@@ -119,3 +119,7 @@ Repository Settings → Pages에서:
 ## 라이선스
 
 MIT
+
+## Bug report or Feature request
+
+Please send email to duckhyun.bae@lge.com or use issue in repo. 
