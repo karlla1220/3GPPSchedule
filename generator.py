@@ -417,6 +417,7 @@ def generate_html(schedule: Schedule) -> str:
         all_sessions.extend(day.sessions)
 
     color_map = _assign_group_colors(all_sessions)
+    mailto_link = _esc(f"mailto:{schedule.contact_email}")
 
     # Build HTML
     html_parts = []
@@ -433,6 +434,7 @@ def generate_html(schedule: Schedule) -> str:
     <header>
         <h1>📅 {_esc(schedule.meeting_name)}</h1>
         <p class="meta">Source: {_esc(schedule.source_file)} &nbsp;|&nbsp; Generated: {_esc(schedule.generated_at)}</p>
+        <p class="meta">Contact: {_esc(schedule.contact_name)} (<a href="{mailto_link}">{_esc(schedule.contact_email)}</a>) for reports or feature requests.</p>
     </header>
 """)
 

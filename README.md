@@ -37,9 +37,12 @@ cp .env.example .env
 
 ```dotenv
 GEMINI_API_KEY=your-api-key-here
+SCHEDULE_CONTACT_NAME=Your Name
+SCHEDULE_CONTACT_EMAIL=your.email@example.com
 ```
 
 API 키는 [Google AI Studio](https://aistudio.google.com/apikey)에서 발급받을 수 있습니다.
+Contact 정보는 `SCHEDULE_CONTACT_NAME`, `SCHEDULE_CONTACT_EMAIL`로 설정해야 합니다.
 
 ## 사용법
 

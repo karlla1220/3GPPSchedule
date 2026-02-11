@@ -78,6 +78,8 @@ class Schedule:
     days: list[DaySchedule]
     source_file: str
     generated_at: str
+    contact_name: str
+    contact_email: str
 
 
 def time_to_minutes(t: str) -> int:
@@ -117,6 +119,4 @@ GROUP_COLORS = [
     {"bg": "#FECDD3", "border": "#E11D48", "text": "#9F1239"},  # Rose
     {"bg": "#E0E7FF", "border": "#6366F1", "text": "#4338CA"},  # Indigo light
 ]
-
-
 
