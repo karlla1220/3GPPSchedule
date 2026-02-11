@@ -10,11 +10,14 @@ Usage:
 
 Environment variables:
     GEMINI_API_KEY  — Google Gemini API key (required unless --no-llm)
+    SCHEDULE_CONTACT_NAME  — Contact name displayed in generated HTML
+    SCHEDULE_CONTACT_EMAIL — Contact email displayed in generated HTML
 """
 
 from __future__ import annotations
 
 import argparse
+import os
 import re
 import sys
 from datetime import datetime
@@ -23,6 +26,9 @@ from pathlib import Path
 from dotenv import load_dotenv
 
 load_dotenv()
+
+CONTACT_NAME = os.getenv("SCHEDULE_CONTACT_NAME", "Duckhyun Bae")
+CONTACT_EMAIL = os.getenv("SCHEDULE_CONTACT_EMAIL", "duckhyun.bae@lge.com")
 
 from models import DAY_ORDER, DaySchedule, Schedule
 from parser import build_room_list, parse_docx
@@ -129,6 +135,8 @@ def main():
         days=days,
         source_file=docx_path.name,
         generated_at=datetime.now().strftime("%Y-%m-%d %H:%M"),
+        contact_name=CONTACT_NAME,
+        contact_email=CONTACT_EMAIL,
     )
 
     # Step 6: Generate HTML
