@@ -2,17 +2,71 @@ name: Build and Deploy Schedule
 
 on:
   schedule:
-    # Run every 3 hours during typical meeting weeks (UTC)
-    - cron: '0 */3 * * 1-5'
+    # Check FTP every 5 minutes (weekdays only)
+    - cron: '*/5 * * * 1-5'
   workflow_dispatch:
+    inputs:
+      force:
+        description: 'Force rebuild even if no change detected'
+        type: boolean
+        default: false
 
 permissions:
   contents: write
   pages: write
   id-token: write
 
+concurrency:
+  group: schedule-deploy
+  cancel-in-progress: true
+
 jobs:
+  # ── Job 1: Lightweight FTP check (~20 seconds) ──────────────
+  check:
+    runs-on: ubuntu-latest
+    outputs:
+      changed: ${{ steps.detect.outputs.changed }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v4
+        with:
+          enable-cache: true
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: uv sync
+
+      # Restore cached state from last successful run
+      - name: Restore schedule state cache
+        uses: actions/cache@v4
+        with:
+          path: .schedule_state
+          key: schedule-state-${{ github.ref }}
+          restore-keys: schedule-state-
+
+      - name: Check for FTP updates
+        id: detect
+        run: uv run python check_update.py
+
+      # Save updated state for next run
+      - name: Save schedule state cache
+        if: steps.detect.outputs.changed == 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: .schedule_state
+          key: schedule-state-${{ github.ref }}-${{ github.run_id }}
+
+  # ── Job 2: Full build (only when schedule changed) ──────────
   build-and-deploy:
+    needs: check
+    if: needs.check.outputs.changed == 'true' || github.event.inputs.force == 'true'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -36,8 +90,8 @@ jobs:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: uv run python main.py
 
-      - name: Check for changes
-        id: check
+      - name: Check for output
+        id: output
         run: |
           if [ -f docs/index.html ]; then
             echo "has_output=true" >> $GITHUB_OUTPUT
@@ -46,7 +100,7 @@ jobs:
           fi
 
       - name: Commit and push
-        if: steps.check.outputs.has_output == 'true'
+        if: steps.output.outputs.has_output == 'true'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"

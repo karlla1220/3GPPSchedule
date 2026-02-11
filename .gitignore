@@ -16,6 +16,7 @@ wheels/
 _explore.py
 _debug_*.py
 *.tmp
+.schedule_state
 
 # Downloaded schedule files (binary DOCX)
 Chair_notes/

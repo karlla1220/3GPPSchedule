@@ -85,6 +85,24 @@ def find_latest_schedule(files: list[dict]) -> dict | None:
     return schedule_files[0]
 
 
+def get_remote_schedule_info(url: str = BASE_URL) -> dict | None:
+    """Return metadata (name + uploaded_at) of the latest schedule on FTP.
+
+    This is a lightweight check — only fetches the directory listing,
+    does NOT download any file.  Used for change detection.
+    """
+    files = list_remote_files(url)
+    latest = find_latest_schedule(files)
+    if latest is None:
+        return None
+    return {
+        "name": latest["name"],
+        "uploaded_at": (
+            latest["uploaded_at"].isoformat() if latest.get("uploaded_at") else None
+        ),
+    }
+
+
 def download_file(url: str, dest_path: Path) -> Path:
     """Download a file from URL to dest_path."""
     print(f"Downloading: {url}")
