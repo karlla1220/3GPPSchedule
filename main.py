@@ -73,6 +73,18 @@ def main():
             file=sys.stderr,
         )
         sys.exit(1)
+    if not re.match(r"^[^@\s]+@[^@\s]+\.[^@\s]+$", contact_email):
+        print(
+            "Error: SCHEDULE_CONTACT_EMAIL must be a valid email address",
+            file=sys.stderr,
+        )
+        sys.exit(1)
+    if not re.match(r"^[\w .'-]+$", contact_name):
+        print(
+            "Error: SCHEDULE_CONTACT_NAME contains invalid characters",
+            file=sys.stderr,
+        )
+        sys.exit(1)
 
     # Step 1: Get the DOCX file
     docx_path: Path | None = None
