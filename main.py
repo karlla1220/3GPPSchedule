@@ -27,9 +27,6 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-CONTACT_NAME = os.getenv("SCHEDULE_CONTACT_NAME", "Duckhyun Bae")
-CONTACT_EMAIL = os.getenv("SCHEDULE_CONTACT_EMAIL", "duckhyun.bae@lge.com")
-
 from models import DAY_ORDER, DaySchedule, Schedule
 from parser import build_room_list, parse_docx
 from session_parser import parse_sessions
@@ -67,6 +64,15 @@ def main():
         help="Output HTML file path (default: docs/index.html)",
     )
     args = argparser.parse_args()
+
+    contact_name = os.getenv("SCHEDULE_CONTACT_NAME")
+    contact_email = os.getenv("SCHEDULE_CONTACT_EMAIL")
+    if not contact_name or not contact_email:
+        print(
+            "Error: SCHEDULE_CONTACT_NAME and SCHEDULE_CONTACT_EMAIL must be set",
+            file=sys.stderr,
+        )
+        sys.exit(1)
 
     # Step 1: Get the DOCX file
     docx_path: Path | None = None
@@ -135,8 +141,8 @@ def main():
         days=days,
         source_file=docx_path.name,
         generated_at=datetime.now().strftime("%Y-%m-%d %H:%M"),
-        contact_name=CONTACT_NAME,
-        contact_email=CONTACT_EMAIL,
+        contact_name=contact_name,
+        contact_email=contact_email,
     )
 
     # Step 6: Generate HTML
