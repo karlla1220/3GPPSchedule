@@ -73,14 +73,16 @@ def main():
             file=sys.stderr,
         )
         sys.exit(1)
-    email_pattern = r"^[A-Za-z0-9.!#$%&'*+/=?^_`{|}~-]+@" r"[A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)+$"
+    email_pattern = (
+        r"^[A-Za-z0-9.!#$%&'*+/=?^_`{|}~-]+@[A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)+$"
+    )
     if not re.match(email_pattern, contact_email):
         print(
             "Error: SCHEDULE_CONTACT_EMAIL must be a valid email address",
             file=sys.stderr,
         )
         sys.exit(1)
-    if any(char in contact_name for char in "<>"):
+    if any(char in contact_name for char in "<>&\""):
         print(
             "Error: SCHEDULE_CONTACT_NAME contains invalid characters",
             file=sys.stderr,
