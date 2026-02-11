@@ -45,14 +45,14 @@ def _extract_meeting_name(filepath: Path) -> str:
 
 def _validate_contact_email(contact_email: str) -> str | None:
     """Validate contact email address."""
-    if "@" not in contact_email:
-        return "SCHEDULE_CONTACT_EMAIL must include a local part and domain"
+    if contact_email.count("@") != 1:
+        return "SCHEDULE_CONTACT_EMAIL must contain exactly one '@' symbol"
     local_part, domain_part = contact_email.split("@", 1)
     if not local_part or not domain_part:
         return "SCHEDULE_CONTACT_EMAIL must include a local part and domain"
     if ".." in local_part or ".." in domain_part:
         return "SCHEDULE_CONTACT_EMAIL must not contain consecutive dots"
-    if not re.match(r"^[A-Za-z0-9.!#$%&'*+/=?^_`{|}~-]+$", local_part):
+    if not re.match(r"^[A-Za-z0-9.!#$%&'*+/=?^_`{|}\-]+$", local_part):
         return "SCHEDULE_CONTACT_EMAIL has an invalid local part"
     if not re.match(r"^[A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)*$", domain_part):
         return "SCHEDULE_CONTACT_EMAIL has an invalid domain"
@@ -94,13 +94,6 @@ def main():
     if email_error:
         print(f"Error: {email_error}", file=sys.stderr)
         sys.exit(1)
-    if any(char in contact_name for char in "<>&\""):
-        print(
-            "Error: SCHEDULE_CONTACT_NAME contains invalid characters",
-            file=sys.stderr,
-        )
-        sys.exit(1)
-
     # Step 1: Get the DOCX file
     docx_path: Path | None = None
 
