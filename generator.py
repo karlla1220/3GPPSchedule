@@ -433,7 +433,7 @@ def generate_html(schedule: Schedule) -> str:
     <header>
         <h1>📅 {_esc(schedule.meeting_name)}</h1>
         <p class="meta">Source: {_esc(schedule.source_file)} &nbsp;|&nbsp; Generated: {_esc(schedule.generated_at)}</p>
-        <p class="meta">Contact: Duckhyun Bae (<a href="mailto:duckhyun.bae@lge.com">duckhyun.bae@lge.com</a>) for reports or feature requests.</p>
+        <p class="meta">Contact: {_esc(schedule.contact_name)} (<a href="mailto:{_esc(schedule.contact_email)}">{_esc(schedule.contact_email)}</a>) for reports or feature requests.</p>
     </header>
 """)
 
