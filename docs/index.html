@@ -1,0 +1,1378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RAN1#123 - Schedule</title>
+    <style>
+:root {
+    --slot-height: 7px;
+    --time-col-width: 54px;
+    --header-height: 36px;
+    --break-bg: #F3F4F6;
+    --grid-line: #E5E7EB;
+    --bg: #FFFFFF;
+    --text: #1F2937;
+    --text-muted: #6B7280;
+    --border: #D1D5DB;
+    --shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: #F9FAFB;
+    color: var(--text);
+    line-height: 1.4;
+}
+
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 16px;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 16px;
+}
+
+header h1 {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 4px;
+}
+
+header .meta {
+    font-size: 12px;
+    color: var(--text-muted);
+}
+
+/* Tabs */
+.tabs {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 12px;
+    border-bottom: 2px solid var(--grid-line);
+    padding-bottom: 0;
+    flex-wrap: wrap;
+}
+
+.tab {
+    padding: 8px 20px;
+    border: none;
+    background: transparent;
+    color: var(--text-muted);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -2px;
+    transition: all 0.15s;
+    border-radius: 6px 6px 0 0;
+}
+
+.tab:hover {
+    background: #F3F4F6;
+    color: var(--text);
+}
+
+.tab.active {
+    color: #2563EB;
+    border-bottom-color: #2563EB;
+    font-weight: 600;
+}
+
+/* Day panels */
+.day-panel {
+    display: none;
+}
+
+.day-panel.active {
+    display: block;
+}
+
+/* Legend */
+.legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 12px;
+    padding: 8px 12px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: var(--shadow);
+    font-size: 11px;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.legend-swatch {
+    width: 12px;
+    height: 12px;
+    border-radius: 3px;
+    border: 1px solid;
+    flex-shrink: 0;
+}
+
+/* Schedule Grid */
+.grid-wrapper {
+    background: white;
+    border-radius: 8px;
+    box-shadow: var(--shadow);
+    overflow-x: auto;
+    padding: 0;
+}
+
+.schedule-grid {
+    display: grid;
+    grid-template-rows: var(--header-height) repeat(135, var(--slot-height));
+    gap: 0;
+    min-width: 600px;
+    position: relative;
+}
+
+/* Room headers */
+.room-header {
+    grid-row: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text);
+    background: #F9FAFB;
+    border-bottom: 2px solid var(--border);
+    padding: 4px 6px;
+    text-align: center;
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.room-header.time-col {
+    background: #F3F4F6;
+    font-weight: 700;
+    font-size: 10px;
+    color: var(--text-muted);
+}
+
+/* Time labels */
+.time-label {
+    grid-column: 1;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    font-size: 9px;
+    font-weight: 600;
+    color: var(--text-muted);
+    padding-top: 1px;
+    border-right: 1px solid var(--grid-line);
+    background: #FAFAFA;
+    z-index: 5;
+}
+
+/* 30-minute grid lines */
+.grid-line {
+    grid-column: 1 / -1;
+    border-top: 1px solid var(--grid-line);
+    pointer-events: none;
+    z-index: 1;
+}
+
+.grid-line.major {
+    border-top: 1px solid #D1D5DB;
+}
+
+/* Break bars */
+.break-bar {
+    grid-column: 1 / -1;
+    background: var(--break-bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--text-muted);
+    z-index: 3;
+    border-top: 1px dashed #D1D5DB;
+    border-bottom: 1px dashed #D1D5DB;
+    position: relative;
+}
+
+.break-bar::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+        -45deg,
+        transparent,
+        transparent 4px,
+        rgba(0,0,0,0.03) 4px,
+        rgba(0,0,0,0.03) 8px
+    );
+}
+
+/* Session blocks */
+.session-block {
+    border-radius: 4px;
+    border-left: 3px solid var(--session-border);
+    background: var(--session-bg);
+    padding: 2px 5px;
+    margin: 1px 2px;
+    overflow: hidden;
+    cursor: default;
+    z-index: 10;
+    position: relative;
+    transition: box-shadow 0.15s, transform 0.1s;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    min-height: 0;
+}
+
+.session-block:hover {
+    box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+    z-index: 15;
+    transform: scale(1.01);
+}
+
+.session-name {
+    font-weight: 600;
+    font-size: 11px;
+    line-height: 1.2;
+    color: var(--session-text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.session-chair {
+    font-size: 9px;
+    color: var(--session-text);
+    opacity: 0.7;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.session-duration {
+    font-size: 9px;
+    color: var(--session-text);
+    opacity: 0.6;
+}
+
+/* Tooltip */
+.session-block .tooltip {
+    display: none;
+    position: absolute;
+    left: 100%;
+    top: 0;
+    margin-left: 4px;
+    background: #1F2937;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    white-space: nowrap;
+    z-index: 100;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    pointer-events: none;
+    line-height: 1.6;
+}
+
+.session-block:hover .tooltip {
+    display: block;
+}
+
+/* Current time indicator */
+.now-line {
+    grid-column: 1 / -1;
+    height: 2px;
+    background: #EF4444;
+    z-index: 25;
+    position: relative;
+    pointer-events: none;
+}
+
+.now-line::before {
+    content: 'NOW';
+    position: absolute;
+    left: 4px;
+    top: -8px;
+    font-size: 9px;
+    font-weight: 700;
+    color: #EF4444;
+    background: white;
+    padding: 0 3px;
+    border-radius: 2px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .container { padding: 8px; }
+    header h1 { font-size: 18px; }
+    .tab { padding: 6px 14px; font-size: 13px; }
+    :root { --slot-height: 6px; --time-col-width: 44px; }
+    .session-name { font-size: 10px; }
+    .room-header { font-size: 9px; padding: 3px 3px; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+    <header>
+        <h1>📅 RAN1#123</h1>
+        <p class="meta">Source: RAN1#123 online and offline schedules v04.docx &nbsp;|&nbsp; Generated: 2026-02-11 14:41</p>
+    </header>
+    <div class="legend">
+        <div class="legend-item"><span class="legend-swatch" style="background:#DBEAFE;border-color:#2563EB"></span>6GR</div>
+        <div class="legend-item"><span class="legend-swatch" style="background:#FCE7F3;border-color:#DB2777"></span>6GR / Overall</div>
+        <div class="legend-item"><span class="legend-swatch" style="background:#D1FAE5;border-color:#059669"></span>AI 8</div>
+        <div class="legend-item"><span class="legend-swatch" style="background:#FED7AA;border-color:#EA580C"></span>Maintenance</div>
+        <div class="legend-item"><span class="legend-swatch" style="background:#E9D5FF;border-color:#7C3AED"></span>R20</div>
+        <div class="legend-item"><span class="legend-swatch" style="background:#CCFBF1;border-color:#0D9488"></span>TBD</div>
+        <div class="legend-item"><span class="legend-swatch" style="background:#FEF08A;border-color:#CA8A04"></span>UE features wrap up / 6GR</div>
+    </div>
+    <div class="tabs">
+        <button class="tab" data-day="monday">Mon</button>
+        <button class="tab" data-day="tuesday">Tue</button>
+        <button class="tab" data-day="wednesday">Wed</button>
+        <button class="tab" data-day="thursday">Thu</button>
+        <button class="tab" data-day="friday">Fri</button>
+    </div>
+    <div class="day-panel" id="monday">
+        <div class="grid-wrapper">
+            <div class="schedule-grid" style="grid-template-columns: var(--time-col-width) repeat(5, 1fr)">
+                <div class="room-header time-col" style="grid-column:1;grid-row:1">Time</div>
+                <div class="room-header" style="grid-column:2;grid-row:1">Room A</div>
+                <div class="room-header" style="grid-column:3;grid-row:1">Room B</div>
+                <div class="room-header" style="grid-column:4;grid-row:1">Room C</div>
+                <div class="room-header" style="grid-column:5;grid-row:1">Offline A</div>
+                <div class="room-header" style="grid-column:6;grid-row:1">Offline B</div>
+                <div class="time-label" style="grid-row:2/8">08:30</div>
+                <div class="time-label" style="grid-row:8/14">09:00</div>
+                <div class="time-label" style="grid-row:14/20">09:30</div>
+                <div class="time-label" style="grid-row:20/26">10:00</div>
+                <div class="time-label" style="grid-row:26/32">10:30</div>
+                <div class="time-label" style="grid-row:32/38">11:00</div>
+                <div class="time-label" style="grid-row:38/44">11:30</div>
+                <div class="time-label" style="grid-row:44/50">12:00</div>
+                <div class="time-label" style="grid-row:50/56">12:30</div>
+                <div class="time-label" style="grid-row:56/62">13:00</div>
+                <div class="time-label" style="grid-row:62/68">13:30</div>
+                <div class="time-label" style="grid-row:68/74">14:00</div>
+                <div class="time-label" style="grid-row:74/80">14:30</div>
+                <div class="time-label" style="grid-row:80/86">15:00</div>
+                <div class="time-label" style="grid-row:86/92">15:30</div>
+                <div class="time-label" style="grid-row:92/98">16:00</div>
+                <div class="time-label" style="grid-row:98/104">16:30</div>
+                <div class="time-label" style="grid-row:104/110">17:00</div>
+                <div class="time-label" style="grid-row:110/116">17:30</div>
+                <div class="time-label" style="grid-row:116/122">18:00</div>
+                <div class="time-label" style="grid-row:122/128">18:30</div>
+                <div class="time-label" style="grid-row:128/134">19:00</div>
+                <div class="time-label" style="grid-row:134/140">19:30</div>
+                <div class="grid-line" style="grid-row:2"></div>
+                <div class="grid-line major" style="grid-row:8"></div>
+                <div class="grid-line" style="grid-row:14"></div>
+                <div class="grid-line major" style="grid-row:20"></div>
+                <div class="grid-line" style="grid-row:26"></div>
+                <div class="grid-line major" style="grid-row:32"></div>
+                <div class="grid-line" style="grid-row:38"></div>
+                <div class="grid-line major" style="grid-row:44"></div>
+                <div class="grid-line" style="grid-row:50"></div>
+                <div class="grid-line major" style="grid-row:56"></div>
+                <div class="grid-line" style="grid-row:62"></div>
+                <div class="grid-line major" style="grid-row:68"></div>
+                <div class="grid-line" style="grid-row:74"></div>
+                <div class="grid-line major" style="grid-row:80"></div>
+                <div class="grid-line" style="grid-row:86"></div>
+                <div class="grid-line major" style="grid-row:92"></div>
+                <div class="grid-line" style="grid-row:98"></div>
+                <div class="grid-line major" style="grid-row:104"></div>
+                <div class="grid-line" style="grid-row:110"></div>
+                <div class="grid-line major" style="grid-row:116"></div>
+                <div class="grid-line" style="grid-row:122"></div>
+                <div class="grid-line major" style="grid-row:128"></div>
+                <div class="grid-line" style="grid-row:134"></div>
+                <div class="break-bar" style="grid-row:26/32">Morning Coffee Break</div>
+                <div class="break-bar" style="grid-row:56/74">Lunch Break</div>
+                <div class="break-bar" style="grid-row:98/104">Afternoon Coffee Break</div>
+                <div class="session-block" style="grid-row:2/20;grid-column:2/5;--session-bg:#F3F4F6;--session-border:#9CA3AF;--session-text:#374151">
+                    <div class="session-name">Agenda items 1, 2, 3, 4, 5</div><div class="session-duration">08:30-10:00 (90m)</div>
+                    <div class="tooltip"><strong>Agenda items 1, 2, 3, 4, 5</strong><br>Time: 08:30 - 10:00 (90 min)<br>Room: Room A, Room B, Room C</div>
+                </div>
+                <div class="session-block" style="grid-row:20/26;grid-column:2/5;--session-bg:#F3F4F6;--session-border:#9CA3AF;--session-text:#374151">
+                    <div class="session-name">Maintenance 8.3</div><div class="session-duration">10:00-10:30 (30m)</div>
+                    <div class="tooltip"><strong>Maintenance 8.3</strong><br>Time: 10:00 - 10:30 (30 min)<br>Room: Room A, Room B, Room C</div>
+                </div>
+                <div class="session-block" style="grid-row:32/39;grid-column:2/5;--session-bg:#FED7AA;--session-border:#EA580C;--session-text:#9A3412">
+                    <div class="session-name">AI 8.3</div><div class="session-duration">11:00-11:35 (35m)</div>
+                    <div class="tooltip"><strong>AI 8.3</strong><br>AI: 8.3<br>Time: 11:00 - 11:35 (35 min)<br>Room: Room A, Room B, Room C</div>
+                </div>
+                <div class="session-block" style="grid-row:39/46;grid-column:2/5;--session-bg:#FED7AA;--session-border:#EA580C;--session-text:#9A3412">
+                    <div class="session-name">AI 8.6</div><div class="session-duration">11:35-12:10 (35m)</div>
+                    <div class="tooltip"><strong>AI 8.6</strong><br>AI: 8.6<br>Time: 11:35 - 12:10 (35 min)<br>Room: Room A, Room B, Room C</div>
+                </div>
+                <div class="session-block" style="grid-row:46/56;grid-column:2/5;--session-bg:#DBEAFE;--session-border:#2563EB;--session-text:#1E40AF">
+                    <div class="session-name">Overall</div><div class="session-duration">12:10-13:00 (50m)</div>
+                    <div class="tooltip"><strong>Overall</strong><br>Time: 12:10 - 13:00 (50 min)<br>Room: Room A, Room B, Room C</div>
+                </div>
+                <div class="session-block" style="grid-row:74/90;grid-column:2/3;--session-bg:#DBEAFE;--session-border:#2563EB;--session-text:#1E40AF">
+                    <div class="session-name">Energy</div><div class="session-duration">14:30-15:50 (80m)</div>
+                    <div class="tooltip"><strong>Energy</strong><br>Time: 14:30 - 15:50 (80 min)<br>Room: Room A</div>
+                </div>
+                <div class="session-block" style="grid-row:90/98;grid-column:2/3;--session-bg:#DBEAFE;--session-border:#2563EB;--session-text:#1E40AF">
+                    <div class="session-name">Frame structure</div><div class="session-duration">15:50-16:30 (40m)</div>
+                    <div class="tooltip"><strong>Frame structure</strong><br>Time: 15:50 - 16:30 (40 min)<br>Room: Room A</div>
+                </div>
+                <div class="session-block" style="grid-row:74/86;grid-column:3/4;--session-bg:#F3F4F6;--session-border:#9CA3AF;--session-text:#374151">
+                    <div class="session-name">AI 6, 7</div><div class="session-duration">14:30-15:30 (60m)</div>
+                    <div class="tooltip"><strong>AI 6, 7</strong><br>Time: 14:30 - 15:30 (60 min)<br>Room: Room B</div>
+                </div>
+                <div class="session-block" style="grid-row:86/92;grid-column:3/4;--session-bg:#D1FAE5;--session-border:#059669;--session-text:#065F46">
+                    <div class="session-name">MIMO</div><div class="session-duration">15:30-16:00 (30m)</div>
+                    <div class="tooltip"><strong>MIMO</strong><br>AI: 8<br>Time: 15:30 - 16:00 (30 min)<br>Room: Room B</div>
+                </div>
+                <div class="session-block" style="grid-row:92/98;grid-column:3/4;--session-bg:#D1FAE5;--session-border:#059669;--session-text:#065F46">
+                    <div class="session-name">NES</div><div class="session-duration">16:00-16:30 (30m)</div>
+                    <div class="tooltip"><strong>NES</strong><br>AI: 8<br>Time: 16:00 - 16:30 (30 min)<br>Room: Room B</div>
+                </div>
+                <div class="session-block" style="grid-row:74/86;grid-column:4/5;--session-bg:#D1FAE5;--session-border:#059669;--session-text:#065F46">
+                    <div class="session-name">AI 8.8</div><div class="session-duration">14:30-15:30 (60m)</div>
+                    <div class="tooltip"><strong>AI 8.8</strong><br>AI: 8.8<br>Time: 14:30 - 15:30 (60 min)<br>Room: Room C</div>
+                </div>
+                <div class="session-block" style="grid-row:86/98;grid-column:4/5;--session-bg:#F3F4F6;--session-border:#9CA3AF;--session-text:#374151">
+                    <div class="session-name">R20 Coverage</div><div class="session-duration">15:30-16:30 (60m)</div>
+                    <div class="tooltip"><strong>R20 Coverage</strong><br>Time: 15:30 - 16:30 (60 min)<br>Room: Room C</div>
+                </div>
+                <div class="session-block" style="grid-row:104/114;grid-column:2/3;--session-bg:#DBEAFE;--session-border:#2563EB;--session-text:#1E40AF">
+                    <div class="session-name">Waveform</div><div class="session-duration">17:00-17:50 (50m)</div>
+                    <div class="tooltip"><strong>Waveform</strong><br>Time: 17:00 - 17:50 (50 min)<br>Room: Room A</div>
+                </div>
+                <div class="session-block" style="grid-row:114/124;grid-column:2/3;--session-bg:#DBEAFE;--session-border:#2563EB;--session-text:#1E40AF">
+                    <div class="session-name">Modulation</div><div class="session-duration">17:50-18:40 (50m)</div>
+                    <div class="tooltip"><strong>Modulation</strong><br>Time: 17:50 - 18:40 (50 min)<br>Room: Room A</div>
+                </div>
+                <div class="session-block" style="grid-row:124/134;grid-column:2/3;--session-bg:#DBEAFE;--session-border:#2563EB;--session-text:#1E40AF">
+                    <div class="session-name">Energy</div><div class="session-duration">18:40-19:30 (50m)</div>
+                    <div class="tooltip"><strong>Energy</strong><br>Time: 18:40 - 19:30 (50 min)<br>Room: Room A</div>
+                </div>
+                <div class="session-block" style="grid-row:104/114;grid-column:3/4;--session-bg:#F3F4F6;--session-border:#9CA3AF;--session-text:#374151">
+                    <div class="session-name">R20 AI/ML</div><div class="session-duration">17:00-17:50 (50m)</div>
+                    <div class="tooltip"><strong>R20 AI/ML</strong><br>Time: 17:00 - 17:50 (50 min)<br>Room: Room B</div>
+                </div>
+                <div class="session-block" style="grid-row:114/124;grid-column:3/4;--session-bg:#E9D5FF;--session-border:#7C3AED;--session-text:#5B21B6">
+                    <div class="session-name">NTN</div><div class="session-duration">17:50-18:40 (50m)</div>
+                    <div class="tooltip"><strong>NTN</strong><br>Time: 17:50 - 18:40 (50 min)<br>Room: Room B</div>
+                </div>
+                <div class="session-block" style="grid-row:124/134;grid-column:3/4;--session-bg:#E9D5FF;--session-border:#7C3AED;--session-text:#5B21B6">
+                    <div class="session-name">MIMO</div><div class="session-duration">18:40-19:30 (50m)</div>
+                    <div class="tooltip"><strong>MIMO</strong><br>Time: 18:40 - 19:30 (50 min)<br>Room: Room B</div>
+                </div>
+                <div class="session-block" style="grid-row:104/124;grid-column:4/5;--session-bg:#F3F4F6;--session-border:#9CA3AF;--session-text:#374151">
+                    <div class="session-name">R20 A-IoT</div><div class="session-duration">17:00-18:40 (100m)</div>
+                    <div class="tooltip"><strong>R20 A-IoT</strong><br>Time: 17:00 - 18:40 (100 min)<br>Room: Room C</div>
+                </div>
+                <div class="session-block" style="grid-row:124/134;grid-column:4/5;--session-bg:#F3F4F6;--session-border:#9CA3AF;--session-text:#374151">
+                    <div class="session-name">R20 ISAC</div><div class="session-duration">18:40-19:30 (50m)</div>
+                    <div class="tooltip"><strong>R20 ISAC</strong><br>Time: 18:40 - 19:30 (50 min)<br>Room: Room C</div>
+                </div>
+                <div class="session-block" style="grid-row:32/44;grid-column:5/6;--session-bg:#DBEAFE;--session-border:#2563EB;--session-text:#1E40AF">
+                    <div class="session-name">Overall</div><div class="session-chair">Xiaodong</div><div class="session-duration">11:00-12:00 (60m)</div>
+                    <div class="tooltip"><strong>Overall</strong><br>Chair: Xiaodong<br>Time: 11:00 - 12:00 (60 min)<br>Room: Offline A</div>
+                </div>
+                <div class="session-block" style="grid-row:44/56;grid-column:5/6;--session-bg:#DBEAFE;--session-border:#2563EB;--session-text:#1E40AF">
+                    <div class="session-name">Frame structure</div><div class="session-chair">Xiaodong</div><div class="session-duration">12:00-13:00 (60m)</div>
+                    <div class="tooltip"><strong>Frame structure</strong><br>Chair: Xiaodong<br>Time: 12:00 - 13:00 (60 min)<br>Room: Offline A</div>
+                </div>
+                <div class="session-block" style="grid-row:32/40;grid-column:6/7;--session-bg:#F3F4F6;--session-border:#9CA3AF;--session-text:#374151">
+                    <div class="session-name">R20 A-IoT</div><div class="session-chair">Hiroki</div><div class="session-duration">11:00-11:40 (40m)</div>
+                    <div class="tooltip"><strong>R20 A-IoT</strong><br>Chair: Hiroki<br>Time: 11:00 - 11:40 (40 min)<br>Room: Offline B</div>
+                </div>
+                <div class="session-block" style="grid-row:40/56;grid-column:6/7;--session-bg:#DBEAFE;--session-border:#2563EB;--session-text:#1E40AF">
+                    <div class="session-name">Energy</div><div class="session-chair">Xiaodong</div><div class="session-duration">11:40-13:00 (80m)</div>
+                    <div class="tooltip"><strong>Energy</strong><br>Chair: Xiaodong<br>Time: 11:40 - 13:00 (80 min)<br>Room: Offline B</div>
+                </div>
+                <div class="session-block" style="grid-row:74/86;grid-column:5/6;--session-bg:#DBEAFE;--session-border:#2563EB;--session-text:#1E40AF">
+                    <div class="session-name">Waveform</div><div class="session-chair">Xiaodong</div><div class="session-duration">14:30-15:30 (60m)</div>
+                    <div class="tooltip"><strong>Waveform</strong><br>Chair: Xiaodong<br>Time: 14:30 - 15:30 (60 min)<br>Room: Offline A</div>
+                </div>
+                <div class="session-block" style="grid-row:86/98;grid-column:5/6;--session-bg:#DBEAFE;--session-border:#2563EB;--session-text:#1E40AF">
+                    <div class="session-name">Modulation</div><div class="session-chair">Xiaodong</div><div class="session-duration">15:30-16:30 (60m)</div>
+                    <div class="tooltip"><strong>Modulation</strong><br>Chair: Xiaodong<br>Time: 15:30 - 16:30 (60 min)<br>Room: Offline A</div>
+                </div>
+                <div class="session-block" style="grid-row:74/86;grid-column:6/7;--session-bg:#F3F4F6;--session-border:#9CA3AF;--session-text:#374151">
+                    <div class="session-name">R20 AI/ML</div><div class="session-chair">Sorour</div><div class="session-duration">14:30-15:30 (60m)</div>
+                    <div class="tooltip"><strong>R20 AI/ML</strong><br>Chair: Sorour<br>Time: 14:30 - 15:30 (60 min)<br>Room: Offline B</div>
+                </div>
+                <div class="session-block" style="grid-row:86/98;grid-column:6/7;--session-bg:#F3F4F6;--session-border:#9CA3AF;--session-text:#374151">
+                    <div class="session-name">R20 A-IoT</div><div class="session-chair">Hiroki</div><div class="session-duration">15:30-16:30 (60m)</div>
+                    <div class="tooltip"><strong>R20 A-IoT</strong><br>Chair: Hiroki<br>Time: 15:30 - 16:30 (60 min)<br>Room: Offline B</div>
+                </div>
+                <div class="session-block" style="grid-row:104/112;grid-column:5/6;--session-bg:#F3F4F6;--session-border:#9CA3AF;--session-text:#374151">
+                    <div class="session-name">ISAC</div><div class="session-chair">Hiroki</div><div class="session-duration">17:00-17:40 (40m)</div>
+                    <div class="tooltip"><strong>ISAC</strong><br>Chair: Hiroki<br>Time: 17:00 - 17:40 (40 min)<br>Room: Offline A</div>
+                </div>
+                <div class="session-block" style="grid-row:112/124;grid-column:5/6;--session-bg:#DBEAFE;--session-border:#2563EB;--session-text:#1E40AF">
+                    <div class="session-name">Evaluation</div><div class="session-chair">Xiaodong</div><div class="session-duration">17:40-18:40 (60m)</div>
+                    <div class="tooltip"><strong>Evaluation</strong><br>Chair: Xiaodong<br>Time: 17:40 - 18:40 (60 min)<br>Room: Offline A</div>
+                </div>
+                <div class="session-block" style="grid-row:124/134;grid-column:5/6;--session-bg:#DBEAFE;--session-border:#2563EB;--session-text:#1E40AF">
+                    <div class="session-name">Channel coding</div><div class="session-chair">Xiaodong</div><div class="session-duration">18:40-19:30 (50m)</div>
+                    <div class="tooltip"><strong>Channel coding</strong><br>Chair: Xiaodong<br>Time: 18:40 - 19:30 (50 min)<br>Room: Offline A</div>
+                </div>
+                <div class="session-block" style="grid-row:104/112;grid-column:6/7;--session-bg:#F3F4F6;--session-border:#9CA3AF;--session-text:#374151">
+                    <div class="session-name">R20 NTN</div><div class="session-chair">Sorour</div><div class="session-duration">17:00-17:40 (40m)</div>
+                    <div class="tooltip"><strong>R20 NTN</strong><br>Chair: Sorour<br>Time: 17:00 - 17:40 (40 min)<br>Room: Offline B</div>
+                </div>
+                <div class="session-block" style="grid-row:112/122;grid-column:6/7;--session-bg:#F3F4F6;--session-border:#9CA3AF;--session-text:#374151">
+                    <div class="session-name">R20 MIMO</div><div class="session-chair">Sorour</div><div class="session-duration">17:40-18:30 (50m)</div>
+                    <div class="tooltip"><strong>R20 MIMO</strong><br>Chair: Sorour<br>Time: 17:40 - 18:30 (50 min)<br>Room: Offline B</div>
+                </div>
+                <div class="session-block" style="grid-row:122/134;grid-column:6/7;--session-bg:#F3F4F6;--session-border:#9CA3AF;--session-text:#374151">
+                    <div class="session-name">R20 Coverage</div><div class="session-chair">Hiroki</div><div class="session-duration">18:30-19:30 (60m)</div>
+                    <div class="tooltip"><strong>R20 Coverage</strong><br>Chair: Hiroki<br>Time: 18:30 - 19:30 (60 min)<br>Room: Offline B</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="day-panel" id="tuesday">
+        <div class="grid-wrapper">
+            <div class="schedule-grid" style="grid-template-columns: var(--time-col-width) repeat(5, 1fr)">
+                <div class="room-header time-col" style="grid-column:1;grid-row:1">Time</div>
+                <div class="room-header" style="grid-column:2;grid-row:1">Room A</div>
+                <div class="room-header" style="grid-column:3;grid-row:1">Room B</div>
+                <div class="room-header" style="grid-column:4;grid-row:1">Room C</div>
+                <div class="room-header" style="grid-column:5;grid-row:1">Offline A</div>
+                <div class="room-header" style="grid-column:6;grid-row:1">Offline B</div>
+                <div class="time-label" style="grid-row:2/8">08:30</div>
+                <div class="time-label" style="grid-row:8/14">09:00</div>
+                <div class="time-label" style="grid-row:14/20">09:30</div>
+                <div class="time-label" style="grid-row:20/26">10:00</div>
+                <div class="time-label" style="grid-row:26/32">10:30</div>
+                <div class="time-label" style="grid-row:32/38">11:00</div>
+                <div class="time-label" style="grid-row:38/44">11:30</div>
+                <div class="time-label" style="grid-row:44/50">12:00</div>
+                <div class="time-label" style="grid-row:50/56">12:30</div>
+                <div class="time-label" style="grid-row:56/62">13:00</div>
+                <div class="time-label" style="grid-row:62/68">13:30</div>
+                <div class="time-label" style="grid-row:68/74">14:00</div>
+                <div class="time-label" style="grid-row:74/80">14:30</div>
+                <div class="time-label" style="grid-row:80/86">15:00</div>
+                <div class="time-label" style="grid-row:86/92">15:30</div>
+                <div class="time-label" style="grid-row:92/98">16:00</div>
+                <div class="time-label" style="grid-row:98/104">16:30</div>
+                <div class="time-label" style="grid-row:104/110">17:00</div>
+                <div class="time-label" style="grid-row:110/116">17:30</div>
+                <div class="time-label" style="grid-row:116/122">18:00</div>
+                <div class="time-label" style="grid-row:122/128">18:30</div>
+                <div class="time-label" style="grid-row:128/134">19:00</div>
+                <div class="time-label" style="grid-row:134/140">19:30</div>
+                <div class="grid-line" style="grid-row:2"></div>
+                <div class="grid-line major" style="grid-row:8"></div>
+                <div class="grid-line" style="grid-row:14"></div>
+                <div class="grid-line major" style="grid-row:20"></div>
+                <div class="grid-line" style="grid-row:26"></div>
+                <div class="grid-line major" style="grid-row:32"></div>
+                <div class="grid-line" style="grid-row:38"></div>
+                <div class="grid-line major" style="grid-row:44"></div>
+                <div class="grid-line" style="grid-row:50"></div>
+                <div class="grid-line major" style="grid-row:56"></div>
+                <div class="grid-line" style="grid-row:62"></div>
+                <div class="grid-line major" style="grid-row:68"></div>
+                <div class="grid-line" style="grid-row:74"></div>
+                <div class="grid-line major" style="grid-row:80"></div>
+                <div class="grid-line" style="grid-row:86"></div>
+                <div class="grid-line major" style="grid-row:92"></div>
+                <div class="grid-line" style="grid-row:98"></div>
+                <div class="grid-line major" style="grid-row:104"></div>
+                <div class="grid-line" style="grid-row:110"></div>
+                <div class="grid-line major" style="grid-row:116"></div>
+                <div class="grid-line" style="grid-row:122"></div>
+                <div class="grid-line major" style="grid-row:128"></div>
+                <div class="grid-line" style="grid-row:134"></div>
+                <div class="break-bar" style="grid-row:26/32">Morning Coffee Break</div>
+                <div class="break-bar" style="grid-row:56/74">Lunch Break</div>
+                <div class="break-bar" style="grid-row:98/104">Afternoon Coffee Break</div>
+                <div class="session-block" style="grid-row:2/10;grid-column:2/3;--session-bg:#DBEAFE;--session-border:#2563EB;--session-text:#1E40AF">
+                    <div class="session-name">Channel coding</div><div class="session-duration">08:30-09:10 (40m)</div>
+                    <div class="tooltip"><strong>Channel coding</strong><br>Time: 08:30 - 09:10 (40 min)<br>Room: Room A</div>
+                </div>
+                <div class="session-block" style="grid-row:10/18;grid-column:2/3;--session-bg:#DBEAFE;--session-border:#2563EB;--session-text:#1E40AF">
+                    <div class="session-name">Evaluation</div><div class="session-duration">09:10-09:50 (40m)</div>
+                    <div class="tooltip"><strong>Evaluation</strong><br>Time: 09:10 - 09:50 (40 min)<br>Room: Room A</div>
+                </div>
+                <div class="session-block" style="grid-row:18/26;grid-column:2/3;--session-bg:#DBEAFE;--session-border:#2563EB;--session-text:#1E40AF">
+                    <div class="session-name">Overall</div><div class="session-duration">09:50-10:30 (40m)</div>
+                    <div class="tooltip"><strong>Overall</strong><br>Time: 09:50 - 10:30 (40 min)<br>Room: Room A</div>
+                </div>
+                <div class="session-block" style="grid-row:2/26;grid-column:3/4;--session-bg:#F3F4F6;--session-border:#9CA3AF;--session-text:#374151">
+                    <div class="session-name">R19UE features</div><div class="session-duration">08:30-10:30 (120m)</div>
+                    <div class="tooltip"><strong>R19UE features</strong><br>Time: 08:30 - 10:30 (120 min)<br>Room: Room B</div>
+                </div>
+                <div class="session-block" style="grid-row:2/14;grid-column:4/5;--session-bg:#D1FAE5;--session-border:#059669;--session-text:#065F46">
+                    <div class="session-name">AI 8.8</div><div class="session-duration">08:30-09:30 (60m)</div>
+                    <div class="tooltip"><strong>AI 8.8</strong><br>AI: 8.8<br>Time: 08:30 - 09:30 (60 min)<br>Room: Room C</div>
+                </div>
+                <div class="session-block" style="grid-row:14/26;grid-column:4/5;--session-bg:#F3F4F6;--session-border:#9CA3AF;--session-text:#374151">
+                    <div class="session-name">R20 Coverage</div><div class="session-duration">09:30-10:30 (60m)</div>
+                    <div class="tooltip"><strong>R20 Coverage</strong><br>Time: 09:30 - 10:30 (60 min)<br>Room: Room C</div>
+                </div>
+                <div class="session-block" style="grid-row:32/46;grid-column:2/3;--session-bg:#DBEAFE;--session-border:#2563EB;--session-text:#1E40AF">
+                    <div class="session-name">AI/ML</div><div class="session-duration">11:00-12:10 (70m)</div>
+                    <div class="tooltip"><strong>AI/ML</strong><br>Time: 11:00 - 12:10 (70 min)<br>Room: Room A</div>
+                </div>
+                <div class="session-block" style="grid-row:46/56;grid-column:2/3;--session-bg:#DBEAFE;--session-border:#2563EB;--session-text:#1E40AF">
+                    <div class="session-name">Waveform</div><div class="session-duration">12:10-13:00 (50m)</div>
+                    <div class="tooltip"><strong>Waveform</strong><br>Time: 12:10 - 13:00 (50 min)<br>Room: Room A</div>
+                </div>
+                <div class="session-block" style="grid-row:32/40;grid-column:3/4;--session-bg:#D1FAE5;--session-border:#059669;--session-text:#065F46">
+                    <div class="session-name">NTN-NR</div><div class="session-duration">11:00-11:40 (40m)</div>
+                    <div class="tooltip"><strong>NTN-NR</strong><br>AI: 8<br>Time: 11:00 - 11:40 (40 min)<br>Room: Room B</div>
+                </div>
+                <div class="session-block" style="grid-row:40/48;grid-column:3/4;--session-bg:#D1FAE5;--session-border:#059669;--session-text:#065F46">
+                    <div class="session-name">NTN-IoT</div><div class="session-duration">11:40-12:20 (40m)</div>
+                    <div class="tooltip"><strong>NTN-IoT</strong><br>AI: 8<br>Time: 11:40 - 12:20 (40 min)<br>Room: Room B</div>
+                </div>
+                <div class="session-block" style="grid-row:48/56;grid-column:3/4;--session-bg:#D1FAE5;--session-border:#059669;--session-text:#065F46">
+                    <div class="session-name">AI/ML</div><div class="session-duration">12:20-13:00 (40m)</div>
+                    <div class="tooltip"><strong>AI/ML</strong><br>AI: 8<br>Time: 12:20 - 13:00 (40 min)<br>Room: Room B</div>
+                </div>
+                <div class="session-block" style="grid-row:32/38;grid-column:4/5;--session-bg:#D1FAE5;--session-border:#059669;--session-text:#065F46">
+                    <div class="session-name">AI 8.4</div><div class="session-duration">11:00-11:30 (30m)</div>
+                    <div class="tooltip"><strong>AI 8.4</strong><br>AI: 8.4<br>Time: 11:00 - 11:30 (30 min)<br>Room: Room C</div>
+                </div>
+                <div class="session-block" style="grid-row:38/56;grid-column:4/5;--session-bg:#F3F4F6;--session-border:#9CA3AF;--session-text:#374151">
+                    <div class="session-name">R20 A-IoT</div><div class="session-duration">11:30-13:00 (90m)</div>
+                    <div class="tooltip"><strong>R20 A-IoT</strong><br>Time: 11:30 - 13:00 (90 min)<br>Room: Room C</div>
+                </div>
+                <div class="session-block" style="grid-row:74/90;grid-column:2/3;--session-bg:#DBEAFE;--session-border:#2563EB;--session-text:#1E40AF">
+                    <div class="session-name">Energy</div><div class="session-duration">14:30-15:50 (80m)</div>
+                    <div class="tooltip"><strong>Energy</strong><br>Time: 14:30 - 15:50 (80 min)<br>Room: Room A</div>
+                </div>
+                <div class="session-block" style="grid-row:90/98;grid-column:2/3;--session-bg:#DBEAFE;--session-border:#2563EB;--session-text:#1E40AF">
+                    <div class="session-name">Frame structure</div><div class="session-duration">15:50-16:30 (40m)</div>
+                    <div class="tooltip"><strong>Frame structure</strong><br>Time: 15:50 - 16:30 (40 min)<br>Room: Room A</div>
+                </div>
+                <div class="session-block" style="grid-row:74/86;grid-column:3/4;--session-bg:#E9D5FF;--session-border:#7C3AED;--session-text:#5B21B6">
+                    <div class="session-name">MIMO</div><div class="session-duration">14:30-15:30 (60m)</div>
+                    <div class="tooltip"><strong>MIMO</strong><br>Time: 14:30 - 15:30 (60 min)<br>Room: Room B</div>
+                </div>
+                <div class="session-block" style="grid-row:86/98;grid-column:3/4;--session-bg:#E9D5FF;--session-border:#7C3AED;--session-text:#5B21B6">
+                    <div class="session-name">NR-NTN</div><div class="session-duration">15:30-16:30 (60m)</div>
+                    <div class="tooltip"><strong>NR-NTN</strong><br>Time: 15:30 - 16:30 (60 min)<br>Room: Room B</div>
+                </div>
+                <div class="session-block" style="grid-row:74/86;grid-column:4/5;--session-bg:#F3F4F6;--session-border:#9CA3AF;--session-text:#374151">
+                    <div class="session-name">R20 ISAC</div><div class="session-duration">14:30-15:30 (60m)</div>
+                    <div class="tooltip"><strong>R20 ISAC</strong><br>Time: 14:30 - 15:30 (60 min)<br>Room: Room C</div>
+                </div>
+                <div class="session-block" style="grid-row:86/98;grid-column:4/5;--session-bg:#F3F4F6;--session-border:#9CA3AF;--session-text:#374151">
+                    <div class="session-name">R20 A-IoT</div><div class="session-duration">15:30-16:30 (60m)</div>
+                    <div class="tooltip"><strong>R20 A-IoT</strong><br>Time: 15:30 - 16:30 (60 min)<br>Room: Room C</div>
+                </div>
+                <div class="session-block" style="grid-row:104/114;grid-column:2/3;--session-bg:#DBEAFE;--session-border:#2563EB;--session-text:#1E40AF">
+                    <div class="session-name">Channel coding</div><div class="session-duration">17:00-17:50 (50m)</div>
+                    <div class="tooltip"><strong>Channel coding</strong><br>Time: 17:00 - 17:50 (50 min)<br>Room: Room A</div>
+                </div>
+                <div class="session-block" style="grid-row:114/124;grid-column:2/3;--session-bg:#DBEAFE;--session-border:#2563EB;--session-text:#1E40AF">
+                    <div class="session-name">Modulation</div><div class="session-duration">17:50-18:40 (50m)</div>
+                    <div class="tooltip"><strong>Modulation</strong><br>Time: 17:50 - 18:40 (50 min)<br>Room: Room A</div>
+                </div>
+                <div class="session-block" style="grid-row:124/134;grid-column:2/3;--session-bg:#DBEAFE;--session-border:#2563EB;--session-text:#1E40AF">
+                    <div class="session-name">Evaluation</div><div class="session-duration">18:40-19:30 (50m)</div>
+                    <div class="tooltip"><strong>Evaluation</strong><br>Time: 18:40 - 19:30 (50 min)<br>Room: Room A</div>
+                </div>
+                <div class="session-block" style="grid-row:104/116;grid-column:3/4;--session-bg:#F3F4F6;--session-border:#9CA3AF;--session-text:#374151">
+                    <div class="session-name">AI 6, 7</div><div class="session-duration">17:00-18:00 (60m)</div>
+                    <div class="tooltip"><strong>AI 6, 7</strong><br>Time: 17:00 - 18:00 (60 min)<br>Room: Room B</div>
+                </div>
+                <div class="session-block" style="grid-row:116/134;grid-column:3/4;--session-bg:#F3F4F6;--session-border:#9CA3AF;--session-text:#374151">
+                    <div class="session-name">R20 AI/ML</div><div class="session-duration">18:00-19:30 (90m)</div>
+                    <div class="tooltip"><strong>R20 AI/ML</strong><br>Time: 18:00 - 19:30 (90 min)<br>Room: Room B</div>
+                </div>
+                <div class="session-block" style="grid-row:104/134;grid-column:4/5;--session-bg:#F3F4F6;--session-border:#9CA3AF;--session-text:#374151">
+                    <div class="session-name">R20 A-IoT</div><div class="session-duration">17:00-19:30 (150m)</div>
+                    <div class="tooltip"><strong>R20 A-IoT</strong><br>Time: 17:00 - 19:30 (150 min)<br>Room: Room C</div>
+                </div>
+                <div class="session-block" style="grid-row:2/14;grid-column:5/6;--session-bg:#DBEAFE;--session-border:#2563EB;--session-text:#1E40AF">
+                    <div class="session-name">Overall</div><div class="session-chair">Xiaodong</div><div class="session-duration">08:30-09:30 (60m)</div>
+                    <div class="tooltip"><strong>Overall</strong><br>Chair: Xiaodong<br>Time: 08:30 - 09:30 (60 min)<br>Room: Offline A</div>
+                </div>
+                <div class="session-block" style="grid-row:14/26;grid-column:5/6;--session-bg:#DBEAFE;--session-border:#2563EB;--session-text:#1E40AF">
+                    <div class="session-name">AI/ML</div><div class="session-chair">Xiaodong</div><div class="session-duration">09:30-10:30 (60m)</div>
+                    <div class="tooltip"><strong>AI/ML</strong><br>Chair: Xiaodong<br>Time: 09:30 - 10:30 (60 min)<br>Room: Offline A</div>
+                </div>
+                <div class="session-block" style="grid-row:2/8;grid-column:6/7;--session-bg:#F3F4F6;--session-border:#9CA3AF;--session-text:#374151">
+                    <div class="session-name">AI 8.4</div><div class="session-chair">Hiroki</div><div class="session-duration">08:30-09:00 (30m)</div>
+                    <div class="tooltip"><strong>AI 8.4</strong><br>Chair: Hiroki<br>Time: 08:30 - 09:00 (30 min)<br>Room: Offline B</div>
+                </div>
+                <div class="session-block" style="grid-row:8/20;grid-column:6/7;--session-bg:#F3F4F6;--session-border:#9CA3AF;--session-text:#374151">
+                    <div class="session-name">R20 A-IoT</div><div class="session-chair">Hiroki</div><div class="session-duration">09:00-10:00 (60m)</div>
+                    <div class="tooltip"><strong>R20 A-IoT</strong><br>Chair: Hiroki<br>Time: 09:00 - 10:00 (60 min)<br>Room: Offline B</div>
+                </div>
+                <div class="session-block" style="grid-row:20/26;grid-column:6/7;--session-bg:#F3F4F6;--session-border:#9CA3AF;--session-text:#374151">
+                    <div class="session-name">AI 8.8</div><div class="session-chair">Hiroki</div><div class="session-duration">10:00-10:30 (30m)</div>
+                    <div class="tooltip"><strong>AI 8.8</strong><br>Chair: Hiroki<br>Time: 10:00 - 10:30 (30 min)<br>Room: Offline B</div>
+                </div>
+                <div class="session-block" style="grid-row:32/44;grid-column:5/6;--session-bg:#DBEAFE;--session-border:#2563EB;--session-text:#1E40AF">
+                    <div class="session-name">Waveform</div><div class="session-chair">Xiaodong</div><div class="session-duration">11:00-12:00 (60m)</div>
+                    <div class="tooltip"><strong>Waveform</strong><br>Chair: Xiaodong<br>Time: 11:00 - 12:00 (60 min)<br>Room: Offline A</div>
+                </div>
+                <div class="session-block" style="grid-row:44/56;grid-column:5/6;--session-bg:#DBEAFE;--session-border:#2563EB;--session-text:#1E40AF">
+                    <div class="session-name">Energy</div><div class="session-chair">Xiaodong</div><div class="session-duration">12:00-13:00 (60m)</div>
+                    <div class="tooltip"><strong>Energy</strong><br>Chair: Xiaodong<br>Time: 12:00 - 13:00 (60 min)<br>Room: Offline A</div>
+                </div>
+                <div class="session-block" style="grid-row:32/40;grid-column:6/7;--session-bg:#F3F4F6;--session-border:#9CA3AF;--session-text:#374151">
+                    <div class="session-name">R20 ISAC</div><div class="session-chair">Hiroki</div><div class="session-duration">11:00-11:40 (40m)</div>
+                    <div class="tooltip"><strong>R20 ISAC</strong><br>Chair: Hiroki<br>Time: 11:00 - 11:40 (40 min)<br>Room: Offline B</div>
+                </div>
+                <div class="session-block" style="grid-row:40/48;grid-column:6/7;--session-bg:#F3F4F6;--session-border:#9CA3AF;--session-text:#374151">
+                    <div class="session-name">R20 MIMO</div><div class="session-chair">Sorour</div><div class="session-duration">11:40-12:20 (40m)</div>
+                    <div class="tooltip"><strong>R20 MIMO</strong><br>Chair: Sorour<br>Time: 11:40 - 12:20 (40 min)<br>Room: Offline B</div>
+                </div>
+                <div class="session-block" style="grid-row:48/56;grid-column:6/7;--session-bg:#F3F4F6;--session-border:#9CA3AF;--session-text:#374151">
+                    <div class="session-name">R20 NR-NTN</div><div class="session-chair">Sorour</div><div class="session-duration">12:20-13:00 (40m)</div>
+                    <div class="tooltip"><strong>R20 NR-NTN</strong><br>Chair: Sorour<br>Time: 12:20 - 13:00 (40 min)<br>Room: Offline B</div>
+                </div>
+                <div class="session-block" style="grid-row:74/82;grid-column:5/6;--session-bg:#DBEAFE;--session-border:#2563EB;--session-text:#1E40AF">
+                    <div class="session-name">Frame structure</div><div class="session-chair">Xiaodong</div><div class="session-duration">14:30-15:10 (40m)</div>
+                    <div class="tooltip"><strong>Frame structure</strong><br>Chair: Xiaodong<br>Time: 14:30 - 15:10 (40 min)<br>Room: Offline A</div>
+                </div>
+                <div class="session-block" style="grid-row:82/98;grid-column:5/6;--session-bg:#DBEAFE;--session-border:#2563EB;--session-text:#1E40AF">
+                    <div class="session-name">Channele coding</div><div class="session-chair">Xiaodong</div><div class="session-duration">15:10-16:30 (80m)</div>
+                    <div class="tooltip"><strong>Channele coding</strong><br>Chair: Xiaodong<br>Time: 15:10 - 16:30 (80 min)<br>Room: Offline A</div>
+                </div>
+                <div class="session-block" style="grid-row:74/82;grid-column:6/7;--session-bg:#F3F4F6;--session-border:#9CA3AF;--session-text:#374151">
+                    <div class="session-name">R20 Coverage</div><div class="session-chair">Hiroki</div><div class="session-duration">14:30-15:10 (40m)</div>
+                    <div class="tooltip"><strong>R20 Coverage</strong><br>Chair: Hiroki<br>Time: 14:30 - 15:10 (40 min)<br>Room: Offline B</div>
+                </div>
+                <div class="session-block" style="grid-row:82/98;grid-column:6/7;--session-bg:#F3F4F6;--session-border:#9CA3AF;--session-text:#374151">
+                    <div class="session-name">R20 AI/ML</div><div class="session-chair">Sorour</div><div class="session-duration">15:10-16:30 (80m)</div>
+                    <div class="tooltip"><strong>R20 AI/ML</strong><br>Chair: Sorour<br>Time: 15:10 - 16:30 (80 min)<br>Room: Offline B</div>
+                </div>
+                <div class="session-block" style="grid-row:104/114;grid-column:5/6;--session-bg:#DBEAFE;--session-border:#2563EB;--session-text:#1E40AF">
+                    <div class="session-name">AI/ML</div><div class="session-chair">Xiaodong</div><div class="session-duration">17:00-17:50 (50m)</div>
+                    <div class="tooltip"><strong>AI/ML</strong><br>Chair: Xiaodong<br>Time: 17:00 - 17:50 (50 min)<br>Room: Offline A</div>
+                </div>
+                <div class="session-block" style="grid-row:114/124;grid-column:5/6;--session-bg:#DBEAFE;--session-border:#2563EB;--session-text:#1E40AF">
+                    <div class="session-name">Overall</div><div class="session-chair">Xiaodong</div><div class="session-duration">17:50-18:40 (50m)</div>
+                    <div class="tooltip"><strong>Overall</strong><br>Chair: Xiaodong<br>Time: 17:50 - 18:40 (50 min)<br>Room: Offline A</div>
+                </div>
+                <div class="session-block" style="grid-row:124/134;grid-column:5/6;--session-bg:#DBEAFE;--session-border:#2563EB;--session-text:#1E40AF">
+                    <div class="session-name">Waveform</div><div class="session-chair">Xiaodong</div><div class="session-duration">18:40-19:30 (50m)</div>
+                    <div class="tooltip"><strong>Waveform</strong><br>Chair: Xiaodong<br>Time: 18:40 - 19:30 (50 min)<br>Room: Offline A</div>
+                </div>
+                <div class="session-block" style="grid-row:104/114;grid-column:6/7;--session-bg:#DBEAFE;--session-border:#2563EB;--session-text:#1E40AF">
+                    <div class="session-name">Modulation</div><div class="session-chair">Xiaodong</div><div class="session-duration">17:00-17:50 (50m)</div>
+                    <div class="tooltip"><strong>Modulation</strong><br>Chair: Xiaodong<br>Time: 17:00 - 17:50 (50 min)<br>Room: Offline B</div>
+                </div>
+                <div class="session-block" style="grid-row:114/124;grid-column:6/7;--session-bg:#DBEAFE;--session-border:#2563EB;--session-text:#1E40AF">
+                    <div class="session-name">Frame structure</div><div class="session-chair">Xiaodong</div><div class="session-duration">17:50-18:40 (50m)</div>
+                    <div class="tooltip"><strong>Frame structure</strong><br>Chair: Xiaodong<br>Time: 17:50 - 18:40 (50 min)<br>Room: Offline B</div>
+                </div>
+                <div class="session-block" style="grid-row:124/134;grid-column:6/7;--session-bg:#DBEAFE;--session-border:#2563EB;--session-text:#1E40AF">
+                    <div class="session-name">TBD [UE features, if necessary]</div><div class="session-chair">Xiaodong</div><div class="session-duration">18:40-19:30 (50m)</div>
+                    <div class="tooltip"><strong>TBD [UE features, if necessary]</strong><br>Chair: Xiaodong<br>Time: 18:40 - 19:30 (50 min)<br>Room: Offline B</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="day-panel" id="wednesday">
+        <div class="grid-wrapper">
+            <div class="schedule-grid" style="grid-template-columns: var(--time-col-width) repeat(5, 1fr)">
+                <div class="room-header time-col" style="grid-column:1;grid-row:1">Time</div>
+                <div class="room-header" style="grid-column:2;grid-row:1">Room A</div>
+                <div class="room-header" style="grid-column:3;grid-row:1">Room B</div>
+                <div class="room-header" style="grid-column:4;grid-row:1">Room C</div>
+                <div class="room-header" style="grid-column:5;grid-row:1">Offline A</div>
+                <div class="room-header" style="grid-column:6;grid-row:1">Offline B</div>
+                <div class="time-label" style="grid-row:2/8">08:30</div>
+                <div class="time-label" style="grid-row:8/14">09:00</div>
+                <div class="time-label" style="grid-row:14/20">09:30</div>
+                <div class="time-label" style="grid-row:20/26">10:00</div>
+                <div class="time-label" style="grid-row:26/32">10:30</div>
+                <div class="time-label" style="grid-row:32/38">11:00</div>
+                <div class="time-label" style="grid-row:38/44">11:30</div>
+                <div class="time-label" style="grid-row:44/50">12:00</div>
+                <div class="time-label" style="grid-row:50/56">12:30</div>
+                <div class="time-label" style="grid-row:56/62">13:00</div>
+                <div class="time-label" style="grid-row:62/68">13:30</div>
+                <div class="time-label" style="grid-row:68/74">14:00</div>
+                <div class="time-label" style="grid-row:74/80">14:30</div>
+                <div class="time-label" style="grid-row:80/86">15:00</div>
+                <div class="time-label" style="grid-row:86/92">15:30</div>
+                <div class="time-label" style="grid-row:92/98">16:00</div>
+                <div class="time-label" style="grid-row:98/104">16:30</div>
+                <div class="time-label" style="grid-row:104/110">17:00</div>
+                <div class="time-label" style="grid-row:110/116">17:30</div>
+                <div class="time-label" style="grid-row:116/122">18:00</div>
+                <div class="time-label" style="grid-row:122/128">18:30</div>
+                <div class="time-label" style="grid-row:128/134">19:00</div>
+                <div class="time-label" style="grid-row:134/140">19:30</div>
+                <div class="grid-line" style="grid-row:2"></div>
+                <div class="grid-line major" style="grid-row:8"></div>
+                <div class="grid-line" style="grid-row:14"></div>
+                <div class="grid-line major" style="grid-row:20"></div>
+                <div class="grid-line" style="grid-row:26"></div>
+                <div class="grid-line major" style="grid-row:32"></div>
+                <div class="grid-line" style="grid-row:38"></div>
+                <div class="grid-line major" style="grid-row:44"></div>
+                <div class="grid-line" style="grid-row:50"></div>
+                <div class="grid-line major" style="grid-row:56"></div>
+                <div class="grid-line" style="grid-row:62"></div>
+                <div class="grid-line major" style="grid-row:68"></div>
+                <div class="grid-line" style="grid-row:74"></div>
+                <div class="grid-line major" style="grid-row:80"></div>
+                <div class="grid-line" style="grid-row:86"></div>
+                <div class="grid-line major" style="grid-row:92"></div>
+                <div class="grid-line" style="grid-row:98"></div>
+                <div class="grid-line major" style="grid-row:104"></div>
+                <div class="grid-line" style="grid-row:110"></div>
+                <div class="grid-line major" style="grid-row:116"></div>
+                <div class="grid-line" style="grid-row:122"></div>
+                <div class="grid-line major" style="grid-row:128"></div>
+                <div class="grid-line" style="grid-row:134"></div>
+                <div class="break-bar" style="grid-row:26/32">Morning Coffee Break</div>
+                <div class="break-bar" style="grid-row:56/74">Lunch Break</div>
+                <div class="break-bar" style="grid-row:98/104">Afternoon Coffee Break</div>
+                <div class="session-block" style="grid-row:2/10;grid-column:2/3;--session-bg:#DBEAFE;--session-border:#2563EB;--session-text:#1E40AF">
+                    <div class="session-name">Overall</div><div class="session-duration">08:30-09:10 (40m)</div>
+                    <div class="tooltip"><strong>Overall</strong><br>Time: 08:30 - 09:10 (40 min)<br>Room: Room A</div>
+                </div>
+                <div class="session-block" style="grid-row:10/18;grid-column:2/3;--session-bg:#DBEAFE;--session-border:#2563EB;--session-text:#1E40AF">
+                    <div class="session-name">Waveform</div><div class="session-duration">09:10-09:50 (40m)</div>
+                    <div class="tooltip"><strong>Waveform</strong><br>Time: 09:10 - 09:50 (40 min)<br>Room: Room A</div>
+                </div>
+                <div class="session-block" style="grid-row:18/26;grid-column:2/3;--session-bg:#DBEAFE;--session-border:#2563EB;--session-text:#1E40AF">
+                    <div class="session-name">Channel coding</div><div class="session-duration">09:50-10:30 (40m)</div>
+                    <div class="tooltip"><strong>Channel coding</strong><br>Time: 09:50 - 10:30 (40 min)<br>Room: Room A</div>
+                </div>
+                <div class="session-block" style="grid-row:2/14;grid-column:3/4;--session-bg:#D1FAE5;--session-border:#059669;--session-text:#065F46">
+                    <div class="session-name">MIMO</div><div class="session-duration">08:30-09:30 (60m)</div>
+                    <div class="tooltip"><strong>MIMO</strong><br>AI: 8<br>Time: 08:30 - 09:30 (60 min)<br>Room: Room B</div>
+                </div>
+                <div class="session-block" style="grid-row:14/26;grid-column:3/4;--session-bg:#D1FAE5;--session-border:#059669;--session-text:#065F46">
+                    <div class="session-name">NES</div><div class="session-duration">09:30-10:30 (60m)</div>
+                    <div class="tooltip"><strong>NES</strong><br>AI: 8<br>Time: 09:30 - 10:30 (60 min)<br>Room: Room B</div>
+                </div>
+                <div class="session-block" style="grid-row:2/26;grid-column:4/5;--session-bg:#F3F4F6;--session-border:#9CA3AF;--session-text:#374151">
+                    <div class="session-name">R19 UE features</div><div class="session-duration">08:30-10:30 (120m)</div>
+                    <div class="tooltip"><strong>R19 UE features</strong><br>Time: 08:30 - 10:30 (120 min)<br>Room: Room C</div>
+                </div>
+                <div class="session-block" style="grid-row:32/40;grid-column:2/3;--session-bg:#DBEAFE;--session-border:#2563EB;--session-text:#1E40AF">
+                    <div class="session-name">Modulation</div><div class="session-duration">11:00-11:40 (40m)</div>
+                    <div class="tooltip"><strong>Modulation</strong><br>Time: 11:00 - 11:40 (40 min)<br>Room: Room A</div>
+                </div>
+                <div class="session-block" style="grid-row:40/56;grid-column:2/3;--session-bg:#DBEAFE;--session-border:#2563EB;--session-text:#1E40AF">
+                    <div class="session-name">AI/ML</div><div class="session-duration">11:40-13:00 (80m)</div>
+                    <div class="tooltip"><strong>AI/ML</strong><br>Time: 11:40 - 13:00 (80 min)<br>Room: Room A</div>
+                </div>
+                <div class="session-block" style="grid-row:32/44;grid-column:3/4;--session-bg:#F3F4F6;--session-border:#9CA3AF;--session-text:#374151">
+                    <div class="session-name">AI 6,7</div><div class="session-duration">11:00-12:00 (60m)</div>
+                    <div class="tooltip"><strong>AI 6,7</strong><br>Time: 11:00 - 12:00 (60 min)<br>Room: Room B</div>
+                </div>
+                <div class="session-block" style="grid-row:44/56;grid-column:3/4;--session-bg:#F3F4F6;--session-border:#9CA3AF;--session-text:#374151">
+                    <div class="session-name">R20 NR-NTN</div><div class="session-duration">12:00-13:00 (60m)</div>
+                    <div class="tooltip"><strong>R20 NR-NTN</strong><br>Time: 12:00 - 13:00 (60 min)<br>Room: Room B</div>
+                </div>
+                <div class="session-block" style="grid-row:32/38;grid-column:4/5;--session-bg:#D1FAE5;--session-border:#059669;--session-text:#065F46">
+                    <div class="session-name">AI 8.4</div><div class="session-duration">11:00-11:30 (30m)</div>
+                    <div class="tooltip"><strong>AI 8.4</strong><br>AI: 8.4<br>Time: 11:00 - 11:30 (30 min)<br>Room: Room C</div>
+                </div>
+                <div class="session-block" style="grid-row:38/56;grid-column:4/5;--session-bg:#F3F4F6;--session-border:#9CA3AF;--session-text:#374151">
+                    <div class="session-name">R20 A-IoT</div><div class="session-duration">11:30-13:00 (90m)</div>
+                    <div class="tooltip"><strong>R20 A-IoT</strong><br>Time: 11:30 - 13:00 (90 min)<br>Room: Room C</div>
+                </div>
+                <div class="session-block" style="grid-row:74/90;grid-column:2/3;--session-bg:#FEF08A;--session-border:#CA8A04;--session-text:#854D0E">
+                    <div class="session-name">Energy</div><div class="session-duration">14:30-15:50 (80m)</div>
+                    <div class="tooltip"><strong>Energy</strong><br>Time: 14:30 - 15:50 (80 min)<br>Room: Room A</div>
+                </div>
+                <div class="session-block" style="grid-row:90/98;grid-column:2/3;--session-bg:#FEF08A;--session-border:#CA8A04;--session-text:#854D0E">
+                    <div class="session-name">Frame structure</div><div class="session-duration">15:50-16:30 (40m)</div>
+                    <div class="tooltip"><strong>Frame structure</strong><br>Time: 15:50 - 16:30 (40 min)<br>Room: Room A</div>
+                </div>
+                <div class="session-block" style="grid-row:74/86;grid-column:3/4;--session-bg:#F3F4F6;--session-border:#9CA3AF;--session-text:#374151">
+                    <div class="session-name">NR-NTN</div><div class="session-duration">14:30-15:30 (60m)</div>
+                    <div class="tooltip"><strong>NR-NTN</strong><br>Time: 14:30 - 15:30 (60 min)<br>Room: Room B</div>
+                </div>
+                <div class="session-block" style="grid-row:86/98;grid-column:3/4;--session-bg:#E9D5FF;--session-border:#7C3AED;--session-text:#5B21B6">
+                    <div class="session-name">MIMO</div><div class="session-duration">15:30-16:30 (60m)</div>
+                    <div class="tooltip"><strong>MIMO</strong><br>Time: 15:30 - 16:30 (60 min)<br>Room: Room B</div>
+                </div>
+                <div class="session-block" style="grid-row:74/86;grid-column:4/5;--session-bg:#F3F4F6;--session-border:#9CA3AF;--session-text:#374151">
+                    <div class="session-name">R20 ISAC</div><div class="session-duration">14:30-15:30 (60m)</div>
+                    <div class="tooltip"><strong>R20 ISAC</strong><br>Time: 14:30 - 15:30 (60 min)<br>Room: Room C</div>
+                </div>
+                <div class="session-block" style="grid-row:86/98;grid-column:4/5;--session-bg:#F3F4F6;--session-border:#9CA3AF;--session-text:#374151">
+                    <div class="session-name">R20 Coverage</div><div class="session-duration">15:30-16:30 (60m)</div>
+                    <div class="tooltip"><strong>R20 Coverage</strong><br>Time: 15:30 - 16:30 (60 min)<br>Room: Room C</div>
+                </div>
+                <div class="session-block" style="grid-row:104/122;grid-column:2/3;--session-bg:#DBEAFE;--session-border:#2563EB;--session-text:#1E40AF">
+                    <div class="session-name">Evaluations</div><div class="session-duration">17:00-18:30 (90m)</div>
+                    <div class="tooltip"><strong>Evaluations</strong><br>Time: 17:00 - 18:30 (90 min)<br>Room: Room A</div>
+                </div>
+                <div class="session-block" style="grid-row:104/122;grid-column:3/4;--session-bg:#F3F4F6;--session-border:#9CA3AF;--session-text:#374151">
+                    <div class="session-name">R20 AI/ML</div><div class="session-duration">17:00-18:30 (90m)</div>
+                    <div class="tooltip"><strong>R20 AI/ML</strong><br>Time: 17:00 - 18:30 (90 min)<br>Room: Room B</div>
+                </div>
+                <div class="session-block" style="grid-row:104/122;grid-column:4/5;--session-bg:#F3F4F6;--session-border:#9CA3AF;--session-text:#374151">
+                    <div class="session-name">R20 A-IoT</div><div class="session-duration">17:00-18:30 (90m)</div>
+                    <div class="tooltip"><strong>R20 A-IoT</strong><br>Time: 17:00 - 18:30 (90 min)<br>Room: Room C</div>
+                </div>
+                <div class="session-block" style="grid-row:2/14;grid-column:5/6;--session-bg:#DBEAFE;--session-border:#2563EB;--session-text:#1E40AF">
+                    <div class="session-name">Modulation</div><div class="session-chair">Xiaodong</div><div class="session-duration">08:30-09:30 (60m)</div>
+                    <div class="tooltip"><strong>Modulation</strong><br>Chair: Xiaodong<br>Time: 08:30 - 09:30 (60 min)<br>Room: Offline A</div>
+                </div>
+                <div class="session-block" style="grid-row:14/26;grid-column:5/6;--session-bg:#DBEAFE;--session-border:#2563EB;--session-text:#1E40AF">
+                    <div class="session-name">AI/ML</div><div class="session-chair">Xiaodong</div><div class="session-duration">09:30-10:30 (60m)</div>
+                    <div class="tooltip"><strong>AI/ML</strong><br>Chair: Xiaodong<br>Time: 09:30 - 10:30 (60 min)<br>Room: Offline A</div>
+                </div>
+                <div class="session-block" style="grid-row:2/10;grid-column:6/7;--session-bg:#F3F4F6;--session-border:#9CA3AF;--session-text:#374151">
+                    <div class="session-name">R20 NR-NTN</div><div class="session-chair">Sorour</div><div class="session-duration">08:30-09:10 (40m)</div>
+                    <div class="tooltip"><strong>R20 NR-NTN</strong><br>Chair: Sorour<br>Time: 08:30 - 09:10 (40 min)<br>Room: Offline B</div>
+                </div>
+                <div class="session-block" style="grid-row:10/26;grid-column:6/7;--session-bg:#F3F4F6;--session-border:#9CA3AF;--session-text:#374151">
+                    <div class="session-name">R20 A-IoT</div><div class="session-chair">Hiroki</div><div class="session-duration">09:10-10:30 (80m)</div>
+                    <div class="tooltip"><strong>R20 A-IoT</strong><br>Chair: Hiroki<br>Time: 09:10 - 10:30 (80 min)<br>Room: Offline B</div>
+                </div>
+                <div class="session-block" style="grid-row:32/40;grid-column:5/6;--session-bg:#DBEAFE;--session-border:#2563EB;--session-text:#1E40AF">
+                    <div class="session-name">Frame structure</div><div class="session-chair">Xiaodong</div><div class="session-duration">11:00-11:40 (40m)</div>
+                    <div class="tooltip"><strong>Frame structure</strong><br>Chair: Xiaodong<br>Time: 11:00 - 11:40 (40 min)<br>Room: Offline A</div>
+                </div>
+                <div class="session-block" style="grid-row:40/56;grid-column:5/6;--session-bg:#DBEAFE;--session-border:#2563EB;--session-text:#1E40AF">
+                    <div class="session-name">Energy</div><div class="session-chair">Xiaodong</div><div class="session-duration">11:40-13:00 (80m)</div>
+                    <div class="tooltip"><strong>Energy</strong><br>Chair: Xiaodong<br>Time: 11:40 - 13:00 (80 min)<br>Room: Offline A</div>
+                </div>
+                <div class="session-block" style="grid-row:32/40;grid-column:6/7;--session-bg:#F3F4F6;--session-border:#9CA3AF;--session-text:#374151">
+                    <div class="session-name">R20 Coverage</div><div class="session-chair">Hiroki</div><div class="session-duration">11:00-11:40 (40m)</div>
+                    <div class="tooltip"><strong>R20 Coverage</strong><br>Chair: Hiroki<br>Time: 11:00 - 11:40 (40 min)<br>Room: Offline B</div>
+                </div>
+                <div class="session-block" style="grid-row:40/48;grid-column:6/7;--session-bg:#F3F4F6;--session-border:#9CA3AF;--session-text:#374151">
+                    <div class="session-name">R20 ISAC</div><div class="session-chair">Hiroki</div><div class="session-duration">11:40-12:20 (40m)</div>
+                    <div class="tooltip"><strong>R20 ISAC</strong><br>Chair: Hiroki<br>Time: 11:40 - 12:20 (40 min)<br>Room: Offline B</div>
+                </div>
+                <div class="session-block" style="grid-row:48/56;grid-column:6/7;--session-bg:#F3F4F6;--session-border:#9CA3AF;--session-text:#374151">
+                    <div class="session-name">R20 MIMO</div><div class="session-chair">Sorour</div><div class="session-duration">12:20-13:00 (40m)</div>
+                    <div class="tooltip"><strong>R20 MIMO</strong><br>Chair: Sorour<br>Time: 12:20 - 13:00 (40 min)<br>Room: Offline B</div>
+                </div>
+                <div class="session-block" style="grid-row:74/82;grid-column:5/6;--session-bg:#FCE7F3;--session-border:#DB2777;--session-text:#9D174D">
+                    <div class="session-name">TR skeleton</div><div class="session-chair">Xiaodong</div><div class="session-duration">14:30-15:10 (40m)</div>
+                    <div class="tooltip"><strong>TR skeleton</strong><br>Chair: Xiaodong<br>Time: 14:30 - 15:10 (40 min)<br>Room: Offline A</div>
+                </div>
+                <div class="session-block" style="grid-row:82/98;grid-column:5/6;--session-bg:#DBEAFE;--session-border:#2563EB;--session-text:#1E40AF">
+                    <div class="session-name">Evaluation</div><div class="session-chair">Xiaodong</div><div class="session-duration">15:10-16:30 (80m)</div>
+                    <div class="tooltip"><strong>Evaluation</strong><br>Chair: Xiaodong<br>Time: 15:10 - 16:30 (80 min)<br>Room: Offline A</div>
+                </div>
+                <div class="session-block" style="grid-row:74/86;grid-column:6/7;--session-bg:#F3F4F6;--session-border:#9CA3AF;--session-text:#374151">
+                    <div class="session-name">R20 AI/ML</div><div class="session-chair">Sorour</div><div class="session-duration">14:30-15:30 (60m)</div>
+                    <div class="tooltip"><strong>R20 AI/ML</strong><br>Chair: Sorour<br>Time: 14:30 - 15:30 (60 min)<br>Room: Offline B</div>
+                </div>
+                <div class="session-block" style="grid-row:86/98;grid-column:6/7;--session-bg:#CCFBF1;--session-border:#0D9488;--session-text:#115E59">
+                    <div class="session-name">AI 8</div><div class="session-chair">Sorour</div><div class="session-duration">15:30-16:30 (60m)</div>
+                    <div class="tooltip"><strong>AI 8</strong><br>Chair: Sorour<br>Time: 15:30 - 16:30 (60 min)<br>Room: Offline B</div>
+                </div>
+                <div class="session-block" style="grid-row:98/110;grid-column:6/7;--session-bg:#CCFBF1;--session-border:#0D9488;--session-text:#115E59">
+                    <div class="session-name">R20 NTN</div><div class="session-chair">Sorour</div><div class="session-duration">16:30-17:30 (60m)</div>
+                    <div class="tooltip"><strong>R20 NTN</strong><br>Chair: Sorour<br>Time: 16:30 - 17:30 (60 min)<br>Room: Offline B</div>
+                </div>
+                <div class="session-block" style="grid-row:104/122;grid-column:5/6;--session-bg:#DBEAFE;--session-border:#2563EB;--session-text:#1E40AF">
+                    <div class="session-name">Waveform</div><div class="session-chair">Xiaodong</div><div class="session-duration">17:00-18:30 (90m)</div>
+                    <div class="tooltip"><strong>Waveform</strong><br>Chair: Xiaodong<br>Time: 17:00 - 18:30 (90 min)<br>Room: Offline A</div>
+                </div>
+                <div class="session-block" style="grid-row:104/114;grid-column:6/7;--session-bg:#DBEAFE;--session-border:#2563EB;--session-text:#1E40AF">
+                    <div class="session-name">Channel coding</div><div class="session-chair">Xiaodong</div><div class="session-duration">17:00-17:50 (50m)</div>
+                    <div class="tooltip"><strong>Channel coding</strong><br>Chair: Xiaodong<br>Time: 17:00 - 17:50 (50 min)<br>Room: Offline B</div>
+                </div>
+                <div class="session-block" style="grid-row:114/122;grid-column:6/7;--session-bg:#DBEAFE;--session-border:#2563EB;--session-text:#1E40AF">
+                    <div class="session-name">Overall</div><div class="session-chair">Xiaodong</div><div class="session-duration">17:50-18:30 (40m)</div>
+                    <div class="tooltip"><strong>Overall</strong><br>Chair: Xiaodong<br>Time: 17:50 - 18:30 (40 min)<br>Room: Offline B</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="day-panel" id="thursday">
+        <div class="grid-wrapper">
+            <div class="schedule-grid" style="grid-template-columns: var(--time-col-width) repeat(5, 1fr)">
+                <div class="room-header time-col" style="grid-column:1;grid-row:1">Time</div>
+                <div class="room-header" style="grid-column:2;grid-row:1">Room A</div>
+                <div class="room-header" style="grid-column:3;grid-row:1">Room B</div>
+                <div class="room-header" style="grid-column:4;grid-row:1">Room C</div>
+                <div class="room-header" style="grid-column:5;grid-row:1">Offline A</div>
+                <div class="room-header" style="grid-column:6;grid-row:1">Offline B</div>
+                <div class="time-label" style="grid-row:2/8">08:30</div>
+                <div class="time-label" style="grid-row:8/14">09:00</div>
+                <div class="time-label" style="grid-row:14/20">09:30</div>
+                <div class="time-label" style="grid-row:20/26">10:00</div>
+                <div class="time-label" style="grid-row:26/32">10:30</div>
+                <div class="time-label" style="grid-row:32/38">11:00</div>
+                <div class="time-label" style="grid-row:38/44">11:30</div>
+                <div class="time-label" style="grid-row:44/50">12:00</div>
+                <div class="time-label" style="grid-row:50/56">12:30</div>
+                <div class="time-label" style="grid-row:56/62">13:00</div>
+                <div class="time-label" style="grid-row:62/68">13:30</div>
+                <div class="time-label" style="grid-row:68/74">14:00</div>
+                <div class="time-label" style="grid-row:74/80">14:30</div>
+                <div class="time-label" style="grid-row:80/86">15:00</div>
+                <div class="time-label" style="grid-row:86/92">15:30</div>
+                <div class="time-label" style="grid-row:92/98">16:00</div>
+                <div class="time-label" style="grid-row:98/104">16:30</div>
+                <div class="time-label" style="grid-row:104/110">17:00</div>
+                <div class="time-label" style="grid-row:110/116">17:30</div>
+                <div class="time-label" style="grid-row:116/122">18:00</div>
+                <div class="time-label" style="grid-row:122/128">18:30</div>
+                <div class="time-label" style="grid-row:128/134">19:00</div>
+                <div class="time-label" style="grid-row:134/140">19:30</div>
+                <div class="grid-line" style="grid-row:2"></div>
+                <div class="grid-line major" style="grid-row:8"></div>
+                <div class="grid-line" style="grid-row:14"></div>
+                <div class="grid-line major" style="grid-row:20"></div>
+                <div class="grid-line" style="grid-row:26"></div>
+                <div class="grid-line major" style="grid-row:32"></div>
+                <div class="grid-line" style="grid-row:38"></div>
+                <div class="grid-line major" style="grid-row:44"></div>
+                <div class="grid-line" style="grid-row:50"></div>
+                <div class="grid-line major" style="grid-row:56"></div>
+                <div class="grid-line" style="grid-row:62"></div>
+                <div class="grid-line major" style="grid-row:68"></div>
+                <div class="grid-line" style="grid-row:74"></div>
+                <div class="grid-line major" style="grid-row:80"></div>
+                <div class="grid-line" style="grid-row:86"></div>
+                <div class="grid-line major" style="grid-row:92"></div>
+                <div class="grid-line" style="grid-row:98"></div>
+                <div class="grid-line major" style="grid-row:104"></div>
+                <div class="grid-line" style="grid-row:110"></div>
+                <div class="grid-line major" style="grid-row:116"></div>
+                <div class="grid-line" style="grid-row:122"></div>
+                <div class="grid-line major" style="grid-row:128"></div>
+                <div class="grid-line" style="grid-row:134"></div>
+                <div class="break-bar" style="grid-row:26/32">Morning Coffee Break</div>
+                <div class="break-bar" style="grid-row:56/74">Lunch Break</div>
+                <div class="break-bar" style="grid-row:98/104">Afternoon Coffee Break</div>
+                <div class="session-block" style="grid-row:2/18;grid-column:2/3;--session-bg:#DBEAFE;--session-border:#2563EB;--session-text:#1E40AF">
+                    <div class="session-name">Waveform</div><div class="session-duration">08:30-09:50 (80m)</div>
+                    <div class="tooltip"><strong>Waveform</strong><br>Time: 08:30 - 09:50 (80 min)<br>Room: Room A</div>
+                </div>
+                <div class="session-block" style="grid-row:18/26;grid-column:2/3;--session-bg:#DBEAFE;--session-border:#2563EB;--session-text:#1E40AF">
+                    <div class="session-name">Overall</div><div class="session-duration">09:50-10:30 (40m)</div>
+                    <div class="tooltip"><strong>Overall</strong><br>Time: 09:50 - 10:30 (40 min)<br>Room: Room A</div>
+                </div>
+                <div class="session-block" style="grid-row:2/10;grid-column:3/4;--session-bg:#D1FAE5;--session-border:#059669;--session-text:#065F46">
+                    <div class="session-name">AI/ML</div><div class="session-duration">08:30-09:10 (40m)</div>
+                    <div class="tooltip"><strong>AI/ML</strong><br>AI: 8<br>Time: 08:30 - 09:10 (40 min)<br>Room: Room B</div>
+                </div>
+                <div class="session-block" style="grid-row:10/18;grid-column:3/4;--session-bg:#D1FAE5;--session-border:#059669;--session-text:#065F46">
+                    <div class="session-name">NTN-NR</div><div class="session-duration">09:10-09:50 (40m)</div>
+                    <div class="tooltip"><strong>NTN-NR</strong><br>AI: 8<br>Time: 09:10 - 09:50 (40 min)<br>Room: Room B</div>
+                </div>
+                <div class="session-block" style="grid-row:18/26;grid-column:3/4;--session-bg:#D1FAE5;--session-border:#059669;--session-text:#065F46">
+                    <div class="session-name">NTN-IoT</div><div class="session-duration">09:50-10:30 (40m)</div>
+                    <div class="tooltip"><strong>NTN-IoT</strong><br>AI: 8<br>Time: 09:50 - 10:30 (40 min)<br>Room: Room B</div>
+                </div>
+                <div class="session-block" style="grid-row:2/14;grid-column:4/5;--session-bg:#F3F4F6;--session-border:#9CA3AF;--session-text:#374151">
+                    <div class="session-name">R20 Coverage</div><div class="session-duration">08:30-09:30 (60m)</div>
+                    <div class="tooltip"><strong>R20 Coverage</strong><br>Time: 08:30 - 09:30 (60 min)<br>Room: Room C</div>
+                </div>
+                <div class="session-block" style="grid-row:14/26;grid-column:4/5;--session-bg:#F3F4F6;--session-border:#9CA3AF;--session-text:#374151">
+                    <div class="session-name">R20 ISAC</div><div class="session-duration">09:30-10:30 (60m)</div>
+                    <div class="tooltip"><strong>R20 ISAC</strong><br>Time: 09:30 - 10:30 (60 min)<br>Room: Room C</div>
+                </div>
+                <div class="session-block" style="grid-row:32/40;grid-column:2/3;--session-bg:#DBEAFE;--session-border:#2563EB;--session-text:#1E40AF">
+                    <div class="session-name">AI/ML</div><div class="session-duration">11:00-11:40 (40m)</div>
+                    <div class="tooltip"><strong>AI/ML</strong><br>Time: 11:00 - 11:40 (40 min)<br>Room: Room A</div>
+                </div>
+                <div class="session-block" style="grid-row:40/48;grid-column:2/3;--session-bg:#DBEAFE;--session-border:#2563EB;--session-text:#1E40AF">
+                    <div class="session-name">Channel coding</div><div class="session-duration">11:40-12:20 (40m)</div>
+                    <div class="tooltip"><strong>Channel coding</strong><br>Time: 11:40 - 12:20 (40 min)<br>Room: Room A</div>
+                </div>
+                <div class="session-block" style="grid-row:48/56;grid-column:2/3;--session-bg:#DBEAFE;--session-border:#2563EB;--session-text:#1E40AF">
+                    <div class="session-name">Energy</div><div class="session-duration">12:20-13:00 (40m)</div>
+                    <div class="tooltip"><strong>Energy</strong><br>Time: 12:20 - 13:00 (40 min)<br>Room: Room A</div>
+                </div>
+                <div class="session-block" style="grid-row:32/56;grid-column:3/4;--session-bg:#F3F4F6;--session-border:#9CA3AF;--session-text:#374151">
+                    <div class="session-name">R20 MIMO</div><div class="session-duration">11:00-13:00 (120m)</div>
+                    <div class="tooltip"><strong>R20 MIMO</strong><br>Time: 11:00 - 13:00 (120 min)<br>Room: Room B</div>
+                </div>
+                <div class="session-block" style="grid-row:32/56;grid-column:4/5;--session-bg:#F3F4F6;--session-border:#9CA3AF;--session-text:#374151">
+                    <div class="session-name">R20 A-IoT</div><div class="session-duration">11:00-13:00 (120m)</div>
+                    <div class="tooltip"><strong>R20 A-IoT</strong><br>Time: 11:00 - 13:00 (120 min)<br>Room: Room C</div>
+                </div>
+                <div class="session-block" style="grid-row:74/98;grid-column:2/3;--session-bg:#F3F4F6;--session-border:#9CA3AF;--session-text:#374151">
+                    <div class="session-name">AI 8</div><div class="session-duration">14:30-16:30 (120m)</div>
+                    <div class="tooltip"><strong>AI 8</strong><br>Time: 14:30 - 16:30 (120 min)<br>Room: Room A</div>
+                </div>
+                <div class="session-block" style="grid-row:74/86;grid-column:3/4;--session-bg:#F3F4F6;--session-border:#9CA3AF;--session-text:#374151">
+                    <div class="session-name">R20 NR-NTN</div><div class="session-duration">14:30-15:30 (60m)</div>
+                    <div class="tooltip"><strong>R20 NR-NTN</strong><br>Time: 14:30 - 15:30 (60 min)<br>Room: Room B</div>
+                </div>
+                <div class="session-block" style="grid-row:86/98;grid-column:3/4;--session-bg:#F3F4F6;--session-border:#9CA3AF;--session-text:#374151">
+                    <div class="session-name">AI 8</div><div class="session-duration">15:30-16:30 (60m)</div>
+                    <div class="tooltip"><strong>AI 8</strong><br>Time: 15:30 - 16:30 (60 min)<br>Room: Room B</div>
+                </div>
+                <div class="session-block" style="grid-row:74/86;grid-column:4/5;--session-bg:#D1FAE5;--session-border:#059669;--session-text:#065F46">
+                    <div class="session-name">AI 8.8</div><div class="session-duration">14:30-15:30 (60m)</div>
+                    <div class="tooltip"><strong>AI 8.8</strong><br>AI: 8.8<br>Time: 14:30 - 15:30 (60 min)<br>Room: Room C</div>
+                </div>
+                <div class="session-block" style="grid-row:86/98;grid-column:4/5;--session-bg:#F3F4F6;--session-border:#9CA3AF;--session-text:#374151">
+                    <div class="session-name">R20 ISAC</div><div class="session-duration">15:30-16:30 (60m)</div>
+                    <div class="tooltip"><strong>R20 ISAC</strong><br>Time: 15:30 - 16:30 (60 min)<br>Room: Room C</div>
+                </div>
+                <div class="session-block" style="grid-row:104/112;grid-column:2/3;--session-bg:#DBEAFE;--session-border:#2563EB;--session-text:#1E40AF">
+                    <div class="session-name">Frame structure</div><div class="session-duration">17:00-17:40 (40m)</div>
+                    <div class="tooltip"><strong>Frame structure</strong><br>Time: 17:00 - 17:40 (40 min)<br>Room: Room A</div>
+                </div>
+                <div class="session-block" style="grid-row:112/122;grid-column:2/3;--session-bg:#DBEAFE;--session-border:#2563EB;--session-text:#1E40AF">
+                    <div class="session-name">Modulation</div><div class="session-duration">17:40-18:30 (50m)</div>
+                    <div class="tooltip"><strong>Modulation</strong><br>Time: 17:40 - 18:30 (50 min)<br>Room: Room A</div>
+                </div>
+                <div class="session-block" style="grid-row:122/134;grid-column:2/3;--session-bg:#DBEAFE;--session-border:#2563EB;--session-text:#1E40AF">
+                    <div class="session-name">Evaluation</div><div class="session-duration">18:30-19:30 (60m)</div>
+                    <div class="tooltip"><strong>Evaluation</strong><br>Time: 18:30 - 19:30 (60 min)<br>Room: Room A</div>
+                </div>
+                <div class="session-block" style="grid-row:104/134;grid-column:3/4;--session-bg:#F3F4F6;--session-border:#9CA3AF;--session-text:#374151">
+                    <div class="session-name">R20 AI/ML</div><div class="session-duration">17:00-19:30 (150m)</div>
+                    <div class="tooltip"><strong>R20 AI/ML</strong><br>Time: 17:00 - 19:30 (150 min)<br>Room: Room B</div>
+                </div>
+                <div class="session-block" style="grid-row:104/134;grid-column:4/5;--session-bg:#F3F4F6;--session-border:#9CA3AF;--session-text:#374151">
+                    <div class="session-name">R20 A-IoT</div><div class="session-duration">17:00-19:30 (150m)</div>
+                    <div class="tooltip"><strong>R20 A-IoT</strong><br>Time: 17:00 - 19:30 (150 min)<br>Room: Room C</div>
+                </div>
+                <div class="session-block" style="grid-row:2/14;grid-column:5/6;--session-bg:#F3F4F6;--session-border:#9CA3AF;--session-text:#374151">
+                    <div class="session-name">R20 MIMO</div><div class="session-chair">Sorour</div><div class="session-duration">08:30-09:30 (60m)</div>
+                    <div class="tooltip"><strong>R20 MIMO</strong><br>Chair: Sorour<br>Time: 08:30 - 09:30 (60 min)<br>Room: Offline A</div>
+                </div>
+                <div class="session-block" style="grid-row:14/26;grid-column:5/6;--session-bg:#DBEAFE;--session-border:#2563EB;--session-text:#1E40AF">
+                    <div class="session-name">AI/ML</div><div class="session-chair">Xiaodong</div><div class="session-duration">09:30-10:30 (60m)</div>
+                    <div class="tooltip"><strong>AI/ML</strong><br>Chair: Xiaodong<br>Time: 09:30 - 10:30 (60 min)<br>Room: Offline A</div>
+                </div>
+                <div class="session-block" style="grid-row:2/26;grid-column:6/7;--session-bg:#F3F4F6;--session-border:#9CA3AF;--session-text:#374151">
+                    <div class="session-name">R20 A-IoT</div><div class="session-chair">Hiroki</div><div class="session-duration">08:30-10:30 (120m)</div>
+                    <div class="tooltip"><strong>R20 A-IoT</strong><br>Chair: Hiroki<br>Time: 08:30 - 10:30 (120 min)<br>Room: Offline B</div>
+                </div>
+                <div class="session-block" style="grid-row:32/48;grid-column:5/6;--session-bg:#DBEAFE;--session-border:#2563EB;--session-text:#1E40AF">
+                    <div class="session-name">Energy</div><div class="session-chair">Xiaodong</div><div class="session-duration">11:00-12:20 (80m)</div>
+                    <div class="tooltip"><strong>Energy</strong><br>Chair: Xiaodong<br>Time: 11:00 - 12:20 (80 min)<br>Room: Offline A</div>
+                </div>
+                <div class="session-block" style="grid-row:48/56;grid-column:5/6;--session-bg:#F3F4F6;--session-border:#9CA3AF;--session-text:#374151">
+                    <div class="session-name">R20 ISAC</div><div class="session-chair">Hiroki</div><div class="session-duration">12:20-13:00 (40m)</div>
+                    <div class="tooltip"><strong>R20 ISAC</strong><br>Chair: Hiroki<br>Time: 12:20 - 13:00 (40 min)<br>Room: Offline A</div>
+                </div>
+                <div class="session-block" style="grid-row:32/44;grid-column:6/7;--session-bg:#F3F4F6;--session-border:#9CA3AF;--session-text:#374151">
+                    <div class="session-name">R20 NR-NTN</div><div class="session-chair">Sorour</div><div class="session-duration">11:00-12:00 (60m)</div>
+                    <div class="tooltip"><strong>R20 NR-NTN</strong><br>Chair: Sorour<br>Time: 11:00 - 12:00 (60 min)<br>Room: Offline B</div>
+                </div>
+                <div class="session-block" style="grid-row:44/56;grid-column:6/7;--session-bg:#F3F4F6;--session-border:#9CA3AF;--session-text:#374151">
+                    <div class="session-name">R20 AI/ML</div><div class="session-chair">Sorour</div><div class="session-duration">12:00-13:00 (60m)</div>
+                    <div class="tooltip"><strong>R20 AI/ML</strong><br>Chair: Sorour<br>Time: 12:00 - 13:00 (60 min)<br>Room: Offline B</div>
+                </div>
+                <div class="session-block" style="grid-row:74/82;grid-column:5/6;--session-bg:#DBEAFE;--session-border:#2563EB;--session-text:#1E40AF">
+                    <div class="session-name">AI/ML</div><div class="session-chair">Xiaodong</div><div class="session-duration">14:30-15:10 (40m)</div>
+                    <div class="tooltip"><strong>AI/ML</strong><br>Chair: Xiaodong<br>Time: 14:30 - 15:10 (40 min)<br>Room: Offline A</div>
+                </div>
+                <div class="session-block" style="grid-row:82/90;grid-column:5/6;--session-bg:#DBEAFE;--session-border:#2563EB;--session-text:#1E40AF">
+                    <div class="session-name">Modulation</div><div class="session-chair">Xiaodong</div><div class="session-duration">15:10-15:50 (40m)</div>
+                    <div class="tooltip"><strong>Modulation</strong><br>Chair: Xiaodong<br>Time: 15:10 - 15:50 (40 min)<br>Room: Offline A</div>
+                </div>
+                <div class="session-block" style="grid-row:90/98;grid-column:5/6;--session-bg:#DBEAFE;--session-border:#2563EB;--session-text:#1E40AF">
+                    <div class="session-name">Frame structure</div><div class="session-chair">Xiaodong</div><div class="session-duration">15:50-16:30 (40m)</div>
+                    <div class="tooltip"><strong>Frame structure</strong><br>Chair: Xiaodong<br>Time: 15:50 - 16:30 (40 min)<br>Room: Offline A</div>
+                </div>
+                <div class="session-block" style="grid-row:74/98;grid-column:6/7;--session-bg:#F3F4F6;--session-border:#9CA3AF;--session-text:#374151">
+                    <div class="session-name">R20 A-IoT</div><div class="session-chair">Hiroki</div><div class="session-duration">14:30-16:30 (120m)</div>
+                    <div class="tooltip"><strong>R20 A-IoT</strong><br>Chair: Hiroki<br>Time: 14:30 - 16:30 (120 min)<br>Room: Offline B</div>
+                </div>
+                <div class="session-block" style="grid-row:104/122;grid-column:5/6;--session-bg:#DBEAFE;--session-border:#2563EB;--session-text:#1E40AF">
+                    <div class="session-name">Evaluation</div><div class="session-chair">Xiaodong</div><div class="session-duration">17:00-18:30 (90m)</div>
+                    <div class="tooltip"><strong>Evaluation</strong><br>Chair: Xiaodong<br>Time: 17:00 - 18:30 (90 min)<br>Room: Offline A</div>
+                </div>
+                <div class="session-block" style="grid-row:122/134;grid-column:5/6;--session-bg:#DBEAFE;--session-border:#2563EB;--session-text:#1E40AF">
+                    <div class="session-name">Waveform</div><div class="session-chair">Xiaodong</div><div class="session-duration">18:30-19:30 (60m)</div>
+                    <div class="tooltip"><strong>Waveform</strong><br>Chair: Xiaodong<br>Time: 18:30 - 19:30 (60 min)<br>Room: Offline A</div>
+                </div>
+                <div class="session-block" style="grid-row:104/122;grid-column:6/7;--session-bg:#DBEAFE;--session-border:#2563EB;--session-text:#1E40AF">
+                    <div class="session-name">Energy</div><div class="session-chair">Xiaodong</div><div class="session-duration">17:00-18:30 (90m)</div>
+                    <div class="tooltip"><strong>Energy</strong><br>Chair: Xiaodong<br>Time: 17:00 - 18:30 (90 min)<br>Room: Offline B</div>
+                </div>
+                <div class="session-block" style="grid-row:122/134;grid-column:6/7;--session-bg:#DBEAFE;--session-border:#2563EB;--session-text:#1E40AF">
+                    <div class="session-name">Overall</div><div class="session-chair">Xiaodong</div><div class="session-duration">18:30-19:30 (60m)</div>
+                    <div class="tooltip"><strong>Overall</strong><br>Chair: Xiaodong<br>Time: 18:30 - 19:30 (60 min)<br>Room: Offline B</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="day-panel" id="friday">
+        <div class="grid-wrapper">
+            <div class="schedule-grid" style="grid-template-columns: var(--time-col-width) repeat(5, 1fr)">
+                <div class="room-header time-col" style="grid-column:1;grid-row:1">Time</div>
+                <div class="room-header" style="grid-column:2;grid-row:1">Room A</div>
+                <div class="room-header" style="grid-column:3;grid-row:1">Room B</div>
+                <div class="room-header" style="grid-column:4;grid-row:1">Room C</div>
+                <div class="room-header" style="grid-column:5;grid-row:1">Offline A</div>
+                <div class="room-header" style="grid-column:6;grid-row:1">Offline B</div>
+                <div class="time-label" style="grid-row:2/8">08:30</div>
+                <div class="time-label" style="grid-row:8/14">09:00</div>
+                <div class="time-label" style="grid-row:14/20">09:30</div>
+                <div class="time-label" style="grid-row:20/26">10:00</div>
+                <div class="time-label" style="grid-row:26/32">10:30</div>
+                <div class="time-label" style="grid-row:32/38">11:00</div>
+                <div class="time-label" style="grid-row:38/44">11:30</div>
+                <div class="time-label" style="grid-row:44/50">12:00</div>
+                <div class="time-label" style="grid-row:50/56">12:30</div>
+                <div class="time-label" style="grid-row:56/62">13:00</div>
+                <div class="time-label" style="grid-row:62/68">13:30</div>
+                <div class="time-label" style="grid-row:68/74">14:00</div>
+                <div class="time-label" style="grid-row:74/80">14:30</div>
+                <div class="time-label" style="grid-row:80/86">15:00</div>
+                <div class="time-label" style="grid-row:86/92">15:30</div>
+                <div class="time-label" style="grid-row:92/98">16:00</div>
+                <div class="time-label" style="grid-row:98/104">16:30</div>
+                <div class="time-label" style="grid-row:104/110">17:00</div>
+                <div class="time-label" style="grid-row:110/116">17:30</div>
+                <div class="time-label" style="grid-row:116/122">18:00</div>
+                <div class="time-label" style="grid-row:122/128">18:30</div>
+                <div class="time-label" style="grid-row:128/134">19:00</div>
+                <div class="time-label" style="grid-row:134/140">19:30</div>
+                <div class="grid-line" style="grid-row:2"></div>
+                <div class="grid-line major" style="grid-row:8"></div>
+                <div class="grid-line" style="grid-row:14"></div>
+                <div class="grid-line major" style="grid-row:20"></div>
+                <div class="grid-line" style="grid-row:26"></div>
+                <div class="grid-line major" style="grid-row:32"></div>
+                <div class="grid-line" style="grid-row:38"></div>
+                <div class="grid-line major" style="grid-row:44"></div>
+                <div class="grid-line" style="grid-row:50"></div>
+                <div class="grid-line major" style="grid-row:56"></div>
+                <div class="grid-line" style="grid-row:62"></div>
+                <div class="grid-line major" style="grid-row:68"></div>
+                <div class="grid-line" style="grid-row:74"></div>
+                <div class="grid-line major" style="grid-row:80"></div>
+                <div class="grid-line" style="grid-row:86"></div>
+                <div class="grid-line major" style="grid-row:92"></div>
+                <div class="grid-line" style="grid-row:98"></div>
+                <div class="grid-line major" style="grid-row:104"></div>
+                <div class="grid-line" style="grid-row:110"></div>
+                <div class="grid-line major" style="grid-row:116"></div>
+                <div class="grid-line" style="grid-row:122"></div>
+                <div class="grid-line major" style="grid-row:128"></div>
+                <div class="grid-line" style="grid-row:134"></div>
+                <div class="break-bar" style="grid-row:26/32">Morning Coffee Break</div>
+                <div class="break-bar" style="grid-row:56/74">Lunch Break</div>
+                <div class="break-bar" style="grid-row:98/104">Afternoon Coffee Break</div>
+                <div class="session-block" style="grid-row:2/10;grid-column:2/3;--session-bg:#DBEAFE;--session-border:#2563EB;--session-text:#1E40AF">
+                    <div class="session-name">Energy</div><div class="session-duration">08:30-09:10 (40m)</div>
+                    <div class="tooltip"><strong>Energy</strong><br>Time: 08:30 - 09:10 (40 min)<br>Room: Room A</div>
+                </div>
+                <div class="session-block" style="grid-row:10/18;grid-column:2/3;--session-bg:#DBEAFE;--session-border:#2563EB;--session-text:#1E40AF">
+                    <div class="session-name">Channel coding</div><div class="session-duration">09:10-09:50 (40m)</div>
+                    <div class="tooltip"><strong>Channel coding</strong><br>Time: 09:10 - 09:50 (40 min)<br>Room: Room A</div>
+                </div>
+                <div class="session-block" style="grid-row:18/26;grid-column:2/3;--session-bg:#DBEAFE;--session-border:#2563EB;--session-text:#1E40AF">
+                    <div class="session-name">Evaluation</div><div class="session-duration">09:50-10:30 (40m)</div>
+                    <div class="tooltip"><strong>Evaluation</strong><br>Time: 09:50 - 10:30 (40 min)<br>Room: Room A</div>
+                </div>
+                <div class="session-block" style="grid-row:2/26;grid-column:3/4;--session-bg:#F3F4F6;--session-border:#9CA3AF;--session-text:#374151">
+                    <div class="session-name">R20 NR-NTN</div><div class="session-duration">08:30-10:30 (120m)</div>
+                    <div class="tooltip"><strong>R20 NR-NTN</strong><br>Time: 08:30 - 10:30 (120 min)<br>Room: Room B</div>
+                </div>
+                <div class="session-block" style="grid-row:2/26;grid-column:4/5;--session-bg:#F3F4F6;--session-border:#9CA3AF;--session-text:#374151">
+                    <div class="session-name">R20 A-IoT</div><div class="session-duration">08:30-10:30 (120m)</div>
+                    <div class="tooltip"><strong>R20 A-IoT</strong><br>Time: 08:30 - 10:30 (120 min)<br>Room: Room C</div>
+                </div>
+                <div class="session-block" style="grid-row:32/56;grid-column:2/5;--session-bg:#F3F4F6;--session-border:#9CA3AF;--session-text:#374151">
+                    <div class="session-name">Sweep / AI 8 / 6GR</div><div class="session-duration">11:00-13:00 (120m)</div>
+                    <div class="tooltip"><strong>Sweep / AI 8 / 6GR</strong><br>Time: 11:00 - 13:00 (120 min)<br>Room: Room A, Room B, Room C</div>
+                </div>
+                <div class="session-block" style="grid-row:74/98;grid-column:2/5;--session-bg:#F3F4F6;--session-border:#9CA3AF;--session-text:#374151">
+                    <div class="session-name">Any other open issues</div><div class="session-duration">14:30-16:30 (120m)</div>
+                    <div class="tooltip"><strong>Any other open issues</strong><br>Time: 14:30 - 16:30 (120 min)<br>Room: Room A, Room B, Room C</div>
+                </div>
+                <div class="session-block" style="grid-row:2/17;grid-column:5/6;--session-bg:#DBEAFE;--session-border:#2563EB;--session-text:#1E40AF">
+                    <div class="session-name">Evaluations</div><div class="session-chair">Xiaodong</div><div class="session-duration">08:30-09:45 (75m)</div>
+                    <div class="tooltip"><strong>Evaluations</strong><br>Chair: Xiaodong<br>Time: 08:30 - 09:45 (75 min)<br>Room: Offline A</div>
+                </div>
+                <div class="session-block" style="grid-row:2/14;grid-column:6/7;--session-bg:#DBEAFE;--session-border:#2563EB;--session-text:#1E40AF">
+                    <div class="session-name">Modulation</div><div class="session-chair">Xiaodong</div><div class="session-duration">08:30-09:30 (60m)</div>
+                    <div class="tooltip"><strong>Modulation</strong><br>Chair: Xiaodong<br>Time: 08:30 - 09:30 (60 min)<br>Room: Offline B</div>
+                </div>
+                <div class="session-block" style="grid-row:14/26;grid-column:6/7;--session-bg:#DBEAFE;--session-border:#2563EB;--session-text:#1E40AF">
+                    <div class="session-name">Frame structure</div><div class="session-chair">Xiaodong</div><div class="session-duration">09:30-10:30 (60m)</div>
+                    <div class="tooltip"><strong>Frame structure</strong><br>Chair: Xiaodong<br>Time: 09:30 - 10:30 (60 min)<br>Room: Offline B</div>
+                </div>
+                <div class="session-block" style="grid-row:74/86;grid-column:5/7;--session-bg:#F3F4F6;--session-border:#9CA3AF;--session-text:#374151">
+                    <div class="session-name">To be assigned by Sorour</div><div class="session-chair">Sorour</div><div class="session-duration">14:30-15:30 (60m)</div>
+                    <div class="tooltip"><strong>To be assigned by Sorour</strong><br>Chair: Sorour<br>Time: 14:30 - 15:30 (60 min)<br>Room: Offline A, Offline B</div>
+                </div>
+                <div class="session-block" style="grid-row:86/98;grid-column:5/7;--session-bg:#F3F4F6;--session-border:#9CA3AF;--session-text:#374151">
+                    <div class="session-name">To be assigned by Hiroki</div><div class="session-chair">Hiroki</div><div class="session-duration">15:30-16:30 (60m)</div>
+                    <div class="tooltip"><strong>To be assigned by Hiroki</strong><br>Chair: Hiroki<br>Time: 15:30 - 16:30 (60 min)<br>Room: Offline A, Offline B</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Tab switching
+    const tabs = document.querySelectorAll('.tab');
+    const panels = document.querySelectorAll('.day-panel');
+
+    tabs.forEach(tab => {
+        tab.addEventListener('click', function() {
+            tabs.forEach(t => t.classList.remove('active'));
+            panels.forEach(p => p.classList.remove('active'));
+            this.classList.add('active');
+            const day = this.dataset.day;
+            const panel = document.getElementById(day);
+            if (panel) panel.classList.add('active');
+        });
+    });
+
+    // Auto-select today's tab
+    const dayNames = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+    const today = dayNames[new Date().getDay()];
+    const todayTab = document.querySelector(`[data-day="${today}"]`);
+    if (todayTab) {
+        todayTab.click();
+    } else {
+        // Default to first tab if today is not a meeting day
+        const firstTab = document.querySelector('.tab');
+        if (firstTab) firstTab.click();
+    }
+
+    // Now-line: update position every minute
+    function updateNowLine() {
+        const now = new Date();
+        const minutes = now.getHours() * 60 + now.getMinutes();
+        const base = 8 * 60 + 30; // 08:30
+        const end = 19 * 60 + 45; // 19:45
+
+        document.querySelectorAll('.now-line').forEach(el => el.remove());
+
+        if (minutes >= base && minutes <= end) {
+            const slot = Math.floor((minutes - base) / 5);
+            const row = slot + 2;
+            document.querySelectorAll('.schedule-grid').forEach(grid => {
+                const nowLine = document.createElement('div');
+                nowLine.className = 'now-line';
+                nowLine.style.gridRow = row + ' / ' + (row + 1);
+                grid.appendChild(nowLine);
+            });
+        }
+    }
+
+    updateNowLine();
+    setInterval(updateNowLine, 60000);
+});
+</script>
+</body>
+</html>

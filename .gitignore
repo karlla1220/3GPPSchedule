@@ -1,0 +1,30 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv
+
+# Cache
+.cache/
+
+# Temporary files
+_explore.py
+_debug_*.py
+*.tmp
+
+# Downloaded schedule files (binary DOCX)
+Chair_notes/
+
+# Environment
+.env
+
+# macOS
+.DS_Store
+
+# VS Code
+.vscode/
