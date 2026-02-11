@@ -417,8 +417,7 @@ def generate_html(schedule: Schedule) -> str:
         all_sessions.extend(day.sessions)
 
     color_map = _assign_group_colors(all_sessions)
-    mailto_email = _esc(schedule.contact_email)
-    mailto_link = f"mailto:{mailto_email}"
+    mailto_link = _esc(f"mailto:{schedule.contact_email}")
 
     # Build HTML
     html_parts = []

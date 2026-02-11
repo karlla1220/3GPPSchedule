@@ -43,6 +43,22 @@ def _extract_meeting_name(filepath: Path) -> str:
     return name
 
 
+def _validate_contact_email(contact_email: str) -> str | None:
+    """Validate contact email address."""
+    if "@" not in contact_email:
+        return "SCHEDULE_CONTACT_EMAIL must include a local part and domain"
+    local_part, domain_part = contact_email.split("@", 1)
+    if not local_part or not domain_part:
+        return "SCHEDULE_CONTACT_EMAIL must include a local part and domain"
+    if ".." in local_part or ".." in domain_part:
+        return "SCHEDULE_CONTACT_EMAIL must not contain consecutive dots"
+    if not re.match(r"^[A-Za-z0-9.!#$%&'*+/=?^_`{|}~-]+$", local_part):
+        return "SCHEDULE_CONTACT_EMAIL has an invalid local part"
+    if not re.match(r"^[A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)*$", domain_part):
+        return "SCHEDULE_CONTACT_EMAIL has an invalid domain"
+    return None
+
+
 def main():
     argparser = argparse.ArgumentParser(
         description="3GPP Schedule → Static Site Generator"
@@ -69,40 +85,14 @@ def main():
     contact_email = os.getenv("SCHEDULE_CONTACT_EMAIL")
     if not contact_name or not contact_email:
         print(
-            "Error: SCHEDULE_CONTACT_NAME and SCHEDULE_CONTACT_EMAIL must be set",
+            "Error: Environment variables SCHEDULE_CONTACT_NAME and "
+            "SCHEDULE_CONTACT_EMAIL must be set",
             file=sys.stderr,
         )
         sys.exit(1)
-    if "@" not in contact_email:
-        print(
-            "Error: SCHEDULE_CONTACT_EMAIL must be a valid email address",
-            file=sys.stderr,
-        )
-        sys.exit(1)
-    local_part, domain_part = contact_email.split("@", 1)
-    if not local_part or not domain_part:
-        print(
-            "Error: SCHEDULE_CONTACT_EMAIL must be a valid email address",
-            file=sys.stderr,
-        )
-        sys.exit(1)
-    if ".." in local_part or ".." in domain_part:
-        print(
-            "Error: SCHEDULE_CONTACT_EMAIL must be a valid email address",
-            file=sys.stderr,
-        )
-        sys.exit(1)
-    if not re.match(r"^[A-Za-z0-9.!#$%&'*+/=?^_`{|}~-]+$", local_part):
-        print(
-            "Error: SCHEDULE_CONTACT_EMAIL must be a valid email address",
-            file=sys.stderr,
-        )
-        sys.exit(1)
-    if not re.match(r"^[A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)*$", domain_part):
-        print(
-            "Error: SCHEDULE_CONTACT_EMAIL must be a valid email address",
-            file=sys.stderr,
-        )
+    email_error = _validate_contact_email(contact_email)
+    if email_error:
+        print(f"Error: {email_error}", file=sys.stderr)
         sys.exit(1)
     if any(char in contact_name for char in "<>&\""):
         print(
