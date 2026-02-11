@@ -73,10 +73,32 @@ def main():
             file=sys.stderr,
         )
         sys.exit(1)
-    email_pattern = (
-        r"^[A-Za-z0-9.!#$%&'*+/=?^_`{|}~-]+@[A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)+$"
-    )
-    if not re.match(email_pattern, contact_email):
+    if "@" not in contact_email:
+        print(
+            "Error: SCHEDULE_CONTACT_EMAIL must be a valid email address",
+            file=sys.stderr,
+        )
+        sys.exit(1)
+    local_part, domain_part = contact_email.split("@", 1)
+    if not local_part or not domain_part:
+        print(
+            "Error: SCHEDULE_CONTACT_EMAIL must be a valid email address",
+            file=sys.stderr,
+        )
+        sys.exit(1)
+    if ".." in local_part or ".." in domain_part:
+        print(
+            "Error: SCHEDULE_CONTACT_EMAIL must be a valid email address",
+            file=sys.stderr,
+        )
+        sys.exit(1)
+    if not re.match(r"^[A-Za-z0-9.!#$%&'*+/=?^_`{|}~-]+$", local_part):
+        print(
+            "Error: SCHEDULE_CONTACT_EMAIL must be a valid email address",
+            file=sys.stderr,
+        )
+        sys.exit(1)
+    if not re.match(r"^[A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)*$", domain_part):
         print(
             "Error: SCHEDULE_CONTACT_EMAIL must be a valid email address",
             file=sys.stderr,
