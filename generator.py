@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 from pathlib import Path
-from urllib.parse import quote
 
 from models import (
     BREAKS,
@@ -418,8 +417,7 @@ def generate_html(schedule: Schedule) -> str:
         all_sessions.extend(day.sessions)
 
     color_map = _assign_group_colors(all_sessions)
-    mailto_email = quote(schedule.contact_email, safe="@._-")
-    mailto_link = _esc(f"mailto:{mailto_email}")
+    mailto_link = _esc(f"mailto:{schedule.contact_email}")
 
     # Build HTML
     html_parts = []
