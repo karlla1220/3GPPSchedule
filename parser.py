@@ -34,14 +34,17 @@ def extract_meeting_location(docx_path: Path) -> str | None:
 
 
 def find_chair_notes_docx(dest_dir: Path = Path("Chair_notes")) -> Path | None:
-    """Find the latest Chair notes DOCX in the local directory.
+    """Find the latest Chair notes document in the local directory.
 
     Looks for files with 'chair note' (case-insensitive) in the name,
-    returns the one with the highest modification time.
+    supporting .docx, .pptx, and .pdf extensions.
+    Returns the one with the highest modification time.
     """
+    supported_extensions = (".docx", ".pptx", ".pdf")
     chair_files = [
         f
-        for f in dest_dir.glob("*.docx")
+        for ext in supported_extensions
+        for f in dest_dir.glob(f"*{ext}")
         if "chair note" in f.name.lower() or "chair_note" in f.name.lower()
     ]
     if not chair_files:
@@ -51,6 +54,10 @@ def find_chair_notes_docx(dest_dir: Path = Path("Chair_notes")) -> Path | None:
 
 # Namespace for OpenXML
 _NS = "http://schemas.openxmlformats.org/wordprocessingml/2006/main"
+_MC_NS = "http://schemas.openxmlformats.org/markup-compatibility/2006"
+_A_NS = "http://schemas.openxmlformats.org/drawingml/2006/main"
+_V_NS = "urn:schemas-microsoft-com:vml"
+_WPS_NS = "http://schemas.microsoft.com/office/word/2010/wordprocessingShape"
 
 
 def _get_grid_span(cell) -> int:
@@ -166,23 +173,300 @@ def _parse_day_header(cells: list[tuple]) -> dict[str, tuple[int, int]]:
     return day_map
 
 
-def _extract_room_names_from_doc(doc: Document) -> list[str] | None:
-    """Try to extract room names from the document metadata rows."""
+def _parse_room_code(line: str) -> str:
+    """Extract a short room code from a line like 'RAN1_Off#1 (J1)' → 'J1'.
+
+    Tries the last parenthesised token first (e.g. '(J1)').  If none found,
+    falls back to the whole line.
+    """
+    # Find all parenthesised groups
+    matches = re.findall(r"\(([^)]+)\)", line)
+    if matches:
+        # Use the last match – it's usually the room code
+        # e.g. "Main session (F1/2/3, Level 2)" → "F1/2/3, Level 2" → take part before comma
+        code = matches[-1].split(",")[0].strip()
+        return code
+    return line.strip()
+
+
+def _normalize_color(color: str | None) -> str | None:
+    """Normalize a hex color string to uppercase 6-digit form.
+
+    Handles '#RRGGBB', 'RRGGBB', and near-matches like D9D9D9 vs D8D8D8.
+    Returns None for missing / 'auto' values.
+    """
+    if not color or color.lower() == 'auto':
+        return None
+    color = color.lstrip('#').upper()
+    if len(color) == 6:
+        return color
+    return None
+
+
+def _colors_match(c1: str, c2: str, tolerance: int = 8) -> bool:
+    """Check if two hex colors are close enough to be considered the same.
+
+    Allows small differences (e.g. D9D9D9 vs D8D8D8) caused by theme
+    resolution differences between VML and OOXML.
+    """
+    if c1 == c2:
+        return True
+    try:
+        r1, g1, b1 = int(c1[0:2], 16), int(c1[2:4], 16), int(c1[4:6], 16)
+        r2, g2, b2 = int(c2[0:2], 16), int(c2[2:4], 16), int(c2[4:6], 16)
+        return (
+            abs(r1 - r2) <= tolerance
+            and abs(g1 - g2) <= tolerance
+            and abs(b1 - b2) <= tolerance
+        )
+    except (ValueError, IndexError):
+        return False
+
+
+def _extract_textbox_rooms(doc: Document) -> list[dict]:
+    """Extract room labels from TextBox shapes in the document.
+
+    Each TextBox that sits above a table acts as a room column header.
+    Returns list of dicts: {'name': str, 'color': str | None}.
+    Color is the fill/background colour of the shape (normalised hex).
+    """
+    body = doc.element.body
+    alt_contents = body.findall(f'.//{{{_MC_NS}}}AlternateContent')
+
+    results: list[dict] = []
+    for ac in alt_contents:
+        # Collect text from <w:t> inside the AlternateContent
+        texts = []
+        from lxml import etree  # noqa: local import
+        for t_el in ac.iter(f'{{{_NS}}}t'):
+            if t_el.text:
+                texts.append(t_el.text)
+        raw = ''.join(texts).strip()
+        if not raw:
+            continue
+
+        # De-duplicate doubled text ('J1J1' → 'J1')
+        # The same text appears in both mc:Choice and mc:Fallback.
+        if len(raw) % 2 == 0:
+            half = len(raw) // 2
+            if raw[:half] == raw[half:]:
+                raw = raw[:half]
+
+        # --- Determine fill colour ---
+        fill_color: str | None = None
+
+        # 1) Try VML fillcolor attribute (most reliable resolved value)
+        for shape in ac.iter(f'{{{_V_NS}}}shape'):
+            fc = shape.get('fillcolor')
+            if fc:
+                # VML may include " [id]" suffix, e.g. '#ffd966 [1943]'
+                fc = fc.split()[0]
+                fill_color = _normalize_color(fc)
+                break
+
+        # 2) Fallback: DrawingML a:solidFill > a:srgbClr (skip font colors)
+        if fill_color is None:
+            for sp_pr in ac.iter(f'{{{_WPS_NS}}}spPr'):
+                for solid in sp_pr.iter(f'{{{_A_NS}}}solidFill'):
+                    srgb = solid.find(f'{{{_A_NS}}}srgbClr')
+                    if srgb is not None:
+                        fill_color = _normalize_color(srgb.get('val'))
+                        break
+                if fill_color is not None:
+                    break
+
+        results.append({'name': raw, 'color': fill_color})
+
+    return results
+
+
+def _get_table_column_colors(
+    table, day_columns: dict[str, tuple[int, int]],
+    actual_rooms: dict[str, int],
+) -> list[str]:
+    """Collect the ordered set of distinct room colours used in a table.
+
+    Scans data rows looking for days where the number of distinct cells
+    equals the actual room count.  From those cells, extracts the fill
+    colours in column order.  This avoids picking up colours from merged
+    cells or empty-day cells.
+
+    Returns an ordered list of unique colour hex strings, one per room.
+    """
+    valid_ranges = list(day_columns.items())
+
+    for row in table.rows[1:]:
+        tr = row._tr
+
+        # Build (col_start, col_end, fill) for every tc in this row
+        tc_info: list[tuple[int, int, str | None]] = []
+        col_cursor = 0
+        for tc_el in tr.findall(f'{{{_NS}}}tc'):
+            tc_pr = tc_el.find(f'{{{_NS}}}tcPr')
+            gs = 1
+            fill = None
+            if tc_pr is not None:
+                gs_el = tc_pr.find(f'{{{_NS}}}gridSpan')
+                if gs_el is not None:
+                    gs = int(gs_el.get(f'{{{_NS}}}val'))
+                shd = tc_pr.find(f'{{{_NS}}}shd')
+                if shd is not None:
+                    fill = _normalize_color(shd.get(f'{{{_NS}}}fill'))
+            tc_info.append((col_cursor, col_cursor + gs, fill))
+            col_cursor += gs
+
+        # For each day, collect room-cell colours if cell count matches
+        for day_name, (day_cs, day_ce) in valid_ranges:
+            expected = actual_rooms.get(day_name, 0)
+            if expected < 1:
+                continue
+
+            day_fills: list[str] = []
+            for cs, ce, fill in tc_info:
+                if cs >= day_cs and ce <= day_ce and cs > 0:
+                    day_fills.append(fill or 'FFFFFF')
+
+            if len(day_fills) == expected:
+                # De-dup while preserving order
+                seen: set[str] = set()
+                ordered: list[str] = []
+                for f in day_fills:
+                    canon = None
+                    for s in seen:
+                        if _colors_match(f, s):
+                            canon = s
+                            break
+                    if canon is None:
+                        seen.add(f)
+                        ordered.append(f)
+                if len(ordered) == expected:
+                    return ordered
+
+    return []
+
+
+def _match_rooms_to_table(
+    textbox_rooms: list[dict],
+    table,
+    day_columns: dict[str, tuple[int, int]],
+    actual_rooms: dict[str, int],
+) -> list[str] | None:
+    """Match TextBox room labels to a table using background colour matching.
+
+    Returns an ordered list of room names for this table's columns,
+    or None if matching fails.
+    """
+    if not textbox_rooms:
+        return None
+
+    unique_table_colors = _get_table_column_colors(
+        table, day_columns, actual_rooms,
+    )
+    if not unique_table_colors:
+        return None
+
+    # For each unique table colour, find matching TextBox
+    matched_names: list[str] = []
+    for tc in unique_table_colors:
+        for tb in textbox_rooms:
+            if tb['color'] and _colors_match(tc, tb['color']):
+                matched_names.append(tb['name'])
+                break
+
+    # Validate: matched count should equal the actual room count
+    sample_day = next(iter(actual_rooms))
+    num_rooms = actual_rooms[sample_day]
+    if len(matched_names) == num_rooms:
+        return matched_names
+
+    return None
+
+
+def _extract_room_names_from_doc(
+    doc: Document,
+) -> tuple[list[str] | None, list[str] | None]:
+    """Extract online and offline room names from document metadata rows.
+
+    Fallback used when TextBox colour matching is not available.
+
+    Returns (online_rooms, offline_rooms) – either may be None.
+    """
     for table in doc.tables:
         for row in table.rows:
             cells = _dedupe_row_cells(row)
             for text, _, _ in cells:
-                if "meeting rooms" in text.lower():
-                    # Parse room names from lines like:
-                    # "RAN1 Meeting Rooms:\n Main session (F1/2/3)\n RAN1_Brk#1 (A1)\n ..."
-                    lines = [
-                        line.strip()
-                        for line in text.split("\n")
-                        if line.strip() and "meeting rooms" not in line.lower()
-                    ]
-                    if lines:
-                        return lines
-    return None
+                if "meeting rooms" not in text.lower():
+                    continue
+
+                # Split into blocks on every "Meeting Rooms" header
+                blocks: list[list[str]] = []
+                current: list[str] = []
+                for line in text.split("\n"):
+                    stripped = line.strip()
+                    if not stripped:
+                        continue
+                    if "meeting rooms" in stripped.lower():
+                        if current:
+                            blocks.append(current)
+                        current = []
+                    else:
+                        current.append(stripped)
+                if current:
+                    blocks.append(current)
+
+                online_rooms: list[str] | None = None
+                offline_rooms: list[str] | None = None
+
+                for block in blocks:
+                    # Determine if this block is for offline rooms
+                    is_offline = any("off" in ln.lower() for ln in block)
+                    names = [_parse_room_code(ln) for ln in block]
+                    if is_offline:
+                        offline_rooms = names
+                    else:
+                        online_rooms = names
+
+                return online_rooms, offline_rooms
+
+    return None, None
+
+
+def _get_table_preceding_paragraphs(doc: Document) -> dict[int, str]:
+    """Map each table index (in doc.tables order) to preceding paragraph text.
+
+    Walks through the document body elements in order, collecting paragraph
+    text until a table is encountered.  The collected text is associated
+    with that table's index.
+
+    Returns:
+        dict mapping table index (0-based, matching doc.tables) to the
+        concatenated text of all paragraphs between the previous table
+        (or document start) and this table.
+    """
+    body = doc.element.body
+    table_contexts: dict[int, str] = {}
+    current_paragraphs: list[str] = []
+    table_idx = 0
+
+    for child in body:
+        tag = child.tag.split('}')[-1] if '}' in child.tag else child.tag
+
+        if tag == 'p':
+            # Extract text from paragraph XML element
+            texts = []
+            for t_el in child.iter(f'{{{_NS}}}t'):
+                if t_el.text:
+                    texts.append(t_el.text)
+            text = ''.join(texts).strip()
+            if text:
+                current_paragraphs.append(text)
+        elif tag == 'tbl':
+            context = '\n'.join(current_paragraphs) if current_paragraphs else ''
+            table_contexts[table_idx] = context
+            current_paragraphs = []  # Reset for next table
+            table_idx += 1
+
+    return table_contexts
 
 
 def _is_schedule_table(table) -> bool:
@@ -249,8 +533,16 @@ def _determine_time_block_index(time_text: str) -> int | None:
     return None
 
 
-def parse_docx(filepath: str | Path) -> tuple[list[CellData], list[dict]]:
+def parse_docx(
+    filepath: str | Path, *, max_tables: int | None = 2,
+) -> tuple[list[CellData], list[dict]]:
     """Parse a schedule DOCX file and extract all cell data.
+
+    Args:
+        filepath: Path to the DOCX file.
+        max_tables: Maximum number of schedule tables to parse.
+            The largest tables (by column count) are kept.
+            Set to None to parse ALL schedule tables.
 
     Returns:
         (cells, tables_meta) where:
@@ -259,8 +551,15 @@ def parse_docx(filepath: str | Path) -> tuple[list[CellData], list[dict]]:
     """
     doc = Document(str(filepath))
 
-    # Try to get room names from document
-    room_names = _extract_room_names_from_doc(doc)
+    # ── Context extraction ───────────────────────────────────────
+    # Map each table to the paragraph text preceding it.
+    table_contexts = _get_table_preceding_paragraphs(doc)
+
+    # ── Room name extraction ────────────────────────────────────
+    # Primary: TextBox colour matching (most robust).
+    # Fallback: metadata row parsing.
+    textbox_rooms = _extract_textbox_rooms(doc)
+    online_room_names_fb, offline_room_names_fb = _extract_room_names_from_doc(doc)
 
     # Find all schedule tables
     schedule_tables = []
@@ -271,11 +570,10 @@ def parse_docx(filepath: str | Path) -> tuple[list[CellData], list[dict]]:
     if not schedule_tables:
         raise ValueError("No schedule tables found in the document")
 
-    # If 3+ tables found, take the 2 largest (by column count)
-    # to skip summary/duplicate tables
-    if len(schedule_tables) > 2:
+    # If more tables than limit, take the N largest (by column count)
+    if max_tables is not None and len(schedule_tables) > max_tables:
         schedule_tables.sort(key=lambda x: len(x[1].columns), reverse=True)
-        schedule_tables = schedule_tables[:2]
+        schedule_tables = schedule_tables[:max_tables]
         # Re-sort by original index
         schedule_tables.sort(key=lambda x: x[0])
 
@@ -298,10 +596,20 @@ def parse_docx(filepath: str | Path) -> tuple[list[CellData], list[dict]]:
         actual_rooms = _count_actual_rooms_per_day(table, day_columns)
 
         day_rooms: dict[str, list[str]] = {}
+
+        # Try colour-based TextBox matching first
+        color_matched = _match_rooms_to_table(
+            textbox_rooms, table, day_columns, actual_rooms,
+        )
+
         for day, (col_start, col_end) in day_columns.items():
             num_rooms = actual_rooms[day]
-            if room_names and table_idx == 0 and num_rooms <= len(room_names):
-                day_rooms[day] = room_names[:num_rooms]
+            if color_matched and num_rooms <= len(color_matched):
+                day_rooms[day] = color_matched[:num_rooms]
+            elif table_idx == 0 and online_room_names_fb and num_rooms <= len(online_room_names_fb):
+                day_rooms[day] = online_room_names_fb[:num_rooms]
+            elif table_idx > 0 and offline_room_names_fb and num_rooms <= len(offline_room_names_fb):
+                day_rooms[day] = offline_room_names_fb[:num_rooms]
             else:
                 prefix = "Offline" if table_idx > 0 else "Room"
                 day_rooms[day] = [
@@ -313,6 +621,7 @@ def parse_docx(filepath: str | Path) -> tuple[list[CellData], list[dict]]:
                 "table_index": table_idx,
                 "day_columns": day_columns,
                 "day_rooms": day_rooms,
+                "context_text": table_contexts.get(orig_idx, ''),
             }
         )
 

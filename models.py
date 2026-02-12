@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
+from pathlib import Path
 
 
 # Time blocks in the standard 3GPP meeting day
@@ -59,6 +60,17 @@ class Session:
     chair: str | None = None
     agenda_item: str | None = None
     group_header: str = ""
+
+
+@dataclass
+class ScheduleSource:
+    """A discovered schedule source from the FTP server."""
+
+    folder_name: str
+    person_name: str | None  # e.g. "Hiroki" (None for main chair schedule)
+    is_main: bool  # True for Chair_notes (main schedule)
+    file_info: dict  # {"name": ..., "url": ..., "uploaded_at": ...}
+    local_path: Path | None = None
 
 
 @dataclass

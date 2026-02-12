@@ -29,9 +29,17 @@ load_dotenv()
 
 from models import DAY_ORDER, DaySchedule, Schedule
 from parser import build_room_list, parse_docx, extract_meeting_location, find_chair_notes_docx
-from session_parser import parse_sessions, get_timezone_from_location
+from session_parser import parse_time_slots, get_timezone_from_location
 from generator import save_html
-from downloader import download_latest_schedule, download_latest_chair_notes, find_local_latest_schedule
+from downloader import (
+    download_latest_schedule,
+    download_latest_chair_notes,
+    find_local_latest_schedule,
+    find_local_vice_chair_schedules,
+    discover_schedule_sources,
+    download_all_schedules,
+)
+from merger import collect_time_slot_data
 
 
 def _extract_meeting_name(filepath: Path) -> str:
@@ -94,8 +102,9 @@ def main():
     if email_error:
         print(f"Error: {email_error}", file=sys.stderr)
         sys.exit(1)
-    # Step 1: Get the DOCX file
+    # Step 1: Get the DOCX file(s)
     docx_path: Path | None = None
+    vice_chair_paths: dict[str, Path] = {}
 
     if args.local:
         docx_path = Path(args.local)
@@ -108,17 +117,36 @@ def main():
             print("Error: No schedule files found locally in Chair_notes/")
             sys.exit(1)
         print(f"Using local file: {docx_path}")
+        # Discover local vice-chair schedules (mirrors default download behavior)
+        vice_chair_paths = find_local_vice_chair_schedules()
+        if vice_chair_paths:
+            print(f"Vice-chair schedules: {', '.join(vice_chair_paths.keys())}")
     else:
+        # Discover all schedule sources from Inbox/
+        print("Discovering schedule sources from FTP...")
         try:
-            docx_path = download_latest_schedule()
+            sources = discover_schedule_sources()
+            if sources:
+                print(f"Found {len(sources)} schedule source(s)")
+                docx_path, vice_chair_paths = download_all_schedules(sources)
+                if vice_chair_paths:
+                    print(f"\nVice-chair schedules: {', '.join(vice_chair_paths.keys())}")
         except Exception as e:
-            print(f"Download failed: {e}")
-            print("Trying local files...")
-            docx_path = find_local_latest_schedule()
-            if docx_path is None:
-                print("Error: No schedule files found locally either")
-                sys.exit(1)
-            print(f"Using local file: {docx_path}")
+            print(f"Discovery failed: {e}")
+
+        if docx_path is None:
+            # Fallback: try legacy single-download
+            print("Falling back to Chair_notes only...")
+            try:
+                docx_path = download_latest_schedule()
+            except Exception as e:
+                print(f"Download failed: {e}")
+                print("Trying local files...")
+                docx_path = find_local_latest_schedule()
+                if docx_path is None:
+                    print("Error: No schedule files found locally either")
+                    sys.exit(1)
+                print(f"Using local file: {docx_path}")
 
     # Step 2: Parse DOCX tables
     print(f"\nParsing: {docx_path}")
@@ -134,9 +162,17 @@ def main():
         room_names = [r.name for r in rooms]
         print(f"  {day}: {len(rooms)} rooms — {', '.join(room_names)}")
 
-    # Step 4: Parse sessions
-    print("\nParsing sessions (Gemini API)...")
-    sessions = parse_sessions(cells, day_rooms_map)
+    # Step 4: Parse sessions (always use time-slot grouping for fewer LLM calls)
+    print("\nCollecting schedule data...")
+    time_slots = collect_time_slot_data(cells, day_rooms_map, vice_chair_paths)
+    n_enriched = sum(1 for s in time_slots if len(s.sources) > 1)
+    if vice_chair_paths:
+        print(f"  {len(time_slots)} time slots ({n_enriched} enriched with vice-chair detail)")
+    else:
+        print(f"  {len(time_slots)} time slots (from {len(cells)} cells)")
+
+    print("\nParsing time slots (Gemini API)...")
+    sessions = parse_time_slots(time_slots, day_rooms_map)
     print(f"Parsed {len(sessions)} sessions")
 
     # Step 5: Build Schedule model
@@ -145,7 +181,7 @@ def main():
     # Detect meeting timezone from Chair notes DOCX
     meeting_tz = "UTC"
     chair_notes_path = find_chair_notes_docx(docx_path.parent)
-    if chair_notes_path is None:
+    if chair_notes_path is None and not args.no_download:
         # Try downloading Chair notes from FTP
         print("\nNo local Chair notes found, downloading from FTP...")
         chair_notes_path = download_latest_chair_notes(docx_path.parent)

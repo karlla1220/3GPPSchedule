@@ -102,9 +102,9 @@ jobs:
         if: steps.output.outputs.has_output == 'true'
         run: |
           uv run python -c "
-          from downloader import get_remote_schedule_info
+          from downloader import get_all_remote_schedule_info
           import json
-          info = get_remote_schedule_info()
+          info = get_all_remote_schedule_info()
           if info:
               with open('docs/.schedule_state.json', 'w') as f:
                   json.dump(info, f, ensure_ascii=False, indent=2)

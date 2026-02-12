@@ -20,6 +20,8 @@ _debug_*.py
 
 # Downloaded schedule files (binary DOCX)
 Chair_notes/
+Hiroki_notes/
+Sorour_notes/
 
 # Environment
 .env

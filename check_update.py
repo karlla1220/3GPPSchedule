@@ -14,32 +14,41 @@ import os
 import sys
 from pathlib import Path
 
-from downloader import get_remote_schedule_info
+from downloader import get_remote_schedule_info, get_all_remote_schedule_info
 
 STATE_FILE = Path("docs/.schedule_state.json")
 
 
 def main() -> None:
     # 1. Fetch current remote state (lightweight — directory listing only)
-    print("Checking FTP for schedule updates…")
+    print("Checking FTP for schedule updates (all folders)…")
     try:
-        remote = get_remote_schedule_info()
+        remote_all = get_all_remote_schedule_info()
     except Exception as e:
         print(f"FTP check failed: {e}")
         # On failure, assume changed to be safe
         _set_output("changed", "true")
         sys.exit(0)
 
-    if remote is None:
-        print("No schedule file found on FTP.")
+    if not remote_all:
+        print("No schedule files found on FTP.")
         _set_output("changed", "false")
         return
 
-    print(f"Remote: {remote['name']}  uploaded_at={remote['uploaded_at']}")
+    for info in remote_all:
+        folder = info.get("folder", "?")
+        print(f"  Remote [{folder}]: {info['name']}  uploaded_at={info.get('uploaded_at')}")
 
     # 2. Compare with cached state (stored in repo as docs/.schedule_state.json)
     cached = _load_state()
-    changed = cached != remote
+
+    # Normalize for comparison: both should be lists of dicts
+    # Handle migration from old single-dict format
+    if isinstance(cached, dict) and "name" in cached:
+        # Old format: single dict → convert to list for comparison
+        cached = [cached]
+
+    changed = cached != remote_all
     print(f"Cached: {cached}")
     print(f"Changed: {changed}")
 

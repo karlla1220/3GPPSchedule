@@ -256,10 +256,10 @@ header .meta {
     padding: 2px 5px;
     margin: 1px 2px;
     overflow: hidden;
-    cursor: default;
+    cursor: pointer;
     z-index: 10;
     position: relative;
-    transition: box-shadow 0.15s, transform 0.1s;
+    transition: box-shadow 0.15s;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
@@ -269,7 +269,6 @@ header .meta {
 .session-block:hover {
     box-shadow: 0 2px 8px rgba(0,0,0,0.18);
     z-index: 15;
-    transform: scale(1.01);
 }
 
 .session-name {
@@ -280,6 +279,18 @@ header .meta {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    flex-shrink: 0;
+    position: relative;
+    z-index: 2;
+    background: var(--session-bg);
+}
+
+.session-details {
+    flex: 1 1 0;
+    min-height: 0;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
 }
 
 .session-chair {
@@ -289,35 +300,76 @@ header .meta {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    flex-shrink: 0;
 }
 
 .session-duration {
     font-size: 9px;
     color: var(--session-text);
     opacity: 0.6;
+    flex-shrink: 0;
 }
 
-/* Tooltip */
-.session-block .tooltip {
+.session-ai {
+    font-size: 8px;
+    color: var(--session-text);
+    opacity: 0.55;
+    white-space: normal;
+    word-break: break-word;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.2;
+    flex: 1 1 0;
+    min-height: 0;
+}
+
+/* Click-to-show popup */
+.popup-backdrop {
     display: none;
-    position: absolute;
-    left: 100%;
-    top: 0;
-    margin-left: 4px;
+    position: fixed;
+    inset: 0;
+    z-index: 90;
+}
+
+.popup-backdrop.active {
+    display: block;
+}
+
+.popup-floating {
+    display: none;
+    position: fixed;
     background: #1F2937;
     color: white;
-    padding: 8px 12px;
-    border-radius: 6px;
+    padding: 12px 16px;
+    border-radius: 8px;
     font-size: 12px;
     white-space: nowrap;
-    z-index: 100;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-    pointer-events: none;
-    line-height: 1.6;
+    z-index: 200;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.35);
+    pointer-events: auto;
+    line-height: 1.7;
+    min-width: 180px;
+    max-width: 400px;
 }
 
-.session-block:hover .tooltip {
+.popup-floating.show {
     display: block;
+}
+
+.popup-floating .popup-close {
+    position: absolute;
+    top: 4px;
+    right: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    color: #9CA3AF;
+    background: none;
+    border: none;
+    line-height: 1;
+}
+
+.popup-floating .popup-close:hover {
+    color: white;
 }
 
 /* Current time indicator */
@@ -482,6 +534,56 @@ document.addEventListener('DOMContentLoaded', function() {{
     updateNowLine();
     setInterval(updateNowLine, 60000);
 
+    // Click-to-show popup on session blocks (shared floating popup)
+    const backdrop = document.getElementById('popup-backdrop');
+    const popupEl = document.getElementById('popup-floating');
+    const popupContent = document.getElementById('popup-content');
+    const popupCloseBtn = document.getElementById('popup-close-btn');
+
+    function closePopup() {{
+        popupEl.classList.remove('show');
+        backdrop.classList.remove('active');
+    }}
+
+    document.querySelectorAll('.session-block').forEach(block => {{
+        block.addEventListener('click', function(e) {{
+            e.stopPropagation();
+            const html = this.getAttribute('data-popup');
+            if (!html) return;
+            const wasOpen = popupEl.classList.contains('show');
+            closePopup();
+            if (!wasOpen || popupContent.innerHTML !== html) {{
+                popupContent.innerHTML = html;
+                const blockRect = this.getBoundingClientRect();
+                popupEl.classList.add('show');
+                backdrop.classList.add('active');
+                // Initially place to the right of the block
+                let left = blockRect.right + 4;
+                let top = blockRect.top;
+                // Measure popup after rendering
+                const pRect = popupEl.getBoundingClientRect();
+                // Flip left if off-screen right
+                if (left + pRect.width > window.innerWidth - 8) {{
+                    left = blockRect.left - pRect.width - 4;
+                }}
+                if (left < 8) left = 8;
+                // Flip up if off-screen bottom
+                if (top + pRect.height > window.innerHeight - 8) {{
+                    top = window.innerHeight - pRect.height - 8;
+                }}
+                if (top < 8) top = 8;
+                popupEl.style.left = left + 'px';
+                popupEl.style.top = top + 'px';
+            }}
+        }});
+    }});
+
+    backdrop.addEventListener('click', closePopup);
+    popupCloseBtn.addEventListener('click', function(e) {{
+        e.stopPropagation();
+        closePopup();
+    }});
+
     // --- Auto-refresh: reload page periodically, preserving user state ---
     if (AUTO_REFRESH_MS > 0) {{
         setInterval(function() {{
@@ -635,30 +737,37 @@ def generate_html(schedule: Schedule) -> str:
                 f"--session-text:{colors['text']}"
             )
 
-            # Content based on block height
+            # Content based on block height — order: Name, Chair, Time, AI
             slots = row_end - row_start
             name_html = f'<div class="session-name">{_esc(session.name)}</div>'
             chair_html = ""
             dur_html = ""
+            ai_html = ""
 
-            if slots >= 4 and session.chair:
+            if slots >= 3 and session.chair:
                 chair_html = (
                     f'<div class="session-chair">{_esc(session.chair)}</div>'
                 )
-            if slots >= 6:
+            if slots >= 4:
                 dur_html = (
                     f'<div class="session-duration">'
                     f"{session.start_time}-{session.end_time} "
                     f"({session.duration_minutes}m)</div>"
                 )
+            if session.agenda_item and slots >= 6:
+                ai_html = (
+                    f'<div class="session-ai">AI {_esc(session.agenda_item)}</div>'
+                )
 
-            # Tooltip
-            tooltip_lines = [f"<strong>{_esc(session.name)}</strong>"]
+            # Popup (click-to-show)
+            popup_lines = [f"<strong>{_esc(session.name)}</strong>"]
+            if session.group_header:
+                popup_lines.append(f"Group: {_esc(session.group_header)}")
             if session.chair:
-                tooltip_lines.append(f"Chair: {_esc(session.chair)}")
+                popup_lines.append(f"Chair: {_esc(session.chair)}")
             if session.agenda_item:
-                tooltip_lines.append(f"AI: {_esc(session.agenda_item)}")
-            tooltip_lines.append(
+                popup_lines.append(f"AI: {_esc(session.agenda_item)}")
+            popup_lines.append(
                 f"Time: {session.start_time} - {session.end_time} ({session.duration_minutes} min)"
             )
             room_names_in_span = []
@@ -666,13 +775,19 @@ def generate_html(schedule: Schedule) -> str:
                 if ri < len(day_schedule.rooms):
                     room_names_in_span.append(day_schedule.rooms[ri].name)
             if room_names_in_span:
-                tooltip_lines.append(f"Room: {', '.join(room_names_in_span)}")
-            tooltip_html = "<br>".join(tooltip_lines)
+                popup_lines.append(f"Room: {', '.join(room_names_in_span)}")
+            popup_html = "<br>".join(popup_lines)
+
+            # Escape popup_html for use in data attribute
+            popup_attr = popup_html.replace('&', '&amp;').replace('"', '&quot;').replace("'", '&#39;')
+
+            # Build secondary details wrapped in a clipping container
+            details_inner = f"{chair_html}{dur_html}{ai_html}"
+            details_html = f'<div class="session-details">{details_inner}</div>' if details_inner else ""
 
             html_parts.append(
-                f'                <div class="session-block" style="{style}">\n'
-                f"                    {name_html}{chair_html}{dur_html}\n"
-                f'                    <div class="tooltip">{tooltip_html}</div>\n'
+                f'                <div class="session-block" style="{style}" data-popup="{popup_attr}">\n'
+                f"                    {name_html}{details_html}\n"
                 f"                </div>\n"
             )
 
@@ -681,6 +796,10 @@ def generate_html(schedule: Schedule) -> str:
             "        </div>\n"
             "    </div>\n"
         )
+
+    # Shared floating popup and backdrop
+    html_parts.append('    <div class="popup-backdrop" id="popup-backdrop"></div>\n')
+    html_parts.append('    <div class="popup-floating" id="popup-floating"><div id="popup-content"></div><button class="popup-close" id="popup-close-btn">&times;</button></div>\n')
 
     # Close container and add JS
     html_parts.append(f"""</div>
