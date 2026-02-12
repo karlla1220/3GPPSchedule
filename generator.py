@@ -15,6 +15,9 @@ from models import (
 # Default color for sessions without a group header
 _DEFAULT_COLOR = {"bg": "#F3F4F6", "border": "#9CA3AF", "text": "#374151"}
 
+# Auto-refresh interval in minutes (0 to disable)
+AUTO_REFRESH_MINUTES = 5
+
 
 def _assign_group_colors(sessions: list) -> dict[str, dict]:
     """Assign colors to unique group_header values from the palette."""
@@ -352,11 +355,38 @@ header .meta {
 """
 
 
-def _generate_js(timezone: str = "UTC") -> str:
-    """Generate the JavaScript for tab switching, today selection, and now-line."""
+def _generate_js(timezone: str = "UTC", auto_refresh_minutes: int = AUTO_REFRESH_MINUTES) -> str:
+    """Generate the JavaScript for tab switching, today selection, now-line, and auto-refresh."""
+    auto_refresh_ms = auto_refresh_minutes * 60 * 1000
     return f"""
 document.addEventListener('DOMContentLoaded', function() {{
     const MEETING_TZ = '{timezone}';
+    const AUTO_REFRESH_MS = {auto_refresh_ms}; // {auto_refresh_minutes} minutes
+    const STATE_KEY = '3gpp_schedule_state';
+
+    // --- User state persistence (sessionStorage) ---
+    function saveUserState() {{
+        const activeTab = document.querySelector('.tab.active');
+        const state = {{
+            activeDay: activeTab ? activeTab.dataset.day : null,
+            scrollX: window.scrollX,
+            scrollY: window.scrollY
+        }};
+        try {{
+            sessionStorage.setItem(STATE_KEY, JSON.stringify(state));
+        }} catch (e) {{
+            // sessionStorage may be unavailable; silently ignore
+        }}
+    }}
+
+    function loadUserState() {{
+        try {{
+            const raw = sessionStorage.getItem(STATE_KEY);
+            return raw ? JSON.parse(raw) : null;
+        }} catch (e) {{
+            return null;
+        }}
+    }}
 
     // Helper: get current Date components in the meeting timezone
     function nowInMeetingTZ() {{
@@ -407,14 +437,26 @@ document.addEventListener('DOMContentLoaded', function() {{
         }});
     }});
 
-    // Auto-select today's tab (in meeting timezone)
-    const {{ weekday: today }} = nowInMeetingTZ();
-    const todayTab = document.querySelector(`[data-day="${{today}}"]`);
-    if (todayTab) {{
-        todayTab.click();
+    // Restore saved state or auto-select today's tab
+    const saved = loadUserState();
+    if (saved && saved.activeDay) {{
+        const savedTab = document.querySelector('[data-day="' + saved.activeDay + '"]');
+        if (savedTab) {{
+            savedTab.click();
+            window.scrollTo(saved.scrollX || 0, saved.scrollY || 0);
+        }} else {{
+            const firstTab = document.querySelector('.tab');
+            if (firstTab) firstTab.click();
+        }}
     }} else {{
-        const firstTab = document.querySelector('.tab');
-        if (firstTab) firstTab.click();
+        const {{ weekday: today }} = nowInMeetingTZ();
+        const todayTab = document.querySelector(`[data-day="${{today}}"]`);
+        if (todayTab) {{
+            todayTab.click();
+        }} else {{
+            const firstTab = document.querySelector('.tab');
+            if (firstTab) firstTab.click();
+        }}
     }}
 
     // Now-line: update position every minute (in meeting timezone)
@@ -439,6 +481,14 @@ document.addEventListener('DOMContentLoaded', function() {{
 
     updateNowLine();
     setInterval(updateNowLine, 60000);
+
+    // --- Auto-refresh: reload page periodically, preserving user state ---
+    if (AUTO_REFRESH_MS > 0) {{
+        setInterval(function() {{
+            saveUserState();
+            location.reload();
+        }}, AUTO_REFRESH_MS);
+    }}
 }});
 """
 
