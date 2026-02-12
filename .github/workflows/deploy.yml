@@ -43,31 +43,19 @@ jobs:
       - name: Install dependencies
         run: uv sync
 
-      # Restore cached state from last successful run
-      - name: Restore schedule state cache
-        uses: actions/cache@v4
-        with:
-          path: .schedule_state
-          key: schedule-state-${{ github.ref }}
-          restore-keys: schedule-state-
-
+      # State is read from docs/.schedule_state.json (committed in repo)
       - name: Check for FTP updates
         id: detect
         run: uv run python check_update.py
-
-      # Save updated state for next run
-      - name: Save schedule state cache
-        if: steps.detect.outputs.changed == 'true'
-        uses: actions/cache/save@v4
-        with:
-          path: .schedule_state
-          key: schedule-state-${{ github.ref }}-${{ github.run_id }}
 
   # ── Job 2: Full build (only when schedule changed) ──────────
   build-and-deploy:
     needs: check
     if: needs.check.outputs.changed == 'true' || github.event.inputs.force == 'true'
     runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -101,6 +89,19 @@ jobs:
             echo "has_output=false" >> $GITHUB_OUTPUT
           fi
 
+      # Save FTP state to repo so next check job can compare
+      - name: Save schedule state
+        if: steps.output.outputs.has_output == 'true'
+        run: |
+          uv run python -c "
+          from downloader import get_remote_schedule_info
+          import json
+          info = get_remote_schedule_info()
+          if info:
+              with open('docs/.schedule_state.json', 'w') as f:
+                  json.dump(info, f, ensure_ascii=False, indent=2)
+          "
+
       - name: Commit and push
         if: steps.output.outputs.has_output == 'true'
         run: |
@@ -109,3 +110,19 @@ jobs:
           git add docs/
           git diff --cached --quiet || git commit -m "Update schedule $(date +%Y-%m-%d_%H:%M)"
           git push
+
+      # Deploy to GitHub Pages directly (GITHUB_TOKEN pushes don't trigger other workflows)
+      - name: Setup Pages
+        if: steps.output.outputs.has_output == 'true'
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        if: steps.output.outputs.has_output == 'true'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: docs/
+
+      - name: Deploy to GitHub Pages
+        if: steps.output.outputs.has_output == 'true'
+        id: deployment
+        uses: actions/deploy-pages@v4

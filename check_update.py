@@ -3,7 +3,8 @@
 Checks if the latest schedule file on the 3GPP FTP has changed since
 the last run.  Outputs `changed=true/false` to $GITHUB_OUTPUT.
 
-State is persisted via GitHub Actions cache (file: .schedule_state).
+State is persisted in docs/.schedule_state.json (committed to the repo
+by the build-and-deploy job).
 """
 
 from __future__ import annotations
@@ -15,7 +16,7 @@ from pathlib import Path
 
 from downloader import get_remote_schedule_info
 
-STATE_FILE = Path(".schedule_state")
+STATE_FILE = Path("docs/.schedule_state.json")
 
 
 def main() -> None:
@@ -36,16 +37,14 @@ def main() -> None:
 
     print(f"Remote: {remote['name']}  uploaded_at={remote['uploaded_at']}")
 
-    # 2. Compare with cached state
+    # 2. Compare with cached state (stored in repo as docs/.schedule_state.json)
     cached = _load_state()
     changed = cached != remote
     print(f"Cached: {cached}")
     print(f"Changed: {changed}")
 
-    # 3. Save new state for next run
-    if changed:
-        _save_state(remote)
-
+    # State is saved by the build-and-deploy job (committed to repo),
+    # not here — so a failed build will retry on the next check.
     _set_output("changed", str(changed).lower())
 
 
