@@ -6,10 +6,14 @@ on:
     - cron: '*/5 * * * 1-5'
   workflow_dispatch:
     inputs:
-      force:
-        description: 'Force rebuild even if no change detected'
-        type: boolean
-        default: false
+      action:
+        description: '실행할 동작 선택'
+        type: choice
+        default: check-and-deploy
+        options:
+          - check-and-deploy    # 변경 감지 후 변경시에만 빌드/배포
+          - force-deploy        # 변경 여부 무시, 강제 빌드/배포
+          - deploy-only         # 빌드 없이 현재 docs/ 그대로 배포
 
 permissions:
   contents: write
@@ -23,6 +27,7 @@ concurrency:
 jobs:
   # ── Job 1: Lightweight FTP check (~20 seconds) ──────────────
   check:
+    if: github.event.inputs.action != 'force-deploy' && github.event.inputs.action != 'deploy-only'
     runs-on: ubuntu-latest
     outputs:
       changed: ${{ steps.detect.outputs.changed }}
@@ -51,7 +56,10 @@ jobs:
   # ── Job 2: Full build (only when schedule changed) ──────────
   build-and-deploy:
     needs: check
-    if: needs.check.outputs.changed == 'true' || github.event.inputs.force == 'true'
+    if: |
+      always() &&
+      (needs.check.outputs.changed == 'true' ||
+       github.event.inputs.action == 'force-deploy')
     runs-on: ubuntu-latest
     environment:
       name: github-pages
@@ -124,5 +132,28 @@ jobs:
 
       - name: Deploy to GitHub Pages
         if: steps.output.outputs.has_output == 'true'
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+  # ── Job 3: Deploy-only (no rebuild, just push existing docs/) ──
+  deploy-only:
+    if: github.event.inputs.action == 'deploy-only'
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: docs/
+
+      - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
