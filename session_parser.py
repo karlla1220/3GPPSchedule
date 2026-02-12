@@ -214,6 +214,66 @@ def parse_with_gemini(cells: list[CellData]) -> list[dict]:
 
 
 
+def get_timezone_from_location(location_text: str) -> str | None:
+    """Use Gemini to determine the IANA timezone from a meeting location string.
+
+    Args:
+        location_text: e.g. "Gothenburg, SE, Feb. 9th ~ 13th, 2026"
+
+    Returns:
+        IANA timezone string (e.g. "Europe/Stockholm") or None on failure.
+    """
+    import time as _time
+    from google import genai
+    from google.genai import types
+
+    api_key = os.environ.get("GEMINI_API_KEY")
+    if not api_key:
+        print("Warning: GEMINI_API_KEY not set, cannot determine timezone")
+        return None
+
+    # Check cache
+    cache_key = hashlib.sha256(f"tz:{location_text}".encode()).hexdigest()[:16]
+    cached = _load_cache(f"tz_{cache_key}")
+    if cached is not None:
+        tz = cached.get("timezone")
+        if tz:
+            print(f"Using cached timezone: {tz}")
+            return tz
+
+    client = genai.Client(
+        api_key=api_key,
+        http_options={"timeout": 30_000},
+    )
+
+    prompt = f"""Given this 3GPP meeting location line, return the IANA timezone identifier for the city.
+
+Location: "{location_text}"
+
+Return ONLY valid JSON: {{"timezone": "IANA/Timezone", "city": "CityName", "country": "CountryName"}}"""
+
+    try:
+        response = client.models.generate_content(
+            model="gemini-2.5-flash",
+            contents=prompt,
+            config=types.GenerateContentConfig(
+                temperature=0.0,
+                response_mime_type="application/json",
+                thinking_config=types.ThinkingConfig(thinking_budget=0),
+            ),
+        )
+        result = json.loads(response.text.strip())
+        tz = result.get("timezone")
+        city = result.get("city", "")
+        country = result.get("country", "")
+        if tz:
+            print(f"Meeting location: {city}, {country} → timezone: {tz}")
+            _save_cache(f"tz_{cache_key}", result)
+            return tz
+    except Exception as e:
+        print(f"Warning: Failed to determine timezone from location: {e}")
+
+    return None
 
 
 def parse_sessions(

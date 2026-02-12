@@ -10,6 +10,45 @@ from docx import Document
 from models import TIME_BLOCKS, CellData, DAY_ORDER, RoomInfo
 
 
+def extract_meeting_location(docx_path: Path) -> str | None:
+    """Extract the meeting location line from a Chair notes DOCX.
+
+    Looks for a line like "Gothenburg, SE, Feb. 9th ~ 13th, 2026"
+    in the first few paragraphs of the document.
+
+    Returns the location string if found, None otherwise.
+    """
+    doc = Document(str(docx_path))
+    # Check first 10 paragraphs for a location-like line
+    for para in doc.paragraphs[:10]:
+        text = para.text.strip()
+        if not text:
+            continue
+        # Location lines typically contain: City, CountryCode, Date
+        # Pattern: word(s), 2-letter code, month/date info
+        if re.search(
+            r"[A-Z][a-z]+.*,\s*[A-Z]{2},\s*\w+\.?\s+\d", text
+        ):
+            return text
+    return None
+
+
+def find_chair_notes_docx(dest_dir: Path = Path("Chair_notes")) -> Path | None:
+    """Find the latest Chair notes DOCX in the local directory.
+
+    Looks for files with 'chair note' (case-insensitive) in the name,
+    returns the one with the highest modification time.
+    """
+    chair_files = [
+        f
+        for f in dest_dir.glob("*.docx")
+        if "chair note" in f.name.lower() or "chair_note" in f.name.lower()
+    ]
+    if not chair_files:
+        return None
+    return max(chair_files, key=lambda f: f.stat().st_mtime)
+
+
 # Namespace for OpenXML
 _NS = "http://schemas.openxmlformats.org/wordprocessingml/2006/main"
 

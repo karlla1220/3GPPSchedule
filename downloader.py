@@ -152,3 +152,65 @@ def find_local_latest_schedule(dest_dir: Path = Path("Chair_notes")) -> Path | N
     latest = max(schedule_files, key=lambda f: f.stat().st_mtime)
     print(f"Latest local schedule (by mtime): {latest.name}")
     return latest
+
+
+def find_latest_chair_notes(files: list[dict]) -> dict | None:
+    """Find the latest Chair notes DOCX file by upload timestamp.
+
+    Looks for files containing 'chair note' (case-insensitive) in the name.
+    Returns the one with the most recent upload time.
+    """
+    chair_files = [
+        f for f in files
+        if "chair note" in f["name"].lower() or "chair_note" in f["name"].lower()
+    ]
+
+    if not chair_files:
+        return None
+
+    # Prefer sorting by upload timestamp
+    files_with_ts = [f for f in chair_files if f.get("uploaded_at") is not None]
+    if files_with_ts:
+        latest = max(files_with_ts, key=lambda x: x["uploaded_at"])
+        print(f"Latest Chair notes (by upload time {latest['uploaded_at']}): {latest['name']}")
+        return latest
+
+    # Fallback: sort by version number in filename
+    versioned = []
+    for f in chair_files:
+        match = re.search(r"v(\d+)\.docx$", f["name"], re.IGNORECASE)
+        if match:
+            versioned.append({**f, "version": int(match.group(1))})
+    if versioned:
+        return max(versioned, key=lambda x: x["version"])
+
+    return chair_files[0]
+
+
+def download_latest_chair_notes(dest_dir: Path = Path("Chair_notes")) -> Path | None:
+    """Download the latest Chair notes DOCX from 3GPP FTP.
+
+    Returns the path to the downloaded file, or None if not found.
+    """
+    try:
+        files = list_remote_files()
+    except Exception as e:
+        print(f"Warning: Could not list FTP for Chair notes: {e}")
+        return None
+
+    latest = find_latest_chair_notes(files)
+    if latest is None:
+        print("No Chair notes file found on FTP")
+        return None
+
+    dest_path = dest_dir / latest["name"]
+
+    if dest_path.exists():
+        print(f"Chair notes already exists: {dest_path}")
+        return dest_path
+
+    try:
+        return download_file(latest["url"], dest_path)
+    except Exception as e:
+        print(f"Warning: Failed to download Chair notes: {e}")
+        return None

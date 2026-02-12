@@ -80,6 +80,7 @@ class Schedule:
     generated_at: str
     contact_name: str
     contact_email: str
+    timezone: str = "UTC"  # IANA timezone of the meeting venue
 
 
 def time_to_minutes(t: str) -> int:

@@ -352,61 +352,94 @@ header .meta {
 """
 
 
-def _generate_js() -> str:
+def _generate_js(timezone: str = "UTC") -> str:
     """Generate the JavaScript for tab switching, today selection, and now-line."""
-    return """
-document.addEventListener('DOMContentLoaded', function() {
+    return f"""
+document.addEventListener('DOMContentLoaded', function() {{
+    const MEETING_TZ = '{timezone}';
+
+    // Helper: get current Date components in the meeting timezone
+    function nowInMeetingTZ() {{
+        const now = new Date();
+        const fmt = new Intl.DateTimeFormat('en-US', {{
+            timeZone: MEETING_TZ,
+            hour: 'numeric', minute: 'numeric',
+            weekday: 'long',
+            hour12: false
+        }});
+        const parts = fmt.formatToParts(now);
+        let hour = 0, minute = 0, weekday = '';
+        for (const p of parts) {{
+            if (p.type === 'hour') hour = parseInt(p.value, 10);
+            if (p.type === 'minute') minute = parseInt(p.value, 10);
+            if (p.type === 'weekday') weekday = p.value.toLowerCase();
+        }}
+        return {{ hour, minute, weekday, minutes: hour * 60 + minute }};
+    }}
+
+    // Update the "Updated" display in meeting timezone
+    function updateTimeDisplay() {{
+        const el = document.getElementById('tz-now');
+        if (!el) return;
+        const now = new Date();
+        const formatted = now.toLocaleString('en-US', {{
+            timeZone: MEETING_TZ,
+            year: 'numeric', month: '2-digit', day: '2-digit',
+            hour: '2-digit', minute: '2-digit', hour12: false
+        }});
+        el.textContent = formatted;
+    }}
+    updateTimeDisplay();
+    setInterval(updateTimeDisplay, 60000);
+
     // Tab switching
     const tabs = document.querySelectorAll('.tab');
     const panels = document.querySelectorAll('.day-panel');
 
-    tabs.forEach(tab => {
-        tab.addEventListener('click', function() {
+    tabs.forEach(tab => {{
+        tab.addEventListener('click', function() {{
             tabs.forEach(t => t.classList.remove('active'));
             panels.forEach(p => p.classList.remove('active'));
             this.classList.add('active');
             const day = this.dataset.day;
             const panel = document.getElementById(day);
             if (panel) panel.classList.add('active');
-        });
-    });
+        }});
+    }});
 
-    // Auto-select today's tab
-    const dayNames = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
-    const today = dayNames[new Date().getDay()];
-    const todayTab = document.querySelector(`[data-day="${today}"]`);
-    if (todayTab) {
+    // Auto-select today's tab (in meeting timezone)
+    const {{ weekday: today }} = nowInMeetingTZ();
+    const todayTab = document.querySelector(`[data-day="${{today}}"]`);
+    if (todayTab) {{
         todayTab.click();
-    } else {
-        // Default to first tab if today is not a meeting day
+    }} else {{
         const firstTab = document.querySelector('.tab');
         if (firstTab) firstTab.click();
-    }
+    }}
 
-    // Now-line: update position every minute
-    function updateNowLine() {
-        const now = new Date();
-        const minutes = now.getHours() * 60 + now.getMinutes();
+    // Now-line: update position every minute (in meeting timezone)
+    function updateNowLine() {{
+        const {{ minutes }} = nowInMeetingTZ();
         const base = 8 * 60 + 30; // 08:30
         const end = 19 * 60 + 45; // 19:45
 
         document.querySelectorAll('.now-line').forEach(el => el.remove());
 
-        if (minutes >= base && minutes <= end) {
+        if (minutes >= base && minutes <= end) {{
             const slot = Math.floor((minutes - base) / 5);
             const row = slot + 2;
-            document.querySelectorAll('.schedule-grid').forEach(grid => {
+            document.querySelectorAll('.schedule-grid').forEach(grid => {{
                 const nowLine = document.createElement('div');
                 nowLine.className = 'now-line';
                 nowLine.style.gridRow = row + ' / ' + (row + 1);
                 grid.appendChild(nowLine);
-            });
-        }
-    }
+            }});
+        }}
+    }}
 
     updateNowLine();
     setInterval(updateNowLine, 60000);
-});
+}});
 """
 
 
@@ -433,7 +466,7 @@ def generate_html(schedule: Schedule) -> str:
 <div class="container">
     <header>
         <h1>📅 {_esc(schedule.meeting_name)}</h1>
-        <p class="meta">Source: {_esc(schedule.source_file)} &nbsp;|&nbsp; Generated: {_esc(schedule.generated_at)}</p>
+        <p class="meta">Source: {_esc(schedule.source_file)} &nbsp;|&nbsp; Generated: {_esc(schedule.generated_at)} ({_esc(schedule.timezone)}) &nbsp;|&nbsp; Now: <span id="tz-now">...</span> ({_esc(schedule.timezone)})</p>
         <p class="meta">Contact: {_esc(schedule.contact_name)} (<a href="{mailto_link}">{_esc(schedule.contact_email)}</a>) for reports or feature requests.</p>
     </header>
 """)
@@ -601,7 +634,7 @@ def generate_html(schedule: Schedule) -> str:
 
     # Close container and add JS
     html_parts.append(f"""</div>
-<script>{_generate_js()}</script>
+<script>{_generate_js(schedule.timezone)}</script>
 </body>
 </html>""")
 

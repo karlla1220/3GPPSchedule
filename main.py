@@ -28,10 +28,10 @@ from dotenv import load_dotenv
 load_dotenv()
 
 from models import DAY_ORDER, DaySchedule, Schedule
-from parser import build_room_list, parse_docx
-from session_parser import parse_sessions
+from parser import build_room_list, parse_docx, extract_meeting_location, find_chair_notes_docx
+from session_parser import parse_sessions, get_timezone_from_location
 from generator import save_html
-from downloader import download_latest_schedule, find_local_latest_schedule
+from downloader import download_latest_schedule, download_latest_chair_notes, find_local_latest_schedule
 
 
 def _extract_meeting_name(filepath: Path) -> str:
@@ -141,6 +141,27 @@ def main():
 
     # Step 5: Build Schedule model
     meeting_name = _extract_meeting_name(docx_path)
+
+    # Detect meeting timezone from Chair notes DOCX
+    meeting_tz = "UTC"
+    chair_notes_path = find_chair_notes_docx(docx_path.parent)
+    if chair_notes_path is None:
+        # Try downloading Chair notes from FTP
+        print("\nNo local Chair notes found, downloading from FTP...")
+        chair_notes_path = download_latest_chair_notes(docx_path.parent)
+    if chair_notes_path:
+        print(f"\nExtracting meeting location from: {chair_notes_path.name}")
+        location_text = extract_meeting_location(chair_notes_path)
+        if location_text:
+            print(f"  Location line: {location_text}")
+            tz = get_timezone_from_location(location_text)
+            if tz:
+                meeting_tz = tz
+        else:
+            print("  Warning: Could not find location line in Chair notes")
+    else:
+        print("\nWarning: No Chair notes DOCX found, using UTC timezone")
+
     days = []
     for day_name in DAY_ORDER:
         if day_name not in day_rooms_map:
@@ -156,13 +177,23 @@ def main():
                 )
             )
 
+    # Generate timestamp in meeting timezone
+    from zoneinfo import ZoneInfo
+
+    try:
+        tz_info = ZoneInfo(meeting_tz)
+        generated_at = datetime.now(tz_info).strftime("%Y-%m-%d %H:%M")
+    except Exception:
+        generated_at = datetime.now().strftime("%Y-%m-%d %H:%M")
+
     schedule = Schedule(
         meeting_name=meeting_name,
         days=days,
         source_file=docx_path.name,
-        generated_at=datetime.now().strftime("%Y-%m-%d %H:%M"),
+        generated_at=generated_at,
         contact_name=contact_name,
         contact_email=contact_email,
+        timezone=meeting_tz,
     )
 
     # Step 6: Generate HTML
