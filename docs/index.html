@@ -332,7 +332,7 @@ header .meta {
 <div class="container">
     <header>
         <h1>📅 RAN1#124</h1>
-        <p class="meta">Source: RAN1#124 online and offline schedules - v05.docx &nbsp;|&nbsp; Generated: 2026-02-12 08:33 (Europe/Stockholm) &nbsp;|&nbsp; Now: <span id="tz-now">...</span> (Europe/Stockholm)</p>
+        <p class="meta">Source: RAN1#124 online and offline schedules - v06.docx &nbsp;|&nbsp; Generated: 2026-02-12 13:52 (Europe/Stockholm) &nbsp;|&nbsp; Now: <span id="tz-now">...</span> (Europe/Stockholm)</p>
         <p class="meta">Contact: Duckhyun Bae (<a href="mailto:duckhyun.bae@lge.com">duckhyun.bae@lge.com</a>) for reports or feature requests.</p>
     </header>
     <div class="legend">
@@ -1396,8 +1396,8 @@ header .meta {
                     <div class="tooltip"><strong>AI 10.5.3.3</strong><br>AI: 10.5.3.3<br>Time: 10:00 - 10:30 (30 min)<br>Room: Main session (F1/2/3, Level 2)</div>
                 </div>
                 <div class="session-block" style="grid-row:2/14;grid-column:3/4;--session-bg:#C7D2FE;--session-border:#4F46E5;--session-text:#3730A3">
-                    <div class="session-name">TBD</div><div class="session-duration">08:30-09:30 (60m)</div>
-                    <div class="tooltip"><strong>TBD</strong><br>Time: 08:30 - 09:30 (60 min)<br>Room: RAN1_Brk#1 (A1, Level 1)</div>
+                    <div class="session-name">NR-NTN</div><div class="session-duration">08:30-09:30 (60m)</div>
+                    <div class="tooltip"><strong>NR-NTN</strong><br>Time: 08:30 - 09:30 (60 min)<br>Room: RAN1_Brk#1 (A1, Level 1)</div>
                 </div>
                 <div class="session-block" style="grid-row:14/26;grid-column:3/4;--session-bg:#C7D2FE;--session-border:#4F46E5;--session-text:#3730A3">
                     <div class="session-name">AI/ML</div><div class="session-duration">09:30-10:30 (60m)</div>
@@ -1443,13 +1443,9 @@ header .meta {
                     <div class="session-name">AI 10.5.1.1</div><div class="session-duration">08:30-09:30 (60m)</div>
                     <div class="tooltip"><strong>AI 10.5.1.1</strong><br>AI: 10.5.1.1<br>Time: 08:30 - 09:30 (60 min)<br>Room: Offline B</div>
                 </div>
-                <div class="session-block" style="grid-row:74/86;grid-column:5/7;--session-bg:#F3F4F6;--session-border:#9CA3AF;--session-text:#374151">
-                    <div class="session-name">To be assigned by Sorour</div><div class="session-chair">Sorour</div><div class="session-duration">14:30-15:30 (60m)</div>
-                    <div class="tooltip"><strong>To be assigned by Sorour</strong><br>Chair: Sorour<br>Time: 14:30 - 15:30 (60 min)<br>Room: Offline A, Offline B</div>
-                </div>
-                <div class="session-block" style="grid-row:86/98;grid-column:5/7;--session-bg:#F3F4F6;--session-border:#9CA3AF;--session-text:#374151">
-                    <div class="session-name">To be assigned by Hiroki</div><div class="session-chair">Hiroki</div><div class="session-duration">15:30-16:30 (60m)</div>
-                    <div class="tooltip"><strong>To be assigned by Hiroki</strong><br>Chair: Hiroki<br>Time: 15:30 - 16:30 (60 min)<br>Room: Offline A, Offline B</div>
+                <div class="session-block" style="grid-row:74/98;grid-column:5/7;--session-bg:#F3F4F6;--session-border:#9CA3AF;--session-text:#374151">
+                    <div class="session-name">To be assigned by Sorour / To be assigned by Hiroki</div><div class="session-duration">14:30-16:30 (120m)</div>
+                    <div class="tooltip"><strong>To be assigned by Sorour / To be assigned by Hiroki</strong><br>Time: 14:30 - 16:30 (120 min)<br>Room: Offline A, Offline B</div>
                 </div>
             </div>
         </div>
@@ -1458,6 +1454,32 @@ header .meta {
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const MEETING_TZ = 'Europe/Stockholm';
+    const AUTO_REFRESH_MS = 300000; // 5 minutes
+    const STATE_KEY = '3gpp_schedule_state';
+
+    // --- User state persistence (sessionStorage) ---
+    function saveUserState() {
+        const activeTab = document.querySelector('.tab.active');
+        const state = {
+            activeDay: activeTab ? activeTab.dataset.day : null,
+            scrollX: window.scrollX,
+            scrollY: window.scrollY
+        };
+        try {
+            sessionStorage.setItem(STATE_KEY, JSON.stringify(state));
+        } catch (e) {
+            // sessionStorage may be unavailable; silently ignore
+        }
+    }
+
+    function loadUserState() {
+        try {
+            const raw = sessionStorage.getItem(STATE_KEY);
+            return raw ? JSON.parse(raw) : null;
+        } catch (e) {
+            return null;
+        }
+    }
 
     // Helper: get current Date components in the meeting timezone
     function nowInMeetingTZ() {
@@ -1508,14 +1530,26 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Auto-select today's tab (in meeting timezone)
-    const { weekday: today } = nowInMeetingTZ();
-    const todayTab = document.querySelector(`[data-day="${today}"]`);
-    if (todayTab) {
-        todayTab.click();
+    // Restore saved state or auto-select today's tab
+    const saved = loadUserState();
+    if (saved && saved.activeDay) {
+        const savedTab = document.querySelector('[data-day="' + saved.activeDay + '"]');
+        if (savedTab) {
+            savedTab.click();
+            window.scrollTo(saved.scrollX || 0, saved.scrollY || 0);
+        } else {
+            const firstTab = document.querySelector('.tab');
+            if (firstTab) firstTab.click();
+        }
     } else {
-        const firstTab = document.querySelector('.tab');
-        if (firstTab) firstTab.click();
+        const { weekday: today } = nowInMeetingTZ();
+        const todayTab = document.querySelector(`[data-day="${today}"]`);
+        if (todayTab) {
+            todayTab.click();
+        } else {
+            const firstTab = document.querySelector('.tab');
+            if (firstTab) firstTab.click();
+        }
     }
 
     // Now-line: update position every minute (in meeting timezone)
@@ -1540,6 +1574,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
     updateNowLine();
     setInterval(updateNowLine, 60000);
+
+    // --- Auto-refresh: reload page periodically, preserving user state ---
+    if (AUTO_REFRESH_MS > 0) {
+        setInterval(function() {
+            saveUserState();
+            location.reload();
+        }, AUTO_REFRESH_MS);
+    }
 });
 </script>
 </body>
