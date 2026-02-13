@@ -8,35 +8,13 @@ import os
 import re
 from pathlib import Path
 
-from models import CellData, RoomInfo, Session, time_to_minutes, minutes_to_time
+from models import RoomInfo, Session, time_to_minutes, minutes_to_time
 
 
 CACHE_DIR = Path(".cache")
+ROOM_DETECT_PROMPT_VERSION = 2
 
 # ── JSON Schemas for structured output ───────────────────────────
-
-SESSION_PARSE_SCHEMA = {
-    "type": "object",
-    "properties": {
-        "sessions": {
-            "type": "array",
-            "items": {
-                "type": "object",
-                "properties": {
-                    "name": {"type": "string"},
-                    "duration_minutes": {"type": "integer"},
-                    "chair": {"type": "string", "nullable": True},
-                    "group_headers": {
-                        "type": "array",
-                        "items": {"type": "string"},
-                    },
-                },
-                "required": ["name", "duration_minutes", "chair", "group_headers"],
-            },
-        }
-    },
-    "required": ["sessions"],
-}
 
 TIMEZONE_SCHEMA = {
     "type": "object",
@@ -82,14 +60,53 @@ MULTI_SOURCE_SESSION_SCHEMA = {
     "required": ["sessions"],
 }
 
+GROUP_SIMPLIFY_SCHEMA = {
+    "type": "object",
+    "properties": {
+        "mappings": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "original": {"type": "string"},
+                    "simplified": {"type": "string"},
+                },
+                "required": ["original", "simplified"],
+            },
+        }
+    },
+    "required": ["mappings"],
+}
 
-def _cache_key(cells: list[CellData]) -> str:
-    """Generate a cache key from cell data."""
-    content = json.dumps(
-        [(c.text, c.day, c.time_block_index, c.table_index) for c in cells],
-        sort_keys=True,
-    )
-    return hashlib.sha256(content.encode()).hexdigest()[:16]
+GROUP_SIMPLIFY_SYSTEM_INSTRUCTION = """You simplify and normalize group header labels from a 3GPP RAN1 meeting schedule.
+
+You receive a list of unique group_header strings currently used as legend labels in a
+Gantt-chart schedule visualization. Many of them are overly specific — they include
+sub-topic names, agenda-item numbers, or nested category paths joined by " / ".
+
+Your task: map every input label to a SIMPLIFIED representative category so that the
+final legend has a small, meaningful set of groups (typically 5–12).
+
+Rules:
+1. If a label has the form "X / Y / Z", X is usually the top-level category.
+   Decide the appropriate level of simplification based on the FULL list.
+2. Merge labels that clearly refer to the same work area.
+   e.g. "R20 / AI 9.1. R20 AI/ML", "R20 / Coverage / R20 Coverage",
+        "R20 / AI/ML / AI 9.1 R20 AI/ML", "R20 / ISAC" → all map to "R20".
+3. "6GR / 10.2.1", "6GR / 10.2.1 Waveform" → "6GR".
+4. "AI 7/8 / Maintenance" → "AI 7/8"  (drop the sub-detail).
+5. Labels like "To be assigned by <name>" → "TBD".
+6. Labels that are ALREADY simple and appear as top-level categories for others
+   should remain unchanged (e.g. "R20", "6GR", "Maintenance", "AI 8").
+7. For mixed/ambiguous labels like "NTN / R20", choose the category that best
+   represents the primary work area based on context from the full list.
+8. Keep the simplified names concise and human-readable.
+9. Every input label MUST appear exactly once in the output mappings.
+10. The simplified name should be one that already exists in the input list when
+    possible (prefer reusing an existing short label over inventing a new one).
+
+Output: {"mappings": [{"original": "<input label>", "simplified": "<category>"}]}
+Return ONLY valid JSON."""
 
 
 def _load_cache(key: str) -> list[dict] | None:
@@ -112,178 +129,6 @@ def _save_cache(key: str, data: list[dict]):
         json.dump(data, f, ensure_ascii=False, indent=2)
 
 
-SYSTEM_INSTRUCTION = """You parse 3GPP RAN1 meeting schedule cells into leaf-level sessions.
-
-A cell describes what happens in one or more rooms during a time block.
-
-RULES:
-1. "(N)" = N minutes duration.
-2. A line whose duration equals the sum of subsequent items' durations → GROUP HEADER, not a session.
-3. Lines without "(N)" before sessions are context labels → include in group_headers.
-4. Lines starting with "." are sub-items of the preceding item.
-5. Person names (e.g. Xiaodong, Sorour, Hiroki) appearing as group headers are chairs.
-6. A line with "(N)" that has no sub-items summing to it → LEAF SESSION.
-7. Group headers can nest. Always check sum-matching at every level.
-8. Total leaf durations must not exceed the time block duration.
-9. If no items have durations, estimate to fill the time block.
-10. If cell mentions a start time (e.g. "commences at 09:00"), time before that is empty.
-
-OUTPUT: {"sessions": [{"name":"...","duration_minutes":N,"chair":"person or null","group_headers":["labels"]}]}
-
-EXAMPLES:
-
-Xiaodong (120) / 6GR / Overall (60) / AI/ML (60)
-→ Xiaodong(120)=60+60 → header (chair). 6GR = label.
-[{"name":"Overall","duration_minutes":60,"chair":"Xiaodong","group_headers":["6GR"]},
- {"name":"AI/ML","duration_minutes":60,"chair":"Xiaodong","group_headers":["6GR"]}]
-
-6GR (150) / Waveform(50) / Modulation(50) / Energy(50)
-→ 6GR(150)=50×3 → header. No person → chair null.
-[{"name":"Waveform","duration_minutes":50,"chair":null,"group_headers":["6GR"]},
- {"name":"Modulation","duration_minutes":50,"chair":null,"group_headers":["6GR"]},
- {"name":"Energy","duration_minutes":50,"chair":null,"group_headers":["6GR"]}]
-
-Hiroki(40) / R20 ISAC(40) / Sorour(80) / R20 MIMO(40) / R20 NR-NTN(40)
-→ Two chair blocks. Hiroki(40)=40, Sorour(80)=40+40.
-[{"name":"R20 ISAC","duration_minutes":40,"chair":"Hiroki","group_headers":[]},
- {"name":"R20 MIMO","duration_minutes":40,"chair":"Sorour","group_headers":[]},
- {"name":"R20 NR-NTN","duration_minutes":40,"chair":"Sorour","group_headers":[]}]
-
-R20 A-IoT (150)
-→ No sub-items → leaf session.
-[{"name":"R20 A-IoT","duration_minutes":150,"chair":null,"group_headers":[]}]
-
-Xiaodong(120) / 6GR / Overall(40) / .TR skeleton(40) / Evaluation(80)
-→ ".TR skeleton" is sub-item of Overall → Overall(40)=40 → nested header.
-→ Xiaodong(120)=40+80 → chair header.
-[{"name":"TR skeleton","duration_minutes":40,"chair":"Xiaodong","group_headers":["6GR","Overall"]},
- {"name":"Evaluation","duration_minutes":80,"chair":"Xiaodong","group_headers":["6GR"]}]
-
-Return ONLY valid JSON: {"sessions": [...]}"""
-
-
-def _build_cell_prompt(cell: CellData) -> str:
-    """Build a user prompt for a single cell."""
-    return f"""Day: {cell.day}, Time Block: {cell.time_block_start}-{cell.time_block_end} ({cell.time_block_duration} min)
-Room indices: {cell.room_indices}
-Text:
-\"\"\"
-{cell.text}
-\"\"\""""
-
-
-def _cell_cache_key(cell: CellData) -> str:
-    """Generate a cache key for a single cell."""
-    content = json.dumps(
-        (cell.text, cell.day, cell.time_block_index, cell.table_index),
-        sort_keys=True,
-    )
-    return hashlib.sha256(content.encode()).hexdigest()[:16]
-
-
-def parse_with_gemini(cells: list[CellData]) -> list[dict]:
-    """Parse cells using Gemini API, one cell at a time (leverages prompt caching).
-
-    Each cell result is cached individually so partial progress is preserved.
-    Returns list of parsed cell results with cell_id keys.
-    """
-    import time as _time
-    from google import genai
-    from google.genai import types
-
-    api_key = os.environ.get("GEMINI_API_KEY")
-    if not api_key:
-        raise ValueError("GEMINI_API_KEY environment variable is not set")
-
-    # Check full-batch cache first
-    batch_key = _cache_key(cells)
-    cached = _load_cache(batch_key)
-    if cached is not None:
-        print("Using cached Gemini results")
-        return cached
-
-    client = genai.Client(
-        api_key=api_key,
-        http_options={"timeout": 120_000},
-    )
-
-    all_parsed: list[dict] = []
-    cache_hits = 0
-    api_calls = 0
-    MAX_RETRIES = 3
-
-    for i, cell in enumerate(cells):
-        cell_id = f"CELL_{i:03d}"
-
-        # Check per-cell cache
-        ck = _cell_cache_key(cell)
-        cell_cached = _load_cache(f"cell_{ck}")
-        if cell_cached is not None:
-            cell_cached["cell_id"] = cell_id
-            all_parsed.append(cell_cached)
-            cache_hits += 1
-            continue
-
-        user_prompt = _build_cell_prompt(cell)
-        print(f"  [{i+1}/{len(cells)}] {cell.day} TB{cell.time_block_index} rooms={cell.room_indices}...", end=" ", flush=True)
-
-        # Rate-limit: 1 second between API calls
-        if api_calls > 0:
-            _time.sleep(1.0)
-
-        for attempt in range(MAX_RETRIES):
-            try:
-                response = client.models.generate_content(
-                    model="gemini-3-flash-preview",
-                    contents=user_prompt,
-                    config=types.GenerateContentConfig(
-                        system_instruction=SYSTEM_INSTRUCTION,
-                        temperature=0.1,
-                        response_mime_type="application/json",
-                        response_json_schema=SESSION_PARSE_SCHEMA,
-                        thinking_config=types.ThinkingConfig(thinking_level="minimal")
-                    ),
-                )
-                break
-            except Exception as e:
-                if attempt < MAX_RETRIES - 1:
-                    wait = 5 * (attempt + 1)
-                    print(f"retry({attempt+1}, wait {wait}s)...", end=" ", flush=True)
-                    _time.sleep(wait)
-                else:
-                    print(f"FAILED: {e}")
-                    parsed = {"cell_id": cell_id, "sessions": []}
-                    all_parsed.append(parsed)
-                    api_calls += 1
-                    continue
-
-        api_calls += 1
-        result_text = response.text.strip()
-        parsed = json.loads(result_text)
-
-        # Normalize: ensure it has the cell_id wrapper
-        if isinstance(parsed, dict) and "sessions" in parsed:
-            parsed["cell_id"] = cell_id
-        elif isinstance(parsed, list):
-            parsed = {"cell_id": cell_id, "sessions": parsed}
-
-        all_parsed.append(parsed)
-        n_sessions = len(parsed.get("sessions", []))
-        print(f"{n_sessions} sessions")
-
-        # Cache individual cell
-        _save_cache(f"cell_{ck}", parsed)
-
-    # Cache the full batch
-    _save_cache(batch_key, all_parsed)
-    if cache_hits:
-        print(f"  ({cache_hits} cells from cache)")
-    print(f"Gemini parsing complete, {len(all_parsed)} cells parsed")
-
-    return all_parsed
-
-
-
 def get_timezone_from_location(location_text: str) -> str | None:
     """Use Gemini to determine the IANA timezone from a meeting location string.
 
@@ -293,7 +138,6 @@ def get_timezone_from_location(location_text: str) -> str | None:
     Returns:
         IANA timezone string (e.g. "Europe/Stockholm") or None on failure.
     """
-    import time as _time
     from google import genai
     from google.genai import types
 
@@ -351,6 +195,7 @@ def detect_room_from_context(
     context_text: str,
     available_rooms: list[str],
     num_rooms_needed: int = 1,
+    room_hints: dict | None = None,
 ) -> list[str] | None:
     """Use Gemini to determine which room(s) a schedule table belongs to.
 
@@ -362,6 +207,14 @@ def detect_room_from_context(
         available_rooms: List of known room names from the main schedule.
         num_rooms_needed: How many room names to return (matches the number
             of room columns in the table).
+        room_hints: Optional role hints for the current meeting, e.g.
+            {
+                "all_rooms": [...],
+                "online_rooms": [...],
+                "offline_rooms": [...],
+                "main_room": "...",
+                "breakout_rooms": [...],
+            }
 
     Returns:
         List of room names from available_rooms, or None if detection fails.
@@ -373,8 +226,24 @@ def detect_room_from_context(
     if not api_key:
         return None
 
+    # Ensure deterministic room order (preserve caller order)
+    available_rooms = _ordered_unique(available_rooms)
+
+    # Merge/derive meeting-specific hints for this run
+    merged_hints = _merge_room_hints(available_rooms, room_hints)
+
     # Check cache
-    cache_input = f"room:{context_text}:{','.join(available_rooms)}:{num_rooms_needed}"
+    cache_input = json.dumps(
+        {
+            "v": ROOM_DETECT_PROMPT_VERSION,
+            "context_text": context_text,
+            "available_rooms": available_rooms,
+            "num_rooms_needed": num_rooms_needed,
+            "room_hints": merged_hints,
+        },
+        sort_keys=True,
+        ensure_ascii=False,
+    )
     cache_key = hashlib.sha256(cache_input.encode()).hexdigest()[:16]
     cached = _load_cache(f"room_{cache_key}")
     if cached is not None:
@@ -382,6 +251,18 @@ def detect_room_from_context(
         if names:
             print(f"  Room detection (cached): {names}")
             return names
+
+    # Fast deterministic pass before LLM (meeting-agnostic + role hints)
+    heuristic_names = _heuristic_detect_rooms(
+        context_text=context_text,
+        available_rooms=available_rooms,
+        num_rooms_needed=num_rooms_needed,
+        room_hints=merged_hints,
+    )
+    if heuristic_names and len(heuristic_names) == num_rooms_needed:
+        _save_cache(f"room_{cache_key}", {"room_names": heuristic_names})
+        print(f"  Room detection (heuristic): {heuristic_names}")
+        return heuristic_names
 
     from google import genai
     from google.genai import types
@@ -391,35 +272,19 @@ def detect_room_from_context(
         http_options={"timeout": 30_000},
     )
 
-    prompt = f"""Given this title/heading text from a 3GPP RAN1 meeting schedule document, determine which room(s) this schedule table covers.
-
-Title text:
-\"\"\"{context_text}\"\"\"
-
-Available rooms in this meeting: {available_rooms}
-
-I need exactly {num_rooms_needed} room name(s) from the available rooms list.
-
-Rules:
-- Match room codes mentioned in the title to available room names.
-  e.g. "A3" in title matches "A3" in available rooms.
-  e.g. "F1/2/3" matches "F1+F2+F3".
-- "Brk#1" or "RAN1_Brk#1" → the first break-out room (typically "A1" or similar).
-- "Brk#2" or "RAN1_Brk#2" → the second break-out room (typically "A3" or similar).
-- "Main Session" → the main/largest room (typically "F1+F2+F3" or similar).
-- "Online Session Schedule" without room specifics → the combined main room.
-- "Offline Session Schedule" → offline rooms (e.g. "J1", "J2").
-- If the title explicitly states a room code like "(room: RAN1_Brk#2, A3, Level 1)",
-  match "A3" directly from the available rooms.
-- Return room names EXACTLY as they appear in the available rooms list.
-- If you truly cannot determine the room, return the first {num_rooms_needed} available rooms."""
+    prompt = _build_room_detect_prompt(
+        context_text=context_text,
+        available_rooms=available_rooms,
+        num_rooms_needed=num_rooms_needed,
+        room_hints=merged_hints,
+    )
 
     try:
         response = client.models.generate_content(
-            model="gemini-2.0-flash",
+            model="gemini-3-flash-preview",
             contents=prompt,
             config=types.GenerateContentConfig(
-                temperature=0.0,
+                temperature=0.2,
                 response_mime_type="application/json",
                 response_json_schema=ROOM_DETECT_SCHEMA,
             ),
@@ -439,127 +304,300 @@ Rules:
                 print(f"    Reasoning: {reasoning}")
             return valid_names
         elif valid_names:
-            # Partial match — still useful
-            _save_cache(f"room_{cache_key}", {"room_names": valid_names})
-            return valid_names
+            # Partial match — combine with deterministic hints if possible
+            combined = _ordered_unique(valid_names + (heuristic_names or []))
+            if combined:
+                combined = combined[:num_rooms_needed]
+                _save_cache(f"room_{cache_key}", {"room_names": combined})
+                return combined
     except Exception as e:
         print(f"  Warning: Room detection LLM call failed: {e}")
+
+    if heuristic_names:
+        fallback = heuristic_names[:num_rooms_needed]
+        _save_cache(f"room_{cache_key}", {"room_names": fallback})
+        return fallback
 
     return None
 
 
-def parse_sessions(
-    cells: list[CellData],
-    day_rooms_map: dict[str, list],
-) -> list[Session]:
-    """Parse all cells into Session objects.
+def _ordered_unique(items: list[str]) -> list[str]:
+    """Return unique strings preserving order."""
+    seen: set[str] = set()
+    out: list[str] = []
+    for it in items:
+        if it not in seen:
+            out.append(it)
+            seen.add(it)
+    return out
 
-    Args:
-        cells: Raw cell data from DOCX parser
-        day_rooms_map: day -> list of RoomInfo (for column mapping)
 
-    Returns:
-        List of Session objects with calculated start/end times.
+def _normalize_token(text: str) -> str:
+    """Normalize a text token for robust room-code matching."""
+    return re.sub(r"[^a-z0-9]+", "", text.lower())
+
+
+def _room_alias_tokens(room_name: str) -> set[str]:
+    """Generate likely textual aliases for a room label.
+
+    Example: "F1+F2+F3" -> {"F1+F2+F3", "F1/F2/F3", "F1/2/3", ...}
     """
-    from parser import compute_room_global_col
+    aliases: set[str] = {room_name}
+    base = room_name.strip()
 
-    parsed_cells = parse_with_gemini(cells)
+    plus_parts = [p.strip() for p in base.split("+") if p.strip()]
+    if len(plus_parts) > 1:
+        aliases.add(" + ".join(plus_parts))
+        aliases.add("/".join(plus_parts))
 
-    all_sessions = []
+        # Compact form when all parts share prefix (e.g. F1+F2+F3 -> F1/2/3)
+        parsed = [re.fullmatch(r"([A-Za-z]+)(\d+)", p) for p in plus_parts]
+        if all(parsed):
+            prefixes = [m.group(1) for m in parsed if m]
+            nums = [m.group(2) for m in parsed if m]
+            if len(set(prefixes)) == 1:
+                aliases.add(f"{prefixes[0]}{'/'.join(nums)}")
 
-    for i, cell in enumerate(cells):
-        day_rooms = day_rooms_map.get(cell.day, [])
-        col_start, col_end = compute_room_global_col(cell, day_rooms)
+    return aliases
 
-        # Find the matching parsed cell from Gemini results
-        cell_id = f"CELL_{i:03d}"
-        parsed = None
-        for pc in parsed_cells:
-            if pc.get("cell_id") == cell_id:
-                parsed = pc
-                break
 
-        cell_sessions_data = parsed.get("sessions", []) if parsed else []
+def _merge_room_hints(
+    available_rooms: list[str],
+    room_hints: dict | None,
+) -> dict:
+    """Merge caller hints with safe defaults derived from available rooms."""
+    hints = dict(room_hints or {})
 
-        # Fallback: when Gemini returns no sessions for a non-empty cell,
-        # create a single session covering the full time block so the
-        # schedule content isn't silently dropped.
-        if not cell_sessions_data and cell.text.strip():
-            # Build a readable name from the first meaningful lines
-            lines = [
-                ln.strip()
-                for ln in cell.text.split("\n")
-                if ln.strip() and not ln.strip().startswith(".")
-            ]
-            # Filter out meta lines (break notices, "resume at", etc.)
-            name_lines = [
-                ln
-                for ln in lines
-                if not any(
-                    kw in ln.lower()
-                    for kw in ("break", "resume", "commences", "expected to close")
-                )
-            ]
-            fallback_name = " / ".join(name_lines[:3]) if name_lines else lines[0] if lines else cell.text[:60]
-            cell_sessions_data = [
-                {
-                    "name": fallback_name,
-                    "duration_minutes": cell.time_block_duration,
-                    "chair": None,
-                    "group_headers": [],
-                }
-            ]
+    all_rooms = _ordered_unique(hints.get("all_rooms", []) + available_rooms)
+    online_rooms = _ordered_unique(hints.get("online_rooms", []))
+    offline_rooms = _ordered_unique(hints.get("offline_rooms", []))
 
-        # Calculate start/end times from sequential positions
-        block_start_min = time_to_minutes(cell.time_block_start)
-        current_min = block_start_min
+    if not online_rooms:
+        online_rooms = all_rooms
 
-        for sd in cell_sessions_data:
-            duration = sd.get("duration_minutes", 0)
-            if duration <= 0:
+    # Ensure every hinted room exists in available list
+    online_rooms = [r for r in online_rooms if r in all_rooms]
+    offline_rooms = [r for r in offline_rooms if r in all_rooms]
+
+    main_room = hints.get("main_room")
+    if main_room not in all_rooms:
+        main_room = online_rooms[0] if online_rooms else (all_rooms[0] if all_rooms else None)
+
+    breakout_rooms = _ordered_unique(hints.get("breakout_rooms", []))
+    breakout_rooms = [r for r in breakout_rooms if r in all_rooms and r != main_room]
+    if not breakout_rooms and online_rooms:
+        breakout_rooms = [r for r in online_rooms if r != main_room]
+
+    return {
+        "all_rooms": all_rooms,
+        "online_rooms": online_rooms,
+        "offline_rooms": offline_rooms,
+        "main_room": main_room,
+        "breakout_rooms": breakout_rooms,
+    }
+
+
+def _heuristic_detect_rooms(
+    context_text: str,
+    available_rooms: list[str],
+    num_rooms_needed: int,
+    room_hints: dict,
+) -> list[str] | None:
+    """Deterministically detect rooms from context text before LLM fallback."""
+    if not available_rooms:
+        return None
+
+    text = context_text or ""
+    text_lower = text.lower()
+    text_norm = _normalize_token(text)
+
+    matches: list[str] = []
+
+    # 1) Explicit room-name/token matching
+    for room in available_rooms:
+        matched = False
+        for alias in _room_alias_tokens(room):
+            alias_norm = _normalize_token(alias)
+            if len(alias_norm) < 2:
                 continue
+            if alias_norm in text_norm:
+                matched = True
+                break
+        if matched:
+            matches.append(room)
 
-            name = sd.get("name", "Unknown")
-            group_headers = sd.get("group_headers", [])
+    # 2) Role phrase matching using meeting-specific hints
+    breakout_rooms = room_hints.get("breakout_rooms", [])
+    main_room = room_hints.get("main_room")
+    online_rooms = room_hints.get("online_rooms", [])
+    offline_rooms = room_hints.get("offline_rooms", [])
 
-            # Post-process: extract agenda_item from name
-            agenda_item = sd.get("agenda_item")  # regex path provides this
-            if agenda_item is None:
-                agenda_match = re.match(r"^\.?\s*(\d+\.\d[\d.xX]*)\s*(.*)", name)
-                if agenda_match:
-                    agenda_item = agenda_match.group(1).strip(".")
-                    rest = agenda_match.group(2).strip()
-                    name = rest if rest else f"AI {agenda_item}"
-                # Also check group_headers for agenda context
-                if not agenda_item:
-                    for h in group_headers:
-                        m = re.match(r"AI\s+(\d[\d.]*)", h)
-                        if m:
-                            agenda_item = m.group(1).strip(".")
-                            break
+    if not matches:
+        brk_nums = [
+            int(n)
+            for n in re.findall(r"(?:brk|break\s*[-_ ]?out)\s*#?\s*(\d+)", text_lower)
+        ]
+        for n in brk_nums:
+            idx = n - 1
+            if 0 <= idx < len(breakout_rooms):
+                matches.append(breakout_rooms[idx])
 
-            start_time = minutes_to_time(current_min)
-            end_time = minutes_to_time(current_min + duration)
+    if not matches:
+        if "offline session schedule" in text_lower or re.search(r"\boffline\b", text_lower):
+            matches.extend(offline_rooms[:num_rooms_needed])
 
-            session = Session(
-                name=name,
-                duration_minutes=duration,
-                start_time=start_time,
-                end_time=end_time,
-                day=cell.day,
-                room_col_start=col_start,
-                room_col_end=col_end,
-                chair=sd.get("chair"),
-                agenda_item=agenda_item,
-                group_header=" / ".join(group_headers) if group_headers else "",
-            )
-            all_sessions.append(session)
-            current_min += duration
+    if not matches:
+        if "online session schedule" in text_lower or re.search(r"\bonline\b", text_lower):
+            if num_rooms_needed > 1:
+                matches.extend(online_rooms[:num_rooms_needed])
+            elif main_room:
+                matches.append(main_room)
 
-    return all_sessions
+    if not matches:
+        if "main session" in text_lower and main_room:
+            matches.append(main_room)
+
+    matches = [m for m in _ordered_unique(matches) if m in available_rooms]
+
+    if not matches:
+        return None
+    return matches[:num_rooms_needed]
+
+
+def _build_room_detect_prompt(
+    context_text: str,
+    available_rooms: list[str],
+    num_rooms_needed: int,
+    room_hints: dict,
+) -> str:
+    """Build a meeting-agnostic room-detection prompt with dynamic room hints."""
+    main_room = room_hints.get("main_room")
+    breakout_rooms = room_hints.get("breakout_rooms", [])
+    online_rooms = room_hints.get("online_rooms", [])
+    offline_rooms = room_hints.get("offline_rooms", [])
+
+    hint_lines = [
+        f"- all_rooms: {available_rooms}",
+        f"- main_room: {main_room}",
+        f"- breakout_rooms_in_order: {breakout_rooms}",
+        f"- online_rooms: {online_rooms}",
+        f"- offline_rooms: {offline_rooms}",
+    ]
+
+    return f"""Given this title/heading text from a 3GPP RAN1 meeting schedule document, determine which room(s) this schedule table covers.
+
+Title text:
+\"\"\"{context_text}\"\"\"
+
+Available rooms in this meeting (EXACT output candidates): {available_rooms}
+
+Meeting-specific room-role hints (derived from this meeting only):
+{chr(10).join(hint_lines)}
+
+I need exactly {num_rooms_needed} room name(s) from the available rooms list.
+
+Rules:
+- Meeting-independent behavior: do NOT assume any fixed physical room names.
+- Match explicit room tokens/codes mentioned in the title to available rooms.
+  Use normalized matching (ignore case and separators like spaces, '/', '+', '-', '_').
+- If title mentions breakout notation like "Brk#N", "Breakout #N", "RAN1_Brk#N",
+  map N to breakout_rooms_in_order[N-1] when available.
+- "Main Session" usually maps to main_room.
+- "Online Session Schedule" without explicit room codes usually maps to online_rooms
+  (or main_room when only one room is requested).
+- "Offline Session Schedule" usually maps to offline_rooms.
+- If explicit room code appears in text (e.g. inside parentheses), prioritize that explicit match.
+- Return room names EXACTLY as they appear in available rooms.
+- If you truly cannot determine the room, return the first {num_rooms_needed} available rooms.
+
+Return JSON only with schema: {{"room_names": ["..."], "reasoning": "..."}}"""
 
 
 # ── Multi-source time-slot parsing ───────────────────────────────
+
+
+_PROMPT_VERSION = 2  # Bump to invalidate time-slot caches on prompt changes
+
+
+def build_room_aliases(
+    day_rooms: list[RoomInfo],
+) -> tuple[dict[str, str], dict[str, str]]:
+    """Build stable role-based aliases for rooms.
+
+    Assigns aliases like RAN1_main, RAN1_brk1, RAN1_off1 so that LLM
+    prompts are stable across meetings regardless of physical room names.
+
+    Returns:
+        (name_to_alias, alias_to_name) mappings.
+        alias_to_name also includes multi-room shortcuts:
+          ALL_ONLINE  = main + all breakout rooms
+          ALL_ROOMS   = every room
+    """
+    # Group by table_index to separate online vs offline rooms
+    tables: dict[int, list[RoomInfo]] = {}
+    for r in day_rooms:
+        tables.setdefault(r.table_index, []).append(r)
+    sorted_tables = sorted(tables.items())
+
+    name_to_alias: dict[str, str] = {}
+    alias_to_name: dict[str, str] = {}
+    online_aliases: list[str] = []
+
+    if sorted_tables:
+        # First table = online rooms (main + breakouts)
+        _, online_rooms = sorted_tables[0]
+        alias = "RAN1_main"
+        name_to_alias[online_rooms[0].name] = alias
+        alias_to_name[alias] = online_rooms[0].name
+        online_aliases.append(alias)
+
+        for i, r in enumerate(online_rooms[1:], 1):
+            alias = f"RAN1_brk{i}"
+            name_to_alias[r.name] = alias
+            alias_to_name[alias] = r.name
+            online_aliases.append(alias)
+
+    # Remaining tables = offline rooms
+    off_counter = 1
+    for _, rooms in sorted_tables[1:]:
+        for r in rooms:
+            alias = f"RAN1_off{off_counter}"
+            name_to_alias[r.name] = alias
+            alias_to_name[alias] = r.name
+            off_counter += 1
+
+    # Multi-room shortcuts
+    if len(online_aliases) > 1:
+        alias_to_name["ALL_ONLINE"] = " + ".join(
+            alias_to_name[a] for a in online_aliases
+        )
+    all_aliases = list(name_to_alias.values())
+    if len(all_aliases) > 1:
+        alias_to_name["ALL_ROOMS"] = " + ".join(
+            alias_to_name[a] for a in all_aliases
+        )
+
+    return name_to_alias, alias_to_name
+
+
+def _alias_room_label(label: str, name_to_alias: dict[str, str]) -> str:
+    """Convert a room label to use aliases.
+
+    Handles formats:
+      "F1+F2+F3"               → "RAN1_main"
+      "F1+F2+F3 + A1 + A3"    → "RAN1_main + RAN1_brk1 + RAN1_brk2"
+      "Sorour: F1+F2+F3"      → "Sorour: RAN1_main"
+    """
+    # Handle "Person: RoomName" prefix
+    prefix = ""
+    rest = label
+    if ": " in label:
+        prefix_part, rest = label.split(": ", 1)
+        prefix = prefix_part + ": "
+
+    parts = [p.strip() for p in rest.split(" + ")]
+    aliased = [name_to_alias.get(p, p) for p in parts]
+    return prefix + " + ".join(aliased)
 
 
 MULTI_SOURCE_SYSTEM_INSTRUCTION = """You produce a unified session list for a 3GPP RAN1 time-slot.
@@ -620,31 +658,72 @@ Example 3 – single leaf:
 
 6. Total leaf durations per room must NOT exceed the time block duration.
 
+## Agenda items
+
+- Vice-chair sources often list MULTIPLE agenda-item numbers for a single session,
+  e.g. "9.3.2.3, 9.3, 9.3.1, 9.3.2.1, 9.3.2.2".
+- You MUST preserve ALL listed agenda items in the agenda_item field as a
+  comma-separated string. Do NOT summarize them to a parent (e.g. do NOT
+  collapse "9.3.2.3, 9.3, 9.3.1, 9.3.2.1, 9.3.2.2" into just "9.3").
+- Keep the original order from the source data.
+
+## Room aliases
+
+Target rooms use STABLE role-based aliases instead of physical room names.
+The prompt header shows a legend like:
+    RAN1_main  (= <main online room name>)
+    RAN1_brk1  (= <first breakout room name>)
+    RAN1_brk2  (= <second breakout room name>)
+    RAN1_off1  (= <first offline room name>)
+    RAN1_off2  (= <second offline room name>)
+
+Always use the ALIAS in room_name, never the physical room name.
+Multi-room shortcuts:
+  ALL_ONLINE  = all online rooms (main + breakouts)
+  ALL_ROOMS   = every room including offline
+
+## Multi-room sessions (plenaries, ceremonies, sweeps)
+
+When a cell in the main schedule spans multiple rooms (shown as
+e.g. [RAN1_main + RAN1_brk1 + RAN1_brk2]), the session runs in ALL
+those rooms simultaneously. For such sessions:
+- Use room_name = "ALL_ONLINE" if spanning all online rooms.
+- Use room_name = "ALL_ROOMS" if spanning ALL rooms (including offline).
+- Output the session ONCE with the multi-room alias.
+  Do NOT duplicate it into each individual room.
+- Common examples: opening/closing plenaries, remembrance gatherings,
+  sweep sessions, agenda approval.
+
 ## Output format
 
 ```json
 {
   "sessions": [
     {
-      "room_name": "<exact target room name>",
+      "room_name": "<room alias or ALL_ONLINE / ALL_ROOMS>",
       "name": "session name (include AI number if known)",
       "duration_minutes": N,
       "chair": "person or null",
       "group_header": "category labels joined by ' / ', or empty string",
-      "agenda_item": "9.1.1 or null"
+      "agenda_item": "9.3.2.3, 9.3, 9.3.1, 9.3.2.1, 9.3.2.2 or null (preserve ALL items)"
     }
   ]
 }
 ```
 
-- Use EXACTLY the target room names in room_name.
+- Use EXACTLY the room ALIAS in room_name (never physical room names).
+- For sessions spanning multiple rooms, use ALL_ONLINE or ALL_ROOMS.
 - Sessions for all rooms in a single flat array, grouped by room, chronologically ordered.
 - Every target room should have at least one entry (if nothing scheduled, omit it).
 - group_header is a single string (join multiple labels with " / "), not an array.
+- agenda_item: comma-separated list of ALL agenda items from vice-chair detail. Never drop items.
 - Return ONLY valid JSON."""
 
 
-def _build_time_slot_prompt(slot) -> str:
+def _build_time_slot_prompt(
+    slot,
+    name_to_alias: dict[str, str] | None = None,
+) -> str:
     """Build prompt for a multi-source time slot.
 
     Structures data so that each target room's content from all sources
@@ -652,6 +731,7 @@ def _build_time_slot_prompt(slot) -> str:
 
     Args:
         slot: a TimeSlotData object from merger.py
+        name_to_alias: room-name → alias mapping (if None, uses raw names)
     """
     parts = []
     parts.append(
@@ -659,8 +739,19 @@ def _build_time_slot_prompt(slot) -> str:
         f"({slot.time_block_duration} min)"
     )
 
-    room_names = [r.name for r in slot.main_rooms]
-    parts.append(f"\nTARGET ROOMS: {', '.join(room_names)}")
+    # TARGET ROOMS with alias legend
+    if name_to_alias:
+        legend_lines = []
+        for r in slot.main_rooms:
+            alias = name_to_alias.get(r.name, r.name)
+            legend_lines.append(f"  {alias}  (= {r.name})")
+        parts.append("\nTARGET ROOMS:\n" + "\n".join(legend_lines))
+    else:
+        room_names = [r.name for r in slot.main_rooms]
+        parts.append(f"\nTARGET ROOMS: {', '.join(room_names)}")
+
+    def _alias_label(label: str) -> str:
+        return _alias_room_label(label, name_to_alias) if name_to_alias else label
 
     # Group: first show main schedule per room, then all vice-chair data
     main_source = slot.sources[0] if slot.sources else None
@@ -668,17 +759,17 @@ def _build_time_slot_prompt(slot) -> str:
 
     # Main schedule (authoritative room→content mapping)
     if main_source:
-        parts.append(f"\n## Main Schedule (defines what goes in each room)")
+        parts.append("\n## Main Schedule (defines what goes in each room)")
         for entry in main_source.entries:
-            parts.append(f'\n[{entry.room_label}]')
+            parts.append(f'\n[{_alias_label(entry.room_label)}]')
             parts.append(entry.cell_text)
 
     # Vice-chair detail (adds specificity; room labels unreliable)
     if vc_sources:
-        parts.append(f"\n## Vice-chair detail (match by CONTENT to target rooms, ignore room labels)")
+        parts.append("\n## Vice-chair detail (match by CONTENT to target rooms, ignore room labels)")
         for source in vc_sources:
             for entry in source.entries:
-                parts.append(f'\n[{source.label} — {entry.room_label}]')
+                parts.append(f'\n[{source.label} — {_alias_label(entry.room_label)}]')
                 parts.append(entry.cell_text)
 
     return "\n".join(parts)
@@ -688,6 +779,7 @@ def _time_slot_cache_key(slot) -> str:
     """Generate a cache key for a time slot's combined data."""
     content = json.dumps(
         {
+            "v": _PROMPT_VERSION,
             "day": slot.day,
             "tb": slot.time_block_index,
             "rooms": [r.name for r in slot.main_rooms],
@@ -745,13 +837,17 @@ def parse_time_slots(
         cached = _load_cache(f"slot_{ck}")
         if cached is not None:
             # Convert cached result to sessions
-            sessions = _slot_result_to_sessions(cached, slot, day_rooms_map)
+            day_rooms = day_rooms_map.get(slot.day, [])
+            _, alias_to_name = build_room_aliases(day_rooms)
+            sessions = _slot_result_to_sessions(cached, slot, day_rooms_map, alias_to_name)
             all_sessions.extend(sessions)
             cache_hits += 1
             continue
 
-        # Build prompt
-        user_prompt = _build_time_slot_prompt(slot)
+        # Build prompt with room aliases
+        day_rooms = day_rooms_map.get(slot.day, [])
+        name_to_alias, alias_to_name = build_room_aliases(day_rooms)
+        user_prompt = _build_time_slot_prompt(slot, name_to_alias)
         n_sources = len(slot.sources)
         n_entries = sum(len(s.entries) for s in slot.sources)
         print(
@@ -799,7 +895,7 @@ def parse_time_slots(
         _save_cache(f"slot_{ck}", parsed_result)
 
         # Convert to sessions
-        sessions = _slot_result_to_sessions(parsed_result, slot, day_rooms_map)
+        sessions = _slot_result_to_sessions(parsed_result, slot, day_rooms_map, alias_to_name)
         all_sessions.extend(sessions)
 
         n_sessions = len(sessions)
@@ -816,6 +912,7 @@ def _slot_result_to_sessions(
     parsed: dict,
     slot,
     day_rooms_map: dict[str, list[RoomInfo]],
+    alias_to_name: dict[str, str] | None = None,
 ) -> list[Session]:
     """Convert a Gemini time-slot result into Session objects.
 
@@ -837,8 +934,8 @@ def _slot_result_to_sessions(
         rooms_ordered[rn].append(sd)
 
     for room_name, room_sessions in rooms_ordered.items():
-        # Find grid columns for this room
-        col_start, col_end = _find_room_columns(room_name, day_rooms)
+        # Find grid columns for this room (supports aliases and multi-room)
+        col_start, col_end = _find_room_columns(room_name, day_rooms, alias_to_name)
 
         block_start_min = time_to_minutes(slot.time_block_start)
         current_min = block_start_min
@@ -887,14 +984,196 @@ def _slot_result_to_sessions(
     return sessions
 
 
+def normalize_group_headers(sessions: list[Session]) -> list[Session]:
+    """Normalize group_header values across all sessions using LLM.
+
+    Collects all unique group_header strings, asks Gemini to produce a
+    simplification mapping, then applies it in-place.
+
+    Args:
+        sessions: List of Session objects (modified in-place).
+
+    Returns:
+        The same list with group_header values replaced.
+    """
+    import time as _time
+    from google import genai
+    from google.genai import types
+
+    unique_headers = sorted(set(s.group_header for s in sessions if s.group_header))
+
+    if len(unique_headers) <= 1:
+        print(f"Group normalization: {len(unique_headers)} unique group(s), skipping.")
+        return sessions
+
+    print(f"\nNormalizing group headers ({len(unique_headers)} unique)...")
+
+    # Cache key from sorted unique headers
+    cache_content = json.dumps(unique_headers, sort_keys=True)
+    cache_hash = hashlib.sha256(cache_content.encode()).hexdigest()[:16]
+    cache_key = f"group_map_{cache_hash}"
+
+    cached = _load_cache(cache_key)
+    mapping: dict[str, str] = {}
+
+    if cached is not None:
+        # Rebuild mapping from cached result
+        for entry in cached.get("mappings", []):
+            mapping[entry["original"]] = entry["simplified"]
+        print(f"  Loaded mapping from cache ({len(mapping)} entries)")
+    else:
+        api_key = os.environ.get("GEMINI_API_KEY")
+        if not api_key:
+            print("  Warning: GEMINI_API_KEY not set, skipping normalization")
+            return sessions
+
+        client = genai.Client(
+            api_key=api_key,
+            http_options={"timeout": 120_000},
+        )
+
+        user_prompt = (
+            "Here are all unique group_header labels from the schedule:\n\n"
+            + json.dumps(unique_headers, indent=2, ensure_ascii=False)
+            + "\n\nProduce the simplification mapping."
+        )
+
+        MAX_RETRIES = 3
+        result = None
+        for attempt in range(MAX_RETRIES):
+            try:
+                response = client.models.generate_content(
+                    model="gemini-3-flash-preview",
+                    contents=user_prompt,
+                    config=types.GenerateContentConfig(
+                        system_instruction=GROUP_SIMPLIFY_SYSTEM_INSTRUCTION,
+                        temperature=0.0,
+                        response_mime_type="application/json",
+                        response_json_schema=GROUP_SIMPLIFY_SCHEMA,
+                    ),
+                )
+                result = json.loads(response.text.strip())
+                break
+            except Exception as e:
+                if attempt < MAX_RETRIES - 1:
+                    wait = 5 * (attempt + 1)
+                    print(f"  retry({attempt+1}, wait {wait}s)...", flush=True)
+                    _time.sleep(wait)
+                else:
+                    print(f"  Group normalization failed: {e}")
+                    return sessions
+
+        if result is None:
+            return sessions
+
+        _save_cache(cache_key, result)
+
+        for entry in result.get("mappings", []):
+            mapping[entry["original"]] = entry["simplified"]
+
+    # Log the mapping
+    changed = {k: v for k, v in mapping.items() if k != v}
+    simplified_groups = sorted(set(mapping.values()))
+    if changed:
+        print(f"  Mapping: {len(unique_headers)} → {len(simplified_groups)} groups")
+        for orig, simp in sorted(changed.items()):
+            print(f"    '{orig}' → '{simp}'")
+    else:
+        print("  All groups already normalized.")
+
+    # Apply mapping in-place
+    for session in sessions:
+        if session.group_header and session.group_header in mapping:
+            session.group_header = mapping[session.group_header]
+
+    return sessions
+
+
+def fill_missing_groups(sessions: list[Session]) -> list[Session]:
+    """Fill empty group_header for sessions by name matching and substring matching.
+
+    Two-pass approach:
+    1. If a session has no group but another session with the SAME name has a group,
+       copy that group.
+    2. If still no group, check if the session name contains any existing group name
+       as a substring — assign the longest matching group (most specific match).
+
+    Args:
+        sessions: List of Session objects (modified in-place).
+
+    Returns:
+        The same list with missing group_header values filled where possible.
+    """
+    # Collect name → group mapping from sessions that have groups
+    name_to_group: dict[str, str] = {}
+    for s in sessions:
+        if s.group_header and s.name not in name_to_group:
+            name_to_group[s.name] = s.group_header
+
+    # Pass 1: match by identical session name
+    filled_by_name = 0
+    for s in sessions:
+        if not s.group_header and s.name in name_to_group:
+            s.group_header = name_to_group[s.name]
+            filled_by_name += 1
+
+    # Collect all known groups (after pass 1)
+    known_groups = sorted(
+        set(s.group_header for s in sessions if s.group_header),
+        key=len,
+        reverse=True,  # longest first for most-specific matching
+    )
+
+    # Pass 2: match by group name substring in session name
+    filled_by_substring = 0
+    for s in sessions:
+        if not s.group_header:
+            name_lower = s.name.lower()
+            for group in known_groups:
+                if group.lower() in name_lower:
+                    s.group_header = group
+                    filled_by_substring += 1
+                    break
+
+    total_missing = sum(1 for s in sessions if not s.group_header)
+    if filled_by_name or filled_by_substring:
+        print(
+            f"  Fill missing groups: {filled_by_name} by name, "
+            f"{filled_by_substring} by substring"
+            + (f" ({total_missing} still empty)" if total_missing else "")
+        )
+    elif total_missing:
+        print(f"  Fill missing groups: {total_missing} sessions have no group")
+
+    return sessions
+
+
 def _find_room_columns(
     room_name: str,
     day_rooms: list[RoomInfo],
+    alias_to_name: dict[str, str] | None = None,
 ) -> tuple[int, int]:
-    """Find grid column range for a room name.
+    """Find grid column range for a room name, alias, or multi-room key.
+
+    Handles:
+      - Regular room names: "F1+F2+F3"
+      - Single aliases: "RAN1_main"
+      - Multi-room aliases: "ALL_ONLINE", "ALL_ROOMS"
+      - Combined names: "RAN1_main + RAN1_brk1 + RAN1_brk2"
 
     Returns (col_start, col_end) as 1-indexed grid columns.
     """
+    # Resolve multi-room aliases (ALL_ONLINE, ALL_ROOMS)
+    if alias_to_name and room_name in alias_to_name:
+        resolved = alias_to_name[room_name]
+        if " + " in resolved:
+            return _find_multi_room_columns(resolved, day_rooms)
+        room_name = resolved
+
+    # Handle combined names ("X + Y + Z")
+    if " + " in room_name:
+        return _find_multi_room_columns(room_name, day_rooms, alias_to_name)
+
     # Exact match
     for idx, ri in enumerate(day_rooms):
         if ri.name == room_name:
@@ -908,4 +1187,35 @@ def _find_room_columns(
             return (idx + 2, idx + 3)
 
     # Fallback
+    return (2, 3)
+
+
+def _find_multi_room_columns(
+    combined_name: str,
+    day_rooms: list[RoomInfo],
+    alias_to_name: dict[str, str] | None = None,
+) -> tuple[int, int]:
+    """Find grid columns spanning multiple rooms.
+
+    Args:
+        combined_name: "F1+F2+F3 + A1 + A3" or "RAN1_main + RAN1_brk1"
+        day_rooms: room list for the day
+        alias_to_name: optional alias resolution dict
+
+    Returns (col_start, col_end) spanning all matched rooms.
+    """
+    parts = [p.strip() for p in combined_name.split(" + ")]
+    all_indices: list[int] = []
+
+    for part in parts:
+        # Resolve alias if needed
+        if alias_to_name and part in alias_to_name:
+            part = alias_to_name[part]
+        for idx, ri in enumerate(day_rooms):
+            if ri.name == part:
+                all_indices.append(idx)
+                break
+
+    if all_indices:
+        return (min(all_indices) + 2, max(all_indices) + 3)
     return (2, 3)

@@ -29,7 +29,7 @@ load_dotenv()
 
 from models import DAY_ORDER, DaySchedule, Schedule
 from parser import build_room_list, parse_docx, extract_meeting_location, find_chair_notes_docx
-from session_parser import parse_time_slots, get_timezone_from_location
+from session_parser import parse_time_slots, get_timezone_from_location, normalize_group_headers, fill_missing_groups
 from generator import save_html
 from downloader import (
     download_latest_schedule,
@@ -174,6 +174,12 @@ def main():
     print("\nParsing time slots (Gemini API)...")
     sessions = parse_time_slots(time_slots, day_rooms_map)
     print(f"Parsed {len(sessions)} sessions")
+
+    # Step 4b: Normalize group headers for cleaner legend
+    sessions = normalize_group_headers(sessions)
+
+    # Step 4c: Fill missing groups by name/substring matching
+    sessions = fill_missing_groups(sessions)
 
     # Step 5: Build Schedule model
     meeting_name = _extract_meeting_name(docx_path)

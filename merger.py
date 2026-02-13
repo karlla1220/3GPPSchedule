@@ -34,12 +34,8 @@ def _resolve_vc_room_names(
     """
     from session_parser import detect_room_from_context
 
-    # Collect all unique main room names
-    all_main_rooms: set[str] = set()
-    for rooms in main_rooms_map.values():
-        for r in rooms:
-            all_main_rooms.add(r.name)
-    available_rooms = sorted(all_main_rooms)
+    room_hints = _build_room_hints(main_rooms_map)
+    available_rooms = room_hints["all_rooms"]
 
     if not available_rooms:
         return
@@ -69,7 +65,10 @@ def _resolve_vc_room_names(
 
         num_rooms = len(sample_rooms)
         detected = detect_room_from_context(
-            context_text, available_rooms, num_rooms,
+            context_text,
+            available_rooms,
+            num_rooms,
+            room_hints=room_hints,
         )
 
         if detected and len(detected) == num_rooms:
@@ -85,6 +84,56 @@ def _resolve_vc_room_names(
                 day_rooms[day] = padded[:num_rooms]
             print(f"    Partially resolved table {meta['table_index']} rooms: "
                   f"{sample_rooms} → {padded[:num_rooms]}")
+
+
+def _build_room_hints(main_rooms_map: dict[str, list[RoomInfo]]) -> dict:
+    """Build stable room-role hints from parsed main-schedule rooms.
+
+    Returns:
+        {
+            "all_rooms": [...],
+            "online_rooms": [...],
+            "offline_rooms": [...],
+            "main_room": "..." | None,
+            "breakout_rooms": [...],
+        }
+    """
+    # Room name -> best-known position tuple for stable ordering
+    # (table_index, room_index_in_table)
+    room_pos: dict[str, tuple[int, int]] = {}
+
+    for rooms in main_rooms_map.values():
+        for r in rooms:
+            pos = (r.table_index, r.room_index_in_table)
+            if r.name not in room_pos or pos < room_pos[r.name]:
+                room_pos[r.name] = pos
+
+    if not room_pos:
+        return {
+            "all_rooms": [],
+            "online_rooms": [],
+            "offline_rooms": [],
+            "main_room": None,
+            "breakout_rooms": [],
+        }
+
+    ordered = sorted(room_pos.items(), key=lambda x: x[1])
+    all_rooms = [name for name, _ in ordered]
+
+    first_table_idx = ordered[0][1][0]
+    online_rooms = [name for name, (ti, _) in ordered if ti == first_table_idx]
+    offline_rooms = [name for name, (ti, _) in ordered if ti != first_table_idx]
+
+    main_room = online_rooms[0] if online_rooms else (all_rooms[0] if all_rooms else None)
+    breakout_rooms = online_rooms[1:] if len(online_rooms) > 1 else []
+
+    return {
+        "all_rooms": all_rooms,
+        "online_rooms": online_rooms,
+        "offline_rooms": offline_rooms,
+        "main_room": main_room,
+        "breakout_rooms": breakout_rooms,
+    }
 
 
 # ── Data structures ──────────────────────────────────────────
