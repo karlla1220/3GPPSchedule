@@ -16,6 +16,7 @@
     --text-muted: #6B7280;
     --border: #D1D5DB;
     --shadow: 0 1px 3px rgba(0,0,0,0.1);
+    --dim-opacity: 0.12;
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -484,7 +485,41 @@ header .meta {
     overflow-y: auto;
     padding: 6px 8px;
     flex: 1;
-    max-height: calc(80vh - 50px);
+    max-height: calc(80vh - 96px);
+}
+
+.filter-controls {
+    padding: 8px 12px 6px;
+    border-bottom: 1px solid #E5E7EB;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex-shrink: 0;
+}
+
+.filter-controls label {
+    font-size: 11px;
+    font-weight: 600;
+    color: #6B7280;
+}
+
+.filter-dim-opacity {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.filter-dim-opacity input[type="range"] {
+    flex: 1;
+    accent-color: #3B82F6;
+}
+
+.filter-dim-opacity-value {
+    min-width: 38px;
+    text-align: right;
+    font-size: 11px;
+    color: #374151;
+    font-variant-numeric: tabular-nums;
 }
 
 .filter-group { margin-bottom: 1px; }
@@ -573,7 +608,7 @@ header .meta {
 }
 
 .session-block.dimmed {
-    opacity: 0.12;
+    opacity: var(--dim-opacity, 0.12);
     pointer-events: none;
     transition: opacity 0.2s;
 }
@@ -593,7 +628,7 @@ header .meta {
 <div class="container">
     <header>
         <h1>📅 RAN1#124</h1>
-        <p class="meta">Source: RAN1#124 online and offline schedules - v07.docx &nbsp;|&nbsp; Generated: 2026-02-13 10:06 (Europe/Stockholm) &nbsp;|&nbsp; Now: <span id="tz-now">...</span> (Europe/Stockholm)</p>
+        <p class="meta">Source: RAN1#124 online and offline schedules - v07.docx &nbsp;|&nbsp; Generated: 2026-02-13 10:14 (Europe/Stockholm) &nbsp;|&nbsp; Now: <span id="tz-now">...</span> (Europe/Stockholm)</p>
         <p class="meta">Contact: Duckhyun Bae (<a href="mailto:duckhyun.bae@lge.com">duckhyun.bae@lge.com</a>) for reports or feature requests.</p>
     </header>
     <div class="legend">
@@ -1538,6 +1573,7 @@ header .meta {
     <div class="filter-panel collapsed">
         <button class="filter-toggle">&#9664; Filter</button>
         <div class="filter-header"><span>Session Filter <span class="filter-active-count"></span></span><button class="filter-clear">Clear</button></div>
+        <div class="filter-controls"><label for="filter-dim-opacity-range">Unchecked opacity</label><div class="filter-dim-opacity"><input type="range" id="filter-dim-opacity-range" class="filter-dim-opacity-range" min="0.02" max="0.95" step="0.01" value="0.12"><span class="filter-dim-opacity-value">12%</span></div></div>
         <div class="filter-list"></div>
     </div>
     <script type="application/json" id="filter-data">{"groups": [{"name": "6GR", "key": "6GR", "sessions": [{"name": "6G waveform", "key": "6G waveform|6GR", "ais": ["10.2.1"]}, {"name": "10.1", "key": "10.1|6GR", "ais": ["10.1"]}, {"name": "10.2.1 Waveform", "key": "10.2.1 Waveform|6GR", "ais": ["10.2.1"]}, {"name": "10.3.1", "key": "10.3.1|6GR", "ais": ["10.3.1"]}, {"name": "10.3.2", "key": "10.3.2|6GR", "ais": ["10.3.2"]}, {"name": "10.4", "key": "10.4|6GR", "ais": ["10.4"]}, {"name": "10.5.0", "key": "10.5.0|6GR", "ais": ["10.5.0"]}, {"name": "10.5.0.", "key": "10.5.0.|6GR", "ais": ["10.5.0"]}, {"name": "10.5.1.1", "key": "10.5.1.1|6GR", "ais": ["10.5.1.1"]}, {"name": "10.5.1.2", "key": "10.5.1.2|6GR", "ais": ["10.5.1.2"]}, {"name": "10.5.1.3", "key": "10.5.1.3|6GR", "ais": ["10.5.1.3"]}, {"name": "10.5.2.1", "key": "10.5.2.1|6GR", "ais": ["10.5.2.1"]}, {"name": "10.5.2.2", "key": "10.5.2.2|6GR", "ais": ["10.5.2.2"]}, {"name": "10.5.2.3", "key": "10.5.2.3|6GR", "ais": ["10.5.2.3"]}, {"name": "10.5.2.4", "key": "10.5.2.4|6GR", "ais": ["10.5.2.4"]}, {"name": "10.5.3.1", "key": "10.5.3.1|6GR", "ais": ["10.5.3.1"]}, {"name": "10.5.3.2", "key": "10.5.3.2|6GR", "ais": ["10.5.3.2"]}, {"name": "10.5.3.3", "key": "10.5.3.3|6GR", "ais": ["10.5.3.3"]}, {"name": "10.5.4.1", "key": "10.5.4.1|6GR", "ais": ["10.5.4.1"]}, {"name": "10.5.4.3", "key": "10.5.4.3|6GR", "ais": ["10.5.4.3"]}, {"name": "10.5.4.x", "key": "10.5.4.x|6GR", "ais": ["10.5.4.x"]}, {"name": "10.5.5", "key": "10.5.5|6GR", "ais": ["10.5.5"]}, {"name": "10.6.x", "key": "10.6.x|6GR", "ais": ["10.6.x"]}, {"name": "10.9", "key": "10.9|6GR", "ais": ["10.9"]}, {"name": "AI 10.3.1 6GR Channel coding", "key": "AI 10.3.1 6GR Channel coding|6GR", "ais": ["10.3.1"]}, {"name": "AI 10.3.2 6GR Modulation", "key": "AI 10.3.2 6GR Modulation|6GR", "ais": ["10.3.2"]}, {"name": "AI 10.7.1 6GR NTN", "key": "AI 10.7.1 6GR NTN|6GR", "ais": ["10.7.1"]}, {"name": "Channel coding", "key": "Channel coding|6GR", "ais": ["10.3.1"]}, {"name": "Modulation", "key": "Modulation|6GR", "ais": ["10.3.2"]}, {"name": "NTN", "key": "NTN|6GR", "ais": ["10.7.1"]}, {"name": "Sweep", "key": "Sweep|6GR", "ais": []}]}, {"name": "AI 7/8", "key": "AI 7/8", "sessions": [{"name": "7 1T-1T switching, UL Tx switching", "key": "7 1T-1T switching, UL Tx switching|AI 7/8", "ais": ["7"]}, {"name": "7 R16/17 MIMO, R18 LTM, R17 Coverage, R18 NR/TEI18, R17/18 NR-NTN", "key": "7 R16/17 MIMO, R18 LTM, R17 Coverage, R18 NR/TEI18, R17/18 NR-NTN|AI 7/8", "ais": ["7"]}, {"name": "8.3 R19 Duplex", "key": "8.3 R19 Duplex|AI 7/8", "ais": ["8.3"]}, {"name": "8.4 R19 A-IoT", "key": "8.4 R19 A-IoT|AI 7/8", "ais": ["8.4"]}, {"name": "8.6 R19 LP-WUS", "key": "8.6 R19 LP-WUS|AI 7/8", "ais": ["8.6"]}, {"name": "8.8 R19 FR3/ISAC CM", "key": "8.8 R19 FR3/ISAC CM|AI 7/8", "ais": ["8.8"]}, {"name": "8.8 R19 LBCA, R19 Mobility", "key": "8.8 R19 LBCA, R19 Mobility|AI 7/8", "ais": ["8.8"]}, {"name": "8.8 R19 Mobility", "key": "8.8 R19 Mobility|AI 7/8", "ais": ["8.8"]}, {"name": "8.9 R19 UE features", "key": "8.9 R19 UE features|AI 7/8", "ais": ["8.9"]}, {"name": "Maintenance", "key": "Maintenance|AI 7/8", "ais": ["7", "8.6", "8.8", "8.9"]}]}, {"name": "AI 8", "key": "AI 8", "sessions": [{"name": "AI 8.1 AI/ML", "key": "AI 8.1 AI/ML|AI 8", "ais": ["8.1"]}, {"name": "AI 8.2 MIMO", "key": "AI 8.2 MIMO|AI 8", "ais": ["8.2"]}, {"name": "AI 8.5 NES", "key": "AI 8.5 NES|AI 8", "ais": ["8.5"]}, {"name": "AI 8.7.1 NR-NTN", "key": "AI 8.7.1 NR-NTN|AI 8", "ais": ["8.7.1"]}, {"name": "AI 8.7.2 IoT-NTN", "key": "AI 8.7.2 IoT-NTN|AI 8", "ais": ["8.7.2"]}, {"name": "MIMO,NES,AI /ML", "key": "MIMO,NES,AI /ML|AI 8", "ais": ["8"]}]}, {"name": "R20", "key": "R20", "sessions": [{"name": "9.4.1 PRACH enh, PUSCH repetition", "key": "9.4.1 PRACH enh, PUSCH repetition|R20", "ais": ["9.4.1"]}, {"name": "9.4.1 PRACH enh, PUSCH repetition, pi/2 BPSK extention", "key": "9.4.1 PRACH enh, PUSCH repetition, pi/2 BPSK extention|R20", "ais": ["9.4.1"]}, {"name": "A-IoT", "key": "A-IoT|R20", "ais": ["9.3", "9.3.1", "9.3.2.1", "9.3.2.2", "9.3.2.3"]}, {"name": "AI 9.1.1", "key": "AI 9.1.1|R20", "ais": ["9.1.1"]}, {"name": "AI 9.1.2", "key": "AI 9.1.2|R20", "ais": ["9.1.2"]}, {"name": "AI 9.2.1", "key": "AI 9.2.1|R20", "ais": ["9.2.1"]}, {"name": "AI 9.2.2", "key": "AI 9.2.2|R20", "ais": ["9.2.2"]}, {"name": "AI 9.6 R20 NTN-NR", "key": "AI 9.6 R20 NTN-NR|R20", "ais": ["9.6"]}, {"name": "AI 9.7 R20 NTN-IoT", "key": "AI 9.7 R20 NTN-IoT|R20", "ais": ["9.7"]}, {"name": "AI/ML", "key": "AI/ML|R20", "ais": []}, {"name": "Coverage", "key": "Coverage|R20", "ais": []}, {"name": "MIMO", "key": "MIMO|R20", "ais": []}, {"name": "NR-NTN", "key": "NR-NTN|R20", "ais": []}, {"name": "NTN-IoT", "key": "NTN-IoT|R20", "ais": []}, {"name": "NTN-NR", "key": "NTN-NR|R20", "ais": []}, {"name": "R20 A-IoT", "key": "R20 A-IoT|R20", "ais": ["9.3", "9.3.1", "9.3.2.1", "9.3.2.2", "9.3.2.3"]}, {"name": "R20 Coverage", "key": "R20 Coverage|R20", "ais": ["9.4.1"]}, {"name": "R20 ISAC", "key": "R20 ISAC|R20", "ais": ["9.5.1"]}, {"name": "R20 MIMO", "key": "R20 MIMO|R20", "ais": []}, {"name": "R20 NTN-NR", "key": "R20 NTN-NR|R20", "ais": []}]}, {"name": "Session reports", "key": "Session reports", "sessions": [{"name": "Any other open issues", "key": "Any other open issues|Session reports", "ais": []}]}, {"name": "Other", "key": "__other__", "sessions": [{"name": "AI 6", "key": "AI 6|", "ais": ["6"]}, {"name": "AI 6/8", "key": "AI 6/8|", "ais": []}, {"name": "Early dinner", "key": "Early dinner|", "ais": []}, {"name": "RAN1#124 commences at 09:00 on Monday", "key": "RAN1#124 commences at 09:00 on Monday|", "ais": ["1", "2", "3", "4", "5"]}, {"name": "Remembrance gathering", "key": "Remembrance gathering|", "ais": []}, {"name": "To be assigned by Hiroki", "key": "To be assigned by Hiroki|", "ais": []}, {"name": "To be assigned by Sorour", "key": "To be assigned by Sorour|", "ais": []}]}], "allAIs": ["1", "2", "3", "4", "5", "6", "7", "8", "8.1", "8.2", "8.3", "8.4", "8.5", "8.6", "8.7.1", "8.7.2", "8.8", "8.9", "9.1.1", "9.1.2", "9.2.1", "9.2.2", "9.3", "9.3.1", "9.3.2.1", "9.3.2.2", "9.3.2.3", "9.4.1", "9.5.1", "9.6", "9.7", "10.1", "10.2.1", "10.3.1", "10.3.2", "10.4", "10.5.0", "10.5.1.1", "10.5.1.2", "10.5.1.3", "10.5.2.1", "10.5.2.2", "10.5.2.3", "10.5.2.4", "10.5.3.1", "10.5.3.2", "10.5.3.3", "10.5.4.1", "10.5.4.3", "10.5.4.x", "10.5.5", "10.6.x", "10.7.1", "10.9"]}</script>
@@ -1725,10 +1761,29 @@ document.addEventListener('DOMContentLoaded', function() {
         const filterClear = document.querySelector('.filter-clear');
         const filterList = document.querySelector('.filter-list');
         const filterCount = document.querySelector('.filter-active-count');
+        const dimOpacityRange = document.querySelector('.filter-dim-opacity-range');
+        const dimOpacityValue = document.querySelector('.filter-dim-opacity-value');
+        const DIM_OPACITY_DEFAULT = 0.12;
         // Only two sets – sessions (no-AI only) and AIs – are the source of truth.
         // Group / session visual state is DERIVED from children.
         const activeSessions = new Set();  // keys of sessions WITHOUT AIs
         const activeAIs = new Set();
+        let dimOpacity = DIM_OPACITY_DEFAULT;
+
+        function clampDimOpacity(v) {
+            var n = Number(v);
+            if (!isFinite(n)) return DIM_OPACITY_DEFAULT;
+            if (n < 0.02) return 0.02;
+            if (n > 0.95) return 0.95;
+            return Math.round(n * 100) / 100;
+        }
+
+        function setDimOpacity(v) {
+            dimOpacity = clampDimOpacity(v);
+            document.documentElement.style.setProperty('--dim-opacity', String(dimOpacity));
+            if (dimOpacityRange) dimOpacityRange.value = String(dimOpacity);
+            if (dimOpacityValue) dimOpacityValue.textContent = Math.round(dimOpacity * 100) + '%';
+        }
 
         // --- helpers to look up FD ---
         function findGroup(key) { return FD.groups.find(function(g){ return g.key===key; }); }
@@ -1930,11 +1985,14 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }
 
-        // URL hash: s:key, a:val
+        // URL hash: s:key, a:val, o:dimOpacity
         function updateFilterHash() {
             var parts = [];
             activeSessions.forEach(function(v){ parts.push('s:'+encodeURIComponent(v)); });
             activeAIs.forEach(function(v){ parts.push('a:'+encodeURIComponent(v)); });
+            if (Math.abs(dimOpacity - DIM_OPACITY_DEFAULT) > 0.0001) {
+                parts.push('o:' + encodeURIComponent(dimOpacity.toFixed(2)));
+            }
             if (parts.length === 0) {
                 history.replaceState(null, '', location.pathname + location.search);
             } else {
@@ -1953,6 +2011,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (!val) return;
                 if (type === 's') activeSessions.add(val);
                 else if (type === 'a') activeAIs.add(val);
+                else if (type === 'o') setDimOpacity(val);
             });
             syncCheckboxes();
             applyFilter();
@@ -1990,7 +2049,15 @@ document.addEventListener('DOMContentLoaded', function() {
             syncCheckboxes(); applyFilter(); updateFilterHash();
         });
 
+        if (dimOpacityRange) {
+            dimOpacityRange.addEventListener('input', function() {
+                setDimOpacity(dimOpacityRange.value);
+                updateFilterHash();
+            });
+        }
+
         buildFilterList();
+        setDimOpacity(DIM_OPACITY_DEFAULT);
         loadFilterHash();
     }
 

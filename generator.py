@@ -102,6 +102,7 @@ def _generate_css(num_rooms_max: int) -> str:
     --text-muted: #6B7280;
     --border: #D1D5DB;
     --shadow: 0 1px 3px rgba(0,0,0,0.1);
+    --dim-opacity: 0.12;
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -570,7 +571,41 @@ header .meta {
     overflow-y: auto;
     padding: 6px 8px;
     flex: 1;
-    max-height: calc(80vh - 50px);
+    max-height: calc(80vh - 96px);
+}
+
+.filter-controls {
+    padding: 8px 12px 6px;
+    border-bottom: 1px solid #E5E7EB;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex-shrink: 0;
+}
+
+.filter-controls label {
+    font-size: 11px;
+    font-weight: 600;
+    color: #6B7280;
+}
+
+.filter-dim-opacity {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.filter-dim-opacity input[type="range"] {
+    flex: 1;
+    accent-color: #3B82F6;
+}
+
+.filter-dim-opacity-value {
+    min-width: 38px;
+    text-align: right;
+    font-size: 11px;
+    color: #374151;
+    font-variant-numeric: tabular-nums;
 }
 
 .filter-group { margin-bottom: 1px; }
@@ -659,7 +694,7 @@ header .meta {
 }
 
 .session-block.dimmed {
-    opacity: 0.12;
+    opacity: var(--dim-opacity, 0.12);
     pointer-events: none;
     transition: opacity 0.2s;
 }
@@ -862,10 +897,29 @@ document.addEventListener('DOMContentLoaded', function() {{
         const filterClear = document.querySelector('.filter-clear');
         const filterList = document.querySelector('.filter-list');
         const filterCount = document.querySelector('.filter-active-count');
+        const dimOpacityRange = document.querySelector('.filter-dim-opacity-range');
+        const dimOpacityValue = document.querySelector('.filter-dim-opacity-value');
+        const DIM_OPACITY_DEFAULT = 0.12;
         // Only two sets – sessions (no-AI only) and AIs – are the source of truth.
         // Group / session visual state is DERIVED from children.
         const activeSessions = new Set();  // keys of sessions WITHOUT AIs
         const activeAIs = new Set();
+        let dimOpacity = DIM_OPACITY_DEFAULT;
+
+        function clampDimOpacity(v) {{
+            var n = Number(v);
+            if (!isFinite(n)) return DIM_OPACITY_DEFAULT;
+            if (n < 0.02) return 0.02;
+            if (n > 0.95) return 0.95;
+            return Math.round(n * 100) / 100;
+        }}
+
+        function setDimOpacity(v) {{
+            dimOpacity = clampDimOpacity(v);
+            document.documentElement.style.setProperty('--dim-opacity', String(dimOpacity));
+            if (dimOpacityRange) dimOpacityRange.value = String(dimOpacity);
+            if (dimOpacityValue) dimOpacityValue.textContent = Math.round(dimOpacity * 100) + '%';
+        }}
 
         // --- helpers to look up FD ---
         function findGroup(key) {{ return FD.groups.find(function(g){{ return g.key===key; }}); }}
@@ -1067,11 +1121,14 @@ document.addEventListener('DOMContentLoaded', function() {{
             }});
         }}
 
-        // URL hash: s:key, a:val
+        // URL hash: s:key, a:val, o:dimOpacity
         function updateFilterHash() {{
             var parts = [];
             activeSessions.forEach(function(v){{ parts.push('s:'+encodeURIComponent(v)); }});
             activeAIs.forEach(function(v){{ parts.push('a:'+encodeURIComponent(v)); }});
+            if (Math.abs(dimOpacity - DIM_OPACITY_DEFAULT) > 0.0001) {{
+                parts.push('o:' + encodeURIComponent(dimOpacity.toFixed(2)));
+            }}
             if (parts.length === 0) {{
                 history.replaceState(null, '', location.pathname + location.search);
             }} else {{
@@ -1090,6 +1147,7 @@ document.addEventListener('DOMContentLoaded', function() {{
                 if (!val) return;
                 if (type === 's') activeSessions.add(val);
                 else if (type === 'a') activeAIs.add(val);
+                else if (type === 'o') setDimOpacity(val);
             }});
             syncCheckboxes();
             applyFilter();
@@ -1127,7 +1185,15 @@ document.addEventListener('DOMContentLoaded', function() {{
             syncCheckboxes(); applyFilter(); updateFilterHash();
         }});
 
+        if (dimOpacityRange) {{
+            dimOpacityRange.addEventListener('input', function() {{
+                setDimOpacity(dimOpacityRange.value);
+                updateFilterHash();
+            }});
+        }}
+
         buildFilterList();
+        setDimOpacity(DIM_OPACITY_DEFAULT);
         loadFilterHash();
     }}
 
@@ -1382,6 +1448,7 @@ def generate_html(schedule: Schedule) -> str:
     html_parts.append('    <div class="filter-panel collapsed">\n')
     html_parts.append('        <button class="filter-toggle">&#9664; Filter</button>\n')
     html_parts.append('        <div class="filter-header"><span>Session Filter <span class="filter-active-count"></span></span><button class="filter-clear">Clear</button></div>\n')
+    html_parts.append('        <div class="filter-controls"><label for="filter-dim-opacity-range">Unchecked opacity</label><div class="filter-dim-opacity"><input type="range" id="filter-dim-opacity-range" class="filter-dim-opacity-range" min="0.02" max="0.95" step="0.01" value="0.12"><span class="filter-dim-opacity-value">12%</span></div></div>\n')
     html_parts.append('        <div class="filter-list"></div>\n')
     html_parts.append('    </div>\n')
 
