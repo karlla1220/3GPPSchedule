@@ -516,7 +516,7 @@ Return JSON only with schema: {{"room_names": ["..."], "reasoning": "..."}}"""
 # ── Multi-source time-slot parsing ───────────────────────────────
 
 
-_PROMPT_VERSION = 2  # Bump to invalidate time-slot caches on prompt changes
+_PROMPT_VERSION = 3  # Bump to invalidate time-slot caches on prompt changes
 
 
 def build_room_aliases(
@@ -657,6 +657,26 @@ Example 3 – single leaf:
    Vice-chair detail for offline rooms just confirms this.
 
 6. Total leaf durations per room must NOT exceed the time block duration.
+
+## Session chair assignment from vice-chair detail
+
+When a vice-chair source provides SIGNIFICANTLY more detail than the main schedule
+for a set of sessions in a room (e.g. detailed sub-session breakdowns, specific AI
+numbers, agenda items that the main schedule lacks), assign that vice chair as the
+session chair for those sessions.
+
+Rationale: the vice chair who wrote the detailed breakdown is typically the one
+chairing that block.
+
+Rules:
+- Only apply when the detail gap is CLEAR — the vice-chair schedule has specific
+  sub-items / AI numbers / agenda items while the main schedule only has a coarse
+  topic name.
+- If the main schedule already names a chair explicitly (e.g. "Xiaodong (120)"),
+  that takes precedence.
+- Only assign when exactly ONE vice-chair source has distinctly more detail.
+  If multiple sources have similar detail, it may be copy-paste — do NOT
+  assign a chair (leave null).
 
 ## Agenda items
 
