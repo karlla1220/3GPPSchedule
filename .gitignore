@@ -22,6 +22,7 @@ _debug_*.py
 Chair_notes/
 Hiroki_notes/
 Sorour_notes/
+test_runs/
 
 # Environment
 .env
