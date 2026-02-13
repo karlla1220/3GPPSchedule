@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import json
+import re
 from pathlib import Path
 
 from models import (
@@ -26,6 +28,64 @@ def _assign_group_colors(sessions: list) -> dict[str, dict]:
     for i, header in enumerate(headers):
         color_map[header] = GROUP_COLORS[i % len(GROUP_COLORS)]
     return color_map
+
+
+def _natural_sort_key(s: str):
+    """Sort key that handles numeric parts naturally (8 < 8.3 < 10)."""
+    parts = re.split(r'(\d+)', s)
+    return [int(p) if p.isdigit() else p.lower() for p in parts]
+
+
+def _build_filter_data(all_sessions: list) -> str:
+    """Build filter data JSON for the session filter panel.
+
+    Returns a JSON string with:
+    - groups: array of {name, sessions: [{name, key, ais}]}
+    - allAIs: sorted array of all unique AI values
+
+    The filter UI shows a three-level tree (Group → Session → AI)
+    plus a flat top-level AI section.  AI checkboxes are duplicated
+    and their checked state is bidirectionally synced.
+    """
+    # 1. Build group -> session_name -> set[AI]
+    group_sessions: dict[str, dict[str, set[str]]] = {}
+    for session in all_sessions:
+        group = session.group_header or ""
+        name = session.name
+        if group not in group_sessions:
+            group_sessions[group] = {}
+        if name not in group_sessions[group]:
+            group_sessions[group][name] = set()
+        if session.agenda_item:
+            for ai in session.agenda_item.split(","):
+                ai = ai.strip()
+                if ai:
+                    group_sessions[group][name].add(ai)
+
+    # 2. Build structured data
+    all_ais: set[str] = set()
+    groups = []
+    for group_name in sorted(group_sessions.keys(), key=lambda x: (x == "", x.lower())):
+        sessions_data = []
+        for sess_name in sorted(group_sessions[group_name].keys(), key=_natural_sort_key):
+            ais = sorted(group_sessions[group_name][sess_name], key=_natural_sort_key)
+            all_ais.update(ais)
+            sessions_data.append({
+                "name": sess_name,
+                "key": f"{sess_name}|{group_name}",
+                "ais": ais,
+            })
+        groups.append({
+            "name": group_name if group_name else "Other",
+            "key": group_name if group_name else "__other__",
+            "sessions": sessions_data,
+        })
+
+    result = {
+        "groups": groups,
+        "allAIs": sorted(all_ais, key=_natural_sort_key),
+    }
+    return json.dumps(result, ensure_ascii=False)
 
 
 def _generate_css(num_rooms_max: int) -> str:
@@ -427,6 +487,192 @@ header .meta {
     .session-name { font-size: 10px; }
     .room-header { font-size: 9px; padding: 3px 3px; }
 }
+
+/* ── Session Filter Panel ── */
+.filter-panel {
+    position: fixed;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 100;
+    width: 260px;
+    max-height: 80vh;
+    background: white;
+    border-radius: 8px 0 0 8px;
+    box-shadow: -2px 0 12px rgba(0,0,0,0.15);
+    transition: transform 0.3s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+.filter-panel.collapsed {
+    transform: translateX(calc(100%)) translateY(-50%);
+}
+
+.filter-toggle {
+    position: absolute;
+    left: -32px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 32px;
+    height: 80px;
+    background: white;
+    border: 1px solid #D1D5DB;
+    border-right: none;
+    border-radius: 8px 0 0 8px;
+    cursor: pointer;
+    font-size: 11px;
+    color: #6B7280;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    writing-mode: vertical-rl;
+    box-shadow: -2px 0 6px rgba(0,0,0,0.1);
+    z-index: 101;
+}
+
+.filter-toggle:hover {
+    background: #F3F4F6;
+    color: #374151;
+}
+
+.filter-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 12px;
+    border-bottom: 1px solid #E5E7EB;
+    flex-shrink: 0;
+}
+
+.filter-header span {
+    font-weight: 600;
+    font-size: 13px;
+    color: #374151;
+}
+
+.filter-clear {
+    font-size: 11px;
+    color: #6B7280;
+    background: none;
+    border: 1px solid #D1D5DB;
+    border-radius: 4px;
+    padding: 2px 8px;
+    cursor: pointer;
+}
+
+.filter-clear:hover {
+    background: #F3F4F6;
+    color: #374151;
+}
+
+.filter-list {
+    overflow-y: auto;
+    padding: 6px 8px;
+    flex: 1;
+    max-height: calc(80vh - 50px);
+}
+
+.filter-group { margin-bottom: 1px; }
+
+.filter-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 3px 4px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+    color: #374151;
+}
+
+.filter-item:hover { background: #F3F4F6; }
+
+.filter-item input[type="checkbox"] {
+    width: 14px;
+    height: 14px;
+    cursor: pointer;
+    flex-shrink: 0;
+    accent-color: #3B82F6;
+}
+
+.filter-item label {
+    cursor: pointer;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    flex: 1;
+    user-select: none;
+}
+
+.filter-item .tree-toggle {
+    width: 16px;
+    height: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    color: #9CA3AF;
+    cursor: pointer;
+    flex-shrink: 0;
+    border: none;
+    background: none;
+    padding: 0;
+}
+
+.filter-item .tree-toggle:hover { color: #374151; }
+
+.filter-children {
+    padding-left: 16px;
+    display: none;
+}
+
+.filter-children.expanded { display: block; }
+
+.filter-children .filter-item {
+    font-size: 11px;
+    padding: 2px 4px;
+    color: #6B7280;
+}
+
+.filter-separator {
+    font-size: 11px;
+    font-weight: 600;
+    color: #9CA3AF;
+    padding: 6px 4px 3px;
+    margin-top: 4px;
+    border-top: 1px solid #E5E7EB;
+    user-select: none;
+}
+
+.filter-active-count {
+    font-size: 10px;
+    color: #3B82F6;
+    font-weight: 600;
+    margin-left: auto;
+    flex-shrink: 0;
+}
+
+/* Session dimming when filter is active */
+.session-block {
+    transition: opacity 0.2s;
+}
+
+.session-block.dimmed {
+    opacity: 0.12;
+    pointer-events: none;
+    transition: opacity 0.2s;
+}
+
+@media (max-width: 768px) {
+    .filter-panel { width: 220px; }
+    .filter-toggle {
+        left: -28px;
+        width: 28px;
+        height: 60px;
+        font-size: 10px;
+    }
+}
 """
 
 
@@ -607,6 +853,284 @@ document.addEventListener('DOMContentLoaded', function() {{
         closePopup();
     }});
 
+    // ── Session Filter ──
+    const filterDataEl = document.getElementById('filter-data');
+    if (filterDataEl) {{
+        const FD = JSON.parse(filterDataEl.textContent);
+        const filterPanel = document.querySelector('.filter-panel');
+        const filterToggle = document.querySelector('.filter-toggle');
+        const filterClear = document.querySelector('.filter-clear');
+        const filterList = document.querySelector('.filter-list');
+        const filterCount = document.querySelector('.filter-active-count');
+        // Only two sets – sessions (no-AI only) and AIs – are the source of truth.
+        // Group / session visual state is DERIVED from children.
+        const activeSessions = new Set();  // keys of sessions WITHOUT AIs
+        const activeAIs = new Set();
+
+        // --- helpers to look up FD ---
+        function findGroup(key) {{ return FD.groups.find(function(g){{ return g.key===key; }}); }}
+        function findSess(key) {{
+            var out = null;
+            FD.groups.forEach(function(g){{ g.sessions.forEach(function(s){{ if(s.key===key) out=s; }}); }});
+            return out;
+        }}
+
+        function mkEl(tag, cls) {{ const e = document.createElement(tag); if (cls) e.className = cls; return e; }}
+        function mkSpacer() {{ const s = document.createElement('span'); s.style.width='16px'; s.style.flexShrink='0'; return s; }}
+        function mkToggle(container) {{
+            const btn = mkEl('button','tree-toggle');
+            btn.textContent = '\u25B6';
+            btn.addEventListener('click', function(e) {{
+                e.stopPropagation();
+                const ch = container.querySelector(':scope > .filter-children');
+                if (!ch) return;
+                const exp = ch.classList.toggle('expanded');
+                btn.textContent = exp ? '\u25BC' : '\u25B6';
+            }});
+            return btn;
+        }}
+
+        function buildFilterList() {{
+            filterList.innerHTML = '';
+            // --- Group trees ---
+            FD.groups.forEach(function(group, gi) {{
+                const grpDiv = mkEl('div','filter-group');
+                // Group header row
+                const grpRow = mkEl('div','filter-item');
+                grpRow.appendChild(mkToggle(grpDiv));
+                const gcb = document.createElement('input');
+                gcb.type = 'checkbox'; gcb.id = 'fg'+gi; gcb.dataset.gk = group.key;
+                gcb.addEventListener('change', function() {{ onGroupChange(group.key, gcb.checked); }});
+                grpRow.appendChild(gcb);
+                const gl = document.createElement('label'); gl.htmlFor = gcb.id;
+                gl.textContent = group.name; gl.title = group.name;
+                grpRow.appendChild(gl);
+                grpDiv.appendChild(grpRow);
+
+                // Sessions under this group
+                const sessC = mkEl('div','filter-children');
+                group.sessions.forEach(function(sess, si) {{
+                    const sessWrap = mkEl('div','filter-group');
+                    const sessRow = mkEl('div','filter-item');
+                    if (sess.ais.length > 0) {{
+                        sessRow.appendChild(mkToggle(sessWrap));
+                    }} else {{
+                        sessRow.appendChild(mkSpacer());
+                    }}
+                    const scb = document.createElement('input');
+                    scb.type = 'checkbox'; scb.id = 'fs'+gi+'_'+si; scb.dataset.sk = sess.key;
+                    scb.addEventListener('change', function() {{ onSessionChange(sess.key, scb.checked); }});
+                    sessRow.appendChild(scb);
+                    const sl = document.createElement('label'); sl.htmlFor = scb.id;
+                    sl.textContent = sess.name; sl.title = sess.name;
+                    sessRow.appendChild(sl);
+                    sessWrap.appendChild(sessRow);
+
+                    // AIs under this session
+                    if (sess.ais.length > 0) {{
+                        const aiC = mkEl('div','filter-children');
+                        sess.ais.forEach(function(ai, ai_i) {{
+                            const aiRow = mkEl('div','filter-item');
+                            aiRow.appendChild(mkSpacer());
+                            const acb = document.createElement('input');
+                            acb.type = 'checkbox'; acb.id = 'fsa'+gi+'_'+si+'_'+ai_i; acb.dataset.ai = ai;
+                            acb.addEventListener('change', function() {{ onAIChange(ai, acb.checked); }});
+                            aiRow.appendChild(acb);
+                            const al = document.createElement('label'); al.htmlFor = acb.id;
+                            al.textContent = 'AI '+ai;
+                            aiRow.appendChild(al);
+                            aiC.appendChild(aiRow);
+                        }});
+                        sessWrap.appendChild(aiC);
+                    }}
+                    sessC.appendChild(sessWrap);
+                }});
+                grpDiv.appendChild(sessC);
+                filterList.appendChild(grpDiv);
+            }});
+
+            // --- Separator + flat AI list ---
+            if (FD.allAIs.length > 0) {{
+                const sep = mkEl('div','filter-separator');
+                sep.textContent = '\u2500\u2500 AI \u2500\u2500';
+                filterList.appendChild(sep);
+                FD.allAIs.forEach(function(ai, i) {{
+                    const row = mkEl('div','filter-item');
+                    row.appendChild(mkSpacer());
+                    const cb = document.createElement('input');
+                    cb.type = 'checkbox'; cb.id = 'fa'+i; cb.dataset.ai = ai;
+                    cb.addEventListener('change', function() {{ onAIChange(ai, cb.checked); }});
+                    row.appendChild(cb);
+                    const lb = document.createElement('label'); lb.htmlFor = cb.id;
+                    lb.textContent = 'AI '+ai;
+                    row.appendChild(lb);
+                    filterList.appendChild(row);
+                }});
+            }}
+        }}
+
+        // ── Cascade handlers ──
+
+        // Group click → cascade to all child sessions → AIs
+        function onGroupChange(key, checked) {{
+            var group = findGroup(key);
+            if (!group) return;
+            group.sessions.forEach(function(sess) {{
+                if (sess.ais.length > 0) {{
+                    sess.ais.forEach(function(ai) {{
+                        if (checked) activeAIs.add(ai); else activeAIs.delete(ai);
+                    }});
+                }} else {{
+                    if (checked) activeSessions.add(sess.key); else activeSessions.delete(sess.key);
+                }}
+            }});
+            syncCheckboxes(); applyFilter(); updateFilterHash();
+        }}
+
+        // Session click → cascade to child AIs
+        function onSessionChange(key, checked) {{
+            var sess = findSess(key);
+            if (!sess) return;
+            if (sess.ais.length > 0) {{
+                sess.ais.forEach(function(ai) {{
+                    if (checked) activeAIs.add(ai); else activeAIs.delete(ai);
+                }});
+            }} else {{
+                if (checked) activeSessions.add(key); else activeSessions.delete(key);
+            }}
+            syncCheckboxes(); applyFilter(); updateFilterHash();
+        }}
+
+        // AI click → just toggle the AI; parents derive visually
+        function onAIChange(ai, checked) {{
+            if (checked) activeAIs.add(ai); else activeAIs.delete(ai);
+            syncCheckboxes(); applyFilter(); updateFilterHash();
+        }}
+
+        // ── Derive visual state from activeAIs + activeSessions ──
+        function syncCheckboxes() {{
+            // 1. Sync all AI checkboxes (tree duplicates + flat list)
+            document.querySelectorAll('input[data-ai]').forEach(function(cb) {{
+                cb.checked = activeAIs.has(cb.dataset.ai);
+            }});
+
+            // 2. Session checkboxes: derive from children
+            FD.groups.forEach(function(group) {{
+                group.sessions.forEach(function(sess) {{
+                    var scb = document.querySelector('input[data-sk="' + sess.key + '"]');
+                    if (!scb) return;
+                    if (sess.ais.length > 0) {{
+                        var n = 0;
+                        sess.ais.forEach(function(ai) {{ if (activeAIs.has(ai)) n++; }});
+                        scb.checked = (n === sess.ais.length);
+                        scb.indeterminate = (n > 0 && n < sess.ais.length);
+                    }} else {{
+                        scb.checked = activeSessions.has(sess.key);
+                        scb.indeterminate = false;
+                    }}
+                }});
+            }});
+
+            // 3. Group checkboxes: derive from child sessions
+            FD.groups.forEach(function(group) {{
+                var gcb = document.querySelector('input[data-gk="' + group.key + '"]');
+                if (!gcb) return;
+                var total = group.sessions.length;
+                if (total === 0) {{ gcb.checked = false; gcb.indeterminate = false; return; }}
+                var full = 0, partial = 0;
+                group.sessions.forEach(function(sess) {{
+                    var scb = document.querySelector('input[data-sk="' + sess.key + '"]');
+                    if (!scb) return;
+                    if (scb.checked) full++;
+                    else if (scb.indeterminate) partial++;
+                }});
+                gcb.checked = (full === total);
+                gcb.indeterminate = (!gcb.checked && (full > 0 || partial > 0));
+            }});
+
+            // 4. Badge count
+            var total = activeAIs.size + activeSessions.size;
+            if (filterCount) {{ filterCount.textContent = total > 0 ? total : ''; }}
+        }}
+
+        function applyFilter() {{
+            var hasFilter = activeAIs.size > 0 || activeSessions.size > 0;
+            document.querySelectorAll('.session-block').forEach(function(block) {{
+                if (!hasFilter) {{ block.classList.remove('dimmed'); return; }}
+                var grp = block.getAttribute('data-group') || '';
+                var nm  = block.getAttribute('data-name') || '';
+                var raw = block.getAttribute('data-ai') || '';
+                var aiVals = raw.split('|').filter(function(v){{ return v.trim(); }});
+                var match = activeSessions.has(nm + '|' + grp) ||
+                            aiVals.some(function(v){{ return activeAIs.has(v); }});
+                if (match) {{ block.classList.remove('dimmed'); }} else {{ block.classList.add('dimmed'); }}
+            }});
+        }}
+
+        // URL hash: s:key, a:val
+        function updateFilterHash() {{
+            var parts = [];
+            activeSessions.forEach(function(v){{ parts.push('s:'+encodeURIComponent(v)); }});
+            activeAIs.forEach(function(v){{ parts.push('a:'+encodeURIComponent(v)); }});
+            if (parts.length === 0) {{
+                history.replaceState(null, '', location.pathname + location.search);
+            }} else {{
+                history.replaceState(null, '', '#filter=' + parts.join(','));
+            }}
+        }}
+
+        function loadFilterHash() {{
+            var h = location.hash;
+            if (!h || !h.startsWith('#filter=')) return;
+            h.slice(8).split(',').forEach(function(tok) {{
+                var c = tok.indexOf(':');
+                if (c < 0) return;
+                var type = tok.slice(0, c);
+                var val  = decodeURIComponent(tok.slice(c+1));
+                if (!val) return;
+                if (type === 's') activeSessions.add(val);
+                else if (type === 'a') activeAIs.add(val);
+            }});
+            syncCheckboxes();
+            applyFilter();
+            // Auto-expand trees with active items
+            filterList.querySelectorAll('.filter-group').forEach(function(grpEl) {{
+                var ch = grpEl.querySelector(':scope > .filter-children');
+                if (!ch) return;
+                var hasActive = ch.querySelector('input:checked') || ch.querySelector('input:indeterminate');
+                if (hasActive) {{
+                    ch.classList.add('expanded');
+                    var tog = grpEl.querySelector(':scope > .filter-item > .tree-toggle');
+                    if (tog) tog.textContent = '\u25BC';
+                }}
+            }});
+        }}
+
+        // Panel toggle
+        filterToggle.addEventListener('click', function() {{
+            var collapsed = filterPanel.classList.toggle('collapsed');
+            filterToggle.textContent = collapsed ? '\u25C0 Filter' : '\u25B6';
+            try {{ sessionStorage.setItem('3gpp_filter_panel', collapsed ? 'c' : 'o'); }} catch(e) {{}}
+        }});
+
+        // Restore panel state
+        try {{
+            if (sessionStorage.getItem('3gpp_filter_panel') === 'o') {{
+                filterPanel.classList.remove('collapsed');
+                filterToggle.textContent = '\u25B6';
+            }}
+        }} catch(e) {{}}
+
+        // Clear all
+        filterClear.addEventListener('click', function() {{
+            activeSessions.clear(); activeAIs.clear();
+            syncCheckboxes(); applyFilter(); updateFilterHash();
+        }});
+
+        buildFilterList();
+        loadFilterHash();
+    }}
+
     // --- Auto-refresh: reload page periodically, preserving user state ---
     if (AUTO_REFRESH_MS > 0) {{
         setInterval(function() {{
@@ -625,6 +1149,7 @@ def generate_html(schedule: Schedule) -> str:
         all_sessions.extend(day.sessions)
 
     color_map = _assign_group_colors(all_sessions)
+    filter_data_json = _build_filter_data(all_sessions)
     mailto_link = _esc(f"mailto:{schedule.contact_email}")
 
     # Build HTML
@@ -823,8 +1348,22 @@ def generate_html(schedule: Schedule) -> str:
             if is_tiny:
                 block_classes += " tiny-session"
 
+            # Filter data attributes – only actual AI values
+            if session.agenda_item:
+                ai_vals = [a.strip() for a in session.agenda_item.split(",") if a.strip()]
+                data_ai = "|".join(ai_vals)
+            else:
+                data_ai = ""
+            data_ai_attr = _esc(data_ai).replace('"', '&quot;')
+            data_name_attr = _esc(session.name).replace('"', '&quot;')
+            data_group_attr = _esc(session.group_header).replace('"', '&quot;')
+
             html_parts.append(
-                f'                <div class="{block_classes}" style="{style}" data-popup="{popup_attr}">\n'
+                f'                <div class="{block_classes}" style="{style}"'
+                f' data-popup="{popup_attr}"'
+                f' data-ai="{data_ai_attr}"'
+                f' data-name="{data_name_attr}"'
+                f' data-group="{data_group_attr}">\n'
                 f"                    {name_html}{details_html}\n"
                 f"                </div>\n"
             )
@@ -838,6 +1377,16 @@ def generate_html(schedule: Schedule) -> str:
     # Shared floating popup and backdrop
     html_parts.append('    <div class="popup-backdrop" id="popup-backdrop"></div>\n')
     html_parts.append('    <div class="popup-floating" id="popup-floating"><div id="popup-content"></div><button class="popup-close" id="popup-close-btn">&times;</button></div>\n')
+
+    # Filter panel
+    html_parts.append('    <div class="filter-panel collapsed">\n')
+    html_parts.append('        <button class="filter-toggle">&#9664; Filter</button>\n')
+    html_parts.append('        <div class="filter-header"><span>Session Filter <span class="filter-active-count"></span></span><button class="filter-clear">Clear</button></div>\n')
+    html_parts.append('        <div class="filter-list"></div>\n')
+    html_parts.append('    </div>\n')
+
+    # Filter data (JSON, read by JS)
+    html_parts.append(f'    <script type="application/json" id="filter-data">{filter_data_json}</script>\n')
 
     # Close container and add JS
     html_parts.append(f"""</div>
