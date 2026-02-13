@@ -24,16 +24,19 @@ def extract_meeting_location(docx_path: Path) -> str | None:
         text = para.text.strip()
         if not text:
             continue
-        # Location lines typically contain: City, CountryCode, Date
-        # Pattern: word(s), 2-letter code, month/date info
+        # Location lines typically look like:
+        #   "Dallas, USA, Nov 17th – 21st, 2025"
+        #   "Athens, Greece, February 17th – 21st, 2025"
+        # Allow both 2-letter and full country names.
         if re.search(
-            r"[A-Z][a-z]+.*,\s*[A-Z]{2},\s*\w+\.?\s+\d", text
+            r"^[A-Z][A-Za-z .'-]+,\s*[A-Z][A-Za-z .'-]+,\s*[A-Za-z]+\.?\s+\d",
+            text,
         ):
             return text
     return None
 
 
-def find_chair_notes_docx(dest_dir: Path = Path("Chair_notes")) -> Path | None:
+def find_chair_notes_docx(dest_dir: Path = Path("downloads/Chair_notes")) -> Path | None:
     """Find the latest Chair notes document in the local directory.
 
     Looks for files with 'chair note' (case-insensitive) in the name,

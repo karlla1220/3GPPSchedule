@@ -114,7 +114,7 @@ def main():
     elif args.no_download:
         docx_path = find_local_latest_schedule()
         if docx_path is None:
-            print("Error: No schedule files found locally in Chair_notes/")
+            print("Error: No schedule files found locally in downloads/Chair_notes/")
             sys.exit(1)
         print(f"Using local file: {docx_path}")
         # Discover local vice-chair schedules (mirrors default download behavior)

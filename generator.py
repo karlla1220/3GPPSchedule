@@ -32,7 +32,7 @@ def _generate_css(num_rooms_max: int) -> str:
     """Generate the CSS for the schedule page."""
     return """
 :root {
-    --slot-height: 7px;
+    --slot-height: 8px;
     --time-col-width: 54px;
     --header-height: 36px;
     --break-bg: #F3F4F6;
@@ -253,7 +253,7 @@ header .meta {
     border-radius: 4px;
     border-left: 3px solid var(--session-border);
     background: var(--session-bg);
-    padding: 2px 5px;
+    padding: 1px 4px;
     margin: 1px 2px;
     overflow: hidden;
     cursor: pointer;
@@ -264,6 +264,29 @@ header .meta {
     flex-direction: column;
     justify-content: flex-start;
     min-height: 0;
+}
+
+.session-block.short-session {
+    min-height: 16px;
+    border-left-width: 2px;
+    padding: 1px 3px;
+}
+
+.session-block.tiny-session {
+    min-height: 14px;
+}
+
+.session-block.short-session .session-details {
+    display: none;
+}
+
+.session-block.short-session .session-name {
+    font-size: 10px;
+    line-height: 1.1;
+}
+
+.session-block.tiny-session .session-name {
+    font-size: 9px;
 }
 
 .session-block:hover {
@@ -400,7 +423,7 @@ header .meta {
     .container { padding: 8px; }
     header h1 { font-size: 18px; }
     .tab { padding: 6px 14px; font-size: 13px; }
-    :root { --slot-height: 6px; --time-col-width: 44px; }
+    :root { --slot-height: 7px; --time-col-width: 44px; }
     .session-name { font-size: 10px; }
     .room-header { font-size: 9px; padding: 3px 3px; }
 }
@@ -715,7 +738,10 @@ def generate_html(schedule: Schedule) -> str:
             row_end = time_to_grid_row(session.end_time)
 
             if row_end <= row_start:
-                continue  # Skip zero/negative duration
+                if session.duration_minutes > 0:
+                    row_end = row_start + 1
+                else:
+                    continue  # Skip zero/negative duration
 
             # Map session room columns to this day's room layout.
             # session.room_col_start/end are global (with col 1=time),
@@ -739,7 +765,14 @@ def generate_html(schedule: Schedule) -> str:
 
             # Content based on block height — order: Name, Chair, Time, AI
             slots = row_end - row_start
-            name_html = f'<div class="session-name">{_esc(session.name)}</div>'
+            is_short = slots <= 2
+            is_tiny = slots <= 1
+            display_name = (
+                _compact_session_label(session.name, session.agenda_item)
+                if is_tiny
+                else session.name
+            )
+            name_html = f'<div class="session-name">{_esc(display_name)}</div>'
             chair_html = ""
             dur_html = ""
             ai_html = ""
@@ -784,9 +817,14 @@ def generate_html(schedule: Schedule) -> str:
             # Build secondary details wrapped in a clipping container
             details_inner = f"{chair_html}{dur_html}{ai_html}"
             details_html = f'<div class="session-details">{details_inner}</div>' if details_inner else ""
+            block_classes = "session-block"
+            if is_short:
+                block_classes += " short-session"
+            if is_tiny:
+                block_classes += " tiny-session"
 
             html_parts.append(
-                f'                <div class="session-block" style="{style}" data-popup="{popup_attr}">\n'
+                f'                <div class="{block_classes}" style="{style}" data-popup="{popup_attr}">\n'
                 f"                    {name_html}{details_html}\n"
                 f"                </div>\n"
             )
@@ -829,3 +867,14 @@ def _esc(text: str) -> str:
         .replace(">", "&gt;")
         .replace('"', "&quot;")
     )
+
+
+def _compact_session_label(name: str, agenda_item: str | None) -> str:
+    """Return a compact single-line label for very short session blocks."""
+    if agenda_item:
+        return f"AI {agenda_item}"
+
+    normalized = " ".join(name.split())
+    if len(normalized) <= 22:
+        return normalized
+    return f"{normalized[:21]}…"

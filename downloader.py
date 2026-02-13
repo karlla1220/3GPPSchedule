@@ -16,6 +16,9 @@ from models import ScheduleSource
 BASE_URL = "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Chair_notes"
 INBOX_URL = "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/"
 
+# Default local storage root for downloaded artifacts
+DOWNLOADS_DIR = Path("downloads")
+
 # Folders in Inbox/ that never contain schedule files
 BLACKLISTED_FOLDERS = {"Agenda", "drafts", "Tdoc_list", "Welcome_speech"}
 
@@ -23,6 +26,18 @@ BLACKLISTED_FOLDERS = {"Agenda", "drafts", "Tdoc_list", "Welcome_speech"}
 DOCUMENT_EXTENSIONS = (".docx", ".pptx", ".pdf")
 # All extensions we accept from remote listings (documents + zip)
 SUPPORTED_EXTENSIONS = DOCUMENT_EXTENSIONS + (".zip",)
+
+
+def _extract_version_from_name(filename: str) -> int:
+    """Extract trailing version number from names like '... v09.zip'.
+
+    Returns -1 when version is not found.
+    """
+    _ext_pattern = "|".join(re.escape(e) for e in SUPPORTED_EXTENSIONS)
+    m = re.search(rf"v(\d+)(?:{_ext_pattern})$", filename, re.IGNORECASE)
+    if not m:
+        return -1
+    return int(m.group(1))
 
 
 def list_remote_files(url: str = BASE_URL) -> list[dict]:
@@ -78,20 +93,26 @@ def find_latest_schedule(files: list[dict]) -> dict | None:
     if not schedule_files:
         return None
 
-    # Prefer sorting by upload timestamp
+    # Prefer sorting by upload timestamp, then by version if timestamps tie.
     files_with_ts = [f for f in schedule_files if f.get("uploaded_at") is not None]
     if files_with_ts:
-        latest = max(files_with_ts, key=lambda x: x["uploaded_at"])
+        latest = max(
+            files_with_ts,
+            key=lambda x: (
+                x["uploaded_at"],
+                _extract_version_from_name(x["name"]),
+                x["name"].lower(),
+            ),
+        )
         print(f"Latest schedule (by upload time {latest['uploaded_at']}): {latest['name']}")
         return latest
 
     # Fallback: sort by version number in filename
-    _ext_pattern = "|".join(re.escape(e) for e in SUPPORTED_EXTENSIONS)
     versioned = []
     for f in schedule_files:
-        match = re.search(rf"v(\d+)(?:{_ext_pattern})$", f["name"], re.IGNORECASE)
-        if match:
-            versioned.append({**f, "version": int(match.group(1))})
+        version = _extract_version_from_name(f["name"])
+        if version >= 0:
+            versioned.append({**f, "version": version})
     if versioned:
         return max(versioned, key=lambda x: x["version"])
 
@@ -190,7 +211,9 @@ def download_and_resolve(url: str, dest_path: Path) -> Path:
     return downloaded
 
 
-def download_latest_schedule(dest_dir: Path = Path("Chair_notes")) -> Path:
+def download_latest_schedule(
+    dest_dir: Path = DOWNLOADS_DIR / "Chair_notes",
+) -> Path:
     """Download the latest schedule from 3GPP FTP.
 
     Supports .docx, .pptx, .pdf, and .zip (auto-extracted).
@@ -222,7 +245,9 @@ def download_latest_schedule(dest_dir: Path = Path("Chair_notes")) -> Path:
     return download_and_resolve(latest["url"], dest_path)
 
 
-def find_local_latest_schedule(dest_dir: Path = Path("Chair_notes")) -> Path | None:
+def find_local_latest_schedule(
+    dest_dir: Path = DOWNLOADS_DIR / "Chair_notes",
+) -> Path | None:
     """Find the latest schedule document in the local directory by modification time.
 
     Searches for .docx, .pptx, and .pdf files containing 'schedule' in the name.
@@ -245,7 +270,7 @@ def find_local_latest_schedule(dest_dir: Path = Path("Chair_notes")) -> Path | N
 
 
 def find_local_vice_chair_schedules(
-    base_dir: Path = Path("."),
+    base_dir: Path = DOWNLOADS_DIR,
 ) -> dict[str, Path]:
     """Discover vice-chair schedule files from local directories.
 
@@ -294,27 +319,35 @@ def find_latest_chair_notes(files: list[dict]) -> dict | None:
     if not chair_files:
         return None
 
-    # Prefer sorting by upload timestamp
+    # Prefer sorting by upload timestamp, then by version if timestamps tie.
     files_with_ts = [f for f in chair_files if f.get("uploaded_at") is not None]
     if files_with_ts:
-        latest = max(files_with_ts, key=lambda x: x["uploaded_at"])
+        latest = max(
+            files_with_ts,
+            key=lambda x: (
+                x["uploaded_at"],
+                _extract_version_from_name(x["name"]),
+                x["name"].lower(),
+            ),
+        )
         print(f"Latest Chair notes (by upload time {latest['uploaded_at']}): {latest['name']}")
         return latest
 
     # Fallback: sort by version number in filename
-    _ext_pattern = "|".join(re.escape(e) for e in SUPPORTED_EXTENSIONS)
     versioned = []
     for f in chair_files:
-        match = re.search(rf"v(\d+)(?:{_ext_pattern})$", f["name"], re.IGNORECASE)
-        if match:
-            versioned.append({**f, "version": int(match.group(1))})
+        version = _extract_version_from_name(f["name"])
+        if version >= 0:
+            versioned.append({**f, "version": version})
     if versioned:
         return max(versioned, key=lambda x: x["version"])
 
     return chair_files[0]
 
 
-def download_latest_chair_notes(dest_dir: Path = Path("Chair_notes")) -> Path | None:
+def download_latest_chair_notes(
+    dest_dir: Path = DOWNLOADS_DIR / "Chair_notes",
+) -> Path | None:
     """Download the latest Chair notes from 3GPP FTP.
 
     Supports .docx, .pptx, .pdf, and .zip (auto-extracted).
@@ -460,6 +493,7 @@ def discover_schedule_sources(url: str = INBOX_URL) -> list[ScheduleSource]:
     Returns a list of ScheduleSource objects.
     """
     sources: list[ScheduleSource] = []
+    chair_notes_url = f"{url.rstrip('/')}/Chair_notes"
 
     # 1. Scan subfolders
     try:
@@ -467,7 +501,7 @@ def discover_schedule_sources(url: str = INBOX_URL) -> list[ScheduleSource]:
     except Exception as e:
         print(f"Warning: Failed to list Inbox subfolders: {e}")
         # Fallback to Chair_notes only
-        return _fallback_chair_only()
+        return _fallback_chair_only(chair_notes_url)
 
     for folder in subfolders:
         if folder["name"] in BLACKLISTED_FOLDERS:
@@ -524,17 +558,17 @@ def discover_schedule_sources(url: str = INBOX_URL) -> list[ScheduleSource]:
 
     if not any(s.is_main for s in sources):
         print("  Warning: No main schedule (Chair_notes) found, using fallback")
-        fallback = _fallback_chair_only()
+        fallback = _fallback_chair_only(chair_notes_url)
         if fallback:
             sources.extend(fallback)
 
     return sources
 
 
-def _fallback_chair_only() -> list[ScheduleSource]:
+def _fallback_chair_only(chair_url: str = BASE_URL) -> list[ScheduleSource]:
     """Fallback: discover only the main Chair_notes schedule."""
     try:
-        files = list_remote_files(BASE_URL)
+        files = list_remote_files(chair_url)
         latest = find_latest_schedule(files)
         if latest:
             return [
@@ -551,7 +585,8 @@ def _fallback_chair_only() -> list[ScheduleSource]:
 
 
 def download_schedule_source(
-    source: ScheduleSource, base_dir: Path = Path("."),
+    source: ScheduleSource,
+    base_dir: Path = DOWNLOADS_DIR,
 ) -> Path | None:
     """Download a single schedule source to a local directory.
 
@@ -581,7 +616,8 @@ def download_schedule_source(
 
 
 def download_all_schedules(
-    sources: list[ScheduleSource], base_dir: Path = Path("."),
+    sources: list[ScheduleSource],
+    base_dir: Path = DOWNLOADS_DIR,
 ) -> tuple[Path | None, dict[str, Path]]:
     """Download all schedule sources.
 

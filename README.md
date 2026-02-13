@@ -70,7 +70,7 @@ uv run python main.py --local "Chair_notes/RAN1#124 online and offline schedules
 uv run python main.py --no-download
 ```
 
-FTP 다운로드를 건너뛰고 `Chair_notes/` 폴더에 있는 가장 최신 로컬 파일을 사용합니다.
+FTP 다운로드를 건너뛰고 `downloads/Chair_notes/` 폴더에 있는 가장 최신 로컬 파일을 사용합니다.
 
 ### 출력 경로 지정
 
