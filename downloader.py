@@ -647,14 +647,16 @@ def get_all_remote_schedule_info(url: str = INBOX_URL) -> list[dict]:
     """Return metadata of all schedule files across Inbox subfolders.
 
     Used for change detection — only fetches directory listings.
-    Returns list of dicts with folder_name, name, uploaded_at.
+    Returns list of dicts with folder_name, name, uploaded_at,
+    sorted by folder name for deterministic ordering.
     """
     all_info: list[dict] = []
 
     try:
         subfolders = list_inbox_subfolders(url)
-    except Exception:
+    except Exception as e:
         # Fallback to single Chair_notes check
+        print(f"Warning: Failed to list inbox subfolders ({e}), falling back to Chair_notes only")
         info = get_remote_schedule_info()
         return [info] if info else []
 
@@ -674,7 +676,10 @@ def get_all_remote_schedule_info(url: str = INBOX_URL) -> list[dict]:
                         else None
                     ),
                 })
-        except Exception:
+        except Exception as e:
+            print(f"Warning: Failed to check folder {folder['name']}: {e}")
             continue
 
+    # Sort by folder name for deterministic ordering
+    all_info.sort(key=lambda x: x.get("folder", ""))
     return all_info

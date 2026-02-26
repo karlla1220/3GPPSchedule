@@ -1218,6 +1218,9 @@ def generate_html(schedule: Schedule) -> str:
     filter_data_json = _build_filter_data(all_sessions)
     mailto_link = _esc(f"mailto:{schedule.contact_email}")
 
+    # Join multiple source files if available
+    sources_text = ", ".join(schedule.source_files) if getattr(schedule, 'source_files', []) else schedule.source_file
+
     # Build HTML
     html_parts = []
     html_parts.append(f"""<!DOCTYPE html>
@@ -1232,7 +1235,7 @@ def generate_html(schedule: Schedule) -> str:
 <div class="container">
     <header>
         <h1>📅 {_esc(schedule.meeting_name)}</h1>
-        <p class="meta">Source: {_esc(schedule.source_file)} &nbsp;|&nbsp; Generated: {_esc(schedule.generated_at)} ({_esc(schedule.timezone)}) &nbsp;|&nbsp; Now: <span id="tz-now">...</span> ({_esc(schedule.timezone)})</p>
+        <p class="meta">Updated Files: {_esc(sources_text)} &nbsp;|&nbsp; Generated: {_esc(schedule.generated_at)} ({_esc(schedule.timezone)}) &nbsp;|&nbsp; Now: <span id="tz-now">...</span> ({_esc(schedule.timezone)})</p>
         <p class="meta">Contact: {_esc(schedule.contact_name)} (<a href="{mailto_link}">{_esc(schedule.contact_email)}</a>) for reports or feature requests.</p>
     </header>
 """)

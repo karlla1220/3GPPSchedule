@@ -228,10 +228,16 @@ def main():
     except Exception:
         generated_at = datetime.now().strftime("%Y-%m-%d %H:%M")
 
+    # Collect all source files
+    source_files = [docx_path.name]
+    if vice_chair_paths:
+        source_files.extend([p.name for p in vice_chair_paths.values()])
+
     schedule = Schedule(
         meeting_name=meeting_name,
         days=days,
         source_file=docx_path.name,
+        source_files=source_files,
         generated_at=generated_at,
         contact_name=contact_name,
         contact_email=contact_email,

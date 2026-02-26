@@ -92,6 +92,7 @@ class Schedule:
     generated_at: str
     contact_name: str
     contact_email: str
+    source_files: list[str] = field(default_factory=list)
     timezone: str = "UTC"  # IANA timezone of the meeting venue
 
 
