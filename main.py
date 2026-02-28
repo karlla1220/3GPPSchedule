@@ -38,6 +38,7 @@ from downloader import (
     find_local_vice_chair_schedules,
     discover_schedule_sources,
     download_all_schedules,
+    save_schedule_state,
 )
 from merger import collect_time_slot_data
 
@@ -129,6 +130,8 @@ def main():
             if sources:
                 print(f"Found {len(sources)} schedule source(s)")
                 docx_path, vice_chair_paths = download_all_schedules(sources)
+                # Save FTP state for next change-detection run (no extra network call)
+                save_schedule_state(sources)
                 if vice_chair_paths:
                     print(f"\nVice-chair schedules: {', '.join(vice_chair_paths.keys())}")
         except Exception as e:

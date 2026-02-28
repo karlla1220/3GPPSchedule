@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import re
+import time
 import zipfile
 from datetime import datetime
 from pathlib import Path
@@ -27,6 +28,98 @@ DOCUMENT_EXTENSIONS = (".docx", ".pptx", ".pdf")
 # All extensions we accept from remote listings (documents + zip)
 SUPPORTED_EXTENSIONS = DOCUMENT_EXTENSIONS + (".zip",)
 
+# Retry configuration for transient server errors
+_MAX_RETRIES = 3
+_RETRY_BACKOFF_BASE = 5  # seconds
+
+# Patterns that indicate the server returned an error page instead of real content
+_SERVICE_ERROR_PATTERNS = (
+    "Our services aren't available right now",
+    "We're working to restore all services",
+    "service unavailable",
+)
+
+
+class ServiceUnavailableError(Exception):
+    """Raised when the 3GPP server returns an error page instead of content."""
+
+
+def _check_response_is_error_page(text: str) -> bool:
+    """Return True if the response body looks like an Azure/server error page."""
+    for pattern in _SERVICE_ERROR_PATTERNS:
+        if pattern.lower() in text.lower():
+            return True
+    return False
+
+
+def _validate_html_response(resp: httpx.Response) -> None:
+    """Raise ServiceUnavailableError if the response is a server error page.
+
+    The 3GPP FTP server (Azure-hosted) sometimes returns HTTP 200 with an
+    HTML error body when the backend is unavailable.  This helper detects
+    that situation so callers can retry or fail gracefully.
+    """
+    # Only inspect text/html responses (binary downloads are fine)
+    content_type = resp.headers.get("content-type", "")
+    if "text/html" not in content_type and "text/plain" not in content_type:
+        return
+    body = resp.text
+    if _check_response_is_error_page(body):
+        raise ServiceUnavailableError(
+            f"3GPP server returned error page (HTTP {resp.status_code}): "
+            f"{body[:200]}"
+        )
+
+
+def _get_with_retry(
+    url: str,
+    *,
+    timeout: int = 30,
+    max_retries: int = _MAX_RETRIES,
+    stream: bool = False,
+) -> httpx.Response:
+    """HTTP GET with automatic retry on transient server errors.
+
+    Retries on:
+    - httpx transport / timeout errors
+    - HTTP 5xx status codes
+    - Azure error pages (200 OK with HTML error body)
+    """
+    last_exc: Exception | None = None
+    for attempt in range(1, max_retries + 1):
+        try:
+            if stream:
+                # Caller is responsible for closing; we return immediately.
+                resp = httpx.stream("GET", url, follow_redirects=True, timeout=timeout)
+                cm = resp.__enter__()
+                cm.raise_for_status()
+                return cm
+            resp = httpx.get(url, follow_redirects=True, timeout=timeout)
+            resp.raise_for_status()
+            _validate_html_response(resp)
+            return resp
+        except ServiceUnavailableError as exc:
+            last_exc = exc
+            wait = _RETRY_BACKOFF_BASE * attempt
+            print(
+                f"  Server unavailable (attempt {attempt}/{max_retries}), "
+                f"retrying in {wait}s…"
+            )
+            time.sleep(wait)
+        except (httpx.HTTPStatusError, httpx.TransportError, httpx.TimeoutException) as exc:
+            last_exc = exc
+            status = getattr(getattr(exc, "response", None), "status_code", None)
+            if status is not None and 400 <= status < 500:
+                # Client errors (404 etc.) are not transient — don't retry
+                raise
+            wait = _RETRY_BACKOFF_BASE * attempt
+            print(
+                f"  HTTP error (attempt {attempt}/{max_retries}): {exc!r}, "
+                f"retrying in {wait}s…"
+            )
+            time.sleep(wait)
+    raise last_exc  # type: ignore[misc]
+
 
 def _extract_version_from_name(filename: str) -> int:
     """Extract trailing version number from names like '... v09.zip'.
@@ -45,8 +138,7 @@ def list_remote_files(url: str = BASE_URL) -> list[dict]:
 
     Each returned dict has keys: name, url, uploaded_at (datetime | None).
     """
-    resp = httpx.get(url, follow_redirects=True, timeout=30)
-    resp.raise_for_status()
+    resp = _get_with_retry(url)
 
     soup = BeautifulSoup(resp.text, "html.parser")
     files = []
@@ -182,16 +274,68 @@ def extract_document_from_zip(zip_path: Path) -> Path | None:
 
 
 def download_file(url: str, dest_path: Path) -> Path:
-    """Download a file from URL to dest_path."""
+    """Download a file from URL to dest_path.
+
+    Validates the downloaded content to ensure we didn't receive a
+    server error page disguised as a successful response.
+    """
     print(f"Downloading: {url}")
-    with httpx.stream("GET", url, follow_redirects=True, timeout=60) as resp:
-        resp.raise_for_status()
-        dest_path.parent.mkdir(parents=True, exist_ok=True)
-        with open(dest_path, "wb") as f:
-            for chunk in resp.iter_bytes(chunk_size=8192):
-                f.write(chunk)
-    print(f"Saved to: {dest_path}")
-    return dest_path
+    last_exc: Exception | None = None
+    for attempt in range(1, _MAX_RETRIES + 1):
+        try:
+            with httpx.stream("GET", url, follow_redirects=True, timeout=60) as resp:
+                resp.raise_for_status()
+                dest_path.parent.mkdir(parents=True, exist_ok=True)
+                with open(dest_path, "wb") as f:
+                    for chunk in resp.iter_bytes(chunk_size=8192):
+                        f.write(chunk)
+            # Validate: error pages are typically small HTML files
+            _validate_downloaded_file(dest_path)
+            print(f"Saved to: {dest_path}")
+            return dest_path
+        except ServiceUnavailableError as exc:
+            last_exc = exc
+            # Remove the corrupt download
+            dest_path.unlink(missing_ok=True)
+            wait = _RETRY_BACKOFF_BASE * attempt
+            print(
+                f"  Downloaded file is a server error page "
+                f"(attempt {attempt}/{_MAX_RETRIES}), retrying in {wait}s…"
+            )
+            time.sleep(wait)
+        except (httpx.HTTPStatusError, httpx.TransportError, httpx.TimeoutException) as exc:
+            last_exc = exc
+            dest_path.unlink(missing_ok=True)
+            status = getattr(getattr(exc, "response", None), "status_code", None)
+            if status is not None and 400 <= status < 500:
+                raise
+            wait = _RETRY_BACKOFF_BASE * attempt
+            print(
+                f"  Download error (attempt {attempt}/{_MAX_RETRIES}): {exc!r}, "
+                f"retrying in {wait}s…"
+            )
+            time.sleep(wait)
+    raise last_exc  # type: ignore[misc]
+
+
+def _validate_downloaded_file(path: Path) -> None:
+    """Check a downloaded file is not a server error page.
+
+    When the Azure-hosted 3GPP server is unavailable it may return
+    HTTP 200 with a small HTML error body.  If we saved that to disk,
+    detect it here and raise ServiceUnavailableError.
+    """
+    # Only inspect small files — real schedule docs are at least a few KB
+    if path.stat().st_size > 4096:
+        return
+    try:
+        text = path.read_text(encoding="utf-8", errors="ignore")
+    except OSError:
+        return
+    if _check_response_is_error_page(text):
+        raise ServiceUnavailableError(
+            f"Downloaded file is a server error page: {text[:200]}"
+        )
 
 
 def download_and_resolve(url: str, dest_path: Path) -> Path:
@@ -410,8 +554,7 @@ def list_inbox_subfolders(url: str = INBOX_URL) -> list[dict]:
     Each returned dict has keys: name, url, uploaded_at (datetime | None).
     Only directories are returned (no files).
     """
-    resp = httpx.get(url, follow_redirects=True, timeout=30)
-    resp.raise_for_status()
+    resp = _get_with_retry(url)
 
     soup = BeautifulSoup(resp.text, "html.parser")
     folders = []
@@ -641,6 +784,36 @@ def download_all_schedules(
             vice_chair_paths[source.person_name] = local
 
     return main_path, vice_chair_paths
+
+
+def save_schedule_state(
+    sources: list[ScheduleSource],
+    state_path: Path = Path("docs/.schedule_state.json"),
+) -> None:
+    """Persist FTP state from already-fetched ScheduleSource objects.
+
+    Called after a successful build so the next check job can compare
+    without re-fetching from FTP.
+    """
+    import json
+
+    info: list[dict] = []
+    for s in sources:
+        uploaded_at = s.file_info.get("uploaded_at")
+        info.append({
+            "folder": s.folder_name,
+            "name": s.file_info["name"],
+            "uploaded_at": (
+                uploaded_at.isoformat()
+                if isinstance(uploaded_at, datetime)
+                else uploaded_at  # already a string or None
+            ),
+        })
+    info.sort(key=lambda x: x.get("folder", ""))
+
+    state_path.parent.mkdir(parents=True, exist_ok=True)
+    state_path.write_text(json.dumps(info, ensure_ascii=False, indent=2))
+    print(f"Schedule state saved ({len(info)} source(s)) → {state_path}")
 
 
 def get_all_remote_schedule_info(url: str = INBOX_URL) -> list[dict]:

@@ -97,18 +97,8 @@ jobs:
             echo "has_output=false" >> $GITHUB_OUTPUT
           fi
 
-      # Save FTP state to repo so next check job can compare
-      - name: Save schedule state
-        if: steps.output.outputs.has_output == 'true'
-        run: |
-          uv run python -c "
-          from downloader import get_all_remote_schedule_info
-          import json
-          info = get_all_remote_schedule_info()
-          if info:
-              with open('docs/.schedule_state.json', 'w') as f:
-                  json.dump(info, f, ensure_ascii=False, indent=2)
-          "
+      # Schedule state (docs/.schedule_state.json) is now saved by main.py
+      # during the build step — no extra FTP call needed.
 
       - name: Commit and push
         if: steps.output.outputs.has_output == 'true'
