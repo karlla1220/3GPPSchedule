@@ -232,7 +232,7 @@ def collect_time_slot_data(
     for person, path in vice_chair_paths.items():
         print(f"  Parsing {person}'s schedule (all tables): {path.name}")
         try:
-            vc_cells, vc_meta = parse_docx(path, max_tables=None)
+            vc_cells, vc_meta, _ = parse_docx(path, max_tables=None)
 
             # Resolve generic room names using LLM + document context
             _resolve_vc_room_names(vc_meta, main_rooms_map)

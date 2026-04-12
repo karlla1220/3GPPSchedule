@@ -28,7 +28,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 from models import DAY_ORDER, DaySchedule, Schedule
-from parser import build_room_list, parse_docx, extract_meeting_location, find_chair_notes_docx
+from parser import build_room_list, parse_docx, extract_meeting_location, extract_meeting_name, find_chair_notes_docx
 from session_parser import parse_time_slots, get_timezone_from_location, normalize_group_headers, fill_missing_groups
 from generator import save_html
 from downloader import (
@@ -153,8 +153,10 @@ def main():
 
     # Step 2: Parse DOCX tables
     print(f"\nParsing: {docx_path}")
-    cells, tables_meta = parse_docx(docx_path)
+    cells, tables_meta, doc_meeting_name = parse_docx(docx_path)
     print(f"Extracted {len(cells)} schedule cells from {len(tables_meta)} tables")
+    if doc_meeting_name:
+        print(f"  Meeting name (from document): {doc_meeting_name}")
 
     # Step 3: Build room mapping
     day_rooms_map = build_room_list(tables_meta)
@@ -185,7 +187,7 @@ def main():
     sessions = fill_missing_groups(sessions)
 
     # Step 5: Build Schedule model
-    meeting_name = _extract_meeting_name(docx_path)
+    meeting_name = doc_meeting_name or _extract_meeting_name(docx_path)
 
     # Detect meeting timezone from Chair notes DOCX
     meeting_tz = "UTC"
