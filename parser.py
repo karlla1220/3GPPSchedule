@@ -10,6 +10,42 @@ from docx import Document
 from models import TIME_BLOCKS, CellData, DAY_ORDER, RoomInfo
 
 
+def _match_meeting_name(text: str) -> str | None:
+    """Try to match a meeting name pattern in a text string.
+
+    Supports patterns like "RAN1#124", "3GPP TSG RAN WG1 Meeting #124",
+    and "TSGR1_124".
+
+    Returns the normalized meeting name (e.g. "RAN1#124") or None.
+    """
+    # Pattern 1: "RAN1#124" or "RAN4#123bis"
+    m = re.search(r"(RAN\d+\s*#\s*\d+\w*)", text)
+    if m:
+        # Normalize whitespace: "RAN1 # 124" → "RAN1#124"
+        return re.sub(r"\s*#\s*", "#", m.group(1))
+    # Pattern 2: "3GPP TSG RAN WG1 Meeting #124" / "TSG RAN WG1 #124"
+    m = re.search(r"(?:TSG\s+)?RAN\s+WG(\d)\s+(?:Meeting\s+)?#\s*(\d+\w*)", text)
+    if m:
+        return f"RAN{m.group(1)}#{m.group(2)}"
+    # Pattern 3: "TSGR1_124" (archived URL-style)
+    m = re.search(r"TSGR(\d)_(\d+\w*)", text)
+    if m:
+        return f"RAN{m.group(1)}#{m.group(2)}"
+    return None
+
+
+def _find_meeting_name_in_paragraphs(paragraphs) -> str | None:
+    """Search the first paragraphs for a meeting name pattern."""
+    for para in paragraphs[:15]:
+        text = para.text.strip()
+        if not text:
+            continue
+        result = _match_meeting_name(text)
+        if result:
+            return result
+    return None
+
+
 def extract_meeting_name(docx_path: Path) -> str | None:
     """Extract the meeting name from the top of a schedule DOCX.
 
@@ -19,45 +55,7 @@ def extract_meeting_name(docx_path: Path) -> str | None:
     Returns the meeting name (e.g. "RAN1#124") if found, None otherwise.
     """
     doc = Document(str(docx_path))
-    for para in doc.paragraphs[:15]:
-        text = para.text.strip()
-        if not text:
-            continue
-        # Pattern 1: "RAN1#124" or "RAN4#123bis"
-        m = re.search(r"(RAN\d+\s*#\s*\d+\w*)", text)
-        if m:
-            # Normalize whitespace: "RAN1 # 124" → "RAN1#124"
-            return re.sub(r"\s*#\s*", "#", m.group(1))
-        # Pattern 2: "3GPP TSG RAN WG1 Meeting #124" / "TSG RAN WG1 #124"
-        m = re.search(r"(?:TSG\s+)?RAN\s+WG(\d)\s+(?:Meeting\s+)?#\s*(\d+\w*)", text)
-        if m:
-            return f"RAN{m.group(1)}#{m.group(2)}"
-        # Pattern 3: "TSGR1_124" (archived URL-style)
-        m = re.search(r"TSGR(\d)_(\d+\w*)", text)
-        if m:
-            return f"RAN{m.group(1)}#{m.group(2)}"
-    return None
-
-
-def _extract_meeting_name_from_doc(doc: Document) -> str | None:
-    """Extract the meeting name from an already-opened Document object.
-
-    Same logic as extract_meeting_name but avoids re-opening the file.
-    """
-    for para in doc.paragraphs[:15]:
-        text = para.text.strip()
-        if not text:
-            continue
-        m = re.search(r"(RAN\d+\s*#\s*\d+\w*)", text)
-        if m:
-            return re.sub(r"\s*#\s*", "#", m.group(1))
-        m = re.search(r"(?:TSG\s+)?RAN\s+WG(\d)\s+(?:Meeting\s+)?#\s*(\d+\w*)", text)
-        if m:
-            return f"RAN{m.group(1)}#{m.group(2)}"
-        m = re.search(r"TSGR(\d)_(\d+\w*)", text)
-        if m:
-            return f"RAN{m.group(1)}#{m.group(2)}"
-    return None
+    return _find_meeting_name_in_paragraphs(doc.paragraphs)
 
 
 def extract_meeting_location(docx_path: Path) -> str | None:
@@ -606,7 +604,7 @@ def parse_docx(
     doc = Document(str(filepath))
 
     # ── Meeting name extraction ──────────────────────────────────
-    meeting_name = _extract_meeting_name_from_doc(doc)
+    meeting_name = _find_meeting_name_in_paragraphs(doc.paragraphs)
 
     # ── Context extraction ───────────────────────────────────────
     # Map each table to the paragraph text preceding it.
