@@ -7,7 +7,12 @@ from pathlib import Path
 
 from docx import Document
 
-from models import TIME_BLOCKS, CellData, DAY_ORDER, RoomInfo
+from models import TIME_BLOCKS, CellData, DAY_ORDER, RoomInfo, time_to_minutes
+
+_TIME_BLOCK_MINUTES = [
+    (block["index"], time_to_minutes(block["start"]), time_to_minutes(block["end"]))
+    for block in TIME_BLOCKS
+]
 
 
 def extract_meeting_location(docx_path: Path) -> str | None:
@@ -520,7 +525,9 @@ def _count_actual_rooms_per_day(
 
 def _determine_time_block_index(time_text: str) -> int | None:
     """Match a time label cell to a time block index."""
-    # Extract start time from text like "08:30\n~\n10:30\n\n(120 min)"
+    # Extract start time from text like "08:30\n~\n10:30\n\n(120 min)".
+    # Some schedules split the first morning block into later-starting rows
+    # such as "09:00 ~ 10:30"; these should still map into TB0.
     match = re.search(r"(\d{1,2}:\d{2})", time_text)
     if not match:
         return None
@@ -530,9 +537,11 @@ def _determine_time_block_index(time_text: str) -> int | None:
     if len(start_time) == 4:
         start_time = "0" + start_time
 
-    for block in TIME_BLOCKS:
-        if block["start"] == start_time:
-            return block["index"]
+    start_minutes = time_to_minutes(start_time)
+
+    for block_index, block_start, block_end in _TIME_BLOCK_MINUTES:
+        if block_start <= start_minutes < block_end:
+            return block_index
     return None
 
 
