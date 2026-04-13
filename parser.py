@@ -68,6 +68,31 @@ _V_NS = "urn:schemas-microsoft-com:vml"
 _WPS_NS = "http://schemas.microsoft.com/office/word/2010/wordprocessingShape"
 
 
+def _get_cell_text(cell) -> str:
+    """Extract cell text, excluding runs with strikethrough formatting.
+
+    Walks through all paragraphs and runs in the cell, skipping any run
+    whose run-properties include ``<w:strike/>`` or ``<w:dstrike/>``.
+    Paragraphs are joined with ``\\n`` (matching ``cell.text`` behaviour).
+    """
+    paragraphs = []
+    for p_el in cell._tc.findall(f".//{{{_NS}}}p"):
+        parts: list[str] = []
+        for r_el in p_el.findall(f".//{{{_NS}}}r"):
+            rpr = r_el.find(f"{{{_NS}}}rPr")
+            if rpr is not None:
+                if (
+                    rpr.find(f"{{{_NS}}}strike") is not None
+                    or rpr.find(f"{{{_NS}}}dstrike") is not None
+                ):
+                    continue
+            for t_el in r_el.findall(f"{{{_NS}}}t"):
+                if t_el.text:
+                    parts.append(t_el.text)
+        paragraphs.append("".join(parts))
+    return "\n".join(paragraphs).strip()
+
+
 def _get_grid_span(cell) -> int:
     """Get the horizontal grid span of a cell."""
     tc = cell._tc
@@ -131,7 +156,7 @@ def _dedupe_row_cells(row) -> list[tuple]:
         if col_pos in continuation_cols:
             result.append(("", col_pos, col_pos + span))
         else:
-            text = cell.text.strip()
+            text = _get_cell_text(cell)
             result.append((text, col_pos, col_pos + span))
 
     return result
