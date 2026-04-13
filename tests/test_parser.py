@@ -1,5 +1,5 @@
 import unittest
-from xml.etree.ElementTree import SubElement
+from xml.etree.ElementTree import Element, SubElement
 from unittest.mock import MagicMock
 
 from parser import _determine_time_block_index, _get_cell_text
@@ -13,8 +13,6 @@ def _make_cell_xml(*paragraphs):
     Each paragraph is a list of (text, strike) tuples where *strike*
     is ``True`` when the run should carry ``<w:strike/>``.
     """
-    from xml.etree.ElementTree import Element
-
     tc = Element(f"{{{_NS}}}tc")
     for runs in paragraphs:
         p = SubElement(tc, f"{{{_NS}}}p")
@@ -59,8 +57,6 @@ class GetCellTextTests(unittest.TestCase):
 
     def test_dstrike_excluded(self):
         """Double-strikethrough (dstrike) should also be excluded."""
-        from xml.etree.ElementTree import Element
-
         tc = Element(f"{{{_NS}}}tc")
         p = SubElement(tc, f"{{{_NS}}}p")
         r = SubElement(p, f"{{{_NS}}}r")
