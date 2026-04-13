@@ -46,7 +46,7 @@ from merger import collect_time_slot_data
 def _extract_meeting_name(filepath: Path) -> str:
     """Try to extract meeting name from the filename."""
     name = filepath.stem
-    match = re.search(r"(RAN\d+#\d+)", name)
+    match = re.search(r"(RAN\d+#\d+\w*)", name)
     if match:
         return match.group(1)
     return name
