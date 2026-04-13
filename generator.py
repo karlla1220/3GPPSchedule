@@ -816,8 +816,9 @@ document.addEventListener('DOMContentLoaded', function() {{
     }}
 
     // Now-line: update position every minute (in meeting timezone)
+    // Only show on the panel matching today's weekday
     function updateNowLine() {{
-        const {{ minutes }} = nowInMeetingTZ();
+        const {{ minutes, weekday }} = nowInMeetingTZ();
         const base = 8 * 60 + 30; // 08:30
         const end = 19 * 60 + 45; // 19:45
 
@@ -826,12 +827,16 @@ document.addEventListener('DOMContentLoaded', function() {{
         if (minutes >= base && minutes <= end) {{
             const slot = Math.floor((minutes - base) / 5);
             const row = slot + 2;
-            document.querySelectorAll('.schedule-grid').forEach(grid => {{
-                const nowLine = document.createElement('div');
-                nowLine.className = 'now-line';
-                nowLine.style.gridRow = row + ' / ' + (row + 1);
-                grid.appendChild(nowLine);
-            }});
+            const todayPanel = document.getElementById(weekday);
+            if (todayPanel) {{
+                const grid = todayPanel.querySelector('.schedule-grid');
+                if (grid) {{
+                    const nowLine = document.createElement('div');
+                    nowLine.className = 'now-line';
+                    nowLine.style.gridRow = row + ' / ' + (row + 1);
+                    grid.appendChild(nowLine);
+                }}
+            }}
         }}
     }}
 
