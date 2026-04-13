@@ -9,6 +9,11 @@ from docx import Document
 
 from models import TIME_BLOCKS, CellData, DAY_ORDER, RoomInfo, time_to_minutes
 
+_TIME_BLOCK_MINUTES = [
+    (block["index"], time_to_minutes(block["start"]), time_to_minutes(block["end"]))
+    for block in TIME_BLOCKS
+]
+
 
 def extract_meeting_location(docx_path: Path) -> str | None:
     """Extract the meeting location line from a Chair notes DOCX.
@@ -534,11 +539,9 @@ def _determine_time_block_index(time_text: str) -> int | None:
 
     start_minutes = time_to_minutes(start_time)
 
-    for block in TIME_BLOCKS:
-        block_start = time_to_minutes(block["start"])
-        block_end = time_to_minutes(block["end"])
+    for block_index, block_start, block_end in _TIME_BLOCK_MINUTES:
         if block_start <= start_minutes < block_end:
-            return block["index"]
+            return block_index
     return None
 
 
