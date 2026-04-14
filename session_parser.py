@@ -516,7 +516,7 @@ Return JSON only with schema: {{"room_names": ["..."], "reasoning": "..."}}"""
 # ── Multi-source time-slot parsing ───────────────────────────────
 
 
-_PROMPT_VERSION = 3  # Bump to invalidate time-slot caches on prompt changes
+_PROMPT_VERSION = 4  # Bump to invalidate time-slot caches on prompt changes
 
 
 def build_room_aliases(
@@ -613,6 +613,12 @@ for each target room.
 - Lines starting with "." are sub-items of the preceding item.
 - Lines without "(N)" before sessions are context/category labels → group_headers.
 - Person names (Xiaodong, Sorour, Hiroki) as group headers → session chair.
+- Text wrapped in ~~…~~ (e.g. ~~.10.5.1.2 (30)~~) is STRIKETHROUGH — it means
+  the item has been CANCELLED or REMOVED from the schedule.
+  → Do NOT include strikethrough items in the output session list.
+  → Their durations should NOT count toward room totals.
+  → However, they provide useful context: the remaining non-struck items
+    are the current schedule after edits.
 
 ## How to parse a cell (with examples)
 

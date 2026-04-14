@@ -69,10 +69,12 @@ _WPS_NS = "http://schemas.microsoft.com/office/word/2010/wordprocessingShape"
 
 
 def _get_cell_text(cell) -> str:
-    """Extract cell text, excluding runs with strikethrough formatting.
+    """Extract cell text, marking strikethrough runs with ``~~…~~``.
 
-    Walks through all paragraphs and runs in the cell, skipping any run
-    whose run-properties include ``<w:strike/>`` or ``<w:dstrike/>``.
+    Walks through all paragraphs and runs in the cell.  Runs whose
+    run-properties include ``<w:strike/>`` or ``<w:dstrike/>`` are
+    wrapped in ``~~…~~`` markers so that downstream consumers (LLM)
+    can recognise them as cancelled items.
     Paragraphs are joined with ``\\n`` (matching ``cell.text`` behaviour).
     """
     paragraphs = []
@@ -80,15 +82,16 @@ def _get_cell_text(cell) -> str:
         parts: list[str] = []
         for r_el in p_el.findall(f".//{{{_NS}}}r"):
             rpr = r_el.find(f"{{{_NS}}}rPr")
-            if rpr is not None:
-                if (
-                    rpr.find(f"{{{_NS}}}strike") is not None
-                    or rpr.find(f"{{{_NS}}}dstrike") is not None
-                ):
-                    continue
+            is_strike = rpr is not None and (
+                rpr.find(f"{{{_NS}}}strike") is not None
+                or rpr.find(f"{{{_NS}}}dstrike") is not None
+            )
             for t_el in r_el.findall(f"{{{_NS}}}t"):
                 if t_el.text:
-                    parts.append(t_el.text)
+                    if is_strike:
+                        parts.append(f"~~{t_el.text}~~")
+                    else:
+                        parts.append(t_el.text)
         paragraphs.append("".join(parts))
     return "\n".join(paragraphs).strip()
 

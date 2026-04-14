@@ -33,7 +33,7 @@ class GetCellTextTests(unittest.TestCase):
         cell = _make_cell_xml([("hello", False), (" world", False)])
         self.assertEqual(_get_cell_text(cell), "hello world")
 
-    def test_strike_text_excluded(self):
+    def test_strike_text_marked(self):
         cell = _make_cell_xml([
             ("Xiaodong (150) 6GR ", False),
             (".10.5.1.2 (30)", True),
@@ -41,12 +41,12 @@ class GetCellTextTests(unittest.TestCase):
         ])
         self.assertEqual(
             _get_cell_text(cell),
-            "Xiaodong (150) 6GR  .10.5.1.3 (60)",
+            "Xiaodong (150) 6GR ~~.10.5.1.2 (30)~~ .10.5.1.3 (60)",
         )
 
-    def test_all_strike_returns_empty(self):
+    def test_all_strike_marked(self):
         cell = _make_cell_xml([("deleted", True)])
-        self.assertEqual(_get_cell_text(cell), "")
+        self.assertEqual(_get_cell_text(cell), "~~deleted~~")
 
     def test_multi_paragraph(self):
         cell = _make_cell_xml(
@@ -55,8 +55,8 @@ class GetCellTextTests(unittest.TestCase):
         )
         self.assertEqual(_get_cell_text(cell), "line1\nline2")
 
-    def test_dstrike_excluded(self):
-        """Double-strikethrough (dstrike) should also be excluded."""
+    def test_dstrike_marked(self):
+        """Double-strikethrough (dstrike) should also be marked."""
         tc = Element(f"{{{_NS}}}tc")
         p = SubElement(tc, f"{{{_NS}}}p")
         r = SubElement(p, f"{{{_NS}}}r")
@@ -66,7 +66,19 @@ class GetCellTextTests(unittest.TestCase):
         t.text = "double-strike"
         cell = MagicMock()
         cell._tc = tc
-        self.assertEqual(_get_cell_text(cell), "")
+        self.assertEqual(_get_cell_text(cell), "~~double-strike~~")
+
+    def test_adjacent_strike_and_normal(self):
+        """Strike markers should not bleed into adjacent normal text."""
+        cell = _make_cell_xml([
+            ("keep", False),
+            ("remove", True),
+            ("also keep", False),
+        ])
+        self.assertEqual(
+            _get_cell_text(cell),
+            "keep~~remove~~also keep",
+        )
 
 
 class DetermineTimeBlockIndexTests(unittest.TestCase):
