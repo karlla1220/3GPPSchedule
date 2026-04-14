@@ -173,30 +173,34 @@ def list_remote_files(url: str = BASE_URL) -> list[dict]:
 
 
 def find_latest_schedule(files: list[dict]) -> dict | None:
-    """Find the latest schedule file by upload timestamp.
+    """Find the latest schedule file by version number, then upload timestamp.
 
     Looks for files containing 'schedule' in the name.
     Supports .docx, .pptx, .pdf, and .zip files.
-    Returns the one with the most recent upload time on the FTP server.
-    Falls back to version number if timestamps are unavailable.
+    Returns the one with the highest version number in its filename.
+    Upload timestamp is used as a tiebreaker when versions are equal.
+    Falls back to version number (then timestamp) if timestamps are unavailable.
     """
     schedule_files = [f for f in files if "schedule" in f["name"].lower()]
 
     if not schedule_files:
         return None
 
-    # Prefer sorting by upload timestamp, then by version if timestamps tie.
+    # Prefer version number as the primary key so that a lower-version file
+    # uploaded later (e.g. a "Draft v01" reference copy uploaded after "v02")
+    # does not incorrectly displace the higher-version file.
+    # Upload timestamp is used as a secondary tiebreaker.
     files_with_ts = [f for f in schedule_files if f.get("uploaded_at") is not None]
     if files_with_ts:
         latest = max(
             files_with_ts,
             key=lambda x: (
-                x["uploaded_at"],
                 _extract_version_from_name(x["name"]),
+                x["uploaded_at"],
                 x["name"].lower(),
             ),
         )
-        print(f"Latest schedule (by upload time {latest['uploaded_at']}): {latest['name']}")
+        print(f"Latest schedule (version={_extract_version_from_name(latest['name'])}, uploaded={latest['uploaded_at']}): {latest['name']}")
         return latest
 
     # Fallback: sort by version number in filename
@@ -449,11 +453,12 @@ def find_local_vice_chair_schedules(
 
 
 def find_latest_chair_notes(files: list[dict]) -> dict | None:
-    """Find the latest Chair notes file by upload timestamp.
+    """Find the latest Chair notes file by version number, then upload timestamp.
 
     Looks for files containing 'chair note' (case-insensitive) in the name.
     Supports .docx, .pptx, .pdf, and .zip files.
-    Returns the one with the most recent upload time.
+    Returns the one with the highest version number in its filename.
+    Upload timestamp is used as a tiebreaker when versions are equal.
     """
     chair_files = [
         f for f in files
@@ -463,18 +468,20 @@ def find_latest_chair_notes(files: list[dict]) -> dict | None:
     if not chair_files:
         return None
 
-    # Prefer sorting by upload timestamp, then by version if timestamps tie.
+    # Prefer version number as the primary key so that a lower-version file
+    # uploaded later does not incorrectly displace the higher-version file.
+    # Upload timestamp is used as a secondary tiebreaker.
     files_with_ts = [f for f in chair_files if f.get("uploaded_at") is not None]
     if files_with_ts:
         latest = max(
             files_with_ts,
             key=lambda x: (
-                x["uploaded_at"],
                 _extract_version_from_name(x["name"]),
+                x["uploaded_at"],
                 x["name"].lower(),
             ),
         )
-        print(f"Latest Chair notes (by upload time {latest['uploaded_at']}): {latest['name']}")
+        print(f"Latest Chair notes (version={_extract_version_from_name(latest['name'])}, uploaded={latest['uploaded_at']}): {latest['name']}")
         return latest
 
     # Fallback: sort by version number in filename
