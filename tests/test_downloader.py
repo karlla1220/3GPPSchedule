@@ -1,7 +1,10 @@
 """Tests for downloader meeting-ID extraction and schedule selection."""
 
+import json
 import unittest
 from datetime import datetime
+from pathlib import Path
+from unittest.mock import MagicMock
 
 from downloader import (
     _extract_meeting_id,
@@ -9,6 +12,8 @@ from downloader import (
     _pick_latest_in_meeting_group,
     find_latest_chair_notes,
     find_latest_schedule,
+    load_schedule_state,
+    save_schedule_state,
 )
 
 
@@ -227,6 +232,103 @@ class FindLatestChairNotesMeetingAwareTests(unittest.TestCase):
         result = find_latest_chair_notes(files)
         assert result is not None
         self.assertIn("v03", result["name"])
+
+
+class LoadScheduleStateTests(unittest.TestCase):
+    """Tests for load_schedule_state."""
+
+    def test_returns_empty_dict_for_missing_file(self):
+        result = load_schedule_state(Path("/tmp/nonexistent_state.json"))
+        self.assertEqual(result, {})
+
+    def test_returns_empty_dict_for_invalid_json(self):
+        p = Path("/tmp/test_bad_state.json")
+        p.write_text("not json")
+        try:
+            result = load_schedule_state(p)
+            self.assertEqual(result, {})
+        finally:
+            p.unlink(missing_ok=True)
+
+    def test_migrates_legacy_list_format(self):
+        p = Path("/tmp/test_legacy_state.json")
+        legacy = [{"folder": "Chair_notes", "name": "sched.docx", "uploaded_at": "2026-01-01T00:00:00"}]
+        p.write_text(json.dumps(legacy))
+        try:
+            result = load_schedule_state(p)
+            self.assertEqual(result, {"files": legacy})
+        finally:
+            p.unlink(missing_ok=True)
+
+    def test_loads_new_format_with_meeting_metadata(self):
+        p = Path("/tmp/test_new_state.json")
+        state = {
+            "files": [{"folder": "Chair_notes", "name": "sched.docx", "uploaded_at": "2026-01-01T00:00:00"}],
+            "meeting_id": "ran1#124bis",
+            "timezone": "Europe/Malta",
+        }
+        p.write_text(json.dumps(state))
+        try:
+            result = load_schedule_state(p)
+            self.assertEqual(result["meeting_id"], "ran1#124bis")
+            self.assertEqual(result["timezone"], "Europe/Malta")
+            self.assertEqual(len(result["files"]), 1)
+        finally:
+            p.unlink(missing_ok=True)
+
+
+class SaveScheduleStateTests(unittest.TestCase):
+    """Tests for save_schedule_state with meeting metadata."""
+
+    def _make_source(self, folder: str, name: str, uploaded_at: datetime) -> MagicMock:
+        s = MagicMock()
+        s.folder_name = folder
+        s.file_info = {"name": name, "uploaded_at": uploaded_at}
+        return s
+
+    def test_saves_with_meeting_metadata(self):
+        p = Path("/tmp/test_save_state.json")
+        sources = [
+            self._make_source("Chair_notes", "RAN1#124bis schedule - v01.docx", datetime(2026, 4, 14, 8, 0)),
+        ]
+        try:
+            save_schedule_state(sources, p, meeting_id="ran1#124bis", timezone="Europe/Malta")
+            state = json.loads(p.read_text())
+            self.assertEqual(state["meeting_id"], "ran1#124bis")
+            self.assertEqual(state["timezone"], "Europe/Malta")
+            self.assertIsInstance(state["files"], list)
+            self.assertEqual(len(state["files"]), 1)
+        finally:
+            p.unlink(missing_ok=True)
+
+    def test_saves_without_meeting_metadata(self):
+        p = Path("/tmp/test_save_state_no_meta.json")
+        sources = [
+            self._make_source("Chair_notes", "schedule.docx", datetime(2026, 4, 14, 8, 0)),
+        ]
+        try:
+            save_schedule_state(sources, p)
+            state = json.loads(p.read_text())
+            self.assertNotIn("meeting_id", state)
+            self.assertNotIn("timezone", state)
+            self.assertIn("files", state)
+        finally:
+            p.unlink(missing_ok=True)
+
+    def test_roundtrip_save_and_load(self):
+        p = Path("/tmp/test_roundtrip_state.json")
+        sources = [
+            self._make_source("Chair_notes", "RAN1#124bis schedule - v03.docx", datetime(2026, 4, 15, 6, 30)),
+            self._make_source("Hiroki_notes", "RAN1#124bis Hiroki_v10.docx", datetime(2026, 4, 15, 14, 38)),
+        ]
+        try:
+            save_schedule_state(sources, p, meeting_id="ran1#124bis", timezone="Europe/Malta")
+            loaded = load_schedule_state(p)
+            self.assertEqual(loaded["meeting_id"], "ran1#124bis")
+            self.assertEqual(loaded["timezone"], "Europe/Malta")
+            self.assertEqual(len(loaded["files"]), 2)
+        finally:
+            p.unlink(missing_ok=True)
 
 
 if __name__ == "__main__":

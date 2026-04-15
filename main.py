@@ -39,6 +39,8 @@ from downloader import (
     discover_schedule_sources,
     download_all_schedules,
     save_schedule_state,
+    load_schedule_state,
+    _extract_meeting_id,
 )
 from merger import collect_time_slot_data
 
@@ -106,6 +108,7 @@ def main():
     # Step 1: Get the DOCX file(s)
     docx_path: Path | None = None
     vice_chair_paths: dict[str, Path] = {}
+    sources: list | None = None  # set during FTP discovery (step 1)
 
     if args.local:
         docx_path = Path(args.local)
@@ -130,8 +133,6 @@ def main():
             if sources:
                 print(f"Found {len(sources)} schedule source(s)")
                 docx_path, vice_chair_paths = download_all_schedules(sources)
-                # Save FTP state for next change-detection run (no extra network call)
-                save_schedule_state(sources)
                 if vice_chair_paths:
                     print(f"\nVice-chair schedules: {', '.join(vice_chair_paths.keys())}")
         except Exception as e:
@@ -186,26 +187,45 @@ def main():
 
     # Step 5: Build Schedule model
     meeting_name = _extract_meeting_name(docx_path)
+    current_meeting_id = _extract_meeting_id(docx_path.name)
 
-    # Detect meeting timezone from Chair notes DOCX
+    # Detect meeting timezone — reuse cached value when the meeting hasn't changed
+    prev_state = load_schedule_state()
+    cached_meeting_id = prev_state.get("meeting_id")
+    cached_tz = prev_state.get("timezone")
+
     meeting_tz = "UTC"
-    chair_notes_path = find_chair_notes_docx(docx_path.parent)
-    if chair_notes_path is None and not args.no_download:
-        # Try downloading Chair notes from FTP
-        print("\nNo local Chair notes found, downloading from FTP...")
-        chair_notes_path = download_latest_chair_notes(docx_path.parent)
-    if chair_notes_path:
-        print(f"\nExtracting meeting location from: {chair_notes_path.name}")
-        location_text = extract_meeting_location(chair_notes_path)
-        if location_text:
-            print(f"  Location line: {location_text}")
-            tz = get_timezone_from_location(location_text)
-            if tz:
-                meeting_tz = tz
-        else:
-            print("  Warning: Could not find location line in Chair notes")
+    if current_meeting_id and current_meeting_id == cached_meeting_id and cached_tz:
+        # Same meeting as last build → reuse the saved timezone
+        print(f"\nReusing cached timezone for {current_meeting_id}: {cached_tz}")
+        meeting_tz = cached_tz
     else:
-        print("\nWarning: No Chair notes DOCX found, using UTC timezone")
+        # New meeting or no cached data → detect timezone from Chair notes
+        chair_notes_path = find_chair_notes_docx(docx_path.parent)
+        if chair_notes_path is None and not args.no_download:
+            # Try downloading Chair notes from FTP
+            print("\nNo local Chair notes found, downloading from FTP...")
+            chair_notes_path = download_latest_chair_notes(docx_path.parent)
+        if chair_notes_path:
+            print(f"\nExtracting meeting location from: {chair_notes_path.name}")
+            location_text = extract_meeting_location(chair_notes_path)
+            if location_text:
+                print(f"  Location line: {location_text}")
+                tz = get_timezone_from_location(location_text)
+                if tz:
+                    meeting_tz = tz
+            else:
+                print("  Warning: Could not find location line in Chair notes")
+        else:
+            print("\nWarning: No Chair notes DOCX found, using UTC timezone")
+
+    # Persist state (FTP file listing + meeting metadata) for next run
+    if sources is not None:
+        save_schedule_state(
+            sources,
+            meeting_id=current_meeting_id,
+            timezone=meeting_tz,
+        )
 
     days = []
     for day_name in DAY_ORDER:

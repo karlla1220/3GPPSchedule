@@ -9,14 +9,10 @@ by the build-and-deploy job).
 
 from __future__ import annotations
 
-import json
 import os
 import sys
-from pathlib import Path
 
-from downloader import get_all_remote_schedule_info
-
-STATE_FILE = Path("docs/.schedule_state.json")
+from downloader import get_all_remote_schedule_info, load_schedule_state
 
 
 def _normalize_for_compare(entries: list[dict]) -> set[tuple]:
@@ -53,12 +49,11 @@ def main() -> None:
         print(f"  Remote [{folder}]: {info['name']}  uploaded_at={info.get('uploaded_at')}")
 
     # 2. Compare with cached state (stored in repo as docs/.schedule_state.json)
-    cached = _load_state()
+    state = load_schedule_state()
+    cached = state.get("files")
 
-    # Normalize for comparison: both should be lists of dicts
     # Handle migration from old single-dict format
     if isinstance(cached, dict) and "name" in cached:
-        # Old format: single dict → convert to list for comparison
         cached = [cached]
 
     if cached is None:
@@ -96,19 +91,6 @@ def main() -> None:
     # State is saved by the build-and-deploy job (committed to repo),
     # not here — so a failed build will retry on the next check.
     _set_output("changed", str(changed).lower())
-
-
-def _load_state() -> dict | None:
-    if STATE_FILE.exists():
-        try:
-            return json.loads(STATE_FILE.read_text())
-        except (json.JSONDecodeError, OSError):
-            return None
-    return None
-
-
-def _save_state(state: dict) -> None:
-    STATE_FILE.write_text(json.dumps(state, ensure_ascii=False))
 
 
 def _set_output(name: str, value: str) -> None:

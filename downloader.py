@@ -867,11 +867,18 @@ def download_all_schedules(
 def save_schedule_state(
     sources: list[ScheduleSource],
     state_path: Path = Path("docs/.schedule_state.json"),
+    *,
+    meeting_id: str | None = None,
+    timezone: str | None = None,
 ) -> None:
     """Persist FTP state from already-fetched ScheduleSource objects.
 
     Called after a successful build so the next check job can compare
     without re-fetching from FTP.
+
+    Optionally stores ``meeting_id`` (normalised, e.g. "ran1#124bis") and
+    ``timezone`` (IANA, e.g. "Europe/Malta") so that expensive per-meeting
+    operations (like LLM timezone detection) are only performed once.
     """
     import json
 
@@ -889,9 +896,46 @@ def save_schedule_state(
         })
     info.sort(key=lambda x: x.get("folder", ""))
 
+    state: dict = {"files": info}
+    if meeting_id is not None:
+        state["meeting_id"] = meeting_id
+    if timezone is not None:
+        state["timezone"] = timezone
+
     state_path.parent.mkdir(parents=True, exist_ok=True)
-    state_path.write_text(json.dumps(info, ensure_ascii=False, indent=2))
+    state_path.write_text(json.dumps(state, ensure_ascii=False, indent=2))
     print(f"Schedule state saved ({len(info)} source(s)) → {state_path}")
+
+
+def load_schedule_state(
+    state_path: Path = Path("docs/.schedule_state.json"),
+) -> dict:
+    """Load persisted schedule state.
+
+    Returns a dict with optional keys ``files`` (list[dict]), ``meeting_id``
+    (str) and ``timezone`` (str).  Returns an empty dict when the file is
+    missing or unparsable.
+
+    Handles migration from the legacy list format (pre-meeting-id) by
+    wrapping a bare list in ``{"files": <list>}``.
+    """
+    import json
+
+    if not state_path.exists():
+        return {}
+    try:
+        raw = json.loads(state_path.read_text())
+    except (json.JSONDecodeError, OSError):
+        return {}
+
+    # Legacy format: plain list → wrap in dict
+    if isinstance(raw, list):
+        return {"files": raw}
+
+    if isinstance(raw, dict):
+        return raw
+
+    return {}
 
 
 def get_all_remote_schedule_info(url: str = INBOX_URL) -> list[dict]:
