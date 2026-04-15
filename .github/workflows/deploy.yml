@@ -9,10 +9,11 @@ on:
       action:
         description: '실행할 동작 선택'
         type: choice
-        default: check-and-deploy
+        default: check-build-deploy
         options:
-          - check-and-deploy    # 변경 감지 후 변경시에만 빌드/배포
-          - force-deploy        # 변경 여부 무시, 강제 빌드/배포
+          - check-build-deploy  # 변경 감지 후 변경시에만 빌드/배포
+          - build-deploy        # FTP 체크 생략, 캐시 유지한 채 빌드/배포 (generator.py만 변경시 유용)
+          - force-deploy        # 캐시 초기화 후 빌드/배포
           - deploy-only         # 빌드 없이 현재 docs/ 그대로 배포
 
 permissions:
@@ -27,7 +28,9 @@ concurrency:
 jobs:
   # ── Job 1: Lightweight FTP check (~20 seconds) ──────────────
   check:
-    if: github.event.inputs.action != 'force-deploy' && github.event.inputs.action != 'deploy-only'
+    if: >-
+      github.event_name == 'repository_dispatch' ||
+      github.event.inputs.action == 'check-build-deploy'
     runs-on: ubuntu-latest
     outputs:
       changed: ${{ steps.detect.outputs.changed }}
@@ -53,12 +56,17 @@ jobs:
         id: detect
         run: uv run python check_update.py
 
-  # ── Job 2: Full build (only when schedule changed) ──────────
+  # ── Job 2: Full build & deploy ──────────────────────────────
+  # Runs when:
+  #   - check detected changes (check-build-deploy)
+  #   - build-deploy selected (skip check, reuse cache)
+  #   - force-deploy selected (reset cache, full rebuild)
   build-and-deploy:
     needs: check
     if: |
       always() &&
       (needs.check.outputs.changed == 'true' ||
+       github.event.inputs.action == 'build-deploy' ||
        github.event.inputs.action == 'force-deploy')
     runs-on: ubuntu-latest
     environment:
@@ -81,6 +89,25 @@ jobs:
       - name: Install dependencies
         run: uv sync
 
+      # ── LLM Cache: restore → run → save ──
+      # Cache key uses run_id so every run saves a new snapshot.
+      # restore-keys prefix fetches the most recent previous snapshot.
+      # Cache is NOT OS/Python dependent — it depends on prompt version,
+      # day, time block, main rooms, source content, and LLM model,
+      # all of which are hashed internally by session_parser.py.
+      - name: Restore LLM cache
+        uses: actions/cache@v4
+        with:
+          path: .cache/
+          key: llm-cache-${{ github.run_id }}
+          restore-keys: |
+            llm-cache-
+
+      # force-deploy: wipe cached LLM results so everything is re-generated
+      - name: Reset LLM cache (force-deploy)
+        if: github.event.inputs.action == 'force-deploy'
+        run: rm -rf .cache/*
+
       - name: Run schedule parser
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
@@ -97,19 +124,15 @@ jobs:
             echo "has_output=false" >> $GITHUB_OUTPUT
           fi
 
-      # Schedule state (docs/.schedule_state.json) is now saved by main.py
-      # during the build step — no extra FTP call needed.
-
       - name: Commit and push
         if: steps.output.outputs.has_output == 'true'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add docs/
-          git diff --cached --quiet || git commit -m "Update schedule $(date +%Y-%m-%d_%H:%M)"
+          git diff --cached --quiet || git commit -m "Update schedule $(date +%Y-%m-%d_%H:%M) [skip ci]"
           git push
 
-      # Deploy to GitHub Pages directly (GITHUB_TOKEN pushes don't trigger other workflows)
       - name: Setup Pages
         if: steps.output.outputs.has_output == 'true'
         uses: actions/configure-pages@v5
