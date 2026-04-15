@@ -1114,13 +1114,26 @@ document.addEventListener('DOMContentLoaded', function() {{
 
         function applyFilter() {{
             var hasFilter = activeAIs.size > 0 || activeSessions.size > 0;
+            // Derive session keys for sessions whose ALL AIs are active.
+            // This ensures blocks without data-ai still match when the
+            // session (or parent group) checkbox is fully checked.
+            var derivedKeys = new Set(activeSessions);
+            if (activeAIs.size > 0) {{
+                FD.groups.forEach(function(group) {{
+                    group.sessions.forEach(function(sess) {{
+                        if (sess.ais.length > 0 && sess.ais.every(function(ai) {{ return activeAIs.has(ai); }})) {{
+                            derivedKeys.add(sess.key);
+                        }}
+                    }});
+                }});
+            }}
             document.querySelectorAll('.session-block').forEach(function(block) {{
                 if (!hasFilter) {{ block.classList.remove('dimmed'); return; }}
                 var grp = block.getAttribute('data-group') || '';
                 var nm  = block.getAttribute('data-name') || '';
                 var raw = block.getAttribute('data-ai') || '';
                 var aiVals = raw.split('|').filter(function(v){{ return v.trim(); }});
-                var match = activeSessions.has(nm + '|' + grp) ||
+                var match = derivedKeys.has(nm + '|' + grp) ||
                             aiVals.some(function(v){{ return activeAIs.has(v); }});
                 if (match) {{ block.classList.remove('dimmed'); }} else {{ block.classList.add('dimmed'); }}
             }});
