@@ -108,7 +108,7 @@ def main():
     # Step 1: Get the DOCX file(s)
     docx_path: Path | None = None
     vice_chair_paths: dict[str, Path] = {}
-    sources: list | None = None  # populated when downloading from FTP
+    sources: list | None = None  # set during FTP discovery (step 1)
 
     if args.local:
         docx_path = Path(args.local)

@@ -241,7 +241,7 @@ class LoadScheduleStateTests(unittest.TestCase):
         result = load_schedule_state(Path("/tmp/nonexistent_state.json"))
         self.assertEqual(result, {})
 
-    def test_returns_empty_dict_for_invalid_json(self, tmp_path=None):
+    def test_returns_empty_dict_for_invalid_json(self):
         p = Path("/tmp/test_bad_state.json")
         p.write_text("not json")
         try:
