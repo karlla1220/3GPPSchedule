@@ -133,6 +133,88 @@ def _extract_version_from_name(filename: str) -> int:
     return int(m.group(1))
 
 
+# Known meeting suffixes (case-insensitive).
+# Only bis, e, and adhoc have been observed in practice.
+_MEETING_SUFFIXES = r"(?:bis|e|adhoc)"
+
+# Pattern to extract meeting identifiers like RAN1#124, RAN1#124bis,
+# RAN1#124-bis, RAN1#124 bis, etc.  The suffix part is optional and may
+# be separated by a hyphen or space.
+_MEETING_ID_PATTERN = re.compile(
+    rf"(RAN\d+#\d+)(?:[- ]?({_MEETING_SUFFIXES}))?",
+    re.IGNORECASE,
+)
+
+
+def _extract_meeting_id(filename: str) -> str | None:
+    """Extract a normalised meeting identifier from a filename.
+
+    Examples:
+        'RAN1#124 online and offline schedules - v02.docx'  → 'ran1#124'
+        'RAN1#124bis schedule for Hiroki_v07.docx'          → 'ran1#124bis'
+        'RAN1#124-bis schedule - v01.docx'                  → 'ran1#124bis'
+        'RAN1#124 bis schedule - v01.docx'                  → 'ran1#124bis'
+        'custom schedule name.docx'                         → None
+
+    The returned string is always lowercased with any hyphen/space between
+    the number and the suffix removed (e.g. '124-bis' → '124bis').
+    """
+    m = _MEETING_ID_PATTERN.search(filename)
+    if not m:
+        return None
+    base = m.group(1).lower()
+    suffix = (m.group(2) or "").lower()
+    return f"{base}{suffix}"
+
+
+def _pick_latest_in_meeting_group(
+    files: list[dict],
+    label: str = "schedule",
+) -> dict:
+    """Select the best file using meeting-aware grouping.
+
+    1. Group *files* by meeting identifier.
+    2. Choose the group whose most-recent ``uploaded_at`` is newest
+       (= the current meeting).
+    3. Within that group pick the file with the highest version number,
+       using ``uploaded_at`` as a tiebreaker.
+
+    All files must have a non-None ``uploaded_at``.
+
+    Known limitation: if a file from a **previous** meeting is uploaded
+    *after* the current meeting's files (e.g. a reference copy), it may
+    be incorrectly selected.  This edge case is considered unlikely.
+    """
+    from collections import defaultdict
+
+    groups: dict[str | None, list[dict]] = defaultdict(list)
+    for f in files:
+        mid = _extract_meeting_id(f["name"])
+        groups[mid].append(f)
+
+    # Determine the "current" meeting: the group whose newest upload is latest.
+    def _group_max_ts(group: list[dict]) -> datetime:
+        return max(f["uploaded_at"] for f in group)
+
+    current_mid = max(groups, key=lambda mid: _group_max_ts(groups[mid]))
+    current_group = groups[current_mid]
+
+    latest = max(
+        current_group,
+        key=lambda x: (
+            _extract_version_from_name(x["name"]),
+            x["uploaded_at"],
+            x["name"].lower(),
+        ),
+    )
+    print(
+        f"Latest {label} (meeting={current_mid}, "
+        f"version={_extract_version_from_name(latest['name'])}, "
+        f"uploaded={latest['uploaded_at']}): {latest['name']}"
+    )
+    return latest
+
+
 def list_remote_files(url: str = BASE_URL) -> list[dict]:
     """Fetch the FTP directory listing and return file info with upload timestamps.
 
@@ -173,31 +255,34 @@ def list_remote_files(url: str = BASE_URL) -> list[dict]:
 
 
 def find_latest_schedule(files: list[dict]) -> dict | None:
-    """Find the latest schedule file by upload timestamp.
+    """Find the latest schedule file using meeting-aware grouping.
 
     Looks for files containing 'schedule' in the name.
     Supports .docx, .pptx, .pdf, and .zip files.
-    Returns the one with the most recent upload time on the FTP server.
-    Falls back to version number if timestamps are unavailable.
+
+    Selection strategy (in order):
+    1. Group files by meeting identifier (e.g. RAN1#124bis).
+    2. Pick the group whose most-recent upload timestamp is newest
+       (= the current meeting).
+    3. Within that group, pick the file with the highest version number.
+       Upload timestamp is a secondary tiebreaker.
+
+    This ensures that old high-version files from a previous meeting
+    do not displace the current meeting's schedule, while still
+    preferring the highest version within the current meeting.
+
+    Falls back to version number (then timestamp) if timestamps are
+    unavailable.
     """
     schedule_files = [f for f in files if "schedule" in f["name"].lower()]
 
     if not schedule_files:
         return None
 
-    # Prefer sorting by upload timestamp, then by version if timestamps tie.
+    # Use meeting-aware grouping when timestamps are available.
     files_with_ts = [f for f in schedule_files if f.get("uploaded_at") is not None]
     if files_with_ts:
-        latest = max(
-            files_with_ts,
-            key=lambda x: (
-                x["uploaded_at"],
-                _extract_version_from_name(x["name"]),
-                x["name"].lower(),
-            ),
-        )
-        print(f"Latest schedule (by upload time {latest['uploaded_at']}): {latest['name']}")
-        return latest
+        return _pick_latest_in_meeting_group(files_with_ts, label="schedule")
 
     # Fallback: sort by version number in filename
     versioned = []
@@ -449,11 +534,13 @@ def find_local_vice_chair_schedules(
 
 
 def find_latest_chair_notes(files: list[dict]) -> dict | None:
-    """Find the latest Chair notes file by upload timestamp.
+    """Find the latest Chair notes file using meeting-aware grouping.
 
     Looks for files containing 'chair note' (case-insensitive) in the name.
     Supports .docx, .pptx, .pdf, and .zip files.
-    Returns the one with the most recent upload time.
+
+    Uses the same meeting-aware grouping strategy as find_latest_schedule():
+    group by meeting ID → pick latest meeting → highest version within group.
     """
     chair_files = [
         f for f in files
@@ -463,19 +550,10 @@ def find_latest_chair_notes(files: list[dict]) -> dict | None:
     if not chair_files:
         return None
 
-    # Prefer sorting by upload timestamp, then by version if timestamps tie.
+    # Use meeting-aware grouping when timestamps are available.
     files_with_ts = [f for f in chair_files if f.get("uploaded_at") is not None]
     if files_with_ts:
-        latest = max(
-            files_with_ts,
-            key=lambda x: (
-                x["uploaded_at"],
-                _extract_version_from_name(x["name"]),
-                x["name"].lower(),
-            ),
-        )
-        print(f"Latest Chair notes (by upload time {latest['uploaded_at']}): {latest['name']}")
-        return latest
+        return _pick_latest_in_meeting_group(files_with_ts, label="Chair notes")
 
     # Fallback: sort by version number in filename
     versioned = []
