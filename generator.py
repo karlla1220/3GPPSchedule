@@ -47,20 +47,22 @@ def _build_filter_data(all_sessions: list) -> str:
     plus a flat top-level AI section.  AI checkboxes are duplicated
     and their checked state is bidirectionally synced.
     """
-    # 1. Build group -> session_name -> set[AI]
-    group_sessions: dict[str, dict[str, set[str]]] = {}
+    # 1. Build group -> session_name -> {ais: set, hasNoAI: bool}
+    group_sessions: dict[str, dict[str, dict]] = {}
     for session in all_sessions:
         group = session.group_header or ""
         name = session.name
         if group not in group_sessions:
             group_sessions[group] = {}
         if name not in group_sessions[group]:
-            group_sessions[group][name] = set()
+            group_sessions[group][name] = {"ais": set(), "hasNoAI": False}
         if session.agenda_item:
             for ai in session.agenda_item.split(","):
                 ai = ai.strip()
                 if ai:
-                    group_sessions[group][name].add(ai)
+                    group_sessions[group][name]["ais"].add(ai)
+        else:
+            group_sessions[group][name]["hasNoAI"] = True
 
     # 2. Build structured data
     all_ais: set[str] = set()
@@ -68,13 +70,20 @@ def _build_filter_data(all_sessions: list) -> str:
     for group_name in sorted(group_sessions.keys(), key=lambda x: (x == "", x.lower())):
         sessions_data = []
         for sess_name in sorted(group_sessions[group_name].keys(), key=_natural_sort_key):
-            ais = sorted(group_sessions[group_name][sess_name], key=_natural_sort_key)
+            info = group_sessions[group_name][sess_name]
+            ais = sorted(info["ais"], key=_natural_sort_key)
             all_ais.update(ais)
-            sessions_data.append({
+            entry: dict = {
                 "name": sess_name,
                 "key": f"{sess_name}|{group_name}",
                 "ais": ais,
-            })
+            }
+            # Only set hasNoAI when the session has AIs but also has
+            # blocks without any AI assigned – this enables the
+            # "Not assigned" sub-filter in the UI.
+            if info["hasNoAI"] and ais:
+                entry["hasNoAI"] = True
+            sessions_data.append(entry)
         groups.append({
             "name": group_name if group_name else "Other",
             "key": group_name if group_name else "__other__",
@@ -905,10 +914,10 @@ document.addEventListener('DOMContentLoaded', function() {{
         const dimOpacityRange = document.querySelector('.filter-dim-opacity-range');
         const dimOpacityValue = document.querySelector('.filter-dim-opacity-value');
         const DIM_OPACITY_DEFAULT = 0.12;
-        // Only two sets – sessions (no-AI only) and AIs – are the source of truth.
-        // Group / session visual state is DERIVED from children.
+        // Three sets are the source of truth; group/session visual state is DERIVED.
         const activeSessions = new Set();  // keys of sessions WITHOUT AIs
         const activeAIs = new Set();
+        const activeNoAISessions = new Set(); // keys of sessions with AIs that also have no-AI blocks
         let dimOpacity = DIM_OPACITY_DEFAULT;
 
         function clampDimOpacity(v) {{
@@ -1000,6 +1009,20 @@ document.addEventListener('DOMContentLoaded', function() {{
                             aiRow.appendChild(al);
                             aiC.appendChild(aiRow);
                         }});
+                        // "Not assigned" entry for sessions that have AI-less blocks
+                        if (sess.hasNoAI) {{
+                            const naRow = mkEl('div','filter-item');
+                            naRow.appendChild(mkSpacer());
+                            const nacb = document.createElement('input');
+                            nacb.type = 'checkbox'; nacb.id = 'fsna'+gi+'_'+si;
+                            nacb.dataset.noai = sess.key;
+                            nacb.addEventListener('change', function() {{ onNoAIChange(sess.key, nacb.checked); }});
+                            naRow.appendChild(nacb);
+                            const nal = document.createElement('label'); nal.htmlFor = nacb.id;
+                            nal.textContent = 'Not assigned';
+                            naRow.appendChild(nal);
+                            aiC.appendChild(naRow);
+                        }}
                         sessWrap.appendChild(aiC);
                     }}
                     sessC.appendChild(sessWrap);
@@ -1030,7 +1053,7 @@ document.addEventListener('DOMContentLoaded', function() {{
 
         // ── Cascade handlers ──
 
-        // Group click → cascade to all child sessions → AIs
+        // Group click → cascade to all child sessions → AIs + noAI
         function onGroupChange(key, checked) {{
             var group = findGroup(key);
             if (!group) return;
@@ -1039,6 +1062,9 @@ document.addEventListener('DOMContentLoaded', function() {{
                     sess.ais.forEach(function(ai) {{
                         if (checked) activeAIs.add(ai); else activeAIs.delete(ai);
                     }});
+                    if (sess.hasNoAI) {{
+                        if (checked) activeNoAISessions.add(sess.key); else activeNoAISessions.delete(sess.key);
+                    }}
                 }} else {{
                     if (checked) activeSessions.add(sess.key); else activeSessions.delete(sess.key);
                 }}
@@ -1046,7 +1072,7 @@ document.addEventListener('DOMContentLoaded', function() {{
             syncCheckboxes(); applyFilter(); updateFilterHash();
         }}
 
-        // Session click → cascade to child AIs
+        // Session click → cascade to child AIs + noAI
         function onSessionChange(key, checked) {{
             var sess = findSess(key);
             if (!sess) return;
@@ -1054,6 +1080,9 @@ document.addEventListener('DOMContentLoaded', function() {{
                 sess.ais.forEach(function(ai) {{
                     if (checked) activeAIs.add(ai); else activeAIs.delete(ai);
                 }});
+                if (sess.hasNoAI) {{
+                    if (checked) activeNoAISessions.add(key); else activeNoAISessions.delete(key);
+                }}
             }} else {{
                 if (checked) activeSessions.add(key); else activeSessions.delete(key);
             }}
@@ -1066,11 +1095,22 @@ document.addEventListener('DOMContentLoaded', function() {{
             syncCheckboxes(); applyFilter(); updateFilterHash();
         }}
 
-        // ── Derive visual state from activeAIs + activeSessions ──
+        // "Not assigned" click → toggle the session's no-AI flag
+        function onNoAIChange(sessKey, checked) {{
+            if (checked) activeNoAISessions.add(sessKey); else activeNoAISessions.delete(sessKey);
+            syncCheckboxes(); applyFilter(); updateFilterHash();
+        }}
+
+        // ── Derive visual state from activeAIs + activeSessions + activeNoAISessions ──
         function syncCheckboxes() {{
             // 1. Sync all AI checkboxes (tree duplicates + flat list)
             document.querySelectorAll('input[data-ai]').forEach(function(cb) {{
                 cb.checked = activeAIs.has(cb.dataset.ai);
+            }});
+
+            // 1b. Sync "Not assigned" checkboxes
+            document.querySelectorAll('input[data-noai]').forEach(function(cb) {{
+                cb.checked = activeNoAISessions.has(cb.dataset.noai);
             }});
 
             // 2. Session checkboxes: derive from children
@@ -1081,8 +1121,14 @@ document.addEventListener('DOMContentLoaded', function() {{
                     if (sess.ais.length > 0) {{
                         var n = 0;
                         sess.ais.forEach(function(ai) {{ if (activeAIs.has(ai)) n++; }});
-                        scb.checked = (n === sess.ais.length);
-                        scb.indeterminate = (n > 0 && n < sess.ais.length);
+                        var totalChildren = sess.ais.length;
+                        var checkedChildren = n;
+                        if (sess.hasNoAI) {{
+                            totalChildren++;
+                            if (activeNoAISessions.has(sess.key)) checkedChildren++;
+                        }}
+                        scb.checked = (checkedChildren === totalChildren);
+                        scb.indeterminate = (checkedChildren > 0 && checkedChildren < totalChildren);
                     }} else {{
                         scb.checked = activeSessions.has(sess.key);
                         scb.indeterminate = false;
@@ -1108,13 +1154,13 @@ document.addEventListener('DOMContentLoaded', function() {{
             }});
 
             // 4. Badge count
-            var total = activeAIs.size + activeSessions.size;
+            var total = activeAIs.size + activeSessions.size + activeNoAISessions.size;
             if (filterCount) {{ filterCount.textContent = total > 0 ? total : ''; }}
         }}
 
         function applyFilter() {{
-            var hasFilter = activeAIs.size > 0 || activeSessions.size > 0;
-            // Derive session keys for sessions whose ALL AIs are active.
+            var hasFilter = activeAIs.size > 0 || activeSessions.size > 0 || activeNoAISessions.size > 0;
+            // Derive session keys for sessions whose ALL AIs (+ noAI) are active.
             // This ensures blocks without data-ai still match when the
             // session (or parent group) checkbox is fully checked.
             var derivedKeys = new Set(activeSessions);
@@ -1122,7 +1168,9 @@ document.addEventListener('DOMContentLoaded', function() {{
                 FD.groups.forEach(function(group) {{
                     group.sessions.forEach(function(sess) {{
                         if (sess.ais.length > 0 && sess.ais.every(function(ai) {{ return activeAIs.has(ai); }})) {{
-                            derivedKeys.add(sess.key);
+                            if (!sess.hasNoAI || activeNoAISessions.has(sess.key)) {{
+                                derivedKeys.add(sess.key);
+                            }}
                         }}
                     }});
                 }});
@@ -1133,17 +1181,23 @@ document.addEventListener('DOMContentLoaded', function() {{
                 var nm  = block.getAttribute('data-name') || '';
                 var raw = block.getAttribute('data-ai') || '';
                 var aiVals = raw.split('|').filter(function(v){{ return v.trim(); }});
-                var match = derivedKeys.has(nm + '|' + grp) ||
+                var sessKey = nm + '|' + grp;
+                var match = derivedKeys.has(sessKey) ||
                             aiVals.some(function(v){{ return activeAIs.has(v); }});
+                // Also match blocks with no AI if "Not assigned" is active for this session
+                if (!match && aiVals.length === 0 && activeNoAISessions.has(sessKey)) {{
+                    match = true;
+                }}
                 if (match) {{ block.classList.remove('dimmed'); }} else {{ block.classList.add('dimmed'); }}
             }});
         }}
 
-        // URL hash: s:key, a:val, o:dimOpacity
+        // URL hash: s:key, a:val, n:sessKey (noAI), o:dimOpacity
         function updateFilterHash() {{
             var parts = [];
             activeSessions.forEach(function(v){{ parts.push('s:'+encodeURIComponent(v)); }});
             activeAIs.forEach(function(v){{ parts.push('a:'+encodeURIComponent(v)); }});
+            activeNoAISessions.forEach(function(v){{ parts.push('n:'+encodeURIComponent(v)); }});
             if (Math.abs(dimOpacity - DIM_OPACITY_DEFAULT) > 0.0001) {{
                 parts.push('o:' + encodeURIComponent(dimOpacity.toFixed(2)));
             }}
@@ -1165,6 +1219,7 @@ document.addEventListener('DOMContentLoaded', function() {{
                 if (!val) return;
                 if (type === 's') activeSessions.add(val);
                 else if (type === 'a') activeAIs.add(val);
+                else if (type === 'n') activeNoAISessions.add(val);
                 else if (type === 'o') setDimOpacity(val);
             }});
             syncCheckboxes();
@@ -1199,7 +1254,7 @@ document.addEventListener('DOMContentLoaded', function() {{
 
         // Clear all
         filterClear.addEventListener('click', function() {{
-            activeSessions.clear(); activeAIs.clear();
+            activeSessions.clear(); activeAIs.clear(); activeNoAISessions.clear();
             syncCheckboxes(); applyFilter(); updateFilterHash();
         }});
 
