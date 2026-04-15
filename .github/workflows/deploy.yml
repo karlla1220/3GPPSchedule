@@ -4,9 +4,6 @@ on:
   repository_dispatch:
     types: [cronjob_trigger] # cron-job.org에서 보낼 이벤트 이름
 
-  schedule:
-    # Check FTP every 5 minutes (weekdays only)
-    - cron: '*/5 * * * 1-5'
   workflow_dispatch:
     inputs:
       action:
