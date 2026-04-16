@@ -9,6 +9,7 @@ from pathlib import Path
 from models import (
     BREAKS,
     GROUP_COLORS,
+    TIME_BLOCKS,
     Schedule,
     time_to_grid_row,
     time_to_minutes,
@@ -358,6 +359,12 @@ header .meta {
 .session-block.tiny-session .session-name {
     font-size: 9px;
 }
+
+.session-block.long-session {
+    border: 1px solid color-mix(in srgb, var(--session-border) 30%, transparent);
+    border-left: 3px solid var(--session-border);
+}
+
 
 .session-block:hover {
     box-shadow: 0 2px 8px rgba(0,0,0,0.18);
@@ -1484,7 +1491,10 @@ def generate_html(schedule: Schedule) -> str:
             # Build secondary details wrapped in a clipping container
             details_inner = f"{chair_html}{dur_html}{ai_html}"
             details_html = f'<div class="session-details">{details_inner}</div>' if details_inner else ""
+            is_long = _crosses_time_block(session.start_time, session.end_time)
             block_classes = "session-block"
+            if is_long:
+                block_classes += " long-session"
             if is_short:
                 block_classes += " short-session"
             if is_tiny:
@@ -1505,7 +1515,8 @@ def generate_html(schedule: Schedule) -> str:
                 f' data-popup="{popup_attr}"'
                 f' data-ai="{data_ai_attr}"'
                 f' data-name="{data_name_attr}"'
-                f' data-group="{data_group_attr}">\n'
+                f' data-group="{data_group_attr}"'
+                f'>\n'
                 f"                    {name_html}{details_html}\n"
                 f"                </div>\n"
             )
@@ -1538,6 +1549,18 @@ def generate_html(schedule: Schedule) -> str:
 </html>""")
 
     return "".join(html_parts)
+
+
+def _crosses_time_block(start_time: str, end_time: str) -> bool:
+    """Return True if the session spans across a TIME_BLOCK boundary."""
+    s = time_to_minutes(start_time)
+    e = time_to_minutes(end_time)
+    for tb in TIME_BLOCKS:
+        tb_start = time_to_minutes(tb["start"])
+        tb_end = time_to_minutes(tb["end"])
+        if s >= tb_start and e <= tb_end:
+            return False
+    return True
 
 
 def save_html(schedule: Schedule, output_path: str | Path = "docs/index.html"):
