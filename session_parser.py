@@ -49,11 +49,12 @@ MULTI_SOURCE_SESSION_SCHEMA = {
                     "room_name": {"type": "string"},
                     "name": {"type": "string"},
                     "duration_minutes": {"type": "integer"},
+                    "specified_start_time": {"type": "string", "nullable": True},
                     "chair": {"type": "string", "nullable": True},
                     "group_header": {"type": "string"},
                     "agenda_item": {"type": "string", "nullable": True},
                 },
-                "required": ["room_name", "name", "duration_minutes", "chair", "group_header", "agenda_item"],
+                "required": ["room_name", "name", "duration_minutes", "specified_start_time", "chair", "group_header", "agenda_item"],
             },
         }
     },
@@ -516,7 +517,7 @@ Return JSON only with schema: {{"room_names": ["..."], "reasoning": "..."}}"""
 # ── Multi-source time-slot parsing ───────────────────────────────
 
 
-_PROMPT_VERSION = 4  # Bump to invalidate time-slot caches on prompt changes
+_PROMPT_VERSION = 5  # Bump to invalidate time-slot caches on prompt changes
 
 
 def build_room_aliases(
@@ -662,7 +663,9 @@ Example 3 – single leaf:
    e.g. "Hiroki (120) / R20 / A-IoT (120)" → Offline B has one session, chair=Hiroki.
    Vice-chair detail for offline rooms just confirms this.
 
-6. Total leaf durations per room must NOT exceed the time block duration.
+6. Total leaf durations per room must NOT exceed the time block duration,
+   UNLESS the cell text contains explicit time ranges (see "Explicit time
+   ranges" section below).
 
 ## Session chair assignment from vice-chair detail
 
@@ -720,6 +723,26 @@ those rooms simultaneously. For such sessions:
 - Common examples: opening/closing plenaries, remembrance gatherings,
   sweep sessions, agenda approval.
 
+## Explicit time ranges in cell text
+
+Sometimes cell text contains explicit time ranges such as:
+  14:00 ~ 15:00
+  Any other open issues
+  . Session reports
+  . etc
+  15:00 ~ 17:00
+  RAN1&RAN4 joint session
+
+These override the standard time block boundaries. When you encounter them:
+- Calculate duration from the time range (e.g. 14:00~15:00 = 60 min).
+- Set specified_start_time to the explicit start (e.g. "14:00").
+- The session MAY start before the time block start and/or end after the
+  time block end. This is allowed and expected.
+- This commonly occurs on the last day (e.g. Friday) with compressed or
+  modified schedules.
+- For sessions WITHOUT an explicit time range, leave specified_start_time
+  as null — their times are calculated sequentially from the time block start.
+
 ## Output format
 
 ```json
@@ -729,6 +752,7 @@ those rooms simultaneously. For such sessions:
       "room_name": "<room alias or ALL_ONLINE / ALL_ROOMS>",
       "name": "session name (include AI number if known)",
       "duration_minutes": N,
+      "specified_start_time": "HH:MM or null (only when cell text has explicit time range)",
       "chair": "person or null",
       "group_header": "category labels joined by ' / ', or empty string",
       "agenda_item": "9.3.2.3, 9.3, 9.3.1, 9.3.2.1, 9.3.2.2 or null (preserve ALL items)"
@@ -988,6 +1012,14 @@ def _slot_result_to_sessions(
                     m = re.match(r"AI\s+(\d[\d.]*)", group_header)
                     if m:
                         agenda_item = m.group(1).strip(".")
+
+            # Use specified_start_time if the LLM found an explicit time range
+            specified = sd.get("specified_start_time")
+            if specified:
+                try:
+                    current_min = time_to_minutes(specified)
+                except (ValueError, IndexError):
+                    pass  # fall back to sequential
 
             start_time = minutes_to_time(current_min)
             end_time = minutes_to_time(current_min + duration)
