@@ -873,7 +873,7 @@ document.addEventListener('DOMContentLoaded', function() {{
         updateRemainingTime(minutes, weekday);
     }}
 
-    // Show "Remaining X min" on sessions overlapping the current time
+    // Show "⏳ Ends in Xm" on sessions overlapping the current time
     function updateRemainingTime(nowMinutes, weekday) {{
         document.querySelectorAll('.session-remaining').forEach(el => el.remove());
 
@@ -896,7 +896,7 @@ document.addEventListener('DOMContentLoaded', function() {{
                 const remaining = endMin - nowMinutes;
                 const badge = document.createElement('div');
                 badge.className = 'session-remaining';
-                badge.textContent = 'Remaining ' + remaining + ' min';
+                badge.textContent = '\u23f3 Ends in ' + remaining + 'm';
                 block.appendChild(badge);
             }}
         }});
