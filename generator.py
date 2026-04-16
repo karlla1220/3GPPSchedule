@@ -365,6 +365,21 @@ header .meta {
     border-left: 3px solid var(--session-border);
 }
 
+.session-remaining {
+    position: absolute;
+    bottom: 1px;
+    right: 3px;
+    font-size: 8px;
+    font-weight: 600;
+    color: #EF4444;
+    background: rgba(255,255,255,0.85);
+    padding: 0 3px;
+    border-radius: 2px;
+    line-height: 1.3;
+    z-index: 3;
+    pointer-events: none;
+    white-space: nowrap;
+}
 
 .session-block:hover {
     box-shadow: 0 2px 8px rgba(0,0,0,0.18);
@@ -854,6 +869,37 @@ document.addEventListener('DOMContentLoaded', function() {{
                 }}
             }}
         }}
+
+        updateRemainingTime(minutes, weekday);
+    }}
+
+    // Show "Remaining X min" on sessions overlapping the current time
+    function updateRemainingTime(nowMinutes, weekday) {{
+        document.querySelectorAll('.session-remaining').forEach(el => el.remove());
+
+        const todayPanel = document.getElementById(weekday);
+        if (!todayPanel) return;
+
+        todayPanel.querySelectorAll('.session-block[data-start][data-end]').forEach(block => {{
+            const startStr = block.dataset.start;
+            const endStr = block.dataset.end;
+            if (!startStr || !endStr) return;
+
+            const sParts = startStr.split(':');
+            const eParts = endStr.split(':');
+            if (sParts.length < 2 || eParts.length < 2) return;
+            const startMin = parseInt(sParts[0], 10) * 60 + parseInt(sParts[1], 10);
+            const endMin = parseInt(eParts[0], 10) * 60 + parseInt(eParts[1], 10);
+            if (isNaN(startMin) || isNaN(endMin)) return;
+
+            if (nowMinutes >= startMin && nowMinutes < endMin) {{
+                const remaining = endMin - nowMinutes;
+                const badge = document.createElement('div');
+                badge.className = 'session-remaining';
+                badge.textContent = 'Remaining ' + remaining + ' min';
+                block.appendChild(badge);
+            }}
+        }});
     }}
 
     updateNowLine();
@@ -1516,6 +1562,8 @@ def generate_html(schedule: Schedule) -> str:
                 f' data-ai="{data_ai_attr}"'
                 f' data-name="{data_name_attr}"'
                 f' data-group="{data_group_attr}"'
+                f' data-start="{session.start_time}"'
+                f' data-end="{session.end_time}"'
                 f'>\n'
                 f"                    {name_html}{details_html}\n"
                 f"                </div>\n"
