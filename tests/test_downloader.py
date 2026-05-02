@@ -4,7 +4,7 @@ import json
 import unittest
 from datetime import datetime
 from pathlib import Path
-from unittest.mock import MagicMock
+from unittest.mock import MagicMock, patch
 
 from downloader import (
     _extract_meeting_id,
@@ -12,6 +12,7 @@ from downloader import (
     _pick_latest_in_meeting_group,
     find_latest_chair_notes,
     find_latest_schedule,
+    get_latest_chair_notes_info,
     load_schedule_state,
     save_schedule_state,
 )
@@ -232,6 +233,52 @@ class FindLatestChairNotesMeetingAwareTests(unittest.TestCase):
         result = find_latest_chair_notes(files)
         assert result is not None
         self.assertIn("v03", result["name"])
+
+    def test_accepts_chairman_note_filenames(self):
+        files = [
+            _f("RAN1#124bis chairman notes - v01.docx", datetime(2026, 4, 14, 8, 0)),
+        ]
+        result = find_latest_chair_notes(files)
+        assert result is not None
+        self.assertIn("chairman", result["name"].lower())
+
+
+class GetLatestChairNotesInfoTests(unittest.TestCase):
+    """Tests for config-aware Chair notes lookup across inboxes and extras."""
+
+    @patch("downloader.list_remote_files")
+    def test_searches_all_configured_inboxes_and_extra_folders(self, mock_list_remote_files):
+        mock_list_remote_files.side_effect = [
+            [_f("RAN1#124 chair notes - v02.docx", datetime(2026, 4, 1, 9, 0))],
+            [_f("RAN1#125 chairman notes - v01.docx", datetime(2026, 4, 27, 9, 0))],
+            [_f("RAN1#125 chair notes - v03.docx", datetime(2026, 4, 28, 9, 0))],
+        ]
+
+        result = get_latest_chair_notes_info(
+            urls=[
+                "https://example.com/legacy/Inbox/",
+                "https://example.com/next/Inbox/",
+            ],
+            extra_folders=[
+                {"url": "https://example.com/custom/Chair_notes/", "name": "Chair_notes"},
+            ],
+        )
+
+        assert result is not None
+        self.assertEqual(result["name"], "RAN1#125 chair notes - v03.docx")
+        self.assertEqual(result["source_url"], "https://example.com/custom/Chair_notes/")
+        self.assertEqual(
+            mock_list_remote_files.call_args_list[0].args[0],
+            "https://example.com/legacy/Inbox/Chair_notes",
+        )
+        self.assertEqual(
+            mock_list_remote_files.call_args_list[1].args[0],
+            "https://example.com/next/Inbox/Chair_notes",
+        )
+        self.assertEqual(
+            mock_list_remote_files.call_args_list[2].args[0],
+            "https://example.com/custom/Chair_notes/",
+        )
 
 
 class LoadScheduleStateTests(unittest.TestCase):

@@ -16,16 +16,20 @@ _TIME_BLOCK_MINUTES = [
 
 
 def extract_meeting_location(docx_path: Path) -> str | None:
-    """Extract the meeting location line from a Chair notes DOCX.
+    """Extract the meeting location line from a Chair notes or agenda DOCX.
 
     Looks for a line like "Gothenburg, SE, Feb. 9th ~ 13th, 2026"
-    in the first few paragraphs of the document.
+    in the first ~30 paragraphs of the document.  Both Chair notes and
+    agenda documents put this location header near the top, but the
+    agenda variant may have a few extra title/logo paragraphs above it.
 
     Returns the location string if found, None otherwise.
     """
     doc = Document(str(docx_path))
-    # Check first 10 paragraphs for a location-like line
-    for para in doc.paragraphs[:10]:
+    # Check first 30 paragraphs for a location-like line.
+    # (Chair notes need ~10; agenda DOCX often pushes it lower with
+    # title/logo paragraphs above the header.)
+    for para in doc.paragraphs[:30]:
         text = para.text.strip()
         if not text:
             continue

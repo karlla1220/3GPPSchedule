@@ -1,0 +1,7 @@
+{
+  "meeting_sync": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/",
+  "meeting_specific": [
+    "https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_125/"
+  ],
+  "extra_folders": []
+}

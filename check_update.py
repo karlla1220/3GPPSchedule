@@ -12,6 +12,7 @@ from __future__ import annotations
 import os
 import sys
 
+from config import load_config
 from downloader import get_all_remote_schedule_info, load_schedule_state
 
 
@@ -29,9 +30,17 @@ def _normalize_for_compare(entries: list[dict]) -> set[tuple]:
 
 def main() -> None:
     # 1. Fetch current remote state (lightweight — directory listing only)
-    print("Checking FTP for schedule updates (all folders)…")
+    cfg = load_config()
+    print(
+        "Checking FTP for schedule updates "
+        f"({len(cfg['inbox_urls'])} inbox URL(s), "
+        f"{len(cfg['extra_folders'])} extra folder(s))…"
+    )
     try:
-        remote_all = get_all_remote_schedule_info()
+        remote_all = get_all_remote_schedule_info(
+            urls=cfg["inbox_urls"],
+            extra_folders=cfg["extra_folders"],
+        )
     except Exception as e:
         print(f"FTP check failed: {e}")
         # On failure, assume NOT changed — avoids unnecessary rebuilds

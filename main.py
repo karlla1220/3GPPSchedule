@@ -12,6 +12,13 @@ Environment variables:
     GEMINI_API_KEY  — Google Gemini API key (required unless --no-llm)
     SCHEDULE_CONTACT_NAME  — Contact name displayed in generated HTML
     SCHEDULE_CONTACT_EMAIL — Contact email displayed in generated HTML
+    SCHEDULE_INBOX_URLS    — JSON array or comma-separated list of inbox URLs
+                             to aggregate (overrides config.json / default)
+    SCHEDULE_EXTRA_FOLDERS — JSON array of extra folder entries to include
+                             (overrides config.json)
+
+Config file:
+    config.json (repo root, optional) — see config.py for schema.
 """
 
 from __future__ import annotations
@@ -34,7 +41,9 @@ from generator import save_html
 from downloader import (
     download_latest_schedule,
     download_latest_chair_notes,
+    download_latest_agenda,
     find_local_latest_schedule,
+    find_local_latest_agenda,
     find_local_vice_chair_schedules,
     discover_schedule_sources,
     download_all_schedules,
@@ -43,6 +52,7 @@ from downloader import (
     _extract_meeting_id,
 )
 from merger import collect_time_slot_data
+from config import load_config
 
 
 def _extract_meeting_name(filepath: Path) -> str:
@@ -105,6 +115,7 @@ def main():
     if email_error:
         print(f"Error: {email_error}", file=sys.stderr)
         sys.exit(1)
+    cfg = load_config()
     # Step 1: Get the DOCX file(s)
     docx_path: Path | None = None
     vice_chair_paths: dict[str, Path] = {}
@@ -126,10 +137,17 @@ def main():
         if vice_chair_paths:
             print(f"Vice-chair schedules: {', '.join(vice_chair_paths.keys())}")
     else:
-        # Discover all schedule sources from Inbox/
-        print("Discovering schedule sources from FTP...")
+        # Discover all schedule sources from configured inbox URLs
+        print(
+            "Discovering schedule sources from FTP "
+            f"({len(cfg['inbox_urls'])} inbox URL(s), "
+            f"{len(cfg['extra_folders'])} extra folder(s))..."
+        )
         try:
-            sources = discover_schedule_sources()
+            sources = discover_schedule_sources(
+                urls=cfg["inbox_urls"],
+                extra_folders=cfg["extra_folders"],
+            )
             if sources:
                 print(f"Found {len(sources)} schedule source(s)")
                 docx_path, vice_chair_paths = download_all_schedules(sources)
@@ -200,24 +218,51 @@ def main():
         print(f"\nReusing cached timezone for {current_meeting_id}: {cached_tz}")
         meeting_tz = cached_tz
     else:
-        # New meeting or no cached data → detect timezone from Chair notes
-        chair_notes_path = find_chair_notes_docx(docx_path.parent)
-        if chair_notes_path is None and not args.no_download:
-            # Try downloading Chair notes from FTP
-            print("\nNo local Chair notes found, downloading from FTP...")
-            chair_notes_path = download_latest_chair_notes(docx_path.parent)
-        if chair_notes_path:
-            print(f"\nExtracting meeting location from: {chair_notes_path.name}")
-            location_text = extract_meeting_location(chair_notes_path)
+        # New meeting or no cached data → detect timezone.
+        # Prefer the agenda DOCX (uploaded earlier than Chair notes), fall
+        # back to Chair notes if no agenda is available.
+        location_source: Path | None = None
+
+        agenda_urls = cfg.get("agenda_urls") or []
+        if agenda_urls and not args.no_download:
+            print(
+                f"\nLooking up meeting agenda from "
+                f"{len(agenda_urls)} agenda URL(s)..."
+            )
+            location_source = download_latest_agenda(agenda_urls)
+        if location_source is None:
+            # Try a previously-cached agenda first (offline / no-download mode)
+            location_source = find_local_latest_agenda()
+            if location_source is not None:
+                print(f"\nUsing local agenda: {location_source.name}")
+
+        if location_source is None:
+            # Fall back to Chair notes
+            chair_notes_path = find_chair_notes_docx(docx_path.parent)
+            if chair_notes_path is None and not args.no_download:
+                print("\nNo local Chair notes found, downloading from FTP...")
+                chair_notes_path = download_latest_chair_notes(
+                    docx_path.parent,
+                    urls=cfg["inbox_urls"],
+                    extra_folders=cfg["extra_folders"],
+                )
+            location_source = chair_notes_path
+
+        if location_source:
+            print(f"\nExtracting meeting location from: {location_source.name}")
+            location_text = extract_meeting_location(location_source)
             if location_text:
                 print(f"  Location line: {location_text}")
                 tz = get_timezone_from_location(location_text)
                 if tz:
                     meeting_tz = tz
             else:
-                print("  Warning: Could not find location line in Chair notes")
+                print(
+                    f"  Warning: Could not find location line in "
+                    f"{location_source.name}"
+                )
         else:
-            print("\nWarning: No Chair notes DOCX found, using UTC timezone")
+            print("\nWarning: No agenda or Chair notes DOCX found, using UTC timezone")
 
     # Persist state (FTP file listing + meeting metadata) for next run
     if sources is not None:
