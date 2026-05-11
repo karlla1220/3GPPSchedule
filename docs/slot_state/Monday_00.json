@@ -1,0 +1,29 @@
+{
+  "day": "Monday",
+  "time_block_index": 0,
+  "source_hashes": {
+    "Main Schedule": "af6e002ac873947c"
+  },
+  "merged_sessions": [
+    {
+      "room_name": "ALL_ONLINE",
+      "name": "RAN1#124b commences at 09:00 on Monday",
+      "duration_minutes": 90,
+      "specified_start_time": "09:00",
+      "chair": null,
+      "group_header": "",
+      "agenda_item": "1, 2, 3, 4, 5"
+    },
+    {
+      "room_name": "ALL_ONLINE",
+      "name": "10.5.0",
+      "duration_minutes": 30,
+      "specified_start_time": null,
+      "chair": null,
+      "group_header": "6GR",
+      "agenda_item": null
+    }
+  ],
+  "merged_at": "2026-05-11T10:45:32.272412+00:00",
+  "schema_version": 1
+}

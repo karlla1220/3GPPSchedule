@@ -1,0 +1,101 @@
+{
+  "day": "Monday",
+  "time_block_index": 1,
+  "source_hashes": {
+    "Main Schedule": "316d070d6e9a9e82"
+  },
+  "merged_sessions": [
+    {
+      "room_name": "ALL_ONLINE",
+      "name": "10.5.0",
+      "duration_minutes": 30,
+      "specified_start_time": null,
+      "chair": null,
+      "group_header": "6GR",
+      "agenda_item": null
+    },
+    {
+      "room_name": "ALL_ONLINE",
+      "name": "10.5.1.1",
+      "duration_minutes": 40,
+      "specified_start_time": null,
+      "chair": null,
+      "group_header": "6GR",
+      "agenda_item": null
+    },
+    {
+      "room_name": "ALL_ONLINE",
+      "name": "10.5.1.2",
+      "duration_minutes": 25,
+      "specified_start_time": null,
+      "chair": null,
+      "group_header": "6GR",
+      "agenda_item": null
+    },
+    {
+      "room_name": "ALL_ONLINE",
+      "name": "10.5.1.3",
+      "duration_minutes": 25,
+      "specified_start_time": null,
+      "chair": null,
+      "group_header": "6GR",
+      "agenda_item": null
+    },
+    {
+      "room_name": "RAN1_off1",
+      "name": "10.5.2.1",
+      "duration_minutes": 30,
+      "specified_start_time": null,
+      "chair": "Xiaodong",
+      "group_header": "6GR",
+      "agenda_item": null
+    },
+    {
+      "room_name": "RAN1_off1",
+      "name": "10.5.2.3",
+      "duration_minutes": 45,
+      "specified_start_time": null,
+      "chair": "Xiaodong",
+      "group_header": "6GR",
+      "agenda_item": null
+    },
+    {
+      "room_name": "RAN1_off1",
+      "name": "10.5.2.2",
+      "duration_minutes": 45,
+      "specified_start_time": null,
+      "chair": "Xiaodong",
+      "group_header": "6GR",
+      "agenda_item": null
+    },
+    {
+      "room_name": "RAN1_off2",
+      "name": "NTN-NR",
+      "duration_minutes": 40,
+      "specified_start_time": null,
+      "chair": "Sorouri",
+      "group_header": "R20",
+      "agenda_item": null
+    },
+    {
+      "room_name": "RAN1_off2",
+      "name": "NTN-IoT",
+      "duration_minutes": 20,
+      "specified_start_time": null,
+      "chair": "Sorouri",
+      "group_header": "R20",
+      "agenda_item": null
+    },
+    {
+      "room_name": "RAN1_off2",
+      "name": "10.7.1 NTN",
+      "duration_minutes": 60,
+      "specified_start_time": null,
+      "chair": "Sorouri",
+      "group_header": "6GR",
+      "agenda_item": null
+    }
+  ],
+  "merged_at": "2026-05-11T10:45:35.861437+00:00",
+  "schema_version": 1
+}

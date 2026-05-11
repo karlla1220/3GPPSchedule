@@ -1,0 +1,38 @@
+{
+  "day": "Friday",
+  "time_block_index": 2,
+  "source_hashes": {
+    "Main Schedule": "d2783920569c4b77"
+  },
+  "merged_sessions": [
+    {
+      "room_name": "ALL_ONLINE",
+      "name": "Any other open issues. Session reports. etc (including surprise event)",
+      "duration_minutes": 120,
+      "specified_start_time": null,
+      "chair": null,
+      "group_header": "",
+      "agenda_item": null
+    },
+    {
+      "room_name": "RAN1_off1",
+      "name": "To be assigned by Sorour",
+      "duration_minutes": 120,
+      "specified_start_time": null,
+      "chair": "Sorour",
+      "group_header": "",
+      "agenda_item": null
+    },
+    {
+      "room_name": "RAN1_off2",
+      "name": "To be assigned by Hiroki",
+      "duration_minutes": 120,
+      "specified_start_time": null,
+      "chair": "Hiroki",
+      "group_header": "",
+      "agenda_item": null
+    }
+  ],
+  "merged_at": "2026-05-11T10:46:41.386710+00:00",
+  "schema_version": 1
+}

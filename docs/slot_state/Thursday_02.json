@@ -1,0 +1,101 @@
+{
+  "day": "Thursday",
+  "time_block_index": 2,
+  "source_hashes": {
+    "Main Schedule": "8b9142001d2ee76b"
+  },
+  "merged_sessions": [
+    {
+      "room_name": "RAN1_main",
+      "name": "10.5.5",
+      "duration_minutes": 30,
+      "specified_start_time": null,
+      "chair": null,
+      "group_header": "6GR",
+      "agenda_item": null
+    },
+    {
+      "room_name": "RAN1_main",
+      "name": "10.6.x",
+      "duration_minutes": 90,
+      "specified_start_time": null,
+      "chair": null,
+      "group_header": "6GR",
+      "agenda_item": null
+    },
+    {
+      "room_name": "RAN1_brk1",
+      "name": "AI/ML",
+      "duration_minutes": 120,
+      "specified_start_time": null,
+      "chair": null,
+      "group_header": "R20",
+      "agenda_item": null
+    },
+    {
+      "room_name": "RAN1_brk2",
+      "name": "10.2.1 Waveform",
+      "duration_minutes": 60,
+      "specified_start_time": null,
+      "chair": null,
+      "group_header": "6GR",
+      "agenda_item": null
+    },
+    {
+      "room_name": "RAN1_brk2",
+      "name": "10.8 Sensing",
+      "duration_minutes": 60,
+      "specified_start_time": null,
+      "chair": null,
+      "group_header": "6GR",
+      "agenda_item": null
+    },
+    {
+      "room_name": "RAN1_off1",
+      "name": "10.5.2.1",
+      "duration_minutes": 30,
+      "specified_start_time": null,
+      "chair": "Xiaodong",
+      "group_header": "6GR",
+      "agenda_item": null
+    },
+    {
+      "room_name": "RAN1_off1",
+      "name": "10.5.2.2",
+      "duration_minutes": 45,
+      "specified_start_time": null,
+      "chair": "Xiaodong",
+      "group_header": "6GR",
+      "agenda_item": null
+    },
+    {
+      "room_name": "RAN1_off1",
+      "name": "10.5.2.3",
+      "duration_minutes": 45,
+      "specified_start_time": null,
+      "chair": "Xiaodong",
+      "group_header": "6GR",
+      "agenda_item": null
+    },
+    {
+      "room_name": "RAN1_off2",
+      "name": "10.3.x",
+      "duration_minutes": 80,
+      "specified_start_time": null,
+      "chair": "Sorouri",
+      "group_header": "6GR",
+      "agenda_item": null
+    },
+    {
+      "room_name": "RAN1_off2",
+      "name": "R20 MIMO",
+      "duration_minutes": 40,
+      "specified_start_time": null,
+      "chair": "Sorouri",
+      "group_header": "",
+      "agenda_item": null
+    }
+  ],
+  "merged_at": "2026-05-11T10:46:29.222373+00:00",
+  "schema_version": 1
+}
