@@ -72,6 +72,7 @@ class MainChairNotesLookupTests(unittest.TestCase):
                 local=str(docx_path),
                 no_download=False,
                 output="docs/index.html",
+                rebuild_slots=False,
             )
 
             with patch("argparse.ArgumentParser.parse_args", return_value=args):

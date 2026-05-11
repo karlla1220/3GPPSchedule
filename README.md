@@ -91,6 +91,7 @@ uv run python main.py --output output/schedule.html
 | `--local <path>` | 지정한 로컬 DOCX 파일로 HTML 생성 |
 | `--no-download` | 다운로드 없이 최신 로컬 파일 사용 |
 | `--output <path>` | HTML 출력 경로 (기본: `docs/index.html`) |
+| `--rebuild-slots` | `docs/slot_state/` 전체 삭제 후 모든 시간 슬롯을 cold 경로로 재빌드 |
 
 ## 프로젝트 구조
 
@@ -140,6 +141,15 @@ FTP Inbox/
 ```
 
 부의장 스케줄은 메인 스케줄과 다른 테이블 구조를 가질 수 있으며, AI 번호(예: 9.1.1, 10.3.2) 같은 상세 정보를 포함합니다. 시스템은 LLM과 문서 컨텍스트를 활용하여 부의장 상세 정보를 메인 스케줄의 올바른 방에 매핑합니다.
+
+## 점진적 머지(Incremental Merge)와 `docs/slot_state/`
+
+각 `(요일, 시간 블록)` 슬롯의 머지 결과는 `docs/slot_state/{Day}_{TB:02d}.json` 으로 저장됩니다. 다음 실행에서 각 소스의 해시를 직전 스냅샷과 비교해 다음 중 하나로 분류합니다.
+
+- **STALE** — 이전과 동일한 내용. 모든 소스가 STALE이면 LLM 호출 없이 직전 머지 결과를 그대로 재사용합니다.
+- **FRESH / NEW / REMOVED** — 변경이 감지됨. LLM에는 *변경된 소스의 원문* 과 *직전 머지 결과(baseline)* 만 전달되며, 변경되지 않은 STALE 소스의 원문은 프롬프트에서 제외됩니다. 이렇게 하면 한 소스가 항목을 합쳐버린 변경(consolidation)을 다른 소스의 오래된 상세 정보가 되살리는 회귀를 막을 수 있습니다.
+
+이 파일들은 깃으로 추적되므로 GitHub 웹 UI에서 한 파일만 지우면 해당 슬롯만 다음 실행에서 cold 경로로 재빌드되고, 나머지 슬롯은 그대로 점진적/숏-서킷 경로를 탑니다. 누적된 carry-forward 오류 등으로 전체를 다시 빌드해야 한다면 `python main.py --rebuild-slots` 로 디렉터리 전체를 비울 수 있습니다.
 
 ## 미팅 선택 규칙
 

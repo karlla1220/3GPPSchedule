@@ -517,7 +517,7 @@ Return JSON only with schema: {{"room_names": ["..."], "reasoning": "..."}}"""
 # ── Multi-source time-slot parsing ───────────────────────────────
 
 
-_PROMPT_VERSION = 5  # Bump to invalidate time-slot caches on prompt changes
+_PROMPT_VERSION = 6  # Bump to invalidate time-slot caches on prompt changes
 
 
 def build_room_aliases(
@@ -601,7 +601,7 @@ def _alias_room_label(label: str, name_to_alias: dict[str, str]) -> str:
     return prefix + " + ".join(aliased)
 
 
-MULTI_SOURCE_SYSTEM_INSTRUCTION = """You produce a unified session list for a 3GPP RAN1 time-slot.
+MULTI_SOURCE_SYSTEM_INSTRUCTION_COLD = """You produce a unified session list for a 3GPP RAN1 time-slot.
 
 You receive MULTIPLE schedule tables that all describe the SAME time duration.
 They come from different sources (main chair schedule + vice-chair schedules).
@@ -770,18 +770,82 @@ These override the standard time block boundaries. When you encounter them:
 - Return ONLY valid JSON."""
 
 
+_COLD_BODY_FROM = "## Cell text syntax"
+_COLD_BODY = MULTI_SOURCE_SYSTEM_INSTRUCTION_COLD[
+    MULTI_SOURCE_SYSTEM_INSTRUCTION_COLD.index(_COLD_BODY_FROM):
+]
+
+MULTI_SOURCE_SYSTEM_INSTRUCTION_INCREMENTAL = """You produce a unified session list for a 3GPP RAN1 time-slot.
+
+This is an INCREMENTAL UPDATE. You receive:
+1. A "Previous merge result" — the authoritative session list from the
+   previous run. Treat it as the established baseline.
+2. "Fresh source raw input" — only the schedule sources whose content
+   changed since the previous run. Sources marked STALE are omitted
+   because their content is unchanged from what produced the baseline.
+   Sources marked REMOVED no longer exist; their previous contribution
+   survives only via the baseline.
+3. A "Source freshness summary" listing the status of every source.
+
+Your job: produce the new session list for this time slot.
+
+## Authority rules
+
+- Fresh sources are authoritative for the AREAS THEY EXPLICITLY COVER.
+  An "area" means a (room, contiguous content block) the fresh source
+  describes.
+- For areas a fresh source covers, IGNORE what the baseline said about
+  the same room/topic and rebuild from the fresh raw text.
+- For areas NO fresh source covers, COPY THE BASELINE entry verbatim
+  (same name, duration, chair, group_header, agenda_item,
+  specified_start_time, room_name).
+- If a fresh source COARSENS a previously-detailed area (e.g. baseline
+  had three 40-min sub-items, fresh source shows one 120-min item),
+  that is an INTENTIONAL CONSOLIDATION. Output the consolidated form.
+  Do NOT re-expand using the baseline's detail.
+- If a fresh source REFINES a previously-coarse area (e.g. baseline
+  had one 120-min item, fresh source shows three 40-min items),
+  output the refined form.
+
+## Carry-forward of auxiliary fields
+
+When a fresh source covers a session but does not mention some
+auxiliary field (chair, agenda_item, group_header), and the baseline
+had a value for that field on a session that maps to the same
+(room, topic, time position), copy the baseline's value.
+
+Mapping a fresh session to a baseline session:
+- Same room_name AND
+- Either: same name (case-insensitive), OR same agenda_item, OR
+  significant name overlap AND comparable duration.
+
+If no clean mapping exists, leave the field as the fresh source
+provides it (which may be null).
+
+## Removed sources
+
+A REMOVED source's previous contribution survives only via the
+baseline. Treat baseline entries the same way regardless of which
+source originally contributed them.
+
+## All other rules from the cold-path system are still in effect
+
+""" + _COLD_BODY
+
+
 def _build_time_slot_prompt(
     slot,
     name_to_alias: dict[str, str] | None = None,
+    mode: str = "cold",
 ) -> str:
     """Build prompt for a multi-source time slot.
 
-    Structures data so that each target room's content from all sources
-    is grouped together, making cross-referencing easy for the LLM.
-
     Args:
-        slot: a TimeSlotData object from merger.py
-        name_to_alias: room-name → alias mapping (if None, uses raw names)
+        slot: a TimeSlotData object from merger.py.
+        name_to_alias: room-name → alias mapping (if None, uses raw names).
+        mode: "cold" (all sources sent, no baseline) or "incremental"
+            (baseline + only FRESH/NEW sources sent, freshness summary
+            included).
     """
     parts = []
     parts.append(
@@ -803,18 +867,62 @@ def _build_time_slot_prompt(
     def _alias_label(label: str) -> str:
         return _alias_room_label(label, name_to_alias) if name_to_alias else label
 
-    # Group: first show main schedule per room, then all vice-chair data
+    if mode == "incremental":
+        # Freshness summary covers every source seen now or previously.
+        summary_lines = []
+        for label in sorted(slot.source_freshness):
+            status = slot.source_freshness[label]
+            note = ""
+            if status == "STALE":
+                note = "  (unchanged, content omitted from this prompt)"
+            elif status == "REMOVED":
+                note = "  (no longer present in this run)"
+            summary_lines.append(f"- {label}: {status}{note}")
+        parts.append("\n## Source freshness summary\n" + "\n".join(summary_lines))
+
+        baseline = slot.previous_merge or []
+        parts.append(
+            "\n## Previous merge result (BASELINE — carry forward unless overridden)"
+        )
+        parts.append(json.dumps(baseline, ensure_ascii=False, indent=2))
+
+        fresh_labels = {
+            label
+            for label, status in slot.source_freshness.items()
+            if status in ("FRESH", "NEW")
+        }
+        fresh_sources = [s for s in slot.sources if s.label in fresh_labels]
+
+        if fresh_sources:
+            parts.append("\n## Fresh source raw input")
+            for source in fresh_sources:
+                status = slot.source_freshness.get(source.label, "FRESH")
+                parts.append(f"\n### {source.label} ({status})")
+                for entry in source.entries:
+                    parts.append(f"\n[{_alias_label(entry.room_label)}]")
+                    parts.append(entry.cell_text)
+        else:
+            # No fresh raw input — REMOVED-only case. The LLM still
+            # needs to know it can carry the baseline forward as-is.
+            parts.append(
+                "\n## Fresh source raw input\n"
+                "(none — only REMOVED sources changed; keep the baseline "
+                "except where a REMOVED source's contribution no longer "
+                "applies)"
+            )
+
+        return "\n".join(parts)
+
+    # Cold-path prompt: same as legacy behaviour.
     main_source = slot.sources[0] if slot.sources else None
     vc_sources = slot.sources[1:] if len(slot.sources) > 1 else []
 
-    # Main schedule (authoritative room→content mapping)
     if main_source:
         parts.append("\n## Main Schedule (defines what goes in each room)")
         for entry in main_source.entries:
             parts.append(f'\n[{_alias_label(entry.room_label)}]')
             parts.append(entry.cell_text)
 
-    # Vice-chair detail (adds specificity; room labels unreliable)
     if vc_sources:
         parts.append("\n## Vice-chair detail (match by CONTENT to target rooms, ignore room labels)")
         for source in vc_sources:
@@ -823,27 +931,6 @@ def _build_time_slot_prompt(
                 parts.append(entry.cell_text)
 
     return "\n".join(parts)
-
-
-def _time_slot_cache_key(slot) -> str:
-    """Generate a cache key for a time slot's combined data."""
-    content = json.dumps(
-        {
-            "v": _PROMPT_VERSION,
-            "day": slot.day,
-            "tb": slot.time_block_index,
-            "rooms": [r.name for r in slot.main_rooms],
-            "sources": [
-                {
-                    "label": s.label,
-                    "entries": [(e.room_label, e.cell_text) for e in s.entries],
-                }
-                for s in slot.sources
-            ],
-        },
-        sort_keys=True,
-    )
-    return hashlib.sha256(content.encode()).hexdigest()[:16]
 
 
 def parse_time_slots(
@@ -874,43 +961,71 @@ def parse_time_slots(
         http_options={"timeout": 120_000},
     )
 
+    from datetime import datetime, timezone
+    from slot_state import SlotState, save_slot_state
+
     all_sessions: list[Session] = []
-    cache_hits = 0
+    n_cold = 0
+    n_incremental = 0
+    n_skipped = 0
     api_calls = 0
     MAX_RETRIES = 3
 
     for slot_idx, slot in enumerate(time_slots):
-        slot_label = f"{slot.day} TB{slot.time_block_index} ({slot.time_block_start}-{slot.time_block_end})"
+        slot_label = (
+            f"{slot.day} TB{slot.time_block_index} "
+            f"({slot.time_block_start}-{slot.time_block_end})"
+        )
 
-        # Check cache
-        ck = _time_slot_cache_key(slot)
-        cached = _load_cache(f"slot_{ck}")
-        if cached is not None:
-            # Convert cached result to sessions
-            day_rooms = day_rooms_map.get(slot.day, [])
-            _, alias_to_name = build_room_aliases(day_rooms)
-            sessions = _slot_result_to_sessions(cached, slot, day_rooms_map, alias_to_name)
-            all_sessions.extend(sessions)
-            cache_hits += 1
-            continue
-
-        # Build prompt with room aliases
         day_rooms = day_rooms_map.get(slot.day, [])
         name_to_alias, alias_to_name = build_room_aliases(day_rooms)
-        user_prompt = _build_time_slot_prompt(slot, name_to_alias)
+
+        freshness = slot.source_freshness or {}
+        freshness_str = ", ".join(
+            f"{label}={status}" for label, status in sorted(freshness.items())
+        ) or "(no sources)"
+
+        # ── Short-circuit: every source unchanged → reuse last merge.
+        if slot.all_stale and slot.previous_merge is not None:
+            parsed_result = {"sessions": slot.previous_merge}
+            sessions = _slot_result_to_sessions(
+                parsed_result, slot, day_rooms_map, alias_to_name
+            )
+            all_sessions.extend(sessions)
+            n_skipped += 1
+            print(
+                f"  [{slot_idx+1}/{len(time_slots)}] {slot_label} "
+                f"sources: {freshness_str} → skipped (cached, "
+                f"{len(sessions)} sessions)"
+            )
+            continue
+
+        # ── Decide cold vs incremental.
+        has_baseline = slot.previous_merge is not None
+        if has_baseline and any(
+            s in ("FRESH", "NEW", "REMOVED") for s in freshness.values()
+        ):
+            mode = "incremental"
+            system_instruction = MULTI_SOURCE_SYSTEM_INSTRUCTION_INCREMENTAL
+        else:
+            mode = "cold"
+            system_instruction = MULTI_SOURCE_SYSTEM_INSTRUCTION_COLD
+
+        user_prompt = _build_time_slot_prompt(slot, name_to_alias, mode=mode)
         n_sources = len(slot.sources)
         n_entries = sum(len(s.entries) for s in slot.sources)
         print(
             f"  [{slot_idx+1}/{len(time_slots)}] {slot_label} "
+            f"sources: {freshness_str} → {mode} "
             f"({n_sources} sources, {n_entries} entries)...",
-            end=" ", flush=True,
+            end=" ",
+            flush=True,
         )
 
         # Rate limit
         if api_calls > 0:
             _time.sleep(1.0)
 
-        # Call Gemini
         parsed_result = None
         for attempt in range(MAX_RETRIES):
             try:
@@ -918,7 +1033,7 @@ def parse_time_slots(
                     model="gemini-3-flash-preview",
                     contents=user_prompt,
                     config=types.GenerateContentConfig(
-                        system_instruction=MULTI_SOURCE_SYSTEM_INSTRUCTION,
+                        system_instruction=system_instruction,
                         temperature=0.1,
                         response_mime_type="application/json",
                         response_json_schema=MULTI_SOURCE_SESSION_SCHEMA,
@@ -941,19 +1056,42 @@ def parse_time_slots(
         if parsed_result is None:
             parsed_result = {"sessions": []}
 
-        # Cache the result
-        _save_cache(f"slot_{ck}", parsed_result)
+        # Persist slot state so the next run can short-circuit / merge incrementally.
+        try:
+            save_slot_state(
+                SlotState(
+                    day=slot.day,
+                    time_block_index=slot.time_block_index,
+                    source_hashes=dict(slot.current_hashes),
+                    merged_sessions=parsed_result.get("sessions", []),
+                    merged_at=datetime.now(timezone.utc).isoformat(),
+                )
+            )
+        except OSError as e:
+            print(f"  Warning: failed to save slot state: {e}")
 
-        # Convert to sessions
         sessions = _slot_result_to_sessions(parsed_result, slot, day_rooms_map, alias_to_name)
         all_sessions.extend(sessions)
 
-        n_sessions = len(sessions)
-        print(f"{n_sessions} sessions")
+        if mode == "cold":
+            n_cold += 1
+        else:
+            n_incremental += 1
 
-    if cache_hits:
-        print(f"  ({cache_hits} time slots from cache)")
-    print(f"Multi-source parsing complete: {len(all_sessions)} sessions from {len(time_slots)} time slots")
+        print(f"{len(sessions)} sessions")
+
+    total = len(time_slots)
+    print(
+        f"Slot freshness summary: {n_cold} cold, {n_incremental} incremental, "
+        f"{n_skipped} skipped ({total} total)"
+    )
+    print(
+        f"LLM calls: {api_calls} (saved {n_skipped} by short-circuit)"
+    )
+    print(
+        f"Multi-source parsing complete: {len(all_sessions)} sessions from "
+        f"{total} time slots"
+    )
 
     return all_sessions
 

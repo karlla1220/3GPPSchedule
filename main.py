@@ -100,7 +100,27 @@ def main():
         default="docs/index.html",
         help="Output HTML file path (default: docs/index.html)",
     )
+    argparser.add_argument(
+        "--rebuild-slots",
+        action="store_true",
+        help=(
+            "Wipe per-slot incremental state cache (docs/slot_state/) and "
+            "rebuild from raw sources. Use when carry-forward errors have "
+            "accumulated. Operators can also delete individual files from "
+            "docs/slot_state/ via the GitHub web UI to force a cold "
+            "rebuild of a single slot."
+        ),
+    )
     args = argparser.parse_args()
+
+    if args.rebuild_slots:
+        from slot_state import clear_all_slot_states
+
+        n = clear_all_slot_states()
+        print(
+            f"Cleared {n} slot state file(s) from docs/slot_state/; "
+            f"will rebuild from scratch."
+        )
 
     contact_name = os.getenv("SCHEDULE_CONTACT_NAME")
     contact_email = os.getenv("SCHEDULE_CONTACT_EMAIL")

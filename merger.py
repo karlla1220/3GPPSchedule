@@ -9,11 +9,13 @@ produce the most detailed session list possible.
 
 from __future__ import annotations
 
+import re
 from dataclasses import dataclass, field
 from pathlib import Path
 
 from models import CellData, RoomInfo, TIME_BLOCKS
 from parser import parse_docx, build_room_list
+from slot_state import hash_source_text, load_slot_state
 
 
 # ── Room name resolution ────────────────────────────────────
@@ -166,6 +168,21 @@ class TimeSlotData:
     time_block_duration: int
     main_rooms: list[RoomInfo]        # rooms from main schedule
     sources: list[SlotSource] = field(default_factory=list)
+    # Incremental-merge metadata (populated by collect_time_slot_data).
+    previous_merge: list[dict] | None = None
+    source_freshness: dict[str, str] = field(default_factory=dict)
+    current_hashes: dict[str, str] = field(default_factory=dict)
+    all_stale: bool = False
+
+
+def _serialize_source(source: SlotSource) -> str:
+    """Stable serialization of a source's entries for hashing."""
+    entries = sorted(source.entries, key=lambda e: e.room_label)
+    lines = []
+    for e in entries:
+        cell = re.sub(r"\s+", " ", e.cell_text).strip()
+        lines.append(f"{e.room_label}\t{cell}")
+    return "\n".join(lines)
 
 
 # ── Collection logic ─────────────────────────────────────────
@@ -310,5 +327,42 @@ def collect_time_slot_data(
         )
     )
 
+    # Classify each source's freshness relative to the previous run.
+    for slot in time_slots:
+        _annotate_freshness(slot)
+
     return time_slots
+
+
+def _annotate_freshness(slot: TimeSlotData) -> None:
+    """Compute current source hashes, compare against the previous snapshot,
+    and tag each source as FRESH / STALE / NEW. Sources present in the
+    previous snapshot but missing now are tagged REMOVED.
+    """
+    current_hashes = {s.label: hash_source_text(_serialize_source(s)) for s in slot.sources}
+    slot.current_hashes = current_hashes
+
+    prev_state = load_slot_state(slot.day, slot.time_block_index)
+    if prev_state is None:
+        slot.previous_merge = None
+        slot.source_freshness = {label: "NEW" for label in current_hashes}
+        slot.all_stale = False
+        return
+
+    prev_hashes = prev_state.source_hashes or {}
+    freshness: dict[str, str] = {}
+    for label, h in current_hashes.items():
+        if label not in prev_hashes:
+            freshness[label] = "NEW"
+        elif prev_hashes[label] == h:
+            freshness[label] = "STALE"
+        else:
+            freshness[label] = "FRESH"
+    for label in prev_hashes:
+        if label not in current_hashes:
+            freshness[label] = "REMOVED"
+
+    slot.source_freshness = freshness
+    slot.previous_merge = prev_state.merged_sessions
+    slot.all_stale = bool(freshness) and all(v == "STALE" for v in freshness.values())
 
