@@ -122,15 +122,25 @@ def _get_with_retry(
 
 
 def _extract_version_from_name(filename: str) -> int:
-    """Extract trailing version number from names like '... v09.zip'.
+    """Extract trailing primary version number from names like '... v09.zip'.
 
     Returns -1 when version is not found.
     """
+    version_parts = _extract_version_parts_from_name(filename)
+    return version_parts[0]
+
+
+def _extract_version_parts_from_name(filename: str) -> tuple[int, ...]:
+    """Extract trailing version parts from names like '... v04_3.docx'.
+
+    Returns (-1,) when version is not found.
+    """
     _ext_pattern = "|".join(re.escape(e) for e in SUPPORTED_EXTENSIONS)
-    m = re.search(rf"v(\d+)(?:{_ext_pattern})$", filename, re.IGNORECASE)
+    m = re.search(rf"v(\d+)((?:[_-]\d+)*)(?:{_ext_pattern})$", filename, re.IGNORECASE)
     if not m:
-        return -1
-    return int(m.group(1))
+        return (-1,)
+    suffix_parts = tuple(int(part) for part in re.findall(r"\d+", m.group(2)))
+    return (int(m.group(1)), *suffix_parts)
 
 
 # Known meeting suffixes (case-insensitive).
@@ -280,7 +290,7 @@ def _pick_latest_in_meeting_group(
     latest = max(
         current_group,
         key=lambda x: (
-            _extract_version_from_name(x["name"]),
+            _extract_version_parts_from_name(x["name"]),
             x["uploaded_at"],
             x["name"].lower(),
         ),
@@ -376,7 +386,7 @@ def find_latest_schedule(
         if version >= 0:
             versioned.append({**f, "version": version})
     if versioned:
-        return max(versioned, key=lambda x: x["version"])
+        return max(versioned, key=lambda x: _extract_version_parts_from_name(x["name"]))
 
     # Last resort: return the first schedule file
     return schedule_files[0]
@@ -659,7 +669,7 @@ def find_latest_chair_notes(
         if version >= 0:
             versioned.append({**f, "version": version})
     if versioned:
-        return max(versioned, key=lambda x: x["version"])
+        return max(versioned, key=lambda x: _extract_version_parts_from_name(x["name"]))
 
     return chair_files[0]
 

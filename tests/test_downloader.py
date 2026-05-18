@@ -119,6 +119,20 @@ class PickLatestInMeetingGroupTests(unittest.TestCase):
         result = _pick_latest_in_meeting_group(files)
         self.assertIn("v02", result["name"])
 
+    def test_same_meeting_picks_highest_version_with_copy_suffix(self):
+        """Version suffixes like v04_3 should sort after the base v04 file."""
+        files = [
+            _f("RAN1#125 schedule for Hiroki Adhoc2 sessions_v04.docx", datetime(2026, 5, 16, 12, 57)),
+            _f("RAN1#125 schedule for Hiroki Adhoc2 sessions_v04_1.docx", datetime(2026, 5, 16, 12, 57)),
+            _f("RAN1#125 schedule for Hiroki Adhoc2 sessions_v04_2.docx", datetime(2026, 5, 16, 12, 57)),
+            _f("RAN1#125 schedule for Hiroki Adhoc2 sessions_v04_3.docx", datetime(2026, 5, 18, 3, 21)),
+        ]
+        result = _pick_latest_in_meeting_group(files)
+        self.assertEqual(
+            result["name"],
+            "RAN1#125 schedule for Hiroki Adhoc2 sessions_v04_3.docx",
+        )
+
     def test_old_meeting_high_version_not_selected(self):
         """Scenario B: old meeting's high-version file should not win."""
         files = [
@@ -229,6 +243,19 @@ class FindLatestScheduleMeetingAwareTests(unittest.TestCase):
         result = find_latest_schedule(files)
         assert result is not None
         self.assertIn("v03", result["name"])
+
+    def test_fallback_no_timestamps_handles_copy_suffix_versions(self):
+        files = [
+            _f("RAN1#125 schedule for Hiroki Adhoc2 sessions_v04.docx"),
+            _f("RAN1#125 schedule for Hiroki Adhoc2 sessions_v04_1.docx"),
+            _f("RAN1#125 schedule for Hiroki Adhoc2 sessions_v04_3.docx"),
+        ]
+        result = find_latest_schedule(files)
+        assert result is not None
+        self.assertEqual(
+            result["name"],
+            "RAN1#125 schedule for Hiroki Adhoc2 sessions_v04_3.docx",
+        )
 
     def test_preferred_meeting_advances_to_newer_regular_meeting(self):
         files = [
