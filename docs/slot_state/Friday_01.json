@@ -9,20 +9,11 @@
   "merged_sessions": [
     {
       "room_name": "RAN1_main",
-      "name": "Sweep",
-      "duration_minutes": 60,
+      "name": "Sweep 6GR",
+      "duration_minutes": 120,
       "specified_start_time": null,
       "chair": null,
-      "group_header": "",
-      "agenda_item": null
-    },
-    {
-      "room_name": "RAN1_main",
-      "name": "6GR",
-      "duration_minutes": 60,
-      "specified_start_time": null,
-      "chair": null,
-      "group_header": "",
+      "group_header": "6GR",
       "agenda_item": null
     },
     {

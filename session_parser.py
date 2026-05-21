@@ -522,7 +522,7 @@ Return JSON only with schema: {{"room_names": ["..."], "reasoning": "..."}}"""
 # ── Multi-source time-slot parsing ───────────────────────────────
 
 
-_PROMPT_VERSION = 6  # Bump to invalidate time-slot caches on prompt changes
+_PROMPT_VERSION = 7  # Bump to invalidate time-slot caches on prompt changes
 
 
 def build_room_aliases(
@@ -618,6 +618,12 @@ for each target room.
 - A line whose duration = sum of subsequent lines → GROUP HEADER (not a session).
 - Lines starting with "." are sub-items of the preceding item.
 - Lines without "(N)" before sessions are context/category labels → group_headers.
+- Do NOT invent durations. If a cell has labels without "(N)" and no sub-items
+  with explicit durations, do NOT split the time block evenly across those
+  labels to fabricate leaf sessions. Treat the labels as a single combined
+  session whose duration equals the time block (or the remaining time after
+  any explicitly-timed sessions). Join the labels with a space to form the
+  session name (e.g. "Sweep / 6GR" → name "Sweep 6GR").
 - Person names (Xiaodong, Sorour, Hiroki) as group headers → session chair.
 - Text wrapped in ~~…~~ (e.g. ~~.10.5.1.2 (30)~~) is STRIKETHROUGH — it means
   the item has been CANCELLED or REMOVED from the schedule.
@@ -646,6 +652,22 @@ Example 3 – single leaf:
   R20 A-IoT (120)
   → No sub-items → leaf session.
   Result: [{name:"R20 A-IoT", dur:120}]
+
+Example 4 – Sweep session over a topic area (no explicit durations):
+  Sweep / 6GR
+  → "Sweep" denotes a single session that scans (sweeps) through ALL agenda
+    items in the named area and comes back — it is NOT a separate session
+    from the area label. Neither label has "(N)", so do NOT split the block
+    evenly. Output ONE session covering the full time block.
+  Result (for a 120-min block): [{name:"Sweep 6GR", dur:120}]
+
+  General rule for Sweep:
+  - "Sweep <Area>" or "Sweep / <Area>" → one session named "Sweep <Area>"
+    whose duration is the full time block (or the remaining time after any
+    explicitly-timed sessions in the same room).
+  - The group_header is the area itself (e.g. "6GR", "AI 7/8") when known.
+  - Do NOT emit a separate "Sweep" session and a separate "<Area>" session.
+  - Do NOT fabricate equal 60+60 (or similar) splits.
 
 ## Multi-source merging
 
