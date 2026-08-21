@@ -3,7 +3,7 @@
   "time_block_index": 0,
   "source_hashes": {
     "Main Schedule": "bf1fa547b1584319",
-    "Hiroki's schedule": "f837c86c06dfb209"
+    "Hiroki's schedule": "b7ad64deb80df7d2"
   },
   "merged_sessions": [
     {
@@ -267,18 +267,18 @@
     },
     {
       "room_name": "RAN1_off1",
-      "name": "10.5.4.3",
+      "name": "10.5.4.1",
       "duration_minutes": 20,
       "specified_start_time": "08:30",
       "chair": "Hiroki",
       "group_header": "6G 10.5.4.x",
-      "agenda_item": "10.5.4.3",
-      "description": "HARQ related Aspects",
+      "agenda_item": "10.5.4.1",
+      "description": "Downlink control channel, scheduling for downlink and uplink transmission",
       "agenda_descriptions": [
         {
-          "agenda_item": "10.5.4.3",
-          "matched_agenda_item": "10.5.4.3",
-          "description": "HARQ related Aspects",
+          "agenda_item": "10.5.4.1",
+          "matched_agenda_item": "10.5.4.1",
+          "description": "Downlink control channel, scheduling for downlink and uplink transmission",
           "hierarchy": [
             {
               "agenda_item": "10",
@@ -296,8 +296,8 @@
               "has_description": true
             },
             {
-              "agenda_item": "10.5.4.3",
-              "description": "HARQ related Aspects",
+              "agenda_item": "10.5.4.1",
+              "description": "Downlink control channel, scheduling for downlink and uplink transmission",
               "has_description": true
             }
           ]
@@ -421,7 +421,7 @@
       "agenda_item": null
     }
   ],
-  "merged_at": "2026-08-21T09:45:57.336588+00:00",
+  "merged_at": "2026-08-21T10:01:29.092747+00:00",
   "meeting_id": "ran1#126",
   "schema_version": 1
 }

@@ -3,7 +3,7 @@
   "time_block_index": 3,
   "source_hashes": {
     "Main Schedule": "8ca920a6901afc9c",
-    "Hiroki's schedule": "2b6851d2ba171870"
+    "Hiroki's schedule": "a5361e3a07250870"
   },
   "merged_sessions": [
     {
@@ -271,11 +271,11 @@
     },
     {
       "room_name": "RAN1_brk2",
-      "name": "10.2.1 Waveform",
+      "name": "6G waveform",
       "duration_minutes": 40,
       "specified_start_time": null,
       "chair": "Hiroki",
-      "group_header": "6GR",
+      "group_header": "",
       "agenda_item": "10.2.1",
       "description": "Waveform",
       "agenda_descriptions": [
@@ -305,8 +305,47 @@
     },
     {
       "room_name": "RAN1_brk2",
+      "name": "10.5.4.3",
+      "duration_minutes": 30,
+      "specified_start_time": null,
+      "chair": "Hiroki",
+      "group_header": "6G 10.5.4.x",
+      "agenda_item": "10.5.4.3",
+      "description": "HARQ related Aspects",
+      "agenda_descriptions": [
+        {
+          "agenda_item": "10.5.4.3",
+          "matched_agenda_item": "10.5.4.3",
+          "description": "HARQ related Aspects",
+          "hierarchy": [
+            {
+              "agenda_item": "10",
+              "description": "Rel-20 Study of 6GR",
+              "has_description": true
+            },
+            {
+              "agenda_item": "10.5",
+              "description": "Multi-antenna system",
+              "has_description": true
+            },
+            {
+              "agenda_item": "10.5.4",
+              "description": "Downlink control channel, scheduling and HARQ operation",
+              "has_description": true
+            },
+            {
+              "agenda_item": "10.5.4.3",
+              "description": "HARQ related Aspects",
+              "has_description": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "room_name": "RAN1_brk2",
       "name": "10.5.4.1",
-      "duration_minutes": 60,
+      "duration_minutes": 50,
       "specified_start_time": null,
       "chair": "Hiroki",
       "group_header": "6G 10.5.4.x",
@@ -345,7 +384,7 @@
     {
       "room_name": "RAN1_brk2",
       "name": "10.5.4.3",
-      "duration_minutes": 50,
+      "duration_minutes": 30,
       "specified_start_time": null,
       "chair": "Hiroki",
       "group_header": "6G 10.5.4.x",
@@ -688,7 +727,7 @@
       "agenda_item": null
     }
   ],
-  "merged_at": "2026-08-21T09:45:57.325826+00:00",
+  "merged_at": "2026-08-21T10:01:12.616207+00:00",
   "meeting_id": "ran1#126",
   "schema_version": 1
 }
