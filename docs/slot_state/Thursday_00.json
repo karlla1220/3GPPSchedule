@@ -2,7 +2,8 @@
   "day": "Thursday",
   "time_block_index": 0,
   "source_hashes": {
-    "Main Schedule": "bf1fa547b1584319"
+    "Main Schedule": "bf1fa547b1584319",
+    "Hiroki's schedule": "f837c86c06dfb209"
   },
   "merged_sessions": [
     {
@@ -191,12 +192,12 @@
     },
     {
       "room_name": "RAN1_brk2",
-      "name": "AI 7/8.2",
+      "name": "8.2 R19 LP-WUS, Mobility, TBD",
       "duration_minutes": 80,
       "specified_start_time": null,
       "chair": "Hiroki",
-      "group_header": "",
-      "agenda_item": "8.2",
+      "group_header": "Maintenance",
+      "agenda_item": "8.2, 7",
       "description": "Maintenance on others",
       "agenda_descriptions": [
         {
@@ -215,17 +216,29 @@
               "has_description": true
             }
           ]
+        },
+        {
+          "agenda_item": "7",
+          "matched_agenda_item": "7",
+          "description": "Pre-Rel-19 NR Maintenance",
+          "hierarchy": [
+            {
+              "agenda_item": "7",
+              "description": "Pre-Rel-19 NR Maintenance",
+              "has_description": true
+            }
+          ]
         }
       ]
     },
     {
       "room_name": "RAN1_brk2",
-      "name": "10.2.1 Waveform",
+      "name": "10.2.1",
       "duration_minutes": 40,
       "specified_start_time": null,
-      "chair": null,
-      "group_header": "6GR",
-      "agenda_item": null,
+      "chair": "Hiroki",
+      "group_header": "6G waveform",
+      "agenda_item": "10.2.1",
       "description": "Waveform",
       "agenda_descriptions": [
         {
@@ -254,18 +267,18 @@
     },
     {
       "room_name": "RAN1_off1",
-      "name": "10.5.4.x",
+      "name": "10.5.4.3",
       "duration_minutes": 20,
-      "specified_start_time": null,
+      "specified_start_time": "08:30",
       "chair": "Hiroki",
-      "group_header": "6GR",
-      "agenda_item": null,
-      "description": "Downlink control channel, scheduling and HARQ operation",
+      "group_header": "6G 10.5.4.x",
+      "agenda_item": "10.5.4.3",
+      "description": "HARQ related Aspects",
       "agenda_descriptions": [
         {
-          "agenda_item": "10.5.4.x",
-          "matched_agenda_item": "10.5.4",
-          "description": "Downlink control channel, scheduling and HARQ operation",
+          "agenda_item": "10.5.4.3",
+          "matched_agenda_item": "10.5.4.3",
+          "description": "HARQ related Aspects",
           "hierarchy": [
             {
               "agenda_item": "10",
@@ -280,6 +293,11 @@
             {
               "agenda_item": "10.5.4",
               "description": "Downlink control channel, scheduling and HARQ operation",
+              "has_description": true
+            },
+            {
+              "agenda_item": "10.5.4.3",
+              "description": "HARQ related Aspects",
               "has_description": true
             }
           ]
@@ -403,7 +421,7 @@
       "agenda_item": null
     }
   ],
-  "merged_at": "2026-08-19T07:02:15.877195+00:00",
+  "merged_at": "2026-08-21T04:46:57.659911+00:00",
   "meeting_id": "ran1#126",
   "schema_version": 1
 }

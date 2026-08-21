@@ -2,7 +2,8 @@
   "day": "Tuesday",
   "time_block_index": 3,
   "source_hashes": {
-    "Main Schedule": "2f8357c721b71093"
+    "Main Schedule": "2f8357c721b71093",
+    "Hiroki's schedule": "dc6343bcb3633a73"
   },
   "merged_sessions": [
     {
@@ -172,37 +173,32 @@
     },
     {
       "room_name": "RAN1_brk2",
-      "name": "10.5.4.1",
-      "duration_minutes": 40,
+      "name": "9.3.2",
+      "duration_minutes": 20,
       "specified_start_time": null,
       "chair": "Hiroki",
-      "group_header": "6G / 10.5.4.x",
-      "agenda_item": "10.5.4.1",
-      "description": "Downlink control channel, scheduling for downlink and uplink transmission",
+      "group_header": "R20 A-IoT",
+      "agenda_item": "9.3.2",
+      "description": "D2R signals, channels, waveform and procedures",
       "agenda_descriptions": [
         {
-          "agenda_item": "10.5.4.1",
-          "matched_agenda_item": "10.5.4.1",
-          "description": "Downlink control channel, scheduling for downlink and uplink transmission",
+          "agenda_item": "9.3.2",
+          "matched_agenda_item": "9.3.2",
+          "description": "D2R signals, channels, waveform and procedures",
           "hierarchy": [
             {
-              "agenda_item": "10",
-              "description": "Rel-20 Study of 6GR",
+              "agenda_item": "9",
+              "description": "Release 20 NR",
               "has_description": true
             },
             {
-              "agenda_item": "10.5",
-              "description": "Multi-antenna system",
+              "agenda_item": "9.3",
+              "description": "Solutions for Ambient IoT (Internet of Things) in NR Phase 2",
               "has_description": true
             },
             {
-              "agenda_item": "10.5.4",
-              "description": "Downlink control channel, scheduling and HARQ operation",
-              "has_description": true
-            },
-            {
-              "agenda_item": "10.5.4.1",
-              "description": "Downlink control channel, scheduling for downlink and uplink transmission",
+              "agenda_item": "9.3.2",
+              "description": "D2R signals, channels, waveform and procedures",
               "has_description": true
             }
           ]
@@ -211,50 +207,11 @@
     },
     {
       "room_name": "RAN1_brk2",
-      "name": "10.5.4.3",
-      "duration_minutes": 40,
-      "specified_start_time": null,
-      "chair": "Hiroki",
-      "group_header": "6G / 10.5.4.x",
-      "agenda_item": "10.5.4.3",
-      "description": "HARQ related Aspects",
-      "agenda_descriptions": [
-        {
-          "agenda_item": "10.5.4.3",
-          "matched_agenda_item": "10.5.4.3",
-          "description": "HARQ related Aspects",
-          "hierarchy": [
-            {
-              "agenda_item": "10",
-              "description": "Rel-20 Study of 6GR",
-              "has_description": true
-            },
-            {
-              "agenda_item": "10.5",
-              "description": "Multi-antenna system",
-              "has_description": true
-            },
-            {
-              "agenda_item": "10.5.4",
-              "description": "Downlink control channel, scheduling and HARQ operation",
-              "has_description": true
-            },
-            {
-              "agenda_item": "10.5.4.3",
-              "description": "HARQ related Aspects",
-              "has_description": true
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "room_name": "RAN1_brk2",
-      "name": "A-IoT",
+      "name": "9.3.3",
       "duration_minutes": 70,
       "specified_start_time": null,
       "chair": "Hiroki",
-      "group_header": "R20",
+      "group_header": "R20 A-IoT",
       "agenda_item": "9.3.3",
       "description": "Other procedures",
       "agenda_descriptions": [
@@ -276,6 +233,40 @@
             {
               "agenda_item": "9.3.3",
               "description": "Other procedures",
+              "has_description": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "room_name": "RAN1_brk2",
+      "name": "9.3.1",
+      "duration_minutes": 60,
+      "specified_start_time": null,
+      "chair": "Hiroki",
+      "group_header": "R20 A-IoT",
+      "agenda_item": "9.3.1",
+      "description": "R2D signals, channels, waveform and procedures",
+      "agenda_descriptions": [
+        {
+          "agenda_item": "9.3.1",
+          "matched_agenda_item": "9.3.1",
+          "description": "R2D signals, channels, waveform and procedures",
+          "hierarchy": [
+            {
+              "agenda_item": "9",
+              "description": "Release 20 NR",
+              "has_description": true
+            },
+            {
+              "agenda_item": "9.3",
+              "description": "Solutions for Ambient IoT (Internet of Things) in NR Phase 2",
+              "has_description": true
+            },
+            {
+              "agenda_item": "9.3.1",
+              "description": "R2D signals, channels, waveform and procedures",
               "has_description": true
             }
           ]
@@ -435,32 +426,91 @@
     },
     {
       "room_name": "RAN1_off2",
-      "name": "A-IoT",
-      "duration_minutes": 70,
+      "name": "6G 10.5.4.x",
+      "duration_minutes": 60,
       "specified_start_time": "17:00",
       "chair": "Hiroki",
-      "group_header": "R20",
-      "agenda_item": "9.3.3",
-      "description": "Other procedures",
+      "group_header": "",
+      "agenda_item": "10.5.4.2, 10.5.4.4, 10.5.4.1",
+      "description": "Downlink and uplink transmission without downlink control channel",
       "agenda_descriptions": [
         {
-          "agenda_item": "9.3.3",
-          "matched_agenda_item": "9.3.3",
-          "description": "Other procedures",
+          "agenda_item": "10.5.4.2",
+          "matched_agenda_item": "10.5.4.2",
+          "description": "Downlink and uplink transmission without downlink control channel",
           "hierarchy": [
             {
-              "agenda_item": "9",
-              "description": "Release 20 NR",
+              "agenda_item": "10",
+              "description": "Rel-20 Study of 6GR",
               "has_description": true
             },
             {
-              "agenda_item": "9.3",
-              "description": "Solutions for Ambient IoT (Internet of Things) in NR Phase 2",
+              "agenda_item": "10.5",
+              "description": "Multi-antenna system",
               "has_description": true
             },
             {
-              "agenda_item": "9.3.3",
-              "description": "Other procedures",
+              "agenda_item": "10.5.4",
+              "description": "Downlink control channel, scheduling and HARQ operation",
+              "has_description": true
+            },
+            {
+              "agenda_item": "10.5.4.2",
+              "description": "Downlink and uplink transmission without downlink control channel",
+              "has_description": true
+            }
+          ]
+        },
+        {
+          "agenda_item": "10.5.4.4",
+          "matched_agenda_item": "10.5.4.4",
+          "description": "Handling of potential multiple uplink transmissions",
+          "hierarchy": [
+            {
+              "agenda_item": "10",
+              "description": "Rel-20 Study of 6GR",
+              "has_description": true
+            },
+            {
+              "agenda_item": "10.5",
+              "description": "Multi-antenna system",
+              "has_description": true
+            },
+            {
+              "agenda_item": "10.5.4",
+              "description": "Downlink control channel, scheduling and HARQ operation",
+              "has_description": true
+            },
+            {
+              "agenda_item": "10.5.4.4",
+              "description": "Handling of potential multiple uplink transmissions",
+              "has_description": true
+            }
+          ]
+        },
+        {
+          "agenda_item": "10.5.4.1",
+          "matched_agenda_item": "10.5.4.1",
+          "description": "Downlink control channel, scheduling for downlink and uplink transmission",
+          "hierarchy": [
+            {
+              "agenda_item": "10",
+              "description": "Rel-20 Study of 6GR",
+              "has_description": true
+            },
+            {
+              "agenda_item": "10.5",
+              "description": "Multi-antenna system",
+              "has_description": true
+            },
+            {
+              "agenda_item": "10.5.4",
+              "description": "Downlink control channel, scheduling and HARQ operation",
+              "has_description": true
+            },
+            {
+              "agenda_item": "10.5.4.1",
+              "description": "Downlink control channel, scheduling for downlink and uplink transmission",
               "has_description": true
             }
           ]
@@ -511,7 +561,7 @@
       ]
     }
   ],
-  "merged_at": "2026-08-19T07:01:51.719673+00:00",
+  "merged_at": "2026-08-21T04:46:30.875555+00:00",
   "meeting_id": "ran1#126",
   "schema_version": 1
 }

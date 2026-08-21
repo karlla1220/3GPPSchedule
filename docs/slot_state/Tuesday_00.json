@@ -2,7 +2,8 @@
   "day": "Tuesday",
   "time_block_index": 0,
   "source_hashes": {
-    "Main Schedule": "cda618614176c01f"
+    "Main Schedule": "cda618614176c01f",
+    "Hiroki's schedule": "b18f6e40683f5052"
   },
   "merged_sessions": [
     {
@@ -133,124 +134,18 @@
     },
     {
       "room_name": "RAN1_brk2",
-      "name": "8.2 R19 FR3/ISAC CM",
-      "duration_minutes": 15,
+      "name": "10.5.4.2",
+      "duration_minutes": 40,
       "specified_start_time": null,
       "chair": "Hiroki",
-      "group_header": "Maintenance/TEI20",
-      "agenda_item": "8.2",
-      "description": "Maintenance on others",
+      "group_header": "6G 10.5.4.x",
+      "agenda_item": "10.5.4.2",
+      "description": "Downlink and uplink transmission without downlink control channel",
       "agenda_descriptions": [
         {
-          "agenda_item": "8.2",
-          "matched_agenda_item": "8.2",
-          "description": "Maintenance on others",
-          "hierarchy": [
-            {
-              "agenda_item": "8",
-              "description": "Maintenance on Rel-19 NR and E-UTRA",
-              "has_description": true
-            },
-            {
-              "agenda_item": "8.2",
-              "description": "Maintenance on others",
-              "has_description": true
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "room_name": "RAN1_brk2",
-      "name": "8.2 R19 Mobility",
-      "duration_minutes": 15,
-      "specified_start_time": null,
-      "chair": "Hiroki",
-      "group_header": "Maintenance/TEI20",
-      "agenda_item": "8.2",
-      "description": "Maintenance on others",
-      "agenda_descriptions": [
-        {
-          "agenda_item": "8.2",
-          "matched_agenda_item": "8.2",
-          "description": "Maintenance on others",
-          "hierarchy": [
-            {
-              "agenda_item": "8",
-              "description": "Maintenance on Rel-19 NR and E-UTRA",
-              "has_description": true
-            },
-            {
-              "agenda_item": "8.2",
-              "description": "Maintenance on others",
-              "has_description": true
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "room_name": "RAN1_brk2",
-      "name": "11 TEI20",
-      "duration_minutes": 15,
-      "specified_start_time": null,
-      "chair": "Hiroki",
-      "group_header": "Maintenance/TEI20",
-      "agenda_item": "11",
-      "description": "TEI",
-      "agenda_descriptions": [
-        {
-          "agenda_item": "11",
-          "matched_agenda_item": "11",
-          "description": "TEI",
-          "hierarchy": [
-            {
-              "agenda_item": "11",
-              "description": "TEI",
-              "has_description": true
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "room_name": "RAN1_brk2",
-      "name": "5 R20 LBCA",
-      "duration_minutes": 15,
-      "specified_start_time": null,
-      "chair": "Hiroki",
-      "group_header": "Maintenance/TEI20",
-      "agenda_item": "5",
-      "description": "Incoming Liaison Statements",
-      "agenda_descriptions": [
-        {
-          "agenda_item": "5",
-          "matched_agenda_item": "5",
-          "description": "Incoming Liaison Statements",
-          "hierarchy": [
-            {
-              "agenda_item": "5",
-              "description": "Incoming Liaison Statements",
-              "has_description": true
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "room_name": "RAN1_brk2",
-      "name": "10.2.1",
-      "duration_minutes": 60,
-      "specified_start_time": null,
-      "chair": "Hiroki",
-      "group_header": "6G waveform",
-      "agenda_item": "10.2.1",
-      "description": "Waveform",
-      "agenda_descriptions": [
-        {
-          "agenda_item": "10.2.1",
-          "matched_agenda_item": "10.2.1",
-          "description": "Waveform",
+          "agenda_item": "10.5.4.2",
+          "matched_agenda_item": "10.5.4.2",
+          "description": "Downlink and uplink transmission without downlink control channel",
           "hierarchy": [
             {
               "agenda_item": "10",
@@ -258,13 +153,96 @@
               "has_description": true
             },
             {
-              "agenda_item": "10.2",
-              "description": "Waveform for 6GR air interface",
+              "agenda_item": "10.5",
+              "description": "Multi-antenna system",
               "has_description": true
             },
             {
-              "agenda_item": "10.2.1",
-              "description": "Waveform",
+              "agenda_item": "10.5.4",
+              "description": "Downlink control channel, scheduling and HARQ operation",
+              "has_description": true
+            },
+            {
+              "agenda_item": "10.5.4.2",
+              "description": "Downlink and uplink transmission without downlink control channel",
+              "has_description": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "room_name": "RAN1_brk2",
+      "name": "10.5.4.4",
+      "duration_minutes": 40,
+      "specified_start_time": null,
+      "chair": "Hiroki",
+      "group_header": "6G 10.5.4.x",
+      "agenda_item": "10.5.4.4",
+      "description": "Handling of potential multiple uplink transmissions",
+      "agenda_descriptions": [
+        {
+          "agenda_item": "10.5.4.4",
+          "matched_agenda_item": "10.5.4.4",
+          "description": "Handling of potential multiple uplink transmissions",
+          "hierarchy": [
+            {
+              "agenda_item": "10",
+              "description": "Rel-20 Study of 6GR",
+              "has_description": true
+            },
+            {
+              "agenda_item": "10.5",
+              "description": "Multi-antenna system",
+              "has_description": true
+            },
+            {
+              "agenda_item": "10.5.4",
+              "description": "Downlink control channel, scheduling and HARQ operation",
+              "has_description": true
+            },
+            {
+              "agenda_item": "10.5.4.4",
+              "description": "Handling of potential multiple uplink transmissions",
+              "has_description": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "room_name": "RAN1_brk2",
+      "name": "10.5.4.3",
+      "duration_minutes": 40,
+      "specified_start_time": null,
+      "chair": "Hiroki",
+      "group_header": "6G 10.5.4.x",
+      "agenda_item": "10.5.4.3",
+      "description": "HARQ related Aspects",
+      "agenda_descriptions": [
+        {
+          "agenda_item": "10.5.4.3",
+          "matched_agenda_item": "10.5.4.3",
+          "description": "HARQ related Aspects",
+          "hierarchy": [
+            {
+              "agenda_item": "10",
+              "description": "Rel-20 Study of 6GR",
+              "has_description": true
+            },
+            {
+              "agenda_item": "10.5",
+              "description": "Multi-antenna system",
+              "has_description": true
+            },
+            {
+              "agenda_item": "10.5.4",
+              "description": "Downlink control channel, scheduling and HARQ operation",
+              "has_description": true
+            },
+            {
+              "agenda_item": "10.5.4.3",
+              "description": "HARQ related Aspects",
               "has_description": true
             }
           ]
@@ -336,9 +314,65 @@
     },
     {
       "room_name": "RAN1_off2",
-      "name": "10.2.1 Waveform",
-      "duration_minutes": 40,
+      "name": "6G ISAC",
+      "duration_minutes": 90,
       "specified_start_time": "08:30",
+      "chair": "Hiroki",
+      "group_header": "6GR",
+      "agenda_item": "10.8.3, 10.8.1",
+      "description": "Waveform and frame structure",
+      "agenda_descriptions": [
+        {
+          "agenda_item": "10.8.3",
+          "matched_agenda_item": "10.8.3",
+          "description": "Waveform and frame structure",
+          "hierarchy": [
+            {
+              "agenda_item": "10",
+              "description": "Rel-20 Study of 6GR",
+              "has_description": true
+            },
+            {
+              "agenda_item": "10.8",
+              "description": "ISAC",
+              "has_description": true
+            },
+            {
+              "agenda_item": "10.8.3",
+              "description": "Waveform and frame structure",
+              "has_description": true
+            }
+          ]
+        },
+        {
+          "agenda_item": "10.8.1",
+          "matched_agenda_item": "10.8.1",
+          "description": "Evaluations",
+          "hierarchy": [
+            {
+              "agenda_item": "10",
+              "description": "Rel-20 Study of 6GR",
+              "has_description": true
+            },
+            {
+              "agenda_item": "10.8",
+              "description": "ISAC",
+              "has_description": true
+            },
+            {
+              "agenda_item": "10.8.1",
+              "description": "Evaluations",
+              "has_description": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "room_name": "RAN1_off2",
+      "name": "6G waveform",
+      "duration_minutes": 30,
+      "specified_start_time": "10:00",
       "chair": "Hiroki",
       "group_header": "6GR",
       "agenda_item": "10.2.1",
@@ -367,65 +401,9 @@
           ]
         }
       ]
-    },
-    {
-      "room_name": "RAN1_off2",
-      "name": "10.8.x Sensing",
-      "duration_minutes": 80,
-      "specified_start_time": "09:10",
-      "chair": "Hiroki",
-      "group_header": "6GR",
-      "agenda_item": "10.8.1, 10.8.3",
-      "description": "Evaluations",
-      "agenda_descriptions": [
-        {
-          "agenda_item": "10.8.1",
-          "matched_agenda_item": "10.8.1",
-          "description": "Evaluations",
-          "hierarchy": [
-            {
-              "agenda_item": "10",
-              "description": "Rel-20 Study of 6GR",
-              "has_description": true
-            },
-            {
-              "agenda_item": "10.8",
-              "description": "ISAC",
-              "has_description": true
-            },
-            {
-              "agenda_item": "10.8.1",
-              "description": "Evaluations",
-              "has_description": true
-            }
-          ]
-        },
-        {
-          "agenda_item": "10.8.3",
-          "matched_agenda_item": "10.8.3",
-          "description": "Waveform and frame structure",
-          "hierarchy": [
-            {
-              "agenda_item": "10",
-              "description": "Rel-20 Study of 6GR",
-              "has_description": true
-            },
-            {
-              "agenda_item": "10.8",
-              "description": "ISAC",
-              "has_description": true
-            },
-            {
-              "agenda_item": "10.8.3",
-              "description": "Waveform and frame structure",
-              "has_description": true
-            }
-          ]
-        }
-      ]
     }
   ],
-  "merged_at": "2026-08-19T07:01:35.796408+00:00",
+  "merged_at": "2026-08-21T04:46:14.284099+00:00",
   "meeting_id": "ran1#126",
   "schema_version": 1
 }

@@ -2,12 +2,13 @@
   "day": "Monday",
   "time_block_index": 0,
   "source_hashes": {
-    "Main Schedule": "619756c558efd86f"
+    "Main Schedule": "619756c558efd86f",
+    "Hiroki's schedule": "59b25267d8715bf5"
   },
   "merged_sessions": [
     {
       "room_name": "ALL_ONLINE",
-      "name": "RAN1#124b commences at 09:00 on Monday",
+      "name": "RAN1#126 commences at 09:00 on Monday",
       "duration_minutes": 60,
       "specified_start_time": "09:00",
       "chair": null,
@@ -107,7 +108,7 @@
       ]
     }
   ],
-  "merged_at": "2026-08-19T07:01:13.674039+00:00",
+  "merged_at": "2026-08-21T04:45:53.170218+00:00",
   "meeting_id": "ran1#126",
   "schema_version": 1
 }

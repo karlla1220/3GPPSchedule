@@ -2,7 +2,8 @@
   "day": "Monday",
   "time_block_index": 1,
   "source_hashes": {
-    "Main Schedule": "14529f997e67b2c2"
+    "Main Schedule": "14529f997e67b2c2",
+    "Hiroki's schedule": "66f75dfec416d907"
   },
   "merged_sessions": [
     {
@@ -153,37 +154,32 @@
     },
     {
       "room_name": "RAN1_off1",
-      "name": "10.5.2.1",
-      "duration_minutes": 30,
-      "specified_start_time": null,
-      "chair": "Xiaodong",
-      "group_header": "6GR",
-      "agenda_item": null,
-      "description": "Downlink transmission scheme(s) for downlink control channels",
+      "name": "R20 A-IoT",
+      "duration_minutes": 60,
+      "specified_start_time": "11:00",
+      "chair": "Hiroki",
+      "group_header": "",
+      "agenda_item": "9.3.1",
+      "description": "R2D signals, channels, waveform and procedures",
       "agenda_descriptions": [
         {
-          "agenda_item": "10.5.2.1",
-          "matched_agenda_item": "10.5.2.1",
-          "description": "Downlink transmission scheme(s) for downlink control channels",
+          "agenda_item": "9.3.1",
+          "matched_agenda_item": "9.3.1",
+          "description": "R2D signals, channels, waveform and procedures",
           "hierarchy": [
             {
-              "agenda_item": "10",
-              "description": "Rel-20 Study of 6GR",
+              "agenda_item": "9",
+              "description": "Release 20 NR",
               "has_description": true
             },
             {
-              "agenda_item": "10.5",
-              "description": "Multi-antenna system",
+              "agenda_item": "9.3",
+              "description": "Solutions for Ambient IoT (Internet of Things) in NR Phase 2",
               "has_description": true
             },
             {
-              "agenda_item": "10.5.2",
-              "description": "MIMO operation",
-              "has_description": true
-            },
-            {
-              "agenda_item": "10.5.2.1",
-              "description": "Downlink transmission scheme(s) for downlink control channels",
+              "agenda_item": "9.3.1",
+              "description": "R2D signals, channels, waveform and procedures",
               "has_description": true
             }
           ]
@@ -192,18 +188,18 @@
     },
     {
       "room_name": "RAN1_off1",
-      "name": "10.5.2.3",
-      "duration_minutes": 45,
-      "specified_start_time": null,
-      "chair": "Xiaodong",
-      "group_header": "6GR",
-      "agenda_item": null,
-      "description": "Uplink transmission scheme(s) for uplink channels",
+      "name": "6G ISAC",
+      "duration_minutes": 60,
+      "specified_start_time": "12:00",
+      "chair": "Hiroki",
+      "group_header": "",
+      "agenda_item": "10.8.2",
+      "description": "Aspects of integration with communication",
       "agenda_descriptions": [
         {
-          "agenda_item": "10.5.2.3",
-          "matched_agenda_item": "10.5.2.3",
-          "description": "Uplink transmission scheme(s) for uplink channels",
+          "agenda_item": "10.8.2",
+          "matched_agenda_item": "10.8.2",
+          "description": "Aspects of integration with communication",
           "hierarchy": [
             {
               "agenda_item": "10",
@@ -211,57 +207,13 @@
               "has_description": true
             },
             {
-              "agenda_item": "10.5",
-              "description": "Multi-antenna system",
+              "agenda_item": "10.8",
+              "description": "ISAC",
               "has_description": true
             },
             {
-              "agenda_item": "10.5.2",
-              "description": "MIMO operation",
-              "has_description": true
-            },
-            {
-              "agenda_item": "10.5.2.3",
-              "description": "Uplink transmission scheme(s) for uplink channels",
-              "has_description": true
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "room_name": "RAN1_off1",
-      "name": "10.5.2.2",
-      "duration_minutes": 45,
-      "specified_start_time": null,
-      "chair": "Xiaodong",
-      "group_header": "6GR",
-      "agenda_item": null,
-      "description": "Downlink transmission scheme(s) for downlink shared channels",
-      "agenda_descriptions": [
-        {
-          "agenda_item": "10.5.2.2",
-          "matched_agenda_item": "10.5.2.2",
-          "description": "Downlink transmission scheme(s) for downlink shared channels",
-          "hierarchy": [
-            {
-              "agenda_item": "10",
-              "description": "Rel-20 Study of 6GR",
-              "has_description": true
-            },
-            {
-              "agenda_item": "10.5",
-              "description": "Multi-antenna system",
-              "has_description": true
-            },
-            {
-              "agenda_item": "10.5.2",
-              "description": "MIMO operation",
-              "has_description": true
-            },
-            {
-              "agenda_item": "10.5.2.2",
-              "description": "Downlink transmission scheme(s) for downlink shared channels",
+              "agenda_item": "10.8.2",
+              "description": "Aspects of integration with communication",
               "has_description": true
             }
           ]
@@ -321,7 +273,7 @@
       ]
     }
   ],
-  "merged_at": "2026-08-19T07:01:18.114342+00:00",
+  "merged_at": "2026-08-21T04:45:57.268956+00:00",
   "meeting_id": "ran1#126",
   "schema_version": 1
 }
