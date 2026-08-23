@@ -2,9 +2,9 @@
   "day": "Monday",
   "time_block_index": 3,
   "source_hashes": {
-    "Main Schedule": "d4c125b70c8f3d86",
+    "Main Schedule": "1a65c5ac66e14c8b",
     "Hiroki's schedule": "a5361e3a07250870",
-    "Sorour's schedule": "4afdc563f2cf6287"
+    "Sorour's schedule": "3731b05d55a01bb3"
   },
   "merged_sessions": [
     {
@@ -457,40 +457,6 @@
     },
     {
       "room_name": "RAN1_off1",
-      "name": "10.4.1",
-      "duration_minutes": 30,
-      "specified_start_time": null,
-      "chair": "Xiaodong",
-      "group_header": "6GR",
-      "agenda_item": null,
-      "description": "Operation in idle mode",
-      "agenda_descriptions": [
-        {
-          "agenda_item": "10.4.1",
-          "matched_agenda_item": "10.4.1",
-          "description": "Operation in idle mode",
-          "hierarchy": [
-            {
-              "agenda_item": "10",
-              "description": "Rel-20 Study of 6GR",
-              "has_description": true
-            },
-            {
-              "agenda_item": "10.4",
-              "description": "Multiple carrier operation",
-              "has_description": true
-            },
-            {
-              "agenda_item": "10.4.1",
-              "description": "Operation in idle mode",
-              "has_description": true
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "room_name": "RAN1_off1",
       "name": "10.4.2",
       "duration_minutes": 30,
       "specified_start_time": null,
@@ -517,6 +483,40 @@
             {
               "agenda_item": "10.4.2",
               "description": "Operation in connected mode",
+              "has_description": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "room_name": "RAN1_off1",
+      "name": "10.4.1",
+      "duration_minutes": 30,
+      "specified_start_time": null,
+      "chair": "Xiaodong",
+      "group_header": "6GR",
+      "agenda_item": null,
+      "description": "Operation in idle mode",
+      "agenda_descriptions": [
+        {
+          "agenda_item": "10.4.1",
+          "matched_agenda_item": "10.4.1",
+          "description": "Operation in idle mode",
+          "hierarchy": [
+            {
+              "agenda_item": "10",
+              "description": "Rel-20 Study of 6GR",
+              "has_description": true
+            },
+            {
+              "agenda_item": "10.4",
+              "description": "Multiple carrier operation",
+              "has_description": true
+            },
+            {
+              "agenda_item": "10.4.1",
+              "description": "Operation in idle mode",
               "has_description": true
             }
           ]
@@ -645,7 +645,7 @@
       "agenda_item": null
     }
   ],
-  "merged_at": "2026-08-23T22:31:04.769904+00:00",
+  "merged_at": "2026-08-23T22:46:00.886615+00:00",
   "meeting_id": "ran1#126",
   "schema_version": 1
 }

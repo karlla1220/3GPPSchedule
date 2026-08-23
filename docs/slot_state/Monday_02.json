@@ -2,9 +2,9 @@
   "day": "Monday",
   "time_block_index": 2,
   "source_hashes": {
-    "Main Schedule": "8f12324e532c651d",
+    "Main Schedule": "21dfd9b61fc2a755",
     "Hiroki's schedule": "3028ce9db1d14ee8",
-    "Sorour's schedule": "46b9c35e92aac50f"
+    "Sorour's schedule": "4de7799338f3adc6"
   },
   "merged_sessions": [
     {
@@ -67,7 +67,7 @@
     },
     {
       "room_name": "RAN1_brk1",
-      "name": "NTN-NR",
+      "name": "AI 9.4 NTN-NR",
       "duration_minutes": 40,
       "specified_start_time": null,
       "chair": "Sorour",
@@ -96,7 +96,7 @@
     },
     {
       "room_name": "RAN1_brk1",
-      "name": "10.7.1 NTN",
+      "name": "AI 10.7.1 NTN",
       "duration_minutes": 40,
       "specified_start_time": null,
       "chair": "Sorour",
@@ -130,7 +130,7 @@
     },
     {
       "room_name": "RAN1_brk1",
-      "name": "MIMO",
+      "name": "AI 9.2 MIMO",
       "duration_minutes": 40,
       "specified_start_time": null,
       "chair": "Sorour",
@@ -159,7 +159,7 @@
     },
     {
       "room_name": "RAN1_brk2",
-      "name": "R20 A-IoT",
+      "name": "A-IoT Phase2",
       "duration_minutes": 60,
       "specified_start_time": null,
       "chair": "Hiroki",
@@ -193,7 +193,7 @@
     },
     {
       "room_name": "RAN1_brk2",
-      "name": "6G ISAC",
+      "name": "10.8 Sensing",
       "duration_minutes": 60,
       "specified_start_time": null,
       "chair": "Hiroki",
@@ -482,7 +482,7 @@
       ]
     }
   ],
-  "merged_at": "2026-08-23T22:31:04.768706+00:00",
+  "merged_at": "2026-08-23T22:45:54.572779+00:00",
   "meeting_id": "ran1#126",
   "schema_version": 1
 }

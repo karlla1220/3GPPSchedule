@@ -2,9 +2,9 @@
   "day": "Tuesday",
   "time_block_index": 0,
   "source_hashes": {
-    "Main Schedule": "cda618614176c01f",
+    "Main Schedule": "dbda1415bdeced5e",
     "Hiroki's schedule": "b18f6e40683f5052",
-    "Sorour's schedule": "96717e3c0f02f3d4"
+    "Sorour's schedule": "4de7799338f3adc6"
   },
   "merged_sessions": [
     {
@@ -218,18 +218,18 @@
     },
     {
       "room_name": "RAN1_brk2",
-      "name": "10.5.4.2",
-      "duration_minutes": 40,
+      "name": "10.5.4",
+      "duration_minutes": 120,
       "specified_start_time": null,
       "chair": "Hiroki",
-      "group_header": "6G 10.5.4.x",
-      "agenda_item": "10.5.4.2",
-      "description": "Downlink and uplink transmission without downlink control channel",
+      "group_header": "6GR",
+      "agenda_item": "10.5.4",
+      "description": "Downlink control channel, scheduling and HARQ operation",
       "agenda_descriptions": [
         {
-          "agenda_item": "10.5.4.2",
-          "matched_agenda_item": "10.5.4.2",
-          "description": "Downlink and uplink transmission without downlink control channel",
+          "agenda_item": "10.5.4",
+          "matched_agenda_item": "10.5.4",
+          "description": "Downlink control channel, scheduling and HARQ operation",
           "hierarchy": [
             {
               "agenda_item": "10",
@@ -244,89 +244,6 @@
             {
               "agenda_item": "10.5.4",
               "description": "Downlink control channel, scheduling and HARQ operation",
-              "has_description": true
-            },
-            {
-              "agenda_item": "10.5.4.2",
-              "description": "Downlink and uplink transmission without downlink control channel",
-              "has_description": true
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "room_name": "RAN1_brk2",
-      "name": "10.5.4.4",
-      "duration_minutes": 40,
-      "specified_start_time": null,
-      "chair": "Hiroki",
-      "group_header": "6G 10.5.4.x",
-      "agenda_item": "10.5.4.4",
-      "description": "Handling of potential multiple uplink transmissions",
-      "agenda_descriptions": [
-        {
-          "agenda_item": "10.5.4.4",
-          "matched_agenda_item": "10.5.4.4",
-          "description": "Handling of potential multiple uplink transmissions",
-          "hierarchy": [
-            {
-              "agenda_item": "10",
-              "description": "Rel-20 Study of 6GR",
-              "has_description": true
-            },
-            {
-              "agenda_item": "10.5",
-              "description": "Multi-antenna system",
-              "has_description": true
-            },
-            {
-              "agenda_item": "10.5.4",
-              "description": "Downlink control channel, scheduling and HARQ operation",
-              "has_description": true
-            },
-            {
-              "agenda_item": "10.5.4.4",
-              "description": "Handling of potential multiple uplink transmissions",
-              "has_description": true
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "room_name": "RAN1_brk2",
-      "name": "10.5.4.3",
-      "duration_minutes": 40,
-      "specified_start_time": null,
-      "chair": "Hiroki",
-      "group_header": "6G 10.5.4.x",
-      "agenda_item": "10.5.4.3",
-      "description": "HARQ related Aspects",
-      "agenda_descriptions": [
-        {
-          "agenda_item": "10.5.4.3",
-          "matched_agenda_item": "10.5.4.3",
-          "description": "HARQ related Aspects",
-          "hierarchy": [
-            {
-              "agenda_item": "10",
-              "description": "Rel-20 Study of 6GR",
-              "has_description": true
-            },
-            {
-              "agenda_item": "10.5",
-              "description": "Multi-antenna system",
-              "has_description": true
-            },
-            {
-              "agenda_item": "10.5.4",
-              "description": "Downlink control channel, scheduling and HARQ operation",
-              "has_description": true
-            },
-            {
-              "agenda_item": "10.5.4.3",
-              "description": "HARQ related Aspects",
               "has_description": true
             }
           ]
@@ -335,32 +252,12 @@
     },
     {
       "room_name": "RAN1_off1",
-      "name": "10.6.x",
-      "duration_minutes": 90,
+      "name": "AI/ML",
+      "duration_minutes": 60,
       "specified_start_time": null,
-      "chair": "Xiaodong",
-      "group_header": "6GR",
-      "agenda_item": "10.6.x",
-      "description": "WUS and operation",
-      "agenda_descriptions": [
-        {
-          "agenda_item": "10.6.x",
-          "matched_agenda_item": "10.6",
-          "description": "WUS and operation",
-          "hierarchy": [
-            {
-              "agenda_item": "10",
-              "description": "Rel-20 Study of 6GR",
-              "has_description": true
-            },
-            {
-              "agenda_item": "10.6",
-              "description": "WUS and operation",
-              "has_description": true
-            }
-          ]
-        }
-      ]
+      "chair": "Sorour",
+      "group_header": "R20",
+      "agenda_item": null
     },
     {
       "room_name": "RAN1_off1",
@@ -390,6 +287,45 @@
             {
               "agenda_item": "10.5.5",
               "description": "Other physical layer signals, channels and procedure",
+              "has_description": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "room_name": "RAN1_off1",
+      "name": "10.6.1.1",
+      "duration_minutes": 30,
+      "specified_start_time": null,
+      "chair": "Xiaodong",
+      "group_header": "6GR",
+      "agenda_item": null,
+      "description": "Design of WUS with OFDM based sequence",
+      "agenda_descriptions": [
+        {
+          "agenda_item": "10.6.1.1",
+          "matched_agenda_item": "10.6.1.1",
+          "description": "Design of WUS with OFDM based sequence",
+          "hierarchy": [
+            {
+              "agenda_item": "10",
+              "description": "Rel-20 Study of 6GR",
+              "has_description": true
+            },
+            {
+              "agenda_item": "10.6",
+              "description": "WUS and operation",
+              "has_description": true
+            },
+            {
+              "agenda_item": "10.6.1",
+              "description": "Downlink WUS and operation",
+              "has_description": true
+            },
+            {
+              "agenda_item": "10.6.1.1",
+              "description": "Design of WUS with OFDM based sequence",
               "has_description": true
             }
           ]
@@ -460,7 +396,7 @@
       ]
     }
   ],
-  "merged_at": "2026-08-23T22:31:04.771254+00:00",
+  "merged_at": "2026-08-23T22:46:05.987610+00:00",
   "meeting_id": "ran1#126",
   "schema_version": 1
 }

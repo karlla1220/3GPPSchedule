@@ -2,9 +2,9 @@
   "day": "Wednesday",
   "time_block_index": 3,
   "source_hashes": {
-    "Main Schedule": "690efa5b621bfd0a",
+    "Main Schedule": "0caaa1dd80dce436",
     "Hiroki's schedule": "88c4164081c93c7f",
-    "Sorour's schedule": "96296d3b344b38f3"
+    "Sorour's schedule": "d37aec5d9039d7ae"
   },
   "merged_sessions": [
     {
@@ -350,18 +350,18 @@
     },
     {
       "room_name": "RAN1_off1",
-      "name": "10.5.1.1",
-      "duration_minutes": 40,
+      "name": "10.5.1.3",
+      "duration_minutes": 25,
       "specified_start_time": null,
       "chair": "Xiaodong",
       "group_header": "6GR",
       "agenda_item": null,
-      "description": "Synchronization acquisition and beam measurement",
+      "description": "Bandwidth operation",
       "agenda_descriptions": [
         {
-          "agenda_item": "10.5.1.1",
-          "matched_agenda_item": "10.5.1.1",
-          "description": "Synchronization acquisition and beam measurement",
+          "agenda_item": "10.5.1.3",
+          "matched_agenda_item": "10.5.1.3",
+          "description": "Bandwidth operation",
           "hierarchy": [
             {
               "agenda_item": "10",
@@ -379,8 +379,8 @@
               "has_description": true
             },
             {
-              "agenda_item": "10.5.1.1",
-              "description": "Synchronization acquisition and beam measurement",
+              "agenda_item": "10.5.1.3",
+              "description": "Bandwidth operation",
               "has_description": true
             }
           ]
@@ -428,18 +428,18 @@
     },
     {
       "room_name": "RAN1_off1",
-      "name": "10.5.1.3",
-      "duration_minutes": 25,
+      "name": "10.5.1.1",
+      "duration_minutes": 40,
       "specified_start_time": null,
       "chair": "Xiaodong",
       "group_header": "6GR",
       "agenda_item": null,
-      "description": "Bandwidth operation",
+      "description": "Synchronization acquisition and beam measurement",
       "agenda_descriptions": [
         {
-          "agenda_item": "10.5.1.3",
-          "matched_agenda_item": "10.5.1.3",
-          "description": "Bandwidth operation",
+          "agenda_item": "10.5.1.1",
+          "matched_agenda_item": "10.5.1.1",
+          "description": "Synchronization acquisition and beam measurement",
           "hierarchy": [
             {
               "agenda_item": "10",
@@ -457,42 +457,8 @@
               "has_description": true
             },
             {
-              "agenda_item": "10.5.1.3",
-              "description": "Bandwidth operation",
-              "has_description": true
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "room_name": "RAN1_off1",
-      "name": "10.4.1",
-      "duration_minutes": 30,
-      "specified_start_time": null,
-      "chair": "Xiaodong",
-      "group_header": "6GR",
-      "agenda_item": null,
-      "description": "Operation in idle mode",
-      "agenda_descriptions": [
-        {
-          "agenda_item": "10.4.1",
-          "matched_agenda_item": "10.4.1",
-          "description": "Operation in idle mode",
-          "hierarchy": [
-            {
-              "agenda_item": "10",
-              "description": "Rel-20 Study of 6GR",
-              "has_description": true
-            },
-            {
-              "agenda_item": "10.4",
-              "description": "Multiple carrier operation",
-              "has_description": true
-            },
-            {
-              "agenda_item": "10.4.1",
-              "description": "Operation in idle mode",
+              "agenda_item": "10.5.1.1",
+              "description": "Synchronization acquisition and beam measurement",
               "has_description": true
             }
           ]
@@ -527,6 +493,40 @@
             {
               "agenda_item": "10.4.2",
               "description": "Operation in connected mode",
+              "has_description": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "room_name": "RAN1_off1",
+      "name": "10.4.1",
+      "duration_minutes": 30,
+      "specified_start_time": null,
+      "chair": "Xiaodong",
+      "group_header": "6GR",
+      "agenda_item": null,
+      "description": "Operation in idle mode",
+      "agenda_descriptions": [
+        {
+          "agenda_item": "10.4.1",
+          "matched_agenda_item": "10.4.1",
+          "description": "Operation in idle mode",
+          "hierarchy": [
+            {
+              "agenda_item": "10",
+              "description": "Rel-20 Study of 6GR",
+              "has_description": true
+            },
+            {
+              "agenda_item": "10.4",
+              "description": "Multiple carrier operation",
+              "has_description": true
+            },
+            {
+              "agenda_item": "10.4.1",
+              "description": "Operation in idle mode",
               "has_description": true
             }
           ]
@@ -709,7 +709,7 @@
       ]
     }
   ],
-  "merged_at": "2026-08-23T22:31:04.779406+00:00",
+  "merged_at": "2026-08-23T22:46:36.343497+00:00",
   "meeting_id": "ran1#126",
   "schema_version": 1
 }
