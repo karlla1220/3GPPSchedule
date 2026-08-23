@@ -2,8 +2,9 @@
   "day": "Thursday",
   "time_block_index": 0,
   "source_hashes": {
-    "Main Schedule": "bf1fa547b1584319",
-    "Hiroki's schedule": "b7ad64deb80df7d2"
+    "Main Schedule": "dc947553db2ef691",
+    "Hiroki's schedule": "b7ad64deb80df7d2",
+    "Sorour's schedule": "d7179799e34261d0"
   },
   "merged_sessions": [
     {
@@ -125,22 +126,27 @@
     },
     {
       "room_name": "RAN1_brk1",
-      "name": "NTN-NR",
+      "name": "AI 9.4 NTN-NR",
       "duration_minutes": 40,
       "specified_start_time": null,
       "chair": "Sorour",
-      "group_header": "R20",
-      "agenda_item": "9.5",
-      "description": "Release 20 NR",
+      "group_header": "R20 / R20 NR",
+      "agenda_item": "9.4",
+      "description": "GNSS resilient NR-NTN operation",
       "agenda_descriptions": [
         {
-          "agenda_item": "9.5",
-          "matched_agenda_item": "9",
-          "description": "Release 20 NR",
+          "agenda_item": "9.4",
+          "matched_agenda_item": "9.4",
+          "description": "GNSS resilient NR-NTN operation",
           "hierarchy": [
             {
               "agenda_item": "9",
               "description": "Release 20 NR",
+              "has_description": true
+            },
+            {
+              "agenda_item": "9.4",
+              "description": "GNSS resilient NR-NTN operation",
               "has_description": true
             }
           ]
@@ -149,7 +155,7 @@
     },
     {
       "room_name": "RAN1_brk1",
-      "name": "10.7.1 NTN",
+      "name": "AI 10.7.1 NTN",
       "duration_minutes": 40,
       "specified_start_time": null,
       "chair": "Sorour",
@@ -183,12 +189,32 @@
     },
     {
       "room_name": "RAN1_brk1",
-      "name": "MIMO",
+      "name": "AI 9.2 MIMO",
       "duration_minutes": 40,
       "specified_start_time": null,
-      "chair": null,
-      "group_header": "R20",
-      "agenda_item": null
+      "chair": "Sorour",
+      "group_header": "R20 / R20 NR",
+      "agenda_item": "9.2",
+      "description": "NR MIMO Phase 6",
+      "agenda_descriptions": [
+        {
+          "agenda_item": "9.2",
+          "matched_agenda_item": "9.2",
+          "description": "NR MIMO Phase 6",
+          "hierarchy": [
+            {
+              "agenda_item": "9",
+              "description": "Release 20 NR",
+              "has_description": true
+            },
+            {
+              "agenda_item": "9.2",
+              "description": "NR MIMO Phase 6",
+              "has_description": true
+            }
+          ]
+        }
+      ]
     },
     {
       "room_name": "RAN1_brk2",
@@ -196,7 +222,7 @@
       "duration_minutes": 80,
       "specified_start_time": null,
       "chair": "Hiroki",
-      "group_header": "Maintenance",
+      "group_header": "Maintenance / AI 7/8.2",
       "agenda_item": "8.2, 7",
       "description": "Maintenance on others",
       "agenda_descriptions": [
@@ -233,11 +259,11 @@
     },
     {
       "room_name": "RAN1_brk2",
-      "name": "10.2.1",
+      "name": "10.2.1 Waveform",
       "duration_minutes": 40,
       "specified_start_time": null,
       "chair": "Hiroki",
-      "group_header": "6G waveform",
+      "group_header": "6G waveform / 6GR",
       "agenda_item": "10.2.1",
       "description": "Waveform",
       "agenda_descriptions": [
@@ -267,11 +293,11 @@
     },
     {
       "room_name": "RAN1_off1",
-      "name": "10.5.4.1",
-      "duration_minutes": 20,
-      "specified_start_time": "08:30",
+      "name": "10.5.4.x",
+      "duration_minutes": 80,
+      "specified_start_time": null,
       "chair": "Hiroki",
-      "group_header": "6G 10.5.4.x",
+      "group_header": "6GR",
       "agenda_item": "10.5.4.1",
       "description": "Downlink control channel, scheduling for downlink and uplink transmission",
       "agenda_descriptions": [
@@ -298,45 +324,6 @@
             {
               "agenda_item": "10.5.4.1",
               "description": "Downlink control channel, scheduling for downlink and uplink transmission",
-              "has_description": true
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "room_name": "RAN1_off1",
-      "name": "10.5.3.1",
-      "duration_minutes": 60,
-      "specified_start_time": null,
-      "chair": "Xiaodong",
-      "group_header": "6GR",
-      "agenda_item": null,
-      "description": "Aspects of downlink-based CSI acquisition",
-      "agenda_descriptions": [
-        {
-          "agenda_item": "10.5.3.1",
-          "matched_agenda_item": "10.5.3.1",
-          "description": "Aspects of downlink-based CSI acquisition",
-          "hierarchy": [
-            {
-              "agenda_item": "10",
-              "description": "Rel-20 Study of 6GR",
-              "has_description": true
-            },
-            {
-              "agenda_item": "10.5",
-              "description": "Multi-antenna system",
-              "has_description": true
-            },
-            {
-              "agenda_item": "10.5.3",
-              "description": "CSI acquisition and report",
-              "has_description": true
-            },
-            {
-              "agenda_item": "10.5.3.1",
-              "description": "Aspects of downlink-based CSI acquisition",
               "has_description": true
             }
           ]
@@ -421,7 +408,7 @@
       "agenda_item": null
     }
   ],
-  "merged_at": "2026-08-21T14:45:53.725454+00:00",
+  "merged_at": "2026-08-23T15:02:05.066897+00:00",
   "meeting_id": "ran1#126",
   "schema_version": 1
 }

@@ -3,7 +3,8 @@
   "time_block_index": 0,
   "source_hashes": {
     "Main Schedule": "7db841c88f6e84bc",
-    "Hiroki's schedule": "11dfe6c285f7ea46"
+    "Hiroki's schedule": "11dfe6c285f7ea46",
+    "Sorour's schedule": "0b1aa373a5281cbf"
   },
   "merged_sessions": [
     {
@@ -76,46 +77,27 @@
     },
     {
       "room_name": "RAN1_brk1",
-      "name": "AI 9.5 IoT-NTN",
-      "duration_minutes": 30,
+      "name": "AI 9.1 AIML",
+      "duration_minutes": 60,
       "specified_start_time": null,
-      "chair": null,
-      "group_header": "R20",
-      "agenda_item": "9.5",
-      "description": "Release 20 NR",
+      "chair": "Sorour",
+      "group_header": "R20 NR",
+      "agenda_item": "9.1",
+      "description": "Artificial Intelligence (AI)/Machine Learning (ML) for NR air interface enhancements",
       "agenda_descriptions": [
         {
-          "agenda_item": "9.5",
-          "matched_agenda_item": "9",
-          "description": "Release 20 NR",
+          "agenda_item": "9.1",
+          "matched_agenda_item": "9.1",
+          "description": "Artificial Intelligence (AI)/Machine Learning (ML) for NR air interface enhancements",
           "hierarchy": [
             {
               "agenda_item": "9",
               "description": "Release 20 NR",
               "has_description": true
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "room_name": "RAN1_brk1",
-      "name": "AI 9.5 NR-NTN",
-      "duration_minutes": 30,
-      "specified_start_time": null,
-      "chair": null,
-      "group_header": "R20",
-      "agenda_item": "9.5",
-      "description": "Release 20 NR",
-      "agenda_descriptions": [
-        {
-          "agenda_item": "9.5",
-          "matched_agenda_item": "9",
-          "description": "Release 20 NR",
-          "hierarchy": [
+            },
             {
-              "agenda_item": "9",
-              "description": "Release 20 NR",
+              "agenda_item": "9.1",
+              "description": "Artificial Intelligence (AI)/Machine Learning (ML) for NR air interface enhancements",
               "has_description": true
             }
           ]
@@ -127,7 +109,7 @@
       "name": "Sweep 6GR",
       "duration_minutes": 60,
       "specified_start_time": null,
-      "chair": null,
+      "chair": "Sorour",
       "group_header": "6GR",
       "agenda_item": null
     },
@@ -316,7 +298,7 @@
       ]
     }
   ],
-  "merged_at": "2026-08-21T14:45:53.729805+00:00",
+  "merged_at": "2026-08-23T15:02:23.195862+00:00",
   "meeting_id": "ran1#126",
   "schema_version": 1
 }

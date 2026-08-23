@@ -2,8 +2,9 @@
   "day": "Wednesday",
   "time_block_index": 1,
   "source_hashes": {
-    "Main Schedule": "a6d5ffa81a0b9997",
-    "Hiroki's schedule": "40e267e11ef70c86"
+    "Main Schedule": "377b884a74152519",
+    "Hiroki's schedule": "40e267e11ef70c86",
+    "Sorour's schedule": "773f99801b7814cd"
   },
   "merged_sessions": [
     {
@@ -110,21 +111,41 @@
     },
     {
       "room_name": "RAN1_brk1",
-      "name": "AI/ML",
+      "name": "AI 9.1 AIML",
       "duration_minutes": 80,
       "specified_start_time": null,
       "chair": "Sorour",
-      "group_header": "R20",
-      "agenda_item": null
+      "group_header": "R20 NR",
+      "agenda_item": "9.1",
+      "description": "Artificial Intelligence (AI)/Machine Learning (ML) for NR air interface enhancements",
+      "agenda_descriptions": [
+        {
+          "agenda_item": "9.1",
+          "matched_agenda_item": "9.1",
+          "description": "Artificial Intelligence (AI)/Machine Learning (ML) for NR air interface enhancements",
+          "hierarchy": [
+            {
+              "agenda_item": "9",
+              "description": "Release 20 NR",
+              "has_description": true
+            },
+            {
+              "agenda_item": "9.1",
+              "description": "Artificial Intelligence (AI)/Machine Learning (ML) for NR air interface enhancements",
+              "has_description": true
+            }
+          ]
+        }
+      ]
     },
     {
       "room_name": "RAN1_brk1",
       "name": "AI 6/8.1",
       "duration_minutes": 40,
       "specified_start_time": null,
-      "chair": null,
+      "chair": "Sorour",
       "group_header": "",
-      "agenda_item": null,
+      "agenda_item": "6, 8.1",
       "description": "Pre-Rel-19 E-UTRA Maintenance",
       "agenda_descriptions": [
         {
@@ -160,12 +181,12 @@
     },
     {
       "room_name": "RAN1_brk2",
-      "name": "10.8.2",
-      "duration_minutes": 40,
+      "name": "10.8 Sensing",
+      "duration_minutes": 80,
       "specified_start_time": null,
       "chair": "Hiroki",
-      "group_header": "6G ISAC",
-      "agenda_item": "10.8.2",
+      "group_header": "6GR",
+      "agenda_item": "10.8.2, 10.8.3",
       "description": "Aspects of integration with communication",
       "agenda_descriptions": [
         {
@@ -189,19 +210,7 @@
               "has_description": true
             }
           ]
-        }
-      ]
-    },
-    {
-      "room_name": "RAN1_brk2",
-      "name": "10.8.3",
-      "duration_minutes": 40,
-      "specified_start_time": null,
-      "chair": "Hiroki",
-      "group_header": "6G ISAC",
-      "agenda_item": "10.8.3",
-      "description": "Waveform and frame structure",
-      "agenda_descriptions": [
+        },
         {
           "agenda_item": "10.8.3",
           "matched_agenda_item": "10.8.3",
@@ -228,11 +237,11 @@
     },
     {
       "room_name": "RAN1_brk2",
-      "name": "10.2.1",
+      "name": "10.2.1 Waveform",
       "duration_minutes": 40,
       "specified_start_time": null,
       "chair": "Hiroki",
-      "group_header": "6G waveform",
+      "group_header": "6GR",
       "agenda_item": "10.2.1",
       "description": "Waveform",
       "agenda_descriptions": [
@@ -340,11 +349,11 @@
     },
     {
       "room_name": "RAN1_off1",
-      "name": "10.5.4.1",
+      "name": "10.5.4",
       "duration_minutes": 30,
-      "specified_start_time": "12:30",
+      "specified_start_time": null,
       "chair": "Hiroki",
-      "group_header": "6G 10.5.4.x",
+      "group_header": "6GR",
       "agenda_item": "10.5.4.1",
       "description": "Downlink control channel, scheduling for downlink and uplink transmission",
       "agenda_descriptions": [
@@ -416,7 +425,7 @@
       "agenda_item": null
     }
   ],
-  "merged_at": "2026-08-21T14:45:53.721917+00:00",
+  "merged_at": "2026-08-23T15:01:49.772564+00:00",
   "meeting_id": "ran1#126",
   "schema_version": 1
 }

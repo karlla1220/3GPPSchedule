@@ -1,17 +1,4 @@
 {
-  "files": {
-    "https://list.etsi.org/scripts/wa.exe?A3=ind2608C&L=3GPP_TSG_RAN_WG1&E=base64&P=10016805&B=------%3D_001_NextPart418355270828_%3D----&T=application%2Foctet-stream;%20name=%22Draft+RAN1%23126+online+and+offline+schedules+-+v04.docx%22&N=Draft+RAN1%23126+online+and+offline+schedules+-+v04.docx&attachment=q&XSS=3": {
-      "sha256": "ff10d3dae0d17be7d7e0012142a08f175b3570ce5795c9af094cc97277ead9a3",
-      "filename": "Draft RAN1#126 online and offline schedules - v04.docx"
-    }
-  },
-  "config": [
-    {
-      "url": "https://list.etsi.org/scripts/wa.exe?A3=ind2608C&L=3GPP_TSG_RAN_WG1&E=base64&P=10016805&B=------%3D_001_NextPart418355270828_%3D----&T=application%2Foctet-stream;%20name=%22Draft+RAN1%23126+online+and+offline+schedules+-+v04.docx%22&N=Draft+RAN1%23126+online+and+offline+schedules+-+v04.docx&attachment=q&XSS=3",
-      "type": "schedule",
-      "name": null,
-      "person_name": null,
-      "is_main": true
-    }
-  ]
+  "files": {},
+  "config": []
 }

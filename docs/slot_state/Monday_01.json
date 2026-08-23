@@ -3,23 +3,24 @@
   "time_block_index": 1,
   "source_hashes": {
     "Main Schedule": "14529f997e67b2c2",
-    "Hiroki's schedule": "66f75dfec416d907"
+    "Hiroki's schedule": "66f75dfec416d907",
+    "Sorour's schedule": "e0f3e3e59fe57f76"
   },
   "merged_sessions": [
     {
       "room_name": "ALL_ONLINE",
-      "name": "10.5.0",
-      "duration_minutes": 30,
+      "name": "10.5.1.3",
+      "duration_minutes": 40,
       "specified_start_time": null,
       "chair": "Sorour",
       "group_header": "6GR",
       "agenda_item": null,
-      "description": "Multi-antenna system",
+      "description": "Bandwidth operation",
       "agenda_descriptions": [
         {
-          "agenda_item": "10.5.0",
-          "matched_agenda_item": "10.5",
-          "description": "Multi-antenna system",
+          "agenda_item": "10.5.1.3",
+          "matched_agenda_item": "10.5.1.3",
+          "description": "Bandwidth operation",
           "hierarchy": [
             {
               "agenda_item": "10",
@@ -29,6 +30,16 @@
             {
               "agenda_item": "10.5",
               "description": "Multi-antenna system",
+              "has_description": true
+            },
+            {
+              "agenda_item": "10.5.1",
+              "description": "Initial access and mobility",
+              "has_description": true
+            },
+            {
+              "agenda_item": "10.5.1.3",
+              "description": "Bandwidth operation",
               "has_description": true
             }
           ]
@@ -77,7 +88,7 @@
     {
       "room_name": "ALL_ONLINE",
       "name": "10.5.1.2",
-      "duration_minutes": 25,
+      "duration_minutes": 40,
       "specified_start_time": null,
       "chair": "Sorour",
       "group_header": "6GR",
@@ -107,45 +118,6 @@
             {
               "agenda_item": "10.5.1.2",
               "description": "PRACH and RACH procedure",
-              "has_description": true
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "room_name": "ALL_ONLINE",
-      "name": "10.5.1.3",
-      "duration_minutes": 25,
-      "specified_start_time": null,
-      "chair": "Sorour",
-      "group_header": "6GR",
-      "agenda_item": null,
-      "description": "Bandwidth operation",
-      "agenda_descriptions": [
-        {
-          "agenda_item": "10.5.1.3",
-          "matched_agenda_item": "10.5.1.3",
-          "description": "Bandwidth operation",
-          "hierarchy": [
-            {
-              "agenda_item": "10",
-              "description": "Rel-20 Study of 6GR",
-              "has_description": true
-            },
-            {
-              "agenda_item": "10.5",
-              "description": "Multi-antenna system",
-              "has_description": true
-            },
-            {
-              "agenda_item": "10.5.1",
-              "description": "Initial access and mobility",
-              "has_description": true
-            },
-            {
-              "agenda_item": "10.5.1.3",
-              "description": "Bandwidth operation",
               "has_description": true
             }
           ]
@@ -222,7 +194,7 @@
     },
     {
       "room_name": "RAN1_off2",
-      "name": "NTN-NR",
+      "name": "MIMO",
       "duration_minutes": 40,
       "specified_start_time": null,
       "chair": "Sorour",
@@ -231,27 +203,18 @@
     },
     {
       "room_name": "RAN1_off2",
-      "name": "NTN-IoT",
-      "duration_minutes": 20,
-      "specified_start_time": null,
-      "chair": "Sorour",
-      "group_header": "R20",
-      "agenda_item": null
-    },
-    {
-      "room_name": "RAN1_off2",
-      "name": "10.7.1 NTN",
-      "duration_minutes": 60,
+      "name": "10.3.2",
+      "duration_minutes": 40,
       "specified_start_time": null,
       "chair": "Sorour",
       "group_header": "6GR",
       "agenda_item": null,
-      "description": "NTN specific requirements and design",
+      "description": "Modulation, Joint channel coding and modulation",
       "agenda_descriptions": [
         {
-          "agenda_item": "10.7.1",
-          "matched_agenda_item": "10.7.1",
-          "description": "NTN specific requirements and design",
+          "agenda_item": "10.3.2",
+          "matched_agenda_item": "10.3.2",
+          "description": "Modulation, Joint channel coding and modulation",
           "hierarchy": [
             {
               "agenda_item": "10",
@@ -259,13 +222,47 @@
               "has_description": true
             },
             {
-              "agenda_item": "10.7",
-              "description": "NTN",
+              "agenda_item": "10.3",
+              "description": "Channel coding and modulation for 6GR interface",
               "has_description": true
             },
             {
-              "agenda_item": "10.7.1",
-              "description": "NTN specific requirements and design",
+              "agenda_item": "10.3.2",
+              "description": "Modulation, Joint channel coding and modulation",
+              "has_description": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "room_name": "RAN1_off2",
+      "name": "10.3.1",
+      "duration_minutes": 40,
+      "specified_start_time": null,
+      "chair": "Sorour",
+      "group_header": "6GR",
+      "agenda_item": null,
+      "description": "Channel coding",
+      "agenda_descriptions": [
+        {
+          "agenda_item": "10.3.1",
+          "matched_agenda_item": "10.3.1",
+          "description": "Channel coding",
+          "hierarchy": [
+            {
+              "agenda_item": "10",
+              "description": "Rel-20 Study of 6GR",
+              "has_description": true
+            },
+            {
+              "agenda_item": "10.3",
+              "description": "Channel coding and modulation for 6GR interface",
+              "has_description": true
+            },
+            {
+              "agenda_item": "10.3.1",
+              "description": "Channel coding",
               "has_description": true
             }
           ]
@@ -273,7 +270,7 @@
       ]
     }
   ],
-  "merged_at": "2026-08-21T14:45:53.712480+00:00",
+  "merged_at": "2026-08-23T15:01:06.655412+00:00",
   "meeting_id": "ran1#126",
   "schema_version": 1
 }
