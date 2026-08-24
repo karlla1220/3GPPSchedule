@@ -3,17 +3,22 @@
     {
       "folder": "Chair_notes",
       "name": "RAN1#126 online and offline schedules - v00.docx",
+      "uploaded_at": "2026-08-23T14:29:00"
+    },
+    {
+      "folder": "Chair_notes",
+      "name": "RAN1#126 online and offline schedules - v00.docx",
       "uploaded_at": "2026-08-22T14:08:00"
     },
     {
       "folder": "Hiroki_notes",
       "name": "RAN1#126 schedule for Hiroki Adhoc2 sessions_v07_1.docx",
-      "uploaded_at": "2026-08-21T09:51:00"
+      "uploaded_at": "2026-08-23T14:29:00"
     },
     {
       "folder": "Sorour_notes",
       "name": "RAN1#126 Sorour sessions online and offline schedules - v00.docx",
-      "uploaded_at": "2026-08-21T16:57:00"
+      "uploaded_at": "2026-08-23T14:29:00"
     }
   ],
   "meeting_id": "ran1#126",
@@ -22,10 +27,10 @@
   "timezone_status": "resolved",
   "timezone_ref": {
     "type": "chair_notes",
-    "name": "Chair notes RAN1#126_v00.docm",
-    "uploaded_at": "2026-08-22T14:08:00",
-    "url": "https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_126/Inbox/Chair_notes/Chair%20notes%20RAN1%23126_v00.docm",
-    "source_url": "https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_126/Inbox/Chair_notes"
+    "name": "Chair notes RAN1#126_v01.docx",
+    "uploaded_at": "2026-08-24T14:43:00",
+    "url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Chair_notes/Chair%20notes%20RAN1%23126_v01.docx",
+    "source_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Chair_notes"
   },
   "agenda": {
     "name": "agenda.csv",
@@ -35,7 +40,7 @@
     "document_file": "agenda.csv",
     "local_path": "downloads/Agenda/agenda.csv",
     "description_json": "docs/agenda_item_description.json",
-    "description_generated_at": "2026-08-24T14:15:53.251646+00:00",
+    "description_generated_at": "2026-08-24T15:01:08.121150+00:00",
     "description_source_type": "agenda_csv",
     "description_source_file": "agenda.csv",
     "description_source_agenda_file": "agenda.csv",
