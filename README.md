@@ -10,7 +10,7 @@
 - `python-docx`로 테이블 구조 추출 및 병합 셀 처리 (TextBox 색상 기반 방 매칭)
 - Gemini API를 사용한 비정형 텍스트 → 구조화 세션 데이터 변환 (결과 캐싱)
 - **다중 소스 크로스레퍼런스**: 같은 시간대의 여러 스케줄 테이블을 하나의 LLM 호출로 통합하여 가장 상세한 세션 정보(AI 번호 등) 도출
-- **회의 시간대 자동 감지**: Chair notes DOCX에서 개최지 정보를 추출하여 IANA 타임존 자동 설정
+- **회의 시간대 자동 감지**: Agenda DOCX 또는 Chair notes DOCX/DOCM의 OOXML에서 개최지 정보를 추출하여 IANA 타임존 자동 설정
 - 요일별 탭 전환, 오늘 날짜 자동 선택되는 단일 HTML 간트차트 생성 (그룹별 색상, 자동 새로고침)
 - GitHub Actions를 통한 자동 빌드 및 GitHub Pages 배포 (평일 5분 간격 변경 감지)
 
@@ -237,12 +237,16 @@ CI에서 외부 파일 요청은 다음과 같이 동작합니다.
 - `files`: 각 소스 폴더에서 실제로 선택된 파일명과 업로드 시각
 - `meeting_id`: 이번 빌드의 기준 미팅 ID
 - `timezone`: 해당 미팅에서 감지한 IANA 타임존
+- `timezone_status`: `resolved`, `pending_timezone_ref`, `detection_failed` 중 하나
+- `timezone_ref`: 실제 시간대 판정에 사용한 Agenda/Chair notes 파일의 식별자. 아직 참조 문서가 없으면 `null`
 
 이 상태는 다음 용도로 사용됩니다.
 
 - `check_update.py`가 FTP 변경 여부를 안정적으로 비교
 - 같은 미팅에서는 타임존 재탐지를 생략하여 LLM 호출 절감
 - FTP에 오래된 draft/오표기 파일이 뒤늦게 올라와도 기존 미팅 상태를 쉽게 되돌리지 않음
+
+시간대 참조는 사용 가능한 직접 Agenda DOCX를 우선하고, 없으면 현재 미팅의 Chair notes DOCX/DOCM을 사용합니다. 새 미팅의 스케줄이 시간대 참조보다 먼저 올라오면 우선 `UTC`, `timezone_status: "pending_timezone_ref"`, `timezone_ref: null`로 저장합니다. 이후 Agenda DOCX 또는 Chair notes가 나타나면 `check_update.py`가 `timezone_ref`의 변화를 별도로 감지해 빌드를 다시 실행하고, 성공한 빌드가 실제 IANA timezone과 참조 식별자를 저장합니다. 같은 파일명이 갱신된 경우에도 업로드 시각 변화로 재다운로드합니다. 로컬 참조는 파일 내용 SHA-256으로 추적합니다. Agenda ZIP/CSV는 agenda description 입력으로만 사용하며 timezone 참조로 승격하지 않습니다.
 
 ## GitHub Actions 자동 배포
 

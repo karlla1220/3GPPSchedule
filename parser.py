@@ -4,10 +4,12 @@ from __future__ import annotations
 
 import re
 from pathlib import Path
+from xml.etree import ElementTree
+from zipfile import BadZipFile, ZipFile
 
 from docx import Document
 
-from downloader import _iter_local_files, _local_doc_preference
+from downloader import _extract_meeting_id, _iter_local_files, _local_doc_preference
 from models import TIME_BLOCKS, CellData, DAY_ORDER, RoomInfo, time_to_minutes
 
 _TIME_BLOCK_MINUTES = [
@@ -26,12 +28,21 @@ def extract_meeting_location(docx_path: Path) -> str | None:
 
     Returns the location string if found, None otherwise.
     """
-    doc = Document(str(docx_path))
+    try:
+        with ZipFile(docx_path) as package:
+            document_xml = package.read("word/document.xml")
+        root = ElementTree.fromstring(document_xml)
+    except (BadZipFile, KeyError, OSError, ElementTree.ParseError):
+        return None
+    paragraphs = root.findall(f".//{{{_NS}}}body/{{{_NS}}}p")
+
     # Check first 30 paragraphs for a location-like line.
     # (Chair notes need ~10; agenda DOCX often pushes it lower with
     # title/logo paragraphs above the header.)
-    for para in doc.paragraphs[:30]:
-        text = para.text.strip()
+    for para in paragraphs[:30]:
+        text = "".join(
+            node.text or "" for node in para.iter(f"{{{_NS}}}t")
+        ).strip()
         if not text:
             continue
         # Location lines typically look like:
@@ -46,20 +57,30 @@ def extract_meeting_location(docx_path: Path) -> str | None:
     return None
 
 
-def find_chair_notes_docx(dest_dir: Path = Path("downloads/Chair_notes")) -> Path | None:
+def find_chair_notes_docx(
+    dest_dir: Path = Path("downloads/Chair_notes"),
+    meeting_id: str | None = None,
+) -> Path | None:
     """Find the latest Chair notes document in the local directory.
 
     Looks for files with 'chair note' (case-insensitive) in the name,
-    supporting .docx, .pptx, and .pdf extensions.
+    supporting .docx and .docm extensions. When a meeting ID
+    is supplied, a document from another identified meeting is never used.
     Returns the highest-version file (deterministic filename selection;
     mtimes are not stable across CI checkouts).
     """
-    supported_extensions = (".docx", ".pptx", ".pdf")
+    supported_extensions = (".docx", ".docm")
     chair_files = [
         f
         for f in _iter_local_files(dest_dir, supported_extensions)
         if "chair note" in f.name.lower() or "chair_note" in f.name.lower()
     ]
+    if meeting_id is not None:
+        chair_files = [
+            path
+            for path in chair_files
+            if _extract_meeting_id(path.name) == meeting_id.lower()
+        ]
     if not chair_files:
         return None
     return max(chair_files, key=_local_doc_preference)

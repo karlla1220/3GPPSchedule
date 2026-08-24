@@ -3,10 +3,132 @@ import json
 import os
 import tempfile
 import unittest
+from datetime import datetime
 from pathlib import Path
 from unittest.mock import patch
 
+import main as main_module
 from main import _agenda_state_for_save, _extract_meeting_name, main
+
+
+def test_pending_timezone_cache_is_reused_while_reference_is_still_missing():
+    state = {
+        "meeting_id": "ran1#126",
+        "timezone": "UTC",
+        "timezone_status": "pending_timezone_ref",
+        "timezone_ref": None,
+    }
+
+    assert main_module._timezone_cache_is_current(state, "ran1#126", None)
+
+
+def test_late_timezone_reference_invalidates_pending_cache():
+    state = {
+        "meeting_id": "ran1#126",
+        "timezone": "UTC",
+        "timezone_status": "pending_timezone_ref",
+        "timezone_ref": None,
+    }
+    new_ref = {
+        "type": "chair_notes",
+        "name": "Chair notes RAN1#126_v00.docm",
+        "uploaded_at": "2026-08-23T14:29:00",
+    }
+
+    assert not main_module._timezone_cache_is_current(
+        state,
+        "ran1#126",
+        new_ref,
+    )
+
+
+def test_resolved_timezone_cache_requires_same_reference():
+    old_ref = {
+        "type": "chair_notes",
+        "name": "Chair notes RAN1#126_v00.docm",
+        "uploaded_at": "2026-08-23T14:29:00",
+    }
+    state = {
+        "meeting_id": "ran1#126",
+        "timezone": "Europe/Amsterdam",
+        "timezone_status": "resolved",
+        "timezone_ref": old_ref,
+    }
+
+    assert main_module._timezone_cache_is_current(state, "ran1#126", old_ref)
+    assert not main_module._timezone_cache_is_current(
+        state,
+        "ran1#126",
+        {**old_ref, "name": "Chair notes RAN1#126_v01.docm"},
+    )
+
+
+def test_legacy_timezone_cache_without_reference_is_rechecked():
+    state = {
+        "meeting_id": "ran1#126",
+        "timezone": "Asia/Shanghai",
+    }
+
+    assert not main_module._timezone_cache_is_current(state, "ran1#126", None)
+
+
+def test_cached_remote_agenda_reference_survives_listing_failure(tmp_path):
+    agenda_path = tmp_path / "RAN1#126 agenda.docx"
+    agenda_path.write_bytes(b"cached-remote-agenda")
+    cached_ref = {
+        "type": "agenda",
+        "name": agenda_path.name,
+        "uploaded_at": "2026-08-20T08:00:00",
+        "url": "https://example.org/agenda.docx",
+        "source_url": "https://example.org/Agenda/",
+    }
+
+    result = main_module._agenda_timezone_reference(
+        agenda_info=None,
+        agenda_path=agenda_path,
+        previous_ref=cached_ref,
+    )
+
+    assert result == cached_ref
+
+
+def test_cached_remote_agenda_reference_survives_without_local_file():
+    cached_ref = {
+        "type": "agenda",
+        "name": "RAN1#126 agenda.docx",
+        "uploaded_at": "2026-08-20T08:00:00",
+        "url": "https://example.org/agenda.docx",
+    }
+
+    result = main_module._agenda_timezone_reference(
+        agenda_info=None,
+        agenda_path=None,
+        previous_ref=cached_ref,
+    )
+
+    assert result == cached_ref
+
+
+def test_cached_agenda_is_preserved_only_for_same_meeting():
+    previous_state = {
+        "meeting_id": "ran1#126",
+        "timezone_status": "resolved",
+        "timezone_ref": {
+            "type": "agenda",
+            "name": "RAN1#126 agenda.docx",
+        },
+    }
+
+    assert main_module._can_preserve_cached_agenda(
+        previous_state,
+        current_meeting_id="ran1#126",
+        agenda_info_name="",
+    )
+    assert not main_module._can_preserve_cached_agenda(
+        previous_state,
+        current_meeting_id="ran1#127",
+        agenda_info_name="",
+    )
 
 
 class ExtractMeetingNameTests(unittest.TestCase):
@@ -67,6 +189,14 @@ class MainChairNotesLookupTests(unittest.TestCase):
     @patch("main.find_local_latest_agenda", return_value=None)
     @patch("main.download_latest_agenda", return_value=None)
     @patch("main.download_latest_chair_notes", return_value=None)
+    @patch(
+        "main.get_latest_chair_notes_info",
+        return_value={
+            "name": "chair notes.docm",
+            "url": "https://example.com/chair-notes.docm",
+            "uploaded_at": None,
+        },
+    )
     @patch("main.load_config", return_value={
         "meeting_sync": None,
         "meeting_specific": [],
@@ -77,6 +207,7 @@ class MainChairNotesLookupTests(unittest.TestCase):
     def test_passes_configured_sources_to_chair_notes_download(
         self,
         mock_load_config,
+        mock_get_latest_chair_notes_info,
         mock_download_latest_chair_notes,
         mock_download_latest_agenda,
         mock_find_local_latest_agenda,
@@ -116,6 +247,9 @@ class MainChairNotesLookupTests(unittest.TestCase):
             docx_path.parent,
             urls=["https://example.com/legacy/Inbox/", "https://example.com/next/Inbox/"],
             extra_folders=[{"url": "https://example.com/custom/Chair_notes/", "name": "Chair_notes"}],
+            preferred_meeting_id=None,
+            latest_info=mock_get_latest_chair_notes_info.return_value,
+            force=True,
         )
 
 
@@ -173,6 +307,9 @@ class MainExtraFilesWiringTests(unittest.TestCase):
         # Defensive: keep local/FTP local-schedule fallbacks inert.
         stack.enter_context(patch("main.find_local_latest_schedule", return_value=None))
         stack.enter_context(patch("main.download_latest_schedule", return_value=None))
+        stack.enter_context(
+            patch("main.get_latest_chair_notes_info", return_value=None)
+        )
         return stack
 
     def test_download_path_schedule_entry_merged_into_local_sources(self):
@@ -306,6 +443,96 @@ class MainExtraFilesWiringTests(unittest.TestCase):
                 mock_loc.assert_called_once_with(chair_docx)
                 mock_ftp.assert_not_called()
 
+    def test_late_remote_chair_notes_resolves_pending_timezone_and_saves_reference(self):
+        from models import ScheduleSource
+
+        chair_info = {
+            "name": "Chair notes RAN1#126_v00.docm",
+            "uploaded_at": datetime(2026, 8, 23, 14, 29),
+            "url": "https://example.org/Chair%20notes%20RAN1%23126_v00.docm",
+            "source_url": "https://example.org/Chair_notes",
+        }
+        expected_ref = {
+            "type": "chair_notes",
+            "name": "Chair notes RAN1#126_v00.docm",
+            "uploaded_at": "2026-08-23T14:29:00",
+            "url": chair_info["url"],
+            "source_url": chair_info["source_url"],
+        }
+
+        with tempfile.TemporaryDirectory() as tmpdir:
+            schedule_path = Path(tmpdir) / "RAN1#126 schedule - v01.docx"
+            schedule_path.write_text("placeholder")
+            chair_path = Path(tmpdir) / chair_info["name"]
+            chair_path.write_text("placeholder")
+            main_source = ScheduleSource(
+                folder_name="Chair_notes",
+                person_name=None,
+                is_main=True,
+                file_info={
+                    "name": schedule_path.name,
+                    "url": "https://example.org/schedule.docx",
+                    "uploaded_at": None,
+                },
+                local_path=None,
+            )
+
+            with self._enter_common([], no_download=False) as stack:
+                stack.enter_context(
+                    patch(
+                        "main.load_schedule_state",
+                        return_value={
+                            "meeting_id": "ran1#126",
+                            "timezone": "UTC",
+                            "timezone_status": "pending_timezone_ref",
+                            "timezone_ref": None,
+                        },
+                    )
+                )
+                stack.enter_context(
+                    patch("main.find_local_schedule_sources", return_value=([], None))
+                )
+                stack.enter_context(
+                    patch("main.discover_schedule_sources", return_value=[main_source])
+                )
+                stack.enter_context(
+                    patch(
+                        "main.download_all_schedules",
+                        return_value=(schedule_path, {}),
+                    )
+                )
+                stack.enter_context(patch("main.find_chair_notes_docx", return_value=None))
+                stack.enter_context(
+                    patch(
+                        "main.get_latest_chair_notes_info",
+                        return_value=chair_info,
+                        create=True,
+                    )
+                )
+                stack.enter_context(
+                    patch("main.download_latest_chair_notes", return_value=chair_path)
+                )
+                stack.enter_context(
+                    patch(
+                        "main.extract_meeting_location",
+                        return_value="Maastricht, NL, Aug 24th-28th, 2026",
+                    )
+                )
+                stack.enter_context(
+                    patch(
+                        "main.get_timezone_from_location",
+                        return_value="Europe/Amsterdam",
+                    )
+                )
+                stack.enter_context(patch("main.save_external_files_state"))
+                mock_save = stack.enter_context(patch("main.save_schedule_state"))
+
+                main()
+
+                self.assertEqual(mock_save.call_args.kwargs["timezone"], "Europe/Amsterdam")
+                self.assertEqual(mock_save.call_args.kwargs["timezone_status"], "resolved")
+                self.assertEqual(mock_save.call_args.kwargs["timezone_ref"], expected_ref)
+
     def test_no_download_scans_extra_files_dir(self):
         """no_download: the REAL scanner runs against a temp EXTRA_FILES_DIR;
         the scan-picked schedule becomes the main doc and the chair notes in
@@ -316,7 +543,7 @@ class MainExtraFilesWiringTests(unittest.TestCase):
             extra = Path(tmpdir) / "extra_files"
             extra.mkdir()
             sched = extra / "RAN1#126 online and offline schedules - v02.docx"
-            chair = extra / "chair notes - v01.docx"
+            chair = extra / "Chair notes RAN1#126_v01.docx"
             sched.write_text("placeholder")
             chair.write_text("placeholder")
 

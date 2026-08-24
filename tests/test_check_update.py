@@ -15,12 +15,15 @@ def _run_check(
     extra_changed: bool = False,
     local_meeting_hint: str | None = None,
     external_state: dict | None = None,
+    agenda_info: dict | None = None,
+    chair_notes_info: dict | None = None,
 ):
     outputs: list[tuple[str, str]] = []
     cfg = {
         "inbox_urls": [],
         "extra_folders": [],
         "extra_files": extra_files or [],
+        "agenda_urls": ["https://example.org/Agenda/"],
     }
     remote_patch = patch(
         "check_update.get_all_remote_schedule_info",
@@ -37,6 +40,16 @@ def _run_check(
         ),
         remote_patch as remote_mock,
         patch(
+            "check_update.get_latest_agenda_info",
+            return_value=agenda_info,
+            create=True,
+        ),
+        patch(
+            "check_update.get_latest_chair_notes_info",
+            return_value=chair_notes_info,
+            create=True,
+        ),
+        patch(
             "check_update.check_external_files",
             return_value=(extra_changed, {"files": {}}),
         ),
@@ -51,6 +64,174 @@ def _run_check(
     ):
         check_update.main()
     return outputs, remote_mock
+
+
+def test_late_chair_notes_appearance_triggers_pending_timezone_rebuild():
+    outputs, _ = _run_check(
+        state={
+            "files": [],
+            "meeting_id": "ran1#126",
+            "timezone": "UTC",
+            "timezone_status": "pending_timezone_ref",
+            "timezone_ref": None,
+            "local_refs": {},
+        },
+        local_refs={},
+        remote=[],
+        chair_notes_info={
+            "name": "Chair notes RAN1#126_v00.docm",
+            "uploaded_at": "2026-08-23T14:29:00",
+            "url": "https://example.org/Chair%20notes%20RAN1%23126_v00.docm",
+            "source_url": "https://example.org/Chair_notes",
+        },
+    )
+
+    assert outputs == [("changed", "true")]
+
+
+def test_same_timezone_reference_does_not_trigger_rebuild():
+    timezone_ref = {
+        "type": "chair_notes",
+        "name": "Chair notes RAN1#126_v00.docm",
+        "uploaded_at": "2026-08-23T14:29:00",
+        "url": "https://example.org/Chair%20notes%20RAN1%23126_v00.docm",
+        "source_url": "https://example.org/Chair_notes",
+    }
+    outputs, _ = _run_check(
+        state={
+            "files": [],
+            "meeting_id": "ran1#126",
+            "timezone": "Europe/Amsterdam",
+            "timezone_status": "resolved",
+            "timezone_ref": timezone_ref,
+            "local_refs": {},
+        },
+        local_refs={},
+        remote=[],
+        chair_notes_info={k: v for k, v in timezone_ref.items() if k != "type"},
+    )
+
+    assert outputs == [("changed", "false")]
+
+
+def test_partial_chair_notes_listing_does_not_downgrade_cached_version():
+    cached_ref = {
+        "type": "chair_notes",
+        "name": "Chair notes RAN1#126_v03.docm",
+        "uploaded_at": "2026-08-24T09:00:00",
+        "url": "https://example.org/source-a/v03.docm",
+        "source_url": "https://example.org/source-a/Chair_notes",
+    }
+    outputs, _ = _run_check(
+        state={
+            "files": [],
+            "meeting_id": "ran1#126",
+            "timezone": "Europe/Amsterdam",
+            "timezone_status": "resolved",
+            "timezone_ref": cached_ref,
+            "local_refs": {},
+        },
+        local_refs={},
+        remote=[],
+        chair_notes_info={
+            "name": "Chair notes RAN1#126_v02.docm",
+            "uploaded_at": "2026-08-23T14:29:00",
+            "url": "https://example.org/source-b/v02.docm",
+            "source_url": "https://example.org/source-b/Chair_notes",
+        },
+    )
+
+    assert outputs == [("changed", "false")]
+
+
+def test_resolved_agenda_reference_ignores_later_chair_notes():
+    agenda_ref = {
+        "type": "agenda",
+        "name": "RAN1#126 agenda.docx",
+        "uploaded_at": "2026-08-20T08:00:00",
+        "url": "https://example.org/Agenda/RAN1%23126%20agenda.docx",
+        "source_url": "https://example.org/Agenda/",
+    }
+    outputs, _ = _run_check(
+        state={
+            "files": [],
+            "meeting_id": "ran1#126",
+            "timezone": "Europe/Amsterdam",
+            "timezone_status": "resolved",
+            "timezone_ref": agenda_ref,
+            "local_refs": {},
+        },
+        local_refs={},
+        remote=[],
+        agenda_info={k: v for k, v in agenda_ref.items() if k != "type"},
+        chair_notes_info={
+            "name": "Chair notes RAN1#126_v00.docm",
+            "uploaded_at": "2026-08-23T14:29:00",
+            "url": "https://example.org/chair.docm",
+            "source_url": "https://example.org/Chair_notes",
+        },
+    )
+
+    assert outputs == [("changed", "false")]
+
+
+def test_transient_agenda_listing_failure_keeps_resolved_agenda_reference():
+    agenda_ref = {
+        "type": "agenda",
+        "name": "RAN1#126 agenda.docx",
+        "uploaded_at": "2026-08-20T08:00:00",
+        "url": "https://example.org/Agenda/RAN1%23126%20agenda.docx",
+        "source_url": "https://example.org/Agenda/",
+    }
+    outputs, _ = _run_check(
+        state={
+            "files": [],
+            "meeting_id": "ran1#126",
+            "timezone": "Europe/Amsterdam",
+            "timezone_status": "resolved",
+            "timezone_ref": agenda_ref,
+            "local_refs": {},
+        },
+        local_refs={},
+        remote=[],
+        agenda_info=None,
+        chair_notes_info={
+            "name": "Chair notes RAN1#126_v00.docm",
+            "uploaded_at": "2026-08-23T14:29:00",
+            "url": "https://example.org/chair.docm",
+            "source_url": "https://example.org/Chair_notes",
+        },
+    )
+
+    assert outputs == [("changed", "false")]
+
+
+def test_local_timezone_reference_is_not_replaced_by_remote_candidate():
+    outputs, _ = _run_check(
+        state={
+            "files": [],
+            "meeting_id": "ran1#126",
+            "timezone": "Europe/Amsterdam",
+            "timezone_status": "resolved",
+            "timezone_ref": {
+                "type": "agenda",
+                "name": "local agenda.docx",
+                "sha256": "local-content-hash",
+                "origin": "local",
+            },
+            "local_refs": {},
+        },
+        local_refs={},
+        remote=[],
+        chair_notes_info={
+            "name": "Chair notes RAN1#126_v00.docm",
+            "uploaded_at": "2026-08-23T14:29:00",
+            "url": "https://example.org/chair.docm",
+            "source_url": "https://example.org/Chair_notes",
+        },
+    )
+
+    assert outputs == [("changed", "false")]
 
 
 def test_deleted_local_reference_is_detected_when_directory_is_empty():

@@ -15,6 +15,8 @@ from downloader import (
     _extract_version_from_name,
     _pick_latest_in_meeting_group,
     discover_schedule_sources,
+    download_latest_chair_notes,
+    download_latest_agenda,
     extract_document_from_zip,
     find_latest_agenda,
     find_latest_chair_notes,
@@ -25,6 +27,7 @@ from downloader import (
     local_reference_hashes,
     local_reference_meeting_id,
     load_schedule_state,
+    list_remote_files,
     save_schedule_state,
 )
 from models import ScheduleSource
@@ -313,6 +316,18 @@ class FindLatestScheduleMeetingAwareTests(unittest.TestCase):
     def test_returns_none_for_empty(self):
         self.assertIsNone(find_latest_schedule([]))
 
+    def test_macro_enabled_schedule_is_not_selected_for_table_parser(self):
+        latest = find_latest_schedule(
+            [
+                _f(
+                    "RAN1#126 schedule - v01.docm",
+                    datetime(2026, 8, 24, 9, 0),
+                ),
+            ]
+        )
+
+        self.assertIsNone(latest)
+
     def test_returns_none_when_no_schedule_files(self):
         files = [_f("agenda_v01.docx", datetime(2026, 4, 14, 8, 0))]
         self.assertIsNone(find_latest_schedule(files))
@@ -487,6 +502,71 @@ class FindLatestChairNotesMeetingAwareTests(unittest.TestCase):
         self.assertIn("chairman", result["name"].lower())
 
 
+def test_list_remote_files_includes_docm_chair_notes():
+    html = """<table><tr>
+      <td></td><td></td>
+      <td><a href="Chair%20notes%20RAN1%23126_v00.docm">file</a></td>
+      <td>2026/08/23 14:29</td>
+    </tr></table>"""
+
+    with patch(
+        "downloader._get_with_retry",
+        return_value=MagicMock(text=html),
+    ):
+        files = list_remote_files("https://example.com/Chair_notes")
+
+    assert [f["name"] for f in files] == ["Chair notes RAN1#126_v00.docm"]
+
+
+def test_forced_chair_notes_refresh_replaces_same_filename(tmp_path):
+    target = tmp_path / "Chair notes RAN1#126_v00.docm"
+    target.write_bytes(b"old-content")
+    latest = {
+        "name": target.name,
+        "url": "https://example.org/chair.docm",
+        "uploaded_at": datetime(2026, 8, 24, 9, 0),
+    }
+
+    def fake_download(_url, path, **_kwargs):
+        path.write_bytes(b"new-content")
+        return path
+
+    with patch("downloader.download_and_resolve", side_effect=fake_download):
+        result = download_latest_chair_notes(
+            tmp_path,
+            latest_info=latest,
+            force=True,
+        )
+
+    assert result == target
+    assert target.read_bytes() == b"new-content"
+
+
+def test_forced_agenda_refresh_replaces_same_filename(tmp_path):
+    target = tmp_path / "RAN1#126 agenda.docx"
+    target.write_bytes(b"old-content")
+    latest = {
+        "name": target.name,
+        "url": "https://example.org/agenda.docx",
+        "uploaded_at": datetime(2026, 8, 24, 9, 0),
+    }
+
+    def fake_download(_url, path):
+        path.write_bytes(b"new-content")
+        return path
+
+    with patch("downloader.download_file", side_effect=fake_download):
+        result = download_latest_agenda(
+            ["https://example.org/Agenda/"],
+            tmp_path,
+            latest_info=latest,
+            force=True,
+        )
+
+    assert result == target
+    assert target.read_bytes() == b"new-content"
+
+
 class GetLatestChairNotesInfoTests(unittest.TestCase):
     """Tests for config-aware Chair notes lookup across inboxes and extras."""
 
@@ -523,6 +603,40 @@ class GetLatestChairNotesInfoTests(unittest.TestCase):
             mock_list_remote_files.call_args_list[2].args[0],
             "https://example.com/custom/Chair_notes/",
         )
+
+    @patch("downloader.list_remote_files")
+    def test_current_meeting_does_not_use_future_chair_notes(
+        self,
+        mock_list_remote_files,
+    ):
+        mock_list_remote_files.return_value = [
+            _f("Chair notes RAN1#126_v00.docm", datetime(2026, 8, 23, 14, 29)),
+            _f("Chair notes RAN1#127_v00.docm", datetime(2026, 11, 1, 9, 0)),
+        ]
+
+        result = get_latest_chair_notes_info(
+            urls=["https://example.org/Inbox/"],
+            preferred_meeting_id="ran1#126",
+        )
+
+        assert result is not None
+        self.assertEqual(result["name"], "Chair notes RAN1#126_v00.docm")
+
+    @patch("downloader.list_remote_files")
+    def test_unsupported_chair_notes_format_is_not_selected(
+        self,
+        mock_list_remote_files,
+    ):
+        mock_list_remote_files.return_value = [
+            _f("Chair notes RAN1#126_v00.pdf", datetime(2026, 8, 23, 14, 29)),
+        ]
+
+        result = get_latest_chair_notes_info(
+            urls=["https://example.org/Inbox/"],
+            preferred_meeting_id="ran1#126",
+        )
+
+        self.assertIsNone(result)
 
 
 class DiscoverScheduleSourcesMeetingFilterTests(unittest.TestCase):
@@ -729,6 +843,30 @@ class SaveScheduleStateTests(unittest.TestCase):
             )
             state = json.loads(p.read_text())
             self.assertEqual(state["meeting_source"], "local")
+        finally:
+            p.unlink(missing_ok=True)
+
+    def test_saves_pending_timezone_without_reference(self):
+        p = Path("/tmp/test_save_state_pending_timezone.json")
+        sources = [
+            self._make_source(
+                "Chair_notes",
+                "RAN1#126 schedule - v01.docx",
+                datetime(2026, 8, 18, 8, 0),
+            ),
+        ]
+        try:
+            save_schedule_state(
+                sources,
+                p,
+                meeting_id="ran1#126",
+                timezone="UTC",
+                timezone_status="pending_timezone_ref",
+                timezone_ref=None,
+            )
+            state = json.loads(p.read_text())
+            self.assertEqual(state["timezone_status"], "pending_timezone_ref")
+            self.assertIsNone(state["timezone_ref"])
         finally:
             p.unlink(missing_ok=True)
 

@@ -27,12 +27,48 @@ from downloader import (
     check_external_files,
     EXTRA_FILES_TRANSFER_DIR,
     get_all_remote_schedule_info,
+    get_latest_agenda_info,
+    get_latest_chair_notes_info,
+    _extract_version_parts_from_name,
     local_reference_hashes,
     local_reference_meeting_id,
     load_external_files_state,
     load_schedule_state,
     save_external_files_state,
 )
+
+
+def _timezone_reference(ref_type: str, info: dict | None) -> dict | None:
+    """Return the stable remote identity of a timezone source document."""
+    if info is None:
+        return None
+    uploaded_at = info.get("uploaded_at")
+    if hasattr(uploaded_at, "isoformat"):
+        uploaded_at = uploaded_at.isoformat()
+    return {
+        key: value
+        for key, value in {
+            "type": ref_type,
+            "name": info.get("name"),
+            "uploaded_at": uploaded_at,
+            "url": info.get("url"),
+            "source_url": info.get("source_url"),
+        }.items()
+        if value is not None
+    }
+
+
+def _is_chair_notes_downgrade(
+    current_ref: dict | None,
+    cached_ref: object,
+) -> bool:
+    if not isinstance(current_ref, dict) or not isinstance(cached_ref, dict):
+        return False
+    if current_ref.get("type") != "chair_notes" or cached_ref.get("type") != "chair_notes":
+        return False
+    return _extract_version_parts_from_name(
+        str(current_ref.get("name", ""))
+    ) < _extract_version_parts_from_name(str(cached_ref.get("name", "")))
 
 
 def _normalize_for_compare(entries: list[dict]) -> set[tuple]:
@@ -153,6 +189,57 @@ def main() -> None:
         print("No remote files and no cached remote state; skipping FTP comparison.")
     elif remote_all is None:
         print("No cached remote comparison because FTP was unavailable.")
+
+    # Timezone inputs are independent of schedule files. Chair notes can be
+    # uploaded after a meeting's first schedule, so compare the best usable
+    # remote reference separately. A missing result does not invalidate an
+    # existing reference because 3GPP directory listings can fail transiently.
+    cached_timezone_ref = state.get("timezone_ref")
+    current_timezone_ref = None
+    if (
+        isinstance(cached_timezone_ref, dict)
+        and cached_timezone_ref.get("type") == "agenda"
+        and cached_timezone_ref.get("origin") != "local"
+    ):
+        agenda_info = get_latest_agenda_info(cfg.get("agenda_urls") or [])
+        agenda_name = str((agenda_info or {}).get("name", "")).lower()
+        if agenda_name.endswith(".docx"):
+            current_timezone_ref = _timezone_reference("agenda", agenda_info)
+    elif not (
+        isinstance(cached_timezone_ref, dict)
+        and cached_timezone_ref.get("origin") == "local"
+    ):
+        agenda_info = get_latest_agenda_info(cfg.get("agenda_urls") or [])
+        agenda_name = str((agenda_info or {}).get("name", ""))
+        current_timezone_ref = (
+            _timezone_reference("agenda", agenda_info)
+            if agenda_name.lower().endswith(".docx")
+            else None
+        )
+        if current_timezone_ref is None:
+            chair_notes_info = get_latest_chair_notes_info(
+                urls=cfg["inbox_urls"],
+                extra_folders=cfg["extra_folders"],
+                preferred_meeting_id=preferred_meeting_id,
+            )
+            current_timezone_ref = _timezone_reference(
+                "chair_notes",
+                chair_notes_info,
+            )
+
+    if (
+        current_timezone_ref is not None
+        and current_timezone_ref != cached_timezone_ref
+        and not _is_chair_notes_downgrade(
+            current_timezone_ref,
+            cached_timezone_ref,
+        )
+    ):
+        changed = True
+        print(
+            "Timezone reference changed: "
+            f"{cached_timezone_ref!r} → {current_timezone_ref!r}"
+        )
 
     # 3. Compare manually-provided local reference files (ref_in_manual/).
     # These are committed to the repo, so content hashes are stable across

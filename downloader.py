@@ -32,9 +32,12 @@ REF_IN_MANUAL_DIR = Path("ref_in_manual")
 BLACKLISTED_FOLDERS = {"Agenda", "drafts", "Tdoc_list", "Welcome_speech"}
 
 # Supported document extensions (order = preference when extracting from ZIP)
+WORD_DOCUMENT_EXTENSIONS = (".docx", ".docm")
 DOCUMENT_EXTENSIONS = (".docx", ".pptx", ".pdf")
 # All extensions we accept from remote listings (documents + zip)
-SUPPORTED_EXTENSIONS = DOCUMENT_EXTENSIONS + (".zip",)
+SUPPORTED_EXTENSIONS = DOCUMENT_EXTENSIONS + (".docm", ".zip")
+SCHEDULE_EXTENSIONS = DOCUMENT_EXTENSIONS + (".zip",)
+CHAIR_NOTES_EXTENSIONS = WORD_DOCUMENT_EXTENSIONS + (".zip",)
 
 # Local directory for externally-linked files (config.json ``extra_files``)
 # and the committed state file used by check_update.py change detection.
@@ -525,7 +528,7 @@ def find_latest_schedule(
     """Find the latest schedule file using meeting-aware grouping.
 
     Looks for files containing 'schedule' in the name.
-    Supports .docx, .pptx, .pdf, and .zip files.
+    Supports .docx, .docm, .pptx, .pdf, and .zip files.
 
     Selection strategy (in order):
     1. Group files by meeting identifier (e.g. RAN1#124bis).
@@ -542,7 +545,12 @@ def find_latest_schedule(
     unavailable.  When ``locked_meeting_id`` is set, only that exact meeting
     is considered; this is used for authoritative local reference files.
     """
-    schedule_files = [f for f in files if "schedule" in f["name"].lower()]
+    schedule_files = [
+        f
+        for f in files
+        if "schedule" in f["name"].lower()
+        and f["name"].lower().endswith(SCHEDULE_EXTENSIONS)
+    ]
     if locked_meeting_id is not None:
         locked = locked_meeting_id.lower()
         schedule_files = [
@@ -725,7 +733,12 @@ def _validate_downloaded_file(path: Path) -> None:
         )
 
 
-def download_and_resolve(url: str, dest_path: Path) -> Path:
+def download_and_resolve(
+    url: str,
+    dest_path: Path,
+    *,
+    document_extensions: tuple[str, ...] = DOCUMENT_EXTENSIONS,
+) -> Path:
     """Download a file and, if it is a ZIP, extract the document inside.
 
     Returns the path to the final usable document (docx / pptx / pdf).
@@ -733,7 +746,10 @@ def download_and_resolve(url: str, dest_path: Path) -> Path:
     downloaded = download_file(url, dest_path)
 
     if downloaded.suffix.lower() == ".zip":
-        extracted = extract_document_from_zip(downloaded)
+        extracted = extract_document_from_zip(
+            downloaded,
+            document_extensions=document_extensions,
+        )
         if extracted is not None:
             return extracted
         # ZIP contained nothing useful — return as-is (caller will handle)
@@ -747,7 +763,7 @@ def download_latest_schedule(
 ) -> Path:
     """Download the latest schedule from 3GPP FTP.
 
-    Supports .docx, .pptx, .pdf, and .zip (auto-extracted).
+    Supports .docx, .docm, .pptx, .pdf, and .zip (auto-extracted).
     Returns the path to the downloaded (or already existing) document.
     """
     files = list_remote_files()
@@ -842,7 +858,7 @@ def find_latest_chair_notes(
     """Find the latest Chair notes file using meeting-aware grouping.
 
     Looks for files containing 'chair note' (case-insensitive) in the name.
-    Supports .docx, .pptx, .pdf, and .zip files.
+    Supports .docx, .docm, and .zip files.
 
     Uses the same meeting-aware grouping strategy as find_latest_schedule():
     group by meeting ID → pick latest meeting → highest version within group.
@@ -850,10 +866,13 @@ def find_latest_chair_notes(
     chair_files = [
         f for f in files
         if (
-            "chair note" in f["name"].lower()
-            or "chair_note" in f["name"].lower()
-            or "chairman note" in f["name"].lower()
-            or "chairman_note" in f["name"].lower()
+            f["name"].lower().endswith(CHAIR_NOTES_EXTENSIONS)
+            and (
+                "chair note" in f["name"].lower()
+                or "chair_note" in f["name"].lower()
+                or "chairman note" in f["name"].lower()
+                or "chairman_note" in f["name"].lower()
+            )
         )
     ]
 
@@ -905,6 +924,7 @@ def get_latest_chair_notes_info(
     *,
     urls: list[str] | None = None,
     extra_folders: list[dict] | None = None,
+    preferred_meeting_id: str | None = None,
 ) -> dict | None:
     """Return metadata of the latest Chair notes across configured sources.
 
@@ -926,7 +946,12 @@ def get_latest_chair_notes_info(
             print(f"Warning: Could not list Chair notes at {chair_url}: {e}")
             continue
 
-        latest = find_latest_chair_notes(files)
+        if preferred_meeting_id is not None:
+            files = _filter_files_to_meeting(files, preferred_meeting_id)
+        latest = find_latest_chair_notes(
+            files,
+            preferred_meeting_id=preferred_meeting_id,
+        )
         if latest is not None:
             candidates.append({**latest, "source_url": chair_url})
 
@@ -939,14 +964,22 @@ def get_latest_chair_notes_info(
             print(f"Warning: Could not list Chair notes in extra folder {folder_name}/: {e}")
             continue
 
-        latest = find_latest_chair_notes(files)
+        if preferred_meeting_id is not None:
+            files = _filter_files_to_meeting(files, preferred_meeting_id)
+        latest = find_latest_chair_notes(
+            files,
+            preferred_meeting_id=preferred_meeting_id,
+        )
         if latest is not None:
             candidates.append({**latest, "source_url": folder_url})
 
     if not candidates:
         return None
 
-    latest = find_latest_chair_notes(candidates)
+    latest = find_latest_chair_notes(
+        candidates,
+        preferred_meeting_id=preferred_meeting_id,
+    )
     if latest is not None and latest.get("source_url"):
         print(f"Latest Chair notes source: {latest['source_url']}")
     return latest
@@ -958,16 +991,20 @@ def download_latest_chair_notes(
     *,
     urls: list[str] | None = None,
     extra_folders: list[dict] | None = None,
+    preferred_meeting_id: str | None = None,
+    latest_info: dict | None = None,
+    force: bool = False,
 ) -> Path | None:
     """Download the latest Chair notes from 3GPP FTP.
 
-    Supports .docx, .pptx, .pdf, and .zip (auto-extracted).
+    Supports .docx, .docm, and .zip (auto-extracted).
     Returns the path to the downloaded file, or None if not found.
     """
-    latest = get_latest_chair_notes_info(
+    latest = latest_info or get_latest_chair_notes_info(
         url,
         urls=urls,
         extra_folders=extra_folders,
+        preferred_meeting_id=preferred_meeting_id,
     )
     if latest is None:
         print("No Chair notes file found on FTP")
@@ -975,20 +1012,30 @@ def download_latest_chair_notes(
 
     dest_path = dest_dir / latest["name"]
 
-    if dest_path.exists():
+    if dest_path.exists() and not force:
         if dest_path.suffix.lower() == ".zip":
-            extracted = _find_extracted_document(dest_path)
+            extracted = _find_extracted_document(
+                dest_path,
+                document_extensions=WORD_DOCUMENT_EXTENSIONS,
+            )
             if extracted:
                 print(f"Using previously extracted: {extracted}")
                 return extracted
-            extracted = extract_document_from_zip(dest_path)
+            extracted = extract_document_from_zip(
+                dest_path,
+                document_extensions=WORD_DOCUMENT_EXTENSIONS,
+            )
             if extracted:
                 return extracted
         print(f"Chair notes already exists: {dest_path}")
         return dest_path
 
     try:
-        return download_and_resolve(latest["url"], dest_path)
+        return download_and_resolve(
+            latest["url"],
+            dest_path,
+            document_extensions=WORD_DOCUMENT_EXTENSIONS,
+        )
     except Exception as e:
         print(f"Warning: Failed to download Chair notes: {e}")
         return None
@@ -1071,6 +1118,7 @@ def download_latest_agenda(
     dest_dir: Path = DOWNLOADS_DIR / "Agenda",
     *,
     latest_info: dict | None = None,
+    force: bool = False,
 ) -> Path | None:
     """Download the latest agenda document from configured agenda URLs.
 
@@ -1088,7 +1136,7 @@ def download_latest_agenda(
 
     dest_path = dest_dir / latest["name"]
 
-    if dest_path.exists():
+    if dest_path.exists() and not force:
         if dest_path.suffix.lower() == ".zip":
             extracted = _find_extracted_document(
                 dest_path,
@@ -1911,6 +1959,8 @@ def save_schedule_state(
     meeting_id: str | None = None,
     meeting_source: str | None = None,
     timezone: str | None = None,
+    timezone_status: str | None = None,
+    timezone_ref: dict | None = None,
     agenda: dict | None = None,
     local_refs: dict[str, str] | None = None,
 ) -> None:
@@ -1952,6 +2002,9 @@ def save_schedule_state(
         state["meeting_source"] = meeting_source
     if timezone is not None:
         state["timezone"] = timezone
+    if timezone_status is not None:
+        state["timezone_status"] = timezone_status
+        state["timezone_ref"] = timezone_ref
     if agenda is not None:
         state["agenda"] = agenda
     if local_refs is not None:

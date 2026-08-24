@@ -1,12 +1,64 @@
 import unittest
+from pathlib import Path
+from zipfile import ZipFile
 from xml.etree.ElementTree import Element, SubElement
 from unittest.mock import MagicMock
 
 from models import RoomInfo
-from parser import _determine_time_block_index, _get_cell_text
+from parser import (
+    _determine_time_block_index,
+    _get_cell_text,
+    extract_meeting_location,
+    find_chair_notes_docx,
+)
 from session_parser import _extract_agenda_item_from_name, _slot_result_to_sessions
 
 _NS = "http://schemas.openxmlformats.org/wordprocessingml/2006/main"
+
+
+def _write_word_package(path: Path, paragraphs: list[str]) -> None:
+    body = "".join(
+        f"<w:p><w:r><w:t>{text}</w:t></w:r></w:p>" for text in paragraphs
+    )
+    with ZipFile(path, "w") as package:
+        package.writestr(
+            "word/document.xml",
+            f'''<?xml version="1.0" encoding="UTF-8"?>
+<w:document xmlns:w="{_NS}"><w:body>{body}</w:body></w:document>''',
+        )
+
+
+def test_extract_meeting_location_reads_docx_and_docm_through_ooxml(tmp_path):
+    for suffix in (".docx", ".docm"):
+        path = tmp_path / f"Chair notes RAN1#126_v00{suffix}"
+        _write_word_package(
+            path,
+            [
+                "3GPP TSG RAN WG1 #126",
+                "Maastricht, NL, Aug 24th-28th, 2026",
+            ],
+        )
+
+        assert (
+            extract_meeting_location(path)
+            == "Maastricht, NL, Aug 24th-28th, 2026"
+        )
+
+
+def test_find_chair_notes_docx_accepts_docm_for_current_meeting_only(tmp_path):
+    old = tmp_path / "Chair notes RAN1#125_v12.docx"
+    current = tmp_path / "Chair notes RAN1#126_v00.docm"
+    _write_word_package(old, ["Shanghai, CN, May 18th-22nd, 2026"])
+    _write_word_package(current, ["Maastricht, NL, Aug 24th-28th, 2026"])
+
+    assert find_chair_notes_docx(tmp_path, meeting_id="ran1#126") == current
+
+
+def test_extract_meeting_location_returns_none_for_malformed_docm(tmp_path):
+    path = tmp_path / "Chair notes RAN1#126_v00.docm"
+    path.write_bytes(b"not-an-ooxml-package")
+
+    assert extract_meeting_location(path) is None
 
 
 def _make_cell_xml(*paragraphs):

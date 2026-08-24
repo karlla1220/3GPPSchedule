@@ -24,6 +24,7 @@ Config file:
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import os
 import re
@@ -44,6 +45,7 @@ from downloader import (
     download_latest_chair_notes,
     download_latest_agenda,
     get_latest_agenda_info,
+    get_latest_chair_notes_info,
     find_local_latest_schedule,
     find_local_latest_agenda,
     find_local_vice_chair_schedules,
@@ -142,6 +144,80 @@ def _agenda_state_for_save(
     for key, value in description_state.items():
         state.setdefault(key, value)
     return state or None
+
+
+def _timezone_cache_is_current(
+    state: dict,
+    meeting_id: str | None,
+    timezone_ref: dict | None,
+) -> bool:
+    """Return whether a saved timezone still describes the current input."""
+    if not meeting_id or state.get("meeting_id") != meeting_id:
+        return False
+    if not state.get("timezone"):
+        return False
+
+    status = state.get("timezone_status")
+    if status == "pending_timezone_ref":
+        return state.get("timezone_ref") is None and timezone_ref is None
+    if status == "resolved":
+        return state.get("timezone_ref") == timezone_ref
+    return False
+
+
+def _timezone_reference_from_info(ref_type: str, info: dict) -> dict:
+    uploaded_at = _iso_value(info.get("uploaded_at"))
+    return {
+        key: value
+        for key, value in {
+            "type": ref_type,
+            "name": info.get("name"),
+            "uploaded_at": uploaded_at,
+            "url": info.get("url"),
+            "source_url": info.get("source_url"),
+        }.items()
+        if value is not None
+    }
+
+
+def _timezone_reference_from_path(ref_type: str, path: Path) -> dict:
+    return {
+        "type": ref_type,
+        "name": path.name,
+        "sha256": hashlib.sha256(path.read_bytes()).hexdigest(),
+        "origin": "local",
+    }
+
+
+def _agenda_timezone_reference(
+    agenda_info: dict | None,
+    agenda_path: Path | None,
+    previous_ref: dict | None,
+) -> dict:
+    """Preserve remote Agenda identity when only its cached file is visible."""
+    if agenda_info is not None:
+        return _timezone_reference_from_info("agenda", agenda_info)
+    if isinstance(previous_ref, dict) and previous_ref.get("type") == "agenda":
+        return previous_ref
+    if agenda_path is None:
+        raise ValueError("agenda_path is required without remote or cached metadata")
+    return _timezone_reference_from_path("agenda", agenda_path)
+
+
+def _can_preserve_cached_agenda(
+    previous_state: dict,
+    current_meeting_id: str | None,
+    agenda_info_name: str,
+) -> bool:
+    previous_ref = previous_state.get("timezone_ref")
+    return (
+        current_meeting_id is not None
+        and previous_state.get("meeting_id") == current_meeting_id
+        and previous_state.get("timezone_status") == "resolved"
+        and isinstance(previous_ref, dict)
+        and previous_ref.get("type") == "agenda"
+        and not agenda_info_name.endswith(".docx")
+    )
 
 
 def _extract_meeting_name(filepath: Path) -> str:
@@ -268,7 +344,9 @@ def main():
         vice_chair_paths = find_local_vice_chair_schedules()
         if vice_chair_paths:
             print(f"Vice-chair schedules: {', '.join(vice_chair_paths.keys())}")
-        extra_chair_notes_paths = [find_chair_notes_docx(EXTRA_FILES_DIR)]
+        extra_chair_notes_paths = [
+            find_chair_notes_docx(EXTRA_FILES_DIR, meeting_id=preferred_meeting_id)
+        ]
         extra_chair_notes_paths = [p for p in extra_chair_notes_paths if p is not None]
     else:
         # Discover all schedule sources from configured inbox URLs
@@ -420,9 +498,18 @@ def main():
         )
         agenda_info = get_latest_agenda_info(agenda_urls)
         if agenda_info is not None:
+            agenda_candidate_ref = _timezone_reference_from_info(
+                "agenda",
+                agenda_info,
+            )
+            agenda_candidate_name = str(agenda_info.get("name", "")).lower()
             agenda_path = download_latest_agenda(
                 agenda_urls,
                 latest_info=agenda_info,
+                force=(
+                    agenda_candidate_name.endswith(".docx")
+                    and agenda_candidate_ref != prev_state.get("timezone_ref")
+                ),
             )
         else:
             print("No agenda file found on FTP")
@@ -458,42 +545,91 @@ def main():
     # Step 5: Build Schedule model
     meeting_name = _extract_meeting_name(docx_path)
 
-    # Detect meeting timezone — reuse cached value when the meeting hasn't changed
+    # Resolve the best available timezone reference before consulting the cache.
+    # Agenda DOCX and Chair notes DOCX/DOCM share the OOXML location extractor.
     meeting_tz = "UTC"
-    if (
-        current_meeting_id
-        and current_meeting_id == cached_meeting_id
-        and cached_tz
+    timezone_status = "pending_timezone_ref"
+    timezone_ref: dict | None = None
+    remote_chair_info: dict | None = None
+    previous_timezone_ref = prev_state.get("timezone_ref")
+    agenda_info_name = str((agenda_info or {}).get("name", "")).lower()
+    location_source: Path | None = (
+        agenda_path
+        if agenda_path
+        and agenda_path.suffix.lower() == ".docx"
+        and (agenda_info is None or agenda_info_name.endswith(".docx"))
+        else None
+    )
+    if location_source is not None:
+        timezone_ref = _agenda_timezone_reference(
+            agenda_info,
+            location_source,
+            prev_state.get("timezone_ref"),
+        )
+    elif _can_preserve_cached_agenda(
+        prev_state,
+        current_meeting_id,
+        agenda_info_name,
     ):
-        # Same meeting as last build → reuse the saved timezone
+        timezone_ref = _agenda_timezone_reference(
+            None,
+            None,
+            previous_timezone_ref,
+        )
+    else:
+        local_chair_notes = find_chair_notes_docx(
+            docx_path.parent,
+            meeting_id=current_meeting_id,
+        )
+        matching_extra = [
+            path
+            for path in extra_chair_notes_paths
+            if _extract_meeting_id(path.name) in {None, current_meeting_id}
+        ]
+        if matching_extra:
+            location_source = max(matching_extra, key=_local_doc_preference)
+            timezone_ref = _timezone_reference_from_path(
+                "chair_notes",
+                location_source,
+            )
+            print(f"  Using extra files chair notes: {location_source.name}")
+        elif (args.local or args.no_download) and local_chair_notes is not None:
+            location_source = local_chair_notes
+            timezone_ref = _timezone_reference_from_path(
+                "chair_notes",
+                location_source,
+            )
+        elif not args.no_download:
+            remote_chair_info = get_latest_chair_notes_info(
+                urls=cfg["inbox_urls"],
+                extra_folders=cfg["extra_folders"],
+                preferred_meeting_id=current_meeting_id,
+            )
+            if remote_chair_info is not None:
+                timezone_ref = _timezone_reference_from_info(
+                    "chair_notes",
+                    remote_chair_info,
+                )
+
+    if _timezone_cache_is_current(prev_state, current_meeting_id, timezone_ref):
         print(f"\nReusing cached timezone for {current_meeting_id}: {cached_tz}")
         meeting_tz = cached_tz
+        timezone_status = prev_state["timezone_status"]
     else:
-        # New meeting or no cached data → detect timezone.
-        # Prefer the agenda DOCX (uploaded earlier than Chair notes), fall
-        # back to Chair notes if no agenda is available.
-        location_source: Path | None = (
-            agenda_path if agenda_path and agenda_path.suffix.lower() == ".docx" else None
-        )
-
-        if location_source is None:
-            # Fall back to Chair notes
-            chair_notes_path = find_chair_notes_docx(docx_path.parent)
-            # Check extra_files chair notes (external URLs or local scan)
-            if chair_notes_path is None and extra_chair_notes_paths:
-                chair_notes_path = max(
-                    extra_chair_notes_paths,
-                    key=_local_doc_preference,
-                )
-                print(f"  Using extra files chair notes: {chair_notes_path.name}")
-            if chair_notes_path is None and not args.no_download:
-                print("\nNo local Chair notes found, downloading from FTP...")
-                chair_notes_path = download_latest_chair_notes(
-                    docx_path.parent,
-                    urls=cfg["inbox_urls"],
-                    extra_folders=cfg["extra_folders"],
-                )
-            location_source = chair_notes_path
+        if location_source is None and remote_chair_info is not None:
+            print("\nDownloading timezone reference from FTP...")
+            location_source = download_latest_chair_notes(
+                docx_path.parent,
+                urls=cfg["inbox_urls"],
+                extra_folders=cfg["extra_folders"],
+                preferred_meeting_id=current_meeting_id,
+                latest_info=remote_chair_info,
+                force=timezone_ref != prev_state.get("timezone_ref"),
+            )
+            if location_source is None:
+                # Keep the reference pending so check_update retries after a
+                # transient download failure instead of treating it as cached.
+                timezone_ref = None
 
         if location_source:
             print(f"\nExtracting meeting location from: {location_source.name}")
@@ -503,7 +639,11 @@ def main():
                 tz = get_timezone_from_location(location_text)
                 if tz:
                     meeting_tz = tz
+                    timezone_status = "resolved"
+                else:
+                    timezone_status = "detection_failed"
             else:
+                timezone_status = "detection_failed"
                 print(
                     f"  Warning: Could not find location line in "
                     f"{location_source.name}"
@@ -528,6 +668,8 @@ def main():
             meeting_id=current_meeting_id,
             meeting_source=meeting_source,
             timezone=meeting_tz,
+            timezone_status=timezone_status,
+            timezone_ref=timezone_ref,
             agenda=_agenda_state_for_save(agenda_info, agenda_path),
             local_refs=local_reference_hashes(),
         )
