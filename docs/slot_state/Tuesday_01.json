@@ -3,6 +3,7 @@
   "time_block_index": 1,
   "source_hashes": {
     "Main Schedule": "ed8f5a755fae8003",
+    "Hiroki's schedule": "ce7d43222fd80486",
     "Sorour's schedule": "923e74d689879fdf"
   },
   "merged_sessions": [
@@ -180,11 +181,11 @@
     },
     {
       "room_name": "RAN1_brk2",
-      "name": "10.2.1 Waveform",
+      "name": "10.2.1",
       "duration_minutes": 40,
       "specified_start_time": null,
       "chair": "Hiroki",
-      "group_header": "6GR",
+      "group_header": "6G waveform",
       "agenda_item": "10.2.1",
       "description": "Waveform",
       "agenda_descriptions": [
@@ -214,12 +215,12 @@
     },
     {
       "room_name": "RAN1_brk2",
-      "name": "10.8 Sensing",
-      "duration_minutes": 80,
+      "name": "10.8.3",
+      "duration_minutes": 40,
       "specified_start_time": null,
       "chair": "Hiroki",
-      "group_header": "6GR",
-      "agenda_item": "10.8.3, 10.8.1.",
+      "group_header": "6G ISAC",
+      "agenda_item": "10.8.3",
       "description": "Waveform and frame structure",
       "agenda_descriptions": [
         {
@@ -243,7 +244,19 @@
               "has_description": true
             }
           ]
-        },
+        }
+      ]
+    },
+    {
+      "room_name": "RAN1_brk2",
+      "name": "10.8.1.",
+      "duration_minutes": 40,
+      "specified_start_time": null,
+      "chair": "Hiroki",
+      "group_header": "6G ISAC",
+      "agenda_item": "10.8.1.",
+      "description": "Evaluations",
+      "agenda_descriptions": [
         {
           "agenda_item": "10.8.1",
           "matched_agenda_item": "10.8.1",
@@ -377,9 +390,9 @@
     },
     {
       "room_name": "RAN1_off1",
-      "name": "A-IoT",
+      "name": "R20 A-IoT",
       "duration_minutes": 30,
-      "specified_start_time": null,
+      "specified_start_time": "12:30",
       "chair": "Hiroki",
       "group_header": "R20",
       "agenda_item": "9.3.2",
@@ -527,7 +540,7 @@
       ]
     }
   ],
-  "merged_at": "2026-08-24T00:48:37.532518+00:00",
+  "merged_at": "2026-08-24T01:01:37.771416+00:00",
   "meeting_id": "ran1#126",
   "schema_version": 1
 }

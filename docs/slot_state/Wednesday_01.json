@@ -3,6 +3,7 @@
   "time_block_index": 1,
   "source_hashes": {
     "Main Schedule": "a6d5ffa81a0b9997",
+    "Hiroki's schedule": "40e267e11ef70c86",
     "Sorour's schedule": "83efcedd8d115b20"
   },
   "merged_sessions": [
@@ -180,12 +181,12 @@
     },
     {
       "room_name": "RAN1_brk2",
-      "name": "10.8 Sensing",
-      "duration_minutes": 80,
+      "name": "10.8.2",
+      "duration_minutes": 40,
       "specified_start_time": null,
       "chair": "Hiroki",
-      "group_header": "6GR",
-      "agenda_item": "10.8.2, 10.8.3",
+      "group_header": "6G ISAC",
+      "agenda_item": "10.8.2",
       "description": "Aspects of integration with communication",
       "agenda_descriptions": [
         {
@@ -209,7 +210,19 @@
               "has_description": true
             }
           ]
-        },
+        }
+      ]
+    },
+    {
+      "room_name": "RAN1_brk2",
+      "name": "10.8.3",
+      "duration_minutes": 40,
+      "specified_start_time": null,
+      "chair": "Hiroki",
+      "group_header": "6G ISAC",
+      "agenda_item": "10.8.3",
+      "description": "Waveform and frame structure",
+      "agenda_descriptions": [
         {
           "agenda_item": "10.8.3",
           "matched_agenda_item": "10.8.3",
@@ -236,11 +249,11 @@
     },
     {
       "room_name": "RAN1_brk2",
-      "name": "10.2.1 Waveform",
+      "name": "10.2.1",
       "duration_minutes": 40,
       "specified_start_time": null,
       "chair": "Hiroki",
-      "group_header": "6GR",
+      "group_header": "6G waveform",
       "agenda_item": "10.2.1",
       "description": "Waveform",
       "agenda_descriptions": [
@@ -348,11 +361,11 @@
     },
     {
       "room_name": "RAN1_off1",
-      "name": "10.5.4",
+      "name": "10.5.4.1",
       "duration_minutes": 30,
-      "specified_start_time": null,
+      "specified_start_time": "12:30",
       "chair": "Hiroki",
-      "group_header": "6GR",
+      "group_header": "6G 10.5.4.x",
       "agenda_item": "10.5.4.1",
       "description": "Downlink control channel, scheduling for downlink and uplink transmission",
       "agenda_descriptions": [
@@ -424,7 +437,7 @@
       "agenda_item": null
     }
   ],
-  "merged_at": "2026-08-24T00:48:58.588563+00:00",
+  "merged_at": "2026-08-24T01:01:59.980901+00:00",
   "meeting_id": "ran1#126",
   "schema_version": 1
 }
