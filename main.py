@@ -314,6 +314,7 @@ def main():
     docx_path: Path | None = None
     vice_chair_paths: dict[str, Path] = {}
     sources: list | None = None  # set during FTP discovery (step 1)
+    remote_state_sources: list | None = None
     extra_chair_notes_paths: list[Path] = []
 
     if args.local:
@@ -434,6 +435,12 @@ def main():
                 preferred_meeting_id=preferred_meeting_id,
                 locked_meeting_id=locked_meeting_id,
             )
+            # Keep the remote/local distinction before download_all_schedules()
+            # assigns local_path to successfully downloaded remote sources.
+            # The persisted check state must contain the FTP listing, while
+            # manually supplied and extra-file sources are intentionally kept
+            # out of that listing.
+            remote_state_sources = [s for s in sources if s.local_path is None]
             if sources:
                 print(f"Found {len(sources)} schedule source(s)")
                 docx_path, vice_chair_paths = download_all_schedules(sources)
@@ -664,7 +671,7 @@ def main():
             else "remote"
         )
         save_schedule_state(
-            [s for s in sources if s.local_path is None],
+            remote_state_sources if remote_state_sources is not None else [],
             meeting_id=current_meeting_id,
             meeting_source=meeting_source,
             timezone=meeting_tz,
