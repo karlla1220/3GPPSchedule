@@ -222,7 +222,7 @@ def _generate_css(num_rooms_max: int) -> str:
     --text-muted: #6B7280;
     --border: #D1D5DB;
     --shadow: 0 1px 3px rgba(0,0,0,0.1);
-    --dim-opacity: 0.12;
+    --dim-opacity: 0.30;
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -872,7 +872,7 @@ header .meta {
 }
 
 .session-block.dimmed {
-    opacity: var(--dim-opacity, 0.12);
+    opacity: var(--dim-opacity, 0.30);
     pointer-events: none;
     transition: opacity 0.2s;
 }
@@ -1123,7 +1123,7 @@ document.addEventListener('DOMContentLoaded', function() {{
         const filterCount = document.querySelector('.filter-active-count');
         const dimOpacityRange = document.querySelector('.filter-dim-opacity-range');
         const dimOpacityValue = document.querySelector('.filter-dim-opacity-value');
-        const DIM_OPACITY_DEFAULT = 0.12;
+        const DIM_OPACITY_DEFAULT = 0.30;
         // Three sets are the source of truth; group/session visual state is DERIVED.
         const activeSessions = new Set();  // keys of sessions WITHOUT AIs
         const activeAIs = new Set();
@@ -1748,7 +1748,7 @@ def generate_html(schedule: Schedule) -> str:
     html_parts.append('    <div class="filter-panel collapsed">\n')
     html_parts.append('        <button class="filter-toggle">&#9664; Filter</button>\n')
     html_parts.append('        <div class="filter-header"><span>Session Filter <span class="filter-active-count"></span></span><button class="filter-clear">Clear</button></div>\n')
-    html_parts.append('        <div class="filter-controls"><label for="filter-dim-opacity-range">Unchecked opacity</label><div class="filter-dim-opacity"><input type="range" id="filter-dim-opacity-range" class="filter-dim-opacity-range" min="0.02" max="0.95" step="0.01" value="0.12"><span class="filter-dim-opacity-value">12%</span></div></div>\n')
+    html_parts.append('        <div class="filter-controls"><label for="filter-dim-opacity-range">Unchecked opacity</label><div class="filter-dim-opacity"><input type="range" id="filter-dim-opacity-range" class="filter-dim-opacity-range" min="0.02" max="0.95" step="0.01" value="0.30"><span class="filter-dim-opacity-value">12%</span></div></div>\n')
     html_parts.append('        <div class="filter-list"></div>\n')
     html_parts.append('    </div>\n')
 
