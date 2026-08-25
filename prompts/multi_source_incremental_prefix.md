@@ -37,6 +37,10 @@ auxiliary field (chair, agenda_item, group_header), and the baseline
 had a value for that field on a session that maps to the same
 (room, topic, time position), copy the baseline's value.
 
+Exception: never carry forward chair for RAN1_main unless the fresh Main
+Schedule explicitly names that person as a chair header. A chair inferred from
+a vice-chair source or present only in the baseline must become null.
+
 Mapping a fresh session to a baseline session:
 - Same room_name AND
 - Either: same name (case-insensitive), OR same agenda_item, OR

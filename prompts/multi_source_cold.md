@@ -113,6 +113,11 @@ Rules:
 - Only apply when the detail gap is CLEAR — the vice-chair schedule has specific
   sub-items / AI numbers / agenda items while the main schedule only has a coarse
   topic name.
+- Never infer the chair of RAN1_main from a vice-chair source, its file owner,
+  or the amount of detail it provides. For RAN1_main, set chair only when the
+  Main Schedule explicitly names that person as a chair header; otherwise use
+  null. This restriction applies even if exactly one vice-chair source is more
+  detailed.
 - If the main schedule already names a chair explicitly (e.g. "Xiaodong (120)"),
   that takes precedence.
 - Only assign when exactly ONE vice-chair source has distinctly more detail.

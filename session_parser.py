@@ -698,6 +698,59 @@ def _build_time_slot_prompt(
     return "\n".join(parts)
 
 
+def _enforce_main_room_chair_evidence(
+    parsed: dict,
+    slot,
+    name_to_alias: dict[str, str] | None,
+) -> dict:
+    """Allow a main-room chair only when the main schedule says so explicitly.
+
+    Vice-chair schedules are useful for enriching session detail, but ownership
+    of a detailed schedule is not evidence that its author chairs RAN1_main.
+    Keep an LLM-provided main-room chair only when the corresponding main-source
+    cell contains a ``Person (N)`` chair header.  This deterministic check also
+    cleans values carried forward from an older incremental baseline.
+    """
+    if not isinstance(parsed, dict):
+        return parsed
+
+    main_source = next(
+        (source for source in slot.sources if source.label == "Main Schedule"),
+        slot.sources[0] if slot.sources else None,
+    )
+    if main_source is None:
+        return parsed
+
+    main_room_texts: list[str] = []
+    for entry in main_source.entries:
+        room_label = (
+            _alias_room_label(entry.room_label, name_to_alias)
+            if name_to_alias
+            else entry.room_label
+        )
+        if "RAN1_main" in {part.strip() for part in room_label.split(" + ")}:
+            # Cancelled text must not count as current chair evidence.
+            main_room_texts.append(re.sub(r"~~.*?~~", "", entry.cell_text, flags=re.DOTALL))
+
+    evidence = "\n".join(main_room_texts)
+    for session in parsed.get("sessions", []):
+        if session.get("room_name") != "RAN1_main":
+            continue
+        chair = session.get("chair")
+        if not isinstance(chair, str) or not chair.strip():
+            session["chair"] = None
+            continue
+        explicit_header = re.search(
+            rf"(?<!\w){re.escape(chair.strip())}\s*\(\s*\d+\s*\)",
+            evidence,
+            flags=re.IGNORECASE,
+        )
+        if explicit_header is None:
+            session["chair"] = None
+
+    return parsed
+
+
 def _extract_agenda_item_from_name(name: str) -> tuple[str, str | None]:
     """Extract a leading agenda item from a session name when present.
 
@@ -775,11 +828,13 @@ def parse_time_slots(
         # ── Short-circuit: every source unchanged → reuse last merge.
         if slot.all_stale and slot.previous_merge is not None:
             parsed_result = {
-                "sessions": annotate_sessions_with_agenda_descriptions(
-                    slot.previous_merge,
-                    agenda_description_map,
-                )
+                "sessions": slot.previous_merge,
             }
+            _enforce_main_room_chair_evidence(parsed_result, slot, name_to_alias)
+            parsed_result["sessions"] = annotate_sessions_with_agenda_descriptions(
+                parsed_result["sessions"],
+                agenda_description_map,
+            )
             try:
                 save_slot_state(
                     SlotState(
@@ -861,6 +916,7 @@ def parse_time_slots(
         if parsed_result is None:
             parsed_result = {"sessions": []}
 
+        _enforce_main_room_chair_evidence(parsed_result, slot, name_to_alias)
         parsed_result["sessions"] = annotate_sessions_with_agenda_descriptions(
             parsed_result.get("sessions", []),
             agenda_description_map,

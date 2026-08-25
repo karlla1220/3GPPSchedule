@@ -13,6 +13,7 @@ from unittest.mock import MagicMock, patch
 import slot_state
 from merger import SlotSource, SourceEntry, TimeSlotData, _annotate_freshness
 from models import RoomInfo
+from session_parser import _enforce_main_room_chair_evidence
 from slot_state import (
     SlotState,
     clear_all_slot_states,
@@ -47,6 +48,69 @@ def _build_slot(
             )
         )
     return slot
+
+
+class MainRoomChairEvidenceTests(unittest.TestCase):
+    def test_clears_vice_chair_inference_from_main_room(self):
+        slot = _build_slot(
+            {
+                "Main Schedule": [("F1+F2+F3", "6GR / 10.5.1 (120)")],
+                "Sorour's schedule": [
+                    ("F1+F2+F3", "10.5.1.1 (60) / 10.5.1.2 (60)")
+                ],
+            }
+        )
+        parsed = {
+            "sessions": [
+                {"room_name": "RAN1_main", "name": "10.5.1.1", "chair": "Sorour"},
+                {"room_name": "RAN1_brk1", "name": "10.5.1.2", "chair": "Sorour"},
+            ]
+        }
+
+        _enforce_main_room_chair_evidence(
+            parsed,
+            slot,
+            {"F1+F2+F3": "RAN1_main", "A1": "RAN1_brk1"},
+        )
+
+        self.assertIsNone(parsed["sessions"][0]["chair"])
+        self.assertEqual(parsed["sessions"][1]["chair"], "Sorour")
+
+    def test_keeps_explicit_main_schedule_chair_header(self):
+        slot = _build_slot(
+            {"Main Schedule": [("F1+F2+F3", "Xiaodong (120) / 6GR / 10.5.1 (120)")]}
+        )
+        parsed = {
+            "sessions": [
+                {"room_name": "RAN1_main", "name": "10.5.1", "chair": "Xiaodong"}
+            ]
+        }
+
+        _enforce_main_room_chair_evidence(
+            parsed,
+            slot,
+            {"F1+F2+F3": "RAN1_main", "A1": "RAN1_brk1"},
+        )
+
+        self.assertEqual(parsed["sessions"][0]["chair"], "Xiaodong")
+
+    def test_struck_main_schedule_header_is_not_evidence(self):
+        slot = _build_slot(
+            {"Main Schedule": [("F1+F2+F3", "~~Sorour (120)~~ / 6GR / 10.5.1 (120)")]}
+        )
+        parsed = {
+            "sessions": [
+                {"room_name": "RAN1_main", "name": "10.5.1", "chair": "Sorour"}
+            ]
+        }
+
+        _enforce_main_room_chair_evidence(
+            parsed,
+            slot,
+            {"F1+F2+F3": "RAN1_main", "A1": "RAN1_brk1"},
+        )
+
+        self.assertIsNone(parsed["sessions"][0]["chair"])
 
 
 class SlotStateFilesystemTests(unittest.TestCase):
