@@ -3,7 +3,7 @@
   "time_block_index": 3,
   "source_hashes": {
     "Main Schedule": "42741ad058d5edc5",
-    "Hiroki's schedule": "f2606378d3d33e81",
+    "Hiroki's schedule": "e4d5c8c1d2d77811",
     "Sorour's schedule": "26a4d089381f5f58"
   },
   "merged_sessions": [
@@ -313,6 +313,15 @@
       ]
     },
     {
+      "room_name": "RAN1_brk2",
+      "name": "Early dinner",
+      "duration_minutes": 60,
+      "specified_start_time": null,
+      "chair": "Hiroki",
+      "group_header": "",
+      "agenda_item": null
+    },
+    {
       "room_name": "RAN1_off1",
       "name": "AI/ML",
       "duration_minutes": 40,
@@ -437,9 +446,18 @@
           ]
         }
       ]
+    },
+    {
+      "room_name": "RAN1_off2",
+      "name": "Early dinner",
+      "duration_minutes": 60,
+      "specified_start_time": null,
+      "chair": "Hiroki",
+      "group_header": "",
+      "agenda_item": null
     }
   ],
-  "merged_at": "2026-08-26T18:01:15.148421+00:00",
+  "merged_at": "2026-08-26T20:31:55.278990+00:00",
   "meeting_id": "ran1#126",
   "schema_version": 1
 }

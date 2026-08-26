@@ -3,7 +3,7 @@
   "time_block_index": 2,
   "source_hashes": {
     "Main Schedule": "7a6e4c2734a50caa",
-    "Hiroki's schedule": "e4447841ba5fff79",
+    "Hiroki's schedule": "f498f419f97b7b29",
     "Sorour's schedule": "930b2e16d98921b9"
   },
   "merged_sessions": [
@@ -156,7 +156,7 @@
     {
       "room_name": "RAN1_brk2",
       "name": "TEI20",
-      "duration_minutes": 0,
+      "duration_minutes": 5,
       "specified_start_time": null,
       "chair": "Hiroki",
       "group_header": "TEI",
@@ -180,7 +180,7 @@
     {
       "room_name": "RAN1_brk2",
       "name": "Maintenance R19 Duplex, R20 LBCA",
-      "duration_minutes": 120,
+      "duration_minutes": 115,
       "specified_start_time": null,
       "chair": "Hiroki",
       "group_header": "AI 7/8.2",
@@ -399,7 +399,7 @@
       ]
     }
   ],
-  "merged_at": "2026-08-26T18:01:15.140866+00:00",
+  "merged_at": "2026-08-26T20:31:26.421444+00:00",
   "meeting_id": "ran1#126",
   "schema_version": 1
 }

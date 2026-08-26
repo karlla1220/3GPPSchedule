@@ -3,7 +3,7 @@
   "time_block_index": 2,
   "source_hashes": {
     "Main Schedule": "4d4cf9322b2cbb0f",
-    "Hiroki's schedule": "bdc5409df9e267b6",
+    "Hiroki's schedule": "d96e7ea00daf68ea",
     "Sorour's schedule": "13955caf3bb7e2ee"
   },
   "merged_sessions": [
@@ -194,12 +194,12 @@
     },
     {
       "room_name": "RAN1_brk2",
-      "name": "10.8 Sensing",
+      "name": "6G ISAC",
       "duration_minutes": 120,
       "specified_start_time": null,
       "chair": "Hiroki",
-      "group_header": "6GR",
-      "agenda_item": "10.8.1, 10.8.2, 10.8.3",
+      "group_header": "",
+      "agenda_item": "10.8.1, 10.8.3, 10.8.2",
       "description": "Evaluations",
       "agenda_descriptions": [
         {
@@ -225,28 +225,6 @@
           ]
         },
         {
-          "agenda_item": "10.8.2",
-          "matched_agenda_item": "10.8.2",
-          "description": "Aspects of integration with communication",
-          "hierarchy": [
-            {
-              "agenda_item": "10",
-              "description": "Rel-20 Study of 6GR",
-              "has_description": true
-            },
-            {
-              "agenda_item": "10.8",
-              "description": "ISAC",
-              "has_description": true
-            },
-            {
-              "agenda_item": "10.8.2",
-              "description": "Aspects of integration with communication",
-              "has_description": true
-            }
-          ]
-        },
-        {
           "agenda_item": "10.8.3",
           "matched_agenda_item": "10.8.3",
           "description": "Waveform and frame structure",
@@ -264,6 +242,28 @@
             {
               "agenda_item": "10.8.3",
               "description": "Waveform and frame structure",
+              "has_description": true
+            }
+          ]
+        },
+        {
+          "agenda_item": "10.8.2",
+          "matched_agenda_item": "10.8.2",
+          "description": "Aspects of integration with communication",
+          "hierarchy": [
+            {
+              "agenda_item": "10",
+              "description": "Rel-20 Study of 6GR",
+              "has_description": true
+            },
+            {
+              "agenda_item": "10.8",
+              "description": "ISAC",
+              "has_description": true
+            },
+            {
+              "agenda_item": "10.8.2",
+              "description": "Aspects of integration with communication",
               "has_description": true
             }
           ]
@@ -354,7 +354,7 @@
       "duration_minutes": 40,
       "specified_start_time": "15:50",
       "chair": "Hiroki",
-      "group_header": "6GR",
+      "group_header": "",
       "agenda_item": "10.5.4.3, 10.5.4.2, 10.5.4.4",
       "description": "HARQ related Aspects",
       "agenda_descriptions": [
@@ -515,7 +515,7 @@
       "duration_minutes": 30,
       "specified_start_time": "16:00",
       "chair": "Hiroki",
-      "group_header": "R20",
+      "group_header": "",
       "agenda_item": "9.3.1",
       "description": "R2D signals, channels, waveform and procedures",
       "agenda_descriptions": [
@@ -544,7 +544,7 @@
       ]
     }
   ],
-  "merged_at": "2026-08-26T18:01:15.147214+00:00",
+  "merged_at": "2026-08-26T20:31:49.648687+00:00",
   "meeting_id": "ran1#126",
   "schema_version": 1
 }
