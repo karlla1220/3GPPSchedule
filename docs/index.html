@@ -200,6 +200,9 @@ header .meta {
     font-weight: 700;
     font-size: 10px;
     color: var(--text-muted);
+    left: 0;
+    z-index: 40;
+    box-shadow: 1px 0 0 var(--grid-line);
 }
 
 /* Time labels */
@@ -214,7 +217,9 @@ header .meta {
     padding-top: 1px;
     border-right: 1px solid var(--grid-line);
     background: #FAFAFA;
-    z-index: 5;
+    position: sticky;
+    left: 0;
+    z-index: 30;
 }
 
 /* 30-minute grid lines */
@@ -277,13 +282,13 @@ header .meta {
 }
 
 .session-block.short-session {
-    min-height: 16px;
     border-left-width: 2px;
     padding: 1px 3px;
 }
 
 .session-block.tiny-session {
-    min-height: 14px;
+    padding-top: 0;
+    padding-bottom: 0;
 }
 
 .session-block.short-session .session-details {
@@ -296,7 +301,7 @@ header .meta {
 }
 
 .session-block.tiny-session .session-name {
-    font-size: 9px;
+    display: none;
 }
 
 .session-block.long-session {
@@ -436,15 +441,20 @@ header .meta {
 
 .now-line::before {
     content: 'NOW';
-    position: absolute;
-    left: 4px;
-    top: -8px;
+    position: sticky;
+    left: 0;
+    width: var(--time-col-width);
+    height: 16px;
+    margin-top: -7px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     font-size: 9px;
     font-weight: 700;
     color: #EF4444;
     background: white;
-    padding: 0 3px;
-    border-radius: 2px;
+    border-radius: 0 2px 2px 0;
+    box-shadow: 1px 0 0 rgba(239, 68, 68, 0.25);
 }
 
 /* Responsive */
@@ -685,7 +695,7 @@ header .meta {
 <div class="container">
     <header>
         <h1>📅 RAN1#126</h1>
-        <p class="meta">Updated Files: RAN1#126 online and offline schedules - v02.docx, RAN1#126 schedule for Hiroki Adhoc2 sessions_v08_1.docx, RAN1#126 Sorour sessions online and offline schedules - v01.docx &nbsp;|&nbsp; Generated: 2026-08-27 20:00 (Europe/Amsterdam) &nbsp;|&nbsp; Now: <span id="tz-now">...</span> (Europe/Amsterdam)</p>
+        <p class="meta">Updated Files: RAN1#126 online and offline schedules - v02.docx, RAN1#126 schedule for Hiroki Adhoc2 sessions_v08_1.docx, RAN1#126 Sorour sessions online and offline schedules - v01.docx &nbsp;|&nbsp; Generated: 2026-08-27 21:03 (Europe/Amsterdam) &nbsp;|&nbsp; Now: <span id="tz-now">...</span> (Europe/Amsterdam)</p>
         <p class="meta">ℹ️ This page is automatically generated from uploaded documents. Some details may not be fully accurate — your feedback helps improve it. </p>
         <p class="meta">Contact: Duckhyun Bae (<a href="mailto:duckhyun.bae@lge.com">duckhyun.bae@lge.com</a>) for reports or feature requests.</p>
     </header>
