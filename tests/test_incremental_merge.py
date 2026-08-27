@@ -15,6 +15,7 @@ from merger import SlotSource, SourceEntry, TimeSlotData, _annotate_freshness
 from models import RoomInfo
 from session_parser import _build_time_slot_prompt, _enforce_main_room_chair_evidence
 from slot_state import (
+    SCHEMA_VERSION,
     SlotState,
     clear_all_slot_states,
     hash_source_text,
@@ -173,6 +174,23 @@ class SlotStateFilesystemTests(unittest.TestCase):
         self.assertEqual(loaded.merged_sessions, [{"name": "x"}])
 
     def test_missing_returns_none(self):
+        self.assertIsNone(load_slot_state("Friday", 0))
+
+    def test_old_semantics_version_is_not_loaded_as_baseline(self):
+        save_slot_state(
+            SlotState(
+                day="Friday",
+                time_block_index=0,
+                merged_sessions=[
+                    {
+                        "name": "poisoned",
+                        "specified_start_time": "09:50",
+                    }
+                ],
+                schema_version=SCHEMA_VERSION - 1,
+            )
+        )
+
         self.assertIsNone(load_slot_state("Friday", 0))
 
     def test_clear_all_slot_states_preserves_directory(self):

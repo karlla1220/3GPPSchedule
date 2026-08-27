@@ -24,7 +24,11 @@ from agenda_descriptions import strip_derived_description_fields
 
 
 SLOT_STATE_DIR = Path("docs/slot_state")
-SCHEMA_VERSION = 1
+# This version covers not only the JSON shape but also the parser/prompt
+# semantics used to produce ``merged_sessions``.  Bump it whenever an old
+# merge result is unsafe as an incremental baseline; a mismatch forces a cold
+# rebuild instead of carrying poisoned semantic fields forward.
+SCHEMA_VERSION = 2
 
 
 @dataclass
