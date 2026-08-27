@@ -873,7 +873,7 @@ header .meta {
 
 .session-block.dimmed {
     opacity: var(--dim-opacity, 0.30);
-    pointer-events: none;
+    /* Keep filtered-out sessions clickable so their detail popup remains available. */
     transition: opacity 0.2s;
 }
 

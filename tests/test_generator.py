@@ -1,6 +1,15 @@
+import re
 from types import SimpleNamespace
 
-from generator import _agenda_description_popup_lines
+from generator import _agenda_description_popup_lines, _generate_css
+
+
+def test_dimmed_sessions_remain_clickable_for_detail_popup():
+    css = _generate_css(num_rooms_max=1)
+    dimmed_rule = re.search(r"\.session-block\.dimmed\s*\{([^}]*)\}", css)
+
+    assert dimmed_rule is not None
+    assert "pointer-events: none" not in dimmed_rule.group(1)
 
 
 def test_agenda_description_popup_shares_common_hierarchy_prefix():
