@@ -3,7 +3,7 @@
   "time_block_index": 3,
   "source_hashes": {
     "Main Schedule": "42741ad058d5edc5",
-    "Hiroki's schedule": "e4d5c8c1d2d77811",
+    "Hiroki's schedule": "62ca99916bf63460",
     "Sorour's schedule": "26a4d089381f5f58"
   },
   "merged_sessions": [
@@ -194,12 +194,90 @@
     },
     {
       "room_name": "RAN1_brk2",
-      "name": "6G 10.5.4.x",
-      "duration_minutes": 90,
+      "name": "10.5.4.4",
+      "duration_minutes": 10,
       "specified_start_time": null,
       "chair": "Hiroki",
       "group_header": "6GR / 10.5.4",
-      "agenda_item": "10.5.4.1, 10.5.4.3, 10.5.4.2, 10.5.4.4",
+      "agenda_item": "10.5.4.4",
+      "description": "Handling of potential multiple uplink transmissions",
+      "agenda_descriptions": [
+        {
+          "agenda_item": "10.5.4.4",
+          "matched_agenda_item": "10.5.4.4",
+          "description": "Handling of potential multiple uplink transmissions",
+          "hierarchy": [
+            {
+              "agenda_item": "10",
+              "description": "Rel-20 Study of 6GR",
+              "has_description": true
+            },
+            {
+              "agenda_item": "10.5",
+              "description": "Multi-antenna system",
+              "has_description": true
+            },
+            {
+              "agenda_item": "10.5.4",
+              "description": "Downlink control channel, scheduling and HARQ operation",
+              "has_description": true
+            },
+            {
+              "agenda_item": "10.5.4.4",
+              "description": "Handling of potential multiple uplink transmissions",
+              "has_description": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "room_name": "RAN1_brk2",
+      "name": "10.5.4.2",
+      "duration_minutes": 10,
+      "specified_start_time": null,
+      "chair": "Hiroki",
+      "group_header": "6GR / 10.5.4",
+      "agenda_item": "10.5.4.2",
+      "description": "Downlink and uplink transmission without downlink control channel",
+      "agenda_descriptions": [
+        {
+          "agenda_item": "10.5.4.2",
+          "matched_agenda_item": "10.5.4.2",
+          "description": "Downlink and uplink transmission without downlink control channel",
+          "hierarchy": [
+            {
+              "agenda_item": "10",
+              "description": "Rel-20 Study of 6GR",
+              "has_description": true
+            },
+            {
+              "agenda_item": "10.5",
+              "description": "Multi-antenna system",
+              "has_description": true
+            },
+            {
+              "agenda_item": "10.5.4",
+              "description": "Downlink control channel, scheduling and HARQ operation",
+              "has_description": true
+            },
+            {
+              "agenda_item": "10.5.4.2",
+              "description": "Downlink and uplink transmission without downlink control channel",
+              "has_description": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "room_name": "RAN1_brk2",
+      "name": "10.5.4.1",
+      "duration_minutes": 35,
+      "specified_start_time": null,
+      "chair": "Hiroki",
+      "group_header": "6GR / 10.5.4",
+      "agenda_item": "10.5.4.1",
       "description": "Downlink control channel, scheduling for downlink and uplink transmission",
       "agenda_descriptions": [
         {
@@ -228,7 +306,19 @@
               "has_description": true
             }
           ]
-        },
+        }
+      ]
+    },
+    {
+      "room_name": "RAN1_brk2",
+      "name": "10.5.4.3",
+      "duration_minutes": 35,
+      "specified_start_time": null,
+      "chair": "Hiroki",
+      "group_header": "6GR / 10.5.4",
+      "agenda_item": "10.5.4.3",
+      "description": "HARQ related Aspects",
+      "agenda_descriptions": [
         {
           "agenda_item": "10.5.4.3",
           "matched_agenda_item": "10.5.4.3",
@@ -252,60 +342,6 @@
             {
               "agenda_item": "10.5.4.3",
               "description": "HARQ related Aspects",
-              "has_description": true
-            }
-          ]
-        },
-        {
-          "agenda_item": "10.5.4.2",
-          "matched_agenda_item": "10.5.4.2",
-          "description": "Downlink and uplink transmission without downlink control channel",
-          "hierarchy": [
-            {
-              "agenda_item": "10",
-              "description": "Rel-20 Study of 6GR",
-              "has_description": true
-            },
-            {
-              "agenda_item": "10.5",
-              "description": "Multi-antenna system",
-              "has_description": true
-            },
-            {
-              "agenda_item": "10.5.4",
-              "description": "Downlink control channel, scheduling and HARQ operation",
-              "has_description": true
-            },
-            {
-              "agenda_item": "10.5.4.2",
-              "description": "Downlink and uplink transmission without downlink control channel",
-              "has_description": true
-            }
-          ]
-        },
-        {
-          "agenda_item": "10.5.4.4",
-          "matched_agenda_item": "10.5.4.4",
-          "description": "Handling of potential multiple uplink transmissions",
-          "hierarchy": [
-            {
-              "agenda_item": "10",
-              "description": "Rel-20 Study of 6GR",
-              "has_description": true
-            },
-            {
-              "agenda_item": "10.5",
-              "description": "Multi-antenna system",
-              "has_description": true
-            },
-            {
-              "agenda_item": "10.5.4",
-              "description": "Downlink control channel, scheduling and HARQ operation",
-              "has_description": true
-            },
-            {
-              "agenda_item": "10.5.4.4",
-              "description": "Handling of potential multiple uplink transmissions",
               "has_description": true
             }
           ]
@@ -457,7 +493,7 @@
       "agenda_item": null
     }
   ],
-  "merged_at": "2026-08-27T09:01:09.737081+00:00",
+  "merged_at": "2026-08-27T11:31:18.520198+00:00",
   "meeting_id": "ran1#126",
   "schema_version": 1
 }

@@ -3,7 +3,7 @@
   "time_block_index": 0,
   "source_hashes": {
     "Main Schedule": "80836a26c6bff900",
-    "Hiroki's schedule": "082a0addbb5c3fbf",
+    "Hiroki's schedule": "ba952402dd079e80",
     "Sorour's schedule": "1f5b0c10ab906b72"
   },
   "merged_sessions": [
@@ -115,12 +115,12 @@
     },
     {
       "room_name": "RAN1_brk2",
-      "name": "R20 A-IoT",
-      "duration_minutes": 120,
+      "name": "9.3.3",
+      "duration_minutes": 40,
       "specified_start_time": null,
       "chair": "Hiroki",
-      "group_header": "A-IoT Phase2",
-      "agenda_item": "9.3.3, 9.3.1, 9.3.2",
+      "group_header": "A-IoT Phase2 / R20 A-IoT",
+      "agenda_item": "9.3.3",
       "description": "Other procedures",
       "agenda_descriptions": [
         {
@@ -144,7 +144,19 @@
               "has_description": true
             }
           ]
-        },
+        }
+      ]
+    },
+    {
+      "room_name": "RAN1_brk2",
+      "name": "9.3.1",
+      "duration_minutes": 40,
+      "specified_start_time": null,
+      "chair": "Hiroki",
+      "group_header": "A-IoT Phase2 / R20 A-IoT",
+      "agenda_item": "9.3.1",
+      "description": "R2D signals, channels, waveform and procedures",
+      "agenda_descriptions": [
         {
           "agenda_item": "9.3.1",
           "matched_agenda_item": "9.3.1",
@@ -166,7 +178,19 @@
               "has_description": true
             }
           ]
-        },
+        }
+      ]
+    },
+    {
+      "room_name": "RAN1_brk2",
+      "name": "9.3.2",
+      "duration_minutes": 40,
+      "specified_start_time": null,
+      "chair": "Hiroki",
+      "group_header": "A-IoT Phase2 / R20 A-IoT",
+      "agenda_item": "9.3.2",
+      "description": "D2R signals, channels, waveform and procedures",
+      "agenda_descriptions": [
         {
           "agenda_item": "9.3.2",
           "matched_agenda_item": "9.3.2",
@@ -289,7 +313,7 @@
       ]
     }
   ],
-  "merged_at": "2026-08-27T09:01:09.738189+00:00",
+  "merged_at": "2026-08-27T11:31:22.985172+00:00",
   "meeting_id": "ran1#126",
   "schema_version": 1
 }
