@@ -49,6 +49,7 @@ def test_time_column_and_now_label_stay_aligned_while_scrolling():
     assert "position: sticky" in now_label_rule.group(1)
     assert "width: var(--time-col-width)" in now_label_rule.group(1)
     assert "justify-content: center" in now_label_rule.group(1)
+    assert css.count("--time-col-width: 36px") == 2
 
 
 def test_generate_html_renders_external_page_assets():
