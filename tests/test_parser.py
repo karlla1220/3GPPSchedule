@@ -186,7 +186,7 @@ def test_parse_docx_applies_grid_span_on_vmerge_time_continuation(tmp_path):
     assert len(dinners) == 1
     assert dinners[0].time_block_index == 3
     assert dinners[0].room_indices == [0, 1, 2]
-    assert dinners[0].specified_start_time == "18:30"
+    assert dinners[0].fallback_start_time == "18:30"
 
 
 def test_parse_docx_does_not_inherit_time_for_plain_blank_row(tmp_path):
@@ -261,6 +261,117 @@ class AgendaExtractionTests(unittest.TestCase):
         self.assertEqual(sessions[0].agenda_item, "10.5.1.2/3")
         self.assertEqual(sessions[0].chair, "Xiaodong")
         self.assertEqual(sessions[0].group_header, "6GR")
+
+    def test_merged_session_starts_after_latest_member_room(self):
+        slot = MagicMock(
+            day="Thursday",
+            time_block_start="17:00",
+            time_block_end="19:30",
+        )
+        parsed = {
+            "sessions": [
+                {
+                    "room_name": "RAN1_main",
+                    "name": "Main session",
+                    "duration_minutes": 60,
+                    "specified_start_time": None,
+                    "fallback_start_time": None,
+                },
+                {
+                    "room_name": "RAN1_brk1",
+                    "name": "Breakout session",
+                    "duration_minutes": 90,
+                    "specified_start_time": None,
+                    "fallback_start_time": None,
+                },
+                {
+                    "room_name": "ALL_ONLINE",
+                    "name": "Early dinner",
+                    "duration_minutes": 60,
+                    "specified_start_time": None,
+                    "fallback_start_time": "18:30",
+                },
+            ]
+        }
+        day_rooms_map = {
+            "Thursday": [
+                RoomInfo(name="Main room", table_index=0, room_index_in_table=0),
+                RoomInfo(name="Breakout room", table_index=0, room_index_in_table=1),
+            ]
+        }
+        alias_to_name = {
+            "RAN1_main": "Main room",
+            "RAN1_brk1": "Breakout room",
+            "ALL_ONLINE": "Main room + Breakout room",
+        }
+
+        sessions = _slot_result_to_sessions(
+            parsed, slot, day_rooms_map, alias_to_name
+        )
+
+        dinner = next(s for s in sessions if s.name == "Early dinner")
+        self.assertEqual((dinner.start_time, dinner.end_time), ("18:30", "19:30"))
+
+    def test_merged_session_uses_fallback_when_latest_room_would_overrun(self):
+        slot = MagicMock(
+            day="Thursday",
+            time_block_start="17:00",
+            time_block_end="19:30",
+        )
+        slot.sources = [
+            MagicMock(
+                entries=[
+                    MagicMock(
+                        room_label="Main room + Breakout room",
+                        cell_text="Early dinner (60)",
+                        fallback_start_time="18:30",
+                    )
+                ]
+            )
+        ]
+        parsed = {
+            "sessions": [
+                {
+                    "room_name": "RAN1_main",
+                    "name": "Overlong room schedule",
+                    "duration_minutes": 150,
+                    "specified_start_time": None,
+                    "fallback_start_time": None,
+                },
+                {
+                    "room_name": "RAN1_brk1",
+                    "name": "Shorter room schedule",
+                    "duration_minutes": 90,
+                    "specified_start_time": None,
+                    "fallback_start_time": None,
+                },
+                {
+                    "room_name": "ALL_ONLINE",
+                    "name": "Early dinner",
+                    "duration_minutes": 60,
+                    "specified_start_time": None,
+                    "fallback_start_time": None,
+                },
+            ]
+        }
+        day_rooms_map = {
+            "Thursday": [
+                RoomInfo(name="Main room", table_index=0, room_index_in_table=0),
+                RoomInfo(name="Breakout room", table_index=0, room_index_in_table=1),
+            ]
+        }
+        alias_to_name = {
+            "RAN1_main": "Main room",
+            "RAN1_brk1": "Breakout room",
+            "ALL_ONLINE": "Main room + Breakout room",
+        }
+
+        sessions = _slot_result_to_sessions(
+            parsed, slot, day_rooms_map, alias_to_name
+        )
+
+        dinner = next(s for s in sessions if s.name == "Early dinner")
+        self.assertEqual((dinner.start_time, dinner.end_time), ("18:30", "19:30"))
 
 
 if __name__ == "__main__":

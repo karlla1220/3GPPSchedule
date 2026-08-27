@@ -150,7 +150,7 @@ class SourceEntry:
 
     room_label: str
     cell_text: str
-    specified_start_time: str | None = None
+    fallback_start_time: str | None = None
 
 
 @dataclass
@@ -185,7 +185,7 @@ def _serialize_source(source: SlotSource) -> str:
     lines = [f"merge_prompt_v{MERGE_PROMPT_VERSION}"]
     for e in entries:
         cell = re.sub(r"\s+", " ", e.cell_text).strip()
-        timing = f"\tstart={e.specified_start_time}" if e.specified_start_time else ""
+        timing = f"\tfallback={e.fallback_start_time}" if e.fallback_start_time else ""
         lines.append(f"{e.room_label}{timing}\t{cell}")
     return "\n".join(lines)
 
@@ -292,7 +292,7 @@ def collect_time_slot_data(
                 SourceEntry(
                     room_label=room_label,
                     cell_text=cell.text,
-                    specified_start_time=cell.specified_start_time,
+                    fallback_start_time=cell.fallback_start_time,
                 )
             )
         slot.sources.append(main_source)
@@ -324,7 +324,7 @@ def collect_time_slot_data(
                     SourceEntry(
                         room_label=room_label,
                         cell_text=cell.text,
-                        specified_start_time=cell.specified_start_time,
+                        fallback_start_time=cell.fallback_start_time,
                     )
                 )
 

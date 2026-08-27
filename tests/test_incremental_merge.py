@@ -114,7 +114,7 @@ class MainRoomChairEvidenceTests(unittest.TestCase):
 
 
 class InferredCellTimingPromptTests(unittest.TestCase):
-    def test_inferred_start_time_is_rendered_as_authoritative_input(self):
+    def test_inferred_start_time_is_rendered_as_fallback_input(self):
         slot = _build_slot({"Main Schedule": []}, day="Thursday", tb_idx=3)
         slot.time_block_start = "17:00"
         slot.time_block_end = "19:30"
@@ -123,13 +123,13 @@ class InferredCellTimingPromptTests(unittest.TestCase):
             SourceEntry(
                 room_label="F1+F2+F3 + A1",
                 cell_text="Early dinner (60)",
-                specified_start_time="18:30",
+                fallback_start_time="18:30",
             )
         )
 
         prompt = _build_time_slot_prompt(slot)
 
-        self.assertIn("Explicit cell start time: 18:30", prompt)
+        self.assertIn("Fallback cell start time: 18:30", prompt)
         self.assertIn("Early dinner (60)", prompt)
 
 

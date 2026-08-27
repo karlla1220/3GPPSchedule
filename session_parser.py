@@ -55,11 +55,12 @@ MULTI_SOURCE_SESSION_SCHEMA = {
                     "name": {"type": "string"},
                     "duration_minutes": {"type": "integer"},
                     "specified_start_time": {"type": "string", "nullable": True},
+                    "fallback_start_time": {"type": "string", "nullable": True},
                     "chair": {"type": "string", "nullable": True},
                     "group_header": {"type": "string"},
                     "agenda_item": {"type": "string", "nullable": True},
                 },
-                "required": ["room_name", "name", "duration_minutes", "specified_start_time", "chair", "group_header", "agenda_item"],
+                "required": ["room_name", "name", "duration_minutes", "specified_start_time", "fallback_start_time", "chair", "group_header", "agenda_item"],
             },
         }
     },
@@ -500,7 +501,7 @@ Return JSON only with schema: {{"room_names": ["..."], "reasoning": "..."}}"""
 # ── Multi-source time-slot parsing ───────────────────────────────
 
 
-_PROMPT_VERSION = 7  # Bump to invalidate time-slot caches on prompt changes
+_PROMPT_VERSION = 8  # Bump to invalidate time-slot caches on prompt changes
 
 
 def build_room_aliases(
@@ -633,9 +634,9 @@ def _build_time_slot_prompt(
         return _alias_room_label(label, name_to_alias) if name_to_alias else label
 
     def _entry_text(entry) -> str:
-        if entry.specified_start_time:
+        if entry.fallback_start_time:
             return (
-                f"Explicit cell start time: {entry.specified_start_time}\n"
+                f"Fallback cell start time: {entry.fallback_start_time}\n"
                 f"{entry.cell_text}"
             )
         return entry.cell_text
@@ -979,13 +980,41 @@ def _slot_result_to_sessions(
 ) -> list[Session]:
     """Convert a Gemini time-slot result into Session objects.
 
-    Handles the flat schema format where sessions is a flat array
-    with room_name on each entry. Groups by room and assigns
-    sequential start/end times within each room.
+    Handles the flat schema format where sessions is a flat array with
+    ``room_name`` on each entry.  Time cursors are tracked per physical room,
+    so a merged-room session starts after the latest occupied member room.
     """
     sessions: list[Session] = []
     day_rooms = day_rooms_map.get(slot.day, [])
     flat_sessions = parsed.get("sessions", [])
+    block_start_min = time_to_minutes(slot.time_block_start)
+    block_end_min = time_to_minutes(slot.time_block_end)
+    room_cursors = {
+        room_index: block_start_min for room_index in range(len(day_rooms))
+    }
+
+    # Preserve parser-derived fallback timing independently of the LLM output.
+    # Matching uses the physical room span plus the normalized session name.
+    fallback_cells: list[tuple[int, int, str, str]] = []
+    for source in getattr(slot, "sources", []):
+        for entry in source.entries:
+            fallback_start = getattr(entry, "fallback_start_time", None)
+            if not fallback_start:
+                continue
+            entry_col_start, entry_col_end = _find_room_columns(
+                entry.room_label, day_rooms, alias_to_name
+            )
+            normalized_text = re.sub(
+                r"[^a-z0-9]+", "", entry.cell_text.lower()
+            )
+            fallback_cells.append(
+                (
+                    entry_col_start,
+                    entry_col_end,
+                    normalized_text,
+                    fallback_start,
+                )
+            )
 
     # Group sessions by room_name to assign sequential times
     from collections import OrderedDict
@@ -999,9 +1028,9 @@ def _slot_result_to_sessions(
     for room_name, room_sessions in rooms_ordered.items():
         # Find grid columns for this room (supports aliases and multi-room)
         col_start, col_end = _find_room_columns(room_name, day_rooms, alias_to_name)
-
-        block_start_min = time_to_minutes(slot.time_block_start)
-        current_min = block_start_min
+        room_indices = list(range(col_start - 2, col_end - 2))
+        if not room_indices:
+            room_indices = [0]
 
         for sd in room_sessions:
             duration = sd.get("duration_minutes") or 0
@@ -1025,13 +1054,42 @@ def _slot_result_to_sessions(
                     if m:
                         agenda_item = m.group(1).strip(".")
 
-            # Use specified_start_time if the LLM found an explicit time range
+            # Start after the latest occupied room in this session's room set.
+            # Explicit source times override that cursor.  For a merged-room
+            # session that would otherwise run past the block end, a parser-
+            # derived fallback can pin it to the document's trailing sub-row.
+            current_min = max(
+                room_cursors.get(room_index, block_start_min)
+                for room_index in room_indices
+            )
             specified = sd.get("specified_start_time")
             if specified:
                 try:
                     current_min = time_to_minutes(specified)
                 except (ValueError, IndexError):
                     pass  # fall back to sequential
+            elif len(room_indices) > 1 and current_min + duration > block_end_min:
+                normalized_name = re.sub(
+                    r"[^a-z0-9]+", "", sd.get("name", "").lower()
+                )
+                fallback = next(
+                    (
+                        start
+                        for fc_start, fc_end, cell_text, start in fallback_cells
+                        if fc_start == col_start
+                        and fc_end == col_end
+                        and normalized_name
+                        and normalized_name in cell_text
+                    ),
+                    None,
+                )
+                if fallback is None:
+                    fallback = sd.get("fallback_start_time")
+                if fallback:
+                    try:
+                        current_min = time_to_minutes(fallback)
+                    except (ValueError, IndexError):
+                        pass
 
             start_time = minutes_to_time(current_min)
             end_time = minutes_to_time(current_min + duration)
@@ -1051,7 +1109,12 @@ def _slot_result_to_sessions(
                 agenda_descriptions=agenda_descriptions,
             )
             sessions.append(session)
-            current_min += duration
+            session_end_min = current_min + duration
+            for room_index in room_indices:
+                room_cursors[room_index] = max(
+                    room_cursors.get(room_index, block_start_min),
+                    session_end_min,
+                )
 
     return sessions
 

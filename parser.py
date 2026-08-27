@@ -839,7 +839,7 @@ def parse_docx(
                     if not text.strip():
                         continue
 
-                    specified_start_time = None
+                    fallback_start_time = None
                     if infer_from_block_end:
                         duration = _single_explicit_duration_minutes(text)
                         if duration is not None:
@@ -847,7 +847,7 @@ def parse_docx(
                                 time_to_minutes(time_block["end"]) - duration
                             )
                             if inferred_start >= time_to_minutes(time_block["start"]):
-                                specified_start_time = minutes_to_time(inferred_start)
+                                fallback_start_time = minutes_to_time(inferred_start)
 
                     cell_data = CellData(
                         text=text,
@@ -858,7 +858,7 @@ def parse_docx(
                         time_block_end=time_block["end"],
                         time_block_duration=time_block["duration"],
                         table_index=table_idx,
-                        specified_start_time=specified_start_time,
+                        fallback_start_time=fallback_start_time,
                     )
                     all_cells.append(cell_data)
 
