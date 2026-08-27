@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{MEETING_NAME}} - Schedule</title>
+    <style>{{STYLES}}</style>
+</head>
+<body>
+<div class="container">
+    <header>
+        <h1>📅 {{MEETING_NAME}}</h1>
+        <p class="meta">Updated Files: {{SOURCES_TEXT}} &nbsp;|&nbsp; Generated: {{GENERATED_AT}} ({{TIMEZONE}}) &nbsp;|&nbsp; Now: <span id="tz-now">...</span> ({{TIMEZONE}})</p>
+        <p class="meta">ℹ️ This page is automatically generated from uploaded documents. Some details may not be fully accurate — your feedback helps improve it. </p>
+        <p class="meta">Contact: {{CONTACT_NAME}} (<a href="{{CONTACT_MAILTO}}">{{CONTACT_EMAIL}}</a>) for reports or feature requests.</p>
+    </header>
+{{SCHEDULE_CONTENT}}    <div class="popup-backdrop" id="popup-backdrop"></div>
+    <div class="popup-floating" id="popup-floating"><div id="popup-content"></div><button class="popup-close" id="popup-close-btn">&times;</button></div>
+    <div class="filter-panel collapsed">
+        <button class="filter-toggle">&#9664; Filter</button>
+        <div class="filter-header"><span>Session Filter <span class="filter-active-count"></span></span><button class="filter-clear">Clear</button></div>
+        <div class="filter-controls"><label for="filter-dim-opacity-range">Unchecked opacity</label><div class="filter-dim-opacity"><input type="range" id="filter-dim-opacity-range" class="filter-dim-opacity-range" min="0.02" max="0.95" step="0.01" value="0.30"><span class="filter-dim-opacity-value">12%</span></div></div>
+        <div class="filter-list"></div>
+    </div>
+    <script type="application/json" id="filter-data">{{FILTER_DATA}}</script>
+</div>
+<script>{{SCRIPT}}</script>
+</body>
+</html>

@@ -102,7 +102,8 @@ parser.py           # python-docx로 DOCX 테이블 구조 추출 (TextBox 색�
 merger.py           # 다중 소스 스케줄 데이터를 (day, time_block) 단위로 수집·통합
 session_parser.py   # Gemini API로 셀 텍스트 → 세션 데이터 파싱 (타임존 감지, 방 매칭, 그룹 정규화)
 models.py           # 데이터 모델 (Session, DaySchedule, Schedule, ScheduleSource 등)
-generator.py        # CSS Grid 기반 HTML 간트차트 생성 (그룹별 색상, 자동 새로고침)
+generator.py        # 스케줄 데이터 기반 동적 마크업 생성
+templates/          # 페이지 골격, CSS, JavaScript 소스 템플릿
 check_update.py     # FTP 변경 감지 (GitHub Actions cron용, 다중 폴더 비교)
 .env.example        # 환경 변수 템플릿
 pyproject.toml      # 프로젝트 의존성 (uv)

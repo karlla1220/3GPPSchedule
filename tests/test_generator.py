@@ -1,7 +1,13 @@
 import re
 from types import SimpleNamespace
 
-from generator import _agenda_description_popup_lines, _generate_css
+from generator import (
+    _agenda_description_popup_lines,
+    _generate_css,
+    _generate_js,
+    generate_html,
+)
+from models import Schedule
 
 
 def test_dimmed_sessions_remain_clickable_for_detail_popup():
@@ -10,6 +16,33 @@ def test_dimmed_sessions_remain_clickable_for_detail_popup():
 
     assert dimmed_rule is not None
     assert "pointer-events: none" not in dimmed_rule.group(1)
+
+
+def test_generate_html_renders_external_page_assets():
+    schedule = Schedule(
+        meeting_name="RAN <Test>",
+        days=[],
+        source_file="schedule.docx",
+        generated_at="2026-08-27 16:00",
+        contact_name="Schedule Team",
+        contact_email="schedule@example.com",
+        timezone="Asia/Seoul",
+    )
+
+    html = generate_html(schedule)
+
+    assert "<title>RAN &lt;Test&gt; - Schedule</title>" in html
+    assert "const MEETING_TZ = \"Asia/Seoul\";" in html
+    assert ".schedule-grid" in html
+    assert 'id="filter-data"' in html
+    assert not re.search(r"\{\{[A-Z0-9_]+\}\}", html)
+
+
+def test_generate_js_uses_json_encoding_for_timezone():
+    script = _generate_js(timezone="Zone'\\Name", auto_refresh_minutes=2)
+
+    assert 'const MEETING_TZ = "Zone\'\\\\Name";' in script
+    assert "const AUTO_REFRESH_MS = 120000; // 2 minutes" in script
 
 
 def test_agenda_description_popup_shares_common_hierarchy_prefix():
