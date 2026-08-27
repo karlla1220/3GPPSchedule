@@ -2,9 +2,9 @@
   "day": "Thursday",
   "time_block_index": 0,
   "source_hashes": {
-    "Main Schedule": "6770db49e10fa4bb",
-    "Hiroki's schedule": "3363072545b9b961",
-    "Sorour's schedule": "37a8ba091ed8e91c"
+    "Main Schedule": "aeefa64bc3ee9724",
+    "Hiroki's schedule": "c263ca1e958812ee",
+    "Sorour's schedule": "725516675cc2b1d8"
   },
   "merged_sessions": [
     {
@@ -130,7 +130,7 @@
       "duration_minutes": 40,
       "specified_start_time": null,
       "chair": "Sorour",
-      "group_header": "R20 / NR",
+      "group_header": "R20 NR",
       "agenda_item": "9.2",
       "description": "NR MIMO Phase 6",
       "agenda_descriptions": [
@@ -159,7 +159,7 @@
       "duration_minutes": 40,
       "specified_start_time": null,
       "chair": "Sorour",
-      "group_header": "R20 / NR",
+      "group_header": "R20 NR",
       "agenda_item": "9.4",
       "description": "GNSS resilient NR-NTN operation",
       "agenda_descriptions": [
@@ -469,7 +469,7 @@
       ]
     }
   ],
-  "merged_at": "2026-08-27T17:09:49.342667+00:00",
+  "merged_at": "2026-08-27T17:24:15.871914+00:00",
   "meeting_id": "ran1#126",
   "schema_version": 1
 }

@@ -2,9 +2,9 @@
   "day": "Thursday",
   "time_block_index": 1,
   "source_hashes": {
-    "Main Schedule": "d42241c5139e817e",
-    "Hiroki's schedule": "7ff8c504322a63a5",
-    "Sorour's schedule": "446b9195c3184458"
+    "Main Schedule": "ac410d15aaf6f056",
+    "Hiroki's schedule": "361ce2fef9c85750",
+    "Sorour's schedule": "9671faf32c298e3f"
   },
   "merged_sessions": [
     {
@@ -185,7 +185,7 @@
       "duration_minutes": 40,
       "specified_start_time": null,
       "chair": "Hiroki",
-      "group_header": "R20 / A-IoT",
+      "group_header": "R20 / A-IoT Phase2 / R20 A-IoT",
       "agenda_item": "9.3.2",
       "description": "D2R signals, channels, waveform and procedures",
       "agenda_descriptions": [
@@ -219,7 +219,7 @@
       "duration_minutes": 40,
       "specified_start_time": null,
       "chair": "Hiroki",
-      "group_header": "R20 / A-IoT",
+      "group_header": "R20 / A-IoT Phase2 / R20 A-IoT",
       "agenda_item": "9.3.3",
       "description": "Other procedures",
       "agenda_descriptions": [
@@ -253,7 +253,7 @@
       "duration_minutes": 40,
       "specified_start_time": null,
       "chair": "Hiroki",
-      "group_header": "R20 / A-IoT",
+      "group_header": "R20 / A-IoT Phase2 / R20 A-IoT",
       "agenda_item": "9.3.1",
       "description": "R2D signals, channels, waveform and procedures",
       "agenda_descriptions": [
@@ -506,7 +506,7 @@
       ]
     }
   ],
-  "merged_at": "2026-08-27T17:09:49.343729+00:00",
+  "merged_at": "2026-08-27T17:24:21.688630+00:00",
   "meeting_id": "ran1#126",
   "schema_version": 1
 }

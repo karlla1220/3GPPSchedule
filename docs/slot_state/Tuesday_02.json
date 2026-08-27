@@ -2,9 +2,9 @@
   "day": "Tuesday",
   "time_block_index": 2,
   "source_hashes": {
-    "Main Schedule": "ed1a183fd83969b9",
-    "Hiroki's schedule": "e12dc9e9952f3aae",
-    "Sorour's schedule": "f3b0dc7f40ae7f85"
+    "Main Schedule": "c881bea5efef4e70",
+    "Hiroki's schedule": "4ea83f22401f2542",
+    "Sorour's schedule": "1bb10978a08ecb7a"
   },
   "merged_sessions": [
     {
@@ -155,7 +155,7 @@
     },
     {
       "room_name": "RAN1_brk2",
-      "name": "TEI20",
+      "name": "11 TEI20",
       "duration_minutes": 30,
       "specified_start_time": null,
       "chair": "Hiroki",
@@ -511,7 +511,7 @@
       ]
     }
   ],
-  "merged_at": "2026-08-27T17:09:48.954489+00:00",
+  "merged_at": "2026-08-27T17:23:35.682394+00:00",
   "meeting_id": "ran1#126",
   "schema_version": 1
 }

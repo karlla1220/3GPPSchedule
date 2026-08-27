@@ -2,9 +2,9 @@
   "day": "Thursday",
   "time_block_index": 2,
   "source_hashes": {
-    "Main Schedule": "4d4cf9322b2cbb0f",
-    "Hiroki's schedule": "77eecda00e51a87d",
-    "Sorour's schedule": "13955caf3bb7e2ee"
+    "Main Schedule": "1f2cbb4a91444772",
+    "Hiroki's schedule": "ebe1f1f011637a4d",
+    "Sorour's schedule": "abc276cef026e605"
   },
   "merged_sessions": [
     {
@@ -354,7 +354,7 @@
       "duration_minutes": 40,
       "specified_start_time": "15:50",
       "chair": "Hiroki",
-      "group_header": "",
+      "group_header": "6GR",
       "agenda_item": "10.5.4.3, 10.5.4.4",
       "description": "HARQ related Aspects",
       "agenda_descriptions": [
@@ -488,7 +488,7 @@
       "duration_minutes": 30,
       "specified_start_time": "16:00",
       "chair": "Hiroki",
-      "group_header": "",
+      "group_header": "R20",
       "agenda_item": "9.3.1",
       "description": "R2D signals, channels, waveform and procedures",
       "agenda_descriptions": [
@@ -517,7 +517,7 @@
       ]
     }
   ],
-  "merged_at": "2026-08-27T17:09:49.344615+00:00",
+  "merged_at": "2026-08-27T17:24:27.290967+00:00",
   "meeting_id": "ran1#126",
   "schema_version": 1
 }
