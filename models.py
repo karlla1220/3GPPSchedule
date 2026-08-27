@@ -35,6 +35,7 @@ class CellData:
     time_block_end: str
     time_block_duration: int
     table_index: int
+    specified_start_time: str | None = None
 
 
 @dataclass

@@ -13,7 +13,7 @@ from unittest.mock import MagicMock, patch
 import slot_state
 from merger import SlotSource, SourceEntry, TimeSlotData, _annotate_freshness
 from models import RoomInfo
-from session_parser import _enforce_main_room_chair_evidence
+from session_parser import _build_time_slot_prompt, _enforce_main_room_chair_evidence
 from slot_state import (
     SlotState,
     clear_all_slot_states,
@@ -111,6 +111,26 @@ class MainRoomChairEvidenceTests(unittest.TestCase):
         )
 
         self.assertIsNone(parsed["sessions"][0]["chair"])
+
+
+class InferredCellTimingPromptTests(unittest.TestCase):
+    def test_inferred_start_time_is_rendered_as_authoritative_input(self):
+        slot = _build_slot({"Main Schedule": []}, day="Thursday", tb_idx=3)
+        slot.time_block_start = "17:00"
+        slot.time_block_end = "19:30"
+        slot.time_block_duration = 150
+        slot.sources[0].entries.append(
+            SourceEntry(
+                room_label="F1+F2+F3 + A1",
+                cell_text="Early dinner (60)",
+                specified_start_time="18:30",
+            )
+        )
+
+        prompt = _build_time_slot_prompt(slot)
+
+        self.assertIn("Explicit cell start time: 18:30", prompt)
+        self.assertIn("Early dinner (60)", prompt)
 
 
 class SlotStateFilesystemTests(unittest.TestCase):

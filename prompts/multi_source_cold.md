@@ -162,6 +162,10 @@ those rooms simultaneously. For such sessions:
 ## Explicit timing in cell text
 ### Explicit time ranges in cell text
 
+The raw input may include a structured line such as
+`Explicit cell start time: 18:30`. This is authoritative: set
+`specified_start_time` to that value for the session in that cell.
+
 Sometimes cell text contains explicit time ranges such as:
   14:00 ~ 15:00
   Any other open issues

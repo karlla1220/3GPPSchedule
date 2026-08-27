@@ -632,6 +632,14 @@ def _build_time_slot_prompt(
     def _alias_label(label: str) -> str:
         return _alias_room_label(label, name_to_alias) if name_to_alias else label
 
+    def _entry_text(entry) -> str:
+        if entry.specified_start_time:
+            return (
+                f"Explicit cell start time: {entry.specified_start_time}\n"
+                f"{entry.cell_text}"
+            )
+        return entry.cell_text
+
     if mode == "incremental":
         # Freshness summary covers every source seen now or previously.
         summary_lines = []
@@ -665,7 +673,7 @@ def _build_time_slot_prompt(
                 parts.append(f"\n### {source.label} ({status})")
                 for entry in source.entries:
                     parts.append(f"\n[{_alias_label(entry.room_label)}]")
-                    parts.append(entry.cell_text)
+                    parts.append(_entry_text(entry))
         else:
             # No fresh raw input — REMOVED-only case. The LLM still
             # needs to know it can carry the baseline forward as-is.
@@ -686,14 +694,14 @@ def _build_time_slot_prompt(
         parts.append("\n## Main Schedule (defines what goes in each room)")
         for entry in main_source.entries:
             parts.append(f'\n[{_alias_label(entry.room_label)}]')
-            parts.append(entry.cell_text)
+            parts.append(_entry_text(entry))
 
     if vc_sources:
         parts.append("\n## Vice-chair detail (match by CONTENT to target rooms, ignore room labels)")
         for source in vc_sources:
             for entry in source.entries:
                 parts.append(f'\n[{source.label} — {_alias_label(entry.room_label)}]')
-                parts.append(entry.cell_text)
+                parts.append(_entry_text(entry))
 
     return "\n".join(parts)
 

@@ -10,7 +10,14 @@ from zipfile import BadZipFile, ZipFile
 from docx import Document
 
 from downloader import _extract_meeting_id, _iter_local_files, _local_doc_preference
-from models import TIME_BLOCKS, CellData, DAY_ORDER, RoomInfo, time_to_minutes
+from models import (
+    TIME_BLOCKS,
+    CellData,
+    DAY_ORDER,
+    RoomInfo,
+    minutes_to_time,
+    time_to_minutes,
+)
 
 _TIME_BLOCK_MINUTES = [
     (block["index"], time_to_minutes(block["start"]), time_to_minutes(block["end"]))
@@ -218,6 +225,23 @@ def _is_vmerge_continuation_at_col(row, grid_col: int) -> bool:
         col_cursor += grid_span
 
     return False
+
+
+def _single_explicit_duration_minutes(text: str) -> int | None:
+    """Return a cell's duration when it contains exactly one numeric marker.
+
+    A single marker such as ``Early dinner (60)`` is unambiguous.  Cells with
+    multiple markers commonly contain group headers and leaf sessions, so
+    their total duration cannot be inferred safely here.
+    """
+    durations = re.findall(
+        r"\(\s*(\d+)\s*(?:min(?:ute)?s?)?\s*\)",
+        text,
+        flags=re.IGNORECASE,
+    )
+    if len(durations) != 1:
+        return None
+    return int(durations[0])
 
 
 def _is_break_row(cells: list[tuple]) -> bool:
@@ -754,6 +778,20 @@ def parse_docx(
 
             time_block = TIME_BLOCKS[tb_index]
 
+            # A vertically merged time label may split one time block into
+            # physical sub-rows.  If this is the final continuation row and a
+            # cell has one unambiguous duration, its end aligns with the time
+            # block end.  Infer its start from that boundary; row height is
+            # deliberately ignored because it is presentation metadata.
+            is_time_continuation = _is_vmerge_continuation_at_col(row, 0)
+            next_is_time_continuation = (
+                row_idx + 1 < len(rows)
+                and _is_vmerge_continuation_at_col(rows[row_idx + 1], 0)
+            )
+            infer_from_block_end = (
+                is_time_continuation and not next_is_time_continuation
+            )
+
             # Process cells grouped by day with ordinal room mapping
             for day, (day_col_start, day_col_end) in day_columns.items():
                 grid_cols = day_col_end - day_col_start
@@ -801,6 +839,16 @@ def parse_docx(
                     if not text.strip():
                         continue
 
+                    specified_start_time = None
+                    if infer_from_block_end:
+                        duration = _single_explicit_duration_minutes(text)
+                        if duration is not None:
+                            inferred_start = (
+                                time_to_minutes(time_block["end"]) - duration
+                            )
+                            if inferred_start >= time_to_minutes(time_block["start"]):
+                                specified_start_time = minutes_to_time(inferred_start)
+
                     cell_data = CellData(
                         text=text,
                         day=day,
@@ -810,6 +858,7 @@ def parse_docx(
                         time_block_end=time_block["end"],
                         time_block_duration=time_block["duration"],
                         table_index=table_idx,
+                        specified_start_time=specified_start_time,
                     )
                     all_cells.append(cell_data)
 

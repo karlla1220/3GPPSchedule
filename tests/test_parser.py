@@ -186,6 +186,7 @@ def test_parse_docx_applies_grid_span_on_vmerge_time_continuation(tmp_path):
     assert len(dinners) == 1
     assert dinners[0].time_block_index == 3
     assert dinners[0].room_indices == [0, 1, 2]
+    assert dinners[0].specified_start_time == "18:30"
 
 
 def test_parse_docx_does_not_inherit_time_for_plain_blank_row(tmp_path):
