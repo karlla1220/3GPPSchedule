@@ -114,7 +114,7 @@ class MainRoomChairEvidenceTests(unittest.TestCase):
 
 
 class InferredCellTimingPromptTests(unittest.TestCase):
-    def test_inferred_start_time_is_rendered_as_fallback_input(self):
+    def test_inferred_start_time_is_not_exposed_to_prompt(self):
         slot = _build_slot({"Main Schedule": []}, day="Thursday", tb_idx=3)
         slot.time_block_start = "17:00"
         slot.time_block_end = "19:30"
@@ -127,10 +127,23 @@ class InferredCellTimingPromptTests(unittest.TestCase):
             )
         )
 
-        prompt = _build_time_slot_prompt(slot)
+        cold_prompt = _build_time_slot_prompt(slot)
+        slot.previous_merge = [
+            {
+                "room_name": "ALL_ONLINE",
+                "name": "Early dinner",
+                "duration_minutes": 60,
+                "specified_start_time": None,
+                "fallback_start_time": "18:30",
+            }
+        ]
+        slot.source_freshness = {"Main Schedule": "FRESH"}
+        incremental_prompt = _build_time_slot_prompt(slot, mode="incremental")
 
-        self.assertIn("Fallback cell start time: 18:30", prompt)
-        self.assertIn("Early dinner (60)", prompt)
+        for prompt in (cold_prompt, incremental_prompt):
+            self.assertNotIn("fallback_start_time", prompt)
+            self.assertNotIn("18:30", prompt)
+            self.assertIn("Early dinner (60)", prompt)
 
 
 class SlotStateFilesystemTests(unittest.TestCase):

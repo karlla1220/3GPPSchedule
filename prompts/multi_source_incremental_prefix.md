@@ -21,7 +21,7 @@ Your job: produce the new session list for this time slot.
   the same room/topic and rebuild from the fresh raw text.
 - For areas NO fresh source covers, COPY THE BASELINE entry verbatim
   (same name, duration, chair, group_header, agenda_item,
-  specified_start_time, fallback_start_time, room_name).
+  specified_start_time, room_name).
 - If a fresh source COARSENS a previously-detailed area (e.g. baseline
   had three 40-min sub-items, fresh source shows one 120-min item),
   that is an INTENTIONAL CONSOLIDATION. Output the consolidated form.

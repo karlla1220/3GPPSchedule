@@ -275,21 +275,18 @@ class AgendaExtractionTests(unittest.TestCase):
                     "name": "Main session",
                     "duration_minutes": 60,
                     "specified_start_time": None,
-                    "fallback_start_time": None,
                 },
                 {
                     "room_name": "RAN1_brk1",
                     "name": "Breakout session",
                     "duration_minutes": 90,
                     "specified_start_time": None,
-                    "fallback_start_time": None,
                 },
                 {
                     "room_name": "ALL_ONLINE",
                     "name": "Early dinner",
                     "duration_minutes": 60,
                     "specified_start_time": None,
-                    "fallback_start_time": "18:30",
                 },
             ]
         }
@@ -336,21 +333,18 @@ class AgendaExtractionTests(unittest.TestCase):
                     "name": "Overlong room schedule",
                     "duration_minutes": 150,
                     "specified_start_time": None,
-                    "fallback_start_time": None,
                 },
                 {
                     "room_name": "RAN1_brk1",
                     "name": "Shorter room schedule",
                     "duration_minutes": 90,
                     "specified_start_time": None,
-                    "fallback_start_time": None,
                 },
                 {
                     "room_name": "ALL_ONLINE",
                     "name": "Early dinner",
                     "duration_minutes": 60,
                     "specified_start_time": None,
-                    "fallback_start_time": None,
                 },
             ]
         }

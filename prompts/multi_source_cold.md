@@ -162,11 +162,6 @@ those rooms simultaneously. For such sessions:
 ## Explicit timing in cell text
 ### Explicit time ranges in cell text
 
-The raw input may include a structured line such as
-`Fallback cell start time: 18:30`. Copy it to `fallback_start_time` for
-the session in that cell. It is not an explicit time from the document and
-must not be copied to `specified_start_time`.
-
 Sometimes cell text contains explicit time ranges such as:
   14:00 ~ 15:00
   Any other open issues
@@ -222,7 +217,6 @@ For these cases:
       "name": "session name (include AI number if known)",
       "duration_minutes": N,
       "specified_start_time": "HH:MM or null (only when cell text has explicit time range or explicit start time)",
-      "fallback_start_time": "HH:MM or null (copy only from Fallback cell start time metadata)",
       "chair": "person or null",
       "group_header": "category labels joined by ' / ', or empty string",
       "agenda_item": "9.3.2.3, 9.3, 9.3.1, 9.3.2.1, 9.3.2.2 or null (preserve ALL items)"

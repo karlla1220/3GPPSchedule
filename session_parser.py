@@ -55,12 +55,11 @@ MULTI_SOURCE_SESSION_SCHEMA = {
                     "name": {"type": "string"},
                     "duration_minutes": {"type": "integer"},
                     "specified_start_time": {"type": "string", "nullable": True},
-                    "fallback_start_time": {"type": "string", "nullable": True},
                     "chair": {"type": "string", "nullable": True},
                     "group_header": {"type": "string"},
                     "agenda_item": {"type": "string", "nullable": True},
                 },
-                "required": ["room_name", "name", "duration_minutes", "specified_start_time", "fallback_start_time", "chair", "group_header", "agenda_item"],
+                "required": ["room_name", "name", "duration_minutes", "specified_start_time", "chair", "group_header", "agenda_item"],
             },
         }
     },
@@ -501,7 +500,7 @@ Return JSON only with schema: {{"room_names": ["..."], "reasoning": "..."}}"""
 # ── Multi-source time-slot parsing ───────────────────────────────
 
 
-_PROMPT_VERSION = 8  # Bump to invalidate time-slot caches on prompt changes
+_PROMPT_VERSION = 9  # Bump to invalidate time-slot caches on prompt changes
 
 
 def build_room_aliases(
@@ -633,14 +632,6 @@ def _build_time_slot_prompt(
     def _alias_label(label: str) -> str:
         return _alias_room_label(label, name_to_alias) if name_to_alias else label
 
-    def _entry_text(entry) -> str:
-        if entry.fallback_start_time:
-            return (
-                f"Fallback cell start time: {entry.fallback_start_time}\n"
-                f"{entry.cell_text}"
-            )
-        return entry.cell_text
-
     if mode == "incremental":
         # Freshness summary covers every source seen now or previously.
         summary_lines = []
@@ -655,6 +646,8 @@ def _build_time_slot_prompt(
         parts.append("\n## Source freshness summary\n" + "\n".join(summary_lines))
 
         baseline = strip_derived_description_fields(slot.previous_merge or [])
+        for session in baseline:
+            session.pop("fallback_start_time", None)
         parts.append(
             "\n## Previous merge result (BASELINE — carry forward unless overridden)"
         )
@@ -674,7 +667,7 @@ def _build_time_slot_prompt(
                 parts.append(f"\n### {source.label} ({status})")
                 for entry in source.entries:
                     parts.append(f"\n[{_alias_label(entry.room_label)}]")
-                    parts.append(_entry_text(entry))
+                    parts.append(entry.cell_text)
         else:
             # No fresh raw input — REMOVED-only case. The LLM still
             # needs to know it can carry the baseline forward as-is.
@@ -695,14 +688,14 @@ def _build_time_slot_prompt(
         parts.append("\n## Main Schedule (defines what goes in each room)")
         for entry in main_source.entries:
             parts.append(f'\n[{_alias_label(entry.room_label)}]')
-            parts.append(_entry_text(entry))
+            parts.append(entry.cell_text)
 
     if vc_sources:
         parts.append("\n## Vice-chair detail (match by CONTENT to target rooms, ignore room labels)")
         for source in vc_sources:
             for entry in source.entries:
                 parts.append(f'\n[{source.label} — {_alias_label(entry.room_label)}]')
-                parts.append(_entry_text(entry))
+                parts.append(entry.cell_text)
 
     return "\n".join(parts)
 
@@ -1083,8 +1076,6 @@ def _slot_result_to_sessions(
                     ),
                     None,
                 )
-                if fallback is None:
-                    fallback = sd.get("fallback_start_time")
                 if fallback:
                     try:
                         current_min = time_to_minutes(fallback)

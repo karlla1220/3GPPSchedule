@@ -18,7 +18,7 @@ from parser import parse_docx, build_room_list
 from slot_state import hash_source_text, load_slot_state
 
 
-MERGE_PROMPT_VERSION = 3
+MERGE_PROMPT_VERSION = 4
 
 
 # ── Room name resolution ────────────────────────────────────
