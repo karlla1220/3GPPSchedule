@@ -9,7 +9,7 @@
     {
       "room_name": "ALL_ONLINE",
       "name": "RAN1#126 commences at 09:00 on Monday",
-      "duration_minutes": 90,
+      "duration_minutes": 60,
       "specified_start_time": "09:00",
       "chair": null,
       "group_header": "",
@@ -118,7 +118,7 @@
       ]
     }
   ],
-  "merged_at": "2026-08-27T17:35:39.973634+00:00",
+  "merged_at": "2026-08-27T17:58:50.733033+00:00",
   "meeting_id": "ran1#126",
-  "schema_version": 1
+  "schema_version": 2
 }

@@ -155,7 +155,7 @@
     },
     {
       "room_name": "RAN1_brk2",
-      "name": "11 TEI20",
+      "name": "TEI20",
       "duration_minutes": 30,
       "specified_start_time": null,
       "chair": "Hiroki",
@@ -292,8 +292,8 @@
       "duration_minutes": 45,
       "specified_start_time": null,
       "chair": "Sorour",
-      "group_header": "6GR / 10.3.x",
-      "agenda_item": null,
+      "group_header": "6GR",
+      "agenda_item": "10.3.1",
       "description": "Channel coding",
       "agenda_descriptions": [
         {
@@ -326,8 +326,8 @@
       "duration_minutes": 45,
       "specified_start_time": null,
       "chair": "Sorour",
-      "group_header": "6GR / 10.3.x",
-      "agenda_item": null,
+      "group_header": "6GR",
+      "agenda_item": "10.3.2",
       "description": "Modulation, Joint channel coding and modulation",
       "agenda_descriptions": [
         {
@@ -511,7 +511,7 @@
       ]
     }
   ],
-  "merged_at": "2026-08-27T17:35:39.981188+00:00",
+  "merged_at": "2026-08-27T17:59:26.825441+00:00",
   "meeting_id": "ran1#126",
-  "schema_version": 1
+  "schema_version": 2
 }

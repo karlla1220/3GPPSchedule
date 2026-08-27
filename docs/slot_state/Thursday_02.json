@@ -194,11 +194,11 @@
     },
     {
       "room_name": "RAN1_brk2",
-      "name": "6G ISAC",
+      "name": "10.8 Sensing",
       "duration_minutes": 120,
       "specified_start_time": null,
       "chair": "Hiroki",
-      "group_header": "",
+      "group_header": "6GR",
       "agenda_item": "10.8.1, 10.8.3, 10.8.2",
       "description": "Evaluations",
       "agenda_descriptions": [
@@ -517,7 +517,7 @@
       ]
     }
   ],
-  "merged_at": "2026-08-27T17:35:39.991484+00:00",
+  "merged_at": "2026-08-27T18:00:13.223330+00:00",
   "meeting_id": "ran1#126",
-  "schema_version": 1
+  "schema_version": 2
 }

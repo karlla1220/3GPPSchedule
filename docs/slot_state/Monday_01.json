@@ -164,7 +164,7 @@
       "duration_minutes": 60,
       "specified_start_time": "12:00",
       "chair": "Hiroki",
-      "group_header": "6GR",
+      "group_header": "6GR / 10.8.x Sensing",
       "agenda_item": "10.8.2",
       "description": "Aspects of integration with communication",
       "agenda_descriptions": [
@@ -270,7 +270,7 @@
       ]
     }
   ],
-  "merged_at": "2026-08-27T17:35:39.974804+00:00",
+  "merged_at": "2026-08-27T17:58:54.914363+00:00",
   "meeting_id": "ran1#126",
-  "schema_version": 1
+  "schema_version": 2
 }

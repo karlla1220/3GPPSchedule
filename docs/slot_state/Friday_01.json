@@ -90,7 +90,7 @@
       "duration_minutes": 60,
       "specified_start_time": null,
       "chair": "Hiroki",
-      "group_header": "6GR",
+      "group_header": "6GR / 10.8 Sensing",
       "agenda_item": "10.8.x",
       "description": "ISAC",
       "agenda_descriptions": [
@@ -119,7 +119,7 @@
       "duration_minutes": 60,
       "specified_start_time": null,
       "chair": "Hiroki",
-      "group_header": "6GR",
+      "group_header": "6GR / 10.5.4",
       "agenda_item": "10.5.4.1, 10.5.4.3, 10.5.4.2, 10.5.4.4",
       "description": "Downlink control channel, scheduling for downlink and uplink transmission",
       "agenda_descriptions": [
@@ -273,7 +273,7 @@
       ]
     }
   ],
-  "merged_at": "2026-08-27T17:35:39.995519+00:00",
+  "merged_at": "2026-08-27T18:00:29.861999+00:00",
   "meeting_id": "ran1#126",
-  "schema_version": 1
+  "schema_version": 2
 }

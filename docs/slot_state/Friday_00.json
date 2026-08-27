@@ -81,7 +81,7 @@
       "duration_minutes": 60,
       "specified_start_time": null,
       "chair": "Sorour",
-      "group_header": "R20 NR",
+      "group_header": "R20 / AI/ML",
       "agenda_item": "9.1",
       "description": "Artificial Intelligence (AI)/Machine Learning (ML) for NR air interface enhancements",
       "agenda_descriptions": [
@@ -139,13 +139,22 @@
       ]
     },
     {
+      "room_name": "RAN1_brk1",
+      "name": "Sweep 6GR",
+      "duration_minutes": 20,
+      "specified_start_time": null,
+      "chair": "Sorour",
+      "group_header": "6GR",
+      "agenda_item": null
+    },
+    {
       "room_name": "RAN1_brk2",
       "name": "9.3.3",
       "duration_minutes": 40,
       "specified_start_time": null,
       "chair": "Hiroki",
-      "group_header": "R20 A-IoT",
-      "agenda_item": "9.3.3",
+      "group_header": "R20 / A-IoT Phase2",
+      "agenda_item": "9.3.3, 9.3.1, 9.3.2",
       "description": "Other procedures",
       "agenda_descriptions": [
         {
@@ -169,19 +178,7 @@
               "has_description": true
             }
           ]
-        }
-      ]
-    },
-    {
-      "room_name": "RAN1_brk2",
-      "name": "9.3.1",
-      "duration_minutes": 40,
-      "specified_start_time": null,
-      "chair": "Hiroki",
-      "group_header": "R20 A-IoT",
-      "agenda_item": "9.3.1",
-      "description": "R2D signals, channels, waveform and procedures",
-      "agenda_descriptions": [
+        },
         {
           "agenda_item": "9.3.1",
           "matched_agenda_item": "9.3.1",
@@ -203,6 +200,106 @@
               "has_description": true
             }
           ]
+        },
+        {
+          "agenda_item": "9.3.2",
+          "matched_agenda_item": "9.3.2",
+          "description": "D2R signals, channels, waveform and procedures",
+          "hierarchy": [
+            {
+              "agenda_item": "9",
+              "description": "Release 20 NR",
+              "has_description": true
+            },
+            {
+              "agenda_item": "9.3",
+              "description": "Solutions for Ambient IoT (Internet of Things) in NR Phase 2",
+              "has_description": true
+            },
+            {
+              "agenda_item": "9.3.2",
+              "description": "D2R signals, channels, waveform and procedures",
+              "has_description": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "room_name": "RAN1_brk2",
+      "name": "9.3.1",
+      "duration_minutes": 40,
+      "specified_start_time": null,
+      "chair": "Hiroki",
+      "group_header": "R20 / A-IoT Phase2",
+      "agenda_item": "9.3.3, 9.3.1, 9.3.2",
+      "description": "Other procedures",
+      "agenda_descriptions": [
+        {
+          "agenda_item": "9.3.3",
+          "matched_agenda_item": "9.3.3",
+          "description": "Other procedures",
+          "hierarchy": [
+            {
+              "agenda_item": "9",
+              "description": "Release 20 NR",
+              "has_description": true
+            },
+            {
+              "agenda_item": "9.3",
+              "description": "Solutions for Ambient IoT (Internet of Things) in NR Phase 2",
+              "has_description": true
+            },
+            {
+              "agenda_item": "9.3.3",
+              "description": "Other procedures",
+              "has_description": true
+            }
+          ]
+        },
+        {
+          "agenda_item": "9.3.1",
+          "matched_agenda_item": "9.3.1",
+          "description": "R2D signals, channels, waveform and procedures",
+          "hierarchy": [
+            {
+              "agenda_item": "9",
+              "description": "Release 20 NR",
+              "has_description": true
+            },
+            {
+              "agenda_item": "9.3",
+              "description": "Solutions for Ambient IoT (Internet of Things) in NR Phase 2",
+              "has_description": true
+            },
+            {
+              "agenda_item": "9.3.1",
+              "description": "R2D signals, channels, waveform and procedures",
+              "has_description": true
+            }
+          ]
+        },
+        {
+          "agenda_item": "9.3.2",
+          "matched_agenda_item": "9.3.2",
+          "description": "D2R signals, channels, waveform and procedures",
+          "hierarchy": [
+            {
+              "agenda_item": "9",
+              "description": "Release 20 NR",
+              "has_description": true
+            },
+            {
+              "agenda_item": "9.3",
+              "description": "Solutions for Ambient IoT (Internet of Things) in NR Phase 2",
+              "has_description": true
+            },
+            {
+              "agenda_item": "9.3.2",
+              "description": "D2R signals, channels, waveform and procedures",
+              "has_description": true
+            }
+          ]
         }
       ]
     },
@@ -212,10 +309,54 @@
       "duration_minutes": 40,
       "specified_start_time": null,
       "chair": "Hiroki",
-      "group_header": "R20 A-IoT",
-      "agenda_item": "9.3.2",
-      "description": "D2R signals, channels, waveform and procedures",
+      "group_header": "R20 / A-IoT Phase2",
+      "agenda_item": "9.3.3, 9.3.1, 9.3.2",
+      "description": "Other procedures",
       "agenda_descriptions": [
+        {
+          "agenda_item": "9.3.3",
+          "matched_agenda_item": "9.3.3",
+          "description": "Other procedures",
+          "hierarchy": [
+            {
+              "agenda_item": "9",
+              "description": "Release 20 NR",
+              "has_description": true
+            },
+            {
+              "agenda_item": "9.3",
+              "description": "Solutions for Ambient IoT (Internet of Things) in NR Phase 2",
+              "has_description": true
+            },
+            {
+              "agenda_item": "9.3.3",
+              "description": "Other procedures",
+              "has_description": true
+            }
+          ]
+        },
+        {
+          "agenda_item": "9.3.1",
+          "matched_agenda_item": "9.3.1",
+          "description": "R2D signals, channels, waveform and procedures",
+          "hierarchy": [
+            {
+              "agenda_item": "9",
+              "description": "Release 20 NR",
+              "has_description": true
+            },
+            {
+              "agenda_item": "9.3",
+              "description": "Solutions for Ambient IoT (Internet of Things) in NR Phase 2",
+              "has_description": true
+            },
+            {
+              "agenda_item": "9.3.1",
+              "description": "R2D signals, channels, waveform and procedures",
+              "has_description": true
+            }
+          ]
+        },
         {
           "agenda_item": "9.3.2",
           "matched_agenda_item": "9.3.2",
@@ -273,6 +414,15 @@
           ]
         }
       ]
+    },
+    {
+      "room_name": "RAN1_off1",
+      "name": "On demand",
+      "duration_minutes": 50,
+      "specified_start_time": null,
+      "chair": "Xiaodong",
+      "group_header": "6GR",
+      "agenda_item": null
     },
     {
       "room_name": "RAN1_off1",
@@ -382,7 +532,7 @@
       ]
     }
   ],
-  "merged_at": "2026-08-27T17:35:39.994517+00:00",
+  "merged_at": "2026-08-27T18:00:25.424742+00:00",
   "meeting_id": "ran1#126",
-  "schema_version": 1
+  "schema_version": 2
 }

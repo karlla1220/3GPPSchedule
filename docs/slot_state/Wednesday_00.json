@@ -130,7 +130,7 @@
       "duration_minutes": 40,
       "specified_start_time": null,
       "chair": "Sorour",
-      "group_header": "R20 / R20 NR",
+      "group_header": "R20",
       "agenda_item": "9.4",
       "description": "GNSS resilient NR-NTN operation",
       "agenda_descriptions": [
@@ -193,7 +193,7 @@
       "duration_minutes": 40,
       "specified_start_time": null,
       "chair": "Sorour",
-      "group_header": "R20 / R20 NR",
+      "group_header": "R20",
       "agenda_item": "9.2",
       "description": "NR MIMO Phase 6",
       "agenda_descriptions": [
@@ -222,7 +222,7 @@
       "duration_minutes": 30,
       "specified_start_time": null,
       "chair": "Hiroki",
-      "group_header": "6GR / 6G 10.5.4.x",
+      "group_header": "6GR / 10.5.4",
       "agenda_item": "10.5.4.4",
       "description": "Handling of potential multiple uplink transmissions",
       "agenda_descriptions": [
@@ -261,7 +261,7 @@
       "duration_minutes": 60,
       "specified_start_time": null,
       "chair": "Hiroki",
-      "group_header": "6GR / 6G 10.5.4.x",
+      "group_header": "6GR / 10.5.4",
       "agenda_item": "10.5.4.1",
       "description": "Downlink control channel, scheduling for downlink and uplink transmission",
       "agenda_descriptions": [
@@ -300,7 +300,7 @@
       "duration_minutes": 30,
       "specified_start_time": null,
       "chair": "Hiroki",
-      "group_header": "6GR / 6G 10.5.4.x",
+      "group_header": "6GR / 10.5.4",
       "agenda_item": "10.5.4.2",
       "description": "Downlink and uplink transmission without downlink control channel",
       "agenda_descriptions": [
@@ -340,32 +340,7 @@
       "specified_start_time": "08:30",
       "chair": "Hiroki",
       "group_header": "6GR",
-      "agenda_item": "10.2.1",
-      "description": "Waveform",
-      "agenda_descriptions": [
-        {
-          "agenda_item": "10.2.1",
-          "matched_agenda_item": "10.2.1",
-          "description": "Waveform",
-          "hierarchy": [
-            {
-              "agenda_item": "10",
-              "description": "Rel-20 Study of 6GR",
-              "has_description": true
-            },
-            {
-              "agenda_item": "10.2",
-              "description": "Waveform for 6GR air interface",
-              "has_description": true
-            },
-            {
-              "agenda_item": "10.2.1",
-              "description": "Waveform",
-              "has_description": true
-            }
-          ]
-        }
-      ]
+      "agenda_item": null
     },
     {
       "room_name": "RAN1_off1",
@@ -515,7 +490,7 @@
       "agenda_item": null
     }
   ],
-  "merged_at": "2026-08-27T17:35:39.984061+00:00",
+  "merged_at": "2026-08-27T17:59:38.554583+00:00",
   "meeting_id": "ran1#126",
-  "schema_version": 1
+  "schema_version": 2
 }

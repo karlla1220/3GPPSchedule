@@ -130,7 +130,7 @@
       "duration_minutes": 40,
       "specified_start_time": null,
       "chair": "Sorour",
-      "group_header": "R20 NR",
+      "group_header": "R20",
       "agenda_item": "9.2",
       "description": "NR MIMO Phase 6",
       "agenda_descriptions": [
@@ -159,7 +159,7 @@
       "duration_minutes": 40,
       "specified_start_time": null,
       "chair": "Sorour",
-      "group_header": "R20 NR",
+      "group_header": "R20",
       "agenda_item": "9.4",
       "description": "GNSS resilient NR-NTN operation",
       "agenda_descriptions": [
@@ -218,14 +218,26 @@
     },
     {
       "room_name": "RAN1_brk2",
-      "name": "8.2 R19 LP-WUS, Mobility, FR3/ISAC CM, 7 x5667, x5548/5549, x5668",
+      "name": "8.2 R19 LP-WUS, Mobility, FR3/ISAC CM",
       "duration_minutes": 80,
       "specified_start_time": null,
       "chair": "Hiroki",
-      "group_header": "Maintenance",
-      "agenda_item": "8.2, 7",
-      "description": "Maintenance on others",
+      "group_header": "AI 7/8.2",
+      "agenda_item": "7, 8.2",
+      "description": "Pre-Rel-19 NR Maintenance",
       "agenda_descriptions": [
+        {
+          "agenda_item": "7",
+          "matched_agenda_item": "7",
+          "description": "Pre-Rel-19 NR Maintenance",
+          "hierarchy": [
+            {
+              "agenda_item": "7",
+              "description": "Pre-Rel-19 NR Maintenance",
+              "has_description": true
+            }
+          ]
+        },
         {
           "agenda_item": "8.2",
           "matched_agenda_item": "8.2",
@@ -242,18 +254,6 @@
               "has_description": true
             }
           ]
-        },
-        {
-          "agenda_item": "7",
-          "matched_agenda_item": "7",
-          "description": "Pre-Rel-19 NR Maintenance",
-          "hierarchy": [
-            {
-              "agenda_item": "7",
-              "description": "Pre-Rel-19 NR Maintenance",
-              "has_description": true
-            }
-          ]
         }
       ]
     },
@@ -263,7 +263,7 @@
       "duration_minutes": 40,
       "specified_start_time": null,
       "chair": "Hiroki",
-      "group_header": "6G waveform",
+      "group_header": "6GR / 6G waveform",
       "agenda_item": "10.2.1",
       "description": "Waveform",
       "agenda_descriptions": [
@@ -293,11 +293,11 @@
     },
     {
       "room_name": "RAN1_off1",
-      "name": "10.5.4.1",
+      "name": "6G 10.5.4.x",
       "duration_minutes": 20,
       "specified_start_time": "08:30",
       "chair": "Hiroki",
-      "group_header": "6G 10.5.4.x",
+      "group_header": "6GR",
       "agenda_item": "10.5.4.x, 10.5.4.1",
       "description": "Downlink control channel, scheduling and HARQ operation",
       "agenda_descriptions": [
@@ -469,7 +469,7 @@
       ]
     }
   ],
-  "merged_at": "2026-08-27T17:35:39.989103+00:00",
+  "merged_at": "2026-08-27T18:00:01.397493+00:00",
   "meeting_id": "ran1#126",
-  "schema_version": 1
+  "schema_version": 2
 }

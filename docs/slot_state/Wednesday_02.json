@@ -14,7 +14,7 @@
       "specified_start_time": null,
       "chair": null,
       "group_header": "6GR",
-      "agenda_item": "10.6.x",
+      "agenda_item": null,
       "description": "WUS and operation",
       "agenda_descriptions": [
         {
@@ -179,7 +179,7 @@
     },
     {
       "room_name": "RAN1_brk2",
-      "name": "Maintenance R19 Duplex, R20 LBCA",
+      "name": "Maintenance",
       "duration_minutes": 115,
       "specified_start_time": null,
       "chair": "Hiroki",
@@ -399,7 +399,7 @@
       ]
     }
   ],
-  "merged_at": "2026-08-27T17:35:39.986379+00:00",
+  "merged_at": "2026-08-27T17:59:49.875611+00:00",
   "meeting_id": "ran1#126",
-  "schema_version": 1
+  "schema_version": 2
 }

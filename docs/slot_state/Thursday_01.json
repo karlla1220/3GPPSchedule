@@ -116,7 +116,7 @@
       "specified_start_time": null,
       "chair": "Sorour",
       "group_header": "",
-      "agenda_item": "AI 8.1 MIMO, AI 8.1 NTN, AI 6",
+      "agenda_item": "8.1, 6",
       "description": "Maintenance on AI/ML for NR Air interface, NR MIMO Phase 5, NES and NTN for NR and IoT",
       "agenda_descriptions": [
         {
@@ -156,7 +156,7 @@
       "duration_minutes": 80,
       "specified_start_time": null,
       "chair": "Sorour",
-      "group_header": "R20 / AI/ML / R20 NR",
+      "group_header": "R20 / AI/ML",
       "agenda_item": "9.1",
       "description": "Artificial Intelligence (AI)/Machine Learning (ML) for NR air interface enhancements",
       "agenda_descriptions": [
@@ -185,7 +185,7 @@
       "duration_minutes": 40,
       "specified_start_time": null,
       "chair": "Hiroki",
-      "group_header": "R20 / A-IoT Phase2 / R20 A-IoT",
+      "group_header": "R20 / A-IoT Phase2",
       "agenda_item": "9.3.2",
       "description": "D2R signals, channels, waveform and procedures",
       "agenda_descriptions": [
@@ -219,7 +219,7 @@
       "duration_minutes": 40,
       "specified_start_time": null,
       "chair": "Hiroki",
-      "group_header": "R20 / A-IoT Phase2 / R20 A-IoT",
+      "group_header": "R20 / A-IoT Phase2",
       "agenda_item": "9.3.3",
       "description": "Other procedures",
       "agenda_descriptions": [
@@ -253,7 +253,7 @@
       "duration_minutes": 40,
       "specified_start_time": null,
       "chair": "Hiroki",
-      "group_header": "R20 / A-IoT Phase2 / R20 A-IoT",
+      "group_header": "R20 / A-IoT Phase2",
       "agenda_item": "9.3.1",
       "description": "R2D signals, channels, waveform and procedures",
       "agenda_descriptions": [
@@ -506,7 +506,7 @@
       ]
     }
   ],
-  "merged_at": "2026-08-27T17:35:39.990255+00:00",
+  "merged_at": "2026-08-27T18:00:07.135171+00:00",
   "meeting_id": "ran1#126",
-  "schema_version": 1
+  "schema_version": 2
 }
