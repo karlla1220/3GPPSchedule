@@ -132,21 +132,28 @@ jobs:
           restore-keys: |
             llm-cache-
 
-      # force-deploy: wipe cached LLM results and the committed external-file
-      # cache so every configured extra file is fetched again.
+      # force-deploy: wipe every persisted build input/result so the parser
+      # cannot reuse data from an earlier build.
       - name: Reset caches (force-deploy)
         if: github.event.inputs.action == 'force-deploy'
         run: |
           rm -rf .cache/*
           rm -rf downloads/extra_files
           rm -f docs/.extra_files_state.json
+          rm -f docs/.schedule_state.json
+          rm -f docs/agenda_item_description.json
 
       - name: Run schedule parser
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           SCHEDULE_CONTACT_NAME: Duckhyun Bae
           SCHEDULE_CONTACT_EMAIL: duckhyun.bae@lge.com
-        run: uv run python main.py
+        run: |
+          if [ "${{ github.event.inputs.action }}" = "force-deploy" ]; then
+            uv run python main.py --rebuild-slots
+          else
+            uv run python main.py
+          fi
 
       - name: Check for output
         id: output
