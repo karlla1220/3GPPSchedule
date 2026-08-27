@@ -2,7 +2,7 @@
   "day": "Thursday",
   "time_block_index": 3,
   "source_hashes": {
-    "Main Schedule": "feaf9cd94e3bc223",
+    "Main Schedule": "5f75c8f78c28a48c",
     "Hiroki's schedule": "62ca99916bf63460",
     "Sorour's schedule": "26a4d089381f5f58"
   },
@@ -316,7 +316,7 @@
       "room_name": "ALL_ONLINE",
       "name": "Early dinner",
       "duration_minutes": 60,
-      "specified_start_time": null,
+      "specified_start_time": "18:30",
       "chair": null,
       "group_header": "",
       "agenda_item": null
@@ -451,13 +451,13 @@
       "room_name": "RAN1_off1 + RAN1_off2",
       "name": "Early dinner",
       "duration_minutes": 60,
-      "specified_start_time": null,
+      "specified_start_time": "18:30",
       "chair": null,
       "group_header": "",
       "agenda_item": null
     }
   ],
-  "merged_at": "2026-08-27T16:32:35.615673+00:00",
+  "merged_at": "2026-08-27T16:52:28.224613+00:00",
   "meeting_id": "ran1#126",
   "schema_version": 1
 }
