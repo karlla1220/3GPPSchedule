@@ -191,6 +191,35 @@ def _dedupe_row_cells(row) -> list[tuple]:
     return result
 
 
+def _is_vmerge_continuation_at_col(row, grid_col: int) -> bool:
+    """Return whether *grid_col* belongs to a vertical-merge continuation.
+
+    ``python-docx`` resolves a continuation cell to the merge origin when
+    accessed through ``row.cells``.  Inspect the row's own XML instead so a
+    blank continuation can be distinguished from an ordinary blank cell.
+    """
+    col_cursor = 0
+    for tc_el in row._tr.findall(f"{{{_NS}}}tc"):
+        tc_pr = tc_el.find(f"{{{_NS}}}tcPr")
+        grid_span = 1
+        if tc_pr is not None:
+            gs_el = tc_pr.find(f"{{{_NS}}}gridSpan")
+            if gs_el is not None:
+                grid_span = int(gs_el.get(f"{{{_NS}}}val"))
+
+        if col_cursor <= grid_col < col_cursor + grid_span:
+            if tc_pr is None:
+                return False
+            vm_el = tc_pr.find(f"{{{_NS}}}vMerge")
+            if vm_el is None:
+                return False
+            return vm_el.get(f"{{{_NS}}}val") != "restart"
+
+        col_cursor += grid_span
+
+    return False
+
+
 def _is_break_row(cells: list[tuple]) -> bool:
     """Check if this row is a break (coffee/lunch).
 
@@ -691,22 +720,37 @@ def parse_docx(
             }
         )
 
-        # Parse data rows
+        # Parse data rows.  Some documents split a time block into multiple
+        # physical rows and vertically merge the time-label cell.  Keep the
+        # last explicit block so continuation rows can retain their own
+        # horizontally merged (gridSpan) schedule cells.
+        active_tb_index: int | None = None
         for row_idx in range(1, len(rows)):
-            row_cells = _dedupe_row_cells(rows[row_idx])
+            row = rows[row_idx]
+            row_cells = _dedupe_row_cells(row)
 
             if _is_break_row(row_cells) or _is_footer_row(row_cells) or _is_metadata_row(row_cells):
+                active_tb_index = None
                 continue
 
             # First cell should be the time label
             if not row_cells:
+                active_tb_index = None
                 continue
 
             time_cell_text = row_cells[0][0]
             tb_index = _determine_time_block_index(time_cell_text)
 
             if tb_index is None:
-                continue
+                if _is_vmerge_continuation_at_col(row, 0):
+                    tb_index = active_tb_index
+                else:
+                    active_tb_index = None
+
+                if tb_index is None:
+                    continue
+            else:
+                active_tb_index = tb_index
 
             time_block = TIME_BLOCKS[tb_index]
 

@@ -4,12 +4,15 @@ from zipfile import ZipFile
 from xml.etree.ElementTree import Element, SubElement
 from unittest.mock import MagicMock
 
+from docx import Document
+
 from models import RoomInfo
 from parser import (
     _determine_time_block_index,
     _get_cell_text,
     extract_meeting_location,
     find_chair_notes_docx,
+    parse_docx,
 )
 from session_parser import _extract_agenda_item_from_name, _slot_result_to_sessions
 
@@ -152,6 +155,64 @@ class DetermineTimeBlockIndexTests(unittest.TestCase):
         self.assertIsNone(
             _determine_time_block_index("10:30\n~\n11:00\n\n(30 min)"),
         )
+
+
+def test_parse_docx_applies_grid_span_on_vmerge_time_continuation(tmp_path):
+    path = tmp_path / "vmerge-gridspan.docx"
+    document = Document()
+    table = document.add_table(rows=5, cols=4)
+
+    table.cell(0, 1).merge(table.cell(0, 3)).text = "Thursday"
+
+    table.cell(1, 0).text = "08:30 ~ 10:30 (120 min)"
+    table.cell(1, 1).text = "Room A morning"
+    table.cell(1, 2).text = "Room B morning"
+    table.cell(1, 3).text = "Room C morning"
+
+    table.cell(2, 0).merge(table.cell(2, 3)).text = "Lunch break: 13:00 ~ 14:30"
+
+    table.cell(3, 0).text = "17:00 ~ 19:30 (150 min)"
+    table.cell(3, 1).text = "Room A evening"
+    table.cell(3, 2).text = "Room B evening"
+    table.cell(3, 3).text = "Room C evening"
+    table.cell(3, 0).merge(table.cell(4, 0))
+    table.cell(4, 1).merge(table.cell(4, 3)).text = "Early dinner (60)"
+
+    document.save(path)
+
+    cells, _ = parse_docx(path)
+    dinners = [cell for cell in cells if cell.text == "Early dinner (60)"]
+
+    assert len(dinners) == 1
+    assert dinners[0].time_block_index == 3
+    assert dinners[0].room_indices == [0, 1, 2]
+
+
+def test_parse_docx_does_not_inherit_time_for_plain_blank_row(tmp_path):
+    path = tmp_path / "blank-time-gridspan.docx"
+    document = Document()
+    table = document.add_table(rows=5, cols=4)
+
+    table.cell(0, 1).merge(table.cell(0, 3)).text = "Thursday"
+
+    table.cell(1, 0).text = "08:30 ~ 10:30 (120 min)"
+    table.cell(1, 1).text = "Room A morning"
+    table.cell(1, 2).text = "Room B morning"
+    table.cell(1, 3).text = "Room C morning"
+
+    table.cell(2, 0).merge(table.cell(2, 3)).text = "Lunch break: 13:00 ~ 14:30"
+
+    table.cell(3, 0).text = "17:00 ~ 19:30 (150 min)"
+    table.cell(3, 1).text = "Room A evening"
+    table.cell(3, 2).text = "Room B evening"
+    table.cell(3, 3).text = "Room C evening"
+    table.cell(4, 1).merge(table.cell(4, 3)).text = "Unrelated note"
+
+    document.save(path)
+
+    cells, _ = parse_docx(path)
+
+    assert all(cell.text != "Unrelated note" for cell in cells)
 
 
 class AgendaExtractionTests(unittest.TestCase):
