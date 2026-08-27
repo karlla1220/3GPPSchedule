@@ -2,6 +2,8 @@
 
 3GPP FTP 서버에서 최신 회의 스케줄 DOCX 파일을 다운로드하고, Gemini API로 비정형 테이블 텍스트를 파싱하여 **CSS Grid 기반 간트차트 스타일의 정적 HTML 페이지**를 생성합니다.
 
+결정론적 DOCX 파싱과 LLM 의미 해석의 책임 범위, 캐시 및 후처리 흐름은 [스케줄 파싱 작동 원리](PARSING_ARCHITECTURE.md)를 참고하세요.
+
 ## 주요 기능
 
 - 3GPP FTP에서 최신 스케줄 DOCX 자동 다운로드 (ZIP 내 문서 자동 추출 지원)
