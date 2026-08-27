@@ -18,6 +18,39 @@ def test_dimmed_sessions_remain_clickable_for_detail_popup():
     assert "pointer-events: none" not in dimmed_rule.group(1)
 
 
+def test_short_sessions_do_not_overflow_their_grid_slots():
+    css = _generate_css(num_rooms_max=1)
+    short_rule = re.search(r"\.session-block\.short-session\s*\{([^}]*)\}", css)
+    tiny_rule = re.search(r"\.session-block\.tiny-session\s*\{([^}]*)\}", css)
+    tiny_name_rule = re.search(
+        r"\.session-block\.tiny-session \.session-name\s*\{([^}]*)\}", css
+    )
+
+    assert short_rule is not None
+    assert tiny_rule is not None
+    assert tiny_name_rule is not None
+    assert "min-height" not in short_rule.group(1)
+    assert "min-height" not in tiny_rule.group(1)
+    assert "display: none" in tiny_name_rule.group(1)
+
+
+def test_time_column_and_now_label_stay_aligned_while_scrolling():
+    css = _generate_css(num_rooms_max=1)
+    time_header_rule = re.search(r"\.room-header\.time-col\s*\{([^}]*)\}", css)
+    time_label_rule = re.search(r"\.time-label\s*\{([^}]*)\}", css)
+    now_label_rule = re.search(r"\.now-line::before\s*\{([^}]*)\}", css)
+
+    assert time_header_rule is not None
+    assert time_label_rule is not None
+    assert now_label_rule is not None
+    assert "left: 0" in time_header_rule.group(1)
+    assert "position: sticky" in time_label_rule.group(1)
+    assert "left: 0" in time_label_rule.group(1)
+    assert "position: sticky" in now_label_rule.group(1)
+    assert "width: var(--time-col-width)" in now_label_rule.group(1)
+    assert "justify-content: center" in now_label_rule.group(1)
+
+
 def test_generate_html_renders_external_page_assets():
     schedule = Schedule(
         meeting_name="RAN <Test>",
