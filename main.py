@@ -9,7 +9,7 @@ Usage:
     python main.py --no-download             # Use latest local file, skip download
 
 Environment variables:
-    GEMINI_API_KEY  — Google Gemini API key (required unless --no-llm)
+    GEMINI_API_KEY  — Google Gemini API key (required)
     SCHEDULE_CONTACT_NAME  — Contact name displayed in generated HTML
     SCHEDULE_CONTACT_EMAIL — Contact email displayed in generated HTML
     SCHEDULE_INBOX_URLS    — JSON array or comma-separated list of inbox URLs

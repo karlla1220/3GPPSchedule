@@ -14,7 +14,7 @@
 - **다중 소스 크로스레퍼런스**: 같은 시간대의 여러 스케줄 테이블을 하나의 LLM 호출로 통합하여 가장 상세한 세션 정보(AI 번호 등) 도출
 - **회의 시간대 자동 감지**: Agenda DOCX 또는 Chair notes DOCX/DOCM의 OOXML에서 개최지 정보를 추출하여 IANA 타임존 자동 설정
 - 요일별 탭 전환, 오늘 날짜 자동 선택되는 단일 HTML 간트차트 생성 (그룹별 색상, 자동 새로고침)
-- GitHub Actions를 통한 자동 빌드 및 GitHub Pages 배포 (평일 5분 간격 변경 감지)
+- GitHub Actions를 통한 자동 빌드 및 GitHub Pages 배포 (외부 cron-job.org가 주기적으로 변경 감지 트리거)
 
 ## 요구사항
 
@@ -257,10 +257,11 @@ CI에서 외부 파일 요청은 다음과 같이 동작합니다.
 
 ### `deploy.yml` — 스케줄 빌드 및 배포
 
-- **자동 실행**: 평일 5분마다 FTP 변경 감지 → 변경 시 재빌드 및 배포
+- **자동 실행**: 외부 cron-job.org가 `repository_dispatch`(`cronjob_trigger`) 이벤트로 주기적 트리거 → `check` job이 FTP 변경 감지 → 변경 시 재빌드 및 배포 (GitHub `schedule:` 크론이 아니라 외부 서비스 주기에 따름)
 - **수동 실행**: GitHub Actions 탭에서 `workflow_dispatch`로 트리거 가능
-  - `check-and-deploy`: 변경 감지 후 변경 시에만 빌드/배포 (기본값)
-     - `force-deploy`: 변경 여부 무시, LLM·슬롯 상태·스케줄 상태·agenda description·외부 파일 캐시를 초기화한 뒤 전체 재빌드/배포
+  - `check-build-deploy`: 변경 감지 후 변경 시에만 빌드/배포 (기본값)
+  - `build-deploy`: FTP 체크 생략, 캐시를 유지한 채 빌드/배포 (예: `generator.py`만 변경됐을 때 유용)
+  - `force-deploy`: 변경 여부 무시, LLM·슬롯 상태·스케줄 상태·agenda description·외부 파일 캐시를 초기화한 뒤 전체 재빌드/배포
   - `deploy-only`: 빌드 없이 현재 `docs/` 그대로 배포
 - **변경 감지**: `check_update.py`가 모든 스케줄 폴더의 파일 메타데이터를 비교하며, 정규 미팅은 meeting rank를 우선하고 비정규 미팅은 업로드 시각을 사용
 - **배포 방식**: `docs/index.html` 생성 → 상태 저장 → 자동 커밋 & 푸시 → GitHub Pages 배포
