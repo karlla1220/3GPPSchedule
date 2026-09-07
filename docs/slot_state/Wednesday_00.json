@@ -3,8 +3,8 @@
   "time_block_index": 0,
   "source_hashes": {
     "Main Schedule": "45a727ce8dc920bc",
-    "Sorour's schedule": "870dc22b7005bcb1",
-    "Hiroki's schedule": "75ce5afdaa2861f4"
+    "Hiroki's schedule": "75ce5afdaa2861f4",
+    "Sorour's schedule": "870dc22b7005bcb1"
   },
   "merged_sessions": [
     {
@@ -490,7 +490,7 @@
       "agenda_item": null
     }
   ],
-  "merged_at": "2026-09-07T17:45:47.641543+00:00",
+  "merged_at": "2026-09-07T18:01:18.395191+00:00",
   "meeting_id": "ran1#126",
   "schema_version": 2
 }
