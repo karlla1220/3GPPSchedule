@@ -19,6 +19,16 @@
     "etag": "\"04d86e78643dd1:0\"",
     "last_modified": "Sun, 13 Sep 2026 13:50:58 GMT"
   },
+  "portal_metadata": {
+    "starts_at": "2026-09-14T09:00:00+02:00",
+    "ends_at": "2026-09-17T17:30:00+02:00",
+    "starts_on": "2026-09-14",
+    "ends_on": "2026-09-17",
+    "location": "Madrid",
+    "country": "ES",
+    "portal_timezone": "(GMT+02.00)  Brussels, Copenhagen, Madrid, Paris",
+    "portal_id": 60799
+  },
   "metadata": {
     "starts_at": "2026-09-14T09:00:00+02:00",
     "ends_at": "2026-09-17T17:30:00+02:00",
