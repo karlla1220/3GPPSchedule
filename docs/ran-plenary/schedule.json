@@ -145,7 +145,7 @@
           "room_col_end": 3,
           "chair": null,
           "agenda_item": "15",
-          "group_header": "Rel-21 5G-Adv",
+          "group_header": "Early items",
           "description": "5G-Advanced in Rel-21",
           "agenda_descriptions": [
             {
@@ -212,7 +212,7 @@
           "room_col_end": 3,
           "chair": null,
           "agenda_item": "15",
-          "group_header": "Rel-21 5G-Adv",
+          "group_header": "Early items",
           "description": "5G-Advanced in Rel-21",
           "agenda_descriptions": [
             {
@@ -363,7 +363,7 @@
       ],
       "sessions": [
         {
-          "name": "Rel-21 5G-Adv (AI 15.2 – RAN1/2/3 Others, Jerome)",
+          "name": "Rel-21 5G-Adv (RAN1/2/3 Others, Jerome)",
           "duration_minutes": 60,
           "start_time": "08:00",
           "end_time": "09:00",
@@ -821,7 +821,7 @@
           "room_col_end": 3,
           "chair": null,
           "agenda_item": "8.2.1.3",
-          "group_header": "6G",
+          "group_header": "Early items",
           "description": "Any other 6G study topics",
           "agenda_descriptions": [
             {
@@ -1392,7 +1392,7 @@
     }
   ],
   "source_file": "RAN#113 time plan v04.zip",
-  "generated_at": "2026-09-14 19:18",
+  "generated_at": "2026-09-14 19:39",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
