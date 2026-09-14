@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from shared.topic_references import render_topic_references
+
 import json
 import re
 from datetime import datetime
@@ -96,7 +98,7 @@ def _build_filter_data(all_sessions: list) -> str:
         "groups": groups,
         "allAIs": sorted(all_ais, key=_natural_sort_key),
     }
-    return json.dumps(result, ensure_ascii=False)
+    return json.dumps(result, ensure_ascii=False).replace("<", "\\u003c")
 
 
 def _agenda_description_popup_lines(session) -> list[str]:
@@ -345,7 +347,12 @@ def generate_html(schedule: Schedule, *, schedules=None, groups=None, presentati
             row_start = max(2, timeline.row(brk["start"]))
             row_end = min(timeline.rows + 2, timeline.row(brk["end"]))
             if row_end > row_start:
-                html_parts.append(f'<div class="break-bar" style="grid-row:{row_start}/{row_end}">{_esc(brk["name"])}</div>')
+                label = _esc(brk["name"])
+                if brk.get("label_position") == "time-axis":
+                    html_parts.append(f'<div class="break-bar" aria-hidden="true" style="grid-row:{row_start}/{row_end}"></div>')
+                    html_parts.append(f'<div class="break-axis" style="grid-row:{row_start}/{row_end}">{label}</div>')
+                else:
+                    html_parts.append(f'<div class="break-bar" style="grid-row:{row_start}/{row_end}">{label}</div>')
 
         # Session blocks
         for session in day_schedule.sessions:
@@ -364,7 +371,13 @@ def generate_html(schedule: Schedule, *, schedules=None, groups=None, presentati
             # but we need to ensure they fit within this day's room count.
             col_start = session.room_col_start
             col_end = session.room_col_end
-            if session.room_ids:
+            if session.room_scope not in {"assigned", "shared", "unassigned"}:
+                raise ValueError(f"Unknown room scope: {session.room_scope}")
+            if session.room_scope in {"shared", "unassigned"}:
+                if session.room_ids:
+                    raise ValueError("Merged display spans cannot claim physical rooms")
+                col_start, col_end = 2, num_rooms + 2
+            elif session.room_ids:
                 room_columns = {room.id: i + 2 for i, room in enumerate(day_schedule.rooms)}
                 columns = sorted(room_columns[room_id] for room_id in session.room_ids)
                 if columns != list(range(columns[0], columns[-1] + 1)):
@@ -395,6 +408,9 @@ def generate_html(schedule: Schedule, *, schedules=None, groups=None, presentati
                 else session.name
             )
             name_html = f'<div class="session-name">{_esc(display_name)}</div>'
+            scope_label = {"shared": "Common", "unassigned": "Room unassigned"}.get(session.room_scope)
+            if scope_label and not is_short:
+                name_html += f'<div class="session-scope">{scope_label}</div>'
             chair_html = ""
             dur_html = ""
             ai_html = ""
@@ -430,8 +446,11 @@ def generate_html(schedule: Schedule, *, schedules=None, groups=None, presentati
             for ri in range(col_start - 2, min(col_end - 2, num_rooms)):
                 if ri < len(day_schedule.rooms):
                     room_names_in_span.append(day_schedule.rooms[ri].name)
-            if room_names_in_span:
-                popup_lines.append(f"Room: {', '.join(room_names_in_span)}")
+            if scope_label:
+                popup_lines.append(f"Room: {scope_label} (merged display, not a booking of every room)")
+            elif room_names_in_span:
+                popup_lines.append(f"Room: {_esc(', '.join(room_names_in_span))}")
+            popup_lines.extend(f"Note: {_esc(note)}" for note in session.notes)
             popup_html = "<br>".join(popup_lines)
 
             # Escape popup_html for use in data attribute
@@ -463,6 +482,7 @@ def generate_html(schedule: Schedule, *, schedules=None, groups=None, presentati
             html_parts.append(
                 f'                <div class="{block_classes}" style="{style}"'
                 f' data-popup="{popup_attr}"'
+                f' data-room-scope="{session.room_scope}"'
                 f' data-ai="{data_ai_attr}"'
                 f' data-name="{data_name_attr}"'
                 f' data-group="{data_group_attr}"'
@@ -477,6 +497,8 @@ def generate_html(schedule: Schedule, *, schedules=None, groups=None, presentati
             "        </div>\n"
             "    </div>\n"
         )
+
+    html_parts.append(render_topic_references(schedule.topic_references))
 
     return _render_template("schedule.html", {
         "MEETING_NAME": _esc(schedule.meeting_name),

@@ -10,7 +10,7 @@ import pytest
 import ci
 from shared.lifecycle import CheckResult
 from shared.schedule import load_schedule
-from working_groups.ran_plenary.pipeline import build_schedule as demo
+from schedule_fixture import build_schedule as demo
 
 
 class FakeWG:
@@ -351,3 +351,15 @@ def test_force_reset_clears_ran1_generated_metadata(tmp_path, monkeypatch):
         path.write_text('old')
     lifecycle.reset_cache()
     assert all(not path.exists() for path in paths)
+
+
+def test_final_render_failure_rolls_back_new_wg_checkpoints(site, monkeypatch):
+    bootstrap()
+    before = {str(p): p.read_bytes() for p in Path('docs').rglob('*') if p.is_file()}
+    site['ran-plenary'].input_paths[0].write_text('updated pipeline')
+    ci.check_site()
+    monkeypatch.setattr(ci, 'render_site', lambda *a, **kw: (_ for _ in ()).throw(OSError('HTML write failed')))
+    with pytest.raises(OSError):
+        ci.build_site()
+    after = {str(p): p.read_bytes() for p in Path('docs').rglob('*') if p.is_file()}
+    assert after == before

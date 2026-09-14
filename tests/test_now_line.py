@@ -11,7 +11,7 @@ import pytest
 
 from shared.renderer import _generate_js, generate_html
 from shared.schedule import load_schedule, save_schedule
-from working_groups.ran_plenary.pipeline import build_schedule
+from schedule_fixture import build_schedule
 
 START = '2026-08-24T09:00:00+02:00'
 END = '2026-08-28T17:30:00+02:00'

@@ -1,0 +1,7 @@
+{
+  "chair_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN/Inbox/Chair/",
+  "agenda_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN/Agenda/agenda.csv",
+  "model": "gemini-3-flash-preview",
+  "local_agenda": null,
+  "meetings": {}
+}
