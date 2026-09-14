@@ -128,7 +128,10 @@ def test_rendering_spans_rooms_without_claiming_them_and_preserves_notes(schedul
     assert len(tuesday.select('.break-axis')) == 3
     assert 'Close by' in html.get_text() or 'Close by' in str(html)
     assert len(html.select('.topic-references tbody tr')) == 22
-    assert 'individual topics have no assigned times' in html.get_text()
+    assert html.select_one('.topic-references summary').get_text() == 'Topics'
+    assert html.select('.topic-references > p')[-1].get_text() == (
+        'Plan is to discuss the RAN#113 topics according to the ordering in the table below unless noted otherwise.'
+    )
     assert not html.select('.demo-notice')
 
 
@@ -138,6 +141,7 @@ def test_snapshot_roundtrip_and_old_snapshot_defaults(schedule, tmp_path):
     assert load_schedule(path) == schedule
     raw = json.loads(path.read_text())
     raw.pop('topic_references')
+    raw.pop('topic_preamble')
     for day in raw['days']:
         for session in day['sessions']:
             session.pop('room_scope'); session.pop('notes')
@@ -498,3 +502,33 @@ def test_date_override_discards_stale_portal_instant(metadata):
     result = pipeline.meeting_metadata(113, cfg, previous, None, None)
     assert 'starts_at' not in result
     assert result['ends_at'] == previous['metadata']['ends_at']
+
+
+@pytest.mark.parametrize('paragraphs', [
+    ['Changed heading', 'Discuss B before A <unless amended> & confirmed.\nSecond line.'],
+    [],
+])
+def test_topic_preamble_comes_from_document(paragraphs, parsed, metadata, tmp_path):
+    doc = Document(io.BytesIO(docmod.unpack_docx((FIXTURES / FILENAME).read_bytes(), FILENAME)))
+    table = doc.tables[1]
+    for sibling in list(table._tbl.itersiblings(preceding=True)):
+        if sibling.tag == qn('w:tbl'):
+            break
+        sibling.getparent().remove(sibling)
+    for text in (paragraphs or ['', '']):
+        paragraph = doc.add_paragraph(text)
+        table._tbl.addprevious(paragraph._p)
+    data = io.BytesIO()
+    doc.save(data)
+    source = docmod.extract_document(data.getvalue(), 'RAN#113 time plan v04.docx')
+    assert source['topic_preamble'] == paragraphs
+    result = interp.make_schedule(source, parsed, docmod.agenda_map((FIXTURES / 'agenda.csv').read_bytes()),
+                                  metadata, FILENAME, '2026-09-15 02:00')
+    path = tmp_path / 'schedule.json'
+    save_schedule(result, path)
+    restored = load_schedule(path)
+    assert restored.topic_preamble == paragraphs
+    html = BeautifulSoup(generate_html(restored), 'html.parser')
+    assert [p.get_text(separator='\n') for p in html.select('.topic-references > p')] == paragraphs
+    assert len(html.select('.topic-references tbody tr')) == 22
+    assert not html.select('.topic-references > p unless')

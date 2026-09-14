@@ -107,13 +107,13 @@ def agenda_tree(items):
     return f'<div class="topic-agenda-tree" aria-label="Agenda hierarchy">{render(roots)}</div>' if roots else ''
 
 
-def render_topic_references(topics):
+def render_topic_references(topics, preamble=()):
     if not topics:
         return ''
-    output = ['<details class="topic-references" open><summary>Topics for early discussions</summary>',
-              '<p>Reference order only — individual topics have no assigned times.</p>',
-              '<div class="topic-scroll"><table><thead><tr><th>Topic</th><th>Documents / notes</th>',
-              '<th>Agenda item</th></tr></thead><tbody>']
+    output = ['<details class="topic-references" open><summary>Topics</summary>']
+    output.extend(f'<p>{escape(text).replace(chr(10), "<br>")}</p>' for text in preamble if text.strip())
+    output.extend(['<div class="topic-scroll"><table><thead><tr><th>Topic</th><th>Documents / notes</th>',
+                   '<th>Agenda item</th></tr></thead><tbody>'])
     for topic in topics:
         source = (f'<div class="topic-agenda-source">'
                   f'<span class="topic-agenda-label">{rich_text(topic, "agenda_item")}</span></div>'

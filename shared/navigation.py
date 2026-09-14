@@ -50,9 +50,7 @@ def render_navigation(selected, schedules, groups):
         if schedule is None:
             continue
         status = meeting_status(schedule)
-        # Undated legacy results stay accessible without claiming to be live.
-        if group["id"] != selected.wg_id and status in {"Upcoming", "Ended"}:
-            continue
+        # Each WG keeps its latest saved schedule accessible until replaced.
         label = schedule.meeting_name
         href = f'../{group["id"]}/'
         if group["id"] == selected.wg_id:

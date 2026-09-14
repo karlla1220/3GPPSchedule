@@ -120,7 +120,7 @@ def test_failed_wg_does_not_replace_last_successful_schedule(tmp_path, monkeypat
     assert (opts.output_dir / 'ran-plenary/index.html').exists()
 
 
-def test_navigation_uses_venue_dates_and_keeps_selected_ended_meeting():
+def test_navigation_uses_venue_dates_and_keeps_latest_ended_meeting():
     ran1 = replace(plenary_schedule(), wg_id='ran1', meeting_name='RAN1', is_demo=False,
                    starts_on='2026-09-15', ends_on='2026-09-15', timezone='Asia/Seoul')
     assert meeting_status(ran1, datetime(2026, 9, 14, 16, tzinfo=timezone.utc)) == 'In progress'
@@ -131,7 +131,9 @@ def test_navigation_uses_venue_dates_and_keeps_selected_ended_meeting():
     html = BeautifulSoup(generate_html(ended, schedules={'ran1': ended, 'ran-plenary': demo}, groups=groups), 'html.parser')
     assert html.select_one('[aria-current]')['href'] == '../ran1/'
     html = BeautifulSoup(generate_html(demo, schedules={'ran1': ended, 'ran-plenary': demo}, groups=groups), 'html.parser')
-    assert html.select_one('.wg-link') is None
+    link = html.select_one('.wg-link')
+    assert link['href'] == '../ran1/'
+    assert link.select_one('.meeting-status').text == 'Ended'
 
 
 @pytest.mark.parametrize('kwargs', [{'slot_minutes': 0}, {'label_minutes': -1}, {'start': '18:00'}, {'slot_minutes': 7}, {'slot_minutes': 15, 'label_minutes': 20}])

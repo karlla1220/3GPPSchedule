@@ -100,6 +100,7 @@ class Schedule:
     ends_at: str | None = None
     is_demo: bool = False
     topic_references: list[dict] = field(default_factory=list)
+    topic_preamble: list[str] = field(default_factory=list)
 
 
 def time_to_minutes(t: str) -> int:

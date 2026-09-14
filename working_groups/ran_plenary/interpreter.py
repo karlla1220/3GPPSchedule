@@ -295,5 +295,6 @@ def make_schedule(document, result, descriptions, metadata, name, generated_at):
                     source_file=name, source_files=[name, 'agenda.csv'], generated_at=generated_at,
                     timezone=metadata['timezone'], starts_on=metadata['starts_on'], ends_on=metadata['ends_on'],
                     starts_at=metadata.get('starts_at'), ends_at=metadata.get('ends_at'),
+                    topic_preamble=document.get('topic_preamble', []),
                     topic_references=[{**t, 'agenda_descriptions': describe(t['agenda_item'], descriptions)}
                                       for t in document['topics']])

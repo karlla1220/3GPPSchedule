@@ -498,7 +498,7 @@ def generate_html(schedule: Schedule, *, schedules=None, groups=None, presentati
             "    </div>\n"
         )
 
-    html_parts.append(render_topic_references(schedule.topic_references))
+    html_parts.append(render_topic_references(schedule.topic_references, schedule.topic_preamble))
 
     return _render_template("schedule.html", {
         "MEETING_NAME": _esc(schedule.meeting_name),

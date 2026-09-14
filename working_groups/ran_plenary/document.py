@@ -9,6 +9,7 @@ import zipfile
 from pathlib import Path
 
 from docx import Document
+from docx.text.paragraph import Paragraph
 from lxml import etree
 
 W = 'http://schemas.openxmlformats.org/wordprocessingml/2006/main'
@@ -152,6 +153,7 @@ def extract_document(data: bytes, name: str) -> dict:
     if filename_match and int(filename_match.group(1)) != int(meeting.group(1)):
         raise ValueError('Filename and document meeting identities disagree')
     cells, breaks, topics = [], [], []
+    topic_preamble = []
     days = []
     time_tables = 0
     for ti, table in enumerate(doc.tables):
@@ -181,6 +183,18 @@ def extract_document(data: bytes, name: str) -> dict:
                     else:
                         cells.append(entry)
         elif [s.lower() for s in first] == ['topics', 'documents', 'agenda item']:
+            # Keep the introductory paragraphs in document order, bounded by the
+            # preceding table. Bookmark markers do not break this paragraph block.
+            preceding = []
+            for sibling in table._tbl.itersiblings(preceding=True):
+                if sibling.tag == f'{{{W}}}tbl':
+                    break
+                if sibling.tag == f'{{{W}}}p':
+                    paragraph = Paragraph(sibling, doc._body)
+                    text = formatting.paragraph(paragraph, 'topic-preamble')['text']
+                    if text.strip():
+                        preceding.append(text)
+            topic_preamble.extend(reversed(preceding))
             for ri, row in enumerate(table.rows[1:], 1):
                 rich_text = {
                     key: [formatting.rich_paragraph(p, f't{ti}.r{ri}.c{ci}.p{pi}')
@@ -192,7 +206,8 @@ def extract_document(data: bytes, name: str) -> dict:
     if time_tables != 1 or not cells:
         raise ValueError('Expected one non-empty weekday timeplan table')
     return {'meeting_number': int(meeting.group(1)), 'title': title, 'days': days,
-            'headers': headers, 'cells': cells, 'breaks': breaks, 'topics': topics}
+            'headers': headers, 'cells': cells, 'breaks': breaks, 'topics': topics,
+            'topic_preamble': topic_preamble}
 
 
 def agenda_map(data: bytes) -> dict[str, str]:

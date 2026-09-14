@@ -6206,5 +6206,9 @@
       },
       "agenda_descriptions": []
     }
+  ],
+  "topic_preamble": [
+    "Topics for Early Discussions ",
+    "Plan is to discuss the RAN#113 topics according to the ordering in the table below unless noted otherwise."
   ]
 }
