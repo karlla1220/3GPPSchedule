@@ -107,7 +107,7 @@ def _load_cache(key: str) -> list[dict] | None:
 
 def _save_cache(key: str, data: list[dict]):
     """Save Gemini results to cache."""
-    CACHE_DIR.mkdir(exist_ok=True)
+    CACHE_DIR.mkdir(parents=True, exist_ok=True)
     cache_file = CACHE_DIR / f"{key}.json"
     with open(cache_file, "w") as f:
         json.dump(data, f, ensure_ascii=False, indent=2)
