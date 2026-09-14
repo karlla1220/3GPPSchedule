@@ -1,24 +1,29 @@
 {
-  "files": [],
+  "files": [
+    {
+      "folder": "Chair_notes",
+      "name": "RAN1#126 online and offline schedules - v03.docx",
+      "uploaded_at": "2026-08-28T08:41:00"
+    },
+    {
+      "folder": "Chair_notes",
+      "name": "RAN1#126 online and offline schedules - v00.docx",
+      "uploaded_at": "2026-08-22T14:08:00"
+    },
+    {
+      "folder": "Hiroki_notes",
+      "name": "RAN1#126 schedule for Hiroki Adhoc2 sessions_v08_1.docx",
+      "uploaded_at": "2026-08-27T11:22:00"
+    },
+    {
+      "folder": "Sorour_notes",
+      "name": "RAN1#126 Sorour sessions online and offline schedules - v01.docx",
+      "uploaded_at": "2026-08-27T12:19:00"
+    }
+  ],
   "meeting_id": "ran1#126",
-  "meeting_source": "local",
+  "meeting_source": "remote",
   "timezone": "Europe/Amsterdam",
-  "agenda": {
-    "name": "agenda.csv",
-    "uploaded_at": "2026-08-23T05:43:00",
-    "url": "https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_126/Agenda/agenda.csv",
-    "source_url": "https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_126/Agenda/",
-    "document_file": "agenda.csv",
-    "local_path": "downloads/ran1/Agenda/agenda.csv",
-    "description_json": "docs/ran1/agenda_item_description.json",
-    "description_generated_at": "2026-08-24T04:00:57.642168+00:00",
-    "description_source_type": "agenda_csv",
-    "description_source_file": "agenda.csv",
-    "description_source_agenda_file": "agenda.csv",
-    "description_source_url": "https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_126/Agenda/agenda.csv",
-    "description_source_uploaded_at": "2026-08-23T05:43:00"
-  },
-  "local_refs": {},
   "timezone_status": "resolved",
   "timezone_ref": {
     "type": "portal",
@@ -32,5 +37,21 @@
     "end_timezone": "(GMT+02.00)  Brussels, Copenhagen, Madrid, Paris",
     "location": "Maastricht",
     "country": "NL"
-  }
+  },
+  "agenda": {
+    "name": "agenda.csv",
+    "uploaded_at": "2026-09-14T05:42:00",
+    "url": "https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_126/Agenda/agenda.csv",
+    "source_url": "https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_126/Agenda/",
+    "document_file": "agenda.csv",
+    "local_path": "downloads/ran1/Agenda/agenda.csv",
+    "description_json": "docs/ran1/agenda_item_description.json",
+    "description_generated_at": "2026-09-14T17:30:02.764802+00:00",
+    "description_source_type": "agenda_csv",
+    "description_source_file": "agenda.csv",
+    "description_source_agenda_file": "agenda.csv",
+    "description_source_url": "https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_126/Agenda/agenda.csv",
+    "description_source_uploaded_at": "2026-09-14T05:42:00"
+  },
+  "local_refs": {}
 }
