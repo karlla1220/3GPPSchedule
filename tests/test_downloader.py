@@ -7,7 +7,7 @@ from pathlib import Path
 from unittest.mock import MagicMock, patch
 from zipfile import ZipFile, is_zipfile
 
-from downloader import (
+from working_groups.ran1.downloader import (
     _current_meeting_from_sources,
     _extract_meeting_id,
     _filter_sources_to_meeting,
@@ -30,7 +30,7 @@ from downloader import (
     list_remote_files,
     save_schedule_state,
 )
-from models import ScheduleSource
+from working_groups.ran1.models import ScheduleSource
 
 
 def _f(name: str, uploaded_at: datetime | None = None, url: str = "") -> dict:
@@ -510,7 +510,7 @@ def test_list_remote_files_includes_docm_chair_notes():
     </tr></table>"""
 
     with patch(
-        "downloader._get_with_retry",
+        "working_groups.ran1.downloader._get_with_retry",
         return_value=MagicMock(text=html),
     ):
         files = list_remote_files("https://example.com/Chair_notes")
@@ -531,7 +531,7 @@ def test_forced_chair_notes_refresh_replaces_same_filename(tmp_path):
         path.write_bytes(b"new-content")
         return path
 
-    with patch("downloader.download_and_resolve", side_effect=fake_download):
+    with patch("working_groups.ran1.downloader.download_and_resolve", side_effect=fake_download):
         result = download_latest_chair_notes(
             tmp_path,
             latest_info=latest,
@@ -555,7 +555,7 @@ def test_forced_agenda_refresh_replaces_same_filename(tmp_path):
         path.write_bytes(b"new-content")
         return path
 
-    with patch("downloader.download_file", side_effect=fake_download):
+    with patch("working_groups.ran1.downloader.download_file", side_effect=fake_download):
         result = download_latest_agenda(
             ["https://example.org/Agenda/"],
             tmp_path,
@@ -570,7 +570,7 @@ def test_forced_agenda_refresh_replaces_same_filename(tmp_path):
 class GetLatestChairNotesInfoTests(unittest.TestCase):
     """Tests for config-aware Chair notes lookup across inboxes and extras."""
 
-    @patch("downloader.list_remote_files")
+    @patch("working_groups.ran1.downloader.list_remote_files")
     def test_searches_all_configured_inboxes_and_extra_folders(self, mock_list_remote_files):
         mock_list_remote_files.side_effect = [
             [_f("RAN1#124 chair notes - v02.docx", datetime(2026, 4, 1, 9, 0))],
@@ -604,7 +604,7 @@ class GetLatestChairNotesInfoTests(unittest.TestCase):
             "https://example.com/custom/Chair_notes/",
         )
 
-    @patch("downloader.list_remote_files")
+    @patch("working_groups.ran1.downloader.list_remote_files")
     def test_current_meeting_does_not_use_future_chair_notes(
         self,
         mock_list_remote_files,
@@ -622,7 +622,7 @@ class GetLatestChairNotesInfoTests(unittest.TestCase):
         assert result is not None
         self.assertEqual(result["name"], "Chair notes RAN1#126_v00.docm")
 
-    @patch("downloader.list_remote_files")
+    @patch("working_groups.ran1.downloader.list_remote_files")
     def test_unsupported_chair_notes_format_is_not_selected(
         self,
         mock_list_remote_files,
@@ -642,8 +642,8 @@ class GetLatestChairNotesInfoTests(unittest.TestCase):
 class DiscoverScheduleSourcesMeetingFilterTests(unittest.TestCase):
     """Tests for current-meeting filtering across discovered schedule sources."""
 
-    @patch("downloader.list_remote_files")
-    @patch("downloader.list_inbox_subfolders")
+    @patch("working_groups.ran1.downloader.list_remote_files")
+    @patch("working_groups.ran1.downloader.list_inbox_subfolders")
     def test_filters_sibling_folder_files_to_current_chair_meeting(
         self,
         mock_list_inbox_subfolders,
@@ -671,8 +671,8 @@ class DiscoverScheduleSourcesMeetingFilterTests(unittest.TestCase):
             "RAN1#125 schedule for Hiroki sessions_v00.docx",
         )
 
-    @patch("downloader.list_remote_files")
-    @patch("downloader.list_inbox_subfolders")
+    @patch("working_groups.ran1.downloader.list_remote_files")
+    @patch("working_groups.ran1.downloader.list_inbox_subfolders")
     def test_filters_old_inbox_vice_chair_sources_after_meeting_advances(
         self,
         mock_list_inbox_subfolders,
@@ -712,8 +712,8 @@ class DiscoverScheduleSourcesMeetingFilterTests(unittest.TestCase):
             "Draft RAN1#125 online and offline schedules - v00.docx",
         )
 
-    @patch("downloader.list_remote_files")
-    @patch("downloader.list_inbox_subfolders")
+    @patch("working_groups.ran1.downloader.list_remote_files")
+    @patch("working_groups.ran1.downloader.list_inbox_subfolders")
     def test_change_check_uses_current_meeting_sources_only(
         self,
         mock_list_inbox_subfolders,
@@ -990,7 +990,7 @@ import io
 import zipfile as _zipfile
 from urllib.parse import quote
 
-from downloader import (
+from working_groups.ran1.downloader import (
     EXTRA_FILES_DIR,
     EXTRA_FILES_STATE_PATH,
     _resolve_external_filename,
@@ -1129,7 +1129,7 @@ def _run_download_external(entries, resp_factory):
         return _OneshotCtx(resp_factory())
 
     with (
-        patch("downloader.httpx.stream", side_effect=make_stream),
+        patch("working_groups.ran1.downloader.httpx.stream", side_effect=make_stream),
         patch("time.sleep"),
     ):
         result = download_external_files(
@@ -1215,7 +1215,7 @@ def test_4xx_no_retry_no_state():
     sleeps = []
     with _IsolatedDownloadEnv() as env:
         with (
-            patch("downloader.httpx.stream", side_effect=lambda m, u, **k: _OneshotCtx(resp)),
+            patch("working_groups.ran1.downloader.httpx.stream", side_effect=lambda m, u, **k: _OneshotCtx(resp)),
             patch("time.sleep", side_effect=sleeps.append),
         ):
             results, state = download_external_files([entry], dest_dir=env.root)
@@ -1238,7 +1238,7 @@ def test_5xx_retries_then_succeeds():
     sleeps = []
     with _IsolatedDownloadEnv() as env:
         with (
-            patch("downloader.httpx.stream", side_effect=make_stream),
+            patch("working_groups.ran1.downloader.httpx.stream", side_effect=make_stream),
             patch("time.sleep", side_effect=sleeps.append),
         ):
             results, state = download_external_files([entry], dest_dir=env.root)
@@ -1285,7 +1285,7 @@ def test_external_download_uses_browser_compatible_user_agent():
         return _OneshotCtx(FakeStreamResponse(body=b"docx"))
 
     with _IsolatedDownloadEnv() as env:
-        with patch("downloader.httpx.stream", side_effect=fake_stream):
+        with patch("working_groups.ran1.downloader.httpx.stream", side_effect=fake_stream):
             download_external_files(
                 [{"url": url, "type": "schedule"}],
                 dest_dir=env.root,
@@ -1313,7 +1313,7 @@ def test_external_download_reuses_matching_cached_file():
         cached_path = env.root / filename
         cached_path.write_bytes(body)
         with patch(
-            "downloader.httpx.stream",
+            "working_groups.ran1.downloader.httpx.stream",
             side_effect=AssertionError("cache hit must not download"),
         ):
             results, state = download_external_files(
@@ -1336,7 +1336,7 @@ class CheckExternalFilesTests(unittest.TestCase):
                 raise errors[u]
             return _OneshotCtx(FakeStreamResponse(body=bodies[u]))
 
-        return patch("downloader.httpx.stream", side_effect=fake_stream), {}
+        return patch("working_groups.ran1.downloader.httpx.stream", side_effect=fake_stream), {}
 
     def test_check_uses_browser_compatible_user_agent(self):
         url = "https://example.com/schedule.docx"
@@ -1346,7 +1346,7 @@ class CheckExternalFilesTests(unittest.TestCase):
             calls.append(kwargs)
             return _OneshotCtx(FakeStreamResponse(body=b"docx"))
 
-        with patch("downloader.httpx.stream", side_effect=fake_stream):
+        with patch("working_groups.ran1.downloader.httpx.stream", side_effect=fake_stream):
             changed, _ = check_external_files(
                 [{"url": url, "type": "schedule"}],
                 state={"files": {}},
@@ -1370,7 +1370,7 @@ class CheckExternalFilesTests(unittest.TestCase):
             )
 
         with _IsolatedDownloadEnv() as env:
-            with patch("downloader.httpx.stream", side_effect=fake_stream):
+            with patch("working_groups.ran1.downloader.httpx.stream", side_effect=fake_stream):
                 changed, state = check_external_files(
                     [{"url": url, "type": "schedule"}],
                     state={"files": {}},
@@ -1398,7 +1398,7 @@ class CheckExternalFilesTests(unittest.TestCase):
         with _IsolatedDownloadEnv() as env:
             (env.root / "schedule.docx").write_bytes(body)
             with patch(
-                "downloader.httpx.stream",
+                "working_groups.ran1.downloader.httpx.stream",
                 side_effect=AssertionError("cache hit must not download"),
             ):
                 changed, state = check_external_files(
@@ -1462,7 +1462,7 @@ class CheckExternalFilesTests(unittest.TestCase):
                 )
             )
 
-        with patch("downloader.httpx.stream", side_effect=fake_stream):
+        with patch("working_groups.ran1.downloader.httpx.stream", side_effect=fake_stream):
             changed, state_out = check_external_files(
                 [{"url": url, "type": "schedule"}],
                 state=state_in,

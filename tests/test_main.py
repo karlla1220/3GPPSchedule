@@ -7,8 +7,8 @@ from datetime import datetime
 from pathlib import Path
 from unittest.mock import patch
 
-import main as main_module
-from main import _agenda_state_for_save, _extract_meeting_name, main
+import working_groups.ran1.pipeline as main_module
+from working_groups.ran1.pipeline import _agenda_state_for_save, _extract_meeting_name, main
 
 
 def test_pending_timezone_cache_is_reused_while_reference_is_still_missing():
@@ -177,27 +177,27 @@ class AgendaStateForSaveTests(unittest.TestCase):
 
 
 class MainChairNotesLookupTests(unittest.TestCase):
-    @patch("main.save_html", return_value="docs/index.html")
-    @patch("main.fill_missing_groups", side_effect=lambda sessions: sessions)
-    @patch("main.normalize_group_headers", side_effect=lambda sessions: sessions)
-    @patch("main.parse_time_slots", return_value=[])
-    @patch("main.collect_time_slot_data", return_value=[])
-    @patch("main.build_room_list", return_value={})
-    @patch("main.parse_docx", return_value=([], []))
-    @patch("main.load_schedule_state", return_value={})
-    @patch("main.find_chair_notes_docx", return_value=None)
-    @patch("main.find_local_latest_agenda", return_value=None)
-    @patch("main.download_latest_agenda", return_value=None)
-    @patch("main.download_latest_chair_notes", return_value=None)
+    @patch("working_groups.ran1.pipeline.save_html", return_value="docs/index.html")
+    @patch("working_groups.ran1.pipeline.fill_missing_groups", side_effect=lambda sessions: sessions)
+    @patch("working_groups.ran1.pipeline.normalize_group_headers", side_effect=lambda sessions: sessions)
+    @patch("working_groups.ran1.pipeline.parse_time_slots", return_value=[])
+    @patch("working_groups.ran1.pipeline.collect_time_slot_data", return_value=[])
+    @patch("working_groups.ran1.pipeline.build_room_list", return_value={})
+    @patch("working_groups.ran1.pipeline.parse_docx", return_value=([], []))
+    @patch("working_groups.ran1.pipeline.load_schedule_state", return_value={})
+    @patch("working_groups.ran1.pipeline.find_chair_notes_docx", return_value=None)
+    @patch("working_groups.ran1.pipeline.find_local_latest_agenda", return_value=None)
+    @patch("working_groups.ran1.pipeline.download_latest_agenda", return_value=None)
+    @patch("working_groups.ran1.pipeline.download_latest_chair_notes", return_value=None)
     @patch(
-        "main.get_latest_chair_notes_info",
+        "working_groups.ran1.pipeline.get_latest_chair_notes_info",
         return_value={
             "name": "chair notes.docm",
             "url": "https://example.com/chair-notes.docm",
             "uploaded_at": None,
         },
     )
-    @patch("main.load_config", return_value={
+    @patch("working_groups.ran1.pipeline.load_config", return_value={
         "meeting_sync": None,
         "meeting_specific": [],
         "inbox_urls": ["https://example.com/legacy/Inbox/", "https://example.com/next/Inbox/"],
@@ -279,7 +279,7 @@ class MainExtraFilesWiringTests(unittest.TestCase):
         )
         stack.enter_context(
             patch(
-                "main.load_config",
+                "working_groups.ran1.pipeline.load_config",
                 return_value={
                     "meeting_sync": None,
                     "meeting_specific": [],
@@ -291,32 +291,32 @@ class MainExtraFilesWiringTests(unittest.TestCase):
             )
         )
         # CRITICAL: return {} so tz detection runs instead of reusing a cached tz.
-        stack.enter_context(patch("main.load_schedule_state", return_value={}))
-        stack.enter_context(patch("main.parse_docx", return_value=([], [])))
-        stack.enter_context(patch("main.build_room_list", return_value={}))
-        stack.enter_context(patch("main.collect_time_slot_data", return_value=[]))
-        stack.enter_context(patch("main.parse_time_slots", return_value=[]))
+        stack.enter_context(patch("working_groups.ran1.pipeline.load_schedule_state", return_value={}))
+        stack.enter_context(patch("working_groups.ran1.pipeline.parse_docx", return_value=([], [])))
+        stack.enter_context(patch("working_groups.ran1.pipeline.build_room_list", return_value={}))
+        stack.enter_context(patch("working_groups.ran1.pipeline.collect_time_slot_data", return_value=[]))
+        stack.enter_context(patch("working_groups.ran1.pipeline.parse_time_slots", return_value=[]))
         stack.enter_context(
-            patch("main.normalize_group_headers", side_effect=lambda s: s)
+            patch("working_groups.ran1.pipeline.normalize_group_headers", side_effect=lambda s: s)
         )
-        stack.enter_context(patch("main.fill_missing_groups", side_effect=lambda s: s))
-        stack.enter_context(patch("main.save_schedule_state", return_value=None))
-        stack.enter_context(patch("main.save_html", return_value="docs/index.html"))
-        stack.enter_context(patch("main.find_local_latest_agenda", return_value=None))
-        stack.enter_context(patch("main.find_local_vice_chair_schedules", return_value={}))
+        stack.enter_context(patch("working_groups.ran1.pipeline.fill_missing_groups", side_effect=lambda s: s))
+        stack.enter_context(patch("working_groups.ran1.pipeline.save_schedule_state", return_value=None))
+        stack.enter_context(patch("working_groups.ran1.pipeline.save_html", return_value="docs/index.html"))
+        stack.enter_context(patch("working_groups.ran1.pipeline.find_local_latest_agenda", return_value=None))
+        stack.enter_context(patch("working_groups.ran1.pipeline.find_local_vice_chair_schedules", return_value={}))
         # Defensive: keep local/FTP local-schedule fallbacks inert.
-        stack.enter_context(patch("main.find_local_latest_schedule", return_value=None))
-        stack.enter_context(patch("main.download_latest_schedule", return_value=None))
+        stack.enter_context(patch("working_groups.ran1.pipeline.find_local_latest_schedule", return_value=None))
+        stack.enter_context(patch("working_groups.ran1.pipeline.download_latest_schedule", return_value=None))
         stack.enter_context(
-            patch("main.get_latest_chair_notes_info", return_value=None)
+            patch("working_groups.ran1.pipeline.get_latest_chair_notes_info", return_value=None)
         )
         return stack
 
     def test_download_path_schedule_entry_merged_into_local_sources(self):
         """Download path: schedule entry becomes a local ScheduleSource fed to
         discover_schedule_sources; external state is persisted."""
-        from models import ScheduleSource
-        from downloader import EXTRA_FILES_DIR
+        from working_groups.ran1.models import ScheduleSource
+        from working_groups.ran1.downloader import EXTRA_FILES_DIR
 
         url = "https://x/e.docx"
         with tempfile.TemporaryDirectory() as tmpdir:
@@ -336,30 +336,30 @@ class MainExtraFilesWiringTests(unittest.TestCase):
 
             with self._enter_common(entries, no_download=False) as stack:
                 stack.enter_context(
-                    patch("main.find_local_schedule_sources", return_value=([], None))
+                    patch("working_groups.ran1.pipeline.find_local_schedule_sources", return_value=([], None))
                 )
-                stack.enter_context(patch("main.find_chair_notes_docx", return_value=None))
+                stack.enter_context(patch("working_groups.ran1.pipeline.find_chair_notes_docx", return_value=None))
                 stack.enter_context(
-                    patch("main.download_latest_chair_notes", return_value=None)
-                )
-                stack.enter_context(
-                    patch("main.extract_meeting_location", return_value="Malta, Malta")
+                    patch("working_groups.ran1.pipeline.download_latest_chair_notes", return_value=None)
                 )
                 stack.enter_context(
-                    patch("main.get_timezone_from_location", return_value="Europe/Malta")
+                    patch("working_groups.ran1.pipeline.extract_meeting_location", return_value="Malta, Malta")
+                )
+                stack.enter_context(
+                    patch("working_groups.ran1.pipeline.get_timezone_from_location", return_value="Europe/Malta")
                 )
                 mock_dl = stack.enter_context(
                     patch(
-                        "main.download_external_files",
+                        "working_groups.ran1.pipeline.download_external_files",
                         return_value=([(entry_obj, docx)], {url: "deadbeef"}),
                     )
                 )
-                mock_save = stack.enter_context(patch("main.save_external_files_state"))
+                mock_save = stack.enter_context(patch("working_groups.ran1.pipeline.save_external_files_state"))
                 mock_disc = stack.enter_context(
-                    patch("main.discover_schedule_sources", return_value=[extra_source])
+                    patch("working_groups.ran1.pipeline.discover_schedule_sources", return_value=[extra_source])
                 )
                 stack.enter_context(
-                    patch("main.download_all_schedules", return_value=(docx, {}))
+                    patch("working_groups.ran1.pipeline.download_all_schedules", return_value=(docx, {}))
                 )
 
                 main()
@@ -387,7 +387,7 @@ class MainExtraFilesWiringTests(unittest.TestCase):
     def test_download_path_chair_notes_entry_used_in_tz_block_before_ftp(self):
         """TZ block: an extra_files chair_notes entry is used for location
         extraction, and the FTP chair-notes download is skipped."""
-        from models import ScheduleSource
+        from working_groups.ran1.models import ScheduleSource
 
         url = "https://x/e.docx"
         with tempfile.TemporaryDirectory() as tmpdir:
@@ -411,32 +411,32 @@ class MainExtraFilesWiringTests(unittest.TestCase):
 
             with self._enter_common(entries, no_download=False) as stack:
                 stack.enter_context(
-                    patch("main.find_local_schedule_sources", return_value=([], None))
+                    patch("working_groups.ran1.pipeline.find_local_schedule_sources", return_value=([], None))
                 )
                 stack.enter_context(
                     patch(
-                        "main.download_external_files",
+                        "working_groups.ran1.pipeline.download_external_files",
                         return_value=(
                             [(dict(entries[0], is_main=None), chair_docx)],
                             {url: "abc"},
                         ),
                     )
                 )
-                stack.enter_context(patch("main.save_external_files_state"))
+                stack.enter_context(patch("working_groups.ran1.pipeline.save_external_files_state"))
                 stack.enter_context(
-                    patch("main.discover_schedule_sources", return_value=[main_src])
+                    patch("working_groups.ran1.pipeline.discover_schedule_sources", return_value=[main_src])
                 )
                 stack.enter_context(
-                    patch("main.download_all_schedules", return_value=(docx, {}))
+                    patch("working_groups.ran1.pipeline.download_all_schedules", return_value=(docx, {}))
                 )
-                stack.enter_context(patch("main.find_chair_notes_docx", return_value=None))
+                stack.enter_context(patch("working_groups.ran1.pipeline.find_chair_notes_docx", return_value=None))
                 mock_loc = stack.enter_context(
-                    patch("main.extract_meeting_location", return_value="Malta, Malta")
+                    patch("working_groups.ran1.pipeline.extract_meeting_location", return_value="Malta, Malta")
                 )
                 stack.enter_context(
-                    patch("main.get_timezone_from_location", return_value="Europe/Malta")
+                    patch("working_groups.ran1.pipeline.get_timezone_from_location", return_value="Europe/Malta")
                 )
-                mock_ftp = stack.enter_context(patch("main.download_latest_chair_notes"))
+                mock_ftp = stack.enter_context(patch("working_groups.ran1.pipeline.download_latest_chair_notes"))
 
                 main()
 
@@ -444,7 +444,7 @@ class MainExtraFilesWiringTests(unittest.TestCase):
                 mock_ftp.assert_not_called()
 
     def test_late_remote_chair_notes_resolves_pending_timezone_and_saves_reference(self):
-        from models import ScheduleSource
+        from working_groups.ran1.models import ScheduleSource
 
         chair_info = {
             "name": "Chair notes RAN1#126_v00.docm",
@@ -480,7 +480,7 @@ class MainExtraFilesWiringTests(unittest.TestCase):
             with self._enter_common([], no_download=False) as stack:
                 stack.enter_context(
                     patch(
-                        "main.load_schedule_state",
+                        "working_groups.ran1.pipeline.load_schedule_state",
                         return_value={
                             "meeting_id": "ran1#126",
                             "timezone": "UTC",
@@ -490,45 +490,53 @@ class MainExtraFilesWiringTests(unittest.TestCase):
                     )
                 )
                 stack.enter_context(
-                    patch("main.find_local_schedule_sources", return_value=([], None))
+                    patch("working_groups.ran1.pipeline.find_local_schedule_sources", return_value=([], None))
                 )
                 stack.enter_context(
-                    patch("main.discover_schedule_sources", return_value=[main_source])
+                    patch("working_groups.ran1.pipeline.discover_schedule_sources", return_value=[main_source])
                 )
+                def finish_download(sources):
+                    # The real downloader populates local_path even for FTP inputs.
+                    for source in sources:
+                        source.local_path = schedule_path
+                    return schedule_path, {}
+
                 stack.enter_context(
                     patch(
-                        "main.download_all_schedules",
-                        return_value=(schedule_path, {}),
+                        "working_groups.ran1.pipeline.download_all_schedules",
+                        side_effect=finish_download,
                     )
                 )
-                stack.enter_context(patch("main.find_chair_notes_docx", return_value=None))
+                stack.enter_context(patch("working_groups.ran1.pipeline.find_chair_notes_docx", return_value=None))
                 stack.enter_context(
                     patch(
-                        "main.get_latest_chair_notes_info",
+                        "working_groups.ran1.pipeline.get_latest_chair_notes_info",
                         return_value=chair_info,
                         create=True,
                     )
                 )
                 stack.enter_context(
-                    patch("main.download_latest_chair_notes", return_value=chair_path)
+                    patch("working_groups.ran1.pipeline.download_latest_chair_notes", return_value=chair_path)
                 )
                 stack.enter_context(
                     patch(
-                        "main.extract_meeting_location",
+                        "working_groups.ran1.pipeline.extract_meeting_location",
                         return_value="Maastricht, NL, Aug 24th-28th, 2026",
                     )
                 )
                 stack.enter_context(
                     patch(
-                        "main.get_timezone_from_location",
+                        "working_groups.ran1.pipeline.get_timezone_from_location",
                         return_value="Europe/Amsterdam",
                     )
                 )
-                stack.enter_context(patch("main.save_external_files_state"))
-                mock_save = stack.enter_context(patch("main.save_schedule_state"))
+                stack.enter_context(patch("working_groups.ran1.pipeline.save_external_files_state"))
+                mock_save = stack.enter_context(patch("working_groups.ran1.pipeline.save_schedule_state"))
 
                 main()
 
+                self.assertEqual(mock_save.call_args.args[0], [main_source])
+                self.assertEqual(mock_save.call_args.kwargs["meeting_source"], "remote")
                 self.assertEqual(mock_save.call_args.kwargs["timezone"], "Europe/Amsterdam")
                 self.assertEqual(mock_save.call_args.kwargs["timezone_status"], "resolved")
                 self.assertEqual(mock_save.call_args.kwargs["timezone_ref"], expected_ref)
@@ -537,7 +545,7 @@ class MainExtraFilesWiringTests(unittest.TestCase):
         """no_download: the REAL scanner runs against a temp EXTRA_FILES_DIR;
         the scan-picked schedule becomes the main doc and the chair notes in
         the same dir feed the tz block."""
-        from downloader import find_local_schedule_sources as real_find
+        from working_groups.ran1.downloader import find_local_schedule_sources as real_find
 
         with tempfile.TemporaryDirectory() as tmpdir:
             extra = Path(tmpdir) / "extra_files"
@@ -548,10 +556,10 @@ class MainExtraFilesWiringTests(unittest.TestCase):
             chair.write_text("placeholder")
 
             with self._enter_common([], no_download=True) as stack:
-                stack.enter_context(patch("main.EXTRA_FILES_DIR", extra))
+                stack.enter_context(patch("working_groups.ran1.pipeline.EXTRA_FILES_DIR", extra))
                 stack.enter_context(
                     patch(
-                        "main.find_local_schedule_sources",
+                        "working_groups.ran1.pipeline.find_local_schedule_sources",
                         side_effect=lambda ref_dir=None, preferred_meeting_id=None: (
                             ([], None)
                             if ref_dir is None
@@ -562,14 +570,14 @@ class MainExtraFilesWiringTests(unittest.TestCase):
                 # NOTE: main.find_chair_notes_docx is NOT patched, so the REAL
                 # scanner runs against docx_path.parent (== extra) and finds chair.
                 mock_loc = stack.enter_context(
-                    patch("main.extract_meeting_location", return_value="Malta, Malta")
+                    patch("working_groups.ran1.pipeline.extract_meeting_location", return_value="Malta, Malta")
                 )
                 stack.enter_context(
-                    patch("main.get_timezone_from_location", return_value="Europe/Malta")
+                    patch("working_groups.ran1.pipeline.get_timezone_from_location", return_value="Europe/Malta")
                 )
-                mock_ftp = stack.enter_context(patch("main.download_latest_chair_notes"))
+                mock_ftp = stack.enter_context(patch("working_groups.ran1.pipeline.download_latest_chair_notes"))
                 mock_parse = stack.enter_context(
-                    patch("main.parse_docx", return_value=([], []))
+                    patch("working_groups.ran1.pipeline.parse_docx", return_value=([], []))
                 )
 
                 main()

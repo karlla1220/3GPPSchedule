@@ -1,0 +1,276 @@
+{
+  "schema_version": 1,
+  "meeting_name": "RAN Plenary",
+  "days": [
+    {
+      "day_name": "Monday",
+      "rooms": [
+        {
+          "name": "Plenary hall",
+          "table_index": 0,
+          "room_index_in_table": 0,
+          "id": "plenary"
+        },
+        {
+          "name": "Discussion room",
+          "table_index": 0,
+          "room_index_in_table": 0,
+          "id": "discussion"
+        }
+      ],
+      "sessions": [
+        {
+          "name": "Opening and agenda approval",
+          "duration_minutes": 45,
+          "start_time": "09:00",
+          "end_time": "09:45",
+          "day": "Monday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": null,
+          "group_header": "Plenary",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [
+            "plenary"
+          ]
+        },
+        {
+          "name": "Working group reports",
+          "duration_minutes": 45,
+          "start_time": "09:45",
+          "end_time": "10:30",
+          "day": "Monday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": null,
+          "group_header": "Reports",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [
+            "plenary"
+          ]
+        },
+        {
+          "name": "RAN1 and RAN2 reports",
+          "duration_minutes": 75,
+          "start_time": "10:45",
+          "end_time": "12:00",
+          "day": "Monday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": null,
+          "group_header": "Reports",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [
+            "plenary"
+          ]
+        },
+        {
+          "name": "Release planning",
+          "duration_minutes": 90,
+          "start_time": "13:00",
+          "end_time": "14:30",
+          "day": "Monday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": null,
+          "group_header": "Planning",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [
+            "plenary"
+          ]
+        },
+        {
+          "name": "Rapporteur discussion",
+          "duration_minutes": 60,
+          "start_time": "13:00",
+          "end_time": "14:00",
+          "day": "Monday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": null,
+          "group_header": "Discussion",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [
+            "discussion"
+          ]
+        },
+        {
+          "name": "Study and work item proposals",
+          "duration_minutes": 75,
+          "start_time": "14:45",
+          "end_time": "16:00",
+          "day": "Monday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": null,
+          "group_header": "Planning",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [
+            "plenary"
+          ]
+        },
+        {
+          "name": "Decisions and next steps",
+          "duration_minutes": 60,
+          "start_time": "16:00",
+          "end_time": "17:00",
+          "day": "Monday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": null,
+          "group_header": "Plenary",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [
+            "plenary"
+          ]
+        }
+      ],
+      "date": null,
+      "timeline": {
+        "start": "09:00",
+        "end": "17:00",
+        "slot_minutes": 15,
+        "label_minutes": 60,
+        "breaks": [
+          {
+            "name": "Coffee break",
+            "start": "10:30",
+            "end": "10:45"
+          },
+          {
+            "name": "Lunch",
+            "start": "12:00",
+            "end": "13:00"
+          }
+        ],
+        "blocks": []
+      }
+    },
+    {
+      "day_name": "Tuesday",
+      "rooms": [
+        {
+          "name": "Plenary hall",
+          "table_index": 0,
+          "room_index_in_table": 0,
+          "id": "plenary"
+        }
+      ],
+      "sessions": [
+        {
+          "name": "RAN3 and RAN4 reports",
+          "duration_minutes": 60,
+          "start_time": "09:30",
+          "end_time": "10:30",
+          "day": "Tuesday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": null,
+          "group_header": "Reports",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [
+            "plenary"
+          ]
+        },
+        {
+          "name": "Liaison statements",
+          "duration_minutes": 75,
+          "start_time": "10:45",
+          "end_time": "12:00",
+          "day": "Tuesday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": null,
+          "group_header": "Plenary",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [
+            "plenary"
+          ]
+        },
+        {
+          "name": "Work plan review",
+          "duration_minutes": 75,
+          "start_time": "13:00",
+          "end_time": "14:15",
+          "day": "Tuesday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": null,
+          "group_header": "Planning",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [
+            "plenary"
+          ]
+        },
+        {
+          "name": "Conclusions and closure",
+          "duration_minutes": 45,
+          "start_time": "14:15",
+          "end_time": "15:00",
+          "day": "Tuesday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": null,
+          "group_header": "Plenary",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [
+            "plenary"
+          ]
+        }
+      ],
+      "date": null,
+      "timeline": {
+        "start": "09:30",
+        "end": "15:00",
+        "slot_minutes": 15,
+        "label_minutes": 30,
+        "breaks": [
+          {
+            "name": "Coffee break",
+            "start": "10:30",
+            "end": "10:45"
+          },
+          {
+            "name": "Lunch",
+            "start": "12:00",
+            "end": "13:00"
+          }
+        ],
+        "blocks": []
+      }
+    }
+  ],
+  "source_file": "Fixed demonstration schedule",
+  "generated_at": "2026-09-15 00:00",
+  "contact_name": "",
+  "contact_email": "",
+  "source_files": [],
+  "timezone": "UTC",
+  "wg_id": "ran-plenary",
+  "meeting_id": "ran-plenary-demo",
+  "starts_on": null,
+  "ends_on": null,
+  "is_demo": true
+}

@@ -33,5 +33,10 @@ test_runs/
 # VS Code
 .vscode/
 downloads/*
-!downloads/extra_files/
-!downloads/extra_files/**
+!downloads/ran1/
+downloads/ran1/*
+!downloads/ran1/extra_files/
+!downloads/ran1/extra_files/**
+
+# Ephemeral CI plans, transfers and reports
+.ci/

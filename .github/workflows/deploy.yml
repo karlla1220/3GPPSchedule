@@ -2,8 +2,7 @@ name: Build and Deploy Schedule
 
 on:
   repository_dispatch:
-    types: [cronjob_trigger] # cron-job.org에서 보낼 이벤트 이름
-
+    types: [cronjob_trigger]
   workflow_dispatch:
     inputs:
       action:
@@ -11,73 +10,63 @@ on:
         type: choice
         default: check-build-deploy
         options:
-          - check-build-deploy  # 변경 감지 후 변경시에만 빌드/배포
-          - build-deploy        # FTP 체크 생략, 캐시 유지한 채 빌드/배포 (generator.py만 변경시 유용)
-          - force-deploy        # 캐시 초기화 후 빌드/배포
-          - deploy-only         # 빌드 없이 현재 docs/ 그대로 배포
+          - check-build-deploy
+          - build-deploy
+          - force-deploy
+          - deploy-only
 
 permissions:
   contents: write
   pages: write
   id-token: write
 
+# Share this lock with pages.yml. Do not cancel a parser or a deployment
+# when the next periodic check arrives.
 concurrency:
-  group: schedule-deploy
-  cancel-in-progress: true
+  group: pages
+  cancel-in-progress: false
 
 jobs:
-  # ── Job 1: Lightweight FTP check (~20 seconds) ──────────────
   check:
     if: >-
       github.event_name == 'repository_dispatch' ||
       github.event.inputs.action == 'check-build-deploy'
     runs-on: ubuntu-latest
+    environment: github-pages
     outputs:
-      changed: ${{ steps.detect.outputs.changed }}
-      extra_files_artifact: ${{ steps.detect.outputs.extra_files_artifact }}
+      build_required: ${{ steps.detect.outputs.build_required }}
+      has_errors: ${{ steps.detect.outputs.has_errors }}
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Install uv
-        uses: astral-sh/setup-uv@v4
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v4
         with:
           enable-cache: true
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-
-      - name: Install dependencies
-        run: uv sync
-
-      # State is read from docs/.schedule_state.json (committed in repo)
-      - name: Check for FTP updates
+      - run: uv sync --locked
+      - name: Check every enabled WG
         id: detect
-        run: uv run python check_update.py
-
-      # A cache miss is downloaded once by check and passed to build. The
-      # committed repository cache remains the long-term source of truth.
-      - name: Upload extra-file transfer
-        if: steps.detect.outputs.extra_files_artifact == 'true'
+        run: uv run python ci.py check
+      - name: Transfer build plan and staged documents
+        if: steps.detect.outputs.build_required == 'true'
         uses: actions/upload-artifact@v4
         with:
-          name: extra-files-${{ github.run_id }}
-          path: downloads/.extra_files_transfer/
+          name: wg-inputs-${{ github.run_id }}
+          path: .ci/
           include-hidden-files: true
           if-no-files-found: error
+      - name: Report failed checks
+        if: steps.detect.outputs.has_errors == 'true'
+        run: |
+          cat .ci/plan.json
+          exit 1
 
-  # ── Job 2: Full build & deploy ──────────────────────────────
-  # Runs when:
-  #   - check detected changes (check-build-deploy)
-  #   - build-deploy selected (skip check, reuse cache)
-  #   - force-deploy selected (reset cache, full rebuild)
   build-and-deploy:
     needs: check
-    if: |
-      always() &&
-      (needs.check.outputs.changed == 'true' ||
+    if: >-
+      always() && !cancelled() &&
+      (needs.check.outputs.build_required == 'true' ||
        github.event.inputs.action == 'build-deploy' ||
        github.event.inputs.action == 'force-deploy')
     runs-on: ubuntu-latest
@@ -85,106 +74,64 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Download extra-file transfer
-        if: needs.check.outputs.extra_files_artifact == 'true'
-        uses: actions/download-artifact@v4
-        with:
-          name: extra-files-${{ github.run_id }}
-          path: downloads/.extra_files_transfer/
-
-      - name: Apply extra-file transfer
-        if: needs.check.outputs.extra_files_artifact == 'true'
-        shell: bash
-        run: |
-          mkdir -p downloads/extra_files
-          cp downloads/.extra_files_transfer/.extra_files_state.json docs/.extra_files_state.json
-          find downloads/.extra_files_transfer -maxdepth 1 -type f \
-            ! -name '.extra_files_state.json' \
-            -exec cp -f {} downloads/extra_files/ \;
-
-      - name: Install uv
-        uses: astral-sh/setup-uv@v4
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v4
         with:
           enable-cache: true
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-
-      - name: Install dependencies
-        run: uv sync
-
-      # ── LLM Cache: restore → run → save ──
-      # Cache key uses run_id so every run saves a new snapshot.
-      # restore-keys prefix fetches the most recent previous snapshot.
-      # Cache is NOT OS/Python dependent — it depends on prompt version,
-      # day, time block, main rooms, source content, and LLM model,
-      # all of which are hashed internally by session_parser.py.
-      - name: Restore LLM cache
+      - run: uv sync --locked
+      - name: Verify lifecycle and RAN1 regression tests
+        run: uv run pytest -q
+      - name: Receive build plan and staged documents
+        if: needs.check.outputs.build_required == 'true'
+        uses: actions/download-artifact@v4
+        with:
+          name: wg-inputs-${{ github.run_id }}
+          path: .ci/
+      - name: Restore WG caches
         uses: actions/cache@v4
         with:
           path: .cache/
-          key: llm-cache-${{ github.run_id }}
+          key: wg-cache-v1-${{ github.run_id }}
           restore-keys: |
-            llm-cache-
-
-      # force-deploy: wipe cached LLM results and the committed external-file
-      # cache so every configured extra file is fetched again.
-      - name: Reset caches (force-deploy)
-        if: github.event.inputs.action == 'force-deploy'
-        run: |
-          rm -rf .cache/*
-          rm -rf downloads/extra_files
-          rm -f docs/.extra_files_state.json
-
-      - name: Run schedule parser
+            wg-cache-v1-
+      - name: Build selected WGs and assemble site
+        id: build
         env:
+          WG_ACTION: ${{ github.event.inputs.action || 'check-build-deploy' }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          SCHEDULE_CONTACT_NAME: Duckhyun Bae
-          SCHEDULE_CONTACT_EMAIL: duckhyun.bae@lge.com
-        run: uv run python main.py
-
-      - name: Check for output
-        id: output
-        run: |
-          if [ -f docs/index.html ]; then
-            echo "has_output=true" >> $GITHUB_OUTPUT
-          else
-            echo "has_output=false" >> $GITHUB_OUTPUT
-          fi
-
-      - name: Commit and push
-        if: steps.output.outputs.has_output == 'true'
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add docs/
-          if [ -n "$(find downloads/extra_files -type f -print -quit 2>/dev/null)" ]; then
-            git add downloads/extra_files/
-          fi
-          git diff --cached --quiet || git commit -m "Update schedule $(date +%Y-%m-%d_%H:%M) [skip ci]"
-          git push
-
+        run: uv run python ci.py build --action "$WG_ACTION"
       - name: Setup Pages
-        if: steps.output.outputs.has_output == 'true'
+        if: steps.build.outputs.site_changed == 'true'
         uses: actions/configure-pages@v5
-
-      - name: Upload artifact
-        if: steps.output.outputs.has_output == 'true'
+      - name: Upload changed site
+        if: steps.build.outputs.site_changed == 'true'
         uses: actions/upload-pages-artifact@v3
         with:
           path: docs/
-
-      - name: Deploy to GitHub Pages
-        if: steps.output.outputs.has_output == 'true'
+      - name: Deploy changed site
+        if: steps.build.outputs.site_changed == 'true'
         id: deployment
         uses: actions/deploy-pages@v4
+      # Commit AFTER deployment: if Pages fails, the next check still sees
+      # the old source state and retries. State-only updates need no deploy.
+      - name: Commit successful WG results and state
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          uv run python ci.py stage
+          if ! git diff --cached --quiet; then
+            git commit -m "Update WG schedules [skip ci]"
+            git push
+          fi
+      - name: Report failed WG builds
+        if: steps.build.outputs.has_errors == 'true'
+        run: |
+          cat .ci/build-report.json
+          exit 1
 
-  # ── Job 3: Deploy-only (no rebuild, just push existing docs/) ──
   deploy-only:
     if: github.event.inputs.action == 'deploy-only'
     runs-on: ubuntu-latest
@@ -192,17 +139,10 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
-
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+      - uses: actions/checkout@v4
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
         with:
           path: docs/
-
-      - name: Deploy to GitHub Pages
+      - uses: actions/deploy-pages@v4
         id: deployment
-        uses: actions/deploy-pages@v4

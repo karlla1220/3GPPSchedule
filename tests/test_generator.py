@@ -1,6 +1,6 @@
 from types import SimpleNamespace
 
-from generator import _agenda_description_popup_lines
+from shared.renderer import _agenda_description_popup_lines
 
 
 def test_agenda_description_popup_shares_common_hierarchy_prefix():

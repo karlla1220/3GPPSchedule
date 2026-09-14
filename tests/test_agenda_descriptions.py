@@ -3,7 +3,7 @@ from zipfile import ZipFile
 
 import pandas as pd
 
-from agenda_descriptions import (
+from working_groups.ran1.agenda_descriptions import (
     AGENDA_DESCRIPTION_COLUMN,
     AGENDA_ITEM_COLUMN,
     annotate_sessions_with_agenda_descriptions,
