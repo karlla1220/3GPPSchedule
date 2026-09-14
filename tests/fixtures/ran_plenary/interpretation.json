@@ -1,0 +1,1016 @@
+{
+  "rooms": [
+    {
+      "id": "madrid_3_4_5_6",
+      "name": "Madrid 3/4/5/6",
+      "role": "main",
+      "availability": [
+        {
+          "day": "Monday",
+          "start": "09:00",
+          "end": "19:30"
+        },
+        {
+          "day": "Tuesday",
+          "start": "08:00",
+          "end": "19:30"
+        },
+        {
+          "day": "Wednesday",
+          "start": "08:00",
+          "end": "19:30"
+        },
+        {
+          "day": "Thursday",
+          "start": "08:00",
+          "end": "18:00"
+        }
+      ],
+      "source_refs": [
+        "p1",
+        "p9"
+      ]
+    },
+    {
+      "id": "madrid_1_2",
+      "name": "Madrid 1-2",
+      "role": "breakout",
+      "availability": [
+        {
+          "day": "Monday",
+          "start": "09:00",
+          "end": "19:30"
+        },
+        {
+          "day": "Tuesday",
+          "start": "08:00",
+          "end": "12:30"
+        }
+      ],
+      "source_refs": [
+        "p1",
+        "p10"
+      ]
+    },
+    {
+      "id": "neptuno_pta_alcala",
+      "name": "Neptuno + PTA Alcala",
+      "role": "breakout",
+      "availability": [
+        {
+          "day": "Tuesday",
+          "start": "12:30",
+          "end": "19:30"
+        },
+        {
+          "day": "Wednesday",
+          "start": "08:00",
+          "end": "19:30"
+        },
+        {
+          "day": "Thursday",
+          "start": "08:00",
+          "end": "18:00"
+        }
+      ],
+      "source_refs": [
+        "p1",
+        "p11"
+      ]
+    }
+  ],
+  "sessions": [
+    {
+      "day": "Tuesday",
+      "name": "ITU Adhoc",
+      "start": "08:00",
+      "end": "09:00",
+      "room_scope": "assigned",
+      "room_ids": [
+        "madrid_3_4_5_6"
+      ],
+      "chair": null,
+      "agenda_item": null,
+      "group_header": "TBD",
+      "notes": [],
+      "source_refs": [
+        "t0.r1.c2.p0"
+      ],
+      "topic_refs": []
+    },
+    {
+      "day": "Tuesday",
+      "name": "Rel-21 5G-Adv (AI 15.2 – RAN1/2/3 Others, Jerome)",
+      "start": "08:00",
+      "end": "09:00",
+      "room_scope": "assigned",
+      "room_ids": [
+        "madrid_1_2"
+      ],
+      "chair": "Jerome",
+      "agenda_item": "15.2",
+      "group_header": "Rel-21 5G-Adv",
+      "notes": [],
+      "source_refs": [
+        "t0.r1.c2.p1"
+      ],
+      "topic_refs": [
+        "t1.r14"
+      ]
+    },
+    {
+      "day": "Wednesday",
+      "name": "TBD",
+      "start": "08:00",
+      "end": "09:00",
+      "room_scope": "assigned",
+      "room_ids": [
+        "madrid_3_4_5_6"
+      ],
+      "chair": null,
+      "agenda_item": null,
+      "group_header": "TBD",
+      "notes": [],
+      "source_refs": [
+        "t0.r1.c3.p0"
+      ],
+      "topic_refs": []
+    },
+    {
+      "day": "Wednesday",
+      "name": "Rel-21 5G-Adv (TBD)",
+      "start": "08:00",
+      "end": "09:00",
+      "room_scope": "assigned",
+      "room_ids": [
+        "neptuno_pta_alcala"
+      ],
+      "chair": null,
+      "agenda_item": "15",
+      "group_header": "Rel-21 5G-Adv",
+      "notes": [],
+      "source_refs": [
+        "t0.r1.c3.p1"
+      ],
+      "topic_refs": [
+        "t1.r13"
+      ]
+    },
+    {
+      "day": "Thursday",
+      "name": "TBD",
+      "start": "08:00",
+      "end": "09:00",
+      "room_scope": "assigned",
+      "room_ids": [
+        "madrid_3_4_5_6"
+      ],
+      "chair": null,
+      "agenda_item": null,
+      "group_header": "TBD",
+      "notes": [],
+      "source_refs": [
+        "t0.r1.c4.p0"
+      ],
+      "topic_refs": []
+    },
+    {
+      "day": "Thursday",
+      "name": "Rel-21 5G-Adv (TBD)",
+      "start": "08:00",
+      "end": "09:00",
+      "room_scope": "assigned",
+      "room_ids": [
+        "neptuno_pta_alcala"
+      ],
+      "chair": null,
+      "agenda_item": "15",
+      "group_header": "Rel-21 5G-Adv",
+      "notes": [],
+      "source_refs": [
+        "t0.r1.c4.p1"
+      ],
+      "topic_refs": [
+        "t1.r13"
+      ]
+    },
+    {
+      "day": "Monday",
+      "name": "Incoming LSs, WG reports, early items",
+      "start": "09:00",
+      "end": "10:30",
+      "room_scope": "unassigned",
+      "room_ids": [],
+      "chair": null,
+      "agenda_item": "7, 5",
+      "group_header": "Early items",
+      "notes": [
+        "Opening at 09:00"
+      ],
+      "source_refs": [
+        "t0.r2.c1.p0",
+        "t0.r2.c1.p2"
+      ],
+      "topic_refs": [
+        "t1.r2",
+        "t1.r4"
+      ]
+    },
+    {
+      "day": "Tuesday",
+      "name": "Early items",
+      "start": "09:00",
+      "end": "10:30",
+      "room_scope": "unassigned",
+      "room_ids": [],
+      "chair": null,
+      "agenda_item": null,
+      "group_header": "Early items",
+      "notes": [],
+      "source_refs": [
+        "t0.r2.c2.p0"
+      ],
+      "topic_refs": []
+    },
+    {
+      "day": "Wednesday",
+      "name": "Report on 6G AS Security – RAN2/SA3 Chairs / 1st sweep / comebacks",
+      "start": "09:00",
+      "end": "10:30",
+      "room_scope": "unassigned",
+      "room_ids": [],
+      "chair": null,
+      "agenda_item": "8.2.1.3",
+      "group_header": "6G",
+      "notes": [],
+      "source_refs": [
+        "t0.r2.c3.p0",
+        "t0.r2.c3.p1"
+      ],
+      "topic_refs": [
+        "t1.r19"
+      ]
+    },
+    {
+      "day": "Thursday",
+      "name": "Comebacks",
+      "start": "09:00",
+      "end": "10:30",
+      "room_scope": "unassigned",
+      "room_ids": [],
+      "chair": null,
+      "agenda_item": null,
+      "group_header": "Comebacks",
+      "notes": [],
+      "source_refs": [
+        "t0.r2.c4.p0"
+      ],
+      "topic_refs": []
+    },
+    {
+      "day": "Monday",
+      "name": "TBD",
+      "start": "10:30",
+      "end": "11:00",
+      "room_scope": "assigned",
+      "room_ids": [
+        "madrid_3_4_5_6"
+      ],
+      "chair": null,
+      "agenda_item": null,
+      "group_header": "TBD",
+      "notes": [],
+      "source_refs": [
+        "t0.r4.c1.p0"
+      ],
+      "topic_refs": []
+    },
+    {
+      "day": "Tuesday",
+      "name": "TBD",
+      "start": "10:30",
+      "end": "11:00",
+      "room_scope": "assigned",
+      "room_ids": [
+        "madrid_3_4_5_6"
+      ],
+      "chair": null,
+      "agenda_item": null,
+      "group_header": "TBD",
+      "notes": [],
+      "source_refs": [
+        "t0.r4.c2.p0"
+      ],
+      "topic_refs": []
+    },
+    {
+      "day": "Tuesday",
+      "name": "NTN time/frequency compensation",
+      "start": "10:30",
+      "end": "11:00",
+      "room_scope": "assigned",
+      "room_ids": [
+        "madrid_1_2"
+      ],
+      "chair": null,
+      "agenda_item": "9.1.1",
+      "group_header": "Rel-21 5G-Adv",
+      "notes": [],
+      "source_refs": [
+        "t0.r4.c2.p1"
+      ],
+      "topic_refs": [
+        "t1.r6"
+      ]
+    },
+    {
+      "day": "Wednesday",
+      "name": "TBD",
+      "start": "10:30",
+      "end": "11:00",
+      "room_scope": "assigned",
+      "room_ids": [
+        "madrid_3_4_5_6"
+      ],
+      "chair": null,
+      "agenda_item": null,
+      "group_header": "TBD",
+      "notes": [],
+      "source_refs": [
+        "t0.r4.c3.p0"
+      ],
+      "topic_refs": []
+    },
+    {
+      "day": "Wednesday",
+      "name": "TBD",
+      "start": "10:30",
+      "end": "11:00",
+      "room_scope": "assigned",
+      "room_ids": [
+        "neptuno_pta_alcala"
+      ],
+      "chair": null,
+      "agenda_item": null,
+      "group_header": "TBD",
+      "notes": [],
+      "source_refs": [
+        "t0.r4.c3.p1"
+      ],
+      "topic_refs": []
+    },
+    {
+      "day": "Thursday",
+      "name": "TBD",
+      "start": "10:30",
+      "end": "11:00",
+      "room_scope": "assigned",
+      "room_ids": [
+        "madrid_3_4_5_6"
+      ],
+      "chair": null,
+      "agenda_item": null,
+      "group_header": "TBD",
+      "notes": [],
+      "source_refs": [
+        "t0.r4.c4.p0"
+      ],
+      "topic_refs": []
+    },
+    {
+      "day": "Thursday",
+      "name": "TBD",
+      "start": "10:30",
+      "end": "11:00",
+      "room_scope": "assigned",
+      "room_ids": [
+        "neptuno_pta_alcala"
+      ],
+      "chair": null,
+      "agenda_item": null,
+      "group_header": "TBD",
+      "notes": [],
+      "source_refs": [
+        "t0.r4.c4.p1"
+      ],
+      "topic_refs": []
+    },
+    {
+      "day": "Monday",
+      "name": "Early items",
+      "start": "11:00",
+      "end": "12:30",
+      "room_scope": "unassigned",
+      "room_ids": [],
+      "chair": null,
+      "agenda_item": null,
+      "group_header": "Early items",
+      "notes": [],
+      "source_refs": [
+        "t0.r5.c1.p0"
+      ],
+      "topic_refs": []
+    },
+    {
+      "day": "Tuesday",
+      "name": "Early items",
+      "start": "11:00",
+      "end": "12:30",
+      "room_scope": "unassigned",
+      "room_ids": [],
+      "chair": null,
+      "agenda_item": null,
+      "group_header": "Early items",
+      "notes": [],
+      "source_refs": [
+        "t0.r5.c2.p0"
+      ],
+      "topic_refs": []
+    },
+    {
+      "day": "Wednesday",
+      "name": "1st sweep / comebacks",
+      "start": "11:00",
+      "end": "12:30",
+      "room_scope": "unassigned",
+      "room_ids": [],
+      "chair": null,
+      "agenda_item": null,
+      "group_header": "Comebacks",
+      "notes": [],
+      "source_refs": [
+        "t0.r5.c3.p0"
+      ],
+      "topic_refs": []
+    },
+    {
+      "day": "Thursday",
+      "name": "Comebacks",
+      "start": "11:00",
+      "end": "12:30",
+      "room_scope": "unassigned",
+      "room_ids": [],
+      "chair": null,
+      "agenda_item": null,
+      "group_header": "Comebacks",
+      "notes": [],
+      "source_refs": [
+        "t0.r5.c4.p0"
+      ],
+      "topic_refs": []
+    },
+    {
+      "day": "Monday",
+      "name": "TBD",
+      "start": "12:30",
+      "end": "13:30",
+      "room_scope": "assigned",
+      "room_ids": [
+        "madrid_3_4_5_6"
+      ],
+      "chair": null,
+      "agenda_item": null,
+      "group_header": "TBD",
+      "notes": [],
+      "source_refs": [
+        "t0.r7.c1.p0"
+      ],
+      "topic_refs": []
+    },
+    {
+      "day": "Monday",
+      "name": "TBD",
+      "start": "12:30",
+      "end": "13:30",
+      "room_scope": "assigned",
+      "room_ids": [
+        "madrid_1_2"
+      ],
+      "chair": null,
+      "agenda_item": null,
+      "group_header": "TBD",
+      "notes": [],
+      "source_refs": [
+        "t0.r7.c1.p1"
+      ],
+      "topic_refs": []
+    },
+    {
+      "day": "Tuesday",
+      "name": "6G spec modernization",
+      "start": "12:30",
+      "end": "13:30",
+      "room_scope": "assigned",
+      "room_ids": [
+        "madrid_3_4_5_6"
+      ],
+      "chair": null,
+      "agenda_item": null,
+      "group_header": "6G",
+      "notes": [
+        "in RAN main room"
+      ],
+      "source_refs": [
+        "t0.r7.c2.p0"
+      ],
+      "topic_refs": []
+    },
+    {
+      "day": "Tuesday",
+      "name": "Rel-21 5G-Adv (AI 15.3 – RAN4 Others, Xutao)",
+      "start": "12:30",
+      "end": "13:30",
+      "room_scope": "assigned",
+      "room_ids": [
+        "neptuno_pta_alcala"
+      ],
+      "chair": "Xutao",
+      "agenda_item": "15.3",
+      "group_header": "Rel-21 5G-Adv",
+      "notes": [],
+      "source_refs": [
+        "t0.r7.c2.p1"
+      ],
+      "topic_refs": [
+        "t1.r15"
+      ]
+    },
+    {
+      "day": "Wednesday",
+      "name": "TBD",
+      "start": "12:30",
+      "end": "13:30",
+      "room_scope": "assigned",
+      "room_ids": [
+        "madrid_3_4_5_6"
+      ],
+      "chair": null,
+      "agenda_item": null,
+      "group_header": "TBD",
+      "notes": [],
+      "source_refs": [
+        "t0.r7.c3.p0"
+      ],
+      "topic_refs": []
+    },
+    {
+      "day": "Wednesday",
+      "name": "Rel-21 5G-Adv (TBD)",
+      "start": "12:30",
+      "end": "13:30",
+      "room_scope": "assigned",
+      "room_ids": [
+        "neptuno_pta_alcala"
+      ],
+      "chair": null,
+      "agenda_item": "15",
+      "group_header": "Rel-21 5G-Adv",
+      "notes": [],
+      "source_refs": [
+        "t0.r7.c3.p1"
+      ],
+      "topic_refs": [
+        "t1.r13"
+      ]
+    },
+    {
+      "day": "Thursday",
+      "name": "TBD",
+      "start": "12:30",
+      "end": "13:30",
+      "room_scope": "assigned",
+      "room_ids": [
+        "madrid_3_4_5_6"
+      ],
+      "chair": null,
+      "agenda_item": null,
+      "group_header": "TBD",
+      "notes": [],
+      "source_refs": [
+        "t0.r7.c4.p0"
+      ],
+      "topic_refs": []
+    },
+    {
+      "day": "Thursday",
+      "name": "TBD",
+      "start": "12:30",
+      "end": "13:30",
+      "room_scope": "assigned",
+      "room_ids": [
+        "neptuno_pta_alcala"
+      ],
+      "chair": null,
+      "agenda_item": null,
+      "group_header": "TBD",
+      "notes": [],
+      "source_refs": [
+        "t0.r7.c4.p1"
+      ],
+      "topic_refs": []
+    },
+    {
+      "day": "Monday",
+      "name": "Early items: Rel-21 5G-Adv",
+      "start": "14:00",
+      "end": "15:30",
+      "room_scope": "unassigned",
+      "room_ids": [],
+      "chair": null,
+      "agenda_item": "15",
+      "group_header": "Rel-21 5G-Adv",
+      "notes": [],
+      "source_refs": [
+        "t0.r8.c1.p0"
+      ],
+      "topic_refs": [
+        "t1.r13"
+      ]
+    },
+    {
+      "day": "Tuesday",
+      "name": "Early items",
+      "start": "14:00",
+      "end": "15:30",
+      "room_scope": "unassigned",
+      "room_ids": [],
+      "chair": null,
+      "agenda_item": null,
+      "group_header": "Early items",
+      "notes": [],
+      "source_refs": [
+        "t0.r8.c2.p0"
+      ],
+      "topic_refs": []
+    },
+    {
+      "day": "Wednesday",
+      "name": "Comebacks",
+      "start": "14:00",
+      "end": "15:30",
+      "room_scope": "unassigned",
+      "room_ids": [],
+      "chair": null,
+      "agenda_item": null,
+      "group_header": "Comebacks",
+      "notes": [],
+      "source_refs": [
+        "t0.r8.c3.p0"
+      ],
+      "topic_refs": []
+    },
+    {
+      "day": "Thursday",
+      "name": "Comebacks",
+      "start": "14:00",
+      "end": "15:30",
+      "room_scope": "unassigned",
+      "room_ids": [],
+      "chair": null,
+      "agenda_item": null,
+      "group_header": "Comebacks",
+      "notes": [],
+      "source_refs": [
+        "t0.r8.c4.p0"
+      ],
+      "topic_refs": []
+    },
+    {
+      "day": "Monday",
+      "name": "TBD",
+      "start": "15:30",
+      "end": "16:00",
+      "room_scope": "assigned",
+      "room_ids": [
+        "madrid_3_4_5_6"
+      ],
+      "chair": null,
+      "agenda_item": null,
+      "group_header": "TBD",
+      "notes": [],
+      "source_refs": [
+        "t0.r10.c1.p0"
+      ],
+      "topic_refs": []
+    },
+    {
+      "day": "Monday",
+      "name": "TBD",
+      "start": "15:30",
+      "end": "16:00",
+      "room_scope": "assigned",
+      "room_ids": [
+        "madrid_1_2"
+      ],
+      "chair": null,
+      "agenda_item": null,
+      "group_header": "TBD",
+      "notes": [],
+      "source_refs": [
+        "t0.r10.c1.p1"
+      ],
+      "topic_refs": []
+    },
+    {
+      "day": "Tuesday",
+      "name": "TBD",
+      "start": "15:30",
+      "end": "16:00",
+      "room_scope": "assigned",
+      "room_ids": [
+        "madrid_3_4_5_6"
+      ],
+      "chair": null,
+      "agenda_item": null,
+      "group_header": "TBD",
+      "notes": [],
+      "source_refs": [
+        "t0.r10.c2.p0"
+      ],
+      "topic_refs": []
+    },
+    {
+      "day": "Tuesday",
+      "name": "NTN time/frequency compensation",
+      "start": "15:30",
+      "end": "16:00",
+      "room_scope": "assigned",
+      "room_ids": [
+        "neptuno_pta_alcala"
+      ],
+      "chair": null,
+      "agenda_item": "9.1.1",
+      "group_header": "Rel-21 5G-Adv",
+      "notes": [],
+      "source_refs": [
+        "t0.r10.c2.p1"
+      ],
+      "topic_refs": [
+        "t1.r6"
+      ]
+    },
+    {
+      "day": "Wednesday",
+      "name": "TBD",
+      "start": "15:30",
+      "end": "16:00",
+      "room_scope": "assigned",
+      "room_ids": [
+        "madrid_3_4_5_6"
+      ],
+      "chair": null,
+      "agenda_item": null,
+      "group_header": "TBD",
+      "notes": [],
+      "source_refs": [
+        "t0.r10.c3.p0"
+      ],
+      "topic_refs": []
+    },
+    {
+      "day": "Wednesday",
+      "name": "TBD",
+      "start": "15:30",
+      "end": "16:00",
+      "room_scope": "assigned",
+      "room_ids": [
+        "neptuno_pta_alcala"
+      ],
+      "chair": null,
+      "agenda_item": null,
+      "group_header": "TBD",
+      "notes": [],
+      "source_refs": [
+        "t0.r10.c3.p1"
+      ],
+      "topic_refs": []
+    },
+    {
+      "day": "Thursday",
+      "name": "TBD",
+      "start": "15:30",
+      "end": "16:00",
+      "room_scope": "assigned",
+      "room_ids": [
+        "madrid_3_4_5_6"
+      ],
+      "chair": null,
+      "agenda_item": null,
+      "group_header": "TBD",
+      "notes": [],
+      "source_refs": [
+        "t0.r10.c4.p0"
+      ],
+      "topic_refs": []
+    },
+    {
+      "day": "Thursday",
+      "name": "TBD",
+      "start": "15:30",
+      "end": "16:00",
+      "room_scope": "assigned",
+      "room_ids": [
+        "neptuno_pta_alcala"
+      ],
+      "chair": null,
+      "agenda_item": null,
+      "group_header": "TBD",
+      "notes": [],
+      "source_refs": [
+        "t0.r10.c4.p1"
+      ],
+      "topic_refs": []
+    },
+    {
+      "day": "Monday",
+      "name": "Early items: Rel-21 5G-Adv",
+      "start": "16:00",
+      "end": "18:00",
+      "room_scope": "unassigned",
+      "room_ids": [],
+      "chair": null,
+      "agenda_item": "15",
+      "group_header": "Rel-21 5G-Adv",
+      "notes": [],
+      "source_refs": [
+        "t0.r11.c1.p0"
+      ],
+      "topic_refs": [
+        "t1.r13"
+      ]
+    },
+    {
+      "day": "Tuesday",
+      "name": "Early items / 1st sweep",
+      "start": "16:00",
+      "end": "18:00",
+      "room_scope": "unassigned",
+      "room_ids": [],
+      "chair": null,
+      "agenda_item": null,
+      "group_header": "Early items",
+      "notes": [],
+      "source_refs": [
+        "t0.r11.c2.p0"
+      ],
+      "topic_refs": []
+    },
+    {
+      "day": "Wednesday",
+      "name": "Comebacks",
+      "start": "16:00",
+      "end": "18:00",
+      "room_scope": "unassigned",
+      "room_ids": [],
+      "chair": null,
+      "agenda_item": null,
+      "group_header": "Comebacks",
+      "notes": [],
+      "source_refs": [
+        "t0.r11.c3.p0"
+      ],
+      "topic_refs": []
+    },
+    {
+      "day": "Thursday",
+      "name": "Comebacks",
+      "start": "16:00",
+      "end": "17:00",
+      "room_scope": "unassigned",
+      "room_ids": [],
+      "chair": null,
+      "agenda_item": null,
+      "group_header": "Comebacks",
+      "notes": [
+        "Closing by 17:00"
+      ],
+      "source_refs": [
+        "t0.r11.c4.p0",
+        "t0.r11.c4.p2"
+      ],
+      "topic_refs": []
+    },
+    {
+      "day": "Monday",
+      "name": "6G diverse devices",
+      "start": "18:00",
+      "end": "19:30",
+      "room_scope": "assigned",
+      "room_ids": [
+        "madrid_3_4_5_6"
+      ],
+      "chair": null,
+      "agenda_item": "8.2.1.2",
+      "group_header": "6G",
+      "notes": [],
+      "source_refs": [
+        "t0.r12.c1.p0"
+      ],
+      "topic_refs": [
+        "t1.r18"
+      ]
+    },
+    {
+      "day": "Monday",
+      "name": "Rel-21 5G-Adv (AI 15.2 – RAN1/2/3 NTN, Xiaodong)",
+      "start": "18:00",
+      "end": "19:30",
+      "room_scope": "assigned",
+      "room_ids": [
+        "madrid_1_2"
+      ],
+      "chair": "Xiaodong",
+      "agenda_item": "15.2",
+      "group_header": "Rel-21 5G-Adv",
+      "notes": [],
+      "source_refs": [
+        "t0.r12.c1.p1"
+      ],
+      "topic_refs": [
+        "t1.r14"
+      ]
+    },
+    {
+      "day": "Tuesday",
+      "name": "TBD",
+      "start": "18:00",
+      "end": "19:00",
+      "room_scope": "assigned",
+      "room_ids": [
+        "madrid_3_4_5_6"
+      ],
+      "chair": null,
+      "agenda_item": null,
+      "group_header": "TBD",
+      "notes": [
+        "Close by 7pm for social event"
+      ],
+      "source_refs": [
+        "t0.r12.c2.p0",
+        "t0.r12.c2.p2"
+      ],
+      "topic_refs": []
+    },
+    {
+      "day": "Tuesday",
+      "name": "Rel-21 5G-Adv (AI 15.3 – RAN4 NTN, Yang)",
+      "start": "18:00",
+      "end": "19:00",
+      "room_scope": "assigned",
+      "room_ids": [
+        "neptuno_pta_alcala"
+      ],
+      "chair": "Yang",
+      "agenda_item": "15.3",
+      "group_header": "Rel-21 5G-Adv",
+      "notes": [
+        "Close by 7pm for social event"
+      ],
+      "source_refs": [
+        "t0.r12.c2.p1",
+        "t0.r12.c2.p2"
+      ],
+      "topic_refs": [
+        "t1.r15"
+      ]
+    },
+    {
+      "day": "Wednesday",
+      "name": "TBD",
+      "start": "18:00",
+      "end": "19:30",
+      "room_scope": "assigned",
+      "room_ids": [
+        "madrid_3_4_5_6"
+      ],
+      "chair": null,
+      "agenda_item": null,
+      "group_header": "TBD",
+      "notes": [],
+      "source_refs": [
+        "t0.r12.c3.p0"
+      ],
+      "topic_refs": []
+    },
+    {
+      "day": "Wednesday",
+      "name": "Rel-21 5G-Adv (TBD)",
+      "start": "18:00",
+      "end": "19:30",
+      "room_scope": "assigned",
+      "room_ids": [
+        "neptuno_pta_alcala"
+      ],
+      "chair": null,
+      "agenda_item": "15",
+      "group_header": "Rel-21 5G-Adv",
+      "notes": [],
+      "source_refs": [
+        "t0.r12.c3.p1"
+      ],
+      "topic_refs": [
+        "t1.r13"
+      ]
+    }
+  ]
+}

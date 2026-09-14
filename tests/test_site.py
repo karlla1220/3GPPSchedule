@@ -15,7 +15,7 @@ from shared.navigation import meeting_status
 from shared.renderer import generate_html
 from shared.schedule import Timeline, load_schedule, save_schedule
 from working_groups.ran1.models import ran1_timeline
-from working_groups.ran_plenary.pipeline import build_schedule as plenary_schedule
+from schedule_fixture import build_schedule as plenary_schedule
 
 
 def options(tmp_path, **overrides):
@@ -35,15 +35,19 @@ def seed_ran1(opts):
     return schedule
 
 
-def test_plenary_pipeline_needs_neither_ran1_nor_llm_credentials():
-    result = subprocess.run([sys.executable, '-c', '''
+def test_plenary_lifecycle_import_is_isolated():
+    result = subprocess.run([sys.executable, '-c', """
 import sys
-from working_groups.registry import build_schedule
-schedule = build_schedule('ran-plenary', None)
-assert schedule.is_demo and len(schedule.days) == 2
+from working_groups.registry import get_working_group
+get_working_group('ran-plenary')
 assert not any(name.startswith(('working_groups.ran1', 'google.genai', 'docx')) for name in sys.modules)
-'''], capture_output=True, text=True)
+"""], capture_output=True, text=True)
     assert result.returncode == 0, result.stderr
+
+
+@pytest.fixture(autouse=True)
+def stub_network_pipeline(monkeypatch):
+    monkeypatch.setattr(build, 'build_schedule', lambda wg, options: plenary_schedule())
 
 
 def test_plenary_uses_daily_rooms_and_timeline_without_ran1_breaks():

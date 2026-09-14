@@ -1,0 +1,30 @@
+{
+  "meeting_number": 113,
+  "version": 4,
+  "config_hash": "c8352e1759e653c7a98f90fb6b4492b5df04a6515a3c4fd7d97763195c530c29",
+  "timeplan": {
+    "url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN/Inbox/Chair/RAN%23113%20time%20plan%20v04.zip",
+    "name": "RAN#113 time plan v04.zip",
+    "meeting_number": 113,
+    "version": 4,
+    "listing_metadata": "RAN#113 time plan v04.zip 2026/09/14 15:57 557,7 KB",
+    "sha256": "10752583086f0990e16028bb6160b4d913f6a8d495762dd9dfe716b7f1903160",
+    "etag": "\"09a9ece6144dd1:0\"",
+    "last_modified": "Mon, 14 Sep 2026 15:57:56 GMT"
+  },
+  "agenda": {
+    "url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN/Agenda/agenda.csv",
+    "sha256": "a0c12c8882e45c535d689f090c9f6eca162a1e3d9e08aea582ca7f832afec5df",
+    "etag": "\"04d86e78643dd1:0\"",
+    "last_modified": "Sun, 13 Sep 2026 13:50:58 GMT"
+  },
+  "metadata": {
+    "starts_on": "2026-09-14",
+    "ends_on": "2026-09-17",
+    "location": "Madrid",
+    "country": "ES",
+    "portal_timezone": "(GMT+02.00)  Brussels, Copenhagen, Madrid, Paris",
+    "portal_id": 60799,
+    "timezone": "Europe/Madrid"
+  }
+}

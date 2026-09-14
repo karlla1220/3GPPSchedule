@@ -64,6 +64,8 @@ class Session:
     description: str | None = None
     agenda_descriptions: list[dict] = field(default_factory=list)
     room_ids: list[str] = field(default_factory=list)
+    room_scope: str = "assigned"  # assigned, shared, or unassigned (display span only)
+    notes: list[str] = field(default_factory=list)
 
 
 @dataclass
@@ -95,6 +97,7 @@ class Schedule:
     starts_on: str | None = None
     ends_on: str | None = None
     is_demo: bool = False
+    topic_references: list[dict] = field(default_factory=list)
 
 
 def time_to_minutes(t: str) -> int:

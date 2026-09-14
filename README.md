@@ -1,6 +1,6 @@
 # 3GPP Schedule Viewer
 
-WG별 독립 파이프라인의 결과를 공통 간트차트로 제공하는 GitHub Pages 사이트입니다. 현재 RAN1은 실제 파서를, RAN Plenary는 고정 더미 일정을 사용합니다.
+WG별 독립 파이프라인의 결과를 공통 간트차트로 제공하는 GitHub Pages 사이트입니다. RAN1과 RAN Plenary는 각각 독립된 실제 문서 파서를 사용합니다.
 
 RAN1은 3GPP FTP 서버에서 최신 회의 스케줄 DOCX 파일을 다운로드하고, Gemini API로 비정형 테이블 텍스트를 파싱하여 **CSS Grid 기반 간트차트 스타일의 정적 HTML 페이지**를 생성합니다.
 
@@ -45,7 +45,7 @@ cp .env.example .env
 GEMINI_API_KEY=your-api-key-here
 ```
 
-- `GEMINI_API_KEY`: RAN1 파싱용 Gemini API 키 ([Google AI Studio](https://aistudio.google.com/apikey)에서 발급)
+- `GEMINI_API_KEY`: RAN1·RAN Plenary 파싱용 Gemini API 키 ([Google AI Studio](https://aistudio.google.com/apikey)에서 발급)
 제작자와 연락처는 환경변수 대신 `site.json`의 `presentation`에서 설정합니다.
 
 ## 사용법
@@ -56,12 +56,12 @@ GEMINI_API_KEY=your-api-key-here
 uv run python main.py
 ```
 
-RAN1 문서를 다운로드·파싱하고 RAN Plenary 더미를 생성합니다. WG별 페이지와 기본 WG로 이동하는 `docs/index.html`을 함께 출력합니다.
+RAN1 문서와 RAN Plenary timeplan을 다운로드·파싱합니다. WG별 페이지와 기본 WG로 이동하는 `docs/index.html`을 함께 출력합니다.
 
 ### 로컬 DOCX 파일 사용
 
 ```bash
-uv run python main.py --local "Chair_notes/RAN1#124 online and offline schedules - v00.docx"
+uv run python main.py --wg ran1 --local "Chair_notes/RAN1#124 online and offline schedules - v00.docx"
 ```
 
 이미 다운로드된 DOCX 파일을 직접 지정하여 HTML을 생성합니다.
@@ -72,7 +72,7 @@ uv run python main.py --local "Chair_notes/RAN1#124 online and offline schedules
 uv run python main.py --no-download
 ```
 
-FTP 다운로드를 건너뛰고 `downloads/ran1/Chair_notes/` 폴더에 있는 가장 최신 로컬 파일을 사용합니다.
+선택 WG의 다운로드 캐시를 사용합니다. RAN P는 `downloads/ran-plenary/inputs/`의 timeplan·agenda와 동일 회의의 메타데이터 또는 명시 설정이 필요합니다. LLM 캐시가 없으면 Gemini 호출은 수행합니다.
 
 ### 출력 경로 지정
 
@@ -87,12 +87,12 @@ uv run python main.py --output-dir output
 | 옵션 | 설명 |
 |---|---|
 | (없음) | FTP 다운로드 → 파싱 → HTML 생성 전체 파이프라인 |
-| `--local <path>` | 지정한 로컬 DOCX 파일로 HTML 생성 |
+| `--local <path>` | 선택한 한 WG의 로컬 DOCX 또는 RAN P ZIP으로 HTML 생성 |
 | `--no-download` | 다운로드 없이 최신 로컬 파일 사용 |
 | `--output-dir <path>` | 사이트 출력 폴더 (기본: `docs/`) |
 | `--wg <id>` | 갱신할 WG: `ran1`, `ran-plenary`, `all` (기본) |
 | `--render-only` | 저장된 `schedule.json`으로 HTML만 재생성; 파싱·네트워크 호출 없음 |
-| `--rebuild-slots` | `docs/ran1/slot_state/` 전체 삭제 후 모든 시간 슬롯을 cold 경로로 재빌드 |
+| `--rebuild-slots` | RAN1 슬롯 상태 또는 RAN P timeplan 해석 캐시를 초기화하고 재해석 |
 
 ## 프로젝트 구조
 
@@ -110,8 +110,11 @@ working_groups/
     agenda_descriptions.py / models.py / config.py
     config.json / prompts/     # RAN1 전용 설정과 LLM 프롬프트
   ran_plenary/
-    lifecycle.py               # 동일 인터페이스, 원격 조회는 없음
-    pipeline.py                # 파싱·외부 호출 없는 고정 더미 일정
+    lifecycle.py / sources.py  # 최신 timeplan·agenda 선택, 재검증, check→build 전달
+    document.py                # DOCX 문단·run·글씨 색·취소선·원문 위치 추출
+    interpreter.py             # LLM 해석, 근거·방 사용 시간·세션 범위 검증
+    pipeline.py                # Portal 메타데이터와 공통 Schedule 조립
+    config.json / prompts/     # RAN P 전용 설정과 프롬프트
 shared/
   lifecycle.py                 # CheckResult, BuildOptions, WorkingGroup 규약
   site_config.py               # 활성 WG와 기본 WG 검증
@@ -136,12 +139,12 @@ WG의 내부 단계는 자유입니다. 공통 실행기는 각 `build_schedule(
 `Schedule.starts_on`/`ends_on`은 ISO 날짜, `timezone`은 개최지의 IANA 시간대입니다.
 날짜가 있는 미팅은 개최 중인 항목과 현재 선택 항목을 상단에 표시합니다.
 기존 RAN1에는 개최 날짜 추출이 아직 없으므로 `Latest schedule`로 표시하며,
-RAN Plenary는 날짜 없는 `Demo`로 항상 선택할 수 있습니다. 실제 개최 중이라고 표시하지 않습니다.
+RAN Plenary는 Portal에서 동일 회의번호의 개최 날짜·장소를 조회해 실제 개최 상태를 표시합니다.
 
 ## 다중 WG 빌드와 로컬 확인
 
 ```bash
-# RAN1 전체 파이프라인 + RAN Plenary 더미 + 사이트 조립
+# RAN1·RAN Plenary 실제 파이프라인 + 사이트 조립
 uv run python main.py
 
 # RAN Plenary만 갱신; RAN1은 저장된 결과를 유지
@@ -170,7 +173,8 @@ GitHub Pages 프로젝트 하위 경로에서도 직접 접속·새로고침·�
 실패한 WG는 마지막 정상 `schedule.json`을 유지하고 다른 WG 빌드는 계속하지만,
 로컬 `main.py` 명령은 실패 코드로 종료합니다. 운영 CI는 아래의 `ci.py` 절차를 사용해
 실패한 WG의 저장 상태까지 복원하고, 성공한 다른 WG의 갱신은 계속합니다.
-`--wg ran-plenary`와 `--render-only`는 RAN1 파서나 API 키를 필요로 하지 않습니다.
+`--wg ran-plenary`는 RAN1 파서를 import하지 않지만 새로운 문서의 해석에는 Gemini API 키가 필요합니다.
+`--render-only`는 두 WG 모두 API 키·네트워크 없이 동작합니다.
 `--render-only`는 기존 `schedule.json`이 필요하며 설정된 기본 WG 결과가 없으면 오류로 종료합니다.
 
 기존 루트의 RAN1 Python 파일·설정·프롬프트는 `working_groups/ran1/`로 이동했고,
@@ -178,6 +182,88 @@ GitHub Pages 프로젝트 하위 경로에서도 직접 접속·새로고침·�
 외부 코드의 import 경로와 수동 참조 파일 위치를 새 경로로 변경하세요.
 RAN1만 단독 HTML로 출력하던 동작은
 `uv run python -m working_groups.ran1.pipeline --output output/schedule.html`로 사용할 수 있습니다.
+
+## RAN Plenary timeplan
+
+RAN P는 Chair 폴더의 `RAN#<번호> time plan v<버전>.zip`/`.docx`를
+**회의번호 → 숫자 버전 → 목록 메타데이터** 순으로 선택합니다. 오래된 회의·버전으로
+자동 후퇴하지 않으며 ZIP에는 같은 회의·버전의 DOCX가 하나 있어야 합니다.
+기본 주소는 `working_groups/ran_plenary/config.json`에 있습니다.
+
+파서는 셀을 평문으로 뭉개지 않고 방 안내와 문단별 run의 글씨 색, 테마/스타일 상속,
+줄바꿈, 취소선, 원문 ID를 보존합니다. Gemini가 문서 전체를 읽어 물리적 장소,
+요일별 사용 가능 시간, 세션을 해석하고 코드는 원문 누락·시간 추정·방 중복·사용 기간을
+검증합니다. 검증 실패 시 오류를 포함해 한 번 수정 요청하고, 계속 실패하면 기존 결과를 유지합니다.
+시간이 없는 둘째 표는 순서를 유지한 별도 토픽·문서·AI 참조 목록입니다.
+이 목록은 원본 하이라이트를 연한 배경색으로 표현하고 원본 하이퍼링크·강조·취소선을
+보존합니다. Agenda 설명은 상위 항목을 합친 들여쓰기 트리로 표시하므로 세부 항목의
+문맥을 확인할 수 있습니다. 이 서식은 스냅샷에 저장되며 서식만 변경되면 LLM 재호출 없이 반영됩니다.
+
+RAN#113 v04의 주요 표현:
+
+- 검은 일반 토픽은 `room_scope="unassigned"`로 하루 전체 방 열에 병합합니다.
+  공통 블록은 `shared`이며 둘 다 실제 모든 방을 예약한다는 의미는 아닙니다.
+- 명시적인 `Main:`/`in RAN main room`은 검은 글씨라도 Main으로 배치합니다.
+  개회·종료의 빨간 강조는 방 구분으로 사용하지 않습니다.
+- 화요일은 세 장소 열을 표시하고 12:30부터 Breakout을 Madrid 1–2에서
+  Neptuno + PTA Alcala로 옮깁니다. TBD도 해당 방 셀에 남습니다.
+- 휴식 중 회의도 보존하고 휴식 이름은 시간축에 표시합니다.
+  점심 세션은 12:30–13:30, 화요일 저녁은 19:00까지, 목요일은 17:00까지입니다.
+- AI는 timeplan의 명시 번호 또는 구체적으로 연결된 토픽 표에서만 얻습니다.
+  agenda.csv는 번호별 설명을 제공합니다. 근거가 없는 AI는 비워 둡니다.
+
+`Schedule.topic_references`, `Session.room_scope`, `Session.notes`는 선택 필드로
+기존 스냅샷도 읽을 수 있습니다. `--render-only`는 저장된 설명과 주석까지 재현합니다.
+
+### 날짜·시간대 및 오프라인 입력
+
+Portal 조회는 진행 중 여부가 아니라 선택한 RAN 회의번호로 일치시킵니다.
+조회 범위는 현재 연도 전후 1년이며 과거 회의는 아래 설정으로 보완할 수 있습니다.
+장소·국가·Portal의 시간대 텍스트를 LLM에 전달하여 IANA 시간대를 얻고 `ZoneInfo`로
+검증합니다. 명시 설정이 우선이고, 조회 장애 시 같은 회의의 성공 메타데이터만 재사용합니다.
+새 회의의 날짜·시간대를 확보하지 못하면 UTC로 추측하지 않고 빌드에 실패합니다.
+
+아래 항목을 `working_groups/ran_plenary/config.json`에 설정하면 지정 v04를
+오프라인 입력으로 검증할 수 있습니다. `timezone` 대신 `location`/`country`만 주면
+시간대 해석에는 Gemini를 사용합니다. 전체 설정 예시는 `config.example.json`에 있습니다.
+
+```json
+{
+  "local_agenda": "tests/fixtures/ran_plenary/agenda.csv",
+  "meetings": {
+    "113": {
+      "starts_on": "2026-09-14",
+      "ends_on": "2026-09-17",
+      "location": "Madrid",
+      "country": "ES",
+      "timezone": "Europe/Madrid"
+    }
+  }
+}
+```
+
+```bash
+uv run python main.py --wg ran-plenary --local "tests/fixtures/ran_plenary/RAN#113 time plan v04.zip"
+uv run python main.py --wg ran-plenary --no-download
+uv run python main.py --render-only
+```
+
+### RAN P의 상태와 캐시
+
+- `docs/ran-plenary/.schedule_state.json`: 성공한 timeplan·agenda의 URL, 회의번호,
+  버전, SHA-256, HTTP validator 및 날짜·시간대 메타데이터. Git으로 추적합니다.
+- `downloads/ran-plenary/inputs/`: 검증 가능한 원문 캐시. Git에는 추가하지 않습니다.
+  check runner의 입력은 `.ci/transfers/ran-plenary/`로 build runner에 전달합니다.
+- `.cache/ran-plenary/`: 원문 구조·색·방 안내·프롬프트·모델을 포함한 해시별
+  LLM 결과와 원문 근거. 기존 CI의 `.cache/` 캐시 대상에 포함됩니다.
+
+색만 변경되어도 재해석합니다. agenda 설명만 변경되면 LLM 시간표 결과를 재사용하고
+설명을 다시 붙입니다. `force-deploy`는 입력·LLM 캐시를 비우되 마지막 성공 출력은
+새 빌드가 성공하기 전까지 유지합니다. 다운로드·파싱·검증·렌더링 실패를 성공 상태로
+기록하지 않으며 다음 check에서 다시 시도합니다.
+
+실제 v04 ZIP·agenda와 검수한 Gemini 결과는 `tests/fixtures/ran_plenary/`에 있으며
+자동 테스트는 실제 네트워크나 API 키를 사용하지 않습니다.
 
 ## 다중 소스 통합 파이프라인
 
@@ -358,7 +444,7 @@ workflow YAML에 WG별 job이나 shell 분기를 추가할 필요가 없습니�
 | `cache_paths` | 재생성 가능한 WG 캐시 경로 (`.cache/<wg>/` 사용) |
 
 RAN1은 기존 FTP/문서/시간대/외부 파일 감지를 그대로 구현합니다.
-RAN Plenary 더미는 원격 조회를 하지 않으며 코드 변경이나 결과 누락 때만 빌드합니다.
+RAN Plenary는 Chair의 timeplan과 agenda.csv를 독립적으로 HTTP 재검증하며, 같은 URL의 본문 변경과 Portal 메타데이터 변경도 감지합니다.
 공통 데이터 모델·의존성이 바뀌면 활성 WG를 다시 빌드합니다. 공통 화면 또는 기본 WG만
 바뀌면 저장된 일정으로 화면만 다시 생성합니다. 개최 날짜에 따른 내비게이션 변화도 검사합니다.
 

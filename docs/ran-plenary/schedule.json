@@ -1,160 +1,339 @@
 {
   "schema_version": 1,
-  "meeting_name": "RAN Plenary",
+  "meeting_name": "RAN#113",
   "days": [
     {
       "day_name": "Monday",
       "rooms": [
         {
-          "name": "Plenary hall",
+          "name": "Main: Madrid 3/4/5/6",
           "table_index": 0,
           "room_index_in_table": 0,
-          "id": "plenary"
+          "id": "madrid_3_4_5_6"
         },
         {
-          "name": "Discussion room",
+          "name": "Breakout: Madrid 1-2",
           "table_index": 0,
           "room_index_in_table": 0,
-          "id": "discussion"
+          "id": "madrid_1_2"
         }
       ],
       "sessions": [
         {
-          "name": "Opening and agenda approval",
-          "duration_minutes": 45,
+          "name": "Incoming LSs, WG reports, early items",
+          "duration_minutes": 90,
           "start_time": "09:00",
-          "end_time": "09:45",
-          "day": "Monday",
-          "room_col_start": 2,
-          "room_col_end": 3,
-          "chair": null,
-          "agenda_item": null,
-          "group_header": "Plenary",
-          "description": null,
-          "agenda_descriptions": [],
-          "room_ids": [
-            "plenary"
-          ]
-        },
-        {
-          "name": "Working group reports",
-          "duration_minutes": 45,
-          "start_time": "09:45",
           "end_time": "10:30",
           "day": "Monday",
           "room_col_start": 2,
           "room_col_end": 3,
           "chair": null,
-          "agenda_item": null,
-          "group_header": "Reports",
-          "description": null,
-          "agenda_descriptions": [],
-          "room_ids": [
-            "plenary"
+          "agenda_item": "7, 5",
+          "group_header": "Early items",
+          "description": "Liaison activities of TSG RAN\nRAN WG reports/coordination",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "7",
+              "matched_agenda_item": "7",
+              "description": "Liaison activities of TSG RAN",
+              "hierarchy": [
+                {
+                  "agenda_item": "7",
+                  "description": "Liaison activities of TSG RAN"
+                }
+              ]
+            },
+            {
+              "agenda_item": "5",
+              "matched_agenda_item": "5",
+              "description": "RAN WG reports/coordination",
+              "hierarchy": [
+                {
+                  "agenda_item": "5",
+                  "description": "RAN WG reports/coordination"
+                }
+              ]
+            }
+          ],
+          "room_ids": [],
+          "room_scope": "unassigned",
+          "notes": [
+            "Opening at 09:00"
           ]
         },
         {
-          "name": "RAN1 and RAN2 reports",
-          "duration_minutes": 75,
-          "start_time": "10:45",
-          "end_time": "12:00",
+          "name": "TBD",
+          "duration_minutes": 30,
+          "start_time": "10:30",
+          "end_time": "11:00",
           "day": "Monday",
           "room_col_start": 2,
           "room_col_end": 3,
           "chair": null,
           "agenda_item": null,
-          "group_header": "Reports",
+          "group_header": "TBD",
           "description": null,
           "agenda_descriptions": [],
           "room_ids": [
-            "plenary"
-          ]
+            "madrid_3_4_5_6"
+          ],
+          "room_scope": "assigned",
+          "notes": []
         },
         {
-          "name": "Release planning",
+          "name": "Early items",
           "duration_minutes": 90,
-          "start_time": "13:00",
-          "end_time": "14:30",
+          "start_time": "11:00",
+          "end_time": "12:30",
           "day": "Monday",
           "room_col_start": 2,
           "room_col_end": 3,
           "chair": null,
           "agenda_item": null,
-          "group_header": "Planning",
+          "group_header": "Early items",
           "description": null,
           "agenda_descriptions": [],
-          "room_ids": [
-            "plenary"
-          ]
+          "room_ids": [],
+          "room_scope": "unassigned",
+          "notes": []
         },
         {
-          "name": "Rapporteur discussion",
+          "name": "TBD",
           "duration_minutes": 60,
-          "start_time": "13:00",
-          "end_time": "14:00",
+          "start_time": "12:30",
+          "end_time": "13:30",
           "day": "Monday",
           "room_col_start": 2,
           "room_col_end": 3,
           "chair": null,
           "agenda_item": null,
-          "group_header": "Discussion",
+          "group_header": "TBD",
           "description": null,
           "agenda_descriptions": [],
           "room_ids": [
-            "discussion"
-          ]
+            "madrid_1_2"
+          ],
+          "room_scope": "assigned",
+          "notes": []
         },
         {
-          "name": "Study and work item proposals",
-          "duration_minutes": 75,
-          "start_time": "14:45",
+          "name": "TBD",
+          "duration_minutes": 60,
+          "start_time": "12:30",
+          "end_time": "13:30",
+          "day": "Monday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": null,
+          "group_header": "TBD",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [
+            "madrid_3_4_5_6"
+          ],
+          "room_scope": "assigned",
+          "notes": []
+        },
+        {
+          "name": "Early items: Rel-21 5G-Adv",
+          "duration_minutes": 90,
+          "start_time": "14:00",
+          "end_time": "15:30",
+          "day": "Monday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": "15",
+          "group_header": "Rel-21 5G-Adv",
+          "description": "5G-Advanced in Rel-21",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "15",
+              "matched_agenda_item": "15",
+              "description": "5G-Advanced in Rel-21",
+              "hierarchy": [
+                {
+                  "agenda_item": "15",
+                  "description": "5G-Advanced in Rel-21"
+                }
+              ]
+            }
+          ],
+          "room_ids": [],
+          "room_scope": "unassigned",
+          "notes": []
+        },
+        {
+          "name": "TBD",
+          "duration_minutes": 30,
+          "start_time": "15:30",
           "end_time": "16:00",
           "day": "Monday",
           "room_col_start": 2,
           "room_col_end": 3,
           "chair": null,
           "agenda_item": null,
-          "group_header": "Planning",
+          "group_header": "TBD",
           "description": null,
           "agenda_descriptions": [],
           "room_ids": [
-            "plenary"
-          ]
+            "madrid_1_2"
+          ],
+          "room_scope": "assigned",
+          "notes": []
         },
         {
-          "name": "Decisions and next steps",
-          "duration_minutes": 60,
-          "start_time": "16:00",
-          "end_time": "17:00",
+          "name": "TBD",
+          "duration_minutes": 30,
+          "start_time": "15:30",
+          "end_time": "16:00",
           "day": "Monday",
           "room_col_start": 2,
           "room_col_end": 3,
           "chair": null,
           "agenda_item": null,
-          "group_header": "Plenary",
+          "group_header": "TBD",
           "description": null,
           "agenda_descriptions": [],
           "room_ids": [
-            "plenary"
-          ]
+            "madrid_3_4_5_6"
+          ],
+          "room_scope": "assigned",
+          "notes": []
+        },
+        {
+          "name": "Early items: Rel-21 5G-Adv",
+          "duration_minutes": 120,
+          "start_time": "16:00",
+          "end_time": "18:00",
+          "day": "Monday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": "15",
+          "group_header": "Rel-21 5G-Adv",
+          "description": "5G-Advanced in Rel-21",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "15",
+              "matched_agenda_item": "15",
+              "description": "5G-Advanced in Rel-21",
+              "hierarchy": [
+                {
+                  "agenda_item": "15",
+                  "description": "5G-Advanced in Rel-21"
+                }
+              ]
+            }
+          ],
+          "room_ids": [],
+          "room_scope": "unassigned",
+          "notes": []
+        },
+        {
+          "name": "Rel-21 5G-Adv (AI 15.2 – RAN1/2/3 NTN, Xiaodong)",
+          "duration_minutes": 90,
+          "start_time": "18:00",
+          "end_time": "19:30",
+          "day": "Monday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "Xiaodong",
+          "agenda_item": "15.2",
+          "group_header": "Rel-21 5G-Adv",
+          "description": "Specific RAN1/2/3-led Rel-21 topics",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "15.2",
+              "matched_agenda_item": "15.2",
+              "description": "Specific RAN1/2/3-led Rel-21 topics",
+              "hierarchy": [
+                {
+                  "agenda_item": "15",
+                  "description": "5G-Advanced in Rel-21"
+                },
+                {
+                  "agenda_item": "15.2",
+                  "description": "Specific RAN1/2/3-led Rel-21 topics"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "madrid_1_2"
+          ],
+          "room_scope": "assigned",
+          "notes": []
+        },
+        {
+          "name": "6G diverse devices",
+          "duration_minutes": 90,
+          "start_time": "18:00",
+          "end_time": "19:30",
+          "day": "Monday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": "8.2.1.2",
+          "group_header": "6G",
+          "description": "Diverse device types",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "8.2.1.2",
+              "matched_agenda_item": "8.2.1.2",
+              "description": "Diverse device types",
+              "hierarchy": [
+                {
+                  "agenda_item": "8",
+                  "description": "6G"
+                },
+                {
+                  "agenda_item": "8.2",
+                  "description": "Open REL-20 6G SIs"
+                },
+                {
+                  "agenda_item": "8.2.1",
+                  "description": "Study on 6G Radio [RAN1 led SI: FS_6G_Radio]"
+                },
+                {
+                  "agenda_item": "8.2.1.2",
+                  "description": "Diverse device types"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "madrid_3_4_5_6"
+          ],
+          "room_scope": "assigned",
+          "notes": []
         }
       ],
-      "date": null,
+      "date": "2026-09-14",
       "timeline": {
         "start": "09:00",
-        "end": "17:00",
-        "slot_minutes": 15,
-        "label_minutes": 60,
+        "end": "19:30",
+        "slot_minutes": 5,
+        "label_minutes": 30,
         "breaks": [
           {
-            "name": "Coffee break",
+            "name": "MORNING COFFEE BREAK",
             "start": "10:30",
-            "end": "10:45"
+            "end": "11:00",
+            "label_position": "time-axis"
           },
           {
-            "name": "Lunch",
-            "start": "12:00",
-            "end": "13:00"
+            "name": "LUNCH BREAK",
+            "start": "12:30",
+            "end": "14:00",
+            "label_position": "time-axis"
+          },
+          {
+            "name": "AFTERNOON COFFEE BREAK",
+            "start": "15:30",
+            "end": "16:00",
+            "label_position": "time-axis"
           }
         ],
         "blocks": []
@@ -164,113 +343,5866 @@
       "day_name": "Tuesday",
       "rooms": [
         {
-          "name": "Plenary hall",
+          "name": "Main: Madrid 3/4/5/6",
           "table_index": 0,
           "room_index_in_table": 0,
-          "id": "plenary"
+          "id": "madrid_3_4_5_6"
+        },
+        {
+          "name": "Breakout: Madrid 1-2 (08:00–12:30)",
+          "table_index": 0,
+          "room_index_in_table": 0,
+          "id": "madrid_1_2"
+        },
+        {
+          "name": "Breakout: Neptuno + PTA Alcala (12:30–19:00)",
+          "table_index": 0,
+          "room_index_in_table": 0,
+          "id": "neptuno_pta_alcala"
         }
       ],
       "sessions": [
         {
-          "name": "RAN3 and RAN4 reports",
+          "name": "Rel-21 5G-Adv (AI 15.2 – RAN1/2/3 Others, Jerome)",
           "duration_minutes": 60,
-          "start_time": "09:30",
+          "start_time": "08:00",
+          "end_time": "09:00",
+          "day": "Tuesday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "Jerome",
+          "agenda_item": "15.2",
+          "group_header": "Rel-21 5G-Adv",
+          "description": "Specific RAN1/2/3-led Rel-21 topics",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "15.2",
+              "matched_agenda_item": "15.2",
+              "description": "Specific RAN1/2/3-led Rel-21 topics",
+              "hierarchy": [
+                {
+                  "agenda_item": "15",
+                  "description": "5G-Advanced in Rel-21"
+                },
+                {
+                  "agenda_item": "15.2",
+                  "description": "Specific RAN1/2/3-led Rel-21 topics"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "madrid_1_2"
+          ],
+          "room_scope": "assigned",
+          "notes": []
+        },
+        {
+          "name": "ITU Adhoc",
+          "duration_minutes": 60,
+          "start_time": "08:00",
+          "end_time": "09:00",
+          "day": "Tuesday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": null,
+          "group_header": "TBD",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [
+            "madrid_3_4_5_6"
+          ],
+          "room_scope": "assigned",
+          "notes": []
+        },
+        {
+          "name": "Early items",
+          "duration_minutes": 90,
+          "start_time": "09:00",
           "end_time": "10:30",
           "day": "Tuesday",
           "room_col_start": 2,
           "room_col_end": 3,
           "chair": null,
           "agenda_item": null,
-          "group_header": "Reports",
+          "group_header": "Early items",
           "description": null,
           "agenda_descriptions": [],
-          "room_ids": [
-            "plenary"
-          ]
+          "room_ids": [],
+          "room_scope": "unassigned",
+          "notes": []
         },
         {
-          "name": "Liaison statements",
-          "duration_minutes": 75,
-          "start_time": "10:45",
-          "end_time": "12:00",
+          "name": "NTN time/frequency compensation",
+          "duration_minutes": 30,
+          "start_time": "10:30",
+          "end_time": "11:00",
+          "day": "Tuesday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": "9.1.1",
+          "group_header": "Rel-21 5G-Adv",
+          "description": "Proposals led by RAN1",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "9.1.1",
+              "matched_agenda_item": "9.1.1",
+              "description": "Proposals led by RAN1",
+              "hierarchy": [
+                {
+                  "agenda_item": "9",
+                  "description": "NR"
+                },
+                {
+                  "agenda_item": "9.1",
+                  "description": "New WI/SI proposals for NR for REL-20"
+                },
+                {
+                  "agenda_item": "9.1.1",
+                  "description": "Proposals led by RAN1"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "madrid_1_2"
+          ],
+          "room_scope": "assigned",
+          "notes": []
+        },
+        {
+          "name": "TBD",
+          "duration_minutes": 30,
+          "start_time": "10:30",
+          "end_time": "11:00",
           "day": "Tuesday",
           "room_col_start": 2,
           "room_col_end": 3,
           "chair": null,
           "agenda_item": null,
-          "group_header": "Plenary",
+          "group_header": "TBD",
           "description": null,
           "agenda_descriptions": [],
           "room_ids": [
-            "plenary"
-          ]
+            "madrid_3_4_5_6"
+          ],
+          "room_scope": "assigned",
+          "notes": []
         },
         {
-          "name": "Work plan review",
-          "duration_minutes": 75,
-          "start_time": "13:00",
-          "end_time": "14:15",
+          "name": "Early items",
+          "duration_minutes": 90,
+          "start_time": "11:00",
+          "end_time": "12:30",
           "day": "Tuesday",
           "room_col_start": 2,
           "room_col_end": 3,
           "chair": null,
           "agenda_item": null,
-          "group_header": "Planning",
+          "group_header": "Early items",
           "description": null,
           "agenda_descriptions": [],
-          "room_ids": [
-            "plenary"
-          ]
+          "room_ids": [],
+          "room_scope": "unassigned",
+          "notes": []
         },
         {
-          "name": "Conclusions and closure",
-          "duration_minutes": 45,
-          "start_time": "14:15",
-          "end_time": "15:00",
+          "name": "6G spec modernization",
+          "duration_minutes": 60,
+          "start_time": "12:30",
+          "end_time": "13:30",
           "day": "Tuesday",
           "room_col_start": 2,
           "room_col_end": 3,
           "chair": null,
           "agenda_item": null,
-          "group_header": "Plenary",
+          "group_header": "6G",
           "description": null,
           "agenda_descriptions": [],
           "room_ids": [
-            "plenary"
+            "madrid_3_4_5_6"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "in RAN main room"
+          ]
+        },
+        {
+          "name": "Rel-21 5G-Adv (AI 15.3 – RAN4 Others, Xutao)",
+          "duration_minutes": 60,
+          "start_time": "12:30",
+          "end_time": "13:30",
+          "day": "Tuesday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "Xutao",
+          "agenda_item": "15.3",
+          "group_header": "Rel-21 5G-Adv",
+          "description": "Specific RAN4-led Rel-21 non-spectrum topics",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "15.3",
+              "matched_agenda_item": "15.3",
+              "description": "Specific RAN4-led Rel-21 non-spectrum topics",
+              "hierarchy": [
+                {
+                  "agenda_item": "15",
+                  "description": "5G-Advanced in Rel-21"
+                },
+                {
+                  "agenda_item": "15.3",
+                  "description": "Specific RAN4-led Rel-21 non-spectrum topics"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "neptuno_pta_alcala"
+          ],
+          "room_scope": "assigned",
+          "notes": []
+        },
+        {
+          "name": "Early items",
+          "duration_minutes": 90,
+          "start_time": "14:00",
+          "end_time": "15:30",
+          "day": "Tuesday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": null,
+          "group_header": "Early items",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [],
+          "room_scope": "unassigned",
+          "notes": []
+        },
+        {
+          "name": "TBD",
+          "duration_minutes": 30,
+          "start_time": "15:30",
+          "end_time": "16:00",
+          "day": "Tuesday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": null,
+          "group_header": "TBD",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [
+            "madrid_3_4_5_6"
+          ],
+          "room_scope": "assigned",
+          "notes": []
+        },
+        {
+          "name": "NTN time/frequency compensation",
+          "duration_minutes": 30,
+          "start_time": "15:30",
+          "end_time": "16:00",
+          "day": "Tuesday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": "9.1.1",
+          "group_header": "Rel-21 5G-Adv",
+          "description": "Proposals led by RAN1",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "9.1.1",
+              "matched_agenda_item": "9.1.1",
+              "description": "Proposals led by RAN1",
+              "hierarchy": [
+                {
+                  "agenda_item": "9",
+                  "description": "NR"
+                },
+                {
+                  "agenda_item": "9.1",
+                  "description": "New WI/SI proposals for NR for REL-20"
+                },
+                {
+                  "agenda_item": "9.1.1",
+                  "description": "Proposals led by RAN1"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "neptuno_pta_alcala"
+          ],
+          "room_scope": "assigned",
+          "notes": []
+        },
+        {
+          "name": "Early items / 1st sweep",
+          "duration_minutes": 120,
+          "start_time": "16:00",
+          "end_time": "18:00",
+          "day": "Tuesday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": null,
+          "group_header": "Early items",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [],
+          "room_scope": "unassigned",
+          "notes": []
+        },
+        {
+          "name": "TBD",
+          "duration_minutes": 60,
+          "start_time": "18:00",
+          "end_time": "19:00",
+          "day": "Tuesday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": null,
+          "group_header": "TBD",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [
+            "madrid_3_4_5_6"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "Close by 7pm for social event"
+          ]
+        },
+        {
+          "name": "Rel-21 5G-Adv (AI 15.3 – RAN4 NTN, Yang)",
+          "duration_minutes": 60,
+          "start_time": "18:00",
+          "end_time": "19:00",
+          "day": "Tuesday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "Yang",
+          "agenda_item": "15.3",
+          "group_header": "Rel-21 5G-Adv",
+          "description": "Specific RAN4-led Rel-21 non-spectrum topics",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "15.3",
+              "matched_agenda_item": "15.3",
+              "description": "Specific RAN4-led Rel-21 non-spectrum topics",
+              "hierarchy": [
+                {
+                  "agenda_item": "15",
+                  "description": "5G-Advanced in Rel-21"
+                },
+                {
+                  "agenda_item": "15.3",
+                  "description": "Specific RAN4-led Rel-21 non-spectrum topics"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "neptuno_pta_alcala"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "Close by 7pm for social event"
           ]
         }
       ],
-      "date": null,
+      "date": "2026-09-15",
       "timeline": {
-        "start": "09:30",
-        "end": "15:00",
-        "slot_minutes": 15,
+        "start": "08:00",
+        "end": "19:00",
+        "slot_minutes": 5,
         "label_minutes": 30,
         "breaks": [
           {
-            "name": "Coffee break",
+            "name": "MORNING COFFEE BREAK",
             "start": "10:30",
-            "end": "10:45"
+            "end": "11:00",
+            "label_position": "time-axis"
           },
           {
-            "name": "Lunch",
-            "start": "12:00",
-            "end": "13:00"
+            "name": "LUNCH BREAK",
+            "start": "12:30",
+            "end": "14:00",
+            "label_position": "time-axis"
+          },
+          {
+            "name": "AFTERNOON COFFEE BREAK",
+            "start": "15:30",
+            "end": "16:00",
+            "label_position": "time-axis"
+          }
+        ],
+        "blocks": []
+      }
+    },
+    {
+      "day_name": "Wednesday",
+      "rooms": [
+        {
+          "name": "Main: Madrid 3/4/5/6",
+          "table_index": 0,
+          "room_index_in_table": 0,
+          "id": "madrid_3_4_5_6"
+        },
+        {
+          "name": "Breakout: Neptuno + PTA Alcala",
+          "table_index": 0,
+          "room_index_in_table": 0,
+          "id": "neptuno_pta_alcala"
+        }
+      ],
+      "sessions": [
+        {
+          "name": "TBD",
+          "duration_minutes": 60,
+          "start_time": "08:00",
+          "end_time": "09:00",
+          "day": "Wednesday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": null,
+          "group_header": "TBD",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [
+            "madrid_3_4_5_6"
+          ],
+          "room_scope": "assigned",
+          "notes": []
+        },
+        {
+          "name": "Rel-21 5G-Adv (TBD)",
+          "duration_minutes": 60,
+          "start_time": "08:00",
+          "end_time": "09:00",
+          "day": "Wednesday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": "15",
+          "group_header": "Rel-21 5G-Adv",
+          "description": "5G-Advanced in Rel-21",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "15",
+              "matched_agenda_item": "15",
+              "description": "5G-Advanced in Rel-21",
+              "hierarchy": [
+                {
+                  "agenda_item": "15",
+                  "description": "5G-Advanced in Rel-21"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "neptuno_pta_alcala"
+          ],
+          "room_scope": "assigned",
+          "notes": []
+        },
+        {
+          "name": "Report on 6G AS Security – RAN2/SA3 Chairs / 1st sweep / comebacks",
+          "duration_minutes": 90,
+          "start_time": "09:00",
+          "end_time": "10:30",
+          "day": "Wednesday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": "8.2.1.3",
+          "group_header": "6G",
+          "description": "Any other 6G study topics",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "8.2.1.3",
+              "matched_agenda_item": "8.2.1.3",
+              "description": "Any other 6G study topics",
+              "hierarchy": [
+                {
+                  "agenda_item": "8",
+                  "description": "6G"
+                },
+                {
+                  "agenda_item": "8.2",
+                  "description": "Open REL-20 6G SIs"
+                },
+                {
+                  "agenda_item": "8.2.1",
+                  "description": "Study on 6G Radio [RAN1 led SI: FS_6G_Radio]"
+                },
+                {
+                  "agenda_item": "8.2.1.3",
+                  "description": "Any other 6G study topics"
+                }
+              ]
+            }
+          ],
+          "room_ids": [],
+          "room_scope": "unassigned",
+          "notes": []
+        },
+        {
+          "name": "TBD",
+          "duration_minutes": 30,
+          "start_time": "10:30",
+          "end_time": "11:00",
+          "day": "Wednesday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": null,
+          "group_header": "TBD",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [
+            "madrid_3_4_5_6"
+          ],
+          "room_scope": "assigned",
+          "notes": []
+        },
+        {
+          "name": "TBD",
+          "duration_minutes": 30,
+          "start_time": "10:30",
+          "end_time": "11:00",
+          "day": "Wednesday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": null,
+          "group_header": "TBD",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [
+            "neptuno_pta_alcala"
+          ],
+          "room_scope": "assigned",
+          "notes": []
+        },
+        {
+          "name": "1st sweep / comebacks",
+          "duration_minutes": 90,
+          "start_time": "11:00",
+          "end_time": "12:30",
+          "day": "Wednesday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": null,
+          "group_header": "Comebacks",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [],
+          "room_scope": "unassigned",
+          "notes": []
+        },
+        {
+          "name": "TBD",
+          "duration_minutes": 60,
+          "start_time": "12:30",
+          "end_time": "13:30",
+          "day": "Wednesday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": null,
+          "group_header": "TBD",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [
+            "madrid_3_4_5_6"
+          ],
+          "room_scope": "assigned",
+          "notes": []
+        },
+        {
+          "name": "Rel-21 5G-Adv (TBD)",
+          "duration_minutes": 60,
+          "start_time": "12:30",
+          "end_time": "13:30",
+          "day": "Wednesday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": "15",
+          "group_header": "Rel-21 5G-Adv",
+          "description": "5G-Advanced in Rel-21",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "15",
+              "matched_agenda_item": "15",
+              "description": "5G-Advanced in Rel-21",
+              "hierarchy": [
+                {
+                  "agenda_item": "15",
+                  "description": "5G-Advanced in Rel-21"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "neptuno_pta_alcala"
+          ],
+          "room_scope": "assigned",
+          "notes": []
+        },
+        {
+          "name": "Comebacks",
+          "duration_minutes": 90,
+          "start_time": "14:00",
+          "end_time": "15:30",
+          "day": "Wednesday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": null,
+          "group_header": "Comebacks",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [],
+          "room_scope": "unassigned",
+          "notes": []
+        },
+        {
+          "name": "TBD",
+          "duration_minutes": 30,
+          "start_time": "15:30",
+          "end_time": "16:00",
+          "day": "Wednesday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": null,
+          "group_header": "TBD",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [
+            "madrid_3_4_5_6"
+          ],
+          "room_scope": "assigned",
+          "notes": []
+        },
+        {
+          "name": "TBD",
+          "duration_minutes": 30,
+          "start_time": "15:30",
+          "end_time": "16:00",
+          "day": "Wednesday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": null,
+          "group_header": "TBD",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [
+            "neptuno_pta_alcala"
+          ],
+          "room_scope": "assigned",
+          "notes": []
+        },
+        {
+          "name": "Comebacks",
+          "duration_minutes": 120,
+          "start_time": "16:00",
+          "end_time": "18:00",
+          "day": "Wednesday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": null,
+          "group_header": "Comebacks",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [],
+          "room_scope": "unassigned",
+          "notes": []
+        },
+        {
+          "name": "TBD",
+          "duration_minutes": 90,
+          "start_time": "18:00",
+          "end_time": "19:30",
+          "day": "Wednesday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": null,
+          "group_header": "TBD",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [
+            "madrid_3_4_5_6"
+          ],
+          "room_scope": "assigned",
+          "notes": []
+        },
+        {
+          "name": "Rel-21 5G-Adv (TBD)",
+          "duration_minutes": 90,
+          "start_time": "18:00",
+          "end_time": "19:30",
+          "day": "Wednesday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": "15",
+          "group_header": "Rel-21 5G-Adv",
+          "description": "5G-Advanced in Rel-21",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "15",
+              "matched_agenda_item": "15",
+              "description": "5G-Advanced in Rel-21",
+              "hierarchy": [
+                {
+                  "agenda_item": "15",
+                  "description": "5G-Advanced in Rel-21"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "neptuno_pta_alcala"
+          ],
+          "room_scope": "assigned",
+          "notes": []
+        }
+      ],
+      "date": "2026-09-16",
+      "timeline": {
+        "start": "08:00",
+        "end": "19:30",
+        "slot_minutes": 5,
+        "label_minutes": 30,
+        "breaks": [
+          {
+            "name": "MORNING COFFEE BREAK",
+            "start": "10:30",
+            "end": "11:00",
+            "label_position": "time-axis"
+          },
+          {
+            "name": "LUNCH BREAK",
+            "start": "12:30",
+            "end": "14:00",
+            "label_position": "time-axis"
+          },
+          {
+            "name": "AFTERNOON COFFEE BREAK",
+            "start": "15:30",
+            "end": "16:00",
+            "label_position": "time-axis"
+          }
+        ],
+        "blocks": []
+      }
+    },
+    {
+      "day_name": "Thursday",
+      "rooms": [
+        {
+          "name": "Main: Madrid 3/4/5/6",
+          "table_index": 0,
+          "room_index_in_table": 0,
+          "id": "madrid_3_4_5_6"
+        },
+        {
+          "name": "Breakout: Neptuno + PTA Alcala",
+          "table_index": 0,
+          "room_index_in_table": 0,
+          "id": "neptuno_pta_alcala"
+        }
+      ],
+      "sessions": [
+        {
+          "name": "TBD",
+          "duration_minutes": 60,
+          "start_time": "08:00",
+          "end_time": "09:00",
+          "day": "Thursday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": null,
+          "group_header": "TBD",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [
+            "madrid_3_4_5_6"
+          ],
+          "room_scope": "assigned",
+          "notes": []
+        },
+        {
+          "name": "Rel-21 5G-Adv (TBD)",
+          "duration_minutes": 60,
+          "start_time": "08:00",
+          "end_time": "09:00",
+          "day": "Thursday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": "15",
+          "group_header": "Rel-21 5G-Adv",
+          "description": "5G-Advanced in Rel-21",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "15",
+              "matched_agenda_item": "15",
+              "description": "5G-Advanced in Rel-21",
+              "hierarchy": [
+                {
+                  "agenda_item": "15",
+                  "description": "5G-Advanced in Rel-21"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "neptuno_pta_alcala"
+          ],
+          "room_scope": "assigned",
+          "notes": []
+        },
+        {
+          "name": "Comebacks",
+          "duration_minutes": 90,
+          "start_time": "09:00",
+          "end_time": "10:30",
+          "day": "Thursday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": null,
+          "group_header": "Comebacks",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [],
+          "room_scope": "unassigned",
+          "notes": []
+        },
+        {
+          "name": "TBD",
+          "duration_minutes": 30,
+          "start_time": "10:30",
+          "end_time": "11:00",
+          "day": "Thursday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": null,
+          "group_header": "TBD",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [
+            "madrid_3_4_5_6"
+          ],
+          "room_scope": "assigned",
+          "notes": []
+        },
+        {
+          "name": "TBD",
+          "duration_minutes": 30,
+          "start_time": "10:30",
+          "end_time": "11:00",
+          "day": "Thursday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": null,
+          "group_header": "TBD",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [
+            "neptuno_pta_alcala"
+          ],
+          "room_scope": "assigned",
+          "notes": []
+        },
+        {
+          "name": "Comebacks",
+          "duration_minutes": 90,
+          "start_time": "11:00",
+          "end_time": "12:30",
+          "day": "Thursday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": null,
+          "group_header": "Comebacks",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [],
+          "room_scope": "unassigned",
+          "notes": []
+        },
+        {
+          "name": "TBD",
+          "duration_minutes": 60,
+          "start_time": "12:30",
+          "end_time": "13:30",
+          "day": "Thursday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": null,
+          "group_header": "TBD",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [
+            "madrid_3_4_5_6"
+          ],
+          "room_scope": "assigned",
+          "notes": []
+        },
+        {
+          "name": "TBD",
+          "duration_minutes": 60,
+          "start_time": "12:30",
+          "end_time": "13:30",
+          "day": "Thursday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": null,
+          "group_header": "TBD",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [
+            "neptuno_pta_alcala"
+          ],
+          "room_scope": "assigned",
+          "notes": []
+        },
+        {
+          "name": "Comebacks",
+          "duration_minutes": 90,
+          "start_time": "14:00",
+          "end_time": "15:30",
+          "day": "Thursday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": null,
+          "group_header": "Comebacks",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [],
+          "room_scope": "unassigned",
+          "notes": []
+        },
+        {
+          "name": "TBD",
+          "duration_minutes": 30,
+          "start_time": "15:30",
+          "end_time": "16:00",
+          "day": "Thursday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": null,
+          "group_header": "TBD",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [
+            "madrid_3_4_5_6"
+          ],
+          "room_scope": "assigned",
+          "notes": []
+        },
+        {
+          "name": "TBD",
+          "duration_minutes": 30,
+          "start_time": "15:30",
+          "end_time": "16:00",
+          "day": "Thursday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": null,
+          "group_header": "TBD",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [
+            "neptuno_pta_alcala"
+          ],
+          "room_scope": "assigned",
+          "notes": []
+        },
+        {
+          "name": "Comebacks",
+          "duration_minutes": 60,
+          "start_time": "16:00",
+          "end_time": "17:00",
+          "day": "Thursday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": null,
+          "group_header": "Comebacks",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [],
+          "room_scope": "unassigned",
+          "notes": [
+            "Closing by 17:00"
+          ]
+        }
+      ],
+      "date": "2026-09-17",
+      "timeline": {
+        "start": "08:00",
+        "end": "17:00",
+        "slot_minutes": 5,
+        "label_minutes": 30,
+        "breaks": [
+          {
+            "name": "MORNING COFFEE BREAK",
+            "start": "10:30",
+            "end": "11:00",
+            "label_position": "time-axis"
+          },
+          {
+            "name": "LUNCH BREAK",
+            "start": "12:30",
+            "end": "14:00",
+            "label_position": "time-axis"
+          },
+          {
+            "name": "AFTERNOON COFFEE BREAK",
+            "start": "15:30",
+            "end": "16:00",
+            "label_position": "time-axis"
           }
         ],
         "blocks": []
       }
     }
   ],
-  "source_file": "Fixed demonstration schedule",
-  "generated_at": "2026-09-15 00:00",
+  "source_file": "RAN#113 time plan v04.zip",
+  "generated_at": "2026-09-14 18:59",
   "contact_name": "",
   "contact_email": "",
-  "source_files": [],
-  "timezone": "UTC",
+  "source_files": [
+    "RAN#113 time plan v04.zip",
+    "agenda.csv"
+  ],
+  "timezone": "Europe/Madrid",
   "wg_id": "ran-plenary",
-  "meeting_id": "ran-plenary-demo",
-  "starts_on": null,
-  "ends_on": null,
-  "is_demo": true
+  "meeting_id": "ran#113",
+  "starts_on": "2026-09-14",
+  "ends_on": "2026-09-17",
+  "is_demo": false,
+  "topic_references": [
+    {
+      "id": "t1.r1",
+      "title": "RAN#113 agenda, RAN#112 meeting report",
+      "documents": "Agenda: 1575\nMeeting report: 1576",
+      "agenda_item": "3, 4",
+      "rich_text": {
+        "title": [
+          {
+            "runs": [
+              {
+                "text": "RAN#113 a",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "genda, RAN#1",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "1",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "2",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": " meeting report",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              }
+            ]
+          }
+        ],
+        "documents": [
+          {
+            "runs": [
+              {
+                "text": "Agenda:",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": " ",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "1",
+                "color": "0563C1",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": true,
+                "shading": null,
+                "href": "https://www.3gpp.org/ftp/tsg_ran/TSG_RAN/TSGR_113/Docs/RP-261575.zip"
+              },
+              {
+                "text": "575",
+                "color": "0563C1",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": true,
+                "shading": null,
+                "href": "https://www.3gpp.org/ftp/tsg_ran/TSG_RAN/TSGR_113/Docs/RP-261575.zip"
+              }
+            ]
+          },
+          {
+            "runs": [
+              {
+                "text": "Meeting report: ",
+                "color": "000000",
+                "strike": false,
+                "highlight": "yellow",
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "1576",
+                "color": "0563C1",
+                "strike": false,
+                "highlight": "yellow",
+                "bold": false,
+                "italic": false,
+                "underline": true,
+                "shading": null,
+                "href": "https://www.3gpp.org/ftp/tsg_ran/TSG_RAN/TSGR_113/Docs/RP-261576.zip"
+              }
+            ]
+          }
+        ],
+        "agenda_item": [
+          {
+            "runs": [
+              {
+                "text": "3",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": ", 4",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              }
+            ]
+          }
+        ]
+      },
+      "agenda_descriptions": [
+        {
+          "agenda_item": "3",
+          "matched_agenda_item": "3",
+          "description": "Approval of the agenda",
+          "hierarchy": [
+            {
+              "agenda_item": "3",
+              "description": "Approval of the agenda"
+            }
+          ]
+        },
+        {
+          "agenda_item": "4",
+          "matched_agenda_item": "4",
+          "description": "Approval of the meeting report of TSG RAN #112",
+          "hierarchy": [
+            {
+              "agenda_item": "4",
+              "description": "Approval of the meeting report of TSG RAN #112"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "t1.r2",
+      "title": "Incoming LSs",
+      "documents": "",
+      "agenda_item": "7",
+      "rich_text": {
+        "title": [
+          {
+            "runs": [
+              {
+                "text": "Incoming LSs",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              }
+            ]
+          }
+        ],
+        "documents": [
+          {
+            "runs": []
+          }
+        ],
+        "agenda_item": [
+          {
+            "runs": [
+              {
+                "text": "7",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              }
+            ]
+          }
+        ]
+      },
+      "agenda_descriptions": [
+        {
+          "agenda_item": "7",
+          "matched_agenda_item": "7",
+          "description": "Liaison activities of TSG RAN",
+          "hierarchy": [
+            {
+              "agenda_item": "7",
+              "description": "Liaison activities of TSG RAN"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "t1.r3",
+      "title": "Other incoming LSs\n(no presentation unless requested)",
+      "documents": "1607 (AI 7), 1604 (AI 8.2.1), 1605/1605/1619 (AI 8.2.1), 1610 (AI 8.2.1.3), 1612 (AI 8.2.1.3), 1616 (AI 8.2.1.3), 1613 (AI 9.11), 1617 (AI 8.2.1)",
+      "agenda_item": "",
+      "rich_text": {
+        "title": [
+          {
+            "runs": [
+              {
+                "text": "Other incoming LSs",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "\n(no presentation unless requested)",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              }
+            ]
+          }
+        ],
+        "documents": [
+          {
+            "runs": [
+              {
+                "text": "1607 (AI 7), ",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "1604 (AI 8.2.1), 1605/1605/1619 (AI 8.2.1), ",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "1610 (AI 8.2.1.3), 1612 (AI 8.2.1.3), 1616 (AI 8.2.1.3)",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": ", 1613 (AI 9.11)",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": ", 1617 (AI 8.2.1)",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              }
+            ]
+          }
+        ],
+        "agenda_item": [
+          {
+            "runs": []
+          }
+        ]
+      },
+      "agenda_descriptions": []
+    },
+    {
+      "id": "t1.r4",
+      "title": "WG meeting reports",
+      "documents": "RAN1: 1577, RAN2: 1579, RAN3: 1581, RAN4: 1583, RAN5: 1585 , 1587",
+      "agenda_item": "5",
+      "rich_text": {
+        "title": [
+          {
+            "runs": [
+              {
+                "text": "WG meeting reports",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              }
+            ]
+          }
+        ],
+        "documents": [
+          {
+            "runs": [
+              {
+                "text": "RAN1: ",
+                "color": "000000",
+                "strike": false,
+                "highlight": "green",
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "1577",
+                "color": "0563C1",
+                "strike": false,
+                "highlight": "green",
+                "bold": false,
+                "italic": false,
+                "underline": true,
+                "shading": null,
+                "href": "https://www.3gpp.org/ftp/tsg_ran/TSG_RAN/TSGR_113/Docs/RP-261577.zip"
+              },
+              {
+                "text": ", RAN2:",
+                "color": "000000",
+                "strike": false,
+                "highlight": "green",
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": " ",
+                "color": "000000",
+                "strike": false,
+                "highlight": "green",
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "1579",
+                "color": "0563C1",
+                "strike": false,
+                "highlight": "green",
+                "bold": false,
+                "italic": false,
+                "underline": true,
+                "shading": null,
+                "href": "https://www.3gpp.org/ftp/tsg_ran/TSG_RAN/TSGR_113/Docs/RP-261579.zip"
+              },
+              {
+                "text": ", RAN3:",
+                "color": "000000",
+                "strike": false,
+                "highlight": "green",
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": " ",
+                "color": "000000",
+                "strike": false,
+                "highlight": "green",
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "1581",
+                "color": "0563C1",
+                "strike": false,
+                "highlight": "green",
+                "bold": false,
+                "italic": false,
+                "underline": true,
+                "shading": null,
+                "href": "https://www.3gpp.org/ftp/tsg_ran/TSG_RAN/TSGR_113/Docs/RP-261581.zip"
+              },
+              {
+                "text": ", ",
+                "color": "000000",
+                "strike": false,
+                "highlight": "green",
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "RAN4: ",
+                "color": "000000",
+                "strike": false,
+                "highlight": "green",
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "1583",
+                "color": "0563C1",
+                "strike": false,
+                "highlight": "green",
+                "bold": false,
+                "italic": false,
+                "underline": true,
+                "shading": null,
+                "href": "https://www.3gpp.org/ftp/tsg_ran/TSG_RAN/TSGR_113/Docs/RP-261583.zip"
+              },
+              {
+                "text": ", ",
+                "color": "000000",
+                "strike": false,
+                "highlight": "green",
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "RAN5:",
+                "color": "000000",
+                "strike": false,
+                "highlight": "green",
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": " ",
+                "color": "000000",
+                "strike": false,
+                "highlight": "green",
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "1585",
+                "color": "0563C1",
+                "strike": false,
+                "highlight": "green",
+                "bold": false,
+                "italic": false,
+                "underline": true,
+                "shading": null,
+                "href": "https://www.3gpp.org/ftp/tsg_ran/TSG_RAN/TSGR_113/Docs/RP-261585.zip"
+              },
+              {
+                "text": " ",
+                "color": "000000",
+                "strike": false,
+                "highlight": "green",
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": ", 1587",
+                "color": "000000",
+                "strike": false,
+                "highlight": "green",
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              }
+            ]
+          }
+        ],
+        "agenda_item": [
+          {
+            "runs": [
+              {
+                "text": "5",
+                "color": "000000",
+                "strike": false,
+                "highlight": "green",
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              }
+            ]
+          }
+        ]
+      },
+      "agenda_descriptions": [
+        {
+          "agenda_item": "5",
+          "matched_agenda_item": "5",
+          "description": "RAN WG reports/coordination",
+          "hierarchy": [
+            {
+              "agenda_item": "5",
+              "description": "RAN WG reports/coordination"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "t1.r5",
+      "title": "IMT-2030 workshop preparation",
+      "documents": "1702 (summary of email discussions)",
+      "agenda_item": "6.1.2",
+      "rich_text": {
+        "title": [
+          {
+            "runs": [
+              {
+                "text": "IMT-2030 workshop ",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "p",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "reparation",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              }
+            ]
+          }
+        ],
+        "documents": [
+          {
+            "runs": [
+              {
+                "text": "1702",
+                "color": "0563C1",
+                "strike": false,
+                "highlight": "green",
+                "bold": false,
+                "italic": false,
+                "underline": true,
+                "shading": null,
+                "href": "https://www.3gpp.org/ftp/tsg_ran/TSG_RAN/TSGR_113/Docs/RP-261702.zip"
+              },
+              {
+                "text": " (summary of email discussions)",
+                "color": "000000",
+                "strike": false,
+                "highlight": "green",
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              }
+            ]
+          }
+        ],
+        "agenda_item": [
+          {
+            "runs": [
+              {
+                "text": "6",
+                "color": "000000",
+                "strike": false,
+                "highlight": "green",
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": ".1.2",
+                "color": "000000",
+                "strike": false,
+                "highlight": "green",
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              }
+            ]
+          }
+        ]
+      },
+      "agenda_descriptions": [
+        {
+          "agenda_item": "6.1.2",
+          "matched_agenda_item": "6.1.2",
+          "description": "Documents from/to ITU-R WP5D",
+          "hierarchy": [
+            {
+              "agenda_item": "6",
+              "description": "Other coordination matters"
+            },
+            {
+              "agenda_item": "6.1",
+              "description": "ITU-R ad hoc"
+            },
+            {
+              "agenda_item": "6.1.2",
+              "description": "Documents from/to ITU-R WP5D"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "t1.r6",
+      "title": "New Rel-20 proposals \n– RAN1",
+      "documents": "NR NTN time/frequency compensation (9.1.1): 2169, 2170\nImproved uplink performance when satellite access is also serving unmodified devices (15.2): 1691\nTo be moderated by Alberto (Qualcomm).",
+      "agenda_item": "9.1.1, 15.2",
+      "rich_text": {
+        "title": [
+          {
+            "runs": [
+              {
+                "text": "N",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "ew Rel-20 proposals ",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "\n– RAN1",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              }
+            ]
+          }
+        ],
+        "documents": [
+          {
+            "runs": [
+              {
+                "text": "NR NTN time/frequency compensation",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": " (",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "9",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": ".1.1",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": ")",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": ": ",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "2169",
+                "color": "0563C1",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": true,
+                "shading": null,
+                "href": "https://www.3gpp.org/ftp/tsg_ran/TSG_RAN/TSGR_113/Docs/RP-262169.zip"
+              },
+              {
+                "text": ", 2170",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              }
+            ]
+          },
+          {
+            "runs": [
+              {
+                "text": "I",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "mproved uplink performance when satellite access is also serving unmodified devices (15.2): ",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "1691",
+                "color": "0563C1",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": true,
+                "shading": null,
+                "href": "https://www.3gpp.org/ftp/tsg_ran/TSG_RAN/TSGR_113/Docs/RP-261691.zip"
+              }
+            ]
+          },
+          {
+            "runs": [
+              {
+                "text": "To be moderated by Alberto (Qualcomm).",
+                "color": "000000",
+                "strike": false,
+                "highlight": "yellow",
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": " ",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              }
+            ]
+          }
+        ],
+        "agenda_item": [
+          {
+            "runs": [
+              {
+                "text": "9",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": ".1.1",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": ", ",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "15.2",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              }
+            ]
+          }
+        ]
+      },
+      "agenda_descriptions": [
+        {
+          "agenda_item": "9.1.1",
+          "matched_agenda_item": "9.1.1",
+          "description": "Proposals led by RAN1",
+          "hierarchy": [
+            {
+              "agenda_item": "9",
+              "description": "NR"
+            },
+            {
+              "agenda_item": "9.1",
+              "description": "New WI/SI proposals for NR for REL-20"
+            },
+            {
+              "agenda_item": "9.1.1",
+              "description": "Proposals led by RAN1"
+            }
+          ]
+        },
+        {
+          "agenda_item": "15.2",
+          "matched_agenda_item": "15.2",
+          "description": "Specific RAN1/2/3-led Rel-21 topics",
+          "hierarchy": [
+            {
+              "agenda_item": "15",
+              "description": "5G-Advanced in Rel-21"
+            },
+            {
+              "agenda_item": "15.2",
+              "description": "Specific RAN1/2/3-led Rel-21 topics"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "t1.r7",
+      "title": "New Rel-20 proposals \n– RAN4 (non-spectrum)",
+      "documents": "NR carrier monitoring: 1965/1966\nRevised WID comeback",
+      "agenda_item": "9.1.4",
+      "rich_text": {
+        "title": [
+          {
+            "runs": [
+              {
+                "text": "N",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "ew Rel-20 proposals ",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "\n– RAN4 (non-spectrum)",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              }
+            ]
+          }
+        ],
+        "documents": [
+          {
+            "runs": [
+              {
+                "text": "NR carrier monitoring: ",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "1965",
+                "color": "0563C1",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": true,
+                "shading": null,
+                "href": "https://www.3gpp.org/ftp/tsg_ran/TSG_RAN/TSGR_113/Docs/RP-261965.zip"
+              },
+              {
+                "text": "/1966",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              }
+            ]
+          },
+          {
+            "runs": [
+              {
+                "text": "Revised WID comeback",
+                "color": "000000",
+                "strike": false,
+                "highlight": "yellow",
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              }
+            ]
+          }
+        ],
+        "agenda_item": [
+          {
+            "runs": [
+              {
+                "text": "9",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": ".1.4",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              }
+            ]
+          }
+        ]
+      },
+      "agenda_descriptions": [
+        {
+          "agenda_item": "9.1.4",
+          "matched_agenda_item": "9.1.4",
+          "description": "Proposals led by RAN4 (not spectrum related)",
+          "hierarchy": [
+            {
+              "agenda_item": "9",
+              "description": "NR"
+            },
+            {
+              "agenda_item": "9.1",
+              "description": "New WI/SI proposals for NR for REL-20"
+            },
+            {
+              "agenda_item": "9.1.4",
+              "description": "Proposals led by RAN4 (not spectrum related)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "t1.r8",
+      "title": "New Rel-20 proposals \n– RAN4 (spectrum)",
+      "documents": "FRMCS PC1 UL MIMO: 1701, 1703  Comeback on Wednesday to check revised WID draft for approval\nSUL bands / band combinations for HAPS: 1907, 1908  Comeback on Wednesday to check revised WID draft for approval\nLTE band 23 refarming: 1914, 1915  Comeback on Wednesday to check revised WID draft for approval\nNR-NTN on TN bands: 1953, 2020, 2096, 2097, 2127, 2128, 1831, 1832, 1845, 1958, 1959, 2009 (LTE)",
+      "agenda_item": "9.1.5, 9.13",
+      "rich_text": {
+        "title": [
+          {
+            "runs": [
+              {
+                "text": "N",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "ew Rel-20 proposals ",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "\n– RAN4 (spectrum)",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              }
+            ]
+          }
+        ],
+        "documents": [
+          {
+            "runs": [
+              {
+                "text": "FRMCS PC1 UL MIMO",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": ": 1701, 1703",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": " ",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "",
+                "color": "000000",
+                "strike": false,
+                "highlight": "yellow",
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": " Comeback on Wednesday to check revised WID draft for approval",
+                "color": "000000",
+                "strike": false,
+                "highlight": "yellow",
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              }
+            ]
+          },
+          {
+            "runs": [
+              {
+                "text": "S",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "UL bands / band combinations for HAPS: 1907, 1908",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": " ",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "",
+                "color": "000000",
+                "strike": false,
+                "highlight": "yellow",
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": " Comeback on Wednesday to check revised WID draft for approval",
+                "color": "000000",
+                "strike": false,
+                "highlight": "yellow",
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              }
+            ]
+          },
+          {
+            "runs": [
+              {
+                "text": "L",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "TE band 23 refarming: 1914, 1915",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": " ",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "",
+                "color": "000000",
+                "strike": false,
+                "highlight": "yellow",
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": " Comeback on Wednesday to check revised WID draft for approval",
+                "color": "000000",
+                "strike": false,
+                "highlight": "yellow",
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              }
+            ]
+          },
+          {
+            "runs": [
+              {
+                "text": "NR-NTN on TN bands: 1953, ",
+                "color": "000000",
+                "strike": false,
+                "highlight": "yellow",
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "2020",
+                "color": "0563C1",
+                "strike": false,
+                "highlight": "yellow",
+                "bold": false,
+                "italic": false,
+                "underline": true,
+                "shading": null,
+                "href": "https://www.3gpp.org/ftp/tsg_ran/TSG_RAN/TSGR_113/Docs/RP-262020.zip"
+              },
+              {
+                "text": ", 2096, 2097, 2127, 2128, 1831, ",
+                "color": "000000",
+                "strike": false,
+                "highlight": "yellow",
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "1832",
+                "color": "0563C1",
+                "strike": false,
+                "highlight": "yellow",
+                "bold": false,
+                "italic": false,
+                "underline": true,
+                "shading": null,
+                "href": "https://www.3gpp.org/ftp/tsg_ran/TSG_RAN/TSGR_113/Docs/RP-261832.zip"
+              },
+              {
+                "text": ", 1845, 1958, 1959, 2009 (LTE)",
+                "color": "000000",
+                "strike": false,
+                "highlight": "yellow",
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              }
+            ]
+          }
+        ],
+        "agenda_item": [
+          {
+            "runs": [
+              {
+                "text": "9",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": ".1.5, 9.13",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              }
+            ]
+          }
+        ]
+      },
+      "agenda_descriptions": [
+        {
+          "agenda_item": "9.1.5",
+          "matched_agenda_item": "9.1.5",
+          "description": "Proposals led by RAN4 (spectrum related)",
+          "hierarchy": [
+            {
+              "agenda_item": "9",
+              "description": "NR"
+            },
+            {
+              "agenda_item": "9.1",
+              "description": "New WI/SI proposals for NR for REL-20"
+            },
+            {
+              "agenda_item": "9.1.5",
+              "description": "Proposals led by RAN4 (spectrum related)"
+            }
+          ]
+        },
+        {
+          "agenda_item": "9.13",
+          "matched_agenda_item": "9.13",
+          "description": "Other NR documents",
+          "hierarchy": [
+            {
+              "agenda_item": "9",
+              "description": "NR"
+            },
+            {
+              "agenda_item": "9.13",
+              "description": "Other NR documents"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "t1.r9",
+      "title": "Rel-20 Ambient IoT",
+      "documents": "1712, 1727, 1868, 1885, 2007, 2009\nTo be moderated by Masato (Qualcomm)",
+      "agenda_item": "9.3.1.4",
+      "rich_text": {
+        "title": [
+          {
+            "runs": [
+              {
+                "text": "R",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "el-20 ",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "Ambient IoT",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              }
+            ]
+          }
+        ],
+        "documents": [
+          {
+            "runs": [
+              {
+                "text": "1712",
+                "color": "0563C1",
+                "strike": false,
+                "highlight": "yellow",
+                "bold": false,
+                "italic": false,
+                "underline": true,
+                "shading": null,
+                "href": "https://www.3gpp.org/ftp/tsg_ran/TSG_RAN/TSGR_113/Docs/RP-261712.zip"
+              },
+              {
+                "text": ", 1727, 1868, 1885, 2007, 2009",
+                "color": "000000",
+                "strike": false,
+                "highlight": "yellow",
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              }
+            ]
+          },
+          {
+            "runs": [
+              {
+                "text": "To be moderated by Masato (Qualcomm)",
+                "color": "000000",
+                "strike": false,
+                "highlight": "yellow",
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              }
+            ]
+          }
+        ],
+        "agenda_item": [
+          {
+            "runs": [
+              {
+                "text": "9",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": ".3.",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "1.4",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              }
+            ]
+          }
+        ]
+      },
+      "agenda_descriptions": [
+        {
+          "agenda_item": "9.3.1.4",
+          "matched_agenda_item": "9.3.1.4",
+          "description": "Solutions for Ambient IoT in NR Phase 2 [RAN1 led WI: Ambient_IoT_Solutions_Ph2]",
+          "hierarchy": [
+            {
+              "agenda_item": "9",
+              "description": "NR"
+            },
+            {
+              "agenda_item": "9.3",
+              "description": "Open REL-20 NR or NR+LTE WIs (not spectrum related)"
+            },
+            {
+              "agenda_item": "9.3.1",
+              "description": "Related to RAN1 led WIs"
+            },
+            {
+              "agenda_item": "9.3.1.4",
+              "description": "Solutions for Ambient IoT in NR Phase 2 [RAN1 led WI: Ambient_IoT_Solutions_Ph2]"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "t1.r10",
+      "title": "Rel-20 XR",
+      "documents": "Uplink mobile AI traffic scope: 1728, 2118, 2154, 1711 (WID – scope + rapporteur update)",
+      "agenda_item": "9.3.2.3",
+      "rich_text": {
+        "title": [
+          {
+            "runs": [
+              {
+                "text": "R",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "el-20 XR",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              }
+            ]
+          }
+        ],
+        "documents": [
+          {
+            "runs": [
+              {
+                "text": "Uplink mobile AI traffic scope: ",
+                "color": "000000",
+                "strike": false,
+                "highlight": "green",
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "1",
+                "color": "0563C1",
+                "strike": false,
+                "highlight": "green",
+                "bold": false,
+                "italic": false,
+                "underline": true,
+                "shading": null,
+                "href": "https://www.3gpp.org/ftp/tsg_ran/TSG_RAN/TSGR_113/Docs/RP-261728.zip"
+              },
+              {
+                "text": "728",
+                "color": "0563C1",
+                "strike": false,
+                "highlight": "green",
+                "bold": false,
+                "italic": false,
+                "underline": true,
+                "shading": null,
+                "href": "https://www.3gpp.org/ftp/tsg_ran/TSG_RAN/TSGR_113/Docs/RP-261728.zip"
+              },
+              {
+                "text": ", 2118, 2154, ",
+                "color": "000000",
+                "strike": false,
+                "highlight": "green",
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "1711",
+                "color": "0563C1",
+                "strike": false,
+                "highlight": "green",
+                "bold": false,
+                "italic": false,
+                "underline": true,
+                "shading": null,
+                "href": "https://www.3gpp.org/ftp/tsg_ran/TSG_RAN/TSGR_113/Docs/RP-261711.zip"
+              },
+              {
+                "text": " (WID – scope + rapporteur update)",
+                "color": "000000",
+                "strike": false,
+                "highlight": "green",
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              }
+            ]
+          }
+        ],
+        "agenda_item": [
+          {
+            "runs": [
+              {
+                "text": "9",
+                "color": "000000",
+                "strike": false,
+                "highlight": "green",
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": ".3.2.3",
+                "color": "000000",
+                "strike": false,
+                "highlight": "green",
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              }
+            ]
+          }
+        ]
+      },
+      "agenda_descriptions": [
+        {
+          "agenda_item": "9.3.2.3",
+          "matched_agenda_item": "9.3.2.3",
+          "description": "Core part: XR for NR Phase 4 [RAN2 led WI: NR_XR_Ph4-Core]",
+          "hierarchy": [
+            {
+              "agenda_item": "9",
+              "description": "NR"
+            },
+            {
+              "agenda_item": "9.3",
+              "description": "Open REL-20 NR or NR+LTE WIs (not spectrum related)"
+            },
+            {
+              "agenda_item": "9.3.2",
+              "description": "Related to RAN2 led WIs"
+            },
+            {
+              "agenda_item": "9.3.2.3",
+              "description": "Core part: XR for NR Phase 4 [RAN2 led WI: NR_XR_Ph4-Core]"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "t1.r11",
+      "title": "Rel-20 ISAC",
+      "documents": "Privacy and security: 1615 (SA3 LS), 1854, 2117, 2003/2004\nComeback on Wednesday morning when SA3 chair in RAN",
+      "agenda_item": "9.3.3.3",
+      "rich_text": {
+        "title": [
+          {
+            "runs": [
+              {
+                "text": "R",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "el-20 ISAC",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              }
+            ]
+          }
+        ],
+        "documents": [
+          {
+            "runs": [
+              {
+                "text": "Privacy and security: ",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "1",
+                "color": "0563C1",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": true,
+                "shading": null,
+                "href": "https://www.3gpp.org/ftp/tsg_ran/TSG_RAN/TSGR_113/Docs/RP-261615.zip"
+              },
+              {
+                "text": "615",
+                "color": "0563C1",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": true,
+                "shading": null,
+                "href": "https://www.3gpp.org/ftp/tsg_ran/TSG_RAN/TSGR_113/Docs/RP-261615.zip"
+              },
+              {
+                "text": " (SA3 LS), 1854, 2117, 2003/2004",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              }
+            ]
+          },
+          {
+            "runs": [
+              {
+                "text": "Comeback on Wednesday morning when SA3 chair in RAN",
+                "color": "000000",
+                "strike": false,
+                "highlight": "yellow",
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              }
+            ]
+          }
+        ],
+        "agenda_item": [
+          {
+            "runs": [
+              {
+                "text": "9",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": ".3.3.3",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              }
+            ]
+          }
+        ]
+      },
+      "agenda_descriptions": [
+        {
+          "agenda_item": "9.3.3.3",
+          "matched_agenda_item": "9.3.3.3",
+          "description": "Core part: ISAC for NR [New RAN3 led WI: NR_Sensing_bis-Core]",
+          "hierarchy": [
+            {
+              "agenda_item": "9",
+              "description": "NR"
+            },
+            {
+              "agenda_item": "9.3",
+              "description": "Open REL-20 NR or NR+LTE WIs (not spectrum related)"
+            },
+            {
+              "agenda_item": "9.3.3",
+              "description": "Related to RAN3 led WIs"
+            },
+            {
+              "agenda_item": "9.3.3.3",
+              "description": "Core part: ISAC for NR [New RAN3 led WI: NR_Sensing_bis-Core]"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "t1.r12",
+      "title": "Rel-20 UE RF",
+      "documents": "DPoD: 1981, 1628, 1658, 1924, 2100, 2172 \n Leo to moderate (2213: moderator summary)",
+      "agenda_item": "9.3.4.1",
+      "rich_text": {
+        "title": [
+          {
+            "runs": [
+              {
+                "text": "R",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "el-20 UE RF",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              }
+            ]
+          }
+        ],
+        "documents": [
+          {
+            "runs": [
+              {
+                "text": "D",
+                "color": "000000",
+                "strike": false,
+                "highlight": "yellow",
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "PoD",
+                "color": "000000",
+                "strike": false,
+                "highlight": "yellow",
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": ": ",
+                "color": "000000",
+                "strike": false,
+                "highlight": "yellow",
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "1981",
+                "color": "0563C1",
+                "strike": false,
+                "highlight": "yellow",
+                "bold": false,
+                "italic": false,
+                "underline": true,
+                "shading": null,
+                "href": "https://www.3gpp.org/ftp/tsg_ran/TSG_RAN/TSGR_113/Docs/RP-261981.zip"
+              },
+              {
+                "text": ", 1628, 1658, 1924, 2100, 2172",
+                "color": "000000",
+                "strike": false,
+                "highlight": "yellow",
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": " ",
+                "color": "000000",
+                "strike": false,
+                "highlight": "yellow",
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "\n",
+                "color": "000000",
+                "strike": false,
+                "highlight": "yellow",
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "",
+                "color": "000000",
+                "strike": false,
+                "highlight": "yellow",
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": " ",
+                "color": "000000",
+                "strike": false,
+                "highlight": "yellow",
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "Leo to moderate (",
+                "color": "000000",
+                "strike": false,
+                "highlight": "yellow",
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "2213",
+                "color": "000000",
+                "strike": false,
+                "highlight": "yellow",
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": ": m",
+                "color": "000000",
+                "strike": false,
+                "highlight": "yellow",
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "oderator summary)",
+                "color": "000000",
+                "strike": false,
+                "highlight": "yellow",
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              }
+            ]
+          }
+        ],
+        "agenda_item": [
+          {
+            "runs": [
+              {
+                "text": "9",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": ".3.4.1",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              }
+            ]
+          }
+        ]
+      },
+      "agenda_descriptions": [
+        {
+          "agenda_item": "9.3.4.1",
+          "matched_agenda_item": "9.3.4.1",
+          "description": "UE RF enhancements for NR FR1, Phase 5 [RAN4 led WI: NR_UE_RF_Ph5]",
+          "hierarchy": [
+            {
+              "agenda_item": "9",
+              "description": "NR"
+            },
+            {
+              "agenda_item": "9.3",
+              "description": "Open REL-20 NR or NR+LTE WIs (not spectrum related)"
+            },
+            {
+              "agenda_item": "9.3.4",
+              "description": "Related to RAN4 led WIs"
+            },
+            {
+              "agenda_item": "9.3.4.1",
+              "description": "UE RF enhancements for NR FR1, Phase 5 [RAN4 led WI: NR_UE_RF_Ph5]"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "t1.r13",
+      "title": "Rel-21 5G-Adv\n– High level discussions",
+      "documents": "General aspects: 1685, 1834, 1865, 1887, 2131, 1635, 1648, 1661, 1719, 1722, 1740, 1751, 1816, 1873, 1900, 1954, 1976, 1996, 2109, 2124, 2159, 1633, 1917, 2019, 2136, 1829, 2158\nRAN leadership input: 2186",
+      "agenda_item": "15, 15.1",
+      "rich_text": {
+        "title": [
+          {
+            "runs": [
+              {
+                "text": "R",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "el-21 5G-Adv",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "\n– High level discussions",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              }
+            ]
+          }
+        ],
+        "documents": [
+          {
+            "runs": [
+              {
+                "text": "G",
+                "color": "000000",
+                "strike": false,
+                "highlight": "green",
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "eneral aspects: ",
+                "color": "000000",
+                "strike": false,
+                "highlight": "green",
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "1685",
+                "color": "0563C1",
+                "strike": false,
+                "highlight": "green",
+                "bold": false,
+                "italic": false,
+                "underline": true,
+                "shading": null,
+                "href": "https://www.3gpp.org/ftp/tsg_ran/TSG_RAN/TSGR_113/Docs/RP-261685.zip"
+              },
+              {
+                "text": ", ",
+                "color": "000000",
+                "strike": false,
+                "highlight": "green",
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "1834",
+                "color": "0563C1",
+                "strike": false,
+                "highlight": "green",
+                "bold": false,
+                "italic": false,
+                "underline": true,
+                "shading": null,
+                "href": "https://www.3gpp.org/ftp/tsg_ran/TSG_RAN/TSGR_113/Docs/RP-261834.zip"
+              },
+              {
+                "text": ", ",
+                "color": "000000",
+                "strike": false,
+                "highlight": "green",
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "1865",
+                "color": "0563C1",
+                "strike": false,
+                "highlight": "green",
+                "bold": false,
+                "italic": false,
+                "underline": true,
+                "shading": null,
+                "href": "https://www.3gpp.org/ftp/tsg_ran/TSG_RAN/TSGR_113/Docs/RP-261865.zip"
+              },
+              {
+                "text": ", ",
+                "color": "000000",
+                "strike": false,
+                "highlight": "green",
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "1887",
+                "color": "0563C1",
+                "strike": false,
+                "highlight": "green",
+                "bold": false,
+                "italic": false,
+                "underline": true,
+                "shading": null,
+                "href": "https://www.3gpp.org/ftp/tsg_ran/TSG_RAN/TSGR_113/Docs/RP-261887.zip"
+              },
+              {
+                "text": ", ",
+                "color": "000000",
+                "strike": false,
+                "highlight": "green",
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "2131",
+                "color": "0563C1",
+                "strike": false,
+                "highlight": "green",
+                "bold": false,
+                "italic": false,
+                "underline": true,
+                "shading": null,
+                "href": "https://www.3gpp.org/ftp/tsg_ran/TSG_RAN/TSGR_113/Docs/RP-262131.zip"
+              },
+              {
+                "text": ", 1635, 1648, 1661, 1719, 1722, 1740, 1751, 1816, 1873, 1900, 1954, 1976, 1996, 2109, 2124, 2159, 1633, 1917, 2019, 2136, 1829, 2158",
+                "color": "000000",
+                "strike": false,
+                "highlight": "green",
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              }
+            ]
+          },
+          {
+            "runs": [
+              {
+                "text": "R",
+                "color": "000000",
+                "strike": false,
+                "highlight": "green",
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "AN leadership input: ",
+                "color": "000000",
+                "strike": false,
+                "highlight": "green",
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "2186",
+                "color": "0563C1",
+                "strike": false,
+                "highlight": "green",
+                "bold": false,
+                "italic": false,
+                "underline": true,
+                "shading": null,
+                "href": "https://www.3gpp.org/ftp/tsg_ran/TSG_RAN/TSGR_113/Docs/RP-262186.zip"
+              }
+            ]
+          }
+        ],
+        "agenda_item": [
+          {
+            "runs": [
+              {
+                "text": "15, ",
+                "color": "000000",
+                "strike": false,
+                "highlight": "green",
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "1",
+                "color": "000000",
+                "strike": false,
+                "highlight": "green",
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "5.1",
+                "color": "000000",
+                "strike": false,
+                "highlight": "green",
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              }
+            ]
+          }
+        ]
+      },
+      "agenda_descriptions": [
+        {
+          "agenda_item": "15",
+          "matched_agenda_item": "15",
+          "description": "5G-Advanced in Rel-21",
+          "hierarchy": [
+            {
+              "agenda_item": "15",
+              "description": "5G-Advanced in Rel-21"
+            }
+          ]
+        },
+        {
+          "agenda_item": "15.1",
+          "matched_agenda_item": "15.1",
+          "description": "High-level overview proposals for Rel-21",
+          "hierarchy": [
+            {
+              "agenda_item": "15",
+              "description": "5G-Advanced in Rel-21"
+            },
+            {
+              "agenda_item": "15.1",
+              "description": "High-level overview proposals for Rel-21"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "t1.r14",
+      "title": "Rel-21 5G-Adv\n– RAN1/2/3 led topics",
+      "documents": "NTN: 1624, 1626, 1645, 1662, 1696, 1705, 1746, 1776, 1864, 1876, 1947, 1957, 1971, 1974, 1983, 1997, 2016, 2110, 2120, 2125, 2167, 2171, 1690, 1691, 1975\nTo be moderated by Xiaodong (RAN1 Chair)\nAI/ML: 1874, 1677, 1748, 2017, 2151, 2162, 1667, 2119\nOthers (MIMO, sensing, LTM, etc): 2015, 1956, 1663, 1686/1687, 1693, 1709, 1875, 1928, 1955, 2014\nTo be moderated by Jerome (TMo USA)",
+      "agenda_item": "15.2",
+      "rich_text": {
+        "title": [
+          {
+            "runs": [
+              {
+                "text": "R",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "el-21 5G-Adv",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "\n– RAN1/2/3 led topics",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              }
+            ]
+          }
+        ],
+        "documents": [
+          {
+            "runs": [
+              {
+                "text": "NTN: 1624, ",
+                "color": "000000",
+                "strike": false,
+                "highlight": "green",
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "1626",
+                "color": "0563C1",
+                "strike": false,
+                "highlight": "green",
+                "bold": false,
+                "italic": false,
+                "underline": true,
+                "shading": null,
+                "href": "https://www.3gpp.org/ftp/tsg_ran/TSG_RAN/TSGR_113/Docs/RP-261626.zip"
+              },
+              {
+                "text": ", 1645, ",
+                "color": "000000",
+                "strike": false,
+                "highlight": "green",
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "1662, 1696, 1705, 1746, 1776, 1864, 1876, 1947, 1957, 1971, 1974, ",
+                "color": "1F1F1F",
+                "strike": false,
+                "highlight": "green",
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": "FDFCFC"
+              },
+              {
+                "text": "1983",
+                "color": "0563C1",
+                "strike": false,
+                "highlight": "green",
+                "bold": false,
+                "italic": false,
+                "underline": true,
+                "shading": "FDFCFC",
+                "href": "https://www.3gpp.org/ftp/tsg_ran/TSG_RAN/TSGR_113/Docs/RP-261983.zip"
+              },
+              {
+                "text": ", 1997, 2016, ",
+                "color": "1F1F1F",
+                "strike": false,
+                "highlight": "green",
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": "FDFCFC"
+              },
+              {
+                "text": "2110",
+                "color": "0563C1",
+                "strike": false,
+                "highlight": "green",
+                "bold": false,
+                "italic": false,
+                "underline": true,
+                "shading": "FDFCFC",
+                "href": "https://www.3gpp.org/ftp/tsg_ran/TSG_RAN/TSGR_113/Docs/RP-262110.zip"
+              },
+              {
+                "text": ", 2120, 2125, 2167, 2171, 1690, 1691, 1975",
+                "color": "1F1F1F",
+                "strike": false,
+                "highlight": "green",
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": "FDFCFC"
+              }
+            ]
+          },
+          {
+            "runs": [
+              {
+                "text": "To be moderated by Xiaodong",
+                "color": "1F1F1F",
+                "strike": false,
+                "highlight": "yellow",
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": "FDFCFC"
+              },
+              {
+                "text": " (RAN1 Chair)",
+                "color": "1F1F1F",
+                "strike": false,
+                "highlight": "yellow",
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": "FDFCFC"
+              }
+            ]
+          },
+          {
+            "runs": [
+              {
+                "text": "AI/ML: ",
+                "color": "000000",
+                "strike": false,
+                "highlight": "green",
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "1874",
+                "color": "0563C1",
+                "strike": false,
+                "highlight": "green",
+                "bold": false,
+                "italic": false,
+                "underline": true,
+                "shading": null,
+                "href": "https://www.3gpp.org/ftp/tsg_ran/TSG_RAN/TSGR_113/Docs/RP-261874.zip"
+              },
+              {
+                "text": ", 1677, 1748, 2017, 2151, 2162, 1667, 2119",
+                "color": "000000",
+                "strike": false,
+                "highlight": "green",
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              }
+            ]
+          },
+          {
+            "runs": [
+              {
+                "text": "Others (MIMO, sensing, LTM, ",
+                "color": "000000",
+                "strike": false,
+                "highlight": "green",
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "etc",
+                "color": "000000",
+                "strike": false,
+                "highlight": "green",
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "): ",
+                "color": "000000",
+                "strike": false,
+                "highlight": "green",
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "2015",
+                "color": "0563C1",
+                "strike": false,
+                "highlight": "green",
+                "bold": false,
+                "italic": false,
+                "underline": true,
+                "shading": "FDFCFC",
+                "href": "https://www.3gpp.org/ftp/tsg_ran/TSG_RAN/TSGR_113/Docs/RP-262015.zip"
+              },
+              {
+                "text": ", 1956, 1663, ",
+                "color": "1F1F1F",
+                "strike": false,
+                "highlight": "green",
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": "FDFCFC"
+              },
+              {
+                "text": "1686",
+                "color": "000000",
+                "strike": false,
+                "highlight": "green",
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": "FDFCFC"
+              },
+              {
+                "text": "/",
+                "color": "1F1F1F",
+                "strike": false,
+                "highlight": "green",
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": "FDFCFC"
+              },
+              {
+                "text": "1687",
+                "color": "1F1F1F",
+                "strike": false,
+                "highlight": "green",
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": "FDFCFC"
+              },
+              {
+                "text": ", 1693, 1709, 1875, 1928, 1955, 2014",
+                "color": "1F1F1F",
+                "strike": false,
+                "highlight": "green",
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": "FDFCFC"
+              }
+            ]
+          },
+          {
+            "runs": [
+              {
+                "text": "To be moderated by Jerome",
+                "color": "1F1F1F",
+                "strike": false,
+                "highlight": "yellow",
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": "FDFCFC"
+              },
+              {
+                "text": " (",
+                "color": "1F1F1F",
+                "strike": false,
+                "highlight": "yellow",
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": "FDFCFC"
+              },
+              {
+                "text": "TMo",
+                "color": "1F1F1F",
+                "strike": false,
+                "highlight": "yellow",
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": "FDFCFC"
+              },
+              {
+                "text": " USA)",
+                "color": "1F1F1F",
+                "strike": false,
+                "highlight": "yellow",
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": "FDFCFC"
+              }
+            ]
+          },
+          {
+            "runs": []
+          }
+        ],
+        "agenda_item": [
+          {
+            "runs": [
+              {
+                "text": "1",
+                "color": "000000",
+                "strike": false,
+                "highlight": "green",
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "5.2",
+                "color": "000000",
+                "strike": false,
+                "highlight": "green",
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              }
+            ]
+          }
+        ]
+      },
+      "agenda_descriptions": [
+        {
+          "agenda_item": "15.2",
+          "matched_agenda_item": "15.2",
+          "description": "Specific RAN1/2/3-led Rel-21 topics",
+          "hierarchy": [
+            {
+              "agenda_item": "15",
+              "description": "5G-Advanced in Rel-21"
+            },
+            {
+              "agenda_item": "15.2",
+              "description": "Specific RAN1/2/3-led Rel-21 topics"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "t1.r15",
+      "title": "Rel-21 5G-Adv\n– RAN4 led topics",
+      "documents": "General: 1998, 1664, 1733\nTN: 1833, 1940, 1922, 2101, 2121, 2122, 1909, 1867, 1941, 1982\nTo be moderated by Xutao (vivo)\nNTN: 1697, 1978, 1664, 1733, 1877, 1636, 1750, 1918, 1923, 2123, 2166, 2205, 2102\nTo be moderated by Yang (RAN4 Chair)",
+      "agenda_item": "15.3",
+      "rich_text": {
+        "title": [
+          {
+            "runs": [
+              {
+                "text": "R",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "el-21 5G-Adv",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "\n– RAN4 led topics",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              }
+            ]
+          }
+        ],
+        "documents": [
+          {
+            "runs": [
+              {
+                "text": "General: ",
+                "color": "000000",
+                "strike": false,
+                "highlight": "green",
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "1998",
+                "color": "0563C1",
+                "strike": false,
+                "highlight": "green",
+                "bold": false,
+                "italic": false,
+                "underline": true,
+                "shading": "FDFCFC",
+                "href": "https://www.3gpp.org/ftp/tsg_ran/TSG_RAN/TSGR_113/Docs/RP-261998.zip"
+              },
+              {
+                "text": ", ",
+                "color": "1F1F1F",
+                "strike": false,
+                "highlight": "green",
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": "FDFCFC"
+              },
+              {
+                "text": "1664, 1733",
+                "color": "000000",
+                "strike": false,
+                "highlight": "green",
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              }
+            ]
+          },
+          {
+            "runs": [
+              {
+                "text": "T",
+                "color": "000000",
+                "strike": false,
+                "highlight": "green",
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "N: ",
+                "color": "000000",
+                "strike": false,
+                "highlight": "green",
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "1833",
+                "color": "0563C1",
+                "strike": false,
+                "highlight": "green",
+                "bold": false,
+                "italic": false,
+                "underline": true,
+                "shading": null,
+                "href": "https://www.3gpp.org/ftp/tsg_ran/TSG_RAN/TSGR_113/Docs/RP-261833.zip"
+              },
+              {
+                "text": ", ",
+                "color": "000000",
+                "strike": false,
+                "highlight": "green",
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "1940",
+                "color": "0563C1",
+                "strike": false,
+                "highlight": "green",
+                "bold": false,
+                "italic": false,
+                "underline": true,
+                "shading": null,
+                "href": "https://www.3gpp.org/ftp/tsg_ran/TSG_RAN/TSGR_113/Docs/RP-261940.zip"
+              },
+              {
+                "text": ", 1922, 2101, 2121, 2122, 1909, 1867, 1941, 1982",
+                "color": "000000",
+                "strike": false,
+                "highlight": "green",
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              }
+            ]
+          },
+          {
+            "runs": [
+              {
+                "text": "To be moderated by Xutao (vivo)",
+                "color": "000000",
+                "strike": false,
+                "highlight": "yellow",
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              }
+            ]
+          },
+          {
+            "runs": [
+              {
+                "text": "N",
+                "color": "000000",
+                "strike": false,
+                "highlight": "green",
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "TN: ",
+                "color": "000000",
+                "strike": false,
+                "highlight": "green",
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "1697",
+                "color": "0563C1",
+                "strike": false,
+                "highlight": "green",
+                "bold": false,
+                "italic": false,
+                "underline": true,
+                "shading": null,
+                "href": "https://www.3gpp.org/ftp/tsg_ran/TSG_RAN/TSGR_113/Docs/RP-261697.zip"
+              },
+              {
+                "text": ", ",
+                "color": "000000",
+                "strike": false,
+                "highlight": "green",
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "1978",
+                "color": "0563C1",
+                "strike": false,
+                "highlight": "green",
+                "bold": false,
+                "italic": false,
+                "underline": true,
+                "shading": null,
+                "href": "https://www.3gpp.org/ftp/tsg_ran/TSG_RAN/TSGR_113/Docs/RP-261978.zip"
+              },
+              {
+                "text": ", 1664, 1733, 1877, ",
+                "color": "000000",
+                "strike": false,
+                "highlight": "green",
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "1636, 1750, 1918, 1923, 2123, 2166, ",
+                "color": "1F1F1F",
+                "strike": false,
+                "highlight": "green",
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": "FDFCFC"
+              },
+              {
+                "text": "2205",
+                "color": "1F1F1F",
+                "strike": false,
+                "highlight": "green",
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": "FDFCFC"
+              },
+              {
+                "text": ", 2102",
+                "color": "000000",
+                "strike": false,
+                "highlight": "green",
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              }
+            ]
+          },
+          {
+            "runs": [
+              {
+                "text": "To be moderated by Yang (RAN4 Chair)",
+                "color": "000000",
+                "strike": false,
+                "highlight": "yellow",
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              }
+            ]
+          }
+        ],
+        "agenda_item": [
+          {
+            "runs": [
+              {
+                "text": "1",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "5.3",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              }
+            ]
+          }
+        ]
+      },
+      "agenda_descriptions": [
+        {
+          "agenda_item": "15.3",
+          "matched_agenda_item": "15.3",
+          "description": "Specific RAN4-led Rel-21 non-spectrum topics",
+          "hierarchy": [
+            {
+              "agenda_item": "15",
+              "description": "5G-Advanced in Rel-21"
+            },
+            {
+              "agenda_item": "15.3",
+              "description": "Specific RAN4-led Rel-21 non-spectrum topics"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "t1.r16",
+      "title": "Study on 6GR",
+      "documents": "1591 (SA LS on 6G terminology)",
+      "agenda_item": "8.2.1",
+      "rich_text": {
+        "title": [
+          {
+            "runs": [
+              {
+                "text": "S",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "tudy on 6GR",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              }
+            ]
+          }
+        ],
+        "documents": [
+          {
+            "runs": [
+              {
+                "text": "1",
+                "color": "0563C1",
+                "strike": false,
+                "highlight": "green",
+                "bold": false,
+                "italic": false,
+                "underline": true,
+                "shading": null,
+                "href": "https://www.3gpp.org/ftp/tsg_ran/TSG_RAN/TSGR_113/Docs/RP-261591.zip"
+              },
+              {
+                "text": "591",
+                "color": "0563C1",
+                "strike": false,
+                "highlight": "green",
+                "bold": false,
+                "italic": false,
+                "underline": true,
+                "shading": null,
+                "href": "https://www.3gpp.org/ftp/tsg_ran/TSG_RAN/TSGR_113/Docs/RP-261591.zip"
+              },
+              {
+                "text": " (SA LS on 6G terminology)",
+                "color": "000000",
+                "strike": false,
+                "highlight": "green",
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              }
+            ]
+          }
+        ],
+        "agenda_item": [
+          {
+            "runs": [
+              {
+                "text": "8",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": ".2.1",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              }
+            ]
+          }
+        ]
+      },
+      "agenda_descriptions": [
+        {
+          "agenda_item": "8.2.1",
+          "matched_agenda_item": "8.2.1",
+          "description": "Study on 6G Radio [RAN1 led SI: FS_6G_Radio]",
+          "hierarchy": [
+            {
+              "agenda_item": "8",
+              "description": "6G"
+            },
+            {
+              "agenda_item": "8.2",
+              "description": "Open REL-20 6G SIs"
+            },
+            {
+              "agenda_item": "8.2.1",
+              "description": "Study on 6G Radio [RAN1 led SI: FS_6G_Radio]"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "t1.r17",
+      "title": "Study on 6GR\n– Migration and 6G aggregation options",
+      "documents": "2197 (LS from 5G ACIA)\nMRSS: 2164 (RAN1 LS on MRSS), 1951, 1724, 1747, 1814, 1934, 1972, 1999, 1656, 1992, 2115, 2135\nMigration options: 1620 (5GAA LS), 2163 (NGMN LS), 1614 (SA2 LS), 1625, 1639, 1646, 1665, 1684, 1723, 1741, 1775, 1815, 1828, 1840, 1843, 1852, 1862, 1880, 1930, 1933, 1937, 1946, 1952, 1988, 2103, 2155, 2111, 2133, 1999 \n6G-6G aggregation options: 1618 (RAN2 LS), 2133, 1654, 1713, 1827, 1853, 1921, 1936, 2002, 1999",
+      "agenda_item": "8.2.1.1",
+      "rich_text": {
+        "title": [
+          {
+            "runs": [
+              {
+                "text": "S",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "tudy on 6GR",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "\n– Migration and 6G aggregation options",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              }
+            ]
+          }
+        ],
+        "documents": [
+          {
+            "runs": [
+              {
+                "text": "2",
+                "color": "0563C1",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": true,
+                "shading": null,
+                "href": "https://www.3gpp.org/ftp/tsg_ran/TSG_RAN/TSGR_113/Docs/RP-262197.zip"
+              },
+              {
+                "text": "197",
+                "color": "0563C1",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": true,
+                "shading": null,
+                "href": "https://www.3gpp.org/ftp/tsg_ran/TSG_RAN/TSGR_113/Docs/RP-262197.zip"
+              },
+              {
+                "text": " (LS from 5G ACIA)",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              }
+            ]
+          },
+          {
+            "runs": [
+              {
+                "text": "M",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "RSS: ",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "2164",
+                "color": "0563C1",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": true,
+                "shading": null,
+                "href": "https://www.3gpp.org/ftp/tsg_ran/TSG_RAN/TSGR_113/Docs/RP-262164.zip"
+              },
+              {
+                "text": " (RAN1 LS on MRSS), ",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "1951",
+                "color": "0563C1",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": true,
+                "shading": null,
+                "href": "https://www.3gpp.org/ftp/tsg_ran/TSG_RAN/TSGR_113/Docs/RP-261951.zip"
+              },
+              {
+                "text": ", 1724, 1747, 1814, 1934, 1972, 1999, 1656, 1992, 2115, 2135",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              }
+            ]
+          },
+          {
+            "runs": [
+              {
+                "text": "M",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "igration options: ",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "1620",
+                "color": "0563C1",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": true,
+                "shading": null,
+                "href": "https://www.3gpp.org/ftp/tsg_ran/TSG_RAN/TSGR_113/Docs/RP-261620.zip"
+              },
+              {
+                "text": " (5GAA LS), ",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "2163",
+                "color": "0563C1",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": true,
+                "shading": null,
+                "href": "https://www.3gpp.org/ftp/tsg_ran/TSG_RAN/TSGR_113/Docs/RP-262163.zip"
+              },
+              {
+                "text": " (NGMN LS), ",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "1614",
+                "color": "0563C1",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": true,
+                "shading": null,
+                "href": "https://www.3gpp.org/ftp/tsg_ran/TSG_RAN/TSGR_113/Docs/RP-261614.zip"
+              },
+              {
+                "text": " (SA2 LS), 1625, 1639, 1646, 1665, 1684, 1723, 1741, 1775, 1815, 1828, 1840, 1843, 1852, 1862, ",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "1880",
+                "color": "0563C1",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": true,
+                "shading": null,
+                "href": "https://www.3gpp.org/ftp/tsg_ran/TSG_RAN/TSGR_113/Docs/RP-261880.zip"
+              },
+              {
+                "text": ", 1930, 1933, 1937, 1946, 1952, 1988, 2103, ",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "2155",
+                "color": "0563C1",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": true,
+                "shading": null,
+                "href": "https://www.3gpp.org/ftp/tsg_ran/TSG_RAN/TSGR_113/Docs/RP-262155.zip"
+              },
+              {
+                "text": ", 2111, 2133",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": ", 1999",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": " ",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              }
+            ]
+          },
+          {
+            "runs": [
+              {
+                "text": "6",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "G-6G aggregation options: ",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "1",
+                "color": "0563C1",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": true,
+                "shading": null,
+                "href": "https://www.3gpp.org/ftp/tsg_ran/TSG_RAN/TSGR_113/Docs/RP-261618.zip"
+              },
+              {
+                "text": "618",
+                "color": "0563C1",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": true,
+                "shading": null,
+                "href": "https://www.3gpp.org/ftp/tsg_ran/TSG_RAN/TSGR_113/Docs/RP-261618.zip"
+              },
+              {
+                "text": " (RAN2 LS), 2133, 1654, 1713, 1827, ",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "1853",
+                "color": "0563C1",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": true,
+                "shading": null,
+                "href": "https://www.3gpp.org/ftp/tsg_ran/TSG_RAN/TSGR_113/Docs/RP-261853.zip"
+              },
+              {
+                "text": ", ",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "1921",
+                "color": "0563C1",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": true,
+                "shading": null,
+                "href": "https://www.3gpp.org/ftp/tsg_ran/TSG_RAN/TSGR_113/Docs/RP-261921.zip"
+              },
+              {
+                "text": ", 1936, 2002, 1999",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              }
+            ]
+          }
+        ],
+        "agenda_item": [
+          {
+            "runs": [
+              {
+                "text": "8",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": ".2.1.1",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              }
+            ]
+          }
+        ]
+      },
+      "agenda_descriptions": [
+        {
+          "agenda_item": "8.2.1.1",
+          "matched_agenda_item": "8.2.1.1",
+          "description": "Migration options (including 6G-6G aggregation options)",
+          "hierarchy": [
+            {
+              "agenda_item": "8",
+              "description": "6G"
+            },
+            {
+              "agenda_item": "8.2",
+              "description": "Open REL-20 6G SIs"
+            },
+            {
+              "agenda_item": "8.2.1",
+              "description": "Study on 6G Radio [RAN1 led SI: FS_6G_Radio]"
+            },
+            {
+              "agenda_item": "8.2.1.1",
+              "description": "Migration options (including 6G-6G aggregation options)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "t1.r18",
+      "title": "Study on 6GR\n– Diverse device types",
+      "documents": "Device types: 2192 (summary) 1627, 1647, 1655, 1706, 1721, 1725, 1762, 1826, 1841, 1842,1863, 1878, 1881, 1929, 1935, 1942, 1989, 2098, 2112, 2134, 1630, 1738, 1830, 1704, 2001, 2139, 1884\nUE features: 1630, 1738, 1830, 2022",
+      "agenda_item": "8.2.1.2",
+      "rich_text": {
+        "title": [
+          {
+            "runs": [
+              {
+                "text": "S",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "tudy on 6GR",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "\n– Diverse device types",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              }
+            ]
+          }
+        ],
+        "documents": [
+          {
+            "runs": [
+              {
+                "text": "Device types: ",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "2192",
+                "color": "0563C1",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": true,
+                "shading": null,
+                "href": "https://www.3gpp.org/ftp/tsg_ran/TSG_RAN/TSGR_113/Docs/RP-262192.zip"
+              },
+              {
+                "text": " (summary)",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": " 1627, 1647, 1655, 1706, 1721, 1725, 1762, 1826, 1841, 1842,1863, 1878, 1881, 1929, 1935, 1942, 1989, 2098, 2112, 2134, 1630, 1738, 1830, 1704, 2001, 2139, 1884",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              }
+            ]
+          },
+          {
+            "runs": [
+              {
+                "text": "U",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "E features: 1630, 1738, 1830, ",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "2022",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              }
+            ]
+          }
+        ],
+        "agenda_item": [
+          {
+            "runs": [
+              {
+                "text": "8",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": ".2.1.2",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              }
+            ]
+          }
+        ]
+      },
+      "agenda_descriptions": [
+        {
+          "agenda_item": "8.2.1.2",
+          "matched_agenda_item": "8.2.1.2",
+          "description": "Diverse device types",
+          "hierarchy": [
+            {
+              "agenda_item": "8",
+              "description": "6G"
+            },
+            {
+              "agenda_item": "8.2",
+              "description": "Open REL-20 6G SIs"
+            },
+            {
+              "agenda_item": "8.2.1",
+              "description": "Study on 6G Radio [RAN1 led SI: FS_6G_Radio]"
+            },
+            {
+              "agenda_item": "8.2.1.2",
+              "description": "Diverse device types"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "t1.r19",
+      "title": "Study on 6GR\n– Other topics",
+      "documents": "Modulation: 1611 (RAN4 LS), 1629, 1708, 1726, 1737, 2203, 1872, 1925, 1932, 1961, 2113, 2140, 1657, 2153, 1707, 2161, 1927, 1726, 2113, 1707\nChannel coding: 1726 (channel coding part only), 2203, 2113, 1926\n6G-NTN: 1623, 1634, 1977, 2126, 1995, 2165\n6G AI/ML: 1882, 2114, 2150, 1870, 2156\nSSB design: 1609 (RAN1 LS), 1927\nSensing: 1749, 1967, 2129\nHLS: 1644 (RAN3 chair input), 2116\nStatus on 6G AS Security in SA3: 2178 (Wednesday 9am)\nOthers: 1745 (2-Step RACH), 1991 (HOM), 2152 (dynamic TDD), 2160 (extended coverage), 2168 (evaluation criteria), 1984 (JSCM)",
+      "agenda_item": "8.2.1.3",
+      "rich_text": {
+        "title": [
+          {
+            "runs": [
+              {
+                "text": "Study on 6GR",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "\n– Other topics",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              }
+            ]
+          }
+        ],
+        "documents": [
+          {
+            "runs": [
+              {
+                "text": "Modulation: ",
+                "color": "000000",
+                "strike": false,
+                "highlight": "green",
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "1",
+                "color": "0563C1",
+                "strike": false,
+                "highlight": "green",
+                "bold": false,
+                "italic": false,
+                "underline": true,
+                "shading": null,
+                "href": "https://www.3gpp.org/ftp/tsg_ran/TSG_RAN/TSGR_113/Docs/RP-261611.zip"
+              },
+              {
+                "text": "6",
+                "color": "0563C1",
+                "strike": false,
+                "highlight": "green",
+                "bold": false,
+                "italic": false,
+                "underline": true,
+                "shading": null,
+                "href": "https://www.3gpp.org/ftp/tsg_ran/TSG_RAN/TSGR_113/Docs/RP-261611.zip"
+              },
+              {
+                "text": "1",
+                "color": "0563C1",
+                "strike": false,
+                "highlight": "green",
+                "bold": false,
+                "italic": false,
+                "underline": true,
+                "shading": null,
+                "href": "https://www.3gpp.org/ftp/tsg_ran/TSG_RAN/TSGR_113/Docs/RP-261611.zip"
+              },
+              {
+                "text": "1",
+                "color": "0563C1",
+                "strike": false,
+                "highlight": "green",
+                "bold": false,
+                "italic": false,
+                "underline": true,
+                "shading": null,
+                "href": "https://www.3gpp.org/ftp/tsg_ran/TSG_RAN/TSGR_113/Docs/RP-261611.zip"
+              },
+              {
+                "text": " (RAN4 LS), 1629, 1708, ",
+                "color": "000000",
+                "strike": false,
+                "highlight": "green",
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "1",
+                "color": "000000",
+                "strike": false,
+                "highlight": "green",
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "726, 1737, ",
+                "color": "000000",
+                "strike": false,
+                "highlight": "green",
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "2203",
+                "color": "000000",
+                "strike": false,
+                "highlight": "green",
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": ", 1872, 1925, 1932, 1961, 2113, 2140, ",
+                "color": "000000",
+                "strike": false,
+                "highlight": "green",
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "16",
+                "color": "0563C1",
+                "strike": false,
+                "highlight": "green",
+                "bold": false,
+                "italic": false,
+                "underline": true,
+                "shading": null,
+                "href": "https://www.3gpp.org/ftp/tsg_ran/TSG_RAN/TSGR_113/Docs/RP-261657.zip"
+              },
+              {
+                "text": "5",
+                "color": "0563C1",
+                "strike": false,
+                "highlight": "green",
+                "bold": false,
+                "italic": false,
+                "underline": true,
+                "shading": null,
+                "href": "https://www.3gpp.org/ftp/tsg_ran/TSG_RAN/TSGR_113/Docs/RP-261657.zip"
+              },
+              {
+                "text": "7",
+                "color": "0563C1",
+                "strike": false,
+                "highlight": "green",
+                "bold": false,
+                "italic": false,
+                "underline": true,
+                "shading": null,
+                "href": "https://www.3gpp.org/ftp/tsg_ran/TSG_RAN/TSGR_113/Docs/RP-261657.zip"
+              },
+              {
+                "text": ", 2153, 1707, 2161, 1927, 1726, 2113",
+                "color": "000000",
+                "strike": false,
+                "highlight": "green",
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": ", ",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "1707",
+                "color": "000000",
+                "strike": false,
+                "highlight": "yellow",
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              }
+            ]
+          },
+          {
+            "runs": [
+              {
+                "text": "C",
+                "color": "000000",
+                "strike": false,
+                "highlight": "green",
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "hannel coding: ",
+                "color": "000000",
+                "strike": false,
+                "highlight": "green",
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "1",
+                "color": "0563C1",
+                "strike": false,
+                "highlight": "green",
+                "bold": false,
+                "italic": false,
+                "underline": true,
+                "shading": null,
+                "href": "https://www.3gpp.org/ftp/tsg_ran/TSG_RAN/TSGR_113/Docs/RP-261726.zip"
+              },
+              {
+                "text": "7",
+                "color": "0563C1",
+                "strike": false,
+                "highlight": "green",
+                "bold": false,
+                "italic": false,
+                "underline": true,
+                "shading": null,
+                "href": "https://www.3gpp.org/ftp/tsg_ran/TSG_RAN/TSGR_113/Docs/RP-261726.zip"
+              },
+              {
+                "text": "2",
+                "color": "0563C1",
+                "strike": false,
+                "highlight": "green",
+                "bold": false,
+                "italic": false,
+                "underline": true,
+                "shading": null,
+                "href": "https://www.3gpp.org/ftp/tsg_ran/TSG_RAN/TSGR_113/Docs/RP-261726.zip"
+              },
+              {
+                "text": "6",
+                "color": "0563C1",
+                "strike": false,
+                "highlight": "green",
+                "bold": false,
+                "italic": false,
+                "underline": true,
+                "shading": null,
+                "href": "https://www.3gpp.org/ftp/tsg_ran/TSG_RAN/TSGR_113/Docs/RP-261726.zip"
+              },
+              {
+                "text": " (channel coding part only), ",
+                "color": "000000",
+                "strike": false,
+                "highlight": "green",
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "2203",
+                "color": "000000",
+                "strike": false,
+                "highlight": "green",
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": ", 2113, 1926",
+                "color": "000000",
+                "strike": false,
+                "highlight": "green",
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              }
+            ]
+          },
+          {
+            "runs": [
+              {
+                "text": "6",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "G-NTN: 1623, 1634, ",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "197",
+                "color": "0563C1",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": true,
+                "shading": null,
+                "href": "https://www.3gpp.org/ftp/tsg_ran/TSG_RAN/TSGR_113/Docs/RP-261977.zip"
+              },
+              {
+                "text": "7",
+                "color": "0563C1",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": true,
+                "shading": null,
+                "href": "https://www.3gpp.org/ftp/tsg_ran/TSG_RAN/TSGR_113/Docs/RP-261977.zip"
+              },
+              {
+                "text": ", 2126, 1995, 2165",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              }
+            ]
+          },
+          {
+            "runs": [
+              {
+                "text": "6",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "G AI/ML: 1882, ",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "2114",
+                "color": "0563C1",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": true,
+                "shading": null,
+                "href": "https://www.3gpp.org/ftp/tsg_ran/TSG_RAN/TSGR_113/Docs/RP-262144.zip"
+              },
+              {
+                "text": ", 2150, ",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "1870",
+                "color": "0563C1",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": true,
+                "shading": null,
+                "href": "https://www.3gpp.org/ftp/tsg_ran/TSG_RAN/TSGR_113/Docs/RP-261870.zip"
+              },
+              {
+                "text": ", 2156",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              }
+            ]
+          },
+          {
+            "runs": [
+              {
+                "text": "S",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "SB design: ",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "1609",
+                "color": "0563C1",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": true,
+                "shading": null,
+                "href": "https://www.3gpp.org/ftp/tsg_ran/TSG_RAN/TSGR_113/Docs/RP-261609.zip"
+              },
+              {
+                "text": " (RAN1 LS), 1927",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              }
+            ]
+          },
+          {
+            "runs": [
+              {
+                "text": "S",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "ensing: ",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "1749",
+                "color": "0563C1",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": true,
+                "shading": null,
+                "href": "https://www.3gpp.org/ftp/tsg_ran/TSG_RAN/TSGR_113/Docs/RP-261749.zip"
+              },
+              {
+                "text": ", ",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "1967",
+                "color": "0563C1",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": true,
+                "shading": null,
+                "href": "https://www.3gpp.org/ftp/tsg_ran/TSG_RAN/TSGR_113/Docs/RP-261967.zip"
+              },
+              {
+                "text": ", 2129",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              }
+            ]
+          },
+          {
+            "runs": [
+              {
+                "text": "H",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "LS: ",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "1644",
+                "color": "0563C1",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": true,
+                "shading": null,
+                "href": "https://www.3gpp.org/ftp/tsg_ran/TSG_RAN/TSGR_113/Docs/RP-2611644.zip"
+              },
+              {
+                "text": " (RAN3 chair input), 2116",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              }
+            ]
+          },
+          {
+            "runs": [
+              {
+                "text": "S",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "tatus on 6G AS Security in SA3: ",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "2178",
+                "color": "0563C1",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": true,
+                "shading": null,
+                "href": "https://www.3gpp.org/ftp/tsg_ran/TSG_RAN/TSGR_113/Docs/RP-262178.zip"
+              },
+              {
+                "text": " (",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "Wednesday 9am",
+                "color": "FF0000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": ")",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              }
+            ]
+          },
+          {
+            "runs": [
+              {
+                "text": "Others: 1745 (2-Step RACH), 1991 (HOM), 2152 (dynamic TDD), 2160 (extended coverage), 2168 (evaluation criteria), 1984 (JSCM)",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              }
+            ]
+          }
+        ],
+        "agenda_item": [
+          {
+            "runs": [
+              {
+                "text": "8",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": ".2.1.3",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              }
+            ]
+          }
+        ]
+      },
+      "agenda_descriptions": [
+        {
+          "agenda_item": "8.2.1.3",
+          "matched_agenda_item": "8.2.1.3",
+          "description": "Any other 6G study topics",
+          "hierarchy": [
+            {
+              "agenda_item": "8",
+              "description": "6G"
+            },
+            {
+              "agenda_item": "8.2",
+              "description": "Open REL-20 6G SIs"
+            },
+            {
+              "agenda_item": "8.2.1",
+              "description": "Study on 6G Radio [RAN1 led SI: FS_6G_Radio]"
+            },
+            {
+              "agenda_item": "8.2.1.3",
+              "description": "Any other 6G study topics"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "t1.r20",
+      "title": "6G RAN level study (TR maintenance)",
+      "documents": "2191, 1871, 1990, 2000, 1698",
+      "agenda_item": "8.3.1",
+      "rich_text": {
+        "title": [
+          {
+            "runs": [
+              {
+                "text": "6G RAN level study (TR maintenance)",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              }
+            ]
+          }
+        ],
+        "documents": [
+          {
+            "runs": [
+              {
+                "text": "2191",
+                "color": "0563C1",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": true,
+                "shading": null,
+                "href": "https://www.3gpp.org/ftp/tsg_ran/TSG_RAN/TSGR_113/Docs/RP-262191.zip"
+              },
+              {
+                "text": ", ",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "1",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "871, 1990, 2000, 1698",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              }
+            ]
+          }
+        ],
+        "agenda_item": [
+          {
+            "runs": [
+              {
+                "text": "8.3.1",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              }
+            ]
+          }
+        ]
+      },
+      "agenda_descriptions": [
+        {
+          "agenda_item": "8.3.1",
+          "matched_agenda_item": "8.3.1",
+          "description": "Study on 6G Scenarios and Requirements [RAN led SI: FS_6G_RAN_Scen_Req]",
+          "hierarchy": [
+            {
+              "agenda_item": "8",
+              "description": "6G"
+            },
+            {
+              "agenda_item": "8.3",
+              "description": "Closed REL-20 6G SIs"
+            },
+            {
+              "agenda_item": "8.3.1",
+              "description": "Study on 6G Scenarios and Requirements [RAN led SI: FS_6G_RAN_Scen_Req]"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "t1.r21",
+      "title": "Other 6G documents",
+      "documents": "OTA TRP/TRS requirements for 6G refarmed bands: 1694/1695",
+      "agenda_item": "8.4",
+      "rich_text": {
+        "title": [
+          {
+            "runs": [
+              {
+                "text": "Other 6G documents",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              }
+            ]
+          }
+        ],
+        "documents": [
+          {
+            "runs": [
+              {
+                "text": "OTA TRP/TRS requirements for 6G ",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": "refarmed",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": " bands",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": ": 1694/1695",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              }
+            ]
+          }
+        ],
+        "agenda_item": [
+          {
+            "runs": [
+              {
+                "text": "8",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              },
+              {
+                "text": ".4",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              }
+            ]
+          }
+        ]
+      },
+      "agenda_descriptions": [
+        {
+          "agenda_item": "8.4",
+          "matched_agenda_item": "8.4",
+          "description": "Other 6G documents",
+          "hierarchy": [
+            {
+              "agenda_item": "8",
+              "description": "6G"
+            },
+            {
+              "agenda_item": "8.4",
+              "description": "Other 6G documents"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "t1.r22",
+      "title": "TEI",
+      "documents": "1666",
+      "agenda_item": "",
+      "rich_text": {
+        "title": [
+          {
+            "runs": [
+              {
+                "text": "TEI",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              }
+            ]
+          }
+        ],
+        "documents": [
+          {
+            "runs": [
+              {
+                "text": "1666",
+                "color": "000000",
+                "strike": false,
+                "highlight": null,
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "shading": null
+              }
+            ]
+          }
+        ],
+        "agenda_item": [
+          {
+            "runs": []
+          }
+        ]
+      },
+      "agenda_descriptions": []
+    }
+  ]
 }

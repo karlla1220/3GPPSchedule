@@ -4,7 +4,7 @@ from dataclasses import replace
 import pytest
 
 from shared.page import normalize_presentation, render_header
-from working_groups.ran_plenary.pipeline import build_schedule
+from schedule_fixture import build_schedule
 
 
 def test_header_escapes_site_metadata_and_keeps_demo_disclosure():

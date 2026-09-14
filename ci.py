@@ -2,17 +2,15 @@
 from __future__ import annotations
 
 import argparse
-from contextlib import contextmanager
 from dataclasses import asdict
 import hashlib
 import json
 import os
 from pathlib import Path
 import shutil
-import tempfile
 
 from build import render_site
-from shared.lifecycle import BuildOptions
+from shared.lifecycle import BuildOptions, preserve_on_failure
 from shared.renderer import generate_html
 from shared.schedule import load_schedule, save_schedule
 from shared.site_config import load_site_config
@@ -22,7 +20,7 @@ STATE_PATH = Path('docs/.build_state.json')
 PLAN_PATH = Path('.ci/plan.json')
 COMMON_INPUTS = tuple(map(Path, ('shared/schedule.py', 'shared/lifecycle.py',
     'working_groups/registry.py', 'pyproject.toml', 'uv.lock')))
-SITE_INPUTS = tuple(map(Path, ('shared/renderer.py', 'shared/navigation.py',
+SITE_INPUTS = tuple(map(Path, ('shared/renderer.py', 'shared/topic_references.py', 'shared/navigation.py',
     'shared/site_config.py', 'shared/page.py', 'build.py', 'ci.py')))
 
 
@@ -120,38 +118,6 @@ def navigation_changed(config):
         return True
 
 
-@contextmanager
-def preserve_on_failure(paths):
-    """Rollback committed WG state as well as HTML on failed builds."""
-    with tempfile.TemporaryDirectory(prefix='wg-build-') as directory:
-        saved = []
-        for i, path in enumerate(paths):
-            path = Path(path)
-            backup = Path(directory) / str(i)
-            exists = path.exists()
-            if exists:
-                if path.is_dir():
-                    shutil.copytree(path, backup)
-                else:
-                    shutil.copy2(path, backup)
-            saved.append((path, backup, exists))
-        try:
-            yield
-        except BaseException:
-            for path, backup, existed in saved:
-                if path.is_dir():
-                    shutil.rmtree(path)
-                else:
-                    path.unlink(missing_ok=True)
-                if existed:
-                    path.parent.mkdir(parents=True, exist_ok=True)
-                    if backup.is_dir():
-                        shutil.copytree(backup, path)
-                    else:
-                        shutil.copy2(backup, path)
-            raise
-
-
 def public_digest():
     # Internal parsing checkpoints are committed but do not require a Pages deploy.
     paths = [p for p in Path('docs').rglob('*') if p.is_file()
@@ -162,6 +128,14 @@ def public_digest():
 
 def build_site(action='check-build-deploy', config_path=Path('site.json'), plan_path=PLAN_PATH):
     config = load_site_config(config_path)
+    paths = [Path('docs')]
+    for group in config['working_groups']:
+        paths.extend(get_working_group(group['id']).persistent_paths)
+    with preserve_on_failure(tuple(dict.fromkeys(paths))):
+        return _build_site(action, config, plan_path)
+
+
+def _build_site(action, config, plan_path):
     enabled = [g['id'] for g in config['working_groups']]
     state = read_json(STATE_PATH)
     state.setdefault('groups', {})
@@ -226,8 +200,7 @@ def build_site(action='check-build-deploy', config_path=Path('site.json'), plan_
             continue
     # Assemble only complete, successfully rendered HTML. A failed WG with a
     # previous snapshot stays visible, while other WGs can still advance.
-    with preserve_on_failure([Path('docs')]):
-        render_site(config, Path('docs'), schedules)
+    render_site(config, Path('docs'), schedules)
     state['site'] = site_fingerprint(config)
     write_json(STATE_PATH, state)
     has_errors = any(v['errors'] for v in results.values()) or bool(plan and plan['has_errors'])

@@ -23,6 +23,7 @@ dependencies = [
     { name = "httpx" },
     { name = "openpyxl" },
     { name = "pandas" },
+    { name = "pydantic" },
     { name = "python-docx" },
     { name = "python-dotenv" },
 ]
@@ -39,6 +40,7 @@ requires-dist = [
     { name = "httpx", specifier = ">=0.27.0" },
     { name = "openpyxl", specifier = ">=3.1.5" },
     { name = "pandas", specifier = ">=3.0.3" },
+    { name = "pydantic", specifier = ">=2.0" },
     { name = "python-docx", specifier = ">=1.1.0" },
     { name = "python-dotenv", specifier = ">=1.2.1" },
 ]

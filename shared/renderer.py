@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from shared.topic_references import render_topic_references
+
 import json
 import re
 from pathlib import Path
@@ -95,7 +97,7 @@ def _build_filter_data(all_sessions: list) -> str:
         "groups": groups,
         "allAIs": sorted(all_ais, key=_natural_sort_key),
     }
-    return json.dumps(result, ensure_ascii=False)
+    return json.dumps(result, ensure_ascii=False).replace("<", "\\u003c")
 
 
 def _agenda_description_popup_lines(session) -> list[str]:
@@ -490,6 +492,45 @@ header .meta {
         rgba(0,0,0,0.03) 8px
     );
 }
+
+/* Timeplan breaks remain visible alongside concurrent room sessions. */
+.break-axis {
+    grid-column: 1;
+    z-index: 6;
+    align-self: end;
+    font-size: 9px;
+    line-height: 1.15;
+    padding: 2px;
+    text-align: center;
+    background: var(--break-bg);
+    color: var(--text-muted);
+    overflow-wrap: anywhere;
+}
+.session-scope { font-size: 10px; font-style: italic; opacity: .8; }
+.topic-references { margin: 24px 0; border-top: 1px solid #D1D5DB; padding-top: 12px; }
+.topic-references summary { cursor: pointer; font-weight: 600; }
+.topic-references .topic-scroll { overflow-x: auto; }
+.topic-references table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.topic-references th, .topic-references td { padding: 10px; border-bottom: 1px solid #E5E7EB; text-align: left; vertical-align: top; }
+.topic-references td { white-space: pre-wrap; overflow-wrap: anywhere; }
+.topic-references th:first-child { width: 25%; }
+.topic-references th:last-child { width: 30%; }
+.topic-references td { line-height: 1.65; }
+.source-highlight { color: inherit; padding: 1px 0; border-radius: 2px; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
+.topic-references a { color: #275D8C; text-decoration-color: #93ADC4; text-underline-offset: 2px; }
+.topic-references a:hover { color: #173F65; text-decoration-color: currentColor; }
+.source-underline { text-decoration: underline; text-underline-offset: 2px; }
+.topic-field-label { font-size: 10px; font-weight: 500; color: #64748B; letter-spacing: .03em; }
+.topic-agenda-source { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
+.topic-agenda-label { display: inline-block; padding: 1px 7px; border: 1px solid #DCE3EB; border-radius: 5px; background: #EEF2F6; font-size: 12px; font-weight: 500; color: #334155; }
+.topic-agenda-description { border-top: 1px solid #E2E8F0; padding-top: 8px; }
+.topic-agenda-description > .topic-field-label { margin-bottom: 5px; }
+.topic-agenda-tree { white-space: normal; font-size: 12px; color: #526174; }
+.topic-agenda-tree ul { list-style: none; margin: 0; padding: 0; }
+.topic-agenda-tree ul ul { margin: 4px 0 4px 7px; padding-left: 12px; border-left: 1px solid #D9E1E9; }
+.topic-agenda-tree li { margin: 4px 0; }
+.topic-agenda-tree .agenda-selected > .agenda-node { color: #263548; font-weight: 600; }
+.agenda-number { font-variant-numeric: tabular-nums; margin-right: 3px; }
 
 /* Session blocks */
 .session-block {
@@ -1617,7 +1658,12 @@ def generate_html(schedule: Schedule, *, schedules=None, groups=None, presentati
             row_start = max(2, timeline.row(brk["start"]))
             row_end = min(timeline.rows + 2, timeline.row(brk["end"]))
             if row_end > row_start:
-                html_parts.append(f'<div class="break-bar" style="grid-row:{row_start}/{row_end}">{_esc(brk["name"])}</div>')
+                label = _esc(brk["name"])
+                if brk.get("label_position") == "time-axis":
+                    html_parts.append(f'<div class="break-bar" aria-hidden="true" style="grid-row:{row_start}/{row_end}"></div>')
+                    html_parts.append(f'<div class="break-axis" style="grid-row:{row_start}/{row_end}">{label}</div>')
+                else:
+                    html_parts.append(f'<div class="break-bar" style="grid-row:{row_start}/{row_end}">{label}</div>')
 
         # Session blocks
         for session in day_schedule.sessions:
@@ -1636,7 +1682,13 @@ def generate_html(schedule: Schedule, *, schedules=None, groups=None, presentati
             # but we need to ensure they fit within this day's room count.
             col_start = session.room_col_start
             col_end = session.room_col_end
-            if session.room_ids:
+            if session.room_scope not in {"assigned", "shared", "unassigned"}:
+                raise ValueError(f"Unknown room scope: {session.room_scope}")
+            if session.room_scope in {"shared", "unassigned"}:
+                if session.room_ids:
+                    raise ValueError("Merged display spans cannot claim physical rooms")
+                col_start, col_end = 2, num_rooms + 2
+            elif session.room_ids:
                 room_columns = {room.id: i + 2 for i, room in enumerate(day_schedule.rooms)}
                 columns = sorted(room_columns[room_id] for room_id in session.room_ids)
                 if columns != list(range(columns[0], columns[-1] + 1)):
@@ -1667,6 +1719,9 @@ def generate_html(schedule: Schedule, *, schedules=None, groups=None, presentati
                 else session.name
             )
             name_html = f'<div class="session-name">{_esc(display_name)}</div>'
+            scope_label = {"shared": "Common", "unassigned": "Room unassigned"}.get(session.room_scope)
+            if scope_label and not is_short:
+                name_html += f'<div class="session-scope">{scope_label}</div>'
             chair_html = ""
             dur_html = ""
             ai_html = ""
@@ -1702,8 +1757,11 @@ def generate_html(schedule: Schedule, *, schedules=None, groups=None, presentati
             for ri in range(col_start - 2, min(col_end - 2, num_rooms)):
                 if ri < len(day_schedule.rooms):
                     room_names_in_span.append(day_schedule.rooms[ri].name)
-            if room_names_in_span:
-                popup_lines.append(f"Room: {', '.join(room_names_in_span)}")
+            if scope_label:
+                popup_lines.append(f"Room: {scope_label} (merged display, not a booking of every room)")
+            elif room_names_in_span:
+                popup_lines.append(f"Room: {_esc(', '.join(room_names_in_span))}")
+            popup_lines.extend(f"Note: {_esc(note)}" for note in session.notes)
             popup_html = "<br>".join(popup_lines)
 
             # Escape popup_html for use in data attribute
@@ -1735,6 +1793,7 @@ def generate_html(schedule: Schedule, *, schedules=None, groups=None, presentati
             html_parts.append(
                 f'                <div class="{block_classes}" style="{style}"'
                 f' data-popup="{popup_attr}"'
+                f' data-room-scope="{session.room_scope}"'
                 f' data-ai="{data_ai_attr}"'
                 f' data-name="{data_name_attr}"'
                 f' data-group="{data_group_attr}"'
@@ -1749,6 +1808,8 @@ def generate_html(schedule: Schedule, *, schedules=None, groups=None, presentati
             "        </div>\n"
             "    </div>\n"
         )
+
+    html_parts.append(render_topic_references(schedule.topic_references))
 
     # Shared floating popup and backdrop
     html_parts.append('    <div class="popup-backdrop" id="popup-backdrop"></div>\n')
