@@ -2,15 +2,56 @@
   "day": "Monday",
   "time_block_index": 1,
   "source_hashes": {
-    "Main Schedule": "14529f997e67b2c2"
+    "Main Schedule": "91c00a18cb0d558e",
+    "Hiroki's schedule": "e1424be4ea0344b5",
+    "Sorour's schedule": "54eed1d32f4625c9"
   },
   "merged_sessions": [
+    {
+      "room_name": "ALL_ONLINE",
+      "name": "10.5.1.3",
+      "duration_minutes": 40,
+      "specified_start_time": null,
+      "chair": null,
+      "group_header": "6GR",
+      "agenda_item": null,
+      "description": "Bandwidth operation",
+      "agenda_descriptions": [
+        {
+          "agenda_item": "10.5.1.3",
+          "matched_agenda_item": "10.5.1.3",
+          "description": "Bandwidth operation",
+          "hierarchy": [
+            {
+              "agenda_item": "10",
+              "description": "Rel-20 Study of 6GR",
+              "has_description": true
+            },
+            {
+              "agenda_item": "10.5",
+              "description": "Multi-antenna system",
+              "has_description": true
+            },
+            {
+              "agenda_item": "10.5.1",
+              "description": "Initial access and mobility",
+              "has_description": true
+            },
+            {
+              "agenda_item": "10.5.1.3",
+              "description": "Bandwidth operation",
+              "has_description": true
+            }
+          ]
+        }
+      ]
+    },
     {
       "room_name": "ALL_ONLINE",
       "name": "10.5.1.1",
       "duration_minutes": 40,
       "specified_start_time": null,
-      "chair": "Sorour",
+      "chair": null,
       "group_header": "6GR",
       "agenda_item": null,
       "description": "Synchronization acquisition and beam measurement",
@@ -49,7 +90,7 @@
       "name": "10.5.1.2",
       "duration_minutes": 40,
       "specified_start_time": null,
-      "chair": "Sorour",
+      "chair": null,
       "group_header": "6GR",
       "agenda_item": null,
       "description": "PRACH and RACH procedure",
@@ -84,49 +125,10 @@
       ]
     },
     {
-      "room_name": "ALL_ONLINE",
-      "name": "10.5.1.3",
-      "duration_minutes": 40,
-      "specified_start_time": null,
-      "chair": "Sorour",
-      "group_header": "6GR",
-      "agenda_item": null,
-      "description": "Bandwidth operation",
-      "agenda_descriptions": [
-        {
-          "agenda_item": "10.5.1.3",
-          "matched_agenda_item": "10.5.1.3",
-          "description": "Bandwidth operation",
-          "hierarchy": [
-            {
-              "agenda_item": "10",
-              "description": "Rel-20 Study of 6GR",
-              "has_description": true
-            },
-            {
-              "agenda_item": "10.5",
-              "description": "Multi-antenna system",
-              "has_description": true
-            },
-            {
-              "agenda_item": "10.5.1",
-              "description": "Initial access and mobility",
-              "has_description": true
-            },
-            {
-              "agenda_item": "10.5.1.3",
-              "description": "Bandwidth operation",
-              "has_description": true
-            }
-          ]
-        }
-      ]
-    },
-    {
       "room_name": "RAN1_off1",
-      "name": "A-IoT",
+      "name": "R20 A-IoT",
       "duration_minutes": 60,
-      "specified_start_time": null,
+      "specified_start_time": "11:00",
       "chair": "Hiroki",
       "group_header": "R20",
       "agenda_item": "9.3.1",
@@ -158,11 +160,11 @@
     },
     {
       "room_name": "RAN1_off1",
-      "name": "10.8.x Sensing",
+      "name": "6G ISAC",
       "duration_minutes": 60,
-      "specified_start_time": null,
+      "specified_start_time": "12:00",
       "chair": "Hiroki",
-      "group_header": "6GR",
+      "group_header": "6GR / 10.8.x Sensing",
       "agenda_item": "10.8.2",
       "description": "Aspects of integration with communication",
       "agenda_descriptions": [
@@ -201,18 +203,18 @@
     },
     {
       "room_name": "RAN1_off2",
-      "name": "10.3.x",
-      "duration_minutes": 80,
+      "name": "10.3.2",
+      "duration_minutes": 40,
       "specified_start_time": null,
       "chair": "Sorour",
       "group_header": "6GR",
       "agenda_item": null,
-      "description": "Channel coding and modulation for 6GR interface",
+      "description": "Modulation, Joint channel coding and modulation",
       "agenda_descriptions": [
         {
-          "agenda_item": "10.3.x",
-          "matched_agenda_item": "10.3",
-          "description": "Channel coding and modulation for 6GR interface",
+          "agenda_item": "10.3.2",
+          "matched_agenda_item": "10.3.2",
+          "description": "Modulation, Joint channel coding and modulation",
           "hierarchy": [
             {
               "agenda_item": "10",
@@ -223,13 +225,52 @@
               "agenda_item": "10.3",
               "description": "Channel coding and modulation for 6GR interface",
               "has_description": true
+            },
+            {
+              "agenda_item": "10.3.2",
+              "description": "Modulation, Joint channel coding and modulation",
+              "has_description": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "room_name": "RAN1_off2",
+      "name": "10.3.1",
+      "duration_minutes": 40,
+      "specified_start_time": null,
+      "chair": "Sorour",
+      "group_header": "6GR",
+      "agenda_item": null,
+      "description": "Channel coding",
+      "agenda_descriptions": [
+        {
+          "agenda_item": "10.3.1",
+          "matched_agenda_item": "10.3.1",
+          "description": "Channel coding",
+          "hierarchy": [
+            {
+              "agenda_item": "10",
+              "description": "Rel-20 Study of 6GR",
+              "has_description": true
+            },
+            {
+              "agenda_item": "10.3",
+              "description": "Channel coding and modulation for 6GR interface",
+              "has_description": true
+            },
+            {
+              "agenda_item": "10.3.1",
+              "description": "Channel coding",
+              "has_description": true
             }
           ]
         }
       ]
     }
   ],
-  "merged_at": "2026-09-14T15:43:10.068656+00:00",
+  "merged_at": "2026-09-08T06:15:53.401626+00:00",
   "meeting_id": "ran1#126",
-  "schema_version": 1
+  "schema_version": 2
 }

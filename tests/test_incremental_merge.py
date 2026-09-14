@@ -13,7 +13,9 @@ from unittest.mock import MagicMock, patch
 import working_groups.ran1.slot_state as slot_state
 from working_groups.ran1.merger import SlotSource, SourceEntry, TimeSlotData, _annotate_freshness
 from working_groups.ran1.models import RoomInfo
+from working_groups.ran1.session_parser import _build_time_slot_prompt, _enforce_main_room_chair_evidence
 from working_groups.ran1.slot_state import (
+    SCHEMA_VERSION,
     SlotState,
     clear_all_slot_states,
     hash_source_text,
@@ -49,6 +51,102 @@ def _build_slot(
     return slot
 
 
+class MainRoomChairEvidenceTests(unittest.TestCase):
+    def test_clears_vice_chair_inference_from_main_room(self):
+        slot = _build_slot(
+            {
+                "Main Schedule": [("F1+F2+F3", "6GR / 10.5.1 (120)")],
+                "Sorour's schedule": [
+                    ("F1+F2+F3", "10.5.1.1 (60) / 10.5.1.2 (60)")
+                ],
+            }
+        )
+        parsed = {
+            "sessions": [
+                {"room_name": "RAN1_main", "name": "10.5.1.1", "chair": "Sorour"},
+                {"room_name": "RAN1_brk1", "name": "10.5.1.2", "chair": "Sorour"},
+            ]
+        }
+
+        _enforce_main_room_chair_evidence(
+            parsed,
+            slot,
+            {"F1+F2+F3": "RAN1_main", "A1": "RAN1_brk1"},
+        )
+
+        self.assertIsNone(parsed["sessions"][0]["chair"])
+        self.assertEqual(parsed["sessions"][1]["chair"], "Sorour")
+
+    def test_keeps_explicit_main_schedule_chair_header(self):
+        slot = _build_slot(
+            {"Main Schedule": [("F1+F2+F3", "Xiaodong (120) / 6GR / 10.5.1 (120)")]}
+        )
+        parsed = {
+            "sessions": [
+                {"room_name": "RAN1_main", "name": "10.5.1", "chair": "Xiaodong"}
+            ]
+        }
+
+        _enforce_main_room_chair_evidence(
+            parsed,
+            slot,
+            {"F1+F2+F3": "RAN1_main", "A1": "RAN1_brk1"},
+        )
+
+        self.assertEqual(parsed["sessions"][0]["chair"], "Xiaodong")
+
+    def test_struck_main_schedule_header_is_not_evidence(self):
+        slot = _build_slot(
+            {"Main Schedule": [("F1+F2+F3", "~~Sorour (120)~~ / 6GR / 10.5.1 (120)")]}
+        )
+        parsed = {
+            "sessions": [
+                {"room_name": "RAN1_main", "name": "10.5.1", "chair": "Sorour"}
+            ]
+        }
+
+        _enforce_main_room_chair_evidence(
+            parsed,
+            slot,
+            {"F1+F2+F3": "RAN1_main", "A1": "RAN1_brk1"},
+        )
+
+        self.assertIsNone(parsed["sessions"][0]["chair"])
+
+
+class InferredCellTimingPromptTests(unittest.TestCase):
+    def test_inferred_start_time_is_not_exposed_to_prompt(self):
+        slot = _build_slot({"Main Schedule": []}, day="Thursday", tb_idx=3)
+        slot.time_block_start = "17:00"
+        slot.time_block_end = "19:30"
+        slot.time_block_duration = 150
+        slot.sources[0].entries.append(
+            SourceEntry(
+                room_label="F1+F2+F3 + A1",
+                cell_text="Early dinner (60)",
+                fallback_start_time="18:30",
+            )
+        )
+
+        cold_prompt = _build_time_slot_prompt(slot)
+        slot.previous_merge = [
+            {
+                "room_name": "ALL_ONLINE",
+                "name": "Early dinner",
+                "duration_minutes": 60,
+                "specified_start_time": None,
+                "fallback_start_time": "18:30",
+            }
+        ]
+        slot.source_freshness = {"Main Schedule": "FRESH"}
+        incremental_prompt = _build_time_slot_prompt(slot, mode="incremental")
+
+        for prompt in (cold_prompt, incremental_prompt):
+            self.assertNotIn("fallback_start_time", prompt)
+            self.assertNotIn("18:30", prompt)
+            self.assertIn("Early dinner (60)", prompt)
+
+
 class SlotStateFilesystemTests(unittest.TestCase):
     """save / load / clear round-trips on a temp directory."""
 
@@ -76,6 +174,23 @@ class SlotStateFilesystemTests(unittest.TestCase):
         self.assertEqual(loaded.merged_sessions, [{"name": "x"}])
 
     def test_missing_returns_none(self):
+        self.assertIsNone(load_slot_state("Friday", 0))
+
+    def test_old_semantics_version_is_not_loaded_as_baseline(self):
+        save_slot_state(
+            SlotState(
+                day="Friday",
+                time_block_index=0,
+                merged_sessions=[
+                    {
+                        "name": "poisoned",
+                        "specified_start_time": "09:50",
+                    }
+                ],
+                schema_version=SCHEMA_VERSION - 1,
+            )
+        )
+
         self.assertIsNone(load_slot_state("Friday", 0))
 
     def test_clear_all_slot_states_preserves_directory(self):

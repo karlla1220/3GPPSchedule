@@ -10,7 +10,14 @@ from zipfile import BadZipFile, ZipFile
 from docx import Document
 
 from .downloader import _extract_meeting_id, _iter_local_files, _local_doc_preference
-from .models import TIME_BLOCKS, CellData, DAY_ORDER, RoomInfo, time_to_minutes
+from .models import (
+    TIME_BLOCKS,
+    CellData,
+    DAY_ORDER,
+    RoomInfo,
+    minutes_to_time,
+    time_to_minutes,
+)
 
 _TIME_BLOCK_MINUTES = [
     (block["index"], time_to_minutes(block["start"]), time_to_minutes(block["end"]))
@@ -189,6 +196,52 @@ def _dedupe_row_cells(row) -> list[tuple]:
             result.append((text, col_pos, col_pos + span))
 
     return result
+
+
+def _is_vmerge_continuation_at_col(row, grid_col: int) -> bool:
+    """Return whether *grid_col* belongs to a vertical-merge continuation.
+
+    ``python-docx`` resolves a continuation cell to the merge origin when
+    accessed through ``row.cells``.  Inspect the row's own XML instead so a
+    blank continuation can be distinguished from an ordinary blank cell.
+    """
+    col_cursor = 0
+    for tc_el in row._tr.findall(f"{{{_NS}}}tc"):
+        tc_pr = tc_el.find(f"{{{_NS}}}tcPr")
+        grid_span = 1
+        if tc_pr is not None:
+            gs_el = tc_pr.find(f"{{{_NS}}}gridSpan")
+            if gs_el is not None:
+                grid_span = int(gs_el.get(f"{{{_NS}}}val"))
+
+        if col_cursor <= grid_col < col_cursor + grid_span:
+            if tc_pr is None:
+                return False
+            vm_el = tc_pr.find(f"{{{_NS}}}vMerge")
+            if vm_el is None:
+                return False
+            return vm_el.get(f"{{{_NS}}}val") != "restart"
+
+        col_cursor += grid_span
+
+    return False
+
+
+def _single_explicit_duration_minutes(text: str) -> int | None:
+    """Return a cell's duration when it contains exactly one numeric marker.
+
+    A single marker such as ``Early dinner (60)`` is unambiguous.  Cells with
+    multiple markers commonly contain group headers and leaf sessions, so
+    their total duration cannot be inferred safely here.
+    """
+    durations = re.findall(
+        r"\(\s*(\d+)\s*(?:min(?:ute)?s?)?\s*\)",
+        text,
+        flags=re.IGNORECASE,
+    )
+    if len(durations) != 1:
+        return None
+    return int(durations[0])
 
 
 def _is_break_row(cells: list[tuple]) -> bool:
@@ -691,24 +744,53 @@ def parse_docx(
             }
         )
 
-        # Parse data rows
+        # Parse data rows.  Some documents split a time block into multiple
+        # physical rows and vertically merge the time-label cell.  Keep the
+        # last explicit block so continuation rows can retain their own
+        # horizontally merged (gridSpan) schedule cells.
+        active_tb_index: int | None = None
         for row_idx in range(1, len(rows)):
-            row_cells = _dedupe_row_cells(rows[row_idx])
+            row = rows[row_idx]
+            row_cells = _dedupe_row_cells(row)
 
             if _is_break_row(row_cells) or _is_footer_row(row_cells) or _is_metadata_row(row_cells):
+                active_tb_index = None
                 continue
 
             # First cell should be the time label
             if not row_cells:
+                active_tb_index = None
                 continue
 
             time_cell_text = row_cells[0][0]
             tb_index = _determine_time_block_index(time_cell_text)
 
             if tb_index is None:
-                continue
+                if _is_vmerge_continuation_at_col(row, 0):
+                    tb_index = active_tb_index
+                else:
+                    active_tb_index = None
+
+                if tb_index is None:
+                    continue
+            else:
+                active_tb_index = tb_index
 
             time_block = TIME_BLOCKS[tb_index]
+
+            # A vertically merged time label may split one time block into
+            # physical sub-rows.  If this is the final continuation row and a
+            # cell has one unambiguous duration, its end aligns with the time
+            # block end.  Infer its start from that boundary; row height is
+            # deliberately ignored because it is presentation metadata.
+            is_time_continuation = _is_vmerge_continuation_at_col(row, 0)
+            next_is_time_continuation = (
+                row_idx + 1 < len(rows)
+                and _is_vmerge_continuation_at_col(rows[row_idx + 1], 0)
+            )
+            infer_from_block_end = (
+                is_time_continuation and not next_is_time_continuation
+            )
 
             # Process cells grouped by day with ordinal room mapping
             for day, (day_col_start, day_col_end) in day_columns.items():
@@ -757,6 +839,16 @@ def parse_docx(
                     if not text.strip():
                         continue
 
+                    fallback_start_time = None
+                    if infer_from_block_end:
+                        duration = _single_explicit_duration_minutes(text)
+                        if duration is not None:
+                            inferred_start = (
+                                time_to_minutes(time_block["end"]) - duration
+                            )
+                            if inferred_start >= time_to_minutes(time_block["start"]):
+                                fallback_start_time = minutes_to_time(inferred_start)
+
                     cell_data = CellData(
                         text=text,
                         day=day,
@@ -766,6 +858,7 @@ def parse_docx(
                         time_block_end=time_block["end"],
                         time_block_duration=time_block["duration"],
                         table_index=table_idx,
+                        fallback_start_time=fallback_start_time,
                     )
                     all_cells.append(cell_data)
 

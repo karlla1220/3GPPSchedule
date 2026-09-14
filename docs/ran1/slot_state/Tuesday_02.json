@@ -2,7 +2,9 @@
   "day": "Tuesday",
   "time_block_index": 2,
   "source_hashes": {
-    "Main Schedule": "f901a987e56a93f7"
+    "Main Schedule": "c881bea5efef4e70",
+    "Hiroki's schedule": "4ea83f22401f2542",
+    "Sorour's schedule": "1bb10978a08ecb7a"
   },
   "merged_sessions": [
     {
@@ -157,7 +159,7 @@
       "duration_minutes": 30,
       "specified_start_time": null,
       "chair": "Hiroki",
-      "group_header": "",
+      "group_header": "TEI",
       "agenda_item": "11",
       "description": "TEI",
       "agenda_descriptions": [
@@ -181,7 +183,7 @@
       "duration_minutes": 50,
       "specified_start_time": null,
       "chair": "Hiroki",
-      "group_header": "",
+      "group_header": "AI 7/8.2",
       "agenda_item": "7, 8.2",
       "description": "Pre-Rel-19 NR Maintenance",
       "agenda_descriptions": [
@@ -222,7 +224,7 @@
       "duration_minutes": 40,
       "specified_start_time": null,
       "chair": "Hiroki",
-      "group_header": "",
+      "group_header": "R20 / A-IoT Phase2",
       "agenda_item": "9.3.2",
       "description": "D2R signals, channels, waveform and procedures",
       "agenda_descriptions": [
@@ -509,7 +511,7 @@
       ]
     }
   ],
-  "merged_at": "2026-09-14T15:43:42.460267+00:00",
+  "merged_at": "2026-09-08T06:15:53.407036+00:00",
   "meeting_id": "ran1#126",
-  "schema_version": 1
+  "schema_version": 2
 }

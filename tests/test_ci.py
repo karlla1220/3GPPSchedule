@@ -326,3 +326,28 @@ def test_portal_status_transition_renders_root_without_rebuilding_wgs(site, monk
     assert ci.build_site()['site_changed']
     assert './ran1/' in Path('docs/index.html').read_text()
     assert all(group.events.count('build') == 1 for group in site.values())
+
+
+def test_template_change_requires_render_without_rebuilding_wgs(site, monkeypatch):
+    template = Path('templates/schedule.css')
+    template.parent.mkdir()
+    template.write_text('v1')
+    monkeypatch.setattr(ci, 'SITE_INPUTS', (template.parent,))
+    bootstrap()
+    template.write_text('v2')
+    plan = ci.check_site()
+    assert plan['build_ids'] == [] and plan['render_required']
+
+
+def test_force_reset_clears_ran1_generated_metadata(tmp_path, monkeypatch):
+    from working_groups.ran1 import lifecycle, slot_state
+    monkeypatch.chdir(tmp_path)
+    monkeypatch.setattr(slot_state, 'SLOT_STATE_DIR', Path('docs/ran1/slot_state'))
+    paths = [Path('docs/ran1/.schedule_state.json'), Path('docs/ran1/agenda_item_description.json'),
+             Path('docs/ran1/.extra_files_state.json'), Path('docs/ran1/slot_state/Monday_00.json'),
+             Path('downloads/ran1/extra_files/document.docx'), Path('.cache/ran1/cached.json')]
+    for path in paths:
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text('old')
+    lifecycle.reset_cache()
+    assert all(not path.exists() for path in paths)

@@ -2,7 +2,9 @@
   "day": "Thursday",
   "time_block_index": 2,
   "source_hashes": {
-    "Main Schedule": "2b398e2b2ba0d54d"
+    "Main Schedule": "1f2cbb4a91444772",
+    "Hiroki's schedule": "ebe1f1f011637a4d",
+    "Sorour's schedule": "abc276cef026e605"
   },
   "merged_sessions": [
     {
@@ -197,7 +199,7 @@
       "specified_start_time": null,
       "chair": "Hiroki",
       "group_header": "6GR",
-      "agenda_item": "10.8.1, 10.8.2, 10.8.3",
+      "agenda_item": "10.8.1, 10.8.3, 10.8.2",
       "description": "Evaluations",
       "agenda_descriptions": [
         {
@@ -223,28 +225,6 @@
           ]
         },
         {
-          "agenda_item": "10.8.2",
-          "matched_agenda_item": "10.8.2",
-          "description": "Aspects of integration with communication",
-          "hierarchy": [
-            {
-              "agenda_item": "10",
-              "description": "Rel-20 Study of 6GR",
-              "has_description": true
-            },
-            {
-              "agenda_item": "10.8",
-              "description": "ISAC",
-              "has_description": true
-            },
-            {
-              "agenda_item": "10.8.2",
-              "description": "Aspects of integration with communication",
-              "has_description": true
-            }
-          ]
-        },
-        {
           "agenda_item": "10.8.3",
           "matched_agenda_item": "10.8.3",
           "description": "Waveform and frame structure",
@@ -262,6 +242,28 @@
             {
               "agenda_item": "10.8.3",
               "description": "Waveform and frame structure",
+              "has_description": true
+            }
+          ]
+        },
+        {
+          "agenda_item": "10.8.2",
+          "matched_agenda_item": "10.8.2",
+          "description": "Aspects of integration with communication",
+          "hierarchy": [
+            {
+              "agenda_item": "10",
+              "description": "Rel-20 Study of 6GR",
+              "has_description": true
+            },
+            {
+              "agenda_item": "10.8",
+              "description": "ISAC",
+              "has_description": true
+            },
+            {
+              "agenda_item": "10.8.2",
+              "description": "Aspects of integration with communication",
               "has_description": true
             }
           ]
@@ -353,7 +355,7 @@
       "specified_start_time": "15:50",
       "chair": "Hiroki",
       "group_header": "6GR",
-      "agenda_item": "10.5.4.3, 10.5.4.2, 10.5.4.4",
+      "agenda_item": "10.5.4.3, 10.5.4.4",
       "description": "HARQ related Aspects",
       "agenda_descriptions": [
         {
@@ -379,33 +381,6 @@
             {
               "agenda_item": "10.5.4.3",
               "description": "HARQ related Aspects",
-              "has_description": true
-            }
-          ]
-        },
-        {
-          "agenda_item": "10.5.4.2",
-          "matched_agenda_item": "10.5.4.2",
-          "description": "Downlink and uplink transmission without downlink control channel",
-          "hierarchy": [
-            {
-              "agenda_item": "10",
-              "description": "Rel-20 Study of 6GR",
-              "has_description": true
-            },
-            {
-              "agenda_item": "10.5",
-              "description": "Multi-antenna system",
-              "has_description": true
-            },
-            {
-              "agenda_item": "10.5.4",
-              "description": "Downlink control channel, scheduling and HARQ operation",
-              "has_description": true
-            },
-            {
-              "agenda_item": "10.5.4.2",
-              "description": "Downlink and uplink transmission without downlink control channel",
               "has_description": true
             }
           ]
@@ -446,7 +421,7 @@
       "specified_start_time": null,
       "chair": "Sorour",
       "group_header": "6GR",
-      "agenda_item": "10.3.1",
+      "agenda_item": null,
       "description": "Channel coding",
       "agenda_descriptions": [
         {
@@ -480,7 +455,7 @@
       "specified_start_time": null,
       "chair": "Sorour",
       "group_header": "6GR",
-      "agenda_item": "10.3.2",
+      "agenda_item": null,
       "description": "Modulation, Joint channel coding and modulation",
       "agenda_descriptions": [
         {
@@ -542,7 +517,7 @@
       ]
     }
   ],
-  "merged_at": "2026-09-14T15:44:29.829163+00:00",
+  "merged_at": "2026-09-08T06:15:53.415686+00:00",
   "meeting_id": "ran1#126",
-  "schema_version": 1
+  "schema_version": 2
 }

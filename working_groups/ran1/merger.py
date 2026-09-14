@@ -18,7 +18,7 @@ from .parser import parse_docx, build_room_list
 from .slot_state import hash_source_text, load_slot_state
 
 
-MERGE_PROMPT_VERSION = 2
+MERGE_PROMPT_VERSION = 4
 
 
 # ── Room name resolution ────────────────────────────────────
@@ -150,6 +150,7 @@ class SourceEntry:
 
     room_label: str
     cell_text: str
+    fallback_start_time: str | None = None
 
 
 @dataclass
@@ -184,7 +185,8 @@ def _serialize_source(source: SlotSource) -> str:
     lines = [f"merge_prompt_v{MERGE_PROMPT_VERSION}"]
     for e in entries:
         cell = re.sub(r"\s+", " ", e.cell_text).strip()
-        lines.append(f"{e.room_label}\t{cell}")
+        timing = f"\tfallback={e.fallback_start_time}" if e.fallback_start_time else ""
+        lines.append(f"{e.room_label}{timing}\t{cell}")
     return "\n".join(lines)
 
 
@@ -287,7 +289,11 @@ def collect_time_slot_data(
         for cell in m_cells:
             room_label = _room_label_for_cell(cell, main_rooms)
             main_source.entries.append(
-                SourceEntry(room_label=room_label, cell_text=cell.text)
+                SourceEntry(
+                    room_label=room_label,
+                    cell_text=cell.text,
+                    fallback_start_time=cell.fallback_start_time,
+                )
             )
         slot.sources.append(main_source)
 
@@ -315,7 +321,11 @@ def collect_time_slot_data(
                 if room_label in main_room_names:
                     room_label = f"{person}: {room_label}"
                 vc_source.entries.append(
-                    SourceEntry(room_label=room_label, cell_text=cell.text)
+                    SourceEntry(
+                        room_label=room_label,
+                        cell_text=cell.text,
+                        fallback_start_time=cell.fallback_start_time,
+                    )
                 )
 
             if vc_source.entries:

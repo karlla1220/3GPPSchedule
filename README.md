@@ -476,3 +476,8 @@ HTML 레이아웃을 작성할 때도 `render_header(schedule, presentation=...,
 WG 파서는 일정 데이터만 반환합니다. 과거 `schedule.json`의 연락처 필드는 읽기 호환을 위해
 남겨 두지만 페이지에서는 사용하지 않습니다. 공통 정보 변경은 CI에서 HTML 재생성만 수행하며,
 WG 문서 다운로드나 파싱을 다시 실행하지 않습니다. 로컬 확인은 `uv run python build.py --render-only`입니다.
+
+
+공통 화면의 HTML/CSS/JavaScript 원본은 `templates/`에 있으며 `shared/renderer.py`가
+WG별 스케줄과 미팅 메타데이터를 주입합니다. 템플릿 변경도 CI의 렌더링 변경 감지에
+포함됩니다. RAN1 파서의 시간 계산과 LLM 역할은 [파싱 작동 원리](PARSING_ARCHITECTURE.md)를 참고하세요.

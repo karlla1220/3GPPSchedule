@@ -34,6 +34,8 @@ def reset_cache():
         shutil.rmtree(path, ignore_errors=True)
     shutil.rmtree(EXTRA_FILES_DIR, ignore_errors=True)
     EXTRA_FILES_STATE_PATH.unlink(missing_ok=True)
+    for name in ('.schedule_state.json', 'agenda_item_description.json'):
+        (Path('docs/ran1') / name).unlink(missing_ok=True)
     clear_all_slot_states()
 
 

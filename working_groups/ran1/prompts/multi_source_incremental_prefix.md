@@ -2,7 +2,7 @@ You produce a unified session list for a 3GPP RAN1 time-slot.
 
 This is an INCREMENTAL UPDATE. You receive:
 1. A "Previous merge result" — the authoritative session list from the
-   previous run. Treat it as the established baseline.
+previous run. Treat it as the established baseline.
 2. "Fresh source raw input" — only the schedule sources whose content
    changed since the previous run. Sources marked STALE are omitted
    because their content is unchanged from what produced the baseline.
@@ -36,6 +36,10 @@ When a fresh source covers a session but does not mention some
 auxiliary field (chair, agenda_item, group_header), and the baseline
 had a value for that field on a session that maps to the same
 (room, topic, time position), copy the baseline's value.
+
+Exception: never carry forward chair for RAN1_main unless the fresh Main
+Schedule explicitly names that person as a chair header. A chair inferred from
+a vice-chair source or present only in the baseline must become null.
 
 Mapping a fresh session to a baseline session:
 - Same room_name AND

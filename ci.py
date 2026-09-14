@@ -23,7 +23,7 @@ PLAN_PATH = Path('.ci/plan.json')
 COMMON_INPUTS = tuple(map(Path, ('shared/schedule.py', 'shared/lifecycle.py',
     'shared/portal_meetings.py', 'working_groups/registry.py', 'pyproject.toml', 'uv.lock')))
 SITE_INPUTS = tuple(map(Path, ('shared/renderer.py', 'shared/navigation.py',
-    'shared/site_config.py', 'shared/page.py', 'build.py', 'ci.py')))
+    'shared/site_config.py', 'shared/page.py', 'templates', 'build.py', 'ci.py')))
 
 
 def read_json(path, default=None):

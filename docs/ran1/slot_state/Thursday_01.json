@@ -2,7 +2,9 @@
   "day": "Thursday",
   "time_block_index": 1,
   "source_hashes": {
-    "Main Schedule": "dffb20ef3d413522"
+    "Main Schedule": "ac410d15aaf6f056",
+    "Hiroki's schedule": "361ce2fef9c85750",
+    "Sorour's schedule": "9671faf32c298e3f"
   },
   "merged_sessions": [
     {
@@ -10,7 +12,7 @@
       "name": "10.5.5",
       "duration_minutes": 40,
       "specified_start_time": null,
-      "chair": "Sorour",
+      "chair": null,
       "group_header": "6GR",
       "agenda_item": null,
       "description": "Other physical layer signals, channels and procedure",
@@ -44,7 +46,7 @@
       "name": "10.4.1",
       "duration_minutes": 40,
       "specified_start_time": null,
-      "chair": "Sorour",
+      "chair": null,
       "group_header": "6GR",
       "agenda_item": null,
       "description": "Operation in idle mode",
@@ -78,7 +80,7 @@
       "name": "10.4.2",
       "duration_minutes": 40,
       "specified_start_time": null,
-      "chair": "Sorour",
+      "chair": null,
       "group_header": "6GR",
       "agenda_item": null,
       "description": "Operation in connected mode",
@@ -154,7 +156,7 @@
       "duration_minutes": 80,
       "specified_start_time": null,
       "chair": "Sorour",
-      "group_header": "R20 / R20 NR",
+      "group_header": "R20 / AI/ML",
       "agenda_item": "9.1",
       "description": "Artificial Intelligence (AI)/Machine Learning (ML) for NR air interface enhancements",
       "agenda_descriptions": [
@@ -179,12 +181,12 @@
     },
     {
       "room_name": "RAN1_brk2",
-      "name": "A-IoT Phase2",
-      "duration_minutes": 120,
+      "name": "9.3.2",
+      "duration_minutes": 40,
       "specified_start_time": null,
       "chair": "Hiroki",
-      "group_header": "R20",
-      "agenda_item": "9.3.2, 9.3.3, 9.3.1",
+      "group_header": "R20 A-IoT",
+      "agenda_item": "9.3.2",
       "description": "D2R signals, channels, waveform and procedures",
       "agenda_descriptions": [
         {
@@ -208,7 +210,19 @@
               "has_description": true
             }
           ]
-        },
+        }
+      ]
+    },
+    {
+      "room_name": "RAN1_brk2",
+      "name": "9.3.3",
+      "duration_minutes": 40,
+      "specified_start_time": null,
+      "chair": "Hiroki",
+      "group_header": "R20 A-IoT",
+      "agenda_item": "9.3.3",
+      "description": "Other procedures",
+      "agenda_descriptions": [
         {
           "agenda_item": "9.3.3",
           "matched_agenda_item": "9.3.3",
@@ -230,7 +244,19 @@
               "has_description": true
             }
           ]
-        },
+        }
+      ]
+    },
+    {
+      "room_name": "RAN1_brk2",
+      "name": "9.3.1",
+      "duration_minutes": 40,
+      "specified_start_time": null,
+      "chair": "Hiroki",
+      "group_header": "R20 A-IoT",
+      "agenda_item": "9.3.1",
+      "description": "R2D signals, channels, waveform and procedures",
+      "agenda_descriptions": [
         {
           "agenda_item": "9.3.1",
           "matched_agenda_item": "9.3.1",
@@ -374,20 +400,40 @@
     },
     {
       "room_name": "RAN1_off2",
-      "name": "AI/ML",
+      "name": "10.6.x",
       "duration_minutes": 30,
       "specified_start_time": null,
-      "chair": "Sorour",
-      "group_header": "R20",
-      "agenda_item": null
+      "chair": "Xiaodong",
+      "group_header": "6GR",
+      "agenda_item": null,
+      "description": "WUS and operation",
+      "agenda_descriptions": [
+        {
+          "agenda_item": "10.6.x",
+          "matched_agenda_item": "10.6",
+          "description": "WUS and operation",
+          "hierarchy": [
+            {
+              "agenda_item": "10",
+              "description": "Rel-20 Study of 6GR",
+              "has_description": true
+            },
+            {
+              "agenda_item": "10.6",
+              "description": "WUS and operation",
+              "has_description": true
+            }
+          ]
+        }
+      ]
     },
     {
       "room_name": "RAN1_off2",
-      "name": "10.8.x Sensing",
+      "name": "6G ISAC",
       "duration_minutes": 90,
-      "specified_start_time": null,
+      "specified_start_time": "11:30",
       "chair": "Hiroki",
-      "group_header": "6GR",
+      "group_header": "",
       "agenda_item": "10.8.1, 10.8.2, 10.8.3",
       "description": "Evaluations",
       "agenda_descriptions": [
@@ -460,7 +506,7 @@
       ]
     }
   ],
-  "merged_at": "2026-09-14T15:44:24.076656+00:00",
+  "merged_at": "2026-09-08T06:15:53.414686+00:00",
   "meeting_id": "ran1#126",
-  "schema_version": 1
+  "schema_version": 2
 }

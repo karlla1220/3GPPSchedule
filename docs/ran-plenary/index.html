@@ -4,10 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RAN Plenary - Schedule</title>
-    <style>
-:root {
+    <style>:root {
     --base-slot-height: 8px;
-    --time-col-width: 54px;
+    --time-col-width: 36px;
     --header-height: 36px;
     --break-bg: #F3F4F6;
     --grid-line: #E5E7EB;
@@ -16,7 +15,7 @@
     --text-muted: #6B7280;
     --border: #D1D5DB;
     --shadow: 0 1px 3px rgba(0,0,0,0.1);
-    --dim-opacity: 0.12;
+    --dim-opacity: 0.30;
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -231,6 +230,9 @@ header .meta {
     font-weight: 700;
     font-size: 10px;
     color: var(--text-muted);
+    left: 0;
+    z-index: 40;
+    box-shadow: 1px 0 0 var(--grid-line);
 }
 
 /* Time labels */
@@ -245,7 +247,9 @@ header .meta {
     padding-top: 1px;
     border-right: 1px solid var(--grid-line);
     background: #FAFAFA;
-    z-index: 5;
+    position: sticky;
+    left: 0;
+    z-index: 30;
 }
 
 /* 30-minute grid lines */
@@ -308,13 +312,13 @@ header .meta {
 }
 
 .session-block.short-session {
-    min-height: 16px;
     border-left-width: 2px;
     padding: 1px 3px;
 }
 
 .session-block.tiny-session {
-    min-height: 14px;
+    padding-top: 0;
+    padding-bottom: 0;
 }
 
 .session-block.short-session .session-details {
@@ -327,7 +331,7 @@ header .meta {
 }
 
 .session-block.tiny-session .session-name {
-    font-size: 9px;
+    display: none;
 }
 
 .session-block.long-session {
@@ -467,15 +471,20 @@ header .meta {
 
 .now-line::before {
     content: 'NOW';
-    position: absolute;
-    left: 4px;
-    top: -8px;
+    position: sticky;
+    left: 0;
+    width: var(--time-col-width);
+    height: 16px;
+    margin-top: -7px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     font-size: 9px;
     font-weight: 700;
     color: #EF4444;
     background: white;
-    padding: 0 3px;
-    border-radius: 2px;
+    border-radius: 0 2px 2px 0;
+    box-shadow: 1px 0 0 rgba(239, 68, 68, 0.25);
 }
 
 /* Responsive */
@@ -486,7 +495,7 @@ header .meta {
     .tabs { flex-wrap: nowrap; overflow-x: auto; }
     .tab { padding: 6px 14px; font-size: 13px; }
     .now-toggle { height: 26px; margin-bottom: 3px; padding: 0 9px; }
-    :root { --base-slot-height: 7px; --time-col-width: 44px; }
+    :root { --base-slot-height: 7px; --time-col-width: 36px; }
     .session-name { font-size: 10px; }
     .room-header { font-size: 9px; padding: 3px 3px; }
 }
@@ -696,8 +705,8 @@ header .meta {
 }
 
 .session-block.dimmed {
-    opacity: var(--dim-opacity, 0.12);
-    pointer-events: none;
+    opacity: var(--dim-opacity, 0.30);
+    /* Keep filtered-out sessions clickable so their detail popup remains available. */
     transition: opacity 0.2s;
 }
 
@@ -789,13 +798,12 @@ header .meta {
     <div class="filter-panel collapsed">
         <button class="filter-toggle">&#9664; Filter</button>
         <div class="filter-header"><span>Session Filter <span class="filter-active-count"></span></span><button class="filter-clear">Clear</button></div>
-        <div class="filter-controls"><label for="filter-dim-opacity-range">Unchecked opacity</label><div class="filter-dim-opacity"><input type="range" id="filter-dim-opacity-range" class="filter-dim-opacity-range" min="0.02" max="0.95" step="0.01" value="0.12"><span class="filter-dim-opacity-value">12%</span></div></div>
+        <div class="filter-controls"><label for="filter-dim-opacity-range">Unchecked opacity</label><div class="filter-dim-opacity"><input type="range" id="filter-dim-opacity-range" class="filter-dim-opacity-range" min="0.02" max="0.95" step="0.01" value="0.30"><span class="filter-dim-opacity-value">30%</span></div></div>
         <div class="filter-list"></div>
     </div>
     <script type="application/json" id="filter-data">{"groups": [{"name": "Discussion", "key": "Discussion", "sessions": [{"name": "Rapporteur discussion", "key": "Rapporteur discussion|Discussion", "ais": []}]}, {"name": "Planning", "key": "Planning", "sessions": [{"name": "Release planning", "key": "Release planning|Planning", "ais": []}, {"name": "Study and work item proposals", "key": "Study and work item proposals|Planning", "ais": []}, {"name": "Work plan review", "key": "Work plan review|Planning", "ais": []}]}, {"name": "Plenary", "key": "Plenary", "sessions": [{"name": "Conclusions and closure", "key": "Conclusions and closure|Plenary", "ais": []}, {"name": "Decisions and next steps", "key": "Decisions and next steps|Plenary", "ais": []}, {"name": "Liaison statements", "key": "Liaison statements|Plenary", "ais": []}, {"name": "Opening and agenda approval", "key": "Opening and agenda approval|Plenary", "ais": []}]}, {"name": "Reports", "key": "Reports", "sessions": [{"name": "RAN1 and RAN2 reports", "key": "RAN1 and RAN2 reports|Reports", "ais": []}, {"name": "RAN3 and RAN4 reports", "key": "RAN3 and RAN4 reports|Reports", "ais": []}, {"name": "Working group reports", "key": "Working group reports|Reports", "ais": []}]}], "allAIs": []}</script>
 </div>
-<script>
-document.addEventListener('DOMContentLoaded', function() {
+<script>document.addEventListener('DOMContentLoaded', function() {
     const MEETING_TZ = "UTC";
     const AUTO_REFRESH_MS = 300000; // 5 minutes
     const STATE_KEY = '3gpp_schedule_state:' + "ran-plenary:ran-plenary-demo";
@@ -1054,7 +1062,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const filterCount = document.querySelector('.filter-active-count');
         const dimOpacityRange = document.querySelector('.filter-dim-opacity-range');
         const dimOpacityValue = document.querySelector('.filter-dim-opacity-value');
-        const DIM_OPACITY_DEFAULT = 0.12;
+        const DIM_OPACITY_DEFAULT = 0.30;
         // Three sets are the source of truth; group/session visual state is DERIVED.
         const activeSessions = new Set();  // keys of sessions WITHOUT AIs
         const activeAIs = new Set();
@@ -1088,13 +1096,13 @@ document.addEventListener('DOMContentLoaded', function() {
         function mkSpacer() { const s = document.createElement('span'); s.style.width='16px'; s.style.flexShrink='0'; return s; }
         function mkToggle(container) {
             const btn = mkEl('button','tree-toggle');
-            btn.textContent = '▶';
+            btn.textContent = '\u25B6';
             btn.addEventListener('click', function(e) {
                 e.stopPropagation();
                 const ch = container.querySelector(':scope > .filter-children');
                 if (!ch) return;
                 const exp = ch.classList.toggle('expanded');
-                btn.textContent = exp ? '▼' : '▶';
+                btn.textContent = exp ? '\u25BC' : '\u25B6';
             });
             return btn;
         }
@@ -1175,7 +1183,7 @@ document.addEventListener('DOMContentLoaded', function() {
             // --- Separator + flat AI list ---
             if (FD.allAIs.length > 0) {
                 const sep = mkEl('div','filter-separator');
-                sep.textContent = '── AI ──';
+                sep.textContent = '\u2500\u2500 AI \u2500\u2500';
                 filterList.appendChild(sep);
                 FD.allAIs.forEach(function(ai, i) {
                     const row = mkEl('div','filter-item');
@@ -1373,7 +1381,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (hasActive) {
                     ch.classList.add('expanded');
                     var tog = grpEl.querySelector(':scope > .filter-item > .tree-toggle');
-                    if (tog) tog.textContent = '▼';
+                    if (tog) tog.textContent = '\u25BC';
                 }
             });
         }
@@ -1389,7 +1397,7 @@ document.addEventListener('DOMContentLoaded', function() {
         try {
             if (sessionStorage.getItem(STATE_KEY + ':filter-panel') === 'o') {
                 filterPanel.classList.remove('collapsed');
-                filterToggle.textContent = '▶';
+                filterToggle.textContent = '\u25B6';
             }
         } catch(e) {}
 
