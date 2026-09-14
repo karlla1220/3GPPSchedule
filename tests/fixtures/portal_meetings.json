@@ -1,0 +1,67 @@
+[
+  {
+    "Id": 60715,
+    "TBId": 379,
+    "Title": "3GPPRAN1#127",
+    "StartDate": "2026-11-16 09:00:00",
+    "EndDate": "2026-11-20 17:30:00",
+    "StartTimeZone": "(GMT-07:00) Mountain Time (US & Canada)",
+    "EndTimeZone": "(GMT-07:00) Mountain Time (US & Canada)",
+    "MeetingPeriod": "NOT_STARTED",
+    "Location": "Calgary",
+    "Country": "CA",
+    "MtgDocURL": null
+  },
+  {
+    "Id": 60714,
+    "TBId": 379,
+    "Title": "3GPPRAN1#126-bis",
+    "StartDate": "2026-10-12 09:00:00",
+    "EndDate": "2026-10-16 17:30:00",
+    "StartTimeZone": "(GMT+09:00) Seoul",
+    "EndTimeZone": "(GMT+09:00) Seoul",
+    "MeetingPeriod": "NOT_STARTED",
+    "Location": "South Korea",
+    "Country": "KR",
+    "MtgDocURL": "https://ftp.3gpp.org/tsg_ran/WG1_RL1/TSGR1_126b/"
+  },
+  {
+    "Id": 60799,
+    "TBId": 373,
+    "Title": "3GPPRAN#113",
+    "StartDate": "2026-09-14 09:00:00",
+    "EndDate": "2026-09-17 17:30:00",
+    "StartTimeZone": "(GMT+02.00)  Brussels, Copenhagen, Madrid, Paris",
+    "EndTimeZone": "(GMT+02.00)  Brussels, Copenhagen, Madrid, Paris",
+    "MeetingPeriod": "ONGOING",
+    "Location": "Madrid",
+    "Country": "ES",
+    "MtgDocURL": "https://ftp.3gpp.org/tsg_ran/TSG_RAN/TSGR_113/Docs/"
+  },
+  {
+    "Id": 60713,
+    "TBId": 379,
+    "Title": "3GPPRAN1#126",
+    "StartDate": "2026-08-24 09:00:00",
+    "EndDate": "2026-08-28 17:30:00",
+    "StartTimeZone": "(GMT+02.00)  Brussels, Copenhagen, Madrid, Paris",
+    "EndTimeZone": "(GMT+02.00)  Brussels, Copenhagen, Madrid, Paris",
+    "MeetingPeriod": "ENDED",
+    "Location": "Maastricht",
+    "Country": "NL",
+    "MtgDocURL": "https://ftp.3gpp.org/tsg_ran/WG1_RL1/TSGR1_126/"
+  },
+  {
+    "Id": 60712,
+    "TBId": 379,
+    "Title": "3GPPRAN1#125",
+    "StartDate": "2026-05-18 09:00:00",
+    "EndDate": "2026-05-22 17:30:00",
+    "StartTimeZone": "(GMT+08:00) Beijing, Chongqing, Hong Kong, Urumqi",
+    "EndTimeZone": "(GMT+08:00) Beijing, Chongqing, Hong Kong, Urumqi",
+    "MeetingPeriod": "ENDED",
+    "Location": "China",
+    "Country": "CN",
+    "MtgDocURL": "https://ftp.3gpp.org/tsg_ran/WG1_RL1/TSGR1_125/"
+  }
+]

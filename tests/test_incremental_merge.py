@@ -10,10 +10,10 @@ import unittest
 from pathlib import Path
 from unittest.mock import MagicMock, patch
 
-import slot_state
-from merger import SlotSource, SourceEntry, TimeSlotData, _annotate_freshness
-from models import RoomInfo
-from slot_state import (
+import working_groups.ran1.slot_state as slot_state
+from working_groups.ran1.merger import SlotSource, SourceEntry, TimeSlotData, _annotate_freshness
+from working_groups.ran1.models import RoomInfo
+from working_groups.ran1.slot_state import (
     SlotState,
     clear_all_slot_states,
     hash_source_text,
@@ -283,7 +283,7 @@ class ParseTimeSlotsIntegrationTests(unittest.TestCase):
         slot_state.SLOT_STATE_DIR = self._orig_dir
 
     def _run(self, slots, fake_response):
-        from session_parser import parse_time_slots
+        from working_groups.ran1.session_parser import parse_time_slots
 
         fake_client = FakeGeminiClient(fake_response)
         day_rooms_map = {"Monday": slots[0].main_rooms}
@@ -294,7 +294,7 @@ class ParseTimeSlotsIntegrationTests(unittest.TestCase):
 
     def test_all_stale_skips_llm(self):
         # First run: cold path populates state.
-        from merger import _annotate_freshness
+        from working_groups.ran1.merger import _annotate_freshness
 
         slot = _build_slot({"Main": [("F1+F2+F3", "AI/ML (120)")]})
         _annotate_freshness(slot)
@@ -322,8 +322,8 @@ class ParseTimeSlotsIntegrationTests(unittest.TestCase):
         self.assertEqual(sessions[0].name, "AI/ML")
 
     def test_incremental_path_excludes_stale_raw_text(self):
-        from merger import _annotate_freshness
-        from session_parser import MULTI_SOURCE_SYSTEM_INSTRUCTION_INCREMENTAL
+        from working_groups.ran1.merger import _annotate_freshness
+        from working_groups.ran1.session_parser import MULTI_SOURCE_SYSTEM_INSTRUCTION_INCREMENTAL
 
         # Seed previous state for two sources.
         slot1 = _build_slot(
@@ -407,8 +407,8 @@ class ParseTimeSlotsIntegrationTests(unittest.TestCase):
         self.assertEqual(sessions[0].name, "AI/ML")
 
     def test_cold_path_when_no_previous_state(self):
-        from merger import _annotate_freshness
-        from session_parser import MULTI_SOURCE_SYSTEM_INSTRUCTION_COLD
+        from working_groups.ran1.merger import _annotate_freshness
+        from working_groups.ran1.session_parser import MULTI_SOURCE_SYSTEM_INSTRUCTION_COLD
 
         slot = _build_slot({"Main": [("F1+F2+F3", "AI/ML (120)")]})
         _annotate_freshness(slot)
@@ -430,8 +430,8 @@ class ParseTimeSlotsIntegrationTests(unittest.TestCase):
 
     def test_single_file_deletion_forces_cold_for_that_slot_only(self):
         """Deleting one slot file forces cold rebuild for only that slot."""
-        from merger import _annotate_freshness
-        from session_parser import (
+        from working_groups.ran1.merger import _annotate_freshness
+        from working_groups.ran1.session_parser import (
             MULTI_SOURCE_SYSTEM_INSTRUCTION_COLD,
             MULTI_SOURCE_SYSTEM_INSTRUCTION_INCREMENTAL,
         )
@@ -489,7 +489,7 @@ class ParseTimeSlotsIntegrationTests(unittest.TestCase):
         self.assertIsNone(slot_a2.previous_merge)
         self.assertIsNotNone(slot_b2.previous_merge)
 
-        from session_parser import parse_time_slots
+        from working_groups.ran1.session_parser import parse_time_slots
 
         fake_client = FakeGeminiClient(
             {

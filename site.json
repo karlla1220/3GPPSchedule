@@ -1,0 +1,20 @@
+{
+  "default_wg": "ran1",
+  "working_groups": [
+    {
+      "id": "ran1",
+      "label": "RAN1",
+      "enabled": true
+    },
+    {
+      "id": "ran-plenary",
+      "label": "RAN Plenary",
+      "enabled": true
+    }
+  ],
+  "presentation": {
+    "creator": "Duckhyun Bae",
+    "contact_name": "Duckhyun Bae",
+    "contact_email": "duckhyun.bae@lge.com"
+  }
+}

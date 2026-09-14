@@ -1,0 +1,36 @@
+{
+  "files": [],
+  "meeting_id": "ran1#126",
+  "meeting_source": "local",
+  "timezone": "Europe/Amsterdam",
+  "agenda": {
+    "name": "agenda.csv",
+    "uploaded_at": "2026-08-23T05:43:00",
+    "url": "https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_126/Agenda/agenda.csv",
+    "source_url": "https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_126/Agenda/",
+    "document_file": "agenda.csv",
+    "local_path": "downloads/ran1/Agenda/agenda.csv",
+    "description_json": "docs/ran1/agenda_item_description.json",
+    "description_generated_at": "2026-08-24T04:00:57.642168+00:00",
+    "description_source_type": "agenda_csv",
+    "description_source_file": "agenda.csv",
+    "description_source_agenda_file": "agenda.csv",
+    "description_source_url": "https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_126/Agenda/agenda.csv",
+    "description_source_uploaded_at": "2026-08-23T05:43:00"
+  },
+  "local_refs": {},
+  "timezone_status": "resolved",
+  "timezone_ref": {
+    "type": "portal",
+    "id": 60713,
+    "timezone": "Europe/Amsterdam",
+    "starts_on": "2026-08-24",
+    "ends_on": "2026-08-28",
+    "starts_at": "2026-08-24T09:00:00+02:00",
+    "ends_at": "2026-08-28T17:30:00+02:00",
+    "start_timezone": "(GMT+02.00)  Brussels, Copenhagen, Madrid, Paris",
+    "end_timezone": "(GMT+02.00)  Brussels, Copenhagen, Madrid, Paris",
+    "location": "Maastricht",
+    "country": "NL"
+  }
+}

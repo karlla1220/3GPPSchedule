@@ -4,14 +4,14 @@ from zipfile import ZipFile
 from xml.etree.ElementTree import Element, SubElement
 from unittest.mock import MagicMock
 
-from models import RoomInfo
-from parser import (
+from working_groups.ran1.models import RoomInfo
+from working_groups.ran1.parser import (
     _determine_time_block_index,
     _get_cell_text,
     extract_meeting_location,
     find_chair_notes_docx,
 )
-from session_parser import _extract_agenda_item_from_name, _slot_result_to_sessions
+from working_groups.ran1.session_parser import _extract_agenda_item_from_name, _slot_result_to_sessions
 
 _NS = "http://schemas.openxmlformats.org/wordprocessingml/2006/main"
 

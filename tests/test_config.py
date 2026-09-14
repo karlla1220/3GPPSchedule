@@ -5,20 +5,20 @@ import unittest
 from pathlib import Path
 from unittest.mock import patch
 
-from config import load_config
+from working_groups.ran1.config import load_config
 
 
 class ExtraFilesConfigTests(unittest.TestCase):
     def test_missing_key_returns_empty_list(self):
         with tempfile.TemporaryDirectory() as tmpdir:
-            path = Path(tmpdir) / "config.json"
+            path = Path(tmpdir) / "working_groups.ran1.config.json"
             path.write_text("{}", encoding="utf-8")
             cfg = load_config(path=path)
         self.assertEqual(cfg["extra_files"], [])
 
     def test_invalid_entry_skipped(self):
         with tempfile.TemporaryDirectory() as tmpdir:
-            path = Path(tmpdir) / "config.json"
+            path = Path(tmpdir) / "working_groups.ran1.config.json"
             path.write_text(
                 json.dumps(
                     {
@@ -38,7 +38,7 @@ class ExtraFilesConfigTests(unittest.TestCase):
 
     def test_valid_entries_round_trip_with_defaults(self):
         with tempfile.TemporaryDirectory() as tmpdir:
-            path = Path(tmpdir) / "config.json"
+            path = Path(tmpdir) / "working_groups.ran1.config.json"
             entries = [
                 {"url": "https://example.org/schedule.docx", "type": "schedule"},
                 {
@@ -75,7 +75,7 @@ class ExtraFilesConfigTests(unittest.TestCase):
 
     def test_is_main_auto_derivation(self):
         with tempfile.TemporaryDirectory() as tmpdir:
-            path = Path(tmpdir) / "config.json"
+            path = Path(tmpdir) / "working_groups.ran1.config.json"
             entries = [
                 # no person_name, no is_main → True
                 {"url": "https://example.org/a.docx", "type": "schedule"},
@@ -107,7 +107,7 @@ class ExtraFilesConfigTests(unittest.TestCase):
 
     def test_mixed_valid_and_invalid(self):
         with tempfile.TemporaryDirectory() as tmpdir:
-            path = Path(tmpdir) / "config.json"
+            path = Path(tmpdir) / "working_groups.ran1.config.json"
             path.write_text(
                 json.dumps(
                     {
@@ -131,7 +131,7 @@ class ExtraFilesConfigTests(unittest.TestCase):
 
     def test_env_override_replaces_file_value(self):
         with tempfile.TemporaryDirectory() as tmpdir:
-            path = Path(tmpdir) / "config.json"
+            path = Path(tmpdir) / "working_groups.ran1.config.json"
             path.write_text(
                 json.dumps(
                     {
@@ -154,7 +154,7 @@ class ExtraFilesConfigTests(unittest.TestCase):
 
     def test_env_invalid_json_keeps_file_value(self):
         with tempfile.TemporaryDirectory() as tmpdir:
-            path = Path(tmpdir) / "config.json"
+            path = Path(tmpdir) / "working_groups.ran1.config.json"
             path.write_text(
                 json.dumps(
                     {

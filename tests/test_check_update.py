@@ -2,9 +2,7 @@
 
 from unittest.mock import patch
 
-import check_update
-
-
+import working_groups.ran1.check_update as check_update
 def _run_check(
     *,
     state: dict,
@@ -26,39 +24,39 @@ def _run_check(
         "agenda_urls": ["https://example.org/Agenda/"],
     }
     remote_patch = patch(
-        "check_update.get_all_remote_schedule_info",
+        "working_groups.ran1.check_update.get_all_remote_schedule_info",
         side_effect=remote_error if remote_error is not None else None,
         return_value=remote if remote_error is None else None,
     )
     with (
-        patch("check_update.load_config", return_value=cfg),
-        patch("check_update.load_schedule_state", return_value=state),
-        patch("check_update.local_reference_hashes", return_value=local_refs),
+        patch("working_groups.ran1.check_update.load_config", return_value=cfg),
+        patch("working_groups.ran1.check_update.load_schedule_state", return_value=state),
+        patch("working_groups.ran1.check_update.local_reference_hashes", return_value=local_refs),
         patch(
-            "check_update.local_reference_meeting_id",
+            "working_groups.ran1.check_update.local_reference_meeting_id",
             return_value=local_meeting_hint,
         ),
         remote_patch as remote_mock,
         patch(
-            "check_update.get_latest_agenda_info",
+            "working_groups.ran1.check_update.get_latest_agenda_info",
             return_value=agenda_info,
             create=True,
         ),
         patch(
-            "check_update.get_latest_chair_notes_info",
+            "working_groups.ran1.check_update.get_latest_chair_notes_info",
             return_value=chair_notes_info,
             create=True,
         ),
         patch(
-            "check_update.check_external_files",
+            "working_groups.ran1.check_update.check_external_files",
             return_value=(extra_changed, {"files": {}}),
         ),
         patch(
-            "check_update.load_external_files_state",
+            "working_groups.ran1.check_update.load_external_files_state",
             return_value=external_state or {"files": {}},
         ),
         patch(
-            "check_update._set_output",
+            "working_groups.ran1.check_update._set_output",
             side_effect=lambda name, value: outputs.append((name, value)),
         ),
     ):
@@ -347,15 +345,15 @@ def test_external_cache_miss_exposes_transfer_artifact(tmp_path):
         }
 
     with (
-        patch("check_update.load_config", return_value=cfg),
-        patch("check_update.load_schedule_state", return_value={"files": []}),
-        patch("check_update.local_reference_hashes", return_value={}),
-        patch("check_update.local_reference_meeting_id", return_value=None),
-        patch("check_update.get_all_remote_schedule_info", return_value=[]),
-        patch("check_update.EXTRA_FILES_TRANSFER_DIR", tmp_path),
-        patch("check_update.check_external_files", side_effect=fake_external_check),
+        patch("working_groups.ran1.check_update.load_config", return_value=cfg),
+        patch("working_groups.ran1.check_update.load_schedule_state", return_value={"files": []}),
+        patch("working_groups.ran1.check_update.local_reference_hashes", return_value={}),
+        patch("working_groups.ran1.check_update.local_reference_meeting_id", return_value=None),
+        patch("working_groups.ran1.check_update.get_all_remote_schedule_info", return_value=[]),
+        patch("working_groups.ran1.check_update.EXTRA_FILES_TRANSFER_DIR", tmp_path),
+        patch("working_groups.ran1.check_update.check_external_files", side_effect=fake_external_check),
         patch(
-            "check_update._set_output",
+            "working_groups.ran1.check_update._set_output",
             side_effect=lambda name, value: outputs.append((name, value)),
         ),
     ):
@@ -366,3 +364,53 @@ def test_external_cache_miss_exposes_transfer_artifact(tmp_path):
         ("changed", "true"),
     ]
     assert (tmp_path / ".extra_files_state.json").exists()
+
+
+def test_historical_local_meeting_does_not_pin_ci_after_source_removed():
+    _, remote = _run_check(
+        state={'files': [], 'meeting_id': 'ran1#126', 'meeting_source': 'local', 'local_refs': {}},
+        local_refs={}, remote=[],
+    )
+    assert remote.call_args.kwargs['preferred_meeting_id'] == 'ran1#126'
+    assert remote.call_args.kwargs['locked_meeting_id'] is None
+
+
+import pytest
+
+
+@pytest.fixture(autouse=True)
+def no_live_portal_lookup():
+    with patch("working_groups.ran1.check_update.lookup_timezone_reference", return_value=None):
+        yield
+
+
+@pytest.mark.parametrize('same', [False, True])
+def test_portal_timezone_changes_detected_without_chair_lookup(same):
+    ref = {'type': 'portal', 'id': 60713, 'timezone': 'Europe/Amsterdam',
+           'starts_on': '2026-08-24', 'ends_on': '2026-08-28'}
+    state = {'files': [], 'meeting_id': 'ran1#126', 'local_refs': {},
+             'timezone_status': 'resolved' if same else 'pending_timezone_ref',
+             'timezone_ref': ref if same else None}
+    with patch.object(check_update, 'lookup_timezone_reference', return_value=ref):
+        outputs, _ = _run_check(state=state, local_refs={}, remote=[])
+    assert outputs == [('changed', 'false' if same else 'true')]
+
+
+def test_portal_outage_does_not_downgrade_saved_reference():
+    state = {'files': [], 'meeting_id': 'ran1#126', 'local_refs': {},
+             'timezone_status': 'resolved', 'timezone_ref': {'type': 'portal', 'id': 60713}}
+    outputs, _ = _run_check(state=state, local_refs={}, remote=[],
+                            chair_notes_info={'name': 'new-chair.docx'})
+    assert outputs == [('changed', 'false')]
+
+
+@pytest.mark.parametrize('updated', [False, True])
+def test_agenda_description_updates_still_detected_after_portal_migration(updated):
+    ref = {'type': 'portal', 'id': 60713, 'timezone': 'Europe/Amsterdam'}
+    agenda = {'name': 'agenda.docx', 'uploaded_at': '2026-08-24T10:00:00'}
+    state = {'files': [], 'meeting_id': 'ran1#126', 'local_refs': {},
+             'timezone_status': 'resolved', 'timezone_ref': ref, 'agenda': agenda}
+    remote_agenda = {**agenda, 'uploaded_at': '2026-08-24T11:00:00'} if updated else agenda
+    with patch.object(check_update, 'lookup_timezone_reference', return_value=ref):
+        outputs, _ = _run_check(state=state, local_refs={}, remote=[], agenda_info=remote_agenda)
+    assert outputs == [('changed', 'true' if updated else 'false')]
