@@ -9,9 +9,9 @@
     --text-muted: #6B7280;
     --border: #D1D5DB;
     --shadow: 0 1px 3px rgba(0,0,0,0.1);
-    --session-surface-top: #FCFDFE;
-    --session-surface-bottom: #E8EBEF;
-    --session-outline: #C9CFD7;
+    --session-surface-top: #FFFFFF;
+    --session-surface-bottom: #F2F3F5;
+    --session-outline: #D7DCE2;
     --session-relief: inset 0 1px 0 rgba(255,255,255,0.9), 0 1px 2px rgba(31,41,55,0.06);
     --dim-opacity: 0.30;
 }
@@ -386,8 +386,8 @@ header .meta {
 }
 
 .session-name {
-    font-weight: 600;
-    font-size: 11px;
+    font-weight: 700;
+    font-size: 12px;
     line-height: 1.2;
     color: #171717;
     white-space: nowrap;
@@ -419,16 +419,16 @@ header .meta {
 .session-duration {
     font-size: 10px;
     line-height: 1.25;
-    color: #171717;
-    font-weight: 600;
+    color: #454B54;
+    font-weight: 500;
     font-variant-numeric: tabular-nums;
     flex-shrink: 0;
 }
 
 .session-ai {
-    font-size: 10px;
-    color: #171717;
-    font-weight: 500;
+    font-size: 9px;
+    color: #525963;
+    font-weight: 400;
     font-variant-numeric: tabular-nums;
     white-space: normal;
     word-break: break-word;
@@ -538,7 +538,7 @@ header .meta {
     .tab { padding: 6px 14px; font-size: 13px; }
     .now-toggle { height: 26px; margin-bottom: 3px; padding: 0 9px; }
     :root { --base-slot-height: 10px; --time-col-width: 36px; }
-    .session-name { font-size: 10px; }
+    .session-name { font-size: 11px; }
     .room-header { font-size: 9px; padding: 3px 3px; }
 }
 
