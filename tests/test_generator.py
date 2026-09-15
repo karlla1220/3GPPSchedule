@@ -52,6 +52,21 @@ def test_time_column_and_now_label_stay_aligned_while_scrolling():
     assert css.count("--time-col-width: 36px") == 2
 
 
+def test_now_indicator_is_above_sticky_time_labels_but_below_header_and_popup():
+    css = _generate_css(num_rooms_max=1)
+
+    def layer(selector):
+        rule = re.search(re.escape(selector) + r"\s*\{([^}]*)\}", css)
+        assert rule is not None
+        return int(re.search(r"z-index:\s*(\d+)", rule.group(1)).group(1))
+
+    # The NOW badge belongs to the now-line stacking context, so it cannot
+    # rise above a higher sticky time label even with its own z-index.
+    assert layer('.time-label') < layer('.now-line')
+    assert layer('.now-line') < layer('.room-header.time-col')
+    assert layer('.now-line') < layer('.popup-floating')
+
+
 def test_generate_html_renders_external_page_assets():
     schedule = Schedule(
         meeting_name="RAN <Test>",
