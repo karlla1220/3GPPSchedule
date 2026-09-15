@@ -393,12 +393,10 @@ def generate_html(schedule: Schedule, *, schedules=None, groups=None, presentati
             style = (
                 f"grid-row:{row_start}/{row_end};"
                 f"grid-column:{col_start}/{col_end};"
-                f"--session-bg:{colors['bg']};"
-                f"--session-border:{colors['border']};"
-                f"--session-text:{colors['text']}"
+                f"--session-border:{colors['border']}"
             )
 
-            # Content based on block height — order: Name, Chair, Time, AI
+            # Content based on block height — order: Name, Time, AI, Chair
             slots = (row_end - row_start) * timeline.slot_minutes / 5
             is_short = slots <= 2
             is_tiny = slots <= 1
@@ -457,7 +455,7 @@ def generate_html(schedule: Schedule, *, schedules=None, groups=None, presentati
             popup_attr = popup_html.replace('&', '&amp;').replace('"', '&quot;').replace("'", '&#39;')
 
             # Build secondary details wrapped in a clipping container
-            details_inner = f"{chair_html}{dur_html}{ai_html}"
+            details_inner = f"{dur_html}{ai_html}{chair_html}"
             details_html = f'<div class="session-details">{details_inner}</div>' if details_inner else ""
             is_long = _crosses_time_block(session.start_time, session.end_time, timeline)
             block_classes = "session-block"
