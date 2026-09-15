@@ -16,7 +16,7 @@ from .document import TIME_RANGE, describe, time_range
 from .sources import CACHE, digest, read_json, write_json
 
 PROMPT = Path(__file__).parent / 'prompts/timeplan.md'
-PARSER_VERSION = 1
+PARSER_VERSION = 2
 
 
 class Availability(BaseModel):
