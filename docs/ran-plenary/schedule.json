@@ -9,18 +9,18 @@
           "name": "Main: Madrid 3/4/5/6",
           "table_index": 0,
           "room_index_in_table": 0,
-          "id": "madrid_3_4_5_6"
+          "id": "MADRID_3_4_5_6"
         },
         {
-          "name": "Breakout: Madrid 1-2 (12:30–19:30)",
+          "name": "Breakout: Madrid 1-2",
           "table_index": 0,
           "room_index_in_table": 0,
-          "id": "madrid_1_2"
+          "id": "MADRID_1_2"
         }
       ],
       "sessions": [
         {
-          "name": "Opening / Incoming LSs, WG reports, early items",
+          "name": "Incoming LSs, WG reports, early items",
           "duration_minutes": 90,
           "start_time": "09:00",
           "end_time": "10:30",
@@ -56,7 +56,7 @@
             }
           ],
           "room_ids": [
-            "madrid_3_4_5_6"
+            "MADRID_3_4_5_6"
           ],
           "room_scope": "assigned",
           "notes": [
@@ -77,7 +77,7 @@
           "description": null,
           "agenda_descriptions": [],
           "room_ids": [
-            "madrid_3_4_5_6"
+            "MADRID_3_4_5_6"
           ],
           "room_scope": "assigned",
           "notes": []
@@ -96,7 +96,7 @@
           "description": null,
           "agenda_descriptions": [],
           "room_ids": [
-            "madrid_3_4_5_6"
+            "MADRID_3_4_5_6"
           ],
           "room_scope": "assigned",
           "notes": []
@@ -115,10 +115,12 @@
           "description": null,
           "agenda_descriptions": [],
           "room_ids": [
-            "madrid_1_2"
+            "MADRID_1_2"
           ],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [
+            "Breakout (12:30~13:30): TBD"
+          ]
         },
         {
           "name": "TBD",
@@ -134,10 +136,12 @@
           "description": null,
           "agenda_descriptions": [],
           "room_ids": [
-            "madrid_3_4_5_6"
+            "MADRID_3_4_5_6"
           ],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [
+            "Main (12:30~13:30): TBD"
+          ]
         },
         {
           "name": "Early items: Rel-21 5G-Adv",
@@ -148,9 +152,9 @@
           "room_col_start": 2,
           "room_col_end": 3,
           "chair": null,
-          "agenda_item": "15",
-          "group_header": "Early items",
-          "description": "5G-Advanced in Rel-21",
+          "agenda_item": "15, 15.1",
+          "group_header": "Rel-21 5G-Adv",
+          "description": "5G-Advanced in Rel-21\nHigh-level overview proposals for Rel-21",
           "agenda_descriptions": [
             {
               "agenda_item": "15",
@@ -162,10 +166,25 @@
                   "description": "5G-Advanced in Rel-21"
                 }
               ]
+            },
+            {
+              "agenda_item": "15.1",
+              "matched_agenda_item": "15.1",
+              "description": "High-level overview proposals for Rel-21",
+              "hierarchy": [
+                {
+                  "agenda_item": "15",
+                  "description": "5G-Advanced in Rel-21"
+                },
+                {
+                  "agenda_item": "15.1",
+                  "description": "High-level overview proposals for Rel-21"
+                }
+              ]
             }
           ],
           "room_ids": [
-            "madrid_3_4_5_6"
+            "MADRID_3_4_5_6"
           ],
           "room_scope": "assigned",
           "notes": []
@@ -184,7 +203,7 @@
           "description": null,
           "agenda_descriptions": [],
           "room_ids": [
-            "madrid_1_2"
+            "MADRID_1_2"
           ],
           "room_scope": "assigned",
           "notes": []
@@ -203,7 +222,7 @@
           "description": null,
           "agenda_descriptions": [],
           "room_ids": [
-            "madrid_3_4_5_6"
+            "MADRID_3_4_5_6"
           ],
           "room_scope": "assigned",
           "notes": []
@@ -217,9 +236,9 @@
           "room_col_start": 2,
           "room_col_end": 3,
           "chair": null,
-          "agenda_item": "15",
-          "group_header": "Early items",
-          "description": "5G-Advanced in Rel-21",
+          "agenda_item": "15, 15.1",
+          "group_header": "Rel-21 5G-Adv",
+          "description": "5G-Advanced in Rel-21\nHigh-level overview proposals for Rel-21",
           "agenda_descriptions": [
             {
               "agenda_item": "15",
@@ -231,10 +250,25 @@
                   "description": "5G-Advanced in Rel-21"
                 }
               ]
+            },
+            {
+              "agenda_item": "15.1",
+              "matched_agenda_item": "15.1",
+              "description": "High-level overview proposals for Rel-21",
+              "hierarchy": [
+                {
+                  "agenda_item": "15",
+                  "description": "5G-Advanced in Rel-21"
+                },
+                {
+                  "agenda_item": "15.1",
+                  "description": "High-level overview proposals for Rel-21"
+                }
+              ]
             }
           ],
           "room_ids": [
-            "madrid_3_4_5_6"
+            "MADRID_3_4_5_6"
           ],
           "room_scope": "assigned",
           "notes": []
@@ -269,7 +303,7 @@
             }
           ],
           "room_ids": [
-            "madrid_1_2"
+            "MADRID_1_2"
           ],
           "room_scope": "assigned",
           "notes": []
@@ -312,7 +346,7 @@
             }
           ],
           "room_ids": [
-            "madrid_3_4_5_6"
+            "MADRID_3_4_5_6"
           ],
           "room_scope": "assigned",
           "notes": []
@@ -354,19 +388,19 @@
           "name": "Main: Madrid 3/4/5/6",
           "table_index": 0,
           "room_index_in_table": 0,
-          "id": "madrid_3_4_5_6"
+          "id": "MADRID_3_4_5_6"
         },
         {
-          "name": "Breakout: Madrid 1-2 (08:00–11:00)",
+          "name": "Breakout: Madrid 1-2 (08:00–12:30)",
           "table_index": 0,
           "room_index_in_table": 0,
-          "id": "madrid_1_2"
+          "id": "MADRID_1_2"
         },
         {
           "name": "Breakout: Neptuno + PTA Alcala (12:30–19:00)",
           "table_index": 0,
           "room_index_in_table": 0,
-          "id": "neptuno_pta_alcala"
+          "id": "NEPTUNO_PTA_ALCALA"
         }
       ],
       "sessions": [
@@ -400,7 +434,7 @@
             }
           ],
           "room_ids": [
-            "madrid_1_2"
+            "MADRID_1_2"
           ],
           "room_scope": "assigned",
           "notes": []
@@ -419,11 +453,11 @@
           "description": null,
           "agenda_descriptions": [],
           "room_ids": [
-            "madrid_3_4_5_6"
+            "MADRID_3_4_5_6"
           ],
           "room_scope": "assigned",
           "notes": [
-            "8:00~9:00"
+            "Main: ITU Adhoc (8:00~9:00)"
           ]
         },
         {
@@ -440,7 +474,7 @@
           "description": null,
           "agenda_descriptions": [],
           "room_ids": [
-            "madrid_3_4_5_6"
+            "MADRID_3_4_5_6"
           ],
           "room_scope": "assigned",
           "notes": []
@@ -479,7 +513,7 @@
             }
           ],
           "room_ids": [
-            "madrid_1_2"
+            "MADRID_1_2"
           ],
           "room_scope": "assigned",
           "notes": []
@@ -498,7 +532,7 @@
           "description": null,
           "agenda_descriptions": [],
           "room_ids": [
-            "madrid_3_4_5_6"
+            "MADRID_3_4_5_6"
           ],
           "room_scope": "assigned",
           "notes": []
@@ -517,7 +551,7 @@
           "description": null,
           "agenda_descriptions": [],
           "room_ids": [
-            "madrid_3_4_5_6"
+            "MADRID_3_4_5_6"
           ],
           "room_scope": "assigned",
           "notes": []
@@ -536,7 +570,7 @@
           "description": null,
           "agenda_descriptions": [],
           "room_ids": [
-            "madrid_3_4_5_6"
+            "MADRID_3_4_5_6"
           ],
           "room_scope": "assigned",
           "notes": [
@@ -573,10 +607,12 @@
             }
           ],
           "room_ids": [
-            "neptuno_pta_alcala"
+            "NEPTUNO_PTA_ALCALA"
           ],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [
+            "Breakout (12:30~13:30)"
+          ]
         },
         {
           "name": "Early items",
@@ -592,7 +628,7 @@
           "description": null,
           "agenda_descriptions": [],
           "room_ids": [
-            "madrid_3_4_5_6"
+            "MADRID_3_4_5_6"
           ],
           "room_scope": "assigned",
           "notes": []
@@ -611,7 +647,7 @@
           "description": null,
           "agenda_descriptions": [],
           "room_ids": [
-            "madrid_3_4_5_6"
+            "MADRID_3_4_5_6"
           ],
           "room_scope": "assigned",
           "notes": []
@@ -650,7 +686,7 @@
             }
           ],
           "room_ids": [
-            "neptuno_pta_alcala"
+            "NEPTUNO_PTA_ALCALA"
           ],
           "room_scope": "assigned",
           "notes": []
@@ -669,7 +705,7 @@
           "description": null,
           "agenda_descriptions": [],
           "room_ids": [
-            "madrid_3_4_5_6"
+            "MADRID_3_4_5_6"
           ],
           "room_scope": "assigned",
           "notes": []
@@ -712,7 +748,7 @@
             }
           ],
           "room_ids": [
-            "madrid_3_4_5_6"
+            "MADRID_3_4_5_6"
           ],
           "room_scope": "assigned",
           "notes": [
@@ -749,7 +785,7 @@
             }
           ],
           "room_ids": [
-            "neptuno_pta_alcala"
+            "NEPTUNO_PTA_ALCALA"
           ],
           "room_scope": "assigned",
           "notes": [
@@ -793,13 +829,13 @@
           "name": "Main: Madrid 3/4/5/6",
           "table_index": 0,
           "room_index_in_table": 0,
-          "id": "madrid_3_4_5_6"
+          "id": "MADRID_3_4_5_6"
         },
         {
           "name": "Breakout: Neptuno + PTA Alcala",
           "table_index": 0,
           "room_index_in_table": 0,
-          "id": "neptuno_pta_alcala"
+          "id": "NEPTUNO_PTA_ALCALA"
         }
       ],
       "sessions": [
@@ -841,7 +877,7 @@
             }
           ],
           "room_ids": [
-            "madrid_3_4_5_6"
+            "MADRID_3_4_5_6"
           ],
           "room_scope": "assigned",
           "notes": []
@@ -880,7 +916,7 @@
             }
           ],
           "room_ids": [
-            "neptuno_pta_alcala"
+            "NEPTUNO_PTA_ALCALA"
           ],
           "room_scope": "assigned",
           "notes": []
@@ -923,7 +959,7 @@
             }
           ],
           "room_ids": [
-            "madrid_3_4_5_6"
+            "MADRID_3_4_5_6"
           ],
           "room_scope": "assigned",
           "notes": []
@@ -942,7 +978,7 @@
           "description": null,
           "agenda_descriptions": [],
           "room_ids": [
-            "madrid_3_4_5_6"
+            "MADRID_3_4_5_6"
           ],
           "room_scope": "assigned",
           "notes": []
@@ -961,7 +997,7 @@
           "description": null,
           "agenda_descriptions": [],
           "room_ids": [
-            "neptuno_pta_alcala"
+            "NEPTUNO_PTA_ALCALA"
           ],
           "room_scope": "assigned",
           "notes": []
@@ -980,7 +1016,7 @@
           "description": null,
           "agenda_descriptions": [],
           "room_ids": [
-            "madrid_3_4_5_6"
+            "MADRID_3_4_5_6"
           ],
           "room_scope": "assigned",
           "notes": []
@@ -1023,11 +1059,11 @@
             }
           ],
           "room_ids": [
-            "madrid_3_4_5_6"
+            "MADRID_3_4_5_6"
           ],
           "room_scope": "assigned",
           "notes": [
-            "12:30~13:30"
+            "Main (12:30~13:30)"
           ]
         },
         {
@@ -1060,11 +1096,11 @@
             }
           ],
           "room_ids": [
-            "neptuno_pta_alcala"
+            "NEPTUNO_PTA_ALCALA"
           ],
           "room_scope": "assigned",
           "notes": [
-            "12:30~13:30"
+            "Breakout (12:30~13:30)"
           ]
         },
         {
@@ -1081,7 +1117,7 @@
           "description": null,
           "agenda_descriptions": [],
           "room_ids": [
-            "madrid_3_4_5_6"
+            "MADRID_3_4_5_6"
           ],
           "room_scope": "assigned",
           "notes": []
@@ -1100,7 +1136,7 @@
           "description": null,
           "agenda_descriptions": [],
           "room_ids": [
-            "madrid_3_4_5_6"
+            "MADRID_3_4_5_6"
           ],
           "room_scope": "assigned",
           "notes": []
@@ -1143,7 +1179,7 @@
             }
           ],
           "room_ids": [
-            "neptuno_pta_alcala"
+            "NEPTUNO_PTA_ALCALA"
           ],
           "room_scope": "assigned",
           "notes": []
@@ -1162,7 +1198,7 @@
           "description": null,
           "agenda_descriptions": [],
           "room_ids": [
-            "madrid_3_4_5_6"
+            "MADRID_3_4_5_6"
           ],
           "room_scope": "assigned",
           "notes": []
@@ -1181,7 +1217,7 @@
           "description": null,
           "agenda_descriptions": [],
           "room_ids": [
-            "madrid_3_4_5_6"
+            "MADRID_3_4_5_6"
           ],
           "room_scope": "assigned",
           "notes": []
@@ -1216,7 +1252,7 @@
             }
           ],
           "room_ids": [
-            "neptuno_pta_alcala"
+            "NEPTUNO_PTA_ALCALA"
           ],
           "room_scope": "assigned",
           "notes": []
@@ -1258,13 +1294,13 @@
           "name": "Main: Madrid 3/4/5/6",
           "table_index": 0,
           "room_index_in_table": 0,
-          "id": "madrid_3_4_5_6"
+          "id": "MADRID_3_4_5_6"
         },
         {
           "name": "Breakout: Neptuno + PTA Alcala",
           "table_index": 0,
           "room_index_in_table": 0,
-          "id": "neptuno_pta_alcala"
+          "id": "NEPTUNO_PTA_ALCALA"
         }
       ],
       "sessions": [
@@ -1282,13 +1318,13 @@
           "description": null,
           "agenda_descriptions": [],
           "room_ids": [
-            "madrid_3_4_5_6"
+            "MADRID_3_4_5_6"
           ],
           "room_scope": "assigned",
           "notes": []
         },
         {
-          "name": "Rel-21 5G-Adv (TBD)",
+          "name": "NTN time/frequency compensation",
           "duration_minutes": 60,
           "start_time": "08:00",
           "end_time": "09:00",
@@ -1296,24 +1332,32 @@
           "room_col_start": 2,
           "room_col_end": 3,
           "chair": null,
-          "agenda_item": "15",
+          "agenda_item": "9.1.1",
           "group_header": "Rel-21 5G-Adv",
-          "description": "5G-Advanced in Rel-21",
+          "description": "Proposals led by RAN1",
           "agenda_descriptions": [
             {
-              "agenda_item": "15",
-              "matched_agenda_item": "15",
-              "description": "5G-Advanced in Rel-21",
+              "agenda_item": "9.1.1",
+              "matched_agenda_item": "9.1.1",
+              "description": "Proposals led by RAN1",
               "hierarchy": [
                 {
-                  "agenda_item": "15",
-                  "description": "5G-Advanced in Rel-21"
+                  "agenda_item": "9",
+                  "description": "NR"
+                },
+                {
+                  "agenda_item": "9.1",
+                  "description": "New WI/SI proposals for NR for REL-20"
+                },
+                {
+                  "agenda_item": "9.1.1",
+                  "description": "Proposals led by RAN1"
                 }
               ]
             }
           ],
           "room_ids": [
-            "neptuno_pta_alcala"
+            "NEPTUNO_PTA_ALCALA"
           ],
           "room_scope": "assigned",
           "notes": []
@@ -1332,7 +1376,7 @@
           "description": null,
           "agenda_descriptions": [],
           "room_ids": [
-            "madrid_3_4_5_6"
+            "MADRID_3_4_5_6"
           ],
           "room_scope": "assigned",
           "notes": []
@@ -1351,13 +1395,13 @@
           "description": null,
           "agenda_descriptions": [],
           "room_ids": [
-            "madrid_3_4_5_6"
+            "MADRID_3_4_5_6"
           ],
           "room_scope": "assigned",
           "notes": []
         },
         {
-          "name": "TBD",
+          "name": "NTN time/frequency compensation",
           "duration_minutes": 30,
           "start_time": "10:30",
           "end_time": "11:00",
@@ -1365,12 +1409,32 @@
           "room_col_start": 2,
           "room_col_end": 3,
           "chair": null,
-          "agenda_item": null,
-          "group_header": "TBD",
-          "description": null,
-          "agenda_descriptions": [],
+          "agenda_item": "9.1.1",
+          "group_header": "Rel-21 5G-Adv",
+          "description": "Proposals led by RAN1",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "9.1.1",
+              "matched_agenda_item": "9.1.1",
+              "description": "Proposals led by RAN1",
+              "hierarchy": [
+                {
+                  "agenda_item": "9",
+                  "description": "NR"
+                },
+                {
+                  "agenda_item": "9.1",
+                  "description": "New WI/SI proposals for NR for REL-20"
+                },
+                {
+                  "agenda_item": "9.1.1",
+                  "description": "Proposals led by RAN1"
+                }
+              ]
+            }
+          ],
           "room_ids": [
-            "neptuno_pta_alcala"
+            "NEPTUNO_PTA_ALCALA"
           ],
           "room_scope": "assigned",
           "notes": []
@@ -1389,7 +1453,7 @@
           "description": null,
           "agenda_descriptions": [],
           "room_ids": [
-            "madrid_3_4_5_6"
+            "MADRID_3_4_5_6"
           ],
           "room_scope": "assigned",
           "notes": []
@@ -1408,11 +1472,11 @@
           "description": null,
           "agenda_descriptions": [],
           "room_ids": [
-            "madrid_3_4_5_6"
+            "MADRID_3_4_5_6"
           ],
           "room_scope": "assigned",
           "notes": [
-            "12:30~13:30"
+            "Main (12:30~13:30)"
           ]
         },
         {
@@ -1429,11 +1493,11 @@
           "description": null,
           "agenda_descriptions": [],
           "room_ids": [
-            "neptuno_pta_alcala"
+            "NEPTUNO_PTA_ALCALA"
           ],
           "room_scope": "assigned",
           "notes": [
-            "12:30~13:30"
+            "Breakout (12:30~13:30)"
           ]
         },
         {
@@ -1450,7 +1514,7 @@
           "description": null,
           "agenda_descriptions": [],
           "room_ids": [
-            "madrid_3_4_5_6"
+            "MADRID_3_4_5_6"
           ],
           "room_scope": "assigned",
           "notes": []
@@ -1469,7 +1533,7 @@
           "description": null,
           "agenda_descriptions": [],
           "room_ids": [
-            "madrid_3_4_5_6"
+            "MADRID_3_4_5_6"
           ],
           "room_scope": "assigned",
           "notes": []
@@ -1488,7 +1552,7 @@
           "description": null,
           "agenda_descriptions": [],
           "room_ids": [
-            "neptuno_pta_alcala"
+            "NEPTUNO_PTA_ALCALA"
           ],
           "room_scope": "assigned",
           "notes": []
@@ -1507,7 +1571,7 @@
           "description": null,
           "agenda_descriptions": [],
           "room_ids": [
-            "madrid_3_4_5_6"
+            "MADRID_3_4_5_6"
           ],
           "room_scope": "assigned",
           "notes": [
@@ -1545,12 +1609,12 @@
       }
     }
   ],
-  "source_file": "RAN#113 time plan v07.zip",
-  "generated_at": "2026-09-16 12:32",
+  "source_file": "RAN#113 time plan v08.zip",
+  "generated_at": "2026-09-16 16:17",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
-    "RAN#113 time plan v07.zip",
+    "RAN#113 time plan v08.zip",
     "agenda.csv"
   ],
   "timezone": "Europe/Madrid",
@@ -5574,7 +5638,7 @@
                 "href": "https://www.3gpp.org/ftp/tsg_ran/TSG_RAN/TSGR_113/Docs/RP-261657.zip"
               },
               {
-                "text": ", 2153, 1707, 2161, 1927, 1726, ",
+                "text": ", 2153, 1707, 2161, 1927, 1726, 2113",
                 "color": "000000",
                 "strike": false,
                 "highlight": "green",
@@ -5584,20 +5648,20 @@
                 "shading": null
               },
               {
-                "text": "2113",
+                "text": ", ",
                 "color": "000000",
                 "strike": false,
-                "highlight": "green",
+                "highlight": null,
                 "bold": false,
                 "italic": false,
                 "underline": false,
                 "shading": null
               },
               {
-                "text": ", 1707",
+                "text": "1707",
                 "color": "000000",
                 "strike": false,
-                "highlight": "green",
+                "highlight": "yellow",
                 "bold": false,
                 "italic": false,
                 "underline": false,
@@ -5995,7 +6059,7 @@
                 "text": "S",
                 "color": "000000",
                 "strike": false,
-                "highlight": "green",
+                "highlight": "yellow",
                 "bold": false,
                 "italic": false,
                 "underline": false,
@@ -6005,7 +6069,7 @@
                 "text": "tatus on 6G AS Security in SA3: ",
                 "color": "000000",
                 "strike": false,
-                "highlight": "green",
+                "highlight": "yellow",
                 "bold": false,
                 "italic": false,
                 "underline": false,
@@ -6015,7 +6079,7 @@
                 "text": "2178",
                 "color": "0563C1",
                 "strike": false,
-                "highlight": "green",
+                "highlight": "yellow",
                 "bold": false,
                 "italic": false,
                 "underline": true,
@@ -6026,7 +6090,7 @@
                 "text": " (",
                 "color": "000000",
                 "strike": false,
-                "highlight": "green",
+                "highlight": "yellow",
                 "bold": false,
                 "italic": false,
                 "underline": false,
@@ -6036,7 +6100,7 @@
                 "text": "Wednesday 9am",
                 "color": "FF0000",
                 "strike": false,
-                "highlight": "green",
+                "highlight": "yellow",
                 "bold": false,
                 "italic": false,
                 "underline": false,
@@ -6046,7 +6110,7 @@
                 "text": ")",
                 "color": "000000",
                 "strike": false,
-                "highlight": "green",
+                "highlight": "yellow",
                 "bold": false,
                 "italic": false,
                 "underline": false,
