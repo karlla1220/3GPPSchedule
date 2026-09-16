@@ -1,17 +1,17 @@
 {
   "meeting_number": 113,
-  "version": 6,
+  "version": 7,
   "config_hash": "c8352e1759e653c7a98f90fb6b4492b5df04a6515a3c4fd7d97763195c530c29",
   "timeplan": {
-    "url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN/Inbox/Chair/RAN%23113%20time%20plan%20v06.zip",
-    "name": "RAN#113 time plan v06.zip",
+    "url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN/Inbox/Chair/RAN%23113%20time%20plan%20v07.zip",
+    "name": "RAN#113 time plan v07.zip",
     "meeting_number": 113,
-    "version": 6,
-    "listing_metadata": "RAN#113 time plan v06.zip 2026/09/15 15:57 558,2 KB",
-    "uploaded_at": "2026-09-15 15:57",
-    "sha256": "bbe5a490da72b6ebcb22f3cc64153a25c4b17829052e32eb7d0f5212b7d448c9",
-    "etag": "\"0d374f52a45dd1:0\"",
-    "last_modified": "Tue, 15 Sep 2026 15:57:50 GMT"
+    "version": 7,
+    "listing_metadata": "RAN#113 time plan v07.zip 2026/09/16 10:30 558,4 KB",
+    "uploaded_at": "2026-09-16 10:30",
+    "sha256": "6c851b548f80296e398fbb0b2e64456a4f1f8b5bdc85492ac3a02f8550a1231f",
+    "etag": "\"0868e5fc645dd1:0\"",
+    "last_modified": "Wed, 16 Sep 2026 10:30:20 GMT"
   },
   "agenda": {
     "url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN/Agenda/agenda.csv",

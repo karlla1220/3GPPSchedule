@@ -20,7 +20,7 @@
       ],
       "sessions": [
         {
-          "name": "Opening at 09:00 / Incoming LSs, WG reports, early items",
+          "name": "Opening / Incoming LSs, WG reports, early items",
           "duration_minutes": 90,
           "start_time": "09:00",
           "end_time": "10:30",
@@ -28,10 +28,33 @@
           "room_col_start": 2,
           "room_col_end": 3,
           "chair": null,
-          "agenda_item": null,
+          "agenda_item": "5, 7",
           "group_header": "Early items",
-          "description": null,
-          "agenda_descriptions": [],
+          "description": "RAN WG reports/coordination\nLiaison activities of TSG RAN",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "5",
+              "matched_agenda_item": "5",
+              "description": "RAN WG reports/coordination",
+              "hierarchy": [
+                {
+                  "agenda_item": "5",
+                  "description": "RAN WG reports/coordination"
+                }
+              ]
+            },
+            {
+              "agenda_item": "7",
+              "matched_agenda_item": "7",
+              "description": "Liaison activities of TSG RAN",
+              "hierarchy": [
+                {
+                  "agenda_item": "7",
+                  "description": "Liaison activities of TSG RAN"
+                }
+              ]
+            }
+          ],
           "room_ids": [
             "madrid_3_4_5_6"
           ],
@@ -963,7 +986,7 @@
           "notes": []
         },
         {
-          "name": "TBD",
+          "name": "6G Migration, Aggregation",
           "duration_minutes": 60,
           "start_time": "12:30",
           "end_time": "13:30",
@@ -971,15 +994,41 @@
           "room_col_start": 2,
           "room_col_end": 3,
           "chair": null,
-          "agenda_item": null,
-          "group_header": "TBD",
-          "description": null,
-          "agenda_descriptions": [],
+          "agenda_item": "8.2.1.1",
+          "group_header": "6G",
+          "description": "Migration options (including 6G-6G aggregation options)",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "8.2.1.1",
+              "matched_agenda_item": "8.2.1.1",
+              "description": "Migration options (including 6G-6G aggregation options)",
+              "hierarchy": [
+                {
+                  "agenda_item": "8",
+                  "description": "6G"
+                },
+                {
+                  "agenda_item": "8.2",
+                  "description": "Open REL-20 6G SIs"
+                },
+                {
+                  "agenda_item": "8.2.1",
+                  "description": "Study on 6G Radio [RAN1 led SI: FS_6G_Radio]"
+                },
+                {
+                  "agenda_item": "8.2.1.1",
+                  "description": "Migration options (including 6G-6G aggregation options)"
+                }
+              ]
+            }
+          ],
           "room_ids": [
             "madrid_3_4_5_6"
           ],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [
+            "12:30~13:30"
+          ]
         },
         {
           "name": "Rel-21 5G-Adv (AI 15.2 – RAN1/2/3 NTN, Xiaodong)",
@@ -1014,7 +1063,9 @@
             "neptuno_pta_alcala"
           ],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [
+            "12:30~13:30"
+          ]
         },
         {
           "name": "Comebacks",
@@ -1055,7 +1106,7 @@
           "notes": []
         },
         {
-          "name": "TBD",
+          "name": "6G diverse devices",
           "duration_minutes": 30,
           "start_time": "15:30",
           "end_time": "16:00",
@@ -1063,10 +1114,34 @@
           "room_col_start": 2,
           "room_col_end": 3,
           "chair": null,
-          "agenda_item": null,
-          "group_header": "TBD",
-          "description": null,
-          "agenda_descriptions": [],
+          "agenda_item": "8.2.1.2",
+          "group_header": "6G",
+          "description": "Diverse device types",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "8.2.1.2",
+              "matched_agenda_item": "8.2.1.2",
+              "description": "Diverse device types",
+              "hierarchy": [
+                {
+                  "agenda_item": "8",
+                  "description": "6G"
+                },
+                {
+                  "agenda_item": "8.2",
+                  "description": "Open REL-20 6G SIs"
+                },
+                {
+                  "agenda_item": "8.2.1",
+                  "description": "Study on 6G Radio [RAN1 led SI: FS_6G_Radio]"
+                },
+                {
+                  "agenda_item": "8.2.1.2",
+                  "description": "Diverse device types"
+                }
+              ]
+            }
+          ],
           "room_ids": [
             "neptuno_pta_alcala"
           ],
@@ -1112,26 +1187,30 @@
           "notes": []
         },
         {
-          "name": "Rel-21 5G-Adv (TBD)",
+          "name": "Rel-21 5G-Adv (AI 15.3 – RAN4 NTN, Yang)",
           "duration_minutes": 90,
           "start_time": "18:00",
           "end_time": "19:30",
           "day": "Wednesday",
           "room_col_start": 2,
           "room_col_end": 3,
-          "chair": null,
-          "agenda_item": "15",
+          "chair": "Yang",
+          "agenda_item": "15.3",
           "group_header": "Rel-21 5G-Adv",
-          "description": "5G-Advanced in Rel-21",
+          "description": "Specific RAN4-led Rel-21 non-spectrum topics",
           "agenda_descriptions": [
             {
-              "agenda_item": "15",
-              "matched_agenda_item": "15",
-              "description": "5G-Advanced in Rel-21",
+              "agenda_item": "15.3",
+              "matched_agenda_item": "15.3",
+              "description": "Specific RAN4-led Rel-21 non-spectrum topics",
               "hierarchy": [
                 {
                   "agenda_item": "15",
                   "description": "5G-Advanced in Rel-21"
+                },
+                {
+                  "agenda_item": "15.3",
+                  "description": "Specific RAN4-led Rel-21 non-spectrum topics"
                 }
               ]
             }
@@ -1332,7 +1411,9 @@
             "madrid_3_4_5_6"
           ],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [
+            "12:30~13:30"
+          ]
         },
         {
           "name": "TBD",
@@ -1351,7 +1432,9 @@
             "neptuno_pta_alcala"
           ],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [
+            "12:30~13:30"
+          ]
         },
         {
           "name": "Comebacks",
@@ -1411,7 +1494,7 @@
           "notes": []
         },
         {
-          "name": "Comebacks / Closing by 17:00",
+          "name": "Comebacks",
           "duration_minutes": 60,
           "start_time": "16:00",
           "end_time": "17:00",
@@ -1462,12 +1545,12 @@
       }
     }
   ],
-  "source_file": "RAN#113 time plan v06.zip",
-  "generated_at": "2026-09-16 02:10",
+  "source_file": "RAN#113 time plan v07.zip",
+  "generated_at": "2026-09-16 12:32",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
-    "RAN#113 time plan v06.zip",
+    "RAN#113 time plan v07.zip",
     "agenda.csv"
   ],
   "timezone": "Europe/Madrid",
@@ -3251,7 +3334,7 @@
                 "text": "Privacy and security: ",
                 "color": "000000",
                 "strike": false,
-                "highlight": null,
+                "highlight": "green",
                 "bold": false,
                 "italic": false,
                 "underline": false,
@@ -3261,7 +3344,7 @@
                 "text": "1",
                 "color": "0563C1",
                 "strike": false,
-                "highlight": null,
+                "highlight": "green",
                 "bold": false,
                 "italic": false,
                 "underline": true,
@@ -3272,7 +3355,7 @@
                 "text": "615",
                 "color": "0563C1",
                 "strike": false,
-                "highlight": null,
+                "highlight": "green",
                 "bold": false,
                 "italic": false,
                 "underline": true,
@@ -3283,7 +3366,7 @@
                 "text": " (SA3 LS), 1854, 2117, 2003/2004",
                 "color": "000000",
                 "strike": false,
-                "highlight": null,
+                "highlight": "green",
                 "bold": false,
                 "italic": false,
                 "underline": false,
@@ -3297,7 +3380,7 @@
                 "text": "Comeback on Wednesday morning when SA3 chair in RAN",
                 "color": "000000",
                 "strike": false,
-                "highlight": "yellow",
+                "highlight": "green",
                 "bold": false,
                 "italic": false,
                 "underline": false,
@@ -5491,7 +5574,7 @@
                 "href": "https://www.3gpp.org/ftp/tsg_ran/TSG_RAN/TSGR_113/Docs/RP-261657.zip"
               },
               {
-                "text": ", 2153, 1707, 2161, 1927, 1726, 2113",
+                "text": ", 2153, 1707, 2161, 1927, 1726, ",
                 "color": "000000",
                 "strike": false,
                 "highlight": "green",
@@ -5501,20 +5584,20 @@
                 "shading": null
               },
               {
-                "text": ", ",
+                "text": "2113",
                 "color": "000000",
                 "strike": false,
-                "highlight": null,
+                "highlight": "green",
                 "bold": false,
                 "italic": false,
                 "underline": false,
                 "shading": null
               },
               {
-                "text": "1707",
+                "text": ", 1707",
                 "color": "000000",
                 "strike": false,
-                "highlight": "yellow",
+                "highlight": "green",
                 "bold": false,
                 "italic": false,
                 "underline": false,
@@ -5912,7 +5995,7 @@
                 "text": "S",
                 "color": "000000",
                 "strike": false,
-                "highlight": "yellow",
+                "highlight": "green",
                 "bold": false,
                 "italic": false,
                 "underline": false,
@@ -5922,7 +6005,7 @@
                 "text": "tatus on 6G AS Security in SA3: ",
                 "color": "000000",
                 "strike": false,
-                "highlight": "yellow",
+                "highlight": "green",
                 "bold": false,
                 "italic": false,
                 "underline": false,
@@ -5932,7 +6015,7 @@
                 "text": "2178",
                 "color": "0563C1",
                 "strike": false,
-                "highlight": "yellow",
+                "highlight": "green",
                 "bold": false,
                 "italic": false,
                 "underline": true,
@@ -5943,7 +6026,7 @@
                 "text": " (",
                 "color": "000000",
                 "strike": false,
-                "highlight": "yellow",
+                "highlight": "green",
                 "bold": false,
                 "italic": false,
                 "underline": false,
@@ -5953,7 +6036,7 @@
                 "text": "Wednesday 9am",
                 "color": "FF0000",
                 "strike": false,
-                "highlight": "yellow",
+                "highlight": "green",
                 "bold": false,
                 "italic": false,
                 "underline": false,
@@ -5963,7 +6046,7 @@
                 "text": ")",
                 "color": "000000",
                 "strike": false,
-                "highlight": "yellow",
+                "highlight": "green",
                 "bold": false,
                 "italic": false,
                 "underline": false,
@@ -6072,7 +6155,7 @@
                 "text": "6G RAN level study (TR maintenance)",
                 "color": "000000",
                 "strike": false,
-                "highlight": null,
+                "highlight": "green",
                 "bold": false,
                 "italic": false,
                 "underline": false,
@@ -6088,7 +6171,7 @@
                 "text": "2191",
                 "color": "0563C1",
                 "strike": false,
-                "highlight": null,
+                "highlight": "green",
                 "bold": false,
                 "italic": false,
                 "underline": true,
@@ -6099,7 +6182,7 @@
                 "text": ", ",
                 "color": "000000",
                 "strike": false,
-                "highlight": null,
+                "highlight": "green",
                 "bold": false,
                 "italic": false,
                 "underline": false,
@@ -6109,7 +6192,7 @@
                 "text": "1",
                 "color": "000000",
                 "strike": false,
-                "highlight": null,
+                "highlight": "green",
                 "bold": false,
                 "italic": false,
                 "underline": false,
@@ -6119,7 +6202,7 @@
                 "text": "871, 1990, 2000, 1698",
                 "color": "000000",
                 "strike": false,
-                "highlight": null,
+                "highlight": "green",
                 "bold": false,
                 "italic": false,
                 "underline": false,
@@ -6135,7 +6218,7 @@
                 "text": "8.3.1",
                 "color": "000000",
                 "strike": false,
-                "highlight": null,
+                "highlight": "green",
                 "bold": false,
                 "italic": false,
                 "underline": false,
@@ -6180,7 +6263,7 @@
                 "text": "Other 6G documents",
                 "color": "000000",
                 "strike": false,
-                "highlight": null,
+                "highlight": "green",
                 "bold": false,
                 "italic": false,
                 "underline": false,
@@ -6196,7 +6279,7 @@
                 "text": "OTA TRP/TRS requirements for 6G ",
                 "color": "000000",
                 "strike": false,
-                "highlight": null,
+                "highlight": "green",
                 "bold": false,
                 "italic": false,
                 "underline": false,
@@ -6206,27 +6289,17 @@
                 "text": "refarmed",
                 "color": "000000",
                 "strike": false,
-                "highlight": null,
+                "highlight": "green",
                 "bold": false,
                 "italic": false,
                 "underline": false,
                 "shading": null
               },
               {
-                "text": " bands",
+                "text": " bands: 1694/1695",
                 "color": "000000",
                 "strike": false,
-                "highlight": null,
-                "bold": false,
-                "italic": false,
-                "underline": false,
-                "shading": null
-              },
-              {
-                "text": ": 1694/1695",
-                "color": "000000",
-                "strike": false,
-                "highlight": null,
+                "highlight": "green",
                 "bold": false,
                 "italic": false,
                 "underline": false,
@@ -6242,7 +6315,7 @@
                 "text": "8",
                 "color": "000000",
                 "strike": false,
-                "highlight": null,
+                "highlight": "green",
                 "bold": false,
                 "italic": false,
                 "underline": false,
@@ -6252,7 +6325,7 @@
                 "text": ".4",
                 "color": "000000",
                 "strike": false,
-                "highlight": null,
+                "highlight": "green",
                 "bold": false,
                 "italic": false,
                 "underline": false,
@@ -6293,7 +6366,7 @@
                 "text": "TEI",
                 "color": "000000",
                 "strike": false,
-                "highlight": null,
+                "highlight": "green",
                 "bold": false,
                 "italic": false,
                 "underline": false,
@@ -6309,7 +6382,7 @@
                 "text": "2214",
                 "color": "0563C1",
                 "strike": false,
-                "highlight": null,
+                "highlight": "green",
                 "bold": false,
                 "italic": false,
                 "underline": true,
@@ -6326,7 +6399,7 @@
                 "text": "9.7",
                 "color": "000000",
                 "strike": false,
-                "highlight": null,
+                "highlight": "green",
                 "bold": false,
                 "italic": false,
                 "underline": false,
