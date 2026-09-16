@@ -570,3 +570,33 @@ WG 문서 다운로드나 파싱을 다시 실행하지 않습니다. 로컬 확
 공통 화면의 HTML/CSS/JavaScript 원본은 `templates/`에 있으며 `shared/renderer.py`가
 WG별 스케줄과 미팅 메타데이터를 주입합니다. 템플릿 변경도 CI의 렌더링 변경 감지에
 포함됩니다. RAN1 파서의 시간 계산과 LLM 역할은 [파싱 작동 원리](PARSING_ARCHITECTURE.md)를 참고하세요.
+
+### 3GPP HTTPS 인증서와 FTP fallback
+
+CI의 check/build 작업은 `scripts/prepare_ca_bundle.py`로 기존 certifi CA 목록에
+검증된 Sectigo 중간 인증서를 보충하고 `SSL_CERT_FILE`을 설정합니다.
+3GPP 서버가 중간 인증서를 누락하는 경우에도 TLS·호스트명 검증을 유지합니다.
+인증서 출처와 갱신 방법은 [certificates/README.md](certificates/README.md)에 있습니다.
+
+RAN1·RAN Plenary 파일 조회는 HTTPS를 우선 사용합니다. 공개 3GPP 파일 URL에서
+연결 오류나 일시적인 서버 오류(523/525/526 포함)가 두 번 발생하면
+`ftp://ftp.3gpp.org`의 동일 경로를 익명·passive 모드로 읽습니다.
+FTP 전송은 평문입니다. 로그인 정보나 HTTP 헤더를 전달하지 않으며, Portal API,
+외부 사이트, 인증 정보 또는 query가 있는 URL, 401/403/404 응답은 fallback 대상에서 제외합니다.
+
+- 목록은 현재 Microsoft FTP 서버의 LIST 형식을 사용합니다. 지원하지 않는 형식은 실패로 처리합니다.
+- FTP 파일은 최대 64 MiB, 소켓 무응답은 20초, 전송 콜백 기준 전체 작업은 180초로 제한합니다.
+- 크기와 수정 시각을 전후 비교하여 잘리거나 전송 중 변경된 파일을 거부합니다.
+- 상태에는 기존 HTTPS URL을 유지하고 FTP 사용 여부는 로그에 남깁니다.
+- HTTPS 본문을 읽는 도중의 실패는 기존 다운로드 재시도 정책을 따릅니다.
+
+로컬에서 배포 없이 인증서 보충과 실제 FTP 복구를 검증하려면:
+
+```bash
+uv run python scripts/prepare_ca_bundle.py /tmp/3gpp-ca-bundle.pem
+SSL_CERT_FILE=/tmp/3gpp-ca-bundle.pem uv run python scripts/check_3gpp_network.py
+```
+
+GitHub Actions의 **Verify 3GPP network recovery**도 같은 검증을 수행합니다.
+HTTP 526을 주입하여 실제 FTP 목록·파일 다운로드를 실행하고, HTTPS와 SHA-256을 비교합니다.
+이 워크플로는 스케줄 데이터나 사이트를 변경하지 않습니다.

@@ -1,0 +1,35 @@
+name: Verify 3GPP network recovery
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - shared/ftp_transport.py
+      - certificates/**
+      - scripts/prepare_ca_bundle.py
+      - scripts/check_3gpp_network.py
+      - tests/test_ftp_fallback.py
+      - .github/workflows/network-check.yml
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: uv sync --locked
+      - name: Verify regression tests
+        run: uv run pytest -q
+      - name: Supplement certificate chain
+        run: |
+          uv run python scripts/prepare_ca_bundle.py "$RUNNER_TEMP/3gpp-ca-bundle.pem"
+          echo "SSL_CERT_FILE=$RUNNER_TEMP/3gpp-ca-bundle.pem" >> "$GITHUB_ENV"
+      - name: Compare HTTPS with forced FTP recovery
+        run: uv run python -u scripts/check_3gpp_network.py
