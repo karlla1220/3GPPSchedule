@@ -14,6 +14,8 @@ from urllib.parse import unquote, urlsplit
 import httpx
 from bs4 import BeautifulSoup
 
+from shared import ftp_transport
+
 from .models import ScheduleSource
 
 BASE_URL = "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Chair_notes"
@@ -121,11 +123,11 @@ def _get_with_retry(
         try:
             if stream:
                 # Caller is responsible for closing; we return immediately.
-                resp = httpx.stream("GET", url, follow_redirects=True, timeout=timeout)
+                resp = ftp_transport.stream("GET", url, follow_redirects=True, timeout=timeout)
                 cm = resp.__enter__()
                 cm.raise_for_status()
                 return cm
-            resp = httpx.get(url, follow_redirects=True, timeout=timeout)
+            resp = ftp_transport.get(url, listing=True, follow_redirects=True, timeout=timeout)
             resp.raise_for_status()
             _validate_html_response(resp)
             return resp
@@ -678,7 +680,7 @@ def download_file(url: str, dest_path: Path) -> Path:
     last_exc: Exception | None = None
     for attempt in range(1, _MAX_RETRIES + 1):
         try:
-            with httpx.stream("GET", url, follow_redirects=True, timeout=60) as resp:
+            with ftp_transport.stream("GET", url, follow_redirects=True, timeout=60) as resp:
                 resp.raise_for_status()
                 dest_path.parent.mkdir(parents=True, exist_ok=True)
                 with open(dest_path, "wb") as f:
@@ -2256,7 +2258,7 @@ def _download_external_one(
     for attempt in range(1, _MAX_RETRIES + 1):
         tmp_path: Path | None = None
         try:
-            with httpx.stream(
+            with ftp_transport.stream(
                 "GET",
                 url,
                 follow_redirects=True,
@@ -2422,7 +2424,7 @@ def _remote_file_sha256(url: str) -> str:
     are a few hundred KB at most, so this stays lightweight).  Raises on
     4xx/5xx and transport failures.
     """
-    with httpx.stream(
+    with ftp_transport.stream(
         "GET",
         url,
         follow_redirects=True,
@@ -2435,7 +2437,7 @@ def _remote_file_sha256(url: str) -> str:
 
 def _remote_file_fingerprint(url: str, entry: dict, index: int) -> dict[str, str]:
     """Fetch an external file and return its resolved filename plus SHA-256."""
-    with httpx.stream(
+    with ftp_transport.stream(
         "GET",
         url,
         follow_redirects=True,

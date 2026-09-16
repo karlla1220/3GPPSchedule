@@ -12,6 +12,7 @@ from urllib.parse import unquote, urljoin, urlparse
 from bs4 import BeautifulSoup
 import httpx
 
+from shared import ftp_transport
 from shared.portal_meetings import timezone_reference
 
 from .document import FILE
@@ -124,11 +125,11 @@ def fetch_file(http, url, old, local: bytes | None):
             headers['If-None-Match'] = old['etag']
         if old.get('last_modified'):
             headers['If-Modified-Since'] = old['last_modified']
-    response = http.get(url, headers=headers)
+    response = ftp_transport.get(url, http=http, headers=headers)
     if response.status_code == 304:
         if local is not None and digest(local) == old.get('sha256'):
             return local, old
-        response = http.get(url)  # Fresh CI runner may lack the original body.
+        response = ftp_transport.get(url, http=http)  # Fresh CI runner may lack the original body.
     response.raise_for_status()
     body = response.content
     if not body or len(body) > 30_000_000:
@@ -138,7 +139,7 @@ def fetch_file(http, url, old, local: bytes | None):
 
 
 def fetch_bundle(cfg, previous, http, cache_dir=DOWNLOADS / 'inputs') -> Bundle:
-    listing = http.get(cfg['chair_url'])
+    listing = ftp_transport.get(cfg['chair_url'], http=http, listing=True)
     listing.raise_for_status()
     chosen = select_timeplan(listing.text, cfg['chair_url'], previous)
     cached = None

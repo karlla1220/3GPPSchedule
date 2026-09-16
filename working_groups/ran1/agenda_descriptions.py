@@ -13,9 +13,10 @@ from pathlib import Path
 from xml.etree import ElementTree as ET
 from urllib.parse import unquote
 
-import httpx
 import pandas as pd
 from bs4 import BeautifulSoup
+
+from shared import ftp_transport
 
 from .downloader import _iter_local_files, _local_doc_preference
 
@@ -80,7 +81,7 @@ class ParagraphInfo:
 
 def find_tdoc_xlsx_files(listing_url: str = TDOC_LIST_URL) -> list[TdocXlsx]:
     """Return XLSX links from a 3GPP TDoc_list directory listing."""
-    resp = httpx.get(listing_url, follow_redirects=True, timeout=30)
+    resp = ftp_transport.get(listing_url, listing=True, follow_redirects=True, timeout=30)
     resp.raise_for_status()
 
     soup = BeautifulSoup(resp.text, "html.parser")
@@ -342,7 +343,7 @@ def download_tdoc_xlsx(
     """Download a TDoc-list XLSX file and return its local path."""
     download_dir.mkdir(parents=True, exist_ok=True)
     path = download_dir / xlsx.name
-    resp = httpx.get(xlsx.url, follow_redirects=True, timeout=60)
+    resp = ftp_transport.get(xlsx.url, follow_redirects=True, timeout=60)
     resp.raise_for_status()
     path.write_bytes(resp.content)
     return path
