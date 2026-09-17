@@ -9,18 +9,18 @@
           "name": "Main: Madrid 3/4/5/6",
           "table_index": 0,
           "room_index_in_table": 0,
-          "id": "MADRID_3_4_5_6"
+          "id": "madrid_3_4_5_6"
         },
         {
-          "name": "Breakout: Madrid 1-2",
+          "name": "Breakout: Madrid 1-2 (12:30–19:30)",
           "table_index": 0,
           "room_index_in_table": 0,
-          "id": "MADRID_1_2"
+          "id": "madrid_1_2"
         }
       ],
       "sessions": [
         {
-          "name": "Incoming LSs, WG reports, early items",
+          "name": "Opening at 09:00 / Incoming LSs, WG reports, early items",
           "duration_minutes": 90,
           "start_time": "09:00",
           "end_time": "10:30",
@@ -28,35 +28,12 @@
           "room_col_start": 2,
           "room_col_end": 3,
           "chair": null,
-          "agenda_item": "5, 7",
+          "agenda_item": null,
           "group_header": "Early items",
-          "description": "RAN WG reports/coordination\nLiaison activities of TSG RAN",
-          "agenda_descriptions": [
-            {
-              "agenda_item": "5",
-              "matched_agenda_item": "5",
-              "description": "RAN WG reports/coordination",
-              "hierarchy": [
-                {
-                  "agenda_item": "5",
-                  "description": "RAN WG reports/coordination"
-                }
-              ]
-            },
-            {
-              "agenda_item": "7",
-              "matched_agenda_item": "7",
-              "description": "Liaison activities of TSG RAN",
-              "hierarchy": [
-                {
-                  "agenda_item": "7",
-                  "description": "Liaison activities of TSG RAN"
-                }
-              ]
-            }
-          ],
+          "description": null,
+          "agenda_descriptions": [],
           "room_ids": [
-            "MADRID_3_4_5_6"
+            "madrid_3_4_5_6"
           ],
           "room_scope": "assigned",
           "notes": [
@@ -77,7 +54,7 @@
           "description": null,
           "agenda_descriptions": [],
           "room_ids": [
-            "MADRID_3_4_5_6"
+            "madrid_3_4_5_6"
           ],
           "room_scope": "assigned",
           "notes": []
@@ -96,7 +73,7 @@
           "description": null,
           "agenda_descriptions": [],
           "room_ids": [
-            "MADRID_3_4_5_6"
+            "madrid_3_4_5_6"
           ],
           "room_scope": "assigned",
           "notes": []
@@ -115,11 +92,11 @@
           "description": null,
           "agenda_descriptions": [],
           "room_ids": [
-            "MADRID_1_2"
+            "madrid_1_2"
           ],
           "room_scope": "assigned",
           "notes": [
-            "Breakout (12:30~13:30): TBD"
+            "Breakout (12:30~13:30)"
           ]
         },
         {
@@ -136,11 +113,11 @@
           "description": null,
           "agenda_descriptions": [],
           "room_ids": [
-            "MADRID_3_4_5_6"
+            "madrid_3_4_5_6"
           ],
           "room_scope": "assigned",
           "notes": [
-            "Main (12:30~13:30): TBD"
+            "Main (12:30~13:30)"
           ]
         },
         {
@@ -184,7 +161,7 @@
             }
           ],
           "room_ids": [
-            "MADRID_3_4_5_6"
+            "madrid_3_4_5_6"
           ],
           "room_scope": "assigned",
           "notes": []
@@ -203,7 +180,7 @@
           "description": null,
           "agenda_descriptions": [],
           "room_ids": [
-            "MADRID_1_2"
+            "madrid_1_2"
           ],
           "room_scope": "assigned",
           "notes": []
@@ -222,7 +199,7 @@
           "description": null,
           "agenda_descriptions": [],
           "room_ids": [
-            "MADRID_3_4_5_6"
+            "madrid_3_4_5_6"
           ],
           "room_scope": "assigned",
           "notes": []
@@ -268,7 +245,7 @@
             }
           ],
           "room_ids": [
-            "MADRID_3_4_5_6"
+            "madrid_3_4_5_6"
           ],
           "room_scope": "assigned",
           "notes": []
@@ -303,7 +280,7 @@
             }
           ],
           "room_ids": [
-            "MADRID_1_2"
+            "madrid_1_2"
           ],
           "room_scope": "assigned",
           "notes": []
@@ -346,7 +323,7 @@
             }
           ],
           "room_ids": [
-            "MADRID_3_4_5_6"
+            "madrid_3_4_5_6"
           ],
           "room_scope": "assigned",
           "notes": []
@@ -388,19 +365,19 @@
           "name": "Main: Madrid 3/4/5/6",
           "table_index": 0,
           "room_index_in_table": 0,
-          "id": "MADRID_3_4_5_6"
+          "id": "madrid_3_4_5_6"
         },
         {
           "name": "Breakout: Madrid 1-2 (08:00–12:30)",
           "table_index": 0,
           "room_index_in_table": 0,
-          "id": "MADRID_1_2"
+          "id": "madrid_1_2"
         },
         {
           "name": "Breakout: Neptuno + PTA Alcala (12:30–19:00)",
           "table_index": 0,
           "room_index_in_table": 0,
-          "id": "NEPTUNO_PTA_ALCALA"
+          "id": "neptuno_pta_alcala"
         }
       ],
       "sessions": [
@@ -434,7 +411,7 @@
             }
           ],
           "room_ids": [
-            "MADRID_1_2"
+            "madrid_1_2"
           ],
           "room_scope": "assigned",
           "notes": []
@@ -453,11 +430,11 @@
           "description": null,
           "agenda_descriptions": [],
           "room_ids": [
-            "MADRID_3_4_5_6"
+            "madrid_3_4_5_6"
           ],
           "room_scope": "assigned",
           "notes": [
-            "Main: ITU Adhoc (8:00~9:00)"
+            "8:00~9:00"
           ]
         },
         {
@@ -474,7 +451,7 @@
           "description": null,
           "agenda_descriptions": [],
           "room_ids": [
-            "MADRID_3_4_5_6"
+            "madrid_3_4_5_6"
           ],
           "room_scope": "assigned",
           "notes": []
@@ -488,9 +465,9 @@
           "room_col_start": 2,
           "room_col_end": 3,
           "chair": null,
-          "agenda_item": "9.1.1",
+          "agenda_item": "9.1.1, 15.2",
           "group_header": "Rel-21 5G-Adv",
-          "description": "Proposals led by RAN1",
+          "description": "Proposals led by RAN1\nSpecific RAN1/2/3-led Rel-21 topics",
           "agenda_descriptions": [
             {
               "agenda_item": "9.1.1",
@@ -510,10 +487,25 @@
                   "description": "Proposals led by RAN1"
                 }
               ]
+            },
+            {
+              "agenda_item": "15.2",
+              "matched_agenda_item": "15.2",
+              "description": "Specific RAN1/2/3-led Rel-21 topics",
+              "hierarchy": [
+                {
+                  "agenda_item": "15",
+                  "description": "5G-Advanced in Rel-21"
+                },
+                {
+                  "agenda_item": "15.2",
+                  "description": "Specific RAN1/2/3-led Rel-21 topics"
+                }
+              ]
             }
           ],
           "room_ids": [
-            "MADRID_1_2"
+            "madrid_1_2"
           ],
           "room_scope": "assigned",
           "notes": []
@@ -532,7 +524,7 @@
           "description": null,
           "agenda_descriptions": [],
           "room_ids": [
-            "MADRID_3_4_5_6"
+            "madrid_3_4_5_6"
           ],
           "room_scope": "assigned",
           "notes": []
@@ -551,7 +543,7 @@
           "description": null,
           "agenda_descriptions": [],
           "room_ids": [
-            "MADRID_3_4_5_6"
+            "madrid_3_4_5_6"
           ],
           "room_scope": "assigned",
           "notes": []
@@ -570,7 +562,7 @@
           "description": null,
           "agenda_descriptions": [],
           "room_ids": [
-            "MADRID_3_4_5_6"
+            "madrid_3_4_5_6"
           ],
           "room_scope": "assigned",
           "notes": [
@@ -607,7 +599,7 @@
             }
           ],
           "room_ids": [
-            "NEPTUNO_PTA_ALCALA"
+            "neptuno_pta_alcala"
           ],
           "room_scope": "assigned",
           "notes": [
@@ -628,7 +620,7 @@
           "description": null,
           "agenda_descriptions": [],
           "room_ids": [
-            "MADRID_3_4_5_6"
+            "madrid_3_4_5_6"
           ],
           "room_scope": "assigned",
           "notes": []
@@ -647,7 +639,7 @@
           "description": null,
           "agenda_descriptions": [],
           "room_ids": [
-            "MADRID_3_4_5_6"
+            "madrid_3_4_5_6"
           ],
           "room_scope": "assigned",
           "notes": []
@@ -661,9 +653,9 @@
           "room_col_start": 2,
           "room_col_end": 3,
           "chair": null,
-          "agenda_item": "9.1.1",
+          "agenda_item": "9.1.1, 15.2",
           "group_header": "Rel-21 5G-Adv",
-          "description": "Proposals led by RAN1",
+          "description": "Proposals led by RAN1\nSpecific RAN1/2/3-led Rel-21 topics",
           "agenda_descriptions": [
             {
               "agenda_item": "9.1.1",
@@ -683,10 +675,25 @@
                   "description": "Proposals led by RAN1"
                 }
               ]
+            },
+            {
+              "agenda_item": "15.2",
+              "matched_agenda_item": "15.2",
+              "description": "Specific RAN1/2/3-led Rel-21 topics",
+              "hierarchy": [
+                {
+                  "agenda_item": "15",
+                  "description": "5G-Advanced in Rel-21"
+                },
+                {
+                  "agenda_item": "15.2",
+                  "description": "Specific RAN1/2/3-led Rel-21 topics"
+                }
+              ]
             }
           ],
           "room_ids": [
-            "NEPTUNO_PTA_ALCALA"
+            "neptuno_pta_alcala"
           ],
           "room_scope": "assigned",
           "notes": []
@@ -705,7 +712,7 @@
           "description": null,
           "agenda_descriptions": [],
           "room_ids": [
-            "MADRID_3_4_5_6"
+            "madrid_3_4_5_6"
           ],
           "room_scope": "assigned",
           "notes": []
@@ -748,7 +755,7 @@
             }
           ],
           "room_ids": [
-            "MADRID_3_4_5_6"
+            "madrid_3_4_5_6"
           ],
           "room_scope": "assigned",
           "notes": [
@@ -785,7 +792,7 @@
             }
           ],
           "room_ids": [
-            "NEPTUNO_PTA_ALCALA"
+            "neptuno_pta_alcala"
           ],
           "room_scope": "assigned",
           "notes": [
@@ -829,13 +836,13 @@
           "name": "Main: Madrid 3/4/5/6",
           "table_index": 0,
           "room_index_in_table": 0,
-          "id": "MADRID_3_4_5_6"
+          "id": "madrid_3_4_5_6"
         },
         {
           "name": "Breakout: Neptuno + PTA Alcala",
           "table_index": 0,
           "room_index_in_table": 0,
-          "id": "NEPTUNO_PTA_ALCALA"
+          "id": "neptuno_pta_alcala"
         }
       ],
       "sessions": [
@@ -877,7 +884,7 @@
             }
           ],
           "room_ids": [
-            "MADRID_3_4_5_6"
+            "madrid_3_4_5_6"
           ],
           "room_scope": "assigned",
           "notes": []
@@ -891,9 +898,9 @@
           "room_col_start": 2,
           "room_col_end": 3,
           "chair": null,
-          "agenda_item": "9.1.1",
+          "agenda_item": "9.1.1, 15.2",
           "group_header": "Rel-21 5G-Adv",
-          "description": "Proposals led by RAN1",
+          "description": "Proposals led by RAN1\nSpecific RAN1/2/3-led Rel-21 topics",
           "agenda_descriptions": [
             {
               "agenda_item": "9.1.1",
@@ -913,10 +920,25 @@
                   "description": "Proposals led by RAN1"
                 }
               ]
+            },
+            {
+              "agenda_item": "15.2",
+              "matched_agenda_item": "15.2",
+              "description": "Specific RAN1/2/3-led Rel-21 topics",
+              "hierarchy": [
+                {
+                  "agenda_item": "15",
+                  "description": "5G-Advanced in Rel-21"
+                },
+                {
+                  "agenda_item": "15.2",
+                  "description": "Specific RAN1/2/3-led Rel-21 topics"
+                }
+              ]
             }
           ],
           "room_ids": [
-            "NEPTUNO_PTA_ALCALA"
+            "neptuno_pta_alcala"
           ],
           "room_scope": "assigned",
           "notes": []
@@ -959,7 +981,7 @@
             }
           ],
           "room_ids": [
-            "MADRID_3_4_5_6"
+            "madrid_3_4_5_6"
           ],
           "room_scope": "assigned",
           "notes": []
@@ -978,7 +1000,7 @@
           "description": null,
           "agenda_descriptions": [],
           "room_ids": [
-            "MADRID_3_4_5_6"
+            "madrid_3_4_5_6"
           ],
           "room_scope": "assigned",
           "notes": []
@@ -997,7 +1019,7 @@
           "description": null,
           "agenda_descriptions": [],
           "room_ids": [
-            "NEPTUNO_PTA_ALCALA"
+            "neptuno_pta_alcala"
           ],
           "room_scope": "assigned",
           "notes": []
@@ -1016,7 +1038,7 @@
           "description": null,
           "agenda_descriptions": [],
           "room_ids": [
-            "MADRID_3_4_5_6"
+            "madrid_3_4_5_6"
           ],
           "room_scope": "assigned",
           "notes": []
@@ -1059,7 +1081,7 @@
             }
           ],
           "room_ids": [
-            "MADRID_3_4_5_6"
+            "madrid_3_4_5_6"
           ],
           "room_scope": "assigned",
           "notes": [
@@ -1096,7 +1118,7 @@
             }
           ],
           "room_ids": [
-            "NEPTUNO_PTA_ALCALA"
+            "neptuno_pta_alcala"
           ],
           "room_scope": "assigned",
           "notes": [
@@ -1117,7 +1139,7 @@
           "description": null,
           "agenda_descriptions": [],
           "room_ids": [
-            "MADRID_3_4_5_6"
+            "madrid_3_4_5_6"
           ],
           "room_scope": "assigned",
           "notes": []
@@ -1136,7 +1158,7 @@
           "description": null,
           "agenda_descriptions": [],
           "room_ids": [
-            "MADRID_3_4_5_6"
+            "madrid_3_4_5_6"
           ],
           "room_scope": "assigned",
           "notes": []
@@ -1179,7 +1201,7 @@
             }
           ],
           "room_ids": [
-            "NEPTUNO_PTA_ALCALA"
+            "neptuno_pta_alcala"
           ],
           "room_scope": "assigned",
           "notes": []
@@ -1198,7 +1220,7 @@
           "description": null,
           "agenda_descriptions": [],
           "room_ids": [
-            "MADRID_3_4_5_6"
+            "madrid_3_4_5_6"
           ],
           "room_scope": "assigned",
           "notes": []
@@ -1217,7 +1239,7 @@
           "description": null,
           "agenda_descriptions": [],
           "room_ids": [
-            "MADRID_3_4_5_6"
+            "madrid_3_4_5_6"
           ],
           "room_scope": "assigned",
           "notes": []
@@ -1252,7 +1274,7 @@
             }
           ],
           "room_ids": [
-            "NEPTUNO_PTA_ALCALA"
+            "neptuno_pta_alcala"
           ],
           "room_scope": "assigned",
           "notes": []
@@ -1294,13 +1316,13 @@
           "name": "Main: Madrid 3/4/5/6",
           "table_index": 0,
           "room_index_in_table": 0,
-          "id": "MADRID_3_4_5_6"
+          "id": "madrid_3_4_5_6"
         },
         {
           "name": "Breakout: Neptuno + PTA Alcala",
           "table_index": 0,
           "room_index_in_table": 0,
-          "id": "NEPTUNO_PTA_ALCALA"
+          "id": "neptuno_pta_alcala"
         }
       ],
       "sessions": [
@@ -1318,7 +1340,7 @@
           "description": null,
           "agenda_descriptions": [],
           "room_ids": [
-            "MADRID_3_4_5_6"
+            "madrid_3_4_5_6"
           ],
           "room_scope": "assigned",
           "notes": []
@@ -1332,9 +1354,9 @@
           "room_col_start": 2,
           "room_col_end": 3,
           "chair": null,
-          "agenda_item": "9.1.1",
+          "agenda_item": "9.1.1, 15.2",
           "group_header": "Rel-21 5G-Adv",
-          "description": "Proposals led by RAN1",
+          "description": "Proposals led by RAN1\nSpecific RAN1/2/3-led Rel-21 topics",
           "agenda_descriptions": [
             {
               "agenda_item": "9.1.1",
@@ -1354,10 +1376,25 @@
                   "description": "Proposals led by RAN1"
                 }
               ]
+            },
+            {
+              "agenda_item": "15.2",
+              "matched_agenda_item": "15.2",
+              "description": "Specific RAN1/2/3-led Rel-21 topics",
+              "hierarchy": [
+                {
+                  "agenda_item": "15",
+                  "description": "5G-Advanced in Rel-21"
+                },
+                {
+                  "agenda_item": "15.2",
+                  "description": "Specific RAN1/2/3-led Rel-21 topics"
+                }
+              ]
             }
           ],
           "room_ids": [
-            "NEPTUNO_PTA_ALCALA"
+            "neptuno_pta_alcala"
           ],
           "room_scope": "assigned",
           "notes": []
@@ -1376,7 +1413,7 @@
           "description": null,
           "agenda_descriptions": [],
           "room_ids": [
-            "MADRID_3_4_5_6"
+            "madrid_3_4_5_6"
           ],
           "room_scope": "assigned",
           "notes": []
@@ -1395,7 +1432,7 @@
           "description": null,
           "agenda_descriptions": [],
           "room_ids": [
-            "MADRID_3_4_5_6"
+            "madrid_3_4_5_6"
           ],
           "room_scope": "assigned",
           "notes": []
@@ -1409,9 +1446,9 @@
           "room_col_start": 2,
           "room_col_end": 3,
           "chair": null,
-          "agenda_item": "9.1.1",
+          "agenda_item": "9.1.1, 15.2",
           "group_header": "Rel-21 5G-Adv",
-          "description": "Proposals led by RAN1",
+          "description": "Proposals led by RAN1\nSpecific RAN1/2/3-led Rel-21 topics",
           "agenda_descriptions": [
             {
               "agenda_item": "9.1.1",
@@ -1431,10 +1468,25 @@
                   "description": "Proposals led by RAN1"
                 }
               ]
+            },
+            {
+              "agenda_item": "15.2",
+              "matched_agenda_item": "15.2",
+              "description": "Specific RAN1/2/3-led Rel-21 topics",
+              "hierarchy": [
+                {
+                  "agenda_item": "15",
+                  "description": "5G-Advanced in Rel-21"
+                },
+                {
+                  "agenda_item": "15.2",
+                  "description": "Specific RAN1/2/3-led Rel-21 topics"
+                }
+              ]
             }
           ],
           "room_ids": [
-            "NEPTUNO_PTA_ALCALA"
+            "neptuno_pta_alcala"
           ],
           "room_scope": "assigned",
           "notes": []
@@ -1453,7 +1505,7 @@
           "description": null,
           "agenda_descriptions": [],
           "room_ids": [
-            "MADRID_3_4_5_6"
+            "madrid_3_4_5_6"
           ],
           "room_scope": "assigned",
           "notes": []
@@ -1472,7 +1524,7 @@
           "description": null,
           "agenda_descriptions": [],
           "room_ids": [
-            "MADRID_3_4_5_6"
+            "madrid_3_4_5_6"
           ],
           "room_scope": "assigned",
           "notes": [
@@ -1480,7 +1532,7 @@
           ]
         },
         {
-          "name": "TBD",
+          "name": "NTN time/frequency compensation",
           "duration_minutes": 60,
           "start_time": "12:30",
           "end_time": "13:30",
@@ -1488,12 +1540,47 @@
           "room_col_start": 2,
           "room_col_end": 3,
           "chair": null,
-          "agenda_item": null,
-          "group_header": "TBD",
-          "description": null,
-          "agenda_descriptions": [],
+          "agenda_item": "9.1.1, 15.2",
+          "group_header": "Rel-21 5G-Adv",
+          "description": "Proposals led by RAN1\nSpecific RAN1/2/3-led Rel-21 topics",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "9.1.1",
+              "matched_agenda_item": "9.1.1",
+              "description": "Proposals led by RAN1",
+              "hierarchy": [
+                {
+                  "agenda_item": "9",
+                  "description": "NR"
+                },
+                {
+                  "agenda_item": "9.1",
+                  "description": "New WI/SI proposals for NR for REL-20"
+                },
+                {
+                  "agenda_item": "9.1.1",
+                  "description": "Proposals led by RAN1"
+                }
+              ]
+            },
+            {
+              "agenda_item": "15.2",
+              "matched_agenda_item": "15.2",
+              "description": "Specific RAN1/2/3-led Rel-21 topics",
+              "hierarchy": [
+                {
+                  "agenda_item": "15",
+                  "description": "5G-Advanced in Rel-21"
+                },
+                {
+                  "agenda_item": "15.2",
+                  "description": "Specific RAN1/2/3-led Rel-21 topics"
+                }
+              ]
+            }
+          ],
           "room_ids": [
-            "NEPTUNO_PTA_ALCALA"
+            "neptuno_pta_alcala"
           ],
           "room_scope": "assigned",
           "notes": [
@@ -1514,7 +1601,7 @@
           "description": null,
           "agenda_descriptions": [],
           "room_ids": [
-            "MADRID_3_4_5_6"
+            "madrid_3_4_5_6"
           ],
           "room_scope": "assigned",
           "notes": []
@@ -1533,7 +1620,7 @@
           "description": null,
           "agenda_descriptions": [],
           "room_ids": [
-            "MADRID_3_4_5_6"
+            "madrid_3_4_5_6"
           ],
           "room_scope": "assigned",
           "notes": []
@@ -1552,13 +1639,13 @@
           "description": null,
           "agenda_descriptions": [],
           "room_ids": [
-            "NEPTUNO_PTA_ALCALA"
+            "neptuno_pta_alcala"
           ],
           "room_scope": "assigned",
           "notes": []
         },
         {
-          "name": "Comebacks",
+          "name": "Comebacks / Closing by 17:00",
           "duration_minutes": 60,
           "start_time": "16:00",
           "end_time": "17:00",
@@ -1571,7 +1658,7 @@
           "description": null,
           "agenda_descriptions": [],
           "room_ids": [
-            "MADRID_3_4_5_6"
+            "madrid_3_4_5_6"
           ],
           "room_scope": "assigned",
           "notes": [
@@ -1609,12 +1696,12 @@
       }
     }
   ],
-  "source_file": "RAN#113 time plan v08.zip",
-  "generated_at": "2026-09-16 16:17",
+  "source_file": "RAN#113 time plan v09.zip",
+  "generated_at": "2026-09-17 10:47",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
-    "RAN#113 time plan v08.zip",
+    "RAN#113 time plan v09.zip",
     "agenda.csv"
   ],
   "timezone": "Europe/Madrid",
@@ -2604,7 +2691,7 @@
                 "text": "N",
                 "color": "000000",
                 "strike": false,
-                "highlight": null,
+                "highlight": "green",
                 "bold": false,
                 "italic": false,
                 "underline": false,
@@ -2614,7 +2701,7 @@
                 "text": "ew Rel-20 proposals ",
                 "color": "000000",
                 "strike": false,
-                "highlight": null,
+                "highlight": "green",
                 "bold": false,
                 "italic": false,
                 "underline": false,
@@ -2624,7 +2711,7 @@
                 "text": "\n– RAN4 (non-spectrum)",
                 "color": "000000",
                 "strike": false,
-                "highlight": null,
+                "highlight": "green",
                 "bold": false,
                 "italic": false,
                 "underline": false,
@@ -2640,7 +2727,7 @@
                 "text": "NR carrier monitoring: ",
                 "color": "000000",
                 "strike": false,
-                "highlight": null,
+                "highlight": "green",
                 "bold": false,
                 "italic": false,
                 "underline": false,
@@ -2650,7 +2737,7 @@
                 "text": "1965",
                 "color": "0563C1",
                 "strike": false,
-                "highlight": null,
+                "highlight": "green",
                 "bold": false,
                 "italic": false,
                 "underline": true,
@@ -2661,7 +2748,7 @@
                 "text": "/1966",
                 "color": "000000",
                 "strike": false,
-                "highlight": null,
+                "highlight": "green",
                 "bold": false,
                 "italic": false,
                 "underline": false,
@@ -2675,7 +2762,7 @@
                 "text": "Revised WID comeback",
                 "color": "000000",
                 "strike": false,
-                "highlight": "yellow",
+                "highlight": "green",
                 "bold": false,
                 "italic": false,
                 "underline": false,
@@ -2691,7 +2778,7 @@
                 "text": "9",
                 "color": "000000",
                 "strike": false,
-                "highlight": null,
+                "highlight": "green",
                 "bold": false,
                 "italic": false,
                 "underline": false,
@@ -2701,7 +2788,7 @@
                 "text": ".1.4",
                 "color": "000000",
                 "strike": false,
-                "highlight": null,
+                "highlight": "green",
                 "bold": false,
                 "italic": false,
                 "underline": false,
@@ -3072,27 +3159,17 @@
                 "text": "R",
                 "color": "000000",
                 "strike": false,
-                "highlight": null,
+                "highlight": "green",
                 "bold": false,
                 "italic": false,
                 "underline": false,
                 "shading": null
               },
               {
-                "text": "el-20 ",
+                "text": "el-20 Ambient IoT",
                 "color": "000000",
                 "strike": false,
-                "highlight": null,
-                "bold": false,
-                "italic": false,
-                "underline": false,
-                "shading": null
-              },
-              {
-                "text": "Ambient IoT",
-                "color": "000000",
-                "strike": false,
-                "highlight": null,
+                "highlight": "green",
                 "bold": false,
                 "italic": false,
                 "underline": false,
@@ -3108,7 +3185,7 @@
                 "text": "1712",
                 "color": "0563C1",
                 "strike": false,
-                "highlight": "yellow",
+                "highlight": "green",
                 "bold": false,
                 "italic": false,
                 "underline": true,
@@ -3119,7 +3196,7 @@
                 "text": ", 1727, 1868, 1885, 2007, 2009",
                 "color": "000000",
                 "strike": false,
-                "highlight": "yellow",
+                "highlight": "green",
                 "bold": false,
                 "italic": false,
                 "underline": false,
@@ -3133,7 +3210,7 @@
                 "text": "To be moderated by Masato (Qualcomm)",
                 "color": "000000",
                 "strike": false,
-                "highlight": "yellow",
+                "highlight": "green",
                 "bold": false,
                 "italic": false,
                 "underline": false,
@@ -3149,27 +3226,17 @@
                 "text": "9",
                 "color": "000000",
                 "strike": false,
-                "highlight": null,
+                "highlight": "green",
                 "bold": false,
                 "italic": false,
                 "underline": false,
                 "shading": null
               },
               {
-                "text": ".3.",
+                "text": ".3.1.4",
                 "color": "000000",
                 "strike": false,
-                "highlight": null,
-                "bold": false,
-                "italic": false,
-                "underline": false,
-                "shading": null
-              },
-              {
-                "text": "1.4",
-                "color": "000000",
-                "strike": false,
-                "highlight": null,
+                "highlight": "green",
                 "bold": false,
                 "italic": false,
                 "underline": false,
