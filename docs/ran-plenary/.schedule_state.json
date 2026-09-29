@@ -9,15 +9,24 @@
     "version": 9,
     "listing_metadata": "RAN#113 time plan v09.zip 2026/09/17 8:30 558,4 KB",
     "uploaded_at": "",
+    "size": 571880,
     "sha256": "4be9c72ec3d8824fc859a0d496a06aa9d8a4574f70e4ca637b4158b28044d59e",
     "etag": "\"8082b8d77e46dd1:0\"",
-    "last_modified": "Thu, 17 Sep 2026 08:30:49 GMT"
+    "last_modified": "Thu, 17 Sep 2026 08:30:49 GMT",
+    "ftp_modified": null,
+    "content_type": "application/x-zip-compressed",
+    "content_disposition": null
   },
   "agenda": {
     "url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN/Agenda/agenda.csv",
+    "name": "agenda.csv",
+    "size": 13936,
     "sha256": "a0c12c8882e45c535d689f090c9f6eca162a1e3d9e08aea582ca7f832afec5df",
     "etag": "\"04d86e78643dd1:0\"",
-    "last_modified": "Sun, 13 Sep 2026 13:50:58 GMT"
+    "last_modified": "Sun, 13 Sep 2026 13:50:58 GMT",
+    "ftp_modified": null,
+    "content_type": "application/octet-stream",
+    "content_disposition": null
   },
   "portal_metadata": {
     "starts_at": "2026-09-14T09:00:00+02:00",
