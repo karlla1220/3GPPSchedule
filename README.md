@@ -361,11 +361,13 @@ FTP Inbox/
 
 빌드 시 `curl -OJL`과 등가 동작(redirect follow + Content-Disposition 기반 파일명)으로 `downloads/ran1/extra_files/`에 저장하고, 해당 파일도 Git에 커밋합니다. 파일명은 `Content-Disposition` → URL 경로 마지막 세그먼트 → `name` 필드 → 생성 순서로 결정됩니다. `docs/ran1/.extra_files_state.json`에는 URL별 다운로드 파일명과 SHA-256을 기록합니다.
 
-기록된 URL의 파일명이 존재하고 로컬 파일의 SHA-256이 기록값과 같으면 check와 build 모두 네트워크 다운로드를 생략합니다. 상태가 없거나 파일이 삭제·변조된 경우에만 원격 파일을 다시 받아 캐시를 복구합니다.
+ETSI 등 외부 호스트는 기록된 URL의 파일명이 존재하고 로컬 파일의 SHA-256이 기록값과 같으면 check와 build 모두 네트워크 다운로드를 생략합니다. 상태가 없거나 파일이 삭제·변조된 경우에만 원격 파일을 다시 받아 캐시를 복구합니다.
 
 CI 변경 감지는 각 URL에 대응하는 커밋된 파일의 **콘텐츠 sha256**을 `docs/ran1/.extra_files_state.json`과 비교해 동작합니다(`check_update.py`). 헤더(ETag/Last-Modified) 비교는 ETSI가 해당 헤더를 제공하지 않아 사용하지 않으며, `ref_in_manual`과 동일한 콘텐츠 해시 방식을 따릅니다.
 
-CI에서 외부 파일 요청은 다음과 같이 동작합니다.
+공개 3GPP 파일 URL은 예외로, 공통 라이브러리의 HTTP 조건부 요청/FTP 메타데이터 비교로 재검증합니다. 같은 URL에 덮어쓴 변경도 확인하며, 변경 없는 본문은 `.cache/3gpp/`에서 재사용합니다.
+
+ETSI 등 외부 호스트의 파일 요청은 다음과 같이 동작합니다.
 
 - `check` job은 먼저 커밋된 `downloads/ran1/extra_files/`의 파일을 기록된 SHA-256과 비교합니다. 일치하면 원격 URL을 요청하지 않습니다.
 - URL이 새로 추가되었거나 캐시 파일이 없거나 해시가 다르면 `check` job이 원격 파일을 다운로드해 변경 여부를 확인하고 build를 트리거합니다.
@@ -378,18 +380,18 @@ CI에서 외부 파일 요청은 다음과 같이 동작합니다.
 
 이 프로젝트에서 `cache`라는 표현은 서로 다른 세 가지를 가리킬 수 있습니다.
 
-1. **GitHub Actions 서비스 캐시 — LLM 결과**
-     - [deploy.yml](.github/workflows/deploy.yml)의 `actions/cache@v4`가 `.cache/` 전체(WG별 하위 디렉터리)를 GitHub Actions 캐시 서비스에 저장합니다.
-     - `session_parser.py`의 Gemini/LLM 결과 재사용을 위한 캐시이며, `extra_files` 원문 파일과는 관계가 없습니다.
-     - `check` job에서는 사용하지 않고 `build-and-deploy` job에서만 복원합니다.
-     - 캐시 키는 실행별 `wg-cache-v1-${{ github.run_id }}`이고, `wg-cache-v1-` prefix로 이전 실행의 최근 캐시를 복원합니다. 새 실행이 끝나면 post-job 단계에서 새 키로 저장됩니다.
-     - `force-deploy`는 각 활성 WG의 `reset_cache()`를 호출합니다. RAN1은 LLM 캐시, 슬롯 상태, 외부 파일 캐시를 비워 다시 파싱합니다.
+1. **GitHub Actions 서비스 캐시 — 공통 3GPP 원본과 WG별 LLM 결과**
+     - [공통 캐시 action](.github/actions/wg-cache/action.yml)이 `.cache/` 전체를 복원·저장합니다. `check`와 `build-and-deploy` 모두 같은 action을 사용합니다.
+     - `.cache/3gpp/`에는 URL별 원본과 파일명·정확한 바이트 크기·SHA-256·ETag·Last-Modified·FTP 수정 시각을 저장합니다. `.cache/<wg>/`에는 WG별 파서 결과를 저장합니다.
+     - check는 변경 없는 실행에서도 캐시를 저장합니다. 일부 WG 확인에 실패해도 정상 수신한 원본은 재사용하며, 성공한 빌드 상태는 별도로 Git에 기록합니다.
+     - 키는 `wg-cache-v2-<OS>-<run_id>-<run_attempt>-<job>`입니다. build는 같은 실행의 check 캐시를 우선 복원하고, 없으면 이전 실행의 최근 캐시를 복원합니다. 재실행은 새 키를 사용합니다. 최초 전환 시에는 기존 `wg-cache-v1-` 캐시도 복원해 LLM 결과를 유지합니다.
+     - `force-deploy`는 공통 3GPP 캐시를 한 번 비운 다음 각 활성 WG의 `reset_cache()`를 호출합니다. WG별 제거와 check artifact 복사는 `shared/lifecycle.py`의 공통 함수를 사용합니다.
 
 2. **Git 저장소에 커밋되는 캐시 — `extra_files` 원문**
      - `downloads/ran1/extra_files/`의 실제 다운로드 파일과 `docs/ran1/.extra_files_state.json`의 URL·파일명·SHA-256 기록이 여기에 해당합니다.
      - [deploy.yml](.github/workflows/deploy.yml)의 새 runner는 `actions/cache`에서 이 파일을 복원하는 것이 아니라 `actions/checkout`으로 Git 커밋에서 가져옵니다.
      - 캐시 miss가 발생한 현재 workflow 안에서는 check job이 받은 파일과 상태를 `actions/upload-artifact`로 build job에 한 번 전달합니다. 이 artifact는 job 간 전달용이며 장기 보관용 캐시는 아닙니다.
-     - Python 코드가 checkout된 파일의 SHA-256을 상태 기록과 비교합니다. 일치하면 네트워크 요청 없이 check/build 모두 파일을 재사용합니다.
+     - Python 코드가 checkout된 파일의 SHA-256을 상태 기록과 비교합니다. 일치하면 ETSI 등 외부 호스트는 네트워크 요청 없이 check/build 모두 파일을 재사용합니다. 공개 3GPP URL은 공통 캐시를 통해 재검증합니다.
      - 이 캐시는 Git commit history에 포함되므로 runner가 바뀌거나 Actions 캐시가 만료되어도 유지됩니다. 대신 DOCX 파일이 Git 저장소 용량을 차지합니다.
      - `force-deploy`는 이 디렉터리와 상태 파일도 삭제한 뒤 build하므로 원격 `extra_files`를 다시 다운로드합니다.
 
@@ -397,7 +399,7 @@ CI에서 외부 파일 요청은 다음과 같이 동작합니다.
      - `setup-uv`의 `enable-cache: true`가 의존성 다운로드 캐시를 관리합니다.
      - 애플리케이션 입력 파일이나 LLM 결과가 아니며, 외부 파일 재사용 여부에도 영향을 주지 않습니다.
 
-즉, `extra_files` 재사용에 사용되는 것은 **GitHub Actions의 cache 서비스가 아니라 Git 저장소에 커밋된 파일과 SHA-256 상태 기록**입니다. GitHub Actions cache 서비스는 LLM 결과와 Python 패키지 다운로드에만 사용됩니다.
+ETSI 등의 `extra_files`는 Git 저장소에 커밋된 파일과 SHA-256 상태 기록으로 재사용합니다. 공개 3GPP URL은 공통 원본 캐시도 함께 사용합니다. GitHub Actions cache 서비스는 공통 3GPP 원본, LLM 결과와 Python 패키지 다운로드에 사용됩니다.
 
 환경 변수 `SCHEDULE_EXTRA_FILES`로 JSON 배열을 지정하면 working_groups/ran1/config.json 값을 대체합니다.
 
@@ -571,6 +573,21 @@ WG 문서 다운로드나 파싱을 다시 실행하지 않습니다. 로컬 확
 WG별 스케줄과 미팅 메타데이터를 주입합니다. 템플릿 변경도 CI의 렌더링 변경 감지에
 포함됩니다. RAN1 파서의 시간 계산과 LLM 역할은 [파싱 작동 원리](PARSING_ARCHITECTURE.md)를 참고하세요.
 
+### WG 공통 원격 파일 라이브러리
+
+`shared/remote_files.py`가 모든 WG의 3GPP 파일 접근과 URL별 디스크 캐시를 관리합니다.
+WG는 파일 선택과 문서 해석만 담당합니다. 새로운 WG도 `get_listing()`,
+`fetch_file()` 또는 `download()`를 사용하고 자체 HTTP/FTP 재시도나 파일명만으로
+다운로드를 생략하는 로직을 만들지 않습니다. Portal 조회와 페이지 처리는
+`shared/portal_meetings.py`를 공유합니다.
+
+- HTTP: 유효한 원본 캐시의 ETag/Last-Modified로 조건부 GET을 보냅니다. 304면 본문을 받지 않고 캐시를 재사용합니다.
+- FTP: 같은 URL의 캐시를 SHA-256으로 검증한 뒤 SIZE/MDTM을 비교합니다. 크기와 수정 시각이 같으면 RETR 없이 반환합니다.
+- 캐시가 없거나 손상되었으면 다시 받습니다. 검증자가 없는 HTTP 응답도 다시 받아 동일 파일명 덮어쓰기를 놓치지 않습니다.
+- 다운로드 실패는 이전 캐시와 성공한 WG 상태를 덮어쓰지 않습니다. 원격 확인 실패를 변경 없음으로 숨기지 않습니다.
+- RAN1의 목록 기반 변경 감지는 유지합니다. 실제 다운로드 단계에서는 기존 파일이 있어도 공통 라이브러리로 재검증합니다.
+- 캐시는 선택 사항입니다. GitHub Actions 캐시가 만료·누락되면 정상 다운로드로 복구합니다.
+
 ### 3GPP HTTPS 인증서와 FTP fallback
 
 CI의 check/build 작업은 `scripts/prepare_ca_bundle.py`로 기존 certifi CA 목록에
@@ -588,7 +605,7 @@ FTP 전송은 평문입니다. 로그인 정보나 HTTP 헤더를 전달하지 �
 - FTP 파일은 최대 64 MiB, 소켓 무응답은 20초, 전송 콜백 기준 전체 작업은 180초로 제한합니다.
 - 크기와 수정 시각을 전후 비교하여 잘리거나 전송 중 변경된 파일을 거부합니다.
 - 상태에는 기존 HTTPS URL을 유지하고 FTP 사용 여부는 로그에 남깁니다.
-- HTTPS 본문을 읽는 도중의 실패는 기존 다운로드 재시도 정책을 따릅니다.
+- 3GPP 파일·목록의 재시도는 공통 전송 계층에서 HTTPS 최대 2회와 FTP 최대 1회로 관리합니다. WG에서 같은 요청을 추가 재시도하지 않습니다.
 
 로컬에서 배포 없이 인증서 보충과 실제 FTP 복구를 검증하려면:
 

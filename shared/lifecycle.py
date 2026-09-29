@@ -42,6 +42,32 @@ class WorkingGroup(Protocol):
     def build_schedule(self, options: BuildOptions) -> Schedule: ...
 
 
+def clear_paths(paths):
+    """Remove disposable files/directories with the same rules for every WG."""
+    for path in map(Path, paths):
+        if path.is_dir() and not path.is_symlink():
+            shutil.rmtree(path)
+        else:
+            path.unlink(missing_ok=True)
+
+
+def restore_staged(source, destination, *, rename=None, replace=False):
+    """Restore a check artifact into a fresh build runner's WG directory."""
+    source, destination = Path(source), Path(destination)
+    if replace:
+        clear_paths((destination,))
+    if not source.is_dir():
+        return
+    rename = rename or {}
+    for entry in source.iterdir():
+        target = Path(rename.get(entry.name, destination / entry.name))
+        target.parent.mkdir(parents=True, exist_ok=True)
+        if entry.is_dir():
+            shutil.copytree(entry, target, dirs_exist_ok=True)
+        else:
+            shutil.copy2(entry, target)
+
+
 @contextmanager
 def preserve_on_failure(paths):
     """Rollback committed WG state as well as HTML on failed builds."""

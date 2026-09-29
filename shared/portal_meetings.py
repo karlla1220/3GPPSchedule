@@ -10,6 +10,8 @@ from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 import httpx
 
+from shared import remote_files
+
 URL = 'https://portal.3gpp.org/webservices/Rest/Meetings.svc/GetMeetings'
 TB_IDS = {'ran-plenary': 373, 'ran1': 379, 'ran2': 380, 'ran3': 381, 'ran4': 382}
 HEADERS = {
@@ -69,30 +71,34 @@ def meeting_key(value):
     return f'ran{wg}#{number}{"bis" if suffix == "b" else suffix}'
 
 
+def fetch_meeting_rows(client, payload, *, max_pages=20):
+    """Shared bounded Portal pagination for all WGs and site navigation."""
+    rows = []
+    page_size = payload.get('ResultsPerPage', 100)
+    for _ in range(max_pages):
+        query = {**payload, 'StartRow': len(rows), 'ResultsPerPage': page_size}
+        response = client.post(URL, json={'getMeetingsInput': query}, headers=HEADERS)
+        response.raise_for_status()
+        page = response.json()
+        if not isinstance(page, list) or any(not isinstance(row, dict) for row in page):
+            raise ValueError('Unexpected Portal meetings response')
+        if page and rows[-len(page):] == page:
+            raise ValueError('Portal repeated a page')
+        rows.extend(page)
+        if len(page) < page_size:
+            return rows
+    raise ValueError('Portal meetings page limit reached')
+
+
 @lru_cache(maxsize=1)
 def _fetch_meetings(today):
-    rows = []
-    with httpx.Client(headers=HEADERS, timeout=30) as client:
-        # A bounded search covers recent, ongoing and next regular meetings.
-        # Follow full pages rather than silently treating truncation as absence.
-        for _ in range(20):
-            payload = {'StartRow': len(rows), 'ResultsPerPage': 100,
-                       'SortBy': 'Date', 'SortAscending': False,
-                       'StartDate': f'{today - timedelta(days=366)} 00:00:00',
-                       'EndDate': f'{today + timedelta(days=183)} 23:59:59',
-                       'Tbs': list(TB_IDS.values()), 'IncludeChildTbs': False,
-                       'IncludeNonTBMeetings': False, 'Reference': '', 'Registered': False}
-            response = client.post(URL, json={'getMeetingsInput': payload})
-            response.raise_for_status()
-            page = response.json()
-            if not isinstance(page, list) or any(not isinstance(row, dict) for row in page):
-                raise ValueError('Unexpected Portal meetings response')
-            if page and rows[-len(page):] == page:
-                raise ValueError('Portal repeated a page')
-            rows.extend(page)
-            if len(page) < 100:
-                return rows
-    raise ValueError('Portal meetings page limit reached')
+    with remote_files.client(headers=HEADERS, timeout=30) as client:
+        return fetch_meeting_rows(client, {
+            'SortBy': 'Date', 'SortAscending': False,
+            'StartDate': f'{today - timedelta(days=366)} 00:00:00',
+            'EndDate': f'{today + timedelta(days=183)} 23:59:59',
+            'Tbs': list(TB_IDS.values()), 'IncludeChildTbs': False,
+            'IncludeNonTBMeetings': False, 'Reference': '', 'Registered': False})
 
 
 def get_meetings():

@@ -10,10 +10,10 @@ import re
 from urllib.parse import unquote, urljoin, urlparse
 
 from bs4 import BeautifulSoup
-import httpx
 
-from shared import ftp_transport
-from shared.portal_meetings import timezone_reference
+from shared import remote_files
+from shared.remote_files import client, fetch_file
+from shared.portal_meetings import timezone_reference, fetch_meeting_rows
 
 from .document import FILE
 
@@ -68,10 +68,6 @@ def config_hash(cfg):
     return digest(json.dumps(cfg, sort_keys=True).encode())
 
 
-def client():
-    return httpx.Client(follow_redirects=True, timeout=45,
-                        headers={'User-Agent': '3GPPSchedule/1.0', 'Accept': '*/*'})
-
 
 @dataclass
 class Bundle:
@@ -118,28 +114,9 @@ def select_timeplan(html: str, listing_url: str, previous: dict) -> dict:
     return chosen
 
 
-def fetch_file(http, url, old, local: bytes | None):
-    headers = {}
-    if old.get('url') == url:
-        if old.get('etag'):
-            headers['If-None-Match'] = old['etag']
-        if old.get('last_modified'):
-            headers['If-Modified-Since'] = old['last_modified']
-    response = ftp_transport.get(url, http=http, headers=headers)
-    if response.status_code == 304:
-        if local is not None and digest(local) == old.get('sha256'):
-            return local, old
-        response = ftp_transport.get(url, http=http)  # Fresh CI runner may lack the original body.
-    response.raise_for_status()
-    body = response.content
-    if not body or len(body) > 30_000_000:
-        raise ValueError(f'Empty or excessive input: {url}')
-    return body, {'url': url, 'sha256': digest(body), 'etag': response.headers.get('etag'),
-                  'last_modified': response.headers.get('last-modified')}
-
 
 def fetch_bundle(cfg, previous, http, cache_dir=DOWNLOADS / 'inputs') -> Bundle:
-    listing = ftp_transport.get(cfg['chair_url'], http=http, listing=True)
+    listing = remote_files.get_listing(cfg['chair_url'], http=http)
     listing.raise_for_status()
     chosen = select_timeplan(listing.text, cfg['chair_url'], previous)
     cached = None
@@ -178,23 +155,11 @@ def local_bundle(path: Path, cfg, previous) -> Bundle:
 
 def portal_meeting(http, number: int) -> dict:
     year = date.today().year
-    rows = []
-    for start in range(0, 1000, 100):
-        payload = {'getMeetingsInput': {
-            'StartRow': start, 'ResultsPerPage': 100, 'SortBy': 'Date', 'SortAscending': False,
-            'StartDate': f'{year-1}-01-01 00:00:00', 'EndDate': f'{year+1}-12-31 23:59:59',
-            'Tbs': [373], 'IncludeChildTbs': False, 'IncludeNonTBMeetings': False,
-            'Reference': '', 'Registered': False}}
-        response = http.post('https://portal.3gpp.org/webservices/Rest/Meetings.svc/GetMeetings',
-                             json=payload, headers={'Origin': 'https://portal.3gpp.org',
-                                                     'Referer': 'https://portal.3gpp.org/'})
-        response.raise_for_status()
-        page = response.json()
-        if not isinstance(page, list):
-            raise ValueError('Invalid Portal response')
-        rows.extend(page)
-        if len(page) < 100:
-            break
+    rows = fetch_meeting_rows(http, {
+        'SortBy': 'Date', 'SortAscending': False,
+        'StartDate': f'{year-1}-01-01 00:00:00', 'EndDate': f'{year+1}-12-31 23:59:59',
+        'Tbs': [373], 'IncludeChildTbs': False, 'IncludeNonTBMeetings': False,
+        'Reference': '', 'Registered': False}, max_pages=10)
     matches = {m['Id']: m for m in rows if m.get('TBId') == 373 and
                re.fullmatch(rf'(?:3GPP)?RAN\s*#\s*{number}', m.get('Title', ''), re.I)}
     if len(matches) != 1:

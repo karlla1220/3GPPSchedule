@@ -353,6 +353,25 @@ def test_force_reset_clears_ran1_generated_metadata(tmp_path, monkeypatch):
     assert all(not path.exists() for path in paths)
 
 
+def test_force_build_clears_shared_remote_cache_once_before_all_wgs(site, monkeypatch):
+    cached = ci.REMOTE_CACHE / 'body.bin'
+    cached.parent.mkdir(parents=True)
+    cached.write_bytes(b'old')
+    for group in site.values():
+        original = group.build_schedule
+        def build(options, group=group, original=original):
+            if group.wg == 'ran1':
+                assert not cached.exists()
+                cached.parent.mkdir(parents=True)
+                cached.write_bytes(b'fresh')
+            else:
+                assert cached.read_bytes() == b'fresh'
+            return original(options)
+        monkeypatch.setattr(group, 'build_schedule', build)
+    ci.build_site('force-deploy')
+    assert cached.read_bytes() == b'fresh'
+
+
 def test_final_render_failure_rolls_back_new_wg_checkpoints(site, monkeypatch):
     bootstrap()
     before = {str(p): p.read_bytes() for p in Path('docs').rglob('*') if p.is_file()}

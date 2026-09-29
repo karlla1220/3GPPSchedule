@@ -5,10 +5,12 @@ on:
   push:
     paths:
       - shared/ftp_transport.py
+      - shared/remote_files.py
       - certificates/**
       - scripts/prepare_ca_bundle.py
       - scripts/check_3gpp_network.py
       - tests/test_ftp_fallback.py
+      - tests/test_remote_files.py
       - .github/workflows/network-check.yml
 
 permissions:

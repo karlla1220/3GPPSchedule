@@ -10,7 +10,8 @@ from pathlib import Path
 import shutil
 
 from build import render_site, render_root, fetch_site_meetings
-from shared.lifecycle import BuildOptions, preserve_on_failure
+from shared.lifecycle import BuildOptions, preserve_on_failure, clear_paths
+from shared.remote_files import CACHE_DIR as REMOTE_CACHE
 from shared.renderer import generate_html
 from shared.schedule import load_schedule, save_schedule
 from shared.site_config import load_site_config
@@ -19,7 +20,7 @@ from working_groups.registry import get_working_group
 STATE_PATH = Path('docs/.build_state.json')
 PLAN_PATH = Path('.ci/plan.json')
 COMMON_INPUTS = tuple(map(Path, ('shared/schedule.py', 'shared/lifecycle.py',
-    'shared/portal_meetings.py', 'shared/ftp_transport.py', 'working_groups/registry.py', 'pyproject.toml', 'uv.lock')))
+    'shared/portal_meetings.py', 'shared/ftp_transport.py', 'shared/remote_files.py', 'working_groups/registry.py', 'pyproject.toml', 'uv.lock')))
 SITE_INPUTS = tuple(map(Path, ('shared/renderer.py', 'shared/topic_references.py', 'shared/navigation.py',
     'shared/site_config.py', 'shared/page.py', 'templates', 'build.py', 'ci.py')))
 
@@ -156,6 +157,9 @@ def _build_site(action, config, plan_path):
     else:
         targets = enabled
     before_public = public_digest()
+    if action == 'force-deploy':
+        # Shared across WGs: clear once, before any group starts downloading.
+        clear_paths((REMOTE_CACHE,))
     persistent = [Path('docs')]
     results = {}
     for wg in enabled:

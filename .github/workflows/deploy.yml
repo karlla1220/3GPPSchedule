@@ -49,9 +49,18 @@ jobs:
         run: |
           uv run python scripts/prepare_ca_bundle.py "$RUNNER_TEMP/3gpp-ca-bundle.pem"
           echo "SSL_CERT_FILE=$RUNNER_TEMP/3gpp-ca-bundle.pem" >> "$GITHUB_ENV"
+      - name: Restore shared and WG caches
+        uses: ./.github/actions/wg-cache
+        with:
+          operation: restore
       - name: Check every enabled WG
         id: detect
         run: uv run python ci.py check
+      - name: Save checked source caches
+        if: always() && !cancelled() && steps.detect.outcome != 'skipped'
+        uses: ./.github/actions/wg-cache
+        with:
+          operation: save
       - name: Transfer build plan and staged documents
         if: steps.detect.outputs.build_required == 'true'
         uses: actions/upload-artifact@v4
@@ -99,18 +108,20 @@ jobs:
           name: wg-inputs-${{ github.run_id }}
           path: .ci/
       - name: Restore WG caches
-        uses: actions/cache@v4
+        uses: ./.github/actions/wg-cache
         with:
-          path: .cache/
-          key: wg-cache-v1-${{ github.run_id }}
-          restore-keys: |
-            wg-cache-v1-
+          operation: restore
       - name: Build selected WGs and assemble site
         id: build
         env:
           WG_ACTION: ${{ github.event.inputs.action || 'check-build-deploy' }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: uv run python ci.py build --action "$WG_ACTION"
+      - name: Save shared and WG caches
+        if: always() && !cancelled() && steps.build.outcome != 'skipped'
+        uses: ./.github/actions/wg-cache
+        with:
+          operation: save
       - name: Setup Pages
         if: steps.build.outputs.site_changed == 'true'
         uses: actions/configure-pages@v5

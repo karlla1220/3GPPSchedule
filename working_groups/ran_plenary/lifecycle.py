@@ -1,8 +1,6 @@
 """Plenary's small CI adapter; importing it requires no document parser or LLM."""
 from pathlib import Path
-import shutil
-
-from shared.lifecycle import CheckResult
+from shared.lifecycle import CheckResult, clear_paths, restore_staged
 
 input_paths = (Path('working_groups/ran_plenary'),)
 persistent_paths = (Path('docs/ran-plenary'),)
@@ -44,15 +42,12 @@ def check_updates():
 def prepare_build():
     from .sources import DOWNLOADS, TRANSFER
     prepared = DOWNLOADS / 'prepared'
-    shutil.rmtree(prepared, ignore_errors=True)
-    if (TRANSFER / 'manifest.json').exists():
-        shutil.copytree(TRANSFER, prepared)
+    restore_staged(TRANSFER, prepared, replace=True)
 
 
 def reset_cache():
     from .sources import DOWNLOADS
-    for path in (*cache_paths, DOWNLOADS):
-        shutil.rmtree(path, ignore_errors=True)
+    clear_paths((*cache_paths, DOWNLOADS))
 
 
 def build_schedule(options=None):

@@ -35,7 +35,8 @@ class FakeFTP:
 
 
 @pytest.fixture
-def ftp(monkeypatch):
+def ftp(monkeypatch, tmp_path):
+    monkeypatch.setattr('shared.remote_files.CACHE_DIR', tmp_path / 'remote-cache')
     FakeFTP.calls = []
     monkeypatch.setattr(ftplib, 'FTP', FakeFTP)
     return FakeFTP

@@ -1,0 +1,25 @@
+name: Shared WG cache
+description: Restore or save all WG parser caches and the common 3GPP file cache
+inputs:
+  operation:
+    description: restore or save
+    required: true
+runs:
+  using: composite
+  steps:
+    - name: Restore shared and WG caches
+      if: inputs.operation == 'restore'
+      uses: actions/cache/restore@v4
+      with:
+        path: .cache/
+        key: wg-cache-v2-${{ runner.os }}-${{ github.run_id }}-${{ github.run_attempt }}-${{ github.job }}
+        restore-keys: |
+          wg-cache-v2-${{ runner.os }}-${{ github.run_id }}-${{ github.run_attempt }}-
+          wg-cache-v2-${{ runner.os }}-
+          wg-cache-v1-
+    - name: Save shared and WG caches
+      if: inputs.operation == 'save'
+      uses: actions/cache/save@v4
+      with:
+        path: .cache/
+        key: wg-cache-v2-${{ runner.os }}-${{ github.run_id }}-${{ github.run_attempt }}-${{ github.job }}

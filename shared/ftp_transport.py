@@ -51,6 +51,11 @@ def _check_status(response):
     # Keep 304 and other non-fallback responses for the existing callers.
     if response.status_code in _RETRY_STATUS:
         response.raise_for_status()
+    # Azure sometimes serves an outage page with a successful status.
+    if response.status_code == 200 and response.is_stream_consumed and any(pattern in response.content[:4096].lower()
+            for pattern in (b"our services aren't available right now",
+                            b"we're working to restore all services", b'service unavailable')):
+        raise httpx.ConnectError('3GPP returned a service unavailable page', request=response.request)
 
 
 def _directory(ftp, path, url, deadline):
@@ -77,12 +82,21 @@ def _directory(ftp, path, url, deadline):
     return ('<table>' + ''.join(rows) + '</table>').encode(), {'content-type': 'text/html; charset=utf-8'}
 
 
-def _file(ftp, path, deadline):
+def _file(ftp, path, deadline, cached=None):
     ftp.voidcmd('TYPE I')
     size = ftp.size(path)
     stamp = ftp.sendcmd('MDTM ' + path)
     if size is None or size <= 0 or size > _MAX_BYTES:
         raise ValueError('Empty or excessive FTP file')
+    modified = datetime.strptime(stamp.removeprefix('213 ').split('.')[0], '%Y%m%d%H%M%S').replace(tzinfo=timezone.utc)
+    headers = {'content-type': 'application/octet-stream',
+               'last-modified': format_datetime(modified, usegmt=True), 'x-3gpp-mtime': stamp}
+    if cached is not None:
+        old, body = cached
+        same_date = (old.get('ftp_modified') == stamp if old.get('ftp_modified')
+                     else old.get('last_modified') == headers['last-modified'])
+        if len(body) == size and same_date:
+            return body, {**headers, 'x-3gpp-revalidated': 'true'}
     data = bytearray()
     def collect(chunk):
         if time.monotonic() > deadline or len(data) + len(chunk) > min(size, _MAX_BYTES):
@@ -91,12 +105,10 @@ def _file(ftp, path, deadline):
     ftp.retrbinary('RETR ' + path, collect, blocksize=65536)
     if len(data) != size or ftp.size(path) != size or ftp.sendcmd('MDTM ' + path) != stamp:
         raise ValueError('FTP file changed or was truncated during download')
-    modified = datetime.strptime(stamp.removeprefix('213 ').split('.')[0], '%Y%m%d%H%M%S').replace(tzinfo=timezone.utc)
-    return bytes(data), {'content-type': 'application/octet-stream',
-                         'last-modified': format_datetime(modified, usegmt=True)}
+    return bytes(data), headers
 
 
-def ftp_response(url, *, listing=False):
+def ftp_response(url, *, listing=False, cached=None):
     """Read a bounded FTP response. Also used by the network diagnostic."""
     path = ftp_path(url)
     if path is None:
@@ -107,14 +119,15 @@ def ftp_response(url, *, listing=False):
         with ftplib.FTP('ftp.3gpp.org', timeout=20) as ftp:
             ftp.login()
             body, headers = (_directory(ftp, path, url, deadline) if listing
-                             else _file(ftp, path, deadline))
+                             else _file(ftp, path, deadline, cached))
     except (ftplib.Error, OSError, ValueError) as exc:
         raise httpx.ConnectError(f'FTP fallback failed for {url}: {exc}', request=request) from exc
-    logging.getLogger(__name__).warning('3GPP FTP fallback: %s (%d bytes)', url, len(body))
+    action = 'revalidated without RETR' if headers.get('x-3gpp-revalidated') else 'received'
+    logging.getLogger(__name__).warning('3GPP FTP fallback: %s (%s, %d bytes)', url, action, len(body))
     return httpx.Response(200, content=body, headers={**headers, 'x-3gpp-transport': 'ftp'}, request=request)
 
 
-def get(url, *, listing=False, http=None, **kwargs):
+def get(url, *, listing=False, http=None, cached=None, **kwargs):
     """Retry eligible HTTPS once, then use FTP; preserve normal HTTP semantics."""
     request = http.get if http is not None else httpx.get
     if ftp_path(url) is None:
@@ -124,7 +137,7 @@ def get(url, *, listing=False, http=None, **kwargs):
             response = request(url, **kwargs)
             try:
                 _check_status(response)
-            except httpx.HTTPStatusError:
+            except (httpx.HTTPStatusError, httpx.TransportError):
                 response.close()
                 raise
             return response
@@ -133,7 +146,7 @@ def get(url, *, listing=False, http=None, **kwargs):
                 raise
             if attempt == 0:
                 time.sleep(1)
-    return ftp_response(url, listing=listing)
+    return ftp_response(url, listing=listing, cached=cached)
 
 
 @contextmanager

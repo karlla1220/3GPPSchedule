@@ -14,7 +14,7 @@ from urllib.parse import unquote, urlsplit
 import httpx
 from bs4 import BeautifulSoup
 
-from shared import ftp_transport
+from shared import remote_files
 
 from .models import ScheduleSource
 
@@ -118,16 +118,19 @@ def _get_with_retry(
     - HTTP 5xx status codes
     - Azure error pages (200 OK with HTML error body)
     """
+    if remote_files.is_3gpp_file(url):
+        # Retry/fallback belongs to the shared transport; do not multiply it.
+        return remote_files.get_listing(url, timeout=timeout)
     last_exc: Exception | None = None
     for attempt in range(1, max_retries + 1):
         try:
             if stream:
                 # Caller is responsible for closing; we return immediately.
-                resp = ftp_transport.stream("GET", url, follow_redirects=True, timeout=timeout)
+                resp = remote_files.stream("GET", url, follow_redirects=True, timeout=timeout)
                 cm = resp.__enter__()
                 cm.raise_for_status()
                 return cm
-            resp = ftp_transport.get(url, listing=True, follow_redirects=True, timeout=timeout)
+            resp = remote_files.get_listing(url, follow_redirects=True, timeout=timeout)
             resp.raise_for_status()
             _validate_html_response(resp)
             return resp
@@ -676,11 +679,13 @@ def download_file(url: str, dest_path: Path) -> Path:
     Validates the downloaded content to ensure we didn't receive a
     server error page disguised as a successful response.
     """
+    if remote_files.is_3gpp_file(url):
+        return remote_files.download(url, dest_path)
     print(f"Downloading: {url}")
     last_exc: Exception | None = None
     for attempt in range(1, _MAX_RETRIES + 1):
         try:
-            with ftp_transport.stream("GET", url, follow_redirects=True, timeout=60) as resp:
+            with remote_files.stream("GET", url, follow_redirects=True, timeout=60) as resp:
                 resp.raise_for_status()
                 dest_path.parent.mkdir(parents=True, exist_ok=True)
                 with open(dest_path, "wb") as f:
@@ -776,7 +781,7 @@ def download_latest_schedule(
 
     dest_path = dest_dir / latest["name"]
 
-    if dest_path.exists():
+    if dest_path.exists() and not remote_files.is_3gpp_file(latest["url"]):
         # If it's a ZIP that was already downloaded, try to find the
         # previously extracted document next to it.
         if dest_path.suffix.lower() == ".zip":
@@ -1020,7 +1025,7 @@ def download_latest_chair_notes(
 
     dest_path = dest_dir / latest["name"]
 
-    if dest_path.exists() and not force:
+    if dest_path.exists() and not force and not remote_files.is_3gpp_file(latest["url"]):
         if dest_path.suffix.lower() == ".zip":
             extracted = _find_extracted_document(
                 dest_path,
@@ -1144,7 +1149,7 @@ def download_latest_agenda(
 
     dest_path = dest_dir / latest["name"]
 
-    if dest_path.exists() and not force:
+    if dest_path.exists() and not force and not remote_files.is_3gpp_file(latest["url"]):
         if dest_path.suffix.lower() == ".zip":
             extracted = _find_extracted_document(
                 dest_path,
@@ -1899,7 +1904,7 @@ def download_schedule_source(
     dest_dir = base_dir / source.folder_name
     dest_path = dest_dir / source.file_info["name"]
 
-    if dest_path.exists():
+    if dest_path.exists() and not remote_files.is_3gpp_file(source.file_info["url"]):
         if dest_path.suffix.lower() == ".zip":
             extracted = _find_extracted_document(dest_path)
             if extracted:
@@ -2255,10 +2260,10 @@ def _download_external_one(
     print(f"Downloading extra file: {url}")
     dest_dir.mkdir(parents=True, exist_ok=True)
     last_exc: Exception | None = None
-    for attempt in range(1, _MAX_RETRIES + 1):
+    for attempt in range(1, (1 if remote_files.is_3gpp_file(url) else _MAX_RETRIES) + 1):
         tmp_path: Path | None = None
         try:
-            with ftp_transport.stream(
+            with remote_files.stream(
                 "GET",
                 url,
                 follow_redirects=True,
@@ -2283,6 +2288,8 @@ def _download_external_one(
             print(f"Saved to: {target}")
             return target, content_hash
         except ServiceUnavailableError as exc:
+            if remote_files.is_3gpp_file(url):
+                raise
             last_exc = exc
             if tmp_path is not None:
                 tmp_path.unlink(missing_ok=True)
@@ -2293,6 +2300,8 @@ def _download_external_one(
             )
             time.sleep(wait)
         except (httpx.HTTPStatusError, httpx.TransportError, httpx.TimeoutException) as exc:
+            if remote_files.is_3gpp_file(url):
+                raise
             last_exc = exc
             if tmp_path is not None:
                 tmp_path.unlink(missing_ok=True)
@@ -2351,7 +2360,7 @@ def download_external_files(
     for index, entry in enumerate(extra_files):
         url = entry["url"]
         cached = _cached_external_file(previous_files.get(url), dest_dir)
-        if cached is not None:
+        if cached is not None and not remote_files.is_3gpp_file(url):
             target, content_hash = cached
             print(f"Using cached extra file: {target}")
         else:
@@ -2424,7 +2433,7 @@ def _remote_file_sha256(url: str) -> str:
     are a few hundred KB at most, so this stays lightweight).  Raises on
     4xx/5xx and transport failures.
     """
-    with ftp_transport.stream(
+    with remote_files.stream(
         "GET",
         url,
         follow_redirects=True,
@@ -2437,7 +2446,7 @@ def _remote_file_sha256(url: str) -> str:
 
 def _remote_file_fingerprint(url: str, entry: dict, index: int) -> dict[str, str]:
     """Fetch an external file and return its resolved filename plus SHA-256."""
-    with ftp_transport.stream(
+    with remote_files.stream(
         "GET",
         url,
         follow_redirects=True,
@@ -2557,7 +2566,7 @@ def check_external_files(
             and isinstance(previous.get("filename"), str)
             and cached is None
         )
-        if cached is not None:
+        if cached is not None and not remote_files.is_3gpp_file(url):
             target, cached_hash = cached
             fingerprint = {
                 "sha256": cached_hash,
