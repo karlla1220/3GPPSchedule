@@ -205,12 +205,12 @@
       "chair": "Sorour",
       "group_header": "6GR",
       "agenda_item": "10.3.2",
-      "description": "Modulation, Joint channel coding and modulation",
+      "description": "Modulation",
       "agenda_descriptions": [
         {
           "agenda_item": "10.3.2",
           "matched_agenda_item": "10.3.2",
-          "description": "Modulation, Joint channel coding and modulation",
+          "description": "Modulation",
           "hierarchy": [
             {
               "agenda_item": "10",
@@ -224,7 +224,7 @@
             },
             {
               "agenda_item": "10.3.2",
-              "description": "Modulation, Joint channel coding and modulation",
+              "description": "Modulation",
               "has_description": true
             }
           ]
@@ -565,12 +565,12 @@
       "chair": "Hiroki",
       "group_header": "6GR",
       "agenda_item": "10.5.4.2, 10.5.4.4, 10.5.4.1",
-      "description": "Downlink and uplink transmission without downlink control channel",
+      "description": "Downlink and uplink transmission without dynamic scheduling",
       "agenda_descriptions": [
         {
           "agenda_item": "10.5.4.2",
           "matched_agenda_item": "10.5.4.2",
-          "description": "Downlink and uplink transmission without downlink control channel",
+          "description": "Downlink and uplink transmission without dynamic scheduling",
           "hierarchy": [
             {
               "agenda_item": "10",
@@ -589,7 +589,7 @@
             },
             {
               "agenda_item": "10.5.4.2",
-              "description": "Downlink and uplink transmission without downlink control channel",
+              "description": "Downlink and uplink transmission without dynamic scheduling",
               "has_description": true
             }
           ]
@@ -733,7 +733,7 @@
       "agenda_item": null
     }
   ],
-  "merged_at": "2026-09-29T07:08:55.819476+00:00",
+  "merged_at": "2026-09-30T02:31:50.798220+00:00",
   "meeting_id": "ran1#126",
   "schema_version": 2
 }

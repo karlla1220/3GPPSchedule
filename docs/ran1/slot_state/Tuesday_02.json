@@ -328,12 +328,12 @@
       "chair": "Sorour",
       "group_header": "6GR",
       "agenda_item": "10.3.2",
-      "description": "Modulation, Joint channel coding and modulation",
+      "description": "Modulation",
       "agenda_descriptions": [
         {
           "agenda_item": "10.3.2",
           "matched_agenda_item": "10.3.2",
-          "description": "Modulation, Joint channel coding and modulation",
+          "description": "Modulation",
           "hierarchy": [
             {
               "agenda_item": "10",
@@ -347,7 +347,7 @@
             },
             {
               "agenda_item": "10.3.2",
-              "description": "Modulation, Joint channel coding and modulation",
+              "description": "Modulation",
               "has_description": true
             }
           ]
@@ -511,7 +511,7 @@
       ]
     }
   ],
-  "merged_at": "2026-09-29T07:08:55.818548+00:00",
+  "merged_at": "2026-09-30T02:31:50.796983+00:00",
   "meeting_id": "ran1#126",
   "schema_version": 2
 }

@@ -1,9 +1,9 @@
 {
-  "generated_at": "2026-09-29T07:08:55.190054+00:00",
+  "generated_at": "2026-09-30T02:31:49.948092+00:00",
   "source_type": "agenda_csv",
   "source_file": "agenda.csv",
-  "source_url": "https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_126/Agenda/agenda.csv",
-  "source_uploaded_at": "2026-09-24T05:42:00",
+  "source_url": "https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_126b/Agenda/agenda.csv",
+  "source_uploaded_at": "2026-09-28T05:42:00",
   "source_agenda_file": "agenda.csv",
   "agenda_items": [
     {
@@ -95,12 +95,20 @@
       "description": "NR-NTN GNSS resilience"
     },
     {
+      "agenda_item": "9.5",
+      "description": "NR NTN in systems using downlink compensation"
+    },
+    {
+      "agenda_item": "9.5.1",
+      "description": "Study and identify possible solutions"
+    },
+    {
       "agenda_item": "10",
       "description": "Rel-20 Study of 6GR"
     },
     {
       "agenda_item": "10.1",
-      "description": "Tasks from RP#111"
+      "description": "Tasks from RP#113"
     },
     {
       "agenda_item": "10.2",
@@ -120,7 +128,7 @@
     },
     {
       "agenda_item": "10.3.2",
-      "description": "Modulation, Joint channel coding and modulation"
+      "description": "Modulation"
     },
     {
       "agenda_item": "10.4",
@@ -200,7 +208,7 @@
     },
     {
       "agenda_item": "10.5.4.2",
-      "description": "Downlink and uplink transmission without downlink control channel"
+      "description": "Downlink and uplink transmission without dynamic scheduling"
     },
     {
       "agenda_item": "10.5.4.3",
@@ -294,13 +302,15 @@
     "9.3.3": "Other procedures",
     "9.4": "GNSS resilient NR-NTN operation",
     "9.4.1": "NR-NTN GNSS resilience",
+    "9.5": "NR NTN in systems using downlink compensation",
+    "9.5.1": "Study and identify possible solutions",
     "10": "Rel-20 Study of 6GR",
-    "10.1": "Tasks from RP#111",
+    "10.1": "Tasks from RP#113",
     "10.2": "Waveform for 6GR air interface",
     "10.2.1": "Waveform",
     "10.3": "Channel coding and modulation for 6GR interface",
     "10.3.1": "Channel coding",
-    "10.3.2": "Modulation, Joint channel coding and modulation",
+    "10.3.2": "Modulation",
     "10.4": "Multiple carrier operation",
     "10.4.1": "Operation in idle mode",
     "10.4.2": "Operation in connected mode",
@@ -320,7 +330,7 @@
     "10.5.3.4": "Beam management for downlink and uplink",
     "10.5.4": "Downlink control channel, scheduling and HARQ operation",
     "10.5.4.1": "Downlink control channel, scheduling for downlink and uplink transmission",
-    "10.5.4.2": "Downlink and uplink transmission without downlink control channel",
+    "10.5.4.2": "Downlink and uplink transmission without dynamic scheduling",
     "10.5.4.3": "HARQ related Aspects",
     "10.5.4.4": "Handling of potential multiple uplink transmissions",
     "10.5.5": "Other physical layer signals, channels and procedure",

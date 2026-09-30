@@ -403,12 +403,12 @@
           "chair": "Sorour",
           "agenda_item": "10.3.2",
           "group_header": "6GR",
-          "description": "Modulation, Joint channel coding and modulation",
+          "description": "Modulation",
           "agenda_descriptions": [
             {
               "agenda_item": "10.3.2",
               "matched_agenda_item": "10.3.2",
-              "description": "Modulation, Joint channel coding and modulation",
+              "description": "Modulation",
               "hierarchy": [
                 {
                   "agenda_item": "10",
@@ -422,7 +422,7 @@
                 },
                 {
                   "agenda_item": "10.3.2",
-                  "description": "Modulation, Joint channel coding and modulation",
+                  "description": "Modulation",
                   "has_description": true
                 }
               ]
@@ -1192,12 +1192,12 @@
           "chair": "Sorour",
           "agenda_item": "10.3.2",
           "group_header": "6GR",
-          "description": "Modulation, Joint channel coding and modulation",
+          "description": "Modulation",
           "agenda_descriptions": [
             {
               "agenda_item": "10.3.2",
               "matched_agenda_item": "10.3.2",
-              "description": "Modulation, Joint channel coding and modulation",
+              "description": "Modulation",
               "hierarchy": [
                 {
                   "agenda_item": "10",
@@ -1211,7 +1211,7 @@
                 },
                 {
                   "agenda_item": "10.3.2",
-                  "description": "Modulation, Joint channel coding and modulation",
+                  "description": "Modulation",
                   "has_description": true
                 }
               ]
@@ -2186,12 +2186,12 @@
           "chair": "Hiroki",
           "agenda_item": "10.5.4.2",
           "group_header": "6GR",
-          "description": "Downlink and uplink transmission without downlink control channel",
+          "description": "Downlink and uplink transmission without dynamic scheduling",
           "agenda_descriptions": [
             {
               "agenda_item": "10.5.4.2",
               "matched_agenda_item": "10.5.4.2",
-              "description": "Downlink and uplink transmission without downlink control channel",
+              "description": "Downlink and uplink transmission without dynamic scheduling",
               "hierarchy": [
                 {
                   "agenda_item": "10",
@@ -2210,7 +2210,7 @@
                 },
                 {
                   "agenda_item": "10.5.4.2",
-                  "description": "Downlink and uplink transmission without downlink control channel",
+                  "description": "Downlink and uplink transmission without dynamic scheduling",
                   "has_description": true
                 }
               ]
@@ -3491,12 +3491,12 @@
           "chair": "Sorour",
           "agenda_item": "10.3.2",
           "group_header": "6GR",
-          "description": "Modulation, Joint channel coding and modulation",
+          "description": "Modulation",
           "agenda_descriptions": [
             {
               "agenda_item": "10.3.2",
               "matched_agenda_item": "10.3.2",
-              "description": "Modulation, Joint channel coding and modulation",
+              "description": "Modulation",
               "hierarchy": [
                 {
                   "agenda_item": "10",
@@ -3510,7 +3510,7 @@
                 },
                 {
                   "agenda_item": "10.3.2",
-                  "description": "Modulation, Joint channel coding and modulation",
+                  "description": "Modulation",
                   "has_description": true
                 }
               ]
@@ -3931,12 +3931,12 @@
           "chair": "Sorour",
           "agenda_item": "10.3.2",
           "group_header": "6GR",
-          "description": "Modulation, Joint channel coding and modulation",
+          "description": "Modulation",
           "agenda_descriptions": [
             {
               "agenda_item": "10.3.2",
               "matched_agenda_item": "10.3.2",
-              "description": "Modulation, Joint channel coding and modulation",
+              "description": "Modulation",
               "hierarchy": [
                 {
                   "agenda_item": "10",
@@ -3950,7 +3950,7 @@
                 },
                 {
                   "agenda_item": "10.3.2",
-                  "description": "Modulation, Joint channel coding and modulation",
+                  "description": "Modulation",
                   "has_description": true
                 }
               ]
@@ -4351,12 +4351,12 @@
           "chair": "Hiroki",
           "agenda_item": "10.5.4.2, 10.5.4.4, 10.5.4.1",
           "group_header": "6GR",
-          "description": "Downlink and uplink transmission without downlink control channel",
+          "description": "Downlink and uplink transmission without dynamic scheduling",
           "agenda_descriptions": [
             {
               "agenda_item": "10.5.4.2",
               "matched_agenda_item": "10.5.4.2",
-              "description": "Downlink and uplink transmission without downlink control channel",
+              "description": "Downlink and uplink transmission without dynamic scheduling",
               "hierarchy": [
                 {
                   "agenda_item": "10",
@@ -4375,7 +4375,7 @@
                 },
                 {
                   "agenda_item": "10.5.4.2",
-                  "description": "Downlink and uplink transmission without downlink control channel",
+                  "description": "Downlink and uplink transmission without dynamic scheduling",
                   "has_description": true
                 }
               ]
@@ -4974,12 +4974,12 @@
           "chair": "Hiroki",
           "agenda_item": "10.5.4.2",
           "group_header": "6GR",
-          "description": "Downlink and uplink transmission without downlink control channel",
+          "description": "Downlink and uplink transmission without dynamic scheduling",
           "agenda_descriptions": [
             {
               "agenda_item": "10.5.4.2",
               "matched_agenda_item": "10.5.4.2",
-              "description": "Downlink and uplink transmission without downlink control channel",
+              "description": "Downlink and uplink transmission without dynamic scheduling",
               "hierarchy": [
                 {
                   "agenda_item": "10",
@@ -4998,7 +4998,7 @@
                 },
                 {
                   "agenda_item": "10.5.4.2",
-                  "description": "Downlink and uplink transmission without downlink control channel",
+                  "description": "Downlink and uplink transmission without dynamic scheduling",
                   "has_description": true
                 }
               ]
@@ -6013,12 +6013,12 @@
           "chair": "Sorour",
           "agenda_item": "10.3.2",
           "group_header": "6GR",
-          "description": "Modulation, Joint channel coding and modulation",
+          "description": "Modulation",
           "agenda_descriptions": [
             {
               "agenda_item": "10.3.2",
               "matched_agenda_item": "10.3.2",
-              "description": "Modulation, Joint channel coding and modulation",
+              "description": "Modulation",
               "hierarchy": [
                 {
                   "agenda_item": "10",
@@ -6032,7 +6032,7 @@
                 },
                 {
                   "agenda_item": "10.3.2",
-                  "description": "Modulation, Joint channel coding and modulation",
+                  "description": "Modulation",
                   "has_description": true
                 }
               ]
@@ -6397,12 +6397,12 @@
           "chair": "Sorour",
           "agenda_item": "10.3.2",
           "group_header": "6GR",
-          "description": "Modulation, Joint channel coding and modulation",
+          "description": "Modulation",
           "agenda_descriptions": [
             {
               "agenda_item": "10.3.2",
               "matched_agenda_item": "10.3.2",
-              "description": "Modulation, Joint channel coding and modulation",
+              "description": "Modulation",
               "hierarchy": [
                 {
                   "agenda_item": "10",
@@ -6416,7 +6416,7 @@
                 },
                 {
                   "agenda_item": "10.3.2",
-                  "description": "Modulation, Joint channel coding and modulation",
+                  "description": "Modulation",
                   "has_description": true
                 }
               ]
@@ -6951,7 +6951,7 @@
             {
               "agenda_item": "10.5.4.2",
               "matched_agenda_item": "10.5.4.2",
-              "description": "Downlink and uplink transmission without downlink control channel",
+              "description": "Downlink and uplink transmission without dynamic scheduling",
               "hierarchy": [
                 {
                   "agenda_item": "10",
@@ -6970,7 +6970,7 @@
                 },
                 {
                   "agenda_item": "10.5.4.2",
-                  "description": "Downlink and uplink transmission without downlink control channel",
+                  "description": "Downlink and uplink transmission without dynamic scheduling",
                   "has_description": true
                 }
               ]
@@ -8723,12 +8723,12 @@
           "chair": "Sorour",
           "agenda_item": "10.3.2",
           "group_header": "6GR",
-          "description": "Modulation, Joint channel coding and modulation",
+          "description": "Modulation",
           "agenda_descriptions": [
             {
               "agenda_item": "10.3.2",
               "matched_agenda_item": "10.3.2",
-              "description": "Modulation, Joint channel coding and modulation",
+              "description": "Modulation",
               "hierarchy": [
                 {
                   "agenda_item": "10",
@@ -8742,7 +8742,7 @@
                 },
                 {
                   "agenda_item": "10.3.2",
-                  "description": "Modulation, Joint channel coding and modulation",
+                  "description": "Modulation",
                   "has_description": true
                 }
               ]
@@ -8978,12 +8978,12 @@
           "chair": "Sorour",
           "agenda_item": "10.3.2",
           "group_header": "6GR",
-          "description": "Modulation, Joint channel coding and modulation",
+          "description": "Modulation",
           "agenda_descriptions": [
             {
               "agenda_item": "10.3.2",
               "matched_agenda_item": "10.3.2",
-              "description": "Modulation, Joint channel coding and modulation",
+              "description": "Modulation",
               "hierarchy": [
                 {
                   "agenda_item": "10",
@@ -8997,7 +8997,7 @@
                 },
                 {
                   "agenda_item": "10.3.2",
-                  "description": "Modulation, Joint channel coding and modulation",
+                  "description": "Modulation",
                   "has_description": true
                 }
               ]
@@ -9063,12 +9063,12 @@
           "chair": "Hiroki",
           "agenda_item": "10.5.4.2",
           "group_header": "6GR",
-          "description": "Downlink and uplink transmission without downlink control channel",
+          "description": "Downlink and uplink transmission without dynamic scheduling",
           "agenda_descriptions": [
             {
               "agenda_item": "10.5.4.2",
               "matched_agenda_item": "10.5.4.2",
-              "description": "Downlink and uplink transmission without downlink control channel",
+              "description": "Downlink and uplink transmission without dynamic scheduling",
               "hierarchy": [
                 {
                   "agenda_item": "10",
@@ -9087,7 +9087,7 @@
                 },
                 {
                   "agenda_item": "10.5.4.2",
-                  "description": "Downlink and uplink transmission without downlink control channel",
+                  "description": "Downlink and uplink transmission without dynamic scheduling",
                   "has_description": true
                 }
               ]
@@ -9899,12 +9899,12 @@
           "chair": "Sorour",
           "agenda_item": "10.3.2",
           "group_header": "",
-          "description": "Modulation, Joint channel coding and modulation",
+          "description": "Modulation",
           "agenda_descriptions": [
             {
               "agenda_item": "10.3.2",
               "matched_agenda_item": "10.3.2",
-              "description": "Modulation, Joint channel coding and modulation",
+              "description": "Modulation",
               "hierarchy": [
                 {
                   "agenda_item": "10",
@@ -9918,7 +9918,7 @@
                 },
                 {
                   "agenda_item": "10.3.2",
-                  "description": "Modulation, Joint channel coding and modulation",
+                  "description": "Modulation",
                   "has_description": true
                 }
               ]
@@ -10132,12 +10132,12 @@
           "chair": "Sorour",
           "agenda_item": "10.3.2",
           "group_header": "6GR",
-          "description": "Modulation, Joint channel coding and modulation",
+          "description": "Modulation",
           "agenda_descriptions": [
             {
               "agenda_item": "10.3.2",
               "matched_agenda_item": "10.3.2",
-              "description": "Modulation, Joint channel coding and modulation",
+              "description": "Modulation",
               "hierarchy": [
                 {
                   "agenda_item": "10",
@@ -10151,7 +10151,7 @@
                 },
                 {
                   "agenda_item": "10.3.2",
-                  "description": "Modulation, Joint channel coding and modulation",
+                  "description": "Modulation",
                   "has_description": true
                 }
               ]
@@ -10266,7 +10266,7 @@
             {
               "agenda_item": "10.5.4.2",
               "matched_agenda_item": "10.5.4.2",
-              "description": "Downlink and uplink transmission without downlink control channel",
+              "description": "Downlink and uplink transmission without dynamic scheduling",
               "hierarchy": [
                 {
                   "agenda_item": "10",
@@ -10285,7 +10285,7 @@
                 },
                 {
                   "agenda_item": "10.5.4.2",
-                  "description": "Downlink and uplink transmission without downlink control channel",
+                  "description": "Downlink and uplink transmission without dynamic scheduling",
                   "has_description": true
                 }
               ]
@@ -10472,7 +10472,7 @@
     }
   ],
   "source_file": "RAN1#126 online and offline schedules - v03.docx",
-  "generated_at": "2026-09-14 19:30",
+  "generated_at": "2026-09-30 04:31",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
