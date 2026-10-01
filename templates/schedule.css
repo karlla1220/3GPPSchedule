@@ -357,9 +357,16 @@ header .meta {
     padding: 1px 3px;
 }
 
+/* A 5-minute block is one 10px slot. Give its whole height to a one-line
+   title: no vertical margin (neighbours keep their own 1px), and a 9px
+   title whose line box equals the 8px inside the borders. */
 .session-block.tiny-session {
+    margin-top: 0;
+    margin-bottom: 0;
     padding-top: 0;
     padding-bottom: 0;
+    border-radius: 2px;
+    justify-content: center;
 }
 
 .session-block.short-session .session-details {
@@ -372,7 +379,8 @@ header .meta {
 }
 
 .session-block.tiny-session .session-name {
-    display: none;
+    font-size: 9px;
+    line-height: calc(var(--slot-height) - 2px);
 }
 
 .session-block.long-session {

@@ -400,12 +400,7 @@ def generate_html(schedule: Schedule, *, schedules=None, groups=None, presentati
             slots = (row_end - row_start) * timeline.slot_minutes / 5
             is_short = slots <= 2
             is_tiny = slots <= 1
-            display_name = (
-                _compact_session_label(session.name, session.agenda_item)
-                if is_tiny
-                else session.name
-            )
-            name_html = f'<div class="session-name">{_esc(display_name)}</div>'
+            name_html = f'<div class="session-name">{_esc(session.name)}</div>'
             scope_label = {"shared": "Common", "unassigned": "Room unassigned"}.get(session.room_scope)
             if scope_label and not is_short:
                 name_html += f'<div class="session-scope">{scope_label}</div>'
@@ -549,14 +544,3 @@ def _esc(text: str) -> str:
         .replace(">", "&gt;")
         .replace('"', "&quot;")
     )
-
-
-def _compact_session_label(name: str, agenda_item: str | None) -> str:
-    """Return a compact single-line label for very short session blocks."""
-    if agenda_item:
-        return f"AI {agenda_item}"
-
-    normalized = " ".join(name.split())
-    if len(normalized) <= 22:
-        return normalized
-    return f"{normalized[:21]}…"

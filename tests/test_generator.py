@@ -31,7 +31,11 @@ def test_short_sessions_do_not_overflow_their_grid_slots():
     assert tiny_name_rule is not None
     assert "min-height" not in short_rule.group(1)
     assert "min-height" not in tiny_rule.group(1)
-    assert "display: none" in tiny_name_rule.group(1)
+    # A 5-minute block still shows its title, sized to fit inside one slot.
+    assert "display: none" not in tiny_name_rule.group(1)
+    assert "margin-top: 0" in tiny_rule.group(1)
+    assert "margin-bottom: 0" in tiny_rule.group(1)
+    assert "line-height: calc(var(--slot-height) - 2px)" in tiny_name_rule.group(1)
 
 
 def test_time_column_and_now_label_stay_aligned_while_scrolling():
