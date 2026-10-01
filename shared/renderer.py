@@ -413,15 +413,20 @@ def generate_html(schedule: Schedule, *, schedules=None, groups=None, presentati
             dur_html = ""
             ai_html = ""
 
+            # The title is the only primary line; duration, clock range, AI and
+            # chair are one quiet secondary tone.
             if slots >= 3 and session.chair:
                 chair_html = (
                     f'<div class="session-chair">{_esc(session.chair)}</div>'
                 )
             if slots >= 4:
+                # Duration leads: it is what people look for first. The row is
+                # one line tall, so a narrow column drops the clock range whole.
                 dur_html = (
                     f'<div class="session-duration">'
-                    f"{session.start_time}-{session.end_time} "
-                    f"({session.duration_minutes}m)</div>"
+                    f'<span class="session-minutes">{session.duration_minutes} <span class="session-unit">min</span></span>'
+                    f'<span class="session-range">\u00b7 {session.start_time}\u2013{session.end_time}</span>'
+                    f"</div>"
                 )
             if session.agenda_item and slots >= 6:
                 ai_html = (
@@ -455,7 +460,7 @@ def generate_html(schedule: Schedule, *, schedules=None, groups=None, presentati
             popup_attr = popup_html.replace('&', '&amp;').replace('"', '&quot;').replace("'", '&#39;')
 
             # Build secondary details wrapped in a clipping container
-            details_inner = f"{dur_html}{ai_html}{chair_html}"
+            details_inner = f"{dur_html}{ai_html}"
             details_html = f'<div class="session-details">{details_inner}</div>' if details_inner else ""
             is_long = _crosses_time_block(session.start_time, session.end_time, timeline)
             block_classes = "session-block"
@@ -486,7 +491,7 @@ def generate_html(schedule: Schedule, *, schedules=None, groups=None, presentati
                 f' data-group="{data_group_attr}"'
                 f' data-description="{data_description_attr}"'
                 f'>\n'
-                f"                    {name_html}{details_html}\n"
+                f"                    {name_html}{details_html}{chair_html}\n"
                 f"                </div>\n"
             )
 
