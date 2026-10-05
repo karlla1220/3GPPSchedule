@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from shared.topic_references import render_topic_references
+from shared.topic_references import render_supplements, render_topic_references
 
 import json
 import re
@@ -497,6 +497,7 @@ def generate_html(schedule: Schedule, *, schedules=None, groups=None, presentati
         )
 
     html_parts.append(render_topic_references(schedule.topic_references, schedule.topic_preamble))
+    html_parts.append(render_supplements(schedule.supplements))
 
     return _render_template("schedule.html", {
         "MEETING_NAME": _esc(schedule.meeting_name),

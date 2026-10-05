@@ -107,6 +107,37 @@ def agenda_tree(items):
     return f'<div class="topic-agenda-tree" aria-label="Agenda hierarchy">{render(roots)}</div>' if roots else ''
 
 
+def render_supplements(blocks):
+    """Text a WG keeps from its source document, shown below the schedule grid."""
+    if not blocks:
+        return ''
+
+    def text(value):
+        return escape(str(value or '')).replace('\n', '<br>')
+
+    output = ['<details class="supplements" open><summary>Additional information</summary>']
+    for block in blocks:
+        kind = block.get('type')
+        if kind == 'heading':
+            output.append(f'<h3>{text(block.get("text"))}</h3>')
+        elif kind == 'table':
+            rows = [list(row) for row in block.get('rows') or [] if any(row)]
+            if not rows:
+                continue
+            head, body = (rows[0], rows[1:]) if block.get('header') else (None, rows)
+            table = ['<div class="supplement-scroll"><table>']
+            if head:
+                table.append('<thead><tr>' + ''.join(f'<th>{text(c)}</th>' for c in head) + '</tr></thead>')
+            table.append('<tbody>' + ''.join('<tr>' + ''.join(f'<td>{text(c)}</td>' for c in row) + '</tr>'
+                                             for row in body) + '</tbody></table></div>')
+            output.append(''.join(table))
+        elif block.get('text'):
+            body = text(block['text'])
+            output.append(f'<p>{f"<strong>{body}</strong>" if block.get("bold") else body}</p>')
+    output.append('</details>')
+    return ''.join(output)
+
+
 def render_topic_references(topics, preamble=()):
     if not topics:
         return ''

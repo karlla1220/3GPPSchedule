@@ -340,6 +340,16 @@ header .meta {
 }
 .session-scope { font-size: 10px; color: #525252; }
 .topic-references { margin: 24px 0; border-top: 1px solid #D1D5DB; padding-top: 12px; }
+/* Source text below the grid; same frame as the Topics section. */
+.supplements { margin: 24px 0; border-top: 1px solid #D1D5DB; padding-top: 12px; }
+.supplements summary { cursor: pointer; font-weight: 600; }
+.supplements h3 { margin: 16px 0 4px; font-size: 12px; font-weight: 600; }
+.supplements p { margin: 6px 0; font-size: 12px; line-height: 1.65; overflow-wrap: anywhere; }
+.supplements .supplement-scroll { overflow-x: auto; }
+.supplements table { border-collapse: collapse; font-size: 12px; }
+.supplements th, .supplements td { padding: 6px 12px 6px 0; border-bottom: 1px solid #E5E7EB; text-align: left; vertical-align: top; }
+.supplements th { font-weight: 600; color: #475569; }
+.supplements td { overflow-wrap: anywhere; }
 .topic-references summary { cursor: pointer; font-weight: 600; }
 .topic-references .topic-scroll { overflow-x: auto; }
 .topic-references table { width: 100%; border-collapse: collapse; font-size: 12px; }
