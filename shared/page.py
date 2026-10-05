@@ -2,7 +2,7 @@
 from html import escape
 import re
 
-from shared.navigation import render_navigation
+from shared.navigation import TITLE_EMOJI, render_navigation
 
 DEFAULT_NOTICE = (
     "ℹ️ This page is automatically generated from uploaded documents. "
@@ -35,7 +35,7 @@ def render_header(schedule, *, presentation=None, schedules=None, groups=None):
     """Reusable across WG layouts; supplies #tz-now for the schedule clock."""
     metadata = normalize_presentation(presentation)
     heading = (render_navigation(schedule, schedules, groups) if schedules is not None
-               else f"<h1>{escape(schedule.meeting_name)}</h1>")
+               else f"<h1>{TITLE_EMOJI}{escape(schedule.meeting_name)}</h1>")
     sources = ", ".join(schedule.source_files) if schedule.source_files else schedule.source_file
     parts = ["<header>", heading,
              f'<p class="meta">Updated Files: {escape(sources)} &nbsp;|&nbsp; Generated: {escape(schedule.generated_at)} ({escape(schedule.timezone)}) &nbsp;|&nbsp; Now: <span id="tz-now">...</span> ({escape(schedule.timezone)})</p>']
