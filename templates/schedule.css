@@ -416,6 +416,8 @@ header .meta {
     flex-direction: column;
     justify-content: flex-start;
     min-height: 0;
+    /* The chair is dropped by block width; see .session-chair. */
+    container-type: inline-size;
 }
 
 .session-block::before {
@@ -545,21 +547,27 @@ header .meta {
     min-height: 0;
 }
 
-/* Pinned bottom-right; the tint behind it keeps a short block's AI line
-   from showing through. */
+/* Pinned bottom-right with nothing behind it, so it needs clear space on
+   its row. */
 .session-chair {
     position: absolute;
     right: 7px;
     bottom: 3px;
     max-width: calc(100% - 17px);
-    padding-left: 6px;
     font-weight: 500;
     color: var(--chair);
-    background: var(--tint-bottom);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     z-index: 3;
+}
+
+/* Below this width the full time line (about 110px) and a name (about
+   45px) no longer fit side by side, so the whole column goes without. */
+@container (max-width: 160px) {
+    .session-chair {
+        display: none;
+    }
 }
 
 /* Click-to-show popup */
