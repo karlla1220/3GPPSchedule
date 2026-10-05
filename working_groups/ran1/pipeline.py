@@ -27,7 +27,6 @@ import argparse
 import hashlib
 import json
 import os
-import re
 import sys
 from datetime import datetime
 from pathlib import Path
@@ -57,10 +56,12 @@ from .downloader import (
     save_schedule_state,
     load_schedule_state,
     _extract_meeting_id,
+    agenda_urls_for_meeting,
     local_reference_meeting_id,
     download_external_files,
     save_external_files_state,
     _external_config_fingerprint,
+    DOWNLOADS_DIR,
     EXTRA_FILES_DIR,
     _local_doc_preference,
     _meeting_rank,
@@ -69,6 +70,7 @@ from .merger import collect_time_slot_data
 from .config import load_config
 from .agenda_descriptions import (
     DEFAULT_JSON_PATH,
+    descriptions_match_meeting,
     update_agenda_description_json,
 )
 
@@ -222,12 +224,28 @@ def _can_preserve_cached_agenda(
 
 
 def _extract_meeting_name(filepath: Path) -> str:
-    """Try to extract meeting name from the filename."""
-    name = filepath.stem
-    match = re.search(r"(RAN\d+#\d+\w*)", name)
-    if match:
-        return match.group(1)
-    return name
+    """Return the display name of the meeting a schedule file belongs to.
+
+    Built from the normalised meeting id, so every spelling of one meeting
+    (``RAN1#126b``, ``RAN1#126-bis``) is shown under the same name.
+    """
+    meeting_id = _extract_meeting_id(filepath.name)
+    if meeting_id is None:
+        return filepath.stem
+    return "RAN" + meeting_id[len("ran"):]
+
+
+def _agenda_cache_dir(meeting_id: str | None) -> Path:
+    """Return the local folder holding one meeting's downloaded agenda.
+
+    An agenda is often just ``agenda.csv``, so its name cannot tell two
+    meetings apart.  A folder per meeting keeps the cached agenda of a
+    previous meeting from being picked up for the current one.
+    """
+    base = DOWNLOADS_DIR / "Agenda"
+    if meeting_id is None:
+        return base
+    return base / meeting_id.replace("#", "_")
 
 
 def main():
@@ -470,9 +488,15 @@ def build_schedule(args) -> Schedule:
     else:
         print(f"  {len(time_slots)} time slots (from {len(cells)} cells)")
 
+    # Reference files follow the meeting of the selected schedule: only an
+    # Agenda folder of that same meeting may describe its agenda items.
     agenda_path: Path | None = None
     agenda_info: dict | None = None
-    agenda_urls = cfg.get("agenda_urls") or []
+    agenda_urls = agenda_urls_for_meeting(
+        cfg.get("agenda_urls") or [],
+        current_meeting_id,
+    )
+    agenda_dir = _agenda_cache_dir(current_meeting_id)
     if agenda_urls and not args.no_download:
         print(
             f"\nLooking up meeting agenda from "
@@ -484,6 +508,7 @@ def build_schedule(args) -> Schedule:
             agenda_candidate_name = str(agenda_info.get("name", "")).lower()
             agenda_path = download_latest_agenda(
                 agenda_urls,
+                agenda_dir,
                 latest_info=agenda_info,
                 force=(
                     agenda_candidate_name.endswith(".docx")
@@ -494,17 +519,23 @@ def build_schedule(args) -> Schedule:
         else:
             print("No agenda file found on FTP")
     if agenda_path is None:
-        agenda_path = find_local_latest_agenda()
+        agenda_path = find_local_latest_agenda(agenda_dir)
         if agenda_path is not None:
             print(f"\nUsing local agenda: {agenda_path.name}")
 
-    if not args.no_download and (agenda_path is not None or not DEFAULT_JSON_PATH.exists()):
+    # Descriptions saved for another meeting are regenerated, not reused.
+    descriptions_are_current = (
+        DEFAULT_JSON_PATH.exists()
+        and descriptions_match_meeting(current_meeting_id, DEFAULT_JSON_PATH)
+    )
+    if not args.no_download and (agenda_path is not None or not descriptions_are_current):
         print("\nFetching agenda item descriptions...")
         try:
             update_agenda_description_json(
                 output_path=DEFAULT_JSON_PATH,
                 agenda_docx_path=agenda_path,
                 agenda_source_info=agenda_info,
+                use_local_agenda=False,
             )
             print(f"  Wrote {DEFAULT_JSON_PATH}")
         except Exception as e:

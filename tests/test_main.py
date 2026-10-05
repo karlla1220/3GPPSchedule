@@ -144,6 +144,12 @@ class ExtractMeetingNameTests(unittest.TestCase):
             "RAN1#124bis",
         )
 
+    def test_short_bis_suffix_is_shown_as_bis(self):
+        self.assertEqual(
+            _extract_meeting_name(Path("Draft RAN1#126b online and offline schedules - v00.docx")),
+            "RAN1#126bis",
+        )
+
     def test_falls_back_to_file_stem_when_no_meeting_name_is_found(self):
         self.assertEqual(
             _extract_meeting_name(Path("custom schedule name.docx")),
@@ -186,6 +192,7 @@ class MainChairNotesLookupTests(unittest.TestCase):
     @patch("working_groups.ran1.pipeline.parse_docx", return_value=([], []))
     @patch("working_groups.ran1.pipeline.load_schedule_state", return_value={})
     @patch("working_groups.ran1.pipeline.find_chair_notes_docx", return_value=None)
+    @patch("working_groups.ran1.pipeline.update_agenda_description_json")
     @patch("working_groups.ran1.pipeline.find_local_latest_agenda", return_value=None)
     @patch("working_groups.ran1.pipeline.download_latest_agenda", return_value=None)
     @patch("working_groups.ran1.pipeline.download_latest_chair_notes", return_value=None)
@@ -211,6 +218,7 @@ class MainChairNotesLookupTests(unittest.TestCase):
         mock_download_latest_chair_notes,
         mock_download_latest_agenda,
         mock_find_local_latest_agenda,
+        mock_update_agenda_description_json,
         mock_find_chair_notes_docx,
         mock_load_schedule_state,
         mock_parse_docx,
@@ -303,6 +311,8 @@ class MainExtraFilesWiringTests(unittest.TestCase):
         stack.enter_context(patch("working_groups.ran1.pipeline.save_schedule_state", return_value=None))
         stack.enter_context(patch("working_groups.ran1.pipeline.save_html", return_value="docs/index.html"))
         stack.enter_context(patch("working_groups.ran1.pipeline.find_local_latest_agenda", return_value=None))
+        # Keep the build away from the published descriptions and the network.
+        stack.enter_context(patch("working_groups.ran1.pipeline.update_agenda_description_json"))
         stack.enter_context(patch("working_groups.ran1.pipeline.find_local_vice_chair_schedules", return_value={}))
         # Defensive: keep local/FTP local-schedule fallbacks inert.
         stack.enter_context(patch("working_groups.ran1.pipeline.find_local_latest_schedule", return_value=None))
@@ -646,3 +656,39 @@ def test_portal_timezone_bypasses_document_location_and_llm(tmp_path, offline):
     else:
         lookup.assert_called_once_with('ran1', 'ran1#126')
         assert save.call_args.kwargs['timezone_ref'] == ref
+
+
+@pytest.mark.parametrize('schedule_name, agenda_dir', [
+    ('RAN1#126 online and offline schedules - v03.docx', None),
+    ('Draft RAN1#126b online and offline schedules - v00.docx', Path('downloads/ran1/Agenda/ran1_126bis')),
+])
+def test_agenda_is_taken_only_from_the_folder_of_the_schedule_meeting(tmp_path, schedule_name, agenda_dir):
+    from working_groups.ran1.models import ScheduleSource
+    agenda_url = 'https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_126b/Agenda/'
+    document = tmp_path / schedule_name
+    document.write_bytes(b'placeholder')
+    source = ScheduleSource('Chair_notes', None, True, {'name': document.name})
+    info = {'name': 'agenda.csv', 'url': agenda_url + 'agenda.csv', 'source_url': agenda_url,
+            'uploaded_at': datetime(2026, 10, 4, 5, 42)}
+    with MainExtraFilesWiringTests()._enter_common([], no_download=False) as stack:
+        stack.enter_context(patch.object(main_module, 'load_config', return_value={
+            'inbox_urls': ['https://example.com/Inbox/'], 'agenda_urls': [agenda_url],
+            'extra_folders': [], 'extra_files': []}))
+        stack.enter_context(patch.object(main_module, 'find_local_schedule_sources', return_value=([], None)))
+        stack.enter_context(patch.object(main_module, 'discover_schedule_sources', return_value=[source]))
+        stack.enter_context(patch.object(main_module, 'download_all_schedules', return_value=(document, {})))
+        stack.enter_context(patch.object(main_module, 'save_external_files_state'))
+        stack.enter_context(patch.object(main_module, 'local_reference_meeting_id', return_value=None))
+        stack.enter_context(patch.object(main_module, 'local_reference_hashes', return_value={}))
+        listing = stack.enter_context(patch.object(main_module, 'get_latest_agenda_info', return_value=info))
+        download = stack.enter_context(patch.object(main_module, 'download_latest_agenda', return_value=None))
+        schedule = main_module.build_schedule(argparse.Namespace(
+            local=None, no_download=False, rebuild_slots=False))
+    if agenda_dir is None:
+        assert schedule.meeting_id == 'ran1#126'
+        listing.assert_not_called()
+        download.assert_not_called()
+    else:
+        assert (schedule.meeting_id, schedule.meeting_name) == ('ran1#126bis', 'RAN1#126bis')
+        listing.assert_called_once_with([agenda_url])
+        assert download.call_args.args == ([agenda_url], agenda_dir)

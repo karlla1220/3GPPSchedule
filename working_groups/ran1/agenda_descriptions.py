@@ -18,7 +18,7 @@ from bs4 import BeautifulSoup
 
 from shared import remote_files
 
-from .downloader import _iter_local_files, _local_doc_preference
+from .downloader import _extract_meeting_id, _iter_local_files, _local_doc_preference
 
 
 TDOC_LIST_URL = "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Tdoc_list"
@@ -616,9 +616,15 @@ def update_agenda_description_json(
     download_dir: Path = DEFAULT_DOWNLOAD_DIR,
     agenda_docx_path: Path | None = None,
     agenda_source_info: dict | None = None,
+    use_local_agenda: bool = True,
 ) -> Path:
-    """Build agenda_item_description.json, preferring the Agenda CSV/DOCX."""
-    if agenda_docx_path is None:
+    """Build agenda_item_description.json, preferring the Agenda CSV/DOCX.
+
+    ``use_local_agenda=False`` is for callers that already resolved the
+    agenda for a specific meeting: the shared download folder is not
+    searched again, since a file left there may belong to another meeting.
+    """
+    if agenda_docx_path is None and use_local_agenda:
         agenda_docx_path = find_local_latest_agenda_file()
 
     if agenda_docx_path is not None:
@@ -661,11 +667,55 @@ def update_agenda_description_json(
     return output_path
 
 
+def description_meeting_id(path: Path = DEFAULT_JSON_PATH) -> str | None:
+    """Return the meeting the saved descriptions were generated for.
+
+    Read from the recorded source: the per-meeting Agenda folder URL
+    (``…/TSGR1_126b/Agenda/agenda.csv``) or a file name that carries the
+    meeting (``TDoc_List_Meeting_RAN1#125 (…).xlsx``).  ``None`` when the
+    file is missing or its source does not name a meeting.
+    """
+    try:
+        data = json.loads(path.read_text())
+    except (json.JSONDecodeError, OSError):
+        return None
+    if not isinstance(data, dict):
+        return None
+    for key in ("source_url", "source_agenda_file", "source_file"):
+        value = data.get(key)
+        if isinstance(value, str):
+            meeting_id = _extract_meeting_id(unquote(value))
+            if meeting_id is not None:
+                return meeting_id
+    return None
+
+
+def descriptions_match_meeting(
+    meeting_id: str | None,
+    path: Path = DEFAULT_JSON_PATH,
+) -> bool:
+    """Return False only when the descriptions name a different meeting."""
+    described = description_meeting_id(path)
+    return meeting_id is None or described is None or described == meeting_id
+
+
 def load_agenda_description_map(
     path: Path = DEFAULT_JSON_PATH,
+    meeting_id: str | None = None,
 ) -> dict[str, str]:
-    """Load agenda item descriptions from JSON."""
+    """Load agenda item descriptions from JSON.
+
+    Agenda item numbers are reused between meetings with different topics,
+    so descriptions generated for another meeting than ``meeting_id`` are
+    not returned.
+    """
     if not path.exists():
+        return {}
+    if not descriptions_match_meeting(meeting_id, path):
+        print(
+            f"  Ignoring agenda descriptions of {description_meeting_id(path)} "
+            f"(current meeting {meeting_id}): {path}"
+        )
         return {}
     try:
         with open(path) as f:

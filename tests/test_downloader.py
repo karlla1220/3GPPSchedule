@@ -14,6 +14,7 @@ from working_groups.ran1.downloader import (
     _meeting_rank,
     _extract_version_from_name,
     _pick_latest_in_meeting_group,
+    agenda_urls_for_meeting,
     discover_schedule_sources,
     download_latest_chair_notes,
     download_latest_agenda,
@@ -206,6 +207,49 @@ class ExtractMeetingIdTests(unittest.TestCase):
             _extract_meeting_id("Draft RAN1#124bis online and offline schedules - v01.docx"),
             "ran1#124bis",
         )
+
+    def test_short_bis_suffix_is_the_bis_meeting(self):
+        # The RAN1#126bis draft was uploaded as "RAN1#126b".
+        self.assertEqual(
+            _extract_meeting_id("Draft RAN1#126b online and offline schedules - v00.docx"),
+            "ran1#126bis",
+        )
+
+    def test_short_bis_suffix_with_separator(self):
+        self.assertEqual(_extract_meeting_id("RAN1#126-b schedule - v01.docx"), "ran1#126bis")
+        self.assertEqual(_extract_meeting_id("RAN1#126 b schedule - v01.docx"), "ran1#126bis")
+
+    def test_first_letter_of_next_word_is_not_a_suffix(self):
+        self.assertEqual(_extract_meeting_id("RAN1#126 breakout schedule.docx"), "ran1#126")
+        self.assertEqual(_extract_meeting_id("RAN1#126 extra schedule.docx"), "ran1#126")
+        self.assertEqual(_extract_meeting_id("TSGR1_126 breakout schedule.docx"), "ran1#126")
+
+    def test_meeting_folder_url(self):
+        self.assertEqual(
+            _extract_meeting_id("https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_126b/Agenda/"),
+            "ran1#126bis",
+        )
+
+
+class AgendaUrlsForMeetingTests(unittest.TestCase):
+    """Tests for agenda_urls_for_meeting."""
+
+    BIS = "https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_126b/Agenda/"
+    BASE = "https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_126/Agenda/"
+
+    def test_keeps_only_the_folder_of_the_current_meeting(self):
+        self.assertEqual(agenda_urls_for_meeting([self.BASE, self.BIS], "ran1#126bis"), [self.BIS])
+        self.assertEqual(agenda_urls_for_meeting([self.BASE, self.BIS], "ran1#126"), [self.BASE])
+
+    def test_drops_folder_of_another_meeting(self):
+        self.assertEqual(agenda_urls_for_meeting([self.BIS], "ran1#126"), [])
+
+    def test_keeps_folder_without_meeting_id(self):
+        url = "https://example.org/Agenda/"
+        self.assertEqual(agenda_urls_for_meeting([url], "ran1#126"), [url])
+
+    def test_unknown_current_meeting_filters_nothing(self):
+        self.assertEqual(agenda_urls_for_meeting([self.BASE, self.BIS], None), [self.BASE, self.BIS])
 
 
 class PickLatestInMeetingGroupTests(unittest.TestCase):
@@ -670,6 +714,46 @@ class DiscoverScheduleSourcesMeetingFilterTests(unittest.TestCase):
             by_person["Hiroki"].file_info["name"],
             "RAN1#125 schedule for Hiroki sessions_v00.docx",
         )
+
+    @patch("working_groups.ran1.downloader.list_remote_files")
+    @patch("working_groups.ran1.downloader.list_inbox_subfolders")
+    def test_bis_draft_named_with_short_suffix_replaces_previous_meeting(
+        self,
+        mock_list_inbox_subfolders,
+        mock_list_remote_files,
+    ):
+        """The sync inbox still holds RAN1#126 while the RAN1#126bis folder
+        has its first draft, uploaded as "RAN1#126b"."""
+        mock_list_inbox_subfolders.side_effect = [
+            [
+                {"name": "Chair_notes", "url": "https://example.com/sync/Inbox/Chair_notes"},
+                {"name": "Hiroki_notes", "url": "https://example.com/sync/Inbox/Hiroki_notes"},
+            ],
+            [
+                {"name": "Chair_notes", "url": "https://example.com/126b/Inbox/Chair_notes"},
+            ],
+        ]
+        mock_list_remote_files.side_effect = [
+            [_f("RAN1#126 online and offline schedules - v03.docx", datetime(2026, 8, 28, 8, 41))],
+            [_f("RAN1#126 schedule for Hiroki Adhoc2 sessions_v08_1.docx", datetime(2026, 8, 27, 11, 22))],
+            [],
+            [
+                _f("Draft Chair notes RAN1#126bis_v00.docx", datetime(2026, 10, 4, 8, 57)),
+                _f("Draft RAN1#126b online and offline schedules - v00.docx", datetime(2026, 10, 4, 8, 57)),
+            ],
+            [],
+        ]
+
+        result = discover_schedule_sources(
+            urls=["https://example.com/sync/Inbox/", "https://example.com/126b/Inbox/"],
+            preferred_meeting_id="ran1#126",
+        )
+
+        self.assertEqual(
+            [s.file_info["name"] for s in result],
+            ["Draft RAN1#126b online and offline schedules - v00.docx"],
+        )
+        self.assertTrue(result[0].is_main)
 
     @patch("working_groups.ran1.downloader.list_remote_files")
     @patch("working_groups.ran1.downloader.list_inbox_subfolders")

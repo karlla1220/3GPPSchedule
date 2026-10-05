@@ -811,7 +811,7 @@ def parse_time_slots(
     n_skipped = 0
     api_calls = 0
     MAX_RETRIES = 3
-    agenda_description_map = load_agenda_description_map()
+    agenda_description_map = load_agenda_description_map(meeting_id=meeting_id)
 
     for slot_idx, slot in enumerate(time_slots):
         slot_label = (

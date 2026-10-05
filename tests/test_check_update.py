@@ -15,13 +15,16 @@ def _run_check(
     external_state: dict | None = None,
     agenda_info: dict | None = None,
     chair_notes_info: dict | None = None,
+    agenda_urls: list[str] | None = None,
 ):
     outputs: list[tuple[str, str]] = []
     cfg = {
         "inbox_urls": [],
         "extra_folders": [],
         "extra_files": extra_files or [],
-        "agenda_urls": ["https://example.org/Agenda/"],
+        "agenda_urls": (
+            agenda_urls if agenda_urls is not None else ["https://example.org/Agenda/"]
+        ),
     }
     remote_patch = patch(
         "working_groups.ran1.check_update.get_all_remote_schedule_info",
@@ -39,7 +42,7 @@ def _run_check(
         remote_patch as remote_mock,
         patch(
             "working_groups.ran1.check_update.get_latest_agenda_info",
-            return_value=agenda_info,
+            side_effect=lambda urls: agenda_info if urls else None,
             create=True,
         ),
         patch(
@@ -414,3 +417,19 @@ def test_agenda_description_updates_still_detected_after_portal_migration(update
     with patch.object(check_update, 'lookup_timezone_reference', return_value=ref):
         outputs, _ = _run_check(state=state, local_refs={}, remote=[], agenda_info=remote_agenda)
     assert outputs == [('changed', 'true' if updated else 'false')]
+
+
+@pytest.mark.parametrize('folder, changed', [('TSGR1_126', 'true'), ('TSGR1_126b', 'false')])
+def test_agenda_of_another_meeting_is_not_a_change(folder, changed):
+    ref = {'type': 'portal', 'id': 60713, 'timezone': 'Europe/Amsterdam'}
+    files = [{'folder': 'Chair_notes', 'name': 'RAN1#126 online and offline schedules - v03.docx',
+              'uploaded_at': '2026-08-28T08:41:00'}]
+    state = {'files': files, 'meeting_id': 'ran1#126', 'local_refs': {},
+             'timezone_status': 'resolved', 'timezone_ref': ref,
+             'agenda': {'name': 'agenda.csv', 'uploaded_at': '2026-08-20T10:00:00'}}
+    newer_agenda = {'name': 'agenda.csv', 'uploaded_at': '2026-10-04T05:42:00'}
+    with patch.object(check_update, 'lookup_timezone_reference', return_value=ref):
+        outputs, _ = _run_check(
+            state=state, local_refs={}, remote=files, agenda_info=newer_agenda,
+            agenda_urls=[f'https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/{folder}/Agenda/'])
+    assert outputs == [('changed', changed)]

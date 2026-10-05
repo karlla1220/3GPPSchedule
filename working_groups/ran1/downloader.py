@@ -180,28 +180,34 @@ def _extract_version_parts_from_name(filename: str) -> tuple[int, ...]:
 
 
 # Known meeting suffixes (case-insensitive).
-# Only bis, e, and adhoc have been observed in practice.
-_MEETING_SUFFIXES = r"(?:bis|e|adhoc)"
+# bis, e, and adhoc have been observed in practice, plus ``b`` as 3GPP's
+# short form of ``bis`` (``RAN1#126b``, matching the ``TSGR1_126b`` folder).
+_MEETING_SUFFIXES = r"(?:bis|b|e|adhoc)"
+
+# A suffix only counts when it is a whole token.  Without this boundary the
+# first letter of the next word would be read as a suffix (``RAN1#126
+# breakout`` is not a bis meeting).
+_SUFFIX_END = r"(?![A-Za-z0-9])"
 
 # Pattern to extract meeting identifiers like RAN1#124, RAN1#124bis,
-# RAN1#124-bis, RAN1#124 bis, etc.  The suffix part is optional and may
-# be separated by a hyphen or space.
+# RAN1#124-bis, RAN1#124 bis, RAN1#124b, etc.  The suffix part is optional
+# and may be separated by a hyphen or space.
 _MEETING_ID_PATTERN = re.compile(
-    rf"(RAN\d+#\d+)(?:[- ]?({_MEETING_SUFFIXES}))?",
+    rf"(RAN\d+#\d+)(?:[- ]?({_MEETING_SUFFIXES}){_SUFFIX_END})?",
     re.IGNORECASE,
 )
 
 
 # Suffixes used in TSGR_*_NNN folder/file names (``b`` is 3GPP's short
 # form of ``bis`` for these newer per-meeting folders).
-_TSGR_SUFFIXES = r"(?:b|bis)"
+_TSGR_SUFFIXES = r"(?:bis|b)"
 
 # Pattern to extract meeting identifiers like TSGR1_126, TSGR1_124b, etc.
 # (per-meeting folders in the tsg_ran FTP tree).  Both short suffixes and
 # full ones are accepted; the result is normalised to the same
 # ``ran<team>#<num>`` form as the ``RAN1#124`` pattern.
 _TSGR_ID_PATTERN = re.compile(
-    rf"TSG[_ ]?R(\d+)[_ ](\d+)(?:[ _-]?({_TSGR_SUFFIXES}))?",
+    rf"TSG[_ ]?R(\d+)[_ ](\d+)(?:[ _-]?({_TSGR_SUFFIXES}){_SUFFIX_END})?",
     re.IGNORECASE,
 )
 
@@ -214,12 +220,15 @@ def _extract_meeting_id(filename: str) -> str | None:
         'RAN1#124bis schedule for Hiroki_v07.docx'          → 'ran1#124bis'
         'RAN1#124-bis schedule - v01.docx'                  → 'ran1#124bis'
         'RAN1#124 bis schedule - v01.docx'                  → 'ran1#124bis'
+        'Draft RAN1#126b online and offline schedules.docx' → 'ran1#126bis'
         'TSGR1_126 online and offline schedules - v02.docx' → 'ran1#126'
         'TSGR1_124b schedule - v01.docx'                    → 'ran1#124bis'
         'custom schedule name.docx'                         → None
 
     The returned string is always lowercased with any hyphen/space between
-    the number and the suffix removed (e.g. '124-bis' → '124bis').
+    the number and the suffix removed (e.g. '124-bis' → '124bis'), and the
+    short ``b`` suffix spelled out as ``bis`` so every spelling of one
+    meeting yields one id.
 
     Two naming conventions are recognised:
 
@@ -233,6 +242,8 @@ def _extract_meeting_id(filename: str) -> str | None:
     if m:
         base = m.group(1).lower()
         suffix = (m.group(2) or "").lower()
+        if suffix == "b":
+            suffix = "bis"
         return f"{base}{suffix}"
 
     m = _TSGR_ID_PATTERN.search(filename)
@@ -243,6 +254,38 @@ def _extract_meeting_id(filename: str) -> str | None:
         return f"ran{team}#{num}{suffix}"
 
     return None
+
+
+def agenda_urls_for_meeting(
+    agenda_urls: list[str],
+    meeting_id: str | None,
+) -> list[str]:
+    """Keep the Agenda folders that belong to ``meeting_id``.
+
+    Agenda URLs come from the per-meeting ``meeting_specific`` folders in
+    config.json (``…/TSGR1_126b/Agenda/``), which are edited by hand, while
+    the current meeting is derived from the selected schedule file.  The two
+    can disagree around a meeting change, so a folder that names a
+    *different* meeting is dropped: its agenda describes other agenda items
+    than the schedule being built.
+
+    A URL without a recognisable meeting id is kept because a mismatch
+    cannot be shown, and nothing is filtered while the meeting is unknown.
+    """
+    if meeting_id is None:
+        return list(agenda_urls)
+
+    matched: list[str] = []
+    for url in agenda_urls:
+        url_meeting_id = _extract_meeting_id(unquote(url))
+        if url_meeting_id is None or url_meeting_id == meeting_id:
+            matched.append(url)
+        else:
+            print(
+                f"  Skipping agenda folder for {url_meeting_id} "
+                f"(current meeting {meeting_id}): {url}"
+            )
+    return matched
 
 
 # Regular plenary meeting ids look like ``ran1#124`` or ``ran1#124bis``.

@@ -10,6 +10,8 @@ from working_groups.ran1.agenda_descriptions import (
     build_agenda_description_pairs,
     build_agenda_description_pairs_from_csv,
     build_agenda_description_pairs_from_docx,
+    description_meeting_id,
+    load_agenda_description_map,
     save_agenda_description_json,
     strip_derived_description_fields,
 )
@@ -199,3 +201,52 @@ def test_save_agenda_description_json_records_source_metadata(tmp_path):
     assert data["source_url"] == "https://example.com/Agenda/R1-2601750.zip"
     assert data["source_uploaded_at"] == "2026-05-18T08:30:00"
     assert data["source_agenda_file"] == "R1-2601750.zip"
+
+
+def _save_descriptions(path, **source):
+    save_agenda_description_json(
+        [{"agenda_item": "10.1", "description": "Overview"}], path, **source
+    )
+
+
+def test_description_meeting_comes_from_the_agenda_folder(tmp_path):
+    path = tmp_path / "agenda_item_description.json"
+    _save_descriptions(
+        path,
+        source_file="agenda.csv",
+        source_url="https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_126b/Agenda/agenda.csv",
+    )
+
+    assert description_meeting_id(path) == "ran1#126bis"
+
+
+def test_description_meeting_comes_from_the_tdoc_list_name(tmp_path):
+    path = tmp_path / "agenda_item_description.json"
+    _save_descriptions(
+        path,
+        source_file="TDoc_List_Meeting_RAN1#125 (260519).xlsx",
+        source_url="https://example.org/Tdoc_list/TDoc_List_Meeting_RAN1%23125%20(260519).xlsx",
+    )
+
+    assert description_meeting_id(path) == "ran1#125"
+
+
+def test_descriptions_of_another_meeting_are_not_loaded(tmp_path):
+    path = tmp_path / "agenda_item_description.json"
+    _save_descriptions(
+        path,
+        source_file="agenda.csv",
+        source_url="https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_126b/Agenda/agenda.csv",
+    )
+
+    assert load_agenda_description_map(path, meeting_id="ran1#126") == {}
+    assert load_agenda_description_map(path, meeting_id="ran1#126bis") == {"10.1": "Overview"}
+    assert load_agenda_description_map(path) == {"10.1": "Overview"}
+
+
+def test_descriptions_without_a_named_meeting_are_loaded(tmp_path):
+    path = tmp_path / "agenda_item_description.json"
+    _save_descriptions(path, source_file="agenda.csv")
+
+    assert description_meeting_id(path) is None
+    assert load_agenda_description_map(path, meeting_id="ran1#126") == {"10.1": "Overview"}

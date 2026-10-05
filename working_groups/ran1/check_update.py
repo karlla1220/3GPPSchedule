@@ -26,6 +26,7 @@ from shared.portal_meetings import lookup_timezone_reference
 
 from .config import load_config
 from .downloader import (
+    agenda_urls_for_meeting,
     check_external_files,
     EXTRA_FILES_TRANSFER_DIR,
     get_all_remote_schedule_info,
@@ -212,6 +213,22 @@ def check_updates(*, staging_dir=None) -> CheckResult:
     elif remote_all is None:
         print("No cached remote comparison because FTP was unavailable.")
 
+    # The build only reads the Agenda folder of the meeting it selects, so
+    # compare against that same folder; another meeting's agenda would be
+    # reported as a change on every run without ever being built.
+    selected_meeting_id = next(
+        (
+            meeting_id
+            for info in remote_all or []
+            if (meeting_id := _extract_meeting_id(info["name"])) is not None
+        ),
+        preferred_meeting_id,
+    )
+    agenda_urls = agenda_urls_for_meeting(
+        cfg.get("agenda_urls") or [],
+        selected_meeting_id,
+    )
+
     portal_ref = lookup_timezone_reference("ran1", preferred_meeting_id)
     cached_timezone_ref = state.get("timezone_ref")
     if portal_ref is not None or (
@@ -220,7 +237,7 @@ def check_updates(*, staging_dir=None) -> CheckResult:
         # Agenda remains an input for item descriptions even after timezone
         # detection stops depending on it. Track it independently of Portal.
         agenda_ref = _timezone_reference(
-            "agenda", get_latest_agenda_info(cfg.get("agenda_urls") or [])
+            "agenda", get_latest_agenda_info(agenda_urls)
         )
         if agenda_ref is not None and any(
             (state.get("agenda") or {}).get(key) != value
@@ -247,7 +264,7 @@ def check_updates(*, staging_dir=None) -> CheckResult:
             and cached_timezone_ref.get("type") == "agenda"
             and cached_timezone_ref.get("origin") != "local"
         ):
-            agenda_info = get_latest_agenda_info(cfg.get("agenda_urls") or [])
+            agenda_info = get_latest_agenda_info(agenda_urls)
             agenda_name = str((agenda_info or {}).get("name", "")).lower()
             if agenda_name.endswith(".docx"):
                 current_timezone_ref = _timezone_reference("agenda", agenda_info)
@@ -255,7 +272,7 @@ def check_updates(*, staging_dir=None) -> CheckResult:
             isinstance(cached_timezone_ref, dict)
             and cached_timezone_ref.get("origin") == "local"
         ):
-            agenda_info = get_latest_agenda_info(cfg.get("agenda_urls") or [])
+            agenda_info = get_latest_agenda_info(agenda_urls)
             agenda_name = str((agenda_info or {}).get("name", ""))
             current_timezone_ref = (
                 _timezone_reference("agenda", agenda_info)
