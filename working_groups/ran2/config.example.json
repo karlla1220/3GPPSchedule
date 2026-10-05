@@ -1,6 +1,8 @@
 {
   "sync_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN2/Agenda/",
   "archive_url": "https://www.3gpp.org/ftp/tsg_ran/WG2_RL2/",
+  "llm_fallback": true,
+  "model": "gemini-3-flash-preview",
   "local_agenda": "tests/fixtures/ran2/agenda_135bis.csv",
   "meetings": {
     "135bis": {

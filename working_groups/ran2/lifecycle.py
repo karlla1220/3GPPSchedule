@@ -4,7 +4,7 @@ from shared.lifecycle import CheckResult, clear_paths, restore_staged
 
 input_paths = (Path('working_groups/ran2'),)
 persistent_paths = (Path('docs/ran2'),)
-cache_paths = ()
+cache_paths = (Path('.cache/ran2'),)
 
 
 def check_updates():

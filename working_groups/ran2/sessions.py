@@ -246,7 +246,50 @@ def title_and_chair(infos: list[Line]):
         title = next((i.text for i in infos if i.text), '')
     chairs = [c for h in heads for c in h.chairs] or [c for i in infos for c in i.chairs]
     group_item = next((h.ais[0] for h in heads if h.ais), None)
-    return title, ', '.join(dict.fromkeys(chairs)) or None, group_item
+    return title, ', '.join(dict.fromkeys(chairs)) or None, group_item, bool(heads)
+
+
+# Times inside prose use a colon; "[7.10]" is an agenda item, not 07:10.
+CLOCK_TEXT = re.compile(r'(?<![\d.:])(\d{1,2}):(\d{2})(?!\d)')
+DURATION = re.compile(r'\b\d+(?:\.\d+)?\s*(?:min(?:ute)?s?|hrs?|hours?)\b|\(\s*\d+(?:\.\d+)?\s*h\s*\)', re.I)
+
+
+def written_times(lines: list[str], bounds) -> set[str]:
+    """Clock times written anywhere in the lines, as HH:MM, within the day's reach."""
+    low, high = bounds
+    found = set()
+    for raw in lines:
+        marker = parse_marker(raw, bounds)
+        if marker:
+            found.update(t for t in marker[:2] if t)
+        for match in CLOCK_TEXT.finditer(raw):
+            try:
+                value = clock(match[1], match[2])
+            except ValueError:
+                continue
+            if low - 60 <= time_to_minutes(value) <= high + 60:
+                found.add(value)
+    return found
+
+
+def uncertainty(cell: dict, bounds, untitled: int) -> list[str]:
+    """Why the rules may have misread this cell; empty when they are on firm ground."""
+    reasons = []
+    lines = cell['lines']
+    for i, raw in enumerate(lines):
+        if not raw:
+            continue
+        marker = parse_marker(raw, bounds)
+        rest = marker[2] if marker else raw
+        if raw.lstrip().startswith('@') and not marker:
+            reasons.append(f'unreadable time marker: {raw!r}')
+        elif CLOCK_TEXT.search(rest) or DURATION.search(rest):
+            reasons.append(f'time written inside a line: {raw!r}')
+        elif marker and not rest and i and lines[i - 1] and marker[0] != cell['start']:
+            reasons.append(f'header written right above a time marker: {lines[i - 1]!r} / {raw!r}')
+    if untitled:
+        reasons.append('a part has no line that names it')
+    return list(dict.fromkeys(reasons))
 
 
 def resolve_overlaps(sessions: list[dict]) -> list[dict]:
@@ -293,28 +336,55 @@ def resolve_overlaps(sessions: list[dict]) -> list[dict]:
     return sorted(placed, key=lambda s: (s['start'], s['rooms']))
 
 
-def interpret(document: dict, agenda: dict | None = None) -> list[dict]:
-    """Session dicts per day: rooms, times, title, chair and agenda items."""
+def day_bounds(day: dict) -> tuple[int, int]:
+    return (min(time_to_minutes(s) for s, _ in day['slots']),
+            max(time_to_minutes(e) for _, e in day['slots']))
+
+
+def rule_based(cell: dict, bounds, chairs, agenda) -> tuple[list[dict], int]:
+    """Sessions of one cell by the rules, and how many parts have no naming line."""
+    found, untitled = [], 0
+    for part in split_cell(cell, bounds):
+        infos = [analyze(raw, chairs, agenda) for raw in part.lines]
+        ais = list(dict.fromkeys(ai for info in infos for ai in info.ais))
+        title, chair, group_item, named = title_and_chair(infos)
+        untitled += not named and not any(info.offline for info in infos)  # "[004] (Xiaomi)" is as named as it gets
+        # Nothing but numbers and companies, e.g. "[004] (Ericsson, Nokia)": keep it as written.
+        title = title or (f'AI {", ".join(ais[:3])}' if ais else part.lines[0])
+        offline = bool(infos[0].offline) or bool(re.search(r'(?<!after )\boffline', title, re.I))
+        found.append({'rooms': cell['rooms'], 'start': part.start, 'end': part.end, 'fixed': part.fixed,
+                      'name': title, 'chair': chair, 'agenda_items': ais,
+                      'group_item': group_item or (ais[0] if ais else None), 'offline': offline,
+                      'lines': list(part.lines)})
+    return found, untitled
+
+
+def interpret(document: dict, agenda: dict | None = None, refine=None) -> list[dict]:
+    """Session dicts per day: rooms, times, title, chair and agenda items.
+
+    ``refine`` is the LLM fallback. It receives the cells the rules are unsure
+    about, with the reasons and the rule-based reading, and returns validated
+    sessions for the cells it could read; every other cell keeps the rules.
+    """
     chairs = learn_chairs(document)
-    sessions = []
+    readings, doubtful = [], []
     for day in document['days']:
         if not day['slots']:
             continue
-        bounds = (min(time_to_minutes(s) for s, _ in day['slots']),
-                  max(time_to_minutes(e) for _, e in day['slots']))
-        found = []
+        bounds = day_bounds(day)
         for cell in day['cells']:
-            for part in split_cell(cell, bounds):
-                infos = [analyze(raw, chairs, agenda) for raw in part.lines]
-                ais = list(dict.fromkeys(ai for info in infos for ai in info.ais))
-                title, chair, group_item = title_and_chair(infos)
-                # Nothing but numbers and companies, e.g. "[004] (Ericsson, Nokia)": keep it as written.
-                title = title or (f'AI {", ".join(ais[:3])}' if ais else part.lines[0])
-                offline = bool(infos[0].offline) or bool(re.search(r'(?<!after )\boffline', title, re.I))
-                found.append({'day': day['day'], 'rooms': cell['rooms'], 'start': part.start, 'end': part.end,
-                              'fixed': part.fixed, 'name': title, 'chair': chair, 'agenda_items': ais,
-                              'group_item': group_item or (ais[0] if ais else None), 'offline': offline,
-                              'lines': list(part.lines)})
+            found, untitled = rule_based(cell, bounds, chairs, agenda)
+            readings.append((day, cell, found))
+            reasons = uncertainty(cell, bounds, untitled)
+            if reasons:
+                doubtful.append({'day': day, 'cell': cell, 'bounds': bounds, 'reasons': reasons, 'rules': found})
+    replaced = refine(doubtful) if refine and doubtful else {}
+    sessions = []
+    for day in document['days']:
+        found = []
+        for owner, cell, rules in readings:
+            if owner is day:
+                found.extend({**s, 'day': day['day']} for s in replaced.get(cell['id'], rules))
         sessions.extend(resolve_overlaps(found))
     return sessions
 
@@ -355,12 +425,13 @@ def round5(value: str) -> str:
 
 
 def make_schedule(document: dict, agenda: dict | None, metadata: dict, source_files: list[str],
-                  generated_at: str) -> Schedule:
+                  generated_at: str, *, refine=None, sessions: list[dict] | None = None) -> Schedule:
+    """``sessions`` replaces the cell reading when the whole document was read by the LLM."""
     agenda = agenda or {}
     first, last = date.fromisoformat(metadata['starts_on']), date.fromisoformat(metadata['ends_on'])
     dates = {(first + timedelta(days=i)).strftime('%A'): (first + timedelta(days=i)).isoformat()
              for i in range(min((last - first).days, 6) + 1)}
-    sessions = interpret(document, agenda)
+    sessions = interpret(document, agenda, refine) if sessions is None else sessions
     room_names = {r['id']: r['name'] for r in document['rooms']}
     days = []
     for day in document['days']:
