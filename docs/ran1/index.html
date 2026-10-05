@@ -611,6 +611,9 @@ header .meta {
     line-height: 1.7;
     min-width: 180px;
     max-width: min(520px, calc(100vw - 24px));
+    max-height: calc(100vh - 16px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
 }
 
 .popup-floating.show {
@@ -1835,35 +1838,61 @@ header .meta {
         backdrop.classList.remove('active');
     }
 
+    function isPopupOpen() {
+        return popupEl.classList.contains('show');
+    }
+
+    // Keep the popup inside the viewport: try right of the block, then left,
+    // then below, then above; clamp whatever wins to the visible area.
+    function placePopup(blockRect) {
+        const M = 8;    // viewport margin
+        const GAP = 4;  // gap between block and popup
+        const vw = document.documentElement.clientWidth;
+        const vh = document.documentElement.clientHeight;
+        popupEl.style.maxHeight = (vh - 2 * M) + 'px';
+        popupEl.style.left = '0px';
+        popupEl.style.top = '0px';
+        const pRect = popupEl.getBoundingClientRect();
+        const w = pRect.width;
+        const h = pRect.height;
+        const clamp = (v, lo, hi) => Math.max(lo, Math.min(v, hi));
+        const clampX = v => clamp(v, M, Math.max(M, vw - w - M));
+        const clampY = v => clamp(v, M, Math.max(M, vh - h - M));
+        let left;
+        let top;
+        if (blockRect.right + GAP + w <= vw - M) {
+            left = blockRect.right + GAP;
+            top = clampY(blockRect.top);
+        } else if (blockRect.left - GAP - w >= M) {
+            left = blockRect.left - GAP - w;
+            top = clampY(blockRect.top);
+        } else if (blockRect.bottom + GAP + h <= vh - M) {
+            left = clampX(blockRect.left);
+            top = blockRect.bottom + GAP;
+        } else if (blockRect.top - GAP - h >= M) {
+            left = clampX(blockRect.left);
+            top = blockRect.top - GAP - h;
+        } else {
+            left = clampX(blockRect.left);
+            top = clampY(blockRect.top);
+        }
+        popupEl.style.left = left + 'px';
+        popupEl.style.top = top + 'px';
+    }
+
     document.querySelectorAll('.session-block').forEach(block => {
         block.addEventListener('click', function(e) {
             e.stopPropagation();
             const html = this.getAttribute('data-popup');
             if (!html) return;
-            const wasOpen = popupEl.classList.contains('show');
+            const wasOpen = isPopupOpen();
             closePopup();
             if (!wasOpen || popupContent.innerHTML !== html) {
                 popupContent.innerHTML = html;
-                const blockRect = this.getBoundingClientRect();
+                popupEl.scrollTop = 0;
                 popupEl.classList.add('show');
                 backdrop.classList.add('active');
-                // Initially place to the right of the block
-                let left = blockRect.right + 4;
-                let top = blockRect.top;
-                // Measure popup after rendering
-                const pRect = popupEl.getBoundingClientRect();
-                // Flip left if off-screen right
-                if (left + pRect.width > window.innerWidth - 8) {
-                    left = blockRect.left - pRect.width - 4;
-                }
-                if (left < 8) left = 8;
-                // Flip up if off-screen bottom
-                if (top + pRect.height > window.innerHeight - 8) {
-                    top = window.innerHeight - pRect.height - 8;
-                }
-                if (top < 8) top = 8;
-                popupEl.style.left = left + 'px';
-                popupEl.style.top = top + 'px';
+                placePopup(this.getBoundingClientRect());
             }
         });
     });
@@ -1873,6 +1902,20 @@ header .meta {
         e.stopPropagation();
         closePopup();
     });
+
+    // Scrolling anywhere (page or grid) closes the popup, since it no longer
+    // sits next to its block. Scrolling inside a tall popup does not.
+    function closeOnScroll(e) {
+        if (!isPopupOpen()) return;
+        if (e.target instanceof Node && popupEl.contains(e.target)) return;
+        closePopup();
+    }
+    document.addEventListener('scroll', closeOnScroll, { capture: true, passive: true });
+    // A scroll gesture on the backdrop closes it even when the page cannot
+    // move (already at the edge, or only the grid scrolls horizontally).
+    backdrop.addEventListener('wheel', closePopup, { passive: true });
+    backdrop.addEventListener('touchmove', closePopup, { passive: true });
+    window.addEventListener('resize', closeOnScroll);
 
     // ── Session Filter ──
     const filterDataEl = document.getElementById('filter-data');
