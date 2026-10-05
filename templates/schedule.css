@@ -15,13 +15,13 @@
     --grid-line: #EEF0F3;
     /* Header meta keeps its own grey; nothing else uses it. */
     --text-muted: #6B7280;
+    /* Category colours stay raw in the data. Session bars and legend dots
+       both show them muted by this one mix. */
+    --accent-strength: 62%;
+    --accent-mute: #64748B;
     --text: #1F2937;
     --border: #D1D5DB;
     --shadow: 0 1px 3px rgba(0,0,0,0.1);
-    --session-surface-top: #FFFFFF;
-    --session-surface-bottom: #F2F3F5;
-    --session-outline: #D7DCE2;
-    --session-relief: inset 0 1px 0 rgba(255,255,255,0.9), 0 1px 2px rgba(31,41,55,0.06);
     --dim-opacity: 0.30;
 }
 
@@ -172,13 +172,11 @@ header .meta {
 .legend {
     display: flex;
     flex-wrap: wrap;
-    gap: 8px;
-    margin-bottom: 12px;
-    padding: 8px 12px;
-    background: white;
-    border-radius: 8px;
-    box-shadow: var(--shadow);
-    font-size: 11px;
+    gap: 14px;
+    margin-bottom: 14px;
+    font-size: 11.5px;
+    font-weight: 500;
+    color: var(--ink-2);
 }
 
 .legend-item {
@@ -187,11 +185,12 @@ header .meta {
     gap: 4px;
 }
 
+/* Same muted colour as the session bar it stands for. */
 .legend-swatch {
-    width: 12px;
-    height: 12px;
-    border-radius: 3px;
-    border: 1px solid;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--accent);
     flex-shrink: 0;
 }
 
@@ -341,43 +340,97 @@ header .meta {
 .topic-agenda-tree .agenda-selected > .agenda-node { color: #263548; font-weight: 600; }
 .agenda-number { font-variant-numeric: tabular-nums; margin-right: 3px; }
 
-/* A subtle neutral gradient gives the whole session a panel surface. */
+/* Session block: a category-tinted panel with a hairline edge and an inset
+   accent bar. Plain colours first, for browsers without color-mix(). */
+.session-block,
+.legend-swatch {
+    --accent: var(--session-border);
+}
+
 .session-block {
-    border-radius: 4px;
-    border: 1px solid var(--session-outline);
-    border-left: 3px solid var(--session-border);
-    background: linear-gradient(180deg, var(--session-surface-top), var(--session-surface-bottom));
-    box-shadow: var(--session-relief);
-    color: #171717;
-    padding: 3px 6px 2px;
-    margin: 1px 2px;
+    --tint-top: #FFFFFF;
+    --tint-bottom: #F7F8FA;
+    --edge: #E3E6EB;
+    --edge-hover: #CDD3DB;
+    --secondary: #7C8698;
+    --minutes: #5B6475;
+    --chair: #A3ABBA;
+}
+
+@supports (color: color-mix(in oklch, red, blue)) {
+    .session-block,
+    .legend-swatch {
+        --accent: color-mix(in oklch, var(--session-border) var(--accent-strength), var(--accent-mute));
+    }
+
+    .session-block {
+        --tint-top: color-mix(in oklch, var(--accent) 4%, #FFFFFF);
+        --tint-bottom: color-mix(in oklch, var(--accent) 10%, #FFFFFF);
+        --edge: color-mix(in oklch, var(--accent) 16%, #FFFFFF);
+        --edge-hover: color-mix(in oklch, var(--accent) 30%, #FFFFFF);
+        --secondary: color-mix(in oklch, var(--accent) 12%, #7C8698);
+        --minutes: color-mix(in oklch, var(--accent) 22%, #5B6475);
+        --chair: color-mix(in oklch, var(--accent) 18%, #A3ABBA);
+    }
+}
+
+/* Height budget for the tightest case, a 30-minute block (60px):
+   60 - margin 4 - border 2 - padding 6 = 48px for the title (16.25px),
+   the 1px gap and two secondary lines (2 x 14.175px) = 45.6px. */
+.session-block {
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--edge);
+    background: linear-gradient(180deg, var(--tint-top), var(--tint-bottom));
+    color: var(--ink);
+    padding: 4px 8px 2px 10px;
+    margin: 2px;
     overflow: hidden;
     cursor: pointer;
     z-index: 10;
     position: relative;
-    transition: box-shadow 0.15s, opacity 0.2s;
+    transition: box-shadow 0.15s, border-color 0.15s, opacity 0.2s;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     min-height: 0;
-    container-type: inline-size;
+}
+
+.session-block::before {
+    content: "";
+    position: absolute;
+    left: 3px;
+    top: 3px;
+    bottom: 3px;
+    width: 3px;
+    border-radius: 3px;
+    background: var(--accent);
 }
 
 .session-block.short-session {
-    border-left-width: 2px;
-    padding: 1px 3px;
+    padding: 1px 4px 1px 8px;
+}
+
+.session-block.short-session::before {
+    top: 2px;
+    bottom: 2px;
+    width: 2px;
 }
 
 /* A 5-minute block is one 10px slot. Give its whole height to a one-line
-   title: no vertical margin (neighbours keep their own 1px), and a 9px
+   title: no vertical margin (neighbours keep their own 2px), and a 9px
    title whose line box equals the 8px inside the borders. */
 .session-block.tiny-session {
     margin-top: 0;
     margin-bottom: 0;
     padding-top: 0;
     padding-bottom: 0;
-    border-radius: 2px;
+    border-radius: 3px;
     justify-content: center;
+}
+
+.session-block.tiny-session::before {
+    top: 1px;
+    bottom: 1px;
 }
 
 .session-block.short-session .session-details {
@@ -394,23 +447,19 @@ header .meta {
     line-height: calc(var(--slot-height) - 2px);
 }
 
-.session-block.long-session {
-    border: 1px solid var(--session-outline);
-    border-left: 3px solid var(--session-border);
-}
-
-
 .session-block:hover {
-    box-shadow: inset 0 1px 0 rgba(255,255,255,0.9), 0 2px 5px rgba(31,41,55,0.14);
+    border-color: var(--edge-hover);
+    box-shadow: 0 2px 8px -2px rgba(15,23,42,.12);
     z-index: 15;
 }
 
 /* Primary: the title. Everything else is one quiet secondary tone. */
 .session-name {
     font-weight: 600;
-    font-size: 12px;
+    font-size: 12.5px;
     line-height: 1.3;
-    color: #111827;
+    letter-spacing: -0.01em;
+    color: var(--ink);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -420,14 +469,12 @@ header .meta {
     background: transparent;
 }
 
+/* Not clipped here: in a 20-minute block the time line leans 2px into the
+   bottom padding. The AI line clips itself. */
 .session-details {
-    /* Indent is 3% of the block's width, capped at 6px, so it shrinks
-       away in narrow mobile columns instead of standing out. */
-    padding-left: min(3cqi, 6px);
     margin-top: 1px;
     flex: 1 1 0;
     min-height: 0;
-    overflow: hidden;
     display: flex;
     flex-direction: column;
 }
@@ -436,9 +483,9 @@ header .meta {
 .session-ai,
 .session-chair {
     font-size: 10.5px;
-    line-height: 1.3;
+    line-height: 1.35;
     font-weight: 400;
-    color: #8B929C;
+    color: var(--secondary);
     font-variant-numeric: tabular-nums;
 }
 
@@ -447,7 +494,7 @@ header .meta {
     flex-wrap: wrap;
     align-items: baseline;
     column-gap: 4px;
-    height: 1.3em;
+    height: 1.35em;
     overflow: hidden;
     flex-shrink: 0;
 }
@@ -457,9 +504,10 @@ header .meta {
     white-space: nowrap;
 }
 
-/* Same grey as the rest of the secondary line; weight alone lifts it. */
+/* Heavier and a shade darker than its line, still well short of the title. */
 .session-minutes {
-    font-weight: 500;
+    font-weight: 600;
+    color: var(--minutes);
 }
 
 .session-unit {
@@ -474,14 +522,17 @@ header .meta {
     min-height: 0;
 }
 
+/* Pinned bottom-right; the tint behind it keeps a short block's AI line
+   from showing through. */
 .session-chair {
     position: absolute;
-    right: 6px;
-    bottom: 2px;
-    max-width: calc(100% - 12px);
+    right: 7px;
+    bottom: 3px;
+    max-width: calc(100% - 17px);
     padding-left: 6px;
-    color: #A1A7B0;
-    background: var(--session-surface-bottom);
+    font-weight: 500;
+    color: var(--chair);
+    background: var(--tint-bottom);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -588,7 +639,7 @@ header .meta {
     .tab { padding: 6px 14px; font-size: 13px; }
     .now-toggle { height: 26px; margin-bottom: 3px; padding: 0 9px; }
     :root { --base-slot-height: 10px; --time-col-width: 36px; }
-    .session-name { font-size: 11px; }
+    .session-name { font-size: 11.5px; }
     .room-header { font-size: 9px; padding: 3px 3px; }
 }
 
