@@ -334,18 +334,24 @@ header .meta {
     );
 }
 
-/* Timeplan breaks remain visible alongside concurrent room sessions. */
+/* Timeplan breaks remain visible alongside concurrent room sessions, so the
+   name sits in the time axis as one word, above the sticky time labels (30). */
 .break-axis {
     grid-column: 1;
-    z-index: 6;
-    align-self: end;
-    font-size: 9px;
+    position: sticky;
+    left: 0;
+    z-index: 31;
+    align-self: center;
+    font-size: 9.5px;
+    font-weight: 500;
     line-height: 1.15;
     padding: 2px;
     text-align: center;
-    background: var(--break-bg);
+    white-space: nowrap;
+    overflow: hidden;
+    background: var(--surface);
+    border-right: 1px solid var(--hairline);
     color: var(--ink-3);
-    overflow-wrap: anywhere;
 }
 .session-scope { font-size: 10px; color: #525252; }
 .topic-references { margin: 24px 0; border-top: 1px solid #D1D5DB; padding-top: 12px; }

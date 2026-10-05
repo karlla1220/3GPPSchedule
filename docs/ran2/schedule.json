@@ -937,20 +937,17 @@
           {
             "name": "Morning coffee",
             "start": "10:30",
-            "end": "11:00",
-            "label_position": "time-axis"
+            "end": "11:00"
           },
           {
             "name": "Lunch",
             "start": "13:00",
-            "end": "14:30",
-            "label_position": "time-axis"
+            "end": "14:30"
           },
           {
             "name": "Afternoon coffee",
             "start": "16:30",
-            "end": "17:00",
-            "label_position": "time-axis"
+            "end": "17:00"
           }
         ],
         "blocks": []
@@ -1656,20 +1653,17 @@
           {
             "name": "Morning coffee",
             "start": "10:30",
-            "end": "11:00",
-            "label_position": "time-axis"
+            "end": "11:00"
           },
           {
             "name": "Lunch",
             "start": "13:00",
-            "end": "14:30",
-            "label_position": "time-axis"
+            "end": "14:30"
           },
           {
             "name": "Afternoon coffee",
             "start": "16:25",
-            "end": "16:50",
-            "label_position": "time-axis"
+            "end": "16:50"
           }
         ],
         "blocks": []
@@ -2370,20 +2364,17 @@
           {
             "name": "Morning coffee",
             "start": "10:30",
-            "end": "11:00",
-            "label_position": "time-axis"
+            "end": "11:00"
           },
           {
             "name": "Lunch",
             "start": "13:00",
-            "end": "14:30",
-            "label_position": "time-axis"
+            "end": "14:30"
           },
           {
             "name": "Afternoon coffee",
             "start": "16:30",
-            "end": "17:00",
-            "label_position": "time-axis"
+            "end": "17:00"
           }
         ],
         "blocks": []
@@ -2967,20 +2958,17 @@
           {
             "name": "Morning coffee",
             "start": "10:30",
-            "end": "11:00",
-            "label_position": "time-axis"
+            "end": "11:00"
           },
           {
             "name": "Lunch",
             "start": "13:00",
-            "end": "14:30",
-            "label_position": "time-axis"
+            "end": "14:30"
           },
           {
             "name": "Afternoon coffee",
             "start": "16:30",
-            "end": "17:00",
-            "label_position": "time-axis"
+            "end": "17:00"
           }
         ],
         "blocks": []
@@ -3150,8 +3138,7 @@
           {
             "name": "Morning coffee",
             "start": "10:30",
-            "end": "11:00",
-            "label_position": "time-axis"
+            "end": "11:00"
           }
         ],
         "blocks": []
@@ -3159,7 +3146,7 @@
     }
   ],
   "source_file": "R2_135b_Schedule_v00.docx",
-  "generated_at": "2026-10-05 17:21",
+  "generated_at": "2026-10-05 18:01",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
