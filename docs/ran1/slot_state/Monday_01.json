@@ -2,9 +2,7 @@
   "day": "Monday",
   "time_block_index": 1,
   "source_hashes": {
-    "Main Schedule": "15d55ddd5a5857d1",
-    "Hiroki's schedule": "abfe27df8d8d19d3",
-    "Sorour's schedule": "6acfdaa861227a81"
+    "Main Schedule": "15d55ddd5a5857d1"
   },
   "merged_sessions": [
     {
@@ -126,37 +124,12 @@
     },
     {
       "room_name": "RAN1_off1",
-      "name": "R20 A-IoT",
+      "name": "A-IoT",
       "duration_minutes": 60,
-      "specified_start_time": "11:00",
+      "specified_start_time": null,
       "chair": "Hiroki",
       "group_header": "R20",
-      "agenda_item": "9.3.1",
-      "description": "R2D signals, channels, waveform and procedures",
-      "agenda_descriptions": [
-        {
-          "agenda_item": "9.3.1",
-          "matched_agenda_item": "9.3.1",
-          "description": "R2D signals, channels, waveform and procedures",
-          "hierarchy": [
-            {
-              "agenda_item": "9",
-              "description": "Release 20 NR",
-              "has_description": true
-            },
-            {
-              "agenda_item": "9.3",
-              "description": "Solutions for Ambient IoT (Internet of Things) in NR Phase 2",
-              "has_description": true
-            },
-            {
-              "agenda_item": "9.3.1",
-              "description": "R2D signals, channels, waveform and procedures",
-              "has_description": true
-            }
-          ]
-        }
-      ]
+      "agenda_item": null
     },
     {
       "room_name": "RAN1_off1",
@@ -242,13 +215,13 @@
       "specified_start_time": null,
       "chair": "Hiroki",
       "group_header": "6GR",
-      "agenda_item": "10.8.2",
-      "description": "Aspects of integration with communication",
+      "agenda_item": null,
+      "description": "ISAC",
       "agenda_descriptions": [
         {
-          "agenda_item": "10.8.2",
-          "matched_agenda_item": "10.8.2",
-          "description": "Aspects of integration with communication",
+          "agenda_item": "10.8.x",
+          "matched_agenda_item": "10.8",
+          "description": "ISAC",
           "hierarchy": [
             {
               "agenda_item": "10",
@@ -258,11 +231,6 @@
             {
               "agenda_item": "10.8",
               "description": "ISAC",
-              "has_description": true
-            },
-            {
-              "agenda_item": "10.8.2",
-              "description": "Aspects of integration with communication",
               "has_description": true
             }
           ]
@@ -304,7 +272,7 @@
       ]
     }
   ],
-  "merged_at": "2026-10-04T15:01:44.783790+00:00",
-  "meeting_id": "ran1#126",
+  "merged_at": "2026-10-05T00:55:05.807362+00:00",
+  "meeting_id": "ran1#126bis",
   "schema_version": 2
 }

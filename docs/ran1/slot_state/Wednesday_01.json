@@ -2,9 +2,7 @@
   "day": "Wednesday",
   "time_block_index": 1,
   "source_hashes": {
-    "Main Schedule": "fc8edba417945752",
-    "Hiroki's schedule": "e999ff562ae51a69",
-    "Sorour's schedule": "422bf0071011ec42"
+    "Main Schedule": "fc8edba417945752"
   },
   "merged_sessions": [
     {
@@ -126,55 +124,23 @@
     },
     {
       "room_name": "RAN1_brk1",
-      "name": "AI 9.1 AIML",
+      "name": "AI/ML",
       "duration_minutes": 60,
       "specified_start_time": null,
-      "chair": "Sorour",
-      "group_header": "R20 / AI/ML",
-      "agenda_item": "9.1",
-      "description": "Artificial Intelligence (AI)/Machine Learning (ML) for NR air interface enhancements",
-      "agenda_descriptions": [
-        {
-          "agenda_item": "9.1",
-          "matched_agenda_item": "9.1",
-          "description": "Artificial Intelligence (AI)/Machine Learning (ML) for NR air interface enhancements",
-          "hierarchy": [
-            {
-              "agenda_item": "9",
-              "description": "Release 20 NR",
-              "has_description": true
-            },
-            {
-              "agenda_item": "9.1",
-              "description": "Artificial Intelligence (AI)/Machine Learning (ML) for NR air interface enhancements",
-              "has_description": true
-            }
-          ]
-        }
-      ]
+      "chair": null,
+      "group_header": "R20",
+      "agenda_item": null
     },
     {
       "room_name": "RAN1_brk1",
       "name": "AI 8.1",
       "duration_minutes": 30,
       "specified_start_time": null,
-      "chair": "Sorour",
-      "group_header": "AI 8.1",
-      "agenda_item": "6, 8.1 NTN, 8.1 AIML, 8.1 NES",
-      "description": "Pre-Rel-19 E-UTRA Maintenance",
+      "chair": null,
+      "group_header": "",
+      "agenda_item": "8.1",
+      "description": "Maintenance on AI/ML for NR Air interface, NR MIMO Phase 5, NES and NTN for NR and IoT",
       "agenda_descriptions": [
-        {
-          "agenda_item": "6",
-          "matched_agenda_item": "6",
-          "description": "Pre-Rel-19 E-UTRA Maintenance",
-          "hierarchy": [
-            {
-              "agenda_item": "6",
-              "description": "Pre-Rel-19 E-UTRA Maintenance",
-              "has_description": true
-            }
-          ]
-        },
         {
           "agenda_item": "8.1",
           "matched_agenda_item": "8.1",
@@ -199,7 +165,7 @@
       "name": "10.5.2.3",
       "duration_minutes": 30,
       "specified_start_time": null,
-      "chair": "Sorour",
+      "chair": null,
       "group_header": "6GR",
       "agenda_item": null,
       "description": "Uplink transmission scheme(s) for uplink channels",
@@ -235,18 +201,18 @@
     },
     {
       "room_name": "RAN1_brk2",
-      "name": "10.8.2",
-      "duration_minutes": 40,
+      "name": "10.8 Sensing",
+      "duration_minutes": 120,
       "specified_start_time": null,
-      "chair": "Hiroki",
-      "group_header": "6GR / 10.8 Sensing / 6G ISAC",
-      "agenda_item": "10.8.2",
-      "description": "Aspects of integration with communication",
+      "chair": null,
+      "group_header": "6GR",
+      "agenda_item": null,
+      "description": "ISAC",
       "agenda_descriptions": [
         {
-          "agenda_item": "10.8.2",
-          "matched_agenda_item": "10.8.2",
-          "description": "Aspects of integration with communication",
+          "agenda_item": "10.8",
+          "matched_agenda_item": "10.8",
+          "description": "ISAC",
           "hierarchy": [
             {
               "agenda_item": "10",
@@ -256,79 +222,6 @@
             {
               "agenda_item": "10.8",
               "description": "ISAC",
-              "has_description": true
-            },
-            {
-              "agenda_item": "10.8.2",
-              "description": "Aspects of integration with communication",
-              "has_description": true
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "room_name": "RAN1_brk2",
-      "name": "10.8.3",
-      "duration_minutes": 40,
-      "specified_start_time": null,
-      "chair": "Hiroki",
-      "group_header": "6GR / 10.8 Sensing / 6G ISAC",
-      "agenda_item": "10.8.3",
-      "description": "Waveform and frame structure",
-      "agenda_descriptions": [
-        {
-          "agenda_item": "10.8.3",
-          "matched_agenda_item": "10.8.3",
-          "description": "Waveform and frame structure",
-          "hierarchy": [
-            {
-              "agenda_item": "10",
-              "description": "Rel-20 Study of 6GR",
-              "has_description": true
-            },
-            {
-              "agenda_item": "10.8",
-              "description": "ISAC",
-              "has_description": true
-            },
-            {
-              "agenda_item": "10.8.3",
-              "description": "Waveform and frame structure",
-              "has_description": true
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "room_name": "RAN1_brk2",
-      "name": "10.2.1",
-      "duration_minutes": 40,
-      "specified_start_time": null,
-      "chair": "Hiroki",
-      "group_header": "6GR / 10.8 Sensing / 6G waveform",
-      "agenda_item": "10.2.1",
-      "description": "Waveform",
-      "agenda_descriptions": [
-        {
-          "agenda_item": "10.2.1",
-          "matched_agenda_item": "10.2.1",
-          "description": "Waveform",
-          "hierarchy": [
-            {
-              "agenda_item": "10",
-              "description": "Rel-20 Study of 6GR",
-              "has_description": true
-            },
-            {
-              "agenda_item": "10.2",
-              "description": "Waveform for 6GR air interface",
-              "has_description": true
-            },
-            {
-              "agenda_item": "10.2.1",
-              "description": "Waveform",
               "has_description": true
             }
           ]
@@ -366,18 +259,18 @@
     },
     {
       "room_name": "RAN1_off1",
-      "name": "6G 10.5.4.x",
+      "name": "10.5.4.x",
       "duration_minutes": 30,
-      "specified_start_time": "12:30",
+      "specified_start_time": null,
       "chair": "Hiroki",
       "group_header": "6GR",
-      "agenda_item": "10.5.4.1",
-      "description": "Downlink control channel, scheduling for downlink and uplink transmission",
+      "agenda_item": null,
+      "description": "Downlink control channel, scheduling and HARQ operation",
       "agenda_descriptions": [
         {
-          "agenda_item": "10.5.4.1",
-          "matched_agenda_item": "10.5.4.1",
-          "description": "Downlink control channel, scheduling for downlink and uplink transmission",
+          "agenda_item": "10.5.4.x",
+          "matched_agenda_item": "10.5.4",
+          "description": "Downlink control channel, scheduling and HARQ operation",
           "hierarchy": [
             {
               "agenda_item": "10",
@@ -392,11 +285,6 @@
             {
               "agenda_item": "10.5.4",
               "description": "Downlink control channel, scheduling and HARQ operation",
-              "has_description": true
-            },
-            {
-              "agenda_item": "10.5.4.1",
-              "description": "Downlink control channel, scheduling for downlink and uplink transmission",
               "has_description": true
             }
           ]
@@ -491,7 +379,7 @@
       "agenda_item": null
     }
   ],
-  "merged_at": "2026-10-04T15:02:32.405965+00:00",
-  "meeting_id": "ran1#126",
+  "merged_at": "2026-10-05T00:55:46.074994+00:00",
+  "meeting_id": "ran1#126bis",
   "schema_version": 2
 }

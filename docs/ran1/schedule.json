@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "meeting_name": "RAN1#126b",
+  "meeting_name": "RAN1#126bis",
   "days": [
     {
       "day_name": "Monday",
@@ -296,7 +296,7 @@
           "notes": []
         },
         {
-          "name": "R20 A-IoT",
+          "name": "A-IoT",
           "duration_minutes": 60,
           "start_time": "11:00",
           "end_time": "12:00",
@@ -304,33 +304,10 @@
           "room_col_start": 5,
           "room_col_end": 6,
           "chair": "Hiroki",
-          "agenda_item": "9.3.1",
+          "agenda_item": null,
           "group_header": "R20",
-          "description": "R2D signals, channels, waveform and procedures",
-          "agenda_descriptions": [
-            {
-              "agenda_item": "9.3.1",
-              "matched_agenda_item": "9.3.1",
-              "description": "R2D signals, channels, waveform and procedures",
-              "hierarchy": [
-                {
-                  "agenda_item": "9",
-                  "description": "Release 20 NR",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "9.3",
-                  "description": "Solutions for Ambient IoT (Internet of Things) in NR Phase 2",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "9.3.1",
-                  "description": "R2D signals, channels, waveform and procedures",
-                  "has_description": true
-                }
-              ]
-            }
-          ],
+          "description": null,
+          "agenda_descriptions": [],
           "room_ids": [],
           "room_scope": "assigned",
           "notes": []
@@ -433,7 +410,7 @@
           "notes": []
         },
         {
-          "name": "10.8.x Sensing",
+          "name": "Sensing",
           "duration_minutes": 60,
           "start_time": "11:30",
           "end_time": "12:30",
@@ -441,14 +418,14 @@
           "room_col_start": 6,
           "room_col_end": 7,
           "chair": "Hiroki",
-          "agenda_item": "10.8.2",
+          "agenda_item": "10.8.x",
           "group_header": "6GR",
-          "description": "Aspects of integration with communication",
+          "description": "ISAC",
           "agenda_descriptions": [
             {
-              "agenda_item": "10.8.2",
-              "matched_agenda_item": "10.8.2",
-              "description": "Aspects of integration with communication",
+              "agenda_item": "10.8.x",
+              "matched_agenda_item": "10.8",
+              "description": "ISAC",
               "hierarchy": [
                 {
                   "agenda_item": "10",
@@ -458,11 +435,6 @@
                 {
                   "agenda_item": "10.8",
                   "description": "ISAC",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "10.8.2",
-                  "description": "Aspects of integration with communication",
                   "has_description": true
                 }
               ]
@@ -583,14 +555,14 @@
           "notes": []
         },
         {
-          "name": "AI 10.7.1 NTN",
+          "name": "10.7.1 NTN",
           "duration_minutes": 60,
           "start_time": "14:30",
           "end_time": "15:30",
           "day": "Monday",
           "room_col_start": 3,
           "room_col_end": 4,
-          "chair": "Sorour",
+          "chair": null,
           "agenda_item": "10.7.1",
           "group_header": "6GR",
           "description": "NTN specific requirements and design",
@@ -623,14 +595,14 @@
           "notes": []
         },
         {
-          "name": "NTN",
+          "name": "9.5 NTN",
           "duration_minutes": 20,
           "start_time": "15:30",
           "end_time": "15:50",
           "day": "Monday",
           "room_col_start": 3,
           "room_col_end": 4,
-          "chair": "Sorour",
+          "chair": null,
           "agenda_item": "9.5",
           "group_header": "R20",
           "description": "NR NTN in systems using downlink compensation",
@@ -658,97 +630,56 @@
           "notes": []
         },
         {
-          "name": "AI 9.4 NTN-NR",
+          "name": "NTN-NR",
           "duration_minutes": 40,
           "start_time": "15:50",
           "end_time": "16:30",
           "day": "Monday",
           "room_col_start": 3,
           "room_col_end": 4,
-          "chair": "Sorour",
-          "agenda_item": "9.4",
+          "chair": null,
+          "agenda_item": null,
           "group_header": "R20",
-          "description": "GNSS resilient NR-NTN operation",
-          "agenda_descriptions": [
-            {
-              "agenda_item": "9.4",
-              "matched_agenda_item": "9.4",
-              "description": "GNSS resilient NR-NTN operation",
-              "hierarchy": [
-                {
-                  "agenda_item": "9",
-                  "description": "Release 20 NR",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "9.4",
-                  "description": "GNSS resilient NR-NTN operation",
-                  "has_description": true
-                }
-              ]
-            }
-          ],
+          "description": null,
+          "agenda_descriptions": [],
           "room_ids": [],
           "room_scope": "assigned",
           "notes": []
         },
         {
-          "name": "R20 A-IoT",
+          "name": "A-IoT Phase2",
           "duration_minutes": 60,
           "start_time": "14:30",
           "end_time": "15:30",
           "day": "Monday",
           "room_col_start": 4,
           "room_col_end": 5,
-          "chair": "Hiroki",
-          "agenda_item": "9.3.1",
+          "chair": null,
+          "agenda_item": null,
           "group_header": "R20",
-          "description": "R2D signals, channels, waveform and procedures",
-          "agenda_descriptions": [
-            {
-              "agenda_item": "9.3.1",
-              "matched_agenda_item": "9.3.1",
-              "description": "R2D signals, channels, waveform and procedures",
-              "hierarchy": [
-                {
-                  "agenda_item": "9",
-                  "description": "Release 20 NR",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "9.3",
-                  "description": "Solutions for Ambient IoT (Internet of Things) in NR Phase 2",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "9.3.1",
-                  "description": "R2D signals, channels, waveform and procedures",
-                  "has_description": true
-                }
-              ]
-            }
-          ],
+          "description": null,
+          "agenda_descriptions": [],
           "room_ids": [],
           "room_scope": "assigned",
           "notes": []
         },
         {
-          "name": "6G ISAC",
+          "name": "10.8 Sensing",
           "duration_minutes": 60,
           "start_time": "15:30",
           "end_time": "16:30",
           "day": "Monday",
           "room_col_start": 4,
           "room_col_end": 5,
-          "chair": "Hiroki",
-          "agenda_item": "10.8.2",
+          "chair": null,
+          "agenda_item": "10.8",
           "group_header": "6GR",
-          "description": "Aspects of integration with communication",
+          "description": "ISAC",
           "agenda_descriptions": [
             {
-              "agenda_item": "10.8.2",
-              "matched_agenda_item": "10.8.2",
-              "description": "Aspects of integration with communication",
+              "agenda_item": "10.8",
+              "matched_agenda_item": "10.8",
+              "description": "ISAC",
               "hierarchy": [
                 {
                   "agenda_item": "10",
@@ -758,11 +689,6 @@
                 {
                   "agenda_item": "10.8",
                   "description": "ISAC",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "10.8.2",
-                  "description": "Aspects of integration with communication",
                   "has_description": true
                 }
               ]
@@ -953,7 +879,7 @@
           "notes": []
         },
         {
-          "name": "6G 10.5.4.x",
+          "name": "10.5.4.x",
           "duration_minutes": 90,
           "start_time": "14:30",
           "end_time": "16:00",
@@ -961,14 +887,14 @@
           "room_col_start": 6,
           "room_col_end": 7,
           "chair": "Hiroki",
-          "agenda_item": "10.5.4.1, 10.5.4.3",
+          "agenda_item": "10.5.4.x",
           "group_header": "6GR",
-          "description": "Downlink control channel, scheduling for downlink and uplink transmission",
+          "description": "Downlink control channel, scheduling and HARQ operation",
           "agenda_descriptions": [
             {
-              "agenda_item": "10.5.4.1",
-              "matched_agenda_item": "10.5.4.1",
-              "description": "Downlink control channel, scheduling for downlink and uplink transmission",
+              "agenda_item": "10.5.4.x",
+              "matched_agenda_item": "10.5.4",
+              "description": "Downlink control channel, scheduling and HARQ operation",
               "hierarchy": [
                 {
                   "agenda_item": "10",
@@ -983,38 +909,6 @@
                 {
                   "agenda_item": "10.5.4",
                   "description": "Downlink control channel, scheduling and HARQ operation",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "10.5.4.1",
-                  "description": "Downlink control channel, scheduling for downlink and uplink transmission",
-                  "has_description": true
-                }
-              ]
-            },
-            {
-              "agenda_item": "10.5.4.3",
-              "matched_agenda_item": "10.5.4.3",
-              "description": "HARQ related Aspects",
-              "hierarchy": [
-                {
-                  "agenda_item": "10",
-                  "description": "Rel-20 Study of 6GR",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "10.5",
-                  "description": "Multi-antenna system",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "10.5.4",
-                  "description": "Downlink control channel, scheduling and HARQ operation",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "10.5.4.3",
-                  "description": "HARQ related Aspects",
                   "has_description": true
                 }
               ]
@@ -1245,14 +1139,14 @@
           "notes": []
         },
         {
-          "name": "AI 10.3.2 Modulation",
-          "duration_minutes": 60,
+          "name": "Modulation",
+          "duration_minutes": 30,
           "start_time": "17:00",
-          "end_time": "18:00",
+          "end_time": "17:30",
           "day": "Monday",
           "room_col_start": 3,
           "room_col_end": 4,
-          "chair": "Sorour",
+          "chair": null,
           "agenda_item": "10.3.2",
           "group_header": "6GR",
           "description": "Modulation",
@@ -1285,14 +1179,14 @@
           "notes": []
         },
         {
-          "name": "AI 10.3.1 Coding",
-          "duration_minutes": 60,
-          "start_time": "18:00",
-          "end_time": "19:00",
+          "name": "Channel coding",
+          "duration_minutes": 50,
+          "start_time": "17:30",
+          "end_time": "18:20",
           "day": "Monday",
           "room_col_start": 3,
           "room_col_end": 4,
-          "chair": "Sorour",
+          "chair": null,
           "agenda_item": "10.3.1",
           "group_header": "6GR",
           "description": "Channel coding",
@@ -1325,14 +1219,14 @@
           "notes": []
         },
         {
-          "name": "AI 10.5.2.1 PDCCH",
+          "name": "10.5.2.1",
           "duration_minutes": 30,
-          "start_time": "19:00",
-          "end_time": "19:30",
+          "start_time": "18:20",
+          "end_time": "18:50",
           "day": "Monday",
           "room_col_start": 3,
           "room_col_end": 4,
-          "chair": "Sorour",
+          "chair": null,
           "agenda_item": "10.5.2.1",
           "group_header": "6GR",
           "description": "Downlink transmission scheme(s) for downlink control channels",
@@ -1370,14 +1264,31 @@
           "notes": []
         },
         {
-          "name": "6G waveform",
+          "name": "MIMO",
           "duration_minutes": 40,
+          "start_time": "18:50",
+          "end_time": "19:30",
+          "day": "Monday",
+          "room_col_start": 3,
+          "room_col_end": 4,
+          "chair": null,
+          "agenda_item": null,
+          "group_header": "R20",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [],
+          "room_scope": "assigned",
+          "notes": []
+        },
+        {
+          "name": "Waveform",
+          "duration_minutes": 30,
           "start_time": "17:00",
-          "end_time": "17:40",
+          "end_time": "17:30",
           "day": "Monday",
           "room_col_start": 4,
           "room_col_end": 5,
-          "chair": "Hiroki",
+          "chair": null,
           "agenda_item": "10.2.1",
           "group_header": "6GR",
           "description": "Waveform",
@@ -1410,112 +1321,22 @@
           "notes": []
         },
         {
-          "name": "10.5.4.3",
-          "duration_minutes": 30,
-          "start_time": "17:40",
-          "end_time": "18:10",
-          "day": "Monday",
-          "room_col_start": 4,
-          "room_col_end": 5,
-          "chair": "Hiroki",
-          "agenda_item": "10.5.4.3",
-          "group_header": "6GR",
-          "description": "HARQ related Aspects",
-          "agenda_descriptions": [
-            {
-              "agenda_item": "10.5.4.3",
-              "matched_agenda_item": "10.5.4.3",
-              "description": "HARQ related Aspects",
-              "hierarchy": [
-                {
-                  "agenda_item": "10",
-                  "description": "Rel-20 Study of 6GR",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "10.5",
-                  "description": "Multi-antenna system",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "10.5.4",
-                  "description": "Downlink control channel, scheduling and HARQ operation",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "10.5.4.3",
-                  "description": "HARQ related Aspects",
-                  "has_description": true
-                }
-              ]
-            }
-          ],
-          "room_ids": [],
-          "room_scope": "assigned",
-          "notes": []
-        },
-        {
-          "name": "10.5.4.1",
-          "duration_minutes": 50,
-          "start_time": "18:10",
-          "end_time": "19:00",
-          "day": "Monday",
-          "room_col_start": 4,
-          "room_col_end": 5,
-          "chair": "Hiroki",
-          "agenda_item": "10.5.4.1",
-          "group_header": "6GR",
-          "description": "Downlink control channel, scheduling for downlink and uplink transmission",
-          "agenda_descriptions": [
-            {
-              "agenda_item": "10.5.4.1",
-              "matched_agenda_item": "10.5.4.1",
-              "description": "Downlink control channel, scheduling for downlink and uplink transmission",
-              "hierarchy": [
-                {
-                  "agenda_item": "10",
-                  "description": "Rel-20 Study of 6GR",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "10.5",
-                  "description": "Multi-antenna system",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "10.5.4",
-                  "description": "Downlink control channel, scheduling and HARQ operation",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "10.5.4.1",
-                  "description": "Downlink control channel, scheduling for downlink and uplink transmission",
-                  "has_description": true
-                }
-              ]
-            }
-          ],
-          "room_ids": [],
-          "room_scope": "assigned",
-          "notes": []
-        },
-        {
-          "name": "10.5.4.3",
-          "duration_minutes": 30,
-          "start_time": "19:00",
+          "name": "10.5.4",
+          "duration_minutes": 120,
+          "start_time": "17:30",
           "end_time": "19:30",
           "day": "Monday",
           "room_col_start": 4,
           "room_col_end": 5,
-          "chair": "Hiroki",
-          "agenda_item": "10.5.4.3",
+          "chair": null,
+          "agenda_item": "10.5.4",
           "group_header": "6GR",
-          "description": "HARQ related Aspects",
+          "description": "Downlink control channel, scheduling and HARQ operation",
           "agenda_descriptions": [
             {
-              "agenda_item": "10.5.4.3",
-              "matched_agenda_item": "10.5.4.3",
-              "description": "HARQ related Aspects",
+              "agenda_item": "10.5.4",
+              "matched_agenda_item": "10.5.4",
+              "description": "Downlink control channel, scheduling and HARQ operation",
               "hierarchy": [
                 {
                   "agenda_item": "10",
@@ -1530,11 +1351,6 @@
                 {
                   "agenda_item": "10.5.4",
                   "description": "Downlink control channel, scheduling and HARQ operation",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "10.5.4.3",
-                  "description": "HARQ related Aspects",
                   "has_description": true
                 }
               ]
@@ -1546,9 +1362,9 @@
         },
         {
           "name": "10.5.1.3",
-          "duration_minutes": 25,
+          "duration_minutes": 30,
           "start_time": "17:00",
-          "end_time": "17:25",
+          "end_time": "17:30",
           "day": "Monday",
           "room_col_start": 5,
           "room_col_end": 6,
@@ -1592,8 +1408,8 @@
         {
           "name": "10.5.1.1",
           "duration_minutes": 40,
-          "start_time": "17:25",
-          "end_time": "18:05",
+          "start_time": "17:30",
+          "end_time": "18:10",
           "day": "Monday",
           "room_col_start": 5,
           "room_col_end": 6,
@@ -1636,9 +1452,9 @@
         },
         {
           "name": "10.5.1.2",
-          "duration_minutes": 25,
-          "start_time": "18:05",
-          "end_time": "18:30",
+          "duration_minutes": 40,
+          "start_time": "18:10",
+          "end_time": "18:50",
           "day": "Monday",
           "room_col_start": 5,
           "room_col_end": 6,
@@ -1680,126 +1496,18 @@
           "notes": []
         },
         {
-          "name": "10.4.2",
-          "duration_minutes": 30,
-          "start_time": "18:30",
-          "end_time": "19:00",
-          "day": "Monday",
-          "room_col_start": 5,
-          "room_col_end": 6,
-          "chair": "Xiaodong",
-          "agenda_item": "10.4.2",
-          "group_header": "6GR",
-          "description": "Operation in connected mode",
-          "agenda_descriptions": [
-            {
-              "agenda_item": "10.4.2",
-              "matched_agenda_item": "10.4.2",
-              "description": "Operation in connected mode",
-              "hierarchy": [
-                {
-                  "agenda_item": "10",
-                  "description": "Rel-20 Study of 6GR",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "10.4",
-                  "description": "Multiple carrier operation",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "10.4.2",
-                  "description": "Operation in connected mode",
-                  "has_description": true
-                }
-              ]
-            }
-          ],
-          "room_ids": [],
-          "room_scope": "assigned",
-          "notes": []
-        },
-        {
-          "name": "10.4.1",
-          "duration_minutes": 30,
-          "start_time": "19:00",
+          "name": "AI/ML",
+          "duration_minutes": 40,
+          "start_time": "18:50",
           "end_time": "19:30",
           "day": "Monday",
           "room_col_start": 5,
           "room_col_end": 6,
-          "chair": "Xiaodong",
-          "agenda_item": "10.4.1",
-          "group_header": "6GR",
-          "description": "Operation in idle mode",
-          "agenda_descriptions": [
-            {
-              "agenda_item": "10.4.1",
-              "matched_agenda_item": "10.4.1",
-              "description": "Operation in idle mode",
-              "hierarchy": [
-                {
-                  "agenda_item": "10",
-                  "description": "Rel-20 Study of 6GR",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "10.4",
-                  "description": "Multiple carrier operation",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "10.4.1",
-                  "description": "Operation in idle mode",
-                  "has_description": true
-                }
-              ]
-            }
-          ],
-          "room_ids": [],
-          "room_scope": "assigned",
-          "notes": []
-        },
-        {
-          "name": "10.6.1.1",
-          "duration_minutes": 30,
-          "start_time": "17:00",
-          "end_time": "17:30",
-          "day": "Monday",
-          "room_col_start": 6,
-          "room_col_end": 7,
-          "chair": "Xiaodong",
-          "agenda_item": "10.6.1.1",
-          "group_header": "6GR",
-          "description": "Design of WUS with OFDM based sequence",
-          "agenda_descriptions": [
-            {
-              "agenda_item": "10.6.1.1",
-              "matched_agenda_item": "10.6.1.1",
-              "description": "Design of WUS with OFDM based sequence",
-              "hierarchy": [
-                {
-                  "agenda_item": "10",
-                  "description": "Rel-20 Study of 6GR",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "10.6",
-                  "description": "WUS and operation",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "10.6.1",
-                  "description": "Downlink WUS and operation",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "10.6.1.1",
-                  "description": "Design of WUS with OFDM based sequence",
-                  "has_description": true
-                }
-              ]
-            }
-          ],
+          "chair": "Sorour",
+          "agenda_item": null,
+          "group_header": "R20",
+          "description": null,
+          "agenda_descriptions": [],
           "room_ids": [],
           "room_scope": "assigned",
           "notes": []
@@ -1807,12 +1515,12 @@
         {
           "name": "10.5.2.1",
           "duration_minutes": 40,
-          "start_time": "17:30",
-          "end_time": "18:10",
+          "start_time": "17:00",
+          "end_time": "17:40",
           "day": "Monday",
           "room_col_start": 6,
           "room_col_end": 7,
-          "chair": "Sorour",
+          "chair": "Sorouri",
           "agenda_item": "10.5.2.1",
           "group_header": "6GR",
           "description": "Downlink transmission scheme(s) for downlink control channels",
@@ -1850,14 +1558,14 @@
           "notes": []
         },
         {
-          "name": "10.7.1 NTN",
+          "name": "NTN",
           "duration_minutes": 40,
-          "start_time": "18:10",
-          "end_time": "18:50",
+          "start_time": "17:40",
+          "end_time": "18:20",
           "day": "Monday",
           "room_col_start": 6,
           "room_col_end": 7,
-          "chair": "Sorour",
+          "chair": "Sorouri",
           "agenda_item": "10.7.1",
           "group_header": "6GR",
           "description": "NTN specific requirements and design",
@@ -1890,6 +1598,41 @@
           "notes": []
         },
         {
+          "name": "NTN",
+          "duration_minutes": 30,
+          "start_time": "18:20",
+          "end_time": "18:50",
+          "day": "Monday",
+          "room_col_start": 6,
+          "room_col_end": 7,
+          "chair": "Sorouri",
+          "agenda_item": "9.5",
+          "group_header": "R20",
+          "description": "NR NTN in systems using downlink compensation",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "9.5",
+              "matched_agenda_item": "9.5",
+              "description": "NR NTN in systems using downlink compensation",
+              "hierarchy": [
+                {
+                  "agenda_item": "9",
+                  "description": "Release 20 NR",
+                  "has_description": true
+                },
+                {
+                  "agenda_item": "9.5",
+                  "description": "NR NTN in systems using downlink compensation",
+                  "has_description": true
+                }
+              ]
+            }
+          ],
+          "room_ids": [],
+          "room_scope": "assigned",
+          "notes": []
+        },
+        {
           "name": "NTN-NR",
           "duration_minutes": 40,
           "start_time": "18:50",
@@ -1897,7 +1640,7 @@
           "day": "Monday",
           "room_col_start": 6,
           "room_col_end": 7,
-          "chair": "Sorour",
+          "chair": "Sorouri",
           "agenda_item": null,
           "group_header": "R20",
           "description": null,
@@ -2129,14 +1872,14 @@
           "notes": []
         },
         {
-          "name": "AI 10.7.1 NTN",
+          "name": "10.7.1 NTN",
           "duration_minutes": 50,
           "start_time": "08:30",
           "end_time": "09:20",
           "day": "Tuesday",
           "room_col_start": 3,
           "room_col_end": 4,
-          "chair": "Sorour",
+          "chair": null,
           "agenda_item": "10.7.1",
           "group_header": "6GR",
           "description": "NTN specific requirements and design",
@@ -2169,14 +1912,14 @@
           "notes": []
         },
         {
-          "name": "NTN",
+          "name": "9.5 NTN",
           "duration_minutes": 30,
           "start_time": "09:20",
           "end_time": "09:50",
           "day": "Tuesday",
           "room_col_start": 3,
           "room_col_end": 4,
-          "chair": "Sorour",
+          "chair": null,
           "agenda_item": "9.5",
           "group_header": "R20",
           "description": "NR NTN in systems using downlink compensation",
@@ -2211,140 +1954,32 @@
           "day": "Tuesday",
           "room_col_start": 3,
           "room_col_end": 4,
-          "chair": "Sorour",
-          "agenda_item": "9.4",
+          "chair": null,
+          "agenda_item": null,
           "group_header": "R20",
-          "description": "GNSS resilient NR-NTN operation",
-          "agenda_descriptions": [
-            {
-              "agenda_item": "9.4",
-              "matched_agenda_item": "9.4",
-              "description": "GNSS resilient NR-NTN operation",
-              "hierarchy": [
-                {
-                  "agenda_item": "9",
-                  "description": "Release 20 NR",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "9.4",
-                  "description": "GNSS resilient NR-NTN operation",
-                  "has_description": true
-                }
-              ]
-            }
-          ],
+          "description": null,
+          "agenda_descriptions": [],
           "room_ids": [],
           "room_scope": "assigned",
           "notes": []
         },
         {
-          "name": "10.5.4.2",
-          "duration_minutes": 40,
+          "name": "10.5.4",
+          "duration_minutes": 120,
           "start_time": "08:30",
-          "end_time": "09:10",
-          "day": "Tuesday",
-          "room_col_start": 4,
-          "room_col_end": 5,
-          "chair": "Hiroki",
-          "agenda_item": "10.5.4.2",
-          "group_header": "6GR",
-          "description": "Downlink and uplink transmission without dynamic scheduling",
-          "agenda_descriptions": [
-            {
-              "agenda_item": "10.5.4.2",
-              "matched_agenda_item": "10.5.4.2",
-              "description": "Downlink and uplink transmission without dynamic scheduling",
-              "hierarchy": [
-                {
-                  "agenda_item": "10",
-                  "description": "Rel-20 Study of 6GR",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "10.5",
-                  "description": "Multi-antenna system",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "10.5.4",
-                  "description": "Downlink control channel, scheduling and HARQ operation",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "10.5.4.2",
-                  "description": "Downlink and uplink transmission without dynamic scheduling",
-                  "has_description": true
-                }
-              ]
-            }
-          ],
-          "room_ids": [],
-          "room_scope": "assigned",
-          "notes": []
-        },
-        {
-          "name": "10.5.4.4",
-          "duration_minutes": 40,
-          "start_time": "09:10",
-          "end_time": "09:50",
-          "day": "Tuesday",
-          "room_col_start": 4,
-          "room_col_end": 5,
-          "chair": "Hiroki",
-          "agenda_item": "10.5.4.4",
-          "group_header": "6GR",
-          "description": "Handling of potential multiple uplink transmissions",
-          "agenda_descriptions": [
-            {
-              "agenda_item": "10.5.4.4",
-              "matched_agenda_item": "10.5.4.4",
-              "description": "Handling of potential multiple uplink transmissions",
-              "hierarchy": [
-                {
-                  "agenda_item": "10",
-                  "description": "Rel-20 Study of 6GR",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "10.5",
-                  "description": "Multi-antenna system",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "10.5.4",
-                  "description": "Downlink control channel, scheduling and HARQ operation",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "10.5.4.4",
-                  "description": "Handling of potential multiple uplink transmissions",
-                  "has_description": true
-                }
-              ]
-            }
-          ],
-          "room_ids": [],
-          "room_scope": "assigned",
-          "notes": []
-        },
-        {
-          "name": "10.5.4.3",
-          "duration_minutes": 40,
-          "start_time": "09:50",
           "end_time": "10:30",
           "day": "Tuesday",
           "room_col_start": 4,
           "room_col_end": 5,
-          "chair": "Hiroki",
-          "agenda_item": "10.5.4.3",
+          "chair": null,
+          "agenda_item": "10.5.4",
           "group_header": "6GR",
-          "description": "HARQ related Aspects",
+          "description": "Downlink control channel, scheduling and HARQ operation",
           "agenda_descriptions": [
             {
-              "agenda_item": "10.5.4.3",
-              "matched_agenda_item": "10.5.4.3",
-              "description": "HARQ related Aspects",
+              "agenda_item": "10.5.4",
+              "matched_agenda_item": "10.5.4",
+              "description": "Downlink control channel, scheduling and HARQ operation",
               "hierarchy": [
                 {
                   "agenda_item": "10",
@@ -2359,11 +1994,6 @@
                 {
                   "agenda_item": "10.5.4",
                   "description": "Downlink control channel, scheduling and HARQ operation",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "10.5.4.3",
-                  "description": "HARQ related Aspects",
                   "has_description": true
                 }
               ]
@@ -2499,7 +2129,7 @@
           "notes": []
         },
         {
-          "name": "6G ISAC",
+          "name": "10.8.x Sensing",
           "duration_minutes": 90,
           "start_time": "08:30",
           "end_time": "10:00",
@@ -2507,14 +2137,14 @@
           "room_col_start": 6,
           "room_col_end": 7,
           "chair": "Hiroki",
-          "agenda_item": "10.8.3, 10.8.1",
+          "agenda_item": "10.8.x",
           "group_header": "6GR",
-          "description": "Waveform and frame structure",
+          "description": "ISAC",
           "agenda_descriptions": [
             {
-              "agenda_item": "10.8.3",
-              "matched_agenda_item": "10.8.3",
-              "description": "Waveform and frame structure",
+              "agenda_item": "10.8.x",
+              "matched_agenda_item": "10.8",
+              "description": "ISAC",
               "hierarchy": [
                 {
                   "agenda_item": "10",
@@ -2524,33 +2154,6 @@
                 {
                   "agenda_item": "10.8",
                   "description": "ISAC",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "10.8.3",
-                  "description": "Waveform and frame structure",
-                  "has_description": true
-                }
-              ]
-            },
-            {
-              "agenda_item": "10.8.1",
-              "matched_agenda_item": "10.8.1",
-              "description": "Evaluations",
-              "hierarchy": [
-                {
-                  "agenda_item": "10",
-                  "description": "Rel-20 Study of 6GR",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "10.8",
-                  "description": "ISAC",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "10.8.1",
-                  "description": "Evaluations",
                   "has_description": true
                 }
               ]
@@ -2561,7 +2164,7 @@
           "notes": []
         },
         {
-          "name": "6G waveform",
+          "name": "10.2.1 Waveform",
           "duration_minutes": 30,
           "start_time": "10:00",
           "end_time": "10:30",
@@ -2569,10 +2172,33 @@
           "room_col_start": 6,
           "room_col_end": 7,
           "chair": "Hiroki",
-          "agenda_item": null,
+          "agenda_item": "10.2.1",
           "group_header": "6GR",
-          "description": null,
-          "agenda_descriptions": [],
+          "description": "Waveform",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "10.2.1",
+              "matched_agenda_item": "10.2.1",
+              "description": "Waveform",
+              "hierarchy": [
+                {
+                  "agenda_item": "10",
+                  "description": "Rel-20 Study of 6GR",
+                  "has_description": true
+                },
+                {
+                  "agenda_item": "10.2",
+                  "description": "Waveform for 6GR air interface",
+                  "has_description": true
+                },
+                {
+                  "agenda_item": "10.2.1",
+                  "description": "Waveform",
+                  "has_description": true
+                }
+              ]
+            }
+          ],
           "room_ids": [],
           "room_scope": "assigned",
           "notes": []
@@ -2698,65 +2324,52 @@
           "notes": []
         },
         {
-          "name": "AI 9.1 AIML",
-          "duration_minutes": 80,
+          "name": "AI/ML",
+          "duration_minutes": 40,
           "start_time": "11:00",
-          "end_time": "12:20",
+          "end_time": "11:40",
           "day": "Tuesday",
           "room_col_start": 3,
           "room_col_end": 4,
-          "chair": "Sorour",
-          "agenda_item": "9.1",
+          "chair": null,
+          "agenda_item": null,
           "group_header": "R20",
-          "description": "Artificial Intelligence (AI)/Machine Learning (ML) for NR air interface enhancements",
-          "agenda_descriptions": [
-            {
-              "agenda_item": "9.1",
-              "matched_agenda_item": "9.1",
-              "description": "Artificial Intelligence (AI)/Machine Learning (ML) for NR air interface enhancements",
-              "hierarchy": [
-                {
-                  "agenda_item": "9",
-                  "description": "Release 20 NR",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "9.1",
-                  "description": "Artificial Intelligence (AI)/Machine Learning (ML) for NR air interface enhancements",
-                  "has_description": true
-                }
-              ]
-            }
-          ],
+          "description": null,
+          "agenda_descriptions": [],
           "room_ids": [],
           "room_scope": "assigned",
           "notes": []
         },
         {
-          "name": "AI 6/8.1",
+          "name": "MIMO",
+          "duration_minutes": 40,
+          "start_time": "11:40",
+          "end_time": "12:20",
+          "day": "Tuesday",
+          "room_col_start": 3,
+          "room_col_end": 4,
+          "chair": null,
+          "agenda_item": null,
+          "group_header": "R20",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [],
+          "room_scope": "assigned",
+          "notes": []
+        },
+        {
+          "name": "AI 8.1",
           "duration_minutes": 40,
           "start_time": "12:20",
           "end_time": "13:00",
           "day": "Tuesday",
           "room_col_start": 3,
           "room_col_end": 4,
-          "chair": "Sorour",
-          "agenda_item": "6/8.1",
-          "group_header": "AI 8.1",
-          "description": "Pre-Rel-19 E-UTRA Maintenance",
+          "chair": null,
+          "agenda_item": "8.1",
+          "group_header": "",
+          "description": "Maintenance on AI/ML for NR Air interface, NR MIMO Phase 5, NES and NTN for NR and IoT",
           "agenda_descriptions": [
-            {
-              "agenda_item": "6",
-              "matched_agenda_item": "6",
-              "description": "Pre-Rel-19 E-UTRA Maintenance",
-              "hierarchy": [
-                {
-                  "agenda_item": "6",
-                  "description": "Pre-Rel-19 E-UTRA Maintenance",
-                  "has_description": true
-                }
-              ]
-            },
             {
               "agenda_item": "8.1",
               "matched_agenda_item": "8.1",
@@ -2780,62 +2393,22 @@
           "notes": []
         },
         {
-          "name": "10.2.1 Waveform",
-          "duration_minutes": 40,
+          "name": "Sensing",
+          "duration_minutes": 80,
           "start_time": "11:00",
-          "end_time": "11:40",
-          "day": "Tuesday",
-          "room_col_start": 4,
-          "room_col_end": 5,
-          "chair": "Hiroki",
-          "agenda_item": "10.2.1",
-          "group_header": "6GR",
-          "description": "Waveform",
-          "agenda_descriptions": [
-            {
-              "agenda_item": "10.2.1",
-              "matched_agenda_item": "10.2.1",
-              "description": "Waveform",
-              "hierarchy": [
-                {
-                  "agenda_item": "10",
-                  "description": "Rel-20 Study of 6GR",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "10.2",
-                  "description": "Waveform for 6GR air interface",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "10.2.1",
-                  "description": "Waveform",
-                  "has_description": true
-                }
-              ]
-            }
-          ],
-          "room_ids": [],
-          "room_scope": "assigned",
-          "notes": []
-        },
-        {
-          "name": "10.8.3",
-          "duration_minutes": 40,
-          "start_time": "11:40",
           "end_time": "12:20",
           "day": "Tuesday",
           "room_col_start": 4,
           "room_col_end": 5,
-          "chair": "Hiroki",
-          "agenda_item": "10.8.3",
+          "chair": null,
+          "agenda_item": "10.8",
           "group_header": "6GR",
-          "description": "Waveform and frame structure",
+          "description": "ISAC",
           "agenda_descriptions": [
             {
-              "agenda_item": "10.8.3",
-              "matched_agenda_item": "10.8.3",
-              "description": "Waveform and frame structure",
+              "agenda_item": "10.8",
+              "matched_agenda_item": "10.8",
+              "description": "ISAC",
               "hierarchy": [
                 {
                   "agenda_item": "10",
@@ -2846,11 +2419,6 @@
                   "agenda_item": "10.8",
                   "description": "ISAC",
                   "has_description": true
-                },
-                {
-                  "agenda_item": "10.8.3",
-                  "description": "Waveform and frame structure",
-                  "has_description": true
                 }
               ]
             }
@@ -2860,41 +2428,18 @@
           "notes": []
         },
         {
-          "name": "10.8.1.",
+          "name": "A-IoT Phase2",
           "duration_minutes": 40,
           "start_time": "12:20",
           "end_time": "13:00",
           "day": "Tuesday",
           "room_col_start": 4,
           "room_col_end": 5,
-          "chair": "Hiroki",
-          "agenda_item": "10.8.1.",
-          "group_header": "6GR",
-          "description": "Evaluations",
-          "agenda_descriptions": [
-            {
-              "agenda_item": "10.8.1",
-              "matched_agenda_item": "10.8.1",
-              "description": "Evaluations",
-              "hierarchy": [
-                {
-                  "agenda_item": "10",
-                  "description": "Rel-20 Study of 6GR",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "10.8",
-                  "description": "ISAC",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "10.8.1",
-                  "description": "Evaluations",
-                  "has_description": true
-                }
-              ]
-            }
-          ],
+          "chair": null,
+          "agenda_item": null,
+          "group_header": "R20",
+          "description": null,
+          "agenda_descriptions": [],
           "room_ids": [],
           "room_scope": "assigned",
           "notes": []
@@ -3071,9 +2616,9 @@
         },
         {
           "name": "10.5.2.2",
-          "duration_minutes": 45,
+          "duration_minutes": 60,
           "start_time": "11:00",
-          "end_time": "11:45",
+          "end_time": "12:00",
           "day": "Tuesday",
           "room_col_start": 6,
           "room_col_end": 7,
@@ -3115,54 +2660,9 @@
           "notes": []
         },
         {
-          "name": "10.5.2.1",
-          "duration_minutes": 30,
-          "start_time": "11:45",
-          "end_time": "12:15",
-          "day": "Tuesday",
-          "room_col_start": 6,
-          "room_col_end": 7,
-          "chair": "Sorour",
-          "agenda_item": "10.5.2.1",
-          "group_header": "6GR",
-          "description": "Downlink transmission scheme(s) for downlink control channels",
-          "agenda_descriptions": [
-            {
-              "agenda_item": "10.5.2.1",
-              "matched_agenda_item": "10.5.2.1",
-              "description": "Downlink transmission scheme(s) for downlink control channels",
-              "hierarchy": [
-                {
-                  "agenda_item": "10",
-                  "description": "Rel-20 Study of 6GR",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "10.5",
-                  "description": "Multi-antenna system",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "10.5.2",
-                  "description": "MIMO operation",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "10.5.2.1",
-                  "description": "Downlink transmission scheme(s) for downlink control channels",
-                  "has_description": true
-                }
-              ]
-            }
-          ],
-          "room_ids": [],
-          "room_scope": "assigned",
-          "notes": []
-        },
-        {
           "name": "10.5.2.3",
-          "duration_minutes": 45,
-          "start_time": "12:15",
+          "duration_minutes": 60,
+          "start_time": "12:00",
           "end_time": "13:00",
           "day": "Tuesday",
           "room_col_start": 6,
@@ -3285,14 +2785,14 @@
           "notes": []
         },
         {
-          "name": "AI 10.5.2.1 PDCCH",
+          "name": "10.5.2.1",
           "duration_minutes": 30,
           "start_time": "14:30",
           "end_time": "15:00",
           "day": "Tuesday",
           "room_col_start": 3,
           "room_col_end": 4,
-          "chair": "Sorour",
+          "chair": null,
           "agenda_item": "10.5.2.1",
           "group_header": "6GR",
           "description": "Downlink transmission scheme(s) for downlink control channels",
@@ -3330,14 +2830,14 @@
           "notes": []
         },
         {
-          "name": "AI 10.5.2.2 PDSCH",
+          "name": "10.5.2.2",
           "duration_minutes": 45,
           "start_time": "15:00",
           "end_time": "15:45",
           "day": "Tuesday",
           "room_col_start": 3,
           "room_col_end": 4,
-          "chair": "Sorour",
+          "chair": null,
           "agenda_item": "10.5.2.2",
           "group_header": "6GR",
           "description": "Downlink transmission scheme(s) for downlink shared channels",
@@ -3375,14 +2875,14 @@
           "notes": []
         },
         {
-          "name": "AI 10.5.2.3 PUxCH",
+          "name": "10.5.2.3",
           "duration_minutes": 45,
           "start_time": "15:45",
           "end_time": "16:30",
           "day": "Tuesday",
           "room_col_start": 3,
           "room_col_end": 4,
-          "chair": "Sorour",
+          "chair": null,
           "agenda_item": "10.5.2.3",
           "group_header": "6GR",
           "description": "Uplink transmission scheme(s) for uplink channels",
@@ -3420,60 +2920,18 @@
           "notes": []
         },
         {
-          "name": "11 TEI20",
-          "duration_minutes": 30,
+          "name": "TEI, AI 7/8.2",
+          "duration_minutes": 80,
           "start_time": "14:30",
-          "end_time": "15:00",
-          "day": "Tuesday",
-          "room_col_start": 4,
-          "room_col_end": 5,
-          "chair": "Hiroki",
-          "agenda_item": "11",
-          "group_header": "TEI",
-          "description": "TEI",
-          "agenda_descriptions": [
-            {
-              "agenda_item": "11",
-              "matched_agenda_item": "11",
-              "description": "TEI",
-              "hierarchy": [
-                {
-                  "agenda_item": "11",
-                  "description": "TEI",
-                  "has_description": true
-                }
-              ]
-            }
-          ],
-          "room_ids": [],
-          "room_scope": "assigned",
-          "notes": []
-        },
-        {
-          "name": "Maintenance",
-          "duration_minutes": 50,
-          "start_time": "15:00",
           "end_time": "15:50",
           "day": "Tuesday",
           "room_col_start": 4,
           "room_col_end": 5,
-          "chair": "Hiroki",
-          "agenda_item": "7, 8.2",
-          "group_header": "TEI",
-          "description": "Pre-Rel-19 NR Maintenance",
+          "chair": null,
+          "agenda_item": null,
+          "group_header": "",
+          "description": "Maintenance on others",
           "agenda_descriptions": [
-            {
-              "agenda_item": "7",
-              "matched_agenda_item": "7",
-              "description": "Pre-Rel-19 NR Maintenance",
-              "hierarchy": [
-                {
-                  "agenda_item": "7",
-                  "description": "Pre-Rel-19 NR Maintenance",
-                  "has_description": true
-                }
-              ]
-            },
             {
               "agenda_item": "8.2",
               "matched_agenda_item": "8.2",
@@ -3497,14 +2955,14 @@
           "notes": []
         },
         {
-          "name": "10.2.1 Waveform",
+          "name": "Waveform",
           "duration_minutes": 40,
           "start_time": "15:50",
           "end_time": "16:30",
           "day": "Tuesday",
           "room_col_start": 4,
           "room_col_end": 5,
-          "chair": "Hiroki",
+          "chair": null,
           "agenda_item": "10.2.1",
           "group_header": "6GR",
           "description": "Waveform",
@@ -3725,33 +3183,10 @@
           "room_col_start": 6,
           "room_col_end": 7,
           "chair": "Hiroki",
-          "agenda_item": "9.3.3",
+          "agenda_item": null,
           "group_header": "R20",
-          "description": "Other procedures",
-          "agenda_descriptions": [
-            {
-              "agenda_item": "9.3.3",
-              "matched_agenda_item": "9.3.3",
-              "description": "Other procedures",
-              "hierarchy": [
-                {
-                  "agenda_item": "9",
-                  "description": "Release 20 NR",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "9.3",
-                  "description": "Solutions for Ambient IoT (Internet of Things) in NR Phase 2",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "9.3.3",
-                  "description": "Other procedures",
-                  "has_description": true
-                }
-              ]
-            }
-          ],
+          "description": null,
+          "agenda_descriptions": [],
           "room_ids": [],
           "room_scope": "assigned",
           "notes": []
@@ -3764,7 +3199,7 @@
           "day": "Tuesday",
           "room_col_start": 6,
           "room_col_end": 7,
-          "chair": "Sorour",
+          "chair": "Sorouri",
           "agenda_item": "10.3.2",
           "group_header": "6GR",
           "description": "Modulation",
@@ -3932,14 +3367,14 @@
           "notes": []
         },
         {
-          "name": "10.3.1 Channel coding",
+          "name": "Channel coding",
           "duration_minutes": 60,
           "start_time": "17:00",
           "end_time": "18:00",
           "day": "Tuesday",
           "room_col_start": 3,
           "room_col_end": 4,
-          "chair": "Sorour",
+          "chair": null,
           "agenda_item": "10.3.1",
           "group_header": "6GR",
           "description": "Channel coding",
@@ -3972,14 +3407,14 @@
           "notes": []
         },
         {
-          "name": "10.3.2 Modulation",
+          "name": "Modulation",
           "duration_minutes": 30,
           "start_time": "18:00",
           "end_time": "18:30",
           "day": "Tuesday",
           "room_col_start": 3,
           "room_col_end": 4,
-          "chair": "Sorour",
+          "chair": null,
           "agenda_item": "10.3.2",
           "group_header": "6GR",
           "description": "Modulation",
@@ -4019,78 +3454,11 @@
           "day": "Tuesday",
           "room_col_start": 4,
           "room_col_end": 5,
-          "chair": "Hiroki",
-          "agenda_item": "9.3.2, 9.3.3, 9.3.1",
+          "chair": null,
+          "agenda_item": null,
           "group_header": "R20",
-          "description": "D2R signals, channels, waveform and procedures",
-          "agenda_descriptions": [
-            {
-              "agenda_item": "9.3.2",
-              "matched_agenda_item": "9.3.2",
-              "description": "D2R signals, channels, waveform and procedures",
-              "hierarchy": [
-                {
-                  "agenda_item": "9",
-                  "description": "Release 20 NR",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "9.3",
-                  "description": "Solutions for Ambient IoT (Internet of Things) in NR Phase 2",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "9.3.2",
-                  "description": "D2R signals, channels, waveform and procedures",
-                  "has_description": true
-                }
-              ]
-            },
-            {
-              "agenda_item": "9.3.3",
-              "matched_agenda_item": "9.3.3",
-              "description": "Other procedures",
-              "hierarchy": [
-                {
-                  "agenda_item": "9",
-                  "description": "Release 20 NR",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "9.3",
-                  "description": "Solutions for Ambient IoT (Internet of Things) in NR Phase 2",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "9.3.3",
-                  "description": "Other procedures",
-                  "has_description": true
-                }
-              ]
-            },
-            {
-              "agenda_item": "9.3.1",
-              "matched_agenda_item": "9.3.1",
-              "description": "R2D signals, channels, waveform and procedures",
-              "hierarchy": [
-                {
-                  "agenda_item": "9",
-                  "description": "Release 20 NR",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "9.3",
-                  "description": "Solutions for Ambient IoT (Internet of Things) in NR Phase 2",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "9.3.1",
-                  "description": "R2D signals, channels, waveform and procedures",
-                  "has_description": true
-                }
-              ]
-            }
-          ],
+          "description": null,
+          "agenda_descriptions": [],
           "room_ids": [],
           "room_scope": "assigned",
           "notes": []
@@ -4203,6 +3571,23 @@
           "notes": []
         },
         {
+          "name": "Early dinner",
+          "duration_minutes": 60,
+          "start_time": "18:30",
+          "end_time": "19:30",
+          "day": "Tuesday",
+          "room_col_start": 5,
+          "room_col_end": 6,
+          "chair": null,
+          "agenda_item": null,
+          "group_header": "",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [],
+          "room_scope": "assigned",
+          "notes": []
+        },
+        {
           "name": "10.5.5",
           "duration_minutes": 30,
           "start_time": "17:00",
@@ -4250,7 +3635,7 @@
           "day": "Tuesday",
           "room_col_start": 6,
           "room_col_end": 7,
-          "chair": "Sorour",
+          "chair": "Sorouri",
           "agenda_item": "10.7.1",
           "group_header": "6GR",
           "description": "NTN specific requirements and design",
@@ -4290,7 +3675,7 @@
           "day": "Tuesday",
           "room_col_start": 6,
           "room_col_end": 7,
-          "chair": "Sorour",
+          "chair": "Sorouri",
           "agenda_item": null,
           "group_header": "R20",
           "description": null,
@@ -4305,7 +3690,7 @@
           "start_time": "18:30",
           "end_time": "19:30",
           "day": "Tuesday",
-          "room_col_start": 5,
+          "room_col_start": 6,
           "room_col_end": 7,
           "chair": null,
           "agenda_item": null,
@@ -4539,14 +3924,14 @@
           "notes": []
         },
         {
-          "name": "AI 10.7.1 NTN",
+          "name": "10.7.1 NTN",
           "duration_minutes": 40,
           "start_time": "08:30",
           "end_time": "09:10",
           "day": "Wednesday",
           "room_col_start": 3,
           "room_col_end": 4,
-          "chair": "Sorour",
+          "chair": null,
           "agenda_item": "10.7.1",
           "group_header": "6GR",
           "description": "NTN specific requirements and design",
@@ -4579,71 +3964,35 @@
           "notes": []
         },
         {
-          "name": "AI 9.4 NTN-NR",
+          "name": "NTN-NR",
           "duration_minutes": 40,
           "start_time": "09:10",
           "end_time": "09:50",
           "day": "Wednesday",
           "room_col_start": 3,
           "room_col_end": 4,
-          "chair": "Sorour",
-          "agenda_item": "9.4",
+          "chair": null,
+          "agenda_item": null,
           "group_header": "R20",
-          "description": "GNSS resilient NR-NTN operation",
-          "agenda_descriptions": [
-            {
-              "agenda_item": "9.4",
-              "matched_agenda_item": "9.4",
-              "description": "GNSS resilient NR-NTN operation",
-              "hierarchy": [
-                {
-                  "agenda_item": "9",
-                  "description": "Release 20 NR",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "9.4",
-                  "description": "GNSS resilient NR-NTN operation",
-                  "has_description": true
-                }
-              ]
-            }
-          ],
+          "description": null,
+          "agenda_descriptions": [],
           "room_ids": [],
           "room_scope": "assigned",
           "notes": []
         },
         {
-          "name": "AI 9.2 MIMO",
+          "name": "MIMO",
           "duration_minutes": 40,
           "start_time": "09:50",
           "end_time": "10:30",
           "day": "Wednesday",
           "room_col_start": 3,
           "room_col_end": 4,
-          "chair": "Sorour",
-          "agenda_item": "9.2",
+          "chair": null,
+          "agenda_item": null,
           "group_header": "R20",
-          "description": "NR MIMO Phase 6",
-          "agenda_descriptions": [
-            {
-              "agenda_item": "9.2",
-              "matched_agenda_item": "9.2",
-              "description": "NR MIMO Phase 6",
-              "hierarchy": [
-                {
-                  "agenda_item": "9",
-                  "description": "Release 20 NR",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "9.2",
-                  "description": "NR MIMO Phase 6",
-                  "has_description": true
-                }
-              ]
-            }
-          ],
+          "description": null,
+          "agenda_descriptions": [],
           "room_ids": [],
           "room_scope": "assigned",
           "notes": []
@@ -4666,7 +4015,7 @@
           "notes": []
         },
         {
-          "name": "Waveform",
+          "name": "10.2.1 Waveform",
           "duration_minutes": 30,
           "start_time": "08:30",
           "end_time": "09:00",
@@ -4706,7 +4055,7 @@
           "notes": []
         },
         {
-          "name": "Sensing",
+          "name": "10.8.x Sensing",
           "duration_minutes": 60,
           "start_time": "09:00",
           "end_time": "10:00",
@@ -4995,36 +4344,18 @@
           "notes": []
         },
         {
-          "name": "AI 9.1 AIML",
+          "name": "AI/ML",
           "duration_minutes": 60,
           "start_time": "11:00",
           "end_time": "12:00",
           "day": "Wednesday",
           "room_col_start": 3,
           "room_col_end": 4,
-          "chair": "Sorour",
-          "agenda_item": "9.1",
+          "chair": null,
+          "agenda_item": null,
           "group_header": "R20",
-          "description": "Artificial Intelligence (AI)/Machine Learning (ML) for NR air interface enhancements",
-          "agenda_descriptions": [
-            {
-              "agenda_item": "9.1",
-              "matched_agenda_item": "9.1",
-              "description": "Artificial Intelligence (AI)/Machine Learning (ML) for NR air interface enhancements",
-              "hierarchy": [
-                {
-                  "agenda_item": "9",
-                  "description": "Release 20 NR",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "9.1",
-                  "description": "Artificial Intelligence (AI)/Machine Learning (ML) for NR air interface enhancements",
-                  "has_description": true
-                }
-              ]
-            }
-          ],
+          "description": null,
+          "agenda_descriptions": [],
           "room_ids": [],
           "room_scope": "assigned",
           "notes": []
@@ -5037,23 +4368,11 @@
           "day": "Wednesday",
           "room_col_start": 3,
           "room_col_end": 4,
-          "chair": "Sorour",
-          "agenda_item": "6, 8.1 NTN, 8.1 AIML, 8.1 NES",
-          "group_header": "AI 8.1",
-          "description": "Pre-Rel-19 E-UTRA Maintenance",
+          "chair": null,
+          "agenda_item": "8.1",
+          "group_header": "",
+          "description": "Maintenance on AI/ML for NR Air interface, NR MIMO Phase 5, NES and NTN for NR and IoT",
           "agenda_descriptions": [
-            {
-              "agenda_item": "6",
-              "matched_agenda_item": "6",
-              "description": "Pre-Rel-19 E-UTRA Maintenance",
-              "hierarchy": [
-                {
-                  "agenda_item": "6",
-                  "description": "Pre-Rel-19 E-UTRA Maintenance",
-                  "has_description": true
-                }
-              ]
-            },
             {
               "agenda_item": "8.1",
               "matched_agenda_item": "8.1",
@@ -5084,7 +4403,7 @@
           "day": "Wednesday",
           "room_col_start": 3,
           "room_col_end": 4,
-          "chair": "Sorour",
+          "chair": null,
           "agenda_item": "10.5.2.3",
           "group_header": "6GR",
           "description": "Uplink transmission scheme(s) for uplink channels",
@@ -5122,102 +4441,22 @@
           "notes": []
         },
         {
-          "name": "10.8.2",
-          "duration_minutes": 40,
+          "name": "Sensing",
+          "duration_minutes": 120,
           "start_time": "11:00",
-          "end_time": "11:40",
-          "day": "Wednesday",
-          "room_col_start": 4,
-          "room_col_end": 5,
-          "chair": "Hiroki",
-          "agenda_item": "10.8.2",
-          "group_header": "6GR",
-          "description": "Aspects of integration with communication",
-          "agenda_descriptions": [
-            {
-              "agenda_item": "10.8.2",
-              "matched_agenda_item": "10.8.2",
-              "description": "Aspects of integration with communication",
-              "hierarchy": [
-                {
-                  "agenda_item": "10",
-                  "description": "Rel-20 Study of 6GR",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "10.8",
-                  "description": "ISAC",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "10.8.2",
-                  "description": "Aspects of integration with communication",
-                  "has_description": true
-                }
-              ]
-            }
-          ],
-          "room_ids": [],
-          "room_scope": "assigned",
-          "notes": []
-        },
-        {
-          "name": "10.8.3",
-          "duration_minutes": 40,
-          "start_time": "11:40",
-          "end_time": "12:20",
-          "day": "Wednesday",
-          "room_col_start": 4,
-          "room_col_end": 5,
-          "chair": "Hiroki",
-          "agenda_item": "10.8.3",
-          "group_header": "6GR",
-          "description": "Waveform and frame structure",
-          "agenda_descriptions": [
-            {
-              "agenda_item": "10.8.3",
-              "matched_agenda_item": "10.8.3",
-              "description": "Waveform and frame structure",
-              "hierarchy": [
-                {
-                  "agenda_item": "10",
-                  "description": "Rel-20 Study of 6GR",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "10.8",
-                  "description": "ISAC",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "10.8.3",
-                  "description": "Waveform and frame structure",
-                  "has_description": true
-                }
-              ]
-            }
-          ],
-          "room_ids": [],
-          "room_scope": "assigned",
-          "notes": []
-        },
-        {
-          "name": "10.2.1",
-          "duration_minutes": 40,
-          "start_time": "12:20",
           "end_time": "13:00",
           "day": "Wednesday",
           "room_col_start": 4,
           "room_col_end": 5,
-          "chair": "Hiroki",
-          "agenda_item": "10.2.1",
+          "chair": null,
+          "agenda_item": "10.8",
           "group_header": "6GR",
-          "description": "Waveform",
+          "description": "ISAC",
           "agenda_descriptions": [
             {
-              "agenda_item": "10.2.1",
-              "matched_agenda_item": "10.2.1",
-              "description": "Waveform",
+              "agenda_item": "10.8",
+              "matched_agenda_item": "10.8",
+              "description": "ISAC",
               "hierarchy": [
                 {
                   "agenda_item": "10",
@@ -5225,13 +4464,8 @@
                   "has_description": true
                 },
                 {
-                  "agenda_item": "10.2",
-                  "description": "Waveform for 6GR air interface",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "10.2.1",
-                  "description": "Waveform",
+                  "agenda_item": "10.8",
+                  "description": "ISAC",
                   "has_description": true
                 }
               ]
@@ -5277,7 +4511,7 @@
           "notes": []
         },
         {
-          "name": "6G 10.5.4.x",
+          "name": "10.5.4.x",
           "duration_minutes": 30,
           "start_time": "12:30",
           "end_time": "13:00",
@@ -5285,14 +4519,14 @@
           "room_col_start": 5,
           "room_col_end": 6,
           "chair": "Hiroki",
-          "agenda_item": "10.5.4.1",
+          "agenda_item": "10.5.4.x",
           "group_header": "6GR",
-          "description": "Downlink control channel, scheduling for downlink and uplink transmission",
+          "description": "Downlink control channel, scheduling and HARQ operation",
           "agenda_descriptions": [
             {
-              "agenda_item": "10.5.4.1",
-              "matched_agenda_item": "10.5.4.1",
-              "description": "Downlink control channel, scheduling for downlink and uplink transmission",
+              "agenda_item": "10.5.4.x",
+              "matched_agenda_item": "10.5.4",
+              "description": "Downlink control channel, scheduling and HARQ operation",
               "hierarchy": [
                 {
                   "agenda_item": "10",
@@ -5307,11 +4541,6 @@
                 {
                   "agenda_item": "10.5.4",
                   "description": "Downlink control channel, scheduling and HARQ operation",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "10.5.4.1",
-                  "description": "Downlink control channel, scheduling for downlink and uplink transmission",
                   "has_description": true
                 }
               ]
@@ -5509,14 +4738,14 @@
           "notes": []
         },
         {
-          "name": "AI 10.5.2.2 PDSCH",
+          "name": "10.5.2.2",
           "duration_minutes": 80,
           "start_time": "14:30",
           "end_time": "15:50",
           "day": "Wednesday",
           "room_col_start": 3,
           "room_col_end": 4,
-          "chair": "Sorour",
+          "chair": null,
           "agenda_item": "10.5.2.2",
           "group_header": "6GR",
           "description": "Downlink transmission scheme(s) for downlink shared channels",
@@ -5554,14 +4783,14 @@
           "notes": []
         },
         {
-          "name": "AI 10.5.2.1 PDCCH",
+          "name": "10.5.2.1",
           "duration_minutes": 40,
           "start_time": "15:50",
           "end_time": "16:30",
           "day": "Wednesday",
           "room_col_start": 3,
           "room_col_end": 4,
-          "chair": "Sorour",
+          "chair": null,
           "agenda_item": "10.5.2.1",
           "group_header": "6GR",
           "description": "Downlink transmission scheme(s) for downlink control channels",
@@ -5599,46 +4828,16 @@
           "notes": []
         },
         {
-          "name": "TEI20",
-          "duration_minutes": 5,
+          "name": "TEI, AI 7/8.2",
+          "duration_minutes": 90,
           "start_time": "14:30",
-          "end_time": "14:35",
-          "day": "Wednesday",
-          "room_col_start": 4,
-          "room_col_end": 5,
-          "chair": "Hiroki",
-          "agenda_item": "11",
-          "group_header": "TEI",
-          "description": "TEI",
-          "agenda_descriptions": [
-            {
-              "agenda_item": "11",
-              "matched_agenda_item": "11",
-              "description": "TEI",
-              "hierarchy": [
-                {
-                  "agenda_item": "11",
-                  "description": "TEI",
-                  "has_description": true
-                }
-              ]
-            }
-          ],
-          "room_ids": [],
-          "room_scope": "assigned",
-          "notes": []
-        },
-        {
-          "name": "Maintenance",
-          "duration_minutes": 85,
-          "start_time": "14:35",
           "end_time": "16:00",
           "day": "Wednesday",
           "room_col_start": 4,
           "room_col_end": 5,
-          "chair": "Hiroki",
+          "chair": null,
           "agenda_item": "7, 8.2",
-          "group_header": "AI 7/8.2",
+          "group_header": "",
           "description": "Pre-Rel-19 NR Maintenance",
           "agenda_descriptions": [
             {
@@ -5683,7 +4882,7 @@
           "day": "Wednesday",
           "room_col_start": 4,
           "room_col_end": 5,
-          "chair": "Hiroki",
+          "chair": null,
           "agenda_item": null,
           "group_header": "R20",
           "description": null,
@@ -5853,85 +5052,18 @@
           "notes": []
         },
         {
-          "name": "R20 A-IoT",
+          "name": "A-IoT",
           "duration_minutes": 80,
-          "start_time": "14:30",
-          "end_time": "15:50",
+          "start_time": "15:10",
+          "end_time": "16:30",
           "day": "Wednesday",
           "room_col_start": 6,
           "room_col_end": 7,
           "chair": "Hiroki",
-          "agenda_item": "9.3.1, 9.3.2, 9.3.3",
+          "agenda_item": null,
           "group_header": "R20",
-          "description": "R2D signals, channels, waveform and procedures",
-          "agenda_descriptions": [
-            {
-              "agenda_item": "9.3.1",
-              "matched_agenda_item": "9.3.1",
-              "description": "R2D signals, channels, waveform and procedures",
-              "hierarchy": [
-                {
-                  "agenda_item": "9",
-                  "description": "Release 20 NR",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "9.3",
-                  "description": "Solutions for Ambient IoT (Internet of Things) in NR Phase 2",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "9.3.1",
-                  "description": "R2D signals, channels, waveform and procedures",
-                  "has_description": true
-                }
-              ]
-            },
-            {
-              "agenda_item": "9.3.2",
-              "matched_agenda_item": "9.3.2",
-              "description": "D2R signals, channels, waveform and procedures",
-              "hierarchy": [
-                {
-                  "agenda_item": "9",
-                  "description": "Release 20 NR",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "9.3",
-                  "description": "Solutions for Ambient IoT (Internet of Things) in NR Phase 2",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "9.3.2",
-                  "description": "D2R signals, channels, waveform and procedures",
-                  "has_description": true
-                }
-              ]
-            },
-            {
-              "agenda_item": "9.3.3",
-              "matched_agenda_item": "9.3.3",
-              "description": "Other procedures",
-              "hierarchy": [
-                {
-                  "agenda_item": "9",
-                  "description": "Release 20 NR",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "9.3",
-                  "description": "Solutions for Ambient IoT (Internet of Things) in NR Phase 2",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "9.3.3",
-                  "description": "Other procedures",
-                  "has_description": true
-                }
-              ]
-            }
-          ],
+          "description": null,
+          "agenda_descriptions": [],
           "room_ids": [],
           "room_scope": "assigned",
           "notes": []
@@ -6102,14 +5234,14 @@
           "notes": []
         },
         {
-          "name": "AI 10.3.1 Channel coding",
+          "name": "10.3.1 Channel coding",
           "duration_minutes": 60,
           "start_time": "17:00",
           "end_time": "18:00",
           "day": "Wednesday",
           "room_col_start": 3,
           "room_col_end": 4,
-          "chair": "Sorour",
+          "chair": null,
           "agenda_item": "10.3.1",
           "group_header": "6GR",
           "description": "Channel coding",
@@ -6142,14 +5274,14 @@
           "notes": []
         },
         {
-          "name": "AI 10.3.2 Modulation",
+          "name": "10.3.2 Modulation",
           "duration_minutes": 30,
           "start_time": "18:00",
           "end_time": "18:30",
           "day": "Wednesday",
           "room_col_start": 3,
           "room_col_end": 4,
-          "chair": "Sorour",
+          "chair": null,
           "agenda_item": "10.3.2",
           "group_header": "6GR",
           "description": "Modulation",
@@ -6189,7 +5321,7 @@
           "day": "Wednesday",
           "room_col_start": 3,
           "room_col_end": 4,
-          "chair": "Sorour",
+          "chair": null,
           "agenda_item": "10.5.2.2",
           "group_header": "6GR",
           "description": "Downlink transmission scheme(s) for downlink shared channels",
@@ -6227,36 +5359,36 @@
           "notes": []
         },
         {
-          "name": "9.3.1",
-          "duration_minutes": 50,
+          "name": "10.5.4",
+          "duration_minutes": 120,
           "start_time": "17:00",
-          "end_time": "17:50",
+          "end_time": "19:00",
           "day": "Wednesday",
           "room_col_start": 4,
           "room_col_end": 5,
-          "chair": "Hiroki",
-          "agenda_item": "9.3.1",
-          "group_header": "R20",
-          "description": "R2D signals, channels, waveform and procedures",
+          "chair": null,
+          "agenda_item": "10.5.4",
+          "group_header": "6GR",
+          "description": "Downlink control channel, scheduling and HARQ operation",
           "agenda_descriptions": [
             {
-              "agenda_item": "9.3.1",
-              "matched_agenda_item": "9.3.1",
-              "description": "R2D signals, channels, waveform and procedures",
+              "agenda_item": "10.5.4",
+              "matched_agenda_item": "10.5.4",
+              "description": "Downlink control channel, scheduling and HARQ operation",
               "hierarchy": [
                 {
-                  "agenda_item": "9",
-                  "description": "Release 20 NR",
+                  "agenda_item": "10",
+                  "description": "Rel-20 Study of 6GR",
                   "has_description": true
                 },
                 {
-                  "agenda_item": "9.3",
-                  "description": "Solutions for Ambient IoT (Internet of Things) in NR Phase 2",
+                  "agenda_item": "10.5",
+                  "description": "Multi-antenna system",
                   "has_description": true
                 },
                 {
-                  "agenda_item": "9.3.1",
-                  "description": "R2D signals, channels, waveform and procedures",
+                  "agenda_item": "10.5.4",
+                  "description": "Downlink control channel, scheduling and HARQ operation",
                   "has_description": true
                 }
               ]
@@ -6267,76 +5399,36 @@
           "notes": []
         },
         {
-          "name": "9.3.2",
-          "duration_minutes": 50,
-          "start_time": "17:50",
-          "end_time": "18:40",
-          "day": "Wednesday",
-          "room_col_start": 4,
-          "room_col_end": 5,
-          "chair": "Hiroki",
-          "agenda_item": "9.3.2",
-          "group_header": "R20",
-          "description": "D2R signals, channels, waveform and procedures",
-          "agenda_descriptions": [
-            {
-              "agenda_item": "9.3.2",
-              "matched_agenda_item": "9.3.2",
-              "description": "D2R signals, channels, waveform and procedures",
-              "hierarchy": [
-                {
-                  "agenda_item": "9",
-                  "description": "Release 20 NR",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "9.3",
-                  "description": "Solutions for Ambient IoT (Internet of Things) in NR Phase 2",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "9.3.2",
-                  "description": "D2R signals, channels, waveform and procedures",
-                  "has_description": true
-                }
-              ]
-            }
-          ],
-          "room_ids": [],
-          "room_scope": "assigned",
-          "notes": []
-        },
-        {
-          "name": "9.3.3",
-          "duration_minutes": 50,
-          "start_time": "18:40",
+          "name": "10.2.1 Waveform",
+          "duration_minutes": 30,
+          "start_time": "19:00",
           "end_time": "19:30",
           "day": "Wednesday",
           "room_col_start": 4,
           "room_col_end": 5,
-          "chair": "Hiroki",
-          "agenda_item": "9.3.3",
-          "group_header": "R20",
-          "description": "Other procedures",
+          "chair": null,
+          "agenda_item": "10.2.1",
+          "group_header": "6GR",
+          "description": "Waveform",
           "agenda_descriptions": [
             {
-              "agenda_item": "9.3.3",
-              "matched_agenda_item": "9.3.3",
-              "description": "Other procedures",
+              "agenda_item": "10.2.1",
+              "matched_agenda_item": "10.2.1",
+              "description": "Waveform",
               "hierarchy": [
                 {
-                  "agenda_item": "9",
-                  "description": "Release 20 NR",
+                  "agenda_item": "10",
+                  "description": "Rel-20 Study of 6GR",
                   "has_description": true
                 },
                 {
-                  "agenda_item": "9.3",
-                  "description": "Solutions for Ambient IoT (Internet of Things) in NR Phase 2",
+                  "agenda_item": "10.2",
+                  "description": "Waveform for 6GR air interface",
                   "has_description": true
                 },
                 {
-                  "agenda_item": "9.3.3",
-                  "description": "Other procedures",
+                  "agenda_item": "10.2.1",
+                  "description": "Waveform",
                   "has_description": true
                 }
               ]
@@ -6567,7 +5659,7 @@
           "notes": []
         },
         {
-          "name": "NTN",
+          "name": "10.7.1 NTN",
           "duration_minutes": 30,
           "start_time": "18:00",
           "end_time": "18:30",
@@ -6607,7 +5699,7 @@
           "notes": []
         },
         {
-          "name": "NTN",
+          "name": "9.5 NTN",
           "duration_minutes": 30,
           "start_time": "18:30",
           "end_time": "19:00",
@@ -6881,14 +5973,14 @@
           "notes": []
         },
         {
-          "name": "10.7.1 NTN",
+          "name": "NTN",
           "duration_minutes": 50,
           "start_time": "08:30",
           "end_time": "09:20",
           "day": "Thursday",
           "room_col_start": 3,
           "room_col_end": 4,
-          "chair": "Sorour",
+          "chair": null,
           "agenda_item": "10.7.1",
           "group_header": "6GR",
           "description": "NTN specific requirements and design",
@@ -6921,14 +6013,14 @@
           "notes": []
         },
         {
-          "name": "9.5 NTN",
+          "name": "NTN",
           "duration_minutes": 30,
           "start_time": "09:20",
           "end_time": "09:50",
           "day": "Thursday",
           "room_col_start": 3,
           "room_col_end": 4,
-          "chair": "Sorour",
+          "chair": null,
           "agenda_item": "9.5",
           "group_header": "R20",
           "description": "NR NTN in systems using downlink compensation",
@@ -6963,44 +6055,26 @@
           "day": "Thursday",
           "room_col_start": 3,
           "room_col_end": 4,
-          "chair": "Sorour",
-          "agenda_item": "9.4",
+          "chair": null,
+          "agenda_item": null,
           "group_header": "R20",
-          "description": "GNSS resilient NR-NTN operation",
-          "agenda_descriptions": [
-            {
-              "agenda_item": "9.4",
-              "matched_agenda_item": "9.4",
-              "description": "GNSS resilient NR-NTN operation",
-              "hierarchy": [
-                {
-                  "agenda_item": "9",
-                  "description": "Release 20 NR",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "9.4",
-                  "description": "GNSS resilient NR-NTN operation",
-                  "has_description": true
-                }
-              ]
-            }
-          ],
+          "description": null,
+          "agenda_descriptions": [],
           "room_ids": [],
           "room_scope": "assigned",
           "notes": []
         },
         {
-          "name": "8.2 R19 LP-WUS, Mobility, FR3/ISAC CM",
+          "name": "AI 7/8.2",
           "duration_minutes": 80,
           "start_time": "08:30",
           "end_time": "09:50",
           "day": "Thursday",
           "room_col_start": 4,
           "room_col_end": 5,
-          "chair": "Hiroki",
-          "agenda_item": "7, 8.2",
-          "group_header": "Maintenance",
+          "chair": null,
+          "agenda_item": null,
+          "group_header": "",
           "description": "Pre-Rel-19 NR Maintenance",
           "agenda_descriptions": [
             {
@@ -7038,14 +6112,14 @@
           "notes": []
         },
         {
-          "name": "10.2.1 Waveform",
+          "name": "Waveform",
           "duration_minutes": 40,
           "start_time": "09:50",
           "end_time": "10:30",
           "day": "Thursday",
           "room_col_start": 4,
           "room_col_end": 5,
-          "chair": "Hiroki",
+          "chair": null,
           "agenda_item": "10.2.1",
           "group_header": "6GR",
           "description": "Waveform",
@@ -7382,9 +6456,9 @@
           "day": "Thursday",
           "room_col_start": 3,
           "room_col_end": 4,
-          "chair": "Sorour",
-          "agenda_item": "8.1, 6",
-          "group_header": "AI 8.1",
+          "chair": null,
+          "agenda_item": "8.1",
+          "group_header": "",
           "description": "Maintenance on AI/ML for NR Air interface, NR MIMO Phase 5, NES and NTN for NR and IoT",
           "agenda_descriptions": [
             {
@@ -7403,18 +6477,6 @@
                   "has_description": true
                 }
               ]
-            },
-            {
-              "agenda_item": "6",
-              "matched_agenda_item": "6",
-              "description": "Pre-Rel-19 E-UTRA Maintenance",
-              "hierarchy": [
-                {
-                  "agenda_item": "6",
-                  "description": "Pre-Rel-19 E-UTRA Maintenance",
-                  "has_description": true
-                }
-              ]
             }
           ],
           "room_ids": [],
@@ -7429,29 +6491,11 @@
           "day": "Thursday",
           "room_col_start": 3,
           "room_col_end": 4,
-          "chair": "Sorour",
-          "agenda_item": "9.1",
+          "chair": null,
+          "agenda_item": null,
           "group_header": "R20",
-          "description": "Artificial Intelligence (AI)/Machine Learning (ML) for NR air interface enhancements",
-          "agenda_descriptions": [
-            {
-              "agenda_item": "9.1",
-              "matched_agenda_item": "9.1",
-              "description": "Artificial Intelligence (AI)/Machine Learning (ML) for NR air interface enhancements",
-              "hierarchy": [
-                {
-                  "agenda_item": "9",
-                  "description": "Release 20 NR",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "9.1",
-                  "description": "Artificial Intelligence (AI)/Machine Learning (ML) for NR air interface enhancements",
-                  "has_description": true
-                }
-              ]
-            }
-          ],
+          "description": null,
+          "agenda_descriptions": [],
           "room_ids": [],
           "room_scope": "assigned",
           "notes": []
@@ -7464,7 +6508,7 @@
           "day": "Thursday",
           "room_col_start": 3,
           "room_col_end": 4,
-          "chair": "Sorour",
+          "chair": null,
           "agenda_item": null,
           "group_header": "R20",
           "description": null,
@@ -7474,127 +6518,24 @@
           "notes": []
         },
         {
-          "name": "9.3.2",
-          "duration_minutes": 40,
+          "name": "A-IoT Phase2",
+          "duration_minutes": 120,
           "start_time": "11:00",
-          "end_time": "11:40",
-          "day": "Thursday",
-          "room_col_start": 4,
-          "room_col_end": 5,
-          "chair": "Hiroki",
-          "agenda_item": "9.3.2",
-          "group_header": "R20",
-          "description": "D2R signals, channels, waveform and procedures",
-          "agenda_descriptions": [
-            {
-              "agenda_item": "9.3.2",
-              "matched_agenda_item": "9.3.2",
-              "description": "D2R signals, channels, waveform and procedures",
-              "hierarchy": [
-                {
-                  "agenda_item": "9",
-                  "description": "Release 20 NR",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "9.3",
-                  "description": "Solutions for Ambient IoT (Internet of Things) in NR Phase 2",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "9.3.2",
-                  "description": "D2R signals, channels, waveform and procedures",
-                  "has_description": true
-                }
-              ]
-            }
-          ],
-          "room_ids": [],
-          "room_scope": "assigned",
-          "notes": []
-        },
-        {
-          "name": "9.3.3",
-          "duration_minutes": 40,
-          "start_time": "11:40",
-          "end_time": "12:20",
-          "day": "Thursday",
-          "room_col_start": 4,
-          "room_col_end": 5,
-          "chair": "Hiroki",
-          "agenda_item": "9.3.3",
-          "group_header": "R20",
-          "description": "Other procedures",
-          "agenda_descriptions": [
-            {
-              "agenda_item": "9.3.3",
-              "matched_agenda_item": "9.3.3",
-              "description": "Other procedures",
-              "hierarchy": [
-                {
-                  "agenda_item": "9",
-                  "description": "Release 20 NR",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "9.3",
-                  "description": "Solutions for Ambient IoT (Internet of Things) in NR Phase 2",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "9.3.3",
-                  "description": "Other procedures",
-                  "has_description": true
-                }
-              ]
-            }
-          ],
-          "room_ids": [],
-          "room_scope": "assigned",
-          "notes": []
-        },
-        {
-          "name": "9.3.1",
-          "duration_minutes": 40,
-          "start_time": "12:20",
           "end_time": "13:00",
           "day": "Thursday",
           "room_col_start": 4,
           "room_col_end": 5,
-          "chair": "Hiroki",
-          "agenda_item": "9.3.1",
+          "chair": null,
+          "agenda_item": null,
           "group_header": "R20",
-          "description": "R2D signals, channels, waveform and procedures",
-          "agenda_descriptions": [
-            {
-              "agenda_item": "9.3.1",
-              "matched_agenda_item": "9.3.1",
-              "description": "R2D signals, channels, waveform and procedures",
-              "hierarchy": [
-                {
-                  "agenda_item": "9",
-                  "description": "Release 20 NR",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "9.3",
-                  "description": "Solutions for Ambient IoT (Internet of Things) in NR Phase 2",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "9.3.1",
-                  "description": "R2D signals, channels, waveform and procedures",
-                  "has_description": true
-                }
-              ]
-            }
-          ],
+          "description": null,
+          "agenda_descriptions": [],
           "room_ids": [],
           "room_scope": "assigned",
           "notes": []
         },
         {
-          "name": "Sensing",
+          "name": "10.8.x Sensing",
           "duration_minutes": 90,
           "start_time": "11:00",
           "end_time": "12:30",
@@ -7889,14 +6830,14 @@
           "notes": []
         },
         {
-          "name": "AI 10.5.2.3 PUxCH",
+          "name": "10.5.2.3",
           "duration_minutes": 45,
           "start_time": "14:30",
           "end_time": "15:15",
           "day": "Thursday",
           "room_col_start": 3,
           "room_col_end": 4,
-          "chair": "Sorour",
+          "chair": null,
           "agenda_item": "10.5.2.3",
           "group_header": "6GR",
           "description": "Uplink transmission scheme(s) for uplink channels",
@@ -7934,14 +6875,14 @@
           "notes": []
         },
         {
-          "name": "AI 10.5.2.2 PDSCH",
+          "name": "10.5.2.2",
           "duration_minutes": 45,
           "start_time": "15:15",
           "end_time": "16:00",
           "day": "Thursday",
           "room_col_start": 3,
           "room_col_end": 4,
-          "chair": "Sorour",
+          "chair": null,
           "agenda_item": "10.5.2.2",
           "group_header": "6GR",
           "description": "Downlink transmission scheme(s) for downlink shared channels",
@@ -7979,14 +6920,14 @@
           "notes": []
         },
         {
-          "name": "AI 10.5.2.1 PDCCH",
+          "name": "10.5.2.1",
           "duration_minutes": 30,
           "start_time": "16:00",
           "end_time": "16:30",
           "day": "Thursday",
           "room_col_start": 3,
           "room_col_end": 4,
-          "chair": "Sorour",
+          "chair": null,
           "agenda_item": "10.5.2.1",
           "group_header": "6GR",
           "description": "Downlink transmission scheme(s) for downlink control channels",
@@ -8024,22 +6965,22 @@
           "notes": []
         },
         {
-          "name": "6G ISAC",
+          "name": "Sensing",
           "duration_minutes": 120,
           "start_time": "14:30",
           "end_time": "16:30",
           "day": "Thursday",
           "room_col_start": 4,
           "room_col_end": 5,
-          "chair": "Hiroki",
-          "agenda_item": "10.8.1, 10.8.3, 10.8.2",
+          "chair": null,
+          "agenda_item": "10.8",
           "group_header": "6GR",
-          "description": "Evaluations",
+          "description": "ISAC",
           "agenda_descriptions": [
             {
-              "agenda_item": "10.8.1",
-              "matched_agenda_item": "10.8.1",
-              "description": "Evaluations",
+              "agenda_item": "10.8",
+              "matched_agenda_item": "10.8",
+              "description": "ISAC",
               "hierarchy": [
                 {
                   "agenda_item": "10",
@@ -8049,55 +6990,6 @@
                 {
                   "agenda_item": "10.8",
                   "description": "ISAC",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "10.8.1",
-                  "description": "Evaluations",
-                  "has_description": true
-                }
-              ]
-            },
-            {
-              "agenda_item": "10.8.3",
-              "matched_agenda_item": "10.8.3",
-              "description": "Waveform and frame structure",
-              "hierarchy": [
-                {
-                  "agenda_item": "10",
-                  "description": "Rel-20 Study of 6GR",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "10.8",
-                  "description": "ISAC",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "10.8.3",
-                  "description": "Waveform and frame structure",
-                  "has_description": true
-                }
-              ]
-            },
-            {
-              "agenda_item": "10.8.2",
-              "matched_agenda_item": "10.8.2",
-              "description": "Aspects of integration with communication",
-              "hierarchy": [
-                {
-                  "agenda_item": "10",
-                  "description": "Rel-20 Study of 6GR",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "10.8",
-                  "description": "ISAC",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "10.8.2",
-                  "description": "Aspects of integration with communication",
                   "has_description": true
                 }
               ]
@@ -8286,14 +7178,14 @@
           "room_col_start": 6,
           "room_col_end": 7,
           "chair": "Hiroki",
-          "agenda_item": "10.5.4.3, 10.5.4.4",
+          "agenda_item": "10.5.4.x",
           "group_header": "6GR",
-          "description": "HARQ related Aspects",
+          "description": "Downlink control channel, scheduling and HARQ operation",
           "agenda_descriptions": [
             {
-              "agenda_item": "10.5.4.3",
-              "matched_agenda_item": "10.5.4.3",
-              "description": "HARQ related Aspects",
+              "agenda_item": "10.5.4.x",
+              "matched_agenda_item": "10.5.4",
+              "description": "Downlink control channel, scheduling and HARQ operation",
               "hierarchy": [
                 {
                   "agenda_item": "10",
@@ -8308,38 +7200,6 @@
                 {
                   "agenda_item": "10.5.4",
                   "description": "Downlink control channel, scheduling and HARQ operation",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "10.5.4.3",
-                  "description": "HARQ related Aspects",
-                  "has_description": true
-                }
-              ]
-            },
-            {
-              "agenda_item": "10.5.4.4",
-              "matched_agenda_item": "10.5.4.4",
-              "description": "Handling of potential multiple uplink transmissions",
-              "hierarchy": [
-                {
-                  "agenda_item": "10",
-                  "description": "Rel-20 Study of 6GR",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "10.5",
-                  "description": "Multi-antenna system",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "10.5.4",
-                  "description": "Downlink control channel, scheduling and HARQ operation",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "10.5.4.4",
-                  "description": "Handling of potential multiple uplink transmissions",
                   "has_description": true
                 }
               ]
@@ -8530,14 +7390,14 @@
           "notes": []
         },
         {
-          "name": "AI 10.3.1 Channel coding",
+          "name": "Channel coding",
           "duration_minutes": 60,
           "start_time": "17:00",
           "end_time": "18:00",
           "day": "Thursday",
           "room_col_start": 3,
           "room_col_end": 4,
-          "chair": "Sorour",
+          "chair": null,
           "agenda_item": "10.3.1",
           "group_header": "6GR",
           "description": "Channel coding",
@@ -8570,14 +7430,14 @@
           "notes": []
         },
         {
-          "name": "AI 10.3.2 Modulation",
+          "name": "Modulation",
           "duration_minutes": 30,
           "start_time": "18:00",
           "end_time": "18:30",
           "day": "Thursday",
           "room_col_start": 3,
           "room_col_end": 4,
-          "chair": "Sorour",
+          "chair": null,
           "agenda_item": "10.3.2",
           "group_header": "6GR",
           "description": "Modulation",
@@ -8627,198 +7487,41 @@
           "notes": []
         },
         {
-          "name": "10.5.4.4",
-          "duration_minutes": 10,
+          "name": "10.5.4",
+          "duration_minutes": 150,
           "start_time": "17:00",
-          "end_time": "17:10",
+          "end_time": "19:30",
           "day": "Thursday",
           "room_col_start": 4,
-          "room_col_end": 5,
-          "chair": "Hiroki",
-          "agenda_item": "10.5.4.4",
-          "group_header": "6GR",
-          "description": "Handling of potential multiple uplink transmissions",
-          "agenda_descriptions": [
-            {
-              "agenda_item": "10.5.4.4",
-              "matched_agenda_item": "10.5.4.4",
-              "description": "Handling of potential multiple uplink transmissions",
-              "hierarchy": [
-                {
-                  "agenda_item": "10",
-                  "description": "Rel-20 Study of 6GR",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "10.5",
-                  "description": "Multi-antenna system",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "10.5.4",
-                  "description": "Downlink control channel, scheduling and HARQ operation",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "10.5.4.4",
-                  "description": "Handling of potential multiple uplink transmissions",
-                  "has_description": true
-                }
-              ]
-            }
-          ],
-          "room_ids": [],
-          "room_scope": "assigned",
-          "notes": []
-        },
-        {
-          "name": "10.5.4.2",
-          "duration_minutes": 10,
-          "start_time": "17:10",
-          "end_time": "17:20",
-          "day": "Thursday",
-          "room_col_start": 4,
-          "room_col_end": 5,
-          "chair": "Hiroki",
-          "agenda_item": "10.5.4.2",
-          "group_header": "6GR",
-          "description": "Downlink and uplink transmission without dynamic scheduling",
-          "agenda_descriptions": [
-            {
-              "agenda_item": "10.5.4.2",
-              "matched_agenda_item": "10.5.4.2",
-              "description": "Downlink and uplink transmission without dynamic scheduling",
-              "hierarchy": [
-                {
-                  "agenda_item": "10",
-                  "description": "Rel-20 Study of 6GR",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "10.5",
-                  "description": "Multi-antenna system",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "10.5.4",
-                  "description": "Downlink control channel, scheduling and HARQ operation",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "10.5.4.2",
-                  "description": "Downlink and uplink transmission without dynamic scheduling",
-                  "has_description": true
-                }
-              ]
-            }
-          ],
-          "room_ids": [],
-          "room_scope": "assigned",
-          "notes": []
-        },
-        {
-          "name": "10.5.4.1",
-          "duration_minutes": 35,
-          "start_time": "17:20",
-          "end_time": "17:55",
-          "day": "Thursday",
-          "room_col_start": 4,
-          "room_col_end": 5,
-          "chair": "Hiroki",
-          "agenda_item": "10.5.4.1",
-          "group_header": "6GR",
-          "description": "Downlink control channel, scheduling for downlink and uplink transmission",
-          "agenda_descriptions": [
-            {
-              "agenda_item": "10.5.4.1",
-              "matched_agenda_item": "10.5.4.1",
-              "description": "Downlink control channel, scheduling for downlink and uplink transmission",
-              "hierarchy": [
-                {
-                  "agenda_item": "10",
-                  "description": "Rel-20 Study of 6GR",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "10.5",
-                  "description": "Multi-antenna system",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "10.5.4",
-                  "description": "Downlink control channel, scheduling and HARQ operation",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "10.5.4.1",
-                  "description": "Downlink control channel, scheduling for downlink and uplink transmission",
-                  "has_description": true
-                }
-              ]
-            }
-          ],
-          "room_ids": [],
-          "room_scope": "assigned",
-          "notes": []
-        },
-        {
-          "name": "10.5.4.3",
-          "duration_minutes": 35,
-          "start_time": "17:55",
-          "end_time": "18:30",
-          "day": "Thursday",
-          "room_col_start": 4,
-          "room_col_end": 5,
-          "chair": "Hiroki",
-          "agenda_item": "10.5.4.3",
-          "group_header": "6GR",
-          "description": "HARQ related Aspects",
-          "agenda_descriptions": [
-            {
-              "agenda_item": "10.5.4.3",
-              "matched_agenda_item": "10.5.4.3",
-              "description": "HARQ related Aspects",
-              "hierarchy": [
-                {
-                  "agenda_item": "10",
-                  "description": "Rel-20 Study of 6GR",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "10.5",
-                  "description": "Multi-antenna system",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "10.5.4",
-                  "description": "Downlink control channel, scheduling and HARQ operation",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "10.5.4.3",
-                  "description": "HARQ related Aspects",
-                  "has_description": true
-                }
-              ]
-            }
-          ],
-          "room_ids": [],
-          "room_scope": "assigned",
-          "notes": []
-        },
-        {
-          "name": "Early dinner",
-          "duration_minutes": 60,
-          "start_time": "19:30",
-          "end_time": "20:30",
-          "day": "Thursday",
-          "room_col_start": 2,
           "room_col_end": 5,
           "chair": null,
-          "agenda_item": null,
-          "group_header": "",
-          "description": null,
-          "agenda_descriptions": [],
+          "agenda_item": "10.5.4",
+          "group_header": "6GR",
+          "description": "Downlink control channel, scheduling and HARQ operation",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "10.5.4",
+              "matched_agenda_item": "10.5.4",
+              "description": "Downlink control channel, scheduling and HARQ operation",
+              "hierarchy": [
+                {
+                  "agenda_item": "10",
+                  "description": "Rel-20 Study of 6GR",
+                  "has_description": true
+                },
+                {
+                  "agenda_item": "10.5",
+                  "description": "Multi-antenna system",
+                  "has_description": true
+                },
+                {
+                  "agenda_item": "10.5.4",
+                  "description": "Downlink control channel, scheduling and HARQ operation",
+                  "has_description": true
+                }
+              ]
+            }
+          ],
           "room_ids": [],
           "room_scope": "assigned",
           "notes": []
@@ -9024,92 +7727,8 @@
           "room_col_start": 6,
           "room_col_end": 7,
           "chair": "Hiroki",
-          "agenda_item": "9.3.1, 9.3.2, 9.3.3",
-          "group_header": "R20",
-          "description": "R2D signals, channels, waveform and procedures",
-          "agenda_descriptions": [
-            {
-              "agenda_item": "9.3.1",
-              "matched_agenda_item": "9.3.1",
-              "description": "R2D signals, channels, waveform and procedures",
-              "hierarchy": [
-                {
-                  "agenda_item": "9",
-                  "description": "Release 20 NR",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "9.3",
-                  "description": "Solutions for Ambient IoT (Internet of Things) in NR Phase 2",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "9.3.1",
-                  "description": "R2D signals, channels, waveform and procedures",
-                  "has_description": true
-                }
-              ]
-            },
-            {
-              "agenda_item": "9.3.2",
-              "matched_agenda_item": "9.3.2",
-              "description": "D2R signals, channels, waveform and procedures",
-              "hierarchy": [
-                {
-                  "agenda_item": "9",
-                  "description": "Release 20 NR",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "9.3",
-                  "description": "Solutions for Ambient IoT (Internet of Things) in NR Phase 2",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "9.3.2",
-                  "description": "D2R signals, channels, waveform and procedures",
-                  "has_description": true
-                }
-              ]
-            },
-            {
-              "agenda_item": "9.3.3",
-              "matched_agenda_item": "9.3.3",
-              "description": "Other procedures",
-              "hierarchy": [
-                {
-                  "agenda_item": "9",
-                  "description": "Release 20 NR",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "9.3",
-                  "description": "Solutions for Ambient IoT (Internet of Things) in NR Phase 2",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "9.3.3",
-                  "description": "Other procedures",
-                  "has_description": true
-                }
-              ]
-            }
-          ],
-          "room_ids": [],
-          "room_scope": "assigned",
-          "notes": []
-        },
-        {
-          "name": "Early dinner",
-          "duration_minutes": 60,
-          "start_time": "19:30",
-          "end_time": "20:30",
-          "day": "Thursday",
-          "room_col_start": 5,
-          "room_col_end": 7,
-          "chair": null,
           "agenda_item": null,
-          "group_header": "",
+          "group_header": "R20",
           "description": null,
           "agenda_descriptions": [],
           "room_ids": [],
@@ -9346,7 +7965,7 @@
           "day": "Friday",
           "room_col_start": 3,
           "room_col_end": 4,
-          "chair": "Sorour",
+          "chair": null,
           "agenda_item": "10.7.1",
           "group_header": "6GR",
           "description": "NTN specific requirements and design",
@@ -9386,7 +8005,7 @@
           "day": "Friday",
           "room_col_start": 3,
           "room_col_end": 4,
-          "chair": "Sorour",
+          "chair": null,
           "agenda_item": "10.5.2.x",
           "group_header": "6GR",
           "description": "MIMO operation",
@@ -9419,176 +8038,16 @@
           "notes": []
         },
         {
-          "name": "9.3.3",
-          "duration_minutes": 40,
+          "name": "A-IoT Phase2",
+          "duration_minutes": 120,
           "start_time": "08:30",
-          "end_time": "09:10",
-          "day": "Friday",
-          "room_col_start": 4,
-          "room_col_end": 5,
-          "chair": "Hiroki",
-          "agenda_item": "9.3.3",
-          "group_header": "R20",
-          "description": "Other procedures",
-          "agenda_descriptions": [
-            {
-              "agenda_item": "9.3.3",
-              "matched_agenda_item": "9.3.3",
-              "description": "Other procedures",
-              "hierarchy": [
-                {
-                  "agenda_item": "9",
-                  "description": "Release 20 NR",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "9.3",
-                  "description": "Solutions for Ambient IoT (Internet of Things) in NR Phase 2",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "9.3.3",
-                  "description": "Other procedures",
-                  "has_description": true
-                }
-              ]
-            }
-          ],
-          "room_ids": [],
-          "room_scope": "assigned",
-          "notes": []
-        },
-        {
-          "name": "9.3.1",
-          "duration_minutes": 40,
-          "start_time": "09:10",
-          "end_time": "09:50",
-          "day": "Friday",
-          "room_col_start": 4,
-          "room_col_end": 5,
-          "chair": "Hiroki",
-          "agenda_item": "9.3.1",
-          "group_header": "R20",
-          "description": "R2D signals, channels, waveform and procedures",
-          "agenda_descriptions": [
-            {
-              "agenda_item": "9.3.1",
-              "matched_agenda_item": "9.3.1",
-              "description": "R2D signals, channels, waveform and procedures",
-              "hierarchy": [
-                {
-                  "agenda_item": "9",
-                  "description": "Release 20 NR",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "9.3",
-                  "description": "Solutions for Ambient IoT (Internet of Things) in NR Phase 2",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "9.3.1",
-                  "description": "R2D signals, channels, waveform and procedures",
-                  "has_description": true
-                }
-              ]
-            }
-          ],
-          "room_ids": [],
-          "room_scope": "assigned",
-          "notes": []
-        },
-        {
-          "name": "9.3.2",
-          "duration_minutes": 40,
-          "start_time": "09:50",
           "end_time": "10:30",
           "day": "Friday",
           "room_col_start": 4,
           "room_col_end": 5,
-          "chair": "Hiroki",
-          "agenda_item": "9.3.2",
-          "group_header": "R20",
-          "description": "D2R signals, channels, waveform and procedures",
-          "agenda_descriptions": [
-            {
-              "agenda_item": "9.3.2",
-              "matched_agenda_item": "9.3.2",
-              "description": "D2R signals, channels, waveform and procedures",
-              "hierarchy": [
-                {
-                  "agenda_item": "9",
-                  "description": "Release 20 NR",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "9.3",
-                  "description": "Solutions for Ambient IoT (Internet of Things) in NR Phase 2",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "9.3.2",
-                  "description": "D2R signals, channels, waveform and procedures",
-                  "has_description": true
-                }
-              ]
-            }
-          ],
-          "room_ids": [],
-          "room_scope": "assigned",
-          "notes": []
-        },
-        {
-          "name": "10.4.2",
-          "duration_minutes": 30,
-          "start_time": "08:30",
-          "end_time": "09:00",
-          "day": "Friday",
-          "room_col_start": 5,
-          "room_col_end": 6,
-          "chair": "Xiaodong",
-          "agenda_item": "10.4.2",
-          "group_header": "6GR",
-          "description": "Operation in connected mode",
-          "agenda_descriptions": [
-            {
-              "agenda_item": "10.4.2",
-              "matched_agenda_item": "10.4.2",
-              "description": "Operation in connected mode",
-              "hierarchy": [
-                {
-                  "agenda_item": "10",
-                  "description": "Rel-20 Study of 6GR",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "10.4",
-                  "description": "Multiple carrier operation",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "10.4.2",
-                  "description": "Operation in connected mode",
-                  "has_description": true
-                }
-              ]
-            }
-          ],
-          "room_ids": [],
-          "room_scope": "assigned",
-          "notes": []
-        },
-        {
-          "name": "On demand",
-          "duration_minutes": 50,
-          "start_time": "09:00",
-          "end_time": "09:50",
-          "day": "Friday",
-          "room_col_start": 5,
-          "room_col_end": 6,
-          "chair": "Xiaodong",
+          "chair": null,
           "agenda_item": null,
-          "group_header": "6GR",
+          "group_header": "R20",
           "description": null,
           "agenda_descriptions": [],
           "room_ids": [],
@@ -9596,206 +8055,18 @@
           "notes": []
         },
         {
-          "name": "10.5.3.4",
-          "duration_minutes": 40,
-          "start_time": "09:50",
-          "end_time": "10:30",
-          "day": "Friday",
-          "room_col_start": 5,
-          "room_col_end": 6,
-          "chair": "Xiaodong",
-          "agenda_item": "10.5.3.4",
-          "group_header": "6GR",
-          "description": "Beam management for downlink and uplink",
-          "agenda_descriptions": [
-            {
-              "agenda_item": "10.5.3.4",
-              "matched_agenda_item": "10.5.3.4",
-              "description": "Beam management for downlink and uplink",
-              "hierarchy": [
-                {
-                  "agenda_item": "10",
-                  "description": "Rel-20 Study of 6GR",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "10.5",
-                  "description": "Multi-antenna system",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "10.5.3",
-                  "description": "CSI acquisition and report",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "10.5.3.4",
-                  "description": "Beam management for downlink and uplink",
-                  "has_description": true
-                }
-              ]
-            }
-          ],
-          "room_ids": [],
-          "room_scope": "assigned",
-          "notes": []
-        },
-        {
-          "name": "Channel coding",
-          "duration_minutes": 60,
-          "start_time": "08:30",
-          "end_time": "09:30",
-          "day": "Friday",
-          "room_col_start": 6,
-          "room_col_end": 7,
-          "chair": "Sorour",
-          "agenda_item": "10.3.1",
-          "group_header": "",
-          "description": "Channel coding",
-          "agenda_descriptions": [
-            {
-              "agenda_item": "10.3.1",
-              "matched_agenda_item": "10.3.1",
-              "description": "Channel coding",
-              "hierarchy": [
-                {
-                  "agenda_item": "10",
-                  "description": "Rel-20 Study of 6GR",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "10.3",
-                  "description": "Channel coding and modulation for 6GR interface",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "10.3.1",
-                  "description": "Channel coding",
-                  "has_description": true
-                }
-              ]
-            }
-          ],
-          "room_ids": [],
-          "room_scope": "assigned",
-          "notes": []
-        },
-        {
-          "name": "Modulation",
-          "duration_minutes": 60,
-          "start_time": "09:30",
-          "end_time": "10:30",
-          "day": "Friday",
-          "room_col_start": 6,
-          "room_col_end": 7,
-          "chair": "Sorour",
-          "agenda_item": "10.3.2",
-          "group_header": "",
-          "description": "Modulation",
-          "agenda_descriptions": [
-            {
-              "agenda_item": "10.3.2",
-              "matched_agenda_item": "10.3.2",
-              "description": "Modulation",
-              "hierarchy": [
-                {
-                  "agenda_item": "10",
-                  "description": "Rel-20 Study of 6GR",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "10.3",
-                  "description": "Channel coding and modulation for 6GR interface",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "10.3.2",
-                  "description": "Modulation",
-                  "has_description": true
-                }
-              ]
-            }
-          ],
-          "room_ids": [],
-          "room_scope": "assigned",
-          "notes": []
-        },
-        {
-          "name": "AI 10.3.1 Coding",
-          "duration_minutes": 60,
+          "name": "Sweep",
+          "duration_minutes": 120,
           "start_time": "11:00",
-          "end_time": "12:00",
-          "day": "Friday",
-          "room_col_start": 2,
-          "room_col_end": 3,
-          "chair": null,
-          "agenda_item": "10.3.1",
-          "group_header": "6GR",
-          "description": "Channel coding",
-          "agenda_descriptions": [
-            {
-              "agenda_item": "10.3.1",
-              "matched_agenda_item": "10.3.1",
-              "description": "Channel coding",
-              "hierarchy": [
-                {
-                  "agenda_item": "10",
-                  "description": "Rel-20 Study of 6GR",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "10.3",
-                  "description": "Channel coding and modulation for 6GR interface",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "10.3.1",
-                  "description": "Channel coding",
-                  "has_description": true
-                }
-              ]
-            }
-          ],
-          "room_ids": [],
-          "room_scope": "assigned",
-          "notes": []
-        },
-        {
-          "name": "AI 10.3.2 Modulation",
-          "duration_minutes": 60,
-          "start_time": "12:00",
           "end_time": "13:00",
           "day": "Friday",
           "room_col_start": 2,
           "room_col_end": 3,
           "chair": null,
-          "agenda_item": "10.3.2",
-          "group_header": "6GR",
-          "description": "Modulation",
-          "agenda_descriptions": [
-            {
-              "agenda_item": "10.3.2",
-              "matched_agenda_item": "10.3.2",
-              "description": "Modulation",
-              "hierarchy": [
-                {
-                  "agenda_item": "10",
-                  "description": "Rel-20 Study of 6GR",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "10.3",
-                  "description": "Channel coding and modulation for 6GR interface",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "10.3.2",
-                  "description": "Modulation",
-                  "has_description": true
-                }
-              ]
-            }
-          ],
+          "agenda_item": null,
+          "group_header": "",
+          "description": null,
+          "agenda_descriptions": [],
           "room_ids": [],
           "room_scope": "assigned",
           "notes": []
@@ -9818,207 +8089,18 @@
           "notes": []
         },
         {
-          "name": "6G ISAC",
-          "duration_minutes": 60,
+          "name": "TBD",
+          "duration_minutes": 120,
           "start_time": "11:00",
-          "end_time": "12:00",
-          "day": "Friday",
-          "room_col_start": 4,
-          "room_col_end": 5,
-          "chair": "Hiroki",
-          "agenda_item": "10.8.x",
-          "group_header": "6GR",
-          "description": "ISAC",
-          "agenda_descriptions": [
-            {
-              "agenda_item": "10.8.x",
-              "matched_agenda_item": "10.8",
-              "description": "ISAC",
-              "hierarchy": [
-                {
-                  "agenda_item": "10",
-                  "description": "Rel-20 Study of 6GR",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "10.8",
-                  "description": "ISAC",
-                  "has_description": true
-                }
-              ]
-            }
-          ],
-          "room_ids": [],
-          "room_scope": "assigned",
-          "notes": []
-        },
-        {
-          "name": "6G 10.5.4.x",
-          "duration_minutes": 60,
-          "start_time": "12:00",
           "end_time": "13:00",
           "day": "Friday",
           "room_col_start": 4,
           "room_col_end": 5,
-          "chair": "Hiroki",
-          "agenda_item": "10.5.4.1, 10.5.4.3, 10.5.4.2, 10.5.4.4",
-          "group_header": "6GR",
-          "description": "Downlink control channel, scheduling for downlink and uplink transmission",
-          "agenda_descriptions": [
-            {
-              "agenda_item": "10.5.4.1",
-              "matched_agenda_item": "10.5.4.1",
-              "description": "Downlink control channel, scheduling for downlink and uplink transmission",
-              "hierarchy": [
-                {
-                  "agenda_item": "10",
-                  "description": "Rel-20 Study of 6GR",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "10.5",
-                  "description": "Multi-antenna system",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "10.5.4",
-                  "description": "Downlink control channel, scheduling and HARQ operation",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "10.5.4.1",
-                  "description": "Downlink control channel, scheduling for downlink and uplink transmission",
-                  "has_description": true
-                }
-              ]
-            },
-            {
-              "agenda_item": "10.5.4.3",
-              "matched_agenda_item": "10.5.4.3",
-              "description": "HARQ related Aspects",
-              "hierarchy": [
-                {
-                  "agenda_item": "10",
-                  "description": "Rel-20 Study of 6GR",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "10.5",
-                  "description": "Multi-antenna system",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "10.5.4",
-                  "description": "Downlink control channel, scheduling and HARQ operation",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "10.5.4.3",
-                  "description": "HARQ related Aspects",
-                  "has_description": true
-                }
-              ]
-            },
-            {
-              "agenda_item": "10.5.4.2",
-              "matched_agenda_item": "10.5.4.2",
-              "description": "Downlink and uplink transmission without dynamic scheduling",
-              "hierarchy": [
-                {
-                  "agenda_item": "10",
-                  "description": "Rel-20 Study of 6GR",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "10.5",
-                  "description": "Multi-antenna system",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "10.5.4",
-                  "description": "Downlink control channel, scheduling and HARQ operation",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "10.5.4.2",
-                  "description": "Downlink and uplink transmission without dynamic scheduling",
-                  "has_description": true
-                }
-              ]
-            },
-            {
-              "agenda_item": "10.5.4.4",
-              "matched_agenda_item": "10.5.4.4",
-              "description": "Handling of potential multiple uplink transmissions",
-              "hierarchy": [
-                {
-                  "agenda_item": "10",
-                  "description": "Rel-20 Study of 6GR",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "10.5",
-                  "description": "Multi-antenna system",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "10.5.4",
-                  "description": "Downlink control channel, scheduling and HARQ operation",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "10.5.4.4",
-                  "description": "Handling of potential multiple uplink transmissions",
-                  "has_description": true
-                }
-              ]
-            }
-          ],
-          "room_ids": [],
-          "room_scope": "assigned",
-          "notes": []
-        },
-        {
-          "name": "10.5.3.1",
-          "duration_minutes": 30,
-          "start_time": "11:00",
-          "end_time": "11:30",
-          "day": "Friday",
-          "room_col_start": 5,
-          "room_col_end": 6,
-          "chair": "Xiaodong",
-          "agenda_item": "10.5.3.1",
-          "group_header": "6GR",
-          "description": "Aspects of downlink-based CSI acquisition",
-          "agenda_descriptions": [
-            {
-              "agenda_item": "10.5.3.1",
-              "matched_agenda_item": "10.5.3.1",
-              "description": "Aspects of downlink-based CSI acquisition",
-              "hierarchy": [
-                {
-                  "agenda_item": "10",
-                  "description": "Rel-20 Study of 6GR",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "10.5",
-                  "description": "Multi-antenna system",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "10.5.3",
-                  "description": "CSI acquisition and report",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "10.5.3.1",
-                  "description": "Aspects of downlink-based CSI acquisition",
-                  "has_description": true
-                }
-              ]
-            }
-          ],
+          "chair": null,
+          "agenda_item": null,
+          "group_header": "",
+          "description": null,
+          "agenda_descriptions": [],
           "room_ids": [],
           "room_scope": "assigned",
           "notes": []
@@ -10128,21 +8210,19 @@
     }
   ],
   "source_file": "Draft RAN1#126b online and offline schedules - v00.docx",
-  "generated_at": "2026-10-04 17:03",
+  "generated_at": "2026-10-05 09:56",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
-    "Draft RAN1#126b online and offline schedules - v00.docx",
-    "RAN1#126 schedule for Hiroki Adhoc2 sessions_v08_1.docx",
-    "RAN1#126 Sorour sessions online and offline schedules - v01.docx"
+    "Draft RAN1#126b online and offline schedules - v00.docx"
   ],
-  "timezone": "Europe/Amsterdam",
+  "timezone": "Asia/Seoul",
   "wg_id": "ran1",
-  "meeting_id": "ran1#126",
-  "starts_on": "2026-08-24",
-  "ends_on": "2026-08-28",
-  "starts_at": "2026-08-24T09:00:00+02:00",
-  "ends_at": "2026-08-28T17:30:00+02:00",
+  "meeting_id": "ran1#126bis",
+  "starts_on": "2026-10-12",
+  "ends_on": "2026-10-16",
+  "starts_at": "2026-10-12T09:00:00+09:00",
+  "ends_at": "2026-10-16T17:30:00+09:00",
   "is_demo": false,
   "topic_references": [],
   "topic_preamble": []

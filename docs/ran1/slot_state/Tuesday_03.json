@@ -2,9 +2,7 @@
   "day": "Tuesday",
   "time_block_index": 3,
   "source_hashes": {
-    "Main Schedule": "571168527def9fb9",
-    "Hiroki's schedule": "235f3328692f280a",
-    "Sorour's schedule": "46112853f4f16478"
+    "Main Schedule": "571168527def9fb9"
   },
   "merged_sessions": [
     {
@@ -129,9 +127,9 @@
       "name": "10.3.1 Channel coding",
       "duration_minutes": 60,
       "specified_start_time": null,
-      "chair": "Sorour",
+      "chair": null,
       "group_header": "6GR",
-      "agenda_item": "10.3.1",
+      "agenda_item": null,
       "description": "Channel coding",
       "agenda_descriptions": [
         {
@@ -163,9 +161,9 @@
       "name": "10.3.2 Modulation",
       "duration_minutes": 30,
       "specified_start_time": null,
-      "chair": "Sorour",
+      "chair": null,
       "group_header": "6GR",
-      "agenda_item": "10.3.2",
+      "agenda_item": null,
       "description": "Modulation",
       "agenda_descriptions": [
         {
@@ -197,78 +195,9 @@
       "name": "A-IoT Phase2",
       "duration_minutes": 90,
       "specified_start_time": null,
-      "chair": "Hiroki",
+      "chair": null,
       "group_header": "R20",
-      "agenda_item": "9.3.2, 9.3.3, 9.3.1",
-      "description": "D2R signals, channels, waveform and procedures",
-      "agenda_descriptions": [
-        {
-          "agenda_item": "9.3.2",
-          "matched_agenda_item": "9.3.2",
-          "description": "D2R signals, channels, waveform and procedures",
-          "hierarchy": [
-            {
-              "agenda_item": "9",
-              "description": "Release 20 NR",
-              "has_description": true
-            },
-            {
-              "agenda_item": "9.3",
-              "description": "Solutions for Ambient IoT (Internet of Things) in NR Phase 2",
-              "has_description": true
-            },
-            {
-              "agenda_item": "9.3.2",
-              "description": "D2R signals, channels, waveform and procedures",
-              "has_description": true
-            }
-          ]
-        },
-        {
-          "agenda_item": "9.3.3",
-          "matched_agenda_item": "9.3.3",
-          "description": "Other procedures",
-          "hierarchy": [
-            {
-              "agenda_item": "9",
-              "description": "Release 20 NR",
-              "has_description": true
-            },
-            {
-              "agenda_item": "9.3",
-              "description": "Solutions for Ambient IoT (Internet of Things) in NR Phase 2",
-              "has_description": true
-            },
-            {
-              "agenda_item": "9.3.3",
-              "description": "Other procedures",
-              "has_description": true
-            }
-          ]
-        },
-        {
-          "agenda_item": "9.3.1",
-          "matched_agenda_item": "9.3.1",
-          "description": "R2D signals, channels, waveform and procedures",
-          "hierarchy": [
-            {
-              "agenda_item": "9",
-              "description": "Release 20 NR",
-              "has_description": true
-            },
-            {
-              "agenda_item": "9.3",
-              "description": "Solutions for Ambient IoT (Internet of Things) in NR Phase 2",
-              "has_description": true
-            },
-            {
-              "agenda_item": "9.3.1",
-              "description": "R2D signals, channels, waveform and procedures",
-              "has_description": true
-            }
-          ]
-        }
-      ]
+      "agenda_item": null
     },
     {
       "room_name": "ALL_ONLINE",
@@ -396,7 +325,7 @@
       "name": "10.7.1 NTN",
       "duration_minutes": 30,
       "specified_start_time": null,
-      "chair": "Sorour",
+      "chair": "Sorouri",
       "group_header": "6GR",
       "agenda_item": null,
       "description": "NTN specific requirements and design",
@@ -430,12 +359,21 @@
       "name": "NTN-NR",
       "duration_minutes": 30,
       "specified_start_time": null,
-      "chair": "Sorour",
+      "chair": "Sorouri",
       "group_header": "R20",
       "agenda_item": null
     },
     {
-      "room_name": "RAN1_off1 + RAN1_off2",
+      "room_name": "RAN1_off1",
+      "name": "Early dinner",
+      "duration_minutes": 60,
+      "specified_start_time": null,
+      "chair": null,
+      "group_header": "",
+      "agenda_item": null
+    },
+    {
+      "room_name": "RAN1_off2",
       "name": "Early dinner",
       "duration_minutes": 60,
       "specified_start_time": null,
@@ -444,7 +382,7 @@
       "agenda_item": null
     }
   ],
-  "merged_at": "2026-10-04T15:02:21.212445+00:00",
-  "meeting_id": "ran1#126",
+  "merged_at": "2026-10-05T00:55:35.557689+00:00",
+  "meeting_id": "ran1#126bis",
   "schema_version": 2
 }

@@ -2,9 +2,7 @@
   "day": "Thursday",
   "time_block_index": 0,
   "source_hashes": {
-    "Main Schedule": "86e7371b4d64a11b",
-    "Hiroki's schedule": "cac62a86de17beae",
-    "Sorour's schedule": "44c26f5e39af61de"
+    "Main Schedule": "86e7371b4d64a11b"
   },
   "merged_sessions": [
     {
@@ -129,9 +127,9 @@
       "name": "10.7.1 NTN",
       "duration_minutes": 50,
       "specified_start_time": null,
-      "chair": "Sorour",
+      "chair": null,
       "group_header": "6GR",
-      "agenda_item": "10.7.1",
+      "agenda_item": null,
       "description": "NTN specific requirements and design",
       "agenda_descriptions": [
         {
@@ -163,9 +161,9 @@
       "name": "9.5 NTN",
       "duration_minutes": 30,
       "specified_start_time": null,
-      "chair": "Sorour",
+      "chair": null,
       "group_header": "R20",
-      "agenda_item": "9.5",
+      "agenda_item": null,
       "description": "NR NTN in systems using downlink compensation",
       "agenda_descriptions": [
         {
@@ -192,38 +190,18 @@
       "name": "NTN-NR",
       "duration_minutes": 40,
       "specified_start_time": null,
-      "chair": "Sorour",
+      "chair": null,
       "group_header": "R20",
-      "agenda_item": "9.4",
-      "description": "GNSS resilient NR-NTN operation",
-      "agenda_descriptions": [
-        {
-          "agenda_item": "9.4",
-          "matched_agenda_item": "9.4",
-          "description": "GNSS resilient NR-NTN operation",
-          "hierarchy": [
-            {
-              "agenda_item": "9",
-              "description": "Release 20 NR",
-              "has_description": true
-            },
-            {
-              "agenda_item": "9.4",
-              "description": "GNSS resilient NR-NTN operation",
-              "has_description": true
-            }
-          ]
-        }
-      ]
+      "agenda_item": null
     },
     {
       "room_name": "RAN1_brk2",
-      "name": "8.2 R19 LP-WUS, Mobility, FR3/ISAC CM",
+      "name": "AI 7/8.2",
       "duration_minutes": 80,
       "specified_start_time": null,
-      "chair": "Hiroki",
-      "group_header": "Maintenance",
-      "agenda_item": "7, 8.2",
+      "chair": null,
+      "group_header": "",
+      "agenda_item": null,
       "description": "Pre-Rel-19 NR Maintenance",
       "agenda_descriptions": [
         {
@@ -262,9 +240,9 @@
       "name": "10.2.1 Waveform",
       "duration_minutes": 40,
       "specified_start_time": null,
-      "chair": "Hiroki",
-      "group_header": "6GR / 6G waveform",
-      "agenda_item": "10.2.1",
+      "chair": null,
+      "group_header": "6GR",
+      "agenda_item": null,
       "description": "Waveform",
       "agenda_descriptions": [
         {
@@ -437,7 +415,7 @@
       ]
     }
   ],
-  "merged_at": "2026-10-04T15:02:50.035621+00:00",
-  "meeting_id": "ran1#126",
+  "merged_at": "2026-10-05T00:56:03.241751+00:00",
+  "meeting_id": "ran1#126bis",
   "schema_version": 2
 }
