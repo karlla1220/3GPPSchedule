@@ -43,7 +43,7 @@ def find(schedule, day, room, start):
     return next(s for s in day.sessions if s.room_ids == [room] and s.start_time == start)
 
 
-def synthetic(cells, offline=(), slots=(('08:30', '10:30'), ('11:00', '13:00'))):
+def synthetic(cells, slots=(('08:30', '10:30'), ('11:00', '13:00'))):
     """A document dict with Monday cells: (room, start, end, lines)."""
     rooms = [{'id': i, 'name': n, 'label': n} for i, n in
              [('main', 'Main'), ('brk1', 'Breakout 1'), ('brk2', 'Breakout 2'), ('brk3', 'Breakout 3')]]
@@ -51,7 +51,7 @@ def synthetic(cells, offline=(), slots=(('08:30', '10:30'), ('11:00', '13:00')))
             'days': [{'day': 'Monday', 'slots': list(slots), 'notes': [],
                       'cells': [{'id': f'c{i}', 'rooms': [room], 'start': start, 'end': end, 'lines': lines}
                                 for i, (room, start, end, lines) in enumerate(cells)]}],
-            'breaks': [], 'offline': list(offline), 'paragraphs': []}
+            'breaks': [], 'supplements': []}
 
 
 def blocks(document, agenda_items=None):
@@ -73,20 +73,51 @@ def test_schedule_filenames(name, expected):
     assert docmod.file_info(name) == expected
 
 
-def test_real_table_rooms_days_breaks_and_offline_list():
+def supplement(document, heading):
+    """The block right after a heading in the supplements."""
+    blocks = document['supplements']
+    index = next(i for i, b in enumerate(blocks) if b['type'] == 'heading' and b['text'] == heading)
+    return blocks[index + 1]
+
+
+def test_real_table_rooms_days_and_breaks():
     document = extract(V11)
     assert document['meeting_id'] == 'ran2#135'
     assert [r['name'] for r in document['rooms']] == ['Main', 'Breakout 1', 'Breakout 2', 'Breakout 3']
     assert [d['day'] for d in document['days']] == ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
     thursday = document['days'][3]
     assert thursday['slots'] == [('08:30', '10:30'), ('10:50', '12:50'), ('14:15', '16:15'), ('16:40', '18:30')]
-    assert 'Social event – end at 18:30 (times to be readjusted for this day)' in thursday['notes']
     assert [b['name'] for b in document['breaks']] == ['Morning coffee', 'Lunch', 'Afternoon coffee']
-    first = document['offline'][1]
-    assert first == {'numbers': ['004'], 'day': 'Tuesday', 'start': '11:00', 'end': '12:00', 'place': 'BO2',
-                     'coordinator': 'Henning Wiemann (Ericsson)',
-                     'title': 'Spectrum aggregation: Extract simulation results and observations based on submitted documents'}
-    assert len(document['offline']) == 17
+
+
+def test_text_outside_the_table_is_kept_in_document_order():
+    document = extract(V11)
+    kinds = [(b['type'], b.get('text')) for b in document['supplements'] if b['type'] != 'table']
+    assert kinds[:3] == [('heading', 'Dates and deadlines'),
+                         ('paragraph', 'NOTE that this schedule may be modified on short notice.\n'
+                                       'Some Expectations: Details may be added every day. The Schedule for CBs on '
+                                       'Thursday (and Friday) will be updated on Wednesday, and the schedule for CBs '
+                                       'on Friday will be further updated on Thursday.'),
+                         ('paragraph', '* Offline discussions should be well scoped and only 30mins in duration.')]
+    assert 'RAN2-135 Session Schedule' not in [text for _, text in kinds]   # the title is the page heading
+    assert supplement(document, 'Dates and deadlines')['rows'] == [['August 14 10:00 UTC', 'Tdoc Submission Deadline.']]
+    assert supplement(document, 'Breaks')['rows'][1] == ['Lunch:', '13:00 to 14:30']
+    offline = supplement(document, 'List of Offline Face to Face discussions')
+    assert offline['header'] and offline['rows'][0] == ['Number', 'Title', 'Day/Time', 'Place', 'Coordinator']
+    assert len(offline['rows']) == 18
+    # A wrapped title continues on the next tab-aligned line.
+    assert offline['rows'][2] == ['[004]', 'Spectrum aggregation: Extract simulation results and observations '
+                                  'based on submitted documents', 'Tue 11:00-12:00', 'BO2', 'Henning Wiemann (Ericsson)']
+    notes = supplement(document, 'Notes in the schedule table')['rows']
+    assert notes == [['Day', 'Note'], ['Thursday', 'Colorful Polo Day'],
+                     ['Thursday', 'Social event – end at 18:30 (times to be readjusted for this day)']]
+
+
+def test_an_empty_offline_list_still_shows_its_header_and_unnumbered_rows_keep_their_columns():
+    header = supplement(extract(BIS), 'List of Offline Face to Face discussions')
+    assert header == {'type': 'table', 'header': True, 'rows': [['Number', 'Title', 'Day/Time', 'Place', 'Coordinator']]}
+    rows = supplement(extract(OLD), 'List of Offline Face to Face discussions')['rows']
+    assert ['', '[AIoT] MAC open issues offline', 'Tue 10:30-11:30', 'BO3', 'Rui Wang (Huawei)'] in rows
 
 
 def test_tracked_changes_are_read_in_accepted_form():
@@ -104,42 +135,80 @@ def test_a_cell_merged_across_two_slots_keeps_the_whole_span():
     assert (main['start'], main['end']) == ('09:00', '13:00')
 
 
-def docx_bytes(rows):
+def docx_bytes(rows, header=('', 'Main room', 'Brk 1 room', 'Brk 2 room', 'Brk 3 room*'),
+               title='RAN2-135\tSession Schedule', after=()):
     doc = Document()
-    doc.add_paragraph('RAN2-135\tSession Schedule')
-    table = doc.add_table(rows=1, cols=5)
-    for cell, text in zip(table.rows[0].cells, ['', 'Main room', 'Brk 1 room', 'Brk 2 room', 'Brk 3 room*']):
+    if title:
+        doc.add_paragraph(title)
+    table = doc.add_table(rows=1, cols=len(header))
+    for cell, text in zip(table.rows[0].cells, header):
         cell.text = text
     for row in rows:
         cells = table.add_row().cells
         if isinstance(row, str):
-            merged = cells[0].merge(cells[4])
+            merged = cells[0].merge(cells[-1])
             merged.text = row
         else:
             for cell, text in zip(cells, row):
                 cell.text = text
+    for text in after:
+        doc.add_paragraph(text)
     out = io.BytesIO()
     doc.save(out)
     return out.getvalue()
 
 
-def test_missing_weekday_label_is_inferred_from_the_clock_going_back():
+def test_missing_weekday_label_is_estimated_and_said_so():
     data = docx_bytes(['Monday', ['09:00 – 10:30', 'Opening', '', '', ''],
                        ['14:30-16:30', 'Afternoon', '', '', ''], '',
                        ['08:30 – 10:30', 'Next morning', '', '', '']])
     document = docmod.extract_document(data, 'R2_135_Schedule_v00.docx')
     assert [(d['day'], d['slots']) for d in document['days']] == [
         ('Monday', [('09:00', '10:30'), ('14:30', '16:30')]), ('Tuesday', [('08:30', '10:30')])]
+    notes = supplement(document, 'Notes in the schedule table')['rows']
+    assert ['Tuesday', 'Weekday label missing in the table; rows from 08:30 are shown as Tuesday.'] in notes
 
 
-def test_document_and_filename_must_agree():
-    with pytest.raises(ValueError, match='disagrees'):
-        docmod.extract_document(docx_bytes(['Monday', ['09:00-10:30', 'x', '', '', '']]), 'R2_136_Schedule_v01.docx')
+def test_a_different_layout_degrades_to_notes_instead_of_failing():
+    # Another author: no "Main" column, a row without a time, a typo time, no title paragraph.
+    data = docx_bytes(['Monday', ['09:00-10:30', 'Opening (Diana)', 'Topic A', ''],
+                       ['TBD', 'Something unplaced', '', ''],
+                       ['25:00-26:00', 'Bad clock', '', ''],
+                       ['11:00-12:30', '', '', 'Topic B']],
+                      header=('Time', 'Plenary', 'Room A', 'Room B'), title=None,
+                      after=['Contacts', 'Chair\tDiana Pani'])
+    document = docmod.extract_document(data, 'R2_136_Schedule_v00.docx')
+    assert document['meeting_id'] == 'ran2#136'
+    assert [r['name'] for r in document['rooms']] == ['Plenary', 'Room A', 'Room B']
+    found = blocks(document)
+    assert [(b[0], b[1], b[2], b[3]) for b in found] == [
+        ('09:00', '10:30', 'plenary', 'Opening'), ('09:00', '10:30', 'room-a', 'Topic A'),
+        ('11:00', '12:30', 'room-b', 'Topic B')]
+    notes = supplement(document, 'Notes in the schedule table')['rows'][1:]
+    assert [n[0] for n in notes] == ['Monday', 'Monday']
+    assert 'Something unplaced' in notes[0][1] and 'Bad clock' in notes[1][1]
+    assert document['supplements'][:2] == [{'type': 'paragraph', 'text': 'Contacts', 'bold': False},
+                                           {'type': 'table', 'header': False, 'rows': [['Chair', 'Diana Pani']]}]
+
+
+def test_the_filename_decides_the_meeting_when_the_title_was_not_updated():
+    data = docx_bytes(['Monday', ['09:00-10:30', 'x', '', '', '']])   # title still says RAN2-135
+    assert docmod.extract_document(data, 'R2_136_Schedule_v01.docx')['meeting_id'] == 'ran2#136'
+    assert docmod.extract_document(data, 'my copy.docx')['meeting_id'] == 'ran2#135'
+    with pytest.raises(ValueError, match='Cannot tell the RAN2 meeting'):
+        docmod.extract_document(docx_bytes(['Monday', ['09:00-10:30', 'x', '', '', '']], title=None), 'x.docx')
+    with pytest.raises(ValueError, match='No table with time ranges'):
+        docmod.extract_document(docx_bytes(['Monday', ['all day', 'x', '', '', '']]), 'R2_136_Schedule_v01.docx')
+
+
+def test_agenda_csv_skips_rows_it_cannot_read():
+    data = '"1","Opening"\n"x","junk"\n"7.4","LP-WUS"\n"7.4"\n'.encode()
+    assert docmod.agenda_map(data) == {'1': 'Opening', '7.4': 'LP-WUS'}
 
 
 # ---------------------------------------------------------------- cell rules
 
-def test_prefix_markers_split_a_cell():
+def test_markers_split_a_cell():
     document = synthetic([('brk1', '08:30', '10:30', [
         '@8:30-9:30', '[7.1] NR19 AI/ML PHY [0] (Erlin)', '@9:30-10:30', '[8.1] NR20 AI/M PHY [2] (Erlin)',
         '[8.1.1]', '[8.1.2] if time allows'])])
@@ -148,86 +217,74 @@ def test_prefix_markers_split_a_cell():
         ('09:30', '10:30', 'brk1', 'NR20 AI/M PHY', 'Erlin', ['8.1', '8.1.1', '8.1.2'])]
 
 
-def test_a_header_written_above_its_marker_moves_with_it():
-    # RAN2#133bis writes the next part's header before its time.
+def test_a_header_written_after_its_marker_is_not_moved():
+    # RAN2#133bis wrote some headers above their time. Guessing that would
+    # misplace other cells, so the text stays where it is written.
     document = synthetic([('brk1', '17:30', '19:30', [
         '[7.1] NR19 AI/ML PHY [0] (Erlin)', '@17:30-18:30', '[8.1] NR20 AI/M PHY [1] (Erlin)',
         '@18:30-19:30', '[8.1.1]', '[8.1.2]'])], slots=[('17:30', '19:30')])
     assert blocks(document) == [
-        ('17:30', '18:30', 'brk1', 'NR19 AI/ML PHY', 'Erlin', ['7.1']),
-        ('18:30', '19:30', 'brk1', 'NR20 AI/M PHY', 'Erlin', ['8.1', '8.1.1', '8.1.2'])]
+        ('17:30', '18:30', 'brk1', 'NR19 AI/ML PHY / NR20 AI/M PHY', 'Erlin', ['7.1', '8.1']),
+        ('18:30', '19:30', 'brk1', 'AI 8.1.1, 8.1.2', None, ['8.1.1', '8.1.2'])]
 
 
-def test_from_and_bare_clock_markers_and_an_end_cap():
+def test_from_and_bare_clock_markers_but_no_prose_times():
     document = synthetic([
         ('brk2', '14:30', '16:30', ['14:30-15:30 [004] (Xiaomi)', '', 'From 15:30:',
                                     '[8.8] E-UTRA TN to NR NTN HO (Sergio)']),
         ('brk3', '11:00', '13:00', ['12:00 [9.3.2.5] CA offline (Mattias)']),
         ('brk1', '17:00', '19:00', ['[8.2] NR20 AIoT [2] (Nathan)', 'Overflow from afternoon session, end by 18:30']),
     ], slots=[('11:00', '13:00'), ('14:30', '16:30'), ('17:00', '19:00')])
-    found = {(b[0], b[1], b[2]) for b in blocks(document)}
-    assert found == {('14:30', '15:30', 'brk2'), ('15:30', '16:30', 'brk2'), ('12:00', '13:00', 'brk3'),
-                     ('17:00', '18:30', 'brk1')}
+    found = {(b[0], b[1], b[2], b[3]) for b in blocks(document)}
+    assert found == {('14:30', '15:30', 'brk2', '[004] (Xiaomi)'), ('15:30', '16:30', 'brk2', 'E-UTRA TN to NR NTN HO'),
+                     ('12:00', '13:00', 'brk3', 'CA offline'), ('17:00', '19:00', 'brk1', 'NR20 AIoT')}
 
 
 def test_agenda_items_budgets_offline_numbers_and_ranges():
-    line = sessions.analyze('[6.0.2.1] - [6.0.2.4], [6.0.2.14]', set(), set(), None)
+    line = sessions.analyze('[6.0.2.1] - [6.0.2.4], [6.0.2.14]', set())
     assert line.ais == ['6.0.2.1', '6.0.2.2', '6.0.2.3', '6.0.2.4', '6.0.2.14'] and line.lead
-    line = sessions.analyze('[8.3] NR20 AI mobility [1.5] (Kyeongin)', {'Kyeongin'}, set(), None)
+    line = sessions.analyze('[8.3] NR20 AI mobility [1.5] (Kyeongin)', {'Kyeongin'})
     assert (line.text, line.ais, line.chairs) == ('NR20 AI mobility', ['8.3'], ['Kyeongin'])
-    line = sessions.analyze('[011] [9.4.1] Mobility offline (Jedrzej)', set(), set(), None)
-    assert line.offline == ['011']
-    line = sessions.analyze('[8.2.1 Organizational', set(), set(), None)   # unclosed in RAN2#134
+    assert sessions.analyze('[011] [9.4.1] Mobility offline (Jedrzej)', set()).offline == ['011']
+    line = sessions.analyze('[8.2.1 Organizational', set())   # unclosed in RAN2#134
     assert (line.text, line.ais) == ('Organizational', ['8.2.1'])
-    line = sessions.analyze('[605] [SONMDT] Rel19 37.320 SON MDT corrections', set(), set(), None)
+    line = sessions.analyze('[605] [SONMDT] Rel19 37.320 SON MDT corrections', set())
     assert line.ais == [] and line.offline == ['605'] and '[SONMDT]' in line.text
-    line = sessions.analyze('6.0.2.4, 5.1.3.2, 6.0.2', set(), set(), {'6.0.2.4': 'a', '5.1.3.2': 'b', '6.0.2': 'c'})
+    line = sessions.analyze('6.0.2.4, 5.1.3.2, 6.0.2', set(), {'6.0.2.4': 'a', '5.1.3.2': 'b', '6.0.2': 'c'})
     assert line.ais == ['6.0.2.4', '5.1.3.2', '6.0.2']
-    line = sessions.analyze('(if time allows) [6.0.2.16] R18 XR (Dawid)', {'Dawid'}, set(), None)
+    # Unbracketed numbers inside prose are not agenda items.
+    assert sessions.analyze('Breakout to start after completion of 7.0 and 8.0', set()).ais == []
+    assert sessions.analyze('- 8.6.1 Organizational', set()).ais == []
+    line = sessions.analyze('(if time allows) [6.0.2.16] R18 XR (Dawid)', {'Dawid'})
     assert (line.text, line.ais, line.lead) == ('R18 XR', ['6.0.2.16'], True)
-    assert sessions.analyze('[8.12.1] (e)RedCap Less than 5 MHz', set(), set(), None).text == '(e)RedCap Less than 5 MHz'
+    assert sessions.analyze('[8.12.1] (e)RedCap Less than 5 MHz', set()).text == '(e)RedCap Less than 5 MHz'
 
 
-def test_chairs_are_learned_and_companies_are_not_chairs():
+def test_only_names_in_parentheses_are_chairs():
     document = synthetic([('main', '08:30', '10:30', ['Session report from Mattias', '[9.3.3] Common CP/UP']),
                           ('brk1', '08:30', '10:30', ['[7.10] NR19 SONMDT [0] (Mattias)']),
                           ('brk2', '08:30', '10:30', ['11:00-12:00 [004] (Ericsson, Nokia)']),
-                          ('main', '11:00', '13:00', ['[9.3.1] 6GR Control Plane', 'CB Intersite spectrum aggregation'])])
+                          ('brk3', '08:30', '10:30', ['CB Kyeongin', 'R19 NES comebacks'])])
     found = {b[3]: b[4] for b in blocks(document)}
-    assert found['Common CP/UP'] is None
-    assert found['NR19 SONMDT'] == 'Mattias'
-    assert found['6GR Control Plane'] is None
-    assert sessions.learn_names(document)[0] == {'Mattias'}
+    assert found == {'Session report from Mattias / Common CP/UP': None, 'NR19 SONMDT': 'Mattias',
+                     '[004] (Ericsson, Nokia)': None, 'CB Kyeongin': None}
+    assert sessions.learn_chairs(document) == {'Mattias'}
 
 
 def test_untimed_sub_row_fills_the_time_after_a_timed_offline():
     document = synthetic([('brk2', '10:50', '12:50', ['UP offline', '10:50-11:50 [009] (InterDigital)']),
                           ('brk2', '10:50', '12:50', ['CB Mattias', 'CB NR19 SONMDT [0] (Mattias)'])],
                          slots=[('10:50', '12:50')])
-    assert [(b[0], b[1], b[3]) for b in blocks(document)] == [
-        ('10:50', '11:50', 'UP offline'), ('11:50', '12:50', 'CB: NR19 SONMDT')]
+    assert [(b[0], b[1], b[3], b[4]) for b in blocks(document)] == [
+        ('10:50', '11:50', 'UP offline', None), ('11:50', '12:50', 'CB Mattias / CB NR19 SONMDT', 'Mattias')]
 
 
-def test_a_labelled_block_after_an_explicit_end_starts_there():
+def test_a_blank_line_ends_an_explicitly_timed_part():
     document = synthetic([('brk1', '08:30', '10:30', [
         'CB Kyeongin', '@8:30-9:30', 'R20 AI Mob comebacks/ and continue [8.3]', '', 'CB Erlin',
         '[8.1] NR20 AI/M PHY [1] (Erlin)'])])
     assert [(b[0], b[1], b[3], b[4]) for b in blocks(document)] == [
-        ('08:30', '09:30', 'CB: R20 AI Mob comebacks/ and continue', 'Kyeongin'),
-        ('09:30', '10:30', 'CB: NR20 AI/M PHY', 'Erlin')]
-
-
-def test_offline_list_names_numbered_blocks_and_fills_free_rooms():
-    records = [
-        {'numbers': ['004'], 'title': 'Spectrum aggregation', 'day': 'Monday', 'start': '11:00', 'end': '12:00',
-         'place': 'BO2', 'coordinator': 'Henning Wiemann (Ericsson)'},
-        {'numbers': ['203'], 'title': '[LPWUS] CN-based subgrouping', 'day': 'Monday', 'start': '10:30',
-         'end': '11:00', 'place': 'BO3', 'coordinator': 'Alexey Kulakov (Vodafone)'},
-    ]
-    document = synthetic([('brk2', '11:00', '13:00', ['11:00-12:00 [004] (Ericsson, Nokia)'])], offline=records)
-    assert [(b[0], b[1], b[2], b[3], b[4]) for b in blocks(document)] == [
-        ('10:30', '11:00', 'brk3', '[203] [LPWUS] CN-based subgrouping', 'Alexey Kulakov'),
-        ('11:00', '12:00', 'brk2', '[004] Spectrum aggregation', 'Henning Wiemann')]
+        ('08:30', '09:30', 'CB Kyeongin', None), ('09:30', '10:30', 'CB Erlin / NR20 AI/M PHY', 'Erlin')]
 
 
 def test_marker_like_agenda_numbers_are_content():
@@ -253,14 +310,16 @@ def test_real_schedule_days_breaks_and_key_blocks(v11):
     assert eutra.name == 'EUTRA&NR15161718' and eutra.chair == 'Mattias'
     assert {'6.0.2.1', '6.0.2.7', '6.0.2.12'} <= set(eutra.agenda_item.split(', '))
     offline = find(v11, 'Tuesday', 'brk2', '11:00')
-    assert offline.name.startswith('[004] Spectrum aggregation: Extract simulation results')
-    assert (offline.end_time, offline.chair, offline.group_header) == ('12:00', 'Henning Wiemann', 'Offline')
+    assert (offline.name, offline.end_time, offline.chair, offline.group_header) == (
+        '[004] (Ericsson, Nokia)', '12:00', None, 'Offline')
     cb = find(v11, 'Thursday', 'brk2', '11:50')
-    assert cb.name == 'CB: EUTRA&NR15161718 / NR19 SONMDT …' and cb.end_time == '12:50'
+    assert cb.name.startswith('CB Mattias / CB EUTRA&NR15161718') and cb.end_time == '12:50'
     xr = find(v11, 'Wednesday', 'brk1', '17:00')
     assert xr.agenda_item == '7.7, 8.5' and xr.chair == 'Dawid'
     late = find(v11, 'Tuesday', 'brk1', '10:00')
     assert (late.name, late.end_time) == ('Offline disc on RRC details', '11:00')
+    # The offline list is shown below the grid, never merged into it.
+    assert not any(s.name.startswith('[203]') for d in v11.days for s in d.sessions)
 
 
 @pytest.mark.parametrize('name, agenda_name, metadata', [
@@ -282,20 +341,27 @@ def test_every_room_shows_one_block_at_a_time(name, agenda_name, metadata):
     assert len(html.select('.session-block')) == sum(len(d.sessions) for d in schedule.days)
 
 
-def test_render_roundtrip_and_popup_keeps_source_lines(v11, tmp_path):
+def test_render_roundtrip_popup_and_additional_information(v11, tmp_path):
     save_schedule(v11, tmp_path / 'schedule.json')
     assert load_schedule(tmp_path / 'schedule.json') == v11
     html = BeautifulSoup(generate_html(v11), 'html.parser')
-    block = html.select_one('#monday [data-name="R17/18 NR / IoT NTN"]')
+    block = html.select_one('#monday [data-name="R17/18 NR / IoT NTN / R17 NR NTN corrections / R18 NR NTN corrections …"]')
     popup = block['data-popup']
     assert 'Note: [7.8] NR19 NR NTN [0] (Sergio)' in popup
     assert 'Note: [7.8.1], [7.8.2]' not in popup   # repeated by the AI field
     assert '7.8: NTN for NR Ph3' in popup.replace('<strong>', '').replace('</strong>', '')
+    section = html.select_one('details.supplements')
+    assert section.summary.get_text() == 'Additional information'
+    assert [h.get_text() for h in section.select('h3')] == [
+        'Dates and deadlines', 'Breaks', 'List of Offline Face to Face discussions', 'Notes in the schedule table']
+    offline = section.select('table')[2]
+    assert [th.get_text() for th in offline.select('thead th')] == ['Number', 'Title', 'Day/Time', 'Place', 'Coordinator']
+    assert len(offline.select('tbody tr')) == 17
 
 
-def test_meeting_dates_must_cover_the_weekdays():
-    with pytest.raises(ValueError, match='outside the meeting dates'):
-        sessions.make_schedule(extract(V11), None, {**META_135, 'ends_on': '2026-08-27'}, [V11], 'now')
+def test_days_outside_the_meeting_dates_are_shown_without_a_date():
+    schedule = sessions.make_schedule(extract(V11), None, {**META_135, 'ends_on': '2026-08-27'}, [V11], 'now')
+    assert [(d.day_name, d.date) for d in schedule.days][-1] == ('Friday', None)
 
 
 # ------------------------------------------------------------------- sources
@@ -502,3 +568,16 @@ assert not any(name.startswith(('working_groups.ran1', 'working_groups.ran_plena
                for name in sys.modules)
 """], capture_output=True, text=True)
     assert result.returncode == 0, result.stderr
+
+
+def test_supplements_are_escaped_and_absent_elsewhere():
+    from shared.topic_references import render_supplements
+    from schedule_fixture import build_schedule as plenary_schedule
+    attack = '<script>alert(1)</script>'
+    html = render_supplements([{'type': 'heading', 'text': attack},
+                               {'type': 'paragraph', 'text': f'a\n{attack}', 'bold': True},
+                               {'type': 'table', 'header': True, 'rows': [[attack], ['x\ny']]},
+                               {'type': 'table', 'rows': []}])
+    assert '<script>' not in html and 'a<br>&lt;script&gt;' in html and '<td>x<br>y</td>' in html
+    assert render_supplements([]) == ''
+    assert BeautifulSoup(generate_html(plenary_schedule()), 'html.parser').select_one('.supplements') is None

@@ -101,6 +101,10 @@ class Schedule:
     is_demo: bool = False
     topic_references: list[dict] = field(default_factory=list)
     topic_preamble: list[str] = field(default_factory=list)
+    # Source text shown below the grid, in document order. Each block is
+    # {"type": "heading", "text"}, {"type": "paragraph", "text", "bold"} or
+    # {"type": "table", "rows": [[cell, ...]], "header": first row is a header}.
+    supplements: list[dict] = field(default_factory=list)
 
 
 def time_to_minutes(t: str) -> int:

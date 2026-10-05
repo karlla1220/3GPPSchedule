@@ -111,8 +111,8 @@ working_groups/
     config.json / prompts/     # RAN1 전용 설정과 LLM 프롬프트
   ran2/
     lifecycle.py / sources.py  # Portal 날짜로 현재 미팅 선택, schedule·agenda.csv 재검증
-    document.py                # 표·병합 셀·변경 추적·오프라인 목록 추출
-    sessions.py                # 셀 안의 시각 표시로 세션 분리, 제목·AI·Chair 결정 (LLM 없음)
+    document.py                # 표·병합 셀·변경 추적, 표 밖 문단·탭 표를 하단 정보로 추출
+    sessions.py                # 시각 표시로 셀을 나누고 제목·AI·Chair를 보수적으로 추정 (LLM 없음)
     pipeline.py / config.json  # Portal 메타데이터와 공통 Schedule 조립
   ran_plenary/
     lifecycle.py / sources.py  # 최신 timeplan·agenda 선택, 재검증, check→build 전달
@@ -295,9 +295,10 @@ uv run python main.py --render-only
 
 RAN2 의장단은 미팅마다 `Agenda/` 폴더에 `R2_<미팅>_Schedule_v<NN>.docx`
 (`R2_135_Schedule_v11.docx`, `R2_133b_Schedule_v14.docx`, `R2_131bis_Schedule v19.docx`)를
-올립니다. 표 하나에 시간 열과 Main/Brk 1~3 방 열이 있고, 셀 안에 여러 세션을
-시각 표시로 나눠 적습니다. RAN2#131bis~#135bis의 실제 문서로 확인한 형식이며,
-**LLM 없이 결정론적 규칙**으로 해석하므로 API 키가 필요 없고 같은 문서는 항상 같은 결과를 냅니다.
+올립니다. 사람이 작성하는 문서라 작성자가 바뀌면 양식도 달라질 수 있으므로, **보수적으로
+추정**합니다. 일반적인 관례 몇 가지만 가정하고, 맞지 않는 내용은 세션으로 지어내거나
+빌드를 실패시키지 않고 원문 그대로 페이지 하단에 남깁니다. LLM을 쓰지 않으므로 API 키가 필요 없고
+같은 문서는 항상 같은 결과를 냅니다. RAN2#131bis~#135bis의 실제 문서로 확인했습니다.
 
 ### 원본 선택
 
@@ -314,29 +315,49 @@ RAN2 의장단은 미팅마다 `Agenda/` 폴더에 `R2_<미팅>_Schedule_v<NN>.d
   `config.json`의 `meetings` 지정 > Portal > 같은 미팅의 마지막 성공 상태입니다.
   셋 다 없으면 UTC로 추측하지 않고 빌드에 실패합니다.
 
-### 셀 해석 규칙 (`working_groups/ran2/sessions.py`)
+### 표 읽기 (`working_groups/ran2/document.py`)
 
+- 첫 열에 시간 범위가 가장 많은 표를 일정표로 봅니다. 그 위 행의 셀 이름이 방 이름이고
+  (`Brk 1 room` → `Breakout 1`, 그 밖의 이름은 그대로), 전체 폭 행은 요일 또는 그날의 메모입니다.
 - 문서의 변경 추적은 수락한 상태로 읽습니다(삽입은 포함, 삭제·취소선은 제외).
   python-docx의 `.text`는 `<w:ins>` 안의 글자를 놓치므로 쓰지 않습니다.
-- 세로 병합 셀은 XML 요소로 식별합니다. 두 시간 슬롯에 걸친 셀은 한 블록이 되고,
-  Brk 3처럼 한 슬롯을 여러 행으로 나눈 셀은 각자 해석한 뒤 방별로 겹침을 정리합니다.
-- `@12:30`, `@8:30-9:30`, `From 15:30:`, `11:00-12:00 [004] ...`, `12:00 [9.3.2.5] ...`가 새 세션을
-  시작합니다. 콜론 없는 `8.10 NR20 MIMO`는 시각으로 보지 않습니다. `end by 18:30`, `until 12:30`은
-  종료를 당기고, `(from 9:00)`은 시작을 늦춥니다. 오프라인 목록처럼 휴식 시간에 잡힌 시각도 그대로 씁니다.
-- 시각 표시 바로 위에 쓴 머리글(`CB Erlin`, `[8.1] NR20 AI/M PHY (Erlin)` 다음에 `@18:30-19:30`)은
-  그 시각의 세션으로 옮깁니다. 같은 슬롯의 시각 없는 하위 행은 시각이 적힌 블록이 비운 시간을 채웁니다.
+- 세로 병합 셀은 XML 요소로 식별합니다. 두 시간 슬롯에 걸친 셀은 한 블록이 됩니다.
+- 시간이 없거나 읽을 수 없는 행, 첫 요일 앞의 행은 버리지 않고 "Notes in the schedule table"로 보냅니다.
+  요일 머리글이 비어 있고 시각이 앞으로 돌아가면 다음 요일로 추정하고, 그 사실도 메모로 남깁니다.
+- 미팅은 파일 이름으로 정합니다. 제목 문단이 이전 미팅 그대로여도(복사 후 미수정) 따르지 않습니다.
+  파일 이름에 미팅이 없을 때만 제목 문단(`RAN2-135 Session Schedule`)을 씁니다.
+
+### 셀 해석 규칙 (`working_groups/ran2/sessions.py`)
+
+- 줄 맨 앞의 시각 표시(`@12:30`, `@8:30-9:30`, `From 15:30:`, `11:00-12:00 [004] ...`)가 셀을 나눕니다.
+  콜론 없는 `8.10 NR20 MIMO`나 그날 슬롯과 동떨어진 시각은 시각으로 보지 않고 글자로 둡니다.
+  `end by 18:30` 같은 문장 속 시각은 해석하지 않습니다.
+- 첫 시각 표시가 셀 시작과 같으면 그 위 줄은 그 부분의 머리글입니다. 종료 시각이 적힌 부분 뒤의
+  빈 줄 다음 내용은 그 종료 시각부터 이어집니다. 그 밖에 머리글을 다른 시각으로 옮기지 않습니다.
+- 같은 방·슬롯을 여러 행으로 나눈 셀(Brk 3의 오프라인 등)은 시각이 적힌 블록을 먼저 놓고,
+  시각 없는 행이 남은 시간을 채웁니다. 한 방에는 한 번에 한 블록만 보입니다.
 - `[8.3]`처럼 대괄호 숫자는 AI입니다. 제목 뒤의 `[0]`, `[1.5]`(시간 예산)와 `[004]`, `[xxx]`,
   `[POST133bis]`(오프라인 번호)는 AI가 아닙니다. `[6.0.2.1] - [6.0.2.12]`는 범위를 펼칩니다.
-- 괄호 속 이름은 Chair입니다(`(Kyeongin)`, `(Erlin, Kyeongin)`). 회사(`(vivo)`, `(Ericsson, Nokia)`)는
-  Chair가 아니며, 회사 목록에 문서의 오프라인 목록 Coordinator 회사도 더합니다.
-- 제목은 머리글 줄(`Rel-19 corrections (Erlin)`) 또는 하위 항목이 아닌 AI 줄의 이름을 ` / `로 잇습니다.
-  `CB Kyeongin`처럼 사람만 적힌 CB 머리글은 `CB: R19 NES comebacks / ...`로 주제를 붙입니다.
-- 문서 아래 "List of Offline Face to Face discussions"와 요일·시작 시각·방(BO1~3, Main)이 맞는
-  블록은 오프라인 번호와 제목, Coordinator를 받습니다. 표에 없고 방이 비어 있으면 블록을 추가합니다.
-- 그룹(범례 색)은 `agenda.csv` 최상위 항목(`6GR Rel-20`, `NR Rel-19` 등)이고, 오프라인은 `Offline`입니다.
-  휴식은 슬롯 사이 빈 시간이며 이름은 문서의 Breaks 문단(`Morning coffee` 등)과 겹치는 것을 씁니다.
-- 셀의 원문 줄은 모두 팝업의 Note로 남습니다. 규칙이 제목을 덜 정확하게 만들어도 내용은 잃지 않습니다.
-- 요일 머리글이 비어 있고 시각이 앞으로 돌아가면 다음 요일로 봅니다(RAN2#135 v00의 금요일).
+  괄호 없는 숫자는 숫자만 있는 줄(`6.0.2.4, 5.1.3.2`)에서만 AI로 봅니다.
+- 괄호 속 사람 이름만 Chair입니다(`(Kyeongin)`, `(Erlin, Kyeongin)`). 회사(`(vivo)`)는 Chair가 아닙니다.
+  `CB Kyeongin`처럼 괄호 없는 이름은 제목에만 남습니다.
+- 제목은 처음 몇 줄에서 추정합니다: 하위 항목이 아닌 AI 줄, 괄호 속 Chair가 있는 줄, 짧은 첫 줄을
+  ` / `로 잇습니다(최대 3개). 아무것도 없으면 첫 줄을 그대로 씁니다(`[004] (Ericsson, Nokia)`).
+- 그룹(범례 색)은 `agenda.csv` 최상위 항목(`6GR Rel-20`, `NR Rel-19` 등)이고, 제목에 offline이 있거나
+  첫 줄에 오프라인 번호가 있으면 `Offline`입니다. 휴식은 슬롯 사이 빈 시간이고 이름은 문서의
+  Breaks 문단(`Morning coffee` 등)에서 가져옵니다.
+- 셀의 원문 줄은 모두 팝업의 Note로 남습니다. 추정이 틀려도 내용은 잃지 않습니다.
+
+### 일정표 밖의 정보 (페이지 하단)
+
+RAN Plenary의 Topics처럼, 일정표 밖의 문서 내용을 그리드 아래 "Additional information"에
+문서 순서대로 보여 줍니다(`Schedule.supplements`). 오프라인 목록을 그리드에 합치거나 블록 이름을 바꾸지 않습니다.
+
+- 짧은 굵은 문단은 소제목, 그 밖의 문단은 본문입니다(`Dates and deadlines`, `NOTE that this schedule ...`).
+- 탭으로 맞춘 연속 문단은 표가 됩니다(Breaks, List of Offline Face to Face discussions).
+  숫자가 없는 첫 행은 머리글이고, 앞이 탭으로 시작하는 줄은 앞 행의 제목이 이어진 것으로 합칩니다.
+- 표 안의 전체 폭 메모(`Colorful Polo Day`, `Social event – end at 18:30 ...`)와 그리드에 놓지 못한 행은
+  "Notes in the schedule table"에 요일과 함께 나옵니다.
 
 ### 상태와 로컬 확인
 
@@ -353,7 +374,8 @@ uv run python main.py --wg ran2 --local "tests/fixtures/ran2/R2_135_Schedule_v11
 ```
 
 실제 문서(RAN2#131bis v19, #135 v11, #135bis v00)와 `agenda.csv`는 `tests/fixtures/ran2/`에 있으며,
-테스트는 네트워크 없이 이 문서로 방별 겹침 없음, 휴식, 오프라인 이름, Chair 등을 확인합니다.
+테스트는 네트워크 없이 이 문서로 방별 겹침 없음, 휴식, Chair, 하단 정보를 확인합니다.
+다른 작성자의 양식(Main 열 없음, 시간 없는 행, 잘못된 시각, 제목 없음)이 실패 대신 메모로 남는지도 확인합니다.
 
 ## 다중 소스 통합 파이프라인
 
