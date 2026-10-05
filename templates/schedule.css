@@ -602,6 +602,9 @@ header .meta {
     line-height: 1.7;
     min-width: 180px;
     max-width: min(520px, calc(100vw - 24px));
+    max-height: calc(100vh - 16px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
 }
 
 .popup-floating.show {
