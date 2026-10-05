@@ -38,6 +38,23 @@ def test_short_sessions_do_not_overflow_their_grid_slots():
     assert "line-height: calc(var(--slot-height) - 2px)" in tiny_name_rule.group(1)
 
 
+def test_chair_has_no_backdrop_and_is_dropped_from_narrow_blocks():
+    css = _generate_css(num_rooms_max=1)
+    block_rule = re.search(r"\n\.session-block\s*\{([^}]*border-radius[^}]*)\}", css)
+    chair_rule = re.search(r"\n\.session-chair\s*\{([^}]*)\}", css)
+    narrow_rule = re.search(
+        r"@container \(max-width: \d+px\)\s*\{\s*\.session-chair\s*\{([^}]*)\}", css
+    )
+
+    assert block_rule is not None
+    assert chair_rule is not None
+    assert narrow_rule is not None
+    # Nothing covers the text under the chair, so a narrow block omits it.
+    assert "background" not in chair_rule.group(1)
+    assert "container-type: inline-size" in block_rule.group(1)
+    assert "display: none" in narrow_rule.group(1)
+
+
 def test_time_column_and_now_label_stay_aligned_while_scrolling():
     css = _generate_css(num_rooms_max=1)
     time_header_rule = re.search(r"\.room-header\.time-col\s*\{([^}]*)\}", css)
