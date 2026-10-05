@@ -164,6 +164,17 @@ def check_updates(*, staging_dir=None) -> CheckResult:
                 f"uploaded_at={info.get('uploaded_at')}"
             )
 
+    # The meeting the build will select: every selected remote source belongs
+    # to it, so the first identifiable file names it.
+    selected_meeting_id = next(
+        (
+            meeting_id
+            for info in remote_all or []
+            if (meeting_id := _extract_meeting_id(info["name"])) is not None
+        ),
+        preferred_meeting_id,
+    )
+
     # 2. Compare with cached state (stored in repo as docs/ran1/.schedule_state.json)
     cached = state.get("files")
 
@@ -213,23 +224,34 @@ def check_updates(*, staging_dir=None) -> CheckResult:
     elif remote_all is None:
         print("No cached remote comparison because FTP was unavailable.")
 
+    # A saved state that names another meeting was built for that meeting, or
+    # by an older selection rule that mixed meetings.  The remote files of the
+    # new meeting can then be a subset of the saved ones, which the transient
+    # failure rule above reads as "unchanged"; a meeting change always
+    # rebuilds.
+    if remote_all and not changed and selected_meeting_id is not None:
+        cached_meeting_ids = {cached_meeting_id} | {
+            _extract_meeting_id(str(entry.get("name", "")))
+            for entry in (cached if isinstance(cached, list) else [])
+            if isinstance(entry, dict)
+        }
+        other_meetings = sorted(cached_meeting_ids - {None, selected_meeting_id})
+        if other_meetings:
+            changed = True
+            print(
+                f"Saved state is for {', '.join(other_meetings)} but the "
+                f"current meeting is {selected_meeting_id} — treating as changed."
+            )
+
     # The build only reads the Agenda folder of the meeting it selects, so
     # compare against that same folder; another meeting's agenda would be
     # reported as a change on every run without ever being built.
-    selected_meeting_id = next(
-        (
-            meeting_id
-            for info in remote_all or []
-            if (meeting_id := _extract_meeting_id(info["name"])) is not None
-        ),
-        preferred_meeting_id,
-    )
     agenda_urls = agenda_urls_for_meeting(
         cfg.get("agenda_urls") or [],
         selected_meeting_id,
     )
 
-    portal_ref = lookup_timezone_reference("ran1", preferred_meeting_id)
+    portal_ref = lookup_timezone_reference("ran1", selected_meeting_id)
     cached_timezone_ref = state.get("timezone_ref")
     if portal_ref is not None or (
         isinstance(cached_timezone_ref, dict) and cached_timezone_ref.get("type") == "portal"

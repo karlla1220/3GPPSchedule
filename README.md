@@ -348,6 +348,7 @@ FTP Inbox/
 - **로컬 Agenda 캐시**: `downloads/ran1/Agenda/<미팅>/`(예: `ran1_126bis/`)에 미팅별로 저장합니다. `agenda.csv`처럼 이름에 미팅이 없는 파일이 다음 미팅에 재사용되지 않습니다.
 - **Chair notes, 부의장 스케줄**: 현재 미팅 ID와 일치하는 파일만 사용합니다.
 - `check_update.py`도 같은 기준으로 Agenda 폴더를 고르므로 check와 build의 판단이 어긋나지 않습니다.
+- **미팅 변경은 항상 재빌드합니다.** 저장된 `meeting_id`나 `files`에 현재 미팅과 다른 미팅이 있으면 `check_update.py`는 변경으로 판정합니다. 새 미팅의 소스가 저장된 목록의 부분집합이어도(미팅이 섞여 저장된 과거 상태 등) "FTP 일시 실패" 규칙으로 넘기지 않습니다. Portal 메타데이터도 저장된 미팅이 아니라 이번에 선택될 미팅으로 조회합니다.
 
 ## 외부 파일 참조 (`extra_files`)
 

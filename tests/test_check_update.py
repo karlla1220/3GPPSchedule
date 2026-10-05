@@ -433,3 +433,45 @@ def test_agenda_of_another_meeting_is_not_a_change(folder, changed):
             state=state, local_refs={}, remote=files, agenda_info=newer_agenda,
             agenda_urls=[f'https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/{folder}/Agenda/'])
     assert outputs == [('changed', changed)]
+
+
+_BIS_DRAFT = {'folder': 'Chair_notes', 'uploaded_at': '2026-10-04T08:57:00',
+              'name': 'Draft RAN1#126b online and offline schedules - v00.docx'}
+_PREVIOUS_MEETING_FILES = [
+    {'folder': 'Chair_notes', 'uploaded_at': '2026-08-28T08:41:00',
+     'name': 'RAN1#126 online and offline schedules - v03.docx'},
+    {'folder': 'Hiroki_notes', 'uploaded_at': '2026-08-27T11:22:00',
+     'name': 'RAN1#126 schedule for Hiroki Adhoc2 sessions_v08_1.docx'},
+]
+
+
+def test_meeting_change_is_detected_when_new_sources_are_a_subset_of_saved_ones():
+    """A state saved while two meetings were mixed lists the new meeting's
+    file too, so the new selection is a subset of it."""
+    state = {'files': [_BIS_DRAFT, *_PREVIOUS_MEETING_FILES], 'meeting_id': 'ran1#126',
+             'local_refs': {}, 'timezone_status': 'resolved',
+             'timezone_ref': {'type': 'portal', 'id': 60713}}
+    outputs, _ = _run_check(state=state, local_refs={}, remote=[_BIS_DRAFT])
+    assert outputs == [('changed', 'true')]
+
+
+def test_saved_files_of_another_meeting_are_stale_even_with_matching_meeting_id():
+    state = {'files': [_BIS_DRAFT, *_PREVIOUS_MEETING_FILES], 'meeting_id': 'ran1#126bis',
+             'local_refs': {}, 'timezone_status': 'resolved',
+             'timezone_ref': {'type': 'portal', 'id': 60714}}
+    outputs, _ = _run_check(state=state, local_refs={}, remote=[_BIS_DRAFT])
+    assert outputs == [('changed', 'true')]
+
+
+def test_missing_folder_of_the_same_meeting_is_still_a_transient_failure():
+    state = {'files': _PREVIOUS_MEETING_FILES, 'meeting_id': 'ran1#126', 'local_refs': {},
+             'timezone_status': 'resolved', 'timezone_ref': {'type': 'portal', 'id': 60713}}
+    outputs, _ = _run_check(state=state, local_refs={}, remote=_PREVIOUS_MEETING_FILES[:1])
+    assert outputs == [('changed', 'false')]
+
+
+def test_portal_metadata_is_looked_up_for_the_selected_meeting():
+    state = {'files': [_BIS_DRAFT], 'meeting_id': 'ran1#126', 'local_refs': {}}
+    with patch.object(check_update, 'lookup_timezone_reference', return_value=None) as lookup:
+        _run_check(state=state, local_refs={}, remote=[_BIS_DRAFT])
+    lookup.assert_called_once_with('ran1', 'ran1#126bis')
