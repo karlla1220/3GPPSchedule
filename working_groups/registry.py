@@ -5,6 +5,7 @@ from shared.lifecycle import WorkingGroup
 PIPELINES = {
     'ran1': 'working_groups.ran1.lifecycle',
     'ran-plenary': 'working_groups.ran_plenary.lifecycle',
+    'ran2': 'working_groups.ran2.lifecycle',
 }
 
 

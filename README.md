@@ -1,6 +1,6 @@
 # 3GPP Schedule Viewer
 
-WG별 독립 파이프라인의 결과를 공통 간트차트로 제공하는 GitHub Pages 사이트입니다. RAN1과 RAN Plenary는 각각 독립된 실제 문서 파서를 사용합니다.
+WG별 독립 파이프라인의 결과를 공통 간트차트로 제공하는 GitHub Pages 사이트입니다. RAN1, RAN2, RAN Plenary는 각각 독립된 실제 문서 파서를 사용합니다.
 
 RAN1은 3GPP FTP 서버에서 최신 회의 스케줄 DOCX 파일을 다운로드하고, Gemini API로 비정형 테이블 텍스트를 파싱하여 **CSS Grid 기반 간트차트 스타일의 정적 HTML 페이지**를 생성합니다.
 
@@ -45,7 +45,7 @@ cp .env.example .env
 GEMINI_API_KEY=your-api-key-here
 ```
 
-- `GEMINI_API_KEY`: RAN1·RAN Plenary 파싱용 Gemini API 키 ([Google AI Studio](https://aistudio.google.com/apikey)에서 발급)
+- `GEMINI_API_KEY`: RAN1·RAN Plenary 파싱용 Gemini API 키 ([Google AI Studio](https://aistudio.google.com/apikey)에서 발급). RAN2는 LLM을 쓰지 않으므로 필요 없습니다.
 제작자와 연락처는 환경변수 대신 `site.json`의 `presentation`에서 설정합니다.
 
 ## 사용법
@@ -56,7 +56,7 @@ GEMINI_API_KEY=your-api-key-here
 uv run python main.py
 ```
 
-RAN1 문서와 RAN Plenary timeplan을 다운로드·파싱합니다. WG별 페이지와 기본 WG로 이동하는 `docs/index.html`을 함께 출력합니다.
+RAN1 문서, RAN2 session schedule, RAN Plenary timeplan을 다운로드·파싱합니다. WG별 페이지와 기본 WG로 이동하는 `docs/index.html`을 함께 출력합니다.
 
 ### 로컬 DOCX 파일 사용
 
@@ -80,17 +80,17 @@ uv run python main.py --no-download
 uv run python main.py --output-dir output
 ```
 
-사이트 루트는 `docs/index.html`이며, WG별 페이지는 `docs/ran1/index.html`, `docs/ran-plenary/index.html`입니다.
+사이트 루트는 `docs/index.html`이며, WG별 페이지는 `docs/ran1/index.html`, `docs/ran2/index.html`, `docs/ran-plenary/index.html`입니다.
 
 ## CLI 옵션 요약
 
 | 옵션 | 설명 |
 |---|---|
 | (없음) | FTP 다운로드 → 파싱 → HTML 생성 전체 파이프라인 |
-| `--local <path>` | 선택한 한 WG의 로컬 DOCX 또는 RAN P ZIP으로 HTML 생성 |
+| `--local <path>` | 선택한 한 WG의 로컬 DOCX(RAN1·RAN2) 또는 RAN P ZIP으로 HTML 생성 |
 | `--no-download` | 다운로드 없이 최신 로컬 파일 사용 |
 | `--output-dir <path>` | 사이트 출력 폴더 (기본: `docs/`) |
-| `--wg <id>` | 갱신할 WG: `ran1`, `ran-plenary`, `all` (기본) |
+| `--wg <id>` | 갱신할 WG: `ran1`, `ran2`, `ran-plenary`, `all` (기본) |
 | `--render-only` | 저장된 `schedule.json`으로 HTML만 재생성; 파싱·네트워크 호출 없음 |
 | `--rebuild-slots` | RAN1 슬롯 상태 또는 RAN P timeplan 해석 캐시를 초기화하고 재해석 |
 
@@ -109,6 +109,11 @@ working_groups/
     downloader.py / check_update.py / slot_state.py
     agenda_descriptions.py / models.py / config.py
     config.json / prompts/     # RAN1 전용 설정과 LLM 프롬프트
+  ran2/
+    lifecycle.py / sources.py  # Portal 날짜로 현재 미팅 선택, schedule·agenda.csv 재검증
+    document.py                # 표·병합 셀·변경 추적·오프라인 목록 추출
+    sessions.py                # 셀 안의 시각 표시로 세션 분리, 제목·AI·Chair 결정 (LLM 없음)
+    pipeline.py / config.json  # Portal 메타데이터와 공통 Schedule 조립
   ran_plenary/
     lifecycle.py / sources.py  # 최신 timeplan·agenda 선택, 재검증, check→build 전달
     document.py                # DOCX 문단·run·글씨 색·취소선·원문 위치 추출
@@ -123,6 +128,7 @@ shared/
   navigation.py                # WG 링크와 개최 상태
 # WG별 결과/상태는 아래 폴더에 격리
 docs/ran1/                     # index.html, schedule.json, slot_state/, 상태 JSON
+docs/ran2/                     # index.html, schedule.json, .schedule_state.json
 docs/ran-plenary/              # index.html, schedule.json
 downloads/ran1/                # 기존 다운로드와 extra_files
 .cache/ran1/                   # 기존 LLM 캐시
@@ -284,6 +290,70 @@ uv run python main.py --render-only
 
 실제 v04 ZIP·agenda와 검수한 Gemini 결과는 `tests/fixtures/ran_plenary/`에 있으며
 자동 테스트는 실제 네트워크나 API 키를 사용하지 않습니다.
+
+## RAN2 session schedule
+
+RAN2 의장단은 미팅마다 `Agenda/` 폴더에 `R2_<미팅>_Schedule_v<NN>.docx`
+(`R2_135_Schedule_v11.docx`, `R2_133b_Schedule_v14.docx`, `R2_131bis_Schedule v19.docx`)를
+올립니다. 표 하나에 시간 열과 Main/Brk 1~3 방 열이 있고, 셀 안에 여러 세션을
+시각 표시로 나눠 적습니다. RAN2#131bis~#135bis의 실제 문서로 확인한 형식이며,
+**LLM 없이 결정론적 규칙**으로 해석하므로 API 키가 필요 없고 같은 문서는 항상 같은 결과를 냅니다.
+
+### 원본 선택
+
+- 목록은 `Meetings_3GPP_SYNC/RAN2/Agenda/`(회의 중 실시간 사본)와
+  `tsg_ran/WG2_RL2/TSGR2_<미팅>/Agenda/`(회의 전 v00과 `agenda.csv`)를 함께 봅니다.
+  아카이브 폴더는 Portal에서 끝나지 않은 다음 두 미팅과 마지막으로 빌드한 미팅만 조회합니다.
+  3GPP는 없는 폴더에 404가 아니라 403을 주므로, 미팅 폴더 목록에 `Agenda`가 있을 때만 엽니다.
+- **현재 미팅은 Portal 날짜로 정합니다.** 아직 끝나지 않은 미팅 중 가장 이른 미팅의 schedule을
+  씁니다. 진행 중인 RAN2#135bis가 있으면 일찍 올라온 RAN2#136 v00으로 넘어가지 않습니다.
+  끝나지 않은 미팅에 schedule이 없으면 가장 높은 미팅(`#135 < #135bis < #136`)을 유지합니다.
+- 같은 미팅에서는 가장 높은 버전을 쓰고, 같은 버전이면 sync 폴더 사본을 우선합니다.
+- `agenda.csv`는 같은 미팅의 아카이브 폴더에서 받아 AI 설명과 범례 그룹에 씁니다. 없으면 생략합니다.
+- 날짜·시간대·시작/종료 시각은 Portal(TB 380)에서 가져옵니다. 순서는
+  `config.json`의 `meetings` 지정 > Portal > 같은 미팅의 마지막 성공 상태입니다.
+  셋 다 없으면 UTC로 추측하지 않고 빌드에 실패합니다.
+
+### 셀 해석 규칙 (`working_groups/ran2/sessions.py`)
+
+- 문서의 변경 추적은 수락한 상태로 읽습니다(삽입은 포함, 삭제·취소선은 제외).
+  python-docx의 `.text`는 `<w:ins>` 안의 글자를 놓치므로 쓰지 않습니다.
+- 세로 병합 셀은 XML 요소로 식별합니다. 두 시간 슬롯에 걸친 셀은 한 블록이 되고,
+  Brk 3처럼 한 슬롯을 여러 행으로 나눈 셀은 각자 해석한 뒤 방별로 겹침을 정리합니다.
+- `@12:30`, `@8:30-9:30`, `From 15:30:`, `11:00-12:00 [004] ...`, `12:00 [9.3.2.5] ...`가 새 세션을
+  시작합니다. 콜론 없는 `8.10 NR20 MIMO`는 시각으로 보지 않습니다. `end by 18:30`, `until 12:30`은
+  종료를 당기고, `(from 9:00)`은 시작을 늦춥니다. 오프라인 목록처럼 휴식 시간에 잡힌 시각도 그대로 씁니다.
+- 시각 표시 바로 위에 쓴 머리글(`CB Erlin`, `[8.1] NR20 AI/M PHY (Erlin)` 다음에 `@18:30-19:30`)은
+  그 시각의 세션으로 옮깁니다. 같은 슬롯의 시각 없는 하위 행은 시각이 적힌 블록이 비운 시간을 채웁니다.
+- `[8.3]`처럼 대괄호 숫자는 AI입니다. 제목 뒤의 `[0]`, `[1.5]`(시간 예산)와 `[004]`, `[xxx]`,
+  `[POST133bis]`(오프라인 번호)는 AI가 아닙니다. `[6.0.2.1] - [6.0.2.12]`는 범위를 펼칩니다.
+- 괄호 속 이름은 Chair입니다(`(Kyeongin)`, `(Erlin, Kyeongin)`). 회사(`(vivo)`, `(Ericsson, Nokia)`)는
+  Chair가 아니며, 회사 목록에 문서의 오프라인 목록 Coordinator 회사도 더합니다.
+- 제목은 머리글 줄(`Rel-19 corrections (Erlin)`) 또는 하위 항목이 아닌 AI 줄의 이름을 ` / `로 잇습니다.
+  `CB Kyeongin`처럼 사람만 적힌 CB 머리글은 `CB: R19 NES comebacks / ...`로 주제를 붙입니다.
+- 문서 아래 "List of Offline Face to Face discussions"와 요일·시작 시각·방(BO1~3, Main)이 맞는
+  블록은 오프라인 번호와 제목, Coordinator를 받습니다. 표에 없고 방이 비어 있으면 블록을 추가합니다.
+- 그룹(범례 색)은 `agenda.csv` 최상위 항목(`6GR Rel-20`, `NR Rel-19` 등)이고, 오프라인은 `Offline`입니다.
+  휴식은 슬롯 사이 빈 시간이며 이름은 문서의 Breaks 문단(`Morning coffee` 등)과 겹치는 것을 씁니다.
+- 셀의 원문 줄은 모두 팝업의 Note로 남습니다. 규칙이 제목을 덜 정확하게 만들어도 내용은 잃지 않습니다.
+- 요일 머리글이 비어 있고 시각이 앞으로 돌아가면 다음 요일로 봅니다(RAN2#135 v00의 금요일).
+
+### 상태와 로컬 확인
+
+- `docs/ran2/.schedule_state.json`: 성공한 schedule·agenda.csv의 URL, SHA-256, HTTP validator,
+  미팅·버전, Portal 메타데이터. check는 이 값과 비교해 변경을 판단하고, 실패한 빌드는 기록하지 않습니다.
+- `downloads/ran2/inputs/`: 마지막 원본(Git 제외). check가 받은 원본은 `.ci/transfers/ran2/`로 build에 전달합니다.
+
+```bash
+uv run python main.py --wg ran2
+uv run python main.py --wg ran2 --no-download
+# 로컬 문서: 날짜·시간대는 Portal에서 찾고, Portal 조회 범위 밖이면 config.json의
+# meetings와 local_agenda로 지정합니다 (config.example.json 참고)
+uv run python main.py --wg ran2 --local "tests/fixtures/ran2/R2_135_Schedule_v11.docx"
+```
+
+실제 문서(RAN2#131bis v19, #135 v11, #135bis v00)와 `agenda.csv`는 `tests/fixtures/ran2/`에 있으며,
+테스트는 네트워크 없이 이 문서로 방별 겹침 없음, 휴식, 오프라인 이름, Chair 등을 확인합니다.
 
 ## 다중 소스 통합 파이프라인
 
@@ -499,6 +569,7 @@ workflow YAML에 WG별 job이나 shell 분기를 추가할 필요가 없습니�
 | `cache_paths` | 재생성 가능한 WG 캐시 경로 (`.cache/<wg>/` 사용) |
 
 RAN1은 기존 FTP/문서/시간대/외부 파일 감지를 그대로 구현합니다.
+RAN2는 sync·아카이브 Agenda 폴더의 schedule과 agenda.csv를 재검증하고 Portal 날짜 변경도 감지합니다.
 RAN Plenary는 Chair의 timeplan과 agenda.csv를 독립적으로 HTTP 재검증하며, 같은 URL의 본문 변경과 Portal 메타데이터 변경도 감지합니다.
 공통 데이터 모델·의존성이 바뀌면 활성 WG를 다시 빌드합니다. 공통 화면 또는 기본 WG만
 바뀌면 저장된 일정으로 화면만 다시 생성합니다. 개최 날짜에 따른 내비게이션 변화도 검사합니다.
