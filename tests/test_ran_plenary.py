@@ -125,7 +125,9 @@ def test_rendering_spans_rooms_without_claiming_them_and_preserves_notes(schedul
     assert 'Room unassigned' in merged['data-popup']
     assert 'Room: Main' not in merged['data-popup']
     assert len(tuesday.select('.room-header')) == 4
-    assert len(tuesday.select('.break-axis')) == 3
+    axis = tuesday.select('.break-axis')
+    assert [(b.get_text(), b['title']) for b in axis] == [
+        ('Coffee', 'MORNING COFFEE BREAK'), ('Lunch', 'LUNCH BREAK'), ('Coffee', 'AFTERNOON COFFEE BREAK')]
     assert 'Close by' in html.get_text() or 'Close by' in str(html)
     assert len(html.select('.topic-references tbody tr')) == 22
     assert html.select_one('.topic-references summary').get_text() == 'Topics'
