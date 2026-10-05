@@ -278,7 +278,7 @@ def generate_html(schedule: Schedule, *, schedules=None, groups=None, presentati
         for header, colors in sorted(color_map.items()):
             html_parts.append(
                 f'        <div class="legend-item">'
-                f'<span class="legend-swatch" style="background:{colors["bg"]};border-color:{colors["border"]}"></span>'
+                f'<span class="legend-swatch" style="--session-border:{colors["border"]}"></span>'
                 f'{_esc(header)}</div>\n'
             )
         html_parts.append("    </div>\n")
