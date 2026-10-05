@@ -408,8 +408,8 @@ header .meta {
 }
 
 /* Height budget for the tightest case, a 30-minute block (60px):
-   60 - margin 4 - border 2 - padding 6 = 48px for the title (16.25px),
-   the 1px gap and two secondary lines (2 x 14.175px) = 45.6px. */
+   60 - margin 4 - border 2 - padding 6 = 48px for the title (16.2px),
+   the 1px gap and two secondary lines (2 x 14.175px) = 45.55px. */
 .session-block {
     /* Barlow's narrow, squared figures keep titles like 10.5.1.1 compact. */
     font-family: "Barlow", "Source Sans 3", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
@@ -493,9 +493,12 @@ header .meta {
 /* Primary: the title. Everything else is one quiet secondary tone. */
 .session-name {
     font-weight: 600;
-    font-size: 12.5px;
-    line-height: 1.3;
-    letter-spacing: -0.01em;
+    /* Barlow is narrow, so it needs 13.5px to carry the weight Pretendard had
+       at 12.5px. Line-height 1.2 keeps the line box at 16.2px, inside the
+       budget below; Barlow's ascender + descender are exactly 1.2em. */
+    font-size: 13.5px;
+    line-height: 1.2;
+    letter-spacing: 0;
     color: var(--ink);
     white-space: nowrap;
     overflow: hidden;
@@ -679,7 +682,7 @@ header .meta {
     .tabs { flex-wrap: nowrap; overflow-x: auto; }
     .tab { padding: 6px 12px; }
     :root { --base-slot-height: 10px; --time-col-width: 36px; }
-    .session-name { font-size: 11.5px; }
+    .session-name { font-size: 12.5px; }
     .room-header { font-size: 9.5px; padding: 3px 3px; }
 }
 
