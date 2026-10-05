@@ -447,8 +447,9 @@ def make_schedule(document: dict, agenda: dict | None, metadata: dict, source_fi
         end = max(time_to_minutes(s['end']) for s in raw)
         end += -end % 5
         slots = sorted((time_to_minutes(a), time_to_minutes(b)) for a, b in day['slots'])
+        # Named inside the bar, as RAN1 does; the gaps between slots are mostly empty.
         breaks = [{'name': break_name(a_end, b_start, document['breaks']),
-                   'start': minutes_to_time(a_end), 'end': minutes_to_time(b_start), 'label_position': 'time-axis'}
+                   'start': minutes_to_time(a_end), 'end': minutes_to_time(b_start)}
                   for (_, a_end), (b_start, _) in zip(slots, slots[1:])
                   if a_end < b_start and start <= a_end and b_start <= end]
         built = []
