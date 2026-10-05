@@ -2,11 +2,20 @@
     --base-slot-height: 10px;
     --time-col-width: 36px;
     --header-height: 36px;
-    --break-bg: #F3F4F6;
-    --grid-line: #E5E7EB;
-    --bg: #FFFFFF;
-    --text: #1F2937;
+    --page-bg: #F6F7F9;
+    --surface: #FFFFFF;
+    --hairline: #E7E9EE;
+    --ink: #0F172A;
+    --ink-2: #475569;
+    --ink-3: #8A94A6;
+    --ink-4: #A9B1BF;
+    --radius-lg: 12px;
+    --radius-sm: 6px;
+    --break-bg: #F8F9FB;
+    --grid-line: #EEF0F3;
+    /* Header meta keeps its own grey; nothing else uses it. */
     --text-muted: #6B7280;
+    --text: #1F2937;
     --border: #D1D5DB;
     --shadow: 0 1px 3px rgba(0,0,0,0.1);
     --session-surface-top: #FFFFFF;
@@ -19,10 +28,12 @@
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    background: #F9FAFB;
-    color: var(--text);
+    font-family: "Pretendard Variable", Pretendard, Inter, -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+    background: var(--page-bg);
+    color: var(--ink);
     line-height: 1.4;
+    -webkit-font-smoothing: antialiased;
+    font-feature-settings: "tnum" 1;
 }
 
 .container {
