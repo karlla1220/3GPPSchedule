@@ -350,7 +350,8 @@ def generate_html(schedule: Schedule, *, schedules=None, groups=None, presentati
                 label = _esc(brk["name"])
                 if brk.get("label_position") == "time-axis":
                     html_parts.append(f'<div class="break-bar" aria-hidden="true" style="grid-row:{row_start}/{row_end}"></div>')
-                    html_parts.append(f'<div class="break-axis" style="grid-row:{row_start}/{row_end}">{label}</div>')
+                    html_parts.append(f'<div class="break-axis" style="grid-row:{row_start}/{row_end}" title="{label}">'
+                                      f'{_axis_break_label(brk["name"])}</div>')
                 else:
                     html_parts.append(f'<div class="break-bar" style="grid-row:{row_start}/{row_end}">{label}</div>')
 
@@ -535,6 +536,12 @@ def save_html(schedule: Schedule, output_path: str | Path = "docs/index.html"):
     output_path.write_text(html, encoding="utf-8")
     print(f"HTML saved to: {output_path}")
     return output_path
+
+
+def _axis_break_label(name: str) -> str:
+    """One word fits the time axis: "MORNING COFFEE BREAK" -> "Coffee"."""
+    match = re.search(r"\b(coffee|lunch)\b", name, re.I)
+    return match[1].capitalize() if match else "Break"
 
 
 def _esc(text: str) -> str:
