@@ -31,10 +31,16 @@ CONFIG_PATH = Path('working_groups/ran2/config.json')
 DOWNLOADS = Path('downloads/ran2')
 OUTPUT = Path('docs/ran2')
 TRANSFER = Path('.ci/transfers/ran2')
+CACHE = Path('.cache/ran2')
 DEFAULTS = {
     'sync_url': 'https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN2/Agenda/',
     'archive_url': 'https://www.3gpp.org/ftp/tsg_ran/WG2_RL2/',
     'local_agenda': None,
+    # Gemini reads the cells the rules are unsure about, and whole documents
+    # whose table layout they do not recognise. Without GEMINI_API_KEY the
+    # rules' reading is used as is.
+    'llm_fallback': True,
+    'model': 'gemini-3-flash-preview',
     'meetings': {},
 }
 METADATA_KEYS = {'starts_on', 'ends_on', 'starts_at', 'ends_at', 'location', 'country', 'timezone'}
@@ -70,6 +76,8 @@ def load_config() -> dict:
     for name in ('sync_url', 'archive_url'):
         if urlparse(result[name]).scheme not in ('http', 'https'):
             raise ValueError(f'{name} must be an HTTP URL')
+    if not isinstance(result['llm_fallback'], bool) or not isinstance(result['model'], str):
+        raise ValueError('llm_fallback must be true/false and model a Gemini model name')
     if not isinstance(result['meetings'], dict):
         raise ValueError('meetings must map a meeting such as "135bis" to its metadata')
     for key, value in result['meetings'].items():
@@ -273,9 +281,11 @@ def fetch_bundle(cfg, previous, http, *, rows=None, today=None, cache_dir=DOWNLO
 
 
 def local_bundle(path: Path, cfg) -> Bundle:
-    from .document import extract_document
+    import io
+    from docx import Document
+    from .document import identify
     data = path.read_bytes()
-    meeting = extract_document(data, path.name)['meeting_id']
+    meeting = identify(Document(io.BytesIO(data)), path.name)[0]   # the table may need the LLM
     agenda, agenda_info = b'', None
     if cfg.get('local_agenda'):
         agenda_path = Path(cfg['local_agenda'])

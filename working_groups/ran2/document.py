@@ -32,6 +32,10 @@ TITLE = re.compile(r'RAN2\s*[-#]?\s*(\d+)\s*(bis|b)?(?![a-z0-9])', re.I)
 BREAK = re.compile(r'^\s*([A-Za-z][A-Za-z ]*?)\s*:\s*' + CLOCK + r'\s*(?:to|[-–—])\s*' + CLOCK)
 
 
+class LayoutError(ValueError):
+    """The schedule table is not in a layout these rules recognise."""
+
+
 def meeting_id(number, suffix) -> str:
     return meeting_key(f'RAN2#{number}{suffix or ""}')
 
@@ -128,7 +132,7 @@ def _schedule_table(doc):
               for i, table in enumerate(doc.tables)]
     best = max(scored, default=(0, 0, None), key=lambda s: (s[0], -s[1]))
     if not best[0]:
-        raise ValueError('No table with time ranges in its first column')
+        raise LayoutError('No table with time ranges in its first column')
     return best[2]
 
 
@@ -291,7 +295,7 @@ def supplements(doc, schedule_table, title: str, notes: list[dict]) -> list[dict
     for child in doc.element.body.iterchildren():
         if child.tag == W + 'tbl':
             flush()
-            if child is not schedule_table._tbl:
+            if schedule_table is None or child is not schedule_table._tbl:
                 block = _other_table(next(t for t in doc.tables if t._tbl is child))
                 if block['rows']:
                     blocks.append(block)
@@ -334,8 +338,8 @@ def extract_breaks(paragraphs: list[str]) -> list[dict]:
     return breaks
 
 
-def extract_document(data: bytes, name: str) -> dict:
-    doc = Document(io.BytesIO(data))
+def identify(doc, name: str) -> tuple[str, str, list[str]]:
+    """(meeting id, title paragraph, paragraph texts)."""
     paragraphs = [paragraph_text(p._p) for p in doc.paragraphs]
     title = next((squash(p) for p in paragraphs if TITLE.search(p) and re.search(r'schedule', p, re.I)), '')
     match = TITLE.search(title)
@@ -348,14 +352,49 @@ def extract_document(data: bytes, name: str) -> dict:
         raise ValueError('Cannot tell the RAN2 meeting from the filename or the schedule title')
     if titled and info and titled != meeting:
         print(f'[ran2] Title says {titled} but the file is {meeting}; using the filename')
+    return meeting, title, paragraphs
 
+
+def extract_document(data: bytes, name: str) -> dict:
+    doc = Document(io.BytesIO(data))
+    meeting, title, paragraphs = identify(doc, name)
     table = _schedule_table(doc)
     rooms, days, notes = _read_table(table)
     if not any(day['cells'] for day in days):
-        raise ValueError('The RAN2 schedule table has no sessions')
+        raise LayoutError('The RAN2 schedule table has no sessions')
     return {'meeting_id': meeting, 'title': title, 'rooms': rooms, 'days': days,
             'breaks': extract_breaks(paragraphs),
             'supplements': supplements(doc, table, title, notes)}
+
+
+def outline(doc) -> list[dict]:
+    """The whole body for the LLM fallback: paragraphs and table cells with ids.
+
+    A merged cell is listed once, at its first row and column.
+    """
+    blocks, table_index = [], 0
+    for index, child in enumerate(doc.element.body.iterchildren()):
+        if child.tag == W + 'p':
+            text = paragraph_text(child).strip()
+            if squash(text):
+                blocks.append({'id': f'p{index}', 'text': '\n'.join(squash(t) for t in text.split('\n') if squash(t))})
+        elif child.tag == W + 'tbl':
+            table = next(t for t in doc.tables if t._tbl is child)
+            seen, rows = set(), []
+            for ri, row in enumerate(table.rows):
+                cells = []
+                for ci, cell in enumerate(row.cells):
+                    if id(cell._tc) in seen:
+                        continue
+                    seen.add(id(cell._tc))
+                    text = '\n'.join(line for line in cell_lines(cell) if line)
+                    if text:
+                        cells.append({'id': f't{table_index}.r{ri}.c{ci}', 'text': text})
+                if cells:
+                    rows.append(cells)
+            blocks.append({'id': f't{table_index}', 'rows': rows})
+            table_index += 1
+    return blocks
 
 
 def agenda_map(data: bytes) -> dict[str, str]:

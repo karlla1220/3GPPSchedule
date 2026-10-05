@@ -45,7 +45,7 @@ cp .env.example .env
 GEMINI_API_KEY=your-api-key-here
 ```
 
-- `GEMINI_API_KEY`: RAN1·RAN Plenary 파싱용 Gemini API 키 ([Google AI Studio](https://aistudio.google.com/apikey)에서 발급). RAN2는 LLM을 쓰지 않으므로 필요 없습니다.
+- `GEMINI_API_KEY`: RAN1·RAN Plenary 파싱용 Gemini API 키 ([Google AI Studio](https://aistudio.google.com/apikey)에서 발급). RAN2는 규칙으로 읽고 규칙이 불확실한 부분만 Gemini로 보완하며, 키가 없으면 규칙 결과만 씁니다.
 제작자와 연락처는 환경변수 대신 `site.json`의 `presentation`에서 설정합니다.
 
 ## 사용법
@@ -112,7 +112,8 @@ working_groups/
   ran2/
     lifecycle.py / sources.py  # Portal 날짜로 현재 미팅 선택, schedule·agenda.csv 재검증
     document.py                # 표·병합 셀·변경 추적, 표 밖 문단·탭 표를 하단 정보로 추출
-    sessions.py                # 시각 표시로 셀을 나누고 제목·AI·Chair를 보수적으로 추정 (LLM 없음)
+    sessions.py                # 시각 표시로 셀을 나누고 제목·AI·Chair를 보수적으로 추정, 불확실한 셀 표시
+    llm.py / prompts/          # 불확실한 셀과 인식 못 한 양식의 Gemini 폴백, 근거 검증
     pipeline.py / config.json  # Portal 메타데이터와 공통 Schedule 조립
   ran_plenary/
     lifecycle.py / sources.py  # 최신 timeplan·agenda 선택, 재검증, check→build 전달
@@ -132,6 +133,7 @@ docs/ran2/                     # index.html, schedule.json, .schedule_state.json
 docs/ran-plenary/              # index.html, schedule.json
 downloads/ran1/                # 기존 다운로드와 extra_files
 .cache/ran1/                   # 기존 LLM 캐시
+.cache/ran2/                   # RAN2 LLM 폴백 결과 (입력 해시별)
 ref_in_manual/ran1/            # RAN1 수동 참조 문서
 ```
 
@@ -297,8 +299,8 @@ RAN2 의장단은 미팅마다 `Agenda/` 폴더에 `R2_<미팅>_Schedule_v<NN>.d
 (`R2_135_Schedule_v11.docx`, `R2_133b_Schedule_v14.docx`, `R2_131bis_Schedule v19.docx`)를
 올립니다. 사람이 작성하는 문서라 작성자가 바뀌면 양식도 달라질 수 있으므로, **보수적으로
 추정**합니다. 일반적인 관례 몇 가지만 가정하고, 맞지 않는 내용은 세션으로 지어내거나
-빌드를 실패시키지 않고 원문 그대로 페이지 하단에 남깁니다. LLM을 쓰지 않으므로 API 키가 필요 없고
-같은 문서는 항상 같은 결과를 냅니다. RAN2#131bis~#135bis의 실제 문서로 확인했습니다.
+빌드를 실패시키지 않고 원문 그대로 페이지 하단에 남깁니다. 규칙이 확신하지 못하는 부분은
+Gemini가 다시 읽되, 원문으로 확인되는 답만 씁니다(아래 "LLM 폴백"). RAN2#131bis~#135bis의 실제 문서로 확인했습니다.
 
 ### 원본 선택
 
@@ -348,6 +350,31 @@ RAN2 의장단은 미팅마다 `Agenda/` 폴더에 `R2_<미팅>_Schedule_v<NN>.d
   Breaks 문단(`Morning coffee` 등)에서 가져옵니다.
 - 셀의 원문 줄은 모두 팝업의 Note로 남습니다. 추정이 틀려도 내용은 잃지 않습니다.
 
+### LLM 폴백 (`working_groups/ran2/llm.py`)
+
+규칙이 기본이고, Gemini(`config.json`의 `model`, 기본 `gemini-3-flash-preview`)는 두 경우에만 씁니다.
+`GEMINI_API_KEY`가 없거나 `llm_fallback`이 `false`이면 규칙 결과를 그대로 씁니다.
+
+- **불확실한 셀**: 규칙이 다음을 발견한 셀만 이유와 규칙 결과를 함께 한 번의 요청으로 묻습니다.
+  - 문장 속 시각·소요 시간(`end by 18:30`, `(from 9:00)`, `(~15 minutes)`)
+  - 시각 표시 바로 위에 붙어 있는 머리글(작성자마다 머리글을 시각 위·아래에 씀)
+  - 읽을 수 없는 시각 표시(`@ TBD`), 이름 붙일 줄이 없는 부분
+  RAN2#131bis~#135bis 문서에서는 셀 50~63개 중 1~23개가 해당합니다.
+- **인식하지 못한 양식**: 첫 열에 시간 범위가 있는 표가 없거나 세션이 하나도 없으면
+  문서 전체(문단과 표 셀, 각각 id 포함)를 묻습니다. 이 경우 하단 정보에 그 사실과 문서 원문을 함께 보여 줍니다.
+
+답은 원문으로 확인될 때만 씁니다. 셀 답은 셀 단위로 확인해, 통과하지 못한 셀은 규칙 결과를 유지합니다.
+
+- 셀의 빈 줄이 아닌 모든 줄을 정확히 한 세션이 인용해야 합니다.
+- 시각은 셀 시작·끝이거나 원문에 적힌 시각이어야 합니다(5분 단위, 겹침 없음). 균등 분할 같은 추정은 거부합니다.
+- 제목의 단어는 인용한 줄에 있어야 하고(바꿔 쓰기 금지), Chair는 원문에 적힌 사람 이름(회사 제외),
+  AI는 인용한 줄에 적힌 번호여야 합니다.
+- 실패한 셀만 오류 내용과 함께 한 번 더 묻습니다. 그래도 실패하거나 요청 자체가 실패하면 규칙 결과로 빌드합니다.
+  문서 전체 해석이 실패하면 빌드가 실패하고 마지막 정상 결과가 유지됩니다.
+- 답은 입력·프롬프트·모델 해시별로 `.cache/ran2/`에 저장해 같은 문서에는 다시 묻지 않습니다.
+  `--rebuild-slots`나 `force-deploy`는 이 캐시를 비웁니다. 결과 요약(불확실 셀 수, 적용 수)은
+  `docs/ran2/.schedule_state.json`의 `llm`에 남습니다.
+
 ### 일정표 밖의 정보 (페이지 하단)
 
 RAN Plenary의 Topics처럼, 일정표 밖의 문서 내용을 그리드 아래 "Additional information"에
@@ -375,7 +402,8 @@ uv run python main.py --wg ran2 --local "tests/fixtures/ran2/R2_135_Schedule_v11
 
 실제 문서(RAN2#131bis v19, #135 v11, #135bis v00)와 `agenda.csv`는 `tests/fixtures/ran2/`에 있으며,
 테스트는 네트워크 없이 이 문서로 방별 겹침 없음, 휴식, Chair, 하단 정보를 확인합니다.
-다른 작성자의 양식(Main 열 없음, 시간 없는 행, 잘못된 시각, 제목 없음)이 실패 대신 메모로 남는지도 확인합니다.
+다른 작성자의 양식(Main 열 없음, 시간 없는 행, 잘못된 시각, 제목 없음)이 실패 대신 메모로 남는지,
+LLM 폴백이 검증을 통과한 답만 쓰고 실패 시 규칙 결과를 유지하는지도 가짜 Gemini 응답으로 확인합니다.
 
 ## 다중 소스 통합 파이프라인
 

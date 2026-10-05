@@ -473,7 +473,7 @@ def test_bundle_cache_rejects_corruption(tmp_path):
 def test_config_rejects_unknown_keys_and_bad_meetings(tmp_path, monkeypatch):
     path = tmp_path / 'config.json'
     monkeypatch.setattr(sources, 'CONFIG_PATH', path)
-    path.write_text(json.dumps({'model': 'x'}))
+    path.write_text(json.dumps({'chair_url': 'x'}))
     with pytest.raises(ValueError, match='Unknown'):
         sources.load_config()
     path.write_text(json.dumps({'meetings': {'135bis': {'city': 'Seoul'}}}))
@@ -494,6 +494,7 @@ def offline_config(tmp_path, monkeypatch):
     monkeypatch.setattr(sources, 'load_config', lambda: cfg)
     monkeypatch.setattr(pipeline, 'portal_rows', lambda: pytest.fail('Portal queried offline'))
     monkeypatch.setattr(sources, 'portal_rows', lambda: [])
+    monkeypatch.setattr(pipeline, 'has_key', lambda: False)   # never reach Gemini from tests
     return cfg
 
 
@@ -506,6 +507,7 @@ def test_local_build_needs_no_network_and_records_state(offline_config, tmp_path
     assert schedule.starts_at == '2026-08-24T09:00:00+02:00'
     state = sources.read_json(tmp_path / 'out/ran2/.schedule_state.json')
     assert state['meeting_id'] == 'ran2#135' and state['metadata']['timezone'] == 'Europe/Amsterdam'
+    assert state['llm'] == {'used': False}   # no GEMINI_API_KEY: the rules' reading as is
     # The next offline build reuses the downloaded inputs.
     again = pipeline.build_schedule(SimpleNamespace(no_download=True, output_dir=tmp_path / 'out'))
     assert again.days == schedule.days
@@ -581,3 +583,175 @@ def test_supplements_are_escaped_and_absent_elsewhere():
     assert '<script>' not in html and 'a<br>&lt;script&gt;' in html and '<td>x<br>y</td>' in html
     assert render_supplements([]) == ''
     assert BeautifulSoup(generate_html(plenary_schedule()), 'html.parser').select_one('.supplements') is None
+
+
+# --------------------------------------------------------------- LLM fallback
+
+from working_groups.ran2 import llm   # noqa: E402
+
+HEADER_ABOVE = ['[7.1] NR19 AI/ML PHY [0] (Erlin)', '@17:30-18:30', '[8.1] NR20 AI/M PHY [1] (Erlin)',
+                '@18:30-19:30', '[8.1.1]', '[8.1.2]']
+
+
+def doubtful(document):
+    seen = []
+    sessions.interpret(document, None, refine=lambda cells: seen.extend(cells) or {})
+    return {item['cell']['id']: item['reasons'] for item in seen}
+
+
+def test_cells_the_rules_are_unsure_about_are_flagged_with_reasons():
+    document = synthetic([
+        ('main', '08:30', '10:30', ['[9.3.1] User Plane', '[9.3.1.2] QoS, QoE']),
+        ('brk1', '17:30', '19:30', HEADER_ABOVE),
+        ('brk2', '17:00', '19:00', ['[8.2] NR20 AIoT [2] (Nathan)', 'Overflow, end by 18:30']),
+        ('brk3', '08:30', '10:30', ['CB Sergio NTN (from 9:00)']),
+        ('main', '11:00', '13:00', ['@ TBD', 'Something']),
+        ('brk1', '11:00', '13:00', ['[8.10] NR20 MIMO', '[7.7] NR19 XR cont. (~15 minutes)']),
+        ('brk2', '11:00', '13:00', ['11:00-12:00 [004] (Ericsson, Nokia)']),
+    ], slots=[('08:30', '10:30'), ('11:00', '13:00'), ('17:00', '19:30')])
+    reasons = doubtful(document)
+    assert set(reasons) == {'c1', 'c2', 'c3', 'c4', 'c5'}   # plain cells, "[8.10]" and "[004]" are clear
+    assert reasons['c1'] == ["header written right above a time marker: '[8.1] NR20 AI/M PHY [1] (Erlin)' / '@18:30-19:30'",
+                             'a part has no line that names it']
+    assert reasons['c2'] == ["time written inside a line: 'Overflow, end by 18:30'"]
+    assert reasons['c4'] == ["unreadable time marker: '@ TBD'"]
+    assert reasons['c5'] == ["time written inside a line: '[7.7] NR19 XR cont. (~15 minutes)'"]
+
+
+def answer(cell_id, *parts):
+    return {'id': cell_id, 'sessions': [dict(zip(('start', 'end', 'title', 'chair', 'agenda_items', 'offline', 'lines'), p))
+                                        for p in parts]}
+
+
+class FakeGemini:
+    def __init__(self, *responses):
+        self.responses, self.calls = list(responses), []
+
+    def __call__(self, payload, schema, model):
+        self.calls.append(payload)
+        response = self.responses.pop(0)
+        if isinstance(response, Exception):
+            raise response
+        return response
+
+
+def test_checked_llm_answers_replace_the_rules_for_uncertain_cells(tmp_path):
+    document = synthetic([('brk1', '17:30', '19:30', HEADER_ABOVE),
+                          ('main', '17:30', '19:30', ['[9.3.2] 6GR Control Plane'])], slots=[('17:30', '19:30')])
+    gemini = FakeGemini({'cells': [answer('c0', ('17:30', '18:30', 'NR19 AI/ML PHY', 'Erlin', ['7.1'], False, [0]),
+                                          ('18:30', '19:30', 'NR20 AI/M PHY', 'Erlin', ['8.1', '8.1.1', '8.1.2'], False,
+                                           [1, 2, 3, 4, 5]))]})
+    refine = llm.CellRefiner('test-model', gemini, tmp_path)
+    found = [(s['start'], s['end'], s['rooms'][0], s['name'], s['chair'], s['agenda_items'])
+             for s in sessions.interpret(document, None, refine)]
+    assert found == [('17:30', '18:30', 'brk1', 'NR19 AI/ML PHY', 'Erlin', ['7.1']),
+                     ('17:30', '19:30', 'main', '6GR Control Plane', None, ['9.3.2']),
+                     ('18:30', '19:30', 'brk1', 'NR20 AI/M PHY', 'Erlin', ['8.1', '8.1.1', '8.1.2'])]
+    assert refine.summary == {'model': 'test-model', 'uncertain': 1, 'applied': 1, 'kept_rules': 0}
+    assert len(gemini.calls) == 1 and '"c0"' in gemini.calls[0] and '"c1"' not in gemini.calls[0]
+    # The same input is answered from the cache.
+    again = llm.CellRefiner('test-model', FakeGemini(), tmp_path)
+    assert len(sessions.interpret(document, None, again)) == 3 and again.summary['applied'] == 1
+
+
+@pytest.mark.parametrize('bad, problem', [
+    (('17:30', '18:00', 'NR19 AI/ML PHY', 'Erlin', ['7.1'], False, [0, 1, 2, 3, 4, 5]), 'not written in the source'),
+    (('17:30', '19:30', 'AI/ML for physical layer', 'Erlin', ['7.1'], False, [0, 1, 2, 3, 4, 5]), 'title words'),
+    (('17:30', '19:30', 'NR19 AI/ML PHY', 'Ericsson', ['7.1'], False, [0, 1, 2, 3, 4, 5]), 'chair'),
+    (('17:30', '19:30', 'NR19 AI/ML PHY', 'Erlin', ['7.2'], False, [0, 1, 2, 3, 4, 5]), 'agenda item'),
+    (('17:30', '19:30', 'NR19 AI/ML PHY', 'Erlin', ['7.1'], False, [0, 1, 2]), 'not cited'),
+])
+def test_unchecked_answers_are_retried_once_then_the_rules_stand(tmp_path, bad, problem, capsys):
+    document = synthetic([('brk1', '17:30', '19:30', HEADER_ABOVE)], slots=[('17:30', '19:30')])
+    rules = blocks(document)
+    gemini = FakeGemini({'cells': [answer('c0', bad)]}, {'cells': [answer('c0', bad)]})
+    refine = llm.CellRefiner('test-model', gemini, tmp_path)
+    found = [(s['start'], s['end'], s['rooms'][0], s['name'], s['chair'], s['agenda_items'])
+             for s in sessions.interpret(document, None, refine)]
+    assert found == rules
+    assert len(gemini.calls) == 2 and problem in gemini.calls[1]
+    assert refine.summary['kept_rules'] == 1 and problem in capsys.readouterr().out
+
+
+def test_an_llm_outage_never_breaks_the_build(tmp_path):
+    document = synthetic([('brk1', '17:30', '19:30', HEADER_ABOVE)], slots=[('17:30', '19:30')])
+    refine = llm.CellRefiner('test-model', FakeGemini(RuntimeError('quota')), tmp_path)
+    assert blocks(document) == [(s['start'], s['end'], s['rooms'][0], s['name'], s['chair'], s['agenda_items'])
+                                for s in sessions.interpret(document, None, refine)]
+    assert refine.summary['error'] == 'quota' and not list(tmp_path.glob('*.json'))
+
+
+def test_real_cell_with_a_written_end_is_read_by_the_llm(tmp_path):
+    """RAN2#135 v11, Wednesday Brk 2: "Overflow from afternoon session, end by 18:30"."""
+    document = extract(V11)
+    wednesday = next(d for d in document['days'] if d['day'] == 'Wednesday')
+    cell = next(c for c in wednesday['cells'] if c['rooms'] == ['brk2'] and c['start'] == '17:00')
+    assert cell['lines'] == ['[8.2] NR20 AIoT [2] (Nathan)', 'Overflow from afternoon session, end by 18:30']
+    gemini = FakeGemini({'cells': [answer(cell['id'], ('17:00', '18:30', 'NR20 AIoT', 'Nathan', ['8.2'], False, [0, 1]))]},
+                        {'cells': []})
+    refine = llm.CellRefiner('test-model', gemini, tmp_path)
+    schedule = sessions.make_schedule(document, agenda('agenda_135.csv'), META_135, [V11], 'now', refine=refine)
+    aiot = find(schedule, 'Wednesday', 'brk2', '17:00')
+    assert (aiot.end_time, aiot.name, aiot.chair, aiot.group_header) == ('18:30', 'NR20 AIoT', 'Nathan', 'NR Rel-20')
+    # The other uncertain cells got no answer, so they keep the rules' reading.
+    assert refine.summary['applied'] == 1 and refine.summary['kept_rules'] == refine.summary['uncertain'] - 1
+
+
+def plain_document():
+    """A schedule written as paragraphs: no table for the rules to read."""
+    return docx_bytes([], title='RAN2-136 Session Schedule', after=[
+        'Monday', 'Main room 09:00-10:30: [1], [2] Opening (Diana)',
+        'Breakout 1 room 11:00-13:00: [8.3] NR20 AI mobility (Kyeongin)'])
+
+
+def plain_answer(blocks_by_text):
+    ref = {text: key for key, text in blocks_by_text.items()}
+    return {'rooms': [{'id': 'main', 'name': 'Main room'}, {'id': 'brk1', 'name': 'Breakout 1 room'}],
+            'days': [{'day': 'Monday', 'slots': [{'start': '09:00', 'end': '10:30'}, {'start': '11:00', 'end': '13:00'}]}],
+            'sessions': [
+                {'day': 'Monday', 'start': '09:00', 'end': '10:30', 'room_ids': ['main'], 'title': 'Opening',
+                 'chair': 'Diana', 'agenda_items': ['1', '2'], 'offline': False,
+                 'refs': [ref['Main room 09:00-10:30: [1], [2] Opening (Diana)']]},
+                {'day': 'Monday', 'start': '11:00', 'end': '13:00', 'room_ids': ['brk1'], 'title': 'NR20 AI mobility',
+                 'chair': 'Kyeongin', 'agenda_items': ['8.3'], 'offline': False,
+                 'refs': [ref['Breakout 1 room 11:00-13:00: [8.3] NR20 AI mobility (Kyeongin)']]}]}
+
+
+def test_an_unrecognised_layout_is_read_by_the_llm(offline_config, tmp_path, monkeypatch):
+    data = plain_document()
+    with pytest.raises(docmod.LayoutError):
+        docmod.extract_document(data, 'R2_136_Schedule_v00.docx')
+    texts = {b['id']: b['text'] for b in docmod.outline(Document(io.BytesIO(data))) if 'text' in b}
+    gemini = FakeGemini(plain_answer(texts))
+    local = tmp_path / 'R2_136_Schedule_v00.docx'
+    local.write_bytes(data)
+    offline_config['local_agenda'] = None
+    offline_config['meetings'] = {'136': {'starts_on': '2026-11-16', 'ends_on': '2026-11-20', 'timezone': 'America/Edmonton'}}
+    monkeypatch.setattr(pipeline, 'CACHE', tmp_path / 'cache')
+    monkeypatch.setattr(llm, 'CACHE', tmp_path / 'cache')
+    schedule = pipeline.build_schedule(SimpleNamespace(local=str(local), output_dir=tmp_path / 'out'), request=gemini)
+    monday = schedule.days[0]
+    assert [r.name for r in monday.rooms] == ['Main room', 'Breakout 1 room']
+    assert [(s.start_time, s.name, s.chair, s.agenda_item) for s in monday.sessions] == [
+        ('09:00', 'Opening', 'Diana', '1, 2'), ('11:00', 'NR20 AI mobility', 'Kyeongin', '8.3')]
+    assert schedule.supplements[0]['text'].startswith('The schedule table layout was not recognised')
+    state = sources.read_json(tmp_path / 'out/ran2/.schedule_state.json')
+    assert state['llm'] == {'model': offline_config['model'], 'document': True}
+
+
+def test_an_unchecked_document_answer_fails_the_build(tmp_path):
+    data = plain_document()
+    texts = {b['id']: b['text'] for b in docmod.outline(Document(io.BytesIO(data))) if 'text' in b}
+    invented = plain_answer(texts)
+    invented['sessions'][0]['start'] = '09:15'   # not written anywhere
+    gemini = FakeGemini(invented, invented)
+    with pytest.raises(docmod.LayoutError, match='could not read the schedule either'):
+        llm.read_document(data, 'R2_136_Schedule_v00.docx', 'test-model', gemini, tmp_path)
+    assert len(gemini.calls) == 2
+
+
+def test_without_a_key_an_unrecognised_layout_still_fails(offline_config, tmp_path):
+    local = tmp_path / 'R2_136_Schedule_v00.docx'
+    local.write_bytes(plain_document())
+    with pytest.raises(docmod.LayoutError):
+        pipeline.build_schedule(SimpleNamespace(local=str(local), output_dir=tmp_path / 'out'))
