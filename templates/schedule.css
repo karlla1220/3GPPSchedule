@@ -19,9 +19,6 @@
        both show them muted by this one mix. */
     --accent-strength: 62%;
     --accent-mute: #64748B;
-    --text: #1F2937;
-    --border: #D1D5DB;
-    --shadow: 0 1px 3px rgba(0,0,0,0.1);
     --dim-opacity: 0.30;
 }
 
@@ -43,15 +40,26 @@ body {
 }
 
 header {
+    --title-size: 22px;
+    --title-line: 28px;
     text-align: center;
     margin-bottom: 16px;
 }
 
 header h1 {
-    font-size: 22px;
+    font-size: var(--title-size);
+    line-height: var(--title-line);
     font-weight: 700;
-    color: var(--text);
+    letter-spacing: -0.02em;
+    color: var(--ink);
     margin-bottom: 4px;
+}
+
+/* On the baseline the glyph's middle already sits on the capitals' middle. */
+.wg-emoji {
+    font-size: .9em;
+    line-height: 1;
+    margin-right: .3em;
 }
 
 header .meta {
@@ -63,23 +71,35 @@ header .meta {
 .wg-navigation {
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
-    align-items: center;
+    align-items: baseline;
     gap: 24px;
     margin: 8px auto 18px;
 }
-.wg-side { display: flex; gap: 20px; align-items: center; flex-wrap: wrap; }
+.wg-side { display: flex; gap: 20px; align-items: baseline; flex-wrap: wrap; }
 .wg-left { justify-content: flex-end; }
 .wg-right { justify-content: flex-start; }
-.wg-link { color: var(--text-muted); font-size: 14px; text-decoration: none; }
-.wg-link:hover { color: var(--text); text-decoration: underline; }
-.wg-current h1 { margin: 0; font-size: 24px; }
-.wg-current a { color: var(--text); text-decoration: none; }
+.wg-link { color: var(--ink-3); font-size: 13px; font-weight: 500; line-height: 1.2; text-decoration: none; }
+/* A zero-width strut the size of the current title: a sibling's first line
+   gets the title's height and baseline, so names and statuses line up. */
+.wg-link::before { content: "\200B"; font-size: var(--title-size); line-height: var(--title-line); }
+.wg-link:hover { color: var(--ink); text-decoration: underline; }
+.wg-current h1 { margin: 0; }
+.wg-current a { color: var(--ink); text-decoration: none; }
 .wg-navigation a:focus-visible { outline: 2px solid #2563EB; outline-offset: 5px; border-radius: 2px; }
-.meeting-status { display: block; font-size: 11px; color: var(--text-muted); font-weight: 400; margin-top: 3px; }
+.meeting-status {
+    display: block;
+    margin-top: 2px;
+    font-size: 10.5px;
+    line-height: 1.4;
+    font-weight: 600;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    color: var(--ink-4);
+}
 .demo-notice { margin: 8px auto; color: #92400E; font-size: 13px; }
 @media (max-width: 600px) {
+    header { --title-size: 18px; --title-line: 24px; }
     .wg-navigation { gap: 10px; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); }
-    .wg-current h1 { font-size: 19px; }
     .wg-link { font-size: 12px; overflow-wrap: anywhere; }
     .wg-side { gap: 8px; }
 }
@@ -87,31 +107,35 @@ header .meta {
 /* Tabs */
 .schedule-toolbar {
     display: flex;
-    align-items: flex-end;
+    align-items: center;
     gap: 8px;
-    margin-bottom: 12px;
-    border-bottom: 2px solid var(--grid-line);
-    padding-bottom: 0;
+    margin-bottom: 14px;
 }
 
+/* Segmented control: only as wide as its days. */
 .tabs {
     display: flex;
-    gap: 4px;
+    gap: 2px;
     flex-wrap: wrap;
-    flex: 1 1 auto;
+    flex: 0 1 auto;
     min-width: 0;
+    padding: 3px;
+    background: #ECEEF2;
+    border-radius: 10px;
 }
 
 .now-toggle {
     flex: 0 0 auto;
-    height: 28px;
-    margin: 0 0 4px 4px;
-    padding: 0 10px;
+    height: 30px;
+    margin-left: auto;
+    padding: 0 12px;
     border: 1px solid #FCA5A5;
     background: #FEF2F2;
     color: #B91C1C;
+    font-family: inherit;
     font-size: 11px;
     font-weight: 700;
+    letter-spacing: .04em;
     cursor: pointer;
     border-radius: 999px;
     transition: all 0.15s;
@@ -128,35 +152,34 @@ header .meta {
 }
 
 .now-toggle[aria-pressed="false"] {
-    background: #F9FAFB;
-    border-color: #D1D5DB;
-    color: #6B7280;
+    background: var(--surface);
+    border-color: var(--hairline);
+    color: var(--ink-4);
     font-weight: 600;
 }
 
 .tab {
-    padding: 8px 20px;
+    padding: 6px 16px;
     border: none;
     background: transparent;
-    color: var(--text-muted);
-    font-size: 14px;
+    color: var(--ink-3);
+    font-family: inherit;
+    font-size: 13px;
     font-weight: 500;
     cursor: pointer;
-    border-bottom: 2px solid transparent;
-    margin-bottom: -2px;
     transition: all 0.15s;
-    border-radius: 6px 6px 0 0;
+    border-radius: 7px;
 }
 
 .tab:hover {
-    background: #F3F4F6;
-    color: var(--text);
+    color: var(--ink);
 }
 
 .tab.active {
-    color: #2563EB;
-    border-bottom-color: #2563EB;
+    background: var(--surface);
+    color: var(--ink);
     font-weight: 600;
+    box-shadow: 0 1px 2px rgba(15,23,42,.08), 0 0 0 .5px rgba(15,23,42,.06);
 }
 
 /* Day panels */
@@ -196,9 +219,9 @@ header .meta {
 
 /* Schedule Grid */
 .grid-wrapper {
-    background: white;
-    border-radius: 8px;
-    box-shadow: var(--shadow);
+    background: var(--surface);
+    border-radius: var(--radius-lg);
+    box-shadow: 0 0 0 1px var(--hairline), 0 1px 2px rgba(15,23,42,.04);
     overflow-x: auto;
     padding: 0;
 }
@@ -220,9 +243,10 @@ header .meta {
     justify-content: center;
     font-size: 11px;
     font-weight: 600;
-    color: var(--text);
-    background: #F9FAFB;
-    border-bottom: 2px solid var(--border);
+    letter-spacing: .01em;
+    color: var(--ink-2);
+    background: var(--surface);
+    border-bottom: 1px solid var(--hairline);
     padding: 4px 6px;
     text-align: center;
     position: sticky;
@@ -234,13 +258,13 @@ header .meta {
 }
 
 .room-header.time-col {
-    background: #F3F4F6;
-    font-weight: 700;
-    font-size: 10px;
-    color: var(--text-muted);
+    font-size: 9.5px;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    color: var(--ink-4);
     left: 0;
     z-index: 40;
-    box-shadow: 1px 0 0 var(--grid-line);
+    box-shadow: 1px 0 0 var(--hairline);
 }
 
 /* Time labels */
@@ -249,12 +273,12 @@ header .meta {
     display: flex;
     align-items: flex-start;
     justify-content: center;
-    font-size: 9px;
-    font-weight: 600;
-    color: var(--text-muted);
+    font-size: 9.5px;
+    font-weight: 500;
+    color: var(--ink-4);
     padding-top: 1px;
-    border-right: 1px solid var(--grid-line);
-    background: #FAFAFA;
+    border-right: 1px solid var(--hairline);
+    background: var(--surface);
     position: sticky;
     left: 0;
     z-index: 30;
@@ -269,7 +293,7 @@ header .meta {
 }
 
 .grid-line.major {
-    border-top: 1px solid #D1D5DB;
+    border-top-color: #E4E7EC;
 }
 
 /* Break bars */
@@ -281,10 +305,9 @@ header .meta {
     justify-content: center;
     font-size: 11px;
     font-weight: 500;
-    color: var(--text-muted);
+    letter-spacing: .02em;
+    color: var(--ink-4);
     z-index: 3;
-    border-top: 1px dashed #D1D5DB;
-    border-bottom: 1px dashed #D1D5DB;
     position: relative;
 }
 
@@ -295,9 +318,9 @@ header .meta {
     background: repeating-linear-gradient(
         -45deg,
         transparent,
-        transparent 4px,
-        rgba(0,0,0,0.03) 4px,
-        rgba(0,0,0,0.03) 8px
+        transparent 5px,
+        rgba(15,23,42,.025) 5px,
+        rgba(15,23,42,.025) 10px
     );
 }
 
@@ -311,7 +334,7 @@ header .meta {
     padding: 2px;
     text-align: center;
     background: var(--break-bg);
-    color: var(--text-muted);
+    color: var(--ink-3);
     overflow-wrap: anywhere;
 }
 .session-scope { font-size: 10px; color: #525252; }
@@ -605,7 +628,7 @@ header .meta {
 .now-line {
     grid-column: 1 / -1;
     height: 2px;
-    background: #EF4444;
+    background: #E5484D;
     /* Above sticky time labels (30), below the time header (40). */
     z-index: 35;
     position: relative;
@@ -624,20 +647,18 @@ header .meta {
     justify-content: center;
     font-size: 9px;
     font-weight: 700;
-    color: #EF4444;
-    background: white;
+    color: #E5484D;
+    background: var(--surface);
     border-radius: 0 2px 2px 0;
-    box-shadow: 1px 0 0 rgba(239, 68, 68, 0.25);
+    box-shadow: 1px 0 0 rgba(229, 72, 77, 0.25);
 }
 
 /* Responsive */
 @media (max-width: 768px) {
     .container { padding: 8px; }
-    header h1 { font-size: 18px; }
     .schedule-toolbar { gap: 6px; }
     .tabs { flex-wrap: nowrap; overflow-x: auto; }
-    .tab { padding: 6px 14px; font-size: 13px; }
-    .now-toggle { height: 26px; margin-bottom: 3px; padding: 0 9px; }
+    .tab { padding: 6px 12px; }
     :root { --base-slot-height: 10px; --time-col-width: 36px; }
     .session-name { font-size: 11.5px; }
     .room-header { font-size: 9px; padding: 3px 3px; }
