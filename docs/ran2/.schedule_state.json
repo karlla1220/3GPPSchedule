@@ -1,0 +1,45 @@
+{
+  "meeting_id": "ran2#135bis",
+  "version": 0,
+  "config_hash": "8bc6afa38dd35e691cb8597464b9eb1162a038ab954e2ab5bb30ba4aa9a9f7b0",
+  "schedule": {
+    "name": "R2_135b_Schedule_v00.docx",
+    "url": "https://www.3gpp.org/ftp/tsg_ran/WG2_RL2/TSGR2_135bis/Agenda/R2_135b_Schedule_v00.docx",
+    "uploaded_at": "2026-09-30 08:32",
+    "size": 292199,
+    "sha256": "76db57533db1c876d8a4a23dccb4b751820d802d61463f6ed23744291761bb49",
+    "etag": "\"4dbf814bb650dd1:0\"",
+    "last_modified": "Wed, 30 Sep 2026 08:32:57 GMT",
+    "ftp_modified": null,
+    "content_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    "content_disposition": null
+  },
+  "agenda": {
+    "url": "https://www.3gpp.org/ftp/tsg_ran/WG2_RL2/TSGR2_135bis/Agenda/agenda.csv",
+    "name": "agenda.csv",
+    "size": 5794,
+    "sha256": "968086e59fd5a03364a69e7da75c09460f2eae9ddc0ae023270dcb32a6929f86",
+    "etag": "\"d0d21b4c8c54dd1:0\"",
+    "last_modified": "Mon, 05 Oct 2026 05:42:24 GMT",
+    "ftp_modified": null,
+    "content_type": "application/octet-stream",
+    "content_disposition": null
+  },
+  "metadata": {
+    "starts_on": "2026-10-12",
+    "ends_on": "2026-10-16",
+    "location": "South Korea",
+    "country": "KR",
+    "portal_timezone": "(GMT+09:00) Seoul",
+    "portal_id": 60721,
+    "timezone": "Asia/Seoul",
+    "starts_at": "2026-10-12T09:00:00+09:00",
+    "ends_at": "2026-10-16T17:30:00+09:00"
+  },
+  "llm": {
+    "model": "gemini-3-flash-preview",
+    "uncertain": 1,
+    "applied": 1,
+    "kept_rules": 0
+  }
+}

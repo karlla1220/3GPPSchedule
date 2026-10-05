@@ -1,0 +1,3266 @@
+{
+  "schema_version": 1,
+  "meeting_name": "RAN2#135bis",
+  "days": [
+    {
+      "day_name": "Monday",
+      "rooms": [
+        {
+          "name": "Main",
+          "table_index": 0,
+          "room_index_in_table": 0,
+          "id": "main"
+        },
+        {
+          "name": "Breakout 1",
+          "table_index": 0,
+          "room_index_in_table": 0,
+          "id": "brk1"
+        },
+        {
+          "name": "Breakout 2",
+          "table_index": 0,
+          "room_index_in_table": 0,
+          "id": "brk2"
+        }
+      ],
+      "sessions": [
+        {
+          "name": "EUTRA&NR15161718",
+          "duration_minutes": 90,
+          "start_time": "09:00",
+          "end_time": "10:30",
+          "day": "Monday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "Mattias",
+          "agenda_item": "5.1.3.3, 4.1, 5.1.0, 5.1.1, 5.1.2, 5.1.3.1, 5.1.3.2, 6.0.2.1, 6.0.2.2, 6.0.2.3, 6.0.2.4, 6.0.2.5, 6.0.2.6, 6.0.2.7, 6.0.2.8, 6.0.2.9, 6.0.2.10, 6.0.2.11, 6.0.2.12, 6.0.2.14, 6.0.2.15, 6.0.2.23, 6.0.2.24",
+          "group_header": "NR Rel-17 and earlier",
+          "description": "Other\nEUTRA corrections Rel-19and earlier\nNR Common\nStage 2 and Organisational\nUser Plane corrections\nNR RRC",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "5.1.3.3",
+              "matched_agenda_item": "5.1.3.3",
+              "description": "Other",
+              "hierarchy": [
+                {
+                  "agenda_item": "5",
+                  "description": "NR Rel-17 and earlier"
+                },
+                {
+                  "agenda_item": "5.1",
+                  "description": "NR Common"
+                },
+                {
+                  "agenda_item": "5.1.3",
+                  "description": "Control Plane corrections"
+                },
+                {
+                  "agenda_item": "5.1.3.3",
+                  "description": "Other"
+                }
+              ]
+            },
+            {
+              "agenda_item": "4.1",
+              "matched_agenda_item": "4.1",
+              "description": "EUTRA corrections Rel-19and earlier",
+              "hierarchy": [
+                {
+                  "agenda_item": "4",
+                  "description": "EUTRA"
+                },
+                {
+                  "agenda_item": "4.1",
+                  "description": "EUTRA corrections Rel-19and earlier"
+                }
+              ]
+            },
+            {
+              "agenda_item": "5.1.0",
+              "matched_agenda_item": "5.1",
+              "description": "NR Common",
+              "hierarchy": [
+                {
+                  "agenda_item": "5",
+                  "description": "NR Rel-17 and earlier"
+                },
+                {
+                  "agenda_item": "5.1",
+                  "description": "NR Common"
+                }
+              ]
+            },
+            {
+              "agenda_item": "5.1.1",
+              "matched_agenda_item": "5.1.1",
+              "description": "Stage 2 and Organisational",
+              "hierarchy": [
+                {
+                  "agenda_item": "5",
+                  "description": "NR Rel-17 and earlier"
+                },
+                {
+                  "agenda_item": "5.1",
+                  "description": "NR Common"
+                },
+                {
+                  "agenda_item": "5.1.1",
+                  "description": "Stage 2 and Organisational"
+                }
+              ]
+            },
+            {
+              "agenda_item": "5.1.2",
+              "matched_agenda_item": "5.1.2",
+              "description": "User Plane corrections",
+              "hierarchy": [
+                {
+                  "agenda_item": "5",
+                  "description": "NR Rel-17 and earlier"
+                },
+                {
+                  "agenda_item": "5.1",
+                  "description": "NR Common"
+                },
+                {
+                  "agenda_item": "5.1.2",
+                  "description": "User Plane corrections"
+                }
+              ]
+            },
+            {
+              "agenda_item": "5.1.3.1",
+              "matched_agenda_item": "5.1.3.1",
+              "description": "NR RRC",
+              "hierarchy": [
+                {
+                  "agenda_item": "5",
+                  "description": "NR Rel-17 and earlier"
+                },
+                {
+                  "agenda_item": "5.1",
+                  "description": "NR Common"
+                },
+                {
+                  "agenda_item": "5.1.3",
+                  "description": "Control Plane corrections"
+                },
+                {
+                  "agenda_item": "5.1.3.1",
+                  "description": "NR RRC"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "brk1"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "Breakout to start after completion of 7.0 and 8.0",
+            "EUTRA&NR15161718 (Mattias):"
+          ]
+        },
+        {
+          "name": "NR19 NES / NR18 Mob / NR19 Mob",
+          "duration_minutes": 90,
+          "start_time": "09:00",
+          "end_time": "10:30",
+          "day": "Monday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "Kyeongin",
+          "agenda_item": "7.5, 7.5.1, 7.5.2, 6.0.2.22, 7.6, 7.6.1, 7.6.2",
+          "group_header": "NR Rel-19",
+          "description": "Network Energy Saving Enh.\nFurther NR mobility enhancements\nMobility Enhancement Ph4",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "7.5",
+              "matched_agenda_item": "7.5",
+              "description": "Network Energy Saving Enh.",
+              "hierarchy": [
+                {
+                  "agenda_item": "7",
+                  "description": "NR Rel-19"
+                },
+                {
+                  "agenda_item": "7.5",
+                  "description": "Network Energy Saving Enh."
+                }
+              ]
+            },
+            {
+              "agenda_item": "6.0.2.22",
+              "matched_agenda_item": "6.0.2.22",
+              "description": "Further NR mobility enhancements",
+              "hierarchy": [
+                {
+                  "agenda_item": "6",
+                  "description": "NR Rel-18"
+                },
+                {
+                  "agenda_item": "6.0",
+                  "description": "Common"
+                },
+                {
+                  "agenda_item": "6.0.2",
+                  "description": "Rel-18 corrections"
+                },
+                {
+                  "agenda_item": "6.0.2.22",
+                  "description": "Further NR mobility enhancements"
+                }
+              ]
+            },
+            {
+              "agenda_item": "7.6",
+              "matched_agenda_item": "7.6",
+              "description": "Mobility Enhancement Ph4",
+              "hierarchy": [
+                {
+                  "agenda_item": "7",
+                  "description": "NR Rel-19"
+                },
+                {
+                  "agenda_item": "7.6",
+                  "description": "Mobility Enhancement Ph4"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "brk2"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "Breakout to start after completion of 7.0 and 8.0",
+            "[7.5] NR19 NES (Kyeongin)",
+            "[6.0.2.22] NR18 Mob (Kyeongin)",
+            "[7.6] NR19 Mob (Kyeongin)"
+          ]
+        },
+        {
+          "name": "R18 common / NR19/20 general / 6GR organizational …",
+          "duration_minutes": 90,
+          "start_time": "09:00",
+          "end_time": "10:30",
+          "day": "Monday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "Diana",
+          "agenda_item": "1, 2, 3, 6.0, 6.0.1, 7.0, 8.0, 9.1, 9.3.2.5",
+          "group_header": "NR Rel-18",
+          "description": "Opening of the meeting\nGeneral\nIncoming liaisons\nCommon\nGeneral\nGeneral",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "1",
+              "matched_agenda_item": "1",
+              "description": "Opening of the meeting",
+              "hierarchy": [
+                {
+                  "agenda_item": "1",
+                  "description": "Opening of the meeting"
+                }
+              ]
+            },
+            {
+              "agenda_item": "2",
+              "matched_agenda_item": "2",
+              "description": "General",
+              "hierarchy": [
+                {
+                  "agenda_item": "2",
+                  "description": "General"
+                }
+              ]
+            },
+            {
+              "agenda_item": "3",
+              "matched_agenda_item": "3",
+              "description": "Incoming liaisons",
+              "hierarchy": [
+                {
+                  "agenda_item": "3",
+                  "description": "Incoming liaisons"
+                }
+              ]
+            },
+            {
+              "agenda_item": "6.0",
+              "matched_agenda_item": "6.0",
+              "description": "Common",
+              "hierarchy": [
+                {
+                  "agenda_item": "6",
+                  "description": "NR Rel-18"
+                },
+                {
+                  "agenda_item": "6.0",
+                  "description": "Common"
+                }
+              ]
+            },
+            {
+              "agenda_item": "7.0",
+              "matched_agenda_item": "7.0",
+              "description": "General",
+              "hierarchy": [
+                {
+                  "agenda_item": "7",
+                  "description": "NR Rel-19"
+                },
+                {
+                  "agenda_item": "7.0",
+                  "description": "General"
+                }
+              ]
+            },
+            {
+              "agenda_item": "8.0",
+              "matched_agenda_item": "8.0",
+              "description": "General",
+              "hierarchy": [
+                {
+                  "agenda_item": "8",
+                  "description": "NR Rel-20"
+                },
+                {
+                  "agenda_item": "8.0",
+                  "description": "General"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "main"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "[6.0] R18 common (Diana)",
+            "[6.0.1] UE capabilities",
+            "[7.0] [8.0] NR19/20 general",
+            "Break out",
+            "[9.1] 6GR organizational",
+            "[9.3.2.5] Spectrum aggregation",
+            "Inter-site with 10ms backhaul"
+          ]
+        },
+        {
+          "name": "EUTRA&NR15161718 con’t / NR19 SONMDT / NR20 SONMDT",
+          "duration_minutes": 120,
+          "start_time": "11:00",
+          "end_time": "13:00",
+          "day": "Monday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "Mattias",
+          "agenda_item": "7.10, 8.6",
+          "group_header": "NR Rel-19",
+          "description": "SON/MDT Ph4\nSON/MDT Ph5",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "7.10",
+              "matched_agenda_item": "7.10",
+              "description": "SON/MDT Ph4",
+              "hierarchy": [
+                {
+                  "agenda_item": "7",
+                  "description": "NR Rel-19"
+                },
+                {
+                  "agenda_item": "7.10",
+                  "description": "SON/MDT Ph4"
+                }
+              ]
+            },
+            {
+              "agenda_item": "8.6",
+              "matched_agenda_item": "8.6",
+              "description": "SON/MDT Ph5",
+              "hierarchy": [
+                {
+                  "agenda_item": "8",
+                  "description": "NR Rel-20"
+                },
+                {
+                  "agenda_item": "8.6",
+                  "description": "SON/MDT Ph5"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "brk1"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "EUTRA&NR15161718 (Mattias) con’t",
+            "[7.10] NR19 SONMDT [0] (Mattias)",
+            "[8.6] NR20 SONMDT [0.5] (Mattias)"
+          ]
+        },
+        {
+          "name": "NR19 Mob",
+          "duration_minutes": 60,
+          "start_time": "11:00",
+          "end_time": "12:00",
+          "day": "Monday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "Kyeongin",
+          "agenda_item": "7.6, 7.6.2",
+          "group_header": "NR Rel-19",
+          "description": "Mobility Enhancement Ph4",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "7.6",
+              "matched_agenda_item": "7.6",
+              "description": "Mobility Enhancement Ph4",
+              "hierarchy": [
+                {
+                  "agenda_item": "7",
+                  "description": "NR Rel-19"
+                },
+                {
+                  "agenda_item": "7.6",
+                  "description": "Mobility Enhancement Ph4"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "brk2"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "[7.6] NR19 Mob (Kyeongin)",
+            "[7.6.2] (continue)"
+          ]
+        },
+        {
+          "name": "Spectrum aggregation / 6GR Control Plane",
+          "duration_minutes": 120,
+          "start_time": "11:00",
+          "end_time": "13:00",
+          "day": "Monday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": "9.3.2.5, 9.3.2, 9.3.2.1",
+          "group_header": "6GR Rel-20",
+          "description": "Control plane",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "9.3.2",
+              "matched_agenda_item": "9.3.2",
+              "description": "Control plane",
+              "hierarchy": [
+                {
+                  "agenda_item": "9",
+                  "description": "6GR Rel-20 - Study on 6G Radio Access Technology"
+                },
+                {
+                  "agenda_item": "9.3",
+                  "description": "Radio protocol architecture"
+                },
+                {
+                  "agenda_item": "9.3.2",
+                  "description": "Control plane"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "main"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "[9.3.2.5] Spectrum aggregation",
+            "Inter-site with 10ms backhaul",
+            "[9.3.2] 6GR Control Plane ((if time allows)",
+            "[9.3.2.1] RRC modeling"
+          ]
+        },
+        {
+          "name": "NR20 MIMO",
+          "duration_minutes": 60,
+          "start_time": "12:00",
+          "end_time": "13:00",
+          "day": "Monday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": "8.10, 8.10.1, 8.10.2",
+          "group_header": "NR Rel-20",
+          "description": "NR MIMO Ph6",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "8.10",
+              "matched_agenda_item": "8.10",
+              "description": "NR MIMO Ph6",
+              "hierarchy": [
+                {
+                  "agenda_item": "8",
+                  "description": "NR Rel-20"
+                },
+                {
+                  "agenda_item": "8.10",
+                  "description": "NR MIMO Ph6"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "brk2"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "[8.10] NR20 MIMO",
+            "[8.10.2] Early SRS/CSI/CSI-RS triggering, other aspects if time allows"
+          ]
+        },
+        {
+          "name": "R17/18 NR / IoT NTN / R17 NR NTN corrections / R18 NR NTN corrections …",
+          "duration_minutes": 120,
+          "start_time": "14:30",
+          "end_time": "16:30",
+          "day": "Monday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "Sergio",
+          "agenda_item": "5.3, 6.0.2.17, 7.8, 7.8.1, 7.8.2, 7.9, 7.9.1, 7.9.2, 7.20.1",
+          "group_header": "NR Rel-17 and earlier",
+          "description": "NR NTN corrections\nNR NTN enhancements\nNTN for NR Ph3\nIoT NTN Ph3\nRAN4",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "5.3",
+              "matched_agenda_item": "5.3",
+              "description": "NR NTN corrections",
+              "hierarchy": [
+                {
+                  "agenda_item": "5",
+                  "description": "NR Rel-17 and earlier"
+                },
+                {
+                  "agenda_item": "5.3",
+                  "description": "NR NTN corrections"
+                }
+              ]
+            },
+            {
+              "agenda_item": "6.0.2.17",
+              "matched_agenda_item": "6.0.2.17",
+              "description": "NR NTN enhancements",
+              "hierarchy": [
+                {
+                  "agenda_item": "6",
+                  "description": "NR Rel-18"
+                },
+                {
+                  "agenda_item": "6.0",
+                  "description": "Common"
+                },
+                {
+                  "agenda_item": "6.0.2",
+                  "description": "Rel-18 corrections"
+                },
+                {
+                  "agenda_item": "6.0.2.17",
+                  "description": "NR NTN enhancements"
+                }
+              ]
+            },
+            {
+              "agenda_item": "7.8",
+              "matched_agenda_item": "7.8",
+              "description": "NTN for NR Ph3",
+              "hierarchy": [
+                {
+                  "agenda_item": "7",
+                  "description": "NR Rel-19"
+                },
+                {
+                  "agenda_item": "7.8",
+                  "description": "NTN for NR Ph3"
+                }
+              ]
+            },
+            {
+              "agenda_item": "7.9",
+              "matched_agenda_item": "7.9",
+              "description": "IoT NTN Ph3",
+              "hierarchy": [
+                {
+                  "agenda_item": "7",
+                  "description": "NR Rel-19"
+                },
+                {
+                  "agenda_item": "7.9",
+                  "description": "IoT NTN Ph3"
+                }
+              ]
+            },
+            {
+              "agenda_item": "7.20.1",
+              "matched_agenda_item": "7.20.1",
+              "description": "RAN4",
+              "hierarchy": [
+                {
+                  "agenda_item": "7",
+                  "description": "NR Rel-19"
+                },
+                {
+                  "agenda_item": "7.20",
+                  "description": "NR Others"
+                },
+                {
+                  "agenda_item": "7.20.1",
+                  "description": "RAN4"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "brk1"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "R17/18 NR / IoT NTN (Sergio)",
+            "[5.3] R17 NR NTN corrections",
+            "[6.0.2.17] R18 NR NTN corrections",
+            "[7.8] NR19 NR NTN [0] (Sergio)",
+            "[7.9] R19 IoT NTN [0] (Sergio)",
+            "[7.20.1] RAN4 related"
+          ]
+        },
+        {
+          "name": "Rel-19 corrections / NR LPWUS / NR SBFD",
+          "duration_minutes": 60,
+          "start_time": "14:30",
+          "end_time": "15:30",
+          "day": "Monday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "Erlin",
+          "agenda_item": "7.4, 7.11",
+          "group_header": "NR Rel-19",
+          "description": "Low-power wake-up signal and receiver for NR (LP-WUS/WUR)\nEvolution of NR duplex operation: Sub-band full duplex (SBFD)",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "7.4",
+              "matched_agenda_item": "7.4",
+              "description": "Low-power wake-up signal and receiver for NR (LP-WUS/WUR)",
+              "hierarchy": [
+                {
+                  "agenda_item": "7",
+                  "description": "NR Rel-19"
+                },
+                {
+                  "agenda_item": "7.4",
+                  "description": "Low-power wake-up signal and receiver for NR (LP-WUS/WUR)"
+                }
+              ]
+            },
+            {
+              "agenda_item": "7.11",
+              "matched_agenda_item": "7.11",
+              "description": "Evolution of NR duplex operation: Sub-band full duplex (SBFD)",
+              "hierarchy": [
+                {
+                  "agenda_item": "7",
+                  "description": "NR Rel-19"
+                },
+                {
+                  "agenda_item": "7.11",
+                  "description": "Evolution of NR duplex operation: Sub-band full duplex (SBFD)"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "brk2"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "Rel-19 corrections (Erlin)",
+            "[7.4] NR LPWUS (Erlin)",
+            "[7.11] NR SBFD"
+          ]
+        },
+        {
+          "name": "Common CP/UP",
+          "duration_minutes": 120,
+          "start_time": "14:30",
+          "end_time": "16:30",
+          "day": "Monday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": "9.3.3, 9.3.3.1, 9.3.3.2",
+          "group_header": "6GR Rel-20",
+          "description": "Common User plane and Control plane",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "9.3.3",
+              "matched_agenda_item": "9.3.3",
+              "description": "Common User plane and Control plane",
+              "hierarchy": [
+                {
+                  "agenda_item": "9",
+                  "description": "6GR Rel-20 - Study on 6G Radio Access Technology"
+                },
+                {
+                  "agenda_item": "9.3",
+                  "description": "Radio protocol architecture"
+                },
+                {
+                  "agenda_item": "9.3.3",
+                  "description": "Common User plane and Control plane"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "main"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "[9.3.3] Common CP/UP",
+            "[9.3.3.1] Data transfer framework",
+            "[9.3.3.2] AI/ML"
+          ]
+        },
+        {
+          "name": "NR19/20 NR others / On 6 DL MIMO layer",
+          "duration_minutes": 60,
+          "start_time": "15:30",
+          "end_time": "16:30",
+          "day": "Monday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "Erlin",
+          "agenda_item": "7.20.1, 8.13.1, 8.13.2",
+          "group_header": "NR Rel-19",
+          "description": "RAN4\nRAN4\nNR Others",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "7.20.1",
+              "matched_agenda_item": "7.20.1",
+              "description": "RAN4",
+              "hierarchy": [
+                {
+                  "agenda_item": "7",
+                  "description": "NR Rel-19"
+                },
+                {
+                  "agenda_item": "7.20",
+                  "description": "NR Others"
+                },
+                {
+                  "agenda_item": "7.20.1",
+                  "description": "RAN4"
+                }
+              ]
+            },
+            {
+              "agenda_item": "8.13.1",
+              "matched_agenda_item": "8.13.1",
+              "description": "RAN4",
+              "hierarchy": [
+                {
+                  "agenda_item": "8",
+                  "description": "NR Rel-20"
+                },
+                {
+                  "agenda_item": "8.13",
+                  "description": "NR Others"
+                },
+                {
+                  "agenda_item": "8.13.1",
+                  "description": "RAN4"
+                }
+              ]
+            },
+            {
+              "agenda_item": "8.13.2",
+              "matched_agenda_item": "8.13",
+              "description": "NR Others",
+              "hierarchy": [
+                {
+                  "agenda_item": "8",
+                  "description": "NR Rel-20"
+                },
+                {
+                  "agenda_item": "8.13",
+                  "description": "NR Others"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "brk2"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "NR19/20 NR others (Erlin)",
+            "[7.20.1] On 6 DL MIMO layer (R2-2605807)"
+          ]
+        },
+        {
+          "name": "NTN pre-meeting offline",
+          "duration_minutes": 90,
+          "start_time": "17:00",
+          "end_time": "18:30",
+          "day": "Monday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "Erlin",
+          "agenda_item": "9.6",
+          "group_header": "Offline",
+          "description": "NTN",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "9.6",
+              "matched_agenda_item": "9.6",
+              "description": "NTN",
+              "hierarchy": [
+                {
+                  "agenda_item": "9",
+                  "description": "6GR Rel-20 - Study on 6G Radio Access Technology"
+                },
+                {
+                  "agenda_item": "9.6",
+                  "description": "NTN"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "brk1"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "[9.6] NTN pre-meeting offline (Erlin)",
+            "Focus on GNSS resilient/free operation (overview of the potential issues related to mobility, initial discussion on proposed solutions, and proposals specific to R20 GNSS WID if time allows)"
+          ]
+        },
+        {
+          "name": "6GR Control Plane",
+          "duration_minutes": 120,
+          "start_time": "17:00",
+          "end_time": "19:00",
+          "day": "Monday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": "9.3.2, 9.3.2.1, 9.3.2.2",
+          "group_header": "6GR Rel-20",
+          "description": "Control plane",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "9.3.2",
+              "matched_agenda_item": "9.3.2",
+              "description": "Control plane",
+              "hierarchy": [
+                {
+                  "agenda_item": "9",
+                  "description": "6GR Rel-20 - Study on 6G Radio Access Technology"
+                },
+                {
+                  "agenda_item": "9.3",
+                  "description": "Radio protocol architecture"
+                },
+                {
+                  "agenda_item": "9.3.2",
+                  "description": "Control plane"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "main"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "[9.3.2] 6GR Control Plane",
+            "[9.3.2.1] RRC modeling",
+            "[9.3.2.2] RRC structure (if time allows)"
+          ]
+        },
+        {
+          "name": "NTN R20 GNSS resilient",
+          "duration_minutes": 30,
+          "start_time": "18:30",
+          "end_time": "19:00",
+          "day": "Monday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": "8.11, 8.11.1, 8.11.2",
+          "group_header": "NR Rel-20",
+          "description": "GNSS resilient NR-NTN operation",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "8.11",
+              "matched_agenda_item": "8.11",
+              "description": "GNSS resilient NR-NTN operation",
+              "hierarchy": [
+                {
+                  "agenda_item": "8",
+                  "description": "NR Rel-20"
+                },
+                {
+                  "agenda_item": "8.11",
+                  "description": "GNSS resilient NR-NTN operation"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "brk1"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "[8.11] NTN R20 GNSS resilient (only topics not discussed in 6G NTN GNSS free/resilient)",
+            "[8.11.2] GNSS-resilient initial access"
+          ]
+        }
+      ],
+      "date": "2026-10-12",
+      "timeline": {
+        "start": "09:00",
+        "end": "19:00",
+        "slot_minutes": 5,
+        "label_minutes": 30,
+        "breaks": [
+          {
+            "name": "Morning coffee",
+            "start": "10:30",
+            "end": "11:00",
+            "label_position": "time-axis"
+          },
+          {
+            "name": "Lunch",
+            "start": "13:00",
+            "end": "14:30",
+            "label_position": "time-axis"
+          },
+          {
+            "name": "Afternoon coffee",
+            "start": "16:30",
+            "end": "17:00",
+            "label_position": "time-axis"
+          }
+        ],
+        "blocks": []
+      }
+    },
+    {
+      "day_name": "Tuesday",
+      "rooms": [
+        {
+          "name": "Main",
+          "table_index": 0,
+          "room_index_in_table": 0,
+          "id": "main"
+        },
+        {
+          "name": "Breakout 1",
+          "table_index": 0,
+          "room_index_in_table": 0,
+          "id": "brk1"
+        },
+        {
+          "name": "Breakout 2",
+          "table_index": 0,
+          "room_index_in_table": 0,
+          "id": "brk2"
+        }
+      ],
+      "sessions": [
+        {
+          "name": "NR20 AI mobility",
+          "duration_minutes": 90,
+          "start_time": "08:30",
+          "end_time": "10:00",
+          "day": "Tuesday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "Kyeongin",
+          "agenda_item": "8.3, 8.3.1, 8.3.2",
+          "group_header": "NR Rel-20",
+          "description": "AI/ML for mobility",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "8.3",
+              "matched_agenda_item": "8.3",
+              "description": "AI/ML for mobility",
+              "hierarchy": [
+                {
+                  "agenda_item": "8",
+                  "description": "NR Rel-20"
+                },
+                {
+                  "agenda_item": "8.3",
+                  "description": "AI/ML for mobility"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "brk1"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "[8.3] NR20 AI mobility [1] (Kyeongin)",
+            "[8.3.1] Organizational",
+            "[8.3.2] LCM procedure"
+          ]
+        },
+        {
+          "name": "LTE Pos / NR1718 Pos / NR1718 SL Relay …",
+          "duration_minutes": 120,
+          "start_time": "08:30",
+          "end_time": "10:30",
+          "day": "Tuesday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "Nathan",
+          "agenda_item": "4.3, 5.2, 6.0.2.21, 5.1.3, 6.0.2.19, 7.13, 7.2, 8.13.2, 8.14",
+          "group_header": "EUTRA",
+          "description": "EUTRA NTN corrections\nNR Positioning Corrections\nExpanded and improved NR positioning\nControl Plane corrections\nEnhanced NR Sidelink Relay\nNR sidelink multi-hop relay",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "4.3",
+              "matched_agenda_item": "4.3",
+              "description": "EUTRA NTN corrections",
+              "hierarchy": [
+                {
+                  "agenda_item": "4",
+                  "description": "EUTRA"
+                },
+                {
+                  "agenda_item": "4.3",
+                  "description": "EUTRA NTN corrections"
+                }
+              ]
+            },
+            {
+              "agenda_item": "5.2",
+              "matched_agenda_item": "5.2",
+              "description": "NR Positioning Corrections",
+              "hierarchy": [
+                {
+                  "agenda_item": "5",
+                  "description": "NR Rel-17 and earlier"
+                },
+                {
+                  "agenda_item": "5.2",
+                  "description": "NR Positioning Corrections"
+                }
+              ]
+            },
+            {
+              "agenda_item": "6.0.2.21",
+              "matched_agenda_item": "6.0.2.21",
+              "description": "Expanded and improved NR positioning",
+              "hierarchy": [
+                {
+                  "agenda_item": "6",
+                  "description": "NR Rel-18"
+                },
+                {
+                  "agenda_item": "6.0",
+                  "description": "Common"
+                },
+                {
+                  "agenda_item": "6.0.2",
+                  "description": "Rel-18 corrections"
+                },
+                {
+                  "agenda_item": "6.0.2.21",
+                  "description": "Expanded and improved NR positioning"
+                }
+              ]
+            },
+            {
+              "agenda_item": "5.1.3",
+              "matched_agenda_item": "5.1.3",
+              "description": "Control Plane corrections",
+              "hierarchy": [
+                {
+                  "agenda_item": "5",
+                  "description": "NR Rel-17 and earlier"
+                },
+                {
+                  "agenda_item": "5.1",
+                  "description": "NR Common"
+                },
+                {
+                  "agenda_item": "5.1.3",
+                  "description": "Control Plane corrections"
+                }
+              ]
+            },
+            {
+              "agenda_item": "6.0.2.19",
+              "matched_agenda_item": "6.0.2.19",
+              "description": "Enhanced NR Sidelink Relay",
+              "hierarchy": [
+                {
+                  "agenda_item": "6",
+                  "description": "NR Rel-18"
+                },
+                {
+                  "agenda_item": "6.0",
+                  "description": "Common"
+                },
+                {
+                  "agenda_item": "6.0.2",
+                  "description": "Rel-18 corrections"
+                },
+                {
+                  "agenda_item": "6.0.2.19",
+                  "description": "Enhanced NR Sidelink Relay"
+                }
+              ]
+            },
+            {
+              "agenda_item": "7.13",
+              "matched_agenda_item": "7.13",
+              "description": "NR sidelink multi-hop relay",
+              "hierarchy": [
+                {
+                  "agenda_item": "7",
+                  "description": "NR Rel-19"
+                },
+                {
+                  "agenda_item": "7.13",
+                  "description": "NR sidelink multi-hop relay"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "brk2"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "[4.3] LTE Pos (Nathan)",
+            "[5.2] [6.0.2.21] NR1718 Pos (Nathan)",
+            "[5.1.3] [6.0.2.19] NR1718 SL Relay (Nathan)",
+            "[7.13] NR19 SL Relay (Nathan)",
+            "[7.2] NR19 Ambient IoT [0] (Nathan)",
+            "[8.13.2] NR20 Others",
+            "- Documents on U2U MANET",
+            "[8.14] TEI20 (if time permits, otherwise handle in CB session)",
+            "- Positioning and relay documents"
+          ]
+        },
+        {
+          "name": "User Plane",
+          "duration_minutes": 120,
+          "start_time": "08:30",
+          "end_time": "10:30",
+          "day": "Tuesday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": "9.3.1, 9.3.1.2",
+          "group_header": "6GR Rel-20",
+          "description": "User plane",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "9.3.1",
+              "matched_agenda_item": "9.3.1",
+              "description": "User plane",
+              "hierarchy": [
+                {
+                  "agenda_item": "9",
+                  "description": "6GR Rel-20 - Study on 6G Radio Access Technology"
+                },
+                {
+                  "agenda_item": "9.3",
+                  "description": "Radio protocol architecture"
+                },
+                {
+                  "agenda_item": "9.3.1",
+                  "description": "User plane"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "main"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "[9.3.1] User Plane",
+            "[9.3.1.2] QoS, QoE"
+          ]
+        },
+        {
+          "name": "offline for AI mobility",
+          "duration_minutes": 30,
+          "start_time": "10:00",
+          "end_time": "10:30",
+          "day": "Tuesday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": null,
+          "group_header": "Offline",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [
+            "brk1"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "offline for AI mobility"
+          ]
+        },
+        {
+          "name": "offline for AI mobility if needed / NR20 AI mobility",
+          "duration_minutes": 120,
+          "start_time": "11:00",
+          "end_time": "13:00",
+          "day": "Tuesday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "Kyeongin",
+          "agenda_item": "8.3, 8.3.2, 8.3.3",
+          "group_header": "Offline",
+          "description": "AI/ML for mobility",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "8.3",
+              "matched_agenda_item": "8.3",
+              "description": "AI/ML for mobility",
+              "hierarchy": [
+                {
+                  "agenda_item": "8",
+                  "description": "NR Rel-20"
+                },
+                {
+                  "agenda_item": "8.3",
+                  "description": "AI/ML for mobility"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "brk1"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "offline for AI mobility if needed (TBD)",
+            "[8.3] NR20 AI mobility [1] (Kyeongin)",
+            "[8.3.2] LCM procedure (continue)",
+            "[8.3.3] Data collection"
+          ]
+        },
+        {
+          "name": "CP offlines",
+          "duration_minutes": 60,
+          "start_time": "11:00",
+          "end_time": "12:00",
+          "day": "Tuesday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": null,
+          "group_header": "Offline",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [
+            "brk2"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "CP offlines (RRC delta, Ericsson)"
+          ]
+        },
+        {
+          "name": "User Plane",
+          "duration_minutes": 120,
+          "start_time": "11:00",
+          "end_time": "13:00",
+          "day": "Tuesday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": "9.3.1, 9.3.1.1, 9.3.1.3.1",
+          "group_header": "6GR Rel-20",
+          "description": "User plane",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "9.3.1",
+              "matched_agenda_item": "9.3.1",
+              "description": "User plane",
+              "hierarchy": [
+                {
+                  "agenda_item": "9",
+                  "description": "6GR Rel-20 - Study on 6G Radio Access Technology"
+                },
+                {
+                  "agenda_item": "9.3",
+                  "description": "Radio protocol architecture"
+                },
+                {
+                  "agenda_item": "9.3.1",
+                  "description": "User plane"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "main"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "[9.3.1] User Plane",
+            "[9.3.1.1] Functionalities of upper UP",
+            "[9.3.1.3.1] Scheduling"
+          ]
+        },
+        {
+          "name": "CP offlines",
+          "duration_minutes": 30,
+          "start_time": "12:00",
+          "end_time": "12:30",
+          "day": "Tuesday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": null,
+          "group_header": "Offline",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [
+            "brk2"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "CP offlines (list handling, Qualcomm)"
+          ]
+        },
+        {
+          "name": "CP offlines",
+          "duration_minutes": 30,
+          "start_time": "12:30",
+          "end_time": "13:00",
+          "day": "Tuesday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": null,
+          "group_header": "Offline",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [
+            "brk2"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "CP offlines (config structure, CMCC)"
+          ]
+        },
+        {
+          "name": "NR20 AIoT",
+          "duration_minutes": 115,
+          "start_time": "14:30",
+          "end_time": "16:25",
+          "day": "Tuesday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": "8.2, 8.2.1, 8.2.2",
+          "group_header": "NR Rel-20",
+          "description": "Ambient IoT Ph2",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "8.2",
+              "matched_agenda_item": "8.2",
+              "description": "Ambient IoT Ph2",
+              "hierarchy": [
+                {
+                  "agenda_item": "8",
+                  "description": "NR Rel-20"
+                },
+                {
+                  "agenda_item": "8.2",
+                  "description": "Ambient IoT Ph2"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "brk1"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "[8.2] NR20 AIoT [2]",
+            "[8.2.1 Organizational",
+            "[8.2.2] Device type C (start with email summary)"
+          ]
+        },
+        {
+          "name": "CP offlines TBD",
+          "duration_minutes": 60,
+          "start_time": "14:30",
+          "end_time": "15:30",
+          "day": "Tuesday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": null,
+          "group_header": "Offline",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [
+            "brk2"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "CP offlines TBD"
+          ]
+        },
+        {
+          "name": "User Plane / Common CP/UP",
+          "duration_minutes": 115,
+          "start_time": "14:30",
+          "end_time": "16:25",
+          "day": "Tuesday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": "9.3.1, 9.3.1.3.1, 9.3.1.3.2, 9.3.3, 9.3.3.4",
+          "group_header": "6GR Rel-20",
+          "description": "User plane\nCommon User plane and Control plane",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "9.3.1",
+              "matched_agenda_item": "9.3.1",
+              "description": "User plane",
+              "hierarchy": [
+                {
+                  "agenda_item": "9",
+                  "description": "6GR Rel-20 - Study on 6G Radio Access Technology"
+                },
+                {
+                  "agenda_item": "9.3",
+                  "description": "Radio protocol architecture"
+                },
+                {
+                  "agenda_item": "9.3.1",
+                  "description": "User plane"
+                }
+              ]
+            },
+            {
+              "agenda_item": "9.3.3",
+              "matched_agenda_item": "9.3.3",
+              "description": "Common User plane and Control plane",
+              "hierarchy": [
+                {
+                  "agenda_item": "9",
+                  "description": "6GR Rel-20 - Study on 6G Radio Access Technology"
+                },
+                {
+                  "agenda_item": "9.3",
+                  "description": "Radio protocol architecture"
+                },
+                {
+                  "agenda_item": "9.3.3",
+                  "description": "Common User plane and Control plane"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "main"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "[9.3.1] User Plane",
+            "[9.3.1.3.1] Scheduling con’t",
+            "[9.3.1.3.2] Other MAC func",
+            "[9.3.3] Common CP/UP",
+            "[9.3.3.4] Early reporting (start with UP specific aspects)"
+          ]
+        },
+        {
+          "name": "E-UTRA TN to NR NTN HO / R20 IoT NTN",
+          "duration_minutes": 55,
+          "start_time": "15:30",
+          "end_time": "16:25",
+          "day": "Tuesday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "Sergio",
+          "agenda_item": "8.8, 8.8.1, 8.8.2, 8.7, 8.7.2, 8.7.3",
+          "group_header": "NR Rel-20",
+          "description": "E-UTRA TN to NR NTN HO\nIoT NTN Ph4",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "8.8",
+              "matched_agenda_item": "8.8",
+              "description": "E-UTRA TN to NR NTN HO",
+              "hierarchy": [
+                {
+                  "agenda_item": "8",
+                  "description": "NR Rel-20"
+                },
+                {
+                  "agenda_item": "8.8",
+                  "description": "E-UTRA TN to NR NTN HO"
+                }
+              ]
+            },
+            {
+              "agenda_item": "8.7",
+              "matched_agenda_item": "8.7",
+              "description": "IoT NTN Ph4",
+              "hierarchy": [
+                {
+                  "agenda_item": "8",
+                  "description": "NR Rel-20"
+                },
+                {
+                  "agenda_item": "8.7",
+                  "description": "IoT NTN Ph4"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "brk2"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "[8.8] E-UTRA TN to NR NTN HO (Sergio)",
+            "[8.7] R20 IoT NTN [1] (Sergio)"
+          ]
+        },
+        {
+          "name": "R20 NR NTN DL compensation",
+          "duration_minutes": 70,
+          "start_time": "16:50",
+          "end_time": "18:00",
+          "day": "Tuesday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "Sergio",
+          "agenda_item": "8.12",
+          "group_header": "NR Rel-20",
+          "description": "NR NTN using DL compensation",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "8.12",
+              "matched_agenda_item": "8.12",
+              "description": "NR NTN using DL compensation",
+              "hierarchy": [
+                {
+                  "agenda_item": "8",
+                  "description": "NR Rel-20"
+                },
+                {
+                  "agenda_item": "8.12",
+                  "description": "NR NTN using DL compensation"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "brk2"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "[8.12] R20 NR NTN DL compensation [0.5] (Sergio)"
+          ]
+        },
+        {
+          "name": "6GR Control Plane",
+          "duration_minutes": 115,
+          "start_time": "16:50",
+          "end_time": "18:45",
+          "day": "Tuesday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": "9.3.2, 9.3.2.6, 9.3.2.3",
+          "group_header": "6GR Rel-20",
+          "description": "Control plane",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "9.3.2",
+              "matched_agenda_item": "9.3.2",
+              "description": "Control plane",
+              "hierarchy": [
+                {
+                  "agenda_item": "9",
+                  "description": "6GR Rel-20 - Study on 6G Radio Access Technology"
+                },
+                {
+                  "agenda_item": "9.3",
+                  "description": "Radio protocol architecture"
+                },
+                {
+                  "agenda_item": "9.3.2",
+                  "description": "Control plane"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "main"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "[9.3.2] 6GR Control Plane",
+            "[9.3.2.6] Idle/inactive",
+            "[9.3.2.3] System information"
+          ]
+        },
+        {
+          "name": "Offline on AI/ML",
+          "duration_minutes": 60,
+          "start_time": "18:00",
+          "end_time": "19:00",
+          "day": "Tuesday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": null,
+          "group_header": "Offline",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [
+            "brk2"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "[005] Offline on AI/ML (if needed)"
+          ]
+        }
+      ],
+      "date": "2026-10-13",
+      "timeline": {
+        "start": "08:30",
+        "end": "19:00",
+        "slot_minutes": 5,
+        "label_minutes": 30,
+        "breaks": [
+          {
+            "name": "Morning coffee",
+            "start": "10:30",
+            "end": "11:00",
+            "label_position": "time-axis"
+          },
+          {
+            "name": "Lunch",
+            "start": "13:00",
+            "end": "14:30",
+            "label_position": "time-axis"
+          },
+          {
+            "name": "Afternoon coffee",
+            "start": "16:25",
+            "end": "16:50",
+            "label_position": "time-axis"
+          }
+        ],
+        "blocks": []
+      }
+    },
+    {
+      "day_name": "Wednesday",
+      "rooms": [
+        {
+          "name": "Main",
+          "table_index": 0,
+          "room_index_in_table": 0,
+          "id": "main"
+        },
+        {
+          "name": "Breakout 1",
+          "table_index": 0,
+          "room_index_in_table": 0,
+          "id": "brk1"
+        },
+        {
+          "name": "Breakout 2",
+          "table_index": 0,
+          "room_index_in_table": 0,
+          "id": "brk2"
+        }
+      ],
+      "sessions": [
+        {
+          "name": "NR19 AI/ML PHY",
+          "duration_minutes": 60,
+          "start_time": "08:30",
+          "end_time": "09:30",
+          "day": "Wednesday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "Erlin",
+          "agenda_item": "7.1",
+          "group_header": "NR Rel-19",
+          "description": "AI/ML for NR air interface",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "7.1",
+              "matched_agenda_item": "7.1",
+              "description": "AI/ML for NR air interface",
+              "hierarchy": [
+                {
+                  "agenda_item": "7",
+                  "description": "NR Rel-19"
+                },
+                {
+                  "agenda_item": "7.1",
+                  "description": "AI/ML for NR air interface"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "brk1"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "@8:30-9:30",
+            "[7.1] NR19 AI/ML PHY [0] (Erlin)"
+          ]
+        },
+        {
+          "name": "Mobility pre-meeting offline",
+          "duration_minutes": 90,
+          "start_time": "08:30",
+          "end_time": "10:00",
+          "day": "Wednesday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "Jedrzej",
+          "agenda_item": "9.4.1",
+          "group_header": "Offline",
+          "description": "Connected mode mobility",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "9.4.1",
+              "matched_agenda_item": "9.4.1",
+              "description": "Connected mode mobility",
+              "hierarchy": [
+                {
+                  "agenda_item": "9",
+                  "description": "6GR Rel-20 - Study on 6G Radio Access Technology"
+                },
+                {
+                  "agenda_item": "9.4",
+                  "description": "Mobility"
+                },
+                {
+                  "agenda_item": "9.4.1",
+                  "description": "Connected mode mobility"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "brk2"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "[9.4.1] Mobility pre-meeting offline (Jedrzej)"
+          ]
+        },
+        {
+          "name": "6GR User Plane",
+          "duration_minutes": 120,
+          "start_time": "08:30",
+          "end_time": "10:30",
+          "day": "Wednesday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": "9.3.1, 9.3.1.3.2",
+          "group_header": "6GR Rel-20",
+          "description": "User plane",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "9.3.1",
+              "matched_agenda_item": "9.3.1",
+              "description": "User plane",
+              "hierarchy": [
+                {
+                  "agenda_item": "9",
+                  "description": "6GR Rel-20 - Study on 6G Radio Access Technology"
+                },
+                {
+                  "agenda_item": "9.3",
+                  "description": "Radio protocol architecture"
+                },
+                {
+                  "agenda_item": "9.3.1",
+                  "description": "User plane"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "main"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "[9.3.1] 6GR User Plane",
+            "[9.3.1.3.2] Other MAC functs"
+          ]
+        },
+        {
+          "name": "NR20 AI/M PHY",
+          "duration_minutes": 60,
+          "start_time": "09:30",
+          "end_time": "10:30",
+          "day": "Wednesday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "Erlin",
+          "agenda_item": "8.1, 8.1.1, 8.1.2, 8.1.3",
+          "group_header": "NR Rel-20",
+          "description": "AI/ML for PHY Ph2",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "8.1",
+              "matched_agenda_item": "8.1",
+              "description": "AI/ML for PHY Ph2",
+              "hierarchy": [
+                {
+                  "agenda_item": "8",
+                  "description": "NR Rel-20"
+                },
+                {
+                  "agenda_item": "8.1",
+                  "description": "AI/ML for PHY Ph2"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "brk1"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "@9:30-10:30",
+            "[8.1] NR20 AI/M PHY [2] (Erlin)",
+            "[8.1.3] if time allows"
+          ]
+        },
+        {
+          "name": "ISAC/CP offline?",
+          "duration_minutes": 60,
+          "start_time": "10:00",
+          "end_time": "11:00",
+          "day": "Wednesday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": null,
+          "group_header": "Offline",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [
+            "brk2"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "ISAC/CP offline?"
+          ]
+        },
+        {
+          "name": "common AI PHY and AI mob issues",
+          "duration_minutes": 60,
+          "start_time": "11:00",
+          "end_time": "12:00",
+          "day": "Wednesday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "Erlin, Kyeongin",
+          "agenda_item": null,
+          "group_header": "",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [
+            "brk1"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "common AI PHY and AI mob issues (Erlin, Kyeongin)"
+          ]
+        },
+        {
+          "name": "CP offline",
+          "duration_minutes": 30,
+          "start_time": "11:00",
+          "end_time": "11:30",
+          "day": "Wednesday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": null,
+          "group_header": "Offline",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [
+            "brk2"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "CP offline"
+          ]
+        },
+        {
+          "name": "TEI20",
+          "duration_minutes": 30,
+          "start_time": "11:00",
+          "end_time": "11:30",
+          "day": "Wednesday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": "8.13",
+          "group_header": "NR Rel-20",
+          "description": "NR Others",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "8.13",
+              "matched_agenda_item": "8.13",
+              "description": "NR Others",
+              "hierarchy": [
+                {
+                  "agenda_item": "8",
+                  "description": "NR Rel-20"
+                },
+                {
+                  "agenda_item": "8.13",
+                  "description": "NR Others"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "main"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "[8.13] TEI20"
+          ]
+        },
+        {
+          "name": "CA pre-meeting offline",
+          "duration_minutes": 90,
+          "start_time": "11:30",
+          "end_time": "13:00",
+          "day": "Wednesday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "Mattias",
+          "agenda_item": "9.3.2.5",
+          "group_header": "Offline",
+          "description": "Spectrum aggregation",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "9.3.2.5",
+              "matched_agenda_item": "9.3.2.5",
+              "description": "Spectrum aggregation",
+              "hierarchy": [
+                {
+                  "agenda_item": "9",
+                  "description": "6GR Rel-20 - Study on 6G Radio Access Technology"
+                },
+                {
+                  "agenda_item": "9.3",
+                  "description": "Radio protocol architecture"
+                },
+                {
+                  "agenda_item": "9.3.2",
+                  "description": "Control plane"
+                },
+                {
+                  "agenda_item": "9.3.2.5",
+                  "description": "Spectrum aggregation"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "brk2"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "[9.3.2.5] CA pre-meeting offline (Mattias)"
+          ]
+        },
+        {
+          "name": "Mobility",
+          "duration_minutes": 90,
+          "start_time": "11:30",
+          "end_time": "13:00",
+          "day": "Wednesday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": "9.4.1",
+          "group_header": "6GR Rel-20",
+          "description": "Connected mode mobility",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "9.4.1",
+              "matched_agenda_item": "9.4.1",
+              "description": "Connected mode mobility",
+              "hierarchy": [
+                {
+                  "agenda_item": "9",
+                  "description": "6GR Rel-20 - Study on 6G Radio Access Technology"
+                },
+                {
+                  "agenda_item": "9.4",
+                  "description": "Mobility"
+                },
+                {
+                  "agenda_item": "9.4.1",
+                  "description": "Connected mode mobility"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "main"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "[9.4.1] Mobility",
+            "Topics not included in offline (e.g. UE power saving mobility, others)"
+          ]
+        },
+        {
+          "name": "NR20 AI/M PHY",
+          "duration_minutes": 60,
+          "start_time": "12:00",
+          "end_time": "13:00",
+          "day": "Wednesday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "Erlin",
+          "agenda_item": "8.1, 8.1.2, 8.1.3",
+          "group_header": "NR Rel-20",
+          "description": "AI/ML for PHY Ph2",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "8.1",
+              "matched_agenda_item": "8.1",
+              "description": "AI/ML for PHY Ph2",
+              "hierarchy": [
+                {
+                  "agenda_item": "8",
+                  "description": "NR Rel-20"
+                },
+                {
+                  "agenda_item": "8.1",
+                  "description": "AI/ML for PHY Ph2"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "brk1"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "[8.1] NR20 AI/M PHY [2] (Erlin)",
+            "[8.1.2] cont."
+          ]
+        },
+        {
+          "name": "NR20 Mobility",
+          "duration_minutes": 120,
+          "start_time": "14:30",
+          "end_time": "16:30",
+          "day": "Wednesday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "Kyeongin",
+          "agenda_item": "8.4, 8.4.1, 8.4.2, 8.4.3",
+          "group_header": "NR Rel-20",
+          "description": "Mobility Enh Ph5",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "8.4",
+              "matched_agenda_item": "8.4",
+              "description": "Mobility Enh Ph5",
+              "hierarchy": [
+                {
+                  "agenda_item": "8",
+                  "description": "NR Rel-20"
+                },
+                {
+                  "agenda_item": "8.4",
+                  "description": "Mobility Enh Ph5"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "brk1"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "[8.4] NR20 Mobility [1] (Kyeongin)",
+            "[8.4.1] Organizational",
+            "[8.4.2] LTM SCell activation",
+            "[8.4.3] Dynamic L1 measurement configuration"
+          ]
+        },
+        {
+          "name": "NR20 AIoT",
+          "duration_minutes": 120,
+          "start_time": "14:30",
+          "end_time": "16:30",
+          "day": "Wednesday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "Nathan",
+          "agenda_item": "8.2, 8.2.3, 8.2.4",
+          "group_header": "NR Rel-20",
+          "description": "Ambient IoT Ph2",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "8.2",
+              "matched_agenda_item": "8.2",
+              "description": "Ambient IoT Ph2",
+              "hierarchy": [
+                {
+                  "agenda_item": "8",
+                  "description": "NR Rel-20"
+                },
+                {
+                  "agenda_item": "8.2",
+                  "description": "Ambient IoT Ph2"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "brk2"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "[8.2] NR20 AIoT [2] (Nathan)",
+            "[8.2.3] T2 (start with email summary)",
+            "[8.2.4] Device (un)availability"
+          ]
+        },
+        {
+          "name": "Common UP/CP",
+          "duration_minutes": 120,
+          "start_time": "14:30",
+          "end_time": "16:30",
+          "day": "Wednesday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": "9.3.3, 9.3.3.3",
+          "group_header": "6GR Rel-20",
+          "description": "Common User plane and Control plane",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "9.3.3",
+              "matched_agenda_item": "9.3.3",
+              "description": "Common User plane and Control plane",
+              "hierarchy": [
+                {
+                  "agenda_item": "9",
+                  "description": "6GR Rel-20 - Study on 6G Radio Access Technology"
+                },
+                {
+                  "agenda_item": "9.3",
+                  "description": "Radio protocol architecture"
+                },
+                {
+                  "agenda_item": "9.3.3",
+                  "description": "Common User plane and Control plane"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "main"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "[9.3.3] Common UP/CP",
+            "[9.3.3.3] Energy efficiency"
+          ]
+        },
+        {
+          "name": "NR18/19/20 XR / NR18 XR / NR19 XR …",
+          "duration_minutes": 120,
+          "start_time": "17:00",
+          "end_time": "19:00",
+          "day": "Wednesday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "Dawid",
+          "agenda_item": "6.0.2.16, 7.7, 8.5",
+          "group_header": "NR Rel-18",
+          "description": "XR Enhancements for NR\nXR Enhancements Ph3\nXR Enhancements Ph4",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "6.0.2.16",
+              "matched_agenda_item": "6.0.2.16",
+              "description": "XR Enhancements for NR",
+              "hierarchy": [
+                {
+                  "agenda_item": "6",
+                  "description": "NR Rel-18"
+                },
+                {
+                  "agenda_item": "6.0",
+                  "description": "Common"
+                },
+                {
+                  "agenda_item": "6.0.2",
+                  "description": "Rel-18 corrections"
+                },
+                {
+                  "agenda_item": "6.0.2.16",
+                  "description": "XR Enhancements for NR"
+                }
+              ]
+            },
+            {
+              "agenda_item": "7.7",
+              "matched_agenda_item": "7.7",
+              "description": "XR Enhancements Ph3",
+              "hierarchy": [
+                {
+                  "agenda_item": "7",
+                  "description": "NR Rel-19"
+                },
+                {
+                  "agenda_item": "7.7",
+                  "description": "XR Enhancements Ph3"
+                }
+              ]
+            },
+            {
+              "agenda_item": "8.5",
+              "matched_agenda_item": "8.5",
+              "description": "XR Enhancements Ph4",
+              "hierarchy": [
+                {
+                  "agenda_item": "8",
+                  "description": "NR Rel-20"
+                },
+                {
+                  "agenda_item": "8.5",
+                  "description": "XR Enhancements Ph4"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "brk1"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "NR18/19/20 XR (Dawid)",
+            "[6.0.2.16] NR18 XR",
+            "[7.7] NR19 XR",
+            "[8.5] NR 20 XR"
+          ]
+        },
+        {
+          "name": "NR20 AIoT",
+          "duration_minutes": 120,
+          "start_time": "17:00",
+          "end_time": "19:00",
+          "day": "Wednesday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "Nathan",
+          "agenda_item": "8.2",
+          "group_header": "NR Rel-20",
+          "description": "Ambient IoT Ph2",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "8.2",
+              "matched_agenda_item": "8.2",
+              "description": "Ambient IoT Ph2",
+              "hierarchy": [
+                {
+                  "agenda_item": "8",
+                  "description": "NR Rel-20"
+                },
+                {
+                  "agenda_item": "8.2",
+                  "description": "Ambient IoT Ph2"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "brk2"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "[8.2] NR20 AIoT [2] (Nathan)",
+            "Overflow if needed"
+          ]
+        },
+        {
+          "name": "NTN",
+          "duration_minutes": 120,
+          "start_time": "17:00",
+          "end_time": "19:00",
+          "day": "Wednesday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": "9.6",
+          "group_header": "6GR Rel-20",
+          "description": "NTN",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "9.6",
+              "matched_agenda_item": "9.6",
+              "description": "NTN",
+              "hierarchy": [
+                {
+                  "agenda_item": "9",
+                  "description": "6GR Rel-20 - Study on 6G Radio Access Technology"
+                },
+                {
+                  "agenda_item": "9.6",
+                  "description": "NTN"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "main"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "[9.6] NTN",
+            "Report from Erlin’s session",
+            "Other untreated topics"
+          ]
+        }
+      ],
+      "date": "2026-10-14",
+      "timeline": {
+        "start": "08:30",
+        "end": "19:00",
+        "slot_minutes": 5,
+        "label_minutes": 30,
+        "breaks": [
+          {
+            "name": "Morning coffee",
+            "start": "10:30",
+            "end": "11:00",
+            "label_position": "time-axis"
+          },
+          {
+            "name": "Lunch",
+            "start": "13:00",
+            "end": "14:30",
+            "label_position": "time-axis"
+          },
+          {
+            "name": "Afternoon coffee",
+            "start": "16:30",
+            "end": "17:00",
+            "label_position": "time-axis"
+          }
+        ],
+        "blocks": []
+      }
+    },
+    {
+      "day_name": "Thursday",
+      "rooms": [
+        {
+          "name": "Main",
+          "table_index": 0,
+          "room_index_in_table": 0,
+          "id": "main"
+        },
+        {
+          "name": "Breakout 1",
+          "table_index": 0,
+          "room_index_in_table": 0,
+          "id": "brk1"
+        },
+        {
+          "name": "Breakout 2",
+          "table_index": 0,
+          "room_index_in_table": 0,
+          "id": "brk2"
+        }
+      ],
+      "sessions": [
+        {
+          "name": "R20 IoT NTN",
+          "duration_minutes": 120,
+          "start_time": "08:30",
+          "end_time": "10:30",
+          "day": "Thursday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "Sergio",
+          "agenda_item": "8.7, 8.7.3",
+          "group_header": "NR Rel-20",
+          "description": "IoT NTN Ph4",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "8.7",
+              "matched_agenda_item": "8.7",
+              "description": "IoT NTN Ph4",
+              "hierarchy": [
+                {
+                  "agenda_item": "8",
+                  "description": "NR Rel-20"
+                },
+                {
+                  "agenda_item": "8.7",
+                  "description": "IoT NTN Ph4"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "brk1"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "[8.7] R20 IoT NTN [1] (Sergio)"
+          ]
+        },
+        {
+          "name": "UP offline",
+          "duration_minutes": 120,
+          "start_time": "08:30",
+          "end_time": "10:30",
+          "day": "Thursday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": null,
+          "group_header": "Offline",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [
+            "brk2"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "UP offline"
+          ]
+        },
+        {
+          "name": "6GR Control Plane / UE capabilities after offline",
+          "duration_minutes": 120,
+          "start_time": "08:30",
+          "end_time": "10:30",
+          "day": "Thursday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": "9.3.2, 9.2.1, 9.3.2.2",
+          "group_header": "6GR Rel-20",
+          "description": "Control plane\nUE capability framework",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "9.3.2",
+              "matched_agenda_item": "9.3.2",
+              "description": "Control plane",
+              "hierarchy": [
+                {
+                  "agenda_item": "9",
+                  "description": "6GR Rel-20 - Study on 6G Radio Access Technology"
+                },
+                {
+                  "agenda_item": "9.3",
+                  "description": "Radio protocol architecture"
+                },
+                {
+                  "agenda_item": "9.3.2",
+                  "description": "Control plane"
+                }
+              ]
+            },
+            {
+              "agenda_item": "9.2.1",
+              "matched_agenda_item": "9.2.1",
+              "description": "UE capability framework",
+              "hierarchy": [
+                {
+                  "agenda_item": "9",
+                  "description": "6GR Rel-20 - Study on 6G Radio Access Technology"
+                },
+                {
+                  "agenda_item": "9.2",
+                  "description": "General aspects"
+                },
+                {
+                  "agenda_item": "9.2.1",
+                  "description": "UE capability framework"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "main"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "[9.3.2] 6GR Control Plane",
+            "[9.2.1] UE capabilities after offline",
+            "[9.3.2.2] RRC structure after offline"
+          ]
+        },
+        {
+          "name": "Cont. NTN R20 GNSS",
+          "duration_minutes": 60,
+          "start_time": "10:50",
+          "end_time": "11:50",
+          "day": "Thursday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "Erlin",
+          "agenda_item": "8.11.2",
+          "group_header": "NR Rel-20",
+          "description": "Other",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "8.11.2",
+              "matched_agenda_item": "8.11.2",
+              "description": "Other",
+              "hierarchy": [
+                {
+                  "agenda_item": "8",
+                  "description": "NR Rel-20"
+                },
+                {
+                  "agenda_item": "8.11",
+                  "description": "GNSS resilient NR-NTN operation"
+                },
+                {
+                  "agenda_item": "8.11.2",
+                  "description": "Other"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "brk1"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "Cont. NTN R20 GNSS (Erlin)",
+            "[8.11.2] cont., to cover the listed proposals"
+          ]
+        },
+        {
+          "name": "UP offline",
+          "duration_minutes": 120,
+          "start_time": "11:00",
+          "end_time": "13:00",
+          "day": "Thursday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": null,
+          "group_header": "Offline",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [
+            "brk2"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "UP offline",
+            "Also listed here: CB Mattias / CB EUTRA&NR15161718 / CB NR19 SONMDT …"
+          ]
+        },
+        {
+          "name": "ISAC",
+          "duration_minutes": 120,
+          "start_time": "11:00",
+          "end_time": "13:00",
+          "day": "Thursday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": "9.5",
+          "group_header": "6GR Rel-20",
+          "description": "ISAC",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "9.5",
+              "matched_agenda_item": "9.5",
+              "description": "ISAC",
+              "hierarchy": [
+                {
+                  "agenda_item": "9",
+                  "description": "6GR Rel-20 - Study on 6G Radio Access Technology"
+                },
+                {
+                  "agenda_item": "9.5",
+                  "description": "ISAC"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "main"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "[9.5] ISAC"
+          ]
+        },
+        {
+          "name": "NR20 CovEnh",
+          "duration_minutes": 60,
+          "start_time": "11:50",
+          "end_time": "12:50",
+          "day": "Thursday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "Erlin",
+          "agenda_item": "8.9.1, 8.9.2",
+          "group_header": "NR Rel-20",
+          "description": "Organizational\nOther",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "8.9.1",
+              "matched_agenda_item": "8.9.1",
+              "description": "Organizational",
+              "hierarchy": [
+                {
+                  "agenda_item": "8",
+                  "description": "NR Rel-20"
+                },
+                {
+                  "agenda_item": "8.9",
+                  "description": "Coverage enhancements Ph3"
+                },
+                {
+                  "agenda_item": "8.9.1",
+                  "description": "Organizational"
+                }
+              ]
+            },
+            {
+              "agenda_item": "8.9.2",
+              "matched_agenda_item": "8.9.2",
+              "description": "Other",
+              "hierarchy": [
+                {
+                  "agenda_item": "8",
+                  "description": "NR Rel-20"
+                },
+                {
+                  "agenda_item": "8.9",
+                  "description": "Coverage enhancements Ph3"
+                },
+                {
+                  "agenda_item": "8.9.2",
+                  "description": "Other"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "brk1"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "NR20 CovEnh (Erlin)"
+          ]
+        },
+        {
+          "name": "CB Kyeongin",
+          "duration_minutes": 120,
+          "start_time": "14:30",
+          "end_time": "16:30",
+          "day": "Thursday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": "8.4.3",
+          "group_header": "NR Rel-20",
+          "description": "Dynamic L1 measurement and reporting configuration change",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "8.4.3",
+              "matched_agenda_item": "8.4.3",
+              "description": "Dynamic L1 measurement and reporting configuration change",
+              "hierarchy": [
+                {
+                  "agenda_item": "8",
+                  "description": "NR Rel-20"
+                },
+                {
+                  "agenda_item": "8.4",
+                  "description": "Mobility Enh Ph5"
+                },
+                {
+                  "agenda_item": "8.4.3",
+                  "description": "Dynamic L1 measurement and reporting configuration change"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "brk1"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "CB Kyeongin",
+            "R19 NES comebacks",
+            "R18/19/20 Mob comebacks/continue [8.4.3]"
+          ]
+        },
+        {
+          "name": "CB Nathan / NR1718 Positioning / NR19 SL relay …",
+          "duration_minutes": 120,
+          "start_time": "14:30",
+          "end_time": "16:30",
+          "day": "Thursday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": "6.0.2.21, 7.13, 7.2, 8.2",
+          "group_header": "NR Rel-18",
+          "description": "Expanded and improved NR positioning\nNR sidelink multi-hop relay\nAmbient IoT\nAmbient IoT Ph2",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "6.0.2.21",
+              "matched_agenda_item": "6.0.2.21",
+              "description": "Expanded and improved NR positioning",
+              "hierarchy": [
+                {
+                  "agenda_item": "6",
+                  "description": "NR Rel-18"
+                },
+                {
+                  "agenda_item": "6.0",
+                  "description": "Common"
+                },
+                {
+                  "agenda_item": "6.0.2",
+                  "description": "Rel-18 corrections"
+                },
+                {
+                  "agenda_item": "6.0.2.21",
+                  "description": "Expanded and improved NR positioning"
+                }
+              ]
+            },
+            {
+              "agenda_item": "7.13",
+              "matched_agenda_item": "7.13",
+              "description": "NR sidelink multi-hop relay",
+              "hierarchy": [
+                {
+                  "agenda_item": "7",
+                  "description": "NR Rel-19"
+                },
+                {
+                  "agenda_item": "7.13",
+                  "description": "NR sidelink multi-hop relay"
+                }
+              ]
+            },
+            {
+              "agenda_item": "7.2",
+              "matched_agenda_item": "7.2",
+              "description": "Ambient IoT",
+              "hierarchy": [
+                {
+                  "agenda_item": "7",
+                  "description": "NR Rel-19"
+                },
+                {
+                  "agenda_item": "7.2",
+                  "description": "Ambient IoT"
+                }
+              ]
+            },
+            {
+              "agenda_item": "8.2",
+              "matched_agenda_item": "8.2",
+              "description": "Ambient IoT Ph2",
+              "hierarchy": [
+                {
+                  "agenda_item": "8",
+                  "description": "NR Rel-20"
+                },
+                {
+                  "agenda_item": "8.2",
+                  "description": "Ambient IoT Ph2"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "brk2"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "CB Nathan (agenda items TBR during week)",
+            "[6.0.2.21] NR1718 Positioning",
+            "[7.13] NR19 SL relay",
+            "[7.2] NR19 AIoT",
+            "[8.2] NR20 AIoT"
+          ]
+        },
+        {
+          "name": "Common CP/UP",
+          "duration_minutes": 120,
+          "start_time": "14:30",
+          "end_time": "16:30",
+          "day": "Thursday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": "9.3.3, 9.3.3.4, 9.3.3.2",
+          "group_header": "6GR Rel-20",
+          "description": "Common User plane and Control plane",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "9.3.3",
+              "matched_agenda_item": "9.3.3",
+              "description": "Common User plane and Control plane",
+              "hierarchy": [
+                {
+                  "agenda_item": "9",
+                  "description": "6GR Rel-20 - Study on 6G Radio Access Technology"
+                },
+                {
+                  "agenda_item": "9.3",
+                  "description": "Radio protocol architecture"
+                },
+                {
+                  "agenda_item": "9.3.3",
+                  "description": "Common User plane and Control plane"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "main"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "[9.3.3] Common CP/UP",
+            "[9.3.3.4] Early reporting con’t (including CP related aspects)",
+            "[9.3.3.2] AI/ML"
+          ]
+        },
+        {
+          "name": "CB Sergio",
+          "duration_minutes": 120,
+          "start_time": "17:00",
+          "end_time": "19:00",
+          "day": "Thursday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": null,
+          "group_header": "",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [
+            "brk1"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "CB Sergio"
+          ]
+        },
+        {
+          "name": "Mobility",
+          "duration_minutes": 120,
+          "start_time": "17:00",
+          "end_time": "19:00",
+          "day": "Thursday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": "9.4.1, 9.4.2",
+          "group_header": "6GR Rel-20",
+          "description": "Connected mode mobility\nMeasurements",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "9.4.1",
+              "matched_agenda_item": "9.4.1",
+              "description": "Connected mode mobility",
+              "hierarchy": [
+                {
+                  "agenda_item": "9",
+                  "description": "6GR Rel-20 - Study on 6G Radio Access Technology"
+                },
+                {
+                  "agenda_item": "9.4",
+                  "description": "Mobility"
+                },
+                {
+                  "agenda_item": "9.4.1",
+                  "description": "Connected mode mobility"
+                }
+              ]
+            },
+            {
+              "agenda_item": "9.4.2",
+              "matched_agenda_item": "9.4.2",
+              "description": "Measurements",
+              "hierarchy": [
+                {
+                  "agenda_item": "9",
+                  "description": "6GR Rel-20 - Study on 6G Radio Access Technology"
+                },
+                {
+                  "agenda_item": "9.4",
+                  "description": "Mobility"
+                },
+                {
+                  "agenda_item": "9.4.2",
+                  "description": "Measurements"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "main"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "[9.4.1] Mobility",
+            "Offline report",
+            "[9.4.2] measurements"
+          ]
+        }
+      ],
+      "date": "2026-10-15",
+      "timeline": {
+        "start": "08:30",
+        "end": "19:00",
+        "slot_minutes": 5,
+        "label_minutes": 30,
+        "breaks": [
+          {
+            "name": "Morning coffee",
+            "start": "10:30",
+            "end": "11:00",
+            "label_position": "time-axis"
+          },
+          {
+            "name": "Lunch",
+            "start": "13:00",
+            "end": "14:30",
+            "label_position": "time-axis"
+          },
+          {
+            "name": "Afternoon coffee",
+            "start": "16:30",
+            "end": "17:00",
+            "label_position": "time-axis"
+          }
+        ],
+        "blocks": []
+      }
+    },
+    {
+      "day_name": "Friday",
+      "rooms": [
+        {
+          "name": "Main",
+          "table_index": 0,
+          "room_index_in_table": 0,
+          "id": "main"
+        },
+        {
+          "name": "Breakout 1",
+          "table_index": 0,
+          "room_index_in_table": 0,
+          "id": "brk1"
+        },
+        {
+          "name": "Breakout 2",
+          "table_index": 0,
+          "room_index_in_table": 0,
+          "id": "brk2"
+        }
+      ],
+      "sessions": [
+        {
+          "name": "CB Kyeongin",
+          "duration_minutes": 60,
+          "start_time": "08:30",
+          "end_time": "09:30",
+          "day": "Friday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": null,
+          "group_header": "",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [
+            "brk1"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "CB Kyeongin (TBD)",
+            "CB Erlin"
+          ]
+        },
+        {
+          "name": "CB Sergio",
+          "duration_minutes": 60,
+          "start_time": "09:30",
+          "end_time": "10:30",
+          "day": "Friday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": null,
+          "group_header": "",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [
+            "brk2"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "CB Sergio"
+          ]
+        },
+        {
+          "name": "CB Diana TBD / 6GR User Plane",
+          "duration_minutes": 60,
+          "start_time": "09:30",
+          "end_time": "10:30",
+          "day": "Friday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": "9.3.1",
+          "group_header": "6GR Rel-20",
+          "description": "User plane",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "9.3.1",
+              "matched_agenda_item": "9.3.1",
+              "description": "User plane",
+              "hierarchy": [
+                {
+                  "agenda_item": "9",
+                  "description": "6GR Rel-20 - Study on 6G Radio Access Technology"
+                },
+                {
+                  "agenda_item": "9.3",
+                  "description": "Radio protocol architecture"
+                },
+                {
+                  "agenda_item": "9.3.1",
+                  "description": "User plane"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "main"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "CB Diana TBD",
+            "[9.3.1] 6GR User Plane",
+            "TBD"
+          ]
+        },
+        {
+          "name": "6GR Control Plane",
+          "duration_minutes": 120,
+          "start_time": "11:00",
+          "end_time": "13:00",
+          "day": "Friday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": "9.3.1",
+          "group_header": "6GR Rel-20",
+          "description": "User plane",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "9.3.1",
+              "matched_agenda_item": "9.3.1",
+              "description": "User plane",
+              "hierarchy": [
+                {
+                  "agenda_item": "9",
+                  "description": "6GR Rel-20 - Study on 6G Radio Access Technology"
+                },
+                {
+                  "agenda_item": "9.3",
+                  "description": "Radio protocol architecture"
+                },
+                {
+                  "agenda_item": "9.3.1",
+                  "description": "User plane"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "main"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "[9.3.1] 6GR Control Plane",
+            "TBD",
+            "Reports from breakout sessions",
+            "EoM"
+          ]
+        }
+      ],
+      "date": "2026-10-16",
+      "timeline": {
+        "start": "08:30",
+        "end": "13:00",
+        "slot_minutes": 5,
+        "label_minutes": 30,
+        "breaks": [
+          {
+            "name": "Morning coffee",
+            "start": "10:30",
+            "end": "11:00",
+            "label_position": "time-axis"
+          }
+        ],
+        "blocks": []
+      }
+    }
+  ],
+  "source_file": "R2_135b_Schedule_v00.docx",
+  "generated_at": "2026-10-05 17:21",
+  "contact_name": "",
+  "contact_email": "",
+  "source_files": [
+    "R2_135b_Schedule_v00.docx",
+    "agenda.csv"
+  ],
+  "timezone": "Asia/Seoul",
+  "wg_id": "ran2",
+  "meeting_id": "ran2#135bis",
+  "starts_on": "2026-10-12",
+  "ends_on": "2026-10-16",
+  "starts_at": "2026-10-12T09:00:00+09:00",
+  "ends_at": "2026-10-16T17:30:00+09:00",
+  "is_demo": false,
+  "topic_references": [],
+  "topic_preamble": [],
+  "supplements": [
+    {
+      "type": "heading",
+      "text": "Dates and deadlines"
+    },
+    {
+      "type": "table",
+      "header": false,
+      "rows": [
+        [
+          "Oct. 2nd 10:00 UTC",
+          "Tdoc Submission Deadline."
+        ]
+      ]
+    },
+    {
+      "type": "paragraph",
+      "text": "NOTE that this schedule may be modified on short notice.\nSome Expectations: Details may be added every day. The Schedule for CBs on Thursday (and Friday) will be updated on Wednesday, and the schedule for CBs on Friday will be further updated on Thursday.",
+      "bold": false
+    },
+    {
+      "type": "paragraph",
+      "text": "* Offline discussions should be well scoped and only 30mins in duration.",
+      "bold": false
+    },
+    {
+      "type": "heading",
+      "text": "Breaks"
+    },
+    {
+      "type": "table",
+      "header": false,
+      "rows": [
+        [
+          "Morning coffee:",
+          "10:30 to 11:00"
+        ],
+        [
+          "Lunch:",
+          "13:00 to 14:30"
+        ],
+        [
+          "Afternoon coffee:",
+          "16:30 to 17:00"
+        ]
+      ]
+    },
+    {
+      "type": "heading",
+      "text": "List of Offline Face to Face discussions"
+    },
+    {
+      "type": "table",
+      "header": true,
+      "rows": [
+        [
+          "Number",
+          "Title",
+          "Day/Time",
+          "Place",
+          "Coordinator"
+        ]
+      ]
+    },
+    {
+      "type": "heading",
+      "text": "Notes in the schedule table"
+    },
+    {
+      "type": "table",
+      "header": true,
+      "rows": [
+        [
+          "Day",
+          "Note"
+        ],
+        [
+          "Tuesday",
+          "End at 6:45pm – social topic/feature dinners"
+        ],
+        [
+          "Thursday",
+          "Colorful Polo Day"
+        ]
+      ]
+    }
+  ]
+}
