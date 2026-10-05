@@ -4,31 +4,40 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RAN#113 - Schedule</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
     <style>:root {
     --base-slot-height: 10px;
     --time-col-width: 36px;
     --header-height: 36px;
-    --break-bg: #F3F4F6;
-    --grid-line: #E5E7EB;
-    --bg: #FFFFFF;
-    --text: #1F2937;
+    --page-bg: #F6F7F9;
+    --surface: #FFFFFF;
+    --hairline: #E7E9EE;
+    --ink: #0F172A;
+    --ink-2: #475569;
+    --ink-3: #8A94A6;
+    --ink-4: #A9B1BF;
+    --radius-lg: 12px;
+    --radius-sm: 6px;
+    --break-bg: #F8F9FB;
+    --grid-line: #EEF0F3;
+    /* Header meta keeps its own grey; nothing else uses it. */
     --text-muted: #6B7280;
-    --border: #D1D5DB;
-    --shadow: 0 1px 3px rgba(0,0,0,0.1);
-    --session-surface-top: #FFFFFF;
-    --session-surface-bottom: #F2F3F5;
-    --session-outline: #D7DCE2;
-    --session-relief: inset 0 1px 0 rgba(255,255,255,0.9), 0 1px 2px rgba(31,41,55,0.06);
+    /* Category colours stay raw in the data. Session bars and legend dots
+       both show them muted by this one mix. */
+    --accent-strength: 62%;
+    --accent-mute: #64748B;
     --dim-opacity: 0.30;
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    background: #F9FAFB;
-    color: var(--text);
+    font-family: "Pretendard Variable", Pretendard, Inter, -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+    background: var(--page-bg);
+    color: var(--ink);
     line-height: 1.4;
+    -webkit-font-smoothing: antialiased;
+    font-feature-settings: "tnum" 1;
 }
 
 .container {
@@ -38,15 +47,26 @@ body {
 }
 
 header {
+    --title-size: 22px;
+    --title-line: 28px;
     text-align: center;
     margin-bottom: 16px;
 }
 
 header h1 {
-    font-size: 22px;
+    font-size: var(--title-size);
+    line-height: var(--title-line);
     font-weight: 700;
-    color: var(--text);
+    letter-spacing: -0.02em;
+    color: var(--ink);
     margin-bottom: 4px;
+}
+
+/* On the baseline the glyph's middle already sits on the capitals' middle. */
+.wg-emoji {
+    font-size: .9em;
+    line-height: 1;
+    margin-right: .3em;
 }
 
 header .meta {
@@ -58,23 +78,35 @@ header .meta {
 .wg-navigation {
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
-    align-items: center;
+    align-items: baseline;
     gap: 24px;
     margin: 8px auto 18px;
 }
-.wg-side { display: flex; gap: 20px; align-items: center; flex-wrap: wrap; }
+.wg-side { display: flex; gap: 20px; align-items: baseline; flex-wrap: wrap; }
 .wg-left { justify-content: flex-end; }
 .wg-right { justify-content: flex-start; }
-.wg-link { color: var(--text-muted); font-size: 14px; text-decoration: none; }
-.wg-link:hover { color: var(--text); text-decoration: underline; }
-.wg-current h1 { margin: 0; font-size: 24px; }
-.wg-current a { color: var(--text); text-decoration: none; }
+.wg-link { color: var(--ink-3); font-size: 13px; font-weight: 500; line-height: 1.2; text-decoration: none; }
+/* A zero-width strut the size of the current title: a sibling's first line
+   gets the title's height and baseline, so names and statuses line up. */
+.wg-link::before { content: "\200B"; font-size: var(--title-size); line-height: var(--title-line); }
+.wg-link:hover { color: var(--ink); text-decoration: underline; }
+.wg-current h1 { margin: 0; }
+.wg-current a { color: var(--ink); text-decoration: none; }
 .wg-navigation a:focus-visible { outline: 2px solid #2563EB; outline-offset: 5px; border-radius: 2px; }
-.meeting-status { display: block; font-size: 11px; color: var(--text-muted); font-weight: 400; margin-top: 3px; }
+.meeting-status {
+    display: block;
+    margin-top: 2px;
+    font-size: 10.5px;
+    line-height: 1.4;
+    font-weight: 600;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    color: var(--ink-4);
+}
 .demo-notice { margin: 8px auto; color: #92400E; font-size: 13px; }
 @media (max-width: 600px) {
+    header { --title-size: 18px; --title-line: 24px; }
     .wg-navigation { gap: 10px; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); }
-    .wg-current h1 { font-size: 19px; }
     .wg-link { font-size: 12px; overflow-wrap: anywhere; }
     .wg-side { gap: 8px; }
 }
@@ -82,31 +114,35 @@ header .meta {
 /* Tabs */
 .schedule-toolbar {
     display: flex;
-    align-items: flex-end;
+    align-items: center;
     gap: 8px;
-    margin-bottom: 12px;
-    border-bottom: 2px solid var(--grid-line);
-    padding-bottom: 0;
+    margin-bottom: 14px;
 }
 
+/* Segmented control: only as wide as its days. */
 .tabs {
     display: flex;
-    gap: 4px;
+    gap: 2px;
     flex-wrap: wrap;
-    flex: 1 1 auto;
+    flex: 0 1 auto;
     min-width: 0;
+    padding: 3px;
+    background: #ECEEF2;
+    border-radius: 10px;
 }
 
 .now-toggle {
     flex: 0 0 auto;
-    height: 28px;
-    margin: 0 0 4px 4px;
-    padding: 0 10px;
+    height: 30px;
+    margin-left: auto;
+    padding: 0 12px;
     border: 1px solid #FCA5A5;
     background: #FEF2F2;
     color: #B91C1C;
+    font-family: inherit;
     font-size: 11px;
     font-weight: 700;
+    letter-spacing: .04em;
     cursor: pointer;
     border-radius: 999px;
     transition: all 0.15s;
@@ -123,35 +159,34 @@ header .meta {
 }
 
 .now-toggle[aria-pressed="false"] {
-    background: #F9FAFB;
-    border-color: #D1D5DB;
-    color: #6B7280;
+    background: var(--surface);
+    border-color: var(--hairline);
+    color: var(--ink-4);
     font-weight: 600;
 }
 
 .tab {
-    padding: 8px 20px;
+    padding: 6px 16px;
     border: none;
     background: transparent;
-    color: var(--text-muted);
-    font-size: 14px;
+    color: var(--ink-3);
+    font-family: inherit;
+    font-size: 13px;
     font-weight: 500;
     cursor: pointer;
-    border-bottom: 2px solid transparent;
-    margin-bottom: -2px;
     transition: all 0.15s;
-    border-radius: 6px 6px 0 0;
+    border-radius: 7px;
 }
 
 .tab:hover {
-    background: #F3F4F6;
-    color: var(--text);
+    color: var(--ink);
 }
 
 .tab.active {
-    color: #2563EB;
-    border-bottom-color: #2563EB;
+    background: var(--surface);
+    color: var(--ink);
     font-weight: 600;
+    box-shadow: 0 1px 2px rgba(15,23,42,.08), 0 0 0 .5px rgba(15,23,42,.06);
 }
 
 /* Day panels */
@@ -167,13 +202,11 @@ header .meta {
 .legend {
     display: flex;
     flex-wrap: wrap;
-    gap: 8px;
-    margin-bottom: 12px;
-    padding: 8px 12px;
-    background: white;
-    border-radius: 8px;
-    box-shadow: var(--shadow);
-    font-size: 11px;
+    gap: 14px;
+    margin-bottom: 14px;
+    font-size: 11.5px;
+    font-weight: 500;
+    color: var(--ink-2);
 }
 
 .legend-item {
@@ -182,19 +215,20 @@ header .meta {
     gap: 4px;
 }
 
+/* Same muted colour as the session bar it stands for. */
 .legend-swatch {
-    width: 12px;
-    height: 12px;
-    border-radius: 3px;
-    border: 1px solid;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--accent);
     flex-shrink: 0;
 }
 
 /* Schedule Grid */
 .grid-wrapper {
-    background: white;
-    border-radius: 8px;
-    box-shadow: var(--shadow);
+    background: var(--surface);
+    border-radius: var(--radius-lg);
+    box-shadow: 0 0 0 1px var(--hairline), 0 1px 2px rgba(15,23,42,.04);
     overflow-x: auto;
     padding: 0;
 }
@@ -216,9 +250,10 @@ header .meta {
     justify-content: center;
     font-size: 11px;
     font-weight: 600;
-    color: var(--text);
-    background: #F9FAFB;
-    border-bottom: 2px solid var(--border);
+    letter-spacing: .01em;
+    color: var(--ink-2);
+    background: var(--surface);
+    border-bottom: 1px solid var(--hairline);
     padding: 4px 6px;
     text-align: center;
     position: sticky;
@@ -230,13 +265,13 @@ header .meta {
 }
 
 .room-header.time-col {
-    background: #F3F4F6;
-    font-weight: 700;
-    font-size: 10px;
-    color: var(--text-muted);
+    font-size: 9.5px;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    color: var(--ink-4);
     left: 0;
     z-index: 40;
-    box-shadow: 1px 0 0 var(--grid-line);
+    box-shadow: 1px 0 0 var(--hairline);
 }
 
 /* Time labels */
@@ -245,12 +280,12 @@ header .meta {
     display: flex;
     align-items: flex-start;
     justify-content: center;
-    font-size: 9px;
-    font-weight: 600;
-    color: var(--text-muted);
+    font-size: 9.5px;
+    font-weight: 500;
+    color: var(--ink-4);
     padding-top: 1px;
-    border-right: 1px solid var(--grid-line);
-    background: #FAFAFA;
+    border-right: 1px solid var(--hairline);
+    background: var(--surface);
     position: sticky;
     left: 0;
     z-index: 30;
@@ -265,7 +300,7 @@ header .meta {
 }
 
 .grid-line.major {
-    border-top: 1px solid #D1D5DB;
+    border-top-color: #E4E7EC;
 }
 
 /* Break bars */
@@ -277,10 +312,9 @@ header .meta {
     justify-content: center;
     font-size: 11px;
     font-weight: 500;
-    color: var(--text-muted);
+    letter-spacing: .02em;
+    color: var(--ink-4);
     z-index: 3;
-    border-top: 1px dashed #D1D5DB;
-    border-bottom: 1px dashed #D1D5DB;
     position: relative;
 }
 
@@ -291,9 +325,9 @@ header .meta {
     background: repeating-linear-gradient(
         -45deg,
         transparent,
-        transparent 4px,
-        rgba(0,0,0,0.03) 4px,
-        rgba(0,0,0,0.03) 8px
+        transparent 5px,
+        rgba(15,23,42,.025) 5px,
+        rgba(15,23,42,.025) 10px
     );
 }
 
@@ -307,7 +341,7 @@ header .meta {
     padding: 2px;
     text-align: center;
     background: var(--break-bg);
-    color: var(--text-muted);
+    color: var(--ink-3);
     overflow-wrap: anywhere;
 }
 .session-scope { font-size: 10px; color: #525252; }
@@ -336,43 +370,99 @@ header .meta {
 .topic-agenda-tree .agenda-selected > .agenda-node { color: #263548; font-weight: 600; }
 .agenda-number { font-variant-numeric: tabular-nums; margin-right: 3px; }
 
-/* A subtle neutral gradient gives the whole session a panel surface. */
+/* Session block: a category-tinted panel with a hairline edge and an inset
+   accent bar. Plain colours first, for browsers without color-mix(). */
+.session-block,
+.legend-swatch {
+    --accent: var(--session-border);
+}
+
 .session-block {
-    border-radius: 4px;
-    border: 1px solid var(--session-outline);
-    border-left: 3px solid var(--session-border);
-    background: linear-gradient(180deg, var(--session-surface-top), var(--session-surface-bottom));
-    box-shadow: var(--session-relief);
-    color: #171717;
-    padding: 3px 6px 2px;
-    margin: 1px 2px;
+    --tint-top: #FFFFFF;
+    --tint-bottom: #F7F8FA;
+    --edge: #E3E6EB;
+    --edge-hover: #CDD3DB;
+    --secondary: #7C8698;
+    --minutes: #5B6475;
+    --chair: #A3ABBA;
+}
+
+@supports (color: color-mix(in oklch, red, blue)) {
+    .session-block,
+    .legend-swatch {
+        --accent: color-mix(in oklch, var(--session-border) var(--accent-strength), var(--accent-mute));
+    }
+
+    .session-block {
+        --tint-top: color-mix(in oklch, var(--accent) 4%, #FFFFFF);
+        --tint-bottom: color-mix(in oklch, var(--accent) 10%, #FFFFFF);
+        --edge: color-mix(in oklch, var(--accent) 16%, #FFFFFF);
+        --edge-hover: color-mix(in oklch, var(--accent) 30%, #FFFFFF);
+        --secondary: color-mix(in oklch, var(--accent) 12%, #7C8698);
+        --minutes: color-mix(in oklch, var(--accent) 22%, #5B6475);
+        --chair: color-mix(in oklch, var(--accent) 18%, #A3ABBA);
+    }
+}
+
+/* Height budget for the tightest case, a 30-minute block (60px):
+   60 - margin 4 - border 2 - padding 6 = 48px for the title (16.25px),
+   the 1px gap and two secondary lines (2 x 14.175px) = 45.6px. */
+.session-block {
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--edge);
+    background: linear-gradient(180deg, var(--tint-top), var(--tint-bottom));
+    color: var(--ink);
+    padding: 4px 8px 2px 10px;
+    margin: 2px;
     overflow: hidden;
     cursor: pointer;
     z-index: 10;
     position: relative;
-    transition: box-shadow 0.15s, opacity 0.2s;
+    transition: box-shadow 0.15s, border-color 0.15s, opacity 0.2s;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     min-height: 0;
+    /* The chair is dropped by block width; see .session-chair. */
     container-type: inline-size;
 }
 
+.session-block::before {
+    content: "";
+    position: absolute;
+    left: 3px;
+    top: 3px;
+    bottom: 3px;
+    width: 3px;
+    border-radius: 3px;
+    background: var(--accent);
+}
+
 .session-block.short-session {
-    border-left-width: 2px;
-    padding: 1px 3px;
+    padding: 1px 4px 1px 8px;
+}
+
+.session-block.short-session::before {
+    top: 2px;
+    bottom: 2px;
+    width: 2px;
 }
 
 /* A 5-minute block is one 10px slot. Give its whole height to a one-line
-   title: no vertical margin (neighbours keep their own 1px), and a 9px
+   title: no vertical margin (neighbours keep their own 2px), and a 9px
    title whose line box equals the 8px inside the borders. */
 .session-block.tiny-session {
     margin-top: 0;
     margin-bottom: 0;
     padding-top: 0;
     padding-bottom: 0;
-    border-radius: 2px;
+    border-radius: 3px;
     justify-content: center;
+}
+
+.session-block.tiny-session::before {
+    top: 1px;
+    bottom: 1px;
 }
 
 .session-block.short-session .session-details {
@@ -389,23 +479,19 @@ header .meta {
     line-height: calc(var(--slot-height) - 2px);
 }
 
-.session-block.long-session {
-    border: 1px solid var(--session-outline);
-    border-left: 3px solid var(--session-border);
-}
-
-
 .session-block:hover {
-    box-shadow: inset 0 1px 0 rgba(255,255,255,0.9), 0 2px 5px rgba(31,41,55,0.14);
+    border-color: var(--edge-hover);
+    box-shadow: 0 2px 8px -2px rgba(15,23,42,.12);
     z-index: 15;
 }
 
 /* Primary: the title. Everything else is one quiet secondary tone. */
 .session-name {
     font-weight: 600;
-    font-size: 12px;
+    font-size: 12.5px;
     line-height: 1.3;
-    color: #111827;
+    letter-spacing: -0.01em;
+    color: var(--ink);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -415,14 +501,12 @@ header .meta {
     background: transparent;
 }
 
+/* Not clipped here: in a 20-minute block the time line leans 2px into the
+   bottom padding. The AI line clips itself. */
 .session-details {
-    /* Indent is 3% of the block's width, capped at 6px, so it shrinks
-       away in narrow mobile columns instead of standing out. */
-    padding-left: min(3cqi, 6px);
     margin-top: 1px;
     flex: 1 1 0;
     min-height: 0;
-    overflow: hidden;
     display: flex;
     flex-direction: column;
 }
@@ -431,9 +515,9 @@ header .meta {
 .session-ai,
 .session-chair {
     font-size: 10.5px;
-    line-height: 1.3;
+    line-height: 1.35;
     font-weight: 400;
-    color: #8B929C;
+    color: var(--secondary);
     font-variant-numeric: tabular-nums;
 }
 
@@ -442,7 +526,7 @@ header .meta {
     flex-wrap: wrap;
     align-items: baseline;
     column-gap: 4px;
-    height: 1.3em;
+    height: 1.35em;
     overflow: hidden;
     flex-shrink: 0;
 }
@@ -452,9 +536,10 @@ header .meta {
     white-space: nowrap;
 }
 
-/* Same grey as the rest of the secondary line; weight alone lifts it. */
+/* Heavier and a shade darker than its line, still well short of the title. */
 .session-minutes {
-    font-weight: 500;
+    font-weight: 600;
+    color: var(--minutes);
 }
 
 .session-unit {
@@ -469,18 +554,27 @@ header .meta {
     min-height: 0;
 }
 
+/* Pinned bottom-right with nothing behind it, so it needs clear space on
+   its row. */
 .session-chair {
     position: absolute;
-    right: 6px;
-    bottom: 2px;
-    max-width: calc(100% - 12px);
-    padding-left: 6px;
-    color: #A1A7B0;
-    background: var(--session-surface-bottom);
+    right: 7px;
+    bottom: 3px;
+    max-width: calc(100% - 17px);
+    font-weight: 500;
+    color: var(--chair);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     z-index: 3;
+}
+
+/* Below this width the full time line (about 110px) and a name (about
+   45px) no longer fit side by side, so the whole column goes without. */
+@container (max-width: 160px) {
+    .session-chair {
+        display: none;
+    }
 }
 
 /* Click-to-show popup */
@@ -549,7 +643,7 @@ header .meta {
 .now-line {
     grid-column: 1 / -1;
     height: 2px;
-    background: #EF4444;
+    background: #E5484D;
     /* Above sticky time labels (30), below the time header (40). */
     z-index: 35;
     position: relative;
@@ -568,22 +662,20 @@ header .meta {
     justify-content: center;
     font-size: 9px;
     font-weight: 700;
-    color: #EF4444;
-    background: white;
+    color: #E5484D;
+    background: var(--surface);
     border-radius: 0 2px 2px 0;
-    box-shadow: 1px 0 0 rgba(239, 68, 68, 0.25);
+    box-shadow: 1px 0 0 rgba(229, 72, 77, 0.25);
 }
 
 /* Responsive */
 @media (max-width: 768px) {
     .container { padding: 8px; }
-    header h1 { font-size: 18px; }
     .schedule-toolbar { gap: 6px; }
     .tabs { flex-wrap: nowrap; overflow-x: auto; }
-    .tab { padding: 6px 14px; font-size: 13px; }
-    .now-toggle { height: 26px; margin-bottom: 3px; padding: 0 9px; }
+    .tab { padding: 6px 12px; }
     :root { --base-slot-height: 10px; --time-col-width: 36px; }
-    .session-name { font-size: 11px; }
+    .session-name { font-size: 11.5px; }
     .room-header { font-size: 9px; padding: 3px 3px; }
 }
 
@@ -807,18 +899,18 @@ header .meta {
 <body>
 <div class="container">
     <header>
-<nav class="wg-navigation" aria-label="Working group meetings"><div class="wg-side wg-left"><a class="wg-link" href="../ran1/">RAN1#126bis<span class="meeting-status">Upcoming</span></a></div><div class="wg-current"><h1><a href="../ran-plenary/" aria-current="page">RAN#113</a></h1><span class="meeting-status">Ended</span></div><div class="wg-side wg-right"></div></nav>
+<nav class="wg-navigation" aria-label="Working group meetings"><div class="wg-side wg-left"><a class="wg-link" href="../ran1/">RAN1#126bis<span class="meeting-status">Upcoming</span></a></div><div class="wg-current"><h1><a href="../ran-plenary/" aria-current="page"><span class="wg-emoji" aria-hidden="true">📅</span>RAN#113</a></h1><span class="meeting-status">Ended</span></div><div class="wg-side wg-right"></div></nav>
 <p class="meta">Updated Files: RAN#113 time plan v09.zip, agenda.csv &nbsp;|&nbsp; Generated: 2026-09-17 10:47 (Europe/Madrid) &nbsp;|&nbsp; Now: <span id="tz-now">...</span> (Europe/Madrid)</p>
 <p class="meta">ℹ️ This page is automatically generated from uploaded documents. Some details may not be fully accurate — your feedback helps improve it.</p>
 <p class="meta">Created by Duckhyun Bae</p>
 <p class="meta">Contact: Duckhyun Bae (<a href="mailto:duckhyun.bae@lge.com">duckhyun.bae@lge.com</a>) for reports or feature requests.</p>
 </header>
     <div class="legend">
-        <div class="legend-item"><span class="legend-swatch" style="background:#DBEAFE;border-color:#2563EB"></span>6G</div>
-        <div class="legend-item"><span class="legend-swatch" style="background:#FCE7F3;border-color:#DB2777"></span>Comebacks</div>
-        <div class="legend-item"><span class="legend-swatch" style="background:#D1FAE5;border-color:#059669"></span>Early items</div>
-        <div class="legend-item"><span class="legend-swatch" style="background:#FED7AA;border-color:#EA580C"></span>Rel-21 5G-Adv</div>
-        <div class="legend-item"><span class="legend-swatch" style="background:#E9D5FF;border-color:#7C3AED"></span>TBD</div>
+        <div class="legend-item"><span class="legend-swatch" style="--session-border:#2563EB"></span>6G</div>
+        <div class="legend-item"><span class="legend-swatch" style="--session-border:#DB2777"></span>Comebacks</div>
+        <div class="legend-item"><span class="legend-swatch" style="--session-border:#059669"></span>Early items</div>
+        <div class="legend-item"><span class="legend-swatch" style="--session-border:#EA580C"></span>Rel-21 5G-Adv</div>
+        <div class="legend-item"><span class="legend-swatch" style="--session-border:#7C3AED"></span>TBD</div>
     </div>
     <div class="schedule-toolbar">
         <div class="tabs">
