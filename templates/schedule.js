@@ -249,6 +249,46 @@ document.addEventListener('DOMContentLoaded', function() {
         popupEl.style.top = top + 'px';
     }
 
+    // After the content changes height, keep the popup's top where it is
+    // unless its bottom would leave the screen; then lift it just enough.
+    function keepPopupInViewport() {
+        const M = 8;
+        const vh = document.documentElement.clientHeight;
+        const rect = popupEl.getBoundingClientRect();
+        const top = Math.max(M, Math.min(rect.top, vh - M - rect.height));
+        popupEl.style.top = top + 'px';
+    }
+
+    function syncAgendaToggle() {
+        const open = popupEl.classList.contains('show-agenda-parents');
+        popupContent.querySelectorAll('.popup-agenda-toggle').forEach(btn => {
+            btn.setAttribute('aria-expanded', String(open));
+        });
+    }
+
+    // Parent agenda items: one toggle, remembered for the next popup.
+    popupContent.addEventListener('click', function(e) {
+        const btn = e.target instanceof Element && e.target.closest('.popup-agenda-toggle');
+        if (!btn) return;
+        e.stopPropagation();
+        popupEl.classList.toggle('show-agenda-parents');
+        syncAgendaToggle();
+        keepPopupInViewport();
+    });
+
+    // A wheel over the popup never scrolls the page behind it (which would
+    // close the popup); it only scrolls the popup itself when that can move.
+    popupEl.addEventListener('wheel', function(e) {
+        const max = popupEl.scrollHeight - popupEl.clientHeight;
+        const atTop = popupEl.scrollTop <= 0 && e.deltaY < 0;
+        const atBottom = popupEl.scrollTop >= max - 1 && e.deltaY > 0;
+        if (max <= 0 || atTop || atBottom) e.preventDefault();
+    }, { passive: false });
+    // Same for touch: a drag on a popup that cannot scroll stays put.
+    popupEl.addEventListener('touchmove', function(e) {
+        if (popupEl.scrollHeight <= popupEl.clientHeight) e.preventDefault();
+    }, { passive: false });
+
     document.querySelectorAll('.session-block').forEach(block => {
         block.addEventListener('click', function(e) {
             e.stopPropagation();
@@ -258,6 +298,7 @@ document.addEventListener('DOMContentLoaded', function() {
             closePopup();
             if (!wasOpen || popupContent.innerHTML !== html) {
                 popupContent.innerHTML = html;
+                syncAgendaToggle();
                 popupEl.scrollTop = 0;
                 popupEl.classList.add('show');
                 backdrop.classList.add('active');

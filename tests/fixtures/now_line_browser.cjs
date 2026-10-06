@@ -29,6 +29,8 @@ const button = element();
 elements.set('now-toggle', button);
 elements.set('popup-backdrop', element());
 elements.set('popup-close-btn', element());
+elements.set('popup-floating', element());
+elements.set('popup-content', element());
 for (const day of ['monday', 'tuesday', 'wednesday', 'thursday', 'friday']) {
     const grid = element();
     grid.dataset = {start: '480', end: '1080', slot: '5'};

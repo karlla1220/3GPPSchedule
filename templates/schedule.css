@@ -583,9 +583,27 @@ header .meta {
    on the title's left edge. */
 .session-notes {
     flex: none;
-    max-height: calc(var(--note-lines, 0) * 1.35em);
+    position: relative;
+    margin-top: 3px;
+    padding-top: 4px;
+    max-height: calc(var(--note-lines, 0) * 1.35em + 4px);
     overflow: hidden;
     overflow-wrap: anywhere;
+}
+
+/* A short rule sets the notes apart from the AI list above. */
+.session-notes::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 16px;
+    height: 1px;
+    background: var(--edge-hover);
+}
+
+.session-notes.beside-chair {
+    display: none;
 }
 
 .session-note {
@@ -617,7 +635,11 @@ header .meta {
 
     /* The chair's row is free again. */
     .session-notes {
-        max-height: calc(var(--note-lines-full, 0) * 1.35em);
+        max-height: calc(var(--note-lines-full, 0) * 1.35em + 4px);
+    }
+
+    .session-notes.beside-chair {
+        display: block;
     }
 }
 
@@ -686,11 +708,54 @@ header .meta {
     line-height: 1.5;
 }
 
-.popup-path {
-    margin-top: 2px;
+/* Agenda names: the session's own items always, their parents folded.
+   The toggle's state lives on .popup-floating so it carries to the next
+   popup without changing the content compared on re-click. */
+.popup-agenda-item {
+    line-height: 1.5;
+}
+
+.popup-agenda-parent {
+    display: none;
     color: #D1D5DB;
     font-size: 11px;
     line-height: 1.45;
+}
+
+.show-agenda-parents .popup-agenda-parent {
+    display: block;
+    margin-top: 2px;
+}
+
+.show-agenda-parents .popup-agenda-parent,
+.show-agenda-parents .popup-agenda-item {
+    padding-left: calc(var(--depth, 0) * 10px);
+}
+
+.popup-agenda-toggle {
+    display: block;
+    margin-bottom: 2px;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: #9CA3AF;
+    font: inherit;
+    font-size: 11px;
+    line-height: 1.6;
+    cursor: pointer;
+}
+
+.popup-agenda-toggle:hover {
+    color: white;
+}
+
+.popup-agenda-toggle .when-unfolded,
+.show-agenda-parents .popup-agenda-toggle .when-folded {
+    display: none;
+}
+
+.show-agenda-parents .popup-agenda-toggle .when-unfolded {
+    display: inline;
 }
 
 /* Current time indicator */

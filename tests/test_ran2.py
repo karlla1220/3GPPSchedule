@@ -356,6 +356,7 @@ def test_render_roundtrip_popup_and_additional_information(v11, tmp_path):
     assert cell[0] == 'R17/18 NR / IoT NTN (Sergio)'
     assert '[7.8] NR19 NR NTN [0] (Sergio)' in cell
     assert '7.8: NTN for NR Ph3' in popup.replace('<strong>', '').replace('</strong>', '')
+    assert popup.index('popup-notes') < popup.index('popup-description')   # notes before agenda names
     section = html.select_one('details.supplements')
     assert section.summary.get_text() == 'Additional information'
     assert [h.get_text() for h in section.select('h3')] == [
