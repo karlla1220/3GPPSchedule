@@ -671,6 +671,8 @@ header .meta {
     min-width: 180px;
     max-width: min(520px, calc(100vw - 24px));
     max-height: calc(100vh - 16px);
+    /* The visible height on phones; schedule.js refines both on open. */
+    max-height: calc(100dvh - 16px);
     overflow-y: auto;
     overscroll-behavior: contain;
 }
