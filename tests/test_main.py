@@ -652,7 +652,7 @@ def test_portal_timezone_bypasses_document_location_and_llm(tmp_path, offline):
                                               return_value=(agreement_data, agreement_ref)))
         schedule = main_module.build_schedule(argparse.Namespace(
             local=None, no_download=offline, rebuild_slots=False))
-    assert schedule.chairman_agreements == agreement_data
+    assert schedule.chairman_agreements == {**agreement_data, 'retained_files': []}
     assert agreements.call_args.kwargs['meeting_id'] == 'ran1#126'
     assert agreements.call_args.kwargs['offline'] is offline
     if not offline:
@@ -732,5 +732,5 @@ def test_agreement_failure_keeps_previous_and_still_builds_schedule(tmp_path):
                                   return_value=published))
         schedule = main_module.build_schedule(argparse.Namespace(
             local=None, no_download=False, rebuild_slots=False))
-    assert schedule.chairman_agreements == published
+    assert schedule.chairman_agreements == {**published, 'retained_files': []}
     assert save.call_args.kwargs['agreements_ref'] == saved_ref

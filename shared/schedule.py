@@ -106,6 +106,9 @@ class Schedule:
     # {"type": "table", "rows": [[cell, ...]], "header": first row is a header}.
     supplements: list[dict] = field(default_factory=list)
     chairman_agreements: dict = field(default_factory=dict)
+    # Agreement HTML files by path relative to schedule.json. Saved as files
+    # beside the snapshot, not inside it; a loaded snapshot has none.
+    agreement_fragments: dict = field(default_factory=dict, repr=False, compare=False)
 
 
 def time_to_minutes(t: str) -> int:
@@ -141,8 +144,15 @@ GROUP_COLORS = [
 
 def save_schedule(schedule: Schedule, path: Path) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
+    data = asdict(schedule)
+    # Files first, so the snapshot never refers to a fragment that is not there.
+    for name, content in data.pop("agreement_fragments").items():
+        target = path.parent / name
+        target.parent.mkdir(parents=True, exist_ok=True)
+        if not target.exists() or target.read_text(encoding="utf-8") != content:
+            target.write_text(content, encoding="utf-8")
     temp = path.with_suffix(".tmp")
-    temp.write_text(json.dumps({"schema_version": 1, **asdict(schedule)}, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    temp.write_text(json.dumps({"schema_version": 1, **data}, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     temp.replace(path)
 
 

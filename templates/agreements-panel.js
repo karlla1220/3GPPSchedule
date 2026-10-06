@@ -86,6 +86,26 @@ async function start() {
         });
         onCleanup(() => controller?.abort());
         const tabID = ai => 'agreement-tab-' + ai.replaceAll('.', '-');
+        // Changes are dated in the meeting's time zone, like the schedule.
+        const when = iso => {
+            const options = { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit', hourCycle: 'h23', timeZoneName: 'short' };
+            try { return new Intl.DateTimeFormat('en-GB', { ...options, timeZone: manifest.timezone || 'UTC' }).format(new Date(iso)); }
+            catch { return new Intl.DateTimeFormat('en-GB', { ...options, timeZone: 'UTC' }).format(new Date(iso)); }
+        };
+        const version = name => (name || '').match(/\bv\d+(?:\.\d+)*\b/i)?.[0] || (name || '').replace(/\.(?:docx|docm|zip)$/i, '');
+        const updatedNow = ai => {
+            const section = manifest.sections[ai];
+            return section && section.change !== 'initial' && section.changed_in === (manifest.source_name || manifest.document_file);
+        };
+        const changeNote = () => {
+            const section = entry();
+            if (!section?.changed_at) return '';
+            const source = version(section.changed_in);
+            if (section.change === 'initial') return 'As of ' + when(section.changed_at) + (source ? ' · ' + source : '');
+            const label = section.change === 'new' ? 'Added ' : 'Updated ';
+            const parts = section.added ? ' · ' + section.added + (section.added === 1 ? ' added part' : ' added parts') + ' highlighted' : '';
+            return label + when(section.changed_at) + (source ? ' · ' + source : '') + parts;
+        };
         const keyTab = (event, ai) => {
             const ais = selection().ais;
             const index = ais.indexOf(ai);
@@ -104,7 +124,7 @@ async function start() {
                             <${For} each=${() => selection().ais}>${ai => html`
                                 <button type="button" role="tab" id=${tabID(ai)} aria-controls="agreement-body"
                                     aria-selected=${() => activeAI() === ai ? 'true' : 'false'} tabindex=${() => activeAI() === ai ? 0 : -1}
-                                    onClick=${() => setActiveAI(ai)} onKeyDown=${event => keyTab(event, ai)}>AI ${ai}</button>`}<//>
+                                    onClick=${() => setActiveAI(ai)} onKeyDown=${event => keyTab(event, ai)}>AI ${ai}<${Show} when=${() => updatedNow(ai)}><span class="agreement-updated" title="Updated in the latest chair note"></span><//></button>`}<//>
                         </div>
                     <//>
                 </div>
@@ -112,6 +132,7 @@ async function start() {
                 <${Show} when=${() => activeAI() && manifest.status === 'ready'}>
                     <section id="agreement-body" role="tabpanel" aria-labelledby=${() => tabID(activeAI())} aria-busy=${() => document.loading ? 'true' : 'false'}>
                         <h3><span class="agreement-ai">${() => 'AI ' + activeAI()}</span>${' '}<span>${() => entry()?.title || ''}</span></h3>
+                        <${Show} when=${changeNote}><p class=${() => 'agreement-change' + (entry()?.added ? ' has-added' : '')}>${changeNote}</p><//>
                         <${Show} when=${() => !document.loading}>
                             <${Show} when=${() => document()?.error}><p>Could not load this agreement. <button type="button" class="agreement-action" onClick=${() => refetch()}>Retry</button></p><//>
                             <${Show} when=${() => !document()?.error && !document()?.content}><p class="agreement-note">${emptyNote}</p><//>

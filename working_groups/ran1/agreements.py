@@ -7,6 +7,9 @@ content, never extraction boundaries or an assertion that the text was agreed.
 from __future__ import annotations
 
 from copy import deepcopy
+from datetime import datetime, timezone
+from difflib import SequenceMatcher
+from email.utils import parsedate_to_datetime
 import hashlib
 import json
 from pathlib import Path
@@ -16,17 +19,19 @@ from lxml import etree as ET
 
 from shared import remote_files
 from shared.metafile_images import backend_identity
-from shared.docx_html import DocxHTML, NS, val, text_of, render_blocks
+from shared.agreement_assets import finish_units
+from shared.docx_html import DocxHTML, ListItem, NS, attr, val, text_of, render_blocks
 from .agenda_descriptions import StyleMap, NumberingMap, _extract_leading_agenda_marker
 from .downloader import (
+    WORD_DOCUMENT_EXTENSIONS,
     _extract_meeting_id,
     _local_doc_preference,
+    extract_document_from_zip,
     get_latest_chair_notes_info,
-    download_latest_chair_notes,
 )
 from .parser import find_chair_notes_docx
 
-PARSER_VERSION = 16
+PARSER_VERSION = 17
 CACHE_DIR = Path(".cache/ran1/agreements")
 TDOC_ID = re.compile(r"R1-\d{6,}(?:\s*(?:rev\.?|r)\s*\d+)?", re.I)
 
@@ -95,6 +100,56 @@ def _without_tdocs(block):
     return filtered, removed
 
 
+def _struck(t):
+    rpr = t.getparent().find("w:rPr", NS)
+    if rpr is None:
+        return False
+    return any(
+        e is not None and attr(e) not in {"0", "false", "off", "none"}
+        for e in (rpr.find("w:strike", NS), rpr.find("w:dstrike", NS))
+    )
+
+
+def _unit_key(block):
+    """Comparison key of one Word paragraph or table, or None if it is blank.
+
+    Built from the Word XML, not the HTML, so parser output changes do not read
+    as edits. Whitespace and run splits are ignored; struck-out text is not.
+    """
+    segments = []
+    for e in block.iter():
+        name = ET.QName(e).localname
+        if name in {"drawing", "pict", "object"}:
+            segments.append(("[img]", False))
+        elif name == "t":
+            text = e.text or ""
+            segments.append((text, bool(text.strip()) and _struck(e)))
+        elif name in {"tab", "br", "cr"}:
+            segments.append((" ", False))
+        elif name == "tc":
+            segments.append((" | ", False))
+    merged = []
+    for text, struck in segments:
+        if merged and merged[-1][1] == struck:
+            merged[-1][0] += text
+        else:
+            merged.append([text, struck])
+    text = "".join(f"\x01{t}\x02" if struck else t for t, struck in merged)
+    normalized = " ".join(text.split())
+    if not normalized.strip(" |"):
+        return None
+    return hashlib.sha1(normalized.encode()).hexdigest()[:12]
+
+
+def _tag_unit(rendered, index):
+    """Mark a rendered block's first tag so finish_units can highlight it later."""
+    tag = lambda html: re.sub(r"^<(\w+)", rf'<\1 data-unit="{index}"', html, count=1)
+    if isinstance(rendered, ListItem):
+        rendered.html = tag(rendered.html)
+        return rendered
+    return tag(rendered)
+
+
 def _body_blocks(parent):
     """Unwrap block-level content controls without losing their agenda headings."""
     for block in parent:
@@ -144,7 +199,14 @@ def parse_agreements(path: Path, meeting_id: str, *, source_name: str | None = N
                 pieces.pop()
             while pieces and not pieces[0][0]:
                 pieces.pop(0)
-            sections[agenda]["html"] += render_blocks(part for _, part in pieces)
+            blocks = sections[agenda]["blocks"]
+            parts = []
+            for _, part, key in pieces:
+                if key is not None:
+                    part = _tag_unit(part, len(blocks))
+                    blocks.append(key)
+                parts.append(part)
+            sections[agenda]["html"] += render_blocks(parts)
             sections[agenda]["excluded_tdoc_rows"] += excluded
         pieces, excluded = [], 0
 
@@ -178,6 +240,7 @@ def parse_agreements(path: Path, meeting_id: str, *, source_name: str | None = N
                     agenda = marker
                     sections.setdefault(agenda, {
                         "title": title, "html": "", "excluded_tdoc_rows": 0,
+                        "blocks": [],
                     })
                     converter.block(block)
                     continue
@@ -193,7 +256,7 @@ def parse_agreements(path: Path, meeting_id: str, *, source_name: str | None = N
                 './/*[local-name()="drawing" or local-name()="pict" '
                 'or local-name()="oMath" or local-name()="object"]'
             ))
-            pieces.append((has_content, rendered))
+            pieces.append((has_content, rendered, _unit_key(clean) if has_content else None))
         elif txt:
             unassigned += 1
     finish()
@@ -215,26 +278,98 @@ def parse_agreements(path: Path, meeting_id: str, *, source_name: str | None = N
     return result
 
 
-def remote_reference(cfg, meeting_id):
-    """Revalidate bytes even when filename, upload time and timezone are unchanged.
+def _modified_at(meta):
+    """Upload time from Last-Modified (FTP MDTM or HTTP), as UTC ISO, or None."""
+    try:
+        return parsedate_to_datetime(meta["last_modified"]).astimezone(timezone.utc).isoformat()
+    except (KeyError, TypeError, ValueError):
+        return None
 
-    Check and build share the transport cache. Failures propagate so a temporary
-    listing/download failure cannot erase a previously published agreement.
+
+def fetch_remote_note(cfg, meeting_id, listed=None):
+    """Return (info, body) of the meeting's latest remote note, or (None, None).
+
+    Bytes are revalidated even when filename, upload time and timezone are
+    unchanged. ``listed`` reuses a lookup the caller already made for this
+    meeting, so the folders are not listed twice. Failures propagate so a
+    temporary listing/download failure cannot erase a published agreement.
     """
     if not meeting_id:
-        return None
-    info = get_latest_chair_notes_info(
-        urls=cfg["inbox_urls"],
-        extra_folders=cfg["extra_folders"],
-        preferred_meeting_id=meeting_id,
-        strict=True,
-    )
+        return None, None
+    info = listed
+    if not info or _extract_meeting_id(info.get("name", "")) != meeting_id.lower():
+        info = get_latest_chair_notes_info(
+            urls=cfg["inbox_urls"],
+            extra_folders=cfg["extra_folders"],
+            preferred_meeting_id=meeting_id,
+            strict=True,
+        )
     if info is None:
-        return None
+        return None, None
     if _extract_meeting_id(info["name"]) != meeting_id.lower():
         raise ValueError("Remote chairman note belongs to a different meeting")
-    _, meta = remote_files.fetch_file(None, info["url"])
-    return {**info, "sha256": meta["sha256"]}
+    body, meta = remote_files.fetch_file(None, info["url"])
+    return {**info, "sha256": meta["sha256"], "modified_at": _modified_at(meta)}, body
+
+
+def remote_reference(cfg, meeting_id, listed=None):
+    info, _ = fetch_remote_note(cfg, meeting_id, listed)
+    return info
+
+
+def _store_note(name, body, directory=Path("downloads/ran1/Chair_notes")):
+    """Save fetched bytes; a zip yields the Word document inside it."""
+    path = directory / Path(name).name
+    path.parent.mkdir(parents=True, exist_ok=True)
+    temp = path.with_name(path.name + ".tmp")
+    temp.write_bytes(body)
+    temp.replace(path)
+    if path.suffix.lower() == ".zip":
+        extracted = extract_document_from_zip(path, document_extensions=WORD_DOCUMENT_EXTENSIONS)
+        if extracted is None:
+            raise RuntimeError(f"{name} contains no Word document")
+        return extracted
+    return path
+
+
+def track_changes(result, previous, *, changed_at, document):
+    """Date each section's last change and highlight the blocks it added.
+
+    Sections compare by block keys, so whitespace, run splits and TDoc rows do
+    not count as changes. An unchanged section keeps its earlier change and
+    highlights; the first note of a meeting is a baseline with none.
+    """
+    before = (previous or {}).get("sections", {})
+    for ai, section in result["sections"].items():
+        keys = section["blocks"]
+        old = before.get(ai)
+        if previous is None:
+            change = {"change": "initial", "added": []}
+        elif old is None:
+            change = {"change": "new", "added": list(range(len(keys)))}
+        elif old.get("blocks") is None:
+            change = {"change": "initial", "added": []}  # Nothing to compare with.
+        elif old.get("blocks") == keys:
+            change = {k: old[k] for k in ("change", "added", "changed_at", "changed_in") if k in old}
+        else:
+            matcher = SequenceMatcher(None, old.get("blocks") or [], keys, autojunk=False)
+            added = [
+                j
+                for op, _, _, j1, j2 in matcher.get_opcodes()
+                if op in {"insert", "replace"}
+                for j in range(j1, j2)
+            ]
+            change = {"change": "updated", "added": added}
+        change.setdefault("changed_at", changed_at)
+        change.setdefault("changed_in", document)
+        section.update(change)
+        section["html"] = finish_units(section["html"], section["added"])
+    # Rebuilding from the same note (a local one has no upload time) keeps its date.
+    same_note = previous is not None and previous.get("sha256") == result.get("sha256")
+    result["document_changed_at"] = (
+        previous.get("document_changed_at", changed_at) if same_note else changed_at
+    )
+    return result
 
 
 def reference_identity(info):
@@ -273,29 +408,28 @@ def local_note_path(cfg, meeting_id, *, offline=False, schedule_path=None):
     return max(paths, key=_local_doc_preference) if paths else None
 
 
-def build_agreements(*, cfg, meeting_id, schedule_path, offline, previous=None):
+def build_agreements(*, cfg, meeting_id, schedule_path, offline, previous=None,
+                     listed=None, now=None):
     """Return (agreements, source identity).
 
-    A note that cannot be parsed keeps ``previous`` (the last published
-    agreements of this meeting) but still reports its identity, so the check
-    job does not rebuild for the same broken document every hour. Listing and
-    download failures propagate; the caller keeps the previous identity.
+    ``previous`` is what was last published for this meeting: the baseline for
+    change tracking, and what stays when the new note cannot be parsed. Its
+    identity is still reported, so the check job does not rebuild for the same
+    broken document every hour. Listing and download failures propagate; the
+    caller keeps the previous identity.
     """
     if not meeting_id:
         return _unavailable(meeting_id), None
+    now = now or datetime.now(timezone.utc).isoformat(timespec="seconds")
     info = None
     path = local_note_path(cfg, meeting_id, offline=offline, schedule_path=schedule_path)
     if path is None:
         if offline:
             return _unavailable(meeting_id), None
-        info = remote_reference(cfg, meeting_id)
+        info, body = fetch_remote_note(cfg, meeting_id, listed)
         if info is None:
             return _unavailable(meeting_id), None
-        path = download_latest_chair_notes(
-            latest_info=info, preferred_meeting_id=meeting_id, force=True
-        )
-        if path is None:
-            raise RuntimeError("Selected chairman note could not be downloaded")
+        path = _store_note(info["name"], body)
         identity = reference_identity(info)
     else:
         identity = {
@@ -315,6 +449,9 @@ def build_agreements(*, cfg, meeting_id, schedule_path, offline, previous=None):
         result["source_url"] = info["url"]
         result["source_name"] = info["name"]
         result["warnings"] = sorted(set(result["warnings"] + info.get("source_warnings", [])))
+    # A local note has no upload time; the build that first sees it dates it.
+    changed_at = (info or {}).get("modified_at") or now
+    track_changes(result, previous, changed_at=changed_at, document=identity["name"])
     return result, identity
 
 

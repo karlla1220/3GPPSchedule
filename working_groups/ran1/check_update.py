@@ -252,6 +252,7 @@ def check_updates(*, staging_dir=None) -> CheckResult:
     )
 
     portal_ref = lookup_timezone_reference("ran1", selected_meeting_id)
+    chair_notes_info = None  # Reused by the agreement check below.
     cached_timezone_ref = state.get("timezone_ref")
     if portal_ref is not None or (
         isinstance(cached_timezone_ref, dict) and cached_timezone_ref.get("type") == "portal"
@@ -331,7 +332,9 @@ def check_updates(*, staging_dir=None) -> CheckResult:
     try:
         current_agreements = local_note_reference(cfg, selected_meeting_id)
         if current_agreements is None:
-            current_agreements = reference_identity(remote_reference(cfg, selected_meeting_id))
+            current_agreements = reference_identity(
+                remote_reference(cfg, selected_meeting_id, listed=chair_notes_info)
+            )
         cached_agreements = state.get("agreements_ref")
         if current_agreements != cached_agreements:
             changed = True

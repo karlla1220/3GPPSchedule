@@ -3,6 +3,7 @@
 from pathlib import Path
 import argparse
 import sys
+import tempfile
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from build import render_site
@@ -14,7 +15,26 @@ from shared.schedule import (
     save_schedule,
     load_schedule,
 )
-from working_groups.ran1.agreements import parse_agreements
+from shared.agreement_assets import package_agreements
+from working_groups.ran1.agreements import parse_agreements, track_changes
+
+ADDED_TEXT = "Preview revision: this paragraph was added in v10."
+
+
+def revised_note(note, directory):
+    """The same note with one paragraph added to AI 10.1, as a v10 would."""
+    from copy import deepcopy
+    from docx import Document
+    from docx.text.paragraph import Paragraph
+
+    document = Document(note)
+    label = next(p for p in document.paragraphs if p.text.strip() == "Agreement")
+    copy = deepcopy(label._p)
+    label._p.addnext(copy)
+    Paragraph(copy, label._parent).text = ADDED_TEXT
+    path = directory / note.name.replace("v09", "v10")
+    document.save(path)
+    return path
 
 
 def main():
@@ -22,7 +42,19 @@ def main():
     parser.add_argument("--output-dir", type=Path, default=Path("test_runs/agreements"))
     args = parser.parse_args()
     note = Path("tests/fixtures/ran1/Chair notes RAN1#124 - v09.docx")
-    data = parse_agreements(note, "ran1#124")
+    # v09 is the baseline; v10 adds one paragraph to 10.1, so the panel shows
+    # both an unchanged section and a dated change with a highlighted addition.
+    baseline, _ = package_agreements(track_changes(
+        parse_agreements(note, "ran1#124"), None,
+        changed_at="2026-10-05T07:00:00+00:00", document=note.name,
+    ))
+    with tempfile.TemporaryDirectory() as scratch:
+        v10 = revised_note(note, Path(scratch))
+        data = track_changes(
+            parse_agreements(v10, "ran1#124"), baseline,
+            changed_at="2026-10-06T12:30:00+00:00", document=v10.name,
+        )
+    stored, fragments = package_agreements(data, baseline)
     samples = [
         ("Evaluation assumptions", "10.1"),
         ("Energy efficiency", "10.4"),
@@ -59,8 +91,10 @@ def main():
         "2026-09-29",
         wg_id="ran1",
         meeting_id="ran1#124",
+        timezone="Europe/Malta",
         is_demo=True,
-        chairman_agreements=data,
+        chairman_agreements=stored,
+        agreement_fragments=fragments,
     )
     other = load_schedule(Path("docs/ran-plenary/schedule.json"))
     config = {

@@ -214,7 +214,7 @@ LLM 응답을 그대로 HTML에 쓰지는 않는다. 코드가 다음 후처리�
 동일 미팅의 note만 선택하고 정확한 번호가 식별되는 agenda heading 사이의 원문 전체를 추출한다.
 Agreement/Proposal 등의 표식은 경계로 사용하지 않는다. TDoc ID 단독 행, 탭으로 구분된 ID/제목/제출자 행,
 표의 단순 TDoc 메타데이터 행만 제거하며 이후 내용은 유지한다. 모호한 공백 구분 문장과 본문 인용은 보존한다.
-섹션은 `html`과 `excluded_tdoc_rows`를 저장하며 parser version 15로 이전 마커 기반 캐시를 무효화한다.
+섹션은 `html`, `excluded_tdoc_rows`, 블록 키 목록 `blocks`를 저장한다(parser version 17).
 LLM 요약을 사용하지 않는다. 별도 `agreements_ref`로 원본 파일/URL/SHA를 비교하므로
 Portal timezone을 사용하거나 note의 이름이 그대로여도 내용 변경을 감지한다.
 
@@ -226,9 +226,29 @@ agreement는 선택적인 입력이라 실패해도 일정 빌드를 멈추지 �
 마지막 게시분(`docs/ran1/schedule.json`)을 유지하고 그 문서의 식별자는 저장해서, 같은 깨진 문서로
 매시간 재빌드하지 않는다. 목록 조회나 다운로드 실패면 이전 식별자를 유지해 다음 check가 다시 시도한다.
 
+### 변경 추적과 저장
+
+note가 바뀌면 섹션마다 직전 게시분과 블록 키를 비교한다(`track_changes`). 블록은 Word 문단 하나 또는
+표 하나이고, 키는 HTML이 아니라 Word XML의 텍스트에서 만든다(`_unit_key`). 그래서 공백, run 분할,
+TDoc 행(비교 전에 이미 빠짐), parser 출력 변경은 변경으로 세지 않고, 취소선은 센다.
+
+- 키가 같은 섹션은 직전의 변경 시각과 강조를 그대로 둔다. 바뀐 섹션은 `changed_at`·`changed_in`을 새
+  note로 갱신하고, `difflib`의 insert/replace 블록을 추가분(`added`)으로 표시한다. 지워지기만 한 경우는
+  날짜만 바뀐다. 미팅의 첫 note는 기준선(`initial`)이라 강조가 없고, 기준선 뒤에 생긴 섹션은 전부 추가분이다.
+- 변경 시각은 원격 note의 `Last-Modified`(FTP MDTM)이고, 로컬 note는 처음 본 빌드 시각이다.
+- 파싱할 때 블록의 첫 태그에 `data-unit`을 달고, 비교 뒤 `finish_units`가 추가분만 `agreement-added`
+  클래스로 바꾼다. 섹션 HTML은 XML로 파싱되지 않으므로(닫지 않은 `<br>`, `<img>`) 다시 직렬화하지 않는다.
+
+`schedule.json`에는 섹션의 메타데이터(제목, 키, 변경 정보, 파일 이름)만 두고, HTML은 옆의
+`agreements/<내용 해시>.html`에 둔다(`package_agreements`, `save_schedule`). 바뀌지 않은 섹션은 같은
+파일이라, 새 note는 바뀐 섹션의 파일만 커밋한다. 렌더링(`write_agreement_assets`)은 현재와 직전 빌드가
+참조하지 않는 파일을 지운다. 직전 빌드의 파일(`retained_files`)은 열려 있는 페이지를 위해 한 번 더 남긴다.
+
+원격 note는 식별자를 만들 때 받은 바이트를 그대로 저장해 파싱한다(두 번 받지 않는다). timezone 단계가 같은
+미팅의 chair note를 이미 조회했으면 그 결과를 넘겨 받아 폴더를 다시 나열하지 않는다(`listed`).
+
 공통 Schedule의 `chairman_agreements`는 선택적인 추가 필드다.
-HTML 렌더링 시 `agreement_assets`가 agenda별 hash HTML fragment를 작성하고
-페이지에는 소형 manifest만 넣는다. RAN1 SolidJS island가 셀의 AI 탭 중 활성 AI만 lazy fetch한다.
+HTML 렌더링 시 `agreement_assets`가 manifest를 만들고 페이지에는 소형 manifest만 넣는다. RAN1 SolidJS island가 셀의 AI 탭 중 활성 AI만 lazy fetch한다.
 셀의 `data-ai`는 필터용으로 일정 표기 그대로이고, 패널이 여는 섹션 목록(`10.6.x` → `10.6.1|10.6.2`)은
 `data-agreement-ai`에 따로 둔다.
 DOMPurify로 HTML을 정제하고 Shadow DOM에 직접 삽입하여 문서 CSS를 격리한다.

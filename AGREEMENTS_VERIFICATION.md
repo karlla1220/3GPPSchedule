@@ -19,7 +19,8 @@ python3 -m http.server 8874 --bind 127.0.0.1 --directory test_runs/agreements
 
 실제 빌드는 기존 `uv run python main.py --wg ran1` 경로를 사용한다.
 `--local`/`--no-download`에서는 동일 미팅의 로컬 note만 사용한다.
-`--render-only`는 schedule.json에 저장된 agreement에서 정적 파일을 복원한다.
+`--render-only`는 schedule.json의 agreement 기록과 옆의 `agreements/*.html`로 다시 렌더링한다.
+미리보기는 v09를 기준선으로, AI 10.1에 문단 하나를 더한 v10을 만들어 변경 일시와 추가분 강조를 보인다.
 
 ## 실제 문서에서 확인한 내용
 
@@ -87,7 +88,8 @@ uv run --with playwright python scripts/verify_agreements_browser.py
 전체 회귀 테스트와 새 문서/매칭/변경감지/보안/변환 테스트를 실행한다.
 Java 실제 변환 테스트는 JAR/Java가 없으면 명시적으로 skip하며, Python fallback은 별도로 강제 검사한다.
 브라우저 검사는 최초 요청 수, AI별 원문 전환, WMF 3개/MathML 로딩, 복수 AI,
-미팅 불일치, 키보드/모바일, WG 이동/뒤로 가기, 빠른 선택, HTTP 오류 재시도, CDN 실패를 포함한다.
+미팅 불일치, 키보드/모바일, WG 이동/뒤로 가기, 빠른 선택, HTTP 오류 재시도, CDN 실패,
+취소선 보존, 변경 일시·추가분 강조·탭 표시를 포함한다(20개).
 화면 캡처는 `test_runs/agreements/desktop.png`, `mobile.png`에 생성된다.
 최신 섹션 전체 추출 변경 후 (2026-09-29): **395 passed (11.02s)**.
 Java 실제 WMF 변환 및 Python fallback 포함, skip 없음. JS 문법 검사 및 `git diff --check` 통과.

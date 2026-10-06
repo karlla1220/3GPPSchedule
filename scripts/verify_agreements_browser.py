@@ -89,6 +89,14 @@ def main():
             "(xs)=>xs.filter(x=>x.style.textDecorationLine.includes('line-through')).length"
         ) == 6
         checks.append("Word strike-through survives style sanitization")
+        # The preview's v10 added one paragraph to 10.1 (see preview_agreements.py).
+        expect(page.locator(".agreement-change")).to_contain_text("Updated 6 Oct, 14:30")
+        expect(page.locator(".agreement-change")).to_contain_text("v10 · 1 added part highlighted")
+        expect(doc.locator(".agreement-added")).to_have_count(1)
+        expect(doc.locator(".agreement-added")).to_contain_text("this paragraph was added in v10")
+        assert doc.locator(".agreement-added").evaluate("(e)=>getComputedStyle(e).boxShadow") != "none"
+        expect(page.locator('[role="tab"] .agreement-updated')).to_have_count(1)
+        checks.append("Section change is dated and its added paragraph highlighted")
         for selector, marker in [
             ("ul", "disc"),
             ("ul ul", "circle"),
@@ -128,6 +136,8 @@ def main():
         page.screenshot(path=str(args.directory / "desktop.png"))
         select("Energy efficiency, AI 10.4")
         expect(doc.locator("article")).to_have_count(1)
+        expect(page.locator(".agreement-change")).to_have_text("As of 5 Oct, 09:00 CEST · v09")
+        expect(page.locator('[role="tab"] .agreement-updated')).to_have_count(0)
         expect(page.get_by_role("tab", name="AI 10.4", exact=True)).to_have_attribute(
             "aria-selected", "true"
         )
@@ -234,6 +244,8 @@ def main():
         expect(page.get_by_text("Loading agreements…")).to_be_visible()
         select("Energy efficiency, AI 10.4")
         expect(doc.locator("article")).to_have_count(1)
+        expect(page.locator(".agreement-change")).to_have_text("As of 5 Oct, 09:00 CEST · v09")
+        expect(page.locator('[role="tab"] .agreement-updated')).to_have_count(0)
         page.wait_for_timeout(500)
         expect(doc.locator("article")).to_have_count(1)
         checks.append("Rapid selection ignores stale responses")

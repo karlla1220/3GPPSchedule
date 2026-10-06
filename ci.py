@@ -190,6 +190,8 @@ def _build_site(action, config, plan_path):
                 if previous is not None:
                     old, new = asdict(previous), asdict(schedule)
                     old.pop('generated_at'); new.pop('generated_at')
+                    # Fragment files are named by content; the snapshot refers to them.
+                    old.pop('agreement_fragments'); new.pop('agreement_fragments')
                     if old == new:
                         schedule.generated_at = previous.generated_at
                 save_schedule(schedule, snapshot)
