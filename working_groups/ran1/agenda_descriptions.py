@@ -274,7 +274,12 @@ class NumberingMap:
         if level is None or not level.lvl_text:
             return None
 
-        counter_level = max(outline_level, ilvl)
+        # A single numbering level can encode multiple agenda components (e.g.
+        # ilvl=0, "%1.1" for Call for IPR). Retain that logical heading depth,
+        # but do not advance an invisible counter beyond the number template:
+        # #126's Heading 4 / ilvl=2 / "%1.%2.%3" is a three-component number.
+        template_depth = len(level.lvl_text.rstrip('.').split('.')) - 1
+        counter_level = max(ilvl, min(outline_level, template_depth))
         self._reset_deeper(counter_level)
         override_start = self._consume_start_override(num_id, ilvl)
         current = self.heading_counters.get(counter_level)

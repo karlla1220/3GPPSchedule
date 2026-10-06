@@ -269,6 +269,10 @@ class MainExtraFilesWiringTests(unittest.TestCase):
         import contextlib
 
         stack = contextlib.ExitStack()
+        # These tests exercise schedule/timezone wiring with placeholder DOCX.
+        # Agreement parsing and its pipeline contract have separate real fixtures.
+        stack.enter_context(patch('working_groups.ran1.agreements.build_agreements',
+                                  return_value=({'status': 'unavailable'}, None)))
         args = argparse.Namespace(
             local=None,
             no_download=no_download,
@@ -642,8 +646,17 @@ def test_portal_timezone_bypasses_document_location_and_llm(tmp_path, offline):
         location = stack.enter_context(patch.object(main_module, 'extract_meeting_location'))
         llm = stack.enter_context(patch.object(main_module, 'get_timezone_from_location'))
         save = stack.enter_context(patch.object(main_module, 'save_schedule_state'))
+        agreement_data = {'status': 'ready', 'meeting_id': 'ran1#126', 'sections': {}}
+        agreement_ref = {'name': 'Chair notes RAN1#126.docx', 'sha256': 'new'}
+        agreements = stack.enter_context(patch('working_groups.ran1.agreements.build_agreements',
+                                              return_value=(agreement_data, agreement_ref)))
         schedule = main_module.build_schedule(argparse.Namespace(
             local=None, no_download=offline, rebuild_slots=False))
+    assert schedule.chairman_agreements == agreement_data
+    assert agreements.call_args.kwargs['meeting_id'] == 'ran1#126'
+    assert agreements.call_args.kwargs['offline'] is offline
+    if not offline:
+        assert save.call_args.kwargs['agreements_ref'] == agreement_ref
     assert schedule.timezone == 'Europe/Amsterdam'
     assert (schedule.starts_on, schedule.ends_on) == ('2026-08-24', '2026-08-28')
     assert (schedule.starts_at, schedule.ends_at) == (ref['starts_at'], ref['ends_at'])

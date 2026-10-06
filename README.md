@@ -16,6 +16,18 @@ RAN1은 3GPP FTP 서버에서 최신 회의 스케줄 DOCX 파일을 다운로�
 - 요일별 탭 전환, 오늘 날짜 자동 선택되는 단일 HTML 간트차트 생성 (그룹별 색상, 자동 새로고침)
 - GitHub Actions를 통한 활성 WG별 주기적 변경 감지·빌드 및 GitHub Pages 배포
 
+## RAN1 Chairman agreements
+
+RAN1 일정 셀을 선택하면 표 아래에 동일 회의·정확한 AI 번호의 chairman note 섹션 원문이 표시됩니다.
+Agreement/Potential agreement/Proposal 및 제목 없는 내용도 순서대로 유지하며, TDoc 목록·메타데이터 행만 제외합니다.
+기존 작은 상세 팝업을 유지하며, 자동 스크롤 없이 하단 `Agreements for`의 AI 탭을 갱신합니다.
+활성 AI의 HTML만 fetch하고 iframe·내부 스크롤 없이 페이지에 펼칩니다.
+DOCX 서식과 표·수식은 가능한 범위에서 보존하고, 글머리 기호는 깊이별 GFM 목록으로 통일합니다.
+변환 한계는 검증 보고서에 기록합니다.
+Java 21과 `uv run python scripts/setup_wmf2svg.py`를 준비하면 WMF 수식에 고정 버전의
+headless 변환기를 사용합니다. Java 미설치 시 Python 변환기로 처리합니다.
+[검증용 미리보기 실행법과 지원 범위](AGREEMENTS_VERIFICATION.md)를 참고하세요.
+
 ## 요구사항
 
 - Python 3.12+

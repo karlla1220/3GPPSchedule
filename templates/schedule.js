@@ -325,9 +325,27 @@ document.addEventListener('DOMContentLoaded', function() {
         if (popupEl.scrollHeight <= popupEl.clientHeight) e.preventDefault();
     }, { passive: false });
 
+    const agreementPanel = document.getElementById('agreement-panel');
+    if (agreementPanel) {
+        document.querySelectorAll('.tab').forEach(tab => tab.addEventListener('click', () => {
+            document.querySelectorAll('.session-block[aria-pressed="true"]').forEach(block => block.setAttribute('aria-pressed', 'false'));
+            window.dispatchEvent(new CustomEvent('agreement-select', { detail: null }));
+        }));
+    }
     document.querySelectorAll('.session-block').forEach(block => {
+        if (agreementPanel) block.addEventListener('keydown', e => {
+            if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); block.click(); }
+        });
         block.addEventListener('click', function(e) {
             e.stopPropagation();
+            if (agreementPanel) {
+                document.querySelectorAll('.session-block[aria-pressed="true"]').forEach(item => item.setAttribute('aria-pressed', 'false'));
+                this.setAttribute('aria-pressed', 'true');
+                window.dispatchEvent(new CustomEvent('agreement-select', { detail: {
+                    block: this, name: this.dataset.name,
+                    ais: [...new Set((this.dataset.ai || '').split('|').filter(Boolean))]
+                }}));
+            }
             const html = this.getAttribute('data-popup');
             if (!html) return;
             const wasOpen = isPopupOpen();

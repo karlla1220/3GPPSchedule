@@ -17,6 +17,7 @@ from shared.schedule import (
 )
 
 from shared.page import render_header
+from shared.agreement_assets import render_agreement_panel, write_agreement_assets, agenda_section_ids
 
 # Default color for sessions without a group header
 _DEFAULT_COLOR = {"bg": "#F3F4F6", "border": "#9CA3AF", "text": "#374151"}
@@ -486,6 +487,11 @@ def generate_html(schedule: Schedule, *, schedules=None, groups=None, presentati
             # Filter data attributes – only actual AI values
             if session.agenda_item:
                 ai_vals = [a.strip() for a in session.agenda_item.split(",") if a.strip()]
+                if schedule.wg_id == 'ran1':
+                    sections = schedule.chairman_agreements.get('sections', {})
+                    if schedule.chairman_agreements.get('meeting_id') != schedule.meeting_id.lower():
+                        sections = {}
+                    ai_vals = agenda_section_ids(session.agenda_item, sections)
                 data_ai = "|".join(ai_vals)
             else:
                 data_ai = ""
@@ -496,7 +502,8 @@ def generate_html(schedule: Schedule, *, schedules=None, groups=None, presentati
 
             html_parts.append(
                 f'                <div class="{block_classes}" style="{style}"'
-                f' data-popup="{popup_attr}"'
+                + (f' tabindex="0" role="button" aria-controls="agreement-panel" aria-pressed="false" aria-label="{data_name_attr}, AI {data_ai_attr}"' if schedule.wg_id == "ran1" else '')
+                + f' data-popup="{popup_attr}"'
                 f' data-room-scope="{session.room_scope}"'
                 f' data-ai="{data_ai_attr}"'
                 f' data-name="{data_name_attr}"'
@@ -513,6 +520,7 @@ def generate_html(schedule: Schedule, *, schedules=None, groups=None, presentati
             "    </div>\n"
         )
 
+    html_parts.append(render_agreement_panel(schedule))
     html_parts.append(render_topic_references(schedule.topic_references, schedule.topic_preamble))
     html_parts.append(render_supplements(schedule.supplements))
 
@@ -602,6 +610,7 @@ def save_html(schedule: Schedule, output_path: str | Path = "docs/index.html"):
     output_path.parent.mkdir(parents=True, exist_ok=True)
 
     html = generate_html(schedule)
+    write_agreement_assets(schedule, output_path.parent)
     output_path.write_text(html, encoding="utf-8")
     print(f"HTML saved to: {output_path}")
     return output_path

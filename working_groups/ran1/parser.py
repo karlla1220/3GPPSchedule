@@ -80,7 +80,7 @@ def find_chair_notes_docx(
     chair_files = [
         f
         for f in _iter_local_files(dest_dir, supported_extensions)
-        if "chair note" in f.name.lower() or "chair_note" in f.name.lower()
+        if any(label in f.name.lower() for label in ("chair note", "chair_note", "chairman note", "chairman_note"))
     ]
     if meeting_id is not None:
         chair_files = [

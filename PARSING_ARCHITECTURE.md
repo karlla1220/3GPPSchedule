@@ -206,3 +206,39 @@ LLM 응답을 그대로 HTML에 쓰지는 않는다. 코드가 다음 후처리�
 | `specified_start_time` 적용 및 최종 시각 계산 | 결정론적 코드 |
 | group 이름 정규화 | LLM |
 | HTML 생성 | 결정론적 코드 |
+
+
+## 9. RAN1 chairman agreement 경로
+
+`pipeline.build_schedule`은 timezone 결정과 독립적으로 `agreements.build_agreements`를 호출한다.
+동일 미팅의 note만 선택하고 정확한 번호가 식별되는 agenda heading 사이의 원문 전체를 추출한다.
+Agreement/Proposal 등의 표식은 경계로 사용하지 않는다. TDoc ID 단독 행, 탭으로 구분된 ID/제목/제출자 행,
+표의 단순 TDoc 메타데이터 행만 제거하며 이후 내용은 유지한다. 모호한 공백 구분 문장과 본문 인용은 보존한다.
+섹션은 `html`과 `excluded_tdoc_rows`를 저장하며 parser version 15로 이전 마커 기반 캐시를 무효화한다.
+LLM 요약을 사용하지 않는다. 별도 `agreements_ref`로 원본 파일/URL/SHA를 비교하므로
+Portal timezone을 사용하거나 note의 이름이 그대로여도 내용 변경을 감지한다.
+
+공통 Schedule의 `chairman_agreements`는 선택적인 추가 필드다.
+HTML 렌더링 시 `agreement_assets`가 agenda별 hash HTML fragment를 작성하고
+페이지에는 소형 manifest만 넣는다. RAN1 SolidJS island가 셀의 AI 탭 중 활성 AI만 lazy fetch한다.
+DOMPurify로 HTML을 정제하고 Shadow DOM에 직접 삽입하여 문서 CSS를 격리한다.
+iframe이나 내부 스크롤, 선택에 따른 자동 스크롤은 없다. 기존 세션 상세 팝업은 유지한다.
+수식은 OMML→MathML, WMF→SVG의 서로 다른 경로다.
+
+캐시는 `.cache/ran1/agreements` 안에 parser version/이미지 backend/원본 SHA 단위로 저장한다.
+출력은 `docs/ran1`에 포함되어 기존 WG별 rollback을 따른다.
+지원 범위, 실제 문서 통계, 검증 명령은 [AGREEMENTS_VERIFICATION.md](AGREEMENTS_VERIFICATION.md)에 기록한다.
+
+GFM 목록 깊이는 문단에 직접 지정한 위치 → 선택된 numbering level의 위치 → 상속 스타일 순으로 판정한다.
+공통 List Paragraph 스타일의 들여쓰기가 모든 목록 단계를 평탄화하지 않도록 일반 문단 서식 cascade와 구분한다.
+
+### 실제 일정 AI 표기와 heading 번호 깊이
+
+RAN1 agreement 탭의 AI 값은 `agenda_section_ids`가 정규화한다. 원본 agenda_item/팝업 문자열은 보존한다.
+번호는 자기 자신과 존재하는 하위 번호(`9.1` → `9.1.1`, `9.1.2`)로 확장하고, `.x`는 하위 번호만으로
+확장한다. 하위 판정은 계층 단위(`10.4.` 접두)이므로 `10.4`가 `10.40.1`을 끌어오지 않는다. 끝 마침표와
+번호 뒤 제목 접미어를 제거하고, 슬래시 표기는 완전한 번호 또는 동일 부모의 형제 번호로 해석한다.
+본문 없는 항목(하위 번호만 있는 heading, 아직 합의가 없는 항목)은 정상 상태다. 패널은 본문이 있는 첫
+탭을 먼저 열고, 빈 항목은 오류가 아닌 안내 문구로 표시한다.
+Word heading 카운터는 선택한 ilvl과 숫자 템플릿의 깊이를 사용하며, outline 스타일이 템플릿보다
+깊으면 제한한다. `%1.1` 같은 고정 접미어와 기존 #124 번호 복원도 회귀 검사한다.
