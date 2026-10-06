@@ -30,6 +30,16 @@
               "description": "Multiple carrier operation",
               "has_description": true
             }
+          ],
+          "children": [
+            {
+              "agenda_item": "10.4.1",
+              "description": "Operation in idle mode"
+            },
+            {
+              "agenda_item": "10.4.2",
+              "description": "Operation in connected mode"
+            }
           ]
         }
       ]
@@ -58,6 +68,28 @@
               "agenda_item": "10.6",
               "description": "WUS and operation",
               "has_description": true
+            }
+          ],
+          "children": [
+            {
+              "agenda_item": "10.6.1",
+              "description": "Downlink WUS and operation"
+            },
+            {
+              "agenda_item": "10.6.1.1",
+              "description": "Design of WUS with OFDM based sequence"
+            },
+            {
+              "agenda_item": "10.6.1.2",
+              "description": "WUS operation in RRC states"
+            },
+            {
+              "agenda_item": "10.6.2",
+              "description": "Uplink WUS and operation"
+            },
+            {
+              "agenda_item": "10.6.3",
+              "description": "WUS operation with other functionalities"
             }
           ]
         }
@@ -359,6 +391,24 @@
               "description": "Downlink control channel, scheduling and HARQ operation",
               "has_description": true
             }
+          ],
+          "children": [
+            {
+              "agenda_item": "10.5.4.1",
+              "description": "Downlink control channel, scheduling for downlink and uplink transmission"
+            },
+            {
+              "agenda_item": "10.5.4.2",
+              "description": "Downlink and uplink transmission without dynamic scheduling"
+            },
+            {
+              "agenda_item": "10.5.4.3",
+              "description": "HARQ related Aspects"
+            },
+            {
+              "agenda_item": "10.5.4.4",
+              "description": "Handling of potential multiple uplink transmissions"
+            }
           ]
         }
       ]
@@ -398,7 +448,7 @@
       ]
     }
   ],
-  "merged_at": "2026-10-05T08:21:35.578153+00:00",
+  "merged_at": "2026-10-06T03:13:58.150073+00:00",
   "meeting_id": "ran1#126bis",
   "schema_version": 2
 }

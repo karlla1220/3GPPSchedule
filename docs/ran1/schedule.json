@@ -437,6 +437,20 @@
                   "description": "ISAC",
                   "has_description": true
                 }
+              ],
+              "children": [
+                {
+                  "agenda_item": "10.8.1",
+                  "description": "Evaluations"
+                },
+                {
+                  "agenda_item": "10.8.2",
+                  "description": "Aspects of integration with communication"
+                },
+                {
+                  "agenda_item": "10.8.3",
+                  "description": "Waveform and frame structure"
+                }
               ]
             }
           ],
@@ -512,6 +526,16 @@
                   "description": "Multiple carrier operation",
                   "has_description": true
                 }
+              ],
+              "children": [
+                {
+                  "agenda_item": "10.4.1",
+                  "description": "Operation in idle mode"
+                },
+                {
+                  "agenda_item": "10.4.2",
+                  "description": "Operation in connected mode"
+                }
               ]
             }
           ],
@@ -546,6 +570,28 @@
                   "agenda_item": "10.6",
                   "description": "WUS and operation",
                   "has_description": true
+                }
+              ],
+              "children": [
+                {
+                  "agenda_item": "10.6.1",
+                  "description": "Downlink WUS and operation"
+                },
+                {
+                  "agenda_item": "10.6.1.1",
+                  "description": "Design of WUS with OFDM based sequence"
+                },
+                {
+                  "agenda_item": "10.6.1.2",
+                  "description": "WUS operation in RRC states"
+                },
+                {
+                  "agenda_item": "10.6.2",
+                  "description": "Uplink WUS and operation"
+                },
+                {
+                  "agenda_item": "10.6.3",
+                  "description": "WUS operation with other functionalities"
                 }
               ]
             }
@@ -910,6 +956,24 @@
                   "agenda_item": "10.5.4",
                   "description": "Downlink control channel, scheduling and HARQ operation",
                   "has_description": true
+                }
+              ],
+              "children": [
+                {
+                  "agenda_item": "10.5.4.1",
+                  "description": "Downlink control channel, scheduling for downlink and uplink transmission"
+                },
+                {
+                  "agenda_item": "10.5.4.2",
+                  "description": "Downlink and uplink transmission without dynamic scheduling"
+                },
+                {
+                  "agenda_item": "10.5.4.3",
+                  "description": "HARQ related Aspects"
+                },
+                {
+                  "agenda_item": "10.5.4.4",
+                  "description": "Handling of potential multiple uplink transmissions"
                 }
               ]
             }
@@ -2156,6 +2220,20 @@
                   "description": "ISAC",
                   "has_description": true
                 }
+              ],
+              "children": [
+                {
+                  "agenda_item": "10.8.1",
+                  "description": "Evaluations"
+                },
+                {
+                  "agenda_item": "10.8.2",
+                  "description": "Aspects of integration with communication"
+                },
+                {
+                  "agenda_item": "10.8.3",
+                  "description": "Waveform and frame structure"
+                }
               ]
             }
           ],
@@ -2731,6 +2809,28 @@
                   "agenda_item": "10.6",
                   "description": "WUS and operation",
                   "has_description": true
+                }
+              ],
+              "children": [
+                {
+                  "agenda_item": "10.6.1",
+                  "description": "Downlink WUS and operation"
+                },
+                {
+                  "agenda_item": "10.6.1.1",
+                  "description": "Design of WUS with OFDM based sequence"
+                },
+                {
+                  "agenda_item": "10.6.1.2",
+                  "description": "WUS operation in RRC states"
+                },
+                {
+                  "agenda_item": "10.6.2",
+                  "description": "Uplink WUS and operation"
+                },
+                {
+                  "agenda_item": "10.6.3",
+                  "description": "WUS operation with other functionalities"
                 }
               ]
             }
@@ -4082,6 +4182,20 @@
                   "description": "ISAC",
                   "has_description": true
                 }
+              ],
+              "children": [
+                {
+                  "agenda_item": "10.8.1",
+                  "description": "Evaluations"
+                },
+                {
+                  "agenda_item": "10.8.2",
+                  "description": "Aspects of integration with communication"
+                },
+                {
+                  "agenda_item": "10.8.3",
+                  "description": "Waveform and frame structure"
+                }
               ]
             }
           ],
@@ -4503,6 +4617,28 @@
                   "description": "WUS and operation",
                   "has_description": true
                 }
+              ],
+              "children": [
+                {
+                  "agenda_item": "10.6.1",
+                  "description": "Downlink WUS and operation"
+                },
+                {
+                  "agenda_item": "10.6.1.1",
+                  "description": "Design of WUS with OFDM based sequence"
+                },
+                {
+                  "agenda_item": "10.6.1.2",
+                  "description": "WUS operation in RRC states"
+                },
+                {
+                  "agenda_item": "10.6.2",
+                  "description": "Uplink WUS and operation"
+                },
+                {
+                  "agenda_item": "10.6.3",
+                  "description": "WUS operation with other functionalities"
+                }
               ]
             }
           ],
@@ -4542,6 +4678,24 @@
                   "agenda_item": "10.5.4",
                   "description": "Downlink control channel, scheduling and HARQ operation",
                   "has_description": true
+                }
+              ],
+              "children": [
+                {
+                  "agenda_item": "10.5.4.1",
+                  "description": "Downlink control channel, scheduling for downlink and uplink transmission"
+                },
+                {
+                  "agenda_item": "10.5.4.2",
+                  "description": "Downlink and uplink transmission without dynamic scheduling"
+                },
+                {
+                  "agenda_item": "10.5.4.3",
+                  "description": "HARQ related Aspects"
+                },
+                {
+                  "agenda_item": "10.5.4.4",
+                  "description": "Handling of potential multiple uplink transmissions"
                 }
               ]
             }
@@ -4729,6 +4883,28 @@
                   "agenda_item": "10.6",
                   "description": "WUS and operation",
                   "has_description": true
+                }
+              ],
+              "children": [
+                {
+                  "agenda_item": "10.6.1",
+                  "description": "Downlink WUS and operation"
+                },
+                {
+                  "agenda_item": "10.6.1.1",
+                  "description": "Design of WUS with OFDM based sequence"
+                },
+                {
+                  "agenda_item": "10.6.1.2",
+                  "description": "WUS operation in RRC states"
+                },
+                {
+                  "agenda_item": "10.6.2",
+                  "description": "Uplink WUS and operation"
+                },
+                {
+                  "agenda_item": "10.6.3",
+                  "description": "WUS operation with other functionalities"
                 }
               ]
             }
@@ -4923,6 +5099,24 @@
                   "agenda_item": "10.5.4",
                   "description": "Downlink control channel, scheduling and HARQ operation",
                   "has_description": true
+                }
+              ],
+              "children": [
+                {
+                  "agenda_item": "10.5.4.1",
+                  "description": "Downlink control channel, scheduling for downlink and uplink transmission"
+                },
+                {
+                  "agenda_item": "10.5.4.2",
+                  "description": "Downlink and uplink transmission without dynamic scheduling"
+                },
+                {
+                  "agenda_item": "10.5.4.3",
+                  "description": "HARQ related Aspects"
+                },
+                {
+                  "agenda_item": "10.5.4.4",
+                  "description": "Handling of potential multiple uplink transmissions"
                 }
               ]
             }
@@ -6321,6 +6515,28 @@
                   "description": "WUS and operation",
                   "has_description": true
                 }
+              ],
+              "children": [
+                {
+                  "agenda_item": "10.6.1",
+                  "description": "Downlink WUS and operation"
+                },
+                {
+                  "agenda_item": "10.6.1.1",
+                  "description": "Design of WUS with OFDM based sequence"
+                },
+                {
+                  "agenda_item": "10.6.1.2",
+                  "description": "WUS operation in RRC states"
+                },
+                {
+                  "agenda_item": "10.6.2",
+                  "description": "Uplink WUS and operation"
+                },
+                {
+                  "agenda_item": "10.6.3",
+                  "description": "WUS operation with other functionalities"
+                }
               ]
             }
           ],
@@ -6562,6 +6778,20 @@
                   "description": "ISAC",
                   "has_description": true
                 }
+              ],
+              "children": [
+                {
+                  "agenda_item": "10.8.1",
+                  "description": "Evaluations"
+                },
+                {
+                  "agenda_item": "10.8.2",
+                  "description": "Aspects of integration with communication"
+                },
+                {
+                  "agenda_item": "10.8.3",
+                  "description": "Waveform and frame structure"
+                }
               ]
             }
           ],
@@ -6776,6 +7006,28 @@
                   "agenda_item": "10.6",
                   "description": "WUS and operation",
                   "has_description": true
+                }
+              ],
+              "children": [
+                {
+                  "agenda_item": "10.6.1",
+                  "description": "Downlink WUS and operation"
+                },
+                {
+                  "agenda_item": "10.6.1.1",
+                  "description": "Design of WUS with OFDM based sequence"
+                },
+                {
+                  "agenda_item": "10.6.1.2",
+                  "description": "WUS operation in RRC states"
+                },
+                {
+                  "agenda_item": "10.6.2",
+                  "description": "Uplink WUS and operation"
+                },
+                {
+                  "agenda_item": "10.6.3",
+                  "description": "WUS operation with other functionalities"
                 }
               ]
             }
@@ -7201,6 +7453,24 @@
                   "agenda_item": "10.5.4",
                   "description": "Downlink control channel, scheduling and HARQ operation",
                   "has_description": true
+                }
+              ],
+              "children": [
+                {
+                  "agenda_item": "10.5.4.1",
+                  "description": "Downlink control channel, scheduling for downlink and uplink transmission"
+                },
+                {
+                  "agenda_item": "10.5.4.2",
+                  "description": "Downlink and uplink transmission without dynamic scheduling"
+                },
+                {
+                  "agenda_item": "10.5.4.3",
+                  "description": "HARQ related Aspects"
+                },
+                {
+                  "agenda_item": "10.5.4.4",
+                  "description": "Handling of potential multiple uplink transmissions"
                 }
               ]
             }
@@ -8030,6 +8300,20 @@
                   "description": "MIMO operation",
                   "has_description": true
                 }
+              ],
+              "children": [
+                {
+                  "agenda_item": "10.5.2.1",
+                  "description": "Downlink transmission scheme(s) for downlink control channels"
+                },
+                {
+                  "agenda_item": "10.5.2.2",
+                  "description": "Downlink transmission scheme(s) for downlink shared channels"
+                },
+                {
+                  "agenda_item": "10.5.2.3",
+                  "description": "Uplink transmission scheme(s) for uplink channels"
+                }
               ]
             }
           ],
@@ -8210,7 +8494,7 @@
     }
   ],
   "source_file": "Draft RAN1#126b online and offline schedules - v00.docx",
-  "generated_at": "2026-10-05 09:56",
+  "generated_at": "2026-10-06 12:14",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
