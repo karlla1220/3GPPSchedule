@@ -868,12 +868,19 @@ def _description_hierarchy(
             }
         )
 
-    return {
+    item: dict[str, object] = {
         "agenda_item": agenda_item,
         "matched_agenda_item": matched,
         "description": descriptions[matched],
         "hierarchy": hierarchy,
     }
+    # "10.6.x" covers every item under 10.6; list them so the popup can show what that is.
+    if agenda_item.lower().endswith(".x"):
+        base = agenda_item[:-2]
+        children = sorted((key for key in descriptions if key.startswith(base + ".")), key=_natural_sort_key)
+        if children:
+            item["children"] = [{"agenda_item": key, "description": descriptions[key]} for key in children]
+    return item
 
 
 def annotate_sessions_with_agenda_descriptions(

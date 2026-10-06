@@ -104,9 +104,10 @@ def _build_filter_data(all_sessions: list) -> str:
 def _agenda_description_popup_lines(session) -> list[str]:
     """Build the popup's agenda section: one tree, parents folded by default.
 
-    The session's own items are always shown. Their parent levels are merged
-    into one tree, so a shared parent appears once; they stay hidden until the
-    popup's toggle shows them (schedule.js keeps that choice across popups).
+    The session's own items are always shown, and an "x" item ("10.6.x")
+    with every item under it. Their parent levels are merged into one tree,
+    so a shared parent appears once; they stay hidden until the popup's
+    toggle shows them (schedule.js keeps that choice across popups).
     """
     items = getattr(session, "agenda_descriptions", None) or []
     if not items and getattr(session, "description", None):
@@ -119,7 +120,7 @@ def _agenda_description_popup_lines(session) -> list[str]:
             }
         ]
 
-    entries: list[tuple[str, list[dict[str, str | None]], str]] = []
+    entries: list[tuple[str, list[dict[str, str | None]], str, list[dict]]] = []
     for item in items:
         agenda_item = str(item.get("agenda_item") or "")
         description = str(item.get("description") or "")
@@ -127,7 +128,11 @@ def _agenda_description_popup_lines(session) -> list[str]:
             continue
         hierarchy = _agenda_hierarchy_levels(item.get("hierarchy") or [])
         parents = hierarchy[:-1] if len(hierarchy) > 1 else []
-        entries.append((agenda_item, parents, _agenda_description_header(agenda_item, description)))
+        children = [c for c in item.get("children") or [] if c.get("agenda_item") and c.get("description")]
+        entries.append((agenda_item, parents, _agenda_description_header(agenda_item, description), children))
+    # An item already listed under an "x" item is not repeated on its own.
+    covered = {c["agenda_item"] for entry in entries for c in entry[3]}
+    entries = [entry for entry in entries if entry[0] not in covered]
     if not entries:
         return []
 
@@ -136,7 +141,7 @@ def _agenda_description_popup_lines(session) -> list[str]:
     entries.sort(key=lambda entry: _agenda_sort_key(entry[0]))
     rows: list[str] = []
     shown: set[str] = set()
-    for _, parents, header in entries:
+    for agenda_item, parents, header, children in entries:
         for depth, level in enumerate(parents):
             key = level["agenda_item"] or ""
             if key in shown:
@@ -147,6 +152,15 @@ def _agenda_description_popup_lines(session) -> list[str]:
                 f"{_agenda_hierarchy_line(level)}</div>"
             )
         rows.append(f'<div class="popup-agenda-item" style="--depth:{len(parents)}">{header}</div>')
+        # Indented under the "x" item whether or not the parents are shown.
+        base_dots = agenda_item.count(".") - 1
+        for child in children:
+            rel = max(1, child["agenda_item"].count(".") - base_dots)
+            rows.append(
+                f'<div class="popup-agenda-item popup-agenda-child" '
+                f'style="--depth:{len(parents) + rel};--rel:{rel}">'
+                f'{_agenda_description_header(child["agenda_item"], child["description"])}</div>'
+            )
 
     toggle = ""
     if shown:
