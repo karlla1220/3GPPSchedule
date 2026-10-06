@@ -1,6 +1,8 @@
 import re
 from types import SimpleNamespace
 
+from bs4 import BeautifulSoup
+
 from shared.renderer import (
     _agenda_description_popup_lines,
     _generate_css,
@@ -115,7 +117,7 @@ def test_generate_js_uses_json_encoding_for_timezone():
     assert "const AUTO_REFRESH_MS = 120000; // 2 minutes" in script
 
 
-def test_agenda_description_popup_shares_common_hierarchy_prefix():
+def test_agenda_description_popup_merges_parents_into_one_tree():
     session = SimpleNamespace(
         agenda_item="10.8.1, 10.8.2",
         description="Evaluations",
@@ -154,19 +156,20 @@ def test_agenda_description_popup_shares_common_hierarchy_prefix():
 
     lines = _agenda_description_popup_lines(session)
 
-    assert lines == [
-        '<div class="popup-description">'
-        '<div class="popup-path">'
-        "10 - Rel-20 Study of 6GR<br>"
-        "10.8 - ISAC"
-        "</div>"
-        "<strong>10.8.1:</strong> Evaluations<br>"
-        "<strong>10.8.2:</strong> Aspects of integration with communication"
-        "</div>"
+    # A shared parent appears once, above its children; parents are folded
+    # behind one toggle and the session's own items are always shown.
+    assert len(lines) == 1
+    section = BeautifulSoup(lines[0], "html.parser")
+    assert section.select_one(".popup-agenda-toggle")["aria-expanded"] == "false"
+    assert [(row["class"][0], row["style"], row.get_text()) for row in section.select("[style]")] == [
+        ("popup-agenda-parent", "--depth:0", "10 - Rel-20 Study of 6GR"),
+        ("popup-agenda-parent", "--depth:1", "10.8 - ISAC"),
+        ("popup-agenda-item", "--depth:2", "10.8.1: Evaluations"),
+        ("popup-agenda-item", "--depth:2", "10.8.2: Aspects of integration with communication"),
     ]
 
 
-def test_agenda_description_popup_keeps_separate_paths_without_two_common_levels():
+def test_agenda_description_popup_orders_items_as_a_tree():
     session = SimpleNamespace(
         agenda_item="9.2, 10.3.1",
         description="NR MIMO Phase 6",
@@ -198,6 +201,11 @@ def test_agenda_description_popup_keeps_separate_paths_without_two_common_levels
 
     lines = _agenda_description_popup_lines(session)
 
-    assert len(lines) == 2
-    assert "9 - Release 20 NR" in lines[0]
-    assert "10 - Rel-20 Study of 6GR" in lines[1]
+    section = BeautifulSoup(lines[0], "html.parser")
+    assert [row.get_text() for row in section.select("[style]")] == [
+        "9 - Release 20 NR",
+        "9.2: NR MIMO Phase 6",
+        "10 - Rel-20 Study of 6GR",
+        "10.3 - Channel coding and modulation",
+        "10.3.1: Channel coding",
+    ]

@@ -102,7 +102,12 @@ def _build_filter_data(all_sessions: list) -> str:
 
 
 def _agenda_description_popup_lines(session) -> list[str]:
-    """Build compact popup HTML for agenda-item descriptions."""
+    """Build the popup's agenda section: one tree, parents folded by default.
+
+    The session's own items are always shown. Their parent levels are merged
+    into one tree, so a shared parent appears once; they stay hidden until the
+    popup's toggle shows them (schedule.js keeps that choice across popups).
+    """
     items = getattr(session, "agenda_descriptions", None) or []
     if not items and getattr(session, "description", None):
         items = [
@@ -114,55 +119,49 @@ def _agenda_description_popup_lines(session) -> list[str]:
             }
         ]
 
-    entries: list[dict[str, object]] = []
+    entries: list[tuple[str, list[dict[str, str | None]], str]] = []
     for item in items:
         agenda_item = str(item.get("agenda_item") or "")
         description = str(item.get("description") or "")
         if not description:
             continue
+        hierarchy = _agenda_hierarchy_levels(item.get("hierarchy") or [])
+        parents = hierarchy[:-1] if len(hierarchy) > 1 else []
+        entries.append((agenda_item, parents, _agenda_description_header(agenda_item, description)))
+    if not entries:
+        return []
 
-        entries.append(
-            {
-                "header": _agenda_description_header(agenda_item, description),
-                "hierarchy": _agenda_hierarchy_levels(item.get("hierarchy") or []),
-            }
-        )
-
-    if len(entries) > 1:
-        common_prefix = _common_hierarchy_prefix(
-            [entry["hierarchy"] for entry in entries]
-        )
-        if len(common_prefix) >= 1:
-            prefix_lines = [_agenda_hierarchy_line(level) for level in common_prefix]
-            path_html = (
-                '<div class="popup-path">'
-                + "<br>".join(prefix_lines)
-                + "</div>"
+    # Agenda numbers are hierarchical, so their natural order is tree order:
+    # each parent lands right above its own children.
+    entries.sort(key=lambda entry: _agenda_sort_key(entry[0]))
+    rows: list[str] = []
+    shown: set[str] = set()
+    for _, parents, header in entries:
+        for depth, level in enumerate(parents):
+            key = level["agenda_item"] or ""
+            if key in shown:
+                continue
+            shown.add(key)
+            rows.append(
+                f'<div class="popup-agenda-parent" style="--depth:{depth}">'
+                f"{_agenda_hierarchy_line(level)}</div>"
             )
-            leaf_html = "<br>".join(str(entry["header"]) for entry in entries)
-            return [
-                '<div class="popup-description">'
-                + path_html
-                + leaf_html
-                + "</div>"
-            ]
+        rows.append(f'<div class="popup-agenda-item" style="--depth:{len(parents)}">{header}</div>')
 
-    lines: list[str] = []
-    for entry in entries:
-        hierarchy = entry["hierarchy"]
-        path_html = ""
-        prefix = hierarchy[:-1] if len(hierarchy) > 1 else []
-        if prefix:
-            path_html = (
-                '<div class="popup-path">'
-                + "<br>".join(_agenda_hierarchy_line(level) for level in prefix)
-                + "</div>"
-            )
-        lines.append(
-            f'<div class="popup-description">{path_html}{entry["header"]}</div>'
+    toggle = ""
+    if shown:
+        toggle = (
+            '<button type="button" class="popup-agenda-toggle" aria-expanded="false">'
+            '<span class="when-folded">\u25b8 Show parent items</span>'
+            '<span class="when-unfolded">\u25be Hide parent items</span>'
+            "</button>"
         )
+    return [f'<div class="popup-description">{toggle}{"".join(rows)}</div>']
 
-    return lines
+
+def _agenda_sort_key(agenda_item: str) -> list[tuple[int, int | str]]:
+    """Natural order for numbers like 5.1.10 (after 5.1.9)."""
+    return [(0, int(part)) if part.isdigit() else (1, part) for part in agenda_item.split(".")]
 
 
 def _agenda_description_header(label: str, description: str) -> str:
@@ -193,22 +192,6 @@ def _agenda_hierarchy_line(level: dict[str, str | None]) -> str:
     if description:
         return f"{_esc(agenda_item)} - {_esc(description)}"
     return _esc(agenda_item)
-
-
-def _common_hierarchy_prefix(
-    hierarchies: list[list[dict[str, str | None]]],
-) -> list[dict[str, str | None]]:
-    if not hierarchies or any(not hierarchy for hierarchy in hierarchies):
-        return []
-
-    prefix: list[dict[str, str | None]] = []
-    for levels in zip(*hierarchies):
-        first = levels[0]
-        if all(level == first for level in levels[1:]):
-            prefix.append(first)
-        else:
-            break
-    return prefix
 
 
 def _load_template(name: str) -> str:
@@ -441,7 +424,6 @@ def generate_html(schedule: Schedule, *, schedules=None, groups=None, presentati
                 popup_lines.append(f"Chair: {_esc(session.chair)}")
             if session.agenda_item:
                 popup_lines.append(f"AI: {_esc(session.agenda_item)}")
-            popup_lines.extend(_agenda_description_popup_lines(session))
             popup_lines.append(
                 f"Time: {session.start_time} - {session.end_time} ({session.duration_minutes} min)"
             )
@@ -458,7 +440,9 @@ def generate_html(schedule: Schedule, *, schedules=None, groups=None, presentati
                 popup_lines.append(
                     '<div class="popup-notes">' + "<br>".join(_esc(n) for n in notes) + "</div>"
                 )
-            popup_html = "<br>".join(popup_lines)
+            # Agenda names last: the notes say what this session covers.
+            popup_lines.extend(_agenda_description_popup_lines(session))
+            popup_html = _join_popup_lines(popup_lines)
 
             # Escape popup_html for use in data attribute
             popup_attr = popup_html.replace('&', '&amp;').replace('"', '&quot;').replace("'", '&#39;')
@@ -522,6 +506,16 @@ def generate_html(schedule: Schedule, *, schedules=None, groups=None, presentati
     })
 
 
+def _join_popup_lines(lines: list[str]) -> str:
+    """Break between text lines only; a block section already starts a line."""
+    html = ""
+    for line in lines:
+        if html and not html.endswith("</div>") and not line.startswith("<div"):
+            html += "<br>"
+        html += line
+    return html
+
+
 # Cell height budget in px; see the comment above .session-block in schedule.css.
 _CELL_CHROME = 12          # margin 4 + border 2 + padding 6
 _TITLE_LINE = 16.2         # 13.5px x 1.2
@@ -529,6 +523,7 @@ _SCOPE_LINE = 13.5         # "Common" under the title, 10px at normal line heigh
 _DETAILS_GAP = 1
 _SECONDARY_LINE = 14.175   # 10.5px x 1.35
 _CHAIR_ROW = _SECONDARY_LINE + 1  # pinned 3px above the border, 1px into the content box
+_NOTES_RULE = 7            # 3px gap, the short rule, 4px gap above the first note
 
 
 def _cell_notes(session) -> list[str]:
@@ -545,7 +540,7 @@ def _notes_html(notes: list[str], slots: float, ai_html: str, scope_label: str |
     through the middle. The chair's row is kept clear while the chair shows;
     columns too narrow for the chair get that row back (see schedule.css).
     """
-    used = _TITLE_LINE + _DETAILS_GAP + _SECONDARY_LINE
+    used = _TITLE_LINE + _DETAILS_GAP + _SECONDARY_LINE + _NOTES_RULE
     if scope_label:
         used += _SCOPE_LINE
     if ai_html:
@@ -556,8 +551,10 @@ def _notes_html(notes: list[str], slots: float, ai_html: str, scope_label: str |
     if not lines_full:
         return ""
     items = "".join(f'<div class="session-note">{_esc(n)}</div>' for n in notes)
+    # Without a line beside the chair, only columns that hide the chair show notes.
+    classes = "session-notes" if lines else "session-notes beside-chair"
     return (
-        f'<div class="session-notes" style="--note-lines:{lines};--note-lines-full:{lines_full}">'
+        f'<div class="{classes}" style="--note-lines:{lines};--note-lines-full:{lines_full}">'
         f"{items}</div>"
     )
 
