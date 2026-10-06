@@ -528,6 +528,7 @@ header .meta {
 
 .session-duration,
 .session-ai,
+.session-notes,
 .session-chair {
     font-size: 10.5px;
     line-height: 1.35;
@@ -568,6 +569,30 @@ header .meta {
     min-height: 0;
 }
 
+/* With notes below, the AI list keeps to one line so the notes get the room. */
+.session-details.has-notes .session-ai {
+    flex: none;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+/* Notes (RAN2 cell text) take the whole lines left over, in the same quiet
+   tone and without a label. The renderer counts the lines; the height is a
+   whole number of line boxes, so no note is cut through the middle.
+   A wrapped note hangs its continuation lines so each note still starts
+   on the title's left edge. */
+.session-notes {
+    flex: none;
+    max-height: calc(var(--note-lines, 0) * 1.35em);
+    overflow: hidden;
+    overflow-wrap: anywhere;
+}
+
+.session-note {
+    padding-left: 6px;
+    text-indent: -6px;
+}
+
 /* Pinned bottom-right with nothing behind it, so it needs clear space on
    its row. */
 .session-chair {
@@ -588,6 +613,11 @@ header .meta {
 @container (max-width: 160px) {
     .session-chair {
         display: none;
+    }
+
+    /* The chair's row is free again. */
+    .session-notes {
+        max-height: calc(var(--note-lines-full, 0) * 1.35em);
     }
 }
 
@@ -647,6 +677,13 @@ header .meta {
     margin-top: 4px;
     padding-top: 4px;
     border-top: 1px solid rgba(255,255,255,0.16);
+}
+
+.popup-notes {
+    margin-top: 4px;
+    padding-top: 4px;
+    border-top: 1px solid rgba(255,255,255,0.16);
+    line-height: 1.5;
 }
 
 .popup-path {

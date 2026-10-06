@@ -347,8 +347,14 @@ def test_render_roundtrip_popup_and_additional_information(v11, tmp_path):
     html = BeautifulSoup(generate_html(v11), 'html.parser')
     block = html.select_one('#monday [data-name="R17/18 NR / IoT NTN / R17 NR NTN corrections / R18 NR NTN corrections …"]')
     popup = block['data-popup']
-    assert 'Note: [7.8] NR19 NR NTN [0] (Sergio)' in popup
-    assert 'Note: [7.8.1], [7.8.2]' not in popup   # repeated by the AI field
+    notes = BeautifulSoup(popup, 'html.parser').select_one('.popup-notes')
+    assert '[7.8] NR19 NR NTN [0] (Sergio)' in notes.get_text('\n').split('\n')
+    assert 'Note:' not in popup                    # one block, no label on every line
+    assert '[7.8.1], [7.8.2]' not in popup         # repeated by the AI field
+    # A two-hour block has room to show the notes in the cell too.
+    cell = [n.get_text() for n in block.select('.session-notes .session-note')]
+    assert cell[0] == 'R17/18 NR / IoT NTN (Sergio)'
+    assert '[7.8] NR19 NR NTN [0] (Sergio)' in cell
     assert '7.8: NTN for NR Ph3' in popup.replace('<strong>', '').replace('</strong>', '')
     section = html.select_one('details.supplements')
     assert section.summary.get_text() == 'Additional information'

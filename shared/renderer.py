@@ -428,6 +428,10 @@ def generate_html(schedule: Schedule, *, schedules=None, groups=None, presentati
                 ai_html = (
                     f'<div class="session-ai">AI {_esc(session.agenda_item)}</div>'
                 )
+            notes = _cell_notes(session)
+            notes_html = ""
+            if notes and dur_html:
+                notes_html = _notes_html(notes, slots, ai_html, scope_label, chair_html)
 
             # Popup (click-to-show)
             popup_lines = [f"<strong>{_esc(session.name)}</strong>"]
@@ -449,15 +453,20 @@ def generate_html(schedule: Schedule, *, schedules=None, groups=None, presentati
                 popup_lines.append(f"Room: {scope_label} (merged display, not a booking of every room)")
             elif room_names_in_span:
                 popup_lines.append(f"Room: {_esc(', '.join(room_names_in_span))}")
-            popup_lines.extend(f"Note: {_esc(note)}" for note in session.notes)
+            if notes:
+                # One separated block; a "Note:" label on every line only adds noise.
+                popup_lines.append(
+                    '<div class="popup-notes">' + "<br>".join(_esc(n) for n in notes) + "</div>"
+                )
             popup_html = "<br>".join(popup_lines)
 
             # Escape popup_html for use in data attribute
             popup_attr = popup_html.replace('&', '&amp;').replace('"', '&quot;').replace("'", '&#39;')
 
             # Build secondary details wrapped in a clipping container
-            details_inner = f"{dur_html}{ai_html}"
-            details_html = f'<div class="session-details">{details_inner}</div>' if details_inner else ""
+            details_inner = f"{dur_html}{ai_html}{notes_html}"
+            details_class = "session-details has-notes" if notes_html else "session-details"
+            details_html = f'<div class="{details_class}">{details_inner}</div>' if details_inner else ""
             is_long = _crosses_time_block(session.start_time, session.end_time, timeline)
             block_classes = "session-block"
             if is_long:
@@ -511,6 +520,46 @@ def generate_html(schedule: Schedule, *, schedules=None, groups=None, presentati
             starts_at=None if schedule.is_demo else schedule.starts_at,
             ends_at=None if schedule.is_demo else schedule.ends_at),
     })
+
+
+# Cell height budget in px; see the comment above .session-block in schedule.css.
+_CELL_CHROME = 12          # margin 4 + border 2 + padding 6
+_TITLE_LINE = 16.2         # 13.5px x 1.2
+_SCOPE_LINE = 13.5         # "Common" under the title, 10px at normal line height
+_DETAILS_GAP = 1
+_SECONDARY_LINE = 14.175   # 10.5px x 1.35
+_CHAIR_ROW = _SECONDARY_LINE + 1  # pinned 3px above the border, 1px into the content box
+
+
+def _cell_notes(session) -> list[str]:
+    """Notes worth showing; a line that only repeats the title adds nothing."""
+    name = session.name.strip().casefold()
+    return [n for n in session.notes if n.strip() and n.strip().casefold() != name]
+
+
+def _notes_html(notes: list[str], slots: float, ai_html: str, scope_label: str | None,
+                chair_html: str) -> str:
+    """Notes fill whole secondary lines left under the title, time and AI lines.
+
+    The container is clipped to a whole number of lines so no note is cut
+    through the middle. The chair's row is kept clear while the chair shows;
+    columns too narrow for the chair get that row back (see schedule.css).
+    """
+    used = _TITLE_LINE + _DETAILS_GAP + _SECONDARY_LINE
+    if scope_label:
+        used += _SCOPE_LINE
+    if ai_html:
+        used += _SECONDARY_LINE
+    free = slots * 10 - _CELL_CHROME - used
+    lines_full = max(0, int(free // _SECONDARY_LINE))
+    lines = max(0, int((free - _CHAIR_ROW) // _SECONDARY_LINE)) if chair_html else lines_full
+    if not lines_full:
+        return ""
+    items = "".join(f'<div class="session-note">{_esc(n)}</div>' for n in notes)
+    return (
+        f'<div class="session-notes" style="--note-lines:{lines};--note-lines-full:{lines_full}">'
+        f"{items}</div>"
+    )
 
 
 def _crosses_time_block(start_time: str, end_time: str, timeline: Timeline) -> bool:
