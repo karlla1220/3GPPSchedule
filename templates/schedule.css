@@ -1100,7 +1100,7 @@ header .meta {
 /* The cell whose agreements are shown: its own accent, drawn as a ring. */
 .session-block[aria-pressed="true"] {
     border-color: var(--accent);
-    box-shadow: 0 0 0 1px var(--accent), 0 2px 8px -2px rgba(15,23,42,.14);
+    box-shadow: 0 0 0 1px var(--accent);
     z-index: 16;
 }
 .session-block:focus-visible { outline: 2px solid #2563EB; outline-offset: 1px; z-index: 16; }

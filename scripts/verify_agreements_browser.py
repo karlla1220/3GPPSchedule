@@ -83,6 +83,12 @@ def main():
         checks.append(
             "Inline HTML, WMF and MathML with natural height and isolated CSS"
         )
+        # node.style lists longhands, so text-decoration must survive as
+        # text-decoration-line; struck-out text reverses an agreement's meaning.
+        assert doc.locator("[style]").evaluate_all(
+            "(xs)=>xs.filter(x=>x.style.textDecorationLine.includes('line-through')).length"
+        ) == 6
+        checks.append("Word strike-through survives style sanitization")
         for selector, marker in [
             ("ul", "disc"),
             ("ul ul", "circle"),
@@ -133,7 +139,7 @@ def main():
         assert len([u for u in requests if "/agreements/" in u]) == 2
         checks.append("Cell switching and successful HTML cache reuse")
         before_requests = len([u for u in requests if "/agreements/" in u])
-        select("Multiple agendas, AI 10.5.1.1|10.5.2.2")
+        select("Multiple agendas, AI 10.5.1.1, 10.5.2.2")
         expect(page.get_by_role("tab")).to_have_count(2)
         expect(doc.locator("article")).not_to_have_count(0)
         assert len([u for u in requests if "/agreements/" in u]) == before_requests + 1
@@ -173,7 +179,7 @@ def main():
         checks.append("Sections without an Agreement marker still show their source content")
         select("TDoc entries only, AI 9.7.1")
         expect(page.get_by_text("Only TDoc listings are recorded under this item.")).to_be_visible()
-        select("Heading over subsections, AI 10.6.1|10.6.1.1|10.6.1.2")
+        select("Heading over subsections, AI 10.6.1")
         expect(page.get_by_role("tab")).to_have_count(3)
         expect(page.get_by_role("tab", name="AI 10.6.1.1")).to_have_attribute("aria-selected", "true")
         expect(doc).to_be_visible()
@@ -181,7 +187,7 @@ def main():
         note = page.locator("#agreement-body .agreement-note")
         expect(note).to_have_text("Nothing is recorded directly under this item; see its subsections.")
         checks.append("A parent brings its subsections and opens on the first item with text")
-        select("No agenda, AI ")
+        select("No agenda")
         expect(page.get_by_text("This cell has no agenda number.")).to_be_visible()
         expect(page.get_by_role("tab")).to_have_count(0)
         checks.append("Missing number and no-AI states")

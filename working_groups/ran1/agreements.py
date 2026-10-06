@@ -105,9 +105,13 @@ def _body_blocks(parent):
             yield block
 
 
-def parse_agreements(path: Path, meeting_id: str) -> dict:
-    """Return portable HTML fragments plus source identity; reject unknown meetings."""
-    if not meeting_id or _extract_meeting_id(path.name) != meeting_id.lower():
+def parse_agreements(path: Path, meeting_id: str, *, source_name: str | None = None) -> dict:
+    """Return portable HTML fragments plus source identity; reject unknown meetings.
+
+    ``source_name`` is the published name when ``path`` was extracted from a
+    zip: the inner document is often named without the meeting.
+    """
+    if not meeting_id or _extract_meeting_id(source_name or path.name) != meeting_id.lower():
         raise ValueError("Chairman note must identify the exact schedule meeting")
     digest = hashlib.sha256(path.read_bytes()).hexdigest()
     backend = hashlib.sha256(backend_identity().encode()).hexdigest()[:12]
@@ -239,72 +243,99 @@ def reference_identity(info):
     return {k: info[k] for k in ("name", "url", "sha256") if k in info}
 
 
-def build_agreements(*, cfg, meeting_id, schedule_path, offline, extra_paths=()):
-    unavailable = {
-        "status": "unavailable",
-        "meeting_id": meeting_id or "",
-        "sections": {},
-    }
+def _unavailable(meeting_id, warning=None):
+    data = {"status": "unavailable", "meeting_id": meeting_id or "", "sections": {}}
+    if warning:
+        data["warnings"] = [warning]
+    return data
+
+
+def local_note_path(cfg, meeting_id, *, offline=False, schedule_path=None):
+    """The local note both the check and the build use, so their identities agree.
+
+    Manual references and configured extra_files take precedence over remote
+    documents. Download caches count only offline; a previous meeting's file
+    never becomes a fallback.
+    """
     if not meeting_id:
-        return unavailable, None
-    # Explicit local references precede remote documents. Download caches are
-    # used only offline; a previous meeting's cache never becomes a fallback.
-    paths = list(extra_paths)
-    manual = find_chair_notes_docx(Path("ref_in_manual/ran1"), meeting_id=meeting_id)
-    if manual:
-        paths.append(manual)
+        return None
+    directories = [Path("ref_in_manual/ran1")]
+    if offline or any(
+        entry.get("type") == "chair_notes" for entry in cfg.get("extra_files", [])
+    ):
+        directories.append(Path("downloads/ran1/extra_files"))
     if offline:
-        for directory in (
-            schedule_path.parent,
-            Path("downloads/ran1/Chair_notes"),
-            Path("downloads/ran1/extra_files"),
-        ):
-            local = find_chair_notes_docx(directory, meeting_id=meeting_id)
-            if local:
-                paths.append(local)
-    paths = [p for p in paths if _extract_meeting_id(p.name) == meeting_id.lower()]
+        if schedule_path is not None:
+            directories.append(schedule_path.parent)
+        directories.append(Path("downloads/ran1/Chair_notes"))
+    paths = [find_chair_notes_docx(d, meeting_id=meeting_id) for d in directories]
+    paths = [p for p in paths if p is not None]
+    return max(paths, key=_local_doc_preference) if paths else None
+
+
+def build_agreements(*, cfg, meeting_id, schedule_path, offline, previous=None):
+    """Return (agreements, source identity).
+
+    A note that cannot be parsed keeps ``previous`` (the last published
+    agreements of this meeting) but still reports its identity, so the check
+    job does not rebuild for the same broken document every hour. Listing and
+    download failures propagate; the caller keeps the previous identity.
+    """
+    if not meeting_id:
+        return _unavailable(meeting_id), None
     info = None
-    if paths:
-        path = max(paths, key=_local_doc_preference)
-    elif not offline:
+    path = local_note_path(cfg, meeting_id, offline=offline, schedule_path=schedule_path)
+    if path is None:
+        if offline:
+            return _unavailable(meeting_id), None
         info = remote_reference(cfg, meeting_id)
         if info is None:
-            return unavailable, None
+            return _unavailable(meeting_id), None
         path = download_latest_chair_notes(
             latest_info=info, preferred_meeting_id=meeting_id, force=True
         )
         if path is None:
             raise RuntimeError("Selected chairman note could not be downloaded")
+        identity = reference_identity(info)
     else:
-        return unavailable, None
-    result = parse_agreements(path, meeting_id)
+        identity = {
+            "origin": "local",
+            "name": path.name,
+            "sha256": hashlib.sha256(path.read_bytes()).hexdigest(),
+        }
+    try:
+        result = parse_agreements(
+            path, meeting_id, source_name=info["name"] if info else None
+        )
+    except Exception as exc:
+        warning = f"Chairman note {identity['name']} could not be parsed: {exc}"
+        print(f"Warning: {warning}")
+        return previous or _unavailable(meeting_id, warning), identity
     if info:
         result["source_url"] = info["url"]
         result["source_name"] = info["name"]
         result["warnings"] = sorted(set(result["warnings"] + info.get("source_warnings", [])))
-    identity = (
-        reference_identity(info)
-        if info
-        else {"origin": "local", "name": path.name, "sha256": result["sha256"]}
-    )
     return result, identity
+
+
+def previous_agreements(meeting_id, snapshot=Path("docs/ran1/schedule.json")):
+    """Agreements last published for this meeting, or None."""
+    if not meeting_id:
+        return None
+    try:
+        data = json.loads(snapshot.read_text(encoding="utf-8")).get("chairman_agreements")
+    except (OSError, ValueError, AttributeError):
+        return None
+    if isinstance(data, dict) and data.get("status") == "ready" and data.get("meeting_id") == meeting_id.lower():
+        return data
+    return None
 
 
 def local_note_reference(cfg, meeting_id):
     """Identity of an authoritative manual/extra note, never a download fallback."""
-    if not meeting_id:
+    path = local_note_path(cfg, meeting_id)
+    if path is None:
         return None
-    paths = [find_chair_notes_docx(Path("ref_in_manual/ran1"), meeting_id=meeting_id)]
-    if any(entry.get("type") == "chair_notes" for entry in cfg.get("extra_files", [])):
-        paths.append(
-            find_chair_notes_docx(
-                Path("downloads/ran1/extra_files"), meeting_id=meeting_id
-            )
-        )
-    paths = [path for path in paths if path is not None]
-    if not paths:
-        return None
-    path = max(paths, key=_local_doc_preference)
     return {
         "origin": "local",
         "name": path.name,

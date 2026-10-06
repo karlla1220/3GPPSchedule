@@ -17,7 +17,12 @@ from shared.schedule import (
 )
 
 from shared.page import render_header
-from shared.agreement_assets import render_agreement_panel, write_agreement_assets, agenda_section_ids
+from shared.agreement_assets import (
+    agenda_section_ids,
+    current_agreements,
+    render_agreement_panel,
+    write_agreement_assets,
+)
 
 # Default color for sessions without a group header
 _DEFAULT_COLOR = {"bg": "#F3F4F6", "border": "#9CA3AF", "text": "#374151"}
@@ -266,6 +271,10 @@ def generate_html(schedule: Schedule, *, schedules=None, groups=None, presentati
 
     color_map = _assign_group_colors(all_sessions)
     filter_data_json = _build_filter_data(all_sessions)
+    # None outside RAN1: cells there have no agreement panel to control.
+    agreement_sections = (
+        current_agreements(schedule).get("sections", {}) if schedule.wg_id == "ran1" else None
+    )
     page_header = render_header(schedule, presentation=presentation, schedules=schedules, groups=groups)
 
     # Build HTML
@@ -478,23 +487,29 @@ def generate_html(schedule: Schedule, *, schedules=None, groups=None, presentati
             # Filter data attributes – only actual AI values
             if session.agenda_item:
                 ai_vals = [a.strip() for a in session.agenda_item.split(",") if a.strip()]
-                if schedule.wg_id == 'ran1':
-                    sections = schedule.chairman_agreements.get('sections', {})
-                    if schedule.chairman_agreements.get('meeting_id') != schedule.meeting_id.lower():
-                        sections = {}
-                    ai_vals = agenda_section_ids(session.agenda_item, sections)
                 data_ai = "|".join(ai_vals)
             else:
                 data_ai = ""
             data_ai_attr = _esc(data_ai).replace('"', '&quot;')
+            # The panel opens the chair-note sections an AI covers (10.6.x →
+            # 10.6.1, 10.6.2). The filter keeps matching the AI as written.
+            agreement_attrs = ""
+            if agreement_sections is not None:
+                agreement_ai = "|".join(agenda_section_ids(session.agenda_item, agreement_sections))
+                label = f"{session.name}, AI {session.agenda_item}" if session.agenda_item else session.name
+                agreement_attrs = (
+                    ' tabindex="0" role="button" aria-controls="agreement-panel" aria-pressed="false"'
+                    f' aria-label="{_esc(label).replace(chr(34), "&quot;")}"'
+                    f' data-agreement-ai="{_esc(agreement_ai).replace(chr(34), "&quot;")}"'
+                )
             data_name_attr = _esc(session.name).replace('"', '&quot;')
             data_group_attr = _esc(session.group_header).replace('"', '&quot;')
             data_description_attr = _esc(session.description or "").replace('"', '&quot;')
 
             html_parts.append(
                 f'                <div class="{block_classes}" style="{style}"'
-                + (f' tabindex="0" role="button" aria-controls="agreement-panel" aria-pressed="false" aria-label="{data_name_attr}, AI {data_ai_attr}"' if schedule.wg_id == "ran1" else '')
-                + f' data-popup="{popup_attr}"'
+                f'{agreement_attrs}'
+                f' data-popup="{popup_attr}"'
                 f' data-room-scope="{session.room_scope}"'
                 f' data-ai="{data_ai_attr}"'
                 f' data-name="{data_name_attr}"'

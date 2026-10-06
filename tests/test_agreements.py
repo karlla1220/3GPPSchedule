@@ -771,3 +771,88 @@ def test_embedded_ole_equation_uses_static_preview_with_vml_size(note):
     assert 'data:image/png;base64,' in rendered
     assert 'width:41.7333px' in rendered
     assert 'ignored-active-object' not in rendered and '[Object:' not in rendered
+
+
+def test_filter_keeps_written_ai_and_panel_gets_sections(note):
+    """10.6.x-style expansion feeds the panel only; the filter matches the AI as written."""
+    page = generate_html(schedule(a.parse_agreements(note, "ran1#124")))
+    block = BeautifulSoup(page, "html.parser").select_one(".session-block")
+    assert block["data-ai"] == "10.1|10.10"
+    assert block["data-agreement-ai"].split("|")[:2] == ["10.1", "10.10"]
+    assert block["aria-label"] == "Multi, AI 10.1, 10.10"
+    other = BeautifulSoup(generate_html(schedule(wg="ran-plenary")), "html.parser")
+    assert not other.select_one(".session-block").has_attr("data-agreement-ai")
+
+
+def test_zip_inner_name_without_meeting_uses_published_name(note, tmp_path):
+    inner = tmp_path / "Chair_notes_v09.docx"
+    inner.write_bytes(note.read_bytes())
+    with pytest.raises(ValueError):
+        a.parse_agreements(inner, "ran1#124")
+    result = a.parse_agreements(
+        inner, "ran1#124", source_name="RAN1#124 Chair notes v09.zip"
+    )
+    assert result["sections"]["10.1"]["html"]
+    with pytest.raises(ValueError):
+        a.parse_agreements(inner, "ran1#124", source_name="RAN1#125 Chair notes.zip")
+
+
+def test_remote_zip_note_is_parsed(note, tmp_path):
+    inner = tmp_path / "Chair_notes_v09.docx"
+    inner.write_bytes(note.read_bytes())
+    info = {"name": "RAN1#124 Chair notes v09.zip", "url": "https://x/n.zip", "sha256": "S"}
+    with (
+        patch.object(a, "remote_reference", return_value=info),
+        patch.object(a, "download_latest_chair_notes", return_value=inner),
+    ):
+        result, ref = a.build_agreements(
+            cfg={}, meeting_id="ran1#124", schedule_path=tmp_path / "s.docx", offline=False
+        )
+    assert result["status"] == "ready" and result["source_name"] == info["name"]
+    assert ref == {"name": info["name"], "url": info["url"], "sha256": "S"}
+
+
+def test_unparsable_note_keeps_previous_and_reports_its_identity(tmp_path, monkeypatch):
+    monkeypatch.chdir(tmp_path)
+    manual = tmp_path / "ref_in_manual/ran1"
+    manual.mkdir(parents=True)
+    broken = manual / "Chair notes RAN1#124 - v10.docx"
+    broken.write_bytes(b"not a docx")
+    previous = {"status": "ready", "meeting_id": "ran1#124", "sections": {"10.1": {}}}
+    result, ref = a.build_agreements(
+        cfg={}, meeting_id="ran1#124", schedule_path=tmp_path / "s.docx",
+        offline=False, previous=previous,
+    )
+    assert result is previous
+    assert ref == a.local_note_reference({}, "ran1#124") and ref["name"] == broken.name
+    result, _ = a.build_agreements(
+        cfg={}, meeting_id="ran1#124", schedule_path=tmp_path / "s.docx", offline=False,
+    )
+    assert result["status"] == "unavailable" and "could not be parsed" in result["warnings"][0]
+
+
+def test_check_and_build_pick_the_same_local_note(note, tmp_path, monkeypatch):
+    """A stale extra_files note left on disk is chosen by both, so identities agree."""
+    monkeypatch.chdir(tmp_path)
+    extra = tmp_path / "downloads/ran1/extra_files"
+    extra.mkdir(parents=True)
+    (extra / "Chair notes RAN1#124 - v03.docx").write_bytes(note.read_bytes())
+    manual = tmp_path / "ref_in_manual/ran1"
+    manual.mkdir(parents=True)
+    (manual / "Chair notes RAN1#124 - v02.docx").write_bytes(note.read_bytes())
+    cfg = {"extra_files": [{"type": "chair_notes", "url": "https://x/n"}]}
+    with patch.object(a, "remote_reference", side_effect=AssertionError("network")):
+        _, ref = a.build_agreements(
+            cfg=cfg, meeting_id="ran1#124", schedule_path=tmp_path / "s.docx", offline=False
+        )
+    assert ref == a.local_note_reference(cfg, "ran1#124")
+    assert ref["name"] == "Chair notes RAN1#124 - v03.docx"
+
+
+def test_previous_agreements_only_for_the_same_meeting(tmp_path):
+    snapshot = tmp_path / "schedule.json"
+    data = {"status": "ready", "meeting_id": "ran1#124", "sections": {}}
+    snapshot.write_text('{"chairman_agreements": ' + __import__("json").dumps(data) + "}")
+    assert a.previous_agreements("RAN1#124", snapshot) == data
+    assert a.previous_agreements("ran1#124bis", snapshot) is None
+    assert a.previous_agreements("ran1#124", tmp_path / "missing.json") is None

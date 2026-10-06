@@ -40,12 +40,18 @@ def agenda_section_ids(value, sections):
     return list(dict.fromkeys(result))
 
 
+def current_agreements(schedule):
+    """The schedule's agreements, or an empty set if they belong to another meeting."""
+    data = schedule.chairman_agreements
+    if data.get("meeting_id") != schedule.meeting_id.lower():
+        return {"status": "unavailable", "sections": {}}
+    return data
+
+
 def agreement_assets(schedule):
     if schedule.wg_id != "ran1":
         return {}, {}
-    data = schedule.chairman_agreements
-    if data.get("meeting_id") != schedule.meeting_id.lower():
-        data = {"status": "unavailable", "sections": {}}
+    data = current_agreements(schedule)
     manifest = {
         k: data[k]
         for k in (

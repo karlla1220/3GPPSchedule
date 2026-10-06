@@ -678,11 +678,26 @@ def build_schedule(args) -> Schedule:
                 print("\nWarning: No agenda or Chair notes DOCX found, using UTC timezone")
 
     # Agreements are an independent input, even with a resolved Portal timezone.
-    from .agreements import build_agreements
-    chairman_agreements, agreements_ref = build_agreements(
-        cfg=cfg, meeting_id=current_meeting_id, schedule_path=docx_path,
-        offline=bool(args.local or args.no_download), extra_paths=extra_chair_notes_paths,
-    )
+    # They are optional: a failure keeps what was last published for this
+    # meeting and never stops the schedule itself from being published.
+    from .agreements import build_agreements, previous_agreements
+    previous = previous_agreements(current_meeting_id)
+    try:
+        chairman_agreements, agreements_ref = build_agreements(
+            cfg=cfg, meeting_id=current_meeting_id, schedule_path=docx_path,
+            offline=bool(args.local or args.no_download), previous=previous,
+        )
+    except Exception as e:
+        print(f"Warning: chairman agreements unavailable: {e}")
+        chairman_agreements = previous or {
+            "status": "unavailable", "meeting_id": current_meeting_id or "", "sections": {},
+        }
+        # Keep the saved identity so the check retries only when the note changes.
+        agreements_ref = (
+            prev_state.get("agreements_ref")
+            if prev_state.get("meeting_id") == current_meeting_id
+            else None
+        )
 
     # Persist state (FTP file listing + meeting metadata) for the next run.
     # Locally-provided chairman documents (ref_in_manual/) are excluded: the
