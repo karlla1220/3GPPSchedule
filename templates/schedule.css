@@ -20,6 +20,9 @@
     --accent-strength: 62%;
     --accent-mute: #64748B;
     --dim-opacity: 0.30;
+    /* Agreement changes: one green for added text, its tab dot and its note. */
+    --added: #2F9E62;
+    --added-tint: #EAF6EF;
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -1081,6 +1084,30 @@ header .meta {
 }
 #agreement-body > p { font-size: 13px; color: var(--ink-2); }
 #agreement-body > .agreement-note { color: var(--ink-3); }
+#agreement-body > .agreement-change {
+    margin: -8px 0 14px;
+    font-size: 12px;
+    color: var(--ink-3);
+}
+#agreement-body > .agreement-change.has-added::before {
+    content: "";
+    display: inline-block;
+    width: 3px;
+    height: .95em;
+    margin-right: 7px;
+    border-radius: 2px;
+    background: var(--added);
+    vertical-align: -.12em;
+}
+.agreement-updated {
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    margin-left: 6px;
+    border-radius: 50%;
+    background: var(--added);
+    vertical-align: .15em;
+}
 .agreement-document { display: block; width: 100%; min-width: 0; }
 .agreement-action {
     margin-left: 8px;

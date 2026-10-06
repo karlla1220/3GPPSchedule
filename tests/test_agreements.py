@@ -293,10 +293,10 @@ def test_remote_revalidation_and_download_failure_do_not_succeed(tmp_path):
         )
         fetch.assert_called_once()
     with (
-        patch.object(a, "remote_reference", return_value=info),
-        patch.object(a, "download_latest_chair_notes", return_value=None),
+        patch.object(a, "get_latest_chair_notes_info", return_value=info),
+        patch.object(a.remote_files, "fetch_file", side_effect=OSError("reset")),
     ):
-        with pytest.raises(RuntimeError):
+        with pytest.raises(OSError):
             a.build_agreements(
                 cfg=cfg,
                 meeting_id="ran1#124",
@@ -797,19 +797,27 @@ def test_zip_inner_name_without_meeting_uses_published_name(note, tmp_path):
         a.parse_agreements(inner, "ran1#124", source_name="RAN1#125 Chair notes.zip")
 
 
-def test_remote_zip_note_is_parsed(note, tmp_path):
-    inner = tmp_path / "Chair_notes_v09.docx"
-    inner.write_bytes(note.read_bytes())
-    info = {"name": "RAN1#124 Chair notes v09.zip", "url": "https://x/n.zip", "sha256": "S"}
+def test_remote_zip_note_is_parsed_from_the_fetched_bytes(note, tmp_path, monkeypatch):
+    """The bytes hashed for the identity are the ones parsed; no second download."""
+    monkeypatch.chdir(tmp_path)
+    archive = tmp_path / "upload.zip"
+    with ZipFile(archive, "w") as z:
+        z.writestr("Chair_notes_v09.docx", note.read_bytes())
+    listed = {"name": "RAN1#124 Chair notes v09.zip", "url": "https://x/n.zip"}
+    meta = {"sha256": "S", "last_modified": "Tue, 06 Oct 2026 12:30:00 GMT"}
+    cfg = {"inbox_urls": [], "extra_folders": []}
     with (
-        patch.object(a, "remote_reference", return_value=info),
-        patch.object(a, "download_latest_chair_notes", return_value=inner),
+        patch.object(a, "get_latest_chair_notes_info", side_effect=AssertionError("listed twice")),
+        patch.object(a.remote_files, "fetch_file", return_value=(archive.read_bytes(), meta)) as fetch,
     ):
         result, ref = a.build_agreements(
-            cfg={}, meeting_id="ran1#124", schedule_path=tmp_path / "s.docx", offline=False
+            cfg=cfg, meeting_id="ran1#124", schedule_path=tmp_path / "s.docx",
+            offline=False, listed=listed,
         )
-    assert result["status"] == "ready" and result["source_name"] == info["name"]
-    assert ref == {"name": info["name"], "url": info["url"], "sha256": "S"}
+    fetch.assert_called_once()
+    assert result["status"] == "ready" and result["source_name"] == listed["name"]
+    assert result["document_changed_at"] == "2026-10-06T12:30:00+00:00"
+    assert ref == {"name": listed["name"], "url": listed["url"], "sha256": "S"}
 
 
 def test_unparsable_note_keeps_previous_and_reports_its_identity(tmp_path, monkeypatch):
@@ -856,3 +864,141 @@ def test_previous_agreements_only_for_the_same_meeting(tmp_path):
     assert a.previous_agreements("RAN1#124", snapshot) == data
     assert a.previous_agreements("ran1#124bis", snapshot) is None
     assert a.previous_agreements("ran1#124", tmp_path / "missing.json") is None
+
+
+def _revise(source, target, mutate):
+    document = Document(source)
+    mutate(document)
+    target.parent.mkdir(parents=True, exist_ok=True)
+    document.save(target)
+    return target
+
+
+def _add_after_first_agreement(text):
+    from copy import deepcopy
+    from docx.text.paragraph import Paragraph
+
+    def mutate(document):
+        label = next(p for p in document.paragraphs if p.text.strip() == "Agreement")
+        copy = deepcopy(label._p)
+        label._p.addnext(copy)
+        Paragraph(copy, label._parent).text = text
+        label.runs[-1].text += "   "  # Whitespace alone is not a change.
+    return mutate
+
+
+def _build(tmp_path, note_path, previous, now):
+    manual = tmp_path / "ref_in_manual/ran1"
+    for old in manual.glob("*"):
+        old.unlink()
+    manual.mkdir(parents=True, exist_ok=True)
+    (manual / note_path.name).write_bytes(note_path.read_bytes())
+    result, _ = a.build_agreements(
+        cfg={}, meeting_id="ran1#124", schedule_path=tmp_path / "s.docx",
+        offline=False, previous=previous, now=now,
+    )
+    return result
+
+
+def test_changes_are_dated_per_section_and_added_blocks_highlighted(tmp_path, monkeypatch):
+    from shared.agreement_assets import package_agreements
+
+    real = REAL_NOTE.resolve()
+    monkeypatch.chdir(tmp_path)
+    v09 = tmp_path / "notes/Chair notes RAN1#124 - v09.docx"
+    v09.parent.mkdir()
+    v09.write_bytes(real.read_bytes())
+    baseline, _ = package_agreements(_build(tmp_path, v09, None, "2026-10-05T09:00:00+00:00"))
+    assert {s["change"] for s in baseline["sections"].values()} == {"initial"}
+    assert all("html" not in s for s in baseline["sections"].values())
+
+    v10 = _revise(real, tmp_path / "notes/Chair notes RAN1#124 - v10.docx",
+                  _add_after_first_agreement("Newly agreed: the added text."))
+    revised = _build(tmp_path, v10, baseline, "2026-10-06T14:00:00+00:00")
+    changed = {ai: s for ai, s in revised["sections"].items() if s["change"] != "initial"}
+    assert list(changed) == ["10.1"]
+    section = changed["10.1"]
+    assert section["change"] == "updated" and len(section["added"]) == 1
+    assert section["changed_at"] == "2026-10-06T14:00:00+00:00"
+    assert section["changed_in"] == v10.name
+    assert section["html"].count('class="agreement-added"') == 1
+    added = BeautifulSoup(section["html"], "html.parser").select_one(".agreement-added")
+    assert "Newly agreed: the added text." in added.get_text()
+    assert all("data-unit" not in s["html"] for s in revised["sections"].values())
+    unchanged = revised["sections"]["10.4"]
+    assert unchanged["changed_at"] == "2026-10-05T09:00:00+00:00"
+
+    # A later note that leaves 10.1 alone keeps its date and highlight.
+    stored, _ = package_agreements(revised, baseline)
+    v11 = _revise(v10, tmp_path / "notes/Chair notes RAN1#124 - v11.docx", lambda d: None)
+    later = _build(tmp_path, v11, stored, "2026-10-07T08:00:00+00:00")
+    assert later["sections"]["10.1"]["changed_at"] == "2026-10-06T14:00:00+00:00"
+    assert later["sections"]["10.1"]["html"] == section["html"]
+
+
+def test_new_section_after_the_baseline_is_all_added(note, tmp_path, monkeypatch):
+    from shared.agreement_assets import package_agreements
+
+    monkeypatch.chdir(tmp_path)
+    baseline, _ = package_agreements(_build(tmp_path, note, None, "2026-10-05T09:00:00+00:00"))
+    del baseline["sections"]["10.2"]
+    revised = _build(tmp_path, note, baseline, "2026-10-06T14:00:00+00:00")
+    section = revised["sections"]["10.2"]
+    assert section["change"] == "new"
+    assert section["html"].count('class="agreement-added"') == len(section["blocks"]) > 0
+
+
+def test_unit_key_ignores_whitespace_and_run_splits_but_not_strikethrough():
+    document = Document()
+    plain = document.add_paragraph("Agreed text")
+    split = document.add_paragraph("Agreed ")
+    split.add_run("te")
+    split.add_run("xt  ")
+    struck = document.add_paragraph("Agreed ")
+    struck.add_run("text").font.strike = True
+    blank = document.add_paragraph("   ")
+    keys = [a._unit_key(p._p) for p in (plain, split, struck, blank)]
+    assert keys[0] == keys[1] != keys[2]
+    assert keys[3] is None
+
+
+def test_snapshot_keeps_records_and_fragments_beside_it_and_prunes_old_files(note, tmp_path):
+    from shared.agreement_assets import package_agreements
+
+    data = a.parse_agreements(note, "ran1#124")
+    a.track_changes(data, None, changed_at="2026-10-05T09:00:00+00:00", document=note.name)
+    stored, fragments = package_agreements(data)
+    s = schedule(stored)
+    s.agreement_fragments = fragments
+    site = tmp_path / "ran1"
+    store = site / "agreements"
+    store.mkdir(parents=True)
+    stale, kept = store / ("0" * 20 + ".html"), store / ("1" * 20 + ".html")
+    stale.write_text("old")
+    kept.write_text("previous build")
+    s.chairman_agreements["retained_files"] = ["agreements/" + kept.name]
+    save_schedule(s, site / "schedule.json")
+    raw = (site / "schedule.json").read_text()
+    assert "<p" not in raw and "agreement_fragments" not in raw
+    assert all((site / name).exists() for name in fragments)
+    loaded = load_schedule(site / "schedule.json")
+    assert loaded.agreement_fragments == {}
+    write_agreement_assets(loaded, site)
+    assert not stale.exists() and kept.exists()
+    manifest, _ = agreement_assets(loaded)
+    url = manifest["sections"]["10.1"]["url"]
+    assert (site / url).read_text().startswith('<div class="docx-document">')
+    assert manifest["sections"]["10.1"]["changed_at"] == "2026-10-05T09:00:00+00:00"
+    assert manifest["document_changed_at"] == "2026-10-05T09:00:00+00:00"
+
+
+def test_rebuilding_the_same_note_keeps_every_date(note):
+    from shared.agreement_assets import package_agreements
+
+    first = a.track_changes(a.parse_agreements(note, "ran1#124"), None,
+                            changed_at="2026-10-05T09:00:00+00:00", document=note.name)
+    stored, _ = package_agreements(first)
+    again = a.track_changes(a.parse_agreements(note, "ran1#124"), stored,
+                            changed_at="2026-10-08T00:00:00+00:00", document=note.name)
+    assert again["document_changed_at"] == "2026-10-05T09:00:00+00:00"
+    assert {s["changed_at"] for s in again["sections"].values()} == {"2026-10-05T09:00:00+00:00"}

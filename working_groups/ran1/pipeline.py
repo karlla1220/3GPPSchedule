@@ -565,6 +565,8 @@ def build_schedule(args) -> Schedule:
             and isinstance(prev_state.get("timezone_ref"), dict)
             and prev_state["timezone_ref"].get("type") == "portal"):
         portal_ref = prev_state["timezone_ref"]
+    # A chair-note lookup made for the timezone is reused for agreements.
+    remote_chair_info: dict | None = None
     if portal_ref is not None:
         meeting_tz = portal_ref["timezone"]
         timezone_status = "resolved"
@@ -576,7 +578,6 @@ def build_schedule(args) -> Schedule:
         meeting_tz = "UTC"
         timezone_status = "pending_timezone_ref"
         timezone_ref: dict | None = None
-        remote_chair_info: dict | None = None
         previous_timezone_ref = prev_state.get("timezone_ref")
         agenda_info_name = str((agenda_info or {}).get("name", "")).lower()
         location_source: Path | None = (
@@ -681,11 +682,13 @@ def build_schedule(args) -> Schedule:
     # They are optional: a failure keeps what was last published for this
     # meeting and never stops the schedule itself from being published.
     from .agreements import build_agreements, previous_agreements
+    from shared.agreement_assets import package_agreements
     previous = previous_agreements(current_meeting_id)
     try:
         chairman_agreements, agreements_ref = build_agreements(
             cfg=cfg, meeting_id=current_meeting_id, schedule_path=docx_path,
             offline=bool(args.local or args.no_download), previous=previous,
+            listed=remote_chair_info,
         )
     except Exception as e:
         print(f"Warning: chairman agreements unavailable: {e}")
@@ -698,6 +701,7 @@ def build_schedule(args) -> Schedule:
             if prev_state.get("meeting_id") == current_meeting_id
             else None
         )
+    chairman_agreements, agreement_fragments = package_agreements(chairman_agreements, previous)
 
     # Persist state (FTP file listing + meeting metadata) for the next run.
     # Locally-provided chairman documents (ref_in_manual/) are excluded: the
@@ -762,6 +766,7 @@ def build_schedule(args) -> Schedule:
         timezone=meeting_tz,
         wg_id="ran1",
         chairman_agreements=chairman_agreements,
+        agreement_fragments=agreement_fragments,
         meeting_id=current_meeting_id or meeting_name,
         starts_on=portal_ref.get("starts_on") if portal_ref else None,
         ends_on=portal_ref.get("ends_on") if portal_ref else None,
