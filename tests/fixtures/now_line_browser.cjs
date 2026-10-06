@@ -47,6 +47,7 @@ const context = {
         querySelectorAll: selector => selector === '.now-line' ? [...lines] : [],
         createElement: element,
         addEventListener(event, fn) { listeners[event] = fn; },
+        documentElement: {clientWidth: 1440, clientHeight: 900},
     },
     window: {addEventListener(event, fn) { windowListeners[event] = fn; }},
     localStorage: {

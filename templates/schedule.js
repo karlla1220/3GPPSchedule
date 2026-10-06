@@ -211,51 +211,87 @@ document.addEventListener('DOMContentLoaded', function() {
         return popupEl.classList.contains('show');
     }
 
-    // Keep the popup inside the viewport: try right of the block, then left,
-    // then below, then above; clamp whatever wins to the visible area.
+    // The part of the page actually on screen, in the coordinates that
+    // position: fixed and getBoundingClientRect use. On phones this is smaller
+    // than the layout viewport while the browser toolbar shows or the page is
+    // pinch-zoomed, so measuring documentElement or 100vh puts the popup's
+    // bottom under the toolbar.
+    function visibleArea() {
+        const vv = window.visualViewport;
+        const de = document.documentElement;
+        if (!vv) return { left: 0, top: 0, width: de.clientWidth, height: de.clientHeight };
+        return { left: vv.offsetLeft, top: vv.offsetTop, width: vv.width, height: vv.height };
+    }
+
+    const POPUP_MARGIN = 8;
+
+    // Size the popup to the visible area; it scrolls inside when taller.
+    function fitPopupSize(area) {
+        popupEl.style.maxHeight = (area.height - 2 * POPUP_MARGIN) + 'px';
+        popupEl.style.maxWidth = Math.min(520, area.width - 2 * POPUP_MARGIN) + 'px';
+    }
+
+    // Keep the popup inside the visible area: try right of the block, then
+    // left, then below, then above; clamp whatever wins to the visible area.
     function placePopup(blockRect) {
-        const M = 8;    // viewport margin
+        const M = POPUP_MARGIN;
         const GAP = 4;  // gap between block and popup
-        const vw = document.documentElement.clientWidth;
-        const vh = document.documentElement.clientHeight;
-        popupEl.style.maxHeight = (vh - 2 * M) + 'px';
-        popupEl.style.left = '0px';
-        popupEl.style.top = '0px';
+        const area = visibleArea();
+        const minX = area.left + M;
+        const maxX = area.left + area.width - M;
+        const minY = area.top + M;
+        const maxY = area.top + area.height - M;
+        fitPopupSize(area);
+        popupEl.style.width = '';
+        popupEl.style.left = minX + 'px';
+        popupEl.style.top = minY + 'px';
         const pRect = popupEl.getBoundingClientRect();
         const w = pRect.width;
         const h = pRect.height;
+        // Hold the measured width. Otherwise a spot near the right edge
+        // squeezes the popup narrower, its text wraps, and it grows taller
+        // than the height it was placed by, past the bottom of the screen.
+        popupEl.style.width = w + 'px';
         const clamp = (v, lo, hi) => Math.max(lo, Math.min(v, hi));
-        const clampX = v => clamp(v, M, Math.max(M, vw - w - M));
-        const clampY = v => clamp(v, M, Math.max(M, vh - h - M));
+        const clampX = v => clamp(v, minX, Math.max(minX, maxX - w));
+        const clampY = v => clamp(v, minY, Math.max(minY, maxY - h));
         let left;
         let top;
-        if (blockRect.right + GAP + w <= vw - M) {
+        if (blockRect.right + GAP + w <= maxX) {
             left = blockRect.right + GAP;
             top = clampY(blockRect.top);
-        } else if (blockRect.left - GAP - w >= M) {
+        } else if (blockRect.left - GAP - w >= minX) {
             left = blockRect.left - GAP - w;
             top = clampY(blockRect.top);
-        } else if (blockRect.bottom + GAP + h <= vh - M) {
+        } else if (blockRect.bottom + GAP + h <= maxY) {
             left = clampX(blockRect.left);
             top = blockRect.bottom + GAP;
-        } else if (blockRect.top - GAP - h >= M) {
+        } else if (blockRect.top - GAP - h >= minY) {
             left = clampX(blockRect.left);
             top = blockRect.top - GAP - h;
         } else {
             left = clampX(blockRect.left);
             top = clampY(blockRect.top);
         }
-        popupEl.style.left = left + 'px';
-        popupEl.style.top = top + 'px';
+        // A block can sit partly or wholly off screen (the grid scrolls
+        // sideways), so every side is clamped, then checked once more.
+        popupEl.style.left = clampX(left) + 'px';
+        popupEl.style.top = clampY(top) + 'px';
+        keepPopupInViewport();
     }
 
-    // After the content changes height, keep the popup's top where it is
-    // unless its bottom would leave the screen; then lift it just enough.
+    // After the content or the visible area changes, keep the popup where it
+    // is unless part of it would leave the screen; then move it just enough.
     function keepPopupInViewport() {
-        const M = 8;
-        const vh = document.documentElement.clientHeight;
+        if (!isPopupOpen()) return;
+        const M = POPUP_MARGIN;
+        const area = visibleArea();
+        fitPopupSize(area);
         const rect = popupEl.getBoundingClientRect();
-        const top = Math.max(M, Math.min(rect.top, vh - M - rect.height));
+        const clamp = (v, lo, hi) => Math.max(lo, Math.min(v, hi));
+        const left = clamp(rect.left, area.left + M, Math.max(area.left + M, area.left + area.width - M - rect.width));
+        const top = clamp(rect.top, area.top + M, Math.max(area.top + M, area.top + area.height - M - rect.height));
+        popupEl.style.left = left + 'px';
         popupEl.style.top = top + 'px';
     }
 
@@ -325,7 +361,24 @@ document.addEventListener('DOMContentLoaded', function() {
     // move (already at the edge, or only the grid scrolls horizontally).
     backdrop.addEventListener('wheel', closePopup, { passive: true });
     backdrop.addEventListener('touchmove', closePopup, { passive: true });
-    window.addEventListener('resize', closeOnScroll);
+    // A phone's toolbar showing or hiding changes only the height: keep the
+    // popup and fit it to the new visible area. A width change (rotation, a
+    // resized window) moves the grid under it, so close.
+    let lastViewportWidth = document.documentElement.clientWidth;
+    window.addEventListener('resize', function() {
+        const width = document.documentElement.clientWidth;
+        if (width !== lastViewportWidth) {
+            lastViewportWidth = width;
+            closePopup();
+        } else {
+            keepPopupInViewport();
+        }
+    });
+    // Pinch-zoom and panning move the visible area without scrolling the page.
+    if (window.visualViewport) {
+        window.visualViewport.addEventListener('resize', keepPopupInViewport);
+        window.visualViewport.addEventListener('scroll', keepPopupInViewport);
+    }
 
     // ── Session Filter ──
     const filterDataEl = document.getElementById('filter-data');
