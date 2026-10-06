@@ -8,7 +8,43 @@ let updateSelection = null;
 async function start() {
     const [{ createSignal, createResource, batch, For, Show, onCleanup }, { render }, { default: html }, { default: DOMPurify }] =
         await Promise.all([import('solid-js'), import('solid-js/web'), import('solid-js/html'), import('dompurify')]);
-    const documentView = content => {
+    // One tinted region and one label per run of consecutive added blocks,
+    // spanning the article width so list indents do not break the bar.
+    const markAdditions = (root, label) => {
+        const article = root.querySelector('article');
+        const runs = [];
+        for (const block of root.querySelectorAll('.agreement-added')) {
+            if (!runs.length || block.classList.contains('agreement-added-first')) runs.push([]);
+            runs[runs.length - 1].push(block);
+        }
+        if (!article || !runs.length) return;
+        article.classList.add('has-added');
+        const regions = runs.map(run => {
+            const first = run[0];
+            // A list item's label goes above the item, not beside its marker.
+            const anchor = first.parentElement?.tagName === 'LI' && first === first.parentElement.firstElementChild ? first.parentElement : first;
+            const tag = document.createElement('div');
+            tag.className = 'agreement-added-label';
+            tag.textContent = label;
+            anchor.before(tag);
+            const region = document.createElement('div');
+            region.className = 'agreement-added-region';
+            region.setAttribute('aria-hidden', 'true');
+            article.append(region);
+            return { region, top: tag, bottom: run[run.length - 1] };
+        });
+        const place = () => {
+            const base = article.getBoundingClientRect().top;
+            for (const { region, top, bottom } of regions) {
+                const start = top.getBoundingClientRect().top - base - 6;
+                region.style.top = start + 'px';
+                region.style.height = (bottom.getBoundingClientRect().bottom - base + 6 - start) + 'px';
+            }
+        };
+        // Also fires once laid out, and again as images load or the width changes.
+        new ResizeObserver(place).observe(article);
+    };
+    const documentView = (content, addedLabel) => {
         const host = document.createElement('div');
         host.className = 'agreement-document';
         // Same-page content with natural height. Shadow DOM isolates Word CSS;
@@ -42,6 +78,7 @@ async function start() {
             }
         }
         root.append(style, fragment);
+        markAdditions(root, addedLabel);
         return host;
     };
     mount.replaceChildren();
@@ -103,7 +140,7 @@ async function start() {
             const source = version(section.changed_in);
             if (section.change === 'initial') return 'As of ' + when(section.changed_at) + (source ? ' · ' + source : '');
             const label = section.change === 'new' ? 'Added ' : 'Updated ';
-            const parts = section.added ? ' · ' + section.added + (section.added === 1 ? ' added part' : ' added parts') + ' highlighted' : '';
+            const parts = section.added ? ' · ' + section.added + (section.added === 1 ? ' addition' : ' additions') + ' highlighted' : '';
             return label + when(section.changed_at) + (source ? ' · ' + source : '') + parts;
         };
         const keyTab = (event, ai) => {
@@ -136,7 +173,7 @@ async function start() {
                         <${Show} when=${() => !document.loading}>
                             <${Show} when=${() => document()?.error}><p>Could not load this agreement. <button type="button" class="agreement-action" onClick=${() => refetch()}>Retry</button></p><//>
                             <${Show} when=${() => !document()?.error && !document()?.content}><p class="agreement-note">${emptyNote}</p><//>
-                            <${Show} when=${() => document()?.content} keyed=${true}>${content => documentView(content)}<//>
+                            <${Show} when=${() => document()?.content} keyed=${true}>${content => documentView(content, 'Added in ' + (version(entry()?.changed_in) || 'the latest note'))}<//>
                         <//>
                     </section>
                 <//>

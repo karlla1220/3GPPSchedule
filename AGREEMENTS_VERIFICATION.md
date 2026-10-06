@@ -20,7 +20,8 @@ python3 -m http.server 8874 --bind 127.0.0.1 --directory test_runs/agreements
 실제 빌드는 기존 `uv run python main.py --wg ran1` 경로를 사용한다.
 `--local`/`--no-download`에서는 동일 미팅의 로컬 note만 사용한다.
 `--render-only`는 schedule.json의 agreement 기록과 옆의 `agreements/*.html`로 다시 렌더링한다.
-미리보기는 v09를 기준선으로, AI 10.1에 문단 하나를 더한 v10을 만들어 변경 일시와 추가분 강조를 보인다.
+미리보기는 v09를 기준선으로, AI 10.1의 기존 합의 앞에 새 합의(라벨, 본문, TDoc 행, FFS)를 넣은 v10을 만들어
+변경 일시와 하나로 묶인 추가분 강조를 보인다.
 
 ## 실제 문서에서 확인한 내용
 

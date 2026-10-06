@@ -332,6 +332,24 @@ def _store_note(name, body, directory=Path("downloads/ran1/Chair_notes")):
     return path
 
 
+def _added_blocks(old, new):
+    """Indices of ``new`` blocks that ``old`` does not have.
+
+    A pure insertion next to a repeated block is ambiguous: a new "Agreement"
+    label and body placed before an existing label can align as body + the
+    old label below it. Like git's diff slider, an insertion moves up while
+    the block above it equals its last block, so it starts at its own label.
+    """
+    added = set()
+    for op, _, _, j1, j2 in SequenceMatcher(None, old, new, autojunk=False).get_opcodes():
+        if op == "insert":
+            while j1 > 0 and j1 - 1 not in added and new[j1 - 1] == new[j2 - 1]:
+                j1, j2 = j1 - 1, j2 - 1
+        if op in {"insert", "replace"}:
+            added.update(range(j1, j2))
+    return sorted(added)
+
+
 def track_changes(result, previous, *, changed_at, document):
     """Date each section's last change and highlight the blocks it added.
 
@@ -352,14 +370,7 @@ def track_changes(result, previous, *, changed_at, document):
         elif old.get("blocks") == keys:
             change = {k: old[k] for k in ("change", "added", "changed_at", "changed_in") if k in old}
         else:
-            matcher = SequenceMatcher(None, old.get("blocks") or [], keys, autojunk=False)
-            added = [
-                j
-                for op, _, _, j1, j2 in matcher.get_opcodes()
-                if op in {"insert", "replace"}
-                for j in range(j1, j2)
-            ]
-            change = {"change": "updated", "added": added}
+            change = {"change": "updated", "added": _added_blocks(old.get("blocks") or [], keys)}
         change.setdefault("changed_at", changed_at)
         change.setdefault("changed_in", document)
         section.update(change)

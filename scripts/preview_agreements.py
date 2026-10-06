@@ -18,20 +18,33 @@ from shared.schedule import (
 from shared.agreement_assets import package_agreements
 from working_groups.ran1.agreements import parse_agreements, track_changes
 
-ADDED_TEXT = "Preview revision: this paragraph was added in v10."
+# A new agreement as a chair adds one: label, text, a TDoc row, more text.
+NEW_AGREEMENT = (
+    "Agreement",
+    "Preview revision: this agreement was added in v10.",
+    "R1-2601234",
+    "FFS: details of the added agreement.",
+)
+
+
+def insert_agreement(document, paragraphs=NEW_AGREEMENT):
+    """Insert a new agreement before the first existing one (AI 10.1)."""
+    from copy import deepcopy
+    from docx.text.paragraph import Paragraph
+
+    label = next(p for p in document.paragraphs if p.text.strip() == "Agreement")
+    for text in paragraphs:
+        copy = deepcopy(label._p)
+        label._p.addprevious(copy)
+        Paragraph(copy, label._parent).text = text
 
 
 def revised_note(note, directory):
-    """The same note with one paragraph added to AI 10.1, as a v10 would."""
-    from copy import deepcopy
+    """The same note with a new agreement in AI 10.1, as a v10 would."""
     from docx import Document
-    from docx.text.paragraph import Paragraph
 
     document = Document(note)
-    label = next(p for p in document.paragraphs if p.text.strip() == "Agreement")
-    copy = deepcopy(label._p)
-    label._p.addnext(copy)
-    Paragraph(copy, label._parent).text = ADDED_TEXT
+    insert_agreement(document)
     path = directory / note.name.replace("v09", "v10")
     document.save(path)
     return path

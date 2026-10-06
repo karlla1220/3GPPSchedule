@@ -89,14 +89,27 @@ def main():
             "(xs)=>xs.filter(x=>x.style.textDecorationLine.includes('line-through')).length"
         ) == 6
         checks.append("Word strike-through survives style sanitization")
-        # The preview's v10 added one paragraph to 10.1 (see preview_agreements.py).
+        # The preview's v10 added one agreement to 10.1 (see preview_agreements.py):
+        # label, text, a TDoc row (not shown) and more text are one addition.
         expect(page.locator(".agreement-change")).to_contain_text("Updated 6 Oct, 14:30")
-        expect(page.locator(".agreement-change")).to_contain_text("v10 · 1 added part highlighted")
-        expect(doc.locator(".agreement-added")).to_have_count(1)
-        expect(doc.locator(".agreement-added")).to_contain_text("this paragraph was added in v10")
-        assert doc.locator(".agreement-added").evaluate("(e)=>getComputedStyle(e).boxShadow") != "none"
+        expect(page.locator(".agreement-change")).to_contain_text("v10 · 1 addition highlighted")
+        expect(doc.locator(".agreement-added")).to_have_count(3)
+        expect(doc.locator(".agreement-added-label")).to_have_count(1)
+        expect(doc.locator(".agreement-added-label")).to_have_text("Added in v10")
+        expect(doc.locator(".agreement-added-region")).to_have_count(1)
+        assert doc.locator(".agreement-added").first.inner_text().strip() == "Agreement"
+        assert doc.locator(".agreement-added").last.inner_text().startswith("FFS: details")
+        # The one region runs from its label to the last added block.
+        assert doc.locator("article").evaluate('''article => {
+            const box = e => e.getBoundingClientRect();
+            const region = box(article.querySelector('.agreement-added-region'));
+            const added = article.querySelectorAll('.agreement-added');
+            return region.top <= box(article.querySelector('.agreement-added-label')).top
+                && region.bottom >= box(added[added.length - 1]).bottom
+                && region.height > 0;
+        }''')
         expect(page.locator('[role="tab"] .agreement-updated')).to_have_count(1)
-        checks.append("Section change is dated and its added paragraph highlighted")
+        checks.append("A new agreement is dated, labelled once and highlighted as one region")
         for selector, marker in [
             ("ul", "disc"),
             ("ul ul", "circle"),

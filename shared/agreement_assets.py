@@ -53,12 +53,27 @@ _UNIT = re.compile(r'<(\w+) data-unit="(\d+)"(?: class="([^"]*)")?')
 _FILE = re.compile(r"agreements/[0-9a-f]{20}\.html")
 
 
+def added_runs(added):
+    """Number of separate additions: consecutive blocks form one.
+
+    TDoc rows and blank paragraphs are not blocks, so they never split a run.
+    """
+    added = set(added)
+    return sum(1 for index in added if index - 1 not in added)
+
+
 def finish_units(html, added):
-    """Turn parse-time unit markers into the highlight class of added blocks."""
+    """Turn parse-time unit markers into the highlight classes of added blocks.
+
+    The first block of each run of consecutive additions also gets
+    ``agreement-added-first``; the panel draws one region and label per run.
+    """
     added = set(added)
 
     def replace(match):
-        classes = [ADDED_CLASS] if int(match[2]) in added else []
+        index = int(match[2])
+        classes = [ADDED_CLASS] if index in added else []
+        classes += [ADDED_CLASS + "-first"] if index in added and index - 1 not in added else []
         classes += [match[3]] if match[3] else []
         return f"<{match[1]}" + (f' class="{" ".join(classes)}"' if classes else "")
 
@@ -139,7 +154,7 @@ def agreement_assets(schedule):
             if section.get(key):
                 entry[key] = section[key]
         if section.get("added"):
-            entry["added"] = len(section["added"])
+            entry["added"] = added_runs(section["added"])
         if _FILE.fullmatch(section.get("file") or ""):
             entry["url"] = "./" + section["file"]
         elif section.get("html"):

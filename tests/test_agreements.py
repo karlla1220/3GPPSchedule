@@ -874,15 +874,18 @@ def _revise(source, target, mutate):
     return target
 
 
-def _add_after_first_agreement(text):
+def _insert_agreement(position, *paragraphs):
+    """Insert paragraphs before the Nth existing "Agreement" label."""
     from copy import deepcopy
     from docx.text.paragraph import Paragraph
 
     def mutate(document):
-        label = next(p for p in document.paragraphs if p.text.strip() == "Agreement")
-        copy = deepcopy(label._p)
-        label._p.addnext(copy)
-        Paragraph(copy, label._parent).text = text
+        labels = [p for p in document.paragraphs if p.text.strip() == "Agreement"]
+        label = labels[position]
+        for text in paragraphs:
+            copy = deepcopy(label._p)
+            label._p.addprevious(copy)
+            Paragraph(copy, label._parent).text = text
         label.runs[-1].text += "   "  # Whitespace alone is not a change.
     return mutate
 
@@ -912,18 +915,20 @@ def test_changes_are_dated_per_section_and_added_blocks_highlighted(tmp_path, mo
     assert {s["change"] for s in baseline["sections"].values()} == {"initial"}
     assert all("html" not in s for s in baseline["sections"].values())
 
-    v10 = _revise(real, tmp_path / "notes/Chair notes RAN1#124 - v10.docx",
-                  _add_after_first_agreement("Newly agreed: the added text."))
+    v10 = _revise(real, tmp_path / "notes/Chair notes RAN1#124 - v10.docx", _insert_agreement(
+        0, "Agreement", "Newly agreed: the added text.", "R1-2601234", "FFS: the rest."))
     revised = _build(tmp_path, v10, baseline, "2026-10-06T14:00:00+00:00")
     changed = {ai: s for ai, s in revised["sections"].items() if s["change"] != "initial"}
     assert list(changed) == ["10.1"]
     section = changed["10.1"]
-    assert section["change"] == "updated" and len(section["added"]) == 1
+    # The TDoc row is not a block, so label, text and FFS are one addition.
+    assert section["change"] == "updated" and len(section["added"]) == 3
     assert section["changed_at"] == "2026-10-06T14:00:00+00:00"
     assert section["changed_in"] == v10.name
-    assert section["html"].count('class="agreement-added"') == 1
-    added = BeautifulSoup(section["html"], "html.parser").select_one(".agreement-added")
-    assert "Newly agreed: the added text." in added.get_text()
+    html = BeautifulSoup(section["html"], "html.parser")
+    added = [e.get_text(strip=True) for e in html.select(".agreement-added")]
+    assert added == ["Agreement", "Newly agreed: the added text.", "FFS: the rest."]
+    assert len(html.select(".agreement-added-first")) == 1
     assert all("data-unit" not in s["html"] for s in revised["sections"].values())
     unchanged = revised["sections"]["10.4"]
     assert unchanged["changed_at"] == "2026-10-05T09:00:00+00:00"
@@ -945,7 +950,9 @@ def test_new_section_after_the_baseline_is_all_added(note, tmp_path, monkeypatch
     revised = _build(tmp_path, note, baseline, "2026-10-06T14:00:00+00:00")
     section = revised["sections"]["10.2"]
     assert section["change"] == "new"
-    assert section["html"].count('class="agreement-added"') == len(section["blocks"]) > 0
+    html = BeautifulSoup(section["html"], "html.parser")
+    assert len(html.select(".agreement-added")) == len(section["blocks"]) > 0
+    assert len(html.select(".agreement-added-first")) == 1  # One addition, one label.
 
 
 def test_unit_key_ignores_whitespace_and_run_splits_but_not_strikethrough():
@@ -1002,3 +1009,33 @@ def test_rebuilding_the_same_note_keeps_every_date(note):
                             changed_at="2026-10-08T00:00:00+00:00", document=note.name)
     assert again["document_changed_at"] == "2026-10-05T09:00:00+00:00"
     assert {s["changed_at"] for s in again["sections"].values()} == {"2026-10-05T09:00:00+00:00"}
+
+
+@pytest.mark.parametrize("old, new, expected", [
+    # A new agreement before an existing one starts at its own label.
+    (["A", "b1", "A", "b2"], ["A", "b1", "A", "new", "A", "b2"], [2, 3]),
+    (["A", "b1"], ["A", "b1", "A", "b2"], [2, 3]),
+    (["A", "b1"], ["A", "new", "A", "b1"], [0, 1]),
+    (["x", "y"], ["x", "z"], [1]),
+])
+def test_added_blocks_start_at_the_new_label(old, new, expected):
+    assert a._added_blocks(old, new) == expected
+
+
+def test_new_agreement_is_highlighted_from_its_own_label_everywhere(note, tmp_path, monkeypatch):
+    """Every insertion point in a real note: never the old label below the new text."""
+    from shared.agreement_assets import package_agreements
+
+    real = REAL_NOTE.resolve()
+    monkeypatch.chdir(tmp_path)
+    baseline, _ = package_agreements(a.track_changes(
+        a.parse_agreements(real, "ran1#124"), None, changed_at="t0", document=real.name))
+    labels = sum(p.text.strip() == "Agreement" for p in Document(real).paragraphs)
+    for position in range(0, labels, 5):
+        v10 = _revise(real, tmp_path / f"{position}/Chair notes RAN1#124 - v10.docx",
+                      _insert_agreement(position, "Agreement", f"Body {position}"))
+        result = a.track_changes(a.parse_agreements(v10, "ran1#124"), baseline,
+                                 changed_at="t1", document=v10.name)
+        (section,) = [s for s in result["sections"].values() if s["change"] == "updated"]
+        added = BeautifulSoup(section["html"], "html.parser").select(".agreement-added")
+        assert [e.get_text(strip=True) for e in added] == ["Agreement", f"Body {position}"]
