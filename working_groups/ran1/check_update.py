@@ -329,12 +329,9 @@ def check_updates(*, staging_dir=None) -> CheckResult:
     # Chairman agreements do not depend on which document supplied timezone.
     from .agreements import remote_reference, reference_identity, local_note_reference
     try:
-        selected_ids = {_extract_meeting_id(entry.get("name", "")) for entry in (remote_all or [])}
-        selected_ids.discard(None)
-        agreement_meeting = (next(iter(selected_ids)) if len(selected_ids) == 1 else preferred_meeting_id)
-        current_agreements = local_note_reference(cfg, agreement_meeting)
+        current_agreements = local_note_reference(cfg, selected_meeting_id)
         if current_agreements is None:
-            current_agreements = reference_identity(remote_reference(cfg, agreement_meeting))
+            current_agreements = reference_identity(remote_reference(cfg, selected_meeting_id))
         cached_agreements = state.get("agreements_ref")
         if current_agreements != cached_agreements:
             changed = True

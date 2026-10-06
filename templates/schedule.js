@@ -343,7 +343,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 this.setAttribute('aria-pressed', 'true');
                 window.dispatchEvent(new CustomEvent('agreement-select', { detail: {
                     block: this, name: this.dataset.name,
-                    ais: [...new Set((this.dataset.ai || '').split('|').filter(Boolean))]
+                    ais: [...new Set((this.dataset.agreementAi || '').split('|').filter(Boolean))]
                 }}));
             }
             const html = this.getAttribute('data-popup');

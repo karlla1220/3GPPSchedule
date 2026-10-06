@@ -33,7 +33,8 @@ async function start() {
             link.setAttribute('target', '_blank');
             link.setAttribute('rel', 'noopener noreferrer');
         }
-        const properties = new Set(('font-weight font-style text-decoration color font-size font-family background-color margin-left margin-right text-indent margin-top margin-bottom text-align width max-width height background').split(' '));
+        // node.style lists longhands: text-decoration arrives as text-decoration-line etc.
+        const properties = new Set(('font-weight font-style text-decoration text-decoration-line text-decoration-style text-decoration-color text-decoration-thickness color font-size font-family background-color margin-left margin-right text-indent margin-top margin-bottom text-align width max-width height background').split(' '));
         for (const node of fragment.querySelectorAll('[style]')) {
             for (const property of [...node.style]) {
                 const value = node.style.getPropertyValue(property);

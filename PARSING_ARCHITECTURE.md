@@ -218,9 +218,19 @@ Agreement/Proposal 등의 표식은 경계로 사용하지 않는다. TDoc ID �
 LLM 요약을 사용하지 않는다. 별도 `agreements_ref`로 원본 파일/URL/SHA를 비교하므로
 Portal timezone을 사용하거나 note의 이름이 그대로여도 내용 변경을 감지한다.
 
+로컬 note(`ref_in_manual/ran1`, chair_notes extra_files)는 check와 build가 같은 함수
+(`local_note_path`)로 고르므로 두 쪽의 `agreements_ref`가 어긋나지 않는다. check의 미팅도
+다른 비교와 같은 `selected_meeting_id`다. zip에서 푼 문서는 안쪽 파일명 대신 원격 이름으로 미팅을 확인한다.
+
+agreement는 선택적인 입력이라 실패해도 일정 빌드를 멈추지 않는다. 파싱에 실패하면 같은 미팅의
+마지막 게시분(`docs/ran1/schedule.json`)을 유지하고 그 문서의 식별자는 저장해서, 같은 깨진 문서로
+매시간 재빌드하지 않는다. 목록 조회나 다운로드 실패면 이전 식별자를 유지해 다음 check가 다시 시도한다.
+
 공통 Schedule의 `chairman_agreements`는 선택적인 추가 필드다.
 HTML 렌더링 시 `agreement_assets`가 agenda별 hash HTML fragment를 작성하고
 페이지에는 소형 manifest만 넣는다. RAN1 SolidJS island가 셀의 AI 탭 중 활성 AI만 lazy fetch한다.
+셀의 `data-ai`는 필터용으로 일정 표기 그대로이고, 패널이 여는 섹션 목록(`10.6.x` → `10.6.1|10.6.2`)은
+`data-agreement-ai`에 따로 둔다.
 DOMPurify로 HTML을 정제하고 Shadow DOM에 직접 삽입하여 문서 CSS를 격리한다.
 iframe이나 내부 스크롤, 선택에 따른 자동 스크롤은 없다. 기존 세션 상세 팝업은 유지한다.
 수식은 OMML→MathML, WMF→SVG의 서로 다른 경로다.

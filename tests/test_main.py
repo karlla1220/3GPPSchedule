@@ -705,3 +705,32 @@ def test_agenda_is_taken_only_from_the_folder_of_the_schedule_meeting(tmp_path, 
         assert (schedule.meeting_id, schedule.meeting_name) == ('ran1#126bis', 'RAN1#126bis')
         listing.assert_called_once_with([agenda_url])
         assert download.call_args.args == ([agenda_url], agenda_dir)
+
+
+def test_agreement_failure_keeps_previous_and_still_builds_schedule(tmp_path):
+    from working_groups.ran1.models import ScheduleSource
+    ref = _portal_reference()
+    document = tmp_path / 'RAN1#126 schedule.docx'
+    document.write_bytes(b'placeholder')
+    source = ScheduleSource('Chair_notes', None, True, {'name': document.name})
+    saved_ref = {'name': 'Chair notes RAN1#126.docx', 'sha256': 'old'}
+    previous = {'meeting_id': 'ran1#126', 'agreements_ref': saved_ref}
+    published = {'status': 'ready', 'meeting_id': 'ran1#126', 'sections': {'9.1': {}}}
+    with MainExtraFilesWiringTests()._enter_common([], no_download=False) as stack:
+        stack.enter_context(patch.object(main_module, 'load_schedule_state', return_value=previous))
+        stack.enter_context(patch.object(main_module, 'find_local_schedule_sources', return_value=([], document)))
+        stack.enter_context(patch.object(main_module, 'discover_schedule_sources', return_value=[source]))
+        stack.enter_context(patch.object(main_module, 'download_all_schedules', return_value=(document, {})))
+        stack.enter_context(patch.object(main_module, 'update_agenda_description_json'))
+        stack.enter_context(patch.object(main_module, 'local_reference_meeting_id', return_value=None))
+        stack.enter_context(patch.object(main_module, 'local_reference_hashes', return_value={}))
+        stack.enter_context(patch.object(main_module, 'lookup_timezone_reference', return_value=ref))
+        save = stack.enter_context(patch.object(main_module, 'save_schedule_state'))
+        stack.enter_context(patch('working_groups.ran1.agreements.build_agreements',
+                                  side_effect=RuntimeError('listing failed')))
+        stack.enter_context(patch('working_groups.ran1.agreements.previous_agreements',
+                                  return_value=published))
+        schedule = main_module.build_schedule(argparse.Namespace(
+            local=None, no_download=False, rebuild_slots=False))
+    assert schedule.chairman_agreements == published
+    assert save.call_args.kwargs['agreements_ref'] == saved_ref
