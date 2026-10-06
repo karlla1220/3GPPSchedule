@@ -710,7 +710,9 @@ header .meta {
     line-height: 1.5;
 }
 
-/* Agenda names: the session's own items always, their parents folded.
+/* Agenda names: the session's own items always, their parents folded
+   when the tree is long (a short one is .agenda-open). Rows are not
+   indented; the smaller parent lines and bold numbers carry the levels.
    The toggle's state lives on .popup-floating so it carries to the next
    popup without changing the content compared on re-click. */
 .popup-agenda-item {
@@ -724,19 +726,10 @@ header .meta {
     line-height: 1.45;
 }
 
+.agenda-open .popup-agenda-parent,
 .show-agenda-parents .popup-agenda-parent {
     display: block;
     margin-top: 2px;
-}
-
-/* Items under an "x" item ("10.6.x") hang below it even while folded. */
-.popup-agenda-child {
-    padding-left: calc(var(--rel, 1) * 10px);
-}
-
-.show-agenda-parents .popup-agenda-parent,
-.show-agenda-parents .popup-agenda-item {
-    padding-left: calc(var(--depth, 0) * 10px);
 }
 
 .popup-agenda-toggle {

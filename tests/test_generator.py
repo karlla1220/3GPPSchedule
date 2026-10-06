@@ -117,6 +117,11 @@ def test_generate_js_uses_json_encoding_for_timezone():
     assert "const AUTO_REFRESH_MS = 120000; // 2 minutes" in script
 
 
+def _agenda_rows(section):
+    rows = section.select(".popup-agenda-parent, .popup-agenda-item")
+    return [(row["class"][-1], row.get_text()) for row in rows]
+
+
 def test_agenda_description_popup_merges_parents_into_one_tree():
     session = SimpleNamespace(
         agenda_item="10.8.1, 10.8.2",
@@ -156,17 +161,19 @@ def test_agenda_description_popup_merges_parents_into_one_tree():
 
     lines = _agenda_description_popup_lines(session)
 
-    # A shared parent appears once, above its children; parents are folded
-    # behind one toggle and the session's own items are always shown.
+    # A shared parent appears once, above its children. Four rows are
+    # few enough to show whole, with no toggle.
     assert len(lines) == 1
     section = BeautifulSoup(lines[0], "html.parser")
-    assert section.select_one(".popup-agenda-toggle")["aria-expanded"] == "false"
-    assert [(row["class"][0], row["style"], row.get_text()) for row in section.select("[style]")] == [
-        ("popup-agenda-parent", "--depth:0", "10 - Rel-20 Study of 6GR"),
-        ("popup-agenda-parent", "--depth:1", "10.8 - ISAC"),
-        ("popup-agenda-item", "--depth:2", "10.8.1: Evaluations"),
-        ("popup-agenda-item", "--depth:2", "10.8.2: Aspects of integration with communication"),
+    assert "agenda-open" in section.div["class"]
+    assert section.select_one(".popup-agenda-toggle") is None
+    assert _agenda_rows(section) == [
+        ("popup-agenda-parent", "10 - Rel-20 Study of 6GR"),
+        ("popup-agenda-parent", "10.8 - ISAC"),
+        ("popup-agenda-item", "10.8.1: Evaluations"),
+        ("popup-agenda-item", "10.8.2: Aspects of integration with communication"),
     ]
+    assert not section.select("[style]")
 
 
 def test_agenda_description_popup_orders_items_as_a_tree():
@@ -201,8 +208,11 @@ def test_agenda_description_popup_orders_items_as_a_tree():
 
     lines = _agenda_description_popup_lines(session)
 
+    # Five rows: the parents fold behind one toggle.
     section = BeautifulSoup(lines[0], "html.parser")
-    assert [row.get_text() for row in section.select("[style]")] == [
+    assert "agenda-open" not in section.div["class"]
+    assert section.select_one(".popup-agenda-toggle")["aria-expanded"] == "false"
+    assert [text for _, text in _agenda_rows(section)] == [
         "9 - Release 20 NR",
         "9.2: NR MIMO Phase 6",
         "10 - Rel-20 Study of 6GR",
@@ -243,11 +253,45 @@ def test_agenda_description_popup_lists_items_under_an_x_item():
 
     section = BeautifulSoup(_agenda_description_popup_lines(session)[0], "html.parser")
 
-    # 10.6.2 is listed once, under 10.6.x, not again on its own.
-    assert [(row["class"][-1], row["style"], row.get_text()) for row in section.select("[style]")] == [
-        ("popup-agenda-parent", "--depth:0", "10 - Rel-20 Study of 6GR"),
-        ("popup-agenda-item", "--depth:1", "10.6.x: WUS and operation"),
-        ("popup-agenda-child", "--depth:2;--rel:1", "10.6.1: WUS"),
-        ("popup-agenda-child", "--depth:3;--rel:2", "10.6.1.1: WUS design"),
-        ("popup-agenda-child", "--depth:2;--rel:1", "10.6.2: Power saving"),
+    # 10.6.2 is listed once, under 10.6.x, not again on its own; the x
+    # item is shown as the item it stands for (10.6).
+    assert _agenda_rows(section) == [
+        ("popup-agenda-parent", "10 - Rel-20 Study of 6GR"),
+        ("popup-agenda-item", "10.6: WUS and operation"),
+        ("popup-agenda-item", "10.6.1: WUS"),
+        ("popup-agenda-item", "10.6.1.1: WUS design"),
+        ("popup-agenda-item", "10.6.2: Power saving"),
     ]
+    # Five rows, but a toggle would only replace the one parent row.
+    assert "agenda-open" in section.div["class"]
+    assert section.select_one(".popup-agenda-toggle") is None
+
+
+def test_agenda_description_popup_lists_an_item_once_when_it_is_also_a_parent():
+    session = SimpleNamespace(
+        agenda_item="15, 15.1",
+        description="5G-Advanced in Rel-21",
+        agenda_descriptions=[
+            {
+                "agenda_item": "15",
+                "description": "5G-Advanced in Rel-21",
+                "hierarchy": [{"agenda_item": "15", "description": "5G-Advanced in Rel-21"}],
+            },
+            {
+                "agenda_item": "15.1",
+                "description": "High-level overview proposals for Rel-21",
+                "hierarchy": [
+                    {"agenda_item": "15", "description": "5G-Advanced in Rel-21"},
+                    {"agenda_item": "15.1", "description": "High-level overview proposals for Rel-21"},
+                ],
+            },
+        ],
+    )
+
+    section = BeautifulSoup(_agenda_description_popup_lines(session)[0], "html.parser")
+
+    assert _agenda_rows(section) == [
+        ("popup-agenda-item", "15: 5G-Advanced in Rel-21"),
+        ("popup-agenda-item", "15.1: High-level overview proposals for Rel-21"),
+    ]
+    assert section.select_one(".popup-agenda-toggle") is None
