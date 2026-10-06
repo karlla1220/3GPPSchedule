@@ -101,13 +101,20 @@ def _build_filter_data(all_sessions: list) -> str:
     return json.dumps(result, ensure_ascii=False).replace("<", "\\u003c")
 
 
+# A tree this short is shown whole: folding would hide almost nothing.
+_AGENDA_OPEN_ROWS = 4
+
+
 def _agenda_description_popup_lines(session) -> list[str]:
-    """Build the popup's agenda section: one tree, parents folded by default.
+    """Build the popup's agenda section: one tree, parents folded when long.
 
     The session's own items are always shown, and an "x" item ("10.6.x")
     with every item under it. Their parent levels are merged into one tree,
-    so a shared parent appears once; they stay hidden until the popup's
-    toggle shows them (schedule.js keeps that choice across popups).
+    so a shared parent appears once. Rows are not indented: the number,
+    bold labels and the smaller parent lines carry the hierarchy. A tree of
+    up to _AGENDA_OPEN_ROWS rows, or with one parent row (the toggle would
+    take its place), is always open; any other hides the parents until the
+    popup's toggle shows them (schedule.js keeps that choice across popups).
     """
     items = getattr(session, "agenda_descriptions", None) or []
     if not items and getattr(session, "description", None):
@@ -140,36 +147,33 @@ def _agenda_description_popup_lines(session) -> list[str]:
     # each parent lands right above its own children.
     entries.sort(key=lambda entry: _agenda_sort_key(entry[0]))
     rows: list[str] = []
-    shown: set[str] = set()
+    # An item that is also another item's parent ("15" above "15.1") is
+    # listed once, as the item.
+    shown: set[str] = {_agenda_tree_label(entry[0]) for entry in entries}
+    parent_rows = 0
     for agenda_item, parents, header, children in entries:
-        for depth, level in enumerate(parents):
+        for level in parents:
             key = level["agenda_item"] or ""
             if key in shown:
                 continue
             shown.add(key)
-            rows.append(
-                f'<div class="popup-agenda-parent" style="--depth:{depth}">'
-                f"{_agenda_hierarchy_line(level)}</div>"
-            )
-        rows.append(f'<div class="popup-agenda-item" style="--depth:{len(parents)}">{header}</div>')
-        # Indented under the "x" item whether or not the parents are shown.
-        base_dots = agenda_item.count(".") - 1
+            parent_rows += 1
+            rows.append(f'<div class="popup-agenda-parent">{_agenda_hierarchy_line(level)}</div>')
+        rows.append(f'<div class="popup-agenda-item">{header}</div>')
         for child in children:
-            rel = max(1, child["agenda_item"].count(".") - base_dots)
             rows.append(
-                f'<div class="popup-agenda-item popup-agenda-child" '
-                f'style="--depth:{len(parents) + rel};--rel:{rel}">'
+                '<div class="popup-agenda-item">'
                 f'{_agenda_description_header(child["agenda_item"], child["description"])}</div>'
             )
 
-    toggle = ""
-    if shown:
-        toggle = (
-            '<button type="button" class="popup-agenda-toggle" aria-expanded="false">'
-            '<span class="when-folded">\u25b8 Show parent items</span>'
-            '<span class="when-unfolded">\u25be Hide parent items</span>'
-            "</button>"
-        )
+    if parent_rows <= 1 or len(rows) <= _AGENDA_OPEN_ROWS:
+        return [f'<div class="popup-description agenda-open">{"".join(rows)}</div>']
+    toggle = (
+        '<button type="button" class="popup-agenda-toggle" aria-expanded="false">'
+        '<span class="when-folded">\u25b8 Show parent items</span>'
+        '<span class="when-unfolded">\u25be Hide parent items</span>'
+        "</button>"
+    )
     return [f'<div class="popup-description">{toggle}{"".join(rows)}</div>']
 
 
@@ -178,9 +182,14 @@ def _agenda_sort_key(agenda_item: str) -> list[tuple[int, int | str]]:
     return [(0, int(part)) if part.isdigit() else (1, part) for part in agenda_item.split(".")]
 
 
+def _agenda_tree_label(agenda_item: str) -> str:
+    """An "x" item is its parent item: the tree shows 10.4.x as 10.4."""
+    return re.sub(r"\.[xX]$", "", agenda_item)
+
+
 def _agenda_description_header(label: str, description: str) -> str:
     if label:
-        return f"<strong>{_esc(label)}:</strong> {_esc(description)}"
+        return f"<strong>{_esc(_agenda_tree_label(label))}:</strong> {_esc(description)}"
     return f"<strong>Description:</strong> {_esc(description)}"
 
 
