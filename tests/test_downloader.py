@@ -618,7 +618,9 @@ class GetLatestChairNotesInfoTests(unittest.TestCase):
     def test_searches_all_configured_inboxes_and_extra_folders(self, mock_list_remote_files):
         mock_list_remote_files.side_effect = [
             [_f("RAN1#124 chair notes - v02.docx", datetime(2026, 4, 1, 9, 0))],
+            [],
             [_f("RAN1#125 chairman notes - v01.docx", datetime(2026, 4, 27, 9, 0))],
+            [],
             [_f("RAN1#125 chair notes - v03.docx", datetime(2026, 4, 28, 9, 0))],
         ]
 
@@ -640,11 +642,11 @@ class GetLatestChairNotesInfoTests(unittest.TestCase):
             "https://example.com/legacy/Inbox/Chair_notes",
         )
         self.assertEqual(
-            mock_list_remote_files.call_args_list[1].args[0],
+            mock_list_remote_files.call_args_list[2].args[0],
             "https://example.com/next/Inbox/Chair_notes",
         )
         self.assertEqual(
-            mock_list_remote_files.call_args_list[2].args[0],
+            mock_list_remote_files.call_args_list[4].args[0],
             "https://example.com/custom/Chair_notes/",
         )
 
@@ -1690,3 +1692,34 @@ def test_save_creates_parent_dirs(tmp_path):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+def test_chair_note_root_and_meeting_specific_backup_survive_primary_failure():
+    primary = "https://example.org/sync/Inbox/"
+    backup = "https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_126/Inbox/"
+    def listing(url):
+        if url.startswith(primary):
+            raise RuntimeError("primary unavailable")
+        if url.endswith("Chair_notes"):
+            return [_f("Chair notes RAN1#126_v12.docx", datetime(2026, 8, 28, 8, 0))]
+        return [
+            _f("Chair notes RAN1#126_v13.docx", datetime(2026, 8, 28, 9, 52)),
+            _f("Chair notes RAN1#127_v14.docx", datetime(2026, 11, 1, 9, 0)),
+        ]
+    with patch("working_groups.ran1.downloader.list_remote_files", side_effect=listing) as fetch:
+        result = get_latest_chair_notes_info(urls=[primary, backup],
+            preferred_meeting_id="ran1#126", strict=True)
+    assert result["name"] == "Chair notes RAN1#126_v13.docx"
+    assert result["source_url"] == backup
+    assert len(result["source_warnings"]) == 2
+    assert fetch.call_count == 4
+
+
+def test_chair_notes_inbox_root_is_checked_when_subfolder_is_empty():
+    with patch("working_groups.ran1.downloader.list_remote_files", side_effect=[[], [
+        _f("Chair notes RAN1#126_v13.docx", datetime(2026, 8, 28, 9, 52))
+    ]]):
+        result = get_latest_chair_notes_info(urls=["https://example.org/Inbox/"],
+            preferred_meeting_id="ran1#126", strict=True)
+    assert result["source_url"] == "https://example.org/Inbox/"
+    assert not result.get("source_warnings")

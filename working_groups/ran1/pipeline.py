@@ -677,6 +677,13 @@ def build_schedule(args) -> Schedule:
             else:
                 print("\nWarning: No agenda or Chair notes DOCX found, using UTC timezone")
 
+    # Agreements are an independent input, even with a resolved Portal timezone.
+    from .agreements import build_agreements
+    chairman_agreements, agreements_ref = build_agreements(
+        cfg=cfg, meeting_id=current_meeting_id, schedule_path=docx_path,
+        offline=bool(args.local or args.no_download), extra_paths=extra_chair_notes_paths,
+    )
+
     # Persist state (FTP file listing + meeting metadata) for the next run.
     # Locally-provided chairman documents (ref_in_manual/) are excluded: the
     # state is compared by check_update.py against a fresh remote scan, and
@@ -697,6 +704,7 @@ def build_schedule(args) -> Schedule:
             timezone_status=timezone_status,
             timezone_ref=timezone_ref,
             agenda=_agenda_state_for_save(agenda_info, agenda_path),
+            agreements_ref=agreements_ref,
             local_refs=local_reference_hashes(),
         )
 
@@ -738,6 +746,7 @@ def build_schedule(args) -> Schedule:
         generated_at=generated_at,
         timezone=meeting_tz,
         wg_id="ran1",
+        chairman_agreements=chairman_agreements,
         meeting_id=current_meeting_id or meeting_name,
         starts_on=portal_ref.get("starts_on") if portal_ref else None,
         ends_on=portal_ref.get("ends_on") if portal_ref else None,

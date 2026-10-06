@@ -20,8 +20,8 @@ from working_groups.registry import get_working_group
 STATE_PATH = Path('docs/.build_state.json')
 PLAN_PATH = Path('.ci/plan.json')
 COMMON_INPUTS = tuple(map(Path, ('shared/schedule.py', 'shared/lifecycle.py',
-    'shared/portal_meetings.py', 'shared/ftp_transport.py', 'shared/remote_files.py', 'working_groups/registry.py', 'pyproject.toml', 'uv.lock')))
-SITE_INPUTS = tuple(map(Path, ('shared/renderer.py', 'shared/topic_references.py', 'shared/navigation.py',
+    'shared/portal_meetings.py', 'shared/docx_html.py', 'shared/docx_math.py', 'shared/metafile_images.py', 'shared/wmf2svg.py', 'shared/vendor', 'shared/ftp_transport.py', 'shared/remote_files.py', 'working_groups/registry.py', 'pyproject.toml', 'uv.lock')))
+SITE_INPUTS = tuple(map(Path, ('shared/renderer.py', 'shared/agreement_assets.py', 'shared/topic_references.py', 'shared/navigation.py',
     'shared/site_config.py', 'shared/page.py', 'templates', 'build.py', 'ci.py')))
 
 

@@ -9,6 +9,7 @@ import httpx
 
 from shared.schedule import load_schedule, save_schedule
 from shared.renderer import generate_html
+from shared.agreement_assets import write_agreement_assets
 from working_groups.registry import PIPELINES, build_schedule, get_working_group
 from shared.lifecycle import preserve_on_failure
 from shared.site_config import load_site_config
@@ -101,6 +102,7 @@ def render_site(config, root, schedules, meetings=None):
     for wg, schedule in schedules.items():
         path = root / wg / "index.html"
         path.parent.mkdir(parents=True, exist_ok=True)
+        write_agreement_assets(schedule, path.parent)
         path.write_text(generate_html(schedule, schedules=schedules, groups=config["working_groups"], presentation=config.get("presentation")), encoding="utf-8")
         print(f"[{wg}] {path}")
     # Real files back every URL, so direct links, refresh and history work on Pages.

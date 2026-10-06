@@ -4,6 +4,8 @@ from shared.lifecycle import clear_paths, restore_staged
 
 input_paths = (Path('working_groups/ran1'), Path('ref_in_manual/ran1'))
 persistent_paths = (Path('docs/ran1'), Path('downloads/ran1/extra_files'))
+# Includes deterministic chairman HTML caches; docs/ran1 includes static assets
+# and source identity, so existing failure rollback covers agreement publishing.
 cache_paths = (Path('.cache/ran1'),)
 TRANSFER_DIR = Path('.ci/transfers/ran1')
 

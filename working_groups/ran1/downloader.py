@@ -981,62 +981,50 @@ def get_latest_chair_notes_info(
     urls: list[str] | None = None,
     extra_folders: list[dict] | None = None,
     preferred_meeting_id: str | None = None,
+    strict: bool = False,
 ) -> dict | None:
-    """Return metadata of the latest Chair notes across configured sources.
+    """Search each Inbox root and Chair_notes child, plus explicit extra folders.
 
-    Searches the ``Chair_notes`` subfolder beneath each configured inbox URL,
-    and also scans every configured ``extra_folder`` directly. This mirrors the
-    schedule-source lookup so location/timezone detection can follow the same
-    config.json settings as the main schedule download.
+    An unavailable primary must not prevent a usable meeting-specific mirror
+    from being checked. Strict mode raises when incomplete listings could be
+    mistaken for document absence; successful fallbacks carry source warnings.
     """
     if urls is None:
         urls = [url] if url is not None else [INBOX_URL]
-
-    candidates: list[dict] = []
-
+    locations = []
     for inbox_url in urls:
-        chair_url = _chair_notes_url_from_inbox(inbox_url)
-        try:
-            files = list_remote_files(chair_url)
-        except Exception as e:
-            print(f"Warning: Could not list Chair notes at {chair_url}: {e}")
+        locations.extend([_chair_notes_url_from_inbox(inbox_url), inbox_url])
+    locations.extend(folder["url"] for folder in extra_folders or [])
+    candidates: list[dict] = []
+    failures = []
+    seen = set()
+    for location in locations:
+        key = location.rstrip("/")
+        if key in seen:
             continue
-
+        seen.add(key)
+        try:
+            files = list_remote_files(location)
+        except Exception as exc:
+            failures.append((location, exc))
+            print(f"Warning: Could not list Chair notes at {location}: {exc}")
+            continue
         if preferred_meeting_id is not None:
             files = _filter_files_to_meeting(files, preferred_meeting_id)
-        latest = find_latest_chair_notes(
-            files,
-            preferred_meeting_id=preferred_meeting_id,
-        )
+        latest = find_latest_chair_notes(files, preferred_meeting_id=preferred_meeting_id)
         if latest is not None:
-            candidates.append({**latest, "source_url": chair_url})
-
-    for folder in extra_folders or []:
-        folder_url = folder["url"]
-        folder_name = folder["name"]
-        try:
-            files = list_remote_files(folder_url)
-        except Exception as e:
-            print(f"Warning: Could not list Chair notes in extra folder {folder_name}/: {e}")
-            continue
-
-        if preferred_meeting_id is not None:
-            files = _filter_files_to_meeting(files, preferred_meeting_id)
-        latest = find_latest_chair_notes(
-            files,
-            preferred_meeting_id=preferred_meeting_id,
-        )
-        if latest is not None:
-            candidates.append({**latest, "source_url": folder_url})
-
+            candidates.append({**latest, "source_url": location})
     if not candidates:
+        if strict and failures:
+            raise failures[0][1]
         return None
-
-    latest = find_latest_chair_notes(
-        candidates,
-        preferred_meeting_id=preferred_meeting_id,
-    )
-    if latest is not None and latest.get("source_url"):
+    latest = find_latest_chair_notes(candidates, preferred_meeting_id=preferred_meeting_id)
+    if latest is not None:
+        if failures:
+            latest = {**latest, "source_warnings": [
+                f"Source listing unavailable: {location}; latest version across all sources could not be verified"
+                for location, _ in failures
+            ]}
         print(f"Latest Chair notes source: {latest['source_url']}")
     return latest
 
@@ -2018,6 +2006,7 @@ def save_schedule_state(
     timezone_status: str | None = None,
     timezone_ref: dict | None = None,
     agenda: dict | None = None,
+    agreements_ref: dict | None = None,
     local_refs: dict[str, str] | None = None,
 ) -> None:
     """Persist FTP state from already-fetched ScheduleSource objects.
@@ -2051,7 +2040,7 @@ def save_schedule_state(
         })
     info.sort(key=lambda x: x.get("folder", ""))
 
-    state: dict = {"files": info}
+    state: dict = {"files": info, "agreements_ref": agreements_ref}
     if meeting_id is not None:
         state["meeting_id"] = meeting_id
     if meeting_source in {"local", "remote"}:

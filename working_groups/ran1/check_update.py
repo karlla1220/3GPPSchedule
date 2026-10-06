@@ -326,6 +326,22 @@ def check_updates(*, staging_dir=None) -> CheckResult:
                 f"{cached_timezone_ref!r} → {current_timezone_ref!r}"
             )
 
+    # Chairman agreements do not depend on which document supplied timezone.
+    from .agreements import remote_reference, reference_identity, local_note_reference
+    try:
+        selected_ids = {_extract_meeting_id(entry.get("name", "")) for entry in (remote_all or [])}
+        selected_ids.discard(None)
+        agreement_meeting = (next(iter(selected_ids)) if len(selected_ids) == 1 else preferred_meeting_id)
+        current_agreements = local_note_reference(cfg, agreement_meeting)
+        if current_agreements is None:
+            current_agreements = reference_identity(remote_reference(cfg, agreement_meeting))
+        cached_agreements = state.get("agreements_ref")
+        if current_agreements != cached_agreements:
+            changed = True
+            print("Chairman agreement document changed.")
+    except Exception as exc:
+        errors.append(f"Chairman agreement check failed: {exc}")
+
     # 3. Compare manually-provided local reference files (ref_in_manual/).
     # These are committed to the repo, so content hashes are stable across
     # CI checkouts and detect local-only changes that the FTP scan misses.

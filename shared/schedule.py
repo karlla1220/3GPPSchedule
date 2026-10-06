@@ -105,6 +105,7 @@ class Schedule:
     # {"type": "heading", "text"}, {"type": "paragraph", "text", "bold"} or
     # {"type": "table", "rows": [[cell, ...]], "header": first row is a header}.
     supplements: list[dict] = field(default_factory=list)
+    chairman_agreements: dict = field(default_factory=dict)
 
 
 def time_to_minutes(t: str) -> int:

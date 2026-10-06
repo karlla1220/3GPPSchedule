@@ -112,8 +112,9 @@ header .meta {
     margin-bottom: 14px;
 }
 
-/* Segmented control: only as wide as its days. */
-.tabs {
+/* Segmented control: only as wide as its items. */
+.tabs,
+.agreement-tabs {
     display: flex;
     gap: 2px;
     flex-wrap: wrap;
@@ -158,7 +159,8 @@ header .meta {
     font-weight: 600;
 }
 
-.tab {
+.tab,
+.agreement-tabs button {
     padding: 6px 16px;
     border: none;
     background: transparent;
@@ -171,11 +173,13 @@ header .meta {
     border-radius: 7px;
 }
 
-.tab:hover {
+.tab:hover,
+.agreement-tabs button:hover {
     color: var(--ink);
 }
 
-.tab.active {
+.tab.active,
+.agreement-tabs [aria-selected="true"] {
     background: var(--surface);
     color: var(--ink);
     font-weight: 600;
@@ -1019,4 +1023,92 @@ header .meta {
         height: 60px;
         font-size: 10px;
     }
+}
+
+/* RAN1 agreements: a surface like the grid's, below it. The AI tabs reuse
+   the day tabs' segmented control; the document itself sits in Shadow DOM. */
+.agreement-panel {
+    margin: 16px 0 24px;
+    background: var(--surface);
+    border-radius: var(--radius-lg);
+    box-shadow: 0 0 0 1px var(--hairline), 0 1px 2px rgba(15,23,42,.04);
+}
+.agreement-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    min-height: 52px;
+    padding: 8px 16px;
+    border-bottom: 1px solid var(--hairline);
+}
+.agreement-header h2,
+#agreement-app > h2 {
+    font-size: 10.5px;
+    line-height: 1.4;
+    font-weight: 600;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    color: var(--ink-4);
+}
+#agreement-app > h2 { padding: 18px 16px 0; }
+.agreement-tabs:empty { display: none; }
+.agreement-status:empty { display: none; }
+.agreement-status,
+.agreement-empty {
+    padding: 14px 16px 18px;
+    font-size: 13px;
+    color: var(--ink-3);
+}
+#agreement-app > .agreement-empty { padding-top: 6px; }
+#agreement-body { padding: 18px 20px 22px; }
+#agreement-body > h3 {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    margin-bottom: 14px;
+    font-size: 16px;
+    line-height: 1.35;
+    font-weight: 600;
+    letter-spacing: -.01em;
+    color: var(--ink);
+}
+.agreement-ai {
+    flex-shrink: 0;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--ink-3);
+}
+#agreement-body > p { font-size: 13px; color: var(--ink-2); }
+#agreement-body > .agreement-note { color: var(--ink-3); }
+.agreement-document { display: block; width: 100%; min-width: 0; }
+.agreement-action {
+    margin-left: 8px;
+    padding: 4px 12px;
+    border: 1px solid var(--hairline);
+    border-radius: 999px;
+    background: var(--surface);
+    color: var(--ink-2);
+    font: inherit;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+}
+.agreement-action:hover { color: var(--ink); border-color: #CDD3DB; }
+.agreement-panel button:focus-visible { outline: 2px solid #2563EB; outline-offset: 2px; }
+
+/* The cell whose agreements are shown: its own accent, drawn as a ring. */
+.session-block[aria-pressed="true"] {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 1px var(--accent), 0 2px 8px -2px rgba(15,23,42,.14);
+    z-index: 16;
+}
+.session-block:focus-visible { outline: 2px solid #2563EB; outline-offset: 1px; z-index: 16; }
+
+@media (max-width: 600px) {
+    .agreement-header { padding: 8px 12px; }
+    .agreement-tabs { max-width: 100%; }
+    .agreement-tabs button { min-height: 36px; }
+    #agreement-body { padding: 14px 14px 18px; }
+    #agreement-body > h3 { flex-direction: column; gap: 2px; font-size: 15px; }
 }
