@@ -209,3 +209,45 @@ def test_agenda_description_popup_orders_items_as_a_tree():
         "10.3 - Channel coding and modulation",
         "10.3.1: Channel coding",
     ]
+
+
+def test_agenda_description_popup_lists_items_under_an_x_item():
+    session = SimpleNamespace(
+        agenda_item="10.6.x, 10.6.2",
+        description="WUS and operation",
+        agenda_descriptions=[
+            {
+                "agenda_item": "10.6.x",
+                "description": "WUS and operation",
+                "hierarchy": [
+                    {"agenda_item": "10", "description": "Rel-20 Study of 6GR"},
+                    {"agenda_item": "10.6", "description": "WUS and operation"},
+                ],
+                "children": [
+                    {"agenda_item": "10.6.1", "description": "WUS"},
+                    {"agenda_item": "10.6.1.1", "description": "WUS design"},
+                    {"agenda_item": "10.6.2", "description": "Power saving"},
+                ],
+            },
+            {
+                "agenda_item": "10.6.2",
+                "description": "Power saving",
+                "hierarchy": [
+                    {"agenda_item": "10", "description": "Rel-20 Study of 6GR"},
+                    {"agenda_item": "10.6", "description": "WUS and operation"},
+                    {"agenda_item": "10.6.2", "description": "Power saving"},
+                ],
+            },
+        ],
+    )
+
+    section = BeautifulSoup(_agenda_description_popup_lines(session)[0], "html.parser")
+
+    # 10.6.2 is listed once, under 10.6.x, not again on its own.
+    assert [(row["class"][-1], row["style"], row.get_text()) for row in section.select("[style]")] == [
+        ("popup-agenda-parent", "--depth:0", "10 - Rel-20 Study of 6GR"),
+        ("popup-agenda-item", "--depth:1", "10.6.x: WUS and operation"),
+        ("popup-agenda-child", "--depth:2;--rel:1", "10.6.1: WUS"),
+        ("popup-agenda-child", "--depth:3;--rel:2", "10.6.1.1: WUS design"),
+        ("popup-agenda-child", "--depth:2;--rel:1", "10.6.2: Power saving"),
+    ]

@@ -148,6 +148,31 @@ def test_annotate_falls_back_from_x_to_parent():
     ]
 
 
+def test_annotate_lists_every_item_under_an_x_item():
+    sessions = [{"name": "10.6.x", "agenda_item": "10.6.x"}, {"name": "10.6.2", "agenda_item": "10.6.2"}]
+
+    annotated = annotate_sessions_with_agenda_descriptions(
+        sessions,
+        {
+            "10": "Rel-20 Study of 6GR",
+            "10.6": "WUS and operation",
+            "10.6.10": "Tenth",
+            "10.6.2": "Power saving",
+            "10.6.1": "WUS",
+            "10.6.1.1": "WUS design",
+            "10.7": "NTN",
+        },
+    )
+
+    assert annotated[0]["agenda_descriptions"][0]["children"] == [
+        {"agenda_item": "10.6.1", "description": "WUS"},
+        {"agenda_item": "10.6.1.1", "description": "WUS design"},
+        {"agenda_item": "10.6.2", "description": "Power saving"},
+        {"agenda_item": "10.6.10", "description": "Tenth"},
+    ]
+    assert "children" not in annotated[1]["agenda_descriptions"][0]
+
+
 def test_strip_derived_description_fields():
     assert strip_derived_description_fields(
         [
