@@ -2,7 +2,7 @@
   "day": "Thursday",
   "time_block_index": 2,
   "source_hashes": {
-    "Main Schedule": "23018729753f7e76"
+    "Main Schedule": "6fe996680762916c"
   },
   "merged_sessions": [
     {
@@ -97,18 +97,18 @@
     },
     {
       "room_name": "RAN1_brk1",
-      "name": "10.5.2.3",
-      "duration_minutes": 45,
+      "name": "10.5.2.1",
+      "duration_minutes": 30,
       "specified_start_time": null,
       "chair": null,
       "group_header": "6GR",
       "agenda_item": null,
-      "description": "Uplink transmission scheme(s) for uplink channels",
+      "description": "Downlink transmission scheme(s) for downlink control channels",
       "agenda_descriptions": [
         {
-          "agenda_item": "10.5.2.3",
-          "matched_agenda_item": "10.5.2.3",
-          "description": "Uplink transmission scheme(s) for uplink channels",
+          "agenda_item": "10.5.2.1",
+          "matched_agenda_item": "10.5.2.1",
+          "description": "Downlink transmission scheme(s) for downlink control channels",
           "hierarchy": [
             {
               "agenda_item": "10",
@@ -126,8 +126,8 @@
               "has_description": true
             },
             {
-              "agenda_item": "10.5.2.3",
-              "description": "Uplink transmission scheme(s) for uplink channels",
+              "agenda_item": "10.5.2.1",
+              "description": "Downlink transmission scheme(s) for downlink control channels",
               "has_description": true
             }
           ]
@@ -175,18 +175,18 @@
     },
     {
       "room_name": "RAN1_brk1",
-      "name": "10.5.2.1",
-      "duration_minutes": 30,
+      "name": "10.5.2.3",
+      "duration_minutes": 45,
       "specified_start_time": null,
       "chair": null,
       "group_header": "6GR",
       "agenda_item": null,
-      "description": "Downlink transmission scheme(s) for downlink control channels",
+      "description": "Uplink transmission scheme(s) for uplink channels",
       "agenda_descriptions": [
         {
-          "agenda_item": "10.5.2.1",
-          "matched_agenda_item": "10.5.2.1",
-          "description": "Downlink transmission scheme(s) for downlink control channels",
+          "agenda_item": "10.5.2.3",
+          "matched_agenda_item": "10.5.2.3",
+          "description": "Uplink transmission scheme(s) for uplink channels",
           "hierarchy": [
             {
               "agenda_item": "10",
@@ -204,8 +204,8 @@
               "has_description": true
             },
             {
-              "agenda_item": "10.5.2.1",
-              "description": "Downlink transmission scheme(s) for downlink control channels",
+              "agenda_item": "10.5.2.3",
+              "description": "Uplink transmission scheme(s) for uplink channels",
               "has_description": true
             }
           ]
@@ -440,7 +440,7 @@
       ]
     }
   ],
-  "merged_at": "2026-10-07T06:02:06.980189+00:00",
+  "merged_at": "2026-10-07T09:22:49.176701+00:00",
   "meeting_id": "ran1#126bis",
   "schema_version": 2
 }

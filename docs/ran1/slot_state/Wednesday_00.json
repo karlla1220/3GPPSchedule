@@ -2,7 +2,7 @@
   "day": "Wednesday",
   "time_block_index": 0,
   "source_hashes": {
-    "Main Schedule": "15dfa4b0fea6f8c3"
+    "Main Schedule": "1ebc62cd2f98ef33"
   },
   "merged_sessions": [
     {
@@ -185,6 +185,40 @@
     },
     {
       "room_name": "RAN1_off1",
+      "name": "10.5.5",
+      "duration_minutes": 30,
+      "specified_start_time": null,
+      "chair": "Xiaodong",
+      "group_header": "6GR",
+      "agenda_item": "10.5.5",
+      "description": "Other physical layer signals, channels and procedure",
+      "agenda_descriptions": [
+        {
+          "agenda_item": "10.5.5",
+          "matched_agenda_item": "10.5.5",
+          "description": "Other physical layer signals, channels and procedure",
+          "hierarchy": [
+            {
+              "agenda_item": "10",
+              "description": "Rel-20 Study of 6GR",
+              "has_description": true
+            },
+            {
+              "agenda_item": "10.5",
+              "description": "Multi-antenna system",
+              "has_description": true
+            },
+            {
+              "agenda_item": "10.5.5",
+              "description": "Other physical layer signals, channels and procedure",
+              "has_description": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "room_name": "RAN1_off1",
       "name": "10.2.1 Waveform",
       "duration_minutes": 30,
       "specified_start_time": null,
@@ -261,40 +295,6 @@
       ]
     },
     {
-      "room_name": "RAN1_off1",
-      "name": "10.5.5",
-      "duration_minutes": 30,
-      "specified_start_time": null,
-      "chair": "Xiaodong",
-      "group_header": "6GR",
-      "agenda_item": "10.5.5",
-      "description": "Other physical layer signals, channels and procedure",
-      "agenda_descriptions": [
-        {
-          "agenda_item": "10.5.5",
-          "matched_agenda_item": "10.5.5",
-          "description": "Other physical layer signals, channels and procedure",
-          "hierarchy": [
-            {
-              "agenda_item": "10",
-              "description": "Rel-20 Study of 6GR",
-              "has_description": true
-            },
-            {
-              "agenda_item": "10.5",
-              "description": "Multi-antenna system",
-              "has_description": true
-            },
-            {
-              "agenda_item": "10.5.5",
-              "description": "Other physical layer signals, channels and procedure",
-              "has_description": true
-            }
-          ]
-        }
-      ]
-    },
-    {
       "room_name": "RAN1_off2",
       "name": "MIMO",
       "duration_minutes": 40,
@@ -352,7 +352,7 @@
       ]
     }
   ],
-  "merged_at": "2026-10-07T06:02:06.973559+00:00",
+  "merged_at": "2026-10-07T09:22:21.200427+00:00",
   "meeting_id": "ran1#126bis",
   "schema_version": 2
 }

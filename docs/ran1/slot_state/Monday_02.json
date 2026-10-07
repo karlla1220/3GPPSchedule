@@ -2,7 +2,7 @@
   "day": "Monday",
   "time_block_index": 2,
   "source_hashes": {
-    "Main Schedule": "523ebde4df721473"
+    "Main Schedule": "3dd1ef53f82f9615"
   },
   "merged_sessions": [
     {
@@ -97,37 +97,12 @@
     },
     {
       "room_name": "RAN1_brk1",
-      "name": "10.7.1 NTN",
-      "duration_minutes": 60,
+      "name": "NTN-NR",
+      "duration_minutes": 40,
       "specified_start_time": null,
       "chair": null,
-      "group_header": "6GR",
-      "agenda_item": "10.7.1",
-      "description": "NTN specific requirements and design",
-      "agenda_descriptions": [
-        {
-          "agenda_item": "10.7.1",
-          "matched_agenda_item": "10.7.1",
-          "description": "NTN specific requirements and design",
-          "hierarchy": [
-            {
-              "agenda_item": "10",
-              "description": "Rel-20 Study of 6GR",
-              "has_description": true
-            },
-            {
-              "agenda_item": "10.7",
-              "description": "NTN",
-              "has_description": true
-            },
-            {
-              "agenda_item": "10.7.1",
-              "description": "NTN specific requirements and design",
-              "has_description": true
-            }
-          ]
-        }
-      ]
+      "group_header": "R20",
+      "agenda_item": null
     },
     {
       "room_name": "RAN1_brk1",
@@ -160,12 +135,37 @@
     },
     {
       "room_name": "RAN1_brk1",
-      "name": "NTN-NR",
-      "duration_minutes": 40,
+      "name": "10.7.1 NTN",
+      "duration_minutes": 60,
       "specified_start_time": null,
       "chair": null,
-      "group_header": "R20",
-      "agenda_item": null
+      "group_header": "6GR",
+      "agenda_item": "10.7.1",
+      "description": "NTN specific requirements and design",
+      "agenda_descriptions": [
+        {
+          "agenda_item": "10.7.1",
+          "matched_agenda_item": "10.7.1",
+          "description": "NTN specific requirements and design",
+          "hierarchy": [
+            {
+              "agenda_item": "10",
+              "description": "Rel-20 Study of 6GR",
+              "has_description": true
+            },
+            {
+              "agenda_item": "10.7",
+              "description": "NTN",
+              "has_description": true
+            },
+            {
+              "agenda_item": "10.7.1",
+              "description": "NTN specific requirements and design",
+              "has_description": true
+            }
+          ]
+        }
+      ]
     },
     {
       "room_name": "RAN1_brk2",
@@ -363,6 +363,40 @@
     },
     {
       "room_name": "RAN1_off2",
+      "name": "10.5.5",
+      "duration_minutes": 30,
+      "specified_start_time": null,
+      "chair": "Xiaodong",
+      "group_header": "6GR",
+      "agenda_item": "10.5.5",
+      "description": "Other physical layer signals, channels and procedure",
+      "agenda_descriptions": [
+        {
+          "agenda_item": "10.5.5",
+          "matched_agenda_item": "10.5.5",
+          "description": "Other physical layer signals, channels and procedure",
+          "hierarchy": [
+            {
+              "agenda_item": "10",
+              "description": "Rel-20 Study of 6GR",
+              "has_description": true
+            },
+            {
+              "agenda_item": "10.5",
+              "description": "Multi-antenna system",
+              "has_description": true
+            },
+            {
+              "agenda_item": "10.5.5",
+              "description": "Other physical layer signals, channels and procedure",
+              "has_description": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "room_name": "RAN1_off2",
       "name": "10.5.4.x",
       "duration_minutes": 90,
       "specified_start_time": null,
@@ -412,43 +446,9 @@
           ]
         }
       ]
-    },
-    {
-      "room_name": "RAN1_off2",
-      "name": "10.5.5",
-      "duration_minutes": 30,
-      "specified_start_time": null,
-      "chair": "Xiaodong",
-      "group_header": "6GR",
-      "agenda_item": "10.5.5",
-      "description": "Other physical layer signals, channels and procedure",
-      "agenda_descriptions": [
-        {
-          "agenda_item": "10.5.5",
-          "matched_agenda_item": "10.5.5",
-          "description": "Other physical layer signals, channels and procedure",
-          "hierarchy": [
-            {
-              "agenda_item": "10",
-              "description": "Rel-20 Study of 6GR",
-              "has_description": true
-            },
-            {
-              "agenda_item": "10.5",
-              "description": "Multi-antenna system",
-              "has_description": true
-            },
-            {
-              "agenda_item": "10.5.5",
-              "description": "Other physical layer signals, channels and procedure",
-              "has_description": true
-            }
-          ]
-        }
-      ]
     }
   ],
-  "merged_at": "2026-10-07T06:02:06.966449+00:00",
+  "merged_at": "2026-10-07T09:22:01.335050+00:00",
   "meeting_id": "ran1#126bis",
   "schema_version": 2
 }

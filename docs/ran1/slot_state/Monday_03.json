@@ -2,7 +2,7 @@
   "day": "Monday",
   "time_block_index": 3,
   "source_hashes": {
-    "Main Schedule": "0d9b23eb5d94e7ed"
+    "Main Schedule": "354255c18416a2a9"
   },
   "merged_sessions": [
     {
@@ -163,6 +163,15 @@
     },
     {
       "room_name": "RAN1_brk1",
+      "name": "MIMO",
+      "duration_minutes": 40,
+      "specified_start_time": null,
+      "chair": null,
+      "group_header": "R20",
+      "agenda_item": null
+    },
+    {
+      "room_name": "RAN1_brk1",
       "name": "10.3.2 Modulation",
       "duration_minutes": 30,
       "specified_start_time": null,
@@ -269,49 +278,6 @@
       ]
     },
     {
-      "room_name": "RAN1_brk1",
-      "name": "MIMO",
-      "duration_minutes": 40,
-      "specified_start_time": null,
-      "chair": null,
-      "group_header": "R20",
-      "agenda_item": null
-    },
-    {
-      "room_name": "RAN1_brk2",
-      "name": "10.2.1 Waveform",
-      "duration_minutes": 30,
-      "specified_start_time": null,
-      "chair": null,
-      "group_header": "6GR",
-      "agenda_item": null,
-      "description": "Waveform",
-      "agenda_descriptions": [
-        {
-          "agenda_item": "10.2.1",
-          "matched_agenda_item": "10.2.1",
-          "description": "Waveform",
-          "hierarchy": [
-            {
-              "agenda_item": "10",
-              "description": "Rel-20 Study of 6GR",
-              "has_description": true
-            },
-            {
-              "agenda_item": "10.2",
-              "description": "Waveform for 6GR air interface",
-              "has_description": true
-            },
-            {
-              "agenda_item": "10.2.1",
-              "description": "Waveform",
-              "has_description": true
-            }
-          ]
-        }
-      ]
-    },
-    {
       "room_name": "RAN1_brk2",
       "name": "10.5.4",
       "duration_minutes": 120,
@@ -346,19 +312,19 @@
       ]
     },
     {
-      "room_name": "RAN1_off1",
-      "name": "10.5.1.3",
+      "room_name": "RAN1_brk2",
+      "name": "10.2.1 Waveform",
       "duration_minutes": 30,
       "specified_start_time": null,
-      "chair": "Xiaodong",
+      "chair": null,
       "group_header": "6GR",
       "agenda_item": null,
-      "description": "Bandwidth operation",
+      "description": "Waveform",
       "agenda_descriptions": [
         {
-          "agenda_item": "10.5.1.3",
-          "matched_agenda_item": "10.5.1.3",
-          "description": "Bandwidth operation",
+          "agenda_item": "10.2.1",
+          "matched_agenda_item": "10.2.1",
+          "description": "Waveform",
           "hierarchy": [
             {
               "agenda_item": "10",
@@ -366,18 +332,13 @@
               "has_description": true
             },
             {
-              "agenda_item": "10.5",
-              "description": "Multi-antenna system",
+              "agenda_item": "10.2",
+              "description": "Waveform for 6GR air interface",
               "has_description": true
             },
             {
-              "agenda_item": "10.5.1",
-              "description": "Initial access and mobility",
-              "has_description": true
-            },
-            {
-              "agenda_item": "10.5.1.3",
-              "description": "Bandwidth operation",
+              "agenda_item": "10.2.1",
+              "description": "Waveform",
               "has_description": true
             }
           ]
@@ -425,6 +386,45 @@
     },
     {
       "room_name": "RAN1_off1",
+      "name": "10.5.1.3",
+      "duration_minutes": 30,
+      "specified_start_time": null,
+      "chair": "Xiaodong",
+      "group_header": "6GR",
+      "agenda_item": null,
+      "description": "Bandwidth operation",
+      "agenda_descriptions": [
+        {
+          "agenda_item": "10.5.1.3",
+          "matched_agenda_item": "10.5.1.3",
+          "description": "Bandwidth operation",
+          "hierarchy": [
+            {
+              "agenda_item": "10",
+              "description": "Rel-20 Study of 6GR",
+              "has_description": true
+            },
+            {
+              "agenda_item": "10.5",
+              "description": "Multi-antenna system",
+              "has_description": true
+            },
+            {
+              "agenda_item": "10.5.1",
+              "description": "Initial access and mobility",
+              "has_description": true
+            },
+            {
+              "agenda_item": "10.5.1.3",
+              "description": "Bandwidth operation",
+              "has_description": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "room_name": "RAN1_off1",
       "name": "10.5.1.2",
       "duration_minutes": 40,
       "specified_start_time": null,
@@ -464,12 +464,37 @@
     },
     {
       "room_name": "RAN1_off1",
-      "name": "AI/ML",
+      "name": "10.4.1",
       "duration_minutes": 40,
       "specified_start_time": null,
-      "chair": "Sorour",
-      "group_header": "R20",
-      "agenda_item": null
+      "chair": "Xiaodong",
+      "group_header": "6GR",
+      "agenda_item": null,
+      "description": "Operation in idle mode",
+      "agenda_descriptions": [
+        {
+          "agenda_item": "10.4.1",
+          "matched_agenda_item": "10.4.1",
+          "description": "Operation in idle mode",
+          "hierarchy": [
+            {
+              "agenda_item": "10",
+              "description": "Rel-20 Study of 6GR",
+              "has_description": true
+            },
+            {
+              "agenda_item": "10.4",
+              "description": "Multiple carrier operation",
+              "has_description": true
+            },
+            {
+              "agenda_item": "10.4.1",
+              "description": "Operation in idle mode",
+              "has_description": true
+            }
+          ]
+        }
+      ]
     },
     {
       "room_name": "RAN1_off2",
@@ -583,7 +608,7 @@
       "agenda_item": null
     }
   ],
-  "merged_at": "2026-10-07T06:02:06.967724+00:00",
+  "merged_at": "2026-10-07T09:22:07.601930+00:00",
   "meeting_id": "ran1#126bis",
   "schema_version": 2
 }

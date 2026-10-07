@@ -2,7 +2,7 @@
   "day": "Wednesday",
   "time_block_index": 1,
   "source_hashes": {
-    "Main Schedule": "fc8edba417945752"
+    "Main Schedule": "3a01a8869abb5c11"
   },
   "merged_sessions": [
     {
@@ -162,18 +162,18 @@
     },
     {
       "room_name": "RAN1_brk1",
-      "name": "10.5.2.3",
+      "name": "10.5.2.2",
       "duration_minutes": 30,
       "specified_start_time": null,
       "chair": null,
       "group_header": "6GR",
       "agenda_item": null,
-      "description": "Uplink transmission scheme(s) for uplink channels",
+      "description": "Downlink transmission scheme(s) for downlink shared channels",
       "agenda_descriptions": [
         {
-          "agenda_item": "10.5.2.3",
-          "matched_agenda_item": "10.5.2.3",
-          "description": "Uplink transmission scheme(s) for uplink channels",
+          "agenda_item": "10.5.2.2",
+          "matched_agenda_item": "10.5.2.2",
+          "description": "Downlink transmission scheme(s) for downlink shared channels",
           "hierarchy": [
             {
               "agenda_item": "10",
@@ -191,8 +191,8 @@
               "has_description": true
             },
             {
-              "agenda_item": "10.5.2.3",
-              "description": "Uplink transmission scheme(s) for uplink channels",
+              "agenda_item": "10.5.2.2",
+              "description": "Downlink transmission scheme(s) for downlink shared channels",
               "has_description": true
             }
           ]
@@ -419,7 +419,7 @@
       "agenda_item": null
     }
   ],
-  "merged_at": "2026-10-07T06:02:06.974545+00:00",
+  "merged_at": "2026-10-07T09:22:24.932107+00:00",
   "meeting_id": "ran1#126bis",
   "schema_version": 2
 }
