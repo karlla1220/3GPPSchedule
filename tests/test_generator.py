@@ -5,6 +5,8 @@ from bs4 import BeautifulSoup
 
 from shared.renderer import (
     _agenda_description_popup_lines,
+    _ai_filter_scope,
+    _ai_ids,
     _generate_css,
     _generate_js,
     generate_html,
@@ -295,3 +297,19 @@ def test_agenda_description_popup_lists_an_item_once_when_it_is_also_a_parent():
         ("popup-agenda-item", "15.1: High-level overview proposals for Rel-21"),
     ]
     assert section.select_one(".popup-agenda-toggle") is None
+
+
+def test_filter_reads_an_x_item_and_slash_list_as_agenda_numbers():
+    assert _ai_ids("10.5.4.x") == ["10.5.4"]
+    assert _ai_ids("10.6.2/10.6.1.1") == ["10.6.2", "10.6.1.1"]
+    assert _ai_ids("10.3.1/4") == ["10.3.1", "10.3.4"]
+    assert _ai_ids("10.5.4.1") == ["10.5.4.1"]
+
+
+def test_filter_scope_covers_sub_items_unless_the_cell_lists_one():
+    # 10.5.4.1 selects a 10.5.4.x or 10.5.4 cell (RAN1).
+    assert _ai_filter_scope("10.5.4.x") == "10.5.4.*"
+    assert _ai_filter_scope("10.5.4") == "10.5.4.*"
+    # RAN2 lists a parent beside its sub-items: the parent is its own part.
+    assert _ai_filter_scope("8.1, 8.1.2, 8.1.3") == "8.1|8.1.2.*|8.1.3.*"
+    assert _ai_filter_scope("") == ""
