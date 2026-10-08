@@ -46,6 +46,41 @@ def _natural_sort_key(s: str):
     return [int(p) if p.isdigit() else p.lower() for p in parts]
 
 
+_AI_NUMBER = re.compile(r'\d+(?:\.\d+)*')
+
+
+def _ai_ids(value: str) -> list[str]:
+    """Agenda numbers an AI as written names: "10.5.4.x" → 10.5.4, "10.6.2/10.6.1.1" → both.
+
+    Text that is not an agenda number stays as written and only matches itself.
+    """
+    ids = []
+    for token in agenda_section_ids(value, ()):
+        if token.lower().endswith(".x"):
+            token = token[:-2]
+        ids.append(token)
+    return list(dict.fromkeys(ids))
+
+
+def _ai_filter_scope(agenda_item: str | None) -> str:
+    """A cell's filter scope: "N.*" covers N's sub-items, "N" is N alone.
+
+    An x item covers its sub-items. A bare number does too ("10.5.4"
+    schedules all of 10.5.4), unless the same cell lists one of its
+    sub-items: "8.1, 8.1.2" then means 8.1's own part next to 8.1.2.
+    """
+    tokens = agenda_section_ids(agenda_item or "", ())
+    ids = [t[:-2] if t.lower().endswith(".x") else t for t in tokens]
+    scope = []
+    for token, ai_id in zip(tokens, ids):
+        covers = _AI_NUMBER.fullmatch(ai_id) and (
+            token.lower().endswith(".x")
+            or not any(other.startswith(ai_id + ".") for other in ids)
+        )
+        scope.append(ai_id + ".*" if covers else ai_id)
+    return "|".join(dict.fromkeys(scope))
+
+
 def _build_filter_data(all_sessions: list) -> str:
     """Build filter data JSON for the session filter panel.
 
@@ -100,9 +135,14 @@ def _build_filter_data(all_sessions: list) -> str:
             "sessions": sessions_data,
         })
 
+    # The agenda numbers a filter entry selects, where they differ from the
+    # entry itself (10.5.4.x → 10.5.4). A cell matches when its scope
+    # (data-ai-scope) holds the number, an item under it, or covers it.
+    ai_ids = {ai: _ai_ids(ai) for ai in all_ais}
     result = {
         "groups": groups,
         "allAIs": sorted(all_ais, key=_natural_sort_key),
+        "aiIds": {ai: ids for ai, ids in ai_ids.items() if ids != [ai]},
     }
     return json.dumps(result, ensure_ascii=False).replace("<", "\\u003c")
 
@@ -500,6 +540,7 @@ def generate_html(schedule: Schedule, *, schedules=None, groups=None, presentati
             else:
                 data_ai = ""
             data_ai_attr = _esc(data_ai).replace('"', '&quot;')
+            data_ai_scope_attr = _esc(_ai_filter_scope(session.agenda_item)).replace('"', '&quot;')
             # The panel opens the chair-note sections an AI covers (10.6.x →
             # 10.6.1, 10.6.2). The filter keeps matching the AI as written.
             agreement_attrs = ""
@@ -521,6 +562,7 @@ def generate_html(schedule: Schedule, *, schedules=None, groups=None, presentati
                 f' data-popup="{popup_attr}"'
                 f' data-room-scope="{session.room_scope}"'
                 f' data-ai="{data_ai_attr}"'
+                f' data-ai-scope="{data_ai_scope_attr}"'
                 f' data-name="{data_name_attr}"'
                 f' data-group="{data_group_attr}"'
                 f' data-description="{data_description_attr}"'

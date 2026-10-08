@@ -671,15 +671,32 @@ document.addEventListener('DOMContentLoaded', function() {
                     });
                 });
             }
+            // Selected agenda numbers: 10.5.4.x selects 10.5.4 (FD.aiIds).
+            var activeIds = [];
+            activeAIs.forEach(function(ai) {
+                (FD.aiIds && FD.aiIds[ai] || [ai]).forEach(function(id) { activeIds.push(id); });
+            });
+            // Cell scope "N.*" covers N's sub-items, "N" is N alone. A selected
+            // number matches itself, the items under it, and a scope above it.
+            function scopeMatches(entry) {
+                var covers = entry.slice(-2) === '.*';
+                var id = covers ? entry.slice(0, -2) : entry;
+                return activeIds.some(function(sel) {
+                    return sel === id || id.indexOf(sel + '.') === 0 ||
+                           (covers && sel.indexOf(id + '.') === 0);
+                });
+            }
             document.querySelectorAll('.session-block').forEach(function(block) {
                 if (!hasFilter) { block.classList.remove('dimmed'); return; }
                 var grp = block.getAttribute('data-group') || '';
                 var nm  = block.getAttribute('data-name') || '';
                 var raw = block.getAttribute('data-ai') || '';
                 var aiVals = raw.split('|').filter(function(v){ return v.trim(); });
+                var scope = (block.getAttribute('data-ai-scope') || '').split('|').filter(Boolean);
                 var sessKey = nm + '|' + grp;
                 var match = derivedKeys.has(sessKey) ||
-                            aiVals.some(function(v){ return activeAIs.has(v); });
+                            aiVals.some(function(v){ return activeAIs.has(v); }) ||
+                            scope.some(scopeMatches);
                 // Also match blocks with no AI if "Not assigned" is active for this session
                 if (!match && aiVals.length === 0 && activeNoAISessions.has(sessKey)) {
                     match = true;
