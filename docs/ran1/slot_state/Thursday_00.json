@@ -2,7 +2,8 @@
   "day": "Thursday",
   "time_block_index": 0,
   "source_hashes": {
-    "Main Schedule": "2c40c85f79c071ad"
+    "Main Schedule": "2c40c85f79c071ad",
+    "Hiroki's schedule": "564f7f3e0ea28376"
   },
   "merged_sessions": [
     {
@@ -196,12 +197,12 @@
     },
     {
       "room_name": "RAN1_brk2",
-      "name": "10.2.1 Waveform",
+      "name": "6G waveform",
       "duration_minutes": 40,
       "specified_start_time": null,
-      "chair": null,
-      "group_header": "6GR",
-      "agenda_item": null,
+      "chair": "Hiroki",
+      "group_header": "",
+      "agenda_item": "10.2.1",
       "description": "Waveform",
       "agenda_descriptions": [
         {
@@ -230,26 +231,14 @@
     },
     {
       "room_name": "RAN1_brk2",
-      "name": "AI 7/8.2",
+      "name": "Maintenance",
       "duration_minutes": 80,
       "specified_start_time": null,
-      "chair": null,
+      "chair": "Hiroki",
       "group_header": "",
-      "agenda_item": null,
-      "description": "Pre-Rel-19 NR Maintenance",
+      "agenda_item": "8.2/8.3, 7, 8",
+      "description": "Maintenance on others",
       "agenda_descriptions": [
-        {
-          "agenda_item": "7",
-          "matched_agenda_item": "7",
-          "description": "Pre-Rel-19 NR Maintenance",
-          "hierarchy": [
-            {
-              "agenda_item": "7",
-              "description": "Pre-Rel-19 NR Maintenance",
-              "has_description": true
-            }
-          ]
-        },
         {
           "agenda_item": "8.2",
           "matched_agenda_item": "8.2",
@@ -263,6 +252,47 @@
             {
               "agenda_item": "8.2",
               "description": "Maintenance on others",
+              "has_description": true
+            }
+          ]
+        },
+        {
+          "agenda_item": "8.3",
+          "matched_agenda_item": "8.3",
+          "description": "Maintenance on UE features",
+          "hierarchy": [
+            {
+              "agenda_item": "8",
+              "description": "Maintenance on Rel-19 NR and E-UTRA",
+              "has_description": true
+            },
+            {
+              "agenda_item": "8.3",
+              "description": "Maintenance on UE features",
+              "has_description": true
+            }
+          ]
+        },
+        {
+          "agenda_item": "7",
+          "matched_agenda_item": "7",
+          "description": "Pre-Rel-19 NR Maintenance",
+          "hierarchy": [
+            {
+              "agenda_item": "7",
+              "description": "Pre-Rel-19 NR Maintenance",
+              "has_description": true
+            }
+          ]
+        },
+        {
+          "agenda_item": "8",
+          "matched_agenda_item": "8",
+          "description": "Maintenance on Rel-19 NR and E-UTRA",
+          "hierarchy": [
+            {
+              "agenda_item": "8",
+              "description": "Maintenance on Rel-19 NR and E-UTRA",
               "has_description": true
             }
           ]
@@ -447,7 +477,7 @@
       ]
     }
   ],
-  "merged_at": "2026-10-08T06:02:05.482541+00:00",
+  "merged_at": "2026-10-09T00:43:04.800744+00:00",
   "meeting_id": "ran1#126bis",
   "schema_version": 2
 }

@@ -2,7 +2,8 @@
   "day": "Monday",
   "time_block_index": 1,
   "source_hashes": {
-    "Main Schedule": "bf567dde2b7e9d49"
+    "Main Schedule": "bf567dde2b7e9d49",
+    "Hiroki's schedule": "18ae9738f99d662a"
   },
   "merged_sessions": [
     {
@@ -192,12 +193,59 @@
     },
     {
       "room_name": "RAN1_off1",
-      "name": "A-IoT",
+      "name": "R20 A-IoT",
       "duration_minutes": 60,
-      "specified_start_time": null,
+      "specified_start_time": "12:00",
       "chair": "Hiroki",
       "group_header": "R20",
-      "agenda_item": null
+      "agenda_item": "9.3.1, 9.3.2",
+      "description": "R2D signals, channels, waveform and procedures",
+      "agenda_descriptions": [
+        {
+          "agenda_item": "9.3.1",
+          "matched_agenda_item": "9.3.1",
+          "description": "R2D signals, channels, waveform and procedures",
+          "hierarchy": [
+            {
+              "agenda_item": "9",
+              "description": "Release 20 NR",
+              "has_description": true
+            },
+            {
+              "agenda_item": "9.3",
+              "description": "Solutions for Ambient IoT (Internet of Things) in NR Phase 2",
+              "has_description": true
+            },
+            {
+              "agenda_item": "9.3.1",
+              "description": "R2D signals, channels, waveform and procedures",
+              "has_description": true
+            }
+          ]
+        },
+        {
+          "agenda_item": "9.3.2",
+          "matched_agenda_item": "9.3.2",
+          "description": "D2R signals, channels, waveform and procedures",
+          "hierarchy": [
+            {
+              "agenda_item": "9",
+              "description": "Release 20 NR",
+              "has_description": true
+            },
+            {
+              "agenda_item": "9.3",
+              "description": "Solutions for Ambient IoT (Internet of Things) in NR Phase 2",
+              "has_description": true
+            },
+            {
+              "agenda_item": "9.3.2",
+              "description": "D2R signals, channels, waveform and procedures",
+              "has_description": true
+            }
+          ]
+        }
+      ]
     },
     {
       "room_name": "RAN1_off2",
@@ -210,18 +258,18 @@
     },
     {
       "room_name": "RAN1_off2",
-      "name": "10.8.x Sensing",
+      "name": "6G ISAC",
       "duration_minutes": 60,
-      "specified_start_time": null,
+      "specified_start_time": "11:30",
       "chair": "Hiroki",
       "group_header": "6GR",
-      "agenda_item": null,
-      "description": "ISAC",
+      "agenda_item": "10.8.2",
+      "description": "Aspects of integration with communication",
       "agenda_descriptions": [
         {
-          "agenda_item": "10.8.x",
-          "matched_agenda_item": "10.8",
-          "description": "ISAC",
+          "agenda_item": "10.8.2",
+          "matched_agenda_item": "10.8.2",
+          "description": "Aspects of integration with communication",
           "hierarchy": [
             {
               "agenda_item": "10",
@@ -232,20 +280,11 @@
               "agenda_item": "10.8",
               "description": "ISAC",
               "has_description": true
-            }
-          ],
-          "children": [
-            {
-              "agenda_item": "10.8.1",
-              "description": "Evaluations"
             },
             {
               "agenda_item": "10.8.2",
-              "description": "Aspects of integration with communication"
-            },
-            {
-              "agenda_item": "10.8.3",
-              "description": "Waveform and frame structure"
+              "description": "Aspects of integration with communication",
+              "has_description": true
             }
           ]
         }
@@ -253,40 +292,15 @@
     },
     {
       "room_name": "RAN1_off2",
-      "name": "10.2.1 Waveform",
+      "name": "6G waveform",
       "duration_minutes": 30,
-      "specified_start_time": null,
+      "specified_start_time": "12:30",
       "chair": "Hiroki",
       "group_header": "6GR",
-      "agenda_item": null,
-      "description": "Waveform",
-      "agenda_descriptions": [
-        {
-          "agenda_item": "10.2.1",
-          "matched_agenda_item": "10.2.1",
-          "description": "Waveform",
-          "hierarchy": [
-            {
-              "agenda_item": "10",
-              "description": "Rel-20 Study of 6GR",
-              "has_description": true
-            },
-            {
-              "agenda_item": "10.2",
-              "description": "Waveform for 6GR air interface",
-              "has_description": true
-            },
-            {
-              "agenda_item": "10.2.1",
-              "description": "Waveform",
-              "has_description": true
-            }
-          ]
-        }
-      ]
+      "agenda_item": null
     }
   ],
-  "merged_at": "2026-10-08T06:02:05.469062+00:00",
+  "merged_at": "2026-10-09T00:41:58.373455+00:00",
   "meeting_id": "ran1#126bis",
   "schema_version": 2
 }
