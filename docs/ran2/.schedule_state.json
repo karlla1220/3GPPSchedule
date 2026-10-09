@@ -1,15 +1,15 @@
 {
   "meeting_id": "ran2#135bis",
-  "version": 0,
+  "version": 1,
   "config_hash": "8bc6afa38dd35e691cb8597464b9eb1162a038ab954e2ab5bb30ba4aa9a9f7b0",
   "schedule": {
-    "name": "R2_135b_Schedule_v00.docx",
-    "url": "https://www.3gpp.org/ftp/tsg_ran/WG2_RL2/TSGR2_135bis/Agenda/R2_135b_Schedule_v00.docx",
-    "uploaded_at": "2026-09-30 08:32",
-    "size": 292199,
-    "sha256": "76db57533db1c876d8a4a23dccb4b751820d802d61463f6ed23744291761bb49",
-    "etag": "\"4dbf814bb650dd1:0\"",
-    "last_modified": "Wed, 30 Sep 2026 08:32:57 GMT",
+    "name": "R2_135b_Schedule_v01.docx",
+    "url": "https://www.3gpp.org/ftp/tsg_ran/WG2_RL2/TSGR2_135bis/Agenda/R2_135b_Schedule_v01.docx",
+    "uploaded_at": "2026-10-09 14:59",
+    "size": 296618,
+    "sha256": "81c1fb09f5e6360a0dd92460fb306fa21a3526a38a64d47c6659f5a19183bc85",
+    "etag": "\"eb4153cbfe57dd1:0\"",
+    "last_modified": "Fri, 09 Oct 2026 14:59:33 GMT",
     "ftp_modified": null,
     "content_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
     "content_disposition": null
@@ -19,8 +19,8 @@
     "name": "agenda.csv",
     "size": 5794,
     "sha256": "968086e59fd5a03364a69e7da75c09460f2eae9ddc0ae023270dcb32a6929f86",
-    "etag": "\"d86e4a775555dd1:0\"",
-    "last_modified": "Tue, 06 Oct 2026 05:42:25 GMT",
+    "etag": "\"80452afab057dd1:0\"",
+    "last_modified": "Fri, 09 Oct 2026 05:42:31 GMT",
     "ftp_modified": null,
     "content_type": "application/octet-stream",
     "content_disposition": null
@@ -38,8 +38,8 @@
   },
   "llm": {
     "model": "gemini-3-flash-preview",
-    "uncertain": 1,
-    "applied": 1,
+    "uncertain": 4,
+    "applied": 4,
     "kept_rules": 0
   }
 }
