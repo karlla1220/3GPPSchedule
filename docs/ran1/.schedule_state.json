@@ -9,6 +9,11 @@
       "folder": "Hiroki_notes",
       "name": "RAN1#126bis schedule for Hiroki Adhoc2 sessions_v01.docx",
       "uploaded_at": "2026-10-09T00:29:00"
+    },
+    {
+      "folder": "Sorour_notes",
+      "name": "RAN1#126b Sorour sessions online and offline schedules - v00.docx",
+      "uploaded_at": "2026-10-09T15:33:00"
     }
   ],
   "agreements_ref": {
@@ -41,7 +46,7 @@
     "document_file": "agenda.csv",
     "local_path": "downloads/ran1/Agenda/ran1_126bis/agenda.csv",
     "description_json": "docs/ran1/agenda_item_description.json",
-    "description_generated_at": "2026-10-09T06:02:04.762961+00:00",
+    "description_generated_at": "2026-10-09T15:41:53.789543+00:00",
     "description_source_type": "agenda_csv",
     "description_source_file": "agenda.csv",
     "description_source_agenda_file": "agenda.csv",

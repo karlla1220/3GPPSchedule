@@ -3,7 +3,8 @@
   "time_block_index": 2,
   "source_hashes": {
     "Main Schedule": "3dd1ef53f82f9615",
-    "Hiroki's schedule": "bf616ec578821b3b"
+    "Hiroki's schedule": "bf616ec578821b3b",
+    "Sorour's schedule": "c06fa5debd37c145"
   },
   "merged_sessions": [
     {
@@ -98,20 +99,40 @@
     },
     {
       "room_name": "RAN1_brk1",
-      "name": "NTN-NR",
+      "name": "AI 9.4 NTN-NR",
       "duration_minutes": 40,
       "specified_start_time": null,
-      "chair": null,
-      "group_header": "R20",
-      "agenda_item": null
+      "chair": "Sorour",
+      "group_header": "R20 NR",
+      "agenda_item": "9.4",
+      "description": "GNSS resilient NR-NTN operation",
+      "agenda_descriptions": [
+        {
+          "agenda_item": "9.4",
+          "matched_agenda_item": "9.4",
+          "description": "GNSS resilient NR-NTN operation",
+          "hierarchy": [
+            {
+              "agenda_item": "9",
+              "description": "Release 20 NR",
+              "has_description": true
+            },
+            {
+              "agenda_item": "9.4",
+              "description": "GNSS resilient NR-NTN operation",
+              "has_description": true
+            }
+          ]
+        }
+      ]
     },
     {
       "room_name": "RAN1_brk1",
-      "name": "9.5 NTN",
+      "name": "AI 9.5 NTN",
       "duration_minutes": 20,
       "specified_start_time": null,
-      "chair": null,
-      "group_header": "R20",
+      "chair": "Sorour",
+      "group_header": "R20 NR",
       "agenda_item": "9.5",
       "description": "NR NTN in systems using downlink compensation",
       "agenda_descriptions": [
@@ -136,10 +157,10 @@
     },
     {
       "room_name": "RAN1_brk1",
-      "name": "10.7.1 NTN",
+      "name": "AI 10.7.1 NTN",
       "duration_minutes": 60,
       "specified_start_time": null,
-      "chair": null,
+      "chair": "Sorour",
       "group_header": "6GR",
       "agenda_item": "10.7.1",
       "description": "NTN specific requirements and design",
@@ -520,7 +541,7 @@
       ]
     }
   ],
-  "merged_at": "2026-10-09T06:02:05.574505+00:00",
+  "merged_at": "2026-10-09T15:41:59.091765+00:00",
   "meeting_id": "ran1#126bis",
   "schema_version": 2
 }

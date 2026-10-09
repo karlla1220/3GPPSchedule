@@ -3,7 +3,8 @@
   "time_block_index": 3,
   "source_hashes": {
     "Main Schedule": "571168527def9fb9",
-    "Hiroki's schedule": "da9cf56e708498cd"
+    "Hiroki's schedule": "da9cf56e708498cd",
+    "Sorour's schedule": "5386349c8ece7b32"
   },
   "merged_sessions": [
     {
@@ -125,12 +126,12 @@
     },
     {
       "room_name": "RAN1_brk1",
-      "name": "10.3.1 Channel coding",
+      "name": "AI 10.3.1 Coding",
       "duration_minutes": 60,
       "specified_start_time": null,
-      "chair": null,
+      "chair": "Sorour",
       "group_header": "6GR",
-      "agenda_item": null,
+      "agenda_item": "10.3.1",
       "description": "Channel coding",
       "agenda_descriptions": [
         {
@@ -159,12 +160,12 @@
     },
     {
       "room_name": "RAN1_brk1",
-      "name": "10.3.2 Modulation",
+      "name": "AI 10.3.2 Modulation",
       "duration_minutes": 30,
       "specified_start_time": null,
-      "chair": null,
+      "chair": "Sorour",
       "group_header": "6GR",
-      "agenda_item": null,
+      "agenda_item": "10.3.2",
       "description": "Modulation",
       "agenda_descriptions": [
         {
@@ -413,12 +414,32 @@
     },
     {
       "room_name": "RAN1_off2",
-      "name": "NTN-NR",
+      "name": "9.4 NTN-NR",
       "duration_minutes": 30,
       "specified_start_time": null,
       "chair": "Sorouri",
       "group_header": "R20",
-      "agenda_item": null
+      "agenda_item": "9.4",
+      "description": "GNSS resilient NR-NTN operation",
+      "agenda_descriptions": [
+        {
+          "agenda_item": "9.4",
+          "matched_agenda_item": "9.4",
+          "description": "GNSS resilient NR-NTN operation",
+          "hierarchy": [
+            {
+              "agenda_item": "9",
+              "description": "Release 20 NR",
+              "has_description": true
+            },
+            {
+              "agenda_item": "9.4",
+              "description": "GNSS resilient NR-NTN operation",
+              "has_description": true
+            }
+          ]
+        }
+      ]
     },
     {
       "room_name": "RAN1_off2",
@@ -430,7 +451,7 @@
       "agenda_item": null
     }
   ],
-  "merged_at": "2026-10-09T06:02:05.581221+00:00",
+  "merged_at": "2026-10-09T15:42:26.952934+00:00",
   "meeting_id": "ran1#126bis",
   "schema_version": 2
 }

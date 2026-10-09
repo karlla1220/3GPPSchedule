@@ -3,7 +3,8 @@
   "time_block_index": 0,
   "source_hashes": {
     "Main Schedule": "2c40c85f79c071ad",
-    "Hiroki's schedule": "564f7f3e0ea28376"
+    "Hiroki's schedule": "564f7f3e0ea28376",
+    "Sorour's schedule": "442bdd0d5a591a3b"
   },
   "merged_sessions": [
     {
@@ -125,12 +126,12 @@
     },
     {
       "room_name": "RAN1_brk1",
-      "name": "10.7.1 NTN",
+      "name": "AI 10.7.1 NTN",
       "duration_minutes": 50,
       "specified_start_time": null,
-      "chair": null,
+      "chair": "Sorour",
       "group_header": "6GR",
-      "agenda_item": null,
+      "agenda_item": "10.7.1",
       "description": "NTN specific requirements and design",
       "agenda_descriptions": [
         {
@@ -159,12 +160,12 @@
     },
     {
       "room_name": "RAN1_brk1",
-      "name": "9.5 NTN",
+      "name": "AI 9.5 NTN",
       "duration_minutes": 30,
       "specified_start_time": null,
-      "chair": null,
-      "group_header": "R20",
-      "agenda_item": null,
+      "chair": "Sorour",
+      "group_header": "R20 NR",
+      "agenda_item": "9.5",
       "description": "NR NTN in systems using downlink compensation",
       "agenda_descriptions": [
         {
@@ -188,12 +189,32 @@
     },
     {
       "room_name": "RAN1_brk1",
-      "name": "NTN-NR",
+      "name": "AI 9.4 NR-NTN",
       "duration_minutes": 40,
       "specified_start_time": null,
-      "chair": null,
-      "group_header": "R20",
-      "agenda_item": null
+      "chair": "Sorour",
+      "group_header": "R20 NR",
+      "agenda_item": "9.4",
+      "description": "GNSS resilient NR-NTN operation",
+      "agenda_descriptions": [
+        {
+          "agenda_item": "9.4",
+          "matched_agenda_item": "9.4",
+          "description": "GNSS resilient NR-NTN operation",
+          "hierarchy": [
+            {
+              "agenda_item": "9",
+              "description": "Release 20 NR",
+              "has_description": true
+            },
+            {
+              "agenda_item": "9.4",
+              "description": "GNSS resilient NR-NTN operation",
+              "has_description": true
+            }
+          ]
+        }
+      ]
     },
     {
       "room_name": "RAN1_brk2",
@@ -477,7 +498,7 @@
       ]
     }
   ],
-  "merged_at": "2026-10-09T06:02:05.587884+00:00",
+  "merged_at": "2026-10-09T15:42:53.059626+00:00",
   "meeting_id": "ran1#126bis",
   "schema_version": 2
 }

@@ -3,7 +3,8 @@
   "time_block_index": 0,
   "source_hashes": {
     "Main Schedule": "9568b4c440cb7ae6",
-    "Hiroki's schedule": "7b201c9fd02e77e7"
+    "Hiroki's schedule": "7b201c9fd02e77e7",
+    "Sorour's schedule": "6986e79071ee1a73"
   },
   "merged_sessions": [
     {
@@ -125,10 +126,10 @@
     },
     {
       "room_name": "RAN1_brk1",
-      "name": "10.7.1 NTN",
+      "name": "AI 10.7.1 NTN",
       "duration_minutes": 60,
       "specified_start_time": null,
-      "chair": null,
+      "chair": "Sorour",
       "group_header": "6GR",
       "agenda_item": "10.7.1",
       "description": "NTN specific requirements and design",
@@ -159,10 +160,10 @@
     },
     {
       "room_name": "RAN1_brk1",
-      "name": "10.5.2.x",
+      "name": "AI 10.5.2.x",
       "duration_minutes": 60,
       "specified_start_time": null,
-      "chair": null,
+      "chair": "Sorour",
       "group_header": "6GR",
       "agenda_item": "10.5.2.x",
       "description": "MIMO operation",
@@ -308,7 +309,7 @@
       ]
     }
   ],
-  "merged_at": "2026-10-09T06:02:05.593194+00:00",
+  "merged_at": "2026-10-09T15:43:14.169041+00:00",
   "meeting_id": "ran1#126bis",
   "schema_version": 2
 }
