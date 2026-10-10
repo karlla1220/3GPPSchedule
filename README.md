@@ -696,17 +696,40 @@ Please send email to duckhyun.bae@lge.com or use issue in repo.
 ```json
 "presentation": {
   "creator": "Duckhyun Bae",
-  "contact_name": "Duckhyun Bae",
+  "creator_url": "https://www.linkedin.com/in/...",
+  "creator_bio": "RAN1 delegate from LGE",
   "contact_email": "duckhyun.bae@lge.com",
+  "disclaimer": "Personal side project · Not affiliated with LG Electronics or 3GPP",
+  "feedback_url": "https://github.com/karlla1220/3GPPSchedule/issues",
+  "support_links": [
+    {"label": "Patreon", "url": "https://www.patreon.com/..."},
+    {"label": "GitHub Sponsors", "url": "https://github.com/sponsors/..."}
+  ],
   "notice": "자동 생성된 일정입니다. 오류나 개선 의견을 알려주세요."
 }
 ```
 
-`creator`, `contact_email`을 비우면 해당 줄을 숨깁니다. `notice`를 생략하면 기본 안내문을
-사용하고, 빈 문자열이면 숨깁니다. 더미 미팅은 설정과 관계없이 Demo 안내를 표시합니다.
-메일 주소는 빌드 전 검증하고, 표시 문자열은 HTML 이스케이프합니다.
+헤더 아래쪽 두 줄과 미팅 제목 줄 오른쪽 끝의 후원 안내가 이 값으로 만들어집니다.
 
-`shared/page.py`의 `render_header()`가 WG 선택, 출처·생성 시각, 안내문, 제작자와 연락처를
+```
+                    RAN2#135bis   📅 RAN1#126bis   RAN#113        ☕ Support this tool
+                                                                     on Patreon or GitHub Sponsors
+Created by Duckhyun Bae (duckhyun.bae@lge.com), RAN1 delegate from LGE
+Personal side project · Not affiliated with LG Electronics or 3GPP · Feedback
+```
+
+- `creator_url`은 이름에, `feedback_url`은 `Feedback`에 걸립니다. 값을 비우면 그 링크(또는 그 줄)를 숨깁니다.
+- `support_links`는 후원 수단 목록입니다. 적은 순서대로 `label`이 링크 글자가 되어 `A or B`(셋 이상은 `A, B or C`)로 이어집니다.
+  화면 폭 960px 이하에서는 제목 줄 아래 가운데 한 줄로 내려옵니다.
+  URL은 모두 `https://`만 받습니다. 저장소의 Sponsor 버튼은 `.github/FUNDING.yml`이 따로 정합니다.
+- `support_links`가 있으면 회의 마지막 날 정오(회의 시간대)부터 안내문 아래에 감사 인사 한 줄이 보입니다.
+  닫으면 그 회의에서는 다시 뜨지 않습니다(`localStorage`). 더미 미팅과 날짜를 모르는 회의에는 넣지 않습니다.
+- `contact_email`은 제작자 이름 뒤 괄호에 메일 링크로 붙습니다. GitHub 이슈를 쓰기 어려운 사용자를 위한 연락처입니다.
+  `contact_name`이 제작자와 다르면(또는 `creator`가 없으면) 예전처럼 따로 `Contact:` 줄을 만듭니다.
+- `notice`를 생략하면 기본 안내문을 사용하고, 빈 문자열이면 숨깁니다. 더미 미팅은 설정과 관계없이 Demo 안내를 표시합니다.
+- 메일 주소와 URL은 빌드 전 검증하고, 표시 문자열은 HTML 이스케이프합니다.
+
+`shared/page.py`의 `render_header()`가 WG 선택, 출처·생성 시각, 안내문, 회의 종료 인사, 제작자와 링크를
 함께 생성합니다. `shared/renderer.py`는 이 헤더와 일정 본문을 조립합니다. 이후 다른 WG용
 HTML 레이아웃을 작성할 때도 `render_header(schedule, presentation=..., schedules=..., groups=...)`를
 재사용할 수 있습니다. 헤더는 `meta`, `demo-notice`, 내비게이션 클래스와 현재 시각용
@@ -716,6 +739,8 @@ WG 파서는 일정 데이터만 반환합니다. 과거 `schedule.json`의 연�
 남겨 두지만 페이지에서는 사용하지 않습니다. 공통 정보 변경은 CI에서 HTML 재생성만 수행하며,
 WG 문서 다운로드나 파싱을 다시 실행하지 않습니다. 로컬 확인은 `uv run python build.py --render-only`입니다.
 
+
+탭 아이콘은 `templates/favicon.svg`이고, 페이지마다 `<link rel="icon">`의 data URI로 넣습니다(따로 배포할 파일이 없습니다).
 
 공통 화면의 HTML/CSS/JavaScript 원본은 `templates/`에 있으며 `shared/renderer.py`가
 WG별 스케줄과 미팅 메타데이터를 주입합니다. 템플릿 변경도 CI의 렌더링 변경 감지에

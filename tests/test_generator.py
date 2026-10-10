@@ -1,5 +1,6 @@
 import re
 from types import SimpleNamespace
+from urllib.parse import unquote
 
 from bs4 import BeautifulSoup
 
@@ -106,6 +107,9 @@ def test_generate_html_renders_external_page_assets():
     html = generate_html(schedule)
 
     assert "<title>RAN &lt;Test&gt; - Schedule</title>" in html
+    icon = BeautifulSoup(html, "html.parser").select_one('link[rel="icon"]')["href"]
+    assert unquote(icon).startswith('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg"')
+    assert unquote(icon).endswith("</svg>") and not re.search(r'[\s"<>#]', icon)
     assert "const MEETING_TZ = \"Asia/Seoul\";" in html
     assert ".schedule-grid" in html
     assert 'id="filter-data"' in html

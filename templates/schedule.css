@@ -45,6 +45,7 @@ body {
 header {
     --title-size: 22px;
     --title-line: 28px;
+    position: relative;
     text-align: center;
     margin-bottom: 16px;
 }
@@ -100,6 +101,75 @@ header .meta {
     color: var(--ink-4);
 }
 .demo-notice { margin: 8px auto; color: #92400E; font-size: 13px; }
+/* Header links keep the meta grey; only the underline marks them. */
+header .meta a { color: inherit; text-underline-offset: 2px; }
+header .meta a:hover { color: var(--ink); }
+header .meta a:focus-visible,
+.support-note a:focus-visible,
+.support-note-close:focus-visible { outline: 2px solid #2563EB; outline-offset: 2px; border-radius: 2px; }
+
+/* Standing invitation: the right end of the titles' row, out of the flow so
+   the centred titles and the grid below stay where they are. */
+.support-links {
+    position: absolute;
+    /* Centred on the title and its status line (46px); the block is 36px. */
+    top: 5px;
+    right: 0;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    color: var(--ink-2);
+    font-size: 12.5px;
+    line-height: 17px;
+    text-align: left;
+}
+.support-icon { font-size: 28px; line-height: 1; }
+.support-text strong { display: block; color: var(--ink); font-size: 14px; font-weight: 600; line-height: 19px; }
+.support-text > span { display: block; }
+.support-links a { color: var(--ink); font-weight: 600; text-underline-offset: 2px; }
+.support-links a:focus-visible { outline: 2px solid #2563EB; outline-offset: 2px; border-radius: 2px; }
+/* No room beside the sibling meetings: one centred line under the titles. */
+@media (max-width: 960px) {
+    .support-links { position: static; justify-content: center; gap: 6px; margin: -10px auto 10px; }
+    .support-icon { font-size: 18px; }
+    .support-text strong { display: inline; font-size: 13px; line-height: inherit; }
+    .support-text > span { display: inline; }
+}
+
+/* Thanks at the end of a meeting: the grid's surface, sized to its text. */
+.support-note {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    width: fit-content;
+    max-width: 100%;
+    margin: 8px auto;
+    padding: 7px 8px 7px 14px;
+    background: var(--surface);
+    border-radius: var(--radius-lg);
+    box-shadow: 0 0 0 1px var(--hairline), 0 1px 2px rgba(15,23,42,.04);
+    color: var(--ink-2);
+    font-size: 13px;
+    line-height: 20px;
+    text-align: left;
+}
+/* display above would otherwise show a note the script has not revealed. */
+.support-note[hidden] { display: none; }
+.support-note a { color: var(--ink); font-weight: 600; text-underline-offset: 2px; }
+.support-note-close {
+    flex: none;
+    width: 20px;
+    height: 20px;
+    border: none;
+    border-radius: var(--radius-sm);
+    background: transparent;
+    color: var(--ink-4);
+    font: inherit;
+    font-size: 16px;
+    line-height: 20px;
+    cursor: pointer;
+}
+.support-note-close:hover { color: var(--ink); background: var(--page-bg); }
 @media (max-width: 600px) {
     header { --title-size: 18px; --title-line: 24px; }
     .wg-navigation { gap: 10px; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); }

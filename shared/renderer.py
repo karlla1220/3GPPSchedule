@@ -8,6 +8,7 @@ import json
 import re
 from datetime import datetime
 from pathlib import Path
+from urllib.parse import quote
 
 from shared.schedule import (
     GROUP_COLORS,
@@ -583,6 +584,8 @@ def generate_html(schedule: Schedule, *, schedules=None, groups=None, presentati
 
     return _render_template("schedule.html", {
         "MEETING_NAME": _esc(schedule.meeting_name),
+        # Inline, so every page carries its icon without another file to publish.
+        "FAVICON": "data:image/svg+xml," + quote(_load_template("favicon.svg").replace("\n", "").replace("\r", "")),
         "HEADER": page_header,
         "STYLES": _generate_css(10),
         "SCHEDULE_CONTENT": "".join(html_parts),
