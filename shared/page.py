@@ -14,6 +14,8 @@ DEFAULT_NOTICE = (
 )
 DEMO_NOTICE = "Demo schedule — fixed sample data, not an official meeting schedule."
 _HTTPS_URL = r"https://[^\s\"'<>\\]+"
+# "v03" standing alone in a file name; "V2X" is a topic, not a version.
+_VERSION = re.compile(r"(?<![A-Za-z0-9])v\d+(?![A-Za-z0-9])", re.IGNORECASE)
 
 
 def normalize_presentation(value=None):
@@ -102,14 +104,30 @@ def render_support_note(schedule, support_links):
     )
 
 
+def _source(name, label):
+    """One source as "Main v03": readers check the version, the meeting is in the title above.
+
+    The file name stays on hover. A file without a label is shown by its name.
+    """
+    if not label:
+        return escape(name)
+    versions = _VERSION.findall(name)
+    text = escape(f"{label} {versions[-1].lower()}" if versions else label).replace(" ", "&nbsp;")
+    return f'<span title="{escape(name, quote=True)}">{text}</span>'
+
+
+def render_sources(schedule):
+    names = schedule.source_files or [schedule.source_file]
+    return " · ".join(_source(name, schedule.source_labels.get(name)) for name in names)
+
+
 def render_header(schedule, *, presentation=None, schedules=None, groups=None):
     """Reusable across WG layouts; supplies #tz-now for the schedule clock."""
     metadata = normalize_presentation(presentation)
     heading = (render_navigation(schedule, schedules, groups) if schedules is not None
                else f"<h1>{TITLE_EMOJI}{escape(schedule.meeting_name)}</h1>")
-    sources = ", ".join(schedule.source_files) if schedule.source_files else schedule.source_file
     parts = ["<header>", heading, render_support_links(metadata["support_links"], metadata["support_title"]),
-             f'<p class="meta">Updated Files: {escape(sources)} &nbsp;|&nbsp; Generated: {escape(schedule.generated_at)} ({escape(schedule.timezone)}) &nbsp;|&nbsp; Now: <span id="tz-now">...</span> ({escape(schedule.timezone)})</p>']
+             f'<p class="meta">Sources: {render_sources(schedule)} &nbsp;|&nbsp; Generated: {escape(schedule.generated_at)} ({escape(schedule.timezone)}) &nbsp;|&nbsp; Now: <span id="tz-now">...</span> ({escape(schedule.timezone)})</p>']
     if schedule.is_demo:
         parts.append(f'<p class="demo-notice">{DEMO_NOTICE}</p>')
     elif metadata["notice"]:

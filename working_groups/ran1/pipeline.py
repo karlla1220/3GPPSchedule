@@ -754,14 +754,17 @@ def build_schedule(args) -> Schedule:
 
     # Collect all source files
     source_files = [docx_path.name]
+    source_labels = {docx_path.name: "Main"}
     if vice_chair_paths:
         source_files.extend([p.name for p in vice_chair_paths.values()])
+        source_labels.update({p.name: person for person, p in vice_chair_paths.items()})
 
     schedule = Schedule(
         meeting_name=meeting_name,
         days=days,
         source_file=docx_path.name,
         source_files=source_files,
+        source_labels=source_labels,
         generated_at=generated_at,
         timezone=meeting_tz,
         wg_id="ran1",

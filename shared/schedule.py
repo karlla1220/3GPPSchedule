@@ -91,6 +91,8 @@ class Schedule:
     contact_name: str = ""
     contact_email: str = ""
     source_files: list[str] = field(default_factory=list)
+    # Short header name by file name ("Main", "Hiroki"); a file without one is shown by its name.
+    source_labels: dict[str, str] = field(default_factory=dict)
     timezone: str = "UTC"  # IANA timezone of the meeting venue
     wg_id: str = ""
     meeting_id: str = ""

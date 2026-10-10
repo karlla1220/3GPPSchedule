@@ -169,6 +169,11 @@ HTML은 `shared/page.py`, 표시 판단은 `templates/support-note.js`, 값은 `
     좁은 화면에서 큰 아이콘과 굵은 글자는 제목 바로 아래에서 부담스러웠다.
   - 후원 수단은 이름을 그대로 링크로 쓴다(`support_links`의 `label`). `Support` 하나에 묶으면 한 번 더 눌러야 고를 수 있다.
     회의 종료 인사도 같은 목록을 같은 순서로 쓴다. 같은 안내를 제작자 줄에 한 번 더 적지 않는다.
+- **원본 파일은 이름 전체가 아니라 짧은 이름과 버전으로 적는다(`Sources: Main v03 · Hiroki v01 · Sorour v00`).**
+  이 줄에서 확인하는 것은 최신 버전이 반영됐는지뿐이고, 미팅 이름은 바로 위 제목에 있다. 파일 이름은 `title`(hover)에 남긴다.
+  - 짧은 이름은 각 WG 파이프라인이 `Schedule.source_labels`(파일 이름 → 이름)로 넘긴다. RAN1은 `Main`과 부의장 이름,
+    RAN2는 `Schedule`·`Agenda`, RAN P는 `Time plan`·`Agenda`다. 파일 이름에서 사람 이름을 추측하지 않는다.
+  - 버전은 `page.py`가 파일 이름에서 읽는다(마지막 `v숫자`). 이름이 없는 파일(예전 스냅샷, 데모)은 파일 이름 그대로 보인다.
 - **제작자 줄은 맨 아래 두 줄이다.** `Created by 이름 (메일), 소개` 아래에 `면책 문구 · Feedback`.
   - 메일 주소는 그대로 적는다. `Feedback`(GitHub Issues)만 두면 계정이 없는 참석자는 연락할 방법이 없다.
   헤더 meta 링크는 meta 회색을 그대로 쓰고 밑줄로만 구별한다.

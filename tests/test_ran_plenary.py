@@ -141,14 +141,18 @@ def test_snapshot_roundtrip_and_old_snapshot_defaults(schedule, tmp_path):
     path = tmp_path / 'schedule.json'
     save_schedule(schedule, path)
     assert load_schedule(path) == schedule
+    assert schedule.source_labels == {FILENAME: 'Time plan', 'agenda.csv': 'Agenda'}
     raw = json.loads(path.read_text())
     raw.pop('topic_references')
     raw.pop('topic_preamble')
+    raw.pop('source_labels')
     for day in raw['days']:
         for session in day['sessions']:
             session.pop('room_scope'); session.pop('notes')
     path.write_text(json.dumps(raw))
-    assert all(s.room_scope == 'assigned' and s.notes == [] for d in load_schedule(path).days for s in d.sessions)
+    old = load_schedule(path)
+    assert all(s.room_scope == 'assigned' and s.notes == [] for d in old.days for s in d.sessions)
+    assert old.source_labels == {}
 
 
 @pytest.mark.parametrize('damage,match', [('missing', 'Unaccounted'), ('room', 'unavailable'),
