@@ -6,6 +6,7 @@ import hashlib
 import json
 import os
 import re
+from collections import Counter
 from pathlib import Path
 
 from .agenda_descriptions import (
@@ -1134,8 +1135,11 @@ def normalize_group_headers(sessions: list[Session]) -> list[Session]:
 
     print(f"\nNormalizing group headers ({len(unique_headers)} unique)...")
 
-    # Cache key from sorted unique headers
-    cache_content = json.dumps(unique_headers, sort_keys=True)
+    # Cache key from sorted unique headers and the prompt, so a prompt edit
+    # is not answered from a mapping the old prompt produced
+    cache_content = json.dumps(
+        [unique_headers, GROUP_SIMPLIFY_SYSTEM_INSTRUCTION], sort_keys=True
+    )
     cache_hash = hashlib.sha256(cache_content.encode()).hexdigest()[:16]
     cache_key = f"group_map_{cache_hash}"
 
@@ -1158,10 +1162,16 @@ def normalize_group_headers(sessions: list[Session]) -> list[Session]:
             http_options={"timeout": 120_000},
         )
 
+        header_counts = Counter(s.group_header for s in sessions if s.group_header)
         user_prompt = (
-            "Here are all unique group_header labels from the schedule:\n\n"
-            + json.dumps(unique_headers, indent=2, ensure_ascii=False)
-            + "\n\nProduce the simplification mapping."
+            "Here are all unique group labels from the schedule, each with the "
+            "number of sessions that use it:\n\n"
+            + json.dumps(
+                [{"label": h, "sessions": header_counts[h]} for h in unique_headers],
+                indent=2,
+                ensure_ascii=False,
+            )
+            + "\n\nProduce the mapping."
         )
 
         MAX_RETRIES = 3
