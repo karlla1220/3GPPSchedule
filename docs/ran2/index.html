@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RAN2#135bis - Schedule</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2064%2064%22%3E%3Crect%20x%3D%225%22%20y%3D%229%22%20width%3D%2254%22%20height%3D%2250%22%20rx%3D%2211%22%20fill%3D%22%23fff%22%20stroke%3D%22%2394A3B8%22%20stroke-width%3D%222%22/%3E%3Cpath%20d%3D%22M5%2026V20A11%2011%200%200%201%2016%209H48A11%2011%200%200%201%2059%2020V26Z%22%20fill%3D%22%23E11D2E%22/%3E%3Crect%20x%3D%2218%22%20y%3D%223%22%20width%3D%226%22%20height%3D%2213%22%20rx%3D%223%22%20fill%3D%22%230F172A%22/%3E%3Crect%20x%3D%2240%22%20y%3D%223%22%20width%3D%226%22%20height%3D%2213%22%20rx%3D%223%22%20fill%3D%22%230F172A%22/%3E%3Ctext%20x%3D%2222%22%20y%3D%2254%22%20font-family%3D%22Arial%2CHelvetica%2Csans-serif%22%20font-size%3D%2234%22%20font-weight%3D%22900%22%20fill%3D%22%230F172A%22%20text-anchor%3D%22middle%22%3E3%3C/text%3E%3Cg%20fill%3D%22none%22%20stroke%3D%22%23E11D2E%22%20stroke-width%3D%224.5%22%20stroke-linecap%3D%22round%22%3E%3Cpath%20d%3D%22M42%2036.3A7%207%200%200%201%2042%2047.7%22/%3E%3Cpath%20d%3D%22M46.6%2029.7A15%2015%200%200%201%2046.6%2054.3%22/%3E%3C/g%3E%3C/svg%3E">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Source+Sans+3:wght@400;500;600;700&display=swap">
@@ -54,6 +55,7 @@ body {
 header {
     --title-size: 22px;
     --title-line: 28px;
+    position: relative;
     text-align: center;
     margin-bottom: 16px;
 }
@@ -109,6 +111,79 @@ header .meta {
     color: var(--ink-4);
 }
 .demo-notice { margin: 8px auto; color: #92400E; font-size: 13px; }
+/* Header links keep the meta grey; only the underline marks them. */
+header .meta a { color: inherit; text-underline-offset: 2px; }
+header .meta a:hover { color: var(--ink); }
+header .meta a:focus-visible,
+.support-note a:focus-visible,
+.support-note-close:focus-visible { outline: 2px solid #2563EB; outline-offset: 2px; border-radius: 2px; }
+
+/* Standing invitation: the right end of the titles' row, out of the flow so
+   the centred titles and the grid below stay where they are. */
+.support-links {
+    position: absolute;
+    /* Centred on the title and its status line (46px); the block is 36px. */
+    top: 5px;
+    right: 0;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    color: var(--ink-2);
+    font-size: 12.5px;
+    line-height: 17px;
+    text-align: left;
+}
+.support-icon { font-size: 28px; line-height: 1; }
+.support-text strong { display: block; color: var(--ink); font-size: 14px; font-weight: 600; line-height: 19px; }
+.support-text > span { display: block; }
+.support-links a { color: var(--ink); font-weight: 600; text-underline-offset: 2px; }
+.support-links a:focus-visible { outline: 2px solid #2563EB; outline-offset: 2px; border-radius: 2px; }
+/* No room beside the sibling meetings: one centred line under the titles. */
+/* There it is sized like the meta lines (12px, regular, cup at text size);
+   only the ink colour sets it apart. */
+@media (max-width: 1024px) {
+    .support-links { position: static; display: block; margin: -10px auto 10px; color: var(--ink); font-size: 12px; text-align: center; }
+    .support-icon { margin-right: 4px; font-size: inherit; line-height: inherit; }
+    .support-text strong { display: inline; font-size: inherit; font-weight: 400; line-height: inherit; }
+    /* Too narrow for one line: "on Patreon or …" moves down whole. */
+    .support-text > span { display: inline-block; }
+    .support-links a { font-weight: 400; }
+}
+
+/* Thanks at the end of a meeting: the grid's surface, sized to its text. */
+.support-note {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    width: fit-content;
+    max-width: 100%;
+    margin: 8px auto;
+    padding: 7px 8px 7px 14px;
+    background: var(--surface);
+    border-radius: var(--radius-lg);
+    box-shadow: 0 0 0 1px var(--hairline), 0 1px 2px rgba(15,23,42,.04);
+    color: var(--ink-2);
+    font-size: 13px;
+    line-height: 20px;
+    text-align: left;
+}
+/* display above would otherwise show a note the script has not revealed. */
+.support-note[hidden] { display: none; }
+.support-note a { color: var(--ink); font-weight: 600; text-underline-offset: 2px; }
+.support-note-close {
+    flex: none;
+    width: 20px;
+    height: 20px;
+    border: none;
+    border-radius: var(--radius-sm);
+    background: transparent;
+    color: var(--ink-4);
+    font: inherit;
+    font-size: 16px;
+    line-height: 20px;
+    cursor: pointer;
+}
+.support-note-close:hover { color: var(--ink); background: var(--page-bg); }
 @media (max-width: 600px) {
     header { --title-size: 18px; --title-line: 24px; }
     .wg-navigation { gap: 10px; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); }
@@ -1147,10 +1222,39 @@ header .meta {
 <div class="container">
     <header>
 <nav class="wg-navigation" aria-label="Working group meetings"><div class="wg-side wg-left"><a class="wg-link" href="../ran1/">RAN1#126bis<span class="meeting-status">Upcoming</span></a></div><div class="wg-current"><h1><a href="../ran2/" aria-current="page"><span class="wg-emoji" aria-hidden="true">📅</span>RAN2#135bis</a></h1><span class="meeting-status">Upcoming</span></div><div class="wg-side wg-right"><a class="wg-link" href="../ran-plenary/">RAN#113<span class="meeting-status">Ended</span></a></div></nav>
+<p class="support-links"><span class="support-icon" aria-hidden="true">☕</span><span class="support-text"><strong>Proposal 1: Buy a coffee for Duckhyun</strong> <span>on <a href="https://www.patreon.com/duckhyunbae" target="_blank" rel="noopener">Patreon</a> or <a href="https://github.com/sponsors/karlla1220" target="_blank" rel="noopener">GitHub Sponsors</a></span></span></p>
 <p class="meta">Updated Files: R2_135b_Schedule_v01.docx, agenda.csv &nbsp;|&nbsp; Generated: 2026-10-10 00:02 (Asia/Seoul) &nbsp;|&nbsp; Now: <span id="tz-now">...</span> (Asia/Seoul)</p>
 <p class="meta">ℹ️ This page is automatically generated from uploaded documents. Some details may not be fully accurate — your feedback helps improve it.</p>
-<p class="meta">Created by Duckhyun Bae</p>
-<p class="meta">Contact: Duckhyun Bae (<a href="mailto:duckhyun.bae@lge.com">duckhyun.bae@lge.com</a>) for reports or feature requests.</p>
+<p class="support-note" id="support-note" hidden><span>Hope this helped you through RAN2#135bis. I build and maintain it on my own time. If it saved you some time, you can buy me a coffee on <a href="https://www.patreon.com/duckhyunbae" target="_blank" rel="noopener">Patreon</a> or <a href="https://github.com/sponsors/karlla1220" target="_blank" rel="noopener">GitHub Sponsors</a>&nbsp;☕. Or just say hi at the next meeting!</span><button type="button" class="support-note-close" aria-label="Dismiss">&times;</button></p>
+<script>// Runs right after the note in the header, before the grid below is laid out,
+// so showing the note never shifts a page the visitor is already reading.
+(function() {
+    const note = document.getElementById('support-note');
+    const SHOW_FROM_MS = 1792119600000;
+    const DISMISSED_KEY = '3gpp_schedule_support_dismissed:' + "ran2:ran2#135bis";
+
+    function dismissed() {
+        try {
+            return localStorage.getItem(DISMISSED_KEY) === 'true';
+        } catch (e) {
+            return false;
+        }
+    }
+
+    if (Date.now() >= SHOW_FROM_MS && !dismissed()) note.hidden = false;
+
+    note.querySelector('.support-note-close').addEventListener('click', function() {
+        note.hidden = true;
+        try {
+            localStorage.setItem(DISMISSED_KEY, 'true');
+        } catch (e) {
+            // localStorage may be unavailable; the note returns on the next visit
+        }
+    });
+})();
+</script>
+<p class="meta">Created by <a href="https://www.linkedin.com/in/duckhyun-bae/" target="_blank" rel="noopener">Duckhyun Bae</a> (<a href="mailto:duckhyun.bae@lge.com">duckhyun.bae@lge.com</a>), RAN1 delegate from LGE</p>
+<p class="meta">Personal side project · Not affiliated with LG Electronics or 3GPP · <a href="https://github.com/karlla1220/3GPPSchedule/issues" target="_blank" rel="noopener">Feedback</a></p>
 </header>
     <div class="legend">
         <div class="legend-item"><span class="legend-swatch" style="--session-border:#2563EB"></span>6GR Rel-20</div>
