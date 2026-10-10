@@ -129,11 +129,15 @@ header .meta a:focus-visible,
 .support-links a { color: var(--ink); font-weight: 600; text-underline-offset: 2px; }
 .support-links a:focus-visible { outline: 2px solid #2563EB; outline-offset: 2px; border-radius: 2px; }
 /* No room beside the sibling meetings: one centred line under the titles. */
-@media (max-width: 960px) {
-    .support-links { position: static; justify-content: center; gap: 6px; margin: -10px auto 10px; }
-    .support-icon { font-size: 18px; }
-    .support-text strong { display: inline; font-size: 13px; line-height: inherit; }
-    .support-text > span { display: inline; }
+/* There it is sized like the meta lines (12px, regular, cup at text size);
+   only the ink colour sets it apart. */
+@media (max-width: 1024px) {
+    .support-links { position: static; display: block; margin: -10px auto 10px; color: var(--ink); font-size: 12px; text-align: center; }
+    .support-icon { margin-right: 4px; font-size: inherit; line-height: inherit; }
+    .support-text strong { display: inline; font-size: inherit; font-weight: 400; line-height: inherit; }
+    /* Too narrow for one line: "on Patreon or …" moves down whole. */
+    .support-text > span { display: inline-block; }
+    .support-links a { font-weight: 400; }
 }
 
 /* Thanks at the end of a meeting: the grid's surface, sized to its text. */

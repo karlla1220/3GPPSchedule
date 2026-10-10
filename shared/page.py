@@ -23,7 +23,7 @@ def normalize_presentation(value=None):
     if not isinstance(value, dict):
         raise ValueError("presentation must be an object")
     defaults = {"creator": "", "creator_url": "", "creator_bio": "", "disclaimer": "",
-                "feedback_url": "", "support_links": [],
+                "feedback_url": "", "support_title": "Support this tool", "support_links": [],
                 "contact_name": "", "contact_email": "", "notice": DEFAULT_NOTICE}
     unknown = value.keys() - defaults.keys()
     if unknown:
@@ -57,13 +57,13 @@ def _support_links(links):
     return " or ".join(filter(None, [", ".join(items[:-1]), items[-1]]))
 
 
-def render_support_links(support_links):
+def render_support_links(support_links, title):
     """The standing invitation at the right end of the meeting titles' row."""
     if not support_links:
         return ""
     return (
         '<p class="support-links"><span class="support-icon" aria-hidden="true">☕</span>'
-        '<span class="support-text"><strong>Support this tool</strong> '
+        f'<span class="support-text"><strong>{escape(title)}</strong> '
         f'<span>on {_support_links(support_links)}</span></span></p>'
     )
 
@@ -95,7 +95,7 @@ def render_support_note(schedule, support_links):
     return (
         '<p class="support-note" id="support-note" hidden><span>'
         f'Hope this helped you through {escape(schedule.meeting_name)}. '
-        'I build and maintain it on my own time. If it saved you some time, you can support it on '
+        'I build and maintain it on my own time. If it saved you some time, you can buy me a coffee on '
         f'{_support_links(support_links)}&nbsp;☕. Or just say hi at the next meeting!</span>'
         '<button type="button" class="support-note-close" aria-label="Dismiss">&times;</button></p>\n'
         f'<script>{script}</script>'
@@ -108,7 +108,7 @@ def render_header(schedule, *, presentation=None, schedules=None, groups=None):
     heading = (render_navigation(schedule, schedules, groups) if schedules is not None
                else f"<h1>{TITLE_EMOJI}{escape(schedule.meeting_name)}</h1>")
     sources = ", ".join(schedule.source_files) if schedule.source_files else schedule.source_file
-    parts = ["<header>", heading, render_support_links(metadata["support_links"]),
+    parts = ["<header>", heading, render_support_links(metadata["support_links"], metadata["support_title"]),
              f'<p class="meta">Updated Files: {escape(sources)} &nbsp;|&nbsp; Generated: {escape(schedule.generated_at)} ({escape(schedule.timezone)}) &nbsp;|&nbsp; Now: <span id="tz-now">...</span> ({escape(schedule.timezone)})</p>']
     if schedule.is_demo:
         parts.append(f'<p class="demo-notice">{DEMO_NOTICE}</p>')
