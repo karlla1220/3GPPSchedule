@@ -1697,13 +1697,17 @@
     }
   ],
   "source_file": "RAN#113 time plan v09.zip",
-  "generated_at": "2026-09-17 10:47",
+  "generated_at": "2026-10-10 19:31",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
     "RAN#113 time plan v09.zip",
     "agenda.csv"
   ],
+  "source_labels": {
+    "RAN#113 time plan v09.zip": "Time plan",
+    "agenda.csv": "Agenda"
+  },
   "timezone": "Europe/Madrid",
   "wg_id": "ran-plenary",
   "meeting_id": "ran#113",
