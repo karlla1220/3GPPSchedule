@@ -1033,7 +1033,7 @@
           "room_col_end": 7,
           "chair": "Hiroki",
           "agenda_item": "10.5.4.1, 10.5.4.3, 10.5.4.4",
-          "group_header": "6G",
+          "group_header": "",
           "description": "Downlink control channel, scheduling for downlink and uplink transmission",
           "agenda_descriptions": [
             {
@@ -2858,7 +2858,7 @@
           "room_col_end": 5,
           "chair": "Hiroki",
           "agenda_item": "10.8.3",
-          "group_header": "6G",
+          "group_header": "6GR",
           "description": "Waveform and frame structure",
           "agenda_descriptions": [
             {
@@ -2898,7 +2898,7 @@
           "room_col_end": 5,
           "chair": "Hiroki",
           "agenda_item": "10.8.1.",
-          "group_header": "6G",
+          "group_header": "6GR",
           "description": "Evaluations",
           "agenda_descriptions": [
             {
@@ -3610,7 +3610,7 @@
           "room_col_end": 5,
           "chair": "Hiroki",
           "agenda_item": "10.2.1",
-          "group_header": "6G",
+          "group_header": "6GR",
           "description": "Waveform",
           "agenda_descriptions": [
             {
@@ -5388,7 +5388,7 @@
           "room_col_end": 5,
           "chair": "Hiroki",
           "agenda_item": "10.8.2",
-          "group_header": "6G",
+          "group_header": "6GR",
           "description": "Aspects of integration with communication",
           "agenda_descriptions": [
             {
@@ -5428,7 +5428,7 @@
           "room_col_end": 5,
           "chair": "Hiroki",
           "agenda_item": "10.8.3",
-          "group_header": "6G",
+          "group_header": "6GR",
           "description": "Waveform and frame structure",
           "agenda_descriptions": [
             {
@@ -5468,7 +5468,7 @@
           "room_col_end": 5,
           "chair": "Hiroki",
           "agenda_item": "10.8.1",
-          "group_header": "6G",
+          "group_header": "6GR",
           "description": "Evaluations",
           "agenda_descriptions": [
             {
@@ -5565,7 +5565,7 @@
           "room_col_end": 6,
           "chair": "Hiroki",
           "agenda_item": "10.5.4.1",
-          "group_header": "6G",
+          "group_header": "6GR",
           "description": "Downlink control channel, scheduling for downlink and uplink transmission",
           "agenda_descriptions": [
             {
@@ -6025,7 +6025,7 @@
           "room_col_end": 6,
           "chair": "Hiroki",
           "agenda_item": "10.5.4.2, 10.5.4.3, 10.5.4.4",
-          "group_header": "6G",
+          "group_header": "6GR",
           "description": "Downlink and uplink transmission without dynamic scheduling",
           "agenda_descriptions": [
             {
@@ -8671,7 +8671,7 @@
           "room_col_end": 5,
           "chair": "Hiroki",
           "agenda_item": "10.8.1",
-          "group_header": "6G",
+          "group_header": "6GR",
           "description": "Evaluations",
           "agenda_descriptions": [
             {
@@ -8711,7 +8711,7 @@
           "room_col_end": 5,
           "chair": "Hiroki",
           "agenda_item": "10.8.2",
-          "group_header": "6G",
+          "group_header": "6GR",
           "description": "Aspects of integration with communication",
           "agenda_descriptions": [
             {
@@ -8751,7 +8751,7 @@
           "room_col_end": 5,
           "chair": "Hiroki",
           "agenda_item": "10.8.3",
-          "group_header": "6G",
+          "group_header": "6GR",
           "description": "Waveform and frame structure",
           "agenda_descriptions": [
             {
@@ -8961,7 +8961,7 @@
           "room_col_end": 7,
           "chair": "Hiroki",
           "agenda_item": "10.5.4.4, 10.5.4.3, 10.5.4.2, 10.5.4.1",
-          "group_header": "6G",
+          "group_header": "6GR",
           "description": "Handling of potential multiple uplink transmissions",
           "agenda_descriptions": [
             {
@@ -10420,7 +10420,7 @@
     }
   ],
   "source_file": "Draft RAN1#126b online and offline schedules - v03.docx",
-  "generated_at": "2026-10-11 02:31",
+  "generated_at": "2026-10-11 05:02",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
