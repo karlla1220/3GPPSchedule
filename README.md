@@ -701,6 +701,7 @@ Please send email to duckhyun.bae@lge.com or use issue in repo.
   "contact_email": "duckhyun.bae@lge.com",
   "disclaimer": "Personal side project · Not affiliated with LG Electronics or 3GPP",
   "feedback_url": "https://github.com/karlla1220/3GPPSchedule/issues",
+  "support_title": "Proposal 1: Buy a coffee for Duckhyun",
   "support_links": [
     {"label": "Patreon", "url": "https://www.patreon.com/..."},
     {"label": "GitHub Sponsors", "url": "https://github.com/sponsors/..."}
@@ -712,7 +713,7 @@ Please send email to duckhyun.bae@lge.com or use issue in repo.
 헤더 아래쪽 두 줄과 미팅 제목 줄 오른쪽 끝의 후원 안내가 이 값으로 만들어집니다.
 
 ```
-                    RAN2#135bis   📅 RAN1#126bis   RAN#113        ☕ Support this tool
+                    RAN2#135bis   📅 RAN1#126bis   RAN#113        ☕ Proposal 1: Buy a coffee for Duckhyun
                                                                      on Patreon or GitHub Sponsors
 Created by Duckhyun Bae (duckhyun.bae@lge.com), RAN1 delegate from LGE
 Personal side project · Not affiliated with LG Electronics or 3GPP · Feedback
@@ -720,7 +721,8 @@ Personal side project · Not affiliated with LG Electronics or 3GPP · Feedback
 
 - `creator_url`은 이름에, `feedback_url`은 `Feedback`에 걸립니다. 값을 비우면 그 링크(또는 그 줄)를 숨깁니다.
 - `support_links`는 후원 수단 목록입니다. 적은 순서대로 `label`이 링크 글자가 되어 `A or B`(셋 이상은 `A, B or C`)로 이어집니다.
-  화면 폭 960px 이하에서는 제목 줄 아래 가운데 한 줄로 내려옵니다.
+  첫 줄 문구는 `support_title`이고, 생략하면 `Support this tool`입니다.
+  화면 폭 1024px 이하에서는 제목 줄 아래 가운데 한 줄로 내려옵니다.
   URL은 모두 `https://`만 받습니다. 저장소의 Sponsor 버튼은 `.github/FUNDING.yml`이 따로 정합니다.
 - `support_links`가 있으면 회의 마지막 날 정오(회의 시간대)부터 안내문 아래에 감사 인사 한 줄이 보입니다.
   닫으면 그 회의에서는 다시 뜨지 않습니다(`localStorage`). 더미 미팅과 날짜를 모르는 회의에는 넣지 않습니다.

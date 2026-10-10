@@ -37,7 +37,7 @@ def test_invalid_site_metadata_is_rejected(value):
 
 SITE = {'creator': 'Site Author', 'creator_url': 'https://example.com/in/author',
         'creator_bio': 'RAN1 delegate <LGE>', 'disclaimer': 'Personal & unofficial',
-        'feedback_url': 'https://example.com/issues', 'support_links': [
+        'feedback_url': 'https://example.com/issues', 'support_title': 'Proposal 1: <Coffee>', 'support_links': [
             {'label': 'Patreon', 'url': 'https://example.com/support?a=1&b=2'},
             {'label': 'GitHub <Sponsors>', 'url': 'https://example.com/sponsors'}]}
 SUPPORT_URLS = [link['url'] for link in SITE['support_links']]
@@ -58,7 +58,7 @@ def test_header_links_creator_feedback_and_support():
     assert about.a['href'] == SITE['feedback_url']
     support = header.select_one('p.support-links')
     assert support.find_previous_sibling().name == 'h1'  # Beside the titles, above the meta lines.
-    assert support.get_text() == '☕Support this tool on Patreon or GitHub <Sponsors>'
+    assert support.get_text() == '☕Proposal 1: <Coffee> on Patreon or GitHub <Sponsors>'
     assert [a['href'] for a in support.select('a')] == SUPPORT_URLS
     assert all(a['target'] == '_blank' and a['rel'] == ['noopener'] for a in header.select('a'))
 
@@ -108,6 +108,7 @@ def test_support_links_are_joined_as_a_sentence():
         header = render_header(real_meeting(), presentation={'support_links': [link] * count})
         return BeautifulSoup(header, 'html.parser').select_one('.support-text > span').get_text()
     assert support(1) == 'on Patreon'
+    assert '<strong>Support this tool</strong>' in render_header(real_meeting(), presentation={'support_links': [link]})
     assert support(3) == 'on Patreon, Patreon or Patreon'
 
 
@@ -133,7 +134,7 @@ def test_support_note_is_hidden_markup_below_the_notice():
     assert note.find_previous_sibling('p').get_text() == 'Notice'
     assert note.find_next_sibling('p').get_text().startswith('Created by')
     assert note.span.get_text() == ('Hope this helped you through RAN1#126bis. I build and maintain it on my own time. '
-                                    'If it saved you some time, you can support it on Patreon or GitHub <Sponsors>\xa0☕. '
+                                    'If it saved you some time, you can buy me a coffee on Patreon or GitHub <Sponsors>\xa0☕. '
                                     'Or just say hi at the next meeting!')
     assert [a['href'] for a in note.select('a')] == SUPPORT_URLS
     assert note.button['aria-label'] == 'Dismiss'
