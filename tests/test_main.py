@@ -600,6 +600,38 @@ class MainExtraFilesWiringTests(unittest.TestCase):
                 self.assertEqual(mock_loc.call_args[0][0], chair)
                 mock_ftp.assert_not_called()
 
+    def test_sources_are_labelled_main_and_by_vice_chair(self):
+        from working_groups.ran1.downloader import find_local_schedule_sources as real_find
+
+        with tempfile.TemporaryDirectory() as tmpdir:
+            extra = Path(tmpdir) / "extra_files"
+            extra.mkdir()
+            sched = extra / "Draft RAN1#126b online and offline schedules - v03.docx"
+            hiroki = Path(tmpdir) / "RAN1#126bis schedule for Hiroki Adhoc2 sessions_v01.docx"
+            sched.write_text("placeholder")
+
+            with self._enter_common([], no_download=True) as stack:
+                stack.enter_context(patch("working_groups.ran1.pipeline.EXTRA_FILES_DIR", extra))
+                stack.enter_context(
+                    patch(
+                        "working_groups.ran1.pipeline.find_local_schedule_sources",
+                        side_effect=lambda ref_dir=None, preferred_meeting_id=None: (
+                            ([], None) if ref_dir is None else real_find(ref_dir, preferred_meeting_id)
+                        ),
+                    )
+                )
+                stack.enter_context(
+                    patch("working_groups.ran1.pipeline.find_local_vice_chair_schedules", return_value={"Hiroki": hiroki})
+                )
+                stack.enter_context(patch("working_groups.ran1.pipeline.find_chair_notes_docx", return_value=None))
+                mock_html = stack.enter_context(patch("working_groups.ran1.pipeline.save_html"))
+
+                main()
+
+                schedule = mock_html.call_args[0][0]
+                self.assertEqual(schedule.source_files, [sched.name, hiroki.name])
+                self.assertEqual(schedule.source_labels, {sched.name: "Main", hiroki.name: "Hiroki"})
+
 
 if __name__ == "__main__":
     unittest.main()

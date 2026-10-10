@@ -292,7 +292,8 @@ def make_schedule(document, result, descriptions, metadata, name, generated_at):
                                                   end=max(s.end_time for s in sessions), breaks=breaks)))
     return Schedule(wg_id='ran-plenary', meeting_id=f'ran#{document["meeting_number"]}',
                     meeting_name=document['title'].removesuffix(' Time Plan'), days=days,
-                    source_file=name, source_files=[name, 'agenda.csv'], generated_at=generated_at,
+                    source_file=name, source_files=[name, 'agenda.csv'],
+                    source_labels={name: 'Time plan', 'agenda.csv': 'Agenda'}, generated_at=generated_at,
                     timezone=metadata['timezone'], starts_on=metadata['starts_on'], ends_on=metadata['ends_on'],
                     starts_at=metadata.get('starts_at'), ends_at=metadata.get('ends_at'),
                     topic_preamble=document.get('topic_preamble', []),

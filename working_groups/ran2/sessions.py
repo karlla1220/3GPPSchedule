@@ -478,7 +478,8 @@ def make_schedule(document: dict, agenda: dict | None, metadata: dict, source_fi
     number = document['meeting_id'].split('#', 1)[1]
     return Schedule(
         wg_id='ran2', meeting_id=document['meeting_id'], meeting_name=f'RAN2#{number}', days=days,
-        source_file=source_files[0], source_files=source_files, generated_at=generated_at,
+        source_file=source_files[0], source_files=source_files,
+        source_labels=dict(zip(source_files, ('Schedule', 'Agenda'))), generated_at=generated_at,
         timezone=metadata['timezone'], starts_on=metadata['starts_on'], ends_on=metadata['ends_on'],
         starts_at=metadata.get('starts_at'), ends_at=metadata.get('ends_at'),
         supplements=document.get('supplements', []))

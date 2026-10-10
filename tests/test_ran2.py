@@ -511,6 +511,7 @@ def test_local_build_needs_no_network_and_records_state(offline_config, tmp_path
     schedule = pipeline.build_schedule(options)
     assert schedule.wg_id == 'ran2' and schedule.meeting_name == 'RAN2#135'
     assert schedule.source_files == [V11, 'agenda.csv']
+    assert schedule.source_labels == {V11: 'Schedule', 'agenda.csv': 'Agenda'}
     assert schedule.starts_at == '2026-08-24T09:00:00+02:00'
     state = sources.read_json(tmp_path / 'out/ran2/.schedule_state.json')
     assert state['meeting_id'] == 'ran2#135' and state['metadata']['timezone'] == 'Europe/Amsterdam'
