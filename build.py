@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 from pathlib import Path
 
 import httpx
@@ -30,13 +31,24 @@ def render_root(config, schedules, meetings=None):
     if default not in schedules:
         raise ValueError(f"Default WG {default} has no schedule; build it first")
     target = f"./{default}/"
+    # This page must not show anything of its own on the way to the schedule:
+    # the redirect runs in the head, before a body exists to paint, and the
+    # background is the schedule's. The link only appears if the redirect stalls.
     return (
         '<!doctype html><html lang="en"><meta charset="utf-8">'
-        '<meta name="viewport" content="width=device-width, initial-scale=1">'
-        f'<meta http-equiv="refresh" content="0;url={target}"><title>3GPP Schedule</title>'
-        f'<p><a href="{target}">Open {default} schedule</a></p>'
-        f'<script>location.replace({json.dumps(target)} + location.search + location.hash);</script></html>'
+        f'<script>location.replace({json.dumps(target)} + location.search + location.hash);</script>'
+        f'<noscript><meta http-equiv="refresh" content="0;url={target}"></noscript>'
+        '<meta name="viewport" content="width=device-width, initial-scale=1"><title>3GPP Schedule</title>'
+        f'<style>html{{background:{_page_background()}}}'
+        'a{visibility:hidden;animation:stalled 0s 2s forwards}'
+        '@keyframes stalled{to{visibility:visible}}</style>'
+        f'<p><a href="{target}">Open {default} schedule</a></p></html>'
     )
+
+
+def _page_background():
+    css = (Path(__file__).resolve().parent / "templates" / "schedule.css").read_text(encoding="utf-8")
+    return re.search(r"--page-bg:\s*([^;]+);", css).group(1)
 
 
 def build_site(options):
