@@ -3125,13 +3125,17 @@
     }
   ],
   "source_file": "R2_135b_Schedule_v01.docx",
-  "generated_at": "2026-10-10 00:02",
+  "generated_at": "2026-10-11 02:31",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
     "R2_135b_Schedule_v01.docx",
     "agenda.csv"
   ],
+  "source_labels": {
+    "R2_135b_Schedule_v01.docx": "Schedule",
+    "agenda.csv": "Agenda"
+  },
   "timezone": "Asia/Seoul",
   "wg_id": "ran2",
   "meeting_id": "ran2#135bis",

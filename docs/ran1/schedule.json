@@ -10420,7 +10420,7 @@
     }
   ],
   "source_file": "Draft RAN1#126b online and offline schedules - v03.docx",
-  "generated_at": "2026-10-10 00:44",
+  "generated_at": "2026-10-11 02:31",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
@@ -10428,6 +10428,11 @@
     "RAN1#126bis schedule for Hiroki Adhoc2 sessions_v01.docx",
     "RAN1#126b Sorour sessions online and offline schedules - v00.docx"
   ],
+  "source_labels": {
+    "Draft RAN1#126b online and offline schedules - v03.docx": "Main",
+    "RAN1#126bis schedule for Hiroki Adhoc2 sessions_v01.docx": "Hiroki",
+    "RAN1#126b Sorour sessions online and offline schedules - v00.docx": "Sorour"
+  },
   "timezone": "Asia/Seoul",
   "wg_id": "ran1",
   "meeting_id": "ran1#126bis",
