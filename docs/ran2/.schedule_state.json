@@ -4,12 +4,12 @@
   "config_hash": "c6c411aa629f66fe98cdf07087bfd44847afbc5a4762e030c55fe7817b8286f4",
   "schedule": {
     "name": "R2_135b_Schedule_v01.docx",
-    "url": "https://www.3gpp.org/ftp/tsg_ran/WG2_RL2/TSGR2_135bis/Agenda/R2_135b_Schedule_v01.docx",
-    "uploaded_at": "2026-10-09 14:59",
+    "url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN2/Agenda/R2_135b_Schedule_v01.docx",
+    "uploaded_at": "2026-10-11 11:54",
     "size": 296618,
     "sha256": "81c1fb09f5e6360a0dd92460fb306fa21a3526a38a64d47c6659f5a19183bc85",
-    "etag": "\"eb4153cbfe57dd1:0\"",
-    "last_modified": "Fri, 09 Oct 2026 14:59:33 GMT",
+    "etag": "\"80a75c3f7759dd1:0\"",
+    "last_modified": "Sun, 11 Oct 2026 11:54:19 GMT",
     "ftp_modified": null,
     "content_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
     "content_disposition": null
