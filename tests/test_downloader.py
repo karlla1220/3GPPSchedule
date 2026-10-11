@@ -1723,3 +1723,39 @@ def test_chair_notes_inbox_root_is_checked_when_subfolder_is_empty():
             preferred_meeting_id="ran1#126", strict=True)
     assert result["source_url"] == "https://example.org/Inbox/"
     assert not result.get("source_warnings")
+
+
+
+def test_an_absent_chair_notes_location_is_not_a_failure():
+    """Sync folders come and go: a 403 (not there) neither fails strict mode nor warns."""
+    import httpx
+    import pytest
+    request = httpx.Request("GET", "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Chair_notes")
+    gone = httpx.HTTPStatusError("403", request=request, response=httpx.Response(403, request=request))
+    def listing(url):
+        if "Meetings_3GPP_SYNC" in url:
+            raise gone
+        return [_f("Chair notes RAN1#126_v13.docx", datetime(2026, 8, 28, 9, 52))] if url.endswith("Inbox/") else []
+    urls = ["https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/",
+            "https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_126/Inbox/"]
+    with patch("working_groups.ran1.downloader.list_remote_files", side_effect=listing):
+        result = get_latest_chair_notes_info(urls=urls, preferred_meeting_id="ran1#126", strict=True)
+        assert result["name"] == "Chair notes RAN1#126_v13.docx" and not result.get("source_warnings")
+    # No note anywhere yet: strict mode reports absence, not an error.
+    with patch("working_groups.ran1.downloader.list_remote_files",
+               side_effect=lambda url: (_ for _ in ()).throw(gone) if "SYNC" in url else []):
+        assert get_latest_chair_notes_info(urls=urls, preferred_meeting_id="ran1#126", strict=True) is None
+    # A real failure still is one.
+    with patch("working_groups.ran1.downloader.list_remote_files", side_effect=RuntimeError("503")):
+        with pytest.raises(RuntimeError):
+            get_latest_chair_notes_info(urls=urls, preferred_meeting_id="ran1#126", strict=True)
+
+
+def test_a_later_mirror_copy_does_not_beat_a_newer_version():
+    from working_groups.ran1.downloader import _dedup_sources
+    sync = ScheduleSource(folder_name="Chair_notes", person_name=None, is_main=True,
+                          file_info={"name": "RAN1#126 schedules - v03.docx", "uploaded_at": datetime(2026, 10, 12, 9)})
+    mirror = ScheduleSource(folder_name="Chair_notes", person_name=None, is_main=True,
+                            file_info={"name": "RAN1#126 schedules - v02.docx", "uploaded_at": datetime(2026, 10, 12, 11)})
+    [main, *_] = _dedup_sources([mirror, sync])
+    assert main.file_info["name"] == "RAN1#126 schedules - v03.docx"

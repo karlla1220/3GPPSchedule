@@ -533,6 +533,10 @@ def build_agreements(*, cfg, meeting_id, schedule_path, offline, previous=None,
             return _unavailable(meeting_id), None
         info, body = fetch_remote_note(cfg, meeting_id, listed)
         if info is None:
+            if previous:
+                # Replaced or cleared in the sync folder: the caller keeps the
+                # published agreements and their identity.
+                raise LookupError(f"No chair notes listed for {meeting_id}")
             return _unavailable(meeting_id), None
         path = _store_note(info["name"], body)
         identity = reference_identity(info)

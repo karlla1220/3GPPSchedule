@@ -9,6 +9,7 @@ import re
 from urllib.parse import unquote, urljoin, urlparse
 
 from bs4 import BeautifulSoup
+import httpx
 
 from shared import remote_files
 from shared.remote_files import client, fetch_file
@@ -23,6 +24,9 @@ CACHE = Path('.cache/ran-plenary')
 TRANSFER = Path('.ci/transfers/ran-plenary')
 DEFAULTS = {
     'chair_url': 'https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN/Inbox/Chair/',
+    # The meeting folder keeps agenda.csv; the sync copy is emptied at some
+    # point after the meeting, so it is only the fallback.
+    'meeting_agenda_url': 'https://www.3gpp.org/ftp/tsg_ran/TSG_RAN/TSGR_{number}/Agenda/agenda.csv',
     'agenda_url': 'https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN/Agenda/agenda.csv',
     'model': 'gemini-3.8-flash',
     'local_agenda': None,
@@ -55,9 +59,11 @@ def load_config() -> dict:
     if unknown:
         raise ValueError(f'Unknown RAN P configuration: {sorted(unknown)}')
     result = {**DEFAULTS, **cfg}
-    for name in ('chair_url', 'agenda_url'):
+    for name in ('chair_url', 'agenda_url', 'meeting_agenda_url'):
         if urlparse(result[name]).scheme not in ('http', 'https'):
             raise ValueError(f'{name} must be an HTTP URL')
+    if '{number}' not in result['meeting_agenda_url']:
+        raise ValueError('meeting_agenda_url must contain {number}')
     if not isinstance(result['meetings'], dict):
         raise ValueError('meetings must be a dictionary keyed by meeting number')
     return result
@@ -90,6 +96,10 @@ class Bundle:
         return cls(manifest, *data)
 
 
+class NothingNewer(ValueError):
+    """The Chair listing has no timeplan at least as new as the built one."""
+
+
 def select_timeplan(html: str, listing_url: str, previous: dict) -> dict:
     candidates = []
     for anchor in BeautifulSoup(html, 'html.parser').find_all('a', href=True):
@@ -105,19 +115,58 @@ def select_timeplan(html: str, listing_url: str, previous: dict) -> dict:
                            'version': int(match.group(2)), 'listing_metadata': uploaded,
                            'uploaded_at': timestamp.group().replace('/', '-') if timestamp else ''})
     if not candidates:
-        raise ValueError('No RAN timeplan found in Chair listing')
+        raise NothingNewer('No RAN timeplan found in Chair listing')
     chosen = max(candidates, key=lambda c: (c['meeting_number'], c['version'], c['uploaded_at'], c['name']))
     old_rank = (previous.get('meeting_number', 0), previous.get('version', 0))
     if (chosen['meeting_number'], chosen['version']) < old_rank:
-        raise ValueError('Chair listing would roll back the last successful timeplan')
+        raise NothingNewer('Chair listing would roll back the last successful timeplan')
     return chosen
+
+
+def built_bundle(cfg, previous, reason) -> Bundle:
+    """The last built inputs, read back from the shared 3GPP cache.
+
+    The sync area follows the meeting: the Chair folder and its timeplans
+    appear and disappear. Their absence keeps the page; it is not an error.
+    """
+    plan_info, agenda_info = previous.get('timeplan') or {}, previous.get('agenda') or {}
+    plan = remote_files.cached(plan_info['url'], plan_info.get('sha256')) if plan_info.get('url') else None
+    agenda = remote_files.cached(agenda_info['url'], agenda_info.get('sha256')) if agenda_info.get('url') else None
+    if plan is None or agenda is None:
+        raise ValueError(f'{reason}, and the last built inputs are not cached')
+    print(f"[ran-plenary] {reason}; keeping {plan_info.get('name')}")
+    return Bundle({'meeting_number': previous['meeting_number'], 'version': previous['version'],
+                   'config_hash': config_hash(cfg), 'timeplan': plan_info, 'agenda': agenda_info}, plan, agenda)
+
+
+def fetch_agenda(cfg, number, previous, http, cached):
+    """agenda.csv from the meeting folder, else the sync folder, else as built."""
+    urls = [cfg['meeting_agenda_url'].format(number=number), cfg['agenda_url']]
+    for url in urls:
+        try:
+            return fetch_file(http, url, previous.get('agenda', {}), cached.agenda if cached else None)
+        except httpx.HTTPError as exc:
+            if not remote_files.is_absent(exc):
+                raise
+    old = previous.get('agenda') or {}
+    if previous.get('meeting_number') == number and old.get('url'):
+        body = remote_files.cached(old['url'], old.get('sha256'))
+        if body is not None:
+            print(f'[ran-plenary] No agenda.csv listed for RAN#{number}; keeping the built one')
+            return body, old
+    raise ValueError(f'No agenda.csv for RAN#{number} at {" or ".join(urls)}')
 
 
 
 def fetch_bundle(cfg, previous, http, cache_dir=DOWNLOADS / 'inputs') -> Bundle:
-    listing = remote_files.get_listing(cfg['chair_url'], http=http)
-    listing.raise_for_status()
-    chosen = select_timeplan(listing.text, cfg['chair_url'], previous)
+    try:
+        listing = remote_files.get_listing(cfg['chair_url'], http=http)
+        chosen = select_timeplan(listing.text, cfg['chair_url'], previous)
+    except (httpx.HTTPError, NothingNewer) as exc:
+        absent = isinstance(exc, NothingNewer) or remote_files.is_absent(exc)
+        if not (absent and previous.get('timeplan')):
+            raise
+        return built_bundle(cfg, previous, 'Chair folder absent' if isinstance(exc, httpx.HTTPError) else str(exc))
     cached = None
     try:
         cached = Bundle.load(cache_dir)
@@ -125,8 +174,7 @@ def fetch_bundle(cfg, previous, http, cache_dir=DOWNLOADS / 'inputs') -> Bundle:
         pass
     plan, plan_info = fetch_file(http, chosen['url'], previous.get('timeplan', {}),
                                 cached.timeplan if cached else None)
-    agenda, agenda_info = fetch_file(http, cfg['agenda_url'], previous.get('agenda', {}),
-                                    cached.agenda if cached else None)
+    agenda, agenda_info = fetch_agenda(cfg, chosen['meeting_number'], previous, http, cached)
     manifest = {'meeting_number': chosen['meeting_number'], 'version': chosen['version'],
                 'config_hash': config_hash(cfg), 'timeplan': {**chosen, **plan_info}, 'agenda': agenda_info}
     return Bundle(manifest, plan, agenda)

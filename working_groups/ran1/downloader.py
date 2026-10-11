@@ -1014,6 +1014,9 @@ def get_latest_chair_notes_info(
         try:
             files = list_remote_files(location)
         except Exception as exc:
+            if remote_files.is_absent(exc):
+                # Sync folders come and go with the meeting; not there is not a failure.
+                continue
             failures.append((location, exc))
             print(f"Warning: Could not list Chair notes at {location}: {exc}")
             continue
@@ -1566,7 +1569,9 @@ def _dedup_sources(sources: list[ScheduleSource]) -> list[ScheduleSource]:
             # multiple local candidates do not resolve by insertion order.
             return (1, _local_doc_preference(s.local_path))
         name = s.file_info.get("name", "")
-        return (0, not _is_draft_name(name), ts(s), name.lower(), name)
+        # Version before upload time: a mirror copy made later must not beat
+        # a newer version in the sync folder.
+        return (0, _release_key(name), ts(s), name.lower(), name)
 
     main: ScheduleSource | None = None
     by_person: dict[str, ScheduleSource] = {}

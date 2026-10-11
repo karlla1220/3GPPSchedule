@@ -537,3 +537,77 @@ def test_topic_preamble_comes_from_document(paragraphs, parsed, metadata, tmp_pa
     assert [p.get_text(separator='\n') for p in html.select('.topic-references > p')] == paragraphs
     assert len(html.select('.topic-references tbody tr')) == 22
     assert not html.select('.topic-references > p unless')
+
+
+# ------------------------------------------------- sync folders come and go
+
+CHAIR = sources.DEFAULTS['chair_url']
+SYNC_AGENDA = sources.DEFAULTS['agenda_url']
+MEETING_AGENDA = sources.DEFAULTS['meeting_agenda_url'].format(number=113)
+V09 = 'RAN%23113%20time%20plan%20v09.zip'
+
+
+def chair_listing(*names):
+    rows = ''.join(f'<tr><td><a href="{CHAIR}{n}">{n}</a></td><td>2026/09/17 10:00</td></tr>' for n in names)
+    return f'<table>{rows}</table>'
+
+
+def server(files, seen=None):
+    """3GPP-like: listings and files from files, 403 (IIS 'not found') for anything else."""
+    def handler(request):
+        url = str(request.url)
+        if seen is not None:
+            seen.append(url)
+        if url in files:
+            body = files[url]
+            return httpx.Response(200, text=body) if isinstance(body, str) else httpx.Response(200, content=body)
+        return httpx.Response(403)
+    return httpx.Client(transport=httpx.MockTransport(handler))
+
+
+@pytest.fixture
+def built(tmp_path, monkeypatch):
+    """State and cached bodies of a RAN#113 v09 build, as CI keeps them."""
+    monkeypatch.setattr(sources.remote_files, 'CACHE_DIR', tmp_path / 'cache')
+    with server({CHAIR + V09: b'PK-v09', SYNC_AGENDA: b'"1","Opening"\n'}) as http:
+        _, plan = sources.remote_files.fetch_file(http, CHAIR + V09)
+        _, agenda = sources.remote_files.fetch_file(http, SYNC_AGENDA)
+    sources.remote_files.new_run()
+    return {'meeting_number': 113, 'version': 9, 'config_hash': 'x',
+            'timeplan': {**plan, 'name': 'RAN#113 time plan v09.zip'}, 'agenda': agenda}
+
+
+@pytest.mark.parametrize('listing', [None, chair_listing(), chair_listing('RAN%23113%20time%20plan%20v08.zip')])
+def test_a_missing_or_older_chair_listing_keeps_the_built_timeplan(built, tmp_path, listing):
+    files = {} if listing is None else {CHAIR: listing}
+    with server(files) as http:
+        bundle = sources.fetch_bundle(sources.DEFAULTS, built, http, tmp_path / 'inputs')
+    assert (bundle.manifest['version'], bundle.timeplan) == (9, b'PK-v09')
+    assert bundle.manifest['timeplan'] == built['timeplan'] and bundle.agenda == b'"1","Opening"\n'
+
+
+def test_without_a_build_a_missing_chair_folder_is_still_an_error(tmp_path, monkeypatch):
+    monkeypatch.setattr(sources.remote_files, 'CACHE_DIR', tmp_path / 'cache')
+    with server({}) as http, pytest.raises(httpx.HTTPStatusError):
+        sources.fetch_bundle(sources.DEFAULTS, {}, http, tmp_path / 'inputs')
+
+
+def test_agenda_comes_from_the_meeting_folder_then_sync_then_the_build(built, tmp_path):
+    v10 = 'RAN%23113%20time%20plan%20v10.zip'
+    base = {CHAIR: chair_listing(V09, v10), CHAIR + v10: b'PK-v10'}
+    seen = []
+    with server({**base, MEETING_AGENDA: b'meeting', SYNC_AGENDA: b'sync'}, seen) as http:
+        bundle = sources.fetch_bundle(sources.DEFAULTS, built, http, tmp_path / 'inputs')
+    assert bundle.agenda == b'meeting' and SYNC_AGENDA not in seen
+    sources.remote_files.new_run()
+    with server(base) as http:
+        bundle = sources.fetch_bundle(sources.DEFAULTS, built, http, tmp_path / 'inputs')
+    assert bundle.timeplan == b'PK-v10' and bundle.agenda == b'"1","Opening"\n'
+    sources.remote_files.new_run()
+    with server({**base, SYNC_AGENDA: b'sync'}) as http:
+        assert sources.fetch_bundle(sources.DEFAULTS, built, http, tmp_path / 'inputs').agenda == b'sync'
+    # A new meeting does not inherit the last meeting's agenda.
+    sources.remote_files.new_run()
+    v01 = 'RAN%23114%20time%20plan%20v01.zip'
+    with server({CHAIR: chair_listing(v01), CHAIR + v01: b'PK-114'}) as http, pytest.raises(ValueError, match='RAN#114'):
+        sources.fetch_bundle(sources.DEFAULTS, built, http, tmp_path / 'inputs')

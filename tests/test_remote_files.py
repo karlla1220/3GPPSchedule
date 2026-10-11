@@ -206,11 +206,41 @@ def test_a_3gpp_folder_is_listed_once_per_run():
 
 def test_a_failed_listing_is_not_remembered():
     url = 'https://www.3gpp.org/ftp/tsg_ran/WG2_RL2/TSGR2_136/'
-    statuses = iter([403, 200])
+    statuses = iter([401, 200])
     with httpx.Client(transport=httpx.MockTransport(lambda _: httpx.Response(next(statuses)))) as http:
         with pytest.raises(httpx.HTTPStatusError):
             remote_files.get_listing(url, http=http)
         assert remote_files.get_listing(url, http=http).status_code == 200
+
+
+def test_an_absent_folder_is_asked_for_once_per_run_and_handed_to_build(tmp_path):
+    url = 'https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN2/Agenda/'
+    calls = []
+    def gone(request):
+        calls.append(request)
+        return httpx.Response(403)
+    with httpx.Client(transport=httpx.MockTransport(gone)) as http:
+        for _ in range(2):
+            with pytest.raises(httpx.HTTPStatusError) as caught:
+                remote_files.get_listing(url, http=http)
+            assert remote_files.is_absent(caught.value)
+    assert len(calls) == 1
+    remote_files.save_listings(tmp_path / 'listings.json')
+    remote_files.new_run()
+    assert remote_files.load_listings(tmp_path / 'listings.json') == 1
+    with pytest.raises(httpx.HTTPStatusError):
+        remote_files.get_listing(url)
+    assert len(calls) == 1
+
+
+def test_absence_is_told_apart_from_failure():
+    request = httpx.Request('GET', 'https://www.3gpp.org/ftp/x/')
+    status = lambda code: httpx.HTTPStatusError('x', request=request, response=httpx.Response(code, request=request))
+    assert remote_files.is_absent(status(403)) and remote_files.is_absent(status(404))
+    assert not remote_files.is_absent(status(500)) and not remote_files.is_absent(status(401))
+    ftp_missing = httpx.ConnectError('FTP fallback failed for x: 550 The system cannot find the file specified.')
+    assert remote_files.is_absent(ftp_missing)
+    assert not remote_files.is_absent(httpx.ConnectError('FTP fallback failed for x: timed out'))
 
 
 def test_check_hands_its_listings_to_build(tmp_path):

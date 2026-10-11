@@ -258,19 +258,19 @@ def choose_schedule(candidates: list[dict], dates: dict, today: str) -> dict:
 # -------------------------------------------------------------------- bundles
 
 def sync_listing(cfg, http) -> list[dict]:
-    """The sync folder's entries.
+    """The sync folder's entries; none while the folder does not exist.
 
-    The folder always exists, so a 403 there is a block, not an absent
-    folder. Read it, and the files in it, over FTP for the rest of the run.
+    The sync area follows the meeting: its folders and files appear and
+    disappear (Agenda/ was removed on 2026-10-11, the day before #135bis).
+    Absence is normal; only a real failure (5xx, connection) raises.
     """
     try:
         return fetch_listing(cfg['sync_url'], http)
-    except httpx.HTTPStatusError as exc:
-        if exc.response.status_code != 403:
+    except httpx.HTTPError as exc:
+        if not remote_files.is_absent(exc):
             raise
-    print('[ran2] HTTPS 403 on the sync folder; reading it over FTP')
-    remote_files.ftp_transport.use_ftp_for(cfg['sync_url'], 'HTTPS 403 on the RAN2 sync folder')
-    return fetch_listing(cfg['sync_url'], http)
+    print('[ran2] Sync folder absent; using the meeting folder')
+    return []
 
 
 def sync_warnings(bundle, error, dates, today) -> Bundle:
@@ -286,18 +286,20 @@ def sync_warnings(bundle, error, dates, today) -> Bundle:
     return bundle
 
 
-def live_copy(cfg, previous, chosen, rows, error) -> Bundle | None:
-    """The built sync copy while the sync folder is unreachable.
+def built_copy(cfg, previous, chosen, candidates, rows, error) -> Bundle | None:
+    """The built version, when its file is gone and nothing newer is listed.
 
-    New versions during a meeting appear only in the sync folder; the meeting
-    folder has those from before or after it. Keep a built sync version
-    instead of stepping back; without its stored body, report the sync error.
+    New versions during a meeting appear only in the sync folder, which can
+    lose them at any time (replaced, cleared); the meeting folder has the
+    versions from before or after the meeting. Never step back within a
+    meeting: keep what is built. Without its stored body, raise error.
     """
     old = previous.get('schedule') or {}
-    if (not str(old.get('url', '')).startswith(cfg['sync_url'])
-            or previous.get('meeting_id') != chosen['meeting_id']
-            or previous.get('version', -1) < chosen['version']):
+    if (previous.get('meeting_id') != chosen['meeting_id']
+            or previous.get('version', -1) < chosen['version']
+            or any(c['url'] == old.get('url') for c in candidates)):
         return None
+    error = error or ValueError(f"{old.get('name')} is no longer listed and its stored copy is missing")
     schedule = remote_files.cached(old['url'], old.get('sha256'))
     agenda_info = previous.get('agenda') or None
     agenda = remote_files.cached(agenda_info['url'], agenda_info.get('sha256')) if agenda_info else b''
@@ -316,9 +318,9 @@ def fetch_bundle(cfg, previous, http, *, rows=None, today=None, cache_dir=DOWNLO
     try:
         entries, sync_error = sync_listing(cfg, http), None
     except httpx.HTTPError as exc:
-        # Since 2026-10-11 3GPP's firewall answers this folder with 403. The
-        # meeting folder still has the versions from before the meeting.
-        print(f'[ran2] Sync folder unavailable ({exc}); reading the meeting folder')
+        # A real failure, not absence. The meeting folder still has the
+        # versions from before the meeting; sync_warnings reports the gap.
+        print(f'[ran2] Sync folder unreadable ({exc}); reading the meeting folder')
         entries, sync_error = [], exc
     dates = meeting_dates(cfg, rows, previous)
     archive = meeting_folders(cfg)
@@ -339,11 +341,11 @@ def fetch_bundle(cfg, previous, http, *, rows=None, today=None, cache_dir=DOWNLO
     if sync_error is not None and not candidates:
         raise sync_error
     chosen = choose_schedule(candidates, dates, today)
-    if sync_error is not None:
-        kept = live_copy(cfg, previous, chosen, rows, sync_error)
-        if kept is not None:
-            print(f"[ran2] Keeping {kept.manifest['schedule']['name']}; the meeting folder has nothing newer")
-            return sync_warnings(kept, sync_error, dates, today)
+    kept = built_copy(cfg, previous, chosen, candidates, rows, sync_error)
+    if kept is not None:
+        print(f"[ran2] Keeping {kept.manifest['schedule']['name']}: it is no longer listed, "
+              f"and {chosen['name']} is not newer")
+        return sync_warnings(kept, sync_error, dates, today)
     meeting = chosen['meeting_id']
     if meeting not in listed and meeting in archive:
         listed[meeting] = agenda_folder(archive[meeting], http)

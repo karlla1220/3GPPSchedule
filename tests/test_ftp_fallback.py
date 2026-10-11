@@ -292,7 +292,9 @@ def test_a_run_without_failures_never_opens_ftp(ftp, monkeypatch, tmp_path):
 
 
 def test_an_unrecognised_403_is_described_in_the_log(ftp, caplog):
+    import logging
     from shared import ftp_transport
+    caplog.set_level(logging.DEBUG, logger='shared.ftp_transport')
     page = (b'<html><head><style>body { color: red }</style><script>var x = 1;</script></head>'
             b'<body><h1>Access denied</h1><p>Ray ID: 1234</p></body></html>')
     answer = httpx.Response(403, content=page, headers={'server': 'cloudflare', 'cf-ray': 'a48d-IAD'})
