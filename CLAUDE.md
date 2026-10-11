@@ -222,4 +222,14 @@ HTML은 `shared/page.py`, 표시 판단은 `templates/support-note.js`, 값은 `
   - 시각은 회의 시간대(`schedule.timezone`)로 보인다. 일정과 같은 기준이다.
   - 첫 note는 기준선이라 `As of …`로 날짜만 보이고 강조는 없다.
 - **빈 항목은 정상이다.** 하위 번호만 있는 제목이나 아직 합의가 없는 항목은 오류가 아니라 회색 안내 문구로 보인다. 패널은 본문이 있는 첫 탭을 먼저 연다.
+- **TDoc 행은 5행 이상 이어진 목록일 때만 접는다(`agreements.py`의 `_listed_tdocs`, `TDOC_LIST_ROWS`).** 본문이 가리키는 TDoc까지 빼면 무엇에 대한 글인지 알 수 없다. AI 5에서 LS 행이 빠지면 설명만 남는다.
+  - 4행까지는 원문 그대로 둔다. 수신 LS, FL summary, 승인된 CR 번호, 릴리스별 mirror CR이 여기에 든다.
+    실제 note에서 이어진 행은 1행(맥락)과 10행 이상(기고 목록)으로 갈리고, 5~9행은 모두 기고 목록이었다.
+  - 접은 자리에는 회색 한 줄 `(48 TDocs not shown)`을 둔다(`.tdoc-list`, `--ink-3`). 원문에 없는 줄이라 색으로 구별하고, `Relevant Tdocs:` 같은 머리말이 가리킬 것을 잃지 않는다.
+    이 줄은 변경 비교에 넣지 않는다. 넣으면 late contribution 하나에 그 AI가 Updated로 표시된다.
+  - 목록만 있는 AI는 이 줄도 넣지 않고 비워 둔다. 패널의 빈 항목 안내가 같은 말을 한다.
+  - 목록 끝에 붙은 summary 행은 뒤에 내용이 이어질 때 남긴다. 의장은 기고 목록 끝에 `FL summary #1`을 붙이고 그 아래에 합의를 적는다.
+    목록 중간의 summary 행은 번호만 잡아 둔 것이라 함께 접는다. 제목 낱말로 행의 종류를 가리는 규칙은 이것 하나뿐이다.
+  - 행 아래의 괄호 주석(`(Late contribution)`, `(Revision of R1-…)`)은 그 행을 따라간다. 주석만 남지 않게 한다.
+  - 표는 TDoc 목록 표만 통째로 뺀다. `Tdoc number | Issue`처럼 TDoc으로 항목을 가리키는 표는 행을 빼지 않는다. 일부 행만 빠진 표는 원문과 다른 말을 한다.
 - 문서 형식이나 출력이 바뀌면 `working_groups/ran1/agreements.py`의 `PARSER_VERSION`을 올려 캐시를 무효화한다.

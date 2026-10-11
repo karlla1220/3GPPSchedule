@@ -212,9 +212,25 @@ LLM 응답을 그대로 HTML에 쓰지는 않는다. 코드가 다음 후처리�
 
 `pipeline.build_schedule`은 timezone 결정과 독립적으로 `agreements.build_agreements`를 호출한다.
 동일 미팅의 note만 선택하고 정확한 번호가 식별되는 agenda heading 사이의 원문 전체를 추출한다.
-Agreement/Proposal 등의 표식은 경계로 사용하지 않는다. TDoc ID 단독 행, 탭으로 구분된 ID/제목/제출자 행,
-표의 단순 TDoc 메타데이터 행만 제거하며 이후 내용은 유지한다. 모호한 공백 구분 문장과 본문 인용은 보존한다.
-섹션은 `html`, `excluded_tdoc_rows`, 블록 키 목록 `blocks`를 저장한다(parser version 17).
+Agreement/Proposal 등의 표식은 경계로 사용하지 않는다. 모호한 공백 구분 문장과 본문 인용은 보존한다.
+
+TDoc 행(ID 단독, 또는 탭으로 구분된 ID/제목/제출자)은 5행 이상 이어진 기고 목록일 때만 뺀다(`_listed_tdocs`, `TDOC_LIST_ROWS`).
+섹션 하나를 모아 놓고 연속된 행을 한 묶음으로 판단한다.
+
+| 묶음 | 처리 | 예 |
+|---|---|---|
+| 4행 이하 | 원문 그대로 | AI 5의 수신 LS, `FL summary #2`, 승인된 CR 번호, mirror CR 3행 |
+| 5행 이상 | 한 줄 `(N TDocs not shown)`으로 대신한다 | AI마다 맨 위의 기고 목록, `Relevant Tdocs:` 아래 목록 |
+| 5행 이상 묶음 끝의 summary 행(제목 `summary` 또는 제출자 `Moderator`), 뒤에 목록이 아닌 내용이 있을 때 | 남긴다 | 기고 40행 + `FL summary #1`, 빈 줄, `Agreement:` |
+
+행 바로 아래의 괄호 주석(`(Late contribution)`, `(Revision of R1-…)`, `(Withdrawn)`)은 그 행과 함께 남거나 빠진다.
+대신하는 줄은 원문이 아니라서 블록 키가 없고(변경 비교에서 빠진다), 목록뿐인 섹션은 이 줄도 없이 비워 둔다.
+표는 TDoc 목록 표(모든 행이 ID 행이거나 TDoc/Title/Source 머리행 아래 ID 행뿐)만 통째로 빼고,
+TDoc 번호로 항목을 가리키는 표(`Tdoc number | Issue`)는 그대로 둔다.
+기준 5행의 근거는 RAN1#124~#126bis note 6개의 조사다: 연속 행 묶음은 1행(맥락)과 10행 이상(기고 목록)으로 갈리고,
+2~4행은 CR 묶음과 짧은 목록이 섞여 있으며, 5~9행은 모두 기고 목록이었다.
+
+섹션은 `html`, `excluded_tdoc_rows`, 블록 키 목록 `blocks`를 저장한다(parser version 18).
 LLM 요약을 사용하지 않는다. 별도 `agreements_ref`로 원본 파일/URL/SHA를 비교하므로
 Portal timezone을 사용하거나 note의 이름이 그대로여도 내용 변경을 감지한다.
 
@@ -230,7 +246,11 @@ agreement는 선택적인 입력이라 실패해도 일정 빌드를 멈추지 �
 
 note가 바뀌면 섹션마다 직전 게시분과 블록 키를 비교한다(`track_changes`). 블록은 Word 문단 하나 또는
 표 하나이고, 키는 HTML이 아니라 Word XML의 텍스트에서 만든다(`_unit_key`). 그래서 공백, run 분할,
-TDoc 행(비교 전에 이미 빠짐), parser 출력 변경은 변경으로 세지 않고, 취소선은 센다.
+빠진 TDoc 목록(비교 전에 이미 빠짐), parser 출력 변경은 변경으로 세지 않고, 취소선은 센다.
+
+parser version이 바뀌면 같은 note도 블록이 달라진다(남기는 TDoc 행이 늘어난 v18이 그렇다). 그 빌드에서는 차이를
+note의 변경으로 읽지 않고, 직전의 변경 기록을 그대로 옮기며 강조 위치만 같은 키끼리 다시 맞춘다.
+강조하던 블록이 모두 사라진 섹션은 기준선(`initial`)으로 돌린다. 같은 빌드에서 note도 바뀌었다면 그 변경은 다음 note부터 비교된다.
 
 - 키가 같은 섹션은 직전의 변경 시각과 강조를 그대로 둔다. 바뀐 섹션은 `changed_at`·`changed_in`을 새
   note로 갱신하고, `difflib`의 insert/replace 블록을 추가분(`added`)으로 표시한다. 지워지기만 한 경우는
