@@ -275,6 +275,7 @@ def detect_room_from_context(
             config=types.GenerateContentConfig(
                 response_mime_type="application/json",
                 response_json_schema=ROOM_DETECT_SCHEMA,
+                thinking_config=types.ThinkingConfig(thinking_level=THINKING_LEVEL),
             ),
         )
         result = json.loads(response.text.strip())
