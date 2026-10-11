@@ -12,7 +12,7 @@ from shared.renderer import generate_html
 from .document import agenda_map, extract_document
 from .interpreter import gemini_request, interpret, make_schedule, resolve_timezone
 from .sources import (CACHE, DOWNLOADS, Bundle, client, config_hash, fetch_bundle,
-                      load_config, local_bundle, portal_meeting, read_json, write_json)
+                      load_config, local_bundle, portal_meeting, portal_rows, read_json, write_json)
 
 
 def meeting_metadata(number, cfg, previous, http, request, supplied=None):
@@ -82,7 +82,7 @@ def build_schedule(options=None, *, request=gemini_request):
             finally:
                 shutil.rmtree(prepared, ignore_errors=True)
         else:
-            bundle = fetch_bundle(cfg, previous, http)
+            bundle = fetch_bundle(cfg, previous, http, rows=portal_rows())
         bundle.save(DOWNLOADS / 'inputs')
         document = extract_document(bundle.timeplan, bundle.manifest['timeplan']['name'])
         if document['meeting_number'] != bundle.manifest['meeting_number']:

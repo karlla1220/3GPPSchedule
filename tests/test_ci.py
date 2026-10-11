@@ -404,3 +404,37 @@ def test_final_render_failure_rolls_back_new_wg_checkpoints(site, monkeypatch):
         ci.build_site()
     after = {str(p): p.read_bytes() for p in Path('docs').rglob('*') if p.is_file()}
     assert after == before
+
+
+def test_recorded_meeting_folders_build_once_without_changing_the_wg_inputs(site, monkeypatch):
+    """A run records found folders in config.json; the build commits them, nothing else changes."""
+    from shared import meeting_folders
+    config = Path('working_groups/ran1/config.json')
+    config.parent.mkdir(parents=True)
+    config.write_text(json.dumps({'meeting_specific': [], 'extra_files': []}))
+    site['ran1'].input_paths = (config.parent,)
+    site['ran1'].persistent_paths += (config,)
+    monkeypatch.setitem(meeting_folders.CONFIG_PATHS, 'ran1', config)
+    bootstrap()
+    found = 'https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_127/'
+
+    def check():
+        meeting_folders._FOUND['ran1'] = {'ran1#127': found}
+        meeting_folders._record('ran1')
+        return CheckResult()
+    monkeypatch.setattr(site['ran1'], 'check_updates', check)
+    plan = ci.check_site()
+    assert plan['build_ids'] == ['ran1'] and plan['groups']['ran1']['reasons'] == [f'meeting folders now {found}']
+    assert json.loads(config.read_text())['meeting_specific'] == [found]
+    # The build job starts from a fresh checkout and does not look folders up
+    # again (prepared bundles): the plan carries the list, and the build writes it.
+    checked_out = config.read_text()
+    config.write_text(json.dumps({'meeting_specific': [], 'extra_files': []}))
+    ci.build_site()   # the recorded list does not make the plan stale
+    assert config.read_text() == checked_out
+    assert str(config) in json.loads(Path('.ci/build-report.json').read_text())['persistent_paths']
+    # Recorded again with the same folders: no reason to build.
+    assert ci.check_site()['build_ids'] == []
+    # A real configuration change still counts.
+    config.write_text(json.dumps({'meeting_specific': [found], 'extra_files': [{'url': 'x'}]}))
+    assert ci.check_site()['build_ids'] == ['ran1']

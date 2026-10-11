@@ -3,7 +3,8 @@ from pathlib import Path
 from shared.lifecycle import CheckResult, clear_paths, restore_staged
 
 input_paths = (Path('working_groups/ran2'),)
-persistent_paths = (Path('docs/ran2'),)
+# config.json: each run records the meeting folders it found (meeting_specific).
+persistent_paths = (Path('docs/ran2'), Path('working_groups/ran2/config.json'))
 cache_paths = (Path('.cache/ran2'),)
 
 

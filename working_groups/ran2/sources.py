@@ -7,9 +7,10 @@ RAN2 publishes ``R2_<meeting>_Schedule_v<NN>.docx`` in each meeting's
 ``agenda.csv``. Portal dates decide which meeting is current, so an early v00
 for the following meeting never replaces the one in progress.
 
-``meeting_specific`` names meeting folders (``.../WG2_RL2/TSGR2_135bis/``), as
-in RAN1. While one of them is for a meeting that has not ended, the archive
-root (several hundred entries) is not listed.
+Meeting folders are found from the meeting id (``shared/meeting_folders.py``:
+Portal's MtgDocURL, then ``TSGR2_135bis``/``TSGR2_135b``, then the archive
+root) and recorded in ``meeting_specific``. ``meeting_specific_override``
+(``.../WG2_RL2/TSGR2_135bis/``) is set by hand and wins for its meeting.
 """
 from __future__ import annotations
 
@@ -25,7 +26,8 @@ from zoneinfo import ZoneInfo
 from bs4 import BeautifulSoup
 import httpx
 
-from shared import remote_files
+from shared import meeting_folders, remote_files
+from shared.meeting_folders import portal_key
 from shared.portal_meetings import TB_IDS, get_meetings, meeting_key, timezone_reference
 from shared.remote_files import client, fetch_file
 
@@ -39,7 +41,10 @@ CACHE = Path('.cache/ran2')
 DEFAULTS = {
     'sync_url': 'https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN2/Agenda/',
     'archive_url': 'https://www.3gpp.org/ftp/tsg_ran/WG2_RL2/',
+    # Written by each run: the meeting folders it found (do not edit).
     'meeting_specific': [],
+    # Set by hand: a meeting folder that wins over the one found.
+    'meeting_specific_override': [],
     'local_agenda': None,
     # Gemini reads the cells the rules are unsure about, and whole documents
     # whose table layout they do not recognise. Without GEMINI_API_KEY the
@@ -49,7 +54,8 @@ DEFAULTS = {
     'meetings': {},
 }
 METADATA_KEYS = {'starts_on', 'ends_on', 'starts_at', 'ends_at', 'location', 'country', 'timezone'}
-FOLDER = re.compile(r'TSGR2_(\d+)(bis|b)?/?', re.I)
+FOLDER = re.compile(r'TSGR2_(\d+)(bis|b)?(?:-?e)?/?', re.I)
+FOLDER_KEYS = ('meeting_specific', 'meeting_specific_override')
 TIMESTAMP = re.compile(r'(\d{4})[/-](\d{2})[/-](\d{2})\s+(\d{1,2}):(\d{2})')
 
 
@@ -83,11 +89,12 @@ def load_config() -> dict:
             raise ValueError(f'{name} must be an HTTP URL')
     if not isinstance(result['llm_fallback'], bool) or not isinstance(result['model'], str):
         raise ValueError('llm_fallback must be true/false and model a Gemini model name')
-    if (not isinstance(result['meeting_specific'], list)
-            or any(not isinstance(url, str) or urlparse(url).scheme not in ('http', 'https')
-                   or not FOLDER.fullmatch(url.rstrip('/').rsplit('/', 1)[-1] + '/')
-                   for url in result['meeting_specific'])):
-        raise ValueError('meeting_specific must list RAN2 meeting folder URLs such as .../TSGR2_135bis/')
+    for name in FOLDER_KEYS:
+        if (not isinstance(result[name], list)
+                or any(not isinstance(url, str) or urlparse(url).scheme not in ('http', 'https')
+                       or not FOLDER.fullmatch(url.rstrip('/').rsplit('/', 1)[-1] + '/')
+                       for url in result[name])):
+            raise ValueError(f'{name} must list RAN2 meeting folder URLs such as .../TSGR2_135bis/')
     if not isinstance(result['meetings'], dict):
         raise ValueError('meetings must map a meeting such as "135bis" to its metadata')
     for key, value in result['meetings'].items():
@@ -99,7 +106,7 @@ def load_config() -> dict:
 def config_hash(cfg) -> str:
     # Where a document is found does not change how it is read; the manifest
     # already records the URL of every input.
-    return digest(json.dumps({k: v for k, v in cfg.items() if k != 'meeting_specific'},
+    return digest(json.dumps({k: v for k, v in cfg.items() if k not in FOLDER_KEYS},
                              sort_keys=True).encode())
 
 
@@ -162,26 +169,25 @@ def agenda_folder(folder: str, http) -> list[dict]:
     """A meeting's Agenda/ entries; [] while the folder holds only an Invitation.
 
     3GPP answers 403, not 404, for a folder that does not exist, so look first
-    instead of treating an access error as an empty folder.
+    instead of treating an access error as an empty folder. Portal can name a
+    meeting folder before it is made: an absent one is empty, not an error.
     """
-    if not any(e['name'].lower() == 'agenda' for e in fetch_listing(folder, http)):
+    try:
+        entries = fetch_listing(folder, http)
+    except httpx.HTTPError as exc:
+        if not remote_files.is_absent(exc):
+            raise
+        print(f'[ran2] Meeting folder absent: {folder}')
+        return []
+    if not any(e['name'].lower() == 'agenda' for e in entries):
         return []
     return fetch_listing(folder + 'Agenda/', http)
 
 
-def archive_folders(entries: list[dict]) -> dict[str, str]:
-    folders = {}
-    for entry in entries:
-        match = FOLDER.fullmatch(entry['name'] + '/')
-        if match:
-            folders[meeting_key(f'RAN2#{match[1]}{match[2] or ""}')] = entry['url'].rstrip('/') + '/'
-    return folders
-
-
-def meeting_folders(cfg) -> dict[str, str]:
-    """Configured meeting folders by meeting id."""
-    return archive_folders([{'name': url.rstrip('/').rsplit('/', 1)[-1], 'url': url}
-                            for url in cfg['meeting_specific']])
+def find_folders(cfg, meetings, rows, http) -> dict[str, str]:
+    """Meeting folders by meeting id; meeting_specific_override wins."""
+    return meeting_folders.resolve('ran2', meetings, rows=rows, override=cfg['meeting_specific_override'],
+                                   recorded=cfg['meeting_specific'], root=cfg['archive_url'], http=http)
 
 
 def schedule_candidates(entries: list[dict]) -> list[dict]:
@@ -202,11 +208,6 @@ def portal_rows() -> list[dict] | None:
     except (httpx.HTTPError, ValueError) as exc:
         print(f'[ran2] Portal unavailable ({exc}); using saved or configured meeting dates')
         return None
-
-
-def portal_key(row) -> str | None:
-    # Portal writes both "3GPPRAN2#135-bis" and "3GPP RAN2#132".
-    return meeting_key(re.sub(r'^3GPP\s+', '3GPP', str(row.get('Title') or '').strip()))
 
 
 def portal_metadata(rows: list[dict], meeting: str) -> dict | None:
@@ -323,16 +324,15 @@ def fetch_bundle(cfg, previous, http, *, rows=None, today=None, cache_dir=DOWNLO
         print(f'[ran2] Sync folder unreadable ({exc}); reading the meeting folder')
         entries, sync_error = [], exc
     dates = meeting_dates(cfg, rows, previous)
-    archive = meeting_folders(cfg)
-    if not any(m in dates and dates[m][1] >= today for m in archive):
-        # No configured folder for a meeting still to come: find it in the archive.
-        archive = {**archive_folders(fetch_listing(cfg['archive_url'], http)), **archive}
-    # Archive folders worth listing: meetings that have not ended yet, plus
-    # the last built one (its Agenda folder holds agenda.csv after the event).
-    upcoming = sorted((start, m) for m, (start, end) in dates.items() if end >= today and m in archive)
+    # Archive folders worth listing: the next two meetings that have not
+    # ended, plus the last built one (its Agenda folder holds agenda.csv
+    # after the event). Folders found once are remembered per meeting.
+    upcoming = sorted((start, m) for m, (start, end) in dates.items() if end >= today)
     wanted = [m for _, m in upcoming[:2]]
-    if previous.get('meeting_id') in archive and previous['meeting_id'] not in wanted:
+    if previous.get('meeting_id') and previous['meeting_id'] not in wanted:
         wanted.append(previous['meeting_id'])
+    archive = find_folders(cfg, wanted, rows, http)
+    wanted = [m for m in wanted if m in archive]
     listed = {}
     for meeting in wanted:
         listed[meeting] = agenda_folder(archive[meeting], http)
@@ -347,6 +347,9 @@ def fetch_bundle(cfg, previous, http, *, rows=None, today=None, cache_dir=DOWNLO
               f"and {chosen['name']} is not newer")
         return sync_warnings(kept, sync_error, dates, today)
     meeting = chosen['meeting_id']
+    if meeting not in listed:
+        # A meeting known only from the sync folder (Portal unavailable).
+        archive.update(find_folders(cfg, [meeting], rows, http))
     if meeting not in listed and meeting in archive:
         listed[meeting] = agenda_folder(archive[meeting], http)
     agenda_entry = next((e for e in listed.get(meeting, []) if e['name'].lower() == 'agenda.csv'), None)

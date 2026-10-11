@@ -4,6 +4,7 @@
   "meeting_specific": [
     "https://www.3gpp.org/ftp/tsg_ran/WG2_RL2/TSGR2_135bis/"
   ],
+  "meeting_specific_override": [],
   "llm_fallback": true,
   "model": "gemini-3.8-flash",
   "local_agenda": null,

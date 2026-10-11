@@ -379,14 +379,11 @@ def listing(names, base='https://www.3gpp.org/ftp/x/'):
     return f'<table>{rows}</table>'
 
 
-def test_listing_parses_names_times_and_meeting_folders():
-    entries = sources.listing_entries(listing(['TSGR2_135bis/', 'TSGR2_133b/', 'TSGR2_99/', 'Invitation/']),
+def test_listing_parses_names_and_times():
+    entries = sources.listing_entries(listing(['TSGR2_135bis/', 'Invitation/']),
                                       'https://www.3gpp.org/ftp/tsg_ran/WG2_RL2/')
     assert entries[0]['uploaded_at'] == '2026-09-30 08:32'
-    assert sources.archive_folders(entries) == {
-        'ran2#135bis': 'https://www.3gpp.org/ftp/x/TSGR2_135bis/',
-        'ran2#133bis': 'https://www.3gpp.org/ftp/x/TSGR2_133b/',
-        'ran2#99': 'https://www.3gpp.org/ftp/x/TSGR2_99/'}
+    assert [e['name'] for e in entries] == ['TSGR2_135bis', 'Invitation']
     assert sources.rank('ran2#135') < sources.rank('ran2#135bis') < sources.rank('ran2#136')
 
 
@@ -471,8 +468,15 @@ def test_fetch_bundle_reads_the_upcoming_archive_folder_and_its_agenda(tmp_path,
     assert bundle.schedule == files[archive + 'TSGR2_135bis/Agenda/' + BIS]
     assert bundle.manifest['agenda']['url'].endswith('TSGR2_135bis/Agenda/agenda.csv')
     assert bundle.manifest['portal_metadata']['timezone'] == 'Asia/Seoul'
-    # A real access error is not mistaken for an empty future folder.
-    with mock_server({}) as http, pytest.raises(httpx.HTTPStatusError):
+    # An absent meeting folder is not an error, but with nothing to build from the check says so.
+    sources.remote_files.new_run()
+    with mock_server({}) as http, pytest.raises(ValueError, match='No RAN2 session schedule'):
+        sources.fetch_bundle(sources.DEFAULTS, {}, http, rows=rows, today='2026-10-05', cache_dir=tmp_path / 'inputs')
+    # A real failure of the meeting folder still is.
+    sources.remote_files.new_run()
+    monkeypatch.setattr(sources.remote_files.ftp_transport, 'ftp_response', lambda url, **k: (_ for _ in ()).throw(
+        httpx.ConnectError('FTP fallback failed: timed out', request=httpx.Request('GET', url))))
+    with mock_server({sync: b''}, blocked={archive + 'TSGR2_135bis/'}) as http, pytest.raises(httpx.ConnectError):
         sources.fetch_bundle(sources.DEFAULTS, {}, http, rows=rows, today='2026-10-05', cache_dir=tmp_path / 'inputs')
 
 
@@ -490,7 +494,7 @@ def blocked_sync(tmp_path, monkeypatch):
     def no_ftp(url, **kwargs):
         raise httpx.ConnectError(f'FTP fallback failed for {url}: timed out', request=httpx.Request('GET', url))
     monkeypatch.setattr(sources.remote_files.ftp_transport, 'ftp_response', no_ftp)
-    return {**sources.DEFAULTS, 'meeting_specific': [FOLDER_135BIS]}
+    return {**sources.DEFAULTS, 'meeting_specific_override': [FOLDER_135BIS]}
 
 
 def test_blocked_sync_folder_falls_back_to_the_configured_meeting_folder(blocked_sync, tmp_path):
@@ -516,7 +520,7 @@ def test_an_absent_sync_folder_is_normal(tmp_path, monkeypatch):
                         lambda *a, **k: pytest.fail('an absent folder is not read over FTP'))
     files = {FOLDER_135BIS + 'Agenda/' + BIS: (FIXTURES / BIS).read_bytes()}
     seen = []
-    cfg = {**sources.DEFAULTS, 'meeting_specific': [FOLDER_135BIS]}
+    cfg = {**sources.DEFAULTS, 'meeting_specific_override': [FOLDER_135BIS]}
     with mock_server(files, seen=seen) as http:
         bundle = sources.fetch_bundle(cfg, {}, http, rows=ROWS_135BIS, today='2026-10-13',
                                       cache_dir=tmp_path / 'inputs')
@@ -531,7 +535,7 @@ def test_a_vanished_sync_version_is_kept_instead_of_stepping_back(tmp_path, monk
     with mock_server({live: b'live v03'}) as http:
         _, info = sources.remote_files.fetch_file(http, live)
     previous = {'meeting_id': 'ran2#135bis', 'version': 3, 'schedule': info, 'agenda': None}
-    cfg = {**sources.DEFAULTS, 'meeting_specific': [FOLDER_135BIS]}
+    cfg = {**sources.DEFAULTS, 'meeting_specific_override': [FOLDER_135BIS]}
     folder = {FOLDER_135BIS + 'Agenda/' + BIS: (FIXTURES / BIS).read_bytes()}
     # v03 is being replaced (or the sync folder was emptied): only the meeting folder's v00 is listed.
     for files in ({SYNC + 'other.txt': b'x', **folder}, folder):
@@ -575,7 +579,9 @@ def test_configured_folder_for_an_ended_meeting_still_finds_the_next_one(blocked
     with mock_server(files, blocked={SYNC}, seen=seen) as http:
         bundle = sources.fetch_bundle(blocked_sync, {}, http, rows=rows, today='2026-10-20',
                                       cache_dir=tmp_path / 'inputs')
-    assert bundle.manifest['meeting_id'] == 'ran2#136' and ARCHIVE in seen
+    # Found by its name; the archive root (several hundred entries) is not listed.
+    assert bundle.manifest['meeting_id'] == 'ran2#136' and ARCHIVE not in seen
+    assert ARCHIVE + 'TSGR2_136/' in seen
 
 
 def test_blocked_sync_folder_keeps_a_newer_built_sync_copy(blocked_sync, tmp_path):
@@ -619,11 +625,12 @@ def test_config_rejects_unknown_keys_and_bad_meetings(tmp_path, monkeypatch):
         sources.load_config()
     path.write_text(json.dumps({'meetings': {'135bis': {'timezone': 'Asia/Seoul'}}}))
     assert sources.override_for(sources.load_config(), 'ran2#135bis') == {'timezone': 'Asia/Seoul'}
-    path.write_text(json.dumps({'meeting_specific': ['https://www.3gpp.org/ftp/tsg_ran/WG2_RL2/Inbox/']}))
+    path.write_text(json.dumps({'meeting_specific_override': ['https://www.3gpp.org/ftp/tsg_ran/WG2_RL2/Inbox/']}))
     with pytest.raises(ValueError, match='meeting_specific'):
         sources.load_config()
     # Folder URLs only decide where documents are found, not how they are read.
-    assert sources.config_hash({**sources.DEFAULTS, 'meeting_specific': [FOLDER_135BIS]}) == \
+    assert sources.config_hash({**sources.DEFAULTS, 'meeting_specific_override': [FOLDER_135BIS]}) == \
+        sources.config_hash({**sources.DEFAULTS, 'meeting_specific': [FOLDER_135BIS]}) == \
         sources.config_hash(sources.DEFAULTS)
 
 

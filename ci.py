@@ -22,7 +22,7 @@ PLAN_PATH = Path('.ci/plan.json')
 # Folder listings check fetched; build reads the same view instead of listing again.
 LISTINGS_PATH = Path('.ci/listings.json')
 COMMON_INPUTS = tuple(map(Path, ('shared/schedule.py', 'shared/lifecycle.py',
-    'shared/portal_meetings.py', 'shared/docx_html.py', 'shared/docx_math.py', 'shared/metafile_images.py', 'shared/wmf2svg.py', 'shared/vendor', 'shared/ftp_transport.py', 'shared/remote_files.py', 'working_groups/registry.py', 'pyproject.toml', 'uv.lock')))
+    'shared/portal_meetings.py', 'shared/meeting_folders.py', 'shared/docx_html.py', 'shared/docx_math.py', 'shared/metafile_images.py', 'shared/wmf2svg.py', 'shared/vendor', 'shared/ftp_transport.py', 'shared/remote_files.py', 'working_groups/registry.py', 'pyproject.toml', 'uv.lock')))
 SITE_INPUTS = tuple(map(Path, ('shared/renderer.py', 'shared/agreement_assets.py', 'shared/topic_references.py', 'shared/navigation.py',
     'shared/site_config.py', 'shared/page.py', 'templates', 'build.py', 'ci.py')))
 
@@ -42,6 +42,24 @@ def write_json(path, value):
     temporary.replace(path)
 
 
+def _content(path):
+    """File bytes, without the meeting folders a run records in a WG config.json.
+
+    Each run writes meeting_specific (shared/meeting_folders.py); recording a
+    folder is not a configuration change and must not invalidate the plan.
+    """
+    data = path.read_bytes()
+    if path.name == 'config.json' and path.parent.parent == Path('working_groups'):
+        try:
+            config = json.loads(data)
+            if isinstance(config, dict):
+                config.pop('meeting_specific', None)
+                return json.dumps(config, sort_keys=True).encode()
+        except ValueError:
+            pass
+    return data
+
+
 def fingerprint(paths):
     """Content hashes work identically on check and fresh build runners."""
     digest = hashlib.sha256()
@@ -51,7 +69,7 @@ def fingerprint(paths):
             if '__pycache__' in path.parts or path.suffix in {'.pyc', '.pyo'}:
                 continue
             if path.is_file():
-                digest.update(str(path).encode() + b'\0' + path.read_bytes() + b'\0')
+                digest.update(str(path).encode() + b'\0' + _content(path) + b'\0')
     return digest.hexdigest()
 
 
@@ -65,10 +83,12 @@ def site_fingerprint(config):
 
 def check_site(config_path=Path('site.json')):
     config = load_site_config(config_path)
+    from shared import meeting_folders
     from shared.portal_meetings import clear_meetings_cache
     from shared.remote_files import new_run
     clear_meetings_cache()
     new_run()
+    meeting_folders.new_run()
     meetings = fetch_site_meetings()
     previous = read_json(STATE_PATH)
     shutil.rmtree('.ci/transfers', ignore_errors=True)
@@ -78,7 +98,7 @@ def check_site(config_path=Path('site.json')):
     for entry in config['working_groups']:
         wg = entry['id']
         reasons, errors = [], []
-        input_hash = None
+        input_hash = recorded = None
         changed = False
         try:
             group = get_working_group(wg)
@@ -91,6 +111,10 @@ def check_site(config_path=Path('site.json')):
             errors.extend(result.errors)
             if previous.get('groups', {}).get(wg) != input_hash:
                 reasons.append('WG code, configuration or dependencies changed')
+            # Only the build job commits: it writes the recorded meeting_specific
+            # again from the plan, since a prepared bundle is not looked up again.
+            reasons.extend(meeting_folders.updates(wg))
+            recorded = meeting_folders.written(wg)
             snapshot = Path('docs') / wg / 'schedule.json'
             try:
                 if load_schedule(snapshot).wg_id != wg:
@@ -104,6 +128,8 @@ def check_site(config_path=Path('site.json')):
             plan['build_ids'].append(wg)
         plan['groups'][wg] = {'status': 'error' if errors else 'changed' if reasons else 'unchanged',
                               'input_fingerprint': input_hash, 'reasons': reasons, 'errors': errors}
+        if recorded is not None:
+            plan['groups'][wg]['meeting_specific'] = recorded
         print(f'[{wg}] {plan["groups"][wg]["status"]}: {reasons or errors or "no changes"}')
     missing_html = any(not (Path('docs') / g['id'] / 'index.html').exists() for g in config['working_groups'])
     plan['render_required'] = (previous.get('site') != plan['site_fingerprint'] or missing_html
@@ -139,6 +165,8 @@ def public_digest():
 
 
 def build_site(action='check-build-deploy', config_path=Path('site.json'), plan_path=PLAN_PATH):
+    from shared import meeting_folders
+    meeting_folders.new_run()
     config = load_site_config(config_path)
     paths = [Path('docs')]
     for group in config['working_groups']:
@@ -184,6 +212,9 @@ def _build_site(action, config, plan_path):
             if plan is not None and plan['groups'][wg]['input_fingerprint'] != input_hash:
                 raise ValueError('WG inputs changed after check; refusing stale plan')
             with preserve_on_failure(group.persistent_paths):
+                if plan is not None and 'meeting_specific' in plan['groups'][wg]:
+                    from shared import meeting_folders
+                    meeting_folders.write(wg, plan['groups'][wg]['meeting_specific'])
                 if action == 'force-deploy':
                     group.reset_cache()
                 else:

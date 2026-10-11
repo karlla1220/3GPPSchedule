@@ -3,6 +3,7 @@
   "meeting_specific": [
     "https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_126b/"
   ],
+  "meeting_specific_override": [],
   "extra_folders": [],
   "extra_files": []
 }
