@@ -902,7 +902,7 @@ def parse_time_slots(
     # a cold rebuild costs about as long as its slowest slot, not their sum.
     # A failure surfaces only after the pool drains, and before any slot
     # state is written, so a failed run leaves every slot as it was.
-    results: dict[int, dict] = {}
+    results: dict[int, tuple[dict, float]] = {}
     if jobs:
         from concurrent.futures import ThreadPoolExecutor
 
@@ -913,30 +913,31 @@ def parse_time_slots(
         with ThreadPoolExecutor(max_workers=SLOT_CONCURRENCY) as pool:
             futures = {job[0]: pool.submit(_call, job) for job in jobs}
         for job in jobs:
-            slot_idx, slot, mode, _, _, freshness_str = job
-            parsed_result, seconds = futures[slot_idx].result()
-            results[slot_idx] = parsed_result
-            print(
-                f"  [{slot_idx+1}/{total}] {_slot_label(slot)} "
-                f"sources: {freshness_str} → {mode} "
-                f"({len(slot.sources)} sources, "
-                f"{sum(len(s.entries) for s in slot.sources)} entries) "
-                f"{seconds:.1f}s"
-            )
+            results[job[0]] = futures[job[0]].result()
 
     # ── Assemble in slot order.
+    jobs_by_slot = {job[0]: job for job in jobs}
     all_sessions: list[Session] = []
     n_skipped = 0
     for slot_idx, slot in enumerate(time_slots):
         _, alias_to_name = build_room_aliases(day_rooms_map.get(slot.day, []))
         if slot_idx in results:
-            parsed_result = results[slot_idx]
+            parsed_result, seconds = results[slot_idx]
         else:
             parsed_result = {"sessions": slot.previous_merge}
             n_skipped += 1
         sessions = _finish(slot, parsed_result, alias_to_name)
         all_sessions.extend(sessions)
-        if slot_idx not in results:
+        if slot_idx in results:
+            _, _, mode, _, _, freshness_str = jobs_by_slot[slot_idx]
+            print(
+                f"  [{slot_idx+1}/{total}] {_slot_label(slot)} "
+                f"sources: {freshness_str} → {mode} "
+                f"({len(slot.sources)} sources, "
+                f"{sum(len(s.entries) for s in slot.sources)} entries) "
+                f"{seconds:.1f}s, {len(sessions)} sessions"
+            )
+        else:
             print(
                 f"  [{slot_idx+1}/{total}] {_slot_label(slot)} → skipped "
                 f"(cached, {len(sessions)} sessions)"
