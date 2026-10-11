@@ -264,3 +264,28 @@ def test_a_connection_failure_sends_the_rest_of_the_host_to_ftp(ftp):
         ftp_transport.get(CHAIR, http=http, listing=True)
         ftp_transport.get(sources.DEFAULTS['agenda_url'], http=http)
     assert seen == [CHAIR, CHAIR]
+
+
+def test_a_run_without_failures_never_opens_ftp(ftp, monkeypatch, tmp_path):
+    from shared import ftp_transport, remote_files
+    monkeypatch.setattr(remote_files, 'CACHE_DIR', tmp_path / 'cache')
+    def ok(request):
+        if request.headers.get('if-none-match') == '"v1"':
+            return httpx.Response(304)
+        return httpx.Response(200, content=b'body', headers={'etag': '"v1"'})
+    @contextmanager
+    def streamed(method, url, **kwargs):
+        yield httpx.Response(200, stream=httpx.ByteStream(b'body'), request=httpx.Request(method, url))
+    monkeypatch.setattr(httpx, 'stream', streamed)
+    with httpx.Client(transport=httpx.MockTransport(ok)) as http:
+        remote_files.get_listing(CHAIR, http=http)
+        remote_files.fetch_file(http, CHAIR + 'a.zip')
+        remote_files.fetch_file(http, CHAIR + 'a.zip')  # revalidated: 304
+        for status in (403, 404):  # an ordinary 403 is an answer, not a failure to route around
+            with httpx.Client(transport=httpx.MockTransport(lambda _: httpx.Response(status))) as other:
+                assert ftp_transport.get(CHAIR + 'missing/', http=other).status_code == status
+    with ftp_transport.stream('GET', CHAIR + 'b.zip') as response:
+        assert response.read() == b'body'
+    remote_files.new_run()
+    ftp_transport.close_session()
+    assert ftp.calls == []

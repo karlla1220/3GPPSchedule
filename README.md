@@ -185,6 +185,9 @@ python3 -m http.server 8000 --directory docs
 uv run pytest -q
 ```
 
+회귀 테스트는 머지 전에 직접 돌립니다. 20분마다 도는 Build and Deploy는 테스트를 돌리지 않습니다.
+CI에서 테스트가 도는 곳은 `network-check.yml`뿐이고, 3GPP 전송 코드(`shared/ftp_transport.py`, `shared/remote_files.py` 등)가 바뀌어 push될 때만 돕니다.
+
 루트는 활성 WG 중 실제 저장된 스케줄의 미팅 번호와 Portal `ONGOING` 항목이
 일치하는 WG로 이동합니다. 동시에 개최 중이면 `site.json`의 `default_wg`를 우선하고,
 그 WG가 개최 중이 아니면 `working_groups` 순서를 따릅니다. 일치하는 개최 중 미팅이
