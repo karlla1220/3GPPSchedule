@@ -103,7 +103,7 @@ async function start() {
             const source = version(section.changed_in);
             if (section.change === 'initial') return 'As of ' + when(section.changed_at) + (source ? ' · ' + source : '');
             const label = section.change === 'new' ? 'Added ' : 'Updated ';
-            const parts = section.added ? ' · ' + section.added + (section.added === 1 ? ' added part' : ' added parts') + ' highlighted' : '';
+            const parts = section.added ? ' · ' + section.added + (section.added === 1 ? ' added part' : ' added parts') + ' marked' : '';
             return label + when(section.changed_at) + (source ? ' · ' + source : '') + parts;
         };
         const keyTab = (event, ai) => {
