@@ -185,6 +185,9 @@ python3 -m http.server 8000 --directory docs
 uv run pytest -q
 ```
 
+회귀 테스트는 머지 전에 직접 돌립니다. 20분마다 도는 Build and Deploy는 테스트를 돌리지 않습니다.
+CI에서 테스트가 도는 곳은 `network-check.yml`뿐이고, 3GPP 전송 코드(`shared/ftp_transport.py`, `shared/remote_files.py` 등)가 바뀌어 push될 때만 돕니다.
+
 루트는 활성 WG 중 실제 저장된 스케줄의 미팅 번호와 Portal `ONGOING` 항목이
 일치하는 WG로 이동합니다. 동시에 개최 중이면 `site.json`의 `default_wg`를 우선하고,
 그 WG가 개최 중이 아니면 `working_groups` 순서를 따릅니다. 일치하는 개최 중 미팅이
@@ -320,6 +323,15 @@ Gemini가 다시 읽되, 원문으로 확인되는 답만 씁니다(아래 "LLM 
   `tsg_ran/WG2_RL2/TSGR2_<미팅>/Agenda/`(회의 전 v00과 `agenda.csv`)를 함께 봅니다.
   아카이브 폴더는 Portal에서 끝나지 않은 다음 두 미팅과 마지막으로 빌드한 미팅만 조회합니다.
   3GPP는 없는 폴더에 404가 아니라 403을 주므로, 미팅 폴더 목록에 `Agenda`가 있을 때만 엽니다.
+- **보조 폴더는 `config.json`의 `meeting_specific`에 적습니다.** RAN1과 같은 이름이고, 값은
+  `https://www.3gpp.org/ftp/tsg_ran/WG2_RL2/TSGR2_135bis/`처럼 미팅 폴더입니다.
+  적힌 폴더 중 끝나지 않은 미팅이 있으면 수백 항목인 `WG2_RL2/` 루트 목록을 받지 않습니다.
+  모두 끝난 미팅이면 루트에서 다음 미팅을 찾으므로, 다음 미팅으로 바꾸기 전에도 멈추지 않습니다.
+  폴더 위치만 바꾸므로 `config_hash`에 넣지 않습니다(바꿔도 재빌드하지 않습니다).
+- **sync 폴더를 읽지 못하면 미팅 폴더로 계속합니다.** 2026-10-11부터 3GPP 방화벽이 sync 폴더에 403을 줍니다.
+  - sync 목록을 HTTPS와 FTP 모두로 받지 못하면 경고만 남기고 미팅 폴더의 사본을 씁니다.
+  - 이미 sync에서 받아 빌드한 판이 미팅 폴더의 판보다 같거나 새로우면 그 판을 그대로 둡니다. 미팅 폴더는 sync보다 늦게 올라오므로 옛 판으로 되돌아가지 않게 하려는 것입니다.
+  - 그 판의 원본이 `.cache/3gpp/`에 없거나, 미팅 폴더에 schedule이 없으면 sync 오류를 그대로 보고합니다.
 - **현재 미팅은 Portal 날짜로 정합니다.** 아직 끝나지 않은 미팅 중 가장 이른 미팅의 schedule을
   씁니다. 진행 중인 RAN2#135bis가 있으면 일찍 올라온 RAN2#136 v00으로 넘어가지 않습니다.
   끝나지 않은 미팅에 schedule이 없으면 가장 높은 미팅(`#135 < #135bis < #136`)을 유지합니다.
@@ -517,6 +529,18 @@ ETSI 등 외부 호스트는 기록된 URL의 파일명이 존재하고 로컬 �
 CI 변경 감지는 각 URL에 대응하는 커밋된 파일의 **콘텐츠 sha256**을 `docs/ran1/.extra_files_state.json`과 비교해 동작합니다(`check_update.py`). 헤더(ETag/Last-Modified) 비교는 ETSI가 해당 헤더를 제공하지 않아 사용하지 않으며, `ref_in_manual`과 동일한 콘텐츠 해시 방식을 따릅니다.
 
 공개 3GPP 파일 URL은 예외로, 공통 라이브러리의 HTTP 조건부 요청/FTP 메타데이터 비교로 재검증합니다. 같은 URL에 덮어쓴 변경도 확인하며, 변경 없는 본문은 `.cache/3gpp/`에서 재사용합니다.
+
+3GPP 요청은 모두 `shared/ftp_transport.py`를 지납니다.
+
+- 5xx나 연결 오류면 HTTPS를 1초 뒤 한 번 더 시도하고, 그래도 실패하면 익명 FTP(`ftp.3gpp.org`)로 같은 경로를 받습니다.
+- 3GPP 방화벽(WAF)의 차단 페이지가 담긴 403은 HTTPS를 다시 시도하지 않고 바로 FTP로 받습니다. 차단된 요청을 반복하지 않기 위해서입니다.
+- 그 밖의 403은 그대로 HTTP 오류입니다. 3GPP는 없는 폴더에도 403을 주므로 FTP로 넘기지 않습니다.
+- FTP로 받을 때는 한 실행에서 FTP 접속 하나(로그인 한 번)를 계속 씁니다. 서버가 idle로 끊은 연결은 한 번만 다시 엽니다.
+- 한 실행에서 HTTPS가 실패한 곳은 다시 HTTPS로 요청하지 않고 바로 FTP로 받습니다. 5xx나 방화벽 403이면 그 폴더, 연결·TLS 실패면 호스트 전체가 대상입니다. 다음 실행은 다시 HTTPS부터 시도합니다.
+- 폴더 목록은 한 실행에서 URL마다 한 번만 받습니다(`remote_files.get_listing`). RAN1은 Inbox와 Chair_notes를 여러 곳에서 읽는데, 두 번째부터는 받은 목록을 씁니다. 실패한 목록은 기억하지 않고, `ci.py check`는 시작할 때 비웁니다.
+- **build는 같은 workflow의 check가 받은 목록과 Portal 결과를 씁니다.** check가 `.ci/listings.json`과 `.ci/plan.json`의 `portal_meetings`에 남기고, build job이 artifact로 받아 다시 조회하지 않습니다. check가 판단한 것과 같은 목록으로 빌드하게 됩니다. 파일 본문은 전부터 `.cache/3gpp/`를 재사용해 조건부 요청(304)만 보냅니다.
+- Portal 회의 목록도 한 프로세스에서 한 번(`get_meetings`)이고, 모든 WG가 같은 결과를 씁니다. RAN P도 따로 조회하지 않습니다.
+- User-Agent는 `3GPPSchedule/1.0 (+https://github.com/karlla1220/3GPPSchedule)` 하나입니다. 공유 클라이언트 없이 부르는 RAN1 요청도 같은 값을 보냅니다. Portal과 ETSI 같은 외부 호스트는 각자의 헤더를 씁니다.
 
 ETSI 등 외부 호스트의 파일 요청은 다음과 같이 동작합니다.
 

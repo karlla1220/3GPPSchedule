@@ -19,6 +19,8 @@ from working_groups.registry import get_working_group
 
 STATE_PATH = Path('docs/.build_state.json')
 PLAN_PATH = Path('.ci/plan.json')
+# Folder listings check fetched; build reads the same view instead of listing again.
+LISTINGS_PATH = Path('.ci/listings.json')
 COMMON_INPUTS = tuple(map(Path, ('shared/schedule.py', 'shared/lifecycle.py',
     'shared/portal_meetings.py', 'shared/docx_html.py', 'shared/docx_math.py', 'shared/metafile_images.py', 'shared/wmf2svg.py', 'shared/vendor', 'shared/ftp_transport.py', 'shared/remote_files.py', 'working_groups/registry.py', 'pyproject.toml', 'uv.lock')))
 SITE_INPUTS = tuple(map(Path, ('shared/renderer.py', 'shared/agreement_assets.py', 'shared/topic_references.py', 'shared/navigation.py',
@@ -64,7 +66,9 @@ def site_fingerprint(config):
 def check_site(config_path=Path('site.json')):
     config = load_site_config(config_path)
     from shared.portal_meetings import clear_meetings_cache
+    from shared.remote_files import new_run
     clear_meetings_cache()
+    new_run()
     meetings = fetch_site_meetings()
     previous = read_json(STATE_PATH)
     shutil.rmtree('.ci/transfers', ignore_errors=True)
@@ -110,6 +114,8 @@ def check_site(config_path=Path('site.json')):
     plan['build_required'] = bool(plan['build_ids'] or plan['render_required'])
     plan['has_errors'] = any(g['errors'] for g in plan['groups'].values())
     write_json(PLAN_PATH, plan)
+    from shared.remote_files import save_listings
+    save_listings(LISTINGS_PATH)
     return plan
 
 
@@ -154,6 +160,11 @@ def _build_site(action, config, plan_path):
         targets = plan['build_ids']
         if not set(targets).issubset(enabled):
             raise ValueError('CI plan contains an inactive WG')
+        from shared.portal_meetings import use_meetings
+        from shared.remote_files import load_listings
+        print(f'Reusing {load_listings(plan_path.parent / LISTINGS_PATH.name)} folder listing(s) from check')
+        if plan.get('portal_meetings') is not None:
+            use_meetings(plan['portal_meetings'])
     else:
         targets = enabled
     before_public = public_digest()

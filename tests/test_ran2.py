@@ -2,6 +2,7 @@
 import io
 import json
 from pathlib import Path
+import shutil
 import subprocess
 import sys
 from types import SimpleNamespace
@@ -427,10 +428,17 @@ def test_portal_titles_with_and_without_space():
     assert sources.portal_metadata(rows, 'ran2#136') is None
 
 
-def mock_server(files):
-    """3GPP-like server: listings for folders, 403 for missing paths."""
+FIREWALL = b'<html><body>This transfer is blocked by a Web Application Firewall.</body></html>'
+
+
+def mock_server(files, blocked=(), seen=None):
+    """3GPP-like server: listings for folders, 403 for missing paths, the firewall page for blocked ones."""
     def handler(request):
         url = str(request.url)
+        if seen is not None:
+            seen.append(url)
+        if url in blocked:
+            return httpx.Response(403, content=FIREWALL)
         if url.endswith('/'):
             names = sorted({u[len(url):].split('/')[0] + ('/' if '/' in u[len(url):] else '')
                             for u in files if u.startswith(url) and u != url})
@@ -468,6 +476,70 @@ def test_fetch_bundle_reads_the_upcoming_archive_folder_and_its_agenda(tmp_path,
         sources.fetch_bundle(sources.DEFAULTS, {}, http, rows=rows, today='2026-10-05', cache_dir=tmp_path / 'inputs')
 
 
+SYNC = 'https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN2/Agenda/'
+ARCHIVE = 'https://www.3gpp.org/ftp/tsg_ran/WG2_RL2/'
+FOLDER_135BIS = ARCHIVE + 'TSGR2_135bis/'
+ROWS_135BIS = [{'Title': '3GPPRAN2#135-bis', 'TBId': 380, 'Id': 1, 'StartDate': '2026-10-12 09:00:00',
+                'EndDate': '2026-10-16 17:30:00', 'StartTimeZone': '(GMT+09:00) Seoul', 'Country': 'KR'}]
+
+
+@pytest.fixture
+def blocked_sync(tmp_path, monkeypatch):
+    """The sync folder answers with the firewall page and FTP is unreachable."""
+    monkeypatch.setattr(sources.remote_files, 'CACHE_DIR', tmp_path / 'cache')
+    def no_ftp(url, **kwargs):
+        raise httpx.ConnectError(f'FTP fallback failed for {url}: timed out', request=httpx.Request('GET', url))
+    monkeypatch.setattr(sources.remote_files.ftp_transport, 'ftp_response', no_ftp)
+    return {**sources.DEFAULTS, 'meeting_specific': [FOLDER_135BIS]}
+
+
+def test_blocked_sync_folder_falls_back_to_the_configured_meeting_folder(blocked_sync, tmp_path):
+    files = {FOLDER_135BIS + 'Agenda/' + BIS: (FIXTURES / BIS).read_bytes(),
+             FOLDER_135BIS + 'Agenda/agenda.csv': (FIXTURES / 'agenda_135bis.csv').read_bytes(),
+             ARCHIVE + 'TSGR2_136/Invitation/x.doc': b'invitation'}
+    seen = []
+    with mock_server(files, blocked={SYNC}, seen=seen) as http:
+        bundle = sources.fetch_bundle(blocked_sync, {}, http, rows=ROWS_135BIS, today='2026-10-11',
+                                      cache_dir=tmp_path / 'inputs')
+    assert (bundle.manifest['meeting_id'], bundle.manifest['version']) == ('ran2#135bis', 0)
+    assert bundle.manifest['agenda']['url'] == FOLDER_135BIS + 'Agenda/agenda.csv'
+    # One request to the blocked folder, and the archive root is not listed.
+    assert seen.count(SYNC) == 1 and ARCHIVE not in seen
+
+
+def test_configured_folder_for_an_ended_meeting_still_finds_the_next_one(blocked_sync, tmp_path):
+    files = {FOLDER_135BIS + 'Agenda/' + BIS: (FIXTURES / BIS).read_bytes(),
+             ARCHIVE + 'TSGR2_136/Agenda/R2_136_Schedule_v00.docx': b'next'}
+    rows = ROWS_135BIS + [{'Title': '3GPPRAN2#136', 'TBId': 380, 'Id': 2, 'StartDate': '2026-11-16 09:00:00',
+                           'EndDate': '2026-11-20 17:30:00'}]
+    seen = []
+    with mock_server(files, blocked={SYNC}, seen=seen) as http:
+        bundle = sources.fetch_bundle(blocked_sync, {}, http, rows=rows, today='2026-10-20',
+                                      cache_dir=tmp_path / 'inputs')
+    assert bundle.manifest['meeting_id'] == 'ran2#136' and ARCHIVE in seen
+
+
+def test_blocked_sync_folder_keeps_a_newer_built_sync_copy(blocked_sync, tmp_path):
+    live = SYNC + 'R2_135b_Schedule_v01.docx'
+    with mock_server({live: b'live v01'}) as http:
+        _, info = sources.remote_files.fetch_file(http, live)
+    previous = {'meeting_id': 'ran2#135bis', 'version': 1, 'schedule': {**info, 'uploaded_at': '2026-10-12 08:00'},
+                'agenda': None}
+    files = {FOLDER_135BIS + 'Agenda/' + BIS: (FIXTURES / BIS).read_bytes()}
+    seen = []
+    with mock_server(files, blocked={SYNC}, seen=seen) as http:
+        bundle = sources.fetch_bundle(blocked_sync, previous, http, rows=ROWS_135BIS, today='2026-10-12',
+                                      cache_dir=tmp_path / 'inputs')
+    # The archive's v00 does not replace the built v01, and v01 is not requested again.
+    assert bundle.schedule == b'live v01' and bundle.manifest['schedule'] == previous['schedule']
+    assert bundle.manifest['portal_metadata']['timezone'] == 'Asia/Seoul' and live not in seen
+    # Without the stored body the sync error is reported instead of stepping back.
+    shutil.rmtree(tmp_path / 'cache')
+    with mock_server(files, blocked={SYNC}) as http, pytest.raises(httpx.ConnectError, match='firewall'):
+        sources.fetch_bundle(blocked_sync, previous, http, rows=ROWS_135BIS, today='2026-10-12',
+                             cache_dir=tmp_path / 'inputs')
+
+
 def test_bundle_cache_rejects_corruption(tmp_path):
     bundle = sources.Bundle({'schedule': {'sha256': sources.digest(b'docx')}, 'agenda': None}, b'docx', b'')
     bundle.save(tmp_path)
@@ -488,6 +560,12 @@ def test_config_rejects_unknown_keys_and_bad_meetings(tmp_path, monkeypatch):
         sources.load_config()
     path.write_text(json.dumps({'meetings': {'135bis': {'timezone': 'Asia/Seoul'}}}))
     assert sources.override_for(sources.load_config(), 'ran2#135bis') == {'timezone': 'Asia/Seoul'}
+    path.write_text(json.dumps({'meeting_specific': ['https://www.3gpp.org/ftp/tsg_ran/WG2_RL2/Inbox/']}))
+    with pytest.raises(ValueError, match='meeting_specific'):
+        sources.load_config()
+    # Folder URLs only decide where documents are found, not how they are read.
+    assert sources.config_hash({**sources.DEFAULTS, 'meeting_specific': [FOLDER_135BIS]}) == \
+        sources.config_hash(sources.DEFAULTS)
 
 
 # ----------------------------------------------------------- pipeline and CI

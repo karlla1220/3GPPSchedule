@@ -3,6 +3,7 @@
 FTP is unencrypted. Never forward HTTP credentials, headers or query strings.
 The response retains the HTTPS identity so a transport change is not an update.
 """
+import atexit
 from contextlib import contextmanager, ExitStack
 from datetime import datetime, timezone
 from email.utils import format_datetime
@@ -10,13 +11,30 @@ import ftplib
 from html import escape
 import logging
 import re
+import threading
 import time
 from urllib.parse import quote, unquote, urlsplit
 
 import httpx
 
+# Every request to 3GPP names this project and where to reach its maintainer,
+# including calls made without the shared client (httpx would send its own).
+USER_AGENT = '3GPPSchedule/1.0 (+https://github.com/karlla1220/3GPPSchedule)'
 _RETRY_STATUS = {500, 502, 503, 504, 520, 521, 522, 523, 524, 525, 526}
+# 3GPP's web application firewall answers some paths with 403 and its own page
+# (Cloudflare in front of IIS). Retrying HTTPS only repeats the blocked request.
+_FIREWALL_PAGE = b'blocked by a web application firewall'
+_FIREWALL_PAGE_BYTES = 256 * 1024
 _MAX_BYTES = 64 * 1024 * 1024
+# One anonymous FTP login serves every fallback in a run, instead of a new
+# connection and login per file or folder.
+_session = None
+_session_lock = threading.Lock()
+# URL prefixes whose HTTPS already failed in this run: a folder after a 5xx or
+# a firewall 403, the whole host after a connection or TLS failure. Requests
+# under them go straight to FTP instead of repeating what failed.
+_https_failed = {}  # prefix -> why HTTPS failed
+_FIREWALL = '3GPP firewall blocked HTTPS (403)'
 _MAX_SECONDS = 180
 # The live Microsoft FTP server advertises SIZE/MDTM, but not MLSD.
 _IIS_ROW = re.compile(r'^(\d{2}-\d{2}-\d{2,4})\s+(\d{2}:\d{2}[AP]M)\s+(<DIR>|\d+)\s+(.+)$')
@@ -45,6 +63,66 @@ def _retryable(error):
     return (isinstance(error, httpx.TransportError)
             or isinstance(error, httpx.HTTPStatusError)
             and error.response.status_code in _RETRY_STATUS)
+
+
+def _firewall_blocked(response):
+    """True for the firewall's 403 page only.
+
+    An ordinary 403 stays an HTTP error: 3GPP also answers 403 for a folder
+    that does not exist, and callers rely on that.
+    """
+    if response.status_code != 403:
+        return False
+    length = response.headers.get('content-length')
+    if length and length.isdigit() and int(length) > _FIREWALL_PAGE_BYTES:
+        return False
+    try:
+        body = response.read()
+    except httpx.HTTPError:
+        return False
+    return _FIREWALL_PAGE in body[:_FIREWALL_PAGE_BYTES].lower()
+
+
+def _folder(url):
+    return url if url.endswith('/') else url.rsplit('/', 1)[0] + '/'
+
+
+def _host(url):
+    parts = urlsplit(url)
+    return f'{parts.scheme}://{parts.netloc}/'
+
+
+def _remember_failure(url, error):
+    if isinstance(error, httpx.TransportError):
+        _https_failed[_host(url)] = f'HTTPS failed ({type(error).__name__})'
+    else:
+        _https_failed[_folder(url)] = f'HTTPS failed ({error.response.status_code})'
+
+
+def _https_failure(url):
+    """Why HTTPS already failed for url in this run, or None."""
+    return next((reason for prefix, reason in _https_failed.items() if url.startswith(prefix)), None)
+
+
+def _ftp_because(url, reason, **kwargs):
+    """FTP for a URL whose HTTPS failed; an FTP failure names both."""
+    try:
+        return ftp_response(url, **kwargs)
+    except httpx.ConnectError as exc:
+        raise httpx.ConnectError(f'{reason} and {exc}', request=exc.request) from exc
+
+
+def _blocked_ftp(url, **kwargs):
+    logging.getLogger(__name__).warning('%s: %s; trying FTP', _FIREWALL, url)
+    _https_failed[_folder(url)] = _FIREWALL
+    return _ftp_because(url, _FIREWALL, **kwargs)
+
+
+def _identified(kwargs):
+    headers = kwargs.get('headers') or {}
+    if any(name.lower() == 'user-agent' for name in headers):
+        return kwargs
+    return {**kwargs, 'headers': {'User-Agent': USER_AGENT, **headers}}
 
 
 def _check_status(response):
@@ -108,6 +186,75 @@ def _file(ftp, path, deadline, cached=None):
     return bytes(data), headers
 
 
+def _connect():
+    ftp = ftplib.FTP('ftp.3gpp.org', timeout=20)
+    try:
+        ftp.login()
+    except BaseException:
+        ftp.close()
+        raise
+    return ftp
+
+
+def _drop():
+    global _session
+    if _session is not None:
+        try:
+            _session.close()
+        except Exception:  # closing never fails a run
+            pass
+    _session = None
+
+
+def close_session():
+    """Log out of the shared FTP session, if one is open."""
+    global _session
+    if _session is not None:
+        try:
+            _session.quit()
+        except Exception:  # closing never fails a run
+            pass
+    _drop()
+
+
+atexit.register(close_session)
+
+
+def reset():
+    """Start a new run: forget HTTPS failures and close the FTP session."""
+    _https_failed.clear()
+    close_session()
+
+
+def _over_ftp(read):
+    """Run read(ftp) on the shared session.
+
+    A session the server closed while idle (421, EOF, reset) is replaced
+    once. After any other failure the session is closed and the error kept.
+    """
+    global _session
+    with _session_lock:
+        reused = _session is not None
+        if _session is None:
+            _session = _connect()
+        try:
+            return read(_session)
+        except (EOFError, OSError, ftplib.error_temp):
+            _drop()
+            if not reused:
+                raise
+        except BaseException:
+            # Unknown state after a partial command: never reuse it.
+            _drop()
+            raise
+        _session = _connect()
+        try:
+            return read(_session)
+        except BaseException:
+            _drop()
+            raise
+
+
 def ftp_response(url, *, listing=False, cached=None):
     """Read a bounded FTP response. Also used by the network diagnostic."""
     path = ftp_path(url)
@@ -116,11 +263,9 @@ def ftp_response(url, *, listing=False, cached=None):
     request = httpx.Request('GET', url)
     deadline = time.monotonic() + _MAX_SECONDS
     try:
-        with ftplib.FTP('ftp.3gpp.org', timeout=20) as ftp:
-            ftp.login()
-            body, headers = (_directory(ftp, path, url, deadline) if listing
-                             else _file(ftp, path, deadline, cached))
-    except (ftplib.Error, OSError, ValueError) as exc:
+        body, headers = _over_ftp(lambda ftp: _directory(ftp, path, url, deadline) if listing
+                                  else _file(ftp, path, deadline, cached))
+    except (ftplib.Error, OSError, EOFError, ValueError) as exc:
         raise httpx.ConnectError(f'FTP fallback failed for {url}: {exc}', request=request) from exc
     action = 'revalidated without RETR' if headers.get('x-3gpp-revalidated') else 'received'
     logging.getLogger(__name__).warning('3GPP FTP fallback: %s (%s, %d bytes)', url, action, len(body))
@@ -128,10 +273,18 @@ def ftp_response(url, *, listing=False, cached=None):
 
 
 def get(url, *, listing=False, http=None, cached=None, **kwargs):
-    """Retry eligible HTTPS once, then use FTP; preserve normal HTTP semantics."""
+    """Retry eligible HTTPS once, then use FTP; preserve normal HTTP semantics.
+
+    A firewall 403 goes to FTP at once, without a second HTTPS request.
+    """
     request = http.get if http is not None else httpx.get
     if ftp_path(url) is None:
         return request(url, **kwargs)
+    reason = _https_failure(url)
+    if reason:
+        return _ftp_because(url, f'{reason} earlier in this run', listing=listing, cached=cached)
+    if http is None:
+        kwargs = _identified(kwargs)
     for attempt in range(2):
         try:
             response = request(url, **kwargs)
@@ -140,12 +293,18 @@ def get(url, *, listing=False, http=None, cached=None, **kwargs):
             except (httpx.HTTPStatusError, httpx.TransportError):
                 response.close()
                 raise
-            return response
         except (httpx.TransportError, httpx.HTTPStatusError) as exc:
             if not _retryable(exc):
                 raise
             if attempt == 0:
                 time.sleep(1)
+            else:
+                _remember_failure(url, exc)
+            continue
+        if not _firewall_blocked(response):
+            return response
+        response.close()
+        return _blocked_ftp(url, listing=listing, cached=cached)
     return ftp_response(url, listing=listing, cached=cached)
 
 
@@ -160,12 +319,23 @@ def stream(method, url, **kwargs):
         with httpx.stream(method, url, **kwargs) as response:
             yield response
         return
+    reason = _https_failure(url)
+    if reason:
+        response = _ftp_because(url, f'{reason} earlier in this run')
+        try:
+            yield response
+        finally:
+            response.close()
+        return
+    kwargs = _identified(kwargs)
     stack = None
+    blocked = False
     for attempt in range(2):
         stack = ExitStack()
         try:
             response = stack.enter_context(httpx.stream(method, url, **kwargs))
             _check_status(response)
+            blocked = _firewall_blocked(response)
         except (httpx.TransportError, httpx.HTTPStatusError) as exc:
             stack.close()
             stack = None
@@ -173,16 +343,21 @@ def stream(method, url, **kwargs):
                 raise
             if attempt == 0:
                 time.sleep(1)
+            else:
+                _remember_failure(url, exc)
         except BaseException:
             stack.close()
             raise
         else:
+            if blocked:
+                stack.close()
+                stack = None
             break
     if stack is not None:
         with stack:
             yield response
     else:
-        response = ftp_response(url)
+        response = _blocked_ftp(url) if blocked else ftp_response(url)
         try:
             yield response
         finally:

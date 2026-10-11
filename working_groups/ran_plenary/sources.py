@@ -2,7 +2,6 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from datetime import date
 import hashlib
 import json
 from pathlib import Path
@@ -13,7 +12,7 @@ from bs4 import BeautifulSoup
 
 from shared import remote_files
 from shared.remote_files import client, fetch_file
-from shared.portal_meetings import timezone_reference, fetch_meeting_rows
+from shared.portal_meetings import TB_IDS, get_meetings, timezone_reference
 
 from .document import FILE
 
@@ -153,14 +152,10 @@ def local_bundle(path: Path, cfg, previous) -> Bundle:
                    'agenda': agenda_info}, data, agenda)
 
 
-def portal_meeting(http, number: int) -> dict:
-    year = date.today().year
-    rows = fetch_meeting_rows(http, {
-        'SortBy': 'Date', 'SortAscending': False,
-        'StartDate': f'{year-1}-01-01 00:00:00', 'EndDate': f'{year+1}-12-31 23:59:59',
-        'Tbs': [373], 'IncludeChildTbs': False, 'IncludeNonTBMeetings': False,
-        'Reference': '', 'Registered': False}, max_pages=10)
-    matches = {m['Id']: m for m in rows if m.get('TBId') == 373 and
+def portal_meeting(number: int, rows=None) -> dict:
+    """RAN#number from the shared Portal query (one per process, all WGs)."""
+    rows = get_meetings() if rows is None else rows
+    matches = {m['Id']: m for m in rows if m.get('TBId') == TB_IDS['ran-plenary'] and
                re.fullmatch(rf'(?:3GPP)?RAN\s*#\s*{number}', m.get('Title', ''), re.I)}
     if len(matches) != 1:
         raise ValueError(f'Expected exactly one Portal RAN#{number} meeting; configure metadata for historical meetings')

@@ -6,6 +6,10 @@ RAN2 publishes ``R2_<meeting>_Schedule_v<NN>.docx`` in each meeting's
 ``tsg_ran/WG2_RL2/TSGR2_<meeting>/Agenda/`` already carries v00 and the
 ``agenda.csv``. Portal dates decide which meeting is current, so an early v00
 for the following meeting never replaces the one in progress.
+
+``meeting_specific`` names meeting folders (``.../WG2_RL2/TSGR2_135bis/``), as
+in RAN1. While one of them is for a meeting that has not ended, the archive
+root (several hundred entries) is not listed.
 """
 from __future__ import annotations
 
@@ -35,6 +39,7 @@ CACHE = Path('.cache/ran2')
 DEFAULTS = {
     'sync_url': 'https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN2/Agenda/',
     'archive_url': 'https://www.3gpp.org/ftp/tsg_ran/WG2_RL2/',
+    'meeting_specific': [],
     'local_agenda': None,
     # Gemini reads the cells the rules are unsure about, and whole documents
     # whose table layout they do not recognise. Without GEMINI_API_KEY the
@@ -78,6 +83,11 @@ def load_config() -> dict:
             raise ValueError(f'{name} must be an HTTP URL')
     if not isinstance(result['llm_fallback'], bool) or not isinstance(result['model'], str):
         raise ValueError('llm_fallback must be true/false and model a Gemini model name')
+    if (not isinstance(result['meeting_specific'], list)
+            or any(not isinstance(url, str) or urlparse(url).scheme not in ('http', 'https')
+                   or not FOLDER.fullmatch(url.rstrip('/').rsplit('/', 1)[-1] + '/')
+                   for url in result['meeting_specific'])):
+        raise ValueError('meeting_specific must list RAN2 meeting folder URLs such as .../TSGR2_135bis/')
     if not isinstance(result['meetings'], dict):
         raise ValueError('meetings must map a meeting such as "135bis" to its metadata')
     for key, value in result['meetings'].items():
@@ -87,7 +97,10 @@ def load_config() -> dict:
 
 
 def config_hash(cfg) -> str:
-    return digest(json.dumps(cfg, sort_keys=True).encode())
+    # Where a document is found does not change how it is read; the manifest
+    # already records the URL of every input.
+    return digest(json.dumps({k: v for k, v in cfg.items() if k != 'meeting_specific'},
+                             sort_keys=True).encode())
 
 
 def rank(meeting: str) -> tuple[int, int]:
@@ -163,6 +176,12 @@ def archive_folders(entries: list[dict]) -> dict[str, str]:
     return folders
 
 
+def meeting_folders(cfg) -> dict[str, str]:
+    """Configured meeting folders by meeting id."""
+    return archive_folders([{'name': url.rstrip('/').rsplit('/', 1)[-1], 'url': url}
+                            for url in cfg['meeting_specific']])
+
+
 def schedule_candidates(entries: list[dict]) -> list[dict]:
     result = []
     for entry in entries:
@@ -236,11 +255,45 @@ def choose_schedule(candidates: list[dict], dates: dict, today: str) -> dict:
 
 # -------------------------------------------------------------------- bundles
 
+def live_copy(cfg, previous, chosen, rows, error) -> Bundle | None:
+    """The built sync copy while the sync folder is unreachable.
+
+    The archive receives each version after the sync folder, so during a
+    meeting it can be behind what is already built. Keep the built version
+    instead of stepping back; without its stored body, report the sync error.
+    """
+    old = previous.get('schedule') or {}
+    if (not str(old.get('url', '')).startswith(cfg['sync_url'])
+            or previous.get('meeting_id') != chosen['meeting_id']
+            or previous.get('version', -1) < chosen['version']):
+        return None
+    schedule = remote_files.cached(old['url'], old.get('sha256'))
+    agenda_info = previous.get('agenda') or None
+    agenda = remote_files.cached(agenda_info['url'], agenda_info.get('sha256')) if agenda_info else b''
+    if schedule is None or agenda is None:
+        raise error
+    manifest = {'meeting_id': previous['meeting_id'], 'version': previous['version'],
+                'config_hash': config_hash(cfg), 'schedule': old, 'agenda': agenda_info}
+    metadata = portal_metadata(rows or [], previous['meeting_id'])
+    if metadata:
+        manifest['portal_metadata'] = metadata
+    return Bundle(manifest, schedule, agenda)
+
+
 def fetch_bundle(cfg, previous, http, *, rows=None, today=None, cache_dir=DOWNLOADS / 'inputs') -> Bundle:
     today = today or datetime.now(ZoneInfo('Asia/Seoul')).date().isoformat()
-    entries = fetch_listing(cfg['sync_url'], http)
-    archive = archive_folders(fetch_listing(cfg['archive_url'], http))
+    try:
+        entries, sync_error = fetch_listing(cfg['sync_url'], http), None
+    except httpx.HTTPError as exc:
+        # Since 2026-10-11 3GPP's firewall answers this folder with 403. The
+        # meeting archive below carries the same files, a little later.
+        print(f'[ran2] Sync folder unavailable ({exc}); reading the meeting archive')
+        entries, sync_error = [], exc
     dates = meeting_dates(cfg, rows, previous)
+    archive = meeting_folders(cfg)
+    if not any(m in dates and dates[m][1] >= today for m in archive):
+        # No configured folder for a meeting still to come: find it in the archive.
+        archive = {**archive_folders(fetch_listing(cfg['archive_url'], http)), **archive}
     # Archive folders worth listing: meetings that have not ended yet, plus
     # the last built one (its Agenda folder holds agenda.csv after the event).
     upcoming = sorted((start, m) for m, (start, end) in dates.items() if end >= today and m in archive)
@@ -251,7 +304,15 @@ def fetch_bundle(cfg, previous, http, *, rows=None, today=None, cache_dir=DOWNLO
     for meeting in wanted:
         listed[meeting] = agenda_folder(archive[meeting], http)
         entries.extend(listed[meeting])
-    chosen = choose_schedule(schedule_candidates(entries), dates, today)
+    candidates = schedule_candidates(entries)
+    if sync_error is not None and not candidates:
+        raise sync_error
+    chosen = choose_schedule(candidates, dates, today)
+    if sync_error is not None:
+        kept = live_copy(cfg, previous, chosen, rows, sync_error)
+        if kept is not None:
+            print(f"[ran2] Keeping {kept.manifest['schedule']['name']}; the archive has nothing newer")
+            return kept
     meeting = chosen['meeting_id']
     if meeting not in listed and meeting in archive:
         listed[meeting] = agenda_folder(archive[meeting], http)
