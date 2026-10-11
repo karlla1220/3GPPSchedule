@@ -68,7 +68,7 @@ from .downloader import (
     _meeting_rank,
 )
 from .merger import collect_time_slot_data
-from .config import load_config
+from .config import load_config, with_meeting_folders
 from .agenda_descriptions import (
     DEFAULT_JSON_PATH,
     descriptions_match_meeting,
@@ -302,6 +302,8 @@ def build_schedule(args) -> Schedule:
     cached_meeting_id = prev_state.get("meeting_id")
     if not isinstance(cached_meeting_id, str) or not cached_meeting_id:
         cached_meeting_id = None
+    if not args.no_download:
+        cfg = with_meeting_folders(cfg, cached_meeting_id)
     local_meeting_hint = local_reference_meeting_id()
     preferred_meeting_id = local_meeting_hint or cached_meeting_id
     locked_meeting_id = local_meeting_hint

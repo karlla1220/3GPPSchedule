@@ -379,14 +379,11 @@ def listing(names, base='https://www.3gpp.org/ftp/x/'):
     return f'<table>{rows}</table>'
 
 
-def test_listing_parses_names_times_and_meeting_folders():
-    entries = sources.listing_entries(listing(['TSGR2_135bis/', 'TSGR2_133b/', 'TSGR2_99/', 'Invitation/']),
+def test_listing_parses_names_and_times():
+    entries = sources.listing_entries(listing(['TSGR2_135bis/', 'Invitation/']),
                                       'https://www.3gpp.org/ftp/tsg_ran/WG2_RL2/')
     assert entries[0]['uploaded_at'] == '2026-09-30 08:32'
-    assert sources.archive_folders(entries) == {
-        'ran2#135bis': 'https://www.3gpp.org/ftp/x/TSGR2_135bis/',
-        'ran2#133bis': 'https://www.3gpp.org/ftp/x/TSGR2_133b/',
-        'ran2#99': 'https://www.3gpp.org/ftp/x/TSGR2_99/'}
+    assert [e['name'] for e in entries] == ['TSGR2_135bis', 'Invitation']
     assert sources.rank('ran2#135') < sources.rank('ran2#135bis') < sources.rank('ran2#136')
 
 
@@ -471,8 +468,15 @@ def test_fetch_bundle_reads_the_upcoming_archive_folder_and_its_agenda(tmp_path,
     assert bundle.schedule == files[archive + 'TSGR2_135bis/Agenda/' + BIS]
     assert bundle.manifest['agenda']['url'].endswith('TSGR2_135bis/Agenda/agenda.csv')
     assert bundle.manifest['portal_metadata']['timezone'] == 'Asia/Seoul'
-    # A real access error is not mistaken for an empty future folder.
-    with mock_server({}) as http, pytest.raises(httpx.HTTPStatusError):
+    # An absent meeting folder is not an error, but with nothing to build from the check says so.
+    sources.remote_files.new_run()
+    with mock_server({}) as http, pytest.raises(ValueError, match='No RAN2 session schedule'):
+        sources.fetch_bundle(sources.DEFAULTS, {}, http, rows=rows, today='2026-10-05', cache_dir=tmp_path / 'inputs')
+    # A real failure of the meeting folder still is.
+    sources.remote_files.new_run()
+    monkeypatch.setattr(sources.remote_files.ftp_transport, 'ftp_response', lambda url, **k: (_ for _ in ()).throw(
+        httpx.ConnectError('FTP fallback failed: timed out', request=httpx.Request('GET', url))))
+    with mock_server({sync: b''}, blocked={archive + 'TSGR2_135bis/'}) as http, pytest.raises(httpx.ConnectError):
         sources.fetch_bundle(sources.DEFAULTS, {}, http, rows=rows, today='2026-10-05', cache_dir=tmp_path / 'inputs')
 
 
@@ -575,7 +579,9 @@ def test_configured_folder_for_an_ended_meeting_still_finds_the_next_one(blocked
     with mock_server(files, blocked={SYNC}, seen=seen) as http:
         bundle = sources.fetch_bundle(blocked_sync, {}, http, rows=rows, today='2026-10-20',
                                       cache_dir=tmp_path / 'inputs')
-    assert bundle.manifest['meeting_id'] == 'ran2#136' and ARCHIVE in seen
+    # Found by its name; the archive root (several hundred entries) is not listed.
+    assert bundle.manifest['meeting_id'] == 'ran2#136' and ARCHIVE not in seen
+    assert ARCHIVE + 'TSGR2_136/' in seen
 
 
 def test_blocked_sync_folder_keeps_a_newer_built_sync_copy(blocked_sync, tmp_path):

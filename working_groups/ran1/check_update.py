@@ -24,7 +24,7 @@ import sys
 from shared.lifecycle import CheckResult
 from shared.portal_meetings import lookup_timezone_reference
 
-from .config import load_config
+from .config import load_config, with_meeting_folders
 from .downloader import (
     agenda_urls_for_meeting,
     check_external_files,
@@ -119,13 +119,13 @@ def check_updates(*, staging_dir=None) -> CheckResult:
     shutil.rmtree(staging_dir, ignore_errors=True)
 
     # 1. Fetch current remote state (lightweight — directory listing only)
-    cfg = load_config()
+    state = load_schedule_state()
+    cfg = with_meeting_folders(load_config(), state.get("meeting_id"))
     print(
         "Checking FTP for schedule updates "
         f"({len(cfg['inbox_urls'])} inbox URL(s), "
         f"{len(cfg['extra_folders'])} extra folder(s))…"
     )
-    state = load_schedule_state()
     local_meeting_hint = local_reference_meeting_id()
     cached_meeting_id = state.get("meeting_id")
     if not isinstance(cached_meeting_id, str) or not cached_meeting_id:

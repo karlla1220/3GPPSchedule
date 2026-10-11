@@ -8,7 +8,10 @@ Config is split into two kinds of base URLs:
   subfolder exists here; no ``Agenda``.
 * ``meeting_specific`` (list of base URLs, optional) — per-meeting folders
   such as ``https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_125/``.  Both
-  ``Inbox`` and ``Agenda`` subfolders are available.
+  ``Inbox`` and ``Agenda`` subfolders are available.  Normally empty:
+  ``with_meeting_folders`` finds the folders of the next meeting and the
+  built one (``shared/meeting_folders.py``). An entry overrides the folder
+  of its meeting.
 
 The loader derives two convenience lists from the above:
 
@@ -256,21 +259,6 @@ def load_config(path: Path = DEFAULT_CONFIG_PATH) -> dict:
         meeting_sync = _normalize_url(meeting_sync)
     meeting_specific = [_normalize_url(u) for u in meeting_specific]
 
-    base_urls: list[str] = []
-    if meeting_sync:
-        base_urls.append(meeting_sync)
-    base_urls.extend(meeting_specific)
-
-    inbox_urls = [_normalize_url(b.rstrip("/") + "/Inbox") for b in base_urls]
-    inbox_urls.extend(_normalize_url(u) for u in legacy_inbox)
-    # Deduplicate while preserving order
-    seen: set[str] = set()
-    inbox_urls = [u for u in inbox_urls if not (u in seen or seen.add(u))]
-
-    agenda_urls = [
-        _normalize_url(b.rstrip("/") + "/Agenda") for b in meeting_specific
-    ]
-
     extra_folders = [
         e for e in (_normalize_extra(x) for x in extra_folders) if e is not None
     ]
@@ -278,11 +266,71 @@ def load_config(path: Path = DEFAULT_CONFIG_PATH) -> dict:
         e for e in (_normalize_extra_file(x) for x in extra_files) if e is not None
     ]
 
-    return {
+    return _derive({
         "meeting_sync": meeting_sync,
         "meeting_specific": meeting_specific,
-        "inbox_urls": inbox_urls,
-        "agenda_urls": agenda_urls,
+        "legacy_inbox": [_normalize_url(u) for u in legacy_inbox],
+        "meeting_folders": [],
         "extra_folders": extra_folders,
         "extra_files": extra_files,
+    })
+
+
+def _derive(cfg: dict) -> dict:
+    """Fill ``inbox_urls``/``agenda_urls`` from the sync and meeting folders."""
+    folders = list(dict.fromkeys(cfg["meeting_specific"] + cfg["meeting_folders"]))
+    base_urls = ([cfg["meeting_sync"]] if cfg["meeting_sync"] else []) + folders
+    inbox_urls = [_normalize_url(b.rstrip("/") + "/Inbox") for b in base_urls]
+    inbox_urls.extend(cfg["legacy_inbox"])
+    return {
+        **cfg,
+        # Deduplicate while preserving order
+        "inbox_urls": list(dict.fromkeys(inbox_urls)),
+        "agenda_urls": [_normalize_url(b.rstrip("/") + "/Agenda") for b in folders],
     }
+
+
+def with_meeting_folders(
+    cfg: dict,
+    built_meeting_id: str | None,
+    *,
+    rows: list[dict] | None = None,
+    today: str | None = None,
+    http=None,
+) -> dict:
+    """``cfg`` plus the meeting folders found for this run.
+
+    The meetings are the earliest one by Portal dates that has not ended
+    and the built one, which stays until the next meeting's files replace
+    it. ``meeting_specific`` wins for its meeting. A folder that cannot be
+    looked up (outage) is left out for this run: the sync folder and the
+    built state still work, as when the folder does not exist yet.
+    """
+    import httpx
+
+    from shared import meeting_folders, portal_meetings
+
+    if rows is None:
+        try:
+            rows = portal_meetings.get_meetings()
+        except (httpx.HTTPError, ValueError) as exc:
+            print(f"Warning: Portal unavailable ({exc}); finding meeting folders by name")
+            rows = []
+    if today is None:
+        from datetime import datetime
+        from zoneinfo import ZoneInfo
+
+        today = datetime.now(ZoneInfo("Asia/Seoul")).date().isoformat()
+    meetings = meeting_folders.upcoming("ran1", rows, today)[:1]
+    if isinstance(built_meeting_id, str) and built_meeting_id:
+        meetings.append(built_meeting_id.lower())
+    try:
+        found = meeting_folders.resolve(
+            "ran1", meetings, rows=rows, configured=cfg["meeting_specific"], http=http
+        )
+    except httpx.HTTPError as exc:
+        print(f"Warning: meeting folder lookup failed: {exc}")
+        return cfg
+    for meeting, url in found.items():
+        print(f"  Meeting folder for {meeting}: {url}")
+    return _derive({**cfg, "meeting_folders": list(found.values())})

@@ -1,0 +1,161 @@
+"""Meeting folders found from the meeting id, without hand-edited config."""
+from datetime import datetime, timedelta, timezone
+
+import httpx
+import pytest
+
+from shared import meeting_folders, remote_files
+from working_groups.ran1 import config as ran1_config
+
+WG1 = 'https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/'
+WG2 = 'https://www.3gpp.org/ftp/tsg_ran/WG2_RL2/'
+NOW = datetime(2026, 10, 11, 12, tzinfo=timezone.utc)
+
+
+@pytest.fixture(autouse=True)
+def no_ftp(monkeypatch):
+    """A real failure goes to FTP, which is unreachable here."""
+    def fail(url, **kwargs):
+        raise httpx.ConnectError(f'FTP fallback failed for {url}: timed out', request=httpx.Request('GET', url))
+    monkeypatch.setattr(remote_files.ftp_transport, 'ftp_response', fail)
+
+
+def server(folders, seen, status=403):
+    """Listings for folders (url -> child names); status for anything else."""
+    def handler(request):
+        url = str(request.url)
+        seen.append(url)
+        if url in folders:
+            rows = ''.join(f'<tr><td><a href="{url}{name}">{name}</a></td></tr>' for name in folders[url])
+            return httpx.Response(200, text=f'<table>{rows}</table>')
+        return httpx.Response(status)
+    return httpx.Client(transport=httpx.MockTransport(handler))
+
+
+def row(title, start, end, url=None, tb=380):
+    return {'Title': title, 'TBId': tb, 'Id': hash(title), 'StartDate': f'{start} 09:00:00',
+            'EndDate': f'{end} 17:00:00', 'MtgDocURL': url}
+
+
+def resolve(wg, meetings, folders, seen, **kwargs):
+    remote_files.new_run()   # each call is a separate CI run
+    with server(folders, seen) as http:
+        return meeting_folders.resolve(wg, meetings, http=http, **{'now': NOW, **kwargs})
+
+
+def test_candidate_names_spell_bis_both_ways():
+    assert meeting_folders.candidate_names('ran1', 'ran1#126bis') == ['TSGR1_126b', 'TSGR1_126bis']
+    assert meeting_folders.candidate_names('ran2', 'ran2#135bis') == ['TSGR2_135bis', 'TSGR2_135b']
+    assert meeting_folders.candidate_names('ran2', 'ran2#136') == ['TSGR2_136']
+    assert meeting_folders.candidate_names('ran-plenary', 'ran#113') == ['TSGR_113']
+    assert meeting_folders.folder_key('ran2', 'TSGR2_133b') == 'ran2#133bis'
+    assert meeting_folders.folder_key('ran2', 'TSGR2_135bis') == 'ran2#135bis'
+    # E-meeting folders still name the meeting.
+    assert meeting_folders.folder_key('ran1', 'TSGR1_104b-e') == 'ran1#104bis'
+    assert meeting_folders.folder_key('ran-plenary', 'TSGR_88e') == 'ran#88'
+    assert meeting_folders.folder_key('ran2', 'Invitation') is None
+    assert meeting_folders.folder_key('ran2', 'TSGR1_126') is None
+
+
+def test_portal_mtgdocurl_needs_no_request():
+    rows = [row('3GPPRAN1#126-bis', '2026-10-12', '2026-10-16',
+                'https://ftp.3gpp.org/tsg_ran/WG1_RL1/TSGR1_126b/', tb=379),
+            # RAN P points at the Docs/ subfolder.
+            row('3GPPRAN#113', '2026-09-14', '2026-09-17',
+                'https://ftp.3gpp.org/tsg_ran/TSG_RAN/TSGR_113/Docs/', tb=373),
+            # A URL for another meeting is not taken.
+            row('3GPPRAN1#127', '2026-11-16', '2026-11-20',
+                'https://ftp.3gpp.org/tsg_ran/WG1_RL1/TSGR1_126b/', tb=379)]
+    seen = []
+    assert resolve('ran1', ['ran1#126bis'], {}, seen, rows=rows) == {'ran1#126bis': WG1 + 'TSGR1_126b/'}
+    assert resolve('ran-plenary', ['ran#113'], {}, seen, rows=rows) == {
+        'ran#113': 'https://www.3gpp.org/ftp/tsg_ran/TSG_RAN/TSGR_113/'}
+    assert seen == []
+    assert meeting_folders.portal_folders('ran1', rows) == {'ran1#126bis': WG1 + 'TSGR1_126b/'}
+
+
+def test_candidates_are_listed_directly_and_the_result_is_remembered():
+    seen = []
+    # RAN2 used both spellings; the second one exists here.
+    assert resolve('ran2', ['ran2#133bis'], {WG2 + 'TSGR2_133b/': ['Agenda/']}, seen) == {
+        'ran2#133bis': WG2 + 'TSGR2_133b/'}
+    assert seen == [WG2 + 'TSGR2_133bis/', WG2 + 'TSGR2_133b/']
+    seen.clear()
+    assert resolve('ran2', ['ran2#133bis'], {}, seen) == {'ran2#133bis': WG2 + 'TSGR2_133b/'}
+    assert seen == []
+
+
+def test_the_root_is_listed_when_no_candidate_exists():
+    seen = []
+    folders = {WG2: ['TSGR2_111-e/', 'TSGR2_110/']}
+    assert resolve('ran2', ['ran2#111'], folders, seen) == {'ran2#111': WG2 + 'TSGR2_111-e/'}
+    assert seen == [WG2 + 'TSGR2_111/', WG2]
+
+
+def test_an_absent_folder_is_retried_but_the_root_only_now_and_then():
+    seen = []
+    # Before the meeting: nothing yet. Not remembered as absent.
+    assert resolve('ran2', ['ran2#136'], {WG2: ['TSGR2_135bis/']}, seen) == {}
+    assert seen == [WG2 + 'TSGR2_136/', WG2]
+    # The next run asks for the folder again, but does not list the large root.
+    seen.clear()
+    assert resolve('ran2', ['ran2#136'], {WG2: ['TSGR2_135bis/']}, seen,
+                   now=NOW + timedelta(minutes=20)) == {}
+    assert seen == [WG2 + 'TSGR2_136/']
+    # Once the folder is made, the next run finds it.
+    seen.clear()
+    assert resolve('ran2', ['ran2#136'], {WG2 + 'TSGR2_136/': ['Invitation/']}, seen,
+                   now=NOW + timedelta(minutes=40)) == {'ran2#136': WG2 + 'TSGR2_136/'}
+    # The root is listed again after ROOT_EVERY.
+    seen.clear()
+    assert resolve('ran2', ['ran2#137'], {}, seen, now=NOW + meeting_folders.ROOT_EVERY) == {}
+    assert seen == [WG2 + 'TSGR2_137/', WG2]
+
+
+def test_override_wins_over_portal_and_cache():
+    moved = 'https://www.3gpp.org/ftp/tsg_ran/WG2_RL2/Old/TSGR2_135bis/'
+    rows = [row('3GPPRAN2#135-bis', '2026-10-12', '2026-10-16', 'https://ftp.3gpp.org/tsg_ran/WG2_RL2/TSGR2_135bis/')]
+    seen = []
+    assert resolve('ran2', ['ran2#135bis'], {}, seen, rows=rows, configured=[moved]) == {'ran2#135bis': moved}
+    assert seen == []
+
+
+def test_a_real_failure_is_not_absence():
+    remote_files.new_run()
+    with server({}, [], status=500) as http, pytest.raises(httpx.HTTPError):
+        meeting_folders.resolve('ran2', ['ran2#136'], http=http, now=NOW)
+
+
+def test_ran1_lists_the_next_meeting_and_the_built_one(tmp_path, monkeypatch):
+    monkeypatch.delenv('SCHEDULE_MEETING_SPECIFIC', raising=False)
+    monkeypatch.delenv('SCHEDULE_MEETING_SYNC', raising=False)
+    path = tmp_path / 'config.json'
+    path.write_text('{"meeting_specific": []}')
+    cfg = ran1_config.load_config(path)
+    rows = [row('3GPPRAN1#126', '2026-08-24', '2026-08-28', WG1 + 'TSGR1_126/', tb=379),
+            row('3GPPRAN1#127', '2026-11-16', '2026-11-20', tb=379),
+            row('3GPPRAN1#128', '2027-02-08', '2027-02-12', tb=379)]
+    seen = []
+    with server({WG1 + 'TSGR1_127/': ['Inbox/'], WG1 + 'TSGR1_126b/': ['Inbox/']}, seen) as http:
+        found = ran1_config.with_meeting_folders(cfg, 'ran1#126bis', rows=rows, today='2026-10-20', http=http)
+    # The next meeting (by name; Portal has no URL yet) and the built one; not RAN1#128.
+    assert found['agenda_urls'] == [WG1 + 'TSGR1_127/Agenda/', WG1 + 'TSGR1_126b/Agenda/']
+    assert found['inbox_urls'] == [ran1_config.DEFAULT_MEETING_SYNC + 'Inbox/',
+                                   WG1 + 'TSGR1_127/Inbox/', WG1 + 'TSGR1_126b/Inbox/']
+    assert WG1 not in seen
+    # A configured folder wins for its meeting and is kept as configured.
+    path.write_text('{"meeting_specific": ["https://example.org/TSGR1_127/"]}')
+    found = ran1_config.with_meeting_folders(ran1_config.load_config(path), None, rows=rows,
+                                             today='2026-10-20', http=None)
+    assert found['agenda_urls'] == ['https://example.org/TSGR1_127/Agenda/']
+
+
+def test_ran1_keeps_the_sync_folder_when_the_lookup_fails(tmp_path, monkeypatch):
+    monkeypatch.delenv('SCHEDULE_MEETING_SPECIFIC', raising=False)
+    path = tmp_path / 'config.json'
+    path.write_text('{}')
+    cfg = ran1_config.load_config(path)
+    remote_files.new_run()
+    with server({}, [], status=500) as http:
+        found = ran1_config.with_meeting_folders(cfg, 'ran1#126bis', rows=[], today='2026-10-20', http=http)
+    assert found['inbox_urls'] == cfg['inbox_urls'] and found['agenda_urls'] == []

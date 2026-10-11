@@ -9,12 +9,12 @@ cache_paths = (Path('.cache/ran-plenary'),)
 
 def check_updates():
     from .sources import (OUTPUT, TRANSFER, client, fetch_bundle, load_config,
-                          portal_meeting, read_json)
+                          portal_meeting, portal_rows, read_json)
     cfg = load_config()
     previous = read_json(OUTPUT / '.schedule_state.json')
     try:
         with client() as http:
-            bundle = fetch_bundle(cfg, previous, http)
+            bundle = fetch_bundle(cfg, previous, http, rows=portal_rows())
             number = bundle.manifest['meeting_number']
             override = cfg['meetings'].get(str(number), {})
             if not (all(override.get(k) for k in ('starts_on', 'ends_on')) and (override.get('timezone') or override.get('location'))):

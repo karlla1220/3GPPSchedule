@@ -11,7 +11,7 @@ from urllib.parse import unquote, urljoin, urlparse
 from bs4 import BeautifulSoup
 import httpx
 
-from shared import remote_files
+from shared import meeting_folders, remote_files
 from shared.remote_files import client, fetch_file
 from shared.portal_meetings import TB_IDS, get_meetings, timezone_reference
 
@@ -25,8 +25,11 @@ TRANSFER = Path('.ci/transfers/ran-plenary')
 DEFAULTS = {
     'chair_url': 'https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN/Inbox/Chair/',
     # The meeting folder keeps agenda.csv; the sync copy is emptied at some
-    # point after the meeting, so it is only the fallback.
-    'meeting_agenda_url': 'https://www.3gpp.org/ftp/tsg_ran/TSG_RAN/TSGR_{number}/Agenda/agenda.csv',
+    # point after the meeting, so it is only the fallback. The folder is found
+    # from the timeplan's meeting number (shared/meeting_folders.py);
+    # meeting_specific (.../TSG_RAN/TSGR_113/) overrides it.
+    'archive_url': 'https://www.3gpp.org/ftp/tsg_ran/TSG_RAN/',
+    'meeting_specific': [],
     'agenda_url': 'https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN/Agenda/agenda.csv',
     'model': 'gemini-3.8-flash',
     'local_agenda': None,
@@ -59,18 +62,32 @@ def load_config() -> dict:
     if unknown:
         raise ValueError(f'Unknown RAN P configuration: {sorted(unknown)}')
     result = {**DEFAULTS, **cfg}
-    for name in ('chair_url', 'agenda_url', 'meeting_agenda_url'):
+    for name in ('chair_url', 'agenda_url', 'archive_url'):
         if urlparse(result[name]).scheme not in ('http', 'https'):
             raise ValueError(f'{name} must be an HTTP URL')
-    if '{number}' not in result['meeting_agenda_url']:
-        raise ValueError('meeting_agenda_url must contain {number}')
+    if (not isinstance(result['meeting_specific'], list)
+            or any(not isinstance(url, str) or urlparse(url).scheme not in ('http', 'https')
+                   or not meeting_folders.overrides('ran-plenary', [url])
+                   for url in result['meeting_specific'])):
+        raise ValueError('meeting_specific must list RAN meeting folder URLs such as .../TSGR_113/')
     if not isinstance(result['meetings'], dict):
         raise ValueError('meetings must be a dictionary keyed by meeting number')
     return result
 
 
 def config_hash(cfg):
-    return digest(json.dumps(cfg, sort_keys=True).encode())
+    # Where agenda.csv is found does not change how it is read.
+    return digest(json.dumps({k: v for k, v in cfg.items() if k != 'meeting_specific'},
+                             sort_keys=True).encode())
+
+
+def portal_rows():
+    """The shared, once-per-process Portal query; None if unavailable."""
+    try:
+        return get_meetings()
+    except (httpx.HTTPError, ValueError) as exc:
+        print(f'[ran-plenary] Portal unavailable ({exc}); finding the meeting folder by name')
+        return None
 
 
 
@@ -139,9 +156,12 @@ def built_bundle(cfg, previous, reason) -> Bundle:
                    'config_hash': config_hash(cfg), 'timeplan': plan_info, 'agenda': agenda_info}, plan, agenda)
 
 
-def fetch_agenda(cfg, number, previous, http, cached):
+def fetch_agenda(cfg, number, previous, http, cached, rows=None):
     """agenda.csv from the meeting folder, else the sync folder, else as built."""
-    urls = [cfg['meeting_agenda_url'].format(number=number), cfg['agenda_url']]
+    meeting = f'ran#{number}'
+    folder = meeting_folders.resolve('ran-plenary', [meeting], rows=rows, configured=cfg['meeting_specific'],
+                                     root=cfg['archive_url'], http=http).get(meeting)
+    urls = ([folder + 'Agenda/agenda.csv'] if folder else []) + [cfg['agenda_url']]
     for url in urls:
         try:
             return fetch_file(http, url, previous.get('agenda', {}), cached.agenda if cached else None)
@@ -158,7 +178,7 @@ def fetch_agenda(cfg, number, previous, http, cached):
 
 
 
-def fetch_bundle(cfg, previous, http, cache_dir=DOWNLOADS / 'inputs') -> Bundle:
+def fetch_bundle(cfg, previous, http, cache_dir=DOWNLOADS / 'inputs', *, rows=None) -> Bundle:
     try:
         listing = remote_files.get_listing(cfg['chair_url'], http=http)
         chosen = select_timeplan(listing.text, cfg['chair_url'], previous)
@@ -174,7 +194,7 @@ def fetch_bundle(cfg, previous, http, cache_dir=DOWNLOADS / 'inputs') -> Bundle:
         pass
     plan, plan_info = fetch_file(http, chosen['url'], previous.get('timeplan', {}),
                                 cached.timeplan if cached else None)
-    agenda, agenda_info = fetch_agenda(cfg, chosen['meeting_number'], previous, http, cached)
+    agenda, agenda_info = fetch_agenda(cfg, chosen['meeting_number'], previous, http, cached, rows)
     manifest = {'meeting_number': chosen['meeting_number'], 'version': chosen['version'],
                 'config_hash': config_hash(cfg), 'timeplan': {**chosen, **plan_info}, 'agenda': agenda_info}
     return Bundle(manifest, plan, agenda)

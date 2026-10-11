@@ -272,6 +272,7 @@ def local_config(metadata, tmp_path, monkeypatch):
     cfg = {**sources.DEFAULTS, 'local_agenda':str(FIXTURES/'agenda.csv'), 'meetings':{'113':metadata}}
     monkeypatch.setattr(pipeline, 'load_config', lambda:cfg)
     monkeypatch.setattr(sources, 'load_config', lambda:cfg)
+    monkeypatch.setattr(sources, 'portal_rows', lambda: [])
     return cfg
 
 
@@ -305,7 +306,7 @@ def test_agenda_only_change_reuses_llm(local_config, parsed, tmp_path):
 
 def test_lifecycle_check_stages_without_advancing_success_state(local_config, tmp_path, monkeypatch):
     bundle = sources.local_bundle(FIXTURES/FILENAME,local_config,{})
-    monkeypatch.setattr(sources,'fetch_bundle',lambda *a:bundle)
+    monkeypatch.setattr(sources,'fetch_bundle',lambda *a, **k:bundle)
     before = {'meeting_number':113,'metadata':local_config['meetings']['113']}
     sources.write_json(sources.OUTPUT/'.schedule_state.json',before)
     result = lifecycle.check_updates()
@@ -316,7 +317,7 @@ def test_lifecycle_check_stages_without_advancing_success_state(local_config, tm
     state = {**bundle.manifest,'metadata':local_config['meetings']['113']}
     sources.write_json(sources.OUTPUT/'.schedule_state.json',state)
     assert not lifecycle.check_updates().changed
-    monkeypatch.setattr(sources,'fetch_bundle',lambda *a: (_ for _ in ()).throw(ValueError('network failed')))
+    monkeypatch.setattr(sources,'fetch_bundle',lambda *a, **k: (_ for _ in ()).throw(ValueError('network failed')))
     assert lifecycle.check_updates().errors
     assert sources.read_json(sources.OUTPUT/'.schedule_state.json') == state
 
@@ -543,7 +544,12 @@ def test_topic_preamble_comes_from_document(paragraphs, parsed, metadata, tmp_pa
 
 CHAIR = sources.DEFAULTS['chair_url']
 SYNC_AGENDA = sources.DEFAULTS['agenda_url']
-MEETING_AGENDA = sources.DEFAULTS['meeting_agenda_url'].format(number=113)
+MEETING_FOLDER = sources.DEFAULTS['archive_url'] + 'TSGR_113/'
+MEETING_AGENDA = MEETING_FOLDER + 'Agenda/agenda.csv'
+# Portal names the meeting's Docs/ subfolder on ftp.3gpp.org.
+ROWS_113 = [{'Title': '3GPPRAN#113', 'TBId': 373, 'Id': 1, 'StartDate': '2026-09-14 09:00:00',
+             'EndDate': '2026-09-17 17:00:00',
+             'MtgDocURL': 'https://ftp.3gpp.org/tsg_ran/TSG_RAN/TSGR_113/Docs/'}]
 V09 = 'RAN%23113%20time%20plan%20v09.zip'
 
 
@@ -597,8 +603,9 @@ def test_agenda_comes_from_the_meeting_folder_then_sync_then_the_build(built, tm
     base = {CHAIR: chair_listing(V09, v10), CHAIR + v10: b'PK-v10'}
     seen = []
     with server({**base, MEETING_AGENDA: b'meeting', SYNC_AGENDA: b'sync'}, seen) as http:
-        bundle = sources.fetch_bundle(sources.DEFAULTS, built, http, tmp_path / 'inputs')
-    assert bundle.agenda == b'meeting' and SYNC_AGENDA not in seen
+        bundle = sources.fetch_bundle(sources.DEFAULTS, built, http, tmp_path / 'inputs', rows=ROWS_113)
+    # Portal's MtgDocURL names the folder: nothing is listed to find it.
+    assert bundle.agenda == b'meeting' and SYNC_AGENDA not in seen and MEETING_FOLDER not in seen
     sources.remote_files.new_run()
     with server(base) as http:
         bundle = sources.fetch_bundle(sources.DEFAULTS, built, http, tmp_path / 'inputs')
@@ -611,3 +618,20 @@ def test_agenda_comes_from_the_meeting_folder_then_sync_then_the_build(built, tm
     v01 = 'RAN%23114%20time%20plan%20v01.zip'
     with server({CHAIR: chair_listing(v01), CHAIR + v01: b'PK-114'}) as http, pytest.raises(ValueError, match='RAN#114'):
         sources.fetch_bundle(sources.DEFAULTS, built, http, tmp_path / 'inputs')
+
+
+def test_without_portal_the_meeting_folder_is_found_by_name(built, tmp_path):
+    v10 = 'RAN%23113%20time%20plan%20v10.zip'
+    files = {CHAIR: chair_listing(V09, v10), CHAIR + v10: b'PK-v10',
+             MEETING_FOLDER: '<table></table>', MEETING_AGENDA: b'meeting', SYNC_AGENDA: b'sync'}
+    seen = []
+    with server(files, seen) as http:
+        bundle = sources.fetch_bundle(sources.DEFAULTS, built, http, tmp_path / 'inputs')
+    assert bundle.agenda == b'meeting' and sources.DEFAULTS['archive_url'] not in seen
+    # An override wins over the name, and is not hashed: it does not change how the agenda is read.
+    other = 'https://www.3gpp.org/ftp/tsg_ran/TSG_RAN/Moved/TSGR_113/'
+    cfg = {**sources.DEFAULTS, 'meeting_specific': [other]}
+    sources.remote_files.new_run()
+    with server({**files, other + 'Agenda/agenda.csv': b'moved'}) as http:
+        assert sources.fetch_bundle(cfg, built, http, tmp_path / 'inputs').agenda == b'moved'
+    assert sources.config_hash(cfg) == sources.config_hash(sources.DEFAULTS)
