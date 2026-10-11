@@ -16,6 +16,8 @@ DEMO_NOTICE = "Demo schedule — fixed sample data, not an official meeting sche
 _HTTPS_URL = r"https://[^\s\"'<>\\]+"
 # "v03" standing alone in a file name; "V2X" is a topic, not a version.
 _VERSION = re.compile(r"(?<![A-Za-z0-9])v\d+(?![A-Za-z0-9])", re.IGNORECASE)
+# "Draft" standing alone: the chair restarts at v00 when the draft is released.
+_DRAFT = re.compile(r"(?<![A-Za-z0-9])draft(?![A-Za-z0-9])", re.IGNORECASE)
 
 
 def normalize_presentation(value=None):
@@ -107,12 +109,15 @@ def render_support_note(schedule, support_links):
 def _source(name, label):
     """One source as "Main v03": readers check the version, the meeting is in the title above.
 
+    A draft says so ("Main draft v03"): its numbers and the released file's are
+    separate series, so "v03" alone does not tell which one is shown.
     The file name stays on hover. A file without a label is shown by its name.
     """
     if not label:
         return escape(name)
     versions = _VERSION.findall(name)
-    text = escape(f"{label} {versions[-1].lower()}" if versions else label).replace(" ", "&nbsp;")
+    shown = [label, "draft" if _DRAFT.search(name) else "", versions[-1].lower() if versions else ""]
+    text = escape(" ".join(filter(None, shown))).replace(" ", "&nbsp;")
     return f'<span title="{escape(name, quote=True)}">{text}</span>'
 
 

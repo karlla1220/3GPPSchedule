@@ -92,7 +92,13 @@ async function start() {
             try { return new Intl.DateTimeFormat('en-GB', { ...options, timeZone: manifest.timezone || 'UTC' }).format(new Date(iso)); }
             catch { return new Intl.DateTimeFormat('en-GB', { ...options, timeZone: 'UTC' }).format(new Date(iso)); }
         };
-        const version = name => (name || '').match(/\bv\d+(?:\.\d+)*\b/i)?.[0] || (name || '').replace(/\.(?:docx|docm|zip)$/i, '');
+        // "_v01" counts ("_" is not a boundary for \b). A draft says so: the chair
+        // restarts at v00 when the draft is released.
+        const version = name => {
+            const found = (name || '').match(/(?:^|[^a-z0-9])(v\d+(?:\.\d+)*)(?![a-z0-9])/i)?.[1];
+            if (!found) return (name || '').replace(/\.(?:docx|docm|zip)$/i, '');
+            return (/(?:^|[^a-z0-9])draft(?![a-z0-9])/i.test(name) ? 'draft ' : '') + found;
+        };
         const updatedNow = ai => {
             const section = manifest.sections[ai];
             return section && section.change !== 'initial' && section.changed_in === (manifest.source_name || manifest.document_file);

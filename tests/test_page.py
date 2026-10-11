@@ -37,7 +37,7 @@ def test_sources_are_short_labels_with_the_version_and_the_file_name_on_hover():
              'RAN1#126bis schedule for Hiroki Adhoc2 sessions_v01.docx',
              'RAN1#126b Sorour sessions online and offline schedules - v00.docx']
     assert sources(source_files=files, source_labels=dict(zip(files, ['Main', 'Hiroki', 'Sorour']))) == (
-        'Sources: Main\xa0v03 · Hiroki\xa0v01 · Sorour\xa0v00 ', files)
+        'Sources: Main\xa0draft\xa0v03 · Hiroki\xa0v01 · Sorour\xa0v00 ', files)
     plenary = ['RAN#113 time plan v09.zip', 'agenda.csv']
     assert sources(source_files=plenary, source_labels=dict(zip(plenary, ['Time plan', 'Agenda'])))[0] == (
         'Sources: Time\xa0plan\xa0v09 · Agenda ')
@@ -47,6 +47,11 @@ def test_sources_are_short_labels_with_the_version_and_the_file_name_on_hover():
     ('R2_135b_Schedule_V01.docx', 'Main\xa0v01'),
     ('Schedule v02 for NR V2X sessions v3.docx', 'Main\xa0v3'),   # The last one; V2X is a topic.
     ('Schedule (rev2).docx', 'Main'),
+    # Draft and released files number their versions separately.
+    ('Draft RAN1#126b online and offline schedules - v03.docx', 'Main\xa0draft\xa0v03'),
+    ('RAN1#126b online and offline schedules - v00.docx', 'Main\xa0v00'),
+    ('DRAFT_schedule.docx', 'Main\xa0draft'),
+    ('Schedule for drafting sessions v02.docx', 'Main\xa0v02'),   # A word, not the marker.
 ])
 def test_source_version_is_read_from_the_file_name(name, shown):
     assert sources(source_files=[name], source_labels={name: 'Main'})[0] == f'Sources: {shown} '
@@ -59,7 +64,7 @@ def test_source_without_a_label_keeps_its_file_name():
     assert 'Sources: Draft &lt;RAN1#126b&gt; schedules - v03.docx · agenda.csv &nbsp;|' in header
     assert sources(source_files=[])[0] == 'Sources: Fixed demonstration schedule '
     labelled = render_header(replace(build_schedule(), source_files=[name + '"x'], source_labels={name + '"x': '<Main>'}))
-    assert 'title="Draft &lt;RAN1#126b&gt; schedules - v03.docx&quot;x">&lt;Main&gt;&nbsp;v03</span>' in labelled
+    assert 'title="Draft &lt;RAN1#126b&gt; schedules - v03.docx&quot;x">&lt;Main&gt;&nbsp;draft&nbsp;v03</span>' in labelled
 
 
 @pytest.mark.parametrize('value', [[], {'creator': None}, {'contact_emali': 'typo'},
