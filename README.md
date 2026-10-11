@@ -234,7 +234,7 @@ RAN P는 Chair 폴더의 `RAN#<번호> time plan v<버전>.zip`/`.docx`를
 - **`agenda.csv`는 미팅 폴더(`tsg_ran/TSG_RAN/TSGR_<번호>/Agenda/`)를 먼저 보고**, 없으면 sync(`agenda_url`), 그것도 없으면 같은 회의에서 빌드한 것을 씁니다. 다른 회의의 agenda는 물려받지 않습니다.
   - 미팅 폴더는 timeplan의 회의 번호로 자동으로 찾습니다(아래 "미팅 폴더 자동 등록"). Portal의 `MtgDocURL`은 `.../TSGR_113/Docs/`처럼 하위 폴더를 가리키므로 그 위 폴더를 씁니다.
   - 찾지 못하면(회의 전이라 아직 없는 폴더) sync로 넘어가고 다음 실행에서 다시 찾습니다.
-  - 직접 지정하려면 `config.json`의 `meeting_specific`에 `https://www.3gpp.org/ftp/tsg_ran/TSG_RAN/TSGR_113/`처럼 적습니다. 그 회의에서는 자동으로 찾은 폴더보다 우선합니다. 폴더 위치만 바꾸므로 `config_hash`에 넣지 않습니다.
+  - 찾은 폴더는 `config.json`의 `meeting_specific`에 기록됩니다. 직접 지정하려면 `meeting_specific_override`에 `https://www.3gpp.org/ftp/tsg_ran/TSG_RAN/TSGR_113/`처럼 적습니다. 그 회의에서는 자동으로 찾은 폴더보다 우선합니다. 둘 다 폴더 위치만 바꾸므로 `config_hash`에 넣지 않습니다.
 
 파서는 셀을 평문으로 뭉개지 않고 방 안내와 문단별 run의 글씨 색, 테마/스타일 상속,
 줄바꿈, 취소선, 원문 ID를 보존합니다. Gemini가 문서 전체를 읽어 물리적 장소,
@@ -333,9 +333,9 @@ Gemini가 다시 읽되, 원문으로 확인되는 답만 씁니다(아래 "LLM 
 - **미팅 폴더는 미팅 ID로 자동으로 찾습니다(아래 "미팅 폴더 자동 등록").** Portal의 `MtgDocURL`,
   `TSGR2_135bis`·`TSGR2_135b`(두 표기가 모두 쓰였습니다) 순입니다. 수백 항목인 `WG2_RL2/` 루트 목록은
   둘 다 없을 때만, 미팅마다 6시간에 한 번 받습니다.
-- **직접 지정하려면 `config.json`의 `meeting_specific`에 적습니다.** RAN1과 같은 이름이고, 값은
-  `https://www.3gpp.org/ftp/tsg_ran/WG2_RL2/TSGR2_135bis/`처럼 미팅 폴더입니다. 그 미팅에서는 자동으로 찾은 폴더보다 우선합니다.
-  폴더 위치만 바꾸므로 `config_hash`에 넣지 않습니다(바꿔도, 자동으로 새 폴더를 찾아도 재빌드하지 않습니다).
+- **찾은 폴더는 `config.json`의 `meeting_specific`에 기록됩니다.** 직접 지정하려면 `meeting_specific_override`에
+  `https://www.3gpp.org/ftp/tsg_ran/WG2_RL2/TSGR2_135bis/`처럼 미팅 폴더를 적습니다(RAN1과 같은 이름). 그 미팅에서는 자동으로 찾은 폴더보다 우선합니다.
+  둘 다 폴더 위치만 바꾸므로 `config_hash`에 넣지 않습니다(바꿔도, 자동으로 새 폴더를 찾아도 파서 캐시를 버리지 않습니다).
 - **두 폴더는 서로 대체하지 않습니다.** 미팅 폴더에는 회의 전(v00 등)과 회의 후에만 올라오고, 회의 중의 판은 sync 폴더에만 올라옵니다.
 - **sync 폴더는 회의에 따라 생기고 사라집니다.** 2026-10-11에는 #135bis 전날 `Agenda/`가 지워졌습니다(IIS 403, FTP 550).
   - 없는 폴더(403·404)는 정상입니다(`sources.sync_listing`). 오류도, FTP 재시도도 없이 미팅 폴더로 계속합니다.
@@ -500,7 +500,7 @@ FTP Inbox/
 
 미팅 번호는 선택된 메인 스케줄 파일 이름에서 정해지고, 나머지 참조 파일은 그 번호와 일치할 때만 사용합니다. LLM 판단 없이 이름과 경로만으로 결정합니다.
 
-- **미팅 폴더**: Portal에서 끝나지 않은 가장 이른 미팅과 마지막으로 빌드한 미팅의 폴더(`tsg_ran/WG1_RL1/TSGR1_126b/`)를 자동으로 찾아 `Inbox/`와 `Agenda/`를 봅니다(아래 "미팅 폴더 자동 등록"). 빌드한 미팅은 다음 미팅의 파일로 바뀔 때까지 남습니다. `config.json`의 `meeting_specific`에 적은 폴더는 그 미팅에서 자동으로 찾은 폴더보다 우선합니다. 자동으로 찾지 못하거나 조회에 실패하면 sync 폴더만으로 계속합니다.
+- **미팅 폴더**: Portal에서 끝나지 않은 가장 이른 미팅과 마지막으로 빌드한 미팅의 폴더(`tsg_ran/WG1_RL1/TSGR1_126b/`)를 자동으로 찾아 `Inbox/`와 `Agenda/`를 봅니다(아래 "미팅 폴더 자동 등록"). 빌드한 미팅은 다음 미팅의 파일로 바뀔 때까지 남습니다. 찾은 폴더는 `config.json`의 `meeting_specific`에 기록되고, `meeting_specific_override`(환경 변수 `SCHEDULE_MEETING_SPECIFIC_OVERRIDE`)에 적은 폴더는 그 미팅에서 자동으로 찾은 폴더보다 우선합니다. 자동으로 찾지 못하거나 조회에 실패하면 sync 폴더만으로 계속합니다. `--no-download` 빌드는 기록된 폴더를 그대로 씁니다.
 - **Agenda**: 미팅 폴더 이름(`TSGR1_126b` → `ran1#126bis`)이 현재 미팅과 다르면 그 폴더의 Agenda는 읽지 않습니다. 다음 미팅 폴더가 먼저 잡히는 기간에도 다른 미팅의 Agenda가 섞이지 않습니다. 미팅을 알 수 없는 URL은 그대로 사용합니다.
 - **Agenda 설명**: `docs/ran1/agenda_item_description.json`의 출처(`source_url` 등)가 다른 미팅을 가리키면 세션에 붙이지 않고, 다운로드가 가능한 빌드에서 다시 생성합니다.
 - **로컬 Agenda 캐시**: `downloads/ran1/Agenda/<미팅>/`(예: `ran1_126bis/`)에 미팅별로 저장합니다. `agenda.csv`처럼 이름에 미팅이 없는 파일이 다음 미팅에 재사용되지 않습니다.
@@ -812,15 +812,19 @@ WG는 파일 선택과 문서 해석만 담당합니다. 새로운 WG도 `get_li
 각 WG는 sync 폴더(회의 중 실시간 판)와 아카이브의 미팅 폴더(회의 전·후 판과 `agenda.csv`)를 함께 읽습니다.
 미팅 폴더는 미팅이 바뀌어도 설정을 고치지 않도록 미팅 ID로 찾습니다. 한 미팅의 폴더는 다음 순서로 정합니다.
 
-1. WG `config.json`의 `meeting_specific` (직접 지정, 그 미팅에만 적용)
+1. WG `config.json`의 `meeting_specific_override` (직접 지정, 그 미팅에만 적용)
 2. Portal의 `MtgDocURL` (실행마다 한 번 받는 Portal 목록에 이미 있어 요청이 없습니다. `ftp.3gpp.org`는 `www.3gpp.org/ftp`로 바꾸고, `Docs/` 같은 하위 폴더는 미팅 폴더로 올립니다. 다른 미팅 이름을 가리키면 쓰지 않습니다.)
-3. 이전 실행이 찾은 폴더 (`.cache/meeting-folders.json`, Actions 캐시로 이어집니다)
+3. 이전 실행이 찾아 기록한 폴더 (`config.json`의 `meeting_specific`)
 4. 미팅 ID로 만든 폴더 이름을 바로 조회: RAN1 `TSGR1_126b`·`TSGR1_126bis`, RAN2 `TSGR2_135bis`·`TSGR2_135b`, RAN P `TSGR_113`
 5. WG 루트 목록에서 이름으로 찾기 (`-e` 같은 전자회의 접미사도 인정). 수백 항목이라 미팅마다 6시간에 한 번만 받습니다.
 
-- **없는 것은 정상입니다.** 폴더가 없으면(IIS 403, FTP 550) 기억하지 않고 다음 실행에서 다시 찾습니다. 회의 전에는 폴더가 아직 없는 경우가 많습니다. 5xx·연결 실패는 오류입니다.
+- **찾은 폴더는 `config.json`의 `meeting_specific`에 기록되어 저장소에 남습니다.** CI가 확인할 때마다 그 실행에서 찾은 폴더(다음 미팅, 빌드한 미팅)로 목록을 다시 쓰고, 바뀌면 그 WG를 빌드해 빌드 결과와 함께 커밋합니다(`meeting folders now …`가 check의 변경 사유로 보입니다). 목록에 없는 미팅은 아직 찾지 못한 것입니다. 손으로 고치지 않습니다. 고정하려면 `meeting_specific_override`에 적습니다.
+  - RAN2와 RAN P의 build는 check가 준비한 입력을 쓰고 폴더를 다시 찾지 않으므로, check가 쓴 목록을 CI 계획(`.ci/plan.json`)으로 build job에 넘겨 다시 씁니다.
+  - 이 목록은 WG 입력 지문(`ci.py`의 `fingerprint`)에서 빠집니다. 기록했다는 이유로 "설정 변경"이 되거나 check의 계획이 무효가 되지 않습니다.
+  - 파일이 없는 로컬 checkout에서는 기록하지 않습니다.
+- **없는 것은 정상입니다.** 폴더가 없으면(IIS 403, FTP 550) 기록하지 않고 다음 실행에서 다시 찾습니다. 회의 전에는 폴더가 아직 없는 경우가 많습니다. 5xx·연결 실패는 오류입니다. 루트 목록을 마지막으로 받은 시각만 `.cache/meeting-folders.json`에 둡니다.
 - 목록은 실행마다 한 번만 받고 check에서 build로 넘기므로(`.ci/listings.json`), 같은 실행에서 다시 찾아도 요청이 늘지 않습니다.
-- 찾은 폴더는 설정이 아니므로 WG 입력 지문과 `config_hash`에 들어가지 않습니다. 새 폴더를 찾았다는 이유만으로 재빌드하지 않습니다.
+- `meeting_specific`과 `meeting_specific_override`는 `config_hash`에 들어가지 않습니다. 폴더가 바뀌어도 파서·LLM 캐시는 그대로 쓰므로, 기록을 커밋하려고 도는 빌드는 가볍습니다.
 
 ### 3GPP HTTPS 인증서와 FTP fallback
 

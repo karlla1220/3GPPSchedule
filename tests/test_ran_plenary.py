@@ -630,7 +630,7 @@ def test_without_portal_the_meeting_folder_is_found_by_name(built, tmp_path):
     assert bundle.agenda == b'meeting' and sources.DEFAULTS['archive_url'] not in seen
     # An override wins over the name, and is not hashed: it does not change how the agenda is read.
     other = 'https://www.3gpp.org/ftp/tsg_ran/TSG_RAN/Moved/TSGR_113/'
-    cfg = {**sources.DEFAULTS, 'meeting_specific': [other]}
+    cfg = {**sources.DEFAULTS, 'meeting_specific_override': [other]}
     sources.remote_files.new_run()
     with server({**files, other + 'Agenda/agenda.csv': b'moved'}) as http:
         assert sources.fetch_bundle(cfg, built, http, tmp_path / 'inputs').agenda == b'moved'

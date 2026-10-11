@@ -3,7 +3,8 @@ from pathlib import Path
 from shared.lifecycle import clear_paths, restore_staged
 
 input_paths = (Path('working_groups/ran1'), Path('ref_in_manual/ran1'))
-persistent_paths = (Path('docs/ran1'), Path('downloads/ran1/extra_files'))
+# config.json: each run records the meeting folders it found (meeting_specific).
+persistent_paths = (Path('docs/ran1'), Path('downloads/ran1/extra_files'), Path('working_groups/ran1/config.json'))
 # Includes deterministic chairman HTML caches; docs/ran1 includes static assets
 # and source identity, so existing failure rollback covers agreement publishing.
 cache_paths = (Path('.cache/ran1'),)

@@ -9,6 +9,10 @@ def fresh_listings(tmp_path, monkeypatch):
     remote_files.new_run()
     # Nor meeting folders an earlier test (or a local build) found.
     monkeypatch.setattr(meeting_folders, 'CACHE_PATH', tmp_path / 'meeting-folders.json')
+    # Never record found folders in the repository's config.json.
+    monkeypatch.setattr(meeting_folders, 'CONFIG_PATHS',
+                        {wg: tmp_path / 'absent' / wg / 'config.json' for wg in meeting_folders.CONFIG_PATHS})
+    meeting_folders.new_run()
     # RAN1 tests give their own folders; the lookup has its own tests.
     for module in ('check_update', 'pipeline'):
         monkeypatch.setattr(f'working_groups.ran1.{module}.with_meeting_folders', lambda cfg, *a, **k: cfg)

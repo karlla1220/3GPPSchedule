@@ -6,17 +6,18 @@ Config is split into two kinds of base URLs:
   that updates throughout a meeting, e.g.
   ``https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/``.  Only an ``Inbox``
   subfolder exists here; no ``Agenda``.
-* ``meeting_specific`` (list of base URLs, optional) — per-meeting folders
-  such as ``https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_125/``.  Both
-  ``Inbox`` and ``Agenda`` subfolders are available.  Normally empty:
+* ``meeting_specific`` (list of base URLs) — per-meeting folders such as
+  ``https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_125/``.  Both ``Inbox``
+  and ``Agenda`` subfolders are available.  Written by each run:
   ``with_meeting_folders`` finds the folders of the next meeting and the
-  built one (``shared/meeting_folders.py``). An entry overrides the folder
-  of its meeting.
+  built one (``shared/meeting_folders.py``) and records them here.
+* ``meeting_specific_override`` (list of base URLs, optional) — set by
+  hand; a folder here wins over the one found for its meeting.
 
 The loader derives two convenience lists from the above:
 
 * ``inbox_urls``  — every base URL with ``Inbox/`` appended.
-* ``agenda_urls`` — only the ``meeting_specific`` URLs with ``Agenda/``
+* ``agenda_urls`` — only the meeting folder URLs with ``Agenda/``
   appended (used for timezone detection from the meeting agenda DOCX,
   which is typically uploaded earlier than the Chair notes).
 
@@ -30,8 +31,9 @@ Environment variables
 ---------------------
 SCHEDULE_MEETING_SYNC
     Single base URL string.
-SCHEDULE_MEETING_SPECIFIC
-    JSON array of base URL strings, or a comma-separated string.
+SCHEDULE_MEETING_SPECIFIC_OVERRIDE (or SCHEDULE_MEETING_SPECIFIC)
+    JSON array of base URL strings, or a comma-separated string; replaces
+    ``meeting_specific_override``.
 SCHEDULE_INBOX_URLS  *(deprecated)*
     JSON array / comma-separated list.  Used as a fallback when neither
     ``SCHEDULE_MEETING_SYNC`` nor ``SCHEDULE_MEETING_SPECIFIC`` is set.
@@ -55,6 +57,7 @@ config.json shape
   "meeting_specific": [
     "https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_125/"
   ],
+  "meeting_specific_override": [],
   "extra_folders": [
     {"url": "https://.../custom/", "person_name": "Alice"}
   ],
@@ -162,16 +165,18 @@ def load_config(path: Path = DEFAULT_CONFIG_PATH) -> dict:
     Returns a dict with these keys:
 
         meeting_sync     : str | None   — single base URL or None
-        meeting_specific : list[str]    — list of base URLs
+        meeting_specific : list[str]    — base URLs found (recorded)
+        meeting_specific_override : list[str] — base URLs set by hand
         inbox_urls       : list[str]    — derived: each base + 'Inbox/'
                                           (plus any legacy inbox_urls)
-        agenda_urls      : list[str]    — derived from meeting_specific only,
+        agenda_urls      : list[str]    — derived from meeting folders only,
                                           each base + 'Agenda/'
         extra_folders    : list[dict]   — manually-listed folders
         extra_files      : list[dict]   — manually-listed external files
     """
     meeting_sync: str | None = DEFAULT_MEETING_SYNC
     meeting_specific: list[str] = []
+    meeting_specific_override: list[str] = []
     legacy_inbox: list[str] = []
     extra_folders: list[dict] = []
     extra_files: list[dict] = []
@@ -192,6 +197,10 @@ def load_config(path: Path = DEFAULT_CONFIG_PATH) -> dict:
             meeting_specific = [
                 str(u) for u in data["meeting_specific"] if str(u).strip()
             ]
+        if isinstance(data.get("meeting_specific_override"), list):
+            meeting_specific_override = [
+                str(u) for u in data["meeting_specific_override"] if str(u).strip()
+            ]
 
         if isinstance(data.get("inbox_urls"), list) and data["inbox_urls"]:
             print(
@@ -203,7 +212,7 @@ def load_config(path: Path = DEFAULT_CONFIG_PATH) -> dict:
             # agenda_urls can still be derived for per-meeting URLs.
             if "meeting_sync" not in data and "meeting_specific" not in data:
                 meeting_sync = None
-                meeting_specific = []
+                meeting_specific_override = []
                 for u in legacy_inbox:
                     base = u.rstrip("/")
                     if base.lower().endswith("/inbox"):
@@ -211,7 +220,7 @@ def load_config(path: Path = DEFAULT_CONFIG_PATH) -> dict:
                     if "/Meetings_3GPP_SYNC/" in base and meeting_sync is None:
                         meeting_sync = base + "/"
                     else:
-                        meeting_specific.append(base + "/")
+                        meeting_specific_override.append(base + "/")
                 legacy_inbox = []  # consumed by migration
 
         if isinstance(data.get("extra_folders"), list):
@@ -222,13 +231,15 @@ def load_config(path: Path = DEFAULT_CONFIG_PATH) -> dict:
 
     # 2. Environment overrides
     env_sync = os.environ.get("SCHEDULE_MEETING_SYNC")
-    env_specific = os.environ.get("SCHEDULE_MEETING_SPECIFIC")
+    env_specific = os.environ.get(
+        "SCHEDULE_MEETING_SPECIFIC_OVERRIDE", os.environ.get("SCHEDULE_MEETING_SPECIFIC")
+    )
     env_legacy = os.environ.get("SCHEDULE_INBOX_URLS")
 
     if env_sync is not None:
         meeting_sync = env_sync.strip() or None
     if env_specific is not None:
-        meeting_specific = _parse_url_list_env(env_specific)
+        meeting_specific_override = _parse_url_list_env(env_specific)
     if env_legacy and not env_sync and not env_specific:
         print(
             "Warning: SCHEDULE_INBOX_URLS is deprecated — "
@@ -258,6 +269,7 @@ def load_config(path: Path = DEFAULT_CONFIG_PATH) -> dict:
     if meeting_sync:
         meeting_sync = _normalize_url(meeting_sync)
     meeting_specific = [_normalize_url(u) for u in meeting_specific]
+    meeting_specific_override = [_normalize_url(u) for u in meeting_specific_override]
 
     extra_folders = [
         e for e in (_normalize_extra(x) for x in extra_folders) if e is not None
@@ -269,8 +281,8 @@ def load_config(path: Path = DEFAULT_CONFIG_PATH) -> dict:
     return _derive({
         "meeting_sync": meeting_sync,
         "meeting_specific": meeting_specific,
+        "meeting_specific_override": meeting_specific_override,
         "legacy_inbox": [_normalize_url(u) for u in legacy_inbox],
-        "meeting_folders": [],
         "extra_folders": extra_folders,
         "extra_files": extra_files,
     })
@@ -278,7 +290,7 @@ def load_config(path: Path = DEFAULT_CONFIG_PATH) -> dict:
 
 def _derive(cfg: dict) -> dict:
     """Fill ``inbox_urls``/``agenda_urls`` from the sync and meeting folders."""
-    folders = list(dict.fromkeys(cfg["meeting_specific"] + cfg["meeting_folders"]))
+    folders = list(dict.fromkeys(cfg["meeting_specific_override"] + cfg["meeting_specific"]))
     base_urls = ([cfg["meeting_sync"]] if cfg["meeting_sync"] else []) + folders
     inbox_urls = [_normalize_url(b.rstrip("/") + "/Inbox") for b in base_urls]
     inbox_urls.extend(cfg["legacy_inbox"])
@@ -302,7 +314,8 @@ def with_meeting_folders(
 
     The meetings are the earliest one by Portal dates that has not ended
     and the built one, which stays until the next meeting's files replace
-    it. ``meeting_specific`` wins for its meeting. A folder that cannot be
+    it. ``meeting_specific_override`` wins for its meeting, and the folders
+    found are recorded in ``meeting_specific``. A folder that cannot be
     looked up (outage) is left out for this run: the sync folder and the
     built state still work, as when the folder does not exist yet.
     """
@@ -326,11 +339,13 @@ def with_meeting_folders(
         meetings.append(built_meeting_id.lower())
     try:
         found = meeting_folders.resolve(
-            "ran1", meetings, rows=rows, configured=cfg["meeting_specific"], http=http
+            "ran1", meetings, rows=rows, override=cfg["meeting_specific_override"],
+            recorded=cfg["meeting_specific"], http=http,
         )
     except httpx.HTTPError as exc:
         print(f"Warning: meeting folder lookup failed: {exc}")
         return cfg
     for meeting, url in found.items():
         print(f"  Meeting folder for {meeting}: {url}")
-    return _derive({**cfg, "meeting_folders": list(found.values())})
+    manual = set(cfg["meeting_specific_override"])
+    return _derive({**cfg, "meeting_specific": [u for u in found.values() if u not in manual]})

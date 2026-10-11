@@ -1,5 +1,6 @@
 """Meeting folders found from the meeting id, without hand-edited config."""
 from datetime import datetime, timedelta, timezone
+import json
 
 import httpx
 import pytest
@@ -39,6 +40,7 @@ def row(title, start, end, url=None, tb=380):
 
 def resolve(wg, meetings, folders, seen, **kwargs):
     remote_files.new_run()   # each call is a separate CI run
+    meeting_folders.new_run()
     with server(folders, seen) as http:
         return meeting_folders.resolve(wg, meetings, http=http, **{'now': NOW, **kwargs})
 
@@ -74,15 +76,28 @@ def test_portal_mtgdocurl_needs_no_request():
     assert meeting_folders.portal_folders('ran1', rows) == {'ran1#126bis': WG1 + 'TSGR1_126b/'}
 
 
-def test_candidates_are_listed_directly_and_the_result_is_remembered():
+def test_found_folders_are_recorded_in_meeting_specific(tmp_path, monkeypatch):
+    path = tmp_path / 'config.json'
+    path.write_text(json.dumps({'sync_url': 'x', 'meeting_specific': [], 'meeting_specific_override': []}))
+    monkeypatch.setitem(meeting_folders.CONFIG_PATHS, 'ran2', path)
     seen = []
-    # RAN2 used both spellings; the second one exists here.
-    assert resolve('ran2', ['ran2#133bis'], {WG2 + 'TSGR2_133b/': ['Agenda/']}, seen) == {
+    # RAN2 used both spellings; the second one exists here. RAN2#136 is not made yet.
+    assert resolve('ran2', ['ran2#133bis', 'ran2#136'], {WG2 + 'TSGR2_133b/': ['Agenda/']}, seen) == {
         'ran2#133bis': WG2 + 'TSGR2_133b/'}
-    assert seen == [WG2 + 'TSGR2_133bis/', WG2 + 'TSGR2_133b/']
+    assert seen[:2] == [WG2 + 'TSGR2_133bis/', WG2 + 'TSGR2_133b/']
+    # The repository shows what was found; a meeting not listed was not found.
+    recorded = json.loads(path.read_text())
+    assert recorded == {'sync_url': 'x', 'meeting_specific': [WG2 + 'TSGR2_133b/'], 'meeting_specific_override': []}
+    assert meeting_folders.updates('ran2') == [f'meeting folders now {WG2}TSGR2_133b/']
+    # The next run reads the record instead of asking again, and changes nothing.
     seen.clear()
-    assert resolve('ran2', ['ran2#133bis'], {}, seen) == {'ran2#133bis': WG2 + 'TSGR2_133b/'}
-    assert seen == []
+    assert resolve('ran2', ['ran2#133bis'], {}, seen, recorded=recorded['meeting_specific']) == {
+        'ran2#133bis': WG2 + 'TSGR2_133b/'}
+    assert seen == [] and meeting_folders.updates('ran2') == []
+    # Once RAN2#136 is made, it is added.
+    resolve('ran2', ['ran2#133bis', 'ran2#136'], {WG2 + 'TSGR2_136/': ['Invitation/']}, seen,
+            recorded=recorded['meeting_specific'], now=NOW + meeting_folders.ROOT_EVERY)
+    assert json.loads(path.read_text())['meeting_specific'] == [WG2 + 'TSGR2_133b/', WG2 + 'TSGR2_136/']
 
 
 def test_the_root_is_listed_when_no_candidate_exists():
@@ -116,7 +131,9 @@ def test_override_wins_over_portal_and_cache():
     moved = 'https://www.3gpp.org/ftp/tsg_ran/WG2_RL2/Old/TSGR2_135bis/'
     rows = [row('3GPPRAN2#135-bis', '2026-10-12', '2026-10-16', 'https://ftp.3gpp.org/tsg_ran/WG2_RL2/TSGR2_135bis/')]
     seen = []
-    assert resolve('ran2', ['ran2#135bis'], {}, seen, rows=rows, configured=[moved]) == {'ran2#135bis': moved}
+    recorded = [WG2 + 'TSGR2_135bis/']
+    assert resolve('ran2', ['ran2#135bis'], {}, seen, rows=rows, override=[moved], recorded=recorded) == {
+        'ran2#135bis': moved}
     assert seen == []
 
 
@@ -128,6 +145,7 @@ def test_a_real_failure_is_not_absence():
 
 def test_ran1_lists_the_next_meeting_and_the_built_one(tmp_path, monkeypatch):
     monkeypatch.delenv('SCHEDULE_MEETING_SPECIFIC', raising=False)
+    monkeypatch.delenv('SCHEDULE_MEETING_SPECIFIC_OVERRIDE', raising=False)
     monkeypatch.delenv('SCHEDULE_MEETING_SYNC', raising=False)
     path = tmp_path / 'config.json'
     path.write_text('{"meeting_specific": []}')
@@ -143,15 +161,21 @@ def test_ran1_lists_the_next_meeting_and_the_built_one(tmp_path, monkeypatch):
     assert found['inbox_urls'] == [ran1_config.DEFAULT_MEETING_SYNC + 'Inbox/',
                                    WG1 + 'TSGR1_127/Inbox/', WG1 + 'TSGR1_126b/Inbox/']
     assert WG1 not in seen
-    # A configured folder wins for its meeting and is kept as configured.
-    path.write_text('{"meeting_specific": ["https://example.org/TSGR1_127/"]}')
+    assert found['meeting_specific'] == [WG1 + 'TSGR1_127/', WG1 + 'TSGR1_126b/']
+    # An override wins for its meeting and is not recorded as found.
+    path.write_text('{"meeting_specific_override": ["https://example.org/TSGR1_127/"]}')
     found = ran1_config.with_meeting_folders(ran1_config.load_config(path), None, rows=rows,
                                              today='2026-10-20', http=None)
     assert found['agenda_urls'] == ['https://example.org/TSGR1_127/Agenda/']
+    assert found['meeting_specific'] == []
+    # Offline builds use the recorded folders as they are.
+    path.write_text(json.dumps({'meeting_specific': [WG1 + 'TSGR1_126b/']}))
+    assert ran1_config.load_config(path)['agenda_urls'] == [WG1 + 'TSGR1_126b/Agenda/']
 
 
 def test_ran1_keeps_the_sync_folder_when_the_lookup_fails(tmp_path, monkeypatch):
     monkeypatch.delenv('SCHEDULE_MEETING_SPECIFIC', raising=False)
+    monkeypatch.delenv('SCHEDULE_MEETING_SPECIFIC_OVERRIDE', raising=False)
     path = tmp_path / 'config.json'
     path.write_text('{}')
     cfg = ran1_config.load_config(path)

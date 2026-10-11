@@ -9,7 +9,8 @@ for the following meeting never replaces the one in progress.
 
 Meeting folders are found from the meeting id (``shared/meeting_folders.py``:
 Portal's MtgDocURL, then ``TSGR2_135bis``/``TSGR2_135b``, then the archive
-root). ``meeting_specific`` (``.../WG2_RL2/TSGR2_135bis/``) overrides one.
+root) and recorded in ``meeting_specific``. ``meeting_specific_override``
+(``.../WG2_RL2/TSGR2_135bis/``) is set by hand and wins for its meeting.
 """
 from __future__ import annotations
 
@@ -40,7 +41,10 @@ CACHE = Path('.cache/ran2')
 DEFAULTS = {
     'sync_url': 'https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN2/Agenda/',
     'archive_url': 'https://www.3gpp.org/ftp/tsg_ran/WG2_RL2/',
+    # Written by each run: the meeting folders it found (do not edit).
     'meeting_specific': [],
+    # Set by hand: a meeting folder that wins over the one found.
+    'meeting_specific_override': [],
     'local_agenda': None,
     # Gemini reads the cells the rules are unsure about, and whole documents
     # whose table layout they do not recognise. Without GEMINI_API_KEY the
@@ -50,7 +54,8 @@ DEFAULTS = {
     'meetings': {},
 }
 METADATA_KEYS = {'starts_on', 'ends_on', 'starts_at', 'ends_at', 'location', 'country', 'timezone'}
-FOLDER = re.compile(r'TSGR2_(\d+)(bis|b)?/?', re.I)
+FOLDER = re.compile(r'TSGR2_(\d+)(bis|b)?(?:-?e)?/?', re.I)
+FOLDER_KEYS = ('meeting_specific', 'meeting_specific_override')
 TIMESTAMP = re.compile(r'(\d{4})[/-](\d{2})[/-](\d{2})\s+(\d{1,2}):(\d{2})')
 
 
@@ -84,11 +89,12 @@ def load_config() -> dict:
             raise ValueError(f'{name} must be an HTTP URL')
     if not isinstance(result['llm_fallback'], bool) or not isinstance(result['model'], str):
         raise ValueError('llm_fallback must be true/false and model a Gemini model name')
-    if (not isinstance(result['meeting_specific'], list)
-            or any(not isinstance(url, str) or urlparse(url).scheme not in ('http', 'https')
-                   or not FOLDER.fullmatch(url.rstrip('/').rsplit('/', 1)[-1] + '/')
-                   for url in result['meeting_specific'])):
-        raise ValueError('meeting_specific must list RAN2 meeting folder URLs such as .../TSGR2_135bis/')
+    for name in FOLDER_KEYS:
+        if (not isinstance(result[name], list)
+                or any(not isinstance(url, str) or urlparse(url).scheme not in ('http', 'https')
+                       or not FOLDER.fullmatch(url.rstrip('/').rsplit('/', 1)[-1] + '/')
+                       for url in result[name])):
+            raise ValueError(f'{name} must list RAN2 meeting folder URLs such as .../TSGR2_135bis/')
     if not isinstance(result['meetings'], dict):
         raise ValueError('meetings must map a meeting such as "135bis" to its metadata')
     for key, value in result['meetings'].items():
@@ -100,7 +106,7 @@ def load_config() -> dict:
 def config_hash(cfg) -> str:
     # Where a document is found does not change how it is read; the manifest
     # already records the URL of every input.
-    return digest(json.dumps({k: v for k, v in cfg.items() if k != 'meeting_specific'},
+    return digest(json.dumps({k: v for k, v in cfg.items() if k not in FOLDER_KEYS},
                              sort_keys=True).encode())
 
 
@@ -179,9 +185,9 @@ def agenda_folder(folder: str, http) -> list[dict]:
 
 
 def find_folders(cfg, meetings, rows, http) -> dict[str, str]:
-    """Meeting folders by meeting id; an override in meeting_specific wins."""
-    return meeting_folders.resolve('ran2', meetings, rows=rows, configured=cfg['meeting_specific'],
-                                   root=cfg['archive_url'], http=http)
+    """Meeting folders by meeting id; meeting_specific_override wins."""
+    return meeting_folders.resolve('ran2', meetings, rows=rows, override=cfg['meeting_specific_override'],
+                                   recorded=cfg['meeting_specific'], root=cfg['archive_url'], http=http)
 
 
 def schedule_candidates(entries: list[dict]) -> list[dict]:

@@ -4,13 +4,18 @@ The archive keeps each meeting in its own folder (``tsg_ran/WG1_RL1/TSGR1_126b/`
 with the versions from before and after the meeting and the ``agenda.csv``.
 In order, a meeting's folder is:
 
-1. the WG's ``meeting_specific`` entry for it (manual override),
+1. the WG's ``meeting_specific_override`` entry for it (set by hand),
 2. Portal's ``MtgDocURL`` (already fetched once per run, no request),
-3. what an earlier run found (``.cache/meeting-folders.json``),
+3. the WG's ``meeting_specific``, which records what earlier runs found,
 4. the first candidate name that lists (``TSGR1_126b``; one request each),
 5. the WG root listing (several hundred entries), at most every ROOT_EVERY.
 
-A folder that is not found is not remembered: before a meeting it usually
+Each run writes the folders it found to ``meeting_specific`` in the WG's
+config.json, so the repository shows them; a meeting that is not listed
+there was not found. CI commits the file with the build. The list is left
+out of the WG input fingerprint (ci.py), so writing it rebuilds nothing.
+
+A folder that is not found is not recorded: before a meeting it usually
 does not exist yet, and the next run looks again. Absence (403/404/550) is
 normal; any other failure propagates.
 """
@@ -28,8 +33,19 @@ import httpx
 from shared import remote_files
 from shared.portal_meetings import TB_IDS, meeting_key
 
+# When the root was last listed for a meeting not found (not worth committing).
 CACHE_PATH = Path('.cache/meeting-folders.json')
 ROOT_EVERY = timedelta(hours=6)
+CONFIG_PATHS = {
+    'ran1': Path('working_groups/ran1/config.json'),
+    'ran2': Path('working_groups/ran2/config.json'),
+    'ran-plenary': Path('working_groups/ran_plenary/config.json'),
+}
+# This run's folders by WG and meeting (overrides excluded), and the lists
+# it wrote to meeting_specific. The CI check reports a written list as a
+# reason to build and hands it to the build job, which commits it.
+_FOUND = {}
+_WRITTEN = {}
 # Archive root, folder prefix and the spellings of "bis" in folder names, in
 # the order they are tried. RAN2 used both (TSGR2_133b, TSGR2_135bis).
 WGS = {
@@ -133,7 +149,22 @@ def upcoming(wg_id, rows, today):
     return [key for _, key in sorted(set(dated))]
 
 
-def _read_cache(path):
+def new_run():
+    _FOUND.clear()
+    _WRITTEN.clear()
+
+
+def written(wg_id):
+    """The meeting_specific this run wrote for the WG, or None if unchanged."""
+    return _WRITTEN.get(wg_id)
+
+
+def updates(wg_id):
+    folders = written(wg_id)
+    return [] if folders is None else [f'meeting folders now {", ".join(folders) or "none"}']
+
+
+def _read_json(path):
     try:
         value = json.loads(Path(path).read_text(encoding='utf-8'))
         return value if isinstance(value, dict) else {}
@@ -141,12 +172,37 @@ def _read_cache(path):
         return {}
 
 
-def _write_cache(path, value):
+def _write_json(path, value):
     path = Path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
     temporary = path.with_suffix('.tmp')
-    temporary.write_text(json.dumps(value, indent=2, sort_keys=True) + '\n', encoding='utf-8')
+    temporary.write_text(json.dumps(value, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
     temporary.replace(path)
+
+
+def write(wg_id, folders):
+    """Set meeting_specific in the WG's config.json; True if it changed.
+
+    Only an existing file is changed (a local checkout without config.json
+    keeps working), and only when the list differs.
+    """
+    path = Path(CONFIG_PATHS[wg_id])
+    try:
+        config = json.loads(path.read_text(encoding='utf-8'))
+    except (OSError, ValueError):
+        return False
+    if not isinstance(config, dict) or config.get('meeting_specific') == folders:
+        return False
+    config['meeting_specific'] = folders
+    _write_json(path, config)
+    print(f'[{wg_id}] Recorded meeting_specific: {folders}')
+    return True
+
+
+def _record(wg_id):
+    folders = sorted(set(_FOUND[wg_id].values()))
+    if write(wg_id, folders):
+        _WRITTEN[wg_id] = folders
 
 
 def _lists(url, http):
@@ -175,25 +231,29 @@ def _root_folders(wg_id, root, http):
     return found
 
 
-def resolve(wg_id, meetings, *, rows=None, configured=(), root=None, http=None, now=None,
-            cache_path=None):
-    """Meeting folder URL by meeting id for each of meetings that has one."""
+def resolve(wg_id, meetings, *, rows=None, override=(), recorded=(), root=None, http=None,
+            now=None, record=True):
+    """Meeting folder URL by meeting id for each of meetings that has one.
+
+    override is the WG's meeting_specific_override, recorded its
+    meeting_specific. With record, the folders found are written back.
+    """
     root = _folder(root or root_url(wg_id))
-    cache_path = Path(cache_path or CACHE_PATH)
     now = now or datetime.now(timezone.utc)
-    manual, portal = overrides(wg_id, configured), portal_folders(wg_id, rows, root)
-    cache = _read_cache(cache_path)
-    state = cache.setdefault(wg_id, {})
-    known, root_listed = state.setdefault('folders', {}), state.setdefault('root_listed', {})
+    manual, portal = overrides(wg_id, override), portal_folders(wg_id, rows, root)
+    # A recorded folder under another archive_url is stale.
+    known = {k: v for k, v in overrides(wg_id, recorded).items() if v.startswith(root)}
+    cache = _read_json(CACHE_PATH)
+    root_listed = cache.setdefault(wg_id, {}).setdefault('root_listed', {})
     before = json.dumps(cache, sort_keys=True)
+    found = _FOUND.setdefault(wg_id, {})
     result = {}
     for meeting in dict.fromkeys(m for m in meetings if m):
         if meeting in manual:
             result[meeting] = manual[meeting]
+            found.pop(meeting, None)
             continue
         folder = portal.get(meeting) or known.get(meeting)
-        if folder is not None and not folder.startswith(root):
-            folder = None   # remembered under another archive_url
         if folder is None:
             folder = next((root + name + '/' for name in candidate_names(wg_id, meeting)
                            if _lists(root + name + '/', http)), None)
@@ -208,9 +268,10 @@ def resolve(wg_id, meetings, *, rows=None, configured=(), root=None, http=None, 
         if folder is None:
             print(f'[{wg_id}] No meeting folder for {meeting} yet; using the sync folder')
             continue
-        known[meeting] = folder
         root_listed.pop(meeting, None)
-        result[meeting] = folder
+        found[meeting] = result[meeting] = folder
     if json.dumps(cache, sort_keys=True) != before:
-        _write_cache(cache_path, cache)
+        _write_json(CACHE_PATH, cache)
+    if record:
+        _record(wg_id)
     return result

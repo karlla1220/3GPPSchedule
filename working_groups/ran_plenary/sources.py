@@ -26,15 +26,20 @@ DEFAULTS = {
     'chair_url': 'https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN/Inbox/Chair/',
     # The meeting folder keeps agenda.csv; the sync copy is emptied at some
     # point after the meeting, so it is only the fallback. The folder is found
-    # from the timeplan's meeting number (shared/meeting_folders.py);
-    # meeting_specific (.../TSG_RAN/TSGR_113/) overrides it.
+    # from the timeplan's meeting number (shared/meeting_folders.py) and
+    # recorded in meeting_specific by each run (do not edit);
+    # meeting_specific_override (.../TSG_RAN/TSGR_113/) is set by hand and wins.
     'archive_url': 'https://www.3gpp.org/ftp/tsg_ran/TSG_RAN/',
     'meeting_specific': [],
+    'meeting_specific_override': [],
     'agenda_url': 'https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN/Agenda/agenda.csv',
     'model': 'gemini-3.8-flash',
     'local_agenda': None,
     'meetings': {},
 }
+
+
+FOLDER_KEYS = ('meeting_specific', 'meeting_specific_override')
 
 
 def digest(data: bytes) -> str:
@@ -65,11 +70,12 @@ def load_config() -> dict:
     for name in ('chair_url', 'agenda_url', 'archive_url'):
         if urlparse(result[name]).scheme not in ('http', 'https'):
             raise ValueError(f'{name} must be an HTTP URL')
-    if (not isinstance(result['meeting_specific'], list)
-            or any(not isinstance(url, str) or urlparse(url).scheme not in ('http', 'https')
-                   or not meeting_folders.overrides('ran-plenary', [url])
-                   for url in result['meeting_specific'])):
-        raise ValueError('meeting_specific must list RAN meeting folder URLs such as .../TSGR_113/')
+    for name in FOLDER_KEYS:
+        if (not isinstance(result[name], list)
+                or any(not isinstance(url, str) or urlparse(url).scheme not in ('http', 'https')
+                       or not meeting_folders.overrides('ran-plenary', [url])
+                       for url in result[name])):
+            raise ValueError(f'{name} must list RAN meeting folder URLs such as .../TSGR_113/')
     if not isinstance(result['meetings'], dict):
         raise ValueError('meetings must be a dictionary keyed by meeting number')
     return result
@@ -77,7 +83,7 @@ def load_config() -> dict:
 
 def config_hash(cfg):
     # Where agenda.csv is found does not change how it is read.
-    return digest(json.dumps({k: v for k, v in cfg.items() if k != 'meeting_specific'},
+    return digest(json.dumps({k: v for k, v in cfg.items() if k not in FOLDER_KEYS},
                              sort_keys=True).encode())
 
 
@@ -159,8 +165,10 @@ def built_bundle(cfg, previous, reason) -> Bundle:
 def fetch_agenda(cfg, number, previous, http, cached, rows=None):
     """agenda.csv from the meeting folder, else the sync folder, else as built."""
     meeting = f'ran#{number}'
-    folder = meeting_folders.resolve('ran-plenary', [meeting], rows=rows, configured=cfg['meeting_specific'],
-                                     root=cfg['archive_url'], http=http).get(meeting)
+    folder = meeting_folders.resolve('ran-plenary', [meeting], rows=rows,
+                                     override=cfg['meeting_specific_override'],
+                                     recorded=cfg['meeting_specific'], root=cfg['archive_url'],
+                                     http=http).get(meeting)
     urls = ([folder + 'Agenda/agenda.csv'] if folder else []) + [cfg['agenda_url']]
     for url in urls:
         try:

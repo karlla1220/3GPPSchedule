@@ -494,7 +494,7 @@ def blocked_sync(tmp_path, monkeypatch):
     def no_ftp(url, **kwargs):
         raise httpx.ConnectError(f'FTP fallback failed for {url}: timed out', request=httpx.Request('GET', url))
     monkeypatch.setattr(sources.remote_files.ftp_transport, 'ftp_response', no_ftp)
-    return {**sources.DEFAULTS, 'meeting_specific': [FOLDER_135BIS]}
+    return {**sources.DEFAULTS, 'meeting_specific_override': [FOLDER_135BIS]}
 
 
 def test_blocked_sync_folder_falls_back_to_the_configured_meeting_folder(blocked_sync, tmp_path):
@@ -520,7 +520,7 @@ def test_an_absent_sync_folder_is_normal(tmp_path, monkeypatch):
                         lambda *a, **k: pytest.fail('an absent folder is not read over FTP'))
     files = {FOLDER_135BIS + 'Agenda/' + BIS: (FIXTURES / BIS).read_bytes()}
     seen = []
-    cfg = {**sources.DEFAULTS, 'meeting_specific': [FOLDER_135BIS]}
+    cfg = {**sources.DEFAULTS, 'meeting_specific_override': [FOLDER_135BIS]}
     with mock_server(files, seen=seen) as http:
         bundle = sources.fetch_bundle(cfg, {}, http, rows=ROWS_135BIS, today='2026-10-13',
                                       cache_dir=tmp_path / 'inputs')
@@ -535,7 +535,7 @@ def test_a_vanished_sync_version_is_kept_instead_of_stepping_back(tmp_path, monk
     with mock_server({live: b'live v03'}) as http:
         _, info = sources.remote_files.fetch_file(http, live)
     previous = {'meeting_id': 'ran2#135bis', 'version': 3, 'schedule': info, 'agenda': None}
-    cfg = {**sources.DEFAULTS, 'meeting_specific': [FOLDER_135BIS]}
+    cfg = {**sources.DEFAULTS, 'meeting_specific_override': [FOLDER_135BIS]}
     folder = {FOLDER_135BIS + 'Agenda/' + BIS: (FIXTURES / BIS).read_bytes()}
     # v03 is being replaced (or the sync folder was emptied): only the meeting folder's v00 is listed.
     for files in ({SYNC + 'other.txt': b'x', **folder}, folder):
@@ -625,11 +625,12 @@ def test_config_rejects_unknown_keys_and_bad_meetings(tmp_path, monkeypatch):
         sources.load_config()
     path.write_text(json.dumps({'meetings': {'135bis': {'timezone': 'Asia/Seoul'}}}))
     assert sources.override_for(sources.load_config(), 'ran2#135bis') == {'timezone': 'Asia/Seoul'}
-    path.write_text(json.dumps({'meeting_specific': ['https://www.3gpp.org/ftp/tsg_ran/WG2_RL2/Inbox/']}))
+    path.write_text(json.dumps({'meeting_specific_override': ['https://www.3gpp.org/ftp/tsg_ran/WG2_RL2/Inbox/']}))
     with pytest.raises(ValueError, match='meeting_specific'):
         sources.load_config()
     # Folder URLs only decide where documents are found, not how they are read.
-    assert sources.config_hash({**sources.DEFAULTS, 'meeting_specific': [FOLDER_135BIS]}) == \
+    assert sources.config_hash({**sources.DEFAULTS, 'meeting_specific_override': [FOLDER_135BIS]}) == \
+        sources.config_hash({**sources.DEFAULTS, 'meeting_specific': [FOLDER_135BIS]}) == \
         sources.config_hash(sources.DEFAULTS)
 
 
