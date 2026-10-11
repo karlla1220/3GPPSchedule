@@ -475,3 +475,20 @@ def test_portal_metadata_is_looked_up_for_the_selected_meeting():
     with patch.object(check_update, 'lookup_timezone_reference', return_value=None) as lookup:
         _run_check(state=state, local_refs={}, remote=[_BIS_DRAFT])
     lookup.assert_called_once_with('ran1', 'ran1#126bis')
+
+
+
+def test_only_lost_versions_is_not_a_change():
+    from working_groups.ran1.check_update import _only_lost_versions
+    built = [{"folder": "Chair_notes", "name": "RAN1#126 schedules - v03.docx", "uploaded_at": "a"},
+             {"folder": "Chair_notes", "name": "RAN1#126 schedules - v01.docx", "uploaded_at": "b"},
+             {"folder": "Hiroki_notes", "name": "RAN1#126 Hiroki - v01.docx", "uploaded_at": "c"}]
+    # v03 left the sync folder; the mirror still has v01, and a new copy of v01 appeared.
+    lost = [{"folder": "Chair_notes", "name": "RAN1#126 schedules - v01.docx", "uploaded_at": "z"},
+            {"folder": "Hiroki_notes", "name": "RAN1#126 Hiroki - v01.docx", "uploaded_at": "c"}]
+    assert _only_lost_versions(built, lost)
+    # Anything newer anywhere is a real change.
+    newer = lost + [{"folder": "Hiroki_notes", "name": "RAN1#126 Hiroki - v02.docx", "uploaded_at": "d"}]
+    assert not _only_lost_versions(built, newer)
+    assert not _only_lost_versions(built, built)
+    assert not _only_lost_versions(built, lost + [{"folder": "Sorour_notes", "name": "RAN1#126 S - v00.docx"}])

@@ -40,6 +40,7 @@ from .parser import build_room_list, parse_docx, extract_meeting_location, find_
 from .session_parser import parse_time_slots, get_timezone_from_location, normalize_group_headers, fill_missing_groups
 from shared.renderer import save_html
 from shared.portal_meetings import lookup_timezone_reference
+from shared import remote_files
 from .downloader import (
     download_latest_schedule,
     download_latest_chair_notes,
@@ -424,7 +425,9 @@ def build_schedule(args) -> Schedule:
             # single explicit local meeting is still safe to pin exactly.
             locked_meeting_id = next(iter(local_main_ids))
             preferred_meeting_id = locked_meeting_id
-        try:
+        def discover_and_download():
+            nonlocal sources
+            # Set before downloading: a download failure must still raise below.
             sources = discover_schedule_sources(
                 urls=cfg["inbox_urls"],
                 extra_folders=cfg["extra_folders"],
@@ -432,11 +435,23 @@ def build_schedule(args) -> Schedule:
                 preferred_meeting_id=preferred_meeting_id,
                 locked_meeting_id=locked_meeting_id,
             )
-            if sources:
-                print(f"Found {len(sources)} schedule source(s)")
-                docx_path, vice_chair_paths = download_all_schedules(sources)
-                if vice_chair_paths:
-                    print(f"\nVice-chair schedules: {', '.join(vice_chair_paths.keys())}")
+            if not sources:
+                return None, {}
+            print(f"Found {len(sources)} schedule source(s)")
+            return download_all_schedules(sources)
+
+        try:
+            try:
+                docx_path, vice_chair_paths = discover_and_download()
+            except Exception as e:
+                # Listings may come from check a minute ago, and a sync file
+                # can be replaced or removed in between: list again, once.
+                print(f"Retrying with fresh listings after: {e}")
+                remote_files.new_run()
+                sources = None
+                docx_path, vice_chair_paths = discover_and_download()
+            if vice_chair_paths:
+                print(f"\nVice-chair schedules: {', '.join(vice_chair_paths.keys())}")
         except Exception as e:
             if sources:
                 raise RuntimeError("Could not download all selected RAN1 sources") from e

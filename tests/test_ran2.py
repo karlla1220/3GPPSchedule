@@ -509,26 +509,44 @@ def test_blocked_sync_folder_falls_back_to_the_configured_meeting_folder(blocked
     assert bundle.warnings == []
 
 
-def test_a_plain_403_on_the_sync_folder_is_read_over_ftp(tmp_path, monkeypatch):
-    """The sync folder always exists: its 403 is a block even without the firewall page."""
+def test_an_absent_sync_folder_is_normal(tmp_path, monkeypatch):
+    """The sync area follows the meeting; a missing folder (IIS 403) is not an error."""
     monkeypatch.setattr(sources.remote_files, 'CACHE_DIR', tmp_path / 'cache')
-    live = SYNC + 'R2_135b_Schedule_v03.docx'
-    over_ftp = {SYNC: listing(['R2_135b_Schedule_v03.docx'], base=SYNC).encode(), live: b'live v03'}
-    asked = []
-    def ftp(url, listing=False, cached=None):
-        asked.append(url)
-        return httpx.Response(200, content=over_ftp[url], request=httpx.Request('GET', url),
-                              headers={'x-3gpp-transport': 'ftp'})
-    monkeypatch.setattr(sources.remote_files.ftp_transport, 'ftp_response', ftp)
+    monkeypatch.setattr(sources.remote_files.ftp_transport, 'ftp_response',
+                        lambda *a, **k: pytest.fail('an absent folder is not read over FTP'))
     files = {FOLDER_135BIS + 'Agenda/' + BIS: (FIXTURES / BIS).read_bytes()}
     seen = []
     cfg = {**sources.DEFAULTS, 'meeting_specific': [FOLDER_135BIS]}
     with mock_server(files, seen=seen) as http:
         bundle = sources.fetch_bundle(cfg, {}, http, rows=ROWS_135BIS, today='2026-10-13',
                                       cache_dir=tmp_path / 'inputs')
-    assert (bundle.manifest['version'], bundle.schedule) == (3, b'live v03') and bundle.warnings == []
-    # HTTPS was tried once; the listing and the file in the folder came over FTP.
-    assert seen.count(SYNC) == 1 and live not in seen and asked == [SYNC, live]
+    # During the meeting too: the folder may simply not be made yet.
+    assert bundle.manifest['version'] == 0 and bundle.warnings == []
+    assert seen.count(SYNC) == 1
+
+
+def test_a_vanished_sync_version_is_kept_instead_of_stepping_back(tmp_path, monkeypatch):
+    monkeypatch.setattr(sources.remote_files, 'CACHE_DIR', tmp_path / 'cache')
+    live = SYNC + 'R2_135b_Schedule_v03.docx'
+    with mock_server({live: b'live v03'}) as http:
+        _, info = sources.remote_files.fetch_file(http, live)
+    previous = {'meeting_id': 'ran2#135bis', 'version': 3, 'schedule': info, 'agenda': None}
+    cfg = {**sources.DEFAULTS, 'meeting_specific': [FOLDER_135BIS]}
+    folder = {FOLDER_135BIS + 'Agenda/' + BIS: (FIXTURES / BIS).read_bytes()}
+    # v03 is being replaced (or the sync folder was emptied): only the meeting folder's v00 is listed.
+    for files in ({SYNC + 'other.txt': b'x', **folder}, folder):
+        sources.remote_files.new_run()  # each pass is a separate run
+        with mock_server(files) as http:
+            bundle = sources.fetch_bundle(cfg, previous, http, rows=ROWS_135BIS, today='2026-10-14',
+                                          cache_dir=tmp_path / 'inputs')
+        assert (bundle.manifest['version'], bundle.schedule) == (3, b'live v03') and bundle.warnings == []
+    # A newer version replaces it as soon as it is listed.
+    v04 = SYNC + 'R2_135b_Schedule_v04.docx'
+    sources.remote_files.new_run()
+    with mock_server({v04: b'live v04', **folder}) as http:
+        bundle = sources.fetch_bundle(cfg, previous, http, rows=ROWS_135BIS, today='2026-10-14',
+                                      cache_dir=tmp_path / 'inputs')
+    assert (bundle.manifest['version'], bundle.schedule) == (4, b'live v04')
 
 
 def test_an_unreadable_sync_folder_during_the_meeting_is_reported(blocked_sync, tmp_path, monkeypatch):

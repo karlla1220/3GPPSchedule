@@ -1141,3 +1141,19 @@ def test_rebuilding_the_same_note_keeps_every_date(note):
                             changed_at="2026-10-08T00:00:00+00:00", document=note.name)
     assert again["document_changed_at"] == "2026-10-05T09:00:00+00:00"
     assert {s["changed_at"] for s in again["sections"].values()} == {"2026-10-05T09:00:00+00:00"}
+
+
+
+def test_a_note_that_is_not_listed_keeps_what_was_published(tmp_path, monkeypatch):
+    monkeypatch.chdir(tmp_path)
+    cfg = {"inbox_urls": [], "extra_folders": []}
+    published = {"status": "ready", "meeting_id": "ran1#124", "sections": {"10.1": {"html": "<p>x</p>"}}}
+    with patch.object(a, "fetch_remote_note", return_value=(None, None)):
+        # The pipeline catches this and keeps the published agreements and their identity.
+        with pytest.raises(LookupError):
+            a.build_agreements(cfg=cfg, meeting_id="ran1#124", schedule_path=tmp_path / "s.docx",
+                               offline=False, previous=published)
+        # Nothing published yet: an empty panel, as before.
+        empty, ref = a.build_agreements(cfg=cfg, meeting_id="ran1#124", schedule_path=tmp_path / "s.docx",
+                                        offline=False)
+    assert empty["status"] == "unavailable" and ref is None

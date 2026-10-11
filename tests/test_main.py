@@ -264,6 +264,44 @@ class MainChairNotesLookupTests(unittest.TestCase):
 class MainExtraFilesWiringTests(unittest.TestCase):
     """Wiring assertions: extra_files -> download -> schedule / chair notes."""
 
+    def _run_with_downloads(self, downloads):
+        """main() with discovery returning one remote source and the given download outcomes."""
+        from working_groups.ran1.models import ScheduleSource
+        source = ScheduleSource(folder_name="Chair_notes", person_name=None, is_main=True,
+                                file_info={"name": "RAN1#126 online and offline schedules - v01.docx",
+                                           "url": "https://www.3gpp.org/ftp/x.docx", "uploaded_at": None})
+        with tempfile.TemporaryDirectory() as tmpdir:
+            docx = Path(tmpdir) / "RAN1#126 online and offline schedules - v01.docx"
+            docx.write_text("placeholder")
+            outcomes = [(docx, {}) if d == "ok" else d for d in downloads]
+            with self._enter_common([], no_download=False) as stack:
+                for name, value in [("find_local_schedule_sources", ([], None)), ("find_chair_notes_docx", None),
+                                    ("download_latest_chair_notes", None),
+                                    ("extract_meeting_location", "Malta, Malta"),
+                                    ("get_timezone_from_location", "Europe/Malta")]:
+                    stack.enter_context(patch(f"working_groups.ran1.pipeline.{name}", return_value=value))
+                discover = stack.enter_context(
+                    patch("working_groups.ran1.pipeline.discover_schedule_sources", return_value=[source]))
+                stack.enter_context(
+                    patch("working_groups.ran1.pipeline.download_all_schedules", side_effect=outcomes))
+                fresh = stack.enter_context(patch("working_groups.ran1.pipeline.remote_files.new_run"))
+                legacy = stack.enter_context(patch("working_groups.ran1.pipeline.download_latest_schedule"))
+                try:
+                    main()
+                finally:
+                    self.discover_calls, self.fresh_calls = discover.call_count, fresh.call_count
+                    self.legacy_calls = legacy.call_count
+
+    def test_a_source_gone_since_check_is_listed_again_once(self):
+        """Build reuses check's listings; a file replaced in between is found by listing again."""
+        self._run_with_downloads([RuntimeError("403 gone"), "ok"])
+        self.assertEqual((self.discover_calls, self.fresh_calls), (2, 1))
+
+    def test_a_download_that_fails_twice_still_fails_the_build(self):
+        with self.assertRaises(RuntimeError):
+            self._run_with_downloads([RuntimeError("403 gone"), RuntimeError("403 gone")])
+        self.assertEqual((self.discover_calls, self.legacy_calls), (2, 0))
+
     def _enter_common(self, extra_files: list, no_download: bool):
         """Enter the common patch stack shared by all wiring tests."""
         import contextlib

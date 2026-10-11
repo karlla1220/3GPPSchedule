@@ -9,6 +9,7 @@ from contextlib import contextmanager
 import hashlib
 import json
 from pathlib import Path
+import re
 from urllib.parse import unquote, urlsplit
 
 import httpx
@@ -21,6 +22,20 @@ MAX_BYTES = 30_000_000
 # RAN1 reads the same Inbox and Chair_notes listings from several places, and
 # build reads what check listed a minute earlier (save_listings/load_listings).
 _LISTINGS = {}
+# Folders this run found absent: url -> HTTP status (403 or 404). Sync folders
+# come and go with a meeting, so the same missing folder is asked for once.
+_ABSENT = {}
+
+
+def is_absent(error):
+    """True when error means the folder or file does not exist (now).
+
+    3GPP's IIS answers 403, not 404, for a missing path; FTP answers 550.
+    Anything else (5xx, connection, TLS) is a real failure.
+    """
+    if isinstance(error, httpx.HTTPStatusError):
+        return error.response.status_code in (403, 404)
+    return isinstance(error, httpx.ConnectError) and re.search(r'\b550\b', str(error)) is not None
 
 
 def client(**kwargs):
@@ -74,9 +89,16 @@ def get_listing(url, *, http=None, **kwargs):
     """
     if url in _LISTINGS:
         return _listing_response(url, *_LISTINGS[url])
+    if url in _ABSENT:
+        _absent_response(url, _ABSENT[url]).raise_for_status()
     response = ftp_transport.get(url, listing=True, http=http,
                                  **({'timeout': 30, 'follow_redirects': True, **kwargs} if http is None else kwargs))
-    response.raise_for_status()
+    try:
+        response.raise_for_status()
+    except httpx.HTTPStatusError as exc:
+        if is_absent(exc) and is_3gpp_file(url):
+            _ABSENT[url] = response.status_code
+        raise
     if is_3gpp_file(url):
         # Only the type: the body is already decoded, so a kept
         # Content-Encoding would make httpx decode it a second time.
@@ -89,9 +111,14 @@ def _listing_response(url, content_type, body):
                           request=httpx.Request('GET', url))
 
 
+def _absent_response(url, status):
+    return httpx.Response(status, request=httpx.Request('GET', url))
+
+
 def new_run():
     """Forget this process's listings and transport failures."""
     _LISTINGS.clear()
+    _ABSENT.clear()
     ftp_transport.reset()
 
 
@@ -99,20 +126,24 @@ def save_listings(path):
     """Hand the listings of this run to its next step (check -> build)."""
     path = Path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps({url: {'content_type': kind, 'body': base64.b64encode(body).decode()}
-                                for url, (kind, body) in _LISTINGS.items()}))
+    saved = {url: {'content_type': kind, 'body': base64.b64encode(body).decode()}
+             for url, (kind, body) in _LISTINGS.items()}
+    saved.update({url: {'absent': status} for url, status in _ABSENT.items()})
+    path.write_text(json.dumps(saved))
 
 
 def load_listings(path):
     """Reuse the listings the check of this run saved; returns how many."""
     try:
-        saved = json.loads(Path(path).read_text())
+        saved = {url: entry for url, entry in json.loads(Path(path).read_text()).items() if is_3gpp_file(url)}
+        absent = {url: int(entry['absent']) for url, entry in saved.items() if 'absent' in entry}
         listings = {url: (entry['content_type'], base64.b64decode(entry['body']))
-                    for url, entry in saved.items() if is_3gpp_file(url)}
+                    for url, entry in saved.items() if 'absent' not in entry}
     except (OSError, ValueError, TypeError, KeyError, AttributeError):
         return 0
     _LISTINGS.update(listings)
-    return len(listings)
+    _ABSENT.update(absent)
+    return len(listings) + len(absent)
 
 
 def fetch_file(http, url, old=None, local=None):

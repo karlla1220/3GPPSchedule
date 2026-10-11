@@ -71,7 +71,7 @@ def _firewall_blocked(response, url):
 
     An ordinary 403 stays an HTTP error: 3GPP also answers 403 for a folder
     that does not exist, and callers rely on that. Any other 403 is logged
-    with its headers and text, so a changed block page can be recognised.
+    at debug level with its headers and text.
     """
     if response.status_code != 403:
         return False
@@ -85,8 +85,10 @@ def _firewall_blocked(response, url):
             body = b''
     if _FIREWALL_PAGE in body.lower():
         return True
-    logging.getLogger(__name__).warning('3GPP answered 403 without the firewall page: %s %s',
-                                        url, _describe(response, body))
+    # Usually a path that does not exist (IIS answers 403); debug level, since
+    # sync folders come and go with every meeting.
+    logging.getLogger(__name__).debug('3GPP answered 403 without the firewall page: %s %s',
+                                      url, _describe(response, body))
     return False
 
 
@@ -121,15 +123,6 @@ def _remember_failure(url, error):
 def _https_failure(url):
     """Why HTTPS already failed for url in this run, or None."""
     return next((reason for prefix, reason in _https_failed.items() if url.startswith(prefix)), None)
-
-
-def use_ftp_for(prefix, reason):
-    """Read everything under prefix over FTP for the rest of this run.
-
-    For a caller that knows more than the status code, such as a 403 from a
-    folder that always exists.
-    """
-    _https_failed[prefix] = reason
 
 
 def _ftp_because(url, reason, **kwargs):

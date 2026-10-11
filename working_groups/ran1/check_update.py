@@ -93,6 +93,21 @@ def _normalize_for_compare(entries: list[dict]) -> set[tuple]:
     }
 
 
+def _only_lost_versions(cached: list[dict], remote: list[dict]) -> bool:
+    """True when some folder's newest file is older than the built one and none is newer."""
+    def newest(entries):
+        best = {}
+        for entry in entries:
+            if isinstance(entry, dict):
+                folder, key = entry.get("folder", ""), _release_key(str(entry.get("name", "")))
+                best[folder] = max(best.get(folder, key), key)
+        return best
+    built, listed = newest(cached), newest(remote)
+    if any(folder not in built or key > built[folder] for folder, key in listed.items()):
+        return False
+    return any(key < built[folder] for folder, key in listed.items())
+
+
 def check_updates(*, staging_dir=None) -> CheckResult:
     """Check RAN1 sources without committing their new state."""
     errors = []
@@ -200,6 +215,11 @@ def check_updates(*, staging_dir=None) -> CheckResult:
             remote_set = _normalize_for_compare(remote_all)
 
             if cached_set == remote_set:
+                changed = False
+            elif _only_lost_versions(cached, remote_all):
+                # A newer file left a folder (replaced, or the sync folder was
+                # cleared) and nothing newer arrived: the build would step back.
+                print("A built version is no longer listed and nothing newer is; treating as unchanged.")
                 changed = False
             elif len(remote_all) < len(cached) and remote_set.issubset(cached_set):
                 # Remote is a strict subset of cached — likely a transient FTP
@@ -338,7 +358,12 @@ def check_updates(*, staging_dir=None) -> CheckResult:
                 remote_reference(cfg, selected_meeting_id, listed=chair_notes_info)
             )
         cached_agreements = state.get("agreements_ref")
-        if current_agreements != cached_agreements:
+        if (current_agreements is None and isinstance(cached_agreements, dict)
+                and _extract_meeting_id(str(cached_agreements.get("name", ""))) == selected_meeting_id):
+            # The note is being replaced or the sync folder was cleared; the
+            # build would keep the published agreements anyway.
+            print("Chair notes not listed now; keeping the published agreements.")
+        elif current_agreements != cached_agreements:
             changed = True
             print("Chairman agreement document changed.")
     except Exception as exc:
