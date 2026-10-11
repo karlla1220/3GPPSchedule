@@ -21,9 +21,9 @@ CACHE_DIR = Path(".cache/ran1")
 ROOM_DETECT_PROMPT_VERSION = 2
 
 GEMINI_MODEL = "gemini-3.8-flash"
-# Flash is fast enough that its default level costs little, and "low" reads
-# the schedule cells less carefully.
-THINKING_LEVEL = "medium"
+# Flash is fast enough that its deepest level costs little, and less thinking
+# reads the schedule cells less carefully.
+THINKING_LEVEL = "high"
 
 # ── JSON Schemas for structured output ───────────────────────────
 
@@ -147,7 +147,7 @@ def get_timezone_from_location(location_text: str) -> str | None:
 
     client = genai.Client(
         api_key=api_key,
-        http_options={"timeout": 30_000},
+        http_options={"timeout": 60_000},
     )
 
     prompt = f"""Given this 3GPP meeting location line, return the IANA timezone identifier for the city.
@@ -258,7 +258,7 @@ def detect_room_from_context(
 
     client = genai.Client(
         api_key=api_key,
-        http_options={"timeout": 30_000},
+        http_options={"timeout": 60_000},
     )
 
     prompt = _build_room_detect_prompt(
@@ -803,7 +803,7 @@ def parse_time_slots(
 
     client = genai.Client(
         api_key=api_key,
-        http_options={"timeout": 120_000},
+        http_options={"timeout": 300_000},
     )
 
     from datetime import datetime, timezone
