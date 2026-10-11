@@ -1,4 +1,4 @@
-"""Exact agenda sections from chairman notes, excluding only TDoc metadata.
+"""Exact agenda sections from chairman notes, with lists of TDocs folded away.
 
 Labels such as Agreement, Proposal and Potential agreement are ordinary source
 content, never extraction boundaries or an assertion that the text was agreed.
@@ -31,9 +31,18 @@ from .downloader import (
 )
 from .parser import find_chair_notes_docx
 
-PARSER_VERSION = 17
+PARSER_VERSION = 18
 CACHE_DIR = Path(".cache/ran1/agreements")
 TDOC_ID = re.compile(r"R1-\d{6,}(?:\s*(?:rev\.?|r)\s*\d+)?", re.I)
+# "(Late contribution)", "(Revision of R1-…)", "(Withdrawn)" under a TDoc row.
+TDOC_REMARK = re.compile(r"\([^()]*\)\.?")
+# The summary a session worked from: "FL summary #1 …", source "Moderator (…)".
+SESSION_TDOC = re.compile(r"\bsummary\b|\bmoderator\b", re.I)
+# Consecutive TDoc rows from this many on are a list of contributions. Fewer
+# are what the text is about: an incoming LS, an FL summary, mirror CRs.
+TDOC_LIST_ROWS = 5
+_RICH = ('.//*[local-name()="drawing" or local-name()="pict" '
+         'or local-name()="oMath" or local-name()="object"]')
 
 
 def _tdoc_entry(text: str) -> bool:
@@ -48,24 +57,82 @@ def _tdoc_entry(text: str) -> bool:
     )
 
 
-def _without_tdocs(block):
-    """Return a filtered copy and number of excluded metadata rows.
+def _tdoc_rows(block) -> int:
+    """Number of TDoc rows in a paragraph that holds nothing else, or 0."""
+    # An ID caption with an equation/image is content, not a metadata row.
+    if ET.QName(block).localname != "p" or block.xpath(_RICH):
+        return 0
+    text = text_of(block)
+    return len(text.strip().splitlines()) if _tdoc_entry(text) else 0
 
-    A table row is metadata only if its first cell is an ID and each cell is a
-    single text paragraph. Mixed/merged/illustrated rows stay intact. A known
-    TDoc header is removed only when every data row in the table is metadata.
+
+def _listed_tdocs(blocks) -> dict[int, int]:
+    """The TDoc lists among one agenda section's blocks: {paragraph index: rows}.
+
+    Each paragraph of a list maps to the number of rows the list folds away.
+    Only a list of contributions is folded, never the document the text is
+    about. The summaries that close a list stay in view when text follows:
+    the chair appends the FL summary to the contributions and writes its
+    agreements underneath. A remark under a row goes with it.
     """
-    tag = ET.QName(block).localname
-    if tag == "p":
-        # An ID caption with an equation/image is content, not a metadata row.
-        rich = block.xpath('.//*[local-name()="drawing" or local-name()="pict" '
-                           'or local-name()="oMath" or local-name()="object"]')
-        return (None, 1) if not rich and _tdoc_entry(text_of(block)) else (block, 0)
-    if tag != "tbl":
-        return block, 0
-    filtered = deepcopy(block)
+    texts = [text_of(block).strip() for block in blocks]
+    kinds = []
+    for block, text in zip(blocks, texts):
+        paragraph = ET.QName(block).localname == "p" and not block.xpath(_RICH)
+        if _tdoc_rows(block):
+            kind = "row"
+        elif paragraph and not text:
+            kind = "blank"
+        elif (paragraph and kinds and kinds[-1] in {"row", "remark"}
+              and TDOC_REMARK.fullmatch(text)):
+            kind = "remark"
+        else:
+            kind = "text"
+        kinds.append(kind)
+    runs = []
+    start = 0
+    while start < len(blocks):
+        end = start + 1
+        if kinds[start] == "row":
+            while end < len(blocks) and kinds[end] in {"row", "remark"}:
+                end += 1
+            runs.append((start, end))
+        start = end
+    listed = {}
+    # Last run first: what comes below a run is then known.
+    for start, end in reversed(runs):
+        rows = [i for i in range(start, end) if kinds[i] == "row"]
+        if sum(_tdoc_rows(blocks[i]) for i in rows) < TDOC_LIST_ROWS:
+            continue
+        below = end
+        while below < len(blocks) and kinds[below] == "blank":
+            below += 1
+        keep = end
+        if below < len(blocks) and below not in listed:  # Not another list.
+            for i in reversed(rows):
+                if not SESSION_TDOC.search(texts[i]):
+                    break
+                keep = i
+        count = sum(_tdoc_rows(blocks[i]) for i in rows if i < keep)
+        listed.update((i, count) for i in range(start, keep))
+    return listed
+
+
+def _without_tdocs(table):
+    """Return a filtered copy of a table and the number of TDoc rows left out.
+
+    Only a table that lists TDocs loses rows: every row is an ID followed by
+    plain text cells, below at most a TDoc/Title/Source header. A table that
+    refers to TDocs (TDoc number | Issue) or has merged/illustrated rows stays
+    whole; half of it would misstate the source.
+    """
+    if ET.QName(table).localname != "tbl":
+        return table, 0
+    filtered = deepcopy(table)
     removed = 0
-    for row in list(filtered.findall("w:tr", NS)):
+    rows = filtered.findall("w:tr", NS)
+    entries = []
+    for row in rows:
         cells = row.findall("w:tc", NS)
         simple = cells and all(
             len(c.findall("w:p", NS)) == 1
@@ -76,18 +143,17 @@ def _without_tdocs(block):
             for c in cells
         )
         if simple and TDOC_ID.fullmatch(text_of(cells[0]).strip()):
-            filtered.remove(row)
-            removed += 1
-    rows = filtered.findall("w:tr", NS)
-    if removed and len(rows) == 1:
-        fields = [text_of(c).strip().lower() for c in rows[0].findall("w:tc", NS)]
-        if fields and fields[0] in {"tdoc", "tdoc number", "document number"} and all(
+            entries.append(row)
+    other = [row for row in rows if row not in entries]
+    header = False
+    if len(other) == 1 and other[0] is rows[0]:
+        fields = [text_of(c).strip().lower() for c in other[0].findall("w:tc", NS)]
+        header = bool(fields) and fields[0] in {"tdoc", "tdoc number", "document number"} and all(
             f in {"title", "source", "author", "authors", "company", "submitter"}
             for f in fields[1:]
-        ):
-            filtered.remove(rows[0])
-    if not filtered.findall("w:tr", NS):
-        return None, removed
+        )
+    if entries and (not other or header):
+        return None, len(entries)
     # Recurse into nested tables; do not erase IDs from retained complex rows.
     for cell in filtered.findall("w:tr/w:tc", NS):
         for child in cell.findall("w:tbl", NS):
@@ -186,29 +252,63 @@ def parse_agreements(path: Path, meeting_id: str, *, source_name: str | None = N
     numbers = NumberingMap(converter.parts.get("word/numbering.xml"))
     sections = {}
     agenda = None
-    pieces = []
-    excluded = 0
+    pending = []  # Blocks of the current section: a list is judged as a whole.
     unassigned = 0
 
     def finish():
-        nonlocal pieces, excluded
-        if agenda is not None:
-            # Blank paragraphs retain internal spacing; boundary whitespace is
-            # not useful as standalone section content.
-            while pieces and not pieces[-1][0]:
-                pieces.pop()
-            while pieces and not pieces[0][0]:
-                pieces.pop(0)
-            blocks = sections[agenda]["blocks"]
-            parts = []
-            for _, part, key in pieces:
-                if key is not None:
-                    part = _tag_unit(part, len(blocks))
-                    blocks.append(key)
-                parts.append(part)
-            sections[agenda]["html"] += render_blocks(parts)
-            sections[agenda]["excluded_tdoc_rows"] += excluded
-        pieces, excluded = [], 0
+        nonlocal pending, unassigned
+        listed = _listed_tdocs(pending)
+        pieces = []
+        folded = []
+        excluded = 0
+        for index, block in enumerate(pending):
+            if index in listed:
+                excluded += bool(_tdoc_rows(block))
+                folded.append(converter.block(block))
+                if index + 1 not in listed:
+                    # The list folds into one line of ours. It is not a unit,
+                    # so a late contribution does not read as a change.
+                    rows = listed[index]
+                    pieces.append((True, (
+                        f'<details class="tdoc-list"><summary>{rows} TDoc{"s" if rows > 1 else ""}'
+                        f"</summary>{render_blocks(folded)}</details>"
+                    ), None))
+                    folded = []
+                continue
+            clean, count = _without_tdocs(block)
+            excluded += count
+            if clean is None:
+                converter.block(block)  # Advance Word counters even for removed rows.
+                continue
+            rendered = converter.block(clean)
+            txt = text_of(block).strip()
+            if agenda is None:
+                unassigned += bool(txt) and not _tdoc_rows(block)
+                continue
+            has_content = bool(
+                txt or ET.QName(block).localname == "tbl" or clean.xpath(_RICH)
+            )
+            pieces.append((has_content, rendered, _unit_key(clean) if has_content else None))
+        pending = []
+        if agenda is None:
+            return
+        if all(key is None for _, _, key in pieces):
+            pieces = []  # Nothing but lists: the panel says so itself.
+        # Blank paragraphs retain internal spacing; boundary whitespace is
+        # not useful as standalone section content.
+        while pieces and not pieces[-1][0]:
+            pieces.pop()
+        while pieces and not pieces[0][0]:
+            pieces.pop(0)
+        blocks = sections[agenda]["blocks"]
+        parts = []
+        for _, part, key in pieces:
+            if key is not None:
+                part = _tag_unit(part, len(blocks))
+                blocks.append(key)
+            parts.append(part)
+        sections[agenda]["html"] += render_blocks(parts)
+        sections[agenda]["excluded_tdoc_rows"] += excluded
 
     for block in _body_blocks(converter.body):
         tag = ET.QName(block).localname
@@ -245,20 +345,7 @@ def parse_agreements(path: Path, meeting_id: str, *, source_name: str | None = N
                     converter.block(block)
                     continue
                 # Unnumbered subheadings remain part of the current section.
-        clean, count = _without_tdocs(block)
-        excluded += count
-        if clean is None:
-            converter.block(block)  # Advance Word counters even for removed rows.
-            continue
-        rendered = converter.block(clean)
-        if agenda is not None:
-            has_content = bool(txt or tag == "tbl" or clean.xpath(
-                './/*[local-name()="drawing" or local-name()="pict" '
-                'or local-name()="oMath" or local-name()="object"]'
-            ))
-            pieces.append((has_content, rendered, _unit_key(clean) if has_content else None))
-        elif txt:
-            unassigned += 1
+        pending.append(block)
     finish()
     result = {
         "status": "ready",
@@ -335,11 +422,17 @@ def _store_note(name, body, directory=Path("downloads/ran1/Chair_notes")):
 def track_changes(result, previous, *, changed_at, document):
     """Date each section's last change and highlight the blocks it added.
 
-    Sections compare by block keys, so whitespace, run splits and TDoc rows do
-    not count as changes. An unchanged section keeps its earlier change and
+    Sections compare by block keys, so whitespace, run splits and listed TDocs
+    do not count as changes. An unchanged section keeps its earlier change and
     highlights; the first note of a meeting is a baseline with none.
+
+    Another parser version cuts the same note into other blocks. That build
+    carries each section's change over instead of reading the parser's
+    difference as an edit; a note that changed in the same build is compared
+    again from the next one.
     """
     before = (previous or {}).get("sections", {})
+    reparsed = previous is not None and previous.get("parser_version") != result.get("parser_version")
     for ai, section in result["sections"].items():
         keys = section["blocks"]
         old = before.get(ai)
@@ -351,6 +444,18 @@ def track_changes(result, previous, *, changed_at, document):
             change = {"change": "initial", "added": []}  # Nothing to compare with.
         elif old.get("blocks") == keys:
             change = {k: old[k] for k in ("change", "added", "changed_at", "changed_in") if k in old}
+        elif reparsed:
+            change = {k: old[k] for k in ("change", "changed_at", "changed_in") if k in old}
+            matcher = SequenceMatcher(None, old.get("blocks") or [], keys, autojunk=False)
+            moved = {
+                i1 + n: j1 + n
+                for op, i1, i2, j1, _ in matcher.get_opcodes()
+                if op == "equal"
+                for n in range(i2 - i1)
+            }
+            change["added"] = [moved[i] for i in old.get("added", []) if i in moved]
+            if old.get("added") and not change["added"]:
+                change["change"] = "initial"  # What it had added is no longer shown.
         else:
             matcher = SequenceMatcher(None, old.get("blocks") or [], keys, autojunk=False)
             added = [

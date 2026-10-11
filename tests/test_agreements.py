@@ -138,7 +138,9 @@ def note(tmp_path):
     table.cell(1, 0).merge(table.cell(2, 0)).text = "Vertical merge"
     table.cell(1, 1).text = "Cell content"
     d.add_paragraph("")
-    d.add_paragraph("R1-2600001\tContribution title\tExample company")
+    for number in range(1, 6):
+        d.add_paragraph(f"R1-260000{number}\tContribution title\tExample company")
+    d.add_paragraph("")
     d.add_paragraph("Discussion after TDoc")
     d.add_heading("10.10 Different agenda", level=1)
     d.add_paragraph("Agreement:")
@@ -149,7 +151,8 @@ def note(tmp_path):
     d.add_paragraph("Agreement")
     d.add_paragraph("Unnumbered subsection content")
     d.add_heading("10.3 TDoc entries only", level=1)
-    d.add_paragraph("R1-2600999")
+    for number in range(995, 1000):
+        d.add_paragraph(f"R1-2600{number}")
     path = tmp_path / "Chair notes RAN1#124 - v01.docx"
     d.save(path)
     return path
@@ -192,8 +195,9 @@ def test_exact_agenda_boundaries_and_original_text(note):
     assert "Mention of an agreement is not a marker." in s["10.2"]["html"]
     assert "Unnumbered subsection content" in s["10.2"]["html"]
     assert s["10.3"]["html"] == ""
-    assert s["10.1"]["excluded_tdoc_rows"] == 1
-    assert "R1-2600001" not in html
+    assert s["10.1"]["excluded_tdoc_rows"] == 5
+    assert "R1-260000" not in _shown(html) and "[5 TDocs]" in _shown(html)
+    assert len(_folded(html)[0]) == 5
 
 
 def test_run_list_table_image_and_link_fidelity(note):
@@ -229,12 +233,17 @@ def test_real_chairman_note_numbering_and_counts():
     assert len(sections) == 90
     assert sections["9.2.1"]["title"] == "Improvement of SRS capacity and coverage"
     assert "9.10.1" not in sections
-    assert sum(s["excluded_tdoc_rows"] for s in sections.values()) == 1539
+    assert sum(s["excluded_tdoc_rows"] for s in sections.values()) == 1461
+    liaisons = _shown(sections["5"]["html"])
+    # The LS a paragraph answers stays in view; a list of the contributions on it folds.
+    assert "R1-2600016\tLS on RAN check point of R20 NR_AIML_air_Ph2\tRAN4, vivo, Ericsson" in liaisons
+    assert "Relevant Tdocs:[7 TDocs]" in liaisons
     assert sections["10.5.0"]["title"] == "General aspects and frameworks"
     assert result["content_scope"] == "agenda-section-excluding-tdocs"
     html = sections["10.1"]["html"]
     assert "<table>" in html and "<math " in html
-    assert "R1-2601415" not in BeautifulSoup(html, "html.parser").get_text()
+    assert "R1-2601415" not in _shown(html)
+    assert any(row.startswith("R1-2601415") for rows in _folded(html) for row in rows)
     assert "data:image/svg+xml;base64," in html
     assert not any("could not be converted" in w for w in result["warnings"])
 
@@ -660,7 +669,7 @@ def test_indent_noise_and_sparse_levels_do_not_create_phantom_nesting():
 
 def test_unlabelled_idle_mobility_continues_agreement_but_tdocs_are_excluded():
     result = a.parse_agreements(REAL_NOTE, 'ran1#124')
-    last = BeautifulSoup(result['sections']['10.5.1.1']['html'], 'html.parser').get_text()
+    last = _shown(result['sections']['10.5.1.1']['html'])
     assert 'Study 6GR signals, channels and procedures for initial access and idle mobility' in last
     assert 'Study 6GR signals, channels and procedures for idle mobility' in last
     assert last.count('Agreement') == 3  # Never invent a missing source label.
@@ -678,6 +687,8 @@ def test_full_section_keeps_nonstandard_labels_and_text_after_tdoc(tmp_path):
         d.add_paragraph(text)
     d.add_paragraph("R1-2600001\tSummary title\tCompany")
     d.add_paragraph("R1-2600002")
+    for number in range(5, 8):
+        d.add_paragraph(f"R1-260000{number}\tContribution\tCompany")
     d.add_paragraph("R1-2600003 proposes a different approach.")
     d.add_paragraph("See R1-2600004 for the assumptions.")
     d.add_paragraph("Agreement")
@@ -689,7 +700,7 @@ def test_full_section_keeps_nonstandard_labels_and_text_after_tdoc(tmp_path):
     path = tmp_path / "Chair notes RAN1#124 - v02.docx"
     d.save(path)
     section = a.parse_agreements(path, "ran1#124")["sections"]["10.1"]
-    text = BeautifulSoup(section["html"], "html.parser").get_text("\n")
+    text = _shown(section["html"], "\n")
     assert all(value in text for value in expected)
     assert [text.index(value) for value in expected] == sorted(text.index(value) for value in expected)
     assert "R1-2600001" not in text and "R1-2600002" not in text
@@ -697,10 +708,112 @@ def test_full_section_keeps_nonstandard_labels_and_text_after_tdoc(tmp_path):
     assert "Content after the TDoc list" in text
     assert "Unnumbered heading and discussion remain" in text
     assert "Other agenda content" not in text
-    assert section["excluded_tdoc_rows"] == 2
+    assert "R1-2600005" not in text and "[5 TDocs]" in text
+    assert section["excluded_tdoc_rows"] == 5
 
 
-def test_tdoc_tables_remove_only_metadata_rows_and_preserve_mixed_content(tmp_path):
+def _shown(html, separator=""):
+    """The text in view: a folded TDoc list shows only its summary, as [5 TDocs]."""
+    dom = BeautifulSoup(html, "html.parser")
+    for fold in dom.select("details.tdoc-list"):
+        fold.replace_with(f"[{fold.summary.get_text()}]")
+    return dom.get_text(separator)
+
+
+def _folded(html):
+    """The rows of each folded TDoc list."""
+    dom = BeautifulSoup(html, "html.parser")
+    return [
+        [p.get_text() for p in fold.select("p")] for fold in dom.select("details.tdoc-list")
+    ]
+
+
+def _section_text(tmp_path, paragraphs):
+    d = Document()
+    d.add_heading("5 Incoming Liaison Statements", level=1)
+    for text in paragraphs:
+        d.add_paragraph(text)
+    d.add_heading("6 Next section", level=1)
+    d.add_paragraph("Other agenda content")
+    path = tmp_path / "Chair notes RAN1#124 - v04.docx"
+    d.save(path)
+    section = a.parse_agreements(path, "ran1#124")["sections"]["5"]
+    return section, _shown(section["html"], "\n")
+
+
+def _contributions(first, count):
+    return [f"R1-26{first + n:05}\tDiscussion {n}\tCompany" for n in range(count)]
+
+
+def test_only_a_list_of_tdocs_is_folded_and_the_rows_stay_inside_it(tmp_path):
+    section, text = _section_text(tmp_path, [
+        "R19 NR-NTN Phase 3",
+        "R1-2600001\tLS on DMRS bundling in HAPS bands\tRAN2, ZTE",
+        "RAN2 asked RAN1 to provide feedback.",
+        "Relevant Tdocs:",
+        *_contributions(100, 5),
+        "(Late contribution)",
+        "",
+        "R1-2600002\tReply LS on LP-WUS\tSA2, Vodafone",
+        "(Revision of R1-2600000)",
+        "No RAN1 action needed.",
+        "Relevant Tdocs",
+        *_contributions(200, 4),
+        "(Late contribution)",
+    ])
+    assert "R1-2600001\tLS on DMRS bundling in HAPS bands\tRAN2, ZTE" in text
+    assert "R1-2600002" in text and "(Revision of R1-2600000)" in text
+    # The list folds under its label, with the remark on its last row.
+    assert "Relevant Tdocs:\n[5 TDocs]\n" in text and "R1-26001" not in text
+    assert _folded(section["html"]) == [[*_contributions(100, 5), "(Late contribution)"]]
+    # Fewer rows than a list stay as the chair wrote them, remark included.
+    assert all(row in text for row in _contributions(200, 4))
+    assert text.count("(Late contribution)") == 1
+    assert section["excluded_tdoc_rows"] == 5
+    assert '<details class="tdoc-list"><summary>5 TDocs</summary><p' in section["html"]
+
+
+def test_the_summaries_that_close_a_list_stay_when_text_follows(tmp_path):
+    section, text = _section_text(tmp_path, [
+        "R1-2600020\tDraft CR on PTRS (Rel-18)\tZTE",
+        "R1-2600021\tDraft CR on PTRS (Rel-19, mirror CR)\tZTE",
+        "",
+        "Agreement:",
+        "The draft CRs are endorsed.",
+        "",
+        *_contributions(300, 3),
+        "R1-2600031\tFL summary #2 on X\tModerator (Samsung)",  # A reserved number.
+        *_contributions(310, 3),
+        "R1-2600033\tFL summary #1 on X\tModerator (Samsung)",
+        "",
+        "Agreement",
+        "Agreed from summary #1",
+        "",
+        *_contributions(400, 5),
+        "R1-2600041\tFL summary #3 on X\tModerator (Samsung)",
+        "",
+        *_contributions(500, 5),
+    ])
+    rows = [line.split("\t")[0] for line in text.splitlines() if line.startswith("R1-")]
+    assert rows == ["R1-2600020", "R1-2600021", "R1-2600033"]
+    # The summary left in view is not counted; one that only heads the next list is.
+    assert [line for line in text.splitlines() if line.startswith("[")] == [
+        "[7 TDocs]", "[6 TDocs]", "[5 TDocs]",
+    ]
+    assert [len(rows) for rows in _folded(section["html"])] == [7, 6, 5]
+    assert section["excluded_tdoc_rows"] == 18
+
+
+def test_a_section_of_lists_alone_stays_empty_and_a_list_is_not_a_change(tmp_path):
+    section, text = _section_text(tmp_path, _contributions(600, 6))
+    assert section["html"] == "" and section["excluded_tdoc_rows"] == 6
+    before, _ = _section_text(tmp_path, ["Agreement", "Agreed text", *_contributions(700, 5)])
+    after, text = _section_text(tmp_path, ["Agreement", "Agreed text", *_contributions(700, 6), "(Late contribution)"])
+    assert "[6 TDocs]" in text and before["blocks"] == after["blocks"]
+    assert "data-unit" not in after["html"].split("<details", 1)[1]
+
+
+def test_tdoc_listing_table_is_removed_and_a_table_that_refers_to_tdocs_stays_whole(tmp_path):
     d = Document()
     d.add_heading("10.1 Section", level=1)
     table = d.add_table(rows=3, cols=3)
@@ -713,8 +826,9 @@ def test_tdoc_tables_remove_only_metadata_rows_and_preserve_mixed_content(tmp_pa
             cell.text = value
     mixed = d.add_table(rows=3, cols=2)
     for row, values in zip(mixed.rows, [
-        ["Parameter", "Value"], ["R1-2600003", "Summary title"],
-        ["Reference", "See R1-2600004"],
+        # RAN1#126 AI 8.2: the rows are the issues, each named by its TDoc.
+        ["RAN1#126 Tdoc number", "Issue"], ["R1-2600003", "Sub-band configuration"],
+        ["R1-2600003, R1-2600004", "SBFD configuration"],
     ]):
         for cell, value in zip(row.cells, values):
             cell.text = value
@@ -723,11 +837,10 @@ def test_tdoc_tables_remove_only_metadata_rows_and_preserve_mixed_content(tmp_pa
     d.save(path)
     section = a.parse_agreements(path, "ran1#124")["sections"]["10.1"]
     dom = BeautifulSoup(section["html"], "html.parser")
-    assert len(dom.select("table")) == 1 and len(dom.select("tr")) == 2
-    assert "Parameter" in dom.text and "See R1-2600004" in dom.text
+    assert len(dom.select("table")) == 1 and len(dom.select("tr")) == 3
+    assert "Sub-band configuration" in dom.text and "R1-2600003, R1-2600004" in dom.text
     assert "Text after tables" in dom.text and "Contribution" not in dom.text
-    assert "R1-2600003" not in dom.text
-    assert section["excluded_tdoc_rows"] == 3
+    assert section["excluded_tdoc_rows"] == 2
 
 
 def test_tdoc_id_paragraph_with_image_is_not_metadata(note):
@@ -934,6 +1047,32 @@ def test_changes_are_dated_per_section_and_added_blocks_highlighted(tmp_path, mo
     later = _build(tmp_path, v11, stored, "2026-10-07T08:00:00+00:00")
     assert later["sections"]["10.1"]["changed_at"] == "2026-10-06T14:00:00+00:00"
     assert later["sections"]["10.1"]["html"] == section["html"]
+
+
+def test_another_parser_version_is_not_read_as_an_edit(note, tmp_path, monkeypatch):
+    from copy import deepcopy
+    from shared.agreement_assets import package_agreements
+
+    monkeypatch.chdir(tmp_path)
+    baseline, _ = package_agreements(_build(tmp_path, note, None, "2026-10-05T09:00:00+00:00"))
+    old = deepcopy(baseline)
+    old["parser_version"] -= 1
+    # The older parser left out the first block of 10.1 and had highlighted the next.
+    shown = old["sections"]["10.1"]
+    shown["blocks"] = shown["blocks"][1:]
+    shown.update(change="updated", added=[0], changed_at="2026-10-06T14:00:00+00:00")
+    # All that 10.2 had highlighted is a block the newer parser leaves out.
+    gone = old["sections"]["10.2"]
+    gone["blocks"] = ["0123456789ab"] + gone["blocks"]
+    gone.update(change="updated", added=[0], changed_at="2026-10-06T14:00:00+00:00")
+
+    rebuilt = _build(tmp_path, note, old, "2026-10-07T08:00:00+00:00")
+    assert all(s["changed_at"] < "2026-10-07" for s in rebuilt["sections"].values())
+    section = rebuilt["sections"]["10.1"]
+    assert (section["change"], section["added"]) == ("updated", [1])
+    assert section["changed_at"] == "2026-10-06T14:00:00+00:00"
+    assert section["html"].count('class="agreement-added"') == 1
+    assert (rebuilt["sections"]["10.2"]["change"], rebuilt["sections"]["10.2"]["added"]) == ("initial", [])
 
 
 def test_new_section_after_the_baseline_is_all_added(note, tmp_path, monkeypatch):
