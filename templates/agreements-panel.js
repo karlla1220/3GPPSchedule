@@ -18,7 +18,7 @@ async function start() {
         style.textContent = manifest.document_css;
         const fragment = DOMPurify.sanitize(content, {
             RETURN_DOM_FRAGMENT: true,
-            ALLOWED_TAGS: ('div article p span br a img sub sup ins del ul ol li table thead tbody tr td th ' +
+            ALLOWED_TAGS: ('div article p span br a img sub sup ins del ul ol li table thead tbody tr td th details summary ' +
                 'math mrow mi mn mo mtext mspace ms mfrac msqrt mroot mstyle merror mpadded mphantom mfenced menclose msub msup msubsup munder mover munderover mmultiscripts mprescripts none mtable mtr mtd mlabeledtr').split(' '),
             FORBID_ATTR: ['id', 'name'],
             ALLOW_DATA_ATTR: false,

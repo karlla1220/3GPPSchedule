@@ -1,4 +1,4 @@
-"""Exact agenda sections from chairman notes, excluding only lists of TDocs.
+"""Exact agenda sections from chairman notes, with lists of TDocs folded away.
 
 Labels such as Agreement, Proposal and Potential agreement are ordinary source
 content, never extraction boundaries or an assertion that the text was agreed.
@@ -69,12 +69,11 @@ def _tdoc_rows(block) -> int:
 def _listed_tdocs(blocks) -> dict[int, int]:
     """The TDoc lists among one agenda section's blocks: {paragraph index: rows}.
 
-    Each paragraph of a list maps to the number of rows the list leaves out,
-    so the first one can stand for all of them. Only a list of contributions
-    is left out, never the document the text is about. The summaries that
-    close a list stay when something shows below: the chair appends the FL
-    summary to the contributions and writes its agreements underneath. A
-    remark under a row goes or stays with it.
+    Each paragraph of a list maps to the number of rows the list folds away.
+    Only a list of contributions is folded, never the document the text is
+    about. The summaries that close a list stay in view when text follows:
+    the chair appends the FL summary to the contributions and writes its
+    agreements underneath. A remark under a row goes with it.
     """
     texts = [text_of(block).strip() for block in blocks]
     kinds = []
@@ -260,18 +259,23 @@ def parse_agreements(path: Path, meeting_id: str, *, source_name: str | None = N
         nonlocal pending, unassigned
         listed = _listed_tdocs(pending)
         pieces = []
+        folded = []
         excluded = 0
         for index, block in enumerate(pending):
             if index in listed:
-                clean, count = None, int(bool(_tdoc_rows(block)))
-                if index - 1 not in listed and agenda is not None:
-                    # One line of ours stands for the list; it is not a unit,
+                excluded += bool(_tdoc_rows(block))
+                folded.append(converter.block(block))
+                if index + 1 not in listed:
+                    # The list folds into one line of ours. It is not a unit,
                     # so a late contribution does not read as a change.
                     rows = listed[index]
-                    note = f"({rows} TDoc{'s' if rows > 1 else ''} not shown)"
-                    pieces.append((True, f'<p class="tdoc-list">{note}</p>', None))
-            else:
-                clean, count = _without_tdocs(block)
+                    pieces.append((True, (
+                        f'<details class="tdoc-list"><summary>{rows} TDoc{"s" if rows > 1 else ""}'
+                        f"</summary>{render_blocks(folded)}</details>"
+                    ), None))
+                    folded = []
+                continue
+            clean, count = _without_tdocs(block)
             excluded += count
             if clean is None:
                 converter.block(block)  # Advance Word counters even for removed rows.

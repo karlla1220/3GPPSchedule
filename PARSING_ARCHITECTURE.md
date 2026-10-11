@@ -214,17 +214,18 @@ LLM 응답을 그대로 HTML에 쓰지는 않는다. 코드가 다음 후처리�
 동일 미팅의 note만 선택하고 정확한 번호가 식별되는 agenda heading 사이의 원문 전체를 추출한다.
 Agreement/Proposal 등의 표식은 경계로 사용하지 않는다. 모호한 공백 구분 문장과 본문 인용은 보존한다.
 
-TDoc 행(ID 단독, 또는 탭으로 구분된 ID/제목/제출자)은 5행 이상 이어진 기고 목록일 때만 뺀다(`_listed_tdocs`, `TDOC_LIST_ROWS`).
+TDoc 행(ID 단독, 또는 탭으로 구분된 ID/제목/제출자)은 5행 이상 이어진 기고 목록일 때만 접는다(`_listed_tdocs`, `TDOC_LIST_ROWS`).
 섹션 하나를 모아 놓고 연속된 행을 한 묶음으로 판단한다.
 
 | 묶음 | 처리 | 예 |
 |---|---|---|
 | 4행 이하 | 원문 그대로 | AI 5의 수신 LS, `FL summary #2`, 승인된 CR 번호, mirror CR 3행 |
-| 5행 이상 | 한 줄 `(N TDocs not shown)`으로 대신한다 | AI마다 맨 위의 기고 목록, `Relevant Tdocs:` 아래 목록 |
-| 5행 이상 묶음 끝의 summary 행(제목 `summary` 또는 제출자 `Moderator`), 뒤에 목록이 아닌 내용이 있을 때 | 남긴다 | 기고 40행 + `FL summary #1`, 빈 줄, `Agreement:` |
+| 5행 이상 | `<details class="tdoc-list">`로 접는다. 보이는 줄은 `N TDocs` | AI마다 맨 위의 기고 목록, `Relevant Tdocs:` 아래 목록 |
+| 5행 이상 묶음 끝의 summary 행(제목 `summary` 또는 제출자 `Moderator`), 뒤에 목록이 아닌 내용이 있을 때 | 접지 않는다 | 기고 40행 + `FL summary #1`, 빈 줄, `Agreement:` |
 
-행 바로 아래의 괄호 주석(`(Late contribution)`, `(Revision of R1-…)`, `(Withdrawn)`)은 그 행과 함께 남거나 빠진다.
-대신하는 줄은 원문이 아니라서 블록 키가 없고(변경 비교에서 빠진다), 목록뿐인 섹션은 이 줄도 없이 비워 둔다.
+행 바로 아래의 괄호 주석(`(Late contribution)`, `(Revision of R1-…)`, `(Withdrawn)`)은 그 행과 함께 접히거나 남는다.
+접힌 목록은 블록 키가 없고(변경 비교에서 빠진다), 목록뿐인 섹션은 접힌 줄도 없이 비워 둔다. `excluded_tdoc_rows`는 접힌 행 수다.
+행을 HTML에 남기므로 #126bis 사전 note(Draft v01) 기준 `agreements/` 조각의 합계가 약 100KB에서 380KB로 는다(AI별로 따로 받는다).
 표는 TDoc 목록 표(모든 행이 ID 행이거나 TDoc/Title/Source 머리행 아래 ID 행뿐)만 통째로 빼고,
 TDoc 번호로 항목을 가리키는 표(`Tdoc number | Issue`)는 그대로 둔다.
 기준 5행의 근거는 RAN1#124~#126bis note 6개의 조사다: 연속 행 묶음은 1행(맥락)과 10행 이상(기고 목록)으로 갈리고,

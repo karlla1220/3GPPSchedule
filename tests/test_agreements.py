@@ -196,7 +196,8 @@ def test_exact_agenda_boundaries_and_original_text(note):
     assert "Unnumbered subsection content" in s["10.2"]["html"]
     assert s["10.3"]["html"] == ""
     assert s["10.1"]["excluded_tdoc_rows"] == 5
-    assert "R1-260000" not in html and "(5 TDocs not shown)" in html
+    assert "R1-260000" not in _shown(html) and "[5 TDocs]" in _shown(html)
+    assert len(_folded(html)[0]) == 5
 
 
 def test_run_list_table_image_and_link_fidelity(note):
@@ -233,15 +234,16 @@ def test_real_chairman_note_numbering_and_counts():
     assert sections["9.2.1"]["title"] == "Improvement of SRS capacity and coverage"
     assert "9.10.1" not in sections
     assert sum(s["excluded_tdoc_rows"] for s in sections.values()) == 1461
-    liaisons = BeautifulSoup(sections["5"]["html"], "html.parser").get_text()
-    # The LS a paragraph answers stays; a list of the contributions on it does not.
+    liaisons = _shown(sections["5"]["html"])
+    # The LS a paragraph answers stays in view; a list of the contributions on it folds.
     assert "R1-2600016\tLS on RAN check point of R20 NR_AIML_air_Ph2\tRAN4, vivo, Ericsson" in liaisons
-    assert "Relevant Tdocs:(7 TDocs not shown)" in liaisons
+    assert "Relevant Tdocs:[7 TDocs]" in liaisons
     assert sections["10.5.0"]["title"] == "General aspects and frameworks"
     assert result["content_scope"] == "agenda-section-excluding-tdocs"
     html = sections["10.1"]["html"]
     assert "<table>" in html and "<math " in html
-    assert "R1-2601415" not in BeautifulSoup(html, "html.parser").get_text()
+    assert "R1-2601415" not in _shown(html)
+    assert any(row.startswith("R1-2601415") for rows in _folded(html) for row in rows)
     assert "data:image/svg+xml;base64," in html
     assert not any("could not be converted" in w for w in result["warnings"])
 
@@ -667,7 +669,7 @@ def test_indent_noise_and_sparse_levels_do_not_create_phantom_nesting():
 
 def test_unlabelled_idle_mobility_continues_agreement_but_tdocs_are_excluded():
     result = a.parse_agreements(REAL_NOTE, 'ran1#124')
-    last = BeautifulSoup(result['sections']['10.5.1.1']['html'], 'html.parser').get_text()
+    last = _shown(result['sections']['10.5.1.1']['html'])
     assert 'Study 6GR signals, channels and procedures for initial access and idle mobility' in last
     assert 'Study 6GR signals, channels and procedures for idle mobility' in last
     assert last.count('Agreement') == 3  # Never invent a missing source label.
@@ -698,7 +700,7 @@ def test_full_section_keeps_nonstandard_labels_and_text_after_tdoc(tmp_path):
     path = tmp_path / "Chair notes RAN1#124 - v02.docx"
     d.save(path)
     section = a.parse_agreements(path, "ran1#124")["sections"]["10.1"]
-    text = BeautifulSoup(section["html"], "html.parser").get_text("\n")
+    text = _shown(section["html"], "\n")
     assert all(value in text for value in expected)
     assert [text.index(value) for value in expected] == sorted(text.index(value) for value in expected)
     assert "R1-2600001" not in text and "R1-2600002" not in text
@@ -706,8 +708,24 @@ def test_full_section_keeps_nonstandard_labels_and_text_after_tdoc(tmp_path):
     assert "Content after the TDoc list" in text
     assert "Unnumbered heading and discussion remain" in text
     assert "Other agenda content" not in text
-    assert "R1-2600005" not in text and "(5 TDocs not shown)" in text
+    assert "R1-2600005" not in text and "[5 TDocs]" in text
     assert section["excluded_tdoc_rows"] == 5
+
+
+def _shown(html, separator=""):
+    """The text in view: a folded TDoc list shows only its summary, as [5 TDocs]."""
+    dom = BeautifulSoup(html, "html.parser")
+    for fold in dom.select("details.tdoc-list"):
+        fold.replace_with(f"[{fold.summary.get_text()}]")
+    return dom.get_text(separator)
+
+
+def _folded(html):
+    """The rows of each folded TDoc list."""
+    dom = BeautifulSoup(html, "html.parser")
+    return [
+        [p.get_text() for p in fold.select("p")] for fold in dom.select("details.tdoc-list")
+    ]
 
 
 def _section_text(tmp_path, paragraphs):
@@ -720,14 +738,14 @@ def _section_text(tmp_path, paragraphs):
     path = tmp_path / "Chair notes RAN1#124 - v04.docx"
     d.save(path)
     section = a.parse_agreements(path, "ran1#124")["sections"]["5"]
-    return section, BeautifulSoup(section["html"], "html.parser").get_text("\n")
+    return section, _shown(section["html"], "\n")
 
 
 def _contributions(first, count):
     return [f"R1-26{first + n:05}\tDiscussion {n}\tCompany" for n in range(count)]
 
 
-def test_only_a_list_of_tdocs_is_left_out_and_one_line_stands_for_it(tmp_path):
+def test_only_a_list_of_tdocs_is_folded_and_the_rows_stay_inside_it(tmp_path):
     section, text = _section_text(tmp_path, [
         "R19 NR-NTN Phase 3",
         "R1-2600001\tLS on DMRS bundling in HAPS bands\tRAN2, ZTE",
@@ -745,13 +763,14 @@ def test_only_a_list_of_tdocs_is_left_out_and_one_line_stands_for_it(tmp_path):
     ])
     assert "R1-2600001\tLS on DMRS bundling in HAPS bands\tRAN2, ZTE" in text
     assert "R1-2600002" in text and "(Revision of R1-2600000)" in text
-    # The list and the remark on its last row go; the label keeps its place.
-    assert "Relevant Tdocs:\n(5 TDocs not shown)\n" in text and "R1-26001" not in text
+    # The list folds under its label, with the remark on its last row.
+    assert "Relevant Tdocs:\n[5 TDocs]\n" in text and "R1-26001" not in text
+    assert _folded(section["html"]) == [[*_contributions(100, 5), "(Late contribution)"]]
     # Fewer rows than a list stay as the chair wrote them, remark included.
     assert all(row in text for row in _contributions(200, 4))
     assert text.count("(Late contribution)") == 1
     assert section["excluded_tdoc_rows"] == 5
-    assert 'class="tdoc-list"' in section["html"]
+    assert '<details class="tdoc-list"><summary>5 TDocs</summary><p' in section["html"]
 
 
 def test_the_summaries_that_close_a_list_stay_when_text_follows(tmp_path):
@@ -777,10 +796,11 @@ def test_the_summaries_that_close_a_list_stay_when_text_follows(tmp_path):
     ])
     rows = [line.split("\t")[0] for line in text.splitlines() if line.startswith("R1-")]
     assert rows == ["R1-2600020", "R1-2600021", "R1-2600033"]
-    # The summary left in place is not counted; one that only heads the next list is.
-    assert [line for line in text.splitlines() if "not shown" in line] == [
-        "(7 TDocs not shown)", "(6 TDocs not shown)", "(5 TDocs not shown)",
+    # The summary left in view is not counted; one that only heads the next list is.
+    assert [line for line in text.splitlines() if line.startswith("[")] == [
+        "[7 TDocs]", "[6 TDocs]", "[5 TDocs]",
     ]
+    assert [len(rows) for rows in _folded(section["html"])] == [7, 6, 5]
     assert section["excluded_tdoc_rows"] == 18
 
 
@@ -789,7 +809,8 @@ def test_a_section_of_lists_alone_stays_empty_and_a_list_is_not_a_change(tmp_pat
     assert section["html"] == "" and section["excluded_tdoc_rows"] == 6
     before, _ = _section_text(tmp_path, ["Agreement", "Agreed text", *_contributions(700, 5)])
     after, text = _section_text(tmp_path, ["Agreement", "Agreed text", *_contributions(700, 6), "(Late contribution)"])
-    assert "(6 TDocs not shown)" in text and before["blocks"] == after["blocks"]
+    assert "[6 TDocs]" in text and before["blocks"] == after["blocks"]
+    assert "data-unit" not in after["html"].split("<details", 1)[1]
 
 
 def test_tdoc_listing_table_is_removed_and_a_table_that_refers_to_tdocs_stays_whole(tmp_path):
