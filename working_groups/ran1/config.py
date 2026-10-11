@@ -289,8 +289,18 @@ def load_config(path: Path = DEFAULT_CONFIG_PATH) -> dict:
 
 
 def _derive(cfg: dict) -> dict:
-    """Fill ``inbox_urls``/``agenda_urls`` from the sync and meeting folders."""
-    folders = list(dict.fromkeys(cfg["meeting_specific_override"] + cfg["meeting_specific"]))
+    """Fill ``inbox_urls``/``agenda_urls`` from the sync and meeting folders.
+
+    A recorded folder of an overridden meeting is not read: the override wins.
+    """
+    from shared.meeting_folders import folder_key, overrides
+
+    manual = overrides("ran1", cfg["meeting_specific_override"])
+    recorded = [
+        u for u in cfg["meeting_specific"]
+        if folder_key("ran1", unquote(u.rstrip("/").rsplit("/", 1)[-1])) not in manual
+    ]
+    folders = list(dict.fromkeys(cfg["meeting_specific_override"] + recorded))
     base_urls = ([cfg["meeting_sync"]] if cfg["meeting_sync"] else []) + folders
     inbox_urls = [_normalize_url(b.rstrip("/") + "/Inbox") for b in base_urls]
     inbox_urls.extend(cfg["legacy_inbox"])
@@ -347,5 +357,4 @@ def with_meeting_folders(
         return cfg
     for meeting, url in found.items():
         print(f"  Meeting folder for {meeting}: {url}")
-    manual = set(cfg["meeting_specific_override"])
-    return _derive({**cfg, "meeting_specific": [u for u in found.values() if u not in manual]})
+    return _derive({**cfg, "meeting_specific": list(found.values())})

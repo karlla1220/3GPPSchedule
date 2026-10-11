@@ -167,7 +167,11 @@ def test_ran1_lists_the_next_meeting_and_the_built_one(tmp_path, monkeypatch):
     found = ran1_config.with_meeting_folders(ran1_config.load_config(path), None, rows=rows,
                                              today='2026-10-20', http=None)
     assert found['agenda_urls'] == ['https://example.org/TSGR1_127/Agenda/']
-    assert found['meeting_specific'] == []
+    # Offline: the recorded folder of the overridden meeting is not read either.
+    path.write_text(json.dumps({'meeting_specific': [WG1 + 'TSGR1_127/', WG1 + 'TSGR1_126b/'],
+                                'meeting_specific_override': ['https://example.org/TSGR1_127/']}))
+    assert ran1_config.load_config(path)['agenda_urls'] == [
+        'https://example.org/TSGR1_127/Agenda/', WG1 + 'TSGR1_126b/Agenda/']
     # Offline builds use the recorded folders as they are.
     path.write_text(json.dumps({'meeting_specific': [WG1 + 'TSGR1_126b/']}))
     assert ran1_config.load_config(path)['agenda_urls'] == [WG1 + 'TSGR1_126b/Agenda/']
@@ -183,3 +187,19 @@ def test_ran1_keeps_the_sync_folder_when_the_lookup_fails(tmp_path, monkeypatch)
     with server({}, [], status=500) as http:
         found = ran1_config.with_meeting_folders(cfg, 'ran1#126bis', rows=[], today='2026-10-20', http=http)
     assert found['inbox_urls'] == cfg['inbox_urls'] and found['agenda_urls'] == []
+
+
+def test_an_overridden_meeting_still_records_the_portal_folder(tmp_path, monkeypatch):
+    path = tmp_path / 'config.json'
+    path.write_text(json.dumps({'meeting_specific': [], 'meeting_specific_override': []}))
+    monkeypatch.setitem(meeting_folders.CONFIG_PATHS, 'ran2', path)
+    moved = WG2 + 'Old/TSGR2_135bis/'
+    rows = [row('3GPPRAN2#135-bis', '2026-10-12', '2026-10-16', 'https://ftp.3gpp.org/tsg_ran/WG2_RL2/TSGR2_135bis/')]
+    seen = []
+    # The override is used; Portal's folder is recorded to compare with it.
+    assert resolve('ran2', ['ran2#135bis'], {}, seen, rows=rows, override=[moved]) == {'ran2#135bis': moved}
+    assert json.loads(path.read_text())['meeting_specific'] == [WG2 + 'TSGR2_135bis/']
+    # Without a Portal URL nothing is looked up for an overridden meeting.
+    path.write_text(json.dumps({'meeting_specific': []}))
+    assert resolve('ran2', ['ran2#135bis'], {}, seen, override=[moved]) == {'ran2#135bis': moved}
+    assert seen == [] and json.loads(path.read_text())['meeting_specific'] == []

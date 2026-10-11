@@ -12,7 +12,8 @@ In order, a meeting's folder is:
 
 Each run writes the folders it found to ``meeting_specific`` in the WG's
 config.json, so the repository shows them; a meeting that is not listed
-there was not found. CI commits the file with the build. The list is left
+there was not found. An overridden meeting records Portal's folder too.
+Readers take the override for its meeting (ran1 config._derive). CI commits the file with the build. The list is left
 out of the WG input fingerprint (ci.py), so writing it rebuilds nothing.
 
 A folder that is not found is not recorded: before a meeting it usually
@@ -250,8 +251,12 @@ def resolve(wg_id, meetings, *, rows=None, override=(), recorded=(), root=None, 
     result = {}
     for meeting in dict.fromkeys(m for m in meetings if m):
         if meeting in manual:
+            # The override is used, but what Portal names (or was recorded) is
+            # still recorded so the two can be compared. Nothing is requested.
             result[meeting] = manual[meeting]
-            found.pop(meeting, None)
+            auto = portal.get(meeting) or known.get(meeting)
+            if auto:
+                found[meeting] = auto
             continue
         folder = portal.get(meeting) or known.get(meeting)
         if folder is None:
