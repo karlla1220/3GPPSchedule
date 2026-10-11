@@ -13,7 +13,7 @@ root (several hundred entries) is not listed.
 """
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import datetime
 import hashlib
 import json
@@ -118,6 +118,8 @@ class Bundle:
     manifest: dict
     schedule: bytes
     agenda: bytes
+    # Problems that leave the page behind without stopping it (not saved).
+    warnings: list[str] = field(default_factory=list)
 
     def save(self, directory: Path):
         directory.mkdir(parents=True, exist_ok=True)
@@ -255,11 +257,40 @@ def choose_schedule(candidates: list[dict], dates: dict, today: str) -> dict:
 
 # -------------------------------------------------------------------- bundles
 
+def sync_listing(cfg, http) -> list[dict]:
+    """The sync folder's entries.
+
+    The folder always exists, so a 403 there is a block, not an absent
+    folder. Read it, and the files in it, over FTP for the rest of the run.
+    """
+    try:
+        return fetch_listing(cfg['sync_url'], http)
+    except httpx.HTTPStatusError as exc:
+        if exc.response.status_code != 403:
+            raise
+    print('[ran2] HTTPS 403 on the sync folder; reading it over FTP')
+    remote_files.ftp_transport.use_ftp_for(cfg['sync_url'], 'HTTPS 403 on the RAN2 sync folder')
+    return fetch_listing(cfg['sync_url'], http)
+
+
+def sync_warnings(bundle, error, dates, today) -> Bundle:
+    """During the meeting only the sync folder carries new versions.
+
+    The meeting folder holds what was uploaded before or after the meeting,
+    so building from it keeps the page up but misses every update; say so.
+    """
+    meeting = bundle.manifest['meeting_id']
+    if error is not None and meeting in dates and dates[meeting][0] <= today <= dates[meeting][1]:
+        bundle.warnings.append(f'RAN2 sync folder unreadable during {meeting} ({error}); '
+                               f"the page keeps {bundle.manifest['schedule']['name']} and misses newer versions")
+    return bundle
+
+
 def live_copy(cfg, previous, chosen, rows, error) -> Bundle | None:
     """The built sync copy while the sync folder is unreachable.
 
-    The archive receives each version after the sync folder, so during a
-    meeting it can be behind what is already built. Keep the built version
+    New versions during a meeting appear only in the sync folder; the meeting
+    folder has those from before or after it. Keep a built sync version
     instead of stepping back; without its stored body, report the sync error.
     """
     old = previous.get('schedule') or {}
@@ -283,11 +314,11 @@ def live_copy(cfg, previous, chosen, rows, error) -> Bundle | None:
 def fetch_bundle(cfg, previous, http, *, rows=None, today=None, cache_dir=DOWNLOADS / 'inputs') -> Bundle:
     today = today or datetime.now(ZoneInfo('Asia/Seoul')).date().isoformat()
     try:
-        entries, sync_error = fetch_listing(cfg['sync_url'], http), None
+        entries, sync_error = sync_listing(cfg, http), None
     except httpx.HTTPError as exc:
         # Since 2026-10-11 3GPP's firewall answers this folder with 403. The
-        # meeting archive below carries the same files, a little later.
-        print(f'[ran2] Sync folder unavailable ({exc}); reading the meeting archive')
+        # meeting folder still has the versions from before the meeting.
+        print(f'[ran2] Sync folder unavailable ({exc}); reading the meeting folder')
         entries, sync_error = [], exc
     dates = meeting_dates(cfg, rows, previous)
     archive = meeting_folders(cfg)
@@ -311,8 +342,8 @@ def fetch_bundle(cfg, previous, http, *, rows=None, today=None, cache_dir=DOWNLO
     if sync_error is not None:
         kept = live_copy(cfg, previous, chosen, rows, sync_error)
         if kept is not None:
-            print(f"[ran2] Keeping {kept.manifest['schedule']['name']}; the archive has nothing newer")
-            return kept
+            print(f"[ran2] Keeping {kept.manifest['schedule']['name']}; the meeting folder has nothing newer")
+            return sync_warnings(kept, sync_error, dates, today)
     meeting = chosen['meeting_id']
     if meeting not in listed and meeting in archive:
         listed[meeting] = agenda_folder(archive[meeting], http)
@@ -338,7 +369,7 @@ def fetch_bundle(cfg, previous, http, *, rows=None, today=None, cache_dir=DOWNLO
     metadata = portal_metadata(rows or [], meeting)
     if metadata:
         manifest['portal_metadata'] = metadata
-    return Bundle(manifest, schedule, agenda)
+    return sync_warnings(Bundle(manifest, schedule, agenda), sync_error, dates, today)
 
 
 def local_bundle(path: Path, cfg) -> Bundle:

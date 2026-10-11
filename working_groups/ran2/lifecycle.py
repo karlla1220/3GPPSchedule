@@ -29,7 +29,8 @@ def check_updates():
         if any(saved.get(k) != portal[k] for k in ('starts_on', 'ends_on', 'starts_at', 'ends_at', 'timezone',
                                                    'location') if k in portal and k not in pinned):
             reasons.append('meeting metadata changed')
-        return CheckResult(changed=bool(reasons), reasons=reasons)
+        # Reported as errors so CI shows them, while the page still builds.
+        return CheckResult(changed=bool(reasons), reasons=reasons, errors=bundle.warnings)
     except Exception as exc:
         return CheckResult(errors=[f'RAN2 source check failed: {exc}'])
 

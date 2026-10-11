@@ -23,7 +23,8 @@ USER_AGENT = '3GPPSchedule/1.0 (+https://github.com/karlla1220/3GPPSchedule)'
 _RETRY_STATUS = {500, 502, 503, 504, 520, 521, 522, 523, 524, 525, 526}
 # 3GPP's web application firewall answers some paths with 403 and its own page
 # (Cloudflare in front of IIS). Retrying HTTPS only repeats the blocked request.
-_FIREWALL_PAGE = b'blocked by a web application firewall'
+# Title and sentence of the block page seen on 2026-10-11 both carry this.
+_FIREWALL_PAGE = b'web application firewall'
 _FIREWALL_PAGE_BYTES = 256 * 1024
 _MAX_BYTES = 64 * 1024 * 1024
 # One anonymous FTP login serves every fallback in a run, instead of a new
@@ -65,22 +66,40 @@ def _retryable(error):
             and error.response.status_code in _RETRY_STATUS)
 
 
-def _firewall_blocked(response):
+def _firewall_blocked(response, url):
     """True for the firewall's 403 page only.
 
     An ordinary 403 stays an HTTP error: 3GPP also answers 403 for a folder
-    that does not exist, and callers rely on that.
+    that does not exist, and callers rely on that. Any other 403 is logged
+    with its headers and text, so a changed block page can be recognised.
     """
     if response.status_code != 403:
         return False
     length = response.headers.get('content-length')
     if length and length.isdigit() and int(length) > _FIREWALL_PAGE_BYTES:
-        return False
-    try:
-        body = response.read()
-    except httpx.HTTPError:
-        return False
-    return _FIREWALL_PAGE in body[:_FIREWALL_PAGE_BYTES].lower()
+        body = b''
+    else:
+        try:
+            body = response.read()[:_FIREWALL_PAGE_BYTES]
+        except httpx.HTTPError:
+            body = b''
+    if _FIREWALL_PAGE in body.lower():
+        return True
+    logging.getLogger(__name__).warning('3GPP answered 403 without the firewall page: %s %s',
+                                        url, _describe(response, body))
+    return False
+
+
+def _describe(response, body):
+    """Headers that tell the edge from the origin, and the page's visible text."""
+    text = re.sub(rb'<(style|script)\b.*?</\1\s*>', b' ', body, flags=re.S | re.I)
+    text = re.sub(rb'<[^>]*>', b' ', text)
+    text = ' '.join(text.decode('utf-8', 'replace').split())
+    headers = {name: response.headers[name] for name in
+               ('content-type', 'content-length', 'server', 'cf-ray', 'cf-mitigated', 'cf-cache-status')
+               if name in response.headers}
+    return f'{headers} body[{len(body)}]={text[:400]!r}'
+
 
 
 def _folder(url):
@@ -102,6 +121,15 @@ def _remember_failure(url, error):
 def _https_failure(url):
     """Why HTTPS already failed for url in this run, or None."""
     return next((reason for prefix, reason in _https_failed.items() if url.startswith(prefix)), None)
+
+
+def use_ftp_for(prefix, reason):
+    """Read everything under prefix over FTP for the rest of this run.
+
+    For a caller that knows more than the status code, such as a 403 from a
+    folder that always exists.
+    """
+    _https_failed[prefix] = reason
 
 
 def _ftp_because(url, reason, **kwargs):
@@ -301,7 +329,7 @@ def get(url, *, listing=False, http=None, cached=None, **kwargs):
             else:
                 _remember_failure(url, exc)
             continue
-        if not _firewall_blocked(response):
+        if not _firewall_blocked(response, url):
             return response
         response.close()
         return _blocked_ftp(url, listing=listing, cached=cached)
@@ -335,7 +363,7 @@ def stream(method, url, **kwargs):
         try:
             response = stack.enter_context(httpx.stream(method, url, **kwargs))
             _check_status(response)
-            blocked = _firewall_blocked(response)
+            blocked = _firewall_blocked(response, url)
         except (httpx.TransportError, httpx.HTTPStatusError) as exc:
             stack.close()
             stack = None

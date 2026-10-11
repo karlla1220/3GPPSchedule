@@ -289,3 +289,17 @@ def test_a_run_without_failures_never_opens_ftp(ftp, monkeypatch, tmp_path):
     remote_files.new_run()
     ftp_transport.close_session()
     assert ftp.calls == []
+
+
+def test_an_unrecognised_403_is_described_in_the_log(ftp, caplog):
+    from shared import ftp_transport
+    page = (b'<html><head><style>body { color: red }</style><script>var x = 1;</script></head>'
+            b'<body><h1>Access denied</h1><p>Ray ID: 1234</p></body></html>')
+    answer = httpx.Response(403, content=page, headers={'server': 'cloudflare', 'cf-ray': 'a48d-IAD'})
+    with httpx.Client(transport=httpx.MockTransport(lambda _: answer)) as http:
+        assert ftp_transport.get(CHAIR, http=http, listing=True).status_code == 403
+    assert ftp.calls == []
+    [record] = [r for r in caplog.records if '403 without the firewall page' in r.getMessage()]
+    message = record.getMessage()
+    assert CHAIR in message and "'server': 'cloudflare'" in message and "'cf-ray': 'a48d-IAD'" in message
+    assert 'Access denied Ray ID: 1234' in message and 'color' not in message and 'var x' not in message

@@ -505,6 +505,47 @@ def test_blocked_sync_folder_falls_back_to_the_configured_meeting_folder(blocked
     assert bundle.manifest['agenda']['url'] == FOLDER_135BIS + 'Agenda/agenda.csv'
     # One request to the blocked folder, and the archive root is not listed.
     assert seen.count(SYNC) == 1 and ARCHIVE not in seen
+    # Before the meeting the meeting folder is the source, so nothing is reported.
+    assert bundle.warnings == []
+
+
+def test_a_plain_403_on_the_sync_folder_is_read_over_ftp(tmp_path, monkeypatch):
+    """The sync folder always exists: its 403 is a block even without the firewall page."""
+    monkeypatch.setattr(sources.remote_files, 'CACHE_DIR', tmp_path / 'cache')
+    live = SYNC + 'R2_135b_Schedule_v03.docx'
+    over_ftp = {SYNC: listing(['R2_135b_Schedule_v03.docx'], base=SYNC).encode(), live: b'live v03'}
+    asked = []
+    def ftp(url, listing=False, cached=None):
+        asked.append(url)
+        return httpx.Response(200, content=over_ftp[url], request=httpx.Request('GET', url),
+                              headers={'x-3gpp-transport': 'ftp'})
+    monkeypatch.setattr(sources.remote_files.ftp_transport, 'ftp_response', ftp)
+    files = {FOLDER_135BIS + 'Agenda/' + BIS: (FIXTURES / BIS).read_bytes()}
+    seen = []
+    cfg = {**sources.DEFAULTS, 'meeting_specific': [FOLDER_135BIS]}
+    with mock_server(files, seen=seen) as http:
+        bundle = sources.fetch_bundle(cfg, {}, http, rows=ROWS_135BIS, today='2026-10-13',
+                                      cache_dir=tmp_path / 'inputs')
+    assert (bundle.manifest['version'], bundle.schedule) == (3, b'live v03') and bundle.warnings == []
+    # HTTPS was tried once; the listing and the file in the folder came over FTP.
+    assert seen.count(SYNC) == 1 and live not in seen and asked == [SYNC, live]
+
+
+def test_an_unreadable_sync_folder_during_the_meeting_is_reported(blocked_sync, tmp_path, monkeypatch):
+    files = {FOLDER_135BIS + 'Agenda/' + BIS: (FIXTURES / BIS).read_bytes()}
+    with mock_server(files, blocked={SYNC}) as http:
+        bundle = sources.fetch_bundle(blocked_sync, {}, http, rows=ROWS_135BIS, today='2026-10-13',
+                                      cache_dir=tmp_path / 'inputs')
+    # The page still builds from the meeting folder, and the check says what it misses.
+    assert bundle.manifest['version'] == 0
+    [warning] = bundle.warnings
+    assert 'sync folder unreadable during ran2#135bis' in warning and BIS in warning
+    monkeypatch.chdir(tmp_path)
+    monkeypatch.setattr(sources, 'fetch_bundle', lambda *a, **k: bundle)
+    monkeypatch.setattr(sources, 'load_config', lambda: blocked_sync)
+    monkeypatch.setattr(sources, 'portal_rows', lambda: [])
+    result = lifecycle.check_updates()
+    assert result.changed and result.errors == [warning]
 
 
 def test_configured_folder_for_an_ended_meeting_still_finds_the_next_one(blocked_sync, tmp_path):
