@@ -179,6 +179,47 @@ def _extract_version_parts_from_name(filename: str) -> tuple[int, ...]:
     return (int(m.group(1)), *suffix_parts)
 
 
+# "Draft" as a whole word marks a document the chair has not released yet
+# (``Draft Chair notes RAN1#126bis_v01.docx``).
+_DRAFT_RE = re.compile(r"(?<![A-Za-z0-9])draft(?![A-Za-z0-9])", re.IGNORECASE)
+
+
+def _is_draft_name(filename: str) -> bool:
+    """True when the filename carries a "Draft" marker."""
+    return _DRAFT_RE.search(filename) is not None
+
+
+def _release_key(filename: str) -> tuple[int, tuple[int, ...]]:
+    """Order documents of one meeting: released before draft, then version.
+
+    The chair restarts the version number when the "Draft" prefix is dropped
+    (``Draft … v03`` is followed by ``… v00``), so a version is only
+    comparable within one class.  Every selection of a schedule or Chair
+    notes file — remote, local and the check job — ranks by this key after
+    the meeting, so they all agree on which file is the latest.
+    """
+    return (
+        0 if _is_draft_name(filename) else 1,
+        _extract_version_parts_from_name(filename),
+    )
+
+
+def _remote_doc_preference(file_info: dict) -> tuple:
+    """Sort key for remote files of one meeting.
+
+    Ordered by (released over draft, version, upload time, name).  A missing
+    upload time sorts first so the key also works for listings without
+    timestamps.
+    """
+    name = file_info["name"]
+    return (
+        *_release_key(name),
+        file_info.get("uploaded_at") or datetime.min,
+        name.lower(),
+        name,
+    )
+
+
 # Known meeting suffixes (case-insensitive).
 # bis, e, and adhoc have been observed in practice, plus ``b`` as 3GPP's
 # short form of ``bis`` (``RAN1#126b``, matching the ``TSGR1_126b`` folder).
@@ -299,11 +340,11 @@ def _local_doc_preference(
 ) -> tuple:
     """Deterministic sort key for locally-provided document files.
 
-    Ordered by (preferred-meeting match, filename meeting rank, filename
-    version, name) — never using filesystem metadata.  File mtimes are not
-    stable across CI checkouts (a fresh ``git checkout`` gives every file
-    the checkout time), so any mtime-based selection would pick
-    non-deterministically on CI/CD runners.  Filename-derived data is
+    Ordered by (preferred-meeting match, filename meeting rank, released
+    over draft, filename version, name) — never using filesystem metadata.
+    File mtimes are not stable across CI checkouts (a fresh ``git checkout``
+    gives every file the checkout time), so any mtime-based selection would
+    pick non-deterministically on CI/CD runners.  Filename-derived data is
     committed content, so it is identical on every machine.
 
     A stable final component (``p.name``) ensures the ordering is a total
@@ -318,7 +359,7 @@ def _local_doc_preference(
     return (
         favored,
         _meeting_rank(mid) or (0, 0, 0),
-        _extract_version_parts_from_name(p.name),
+        *_release_key(p.name),
         p.name.lower(),
         p.name,
     )
@@ -435,8 +476,9 @@ def _pick_latest_in_meeting_group(
              - If no regular ids are present (only ad-hoc / unknown), fall
                  back to the preferred group when present, else to the group
                  whose most-recent ``uploaded_at`` is newest.
-    3. Within the chosen group pick the file with the highest version
-       number, using ``uploaded_at`` as a tiebreaker.
+    3. Within the chosen group a released file beats any "Draft" file;
+       within the same class pick the highest version number, using
+       ``uploaded_at`` as a tiebreaker (see ``_release_key``).
 
     All files must have a non-None ``uploaded_at``.
     """
@@ -508,17 +550,10 @@ def _pick_latest_in_meeting_group(
             )
     current_group = groups[current_mid]
 
-    latest = max(
-        current_group,
-        key=lambda x: (
-            _extract_version_parts_from_name(x["name"]),
-            x["uploaded_at"],
-            x["name"].lower(),
-            x["name"],
-        ),
-    )
+    latest = max(current_group, key=_remote_doc_preference)
     print(
         f"Latest {label} (meeting={current_mid}, "
+        f"{'draft' if _is_draft_name(latest['name']) else 'released'}, "
         f"version={_extract_version_from_name(latest['name'])}, "
         f"uploaded={latest['uploaded_at']}): {latest['name']}"
     )
@@ -582,8 +617,9 @@ def find_latest_schedule(
     1. Group files by meeting identifier (e.g. RAN1#124bis).
     2. Pick the group whose most-recent upload timestamp is newest
        (= the current meeting).
-    3. Within that group, pick the file with the highest version number.
-       Upload timestamp is a secondary tiebreaker.
+    3. Within that group, a released file beats any "Draft" file; within
+       the same class pick the highest version number.  Upload timestamp
+       is a secondary tiebreaker.
 
     This ensures that old high-version files from a previous meeting
     do not displace the current meeting's schedule, while still
@@ -623,24 +659,10 @@ def find_latest_schedule(
             preferred_meeting_id=preferred_meeting_id,
         )
 
-    # Fallback: sort by version number in filename
-    versioned = []
-    for f in schedule_files:
-        version = _extract_version_from_name(f["name"])
-        if version >= 0:
-            versioned.append({**f, "version": version})
-    if versioned:
-        return max(
-            versioned,
-            key=lambda x: (
-                _extract_version_parts_from_name(x["name"]),
-                x["name"].lower(),
-                x["name"],
-            ),
-        )
-
-    # Last resort: use a stable filename order rather than listing order.
-    return max(schedule_files, key=lambda f: (f["name"].lower(), f["name"]))
+    # Fallback: released over draft, then version number in the filename
+    # (an unversioned name sorts first), then a stable filename order
+    # rather than listing order.
+    return max(schedule_files, key=_remote_doc_preference)
 
 
 def get_remote_schedule_info(
@@ -849,9 +871,9 @@ def find_local_latest_schedule(
     """Find the latest schedule document in the local directory.
 
     Searches for .docx, .pptx, and .pdf files containing 'schedule' in the name.
-    Selection is by filename (version, then name), not mtime — mtimes are not
-    stable across CI checkouts, so a fresh runner would pick
-    non-deterministically.
+    Selection is by filename (released over draft, version, then name), not
+    mtime — mtimes are not stable across CI checkouts, so a fresh runner
+    would pick non-deterministically.
     """
     schedule_files = [
         f
@@ -917,7 +939,8 @@ def find_latest_chair_notes(
     Supports .docx, .docm, and .zip files.
 
     Uses the same meeting-aware grouping strategy as find_latest_schedule():
-    group by meeting ID → pick latest meeting → highest version within group.
+    group by meeting ID → pick latest meeting → released over draft →
+    highest version within group.
     """
     chair_files = [
         f for f in files
@@ -951,23 +974,8 @@ def find_latest_chair_notes(
             preferred_meeting_id=preferred_meeting_id,
         )
 
-    # Fallback: sort by version number in filename
-    versioned = []
-    for f in chair_files:
-        version = _extract_version_from_name(f["name"])
-        if version >= 0:
-            versioned.append({**f, "version": version})
-    if versioned:
-        return max(
-            versioned,
-            key=lambda x: (
-                _extract_version_parts_from_name(x["name"]),
-                x["name"].lower(),
-                x["name"],
-            ),
-        )
-
-    return max(chair_files, key=lambda f: (f["name"].lower(), f["name"]))
+    # Fallback: released over draft, then version number, then filename.
+    return max(chair_files, key=_remote_doc_preference)
 
 
 def _chair_notes_url_from_inbox(url: str) -> str:
@@ -1537,8 +1545,8 @@ def _dedup_sources(sources: list[ScheduleSource]) -> list[ScheduleSource]:
     """Resolve collisions when aggregating across multiple inboxes.
 
         - At most one ``is_main`` survives (locally-provided mains win over FTP
-            mains; local collisions use filename meeting/version, remote collisions
-            use ``uploaded_at``).
+            mains; local collisions use filename meeting/draft/version, remote
+            collisions prefer a released file over a draft, then ``uploaded_at``).
         - Vice-chair sources with the same ``person_name`` collapse using the same
             local-priority/remote-timestamp ranking.
         - Non-main, no-person entries with the same ``folder_name`` collapse using
@@ -1558,7 +1566,7 @@ def _dedup_sources(sources: list[ScheduleSource]) -> list[ScheduleSource]:
             # multiple local candidates do not resolve by insertion order.
             return (1, _local_doc_preference(s.local_path))
         name = s.file_info.get("name", "")
-        return (0, ts(s), name.lower(), name)
+        return (0, not _is_draft_name(name), ts(s), name.lower(), name)
 
     main: ScheduleSource | None = None
     by_person: dict[str, ScheduleSource] = {}
@@ -1712,8 +1720,8 @@ def _latest_local_schedule(
     """From a set of local schedule document paths, pick the one to use.
 
     Manual references carry no remote version info, so selection is
-    purely by filename: preferred-meeting match, meeting rank, version
-    (treating an unparseable version as (-1,)), then name.  No filesystem
+    purely by filename: preferred-meeting match, meeting rank, released
+    over draft, version (treating an unparseable version as (-1,)), then name.  No filesystem
     metadata is used — mtimes are not stable across CI checkouts, so an
     mtime tiebreaker would select a different file on every fresh runner.
 
