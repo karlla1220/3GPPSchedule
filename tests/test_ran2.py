@@ -635,7 +635,7 @@ class FakeGemini:
     def __init__(self, *responses):
         self.responses, self.calls = list(responses), []
 
-    def __call__(self, payload, schema, model):
+    def __call__(self, payload, schema, model, thinking=None):
         self.calls.append(payload)
         response = self.responses.pop(0)
         if isinstance(response, Exception):

@@ -21,9 +21,10 @@ CACHE_DIR = Path(".cache/ran1")
 ROOM_DETECT_PROMPT_VERSION = 2
 
 GEMINI_MODEL = "gemini-3.8-flash"
-# Flash is fast enough that its deepest level costs little, and less thinking
-# reads the schedule cells less carefully.
-THINKING_LEVEL = "high"
+# Thinking follows the task. Lookups and slot parsing use "low": a cold
+# rebuild makes one call per slot (19 a week) and must finish within minutes;
+# a slot at "high" ran past 9 minutes. Group mapping uses "high": it is one
+# call that weighs every label against the others.
 
 # ── JSON Schemas for structured output ───────────────────────────
 
@@ -163,7 +164,7 @@ Return ONLY valid JSON: {{"timezone": "IANA/Timezone", "city": "CityName", "coun
             config=types.GenerateContentConfig(
                 response_mime_type="application/json",
                 response_json_schema=TIMEZONE_SCHEMA,
-                thinking_config=types.ThinkingConfig(thinking_level=THINKING_LEVEL),
+                thinking_config=types.ThinkingConfig(thinking_level="low"),
             ),
         )
         result = json.loads(response.text.strip())
@@ -275,7 +276,7 @@ def detect_room_from_context(
             config=types.GenerateContentConfig(
                 response_mime_type="application/json",
                 response_json_schema=ROOM_DETECT_SCHEMA,
-                thinking_config=types.ThinkingConfig(thinking_level=THINKING_LEVEL),
+                thinking_config=types.ThinkingConfig(thinking_level="low"),
             ),
         )
         result = json.loads(response.text.strip())
@@ -804,7 +805,7 @@ def parse_time_slots(
 
     client = genai.Client(
         api_key=api_key,
-        http_options={"timeout": 300_000},
+        http_options={"timeout": 60_000},
     )
 
     from datetime import datetime, timezone
@@ -903,7 +904,7 @@ def parse_time_slots(
                         system_instruction=system_instruction,
                         response_mime_type="application/json",
                         response_json_schema=MULTI_SOURCE_SESSION_SCHEMA,
-                        thinking_config=types.ThinkingConfig(thinking_level=THINKING_LEVEL),
+                        thinking_config=types.ThinkingConfig(thinking_level="low"),
                     ),
                 )
                 parsed_result = json.loads(response.text.strip())
@@ -1190,7 +1191,7 @@ def normalize_group_headers(sessions: list[Session]) -> list[Session]:
                         system_instruction=GROUP_SIMPLIFY_SYSTEM_INSTRUCTION,
                         response_mime_type="application/json",
                         response_json_schema=GROUP_SIMPLIFY_SCHEMA,
-                        thinking_config=types.ThinkingConfig(thinking_level=THINKING_LEVEL),
+                        thinking_config=types.ThinkingConfig(thinking_level="high"),
                     ),
                 )
                 result = json.loads(response.text.strip())
