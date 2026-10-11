@@ -819,7 +819,7 @@ WG는 파일 선택과 문서 해석만 담당합니다. 새로운 WG도 `get_li
 5. WG 루트 목록에서 이름으로 찾기 (`-e` 같은 전자회의 접미사도 인정). 수백 항목이라 미팅마다 6시간에 한 번만 받습니다.
 
 - **찾은 폴더는 `config.json`의 `meeting_specific`에 기록되어 저장소에 남습니다.** CI가 확인할 때마다 그 실행에서 찾은 폴더(다음 미팅, 빌드한 미팅)로 목록을 다시 쓰고, 바뀌면 그 WG를 빌드해 빌드 결과와 함께 커밋합니다(`meeting folders now …`가 check의 변경 사유로 보입니다). 목록에 없는 미팅은 아직 찾지 못한 것입니다. 손으로 고치지 않습니다. 고정하려면 `meeting_specific_override`에 적습니다.
-  - override가 있는 미팅도 Portal `MtgDocURL`(없으면 전에 기록한 폴더)을 기록해서 override와 비교할 수 있습니다. 사용은 override만 하고, 이 미팅에는 이름·루트 조회를 하지 않습니다.
+  - override가 있는 미팅도 다른 미팅과 똑같이 찾아서 기록합니다. 사용하는 것은 override뿐입니다. 관리자는 `meeting_specific`에 기록된 폴더를 보고 override를 유지할지 지울지 정합니다.
   - RAN2와 RAN P의 build는 check가 준비한 입력을 쓰고 폴더를 다시 찾지 않으므로, check가 쓴 목록을 CI 계획(`.ci/plan.json`)으로 build job에 넘겨 다시 씁니다.
   - 이 목록은 WG 입력 지문(`ci.py`의 `fingerprint`)에서 빠집니다. 기록했다는 이유로 "설정 변경"이 되거나 check의 계획이 무효가 되지 않습니다.
   - 파일이 없는 로컬 checkout에서는 기록하지 않습니다.

@@ -12,8 +12,9 @@ In order, a meeting's folder is:
 
 Each run writes the folders it found to ``meeting_specific`` in the WG's
 config.json, so the repository shows them; a meeting that is not listed
-there was not found. An overridden meeting records Portal's folder too.
-Readers take the override for its meeting (ran1 config._derive). CI commits the file with the build. The list is left
+there was not found. An overridden meeting is looked up and recorded too,
+so the maintainer can compare and decide whether to keep the override;
+readers take the override for its meeting (ran1 config._derive). CI commits the file with the build. The list is left
 out of the WG input fingerprint (ci.py), so writing it rebuilds nothing.
 
 A folder that is not found is not recorded: before a meeting it usually
@@ -250,14 +251,10 @@ def resolve(wg_id, meetings, *, rows=None, override=(), recorded=(), root=None, 
     found = _FOUND.setdefault(wg_id, {})
     result = {}
     for meeting in dict.fromkeys(m for m in meetings if m):
+        # An override is what is used, but the folder is still looked up and
+        # recorded, so the maintainer can compare and drop the override.
         if meeting in manual:
-            # The override is used, but what Portal names (or was recorded) is
-            # still recorded so the two can be compared. Nothing is requested.
             result[meeting] = manual[meeting]
-            auto = portal.get(meeting) or known.get(meeting)
-            if auto:
-                found[meeting] = auto
-            continue
         folder = portal.get(meeting) or known.get(meeting)
         if folder is None:
             folder = next((root + name + '/' for name in candidate_names(wg_id, meeting)
@@ -271,10 +268,12 @@ def resolve(wg_id, meetings, *, rows=None, override=(), recorded=(), root=None, 
                 root_listed[meeting] = now.isoformat(timespec='seconds')
                 folder = _root_folders(wg_id, root, http).get(meeting)
         if folder is None:
-            print(f'[{wg_id}] No meeting folder for {meeting} yet; using the sync folder')
+            if meeting not in manual:
+                print(f'[{wg_id}] No meeting folder for {meeting} yet; using the sync folder')
             continue
         root_listed.pop(meeting, None)
-        found[meeting] = result[meeting] = folder
+        found[meeting] = folder
+        result.setdefault(meeting, folder)
     if json.dumps(cache, sort_keys=True) != before:
         _write_json(CACHE_PATH, cache)
     if record:
