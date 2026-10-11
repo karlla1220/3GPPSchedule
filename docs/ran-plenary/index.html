@@ -7,7 +7,7 @@
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2064%2064%22%3E%3Crect%20x%3D%225%22%20y%3D%229%22%20width%3D%2254%22%20height%3D%2250%22%20rx%3D%2211%22%20fill%3D%22%23fff%22%20stroke%3D%22%2394A3B8%22%20stroke-width%3D%222%22/%3E%3Cpath%20d%3D%22M5%2026V20A11%2011%200%200%201%2016%209H48A11%2011%200%200%201%2059%2020V26Z%22%20fill%3D%22%23E11D2E%22/%3E%3Crect%20x%3D%2218%22%20y%3D%223%22%20width%3D%226%22%20height%3D%2213%22%20rx%3D%223%22%20fill%3D%22%230F172A%22/%3E%3Crect%20x%3D%2240%22%20y%3D%223%22%20width%3D%226%22%20height%3D%2213%22%20rx%3D%223%22%20fill%3D%22%230F172A%22/%3E%3Ctext%20x%3D%2222%22%20y%3D%2254%22%20font-family%3D%22Arial%2CHelvetica%2Csans-serif%22%20font-size%3D%2234%22%20font-weight%3D%22900%22%20fill%3D%22%230F172A%22%20text-anchor%3D%22middle%22%3E3%3C/text%3E%3Cg%20fill%3D%22none%22%20stroke%3D%22%23E11D2E%22%20stroke-width%3D%224.5%22%20stroke-linecap%3D%22round%22%3E%3Cpath%20d%3D%22M42%2036.3A7%207%200%200%201%2042%2047.7%22/%3E%3Cpath%20d%3D%22M46.6%2029.7A15%2015%200%200%201%2046.6%2054.3%22/%3E%3C/g%3E%3C/svg%3E">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Source+Sans+3:wght@400;500;600;700&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Source+Sans+3:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap">
     <style>:root {
     --base-slot-height: 10px;
     --time-col-width: 36px;
@@ -121,27 +121,29 @@ header .meta a:focus-visible,
    the centred titles and the grid below stay where they are. */
 .support-links {
     position: absolute;
-    /* Centred on the title and its status line (46px); the block is 36px. */
-    top: 5px;
+    /* Centred on the title and its status line (46px); the block is 32px. */
+    top: 7px;
     right: 0;
     display: flex;
     align-items: center;
-    gap: 9px;
+    gap: 7px;
     color: var(--ink-2);
-    font-size: 12.5px;
-    line-height: 17px;
+    font-size: 11.5px;
+    line-height: 16px;
     text-align: left;
 }
-.support-icon { font-size: 28px; line-height: 1; }
-.support-text strong { display: block; color: var(--ink); font-size: 14px; font-weight: 600; line-height: 19px; }
+.support-icon { font-size: 22px; line-height: 1; }
+/* Set like a proposal in a contribution: italic. The cup stays upright. */
+.support-text { font-style: italic; }
+.support-text strong { display: block; color: var(--ink); font-size: 12px; font-weight: 500; line-height: 16px; }
 .support-text > span { display: block; }
-.support-links a { color: var(--ink); font-weight: 600; text-underline-offset: 2px; }
+.support-links a { color: var(--ink); font-weight: 500; text-underline-offset: 2px; }
 .support-links a:focus-visible { outline: 2px solid #2563EB; outline-offset: 2px; border-radius: 2px; }
 /* No room beside the sibling meetings: one centred line under the titles. */
 /* There it is sized like the meta lines (12px, regular, cup at text size);
    only the ink colour sets it apart. */
 @media (max-width: 1024px) {
-    .support-links { position: static; display: block; margin: -10px auto 10px; color: var(--ink); font-size: 12px; text-align: center; }
+    .support-links { position: static; display: block; margin: -10px auto 10px; color: var(--ink); font-size: 12px; line-height: 17px; text-align: center; }
     .support-icon { margin-right: 4px; font-size: inherit; line-height: inherit; }
     .support-text strong { display: inline; font-size: inherit; font-weight: 400; line-height: inherit; }
     /* Too narrow for one line: "on Patreon or …" moves down whole. */
