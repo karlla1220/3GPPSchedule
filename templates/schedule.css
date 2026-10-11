@@ -111,27 +111,29 @@ header .meta a:focus-visible,
    the centred titles and the grid below stay where they are. */
 .support-links {
     position: absolute;
-    /* Centred on the title and its status line (46px); the block is 36px. */
-    top: 5px;
+    /* Centred on the title and its status line (46px); the block is 32px. */
+    top: 7px;
     right: 0;
     display: flex;
     align-items: center;
-    gap: 9px;
+    gap: 7px;
     color: var(--ink-2);
-    font-size: 12.5px;
-    line-height: 17px;
+    font-size: 11.5px;
+    line-height: 16px;
     text-align: left;
 }
-.support-icon { font-size: 28px; line-height: 1; }
-.support-text strong { display: block; color: var(--ink); font-size: 14px; font-weight: 600; line-height: 19px; }
+.support-icon { font-size: 22px; line-height: 1; }
+/* Set like a proposal in a contribution: italic. The cup stays upright. */
+.support-text { font-style: italic; }
+.support-text strong { display: block; color: var(--ink); font-size: 12px; font-weight: 500; line-height: 16px; }
 .support-text > span { display: block; }
-.support-links a { color: var(--ink); font-weight: 600; text-underline-offset: 2px; }
+.support-links a { color: var(--ink); font-weight: 500; text-underline-offset: 2px; }
 .support-links a:focus-visible { outline: 2px solid #2563EB; outline-offset: 2px; border-radius: 2px; }
 /* No room beside the sibling meetings: one centred line under the titles. */
 /* There it is sized like the meta lines (12px, regular, cup at text size);
    only the ink colour sets it apart. */
 @media (max-width: 1024px) {
-    .support-links { position: static; display: block; margin: -10px auto 10px; color: var(--ink); font-size: 12px; text-align: center; }
+    .support-links { position: static; display: block; margin: -10px auto 10px; color: var(--ink); font-size: 12px; line-height: 17px; text-align: center; }
     .support-icon { margin-right: 4px; font-size: inherit; line-height: inherit; }
     .support-text strong { display: inline; font-size: inherit; font-weight: 400; line-height: inherit; }
     /* Too narrow for one line: "on Patreon or …" moves down whole. */
