@@ -22,6 +22,8 @@ class FakeFTP:
     def __enter__(self): return self
     def __exit__(self, *args): pass
     def login(self): self.calls.append(('login',))
+    def quit(self): self.calls.append(('quit',))
+    def close(self): pass
     def cwd(self, path): self.calls.append(('cwd', path))
     def voidcmd(self, cmd): return '200 OK'
     def retrlines(self, cmd, callback):
@@ -210,3 +212,55 @@ def test_requests_without_a_client_name_the_project(monkeypatch):
     ftp_transport.get('https://list.etsi.org/file', headers={'User-Agent': 'Mozilla/5.0'})
     assert [h.get('User-Agent') for h in sent] == [ftp_transport.USER_AGENT] * 2 + ['Mozilla/5.0']
     assert sent[1]['If-None-Match'] == '"v1"'
+
+
+def test_one_ftp_login_serves_every_fallback_of_a_run(ftp):
+    from shared import ftp_transport
+    with httpx.Client(transport=httpx.MockTransport(lambda _: httpx.Response(526))) as http:
+        ftp_transport.get(CHAIR, http=http, listing=True)
+        ftp_transport.get(CHAIR + 'RAN%23113%20time%20plan%20v06.zip', http=http)
+        ftp_transport.get(sources.DEFAULTS['agenda_url'], http=http)
+    assert [c[0] for c in ftp.calls].count('login') == 1
+    ftp_transport.reset()
+    assert ftp.calls[-1] == ('quit',)
+
+
+def test_a_stale_ftp_session_is_replaced_once(ftp, monkeypatch):
+    from shared import ftp_transport
+    ftp_transport.ftp_response(CHAIR, listing=True)
+    ftp_transport._session.retrlines = lambda *a: (_ for _ in ()).throw(EOFError())
+    assert NAME in ftp_transport.ftp_response(CHAIR, listing=True).text
+    assert [c[0] for c in ftp.calls].count('login') == 2
+
+
+def test_https_that_failed_is_not_repeated_in_the_same_run(ftp):
+    from shared import ftp_transport
+    seen = []
+    def handler(request):
+        seen.append(str(request.url))
+        if '/Chair/' in str(request.url):
+            return httpx.Response(403, content=FIREWALL)
+        return httpx.Response(200, text='ok')
+    other = 'https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/'
+    with httpx.Client(transport=httpx.MockTransport(handler)) as http:
+        ftp_transport.get(CHAIR, http=http, listing=True)
+        # A file in the blocked folder goes straight to FTP; another folder still uses HTTPS.
+        ftp_transport.get(CHAIR + 'RAN%23113%20time%20plan%20v06.zip', http=http)
+        assert ftp_transport.get(other, http=http).text == 'ok'
+    assert seen == [CHAIR, other]
+    ftp_transport.reset()
+    with httpx.Client(transport=httpx.MockTransport(handler)) as http:
+        ftp_transport.get(CHAIR, http=http, listing=True)
+    assert seen[-1] == CHAIR
+
+
+def test_a_connection_failure_sends_the_rest_of_the_host_to_ftp(ftp):
+    from shared import ftp_transport
+    seen = []
+    def down(request):
+        seen.append(str(request.url))
+        raise httpx.ConnectError('connection refused', request=request)
+    with httpx.Client(transport=httpx.MockTransport(down)) as http:
+        ftp_transport.get(CHAIR, http=http, listing=True)
+        ftp_transport.get(sources.DEFAULTS['agenda_url'], http=http)
+    assert seen == [CHAIR, CHAIR]

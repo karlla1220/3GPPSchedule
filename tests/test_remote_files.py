@@ -77,6 +77,8 @@ class FTP:
     def __enter__(self): return self
     def __exit__(self, *a): pass
     def login(self): pass
+    def quit(self): pass
+    def close(self): pass
     def voidcmd(self, cmd): pass
     def size(self, path): return len(self.body)
     def sendcmd(self, cmd): return self.stamp
@@ -198,7 +200,7 @@ def test_a_3gpp_folder_is_listed_once_per_run():
         assert remote_files.get_listing(url, http=http).text == first
         assert remote_files.get_listing(url + 'Chair_notes/', http=http).text != first
         assert seen == [url, url + 'Chair_notes/']
-        remote_files.clear_listings()
+        remote_files.new_run()
         assert remote_files.get_listing(url, http=http).text != first
 
 
@@ -209,3 +211,23 @@ def test_a_failed_listing_is_not_remembered():
         with pytest.raises(httpx.HTTPStatusError):
             remote_files.get_listing(url, http=http)
         assert remote_files.get_listing(url, http=http).status_code == 200
+
+
+def test_check_hands_its_listings_to_build(tmp_path):
+    import gzip
+    url = 'https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/'
+    body = '<table><tr><td>Chair_notes</td></tr></table>'
+    calls = []
+    def handler(request):
+        calls.append(request)
+        return httpx.Response(200, content=gzip.compress(body.encode()),
+                              headers={'content-encoding': 'gzip', 'content-type': 'text/html; charset=utf-8'})
+    with httpx.Client(transport=httpx.MockTransport(handler)) as http:
+        assert remote_files.get_listing(url, http=http).text == body
+        # The kept body is already decoded and is not decoded again.
+        assert remote_files.get_listing(url, http=http).text == body
+    remote_files.save_listings(tmp_path / 'listings.json')
+    remote_files.new_run()
+    assert remote_files.load_listings(tmp_path / 'listings.json') == 1
+    assert remote_files.get_listing(url).text == body and len(calls) == 1
+    assert remote_files.load_listings(tmp_path / 'missing.json') == 0

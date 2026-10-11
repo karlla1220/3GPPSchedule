@@ -4,6 +4,7 @@ WG code selects URLs and interprets documents. This module owns transport and
 cache identity. Cache entries are disposable and never mark a WG build as
 successful. They can be restored on any runner, independently of WG state.
 """
+import base64
 from contextlib import contextmanager
 import hashlib
 import json
@@ -16,8 +17,9 @@ from shared import ftp_transport
 
 CACHE_DIR = Path('.cache/3gpp')
 MAX_BYTES = 30_000_000
-# Folder listings already fetched in this process: url -> (headers, body).
-# RAN1 reads the same Inbox and Chair_notes listings from several places.
+# Folder listings already fetched in this run: url -> (content type, body).
+# RAN1 reads the same Inbox and Chair_notes listings from several places, and
+# build reads what check listed a minute earlier (save_listings/load_listings).
 _LISTINGS = {}
 
 
@@ -66,24 +68,51 @@ def _save(url, body, info):
 
 
 def get_listing(url, *, http=None, **kwargs):
-    """A folder listing; a public 3GPP folder is requested once per process.
+    """A folder listing; a public 3GPP folder is requested once per run.
 
-    One check or build run reads each folder once. A new run in the same
-    process starts with clear_listings().
+    A new run in the same process starts with new_run().
     """
     if url in _LISTINGS:
-        headers, body = _LISTINGS[url]
-        return httpx.Response(200, headers=headers, content=body, request=httpx.Request('GET', url))
+        return _listing_response(url, *_LISTINGS[url])
     response = ftp_transport.get(url, listing=True, http=http,
                                  **({'timeout': 30, 'follow_redirects': True, **kwargs} if http is None else kwargs))
     response.raise_for_status()
     if is_3gpp_file(url):
-        _LISTINGS[url] = (dict(response.headers), response.content)
+        # Only the type: the body is already decoded, so a kept
+        # Content-Encoding would make httpx decode it a second time.
+        _LISTINGS[url] = (response.headers.get('content-type', 'text/html'), response.content)
     return response
 
 
-def clear_listings():
+def _listing_response(url, content_type, body):
+    return httpx.Response(200, headers={'content-type': content_type}, content=body,
+                          request=httpx.Request('GET', url))
+
+
+def new_run():
+    """Forget this process's listings and transport failures."""
     _LISTINGS.clear()
+    ftp_transport.reset()
+
+
+def save_listings(path):
+    """Hand the listings of this run to its next step (check -> build)."""
+    path = Path(path)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps({url: {'content_type': kind, 'body': base64.b64encode(body).decode()}
+                                for url, (kind, body) in _LISTINGS.items()}))
+
+
+def load_listings(path):
+    """Reuse the listings the check of this run saved; returns how many."""
+    try:
+        saved = json.loads(Path(path).read_text())
+        listings = {url: (entry['content_type'], base64.b64decode(entry['body']))
+                    for url, entry in saved.items() if is_3gpp_file(url)}
+    except (OSError, ValueError, TypeError, KeyError, AttributeError):
+        return 0
+    _LISTINGS.update(listings)
+    return len(listings)
 
 
 def fetch_file(http, url, old=None, local=None):

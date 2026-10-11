@@ -532,7 +532,10 @@ CI 변경 감지는 각 URL에 대응하는 커밋된 파일의 **콘텐츠 sha2
 - 5xx나 연결 오류면 HTTPS를 1초 뒤 한 번 더 시도하고, 그래도 실패하면 익명 FTP(`ftp.3gpp.org`)로 같은 경로를 받습니다.
 - 3GPP 방화벽(WAF)의 차단 페이지가 담긴 403은 HTTPS를 다시 시도하지 않고 바로 FTP로 받습니다. 차단된 요청을 반복하지 않기 위해서입니다.
 - 그 밖의 403은 그대로 HTTP 오류입니다. 3GPP는 없는 폴더에도 403을 주므로 FTP로 넘기지 않습니다.
-- 폴더 목록은 한 실행(프로세스)에서 URL마다 한 번만 받습니다(`remote_files.get_listing`). RAN1은 Inbox와 Chair_notes를 여러 곳에서 읽는데, 두 번째부터는 받은 목록을 씁니다. 실패한 목록은 기억하지 않고, `ci.py check`는 시작할 때 비웁니다.
+- FTP로 받을 때는 한 실행에서 FTP 접속 하나(로그인 한 번)를 계속 씁니다. 서버가 idle로 끊은 연결은 한 번만 다시 엽니다.
+- 한 실행에서 HTTPS가 실패한 곳은 다시 HTTPS로 요청하지 않고 바로 FTP로 받습니다. 5xx나 방화벽 403이면 그 폴더, 연결·TLS 실패면 호스트 전체가 대상입니다. 다음 실행은 다시 HTTPS부터 시도합니다.
+- 폴더 목록은 한 실행에서 URL마다 한 번만 받습니다(`remote_files.get_listing`). RAN1은 Inbox와 Chair_notes를 여러 곳에서 읽는데, 두 번째부터는 받은 목록을 씁니다. 실패한 목록은 기억하지 않고, `ci.py check`는 시작할 때 비웁니다.
+- **build는 같은 workflow의 check가 받은 목록과 Portal 결과를 씁니다.** check가 `.ci/listings.json`과 `.ci/plan.json`의 `portal_meetings`에 남기고, build job이 artifact로 받아 다시 조회하지 않습니다. check가 판단한 것과 같은 목록으로 빌드하게 됩니다. 파일 본문은 전부터 `.cache/3gpp/`를 재사용해 조건부 요청(304)만 보냅니다.
 - Portal 회의 목록도 한 프로세스에서 한 번(`get_meetings`)이고, 모든 WG가 같은 결과를 씁니다. RAN P도 따로 조회하지 않습니다.
 - User-Agent는 `3GPPSchedule/1.0 (+https://github.com/karlla1220/3GPPSchedule)` 하나입니다. 공유 클라이언트 없이 부르는 RAN1 요청도 같은 값을 보냅니다. Portal과 ETSI 같은 외부 호스트는 각자의 헤더를 씁니다.
 

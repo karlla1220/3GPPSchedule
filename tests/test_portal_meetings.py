@@ -114,3 +114,16 @@ def test_api_instants_use_dst_rules_at_each_endpoint(rows):
                                     'EndDate': '2026-10-26 17:30:00'})
     assert ref['starts_at'] == '2026-10-23T09:00:00+02:00'
     assert ref['ends_at'] == '2026-10-26T17:30:00+01:00'
+
+
+def test_build_answers_from_the_rows_check_fetched(monkeypatch):
+    from shared import portal_meetings
+    monkeypatch.setattr(portal_meetings, '_fetch_meetings', lambda today: pytest.fail('no Portal request'))
+    rows = [{'Id': 1, 'TBId': 380, 'Title': '3GPPRAN2#135-bis'}]
+    portal_meetings.use_meetings(rows)
+    try:
+        assert portal_meetings.get_meetings() == rows
+    finally:
+        monkeypatch.undo()
+        portal_meetings.clear_meetings_cache()
+    assert portal_meetings._given is None

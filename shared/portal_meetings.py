@@ -101,13 +101,26 @@ def _fetch_meetings(today):
             'IncludeNonTBMeetings': False, 'Reference': '', 'Registered': False})
 
 
+_given = None
+
+
 def get_meetings():
     """One shared fetch per process/day; failures remain errors to callers."""
+    if _given is not None:
+        return _given
     return _fetch_meetings(datetime.now(ZoneInfo('Asia/Seoul')).date())
+
+
+def use_meetings(rows):
+    """Answer get_meetings() with rows this run already fetched (check -> build)."""
+    global _given
+    _given = list(rows)
 
 
 def clear_meetings_cache():
     """Start a fresh check when several CI runs share one Python process."""
+    global _given
+    _given = None
     _fetch_meetings.cache_clear()
 
 
