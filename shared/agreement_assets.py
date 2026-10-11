@@ -192,7 +192,7 @@ def render_agreement_panel(schedule):
     )
     return (
         """<section id="agreement-panel" class="agreement-panel" aria-labelledby="agreement-title">
-<div id="agreement-app"><h2 id="agreement-title">Agreements for</h2><p class="agreement-empty">Select a schedule cell to read its agreements here.</p></div>
+<div id="agreement-app"><div class="agreement-header"><h2 id="agreement-title">Agreements for</h2></div><p class="agreement-status">Select a schedule cell to read its agreements here.</p></div>
 <noscript>JavaScript is required to select and load agreements.</noscript>
 </section>
 <script type="application/json" id="agreement-data">"""

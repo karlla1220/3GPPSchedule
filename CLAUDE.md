@@ -231,6 +231,10 @@ HTML은 `shared/page.py`, 표시 판단은 `templates/support-note.js`, 값은 `
   - 번쩍이는 바탕(`::after`)은 덮개 위에 놓여서 여백부터 문단 오른쪽 끝까지 한 줄 전체를 덮는다. 쌓는 순서는 띠(-3) → 덮개(-2) → 바탕(-1) → 글자다.
   - 시각은 회의 시간대(`schedule.timezone`)로 보인다. 일정과 같은 기준이다.
   - 첫 note는 기준선이라 `As of …`로 날짜만 보이고 강조는 없다.
+- **패널이 반영한 note의 버전은 머리줄 오른쪽 끝에 늘 보인다(`.agreement-source`, `Chair notes v00 · 10 Oct, 15:55 GMT+9`).** AI의 변경 줄은 그 AI를 마지막으로 바꾼 note만 말한다. `Updated … · draft v01`만으로는 그 뒤에 나온 note가 반영됐는지 알 수 없다.
+  - 셀을 고르기 전에도 보인다. 뷰어는 첫 선택 때 뜨므로, 정적 마크업의 `.agreement-header`에 패널 스크립트가 같은 줄을 붙인다.
+  - 변경 줄과 같은 톤(12px, `--ink-3`)이고 버전 표기도 같다(draft는 `draft v01`). 시각은 note가 올라온 시각(`document_changed_at`)이고, 파일 이름은 `title`(hover)에 둔다.
+  - 600px 이하에서는 머리줄의 마지막 줄로 내려와 왼쪽에 붙는다. 오른쪽 끝에 홀로 떠 있지 않게 한다.
 - **빈 항목은 정상이다.** 하위 번호만 있는 제목이나 아직 합의가 없는 항목은 오류가 아니라 회색 안내 문구로 보인다. 패널은 본문이 있는 첫 탭을 먼저 연다.
 - **TDoc 행은 5행 이상 이어진 목록일 때만 접는다(`agreements.py`의 `_listed_tdocs`, `TDOC_LIST_ROWS`).** 본문이 가리키는 TDoc까지 빼면 무엇에 대한 글인지 알 수 없다. AI 5에서 LS 행이 빠지면 설명만 남는다.
   - 4행까지는 원문 그대로 둔다. 수신 LS, FL summary, 승인된 CR 번호, 릴리스별 mirror CR이 여기에 든다.

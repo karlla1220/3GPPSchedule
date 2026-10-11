@@ -55,17 +55,14 @@ document.addEventListener('DOMContentLoaded', function() {
         return { hour, minute, weekday, date: dateParts.year + "-" + dateParts.month + "-" + dateParts.day, minutes: (hour % 24) * 60 + minute };
     }
 
-    // Update the "Updated" display in meeting timezone
+    // "Now" in the meeting timezone, written like "Generated" beside it
+    // (2026-10-12 14:05) so the two can be compared at a glance.
     function updateTimeDisplay() {
         const el = document.getElementById('tz-now');
         if (!el) return;
-        const now = new Date();
-        const formatted = now.toLocaleString('en-US', {
-            timeZone: MEETING_TZ,
-            year: 'numeric', month: '2-digit', day: '2-digit',
-            hour: '2-digit', minute: '2-digit', hour12: false
-        });
-        el.textContent = formatted;
+        const now = nowInMeetingTZ();
+        const two = n => String(n).padStart(2, '0');
+        el.textContent = now.date + ' ' + two(now.hour % 24) + ':' + two(now.minute);
     }
     updateTimeDisplay();
     setInterval(updateTimeDisplay, 60000);

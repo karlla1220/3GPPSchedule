@@ -325,6 +325,9 @@ def test_asset_manifest_is_lazy_content_addressed_and_roundtrips(note, tmp_path)
     assert 'aria-controls="agreement-panel"' in page
     assert "iframe" not in page
     assert "Agreements for" in page
+    # The panel script appends the note's version to this header before any selection.
+    assert BeautifulSoup(page, "html.parser").select_one("#agreement-app > .agreement-header > h2")
+    assert manifest["document_file"] == note.name
     assert "dompurify@3.4.16" in page
     write_agreement_assets(s, tmp_path)
     for name, content in assets.items():
