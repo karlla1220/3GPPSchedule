@@ -32,7 +32,7 @@ from .downloader import (
     get_all_remote_schedule_info,
     get_latest_agenda_info,
     get_latest_chair_notes_info,
-    _extract_version_parts_from_name,
+    _release_key,
     local_reference_hashes,
     local_reference_meeting_id,
     load_external_files_state,
@@ -73,9 +73,11 @@ def _is_chair_notes_downgrade(
         return False
     if current_ref.get("type") != "chair_notes" or cached_ref.get("type") != "chair_notes":
         return False
-    return _extract_version_parts_from_name(
-        str(current_ref.get("name", ""))
-    ) < _extract_version_parts_from_name(str(cached_ref.get("name", "")))
+    # Same order as the selection: the released v00 that follows a draft v01
+    # is an upgrade, not a downgrade.
+    return _release_key(str(current_ref.get("name", ""))) < _release_key(
+        str(cached_ref.get("name", ""))
+    )
 
 
 def _normalize_for_compare(entries: list[dict]) -> set[tuple]:

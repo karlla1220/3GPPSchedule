@@ -73,8 +73,9 @@ def find_chair_notes_docx(
     Looks for files with 'chair note' (case-insensitive) in the name,
     supporting .docx and .docm extensions. When a meeting ID
     is supplied, a document from another identified meeting is never used.
-    Returns the highest-version file (deterministic filename selection;
-    mtimes are not stable across CI checkouts).
+    A released note beats a "Draft" one; within the same class the highest
+    version wins (deterministic filename selection; mtimes are not stable
+    across CI checkouts).
     """
     supported_extensions = (".docx", ".docm")
     chair_files = [

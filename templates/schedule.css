@@ -22,7 +22,6 @@
     --dim-opacity: 0.30;
     /* Agreement changes: one green for added text, its tab dot and its note. */
     --added: #2F9E62;
-    --added-tint: #EAF6EF;
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
