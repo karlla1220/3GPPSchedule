@@ -101,7 +101,7 @@ def gemini_request(payload, schema, model):
                     config=types.GenerateContentConfig(
                         response_mime_type='application/json',
                         response_json_schema=schema, max_output_tokens=32768,
-                        thinking_config=types.ThinkingConfig(thinking_level='low')))
+                        thinking_config=types.ThinkingConfig(thinking_level='medium')))
                 return json.loads(response.text)
             except (genai.errors.APIError, ValueError) as exc:
                 if attempt == 2:

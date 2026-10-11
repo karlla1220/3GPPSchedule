@@ -237,7 +237,7 @@ def test_ran1_group_normalization_failure_fails_the_build(tmp_path, monkeypatch)
         session_parser.normalize_group_headers(sessions)
     assert client.models.generate_content.call_count == 3
     config = client.models.generate_content.call_args.kwargs['config']
-    assert config.thinking_config.thinking_level.value == 'LOW'
+    assert config.thinking_config.thinking_level.value == 'MEDIUM'
     assert not list(tmp_path.iterdir())
 
 

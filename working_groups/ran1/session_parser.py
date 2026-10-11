@@ -21,9 +21,9 @@ CACHE_DIR = Path(".cache/ran1")
 ROOM_DETECT_PROMPT_VERSION = 2
 
 GEMINI_MODEL = "gemini-3.8-flash"
-# Extraction calls want the least reasoning the model allows. gemini-3.8-flash
-# has no "minimal" level; "low" is its floor.
-LOW_THINKING = "low"
+# Flash is fast enough that its default level costs little, and "low" reads
+# the schedule cells less carefully.
+THINKING_LEVEL = "medium"
 
 # ── JSON Schemas for structured output ───────────────────────────
 
@@ -163,7 +163,7 @@ Return ONLY valid JSON: {{"timezone": "IANA/Timezone", "city": "CityName", "coun
             config=types.GenerateContentConfig(
                 response_mime_type="application/json",
                 response_json_schema=TIMEZONE_SCHEMA,
-                thinking_config=types.ThinkingConfig(thinking_level=LOW_THINKING),
+                thinking_config=types.ThinkingConfig(thinking_level=THINKING_LEVEL),
             ),
         )
         result = json.loads(response.text.strip())
@@ -902,7 +902,7 @@ def parse_time_slots(
                         system_instruction=system_instruction,
                         response_mime_type="application/json",
                         response_json_schema=MULTI_SOURCE_SESSION_SCHEMA,
-                        thinking_config=types.ThinkingConfig(thinking_level=LOW_THINKING),
+                        thinking_config=types.ThinkingConfig(thinking_level=THINKING_LEVEL),
                     ),
                 )
                 parsed_result = json.loads(response.text.strip())
@@ -1159,9 +1159,11 @@ def normalize_group_headers(sessions: list[Session]) -> list[Session]:
             print("  Warning: GEMINI_API_KEY not set, skipping normalization")
             return sessions
 
+        # One call per label set, and a failure stops the build: give the
+        # model room to compare the names rather than retry on a deadline.
         client = genai.Client(
             api_key=api_key,
-            http_options={"timeout": 120_000},
+            http_options={"timeout": 300_000},
         )
 
         header_counts = Counter(s.group_header for s in sessions if s.group_header)
@@ -1187,9 +1189,7 @@ def normalize_group_headers(sessions: list[Session]) -> list[Session]:
                         system_instruction=GROUP_SIMPLIFY_SYSTEM_INSTRUCTION,
                         response_mime_type="application/json",
                         response_json_schema=GROUP_SIMPLIFY_SCHEMA,
-                        # Without a level the model reasons at length over the
-                        # label list and runs past the request deadline.
-                        thinking_config=types.ThinkingConfig(thinking_level=LOW_THINKING),
+                        thinking_config=types.ThinkingConfig(thinking_level=THINKING_LEVEL),
                     ),
                 )
                 result = json.loads(response.text.strip())
