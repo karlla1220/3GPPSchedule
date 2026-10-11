@@ -185,3 +185,27 @@ def test_cached_stream_preserves_server_filename(monkeypatch):
             with remote_files.stream('GET', URL) as response:
                 assert response.headers['content-disposition'] == disposition
                 assert response.content == b'document'
+
+
+def test_a_3gpp_folder_is_listed_once_per_run():
+    url = 'https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/'
+    seen = []
+    def handler(request):
+        seen.append(str(request.url))
+        return httpx.Response(200, text=f'<table>{len(seen)}</table>')
+    with httpx.Client(transport=httpx.MockTransport(handler)) as http:
+        first = remote_files.get_listing(url, http=http).text
+        assert remote_files.get_listing(url, http=http).text == first
+        assert remote_files.get_listing(url + 'Chair_notes/', http=http).text != first
+        assert seen == [url, url + 'Chair_notes/']
+        remote_files.clear_listings()
+        assert remote_files.get_listing(url, http=http).text != first
+
+
+def test_a_failed_listing_is_not_remembered():
+    url = 'https://www.3gpp.org/ftp/tsg_ran/WG2_RL2/TSGR2_136/'
+    statuses = iter([403, 200])
+    with httpx.Client(transport=httpx.MockTransport(lambda _: httpx.Response(next(statuses)))) as http:
+        with pytest.raises(httpx.HTTPStatusError):
+            remote_files.get_listing(url, http=http)
+        assert remote_files.get_listing(url, http=http).status_code == 200

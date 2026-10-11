@@ -64,7 +64,9 @@ def site_fingerprint(config):
 def check_site(config_path=Path('site.json')):
     config = load_site_config(config_path)
     from shared.portal_meetings import clear_meetings_cache
+    from shared.remote_files import clear_listings
     clear_meetings_cache()
+    clear_listings()
     meetings = fetch_site_meetings()
     previous = read_json(STATE_PATH)
     shutil.rmtree('.ci/transfers', ignore_errors=True)

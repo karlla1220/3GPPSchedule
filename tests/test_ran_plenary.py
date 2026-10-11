@@ -235,16 +235,15 @@ def test_bundle_corruption_is_not_silently_accepted(tmp_path):
         sources.Bundle.load(tmp_path)
 
 
-def test_portal_matches_meeting_number_not_ongoing_status():
-    def handler(req):
-        assert json.loads(req.content)['getMeetingsInput']['Tbs'] == [373]
-        return httpx.Response(200, json=[
-            {'Id':1,'TBId':373,'Title':'3GPPRAN#113','StartDate':'2026-09-14 09:00:00','EndDate':'2026-09-17 17:30:00','Location':'Madrid','Country':'ES'},
-            {'Id':2,'TBId':373,'Title':'3GPPRAN#114','StartDate':'2026-12-07 09:00:00','EndDate':'2026-12-10 17:30:00','Location':'Boston','Country':'US'}])
-    with httpx.Client(transport=httpx.MockTransport(handler)) as http:
-        assert sources.portal_meeting(http, 114)['location'] == 'Boston'
-        with pytest.raises(ValueError):
-            sources.portal_meeting(http, 112)
+def test_portal_matches_meeting_number_not_ongoing_status(monkeypatch):
+    rows = [{'Id':1,'TBId':373,'Title':'3GPPRAN#113','StartDate':'2026-09-14 09:00:00','EndDate':'2026-09-17 17:30:00','Location':'Madrid','Country':'ES'},
+            {'Id':2,'TBId':373,'Title':'3GPPRAN#114','StartDate':'2026-12-07 09:00:00','EndDate':'2026-12-10 17:30:00','Location':'Boston','Country':'US'},
+            {'Id':3,'TBId':380,'Title':'3GPPRAN#112','StartDate':'2026-06-01 09:00:00','EndDate':'2026-06-04 17:30:00'}]
+    # The shared query (one per process, every WG) answers; RAN P sends none of its own.
+    monkeypatch.setattr(sources, 'get_meetings', lambda: rows)
+    assert sources.portal_meeting(114)['location'] == 'Boston'
+    with pytest.raises(ValueError):
+        sources.portal_meeting(112)
 
 
 def test_metadata_fallback_cannot_cross_meetings(metadata):

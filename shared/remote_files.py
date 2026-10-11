@@ -16,6 +16,9 @@ from shared import ftp_transport
 
 CACHE_DIR = Path('.cache/3gpp')
 MAX_BYTES = 30_000_000
+# Folder listings already fetched in this process: url -> (headers, body).
+# RAN1 reads the same Inbox and Chair_notes listings from several places.
+_LISTINGS = {}
 
 
 def client(**kwargs):
@@ -63,10 +66,24 @@ def _save(url, body, info):
 
 
 def get_listing(url, *, http=None, **kwargs):
+    """A folder listing; a public 3GPP folder is requested once per process.
+
+    One check or build run reads each folder once. A new run in the same
+    process starts with clear_listings().
+    """
+    if url in _LISTINGS:
+        headers, body = _LISTINGS[url]
+        return httpx.Response(200, headers=headers, content=body, request=httpx.Request('GET', url))
     response = ftp_transport.get(url, listing=True, http=http,
                                  **({'timeout': 30, 'follow_redirects': True, **kwargs} if http is None else kwargs))
     response.raise_for_status()
+    if is_3gpp_file(url):
+        _LISTINGS[url] = (dict(response.headers), response.content)
     return response
+
+
+def clear_listings():
+    _LISTINGS.clear()
 
 
 def fetch_file(http, url, old=None, local=None):

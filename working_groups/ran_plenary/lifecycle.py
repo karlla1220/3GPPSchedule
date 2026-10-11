@@ -19,7 +19,7 @@ def check_updates():
             override = cfg['meetings'].get(str(number), {})
             if not (all(override.get(k) for k in ('starts_on', 'ends_on')) and (override.get('timezone') or override.get('location'))):
                 try:
-                    bundle.manifest['portal_metadata'] = portal_meeting(http, number)
+                    bundle.manifest['portal_metadata'] = portal_meeting(number)
                 except Exception:
                     if previous.get('meeting_number') != number or not previous.get('metadata'):
                         raise

@@ -27,7 +27,7 @@ def meeting_metadata(number, cfg, previous, http, request, supplied=None):
         live = supplied
         if live is None and http is not None:
             try:
-                live = portal_meeting(http, number)
+                live = portal_meeting(number)
             except (ValueError, OSError, httpx.HTTPError) as exc:
                 if not cached:
                     raise ValueError('Cannot resolve meeting metadata; configure meetings or retry Portal') from exc
