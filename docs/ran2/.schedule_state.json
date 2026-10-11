@@ -1,7 +1,7 @@
 {
   "meeting_id": "ran2#135bis",
   "version": 1,
-  "config_hash": "8bc6afa38dd35e691cb8597464b9eb1162a038ab954e2ab5bb30ba4aa9a9f7b0",
+  "config_hash": "c6c411aa629f66fe98cdf07087bfd44847afbc5a4762e030c55fe7817b8286f4",
   "schedule": {
     "name": "R2_135b_Schedule_v01.docx",
     "url": "https://www.3gpp.org/ftp/tsg_ran/WG2_RL2/TSGR2_135bis/Agenda/R2_135b_Schedule_v01.docx",
@@ -37,7 +37,7 @@
     "ends_at": "2026-10-16T17:30:00+09:00"
   },
   "llm": {
-    "model": "gemini-3-flash-preview",
+    "model": "gemini-3.8-flash",
     "uncertain": 4,
     "applied": 4,
     "kept_rules": 0

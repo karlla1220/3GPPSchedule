@@ -2490,8 +2490,8 @@
         },
         {
           "name": "Cont. NTN R20 GNSS",
-          "duration_minutes": 35,
-          "start_time": "11:00",
+          "duration_minutes": 45,
+          "start_time": "10:50",
           "end_time": "11:35",
           "day": "Thursday",
           "room_col_start": 2,
@@ -2634,7 +2634,7 @@
           ]
         },
         {
-          "name": "CB for Rel-19 corrections",
+          "name": "CB for Rel-19 corrections (MIMO, LPWUS, SBFD), if needed, details TBD",
           "duration_minutes": 30,
           "start_time": "12:30",
           "end_time": "13:00",
@@ -2954,7 +2954,7 @@
       ],
       "sessions": [
         {
-          "name": "CB Kyeongin",
+          "name": "CB Kyeongin (TBD)",
           "duration_minutes": 60,
           "start_time": "08:30",
           "end_time": "09:30",
@@ -2976,7 +2976,7 @@
           ]
         },
         {
-          "name": "CB for NR20 AI/M PHY",
+          "name": "CB Erlin / CB for NR20 AI/M PHY, if needed, details TBD",
           "duration_minutes": 60,
           "start_time": "09:30",
           "end_time": "10:30",
@@ -3125,7 +3125,7 @@
     }
   ],
   "source_file": "R2_135b_Schedule_v01.docx",
-  "generated_at": "2026-10-11 02:31",
+  "generated_at": "2026-10-11 15:50",
   "contact_name": "",
   "contact_email": "",
   "source_files": [

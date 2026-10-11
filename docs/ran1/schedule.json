@@ -623,7 +623,7 @@
           "room_col_end": 4,
           "chair": "Sorour",
           "agenda_item": "9.4",
-          "group_header": "R20 NR",
+          "group_header": "R20",
           "description": "GNSS resilient NR-NTN operation",
           "agenda_descriptions": [
             {
@@ -658,7 +658,7 @@
           "room_col_end": 4,
           "chair": "Sorour",
           "agenda_item": "9.5",
-          "group_header": "R20 NR",
+          "group_header": "R20",
           "description": "NR NTN in systems using downlink compensation",
           "agenda_descriptions": [
             {
@@ -1312,7 +1312,7 @@
           "room_col_end": 4,
           "chair": "Sorouri",
           "agenda_item": "9.2",
-          "group_header": "R20 NR",
+          "group_header": "R20",
           "description": "NR MIMO Phase 6",
           "agenda_descriptions": [
             {
@@ -1472,7 +1472,7 @@
           "room_col_end": 5,
           "chair": "Hiroki",
           "agenda_item": "10.5.4",
-          "group_header": "6GR / 10.5.4",
+          "group_header": "6GR",
           "description": "Downlink control channel, scheduling and HARQ operation",
           "agenda_descriptions": [
             {
@@ -1512,7 +1512,7 @@
           "room_col_end": 5,
           "chair": "Hiroki",
           "agenda_item": "10.5.4",
-          "group_header": "6GR / 10.5.4",
+          "group_header": "6GR",
           "description": "Downlink control channel, scheduling and HARQ operation",
           "agenda_descriptions": [
             {
@@ -1552,7 +1552,7 @@
           "room_col_end": 5,
           "chair": "Hiroki",
           "agenda_item": "10.5.4",
-          "group_header": "6GR / 10.5.4",
+          "group_header": "6GR",
           "description": "Downlink control channel, scheduling and HARQ operation",
           "agenda_descriptions": [
             {
@@ -2224,7 +2224,7 @@
           "room_col_end": 4,
           "chair": "Sorour",
           "agenda_item": "9.5",
-          "group_header": "R20 NR",
+          "group_header": "R20",
           "description": "NR NTN in systems using downlink compensation",
           "agenda_descriptions": [
             {
@@ -2259,7 +2259,7 @@
           "room_col_end": 4,
           "chair": "Sorour",
           "agenda_item": "9.4",
-          "group_header": "R20 NR",
+          "group_header": "R20",
           "description": "GNSS resilient NR-NTN operation",
           "agenda_descriptions": [
             {
@@ -2294,7 +2294,7 @@
           "room_col_end": 5,
           "chair": "Hiroki",
           "agenda_item": "10.5.4.1",
-          "group_header": "6GR / 10.5.4",
+          "group_header": "6GR",
           "description": "Downlink control channel, scheduling for downlink and uplink transmission",
           "agenda_descriptions": [
             {
@@ -2339,7 +2339,7 @@
           "room_col_end": 5,
           "chair": "Hiroki",
           "agenda_item": "10.5.4.2",
-          "group_header": "6GR / 10.5.4",
+          "group_header": "6GR",
           "description": "Downlink and uplink transmission without dynamic scheduling",
           "agenda_descriptions": [
             {
@@ -2384,7 +2384,7 @@
           "room_col_end": 5,
           "chair": "Hiroki",
           "agenda_item": "10.5.4.3",
-          "group_header": "6GR / 10.5.4",
+          "group_header": "6GR",
           "description": "HARQ related Aspects",
           "agenda_descriptions": [
             {
@@ -2531,7 +2531,7 @@
           "room_col_end": 7,
           "chair": "Hiroki",
           "agenda_item": "10.8.3, 10.8.1",
-          "group_header": "6GR / 10.8.x Sensing",
+          "group_header": "6GR",
           "description": "Waveform and frame structure",
           "agenda_descriptions": [
             {
@@ -2593,7 +2593,7 @@
           "room_col_end": 7,
           "chair": "Hiroki",
           "agenda_item": "10.2.1",
-          "group_header": "6GR / 10.2.1 Waveform",
+          "group_header": "6GR",
           "description": "Waveform",
           "agenda_descriptions": [
             {
@@ -2753,7 +2753,7 @@
           "room_col_end": 4,
           "chair": "Sorour",
           "agenda_item": "9.1",
-          "group_header": "R20 NR",
+          "group_header": "R20",
           "description": "Artificial Intelligence (AI)/Machine Learning (ML) for NR air interface enhancements",
           "agenda_descriptions": [
             {
@@ -2788,7 +2788,7 @@
           "room_col_end": 4,
           "chair": "Sorour",
           "agenda_item": "9.2",
-          "group_header": "R20 NR",
+          "group_header": "R20",
           "description": "NR MIMO Phase 6",
           "agenda_descriptions": [
             {
@@ -2858,7 +2858,7 @@
           "room_col_end": 5,
           "chair": "Hiroki",
           "agenda_item": "10.8.3",
-          "group_header": "6G ISAC",
+          "group_header": "6GR",
           "description": "Waveform and frame structure",
           "agenda_descriptions": [
             {
@@ -2898,7 +2898,7 @@
           "room_col_end": 5,
           "chair": "Hiroki",
           "agenda_item": "10.8.1.",
-          "group_header": "6G ISAC",
+          "group_header": "6GR",
           "description": "Evaluations",
           "agenda_descriptions": [
             {
@@ -3610,7 +3610,7 @@
           "room_col_end": 5,
           "chair": "Hiroki",
           "agenda_item": "10.2.1",
-          "group_header": "6G waveform",
+          "group_header": "6GR",
           "description": "Waveform",
           "agenda_descriptions": [
             {
@@ -4147,7 +4147,7 @@
           "room_col_end": 5,
           "chair": "Hiroki",
           "agenda_item": "9.3.3",
-          "group_header": "R20 / A-IoT Phase2",
+          "group_header": "R20",
           "description": "Other procedures",
           "agenda_descriptions": [
             {
@@ -4187,7 +4187,7 @@
           "room_col_end": 5,
           "chair": "Hiroki",
           "agenda_item": "9.3.1",
-          "group_header": "R20 / A-IoT Phase2",
+          "group_header": "R20",
           "description": "R2D signals, channels, waveform and procedures",
           "agenda_descriptions": [
             {
@@ -4728,7 +4728,7 @@
           "room_col_end": 4,
           "chair": "Sorour",
           "agenda_item": "9.4",
-          "group_header": "R20 NR",
+          "group_header": "R20",
           "description": "GNSS resilient NR-NTN operation",
           "agenda_descriptions": [
             {
@@ -4763,7 +4763,7 @@
           "room_col_end": 4,
           "chair": "Sorour",
           "agenda_item": "9.2",
-          "group_header": "R20 NR",
+          "group_header": "R20",
           "description": "NR MIMO Phase 6",
           "agenda_descriptions": [
             {
@@ -4798,7 +4798,7 @@
           "room_col_end": 5,
           "chair": "Hiroki",
           "agenda_item": "9.3.2",
-          "group_header": "R20 A-IoT",
+          "group_header": "R20",
           "description": "D2R signals, channels, waveform and procedures",
           "agenda_descriptions": [
             {
@@ -4838,7 +4838,7 @@
           "room_col_end": 5,
           "chair": "Hiroki",
           "agenda_item": "9.3.3",
-          "group_header": "R20 A-IoT",
+          "group_header": "R20",
           "description": "Other procedures",
           "agenda_descriptions": [
             {
@@ -4878,7 +4878,7 @@
           "room_col_end": 5,
           "chair": "Hiroki",
           "agenda_item": "9.3.1",
-          "group_header": "R20 A-IoT",
+          "group_header": "R20",
           "description": "R2D signals, channels, waveform and procedures",
           "agenda_descriptions": [
             {
@@ -5274,7 +5274,7 @@
           "room_col_end": 4,
           "chair": "Sorour",
           "agenda_item": "9.1",
-          "group_header": "R20 NR",
+          "group_header": "R20",
           "description": "Artificial Intelligence (AI)/Machine Learning (ML) for NR air interface enhancements",
           "agenda_descriptions": [
             {
@@ -5389,7 +5389,7 @@
           "room_col_end": 5,
           "chair": "Hiroki",
           "agenda_item": "10.8.2",
-          "group_header": "6G ISAC",
+          "group_header": "6GR",
           "description": "Aspects of integration with communication",
           "agenda_descriptions": [
             {
@@ -5429,7 +5429,7 @@
           "room_col_end": 5,
           "chair": "Hiroki",
           "agenda_item": "10.8.3",
-          "group_header": "6G ISAC",
+          "group_header": "6GR",
           "description": "Waveform and frame structure",
           "agenda_descriptions": [
             {
@@ -5469,7 +5469,7 @@
           "room_col_end": 5,
           "chair": "Hiroki",
           "agenda_item": "10.8.1",
-          "group_header": "6G ISAC",
+          "group_header": "6GR",
           "description": "Evaluations",
           "agenda_descriptions": [
             {
@@ -5566,7 +5566,7 @@
           "room_col_end": 6,
           "chair": "Hiroki",
           "agenda_item": "10.5.4.1",
-          "group_header": "6G 10.5.4.x",
+          "group_header": "6GR",
           "description": "Downlink control channel, scheduling for downlink and uplink transmission",
           "agenda_descriptions": [
             {
@@ -6026,7 +6026,7 @@
           "room_col_end": 6,
           "chair": "Hiroki",
           "agenda_item": "10.5.4.2, 10.5.4.3, 10.5.4.4",
-          "group_header": "6GR / 6G",
+          "group_header": "6GR",
           "description": "Downlink and uplink transmission without dynamic scheduling",
           "agenda_descriptions": [
             {
@@ -6659,7 +6659,7 @@
           "room_col_end": 5,
           "chair": "Hiroki",
           "agenda_item": "10.5.4.1",
-          "group_header": "6GR / 10.5.4",
+          "group_header": "6GR",
           "description": "Downlink control channel, scheduling for downlink and uplink transmission",
           "agenda_descriptions": [
             {
@@ -6704,7 +6704,7 @@
           "room_col_end": 5,
           "chair": "Hiroki",
           "agenda_item": "10.5.4.2",
-          "group_header": "6GR / 10.5.4",
+          "group_header": "6GR",
           "description": "Downlink and uplink transmission without dynamic scheduling",
           "agenda_descriptions": [
             {
@@ -6749,7 +6749,7 @@
           "room_col_end": 5,
           "chair": "Hiroki",
           "agenda_item": "10.5.4.4",
-          "group_header": "6GR / 10.5.4",
+          "group_header": "6GR",
           "description": "Handling of potential multiple uplink transmissions",
           "agenda_descriptions": [
             {
@@ -6794,7 +6794,7 @@
           "room_col_end": 5,
           "chair": "Hiroki",
           "agenda_item": "10.5.4.3",
-          "group_header": "6GR / 10.5.4",
+          "group_header": "6GR",
           "description": "HARQ related Aspects",
           "agenda_descriptions": [
             {
@@ -7099,7 +7099,7 @@
           "room_col_end": 7,
           "chair": "Sorour",
           "agenda_item": "9.5",
-          "group_header": "6GR / R20",
+          "group_header": "6GR",
           "description": "NR NTN in systems using downlink compensation",
           "agenda_descriptions": [
             {
@@ -7134,7 +7134,7 @@
           "room_col_end": 7,
           "chair": "Sorour",
           "agenda_item": "9.4",
-          "group_header": "6GR / R20",
+          "group_header": "6GR",
           "description": "GNSS resilient NR-NTN operation",
           "agenda_descriptions": [
             {
@@ -7431,7 +7431,7 @@
           "room_col_end": 4,
           "chair": "Sorour",
           "agenda_item": "9.5",
-          "group_header": "R20 NR",
+          "group_header": "R20",
           "description": "NR NTN in systems using downlink compensation",
           "agenda_descriptions": [
             {
@@ -7466,7 +7466,7 @@
           "room_col_end": 4,
           "chair": "Sorour",
           "agenda_item": "9.4",
-          "group_header": "R20 NR",
+          "group_header": "R20",
           "description": "GNSS resilient NR-NTN operation",
           "agenda_descriptions": [
             {
@@ -7981,7 +7981,7 @@
           "room_col_end": 4,
           "chair": "Sorour",
           "agenda_item": "9.1",
-          "group_header": "R20 NR",
+          "group_header": "R20",
           "description": "Artificial Intelligence (AI)/Machine Learning (ML) for NR air interface enhancements",
           "agenda_descriptions": [
             {
@@ -8016,7 +8016,7 @@
           "room_col_end": 4,
           "chair": "Sorour",
           "agenda_item": "9.2",
-          "group_header": "R20 NR",
+          "group_header": "R20",
           "description": "NR MIMO Phase 6",
           "agenda_descriptions": [
             {
@@ -8051,7 +8051,7 @@
           "room_col_end": 5,
           "chair": "Hiroki",
           "agenda_item": "9.3.3",
-          "group_header": "R20 A-IoT",
+          "group_header": "R20",
           "description": "Other procedures",
           "agenda_descriptions": [
             {
@@ -8091,7 +8091,7 @@
           "room_col_end": 5,
           "chair": "Hiroki",
           "agenda_item": "9.3.1",
-          "group_header": "R20 A-IoT",
+          "group_header": "R20",
           "description": "R2D signals, channels, waveform and procedures",
           "agenda_descriptions": [
             {
@@ -8131,7 +8131,7 @@
           "room_col_end": 5,
           "chair": "Hiroki",
           "agenda_item": "9.3.2",
-          "group_header": "R20 A-IoT",
+          "group_header": "R20",
           "description": "D2R signals, channels, waveform and procedures",
           "agenda_descriptions": [
             {
@@ -8672,7 +8672,7 @@
           "room_col_end": 5,
           "chair": "Hiroki",
           "agenda_item": "10.8.1",
-          "group_header": "6G ISAC",
+          "group_header": "6GR",
           "description": "Evaluations",
           "agenda_descriptions": [
             {
@@ -8712,7 +8712,7 @@
           "room_col_end": 5,
           "chair": "Hiroki",
           "agenda_item": "10.8.2",
-          "group_header": "6G ISAC",
+          "group_header": "6GR",
           "description": "Aspects of integration with communication",
           "agenda_descriptions": [
             {
@@ -8752,7 +8752,7 @@
           "room_col_end": 5,
           "chair": "Hiroki",
           "agenda_item": "10.8.3",
-          "group_header": "6G ISAC",
+          "group_header": "6GR",
           "description": "Waveform and frame structure",
           "agenda_descriptions": [
             {
@@ -9402,7 +9402,7 @@
           "room_col_end": 4,
           "chair": "Sorour",
           "agenda_item": "9.1",
-          "group_header": "R20 NR",
+          "group_header": "R20",
           "description": "Artificial Intelligence (AI)/Machine Learning (ML) for NR air interface enhancements",
           "agenda_descriptions": [
             {
@@ -9437,7 +9437,7 @@
           "room_col_end": 5,
           "chair": "Hiroki",
           "agenda_item": "10.5.4.4",
-          "group_header": "6GR / 10.5.4",
+          "group_header": "6GR",
           "description": "Handling of potential multiple uplink transmissions",
           "agenda_descriptions": [
             {
@@ -9482,7 +9482,7 @@
           "room_col_end": 5,
           "chair": "Hiroki",
           "agenda_item": "10.5.4.3",
-          "group_header": "6GR / 10.5.4",
+          "group_header": "6GR",
           "description": "HARQ related Aspects",
           "agenda_descriptions": [
             {
@@ -9527,7 +9527,7 @@
           "room_col_end": 5,
           "chair": "Hiroki",
           "agenda_item": "10.5.4.1",
-          "group_header": "6GR / 10.5.4",
+          "group_header": "6GR",
           "description": "Downlink control channel, scheduling for downlink and uplink transmission",
           "agenda_descriptions": [
             {
@@ -9572,7 +9572,7 @@
           "room_col_end": 5,
           "chair": "Hiroki",
           "agenda_item": "10.5.4.2",
-          "group_header": "6GR / 10.5.4",
+          "group_header": "6GR",
           "description": "Downlink and uplink transmission without dynamic scheduling",
           "agenda_descriptions": [
             {
@@ -10209,7 +10209,7 @@
           "room_col_end": 5,
           "chair": "Hiroki",
           "agenda_item": "9.3.1",
-          "group_header": "R20 / A-IoT Phase2 / R20 A-IoT",
+          "group_header": "R20",
           "description": "R2D signals, channels, waveform and procedures",
           "agenda_descriptions": [
             {
@@ -10249,7 +10249,7 @@
           "room_col_end": 5,
           "chair": "Hiroki",
           "agenda_item": "9.3.2",
-          "group_header": "R20 / A-IoT Phase2 / R20 A-IoT",
+          "group_header": "R20",
           "description": "D2R signals, channels, waveform and procedures",
           "agenda_descriptions": [
             {
@@ -10289,7 +10289,7 @@
           "room_col_end": 5,
           "chair": "Hiroki",
           "agenda_item": "9.3.3",
-          "group_header": "R20 / A-IoT Phase2 / R20 A-IoT",
+          "group_header": "R20",
           "description": "Other procedures",
           "agenda_descriptions": [
             {
@@ -10475,7 +10475,7 @@
     }
   ],
   "source_file": "RAN1#126b online and offline schedules - v00.docx",
-  "generated_at": "2026-10-11 15:08",
+  "generated_at": "2026-10-11 15:50",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
