@@ -15,7 +15,14 @@ from urllib.parse import quote, unquote, urlsplit
 
 import httpx
 
+# Every request to 3GPP names this project and where to reach its maintainer,
+# including calls made without the shared client (httpx would send its own).
+USER_AGENT = '3GPPSchedule/1.0 (+https://github.com/karlla1220/3GPPSchedule)'
 _RETRY_STATUS = {500, 502, 503, 504, 520, 521, 522, 523, 524, 525, 526}
+# 3GPP's web application firewall answers some paths with 403 and its own page
+# (Cloudflare in front of IIS). Retrying HTTPS only repeats the blocked request.
+_FIREWALL_PAGE = b'blocked by a web application firewall'
+_FIREWALL_PAGE_BYTES = 256 * 1024
 _MAX_BYTES = 64 * 1024 * 1024
 _MAX_SECONDS = 180
 # The live Microsoft FTP server advertises SIZE/MDTM, but not MLSD.
@@ -45,6 +52,39 @@ def _retryable(error):
     return (isinstance(error, httpx.TransportError)
             or isinstance(error, httpx.HTTPStatusError)
             and error.response.status_code in _RETRY_STATUS)
+
+
+def _firewall_blocked(response):
+    """True for the firewall's 403 page only.
+
+    An ordinary 403 stays an HTTP error: 3GPP also answers 403 for a folder
+    that does not exist, and callers rely on that.
+    """
+    if response.status_code != 403:
+        return False
+    length = response.headers.get('content-length')
+    if length and length.isdigit() and int(length) > _FIREWALL_PAGE_BYTES:
+        return False
+    try:
+        body = response.read()
+    except httpx.HTTPError:
+        return False
+    return _FIREWALL_PAGE in body[:_FIREWALL_PAGE_BYTES].lower()
+
+
+def _blocked_ftp(url, **kwargs):
+    logging.getLogger(__name__).warning('3GPP firewall blocked HTTPS (403): %s; trying FTP', url)
+    try:
+        return ftp_response(url, **kwargs)
+    except httpx.ConnectError as exc:
+        raise httpx.ConnectError(f'3GPP firewall blocked HTTPS (403) and {exc}', request=exc.request) from exc
+
+
+def _identified(kwargs):
+    headers = kwargs.get('headers') or {}
+    if any(name.lower() == 'user-agent' for name in headers):
+        return kwargs
+    return {**kwargs, 'headers': {'User-Agent': USER_AGENT, **headers}}
 
 
 def _check_status(response):
@@ -128,10 +168,15 @@ def ftp_response(url, *, listing=False, cached=None):
 
 
 def get(url, *, listing=False, http=None, cached=None, **kwargs):
-    """Retry eligible HTTPS once, then use FTP; preserve normal HTTP semantics."""
+    """Retry eligible HTTPS once, then use FTP; preserve normal HTTP semantics.
+
+    A firewall 403 goes to FTP at once, without a second HTTPS request.
+    """
     request = http.get if http is not None else httpx.get
     if ftp_path(url) is None:
         return request(url, **kwargs)
+    if http is None:
+        kwargs = _identified(kwargs)
     for attempt in range(2):
         try:
             response = request(url, **kwargs)
@@ -140,12 +185,16 @@ def get(url, *, listing=False, http=None, cached=None, **kwargs):
             except (httpx.HTTPStatusError, httpx.TransportError):
                 response.close()
                 raise
-            return response
         except (httpx.TransportError, httpx.HTTPStatusError) as exc:
             if not _retryable(exc):
                 raise
             if attempt == 0:
                 time.sleep(1)
+            continue
+        if not _firewall_blocked(response):
+            return response
+        response.close()
+        return _blocked_ftp(url, listing=listing, cached=cached)
     return ftp_response(url, listing=listing, cached=cached)
 
 
@@ -160,12 +209,15 @@ def stream(method, url, **kwargs):
         with httpx.stream(method, url, **kwargs) as response:
             yield response
         return
+    kwargs = _identified(kwargs)
     stack = None
+    blocked = False
     for attempt in range(2):
         stack = ExitStack()
         try:
             response = stack.enter_context(httpx.stream(method, url, **kwargs))
             _check_status(response)
+            blocked = _firewall_blocked(response)
         except (httpx.TransportError, httpx.HTTPStatusError) as exc:
             stack.close()
             stack = None
@@ -177,12 +229,15 @@ def stream(method, url, **kwargs):
             stack.close()
             raise
         else:
+            if blocked:
+                stack.close()
+                stack = None
             break
     if stack is not None:
         with stack:
             yield response
     else:
-        response = ftp_response(url)
+        response = _blocked_ftp(url) if blocked else ftp_response(url)
         try:
             yield response
         finally:

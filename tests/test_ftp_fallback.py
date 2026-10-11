@@ -161,3 +161,52 @@ def test_exception_inside_stream_consumer_does_not_trigger_ftp(ftp, monkeypatch)
         with ftp_transport.stream('GET', CHAIR + 'file.zip'):
             raise httpx.ReadError('consumer failure')
     assert ftp.calls == []
+
+
+# The real page is ~35 KB with the sentence near the end.
+FIREWALL = (b'<html><head><style>' + b' ' * 34000 + b'</style></head><body>Web Application Firewall '
+            b'This transfer is blocked by a Web Application Firewall.</body></html>')
+
+
+def test_firewall_403_goes_to_ftp_without_a_second_https_request(ftp):
+    from shared import ftp_transport
+    seen = []
+    def blocked(request):
+        seen.append(request)
+        return httpx.Response(403, content=FIREWALL)
+    with httpx.Client(transport=httpx.MockTransport(blocked)) as http:
+        response = ftp_transport.get(CHAIR, http=http, listing=True)
+    assert response.headers['x-3gpp-transport'] == 'ftp'
+    assert NAME in response.text and len(seen) == 1
+
+
+def test_firewall_403_stream_goes_to_ftp(ftp, monkeypatch):
+    from shared import ftp_transport
+    @contextmanager
+    def blocked(method, url, **kwargs):
+        yield httpx.Response(403, stream=httpx.ByteStream(FIREWALL), request=httpx.Request(method, url))
+    monkeypatch.setattr(httpx, 'stream', blocked)
+    with ftp_transport.stream('GET', CHAIR + 'RAN%23113%20time%20plan%20v06.zip') as response:
+        assert response.read() == PLAN
+
+
+def test_firewall_403_with_failed_ftp_names_the_firewall(ftp, monkeypatch):
+    from shared import ftp_transport
+    monkeypatch.setattr(ftp, 'login', lambda _: (_ for _ in ()).throw(ftplib.error_perm('530 denied')))
+    with httpx.Client(transport=httpx.MockTransport(lambda _: httpx.Response(403, content=FIREWALL))) as http:
+        with pytest.raises(httpx.ConnectError, match='firewall blocked HTTPS.*FTP fallback failed.*530'):
+            ftp_transport.get(CHAIR, http=http, listing=True)
+
+
+def test_requests_without_a_client_name_the_project(monkeypatch):
+    from shared import ftp_transport
+    sent = []
+    def record(url, **kwargs):
+        sent.append(kwargs.get('headers') or {})
+        return httpx.Response(200, request=httpx.Request('GET', url))
+    monkeypatch.setattr(httpx, 'get', record)
+    ftp_transport.get(CHAIR, listing=True)
+    ftp_transport.get(CHAIR, headers={'If-None-Match': '"v1"'})
+    ftp_transport.get('https://list.etsi.org/file', headers={'User-Agent': 'Mozilla/5.0'})
+    assert [h.get('User-Agent') for h in sent] == [ftp_transport.USER_AGENT] * 2 + ['Mozilla/5.0']
+    assert sent[1]['If-None-Match'] == '"v1"'

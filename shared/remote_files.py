@@ -20,7 +20,7 @@ MAX_BYTES = 30_000_000
 
 def client(**kwargs):
     return httpx.Client(**{'follow_redirects': True, 'timeout': 45,
-                          'headers': {'User-Agent': '3GPPSchedule/1.0', 'Accept': '*/*'},
+                          'headers': {'User-Agent': ftp_transport.USER_AGENT, 'Accept': '*/*'},
                           **kwargs})
 
 
@@ -43,6 +43,12 @@ def _load(url):
     except (OSError, ValueError, AttributeError):
         pass
     return {}, None
+
+
+def cached(url, sha256):
+    """The stored body of url if it is exactly sha256, without any request."""
+    info, body = _load(url)
+    return body if body is not None and info.get('sha256') == sha256 else None
 
 
 def _save(url, body, info):
