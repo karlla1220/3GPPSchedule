@@ -2,8 +2,8 @@
   "day": "Tuesday",
   "time_block_index": 1,
   "source_hashes": {
-    "Main Schedule": "ac6e376de8f5f93d",
-    "Hiroki's schedule": "ebcf277115b69c4d",
+    "Main Schedule": "49335b5c446f8688",
+    "Hiroki's schedule": "43fcc53be4d347b3",
     "Sorour's schedule": "ca885887e6683d19"
   },
   "merged_sessions": [
@@ -270,7 +270,7 @@
       "duration_minutes": 40,
       "specified_start_time": null,
       "chair": "Hiroki",
-      "group_header": "",
+      "group_header": "R20",
       "agenda_item": "9.3.2",
       "description": "D2R signals, channels, waveform and procedures",
       "agenda_descriptions": [
@@ -523,7 +523,7 @@
       ]
     }
   ],
-  "merged_at": "2026-10-10T20:01:59.525002+00:00",
+  "merged_at": "2026-10-11T02:22:11.797785+00:00",
   "meeting_id": "ran1#126bis",
   "schema_version": 2
 }

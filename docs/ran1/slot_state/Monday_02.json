@@ -2,8 +2,8 @@
   "day": "Monday",
   "time_block_index": 2,
   "source_hashes": {
-    "Main Schedule": "3dd1ef53f82f9615",
-    "Hiroki's schedule": "bf616ec578821b3b",
+    "Main Schedule": "d30f688376ef7a2d",
+    "Hiroki's schedule": "a2f03d3b74cf6452",
     "Sorour's schedule": "c06fa5debd37c145"
   },
   "merged_sessions": [
@@ -453,7 +453,7 @@
       "duration_minutes": 90,
       "specified_start_time": "15:00",
       "chair": "Hiroki",
-      "group_header": "",
+      "group_header": "6GR",
       "agenda_item": "10.5.4.1, 10.5.4.3, 10.5.4.4",
       "description": "Downlink control channel, scheduling for downlink and uplink transmission",
       "agenda_descriptions": [
@@ -541,7 +541,7 @@
       ]
     }
   ],
-  "merged_at": "2026-10-10T20:01:59.521230+00:00",
+  "merged_at": "2026-10-11T02:21:53.931667+00:00",
   "meeting_id": "ran1#126bis",
   "schema_version": 2
 }

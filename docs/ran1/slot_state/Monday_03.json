@@ -2,9 +2,9 @@
   "day": "Monday",
   "time_block_index": 3,
   "source_hashes": {
-    "Main Schedule": "354255c18416a2a9",
-    "Hiroki's schedule": "338036b3843e6651",
-    "Sorour's schedule": "af42061b98942513"
+    "Main Schedule": "1f60543c0a045e1a",
+    "Hiroki's schedule": "4eceb1c96ba7ca88",
+    "Sorour's schedule": "05b0e1da9cd2e184"
   },
   "merged_sessions": [
     {
@@ -305,7 +305,7 @@
       "duration_minutes": 40,
       "specified_start_time": null,
       "chair": "Hiroki",
-      "group_header": "6GR",
+      "group_header": "6GR / 10.5.4",
       "agenda_item": "10.5.4",
       "description": "Downlink control channel, scheduling and HARQ operation",
       "agenda_descriptions": [
@@ -339,7 +339,7 @@
       "duration_minutes": 40,
       "specified_start_time": null,
       "chair": "Hiroki",
-      "group_header": "6GR",
+      "group_header": "6GR / 10.5.4",
       "agenda_item": "10.5.4",
       "description": "Downlink control channel, scheduling and HARQ operation",
       "agenda_descriptions": [
@@ -373,7 +373,7 @@
       "duration_minutes": 40,
       "specified_start_time": null,
       "chair": "Hiroki",
-      "group_header": "6GR",
+      "group_header": "6GR / 10.5.4",
       "agenda_item": "10.5.4",
       "description": "Downlink control channel, scheduling and HARQ operation",
       "agenda_descriptions": [
@@ -718,7 +718,7 @@
       ]
     }
   ],
-  "merged_at": "2026-10-10T20:01:59.522416+00:00",
+  "merged_at": "2026-10-11T02:22:00.725960+00:00",
   "meeting_id": "ran1#126bis",
   "schema_version": 2
 }

@@ -2,8 +2,8 @@
   "day": "Monday",
   "time_block_index": 1,
   "source_hashes": {
-    "Main Schedule": "bf567dde2b7e9d49",
-    "Hiroki's schedule": "18ae9738f99d662a"
+    "Main Schedule": "035453bc3110c98f",
+    "Hiroki's schedule": "e7d98ae99dd239db"
   },
   "merged_sessions": [
     {
@@ -300,7 +300,7 @@
       "agenda_item": null
     }
   ],
-  "merged_at": "2026-10-10T20:01:59.520216+00:00",
+  "merged_at": "2026-10-11T02:21:48.825603+00:00",
   "meeting_id": "ran1#126bis",
   "schema_version": 2
 }

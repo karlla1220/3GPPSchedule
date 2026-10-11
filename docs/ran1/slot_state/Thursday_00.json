@@ -2,9 +2,9 @@
   "day": "Thursday",
   "time_block_index": 0,
   "source_hashes": {
-    "Main Schedule": "2c40c85f79c071ad",
-    "Hiroki's schedule": "564f7f3e0ea28376",
-    "Sorour's schedule": "442bdd0d5a591a3b"
+    "Main Schedule": "55066c88083fca62",
+    "Hiroki's schedule": "ecbd905efafb87c5",
+    "Sorour's schedule": "60e82e7ba85f5866"
   },
   "merged_sessions": [
     {
@@ -222,7 +222,7 @@
       "duration_minutes": 40,
       "specified_start_time": null,
       "chair": "Hiroki",
-      "group_header": "",
+      "group_header": "6GR",
       "agenda_item": "10.2.1",
       "description": "Waveform",
       "agenda_descriptions": [
@@ -256,7 +256,7 @@
       "duration_minutes": 80,
       "specified_start_time": null,
       "chair": "Hiroki",
-      "group_header": "",
+      "group_header": "AI 7/8.2",
       "agenda_item": "8.2/8.3, 7, 8",
       "description": "Maintenance on others",
       "agenda_descriptions": [
@@ -498,7 +498,7 @@
       ]
     }
   ],
-  "merged_at": "2026-10-10T20:01:59.533533+00:00",
+  "merged_at": "2026-10-11T02:22:50.666496+00:00",
   "meeting_id": "ran1#126bis",
   "schema_version": 2
 }
