@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const AUTO_REFRESH_MS = {{AUTO_REFRESH_MS}}; // {{AUTO_REFRESH_MINUTES}} minutes
     const STATE_KEY = '3gpp_schedule_state:' + {{STATE_ID_JSON}};
     const NOW_TOGGLE_KEY = '3gpp_schedule_show_now:' + {{STATE_ID_JSON}};
+    const FILTER_KEY = '3gpp_schedule_filter:' + {{STATE_ID_JSON}};
     const MEETING_START_MS = {{MEETING_START_MS}};
     const MEETING_END_MS = {{MEETING_END_MS}};
     let meetingActive = false;
@@ -714,16 +715,40 @@ document.addEventListener('DOMContentLoaded', function() {
             if (Math.abs(dimOpacity - DIM_OPACITY_DEFAULT) > 0.0001) {
                 parts.push('o:' + encodeURIComponent(dimOpacity.toFixed(2)));
             }
-            if (parts.length === 0) {
-                history.replaceState(null, '', location.pathname + location.search);
-            } else {
-                history.replaceState(null, '', '#filter=' + parts.join(','));
+            var hash = parts.length === 0 ? '' : '#filter=' + parts.join(',');
+            history.replaceState(null, '', hash || location.pathname + location.search);
+            saveFilter(hash);
+        }
+
+        // The last filter used on this meeting's page (localStorage). The
+        // meeting links in the header carry no hash, so coming back from
+        // another WG would otherwise drop it.
+        function saveFilter(hash) {
+            try {
+                if (hash) localStorage.setItem(FILTER_KEY, hash);
+                else localStorage.removeItem(FILTER_KEY);
+            } catch (e) {
+                // localStorage may be unavailable; the filter stays in the URL only
+            }
+        }
+
+        function loadSavedFilter() {
+            try {
+                var saved = localStorage.getItem(FILTER_KEY);
+                return saved && saved.startsWith('#filter=') ? saved : '';
+            } catch (e) {
+                return '';
             }
         }
 
         function loadFilterHash() {
             var h = location.hash;
-            if (!h || !h.startsWith('#filter=')) return;
+            // A filter in the URL (a shared link) wins and leaves the saved one alone.
+            if (!h || !h.startsWith('#filter=')) {
+                h = loadSavedFilter();
+                if (!h) return;
+                history.replaceState(null, '', h);
+            }
             h.slice(8).split(',').forEach(function(tok) {
                 var c = tok.indexOf(':');
                 if (c < 0) return;
