@@ -364,7 +364,7 @@ Gemini가 다시 읽되, 원문으로 확인되는 답만 씁니다(아래 "LLM 
 
 ### LLM 폴백 (`working_groups/ran2/llm.py`)
 
-규칙이 기본이고, Gemini(`config.json`의 `model`, 기본 `gemini-3-flash-preview`)는 두 경우에만 씁니다.
+규칙이 기본이고, Gemini(`config.json`의 `model`, 기본 `gemini-3.8-flash`)는 두 경우에만 씁니다.
 `GEMINI_API_KEY`가 없거나 `llm_fallback`이 `false`이면 규칙 결과를 그대로 씁니다.
 
 - **불확실한 셀**: 규칙이 다음을 발견한 셀만 이유와 규칙 결과를 함께 한 번의 요청으로 묻습니다.

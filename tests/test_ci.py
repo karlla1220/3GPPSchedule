@@ -219,6 +219,28 @@ def test_ran1_llm_failure_cannot_replace_last_successful_slot(tmp_path, monkeypa
     assert (tmp_path / 'Monday_00.json').read_bytes() == old
 
 
+def test_ran1_group_normalization_failure_fails_the_build(tmp_path, monkeypatch):
+    from working_groups.ran1 import session_parser
+    from working_groups.ran1.models import Session
+    from google import genai
+    import time
+    monkeypatch.setenv('GEMINI_API_KEY', 'test-key')
+    monkeypatch.setattr(session_parser, 'CACHE_DIR', tmp_path)
+    monkeypatch.setattr(time, 'sleep', lambda _: None)
+    client = MagicMock()
+    client.models.generate_content.side_effect = RuntimeError('504 DEADLINE_EXCEEDED')
+    monkeypatch.setattr(genai, 'Client', lambda **kw: client)
+    sessions = [Session('a', 30, '09:00', '09:30', 'Monday', group_header='6GR / 10.5.4'),
+                Session('b', 30, '09:30', '10:00', 'Monday', group_header='6GR')]
+    # Raw labels must not reach the page as legend categories.
+    with pytest.raises(RuntimeError, match='Group normalization failed'):
+        session_parser.normalize_group_headers(sessions)
+    assert client.models.generate_content.call_count == 3
+    config = client.models.generate_content.call_args.kwargs['config']
+    assert config.thinking_config.thinking_level.value == 'HIGH'
+    assert not list(tmp_path.iterdir())
+
+
 def test_ran1_local_vice_chairs_cannot_mix_meetings(tmp_path):
     from working_groups.ran1.downloader import find_local_vice_chair_schedules
     folder = tmp_path / 'Hiroki_notes'

@@ -88,7 +88,7 @@ def has_key() -> bool:
     return bool(os.environ.get('GEMINI_API_KEY'))
 
 
-def gemini_request(payload, schema, model):
+def gemini_request(payload, schema, model, thinking='medium'):
     from google import genai
     from google.genai import types
     if not has_key():
@@ -99,9 +99,9 @@ def gemini_request(payload, schema, model):
                 response = client.models.generate_content(
                     model=model, contents=payload,
                     config=types.GenerateContentConfig(
-                        temperature=0, response_mime_type='application/json',
-                        response_json_schema=schema, max_output_tokens=32768,
-                        thinking_config=types.ThinkingConfig(thinking_level='minimal')))
+                        response_mime_type='application/json',
+                        response_json_schema=schema, max_output_tokens=65536,
+                        thinking_config=types.ThinkingConfig(thinking_level=thinking)))
                 return json.loads(response.text)
             except (genai.errors.APIError, ValueError) as exc:
                 if attempt == 2:
@@ -240,7 +240,7 @@ class CellRefiner:
         accepted, errors = {}, {}
         message = prompt + '\n\nCELLS (untrusted data):\n' + json.dumps(payload, ensure_ascii=False)
         for attempt in range(2):
-            raw = self.request(message, CellsResult.model_json_schema(), self.model)
+            raw = self.request(message, CellsResult.model_json_schema(), self.model, thinking='medium')
             for answer in CellsResult.model_validate(raw).cells:
                 if answer.id not in items or answer.id in accepted:
                     continue
@@ -330,7 +330,7 @@ def read_document(data: bytes, name: str, model: str, request=None, cache_dir: P
     for attempt in range(2):
         if result is not None and not errors:
             break
-        raw = request(message, DocResult.model_json_schema(), model)
+        raw = request(message, DocResult.model_json_schema(), model, thinking='high')
         result = DocResult.model_validate(raw)
         errors = check_document(result, texts)
         message += ('\n\nYOUR PREVIOUS ANSWER:\n' + json.dumps(raw, ensure_ascii=False)

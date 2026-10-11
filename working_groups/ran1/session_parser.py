@@ -20,6 +20,15 @@ from .models import RoomInfo, Session, time_to_minutes, minutes_to_time
 CACHE_DIR = Path(".cache/ran1")
 ROOM_DETECT_PROMPT_VERSION = 2
 
+GEMINI_MODEL = "gemini-3.8-flash"
+# Slot requests in flight at once. A week has 19 slots; this sends them all in
+# one wave while staying far below the API's per-minute request limit.
+SLOT_CONCURRENCY = 20
+# Thinking follows the task. Lookups and slot parsing use "low": a cold
+# rebuild makes one call per slot (19 a week) and must finish within minutes;
+# a slot at "high" ran past 9 minutes. Group mapping uses "high": it is one
+# call that weighs every label against the others.
+
 # ── JSON Schemas for structured output ───────────────────────────
 
 TIMEZONE_SCHEMA = {
@@ -142,7 +151,7 @@ def get_timezone_from_location(location_text: str) -> str | None:
 
     client = genai.Client(
         api_key=api_key,
-        http_options={"timeout": 30_000},
+        http_options={"timeout": 60_000},
     )
 
     prompt = f"""Given this 3GPP meeting location line, return the IANA timezone identifier for the city.
@@ -153,13 +162,12 @@ Return ONLY valid JSON: {{"timezone": "IANA/Timezone", "city": "CityName", "coun
 
     try:
         response = client.models.generate_content(
-            model="gemini-3-flash-preview",
+            model=GEMINI_MODEL,
             contents=prompt,
             config=types.GenerateContentConfig(
-                temperature=0.0,
                 response_mime_type="application/json",
                 response_json_schema=TIMEZONE_SCHEMA,
-                thinking_config=types.ThinkingConfig(thinking_level="minimal"),
+                thinking_config=types.ThinkingConfig(thinking_level="low"),
             ),
         )
         result = json.loads(response.text.strip())
@@ -254,7 +262,7 @@ def detect_room_from_context(
 
     client = genai.Client(
         api_key=api_key,
-        http_options={"timeout": 30_000},
+        http_options={"timeout": 60_000},
     )
 
     prompt = _build_room_detect_prompt(
@@ -266,12 +274,12 @@ def detect_room_from_context(
 
     try:
         response = client.models.generate_content(
-            model="gemini-3-flash-preview",
+            model=GEMINI_MODEL,
             contents=prompt,
             config=types.GenerateContentConfig(
-                temperature=0.2,
                 response_mime_type="application/json",
                 response_json_schema=ROOM_DETECT_SCHEMA,
+                thinking_config=types.ThinkingConfig(thinking_level="low"),
             ),
         )
         result = json.loads(response.text.strip())
@@ -800,132 +808,30 @@ def parse_time_slots(
 
     client = genai.Client(
         api_key=api_key,
-        http_options={"timeout": 120_000},
+        http_options={"timeout": 60_000},
     )
 
     from datetime import datetime, timezone
     from .slot_state import SlotState, save_slot_state
 
-    all_sessions: list[Session] = []
-    n_cold = 0
-    n_incremental = 0
-    n_skipped = 0
-    api_calls = 0
     MAX_RETRIES = 3
     agenda_description_map = load_agenda_description_map(meeting_id=meeting_id)
+    total = len(time_slots)
 
-    for slot_idx, slot in enumerate(time_slots):
-        slot_label = (
+    def _slot_label(slot) -> str:
+        return (
             f"{slot.day} TB{slot.time_block_index} "
             f"({slot.time_block_start}-{slot.time_block_end})"
         )
 
-        day_rooms = day_rooms_map.get(slot.day, [])
-        name_to_alias, alias_to_name = build_room_aliases(day_rooms)
-
-        freshness = slot.source_freshness or {}
-        freshness_str = ", ".join(
-            f"{label}={status}" for label, status in sorted(freshness.items())
-        ) or "(no sources)"
-
-        # ── Short-circuit: every source unchanged → reuse last merge.
-        if slot.all_stale and slot.previous_merge is not None:
-            parsed_result = {
-                "sessions": slot.previous_merge,
-            }
-            _enforce_main_room_chair_evidence(parsed_result, slot, name_to_alias)
-            parsed_result["sessions"] = annotate_sessions_with_agenda_descriptions(
-                parsed_result["sessions"],
-                agenda_description_map,
-            )
-            try:
-                save_slot_state(
-                    SlotState(
-                        day=slot.day,
-                        time_block_index=slot.time_block_index,
-                        source_hashes=dict(slot.current_hashes),
-                        merged_sessions=parsed_result.get("sessions", []),
-                        merged_at=datetime.now(timezone.utc).isoformat(),
-                        meeting_id=meeting_id or "",
-                    )
-                )
-            except OSError as e:
-                print(f"  Warning: failed to save slot state: {e}")
-            sessions = _slot_result_to_sessions(
-                parsed_result, slot, day_rooms_map, alias_to_name
-            )
-            all_sessions.extend(sessions)
-            n_skipped += 1
-            print(
-                f"  [{slot_idx+1}/{len(time_slots)}] {slot_label} "
-                f"sources: {freshness_str} → skipped (cached, "
-                f"{len(sessions)} sessions)"
-            )
-            continue
-
-        # ── Decide cold vs incremental.
-        has_baseline = slot.previous_merge is not None
-        if has_baseline and any(
-            s in ("FRESH", "NEW", "REMOVED") for s in freshness.values()
-        ):
-            mode = "incremental"
-            system_instruction = MULTI_SOURCE_SYSTEM_INSTRUCTION_INCREMENTAL
-        else:
-            mode = "cold"
-            system_instruction = MULTI_SOURCE_SYSTEM_INSTRUCTION_COLD
-
-        user_prompt = _build_time_slot_prompt(slot, name_to_alias, mode=mode)
-        n_sources = len(slot.sources)
-        n_entries = sum(len(s.entries) for s in slot.sources)
-        print(
-            f"  [{slot_idx+1}/{len(time_slots)}] {slot_label} "
-            f"sources: {freshness_str} → {mode} "
-            f"({n_sources} sources, {n_entries} entries)...",
-            end=" ",
-            flush=True,
-        )
-
-        # Rate limit
-        if api_calls > 0:
-            _time.sleep(1.0)
-
-        parsed_result = None
-        for attempt in range(MAX_RETRIES):
-            try:
-                response = client.models.generate_content(
-                    model="gemini-3-flash-preview",
-                    contents=user_prompt,
-                    config=types.GenerateContentConfig(
-                        system_instruction=system_instruction,
-                        temperature=0.1,
-                        response_mime_type="application/json",
-                        response_json_schema=MULTI_SOURCE_SESSION_SCHEMA,
-                        thinking_config=types.ThinkingConfig(thinking_level="minimal"),
-                    ),
-                )
-                parsed_result = json.loads(response.text.strip())
-                break
-            except Exception as e:
-                if attempt < MAX_RETRIES - 1:
-                    wait = 5 * (attempt + 1)
-                    print(f"retry({attempt+1}, wait {wait}s)...", end=" ", flush=True)
-                    _time.sleep(wait)
-                else:
-                    print(f"FAILED: {e}")
-                    raise RuntimeError(f"Could not parse {slot_label} after {MAX_RETRIES} attempts") from e
-
-        api_calls += 1
-
-        if parsed_result is None:
-            parsed_result = {"sessions": []}
-
+    def _finish(slot, parsed_result, alias_to_name) -> list[Session]:
+        """Annotate a merge, persist it for the next run, convert to sessions."""
+        name_to_alias, _ = build_room_aliases(day_rooms_map.get(slot.day, []))
         _enforce_main_room_chair_evidence(parsed_result, slot, name_to_alias)
         parsed_result["sessions"] = annotate_sessions_with_agenda_descriptions(
             parsed_result.get("sessions", []),
             agenda_description_map,
         )
-
-        # Persist slot state so the next run can short-circuit / merge incrementally.
         try:
             save_slot_state(
                 SlotState(
@@ -939,24 +845,112 @@ def parse_time_slots(
             )
         except OSError as e:
             print(f"  Warning: failed to save slot state: {e}")
+        return _slot_result_to_sessions(parsed_result, slot, day_rooms_map, alias_to_name)
 
-        sessions = _slot_result_to_sessions(parsed_result, slot, day_rooms_map, alias_to_name)
-        all_sessions.extend(sessions)
-
-        if mode == "cold":
-            n_cold += 1
+    # ── Plan: reuse unchanged slots, prepare one request per changed slot.
+    jobs = []  # (slot_idx, slot, mode, system_instruction, user_prompt, freshness_str)
+    for slot_idx, slot in enumerate(time_slots):
+        freshness = slot.source_freshness or {}
+        freshness_str = ", ".join(
+            f"{label}={status}" for label, status in sorted(freshness.items())
+        ) or "(no sources)"
+        if slot.all_stale and slot.previous_merge is not None:
+            continue
+        name_to_alias, _ = build_room_aliases(day_rooms_map.get(slot.day, []))
+        has_baseline = slot.previous_merge is not None
+        if has_baseline and any(
+            s in ("FRESH", "NEW", "REMOVED") for s in freshness.values()
+        ):
+            mode, system_instruction = "incremental", MULTI_SOURCE_SYSTEM_INSTRUCTION_INCREMENTAL
         else:
-            n_incremental += 1
+            mode, system_instruction = "cold", MULTI_SOURCE_SYSTEM_INSTRUCTION_COLD
+        user_prompt = _build_time_slot_prompt(slot, name_to_alias, mode=mode)
+        jobs.append((slot_idx, slot, mode, system_instruction, user_prompt, freshness_str))
 
-        print(f"{len(sessions)} sessions")
+    def _call(job) -> tuple[dict, float]:
+        slot_idx, slot, mode, system_instruction, user_prompt, _ = job
+        started = _time.monotonic()
+        for attempt in range(MAX_RETRIES):
+            try:
+                response = client.models.generate_content(
+                    model=GEMINI_MODEL,
+                    contents=user_prompt,
+                    config=types.GenerateContentConfig(
+                        system_instruction=system_instruction,
+                        response_mime_type="application/json",
+                        response_json_schema=MULTI_SOURCE_SESSION_SCHEMA,
+                        thinking_config=types.ThinkingConfig(thinking_level="low"),
+                    ),
+                )
+                return json.loads(response.text.strip()), _time.monotonic() - started
+            except Exception as e:
+                if attempt < MAX_RETRIES - 1:
+                    wait = 5 * (attempt + 1)
+                    print(
+                        f"  [{slot_idx+1}/{total}] {_slot_label(slot)} "
+                        f"retry({attempt+1}, wait {wait}s): {e}",
+                        flush=True,
+                    )
+                    _time.sleep(wait)
+                else:
+                    print(f"  [{slot_idx+1}/{total}] {_slot_label(slot)} FAILED: {e}", flush=True)
+                    raise RuntimeError(
+                        f"Could not parse {_slot_label(slot)} after {MAX_RETRIES} attempts"
+                    ) from e
 
-    total = len(time_slots)
+    # ── Ask Gemini for every changed slot at once. Slots are independent, so
+    # a cold rebuild costs about as long as its slowest slot, not their sum.
+    # A failure surfaces only after the pool drains, and before any slot
+    # state is written, so a failed run leaves every slot as it was.
+    results: dict[int, tuple[dict, float]] = {}
+    if jobs:
+        from concurrent.futures import ThreadPoolExecutor
+
+        print(
+            f"  Sending {len(jobs)} slot request(s), {SLOT_CONCURRENCY} at a time...",
+            flush=True,
+        )
+        with ThreadPoolExecutor(max_workers=SLOT_CONCURRENCY) as pool:
+            futures = {job[0]: pool.submit(_call, job) for job in jobs}
+        for job in jobs:
+            results[job[0]] = futures[job[0]].result()
+
+    # ── Assemble in slot order.
+    jobs_by_slot = {job[0]: job for job in jobs}
+    all_sessions: list[Session] = []
+    n_skipped = 0
+    for slot_idx, slot in enumerate(time_slots):
+        _, alias_to_name = build_room_aliases(day_rooms_map.get(slot.day, []))
+        if slot_idx in results:
+            parsed_result, seconds = results[slot_idx]
+        else:
+            parsed_result = {"sessions": slot.previous_merge}
+            n_skipped += 1
+        sessions = _finish(slot, parsed_result, alias_to_name)
+        all_sessions.extend(sessions)
+        if slot_idx in results:
+            _, _, mode, _, _, freshness_str = jobs_by_slot[slot_idx]
+            print(
+                f"  [{slot_idx+1}/{total}] {_slot_label(slot)} "
+                f"sources: {freshness_str} → {mode} "
+                f"({len(slot.sources)} sources, "
+                f"{sum(len(s.entries) for s in slot.sources)} entries) "
+                f"{seconds:.1f}s, {len(sessions)} sessions"
+            )
+        else:
+            print(
+                f"  [{slot_idx+1}/{total}] {_slot_label(slot)} → skipped "
+                f"(cached, {len(sessions)} sessions)"
+            )
+
+    n_cold = sum(1 for job in jobs if job[2] == "cold")
+    n_incremental = len(jobs) - n_cold
     print(
         f"Slot freshness summary: {n_cold} cold, {n_incremental} incremental, "
         f"{n_skipped} skipped ({total} total)"
     )
     print(
-        f"LLM calls: {api_calls} (saved {n_skipped} by short-circuit)"
+        f"LLM calls: {len(jobs)} (saved {n_skipped} by short-circuit)"
     )
     print(
         f"Multi-source parsing complete: {len(all_sessions)} sessions from "
@@ -1157,9 +1151,11 @@ def normalize_group_headers(sessions: list[Session]) -> list[Session]:
             print("  Warning: GEMINI_API_KEY not set, skipping normalization")
             return sessions
 
+        # One call per label set, and a failure stops the build: give the
+        # model room to compare the names rather than retry on a deadline.
         client = genai.Client(
             api_key=api_key,
-            http_options={"timeout": 120_000},
+            http_options={"timeout": 300_000},
         )
 
         header_counts = Counter(s.group_header for s in sessions if s.group_header)
@@ -1179,13 +1175,13 @@ def normalize_group_headers(sessions: list[Session]) -> list[Session]:
         for attempt in range(MAX_RETRIES):
             try:
                 response = client.models.generate_content(
-                    model="gemini-3-flash-preview",
+                    model=GEMINI_MODEL,
                     contents=user_prompt,
                     config=types.GenerateContentConfig(
                         system_instruction=GROUP_SIMPLIFY_SYSTEM_INSTRUCTION,
-                        temperature=0.0,
                         response_mime_type="application/json",
                         response_json_schema=GROUP_SIMPLIFY_SCHEMA,
+                        thinking_config=types.ThinkingConfig(thinking_level="high"),
                     ),
                 )
                 result = json.loads(response.text.strip())
@@ -1197,10 +1193,13 @@ def normalize_group_headers(sessions: list[Session]) -> list[Session]:
                     _time.sleep(wait)
                 else:
                     print(f"  Group normalization failed: {e}")
-                    return sessions
-
-        if result is None:
-            return sessions
+                    # Publishing the raw labels splits each work area into
+                    # several legend entries, and nothing rebuilds the page
+                    # until a source changes. Fail the build instead: the
+                    # last good page stays up and the next run retries.
+                    raise RuntimeError(
+                        f"Group normalization failed after {MAX_RETRIES} attempts"
+                    ) from e
 
         _save_cache(cache_key, result)
 

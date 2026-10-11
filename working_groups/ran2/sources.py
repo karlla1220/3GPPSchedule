@@ -40,7 +40,7 @@ DEFAULTS = {
     # whose table layout they do not recognise. Without GEMINI_API_KEY the
     # rules' reading is used as is.
     'llm_fallback': True,
-    'model': 'gemini-3-flash-preview',
+    'model': 'gemini-3.8-flash',
     'meetings': {},
 }
 METADATA_KEYS = {'starts_on', 'ends_on', 'starts_at', 'ends_at', 'location', 'country', 'timezone'}

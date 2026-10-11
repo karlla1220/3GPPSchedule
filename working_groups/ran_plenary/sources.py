@@ -25,7 +25,7 @@ TRANSFER = Path('.ci/transfers/ran-plenary')
 DEFAULTS = {
     'chair_url': 'https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN/Inbox/Chair/',
     'agenda_url': 'https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN/Agenda/agenda.csv',
-    'model': 'gemini-3-flash-preview',
+    'model': 'gemini-3.8-flash',
     'local_agenda': None,
     'meetings': {},
 }

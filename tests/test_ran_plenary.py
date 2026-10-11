@@ -174,7 +174,7 @@ def test_invalid_llm_result_is_rejected(source, parsed, damage, match):
 
 def test_color_only_change_invalidates_interpretation_cache(source, parsed, tmp_path):
     calls = []
-    def request(*args):
+    def request(*args, **_):
         calls.append(args)
         return parsed.model_dump()
     interp.interpret(source, 'test-model', request, tmp_path)
@@ -190,13 +190,13 @@ def test_color_only_change_invalidates_interpretation_cache(source, parsed, tmp_
 def test_one_validation_repair_then_failure(source, parsed, tmp_path):
     calls = []
     bad = parsed.model_dump(); bad['sessions'] = []
-    def repair(*args):
+    def repair(*args, **_):
         calls.append(args)
         return bad if len(calls) == 1 else parsed.model_dump()
     interp.interpret(source, 'repair', repair, tmp_path)
     assert len(calls) == 2 and 'VALIDATION ERROR' in calls[1][0]
     with pytest.raises(ValueError, match='failed validation'):
-        interp.interpret(source, 'broken', lambda *args: bad, tmp_path)
+        interp.interpret(source, 'broken', lambda *args, **_: bad, tmp_path)
     assert len(list(tmp_path.glob('parse-*.json'))) == 1
 
 
@@ -258,7 +258,7 @@ def test_metadata_fallback_cannot_cross_meetings(metadata):
 def test_timezone_uses_location_and_reuses_validated_cache(tmp_path, monkeypatch):
     monkeypatch.setattr(interp, 'CACHE', tmp_path)
     calls = []
-    def request(payload, *_):
+    def request(payload, *_, **__):
         calls.append(payload)
         return {'timezone':'Europe/Madrid'}
     data = {'location':'Madrid','country':'ES','portal_timezone':'GMT+02:00'}
@@ -279,7 +279,7 @@ def local_config(metadata, tmp_path, monkeypatch):
 def test_offline_pipeline_uses_real_inputs_and_retains_state_on_failure(local_config, parsed, tmp_path, monkeypatch):
     opts = SimpleNamespace(local=str(FIXTURES/FILENAME), no_download=True, output_dir=tmp_path/'out')
     monkeypatch.setattr(httpx.Client, 'send', lambda *a, **k: pytest.fail('Offline network request'))
-    schedule = pipeline.build_schedule(opts, request=lambda *args:parsed.model_dump())
+    schedule = pipeline.build_schedule(opts, request=lambda *args, **_:parsed.model_dump())
     state = tmp_path/'out/ran-plenary/.schedule_state.json'
     before = state.read_bytes()
     assert not schedule.is_demo and schedule.timezone == 'Europe/Madrid'
@@ -294,7 +294,7 @@ def test_agenda_only_change_reuses_llm(local_config, parsed, tmp_path):
     local_config['local_agenda'] = str(agenda)
     opts = SimpleNamespace(local=str(FIXTURES/FILENAME), no_download=True)
     calls=[]
-    def request(*a):
+    def request(*a, **_):
         calls.append(a);return parsed.model_dump()
     first = pipeline.build_schedule(opts,request=request)
     agenda.write_text(agenda.read_text().replace('Opening of the meeting','Updated opening'))
@@ -377,7 +377,7 @@ def test_direct_builder_restores_state_if_snapshot_write_fails(local_config, par
     save_schedule(schedule_fixture.build_schedule(),state.parent/'schedule.json')
     old_snapshot=(state.parent/'schedule.json').read_bytes()
     config=tmp_path/'site.json';config.write_text(json.dumps({'default_wg':'ran-plenary','working_groups':[{'id':'ran-plenary'}]}))
-    monkeypatch.setattr(build,'build_schedule',lambda wg,opts: pipeline.build_schedule(opts,request=lambda *a:parsed.model_dump()))
+    monkeypatch.setattr(build,'build_schedule',lambda wg,opts: pipeline.build_schedule(opts,request=lambda *a, **_:parsed.model_dump()))
     monkeypatch.setattr(build,'save_schedule',lambda *a: (_ for _ in ()).throw(OSError('disk failed')))
     opts=SimpleNamespace(wg='ran-plenary',site_config=config,output_dir=tmp_path/'docs',render_only=False,
                          local=str(FIXTURES/FILENAME),no_download=True)
@@ -420,7 +420,7 @@ def test_location_override_discards_cached_timezone(metadata,tmp_path,monkeypatc
     monkeypatch.setattr(interp,'CACHE',tmp_path)
     cfg={**sources.DEFAULTS,'meetings':{'113':{'location':'Tokyo','country':'JP'}}}
     prior={'meeting_number':113,'metadata':metadata}
-    result=pipeline.meeting_metadata(113,cfg,prior,None,lambda *a:{'timezone':'Asia/Tokyo'})
+    result=pipeline.meeting_metadata(113,cfg,prior,None,lambda *a, **_:{'timezone':'Asia/Tokyo'})
     assert result['timezone'] == 'Asia/Tokyo'
 
 
@@ -474,7 +474,7 @@ def test_rich_reference_blocks_unsafe_urls_and_html():
 
 def test_topic_presentation_changes_do_not_rerun_llm(source, parsed, tmp_path):
     calls=[]
-    def request(*args):
+    def request(*args, **_):
         calls.append(args);return parsed.model_dump()
     interp.interpret(source,'test',request,tmp_path)
     source['topics'][0]['rich_text']['documents'][0]['runs'][0]['highlight']='green'
@@ -490,7 +490,7 @@ def test_portal_instants_reach_plenary_now_controls(source, parsed, monkeypatch)
            'Country': 'ES', 'Location': 'Madrid'}
     with httpx.Client(transport=httpx.MockTransport(lambda req: httpx.Response(200, json=[row]))) as http:
         metadata = pipeline.meeting_metadata(113, sources.DEFAULTS, {}, http,
-                                             lambda *a: pytest.fail('Known Portal zone must not call LLM'))
+                                             lambda *a, **_: pytest.fail('Known Portal zone must not call LLM'))
     assert metadata['starts_at'] == '2026-09-14T09:00:00+02:00'
     assert metadata['ends_at'] == '2026-09-17T17:30:00+02:00'
     schedule = interp.make_schedule(source, parsed, {}, metadata, FILENAME, 'test')
