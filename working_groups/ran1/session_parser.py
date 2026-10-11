@@ -20,6 +20,11 @@ from .models import RoomInfo, Session, time_to_minutes, minutes_to_time
 CACHE_DIR = Path(".cache/ran1")
 ROOM_DETECT_PROMPT_VERSION = 2
 
+GEMINI_MODEL = "gemini-3.8-flash"
+# Extraction calls want the least reasoning the model allows. gemini-3.8-flash
+# has no "minimal" level; "low" is its floor.
+LOW_THINKING = "low"
+
 # ── JSON Schemas for structured output ───────────────────────────
 
 TIMEZONE_SCHEMA = {
@@ -153,13 +158,12 @@ Return ONLY valid JSON: {{"timezone": "IANA/Timezone", "city": "CityName", "coun
 
     try:
         response = client.models.generate_content(
-            model="gemini-3-flash-preview",
+            model=GEMINI_MODEL,
             contents=prompt,
             config=types.GenerateContentConfig(
-                temperature=0.0,
                 response_mime_type="application/json",
                 response_json_schema=TIMEZONE_SCHEMA,
-                thinking_config=types.ThinkingConfig(thinking_level="minimal"),
+                thinking_config=types.ThinkingConfig(thinking_level=LOW_THINKING),
             ),
         )
         result = json.loads(response.text.strip())
@@ -266,10 +270,9 @@ def detect_room_from_context(
 
     try:
         response = client.models.generate_content(
-            model="gemini-3-flash-preview",
+            model=GEMINI_MODEL,
             contents=prompt,
             config=types.GenerateContentConfig(
-                temperature=0.2,
                 response_mime_type="application/json",
                 response_json_schema=ROOM_DETECT_SCHEMA,
             ),
@@ -893,14 +896,13 @@ def parse_time_slots(
         for attempt in range(MAX_RETRIES):
             try:
                 response = client.models.generate_content(
-                    model="gemini-3-flash-preview",
+                    model=GEMINI_MODEL,
                     contents=user_prompt,
                     config=types.GenerateContentConfig(
                         system_instruction=system_instruction,
-                        temperature=0.1,
                         response_mime_type="application/json",
                         response_json_schema=MULTI_SOURCE_SESSION_SCHEMA,
-                        thinking_config=types.ThinkingConfig(thinking_level="minimal"),
+                        thinking_config=types.ThinkingConfig(thinking_level=LOW_THINKING),
                     ),
                 )
                 parsed_result = json.loads(response.text.strip())
@@ -1179,13 +1181,15 @@ def normalize_group_headers(sessions: list[Session]) -> list[Session]:
         for attempt in range(MAX_RETRIES):
             try:
                 response = client.models.generate_content(
-                    model="gemini-3-flash-preview",
+                    model=GEMINI_MODEL,
                     contents=user_prompt,
                     config=types.GenerateContentConfig(
                         system_instruction=GROUP_SIMPLIFY_SYSTEM_INSTRUCTION,
-                        temperature=0.0,
                         response_mime_type="application/json",
                         response_json_schema=GROUP_SIMPLIFY_SCHEMA,
+                        # Without a level the model reasons at length over the
+                        # label list and runs past the request deadline.
+                        thinking_config=types.ThinkingConfig(thinking_level=LOW_THINKING),
                     ),
                 )
                 result = json.loads(response.text.strip())
@@ -1197,10 +1201,13 @@ def normalize_group_headers(sessions: list[Session]) -> list[Session]:
                     _time.sleep(wait)
                 else:
                     print(f"  Group normalization failed: {e}")
-                    return sessions
-
-        if result is None:
-            return sessions
+                    # Publishing the raw labels splits each work area into
+                    # several legend entries, and nothing rebuilds the page
+                    # until a source changes. Fail the build instead: the
+                    # last good page stays up and the next run retries.
+                    raise RuntimeError(
+                        f"Group normalization failed after {MAX_RETRIES} attempts"
+                    ) from e
 
         _save_cache(cache_key, result)
 
