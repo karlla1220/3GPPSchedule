@@ -26,7 +26,7 @@
       ],
       "sessions": [
         {
-          "name": "EUTRA&NR15161718",
+          "name": "Breakout after 9.1 / EUTRA&NR15161718",
           "duration_minutes": 90,
           "start_time": "09:00",
           "end_time": "10:30",
@@ -34,33 +34,10 @@
           "room_col_start": 2,
           "room_col_end": 3,
           "chair": "Mattias",
-          "agenda_item": "5.1.3.3, 4.1, 5.1.0, 5.1.1, 5.1.2, 5.1.3.1, 5.1.3.2, 6.0.2.1, 6.0.2.2, 6.0.2.3, 6.0.2.4, 6.0.2.5, 6.0.2.6, 6.0.2.7, 6.0.2.8, 6.0.2.9, 6.0.2.10, 6.0.2.11, 6.0.2.12, 6.0.2.14, 6.0.2.15, 6.0.2.23, 6.0.2.24",
-          "group_header": "NR Rel-17 and earlier",
-          "description": "Other\nEUTRA corrections Rel-19and earlier\nNR Common\nStage 2 and Organisational\nUser Plane corrections\nNR RRC",
+          "agenda_item": "4.1, 5.1.1, 5.1.2, 5.1.3.1, 5.1.3.2, 5.1.3.3, 6.0.2.1, 6.0.2.2, 6.0.2.3, 6.0.2.4, 6.0.2.5, 6.0.2.6, 6.0.2.7, 6.0.2.8, 6.0.2.9, 6.0.2.10, 6.0.2.11, 6.0.2.12, 6.0.2.14, 6.0.2.15, 6.0.2.20, 6.0.2.23, 6.0.2.24",
+          "group_header": "EUTRA",
+          "description": "EUTRA corrections Rel-19and earlier\nStage 2 and Organisational\nUser Plane corrections\nNR RRC\nUE capabilities\nOther",
           "agenda_descriptions": [
-            {
-              "agenda_item": "5.1.3.3",
-              "matched_agenda_item": "5.1.3.3",
-              "description": "Other",
-              "hierarchy": [
-                {
-                  "agenda_item": "5",
-                  "description": "NR Rel-17 and earlier"
-                },
-                {
-                  "agenda_item": "5.1",
-                  "description": "NR Common"
-                },
-                {
-                  "agenda_item": "5.1.3",
-                  "description": "Control Plane corrections"
-                },
-                {
-                  "agenda_item": "5.1.3.3",
-                  "description": "Other"
-                }
-              ]
-            },
             {
               "agenda_item": "4.1",
               "matched_agenda_item": "4.1",
@@ -73,21 +50,6 @@
                 {
                   "agenda_item": "4.1",
                   "description": "EUTRA corrections Rel-19and earlier"
-                }
-              ]
-            },
-            {
-              "agenda_item": "5.1.0",
-              "matched_agenda_item": "5.1",
-              "description": "NR Common",
-              "hierarchy": [
-                {
-                  "agenda_item": "5",
-                  "description": "NR Rel-17 and earlier"
-                },
-                {
-                  "agenda_item": "5.1",
-                  "description": "NR Common"
                 }
               ]
             },
@@ -151,6 +113,52 @@
                   "description": "NR RRC"
                 }
               ]
+            },
+            {
+              "agenda_item": "5.1.3.2",
+              "matched_agenda_item": "5.1.3.2",
+              "description": "UE capabilities",
+              "hierarchy": [
+                {
+                  "agenda_item": "5",
+                  "description": "NR Rel-17 and earlier"
+                },
+                {
+                  "agenda_item": "5.1",
+                  "description": "NR Common"
+                },
+                {
+                  "agenda_item": "5.1.3",
+                  "description": "Control Plane corrections"
+                },
+                {
+                  "agenda_item": "5.1.3.2",
+                  "description": "UE capabilities"
+                }
+              ]
+            },
+            {
+              "agenda_item": "5.1.3.3",
+              "matched_agenda_item": "5.1.3.3",
+              "description": "Other",
+              "hierarchy": [
+                {
+                  "agenda_item": "5",
+                  "description": "NR Rel-17 and earlier"
+                },
+                {
+                  "agenda_item": "5.1",
+                  "description": "NR Common"
+                },
+                {
+                  "agenda_item": "5.1.3",
+                  "description": "Control Plane corrections"
+                },
+                {
+                  "agenda_item": "5.1.3.3",
+                  "description": "Other"
+                }
+              ]
             }
           ],
           "room_ids": [
@@ -158,12 +166,12 @@
           ],
           "room_scope": "assigned",
           "notes": [
-            "Breakout to start after completion of 7.0 and 8.0",
+            "Breakout after 9.1",
             "EUTRA&NR15161718 (Mattias):"
           ]
         },
         {
-          "name": "NR19 NES / NR18 Mob / NR19 Mob",
+          "name": "Breakout after 9.1 / NR18 Mob / NR19 Mob",
           "duration_minutes": 90,
           "start_time": "09:00",
           "end_time": "10:30",
@@ -171,25 +179,10 @@
           "room_col_start": 2,
           "room_col_end": 3,
           "chair": "Kyeongin",
-          "agenda_item": "7.5, 7.5.1, 7.5.2, 6.0.2.22, 7.6, 7.6.1, 7.6.2",
-          "group_header": "NR Rel-19",
-          "description": "Network Energy Saving Enh.\nFurther NR mobility enhancements\nMobility Enhancement Ph4",
+          "agenda_item": "6.0.2.22, 7.6, 7.6.1, 7.6.2",
+          "group_header": "NR Rel-18",
+          "description": "Further NR mobility enhancements\nMobility Enhancement Ph4",
           "agenda_descriptions": [
-            {
-              "agenda_item": "7.5",
-              "matched_agenda_item": "7.5",
-              "description": "Network Energy Saving Enh.",
-              "hierarchy": [
-                {
-                  "agenda_item": "7",
-                  "description": "NR Rel-19"
-                },
-                {
-                  "agenda_item": "7.5",
-                  "description": "Network Energy Saving Enh."
-                }
-              ]
-            },
             {
               "agenda_item": "6.0.2.22",
               "matched_agenda_item": "6.0.2.22",
@@ -234,8 +227,7 @@
           ],
           "room_scope": "assigned",
           "notes": [
-            "Breakout to start after completion of 7.0 and 8.0",
-            "[7.5] NR19 NES (Kyeongin)",
+            "Breakout after 9.1",
             "[6.0.2.22] NR18 Mob (Kyeongin)",
             "[7.6] NR19 Mob (Kyeongin)"
           ]
@@ -869,14 +861,14 @@
           ]
         },
         {
-          "name": "NTN R20 GNSS resilient Erlin",
+          "name": "NTN R20 GNSS resilient",
           "duration_minutes": 30,
           "start_time": "18:30",
           "end_time": "19:00",
           "day": "Monday",
           "room_col_start": 2,
           "room_col_end": 3,
-          "chair": null,
+          "chair": "Erlin",
           "agenda_item": "8.11, 8.11.1, 8.11.2",
           "group_header": "NR Rel-20",
           "description": "GNSS resilient NR-NTN operation",
@@ -902,7 +894,7 @@
           ],
           "room_scope": "assigned",
           "notes": [
-            "[8.11] NTN R20 GNSS resilient Erlin (only topics not discussed in 6G NTN GNSS free/resilient)",
+            "[8.11] NTN R20 GNSS resilient (Erlin) (only topics not discussed in 6G NTN GNSS free/resilient)",
             "[8.11.2] GNSS-resilient initial access"
           ]
         }
@@ -1148,10 +1140,10 @@
           ]
         },
         {
-          "name": "offline for AI mobility",
-          "duration_minutes": 30,
+          "name": "Offline for RRC details",
+          "duration_minutes": 60,
           "start_time": "10:00",
-          "end_time": "10:30",
+          "end_time": "11:00",
           "day": "Tuesday",
           "room_col_start": 2,
           "room_col_end": 3,
@@ -1165,11 +1157,11 @@
           ],
           "room_scope": "assigned",
           "notes": [
-            "offline for AI mobility"
+            "Offline for RRC details"
           ]
         },
         {
-          "name": "offline for AI mobility if needed / NR20 AI mobility",
+          "name": "NR20 AI mobility",
           "duration_minutes": 120,
           "start_time": "11:00",
           "end_time": "13:00",
@@ -1178,7 +1170,7 @@
           "room_col_end": 3,
           "chair": "Kyeongin",
           "agenda_item": "8.3, 8.3.2, 8.3.3",
-          "group_header": "Offline",
+          "group_header": "NR Rel-20",
           "description": "AI/ML for mobility",
           "agenda_descriptions": [
             {
@@ -1202,7 +1194,6 @@
           ],
           "room_scope": "assigned",
           "notes": [
-            "offline for AI mobility if needed (TBD)",
             "[8.3] NR20 AI mobility [1] (Kyeongin)",
             "[8.3.2] LCM procedure (continue)",
             "[8.3.3] Data collection"
@@ -2664,9 +2655,9 @@
           "room_col_start": 2,
           "room_col_end": 3,
           "chair": null,
-          "agenda_item": "8.4.3",
+          "agenda_item": "8.4.3, 8.3",
           "group_header": "NR Rel-20",
-          "description": "Dynamic L1 measurement and reporting configuration change",
+          "description": "Dynamic L1 measurement and reporting configuration change\nAI/ML for mobility",
           "agenda_descriptions": [
             {
               "agenda_item": "8.4.3",
@@ -2686,6 +2677,21 @@
                   "description": "Dynamic L1 measurement and reporting configuration change"
                 }
               ]
+            },
+            {
+              "agenda_item": "8.3",
+              "matched_agenda_item": "8.3",
+              "description": "AI/ML for mobility",
+              "hierarchy": [
+                {
+                  "agenda_item": "8",
+                  "description": "NR Rel-20"
+                },
+                {
+                  "agenda_item": "8.3",
+                  "description": "AI/ML for mobility"
+                }
+              ]
             }
           ],
           "room_ids": [
@@ -2694,8 +2700,8 @@
           "room_scope": "assigned",
           "notes": [
             "CB Kyeongin",
-            "R19 NES comebacks",
-            "R18/19/20 Mob comebacks/continue [8.4.3]"
+            "R18/19/20 Mob comebacks/continue [8.4.3]",
+            "R20 AI Mob comebacks/continue [8.3]"
           ]
         },
         {
@@ -3124,16 +3130,16 @@
       }
     }
   ],
-  "source_file": "R2_135b_Schedule_v01.docx",
-  "generated_at": "2026-10-11 15:50",
+  "source_file": "R2_135b_Schedule_v02.docx",
+  "generated_at": "2026-10-11 23:01",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
-    "R2_135b_Schedule_v01.docx",
+    "R2_135b_Schedule_v02.docx",
     "agenda.csv"
   ],
   "source_labels": {
-    "R2_135b_Schedule_v01.docx": "Schedule",
+    "R2_135b_Schedule_v02.docx": "Schedule",
     "agenda.csv": "Agenda"
   },
   "timezone": "Asia/Seoul",
