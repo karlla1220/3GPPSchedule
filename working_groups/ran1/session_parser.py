@@ -762,6 +762,27 @@ def _enforce_main_room_chair_evidence(
     return parsed
 
 
+# An agenda number written with a trailing dot ("10.8.1.(40)" in a source).
+_TRAILING_AGENDA_DOT = re.compile(r"(\d+(?:\.\d+)*(?:\.[xX])?)\.+(?=[\s,/]|$)")
+
+
+def _strip_agenda_dots(text: str) -> str:
+    """Drop the dot after an agenda number: "10.8.1." → "10.8.1".
+
+    Applies to every number in an agenda_item and to the number that leads
+    a session name ("10.8.1. Sensing" → "10.8.1 Sensing"); other text in a
+    name keeps its punctuation.
+    """
+    return _TRAILING_AGENDA_DOT.sub(r"\1", text)
+
+
+def _strip_name_agenda_dot(name: str) -> str:
+    match = re.match(r"^((?:AI\s+)?\.?\s*)(\S+)", name)
+    if not match:
+        return name
+    return match[1] + _strip_agenda_dots(match[2]) + name[match.end():]
+
+
 def _extract_agenda_item_from_name(name: str) -> tuple[str, str | None]:
     """Extract a leading agenda item from a session name when present.
 
@@ -1047,9 +1068,11 @@ def _slot_result_to_sessions(
             if duration <= 0:
                 continue
 
-            name = sd.get("name", "Unknown")
+            name = _strip_name_agenda_dot(sd.get("name", "Unknown"))
             group_header = sd.get("group_header", "")
             agenda_item = sd.get("agenda_item")
+            if agenda_item:
+                agenda_item = _strip_agenda_dots(agenda_item)
             description = sd.get("description")
             agenda_descriptions = sd.get("agenda_descriptions") or []
 

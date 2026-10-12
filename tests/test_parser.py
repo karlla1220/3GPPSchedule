@@ -17,6 +17,8 @@ from working_groups.ran1.parser import (
 from working_groups.ran1.session_parser import (
     _extract_agenda_item_from_name,
     _leaf_agenda_item,
+    _strip_agenda_dots,
+    _strip_name_agenda_dot,
     _slot_result_to_sessions,
 )
 
@@ -245,6 +247,47 @@ class AgendaExtractionTests(unittest.TestCase):
         self.assertEqual(_leaf_agenda_item("Sensing", "10.8"), "10.8")
         self.assertEqual(_leaf_agenda_item("10.5.1.2/3", "10.5.1"), "10.5.1")
         self.assertEqual(_leaf_agenda_item("10.50.1", "10.5"), "10.5")
+
+    def test_drops_the_dot_after_an_agenda_number(self):
+        # Hiroki wrote "10.8.1.(40)"; the LLM kept the dot in name and AI.
+        self.assertEqual(_strip_agenda_dots("10.8.1."), "10.8.1")
+        self.assertEqual(_strip_agenda_dots("10.8.3, 10.8.1."), "10.8.3, 10.8.1")
+        self.assertEqual(_strip_agenda_dots("10.6.x."), "10.6.x")
+        self.assertEqual(_strip_agenda_dots("10.3.1./4"), "10.3.1/4")
+        self.assertEqual(_strip_name_agenda_dot("10.8.1."), "10.8.1")
+        self.assertEqual(_strip_name_agenda_dot("10.8.1. Sensing"), "10.8.1 Sensing")
+        self.assertEqual(_strip_name_agenda_dot("AI 9.1.1. AI/ML"), "AI 9.1.1 AI/ML")
+        # Only the leading number of a name; other text keeps its dots.
+        self.assertEqual(_strip_name_agenda_dot("6G ISAC 10.8.1."), "6G ISAC 10.8.1.")
+        self.assertEqual(_strip_name_agenda_dot("Early dinner."), "Early dinner.")
+        self.assertEqual(_strip_agenda_dots("10.8.1"), "10.8.1")
+
+    def test_slot_result_drops_a_trailing_dot_from_name_and_agenda_item(self):
+        slot = MagicMock(day="Tuesday", time_block_start="10:30", time_block_end="12:30")
+        parsed = {
+            "sessions": [
+                {
+                    "room_name": "RAN1_brk1",
+                    "name": "10.8.1.",
+                    "duration_minutes": 40,
+                    "specified_start_time": None,
+                    "chair": "Hiroki",
+                    "group_header": "6G ISAC",
+                    "agenda_item": "10.8.1.",
+                }
+            ]
+        }
+        day_rooms_map = {
+            "Tuesday": [
+                RoomInfo(name="Main room", table_index=0, room_index_in_table=0),
+                RoomInfo(name="Breakout room", table_index=0, room_index_in_table=1),
+            ]
+        }
+        alias_to_name = {"RAN1_main": "Main room", "RAN1_brk1": "Breakout room"}
+
+        sessions = _slot_result_to_sessions(parsed, slot, day_rooms_map, alias_to_name)
+
+        self.assertEqual((sessions[0].name, sessions[0].agenda_item), ("10.8.1", "10.8.1"))
 
     def test_slot_result_replaces_a_parent_copied_onto_a_leaf(self):
         slot = MagicMock(day="Monday", time_block_start="16:00", time_block_end="18:30")
