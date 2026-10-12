@@ -63,32 +63,22 @@ def _ai_ids(value: str) -> list[str]:
     return list(dict.fromkeys(ids))
 
 
-def _ai_filter_scope(agenda_item: str | None, title: str = "") -> str:
+def _ai_filter_scope(agenda_item: str | None) -> str:
     """A cell's filter scope: "N.*" covers N's sub-items, "N" is N alone.
 
     An x item covers its sub-items. A bare number does too ("10.5.4"
     schedules all of 10.5.4), unless the same cell lists one of its
     sub-items: "8.1, 8.1.2" then means 8.1's own part next to 8.1.2.
-    A title naming a sub-item narrows the cover to it: a cell titled
-    "10.5.4.4" with AI 10.5.4 is 10.5.4.4, not every 10.5.4 item.
     """
     tokens = agenda_section_ids(agenda_item or "", ())
     ids = [t[:-2] if t.lower().endswith(".x") else t for t in tokens]
-    title_ids = [
-        t[:-2] if t.lower().endswith(".x") else t
-        for t in re.findall(r"(?<![\d.])\d+(?:\.\d+)+(?:\.x)?", title or "", re.I)
-    ]
     scope = []
     for token, ai_id in zip(tokens, ids):
         covers = _AI_NUMBER.fullmatch(ai_id) and (
             token.lower().endswith(".x")
             or not any(other.startswith(ai_id + ".") for other in ids)
         )
-        named = [t for t in title_ids if t.startswith(ai_id + ".")] if covers else []
-        if named:
-            scope.extend(t + ".*" for t in named)
-        else:
-            scope.append(ai_id + ".*" if covers else ai_id)
+        scope.append(ai_id + ".*" if covers else ai_id)
     return "|".join(dict.fromkeys(scope))
 
 
@@ -551,7 +541,7 @@ def generate_html(schedule: Schedule, *, schedules=None, groups=None, presentati
             else:
                 data_ai = ""
             data_ai_attr = _esc(data_ai).replace('"', '&quot;')
-            data_ai_scope_attr = _esc(_ai_filter_scope(session.agenda_item, session.name)).replace('"', '&quot;')
+            data_ai_scope_attr = _esc(_ai_filter_scope(session.agenda_item)).replace('"', '&quot;')
             # The panel opens the chair-note sections an AI covers (10.6.x →
             # 10.6.1, 10.6.2). The filter keeps matching the AI as written.
             agreement_attrs = ""

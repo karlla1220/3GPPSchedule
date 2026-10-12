@@ -317,14 +317,3 @@ def test_filter_scope_covers_sub_items_unless_the_cell_lists_one():
     # RAN2 lists a parent beside its sub-items: the parent is its own part.
     assert _ai_filter_scope("8.1, 8.1.2, 8.1.3") == "8.1|8.1.2.*|8.1.3.*"
     assert _ai_filter_scope("") == ""
-
-
-def test_filter_scope_narrows_to_the_sub_item_the_title_names():
-    # RAN1 writes AI 10.5.4 on cells titled 10.5.4.3 and 10.5.4.4: selecting
-    # 10.5.4.1 must not light them.
-    assert _ai_filter_scope("10.5.4", "10.5.4.4") == "10.5.4.4.*"
-    assert _ai_filter_scope("10.5.4.x", "10.5.4.1 DCI") == "10.5.4.1.*"
-    # A title that names the AI itself, or another item, changes nothing.
-    assert _ai_filter_scope("10.5.4", "10.5.4") == "10.5.4.*"
-    assert _ai_filter_scope("10.8", "Sensing") == "10.8.*"
-    assert _ai_filter_scope("10.5.4.1, 10.5.4.3", "6G 10.5.4.x") == "10.5.4.1.*|10.5.4.3.*"
