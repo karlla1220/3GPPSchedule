@@ -825,6 +825,29 @@ def _leaf_agenda_item(name: str, agenda_item: str) -> str:
     return from_name if from_name.startswith(parent + ".") else agenda_item
 
 
+def _normalize_agenda_fields(sessions: list[dict]) -> list[dict]:
+    """Fix agenda numbers in merged sessions before they are annotated and saved.
+
+    Drops a trailing dot ("10.8.1." → "10.8.1") and replaces a parent copied
+    onto a leaf ("10.5.4.4" with AI 10.5.4 → 10.5.4.4). Running before the
+    save keeps slot_state, and so the next incremental baseline, correct.
+    """
+    normalized = []
+    for session in sessions:
+        session = dict(session)
+        name = session.get("name")
+        if isinstance(name, str):
+            session["name"] = name = _strip_name_agenda_dot(name)
+        agenda_item = session.get("agenda_item")
+        if isinstance(agenda_item, str) and agenda_item:
+            agenda_item = _strip_agenda_dots(agenda_item)
+            if isinstance(name, str):
+                agenda_item = _leaf_agenda_item(name, agenda_item)
+            session["agenda_item"] = agenda_item
+        normalized.append(session)
+    return normalized
+
+
 def parse_time_slots(
     time_slots: list,
     day_rooms_map: dict[str, list[RoomInfo]],
@@ -870,6 +893,7 @@ def parse_time_slots(
     def _finish(slot, parsed_result, alias_to_name) -> list[Session]:
         """Annotate a merge, persist it for the next run, convert to sessions."""
         name_to_alias, _ = build_room_aliases(day_rooms_map.get(slot.day, []))
+        parsed_result["sessions"] = _normalize_agenda_fields(parsed_result.get("sessions") or [])
         _enforce_main_room_chair_evidence(parsed_result, slot, name_to_alias)
         parsed_result["sessions"] = annotate_sessions_with_agenda_descriptions(
             parsed_result.get("sessions", []),
@@ -1068,19 +1092,14 @@ def _slot_result_to_sessions(
             if duration <= 0:
                 continue
 
-            name = _strip_name_agenda_dot(sd.get("name", "Unknown"))
+            name = sd.get("name", "Unknown")
             group_header = sd.get("group_header", "")
             agenda_item = sd.get("agenda_item")
-            if agenda_item:
-                agenda_item = _strip_agenda_dots(agenda_item)
             description = sd.get("description")
             agenda_descriptions = sd.get("agenda_descriptions") or []
 
-            # Post-process: extract agenda_item from name if not provided,
-            # or take the name's own number over a parent copied onto it.
-            if agenda_item:
-                agenda_item = _leaf_agenda_item(name, agenda_item)
-            else:
+            # Post-process: extract agenda_item from name if not provided
+            if not agenda_item:
                 name, extracted_agenda_item = _extract_agenda_item_from_name(name)
                 if extracted_agenda_item:
                     agenda_item = extracted_agenda_item

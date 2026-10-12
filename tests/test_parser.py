@@ -14,9 +14,11 @@ from working_groups.ran1.parser import (
     find_chair_notes_docx,
     parse_docx,
 )
+from working_groups.ran1.agenda_descriptions import annotate_sessions_with_agenda_descriptions
 from working_groups.ran1.session_parser import (
     _extract_agenda_item_from_name,
     _leaf_agenda_item,
+    _normalize_agenda_fields,
     _strip_agenda_dots,
     _strip_name_agenda_dot,
     _slot_result_to_sessions,
@@ -262,59 +264,42 @@ class AgendaExtractionTests(unittest.TestCase):
         self.assertEqual(_strip_name_agenda_dot("Early dinner."), "Early dinner.")
         self.assertEqual(_strip_agenda_dots("10.8.1"), "10.8.1")
 
-    def test_slot_result_drops_a_trailing_dot_from_name_and_agenda_item(self):
-        slot = MagicMock(day="Tuesday", time_block_start="10:30", time_block_end="12:30")
-        parsed = {
-            "sessions": [
-                {
-                    "room_name": "RAN1_brk1",
-                    "name": "10.8.1.",
-                    "duration_minutes": 40,
-                    "specified_start_time": None,
-                    "chair": "Hiroki",
-                    "group_header": "6G ISAC",
-                    "agenda_item": "10.8.1.",
-                }
-            ]
+    def test_normalizes_merged_sessions_before_they_are_saved(self):
+        # LLM output as saved in slot_state (Monday block 3, Tuesday block 1).
+        merged = [
+            {"room_name": "RAN1_brk2", "name": "10.5.4.4", "agenda_item": "10.5.4"},
+            {"room_name": "RAN1_brk2", "name": "10.8.1.", "agenda_item": "10.8.1."},
+            {"room_name": "RAN1_off1", "name": "10.5.4.x", "agenda_item": "10.5.4.2, 10.5.4.3"},
+            {"room_name": "RAN1_main", "name": "Opening", "agenda_item": None},
+        ]
+
+        normalized = _normalize_agenda_fields(merged)
+
+        self.assertEqual(
+            [(s["name"], s["agenda_item"]) for s in normalized],
+            [
+                ("10.5.4.4", "10.5.4.4"),
+                ("10.8.1", "10.8.1"),
+                ("10.5.4.x", "10.5.4.2, 10.5.4.3"),
+                ("Opening", None),
+            ],
+        )
+        self.assertEqual(merged[0]["agenda_item"], "10.5.4")  # input untouched
+
+    def test_popup_description_follows_the_normalized_agenda_item(self):
+        descriptions = {
+            "10.5.4": "Downlink control channel, scheduling and HARQ operation",
+            "10.5.4.4": "Handling of potential multiple uplink transmissions",
         }
-        day_rooms_map = {
-            "Tuesday": [
-                RoomInfo(name="Main room", table_index=0, room_index_in_table=0),
-                RoomInfo(name="Breakout room", table_index=0, room_index_in_table=1),
-            ]
-        }
-        alias_to_name = {"RAN1_main": "Main room", "RAN1_brk1": "Breakout room"}
+        merged = [{"name": "10.5.4.4", "agenda_item": "10.5.4"}]
 
-        sessions = _slot_result_to_sessions(parsed, slot, day_rooms_map, alias_to_name)
+        annotated = annotate_sessions_with_agenda_descriptions(
+            _normalize_agenda_fields(merged), descriptions
+        )
 
-        self.assertEqual((sessions[0].name, sessions[0].agenda_item), ("10.8.1", "10.8.1"))
-
-    def test_slot_result_replaces_a_parent_copied_onto_a_leaf(self):
-        slot = MagicMock(day="Monday", time_block_start="16:00", time_block_end="18:30")
-        parsed = {
-            "sessions": [
-                {
-                    "room_name": "RAN1_brk1",
-                    "name": "10.5.4.4",
-                    "duration_minutes": 40,
-                    "specified_start_time": None,
-                    "chair": "Hiroki",
-                    "group_header": "6GR",
-                    "agenda_item": "10.5.4",
-                }
-            ]
-        }
-        day_rooms_map = {
-            "Monday": [
-                RoomInfo(name="Main room", table_index=0, room_index_in_table=0),
-                RoomInfo(name="Breakout room", table_index=0, room_index_in_table=1),
-            ]
-        }
-        alias_to_name = {"RAN1_main": "Main room", "RAN1_brk1": "Breakout room"}
-
-        sessions = _slot_result_to_sessions(parsed, slot, day_rooms_map, alias_to_name)
-
-        self.assertEqual(sessions[0].agenda_item, "10.5.4.4")
+        self.assertEqual(
+            annotated[0]["description"], "Handling of potential multiple uplink transmissions"
+        )
 
     def test_slot_result_keeps_full_name_for_slash_shorthand(self):
         slot = MagicMock(
