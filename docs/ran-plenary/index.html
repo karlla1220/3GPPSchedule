@@ -1635,6 +1635,10 @@ RAN WG reports/coordination">
     // browser zoom out, but Chrome then pans the screen over a page-wide
     // layout viewport and sticky elements slide off.
     const GRID_ZOOM_MAX = 2;
+    // 100% holds until the fingers spread or close this much more, so it is
+    // easy to land on and to leave a pinch at. Past it the zoom carries on
+    // smoothly from 100%, with no jump.
+    const GRID_ZOOM_DETENT = Math.log(1.15);
     const gridZoomSupported = window.CSS && CSS.supports && CSS.supports('zoom', '1');
     let gridZoom = 1;
 
@@ -1661,6 +1665,17 @@ RAN WG reports/coordination">
         const touchDistance = t => Math.hypot(t[0].clientX - t[1].clientX, t[0].clientY - t[1].clientY);
         let pinch = null;
 
+        // Pinch position (log of the finger spread ratio) -> zoom, with a flat
+        // stretch at 100%; and back, for the zoom a pinch starts from.
+        const detentZoom = u => Math.abs(u) <= GRID_ZOOM_DETENT ? 1 :
+            Math.exp(u - Math.sign(u) * GRID_ZOOM_DETENT);
+        const detentPosition = z => z === 1 ? 0 :
+            Math.log(z) + Math.sign(Math.log(z)) * GRID_ZOOM_DETENT;
+        // A short tick where the phone can (Android), as the pinch lands on 100%.
+        const tickAt100 = function() {
+            try { if (navigator.vibrate) navigator.vibrate(8); } catch (err) { /* not allowed yet */ }
+        };
+
         document.querySelectorAll('.grid-wrapper').forEach(wrapper => {
             const grid = wrapper.querySelector('.schedule-grid');
             wrapper.addEventListener('touchstart', function(e) {
@@ -1670,7 +1685,7 @@ RAN WG reports/coordination">
                 pinch = {
                     wrapper: wrapper,
                     distance: touchDistance(e.touches) || 1,
-                    zoom: gridZoom,
+                    position: detentPosition(gridZoom),
                     // The grid point under the fingers, in unzoomed grid px,
                     // and the grid's top in the page (its own zoom moves neither).
                     x: (mid.x - rect.left) / gridZoom,
@@ -1681,7 +1696,18 @@ RAN WG reports/coordination">
             wrapper.addEventListener('touchmove', function(e) {
                 if (!pinch || pinch.wrapper !== wrapper || e.touches.length !== 2) return;
                 if (e.cancelable) e.preventDefault();
-                setGridZoom(pinch.zoom * touchDistance(e.touches) / pinch.distance);
+                // Past either end, move the start so turning back reacts at once.
+                let u = pinch.position + Math.log(touchDistance(e.touches) / pinch.distance);
+                const lo = detentPosition(minGridZoom());
+                const hi = detentPosition(GRID_ZOOM_MAX);
+                if (u < lo || u > hi) {
+                    const bounded = Math.max(lo, Math.min(u, hi));
+                    pinch.position += bounded - u;
+                    u = bounded;
+                }
+                const before = gridZoom;
+                setGridZoom(detentZoom(u));
+                if (gridZoom === 1 && before !== 1) tickAt100();
                 // Keep that grid point under the fingers as they move.
                 const mid = touchMid(e.touches);
                 wrapper.scrollLeft = wrapper.getBoundingClientRect().left + pinch.x * gridZoom - mid.x;
