@@ -12,6 +12,7 @@
     --base-slot-height: 10px;
     --time-col-width: 36px;
     --header-height: 36px;
+    --grid-min-width: 600px;
     --page-bg: #F6F7F9;
     --surface: #FFFFFF;
     --hairline: #E7E9EE;
@@ -323,8 +324,16 @@ header .meta a:focus-visible,
     display: grid;
     grid-template-rows: var(--header-height) repeat(var(--time-rows), var(--slot-height));
     gap: 0;
-    min-width: 600px;
+    min-width: var(--grid-min-width);
     position: relative;
+    /* Set by a pinch on the grid (schedule.js). */
+    zoom: var(--grid-zoom, 1);
+}
+
+/* A pinch on the grid zooms the grid, not the page (see schedule.js);
+   browsers without CSS zoom keep the native pinch. */
+@supports (zoom: 1) {
+    .grid-wrapper { touch-action: pan-x pan-y; }
 }
 
 /* Room headers */
@@ -1499,6 +1508,7 @@ RAN WG reports/coordination">
         const activeTab = document.querySelector('.tab.active');
         const state = {
             activeDay: activeTab ? activeTab.dataset.day : null,
+            gridZoom: gridZoom,
             scrollX: window.scrollX,
             scrollY: window.scrollY
         };
@@ -1616,12 +1626,89 @@ RAN WG reports/coordination">
 
     window.addEventListener('pagehide', saveUserState);
 
+    // ── Grid pinch zoom ──
+    // The grid scrolls sideways in its own box, so the page is never wider
+    // than a phone and the browser has nothing to zoom out to. A pinch on the
+    // grid zooms the grid instead (CSS zoom), down to where the whole day fits
+    // the width. The box stays, so the time column and room headers stay
+    // sticky while it is panned. Making the page itself wide would let the
+    // browser zoom out, but Chrome then pans the screen over a page-wide
+    // layout viewport and sticky elements slide off.
+    const GRID_ZOOM_MAX = 2;
+    const gridZoomSupported = window.CSS && CSS.supports && CSS.supports('zoom', '1');
+    let gridZoom = 1;
+
+    function activeGridWrapper() {
+        return document.querySelector('.day-panel.active .grid-wrapper');
+    }
+
+    // Below this the grid would fill the width with smaller text, not show more.
+    function minGridZoom() {
+        const wrapper = activeGridWrapper();
+        if (!wrapper || !wrapper.clientWidth) return 1;
+        const gridMinWidth = parseFloat(getComputedStyle(document.documentElement)
+            .getPropertyValue('--grid-min-width')) || 600;
+        return Math.min(1, wrapper.clientWidth / gridMinWidth);
+    }
+
+    function setGridZoom(z) {
+        gridZoom = Math.max(minGridZoom(), Math.min(z, GRID_ZOOM_MAX));
+        document.documentElement.style.setProperty('--grid-zoom', String(gridZoom));
+    }
+
+    if (gridZoomSupported) {
+        const touchMid = t => ({ x: (t[0].clientX + t[1].clientX) / 2, y: (t[0].clientY + t[1].clientY) / 2 });
+        const touchDistance = t => Math.hypot(t[0].clientX - t[1].clientX, t[0].clientY - t[1].clientY);
+        let pinch = null;
+
+        document.querySelectorAll('.grid-wrapper').forEach(wrapper => {
+            const grid = wrapper.querySelector('.schedule-grid');
+            wrapper.addEventListener('touchstart', function(e) {
+                if (e.touches.length !== 2) { pinch = null; return; }
+                const mid = touchMid(e.touches);
+                const rect = grid.getBoundingClientRect();
+                pinch = {
+                    wrapper: wrapper,
+                    distance: touchDistance(e.touches) || 1,
+                    zoom: gridZoom,
+                    // The grid point under the fingers, in unzoomed grid px,
+                    // and the grid's top in the page (its own zoom moves neither).
+                    x: (mid.x - rect.left) / gridZoom,
+                    y: (mid.y - rect.top) / gridZoom,
+                    gridTop: rect.top + window.scrollY
+                };
+            }, { passive: true });
+            wrapper.addEventListener('touchmove', function(e) {
+                if (!pinch || pinch.wrapper !== wrapper || e.touches.length !== 2) return;
+                if (e.cancelable) e.preventDefault();
+                setGridZoom(pinch.zoom * touchDistance(e.touches) / pinch.distance);
+                // Keep that grid point under the fingers as they move.
+                const mid = touchMid(e.touches);
+                wrapper.scrollLeft = wrapper.getBoundingClientRect().left + pinch.x * gridZoom - mid.x;
+                window.scrollTo(window.scrollX, pinch.gridTop + pinch.y * gridZoom - mid.y);
+            }, { passive: false });
+            const endPinch = function(e) {
+                if (!pinch || e.touches.length >= 2) return;
+                pinch = null;
+                saveUserState();
+            };
+            wrapper.addEventListener('touchend', endPinch);
+            wrapper.addEventListener('touchcancel', endPinch);
+        });
+
+        // A wider screen (rotation) can fit the day at a larger zoom.
+        window.addEventListener('resize', function() {
+            if (gridZoom < minGridZoom()) setGridZoom(gridZoom);
+        });
+    }
+
     // Restore saved state or auto-select today's tab
     const saved = loadUserState();
     if (saved && saved.activeDay) {
         const savedTab = document.querySelector('[data-day="' + saved.activeDay + '"]');
         if (savedTab) {
             savedTab.click();
+            if (gridZoomSupported && saved.gridZoom) setGridZoom(saved.gridZoom);
             window.scrollTo(saved.scrollX || 0, saved.scrollY || 0);
         } else {
             const firstTab = document.querySelector('.tab');
