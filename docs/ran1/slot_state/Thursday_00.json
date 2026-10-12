@@ -3,7 +3,7 @@
   "time_block_index": 0,
   "source_hashes": {
     "Main Schedule": "55066c88083fca62",
-    "Hiroki's schedule": "ecbd905efafb87c5",
+    "Hiroki's schedule": "aecf6ee07dc7e802",
     "Sorour's schedule": "60e82e7ba85f5866"
   },
   "merged_sessions": [
@@ -257,7 +257,7 @@
       "specified_start_time": null,
       "chair": "Hiroki",
       "group_header": "AI 7/8.2",
-      "agenda_item": "8.2/8.3, 7, 8",
+      "agenda_item": "8.2/8.3, 7",
       "description": "Maintenance on others",
       "agenda_descriptions": [
         {
@@ -302,18 +302,6 @@
             {
               "agenda_item": "7",
               "description": "Pre-Rel-19 NR Maintenance",
-              "has_description": true
-            }
-          ]
-        },
-        {
-          "agenda_item": "8",
-          "matched_agenda_item": "8",
-          "description": "Maintenance on Rel-19 NR and E-UTRA",
-          "hierarchy": [
-            {
-              "agenda_item": "8",
-              "description": "Maintenance on Rel-19 NR and E-UTRA",
               "has_description": true
             }
           ]
@@ -498,7 +486,7 @@
       ]
     }
   ],
-  "merged_at": "2026-10-11T15:41:08.085868+00:00",
+  "merged_at": "2026-10-12T00:41:17.657142+00:00",
   "meeting_id": "ran1#126bis",
   "schema_version": 2
 }
