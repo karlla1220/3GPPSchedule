@@ -37,6 +37,29 @@ const sourceNote = () => {
     if (line) mount.querySelector('.agreement-header')?.append(line);
 }
 
+// Added blocks in a row read as one change: each bar reaches up to the
+// previous added block across margins and blank paragraphs, so the margin
+// shows one line instead of a dash per paragraph. Anything else in between
+// (text, an image, a folded TDoc list) keeps the bars apart.
+const joinAdded = root => {
+    const added = [...root.querySelectorAll('.agreement-added')];
+    const joined = added.slice(1).map((block, i) => [added[i], block]).filter(([above, block]) => {
+        if (above.contains(block)) return false;
+        const between = document.createRange();
+        between.setStartAfter(above);
+        between.setEndBefore(block);
+        return !between.toString().trim() && !between.cloneContents().querySelector('img, table, math');
+    });
+    if (!joined.length) return;
+    // The gap depends on fonts and width, so it is measured whenever the document resizes.
+    new ResizeObserver(() => {
+        for (const [above, block] of joined) {
+            const gap = block.getBoundingClientRect().top - above.getBoundingClientRect().bottom;
+            block.style.setProperty('--added-reach', Math.max(0, gap) + 'px');
+        }
+    }).observe(root.querySelector('.docx-document') || root.host);
+};
+
 async function start() {
     const [{ createSignal, createResource, batch, For, Show, onCleanup }, { render }, { default: html }, { default: DOMPurify }] =
         await Promise.all([import('solid-js'), import('solid-js/web'), import('solid-js/html'), import('dompurify')]);
@@ -74,6 +97,7 @@ async function start() {
             }
         }
         root.append(style, fragment);
+        joinAdded(root);
         return host;
     };
     mount.replaceChildren();

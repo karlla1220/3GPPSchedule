@@ -89,13 +89,27 @@ def main():
             "(xs)=>xs.filter(x=>x.style.textDecorationLine.includes('line-through')).length"
         ) == 6
         checks.append("Word strike-through survives style sanitization")
-        # The preview's v10 added one paragraph to 10.1 (see preview_agreements.py).
+        # The preview's v10 added two paragraphs to 10.1, a blank one between
+        # them (see preview_agreements.py).
         expect(page.locator(".agreement-change")).to_contain_text("Updated 6 Oct, 14:30")
-        expect(page.locator(".agreement-change")).to_contain_text("v10 · 1 added part marked")
-        expect(doc.locator(".agreement-added")).to_have_count(1)
-        expect(doc.locator(".agreement-added")).to_contain_text("this paragraph was added in v10")
+        expect(page.locator(".agreement-change")).to_contain_text("v10 · 2 added parts marked")
+        expect(doc.locator(".agreement-added")).to_have_count(2)
+        expect(doc.locator(".agreement-added").first).to_contain_text("this paragraph was added in v10")
+        # One unbroken bar: the second reaches up across the margins and the
+        # blank paragraph to the bottom of the first.
+        first, second = (doc.locator(".agreement-added").nth(i) for i in range(2))
+        page.wait_for_function(
+            "() => document.querySelector('.agreement-document').shadowRoot"
+            ".querySelectorAll('.agreement-added')[1].style.getPropertyValue('--added-reach')"
+        )
+        gap = second.evaluate("(e)=>e.getBoundingClientRect().top") - first.evaluate(
+            "(e)=>e.getBoundingClientRect().bottom"
+        )
+        assert gap > 10, gap
+        assert abs(second.evaluate("(e)=>parseFloat(getComputedStyle(e,'::before').top)") + gap) < 0.5
+        assert first.evaluate("(e)=>getComputedStyle(e,'::before').top") == "0px"
         # The bar stays; the tint only flashes when the tab opens.
-        added = doc.locator(".agreement-added")
+        added = first
         assert added.evaluate("(e)=>getComputedStyle(e,'::before').backgroundColor") == "rgb(47, 158, 98)"
         assert added.evaluate("(e)=>getComputedStyle(e).backgroundColor") == "rgba(0, 0, 0, 0)"
         assert added.evaluate("(e)=>getComputedStyle(e,'::after').animationName") == "added-flash"
@@ -104,7 +118,7 @@ def main():
             ".shadowRoot.querySelector('.agreement-added'), '::after').opacity === '0'"
         )
         expect(page.locator('[role="tab"] .agreement-updated')).to_have_count(1)
-        checks.append("Section change is dated and its added paragraph marked")
+        checks.append("Section change is dated and its added paragraphs marked with one bar")
         for selector, marker in [
             ("ul", "disc"),
             ("ul ul", "circle"),
