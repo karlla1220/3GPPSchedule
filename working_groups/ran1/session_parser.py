@@ -782,6 +782,28 @@ def _extract_agenda_item_from_name(name: str) -> tuple[str, str | None]:
     return name, agenda_item
 
 
+def _leaf_agenda_item(name: str, agenda_item: str) -> str:
+    """Use the session's own agenda number when the AI names only its parent.
+
+    A schedule may split ".10.5.4 (120)" into leaves "10.5.4.4 (40)" … and
+    the LLM can copy the parent onto each leaf. A single AI that is an
+    ancestor of the name's leading number ("10.5.4", "10.5.4.x", "10.5")
+    gives way to that number; any other AI is kept as given.
+    """
+    _, from_name = _extract_agenda_item_from_name(name)
+    parent = agenda_item.strip().rstrip(".")
+    if not from_name or "/" in from_name or "," in parent:
+        return agenda_item
+    if not re.fullmatch(r"\d+(?:\.\d+)*(?:\.[xX])?", parent):
+        return agenda_item
+    if parent.lower().endswith(".x"):
+        parent = parent[:-2]
+    if from_name.lower().endswith(".x"):
+        own = from_name[:-2]
+        return from_name if own.startswith(parent + ".") else agenda_item
+    return from_name if from_name.startswith(parent + ".") else agenda_item
+
+
 def parse_time_slots(
     time_slots: list,
     day_rooms_map: dict[str, list[RoomInfo]],
@@ -1031,8 +1053,11 @@ def _slot_result_to_sessions(
             description = sd.get("description")
             agenda_descriptions = sd.get("agenda_descriptions") or []
 
-            # Post-process: extract agenda_item from name if not provided
-            if not agenda_item:
+            # Post-process: extract agenda_item from name if not provided,
+            # or take the name's own number over a parent copied onto it.
+            if agenda_item:
+                agenda_item = _leaf_agenda_item(name, agenda_item)
+            else:
                 name, extracted_agenda_item = _extract_agenda_item_from_name(name)
                 if extracted_agenda_item:
                     agenda_item = extracted_agenda_item
