@@ -174,7 +174,8 @@
           "notes": [
             "Breakout after 9.1",
             "EUTRA&NR15161718 (Mattias):"
-          ]
+          ],
+          "inferred_agenda_items": []
         },
         {
           "name": "Breakout after 9.1 / NR18 Mob / NR19 Mob",
@@ -236,7 +237,8 @@
             "Breakout after 9.1",
             "[6.0.2.22] NR18 Mob (Kyeongin)",
             "[7.6] NR19 Mob (Kyeongin)"
-          ]
+          ],
+          "inferred_agenda_items": []
         },
         {
           "name": "R18 common / NR19/20 general / 6GR organizational …",
@@ -342,7 +344,8 @@
             "Break out",
             "[9.3.2.5] Spectrum aggregation",
             "Inter-site with 10ms backhaul"
-          ]
+          ],
+          "inferred_agenda_items": []
         },
         {
           "name": "EUTRA&NR15161718 con’t / NR19 SONMDT / NR20 SONMDT",
@@ -396,7 +399,8 @@
             "EUTRA&NR15161718 (Mattias) con’t",
             "[7.10] NR19 SONMDT [0] (Mattias)",
             "[8.6] NR20 SONMDT [0.5] (Mattias)"
-          ]
+          ],
+          "inferred_agenda_items": []
         },
         {
           "name": "NR19 Mob",
@@ -434,7 +438,8 @@
           "notes": [
             "[7.6] NR19 Mob (Kyeongin)",
             "[7.6.2] (continue)"
-          ]
+          ],
+          "inferred_agenda_items": []
         },
         {
           "name": "Spectrum aggregation / 6GR Control Plane",
@@ -478,7 +483,8 @@
             "Inter-site with 10ms backhaul",
             "[9.3.2] 6GR Control Plane ((if time allows)",
             "[9.3.2.1] RRC modeling"
-          ]
+          ],
+          "inferred_agenda_items": []
         },
         {
           "name": "NR20 MIMO",
@@ -516,7 +522,8 @@
           "notes": [
             "[8.10] NR20 MIMO (Erlin)",
             "[8.10.2] Early SRS/CSI/CSI-RS triggering, other aspects if time allows"
-          ]
+          ],
+          "inferred_agenda_items": []
         },
         {
           "name": "R17/18 NR / IoT NTN / R17 NR NTN corrections / R18 NR NTN corrections …",
@@ -651,7 +658,8 @@
             "[7.9] R19 IoT NTN [0] (Sergio)",
             "[8.7] R20 IoT NTN [1] (Sergio)",
             "[8.7.2] (if time allows)"
-          ]
+          ],
+          "inferred_agenda_items": []
         },
         {
           "name": "Rel-19 corrections / MIMO / NR LPWUS …",
@@ -721,7 +729,8 @@
             "[7.12] MIMO",
             "[7.4] NR LPWUS (Erlin)",
             "[7.11] NR SBFD"
-          ]
+          ],
+          "inferred_agenda_items": []
         },
         {
           "name": "1630-1700 A-IoT paging configuration",
@@ -742,7 +751,8 @@
           "room_scope": "assigned",
           "notes": [
             "1630-1700 [401] A-IoT paging configuration (Huawei)"
-          ]
+          ],
+          "inferred_agenda_items": []
         },
         {
           "name": "Common CP/UP",
@@ -785,7 +795,8 @@
             "[9.3.3] Common CP/UP",
             "[9.3.3.1] Data transfer framework",
             "[9.3.3.2] AI/ML"
-          ]
+          ],
+          "inferred_agenda_items": []
         },
         {
           "name": "NTN pre-meeting offline",
@@ -823,7 +834,8 @@
           "notes": [
             "[9.6] NTN pre-meeting offline (Erlin)",
             "Focus on GNSS resilient/free operation (overview of the potential issues related to mobility, initial discussion on proposed solutions, and proposals specific to R20 GNSS WID if time allows)"
-          ]
+          ],
+          "inferred_agenda_items": []
         },
         {
           "name": "6GR Control Plane",
@@ -885,7 +897,8 @@
             "[9.3.2] 6GR Control Plane",
             "[9.3.2.1] RRC modeling",
             "[[9.2.1] UE capabilities"
-          ]
+          ],
+          "inferred_agenda_items": []
         },
         {
           "name": "NTN R20 GNSS resilient",
@@ -923,7 +936,8 @@
           "notes": [
             "[8.11] NTN R20 GNSS resilient (Erlin) (only topics not discussed in 6G NTN GNSS free/resilient)",
             "[8.11.2] GNSS-resilient initial access"
-          ]
+          ],
+          "inferred_agenda_items": []
         }
       ],
       "date": "2026-10-12",
@@ -1012,7 +1026,8 @@
             "[8.3] NR20 AI mobility [1] (Kyeongin)",
             "[8.3.1] Organizational",
             "[8.3.2] LCM procedure"
-          ]
+          ],
+          "inferred_agenda_items": []
         },
         {
           "name": "NR1718 Pos / NR19 Ambient IoT / NR20 Others …",
@@ -1122,7 +1137,8 @@
             "- Documents on U2U MANET",
             "[8.14] TEI20 (if time permits, otherwise handle in CB session)",
             "- Positioning documents (note: the posSIB documents will be handled in the main session)"
-          ]
+          ],
+          "inferred_agenda_items": []
         },
         {
           "name": "User Plane",
@@ -1164,7 +1180,8 @@
           "notes": [
             "[9.3.1] User Plane",
             "[9.3.1.2] QoS, QoE"
-          ]
+          ],
+          "inferred_agenda_items": []
         },
         {
           "name": "Offline [103] for RRC details",
@@ -1185,7 +1202,8 @@
           "room_scope": "assigned",
           "notes": [
             "Until 12:00, Offline [103] for RRC details"
-          ]
+          ],
+          "inferred_agenda_items": []
         },
         {
           "name": "CP offlines",
@@ -1206,7 +1224,8 @@
           "room_scope": "assigned",
           "notes": [
             "CP offlines (RRC delta, Ericsson)"
-          ]
+          ],
+          "inferred_agenda_items": []
         },
         {
           "name": "User Plane",
@@ -1248,7 +1267,8 @@
           "notes": [
             "[9.3.1] User Plane",
             "[9.3.1.1] Functionalities of upper UP"
-          ]
+          ],
+          "inferred_agenda_items": []
         },
         {
           "name": "NR20 AI mobility",
@@ -1287,7 +1307,8 @@
             "[8.3] NR20 AI mobility [1] (Kyeongin)",
             "[8.3.2] LCM procedure (continue)",
             "[8.3.3] Data collection"
-          ]
+          ],
+          "inferred_agenda_items": []
         },
         {
           "name": "CP offlines",
@@ -1308,7 +1329,8 @@
           "room_scope": "assigned",
           "notes": [
             "CP offlines (list handling, Qualcomm)"
-          ]
+          ],
+          "inferred_agenda_items": []
         },
         {
           "name": "CP offlines",
@@ -1329,7 +1351,8 @@
           "room_scope": "assigned",
           "notes": [
             "CP offlines (config structure, CMCC)"
-          ]
+          ],
+          "inferred_agenda_items": []
         },
         {
           "name": "NR20 AIoT",
@@ -1368,7 +1391,8 @@
             "[8.2] NR20 AIoT [2]",
             "[8.2.1 Organizational",
             "[8.2.2] Device type C (start with email summary)"
-          ]
+          ],
+          "inferred_agenda_items": []
         },
         {
           "name": "CP offlines TBD",
@@ -1389,7 +1413,8 @@
           "room_scope": "assigned",
           "notes": [
             "CP offlines TBD"
-          ]
+          ],
+          "inferred_agenda_items": []
         },
         {
           "name": "User Plane / Common CP/UP",
@@ -1452,7 +1477,8 @@
             "[9.3.1.3.1] Scheduling con’t",
             "[9.3.3] Common CP/UP",
             "[9.3.1.3.1] Early reporting ( UP specific aspects)"
-          ]
+          ],
+          "inferred_agenda_items": []
         },
         {
           "name": "E-UTRA TN to NR NTN HO / R20 IoT NTN",
@@ -1505,7 +1531,8 @@
           "notes": [
             "[8.8] E-UTRA TN to NR NTN HO (Sergio)",
             "[8.7] R20 IoT NTN [1] (Sergio)"
-          ]
+          ],
+          "inferred_agenda_items": []
         },
         {
           "name": "R20 NR NTN DL compensation",
@@ -1542,7 +1569,8 @@
           "room_scope": "assigned",
           "notes": [
             "[8.12] R20 NR NTN DL compensation [0.5] (Sergio)"
-          ]
+          ],
+          "inferred_agenda_items": []
         },
         {
           "name": "6GR Control Plane",
@@ -1585,7 +1613,8 @@
             "[9.3.2] 6GR Control Plane",
             "[9.3.2.6] Idle/inactive",
             "[9.3.2.3] System information"
-          ]
+          ],
+          "inferred_agenda_items": []
         },
         {
           "name": "Offline on AI/ML",
@@ -1606,7 +1635,8 @@
           "room_scope": "assigned",
           "notes": [
             "[005] Offline on AI/ML (if needed)"
-          ]
+          ],
+          "inferred_agenda_items": []
         }
       ],
       "date": "2026-10-13",
@@ -1694,7 +1724,8 @@
           "notes": [
             "@8:30-9:30",
             "[7.1] NR19 AI/ML PHY [0] (Erlin)"
-          ]
+          ],
+          "inferred_agenda_items": []
         },
         {
           "name": "Mobility pre-meeting offline – Early DL/UL synch, resource reservation",
@@ -1735,7 +1766,8 @@
           "room_scope": "assigned",
           "notes": [
             "[9.4.1] Mobility pre-meeting offline (Jedrzej) – Early DL/UL synch, resource reservation"
-          ]
+          ],
+          "inferred_agenda_items": []
         },
         {
           "name": "6GR User Plane",
@@ -1778,7 +1810,8 @@
             "[9.3.1] 6GR User Plane",
             "9.3.1.3.2] UL resource allocation",
             "[9.3.1.3.3] Other MAC functs"
-          ]
+          ],
+          "inferred_agenda_items": []
         },
         {
           "name": "NR20 AI/M PHY",
@@ -1817,7 +1850,8 @@
             "@9:30-10:30",
             "[8.1] NR20 AI/M PHY [2] (Erlin)",
             "[8.1.3] if time allows"
-          ]
+          ],
+          "inferred_agenda_items": []
         },
         {
           "name": "ISAC/CP offline",
@@ -1838,7 +1872,8 @@
           "room_scope": "assigned",
           "notes": [
             "ISAC/CP offline"
-          ]
+          ],
+          "inferred_agenda_items": []
         },
         {
           "name": "common AI PHY and AI mob issues",
@@ -1859,7 +1894,8 @@
           "room_scope": "assigned",
           "notes": [
             "common AI PHY and AI mob issues (Erlin, Kyeongin)"
-          ]
+          ],
+          "inferred_agenda_items": []
         },
         {
           "name": "CP offline",
@@ -1880,7 +1916,8 @@
           "room_scope": "assigned",
           "notes": [
             "CP offline"
-          ]
+          ],
+          "inferred_agenda_items": []
         },
         {
           "name": "TEI20",
@@ -1917,7 +1954,8 @@
           "room_scope": "assigned",
           "notes": [
             "[8.13] TEI20"
-          ]
+          ],
+          "inferred_agenda_items": []
         },
         {
           "name": "CA pre-meeting offline",
@@ -1962,7 +2000,8 @@
           "room_scope": "assigned",
           "notes": [
             "[9.3.2.5] CA pre-meeting offline (Mattias)"
-          ]
+          ],
+          "inferred_agenda_items": []
         },
         {
           "name": "measurements",
@@ -2003,7 +2042,8 @@
           "room_scope": "assigned",
           "notes": [
             "@11:30 [9.4.2] measurements"
-          ]
+          ],
+          "inferred_agenda_items": []
         },
         {
           "name": "NR20 AI/M PHY",
@@ -2041,7 +2081,8 @@
           "notes": [
             "[8.1] NR20 AI/M PHY [2] (Erlin)",
             "[8.1.2] cont."
-          ]
+          ],
+          "inferred_agenda_items": []
         },
         {
           "name": "NR20 Mobility",
@@ -2081,7 +2122,8 @@
             "[8.4.1] Organizational",
             "[8.4.2] LTM SCell activation",
             "[8.4.3] Dynamic L1 measurement configuration"
-          ]
+          ],
+          "inferred_agenda_items": []
         },
         {
           "name": "NR20 AIoT",
@@ -2120,7 +2162,8 @@
             "[8.2] NR20 AIoT [2] (Nathan)",
             "[8.2.3] T2 (start with email summary)",
             "[8.2.4] Device (un)availability"
-          ]
+          ],
+          "inferred_agenda_items": []
         },
         {
           "name": "Common UP/CP",
@@ -2162,7 +2205,8 @@
           "notes": [
             "[9.3.3] Common UP/CP",
             "[9.3.3.3] Energy efficiency"
-          ]
+          ],
+          "inferred_agenda_items": []
         },
         {
           "name": "NR18/19/20 XR / NR18 XR / NR19 XR …",
@@ -2240,7 +2284,8 @@
             "[6.0.2.16] NR18 XR",
             "[7.7] NR19 XR",
             "[8.5] NR 20 XR"
-          ]
+          ],
+          "inferred_agenda_items": []
         },
         {
           "name": "NR20 AIoT",
@@ -2278,7 +2323,8 @@
           "notes": [
             "[8.2] NR20 AIoT [2] (Nathan)",
             "Overflow if needed"
-          ]
+          ],
+          "inferred_agenda_items": []
         },
         {
           "name": "NTN",
@@ -2317,7 +2363,8 @@
             "[9.6] NTN",
             "Report from Erlin’s session",
             "Other untreated topics"
-          ]
+          ],
+          "inferred_agenda_items": []
         }
       ],
       "date": "2026-10-14",
@@ -2441,7 +2488,8 @@
             "[8.7.3] cont",
             "[8.13.1] RAN4 - NTN related (Sergio)",
             "[8.14] TEI20 – NTN related (Sergio)"
-          ]
+          ],
+          "inferred_agenda_items": []
         },
         {
           "name": "UP offline",
@@ -2462,7 +2510,8 @@
           "room_scope": "assigned",
           "notes": [
             "UP offline"
-          ]
+          ],
+          "inferred_agenda_items": []
         },
         {
           "name": "6GR Control Plane",
@@ -2504,7 +2553,8 @@
           "notes": [
             "[9.3.2] 6GR Control Plane",
             "[9.3.2.2] RRC structure after offline"
-          ]
+          ],
+          "inferred_agenda_items": []
         },
         {
           "name": "Cont. NTN R20 GNSS",
@@ -2547,7 +2597,8 @@
             "@10:50 – 11:35",
             "Cont. NTN R20 GNSS (Erlin)",
             "[8.11.2] cont."
-          ]
+          ],
+          "inferred_agenda_items": []
         },
         {
           "name": "UP offline",
@@ -2569,7 +2620,8 @@
           "notes": [
             "UP offline",
             "Also listed here: CB Mattias / CB EUTRA&NR15161718 / CB NR19 SONMDT …"
-          ]
+          ],
+          "inferred_agenda_items": []
         },
         {
           "name": "ISAC",
@@ -2606,7 +2658,8 @@
           "room_scope": "assigned",
           "notes": [
             "[9.5] ISAC"
-          ]
+          ],
+          "inferred_agenda_items": []
         },
         {
           "name": "NR20 CovEnh",
@@ -2649,7 +2702,8 @@
             "@11:35-12:30",
             "NR20 CovEnh (Erlin)",
             "[8.9.1] focus on email discussion"
-          ]
+          ],
+          "inferred_agenda_items": []
         },
         {
           "name": "CB for Rel-19 corrections (MIMO, LPWUS, SBFD), if needed, details TBD",
@@ -2671,7 +2725,8 @@
           "notes": [
             "@12:30-13:00",
             "CB for Rel-19 corrections (MIMO, LPWUS, SBFD), if needed, details TBD"
-          ]
+          ],
+          "inferred_agenda_items": []
         },
         {
           "name": "CB Kyeongin",
@@ -2729,7 +2784,8 @@
             "CB Kyeongin",
             "R18/19/20 Mob comebacks/continue [8.4.3]",
             "R20 AI Mob comebacks/continue [8.3]"
-          ]
+          ],
+          "inferred_agenda_items": []
         },
         {
           "name": "CB Nathan / NR1718 Positioning / NR19 AIoT …",
@@ -2807,7 +2863,8 @@
             "[6.0.2.21] NR1718 Positioning",
             "[7.2] NR19 AIoT",
             "[8.2] NR20 AIoT"
-          ]
+          ],
+          "inferred_agenda_items": []
         },
         {
           "name": "Common CP/UP",
@@ -2850,7 +2907,8 @@
             "[9.3.3] Common CP/UP",
             "[9.3.3.4] Early reporting con’t (including CP related aspects)",
             "[9.3.3.2] AI/ML con’t if needed"
-          ]
+          ],
+          "inferred_agenda_items": []
         },
         {
           "name": "CB Sergio",
@@ -2871,7 +2929,8 @@
           "room_scope": "assigned",
           "notes": [
             "CB Sergio"
-          ]
+          ],
+          "inferred_agenda_items": []
         },
         {
           "name": "Mobility",
@@ -2934,7 +2993,8 @@
             "Offline report",
             "Other untreated topics",
             "[9.4.2] measurements con’t (if needed or time allows)"
-          ]
+          ],
+          "inferred_agenda_items": []
         }
       ],
       "date": "2026-10-15",
@@ -3006,7 +3066,8 @@
           "notes": [
             "CB Kyeongin (TBD)",
             "@8:30-9:30"
-          ]
+          ],
+          "inferred_agenda_items": []
         },
         {
           "name": "CB for NR20 AI/M PHY, if needed, details TBD",
@@ -3029,7 +3090,8 @@
             "CB Erlin",
             "@9:30-10:30",
             "CB for NR20 AI/M PHY, if needed, details TBD"
-          ]
+          ],
+          "inferred_agenda_items": []
         },
         {
           "name": "CB Sergio",
@@ -3050,7 +3112,8 @@
           "room_scope": "assigned",
           "notes": [
             "CB Sergio"
-          ]
+          ],
+          "inferred_agenda_items": []
         },
         {
           "name": "CB Diana TBD / 6GR User Plane",
@@ -3093,7 +3156,8 @@
             "CB Diana TBD",
             "[9.3.1] 6GR User Plane",
             "TBD"
-          ]
+          ],
+          "inferred_agenda_items": []
         },
         {
           "name": "6GR Control Plane",
@@ -3137,7 +3201,8 @@
             "TBD",
             "Reports from breakout sessions",
             "EoM"
-          ]
+          ],
+          "inferred_agenda_items": []
         }
       ],
       "date": "2026-10-16",

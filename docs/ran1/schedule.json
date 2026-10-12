@@ -113,7 +113,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "10.5.1.1",
@@ -158,7 +159,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "10.5.1.1",
@@ -203,7 +205,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "10.5.1.2",
@@ -248,7 +251,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "10.5.1.3",
@@ -293,7 +297,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "10.3.2",
@@ -333,7 +338,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "10.3.1",
@@ -373,7 +379,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "R20 A-IoT",
@@ -435,7 +442,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "MIMO",
@@ -452,7 +460,10 @@
           "agenda_descriptions": [],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": [
+            "9.2"
+          ]
         },
         {
           "name": "6G ISAC",
@@ -492,7 +503,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "6G waveform",
@@ -509,7 +521,10 @@
           "agenda_descriptions": [],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": [
+            "10.2"
+          ]
         },
         {
           "name": "10.4.x",
@@ -554,7 +569,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "10.6.x",
@@ -611,7 +627,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "AI 9.4 NTN-NR",
@@ -646,7 +663,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "AI 9.5 NTN",
@@ -681,7 +699,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "AI 10.7.1 NTN",
@@ -721,7 +740,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "R20 A-IoT",
@@ -761,7 +781,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "6G ISAC",
@@ -801,7 +822,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "10.5.3.4",
@@ -846,7 +868,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "10.5.3.1",
@@ -891,7 +914,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "10.5.3.2",
@@ -936,7 +960,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "10.5.3.3",
@@ -981,7 +1006,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "10.5.5",
@@ -1021,7 +1047,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "6G 10.5.4.x",
@@ -1120,7 +1147,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "10.5.3.1",
@@ -1165,7 +1193,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "10.5.3.2",
@@ -1210,7 +1239,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "10.5.3.3",
@@ -1255,7 +1285,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "10.5.3.4",
@@ -1300,7 +1331,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "AI 9.2 MIMO",
@@ -1335,7 +1367,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "AI 10.3.2 Modulation",
@@ -1375,7 +1408,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "AI 10.3.1 Coding",
@@ -1415,7 +1449,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "AI 10.5.2.1 PDCCH",
@@ -1460,7 +1495,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "10.5.4.4",
@@ -1505,7 +1541,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "10.5.4.1",
@@ -1550,7 +1587,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "10.5.4.3",
@@ -1595,7 +1633,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "10.2.1",
@@ -1635,7 +1674,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "10.5.1.1",
@@ -1680,7 +1720,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "10.5.1.3",
@@ -1725,7 +1766,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "10.5.1.2",
@@ -1770,7 +1812,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "10.4.1",
@@ -1810,7 +1853,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "10.5.2.1",
@@ -1855,7 +1899,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "NTN",
@@ -1895,7 +1940,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "9.5 NTN",
@@ -1930,7 +1976,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "9.4 NTN-NR",
@@ -1965,7 +2012,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         }
       ],
       "date": null,
@@ -2097,7 +2145,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "10.5.1.2",
@@ -2142,7 +2191,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "10.5.1.1",
@@ -2187,7 +2237,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "AI 10.7.1 NTN",
@@ -2227,7 +2278,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "AI 9.5 NTN",
@@ -2262,7 +2314,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "AI 9.4 NR-NTN",
@@ -2297,7 +2350,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "10.5.4.1",
@@ -2342,7 +2396,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "10.5.4.2",
@@ -2387,7 +2442,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "10.5.4.3",
@@ -2432,7 +2488,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "10.4.2",
@@ -2472,7 +2529,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "10.6.1.1",
@@ -2517,7 +2575,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "AI/ML",
@@ -2534,7 +2593,10 @@
           "agenda_descriptions": [],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": [
+            "9.1"
+          ]
         },
         {
           "name": "6G ISAC",
@@ -2596,7 +2658,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "6G waveform",
@@ -2636,7 +2699,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "10.5.5",
@@ -2676,7 +2740,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "10.4.2",
@@ -2716,7 +2781,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "10.4.1",
@@ -2756,7 +2822,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "AI 9.1 AIML",
@@ -2791,7 +2858,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "AI 9.2 MIMO",
@@ -2826,7 +2894,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "AI 8.1",
@@ -2861,7 +2930,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "10.8.3",
@@ -2901,7 +2971,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "10.8.1",
@@ -2941,7 +3012,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "R20 A-IoT",
@@ -2981,7 +3053,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "10.6.1.2",
@@ -3026,7 +3099,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "10.6.2",
@@ -3066,7 +3140,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "10.6.3",
@@ -3106,7 +3181,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "10.5.1.2",
@@ -3151,7 +3227,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "10.5.2.3",
@@ -3196,7 +3273,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "10.5.2.2",
@@ -3241,7 +3319,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "10.6.x",
@@ -3298,7 +3377,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "10.5.1.1",
@@ -3343,7 +3423,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "AI 10.5.2.1 PDCCH",
@@ -3388,7 +3469,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "AI 10.5.2.2 PDSCH",
@@ -3433,7 +3515,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "AI 10.5.2.3 PUxCH",
@@ -3478,7 +3561,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "11 TEI20",
@@ -3508,7 +3592,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "8.2 R19 Duplex, R19 ISAC CM, R19 XR",
@@ -3543,7 +3628,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "8.3 UE features",
@@ -3578,7 +3664,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "8.2 R19 LP-WUS",
@@ -3613,7 +3700,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "10.2.1",
@@ -3653,7 +3741,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "10.5.3.1",
@@ -3698,7 +3787,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "10.5.3.2",
@@ -3743,7 +3833,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "10.5.3.3",
@@ -3788,7 +3879,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "10.5.3.4",
@@ -3833,7 +3925,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "R20 A-IoT",
@@ -3895,7 +3988,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "10.3.2",
@@ -3935,7 +4029,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "10.5.3.2",
@@ -3980,7 +4075,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "10.5.3.3",
@@ -4025,7 +4121,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "10.5.3.4",
@@ -4070,7 +4167,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "AI 10.3.1 Coding",
@@ -4110,7 +4208,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "AI 10.3.2 Modulation",
@@ -4150,7 +4249,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "9.3.3",
@@ -4190,7 +4290,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "9.3.1",
@@ -4230,7 +4331,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "Early dinner",
@@ -4247,7 +4349,8 @@
           "agenda_descriptions": [],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "10.5.1.3",
@@ -4292,7 +4395,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "10.5.1.1",
@@ -4337,7 +4441,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "10.5.5",
@@ -4377,7 +4482,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "NTN",
@@ -4417,7 +4523,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "9.4 NTN-NR",
@@ -4452,7 +4559,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "Early dinner",
@@ -4469,7 +4577,8 @@
           "agenda_descriptions": [],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         }
       ],
       "date": null,
@@ -4601,7 +4710,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "10.5.1.3",
@@ -4646,7 +4756,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "10.5.1.2",
@@ -4691,7 +4802,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "AI 10.7.1 NTN",
@@ -4731,7 +4843,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "AI 9.4 NR-NTN",
@@ -4766,7 +4879,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "AI 9.2 MIMO",
@@ -4801,7 +4915,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "9.3.2",
@@ -4841,7 +4956,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "9.3.3",
@@ -4881,7 +4997,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "9.3.1",
@@ -4921,7 +5038,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "10.5.5",
@@ -4961,7 +5079,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "6G waveform",
@@ -5001,7 +5120,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "6G ISAC",
@@ -5063,7 +5183,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "MIMO",
@@ -5080,7 +5201,10 @@
           "agenda_descriptions": [],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": [
+            "9.2"
+          ]
         },
         {
           "name": "AI/ML",
@@ -5097,7 +5221,10 @@
           "agenda_descriptions": [],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": [
+            "9.1"
+          ]
         },
         {
           "name": "10.5.2.1",
@@ -5142,7 +5269,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "10.5.3.1",
@@ -5187,7 +5315,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "10.5.3.2",
@@ -5232,7 +5361,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "10.5.3.3",
@@ -5277,7 +5407,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "AI 9.1 AIML",
@@ -5312,7 +5443,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "AI 8.1",
@@ -5347,7 +5479,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "AI 10.5.2.2 PDSCH",
@@ -5392,7 +5525,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "10.8.2",
@@ -5432,7 +5566,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "10.8.3",
@@ -5472,7 +5607,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "10.8.1",
@@ -5512,7 +5648,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "10.6.x",
@@ -5569,7 +5706,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "10.5.4.1",
@@ -5614,7 +5752,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "10.5.2.1",
@@ -5659,7 +5798,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "10.5.2.3",
@@ -5704,7 +5844,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "MIMO",
@@ -5721,7 +5862,10 @@
           "agenda_descriptions": [],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": [
+            "9.2"
+          ]
         },
         {
           "name": "10.5.3.4",
@@ -5766,7 +5910,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "10.6.x",
@@ -5823,7 +5968,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "AI 10.5.2.1 PDCCH",
@@ -5868,7 +6014,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "AI 10.5.2.3 PUxCH",
@@ -5913,7 +6060,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "8.2 R19 LP-WUS, R19/20 Mobility",
@@ -5948,7 +6096,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "7 pre-Rel-19 CRs, 8.3 UE features, 8.2 R19 Duplex",
@@ -6012,7 +6161,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "R20 Coverage RRC",
@@ -6029,7 +6179,8 @@
           "agenda_descriptions": [],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "10.5.4.x",
@@ -6128,7 +6279,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "10.4.2",
@@ -6168,7 +6320,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "10.4.1",
@@ -6208,7 +6361,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "10.3.1",
@@ -6248,7 +6402,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "R20 A-IoT",
@@ -6332,7 +6487,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "10.4.1",
@@ -6372,7 +6528,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "10.4.2",
@@ -6412,7 +6569,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "10.5.5",
@@ -6452,7 +6610,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "10.5.3.1",
@@ -6497,7 +6656,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "AI 10.3.1 Coding",
@@ -6537,7 +6697,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "AI 10.3.2 Modulation",
@@ -6577,7 +6738,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "AI 10.5.2.2 PDSCH",
@@ -6622,7 +6784,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "10.2.1 Waveform",
@@ -6662,7 +6825,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "10.5.4.2",
@@ -6707,7 +6871,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "10.5.4.1",
@@ -6752,7 +6917,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "10.5.4.4",
@@ -6797,7 +6963,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "10.5.4.3",
@@ -6842,7 +7009,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "10.5.1.3",
@@ -6887,7 +7055,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "10.5.1.2",
@@ -6932,7 +7101,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "10.5.1.1",
@@ -6977,7 +7147,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "10.4.1",
@@ -7017,7 +7188,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "10.5.2.2",
@@ -7062,7 +7234,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "10.7.1 NTN",
@@ -7102,7 +7275,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "9.5 NTN",
@@ -7137,7 +7311,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "9.4 NTN-NR",
@@ -7172,7 +7347,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         }
       ],
       "date": null,
@@ -7304,7 +7480,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "10.5.1.2",
@@ -7349,7 +7526,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "10.5.1.3",
@@ -7394,7 +7572,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "AI 10.7.1 NTN",
@@ -7434,7 +7613,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "AI 9.5 NTN",
@@ -7469,7 +7649,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "AI 9.4 NR-NTN",
@@ -7504,7 +7685,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "6G waveform",
@@ -7544,7 +7726,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "Maintenance",
@@ -7608,7 +7791,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "10.4.2",
@@ -7648,7 +7832,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "10.5.5",
@@ -7688,7 +7873,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "10.5.3.1",
@@ -7733,7 +7919,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "AI/ML",
@@ -7750,7 +7937,10 @@
           "agenda_descriptions": [],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": [
+            "9.1"
+          ]
         },
         {
           "name": "10.6.2/10.6.1.1/106.1.2",
@@ -7817,7 +8007,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "10.5.5",
@@ -7857,7 +8048,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "10.4.1",
@@ -7897,7 +8089,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "10.4.2",
@@ -7937,7 +8130,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "AI 8.1",
@@ -7972,7 +8166,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "AI 9.1 AIML",
@@ -8007,7 +8202,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "AI 9.2 MIMO",
@@ -8042,7 +8238,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "9.3.3",
@@ -8082,7 +8279,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "9.3.1",
@@ -8122,7 +8320,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "9.3.2",
@@ -8162,7 +8361,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "6G ISAC",
@@ -8246,7 +8446,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "10.5.3.2",
@@ -8291,7 +8492,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "10.5.2.3",
@@ -8336,7 +8538,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "10.5.2.1",
@@ -8381,7 +8584,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "10.5.2.2",
@@ -8426,7 +8630,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "10.6.x",
@@ -8483,7 +8688,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "10.5.3.1",
@@ -8528,7 +8734,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "AI 10.5.2.1 PDCCH",
@@ -8573,7 +8780,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "AI 10.5.2.2 PDSCH",
@@ -8618,7 +8826,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "AI 10.5.2.3 PUxCH",
@@ -8663,7 +8872,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "10.8.1",
@@ -8703,7 +8913,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "10.8.2",
@@ -8743,7 +8954,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "10.8.3",
@@ -8783,7 +8995,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "10.5.3.2",
@@ -8828,7 +9041,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "10.5.3.3",
@@ -8873,7 +9087,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "10.3.1",
@@ -8913,7 +9128,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "10.3.2",
@@ -8953,7 +9169,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "6G 10.5.4.x",
@@ -9079,7 +9296,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "10.5.4.4",
@@ -9124,7 +9342,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "10.5.4.3",
@@ -9169,7 +9388,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "10.5.4.1",
@@ -9214,7 +9434,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "10.5.4.2",
@@ -9259,7 +9480,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "AI 10.3.1 Coding",
@@ -9299,7 +9521,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "AI 10.3.2 Modulation",
@@ -9339,7 +9562,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "AI 9.1 AIML",
@@ -9374,7 +9598,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "10.5.4.4",
@@ -9419,7 +9644,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "10.5.4.3",
@@ -9464,7 +9690,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "10.5.4.1",
@@ -9509,7 +9736,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "10.5.4.2",
@@ -9554,7 +9782,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "10.5.1.1",
@@ -9599,7 +9828,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "10.5.1.2",
@@ -9644,7 +9874,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "10.5.1.3",
@@ -9689,7 +9920,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "NTN",
@@ -9729,7 +9961,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "AI/ML",
@@ -9746,7 +9979,10 @@
           "agenda_descriptions": [],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": [
+            "9.1"
+          ]
         },
         {
           "name": "R20 A-IoT",
@@ -9830,7 +10066,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         }
       ],
       "date": null,
@@ -9962,7 +10199,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "10.5.1.2",
@@ -10007,7 +10245,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "10.5.1.3",
@@ -10052,7 +10291,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "AI 10.7.1 NTN",
@@ -10092,7 +10332,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "AI 10.5.2.x",
@@ -10146,7 +10387,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "9.3.1",
@@ -10186,7 +10428,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "9.3.2",
@@ -10226,7 +10469,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "9.3.3",
@@ -10266,7 +10510,8 @@
           ],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "Sweep",
@@ -10283,7 +10528,8 @@
           "agenda_descriptions": [],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "TBD",
@@ -10300,7 +10546,8 @@
           "agenda_descriptions": [],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "TBD",
@@ -10317,7 +10564,8 @@
           "agenda_descriptions": [],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "Any other open issues. Session reports",
@@ -10334,7 +10582,8 @@
           "agenda_descriptions": [],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "To be assigned by Sorour",
@@ -10351,7 +10600,8 @@
           "agenda_descriptions": [],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         },
         {
           "name": "To be assigned by Hiroki",
@@ -10368,7 +10618,8 @@
           "agenda_descriptions": [],
           "room_ids": [],
           "room_scope": "assigned",
-          "notes": []
+          "notes": [],
+          "inferred_agenda_items": []
         }
       ],
       "date": null,
@@ -10424,7 +10675,7 @@
     }
   ],
   "source_file": "RAN1#126b online and offline schedules - v00.docx",
-  "generated_at": "2026-10-12 13:21",
+  "generated_at": "2026-10-12 13:41",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
@@ -11605,13 +11856,6 @@
         "changed_in": "Draft Chair notes RAN1#126bis_v00.docx"
       }
     },
-    "retained_files": [
-      "agreements/6b50bf8d931c7adc7e68.html",
-      "agreements/705789ee5b4bf21bb225.html",
-      "agreements/791d0bed4700313f302b.html",
-      "agreements/c6ec3999e0beaaf04bb5.html",
-      "agreements/d967a0f89869b629f3a3.html",
-      "agreements/e6f96a96adc8eeb1f415.html"
-    ]
+    "retained_files": []
   }
 }
