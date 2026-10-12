@@ -298,7 +298,7 @@ def main():
             page.get_by_text("No chairman note is available for this meeting.")
         ).to_be_visible()
         expect(page.locator(".agreement-document")).to_have_count(0)
-        checks.append("RAN1#126 does not borrow #124 agreements")
+        checks.append("Another meeting does not borrow #124 agreements")
         mobile = browser.new_page(
             viewport={"width": 390, "height": 844}, is_mobile=True, has_touch=True
         )

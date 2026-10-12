@@ -108,8 +108,12 @@ def main():
     for s in [schedule, other]:
         save_schedule(s, root / s.wg_id / "schedule.json")
     render_site(config, root, {"ran1": schedule, "ran-plenary": other})
-    # A separate real current schedule verifies that #124 notes cannot appear in #126.
+    # The real current schedule, handed the #124 notes, verifies that a note of
+    # another meeting never reaches the panel. Its own note is replaced so the
+    # check does not depend on whether the live meeting has one yet.
     current = load_schedule(Path("docs/ran1/schedule.json"))
+    current.chairman_agreements = stored
+    current.agreement_fragments = fragments
     from shared.renderer import save_html
 
     save_html(current, root / "current-ran1/index.html")
