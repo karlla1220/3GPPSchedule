@@ -15,7 +15,6 @@ document.addEventListener('DOMContentLoaded', function() {
         const activeTab = document.querySelector('.tab.active');
         const state = {
             activeDay: activeTab ? activeTab.dataset.day : null,
-            gridZoom: gridZoom,
             scrollX: window.scrollX,
             scrollY: window.scrollY
         };
@@ -133,106 +132,67 @@ document.addEventListener('DOMContentLoaded', function() {
 
     window.addEventListener('pagehide', saveUserState);
 
-    // ── Grid pinch zoom ──
-    // The grid scrolls sideways in its own box, so the page is never wider
-    // than a phone and the browser has nothing to zoom out to. A pinch on the
-    // grid zooms the grid instead (CSS zoom), down to where the whole day fits
-    // the width. The box stays, so the time column and room headers stay
-    // sticky while it is panned. Making the page itself wide would let the
-    // browser zoom out, but Chrome then pans the screen over a page-wide
-    // layout viewport and sticky elements slide off.
-    const GRID_ZOOM_MAX = 2;
-    // 100% holds until the fingers spread or close this much more, so it is
-    // easy to land on and to leave a pinch at. Past it the zoom carries on
-    // smoothly from 100%, with no jump.
-    const GRID_ZOOM_DETENT = Math.log(1.15);
-    const gridZoomSupported = window.CSS && CSS.supports && CSS.supports('zoom', '1');
-    let gridZoom = 1;
+    // ── Browser zoom on phones ──
+    // On a phone the grid is laid out at its full width in the page instead of
+    // scrolling in its own box (schedule.css), so the browser's own pinch can
+    // zoom out until the whole day fits. The pinch stays the browser's: it is
+    // drawn by the compositor and nothing in the grid is resized here.
+    // What follows the zoom is the rest of the page. The text, legend, tabs
+    // and Agreement panel are laid out for the width that is visible, so they
+    // read the same from the whole-day zoom up to 100%. The Filter tab is
+    // fixed to a layout viewport as wide as the page, so it is moved to the
+    // edge of the visible area.
+    if (window.visualViewport && window.matchMedia) {
+        const vv = window.visualViewport;
+        const root = document.documentElement;
+        const widePage = window.matchMedia('(max-width: 615px) and (pointer: coarse)');
+        const container = document.querySelector('.container');
+        const aroundGrid = Array.from(container.children).filter(el =>
+            el.matches('header, .legend, .schedule-toolbar, .agreement-panel'));
+        const filterPanel = document.querySelector('.filter-panel');
+        let pageFit = 1;
+        let queued = false;
 
-    function activeGridWrapper() {
-        return document.querySelector('.day-panel.active .grid-wrapper');
-    }
-
-    // Below this the grid would fill the width with smaller text, not show more.
-    function minGridZoom() {
-        const wrapper = activeGridWrapper();
-        if (!wrapper || !wrapper.clientWidth) return 1;
-        const gridMinWidth = parseFloat(getComputedStyle(document.documentElement)
-            .getPropertyValue('--grid-min-width')) || 600;
-        return Math.min(1, wrapper.clientWidth / gridMinWidth);
-    }
-
-    function setGridZoom(z) {
-        gridZoom = Math.max(minGridZoom(), Math.min(z, GRID_ZOOM_MAX));
-        document.documentElement.style.setProperty('--grid-zoom', String(gridZoom));
-    }
-
-    if (gridZoomSupported) {
-        const touchMid = t => ({ x: (t[0].clientX + t[1].clientX) / 2, y: (t[0].clientY + t[1].clientY) / 2 });
-        const touchDistance = t => Math.hypot(t[0].clientX - t[1].clientX, t[0].clientY - t[1].clientY);
-        let pinch = null;
-
-        // Pinch position (log of the finger spread ratio) -> zoom, with a flat
-        // stretch at 100%; and back, for the zoom a pinch starts from.
-        const detentZoom = u => Math.abs(u) <= GRID_ZOOM_DETENT ? 1 :
-            Math.exp(u - Math.sign(u) * GRID_ZOOM_DETENT);
-        const detentPosition = z => z === 1 ? 0 :
-            Math.log(z) + Math.sign(Math.log(z)) * GRID_ZOOM_DETENT;
-        // A short tick where the phone can (Android), as the pinch lands on 100%.
-        const tickAt100 = function() {
-            try { if (navigator.vibrate) navigator.vibrate(8); } catch (err) { /* not allowed yet */ }
+        const followBrowserZoom = function() {
+            queued = false;
+            const wide = widePage.matches;
+            // 1 / page scale: how many times wider than the screen the visible area is.
+            const out = wide ? vv.width / root.clientWidth : 1;
+            if (filterPanel) {
+                const set = (name, px) => wide ? filterPanel.style.setProperty(name, px / out + 'px')
+                    : filterPanel.style.removeProperty(name);
+                filterPanel.style.zoom = wide ? String(out) : '';
+                set('--view-right', vv.offsetLeft + vv.width);
+                set('--view-middle', vv.offsetTop + vv.height / 2);
+                set('--view-height', vv.height);
+            }
+            // Past 100% the page zooms in as any page does.
+            const fit = Math.max(1, Math.floor(out * 1000) / 1000);
+            if (fit === pageFit) return;
+            pageFit = fit;
+            // The parts above the grid change height: hold the grid where it is.
+            const grid = document.querySelector('.day-panel.active .grid-wrapper');
+            const before = grid ? grid.getBoundingClientRect().top : 0;
+            // Each part takes the visible width itself (its own width counts
+            // in its zoom). Widening the container would lay the grid out again.
+            const sides = parseFloat(getComputedStyle(container).paddingLeft) * 2;
+            const width = (root.clientWidth * fit - sides) / fit + 'px';
+            aroundGrid.forEach(el => {
+                el.style.zoom = fit === 1 ? '' : String(fit);
+                el.style.width = fit === 1 ? '' : width;
+            });
+            const moved = grid ? grid.getBoundingClientRect().top - before : 0;
+            if (moved) window.scrollBy(0, moved);
         };
-
-        document.querySelectorAll('.grid-wrapper').forEach(wrapper => {
-            const grid = wrapper.querySelector('.schedule-grid');
-            wrapper.addEventListener('touchstart', function(e) {
-                if (e.touches.length !== 2) { pinch = null; return; }
-                const mid = touchMid(e.touches);
-                const rect = grid.getBoundingClientRect();
-                pinch = {
-                    wrapper: wrapper,
-                    distance: touchDistance(e.touches) || 1,
-                    position: detentPosition(gridZoom),
-                    // The grid point under the fingers, in unzoomed grid px,
-                    // and the grid's top in the page (its own zoom moves neither).
-                    x: (mid.x - rect.left) / gridZoom,
-                    y: (mid.y - rect.top) / gridZoom,
-                    gridTop: rect.top + window.scrollY
-                };
-            }, { passive: true });
-            wrapper.addEventListener('touchmove', function(e) {
-                if (!pinch || pinch.wrapper !== wrapper || e.touches.length !== 2) return;
-                if (e.cancelable) e.preventDefault();
-                // Past either end, move the start so turning back reacts at once.
-                let u = pinch.position + Math.log(touchDistance(e.touches) / pinch.distance);
-                const lo = detentPosition(minGridZoom());
-                const hi = detentPosition(GRID_ZOOM_MAX);
-                if (u < lo || u > hi) {
-                    const bounded = Math.max(lo, Math.min(u, hi));
-                    pinch.position += bounded - u;
-                    u = bounded;
-                }
-                const before = gridZoom;
-                setGridZoom(detentZoom(u));
-                if (gridZoom === 1 && before !== 1) tickAt100();
-                // Keep that grid point under the fingers as they move.
-                const mid = touchMid(e.touches);
-                wrapper.scrollLeft = wrapper.getBoundingClientRect().left + pinch.x * gridZoom - mid.x;
-                window.scrollTo(window.scrollX, pinch.gridTop + pinch.y * gridZoom - mid.y);
-            }, { passive: false });
-            const endPinch = function(e) {
-                if (!pinch || e.touches.length >= 2) return;
-                pinch = null;
-                saveUserState();
-            };
-            wrapper.addEventListener('touchend', endPinch);
-            wrapper.addEventListener('touchcancel', endPinch);
-        });
-
-        // A wider screen (rotation) can fit the day at a larger zoom.
-        window.addEventListener('resize', function() {
-            if (gridZoom < minGridZoom()) setGridZoom(gridZoom);
-        });
+        const queueFollow = function() {
+            if (queued) return;
+            queued = true;
+            requestAnimationFrame(followBrowserZoom);
+        };
+        vv.addEventListener('resize', queueFollow);
+        vv.addEventListener('scroll', queueFollow);
+        widePage.addEventListener('change', queueFollow);
+        followBrowserZoom();
     }
 
     // Restore saved state or auto-select today's tab
@@ -241,7 +201,6 @@ document.addEventListener('DOMContentLoaded', function() {
         const savedTab = document.querySelector('[data-day="' + saved.activeDay + '"]');
         if (savedTab) {
             savedTab.click();
-            if (gridZoomSupported && saved.gridZoom) setGridZoom(saved.gridZoom);
             window.scrollTo(saved.scrollX || 0, saved.scrollY || 0);
         } else {
             const firstTab = document.querySelector('.tab');

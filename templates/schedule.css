@@ -316,14 +316,25 @@ header .meta a:focus-visible,
     gap: 0;
     min-width: var(--grid-min-width);
     position: relative;
-    /* Set by a pinch on the grid (schedule.js). */
-    zoom: var(--grid-zoom, 1);
 }
 
-/* A pinch on the grid zooms the grid, not the page (see schedule.js);
-   browsers without CSS zoom keep the native pinch. */
-@supports (zoom: 1) {
-    .grid-wrapper { touch-action: pan-x pan-y; }
+/* On a phone the grid is wider than the screen. Laid out at full width in the
+   page, the browser's own pinch can zoom out until the whole day fits; inside
+   a box that scrolls sideways the page is never wider than the screen and the
+   browser has nothing to zoom out to. schedule.js fits the rest of the page
+   to the visible width. 615px: below it the box (page - 16px) is narrower
+   than --grid-min-width. Touch only: a narrow desktop window cannot pinch. */
+@media (max-width: 615px) and (pointer: coarse) {
+    /* schedule.js holds the grid in place itself when the parts above it resize. */
+    html { overflow-anchor: none; }
+    .grid-wrapper {
+        overflow-x: visible;
+        width: max-content;
+        min-width: 100%;
+    }
+    /* Without the box, top: 0 would pin the room names to the layout viewport,
+       which at 100% is taller than the screen: they would come and go. */
+    .schedule-grid .room-header { top: auto; }
 }
 
 /* Room headers */
@@ -908,6 +919,21 @@ header .meta a:focus-visible,
 
 .filter-panel.collapsed {
     transform: translateX(calc(100%)) translateY(-50%);
+}
+
+/* Browser zoom on phones: fixed parts follow a layout viewport as wide as the
+   page, so right: 0 is off screen at 100%. schedule.js gives the visible
+   area's right edge, middle and height (--view-*), and the panel's zoom. */
+@media (max-width: 615px) and (pointer: coarse) {
+    .filter-panel {
+        right: auto;
+        left: var(--view-right, 100%);
+        top: var(--view-middle, 50%);
+        max-height: calc(var(--view-height, 100vh) * .8);
+        transform: translate(-100%, -50%);
+        transition: none;
+    }
+    .filter-panel.collapsed { transform: translate(0, -50%); }
 }
 
 .filter-toggle {
