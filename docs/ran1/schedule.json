@@ -1471,14 +1471,14 @@
           "room_col_start": 4,
           "room_col_end": 5,
           "chair": "Hiroki",
-          "agenda_item": "10.5.4",
+          "agenda_item": "10.5.4.4",
           "group_header": "6GR",
-          "description": "Downlink control channel, scheduling and HARQ operation",
+          "description": "Handling of potential multiple uplink transmissions",
           "agenda_descriptions": [
             {
-              "agenda_item": "10.5.4",
-              "matched_agenda_item": "10.5.4",
-              "description": "Downlink control channel, scheduling and HARQ operation",
+              "agenda_item": "10.5.4.4",
+              "matched_agenda_item": "10.5.4.4",
+              "description": "Handling of potential multiple uplink transmissions",
               "hierarchy": [
                 {
                   "agenda_item": "10",
@@ -1493,6 +1493,11 @@
                 {
                   "agenda_item": "10.5.4",
                   "description": "Downlink control channel, scheduling and HARQ operation",
+                  "has_description": true
+                },
+                {
+                  "agenda_item": "10.5.4.4",
+                  "description": "Handling of potential multiple uplink transmissions",
                   "has_description": true
                 }
               ]
@@ -1511,14 +1516,14 @@
           "room_col_start": 4,
           "room_col_end": 5,
           "chair": "Hiroki",
-          "agenda_item": "10.5.4",
+          "agenda_item": "10.5.4.1",
           "group_header": "6GR",
-          "description": "Downlink control channel, scheduling and HARQ operation",
+          "description": "Downlink control channel, scheduling for downlink and uplink transmission",
           "agenda_descriptions": [
             {
-              "agenda_item": "10.5.4",
-              "matched_agenda_item": "10.5.4",
-              "description": "Downlink control channel, scheduling and HARQ operation",
+              "agenda_item": "10.5.4.1",
+              "matched_agenda_item": "10.5.4.1",
+              "description": "Downlink control channel, scheduling for downlink and uplink transmission",
               "hierarchy": [
                 {
                   "agenda_item": "10",
@@ -1533,6 +1538,11 @@
                 {
                   "agenda_item": "10.5.4",
                   "description": "Downlink control channel, scheduling and HARQ operation",
+                  "has_description": true
+                },
+                {
+                  "agenda_item": "10.5.4.1",
+                  "description": "Downlink control channel, scheduling for downlink and uplink transmission",
                   "has_description": true
                 }
               ]
@@ -1551,14 +1561,14 @@
           "room_col_start": 4,
           "room_col_end": 5,
           "chair": "Hiroki",
-          "agenda_item": "10.5.4",
+          "agenda_item": "10.5.4.3",
           "group_header": "6GR",
-          "description": "Downlink control channel, scheduling and HARQ operation",
+          "description": "HARQ related Aspects",
           "agenda_descriptions": [
             {
-              "agenda_item": "10.5.4",
-              "matched_agenda_item": "10.5.4",
-              "description": "Downlink control channel, scheduling and HARQ operation",
+              "agenda_item": "10.5.4.3",
+              "matched_agenda_item": "10.5.4.3",
+              "description": "HARQ related Aspects",
               "hierarchy": [
                 {
                   "agenda_item": "10",
@@ -1573,6 +1583,11 @@
                 {
                   "agenda_item": "10.5.4",
                   "description": "Downlink control channel, scheduling and HARQ operation",
+                  "has_description": true
+                },
+                {
+                  "agenda_item": "10.5.4.3",
+                  "description": "HARQ related Aspects",
                   "has_description": true
                 }
               ]
@@ -2889,7 +2904,7 @@
           "notes": []
         },
         {
-          "name": "10.8.1.",
+          "name": "10.8.1",
           "duration_minutes": 40,
           "start_time": "11:40",
           "end_time": "12:20",
@@ -2897,7 +2912,7 @@
           "room_col_start": 4,
           "room_col_end": 5,
           "chair": "Hiroki",
-          "agenda_item": "10.8.1.",
+          "agenda_item": "10.8.1",
           "group_header": "6GR",
           "description": "Evaluations",
           "agenda_descriptions": [
@@ -10409,7 +10424,7 @@
     }
   ],
   "source_file": "RAN1#126b online and offline schedules - v00.docx",
-  "generated_at": "2026-10-12 09:41",
+  "generated_at": "2026-10-12 11:01",
   "contact_name": "",
   "contact_email": "",
   "source_files": [

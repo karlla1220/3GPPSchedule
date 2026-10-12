@@ -232,12 +232,12 @@
     },
     {
       "room_name": "RAN1_brk2",
-      "name": "10.8.1.",
+      "name": "10.8.1",
       "duration_minutes": 40,
       "specified_start_time": null,
       "chair": "Hiroki",
       "group_header": "6G ISAC",
-      "agenda_item": "10.8.1.",
+      "agenda_item": "10.8.1",
       "description": "Evaluations",
       "agenda_descriptions": [
         {
@@ -523,7 +523,7 @@
       ]
     }
   ],
-  "merged_at": "2026-10-12T00:41:17.647480+00:00",
+  "merged_at": "2026-10-12T02:01:19.969721+00:00",
   "meeting_id": "ran1#126bis",
   "schema_version": 2
 }
