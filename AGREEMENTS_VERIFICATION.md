@@ -13,8 +13,9 @@ python3 -m http.server 8874 --bind 127.0.0.1 --directory test_runs/agreements
 ```
 
 - [RAN1#124 agreement 미리보기](http://127.0.0.1:8874/ran1/): 실제 chairman note + 검증용 일정 셀/시간.
-- [실제 RAN1#126 일정](http://127.0.0.1:8874/current-ran1/): 해당 chairman note가 없는 상태. #124 문서를 섞지 않는다.
-- [RAN Plenary](http://127.0.0.1:8874/ran-plenary/): 기존 팝업 유지. WG 이동 및 뒤로 가기 확인용.
+- [다른 회의](http://127.0.0.1:8874/other-meeting/): 같은 미리보기 일정의 meeting ID만 RAN1#125로 바꾸고 #124 note를 그대로 둔 상태. 패널은 note를 보이지 않는다.
+- [RAN Plenary](http://127.0.0.1:8874/ran-plenary/): `tests/schedule_fixture.py`의 고정 일정. 기존 팝업 유지. WG 이동 및 뒤로 가기 확인용.
+- 미리보기는 `docs/`의 실제 일정을 읽지 않는다. 진행 중인 회의가 바뀌어도 결과가 같다.
 - 미리보기 생성은 LLM/API 키나 FTP 접속이 필요 없다. 선택 후 SolidJS CDN 접속은 필요하다.
 
 실제 빌드는 기존 `uv run python main.py --wg ran1` 경로를 사용한다.

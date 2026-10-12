@@ -229,7 +229,7 @@ def main():
         expect(page.locator('.session-block[aria-pressed="true"]')).to_have_count(0)
         expect(page.get_by_role("tab")).to_have_count(0)
         checks.append("Enter/Space activation and day-switch reset")
-        page.get_by_role("link", name="RAN#113 Ended").click()
+        page.locator('a.wg-link[href="../ran-plenary/"]').click()
         assert "/ran-plenary/" in page.url
         expect(page.locator("#agreement-panel")).to_have_count(0)
         page.locator(".day-panel.active .session-block").first.click()
@@ -292,7 +292,7 @@ def main():
         checks.append(
             "Fetched HTML sanitization blocks active content, remote assets and CSS URLs"
         )
-        page.goto(base + "/current-ran1/", wait_until="networkidle")
+        page.goto(base + "/other-meeting/", wait_until="networkidle")
         page.locator(".day-panel.active .session-block").first.click()
         expect(
             page.get_by_text("No chairman note is available for this meeting.")

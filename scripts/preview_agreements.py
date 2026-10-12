@@ -1,19 +1,22 @@
 """Create a reproducible offline input preview; serve via HTTP for module/fetch support."""
 
+from dataclasses import replace
 from pathlib import Path
 import argparse
 import sys
 import tempfile
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "tests"))
 from build import render_site
+from schedule_fixture import build_schedule as plenary_schedule
+from shared.renderer import save_html
 from shared.schedule import (
     Schedule,
     DaySchedule,
     RoomInfo,
     Session,
     save_schedule,
-    load_schedule,
 )
 from shared.agreement_assets import package_agreements
 from working_groups.ran1.agreements import parse_agreements, track_changes
@@ -96,7 +99,8 @@ def main():
         chairman_agreements=stored,
         agreement_fragments=fragments,
     )
-    other = load_schedule(Path("docs/ran-plenary/schedule.json"))
+    # Fixed inputs only: the preview must not change with the live meetings in docs/.
+    other = plenary_schedule()
     config = {
         "default_wg": "ran1",
         "working_groups": [{"id": "ran1"}, {"id": "ran-plenary"}],
@@ -108,15 +112,10 @@ def main():
     for s in [schedule, other]:
         save_schedule(s, root / s.wg_id / "schedule.json")
     render_site(config, root, {"ran1": schedule, "ran-plenary": other})
-    # The real current schedule, handed the #124 notes, verifies that a note of
-    # another meeting never reaches the panel. Its own note is replaced so the
-    # check does not depend on whether the live meeting has one yet.
-    current = load_schedule(Path("docs/ran1/schedule.json"))
-    current.chairman_agreements = stored
-    current.agreement_fragments = fragments
-    from shared.renderer import save_html
-
-    save_html(current, root / "current-ran1/index.html")
+    # Another RAN1 meeting that still carries the #124 notes, as a saved
+    # schedule would after the meeting changes: the panel must not show them.
+    later = replace(schedule, meeting_id="ran1#125", meeting_name="RAN1#125 · Other meeting")
+    save_html(later, root / "other-meeting/index.html")
     print(f"Preview: python3 -m http.server 8874 --directory {root}")
 
 
