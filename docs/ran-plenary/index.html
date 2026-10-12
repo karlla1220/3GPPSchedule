@@ -326,14 +326,33 @@ header .meta a:focus-visible,
     gap: 0;
     min-width: var(--grid-min-width);
     position: relative;
-    /* Set by a pinch on the grid (schedule.js). */
+    /* Set by a pinch on the grid (schedule.js). The width is the grid's own
+       width at 100%, so zoom magnifies that layout. */
     zoom: var(--grid-zoom, 1);
+    width: var(--grid-width, auto);
 }
 
 /* A pinch on the grid zooms the grid, not the page (see schedule.js);
    browsers without CSS zoom keep the native pinch. */
 @supports (zoom: 1) {
     .grid-wrapper { touch-action: pan-x pan-y; }
+}
+
+/* While the fingers move, the grid is scaled as drawn and the box takes the
+   scaled height; zoom is set when they lift. will-change keeps the drawn
+   picture instead of drawing the text again at every size. */
+.grid-wrapper.pinching { overflow-y: hidden; }
+.grid-wrapper.pinching .schedule-grid {
+    transform-origin: 0 0;
+    will-change: transform;
+}
+/* The sticky time axis sits at the box's scroll offset inside the grid, so the
+   scale would carry it away from the box's left edge; --pinch-shift puts it back. */
+.pinching .time-label,
+.pinching .room-header.time-col,
+.pinching .now-line::before,
+.pinching .break-axis {
+    translate: var(--pinch-shift, 0px) 0;
 }
 
 /* Room headers */
@@ -1634,6 +1653,11 @@ RAN WG reports/coordination">
     // sticky while it is panned. Making the page itself wide would let the
     // browser zoom out, but Chrome then pans the screen over a page-wide
     // layout viewport and sticky elements slide off.
+    //
+    // While the fingers move, the grid is only scaled (transform) and its box
+    // follows: the browser stretches what is already drawn. CSS zoom lays out
+    // and paints the whole grid again, too slow for every frame on a phone, so
+    // it is set once when the fingers lift, which also sharpens the text.
     const GRID_ZOOM_MAX = 2;
     // 100% holds until the fingers spread or close this much more, so it is
     // easy to land on and to leave a pinch at. Past it the zoom carries on
@@ -1646,18 +1670,32 @@ RAN WG reports/coordination">
         return document.querySelector('.day-panel.active .grid-wrapper');
     }
 
+    function gridMinWidth() {
+        return parseFloat(getComputedStyle(document.documentElement)
+            .getPropertyValue('--grid-min-width')) || 600;
+    }
+
     // Below this the grid would fill the width with smaller text, not show more.
     function minGridZoom() {
         const wrapper = activeGridWrapper();
         if (!wrapper || !wrapper.clientWidth) return 1;
-        const gridMinWidth = parseFloat(getComputedStyle(document.documentElement)
-            .getPropertyValue('--grid-min-width')) || 600;
-        return Math.min(1, wrapper.clientWidth / gridMinWidth);
+        return Math.min(1, wrapper.clientWidth / gridMinWidth());
     }
 
+    function clampGridZoom(z) {
+        return Math.max(minGridZoom(), Math.min(z, GRID_ZOOM_MAX));
+    }
+
+    // Zoom magnifies the grid as it is laid out at 100%, so --grid-width holds
+    // that width. Left to fit the box at each zoom (box width / zoom), the
+    // columns of a wide screen would change as the grid grows.
     function setGridZoom(z) {
-        gridZoom = Math.max(minGridZoom(), Math.min(z, GRID_ZOOM_MAX));
-        document.documentElement.style.setProperty('--grid-zoom', String(gridZoom));
+        gridZoom = clampGridZoom(z);
+        const root = document.documentElement;
+        const wrapper = activeGridWrapper();
+        root.style.setProperty('--grid-zoom', String(gridZoom));
+        if (gridZoom === 1 || !wrapper) root.style.removeProperty('--grid-width');
+        else root.style.setProperty('--grid-width', Math.max(wrapper.clientWidth, gridMinWidth()) + 'px');
     }
 
     if (gridZoomSupported) {
@@ -1676,22 +1714,53 @@ RAN WG reports/coordination">
             try { if (navigator.vibrate) navigator.vibrate(8); } catch (err) { /* not allowed yet */ }
         };
 
+        // Lay the grid out at the zoom the pinch reached, where the pinch left it.
+        const finishPinch = function() {
+            if (!pinch) return;
+            const p = pinch;
+            pinch = null;
+            p.wrapper.classList.remove('pinching');
+            p.grid.style.transform = '';
+            p.wrapper.style.height = '';
+            p.axis.forEach(el => el.style.removeProperty('--pinch-shift'));
+            const moved = p.zoom !== gridZoom;
+            setGridZoom(p.zoom);
+            if (moved) {
+                p.wrapper.scrollLeft = p.scrollLeft;
+                window.scrollTo(window.scrollX, p.scrollTop);
+            }
+            saveUserState();
+        };
+
         document.querySelectorAll('.grid-wrapper').forEach(wrapper => {
             const grid = wrapper.querySelector('.schedule-grid');
             wrapper.addEventListener('touchstart', function(e) {
-                if (e.touches.length !== 2) { pinch = null; return; }
+                finishPinch();
+                if (e.touches.length !== 2) return;
                 const mid = touchMid(e.touches);
                 const rect = grid.getBoundingClientRect();
+                const box = wrapper.getBoundingClientRect();
                 pinch = {
                     wrapper: wrapper,
+                    grid: grid,
                     distance: touchDistance(e.touches) || 1,
                     position: detentPosition(gridZoom),
+                    zoom: gridZoom,
                     // The grid point under the fingers, in unzoomed grid px,
                     // and the grid's top in the page (its own zoom moves neither).
                     x: (mid.x - rect.left) / gridZoom,
                     y: (mid.y - rect.top) / gridZoom,
-                    gridTop: rect.top + window.scrollY
+                    gridTop: rect.top + window.scrollY,
+                    // Measured once: nothing is laid out again until the fingers lift.
+                    gridWidth: rect.width / gridZoom,
+                    gridHeight: rect.height / gridZoom,
+                    boxLeft: box.left,
+                    boxWidth: wrapper.clientWidth,
+                    boxExtra: box.height - rect.height,
+                    // The sticky time axis (.now-line carries its NOW label).
+                    axis: grid.querySelectorAll('.time-label, .room-header.time-col, .break-axis, .now-line')
                 };
+                wrapper.classList.add('pinching');
             }, { passive: true });
             wrapper.addEventListener('touchmove', function(e) {
                 if (!pinch || pinch.wrapper !== wrapper || e.touches.length !== 2) return;
@@ -1705,26 +1774,36 @@ RAN WG reports/coordination">
                     pinch.position += bounded - u;
                     u = bounded;
                 }
-                const before = gridZoom;
-                setGridZoom(detentZoom(u));
-                if (gridZoom === 1 && before !== 1) tickAt100();
-                // Keep that grid point under the fingers as they move.
+                const before = pinch.zoom;
+                const zoom = pinch.zoom = clampGridZoom(detentZoom(u));
+                if (zoom === 1 && before !== 1) tickAt100();
+                grid.style.transform = 'scale(' + zoom / gridZoom + ')';
+                wrapper.style.height = pinch.boxExtra + pinch.gridHeight * zoom + 'px';
+                // Keep that grid point under the fingers as they move. A grid
+                // scaled down still scrolls as far as its unscaled width, so
+                // the end of the scaled grid is held here.
                 const mid = touchMid(e.touches);
-                wrapper.scrollLeft = wrapper.getBoundingClientRect().left + pinch.x * gridZoom - mid.x;
-                window.scrollTo(window.scrollX, pinch.gridTop + pinch.y * gridZoom - mid.y);
+                pinch.scrollLeft = Math.max(0, Math.min(pinch.boxLeft + pinch.x * zoom - mid.x,
+                    pinch.gridWidth * zoom - pinch.boxWidth));
+                pinch.scrollTop = pinch.gridTop + pinch.y * zoom - mid.y;
+                wrapper.scrollLeft = pinch.scrollLeft;
+                window.scrollTo(window.scrollX, pinch.scrollTop);
+                // Sticky offsets are worked out before the scale: an axis held
+                // at scrollLeft inside the grid lands at scrollLeft * scale.
+                const shift = wrapper.scrollLeft * (gridZoom / zoom - 1) / gridZoom + 'px';
+                pinch.axis.forEach(el => el.style.setProperty('--pinch-shift', shift));
             }, { passive: false });
             const endPinch = function(e) {
-                if (!pinch || e.touches.length >= 2) return;
-                pinch = null;
-                saveUserState();
+                if (e.touches.length < 2) finishPinch();
             };
             wrapper.addEventListener('touchend', endPinch);
             wrapper.addEventListener('touchcancel', endPinch);
         });
 
-        // A wider screen (rotation) can fit the day at a larger zoom.
+        // The 100% layout follows the box (rotation): keep the zoom, magnify
+        // the new layout. A wider box can also fit the day at a larger zoom.
         window.addEventListener('resize', function() {
-            if (gridZoom < minGridZoom()) setGridZoom(gridZoom);
+            if (!pinch) setGridZoom(gridZoom);
         });
     }
 
