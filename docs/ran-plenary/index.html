@@ -1123,8 +1123,7 @@ header .meta a:focus-visible,
     padding: 8px 16px;
     border-bottom: 1px solid var(--hairline);
 }
-.agreement-header h2,
-#agreement-app > h2 {
+.agreement-header h2 {
     font-size: 10.5px;
     line-height: 1.4;
     font-weight: 600;
@@ -1132,16 +1131,20 @@ header .meta a:focus-visible,
     text-transform: uppercase;
     color: var(--ink-4);
 }
-#agreement-app > h2 { padding: 18px 16px 0; }
+/* The note the panel was built from, at the far end of the header. */
+.agreement-source {
+    margin-left: auto;
+    font-size: 12px;
+    color: var(--ink-3);
+    white-space: nowrap;
+}
 .agreement-tabs:empty { display: none; }
 .agreement-status:empty { display: none; }
-.agreement-status,
-.agreement-empty {
+.agreement-status {
     padding: 14px 16px 18px;
     font-size: 13px;
     color: var(--ink-3);
 }
-#agreement-app > .agreement-empty { padding-top: 6px; }
 #agreement-body { padding: 18px 20px 22px; }
 #agreement-body > h3 {
     display: flex;
@@ -1213,6 +1216,7 @@ header .meta a:focus-visible,
 @media (max-width: 600px) {
     .agreement-header { padding: 8px 12px; }
     .agreement-tabs { max-width: 100%; }
+    .agreement-source { flex-basis: 100%; margin-left: 0; }
     .agreement-tabs button { min-height: 36px; }
     #agreement-body { padding: 14px 14px 18px; }
     #agreement-body > h3 { flex-direction: column; gap: 2px; font-size: 15px; }
@@ -1535,17 +1539,14 @@ RAN WG reports/coordination">
         return { hour, minute, weekday, date: dateParts.year + "-" + dateParts.month + "-" + dateParts.day, minutes: (hour % 24) * 60 + minute };
     }
 
-    // Update the "Updated" display in meeting timezone
+    // "Now" in the meeting timezone, written like "Generated" beside it
+    // (2026-10-12 14:05) so the two can be compared at a glance.
     function updateTimeDisplay() {
         const el = document.getElementById('tz-now');
         if (!el) return;
-        const now = new Date();
-        const formatted = now.toLocaleString('en-US', {
-            timeZone: MEETING_TZ,
-            year: 'numeric', month: '2-digit', day: '2-digit',
-            hour: '2-digit', minute: '2-digit', hour12: false
-        });
-        el.textContent = formatted;
+        const now = nowInMeetingTZ();
+        const two = n => String(n).padStart(2, '0');
+        el.textContent = now.date + ' ' + two(now.hour % 24) + ':' + two(now.minute);
     }
     updateTimeDisplay();
     setInterval(updateTimeDisplay, 60000);

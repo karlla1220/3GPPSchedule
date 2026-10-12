@@ -5,6 +5,38 @@ let latest = null;
 let pending = null;
 let updateSelection = null;
 
+// Changes are dated in the meeting's time zone, like the schedule.
+const when = iso => {
+    const options = { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit', hourCycle: 'h23', timeZoneName: 'short' };
+    try { return new Intl.DateTimeFormat('en-GB', { ...options, timeZone: manifest.timezone || 'UTC' }).format(new Date(iso)); }
+    catch { return new Intl.DateTimeFormat('en-GB', { ...options, timeZone: 'UTC' }).format(new Date(iso)); }
+};
+// "_v01" counts ("_" is not a boundary for \b). A draft says so: the chair
+// restarts at v00 when the draft is released.
+const version = name => {
+    const found = (name || '').match(/(?:^|[^a-z0-9])(v\d+(?:\.\d+)*)(?![a-z0-9])/i)?.[1];
+    if (!found) return (name || '').replace(/\.(?:docx|docm|zip)$/i, '');
+    return (/(?:^|[^a-z0-9])draft(?![a-z0-9])/i.test(name) ? 'draft ' : '') + found;
+};
+// The note the panel was built from. A section's own line names the note that
+// last changed it, which says nothing about how far the panel has read.
+const noteFile = manifest.source_name || manifest.document_file || '';
+const sourceNote = () => {
+    if (manifest.status !== 'ready' || !noteFile) return null;
+    const line = document.createElement('p');
+    line.className = 'agreement-source';
+    line.title = noteFile;
+    const shown = version(noteFile);
+    line.textContent = (/^(?:draft )?v\d/.test(shown) ? 'Chair notes ' : '') + shown
+        + (manifest.document_changed_at ? ' · ' + when(manifest.document_changed_at) : '');
+    return line;
+};
+// Shown before any cell is selected: the viewer loads on the first selection.
+{
+    const line = sourceNote();
+    if (line) mount.querySelector('.agreement-header')?.append(line);
+}
+
 async function start() {
     const [{ createSignal, createResource, batch, For, Show, onCleanup }, { render }, { default: html }, { default: DOMPurify }] =
         await Promise.all([import('solid-js'), import('solid-js/web'), import('solid-js/html'), import('dompurify')]);
@@ -86,22 +118,9 @@ async function start() {
         });
         onCleanup(() => controller?.abort());
         const tabID = ai => 'agreement-tab-' + ai.replaceAll('.', '-');
-        // Changes are dated in the meeting's time zone, like the schedule.
-        const when = iso => {
-            const options = { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit', hourCycle: 'h23', timeZoneName: 'short' };
-            try { return new Intl.DateTimeFormat('en-GB', { ...options, timeZone: manifest.timezone || 'UTC' }).format(new Date(iso)); }
-            catch { return new Intl.DateTimeFormat('en-GB', { ...options, timeZone: 'UTC' }).format(new Date(iso)); }
-        };
-        // "_v01" counts ("_" is not a boundary for \b). A draft says so: the chair
-        // restarts at v00 when the draft is released.
-        const version = name => {
-            const found = (name || '').match(/(?:^|[^a-z0-9])(v\d+(?:\.\d+)*)(?![a-z0-9])/i)?.[1];
-            if (!found) return (name || '').replace(/\.(?:docx|docm|zip)$/i, '');
-            return (/(?:^|[^a-z0-9])draft(?![a-z0-9])/i.test(name) ? 'draft ' : '') + found;
-        };
         const updatedNow = ai => {
             const section = manifest.sections[ai];
-            return section && section.change !== 'initial' && section.changed_in === (manifest.source_name || manifest.document_file);
+            return section && section.change !== 'initial' && section.changed_in === noteFile;
         };
         const changeNote = () => {
             const section = entry();
@@ -133,6 +152,7 @@ async function start() {
                                     onClick=${() => setActiveAI(ai)} onKeyDown=${event => keyTab(event, ai)}>AI ${ai}<${Show} when=${() => updatedNow(ai)}><span class="agreement-updated" title="Updated in the latest chair note"></span><//></button>`}<//>
                         </div>
                     <//>
+                    ${sourceNote}
                 </div>
                 <p class="agreement-status" role="status" aria-live="polite">${() => !selection() ? 'Select a schedule cell to read its agreements here.' : !selection().ais.length ? 'This cell has no agenda number.' : manifest.status !== 'ready' ? 'No chairman note is available for this meeting.' : document.loading ? 'Loading agreements…' : ''}</p>
                 <${Show} when=${() => activeAI() && manifest.status === 'ready'}>
