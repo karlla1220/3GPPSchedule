@@ -316,14 +316,33 @@ header .meta a:focus-visible,
     gap: 0;
     min-width: var(--grid-min-width);
     position: relative;
-    /* Set by a pinch on the grid (schedule.js). */
+    /* Set by a pinch on the grid (schedule.js). The width is the grid's own
+       width at 100%, so zoom magnifies that layout. */
     zoom: var(--grid-zoom, 1);
+    width: var(--grid-width, auto);
 }
 
 /* A pinch on the grid zooms the grid, not the page (see schedule.js);
    browsers without CSS zoom keep the native pinch. */
 @supports (zoom: 1) {
     .grid-wrapper { touch-action: pan-x pan-y; }
+}
+
+/* While the fingers move, the grid is scaled as drawn and the box takes the
+   scaled height; zoom is set when they lift. will-change keeps the drawn
+   picture instead of drawing the text again at every size. */
+.grid-wrapper.pinching { overflow-y: hidden; }
+.grid-wrapper.pinching .schedule-grid {
+    transform-origin: 0 0;
+    will-change: transform;
+}
+/* The sticky time axis sits at the box's scroll offset inside the grid, so the
+   scale would carry it away from the box's left edge; --pinch-shift puts it back. */
+.pinching .time-label,
+.pinching .room-header.time-col,
+.pinching .now-line::before,
+.pinching .break-axis {
+    translate: var(--pinch-shift, 0px) 0;
 }
 
 /* Room headers */
