@@ -762,6 +762,27 @@ def _enforce_main_room_chair_evidence(
     return parsed
 
 
+# An agenda number written with a trailing dot ("10.8.1.(40)" in a source).
+_TRAILING_AGENDA_DOT = re.compile(r"(\d+(?:\.\d+)*(?:\.[xX])?)\.+(?=[\s,/]|$)")
+
+
+def _strip_agenda_dots(text: str) -> str:
+    """Drop the dot after an agenda number: "10.8.1." → "10.8.1".
+
+    Applies to every number in an agenda_item and to the number that leads
+    a session name ("10.8.1. Sensing" → "10.8.1 Sensing"); other text in a
+    name keeps its punctuation.
+    """
+    return _TRAILING_AGENDA_DOT.sub(r"\1", text)
+
+
+def _strip_name_agenda_dot(name: str) -> str:
+    match = re.match(r"^((?:AI\s+)?\.?\s*)(\S+)", name)
+    if not match:
+        return name
+    return match[1] + _strip_agenda_dots(match[2]) + name[match.end():]
+
+
 def _extract_agenda_item_from_name(name: str) -> tuple[str, str | None]:
     """Extract a leading agenda item from a session name when present.
 
@@ -780,6 +801,51 @@ def _extract_agenda_item_from_name(name: str) -> tuple[str, str | None]:
     if remainder:
         return remainder, agenda_item
     return name, agenda_item
+
+
+def _leaf_agenda_item(name: str, agenda_item: str) -> str:
+    """Use the session's own agenda number when the AI names only its parent.
+
+    A schedule may split ".10.5.4 (120)" into leaves "10.5.4.4 (40)" … and
+    the LLM can copy the parent onto each leaf. A single AI that is an
+    ancestor of the name's leading number ("10.5.4", "10.5.4.x", "10.5")
+    gives way to that number; any other AI is kept as given.
+    """
+    _, from_name = _extract_agenda_item_from_name(name)
+    parent = agenda_item.strip().rstrip(".")
+    if not from_name or "/" in from_name or "," in parent:
+        return agenda_item
+    if not re.fullmatch(r"\d+(?:\.\d+)*(?:\.[xX])?", parent):
+        return agenda_item
+    if parent.lower().endswith(".x"):
+        parent = parent[:-2]
+    if from_name.lower().endswith(".x"):
+        own = from_name[:-2]
+        return from_name if own.startswith(parent + ".") else agenda_item
+    return from_name if from_name.startswith(parent + ".") else agenda_item
+
+
+def _normalize_agenda_fields(sessions: list[dict]) -> list[dict]:
+    """Fix agenda numbers in merged sessions before they are annotated and saved.
+
+    Drops a trailing dot ("10.8.1." → "10.8.1") and replaces a parent copied
+    onto a leaf ("10.5.4.4" with AI 10.5.4 → 10.5.4.4). Running before the
+    save keeps slot_state, and so the next incremental baseline, correct.
+    """
+    normalized = []
+    for session in sessions:
+        session = dict(session)
+        name = session.get("name")
+        if isinstance(name, str):
+            session["name"] = name = _strip_name_agenda_dot(name)
+        agenda_item = session.get("agenda_item")
+        if isinstance(agenda_item, str) and agenda_item:
+            agenda_item = _strip_agenda_dots(agenda_item)
+            if isinstance(name, str):
+                agenda_item = _leaf_agenda_item(name, agenda_item)
+            session["agenda_item"] = agenda_item
+        normalized.append(session)
+    return normalized
 
 
 def parse_time_slots(
@@ -827,6 +893,7 @@ def parse_time_slots(
     def _finish(slot, parsed_result, alias_to_name) -> list[Session]:
         """Annotate a merge, persist it for the next run, convert to sessions."""
         name_to_alias, _ = build_room_aliases(day_rooms_map.get(slot.day, []))
+        parsed_result["sessions"] = _normalize_agenda_fields(parsed_result.get("sessions") or [])
         _enforce_main_room_chair_evidence(parsed_result, slot, name_to_alias)
         parsed_result["sessions"] = annotate_sessions_with_agenda_descriptions(
             parsed_result.get("sessions", []),

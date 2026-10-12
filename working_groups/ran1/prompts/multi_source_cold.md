@@ -90,6 +90,10 @@ Example 4 – Sweep session over a topic area (no explicit durations):
      associated leaf schedule is clear.
    - If the leaf relationship is ambiguous, conflicting, or does not fit the
      main duration, keep the safer coarse entry.
+   - Each leaf session's agenda_item is the leaf's OWN agenda number, not the
+     coarse entry's. e.g. Main ".10.5.4 (120)" with vice-chair detail
+     "10.5.4.4(40), 10.5.4.1(40), 10.5.4.3(40)" → three sessions with
+     agenda_item "10.5.4.4", "10.5.4.1", "10.5.4.3" (never "10.5.4").
 
 6. For offline rooms: the main schedule content is authoritative.
    e.g. "Hiroki (120) / R20 / A-IoT (120)" → Offline B has one session, chair=Hiroki.

@@ -1471,14 +1471,14 @@
           "room_col_start": 4,
           "room_col_end": 5,
           "chair": "Hiroki",
-          "agenda_item": "10.5.4",
+          "agenda_item": "10.5.4.4",
           "group_header": "6GR",
-          "description": "Downlink control channel, scheduling and HARQ operation",
+          "description": "Handling of potential multiple uplink transmissions",
           "agenda_descriptions": [
             {
-              "agenda_item": "10.5.4",
-              "matched_agenda_item": "10.5.4",
-              "description": "Downlink control channel, scheduling and HARQ operation",
+              "agenda_item": "10.5.4.4",
+              "matched_agenda_item": "10.5.4.4",
+              "description": "Handling of potential multiple uplink transmissions",
               "hierarchy": [
                 {
                   "agenda_item": "10",
@@ -1493,6 +1493,11 @@
                 {
                   "agenda_item": "10.5.4",
                   "description": "Downlink control channel, scheduling and HARQ operation",
+                  "has_description": true
+                },
+                {
+                  "agenda_item": "10.5.4.4",
+                  "description": "Handling of potential multiple uplink transmissions",
                   "has_description": true
                 }
               ]
@@ -1511,14 +1516,14 @@
           "room_col_start": 4,
           "room_col_end": 5,
           "chair": "Hiroki",
-          "agenda_item": "10.5.4",
+          "agenda_item": "10.5.4.1",
           "group_header": "6GR",
-          "description": "Downlink control channel, scheduling and HARQ operation",
+          "description": "Downlink control channel, scheduling for downlink and uplink transmission",
           "agenda_descriptions": [
             {
-              "agenda_item": "10.5.4",
-              "matched_agenda_item": "10.5.4",
-              "description": "Downlink control channel, scheduling and HARQ operation",
+              "agenda_item": "10.5.4.1",
+              "matched_agenda_item": "10.5.4.1",
+              "description": "Downlink control channel, scheduling for downlink and uplink transmission",
               "hierarchy": [
                 {
                   "agenda_item": "10",
@@ -1533,6 +1538,11 @@
                 {
                   "agenda_item": "10.5.4",
                   "description": "Downlink control channel, scheduling and HARQ operation",
+                  "has_description": true
+                },
+                {
+                  "agenda_item": "10.5.4.1",
+                  "description": "Downlink control channel, scheduling for downlink and uplink transmission",
                   "has_description": true
                 }
               ]
@@ -1551,14 +1561,14 @@
           "room_col_start": 4,
           "room_col_end": 5,
           "chair": "Hiroki",
-          "agenda_item": "10.5.4",
+          "agenda_item": "10.5.4.3",
           "group_header": "6GR",
-          "description": "Downlink control channel, scheduling and HARQ operation",
+          "description": "HARQ related Aspects",
           "agenda_descriptions": [
             {
-              "agenda_item": "10.5.4",
-              "matched_agenda_item": "10.5.4",
-              "description": "Downlink control channel, scheduling and HARQ operation",
+              "agenda_item": "10.5.4.3",
+              "matched_agenda_item": "10.5.4.3",
+              "description": "HARQ related Aspects",
               "hierarchy": [
                 {
                   "agenda_item": "10",
@@ -1573,6 +1583,11 @@
                 {
                   "agenda_item": "10.5.4",
                   "description": "Downlink control channel, scheduling and HARQ operation",
+                  "has_description": true
+                },
+                {
+                  "agenda_item": "10.5.4.3",
+                  "description": "HARQ related Aspects",
                   "has_description": true
                 }
               ]
@@ -2889,7 +2904,7 @@
           "notes": []
         },
         {
-          "name": "10.8.1.",
+          "name": "10.8.1",
           "duration_minutes": 40,
           "start_time": "11:40",
           "end_time": "12:20",
@@ -2897,7 +2912,7 @@
           "room_col_start": 4,
           "room_col_end": 5,
           "chair": "Hiroki",
-          "agenda_item": "10.8.1.",
+          "agenda_item": "10.8.1",
           "group_header": "6GR",
           "description": "Evaluations",
           "agenda_descriptions": [
@@ -10409,7 +10424,7 @@
     }
   ],
   "source_file": "RAN1#126b online and offline schedules - v00.docx",
-  "generated_at": "2026-10-12 09:41",
+  "generated_at": "2026-10-12 13:21",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
@@ -10436,15 +10451,15 @@
   "chairman_agreements": {
     "status": "ready",
     "meeting_id": "ran1#126bis",
-    "document_file": "Chair notes RAN1#126bis_v00.docx",
-    "sha256": "239594053d915bf5747cb67e7c80f108d81b68908c579c9ae0d901740a204677",
+    "document_file": "Chair notes RAN1#126bis_v01.docx",
+    "sha256": "82877d69cc4555fa2ae55e4409b891c07d71b54030de59a47fe4bafcf765e89c",
     "parser_version": 18,
     "warnings": [],
     "unassigned_blocks": 13,
     "content_scope": "agenda-section-excluding-tdocs",
-    "source_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Chair_notes/Chair%20notes%20RAN1%23126bis_v00.docx",
-    "source_name": "Chair notes RAN1#126bis_v00.docx",
-    "document_changed_at": "2026-10-10T06:55:27+00:00",
+    "source_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Chair_notes/Chair%20notes%20RAN1%23126bis_v01.docx",
+    "source_name": "Chair notes RAN1#126bis_v01.docx",
+    "document_changed_at": "2026-10-12T04:04:14+00:00",
     "sections": {
       "1": {
         "title": "Opening of the meeting (Day 1: 9:00 am)",
@@ -10539,7 +10554,7 @@
         "added": [],
         "changed_at": "2026-10-04T08:57:51+00:00",
         "changed_in": "Draft Chair notes RAN1#126bis_v00.docx",
-        "file": "agreements/c6ec3999e0beaaf04bb5.html"
+        "file": "agreements/5e919f1d0c63560da12c.html"
       },
       "3": {
         "title": "Highlights from RAN plenary",
@@ -10563,7 +10578,7 @@
         "added": [],
         "changed_at": "2026-10-04T08:57:51+00:00",
         "changed_in": "Draft Chair notes RAN1#126bis_v00.docx",
-        "file": "agreements/e6f96a96adc8eeb1f415.html"
+        "file": "agreements/ba18a63e4b7d4c1cfa38.html"
       },
       "5": {
         "title": "Incoming Liaison Statements",
@@ -10581,7 +10596,7 @@
           "a9dc76c7e498",
           "0faa266f2431",
           "ff8a7ce4fb00",
-          "2633844591cb",
+          "e73397392841",
           "0faa266f2431",
           "aad3e87e84eb",
           "611a99758f77",
@@ -10630,13 +10645,16 @@
           "c30e0729d098",
           "0cc9daf48e36",
           "c1d60bbda798",
-          "7628b3ebcfb9"
+          "b757a3f2922a"
         ],
-        "change": "initial",
-        "added": [],
-        "changed_at": "2026-10-04T08:57:51+00:00",
-        "changed_in": "Draft Chair notes RAN1#126bis_v00.docx",
-        "file": "agreements/6b50bf8d931c7adc7e68.html"
+        "change": "updated",
+        "added": [
+          12,
+          61
+        ],
+        "changed_at": "2026-10-12T04:04:14+00:00",
+        "changed_in": "Chair notes RAN1#126bis_v01.docx",
+        "file": "agreements/11bd722cd895b5e0a3dc.html"
       },
       "6": {
         "title": "Pre-Rel-19 E-UTRA Maintenance",
@@ -11109,17 +11127,50 @@
         "blocks": [
           "c59d956034db",
           "fe6e184ac9f8",
-          "334907737e61"
+          "334907737e61",
+          "c8fee8eabe07",
+          "0462b3109aae",
+          "80d7b7fea4f6",
+          "9d9f4cfca177",
+          "704752738201",
+          "d39e4d124b5a",
+          "4c2a943d948d",
+          "d39e4d124b5a",
+          "11774ddb56a5",
+          "c8fee8eabe07",
+          "735a5e7acdac",
+          "116d1a0d03d6",
+          "0c21fa519343",
+          "5c880f15e4d1",
+          "a3653b899cf1",
+          "2ca82a27fa89"
         ],
-        "change": "initial",
-        "added": [],
-        "changed_at": "2026-10-04T08:57:51+00:00",
-        "changed_in": "Draft Chair notes RAN1#126bis_v00.docx",
-        "file": "agreements/705789ee5b4bf21bb225.html"
+        "change": "updated",
+        "added": [
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18
+        ],
+        "changed_at": "2026-10-12T04:04:14+00:00",
+        "changed_in": "Chair notes RAN1#126bis_v01.docx",
+        "file": "agreements/76b881cd8a4e459a74b1.html"
       },
       "10.5.1.2": {
         "title": "PRACH and RACH procedure",
-        "excluded_tdoc_rows": 43,
+        "excluded_tdoc_rows": 44,
         "blocks": [
           "83be3872ff55",
           "1aa38c3a9068",
@@ -11129,21 +11180,36 @@
         "added": [],
         "changed_at": "2026-10-04T08:57:51+00:00",
         "changed_in": "Draft Chair notes RAN1#126bis_v00.docx",
-        "file": "agreements/791d0bed4700313f302b.html"
+        "file": "agreements/13c75571313197c237bf.html"
       },
       "10.5.1.3": {
         "title": "Bandwidth operation",
-        "excluded_tdoc_rows": 40,
+        "excluded_tdoc_rows": 41,
         "blocks": [
           "e04f6bcb1a87",
           "453ee4324fff",
-          "334907737e61"
+          "334907737e61",
+          "c8fee8eabe07",
+          "17b917bd7fa4",
+          "b4b760681224",
+          "e951f17dc5a0",
+          "f8e62c47c47c",
+          "53b2c8e9012a",
+          "af570839c8fc"
         ],
-        "change": "initial",
-        "added": [],
-        "changed_at": "2026-10-04T08:57:51+00:00",
-        "changed_in": "Draft Chair notes RAN1#126bis_v00.docx",
-        "file": "agreements/d967a0f89869b629f3a3.html"
+        "change": "updated",
+        "added": [
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ],
+        "changed_at": "2026-10-12T04:04:14+00:00",
+        "changed_in": "Chair notes RAN1#126bis_v01.docx",
+        "file": "agreements/0ec722ef52c11815d6ac.html"
       },
       "10.5.2": {
         "title": "MIMO operation",
@@ -11539,6 +11605,13 @@
         "changed_in": "Draft Chair notes RAN1#126bis_v00.docx"
       }
     },
-    "retained_files": []
+    "retained_files": [
+      "agreements/6b50bf8d931c7adc7e68.html",
+      "agreements/705789ee5b4bf21bb225.html",
+      "agreements/791d0bed4700313f302b.html",
+      "agreements/c6ec3999e0beaaf04bb5.html",
+      "agreements/d967a0f89869b629f3a3.html",
+      "agreements/e6f96a96adc8eeb1f415.html"
+    ]
   }
 }

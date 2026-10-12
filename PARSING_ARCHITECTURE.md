@@ -154,13 +154,14 @@ LLM에 의해 다음처럼 해석된다.
 LLM 응답을 그대로 HTML에 쓰지는 않는다. 코드가 다음 후처리를 수행한다.
 
 1. Main room의 chair는 Main schedule에 명시적 근거가 있을 때만 유지한다.
-2. `agenda_item` 또는 세션 이름을 `docs/agenda_item_description.json`과 연결해 설명 계층을 추가한다.
-3. `specified_start_time`이 있으면 `time_to_minutes()`로 분 단위로 바꾼다.
-4. 값이 없으면 방별 cursor를 이용해 앞 세션 종료 직후에 순차 배치한다.
-5. parser-derived `fallback_start_time`이 적용되는 예외라면 해당 시작 시각을 사용한다.
-6. duration을 더해 최종 `start_time`과 `end_time`을 `HH:MM`으로 생성한다.
-7. LLM으로 `group_header` 표기를 정리한 뒤, 남은 빈 group은 이름 일치 규칙으로 보완한다.
-8. AI 번호가 없는 셀은 이름을 회의별 매핑 목록(`docs/ran1/agenda_label_map/<meeting>.jsonl`)에서 찾아 `inferred_agenda_items`를 채운다. 목록에 없는 이름만 LLM에 묻고 답을 목록에 덧붙인다(`agenda_labels.py`, CLAUDE.md의 "AI 없는 셀의 AI 추정").
+2. `agenda_item`을 세션 이름과 맞춘다(`_normalize_agenda_fields`). AI 번호와 이름 앞 번호의 끝 점을 떼고(`10.8.1.` → `10.8.1`), 하나뿐인 AI가 이름 번호의 상위(`10.5.4`, `10.5.4.x`)이면 이름 번호(`10.5.4.4`)로 바꾼다. 원문의 `10.8.1.(40)` 같은 점이 남으면 필터에 `10.8.1`과 다른 항목으로 보이고, Main의 `.10.5.4 (120)`을 vice-chair의 하위 항목으로 나눌 때 LLM이 부모 번호를 하위 세션에 그대로 붙이는 경우가 있어서다. 이 단계는 설명 계층을 붙이고 `slot_state`에 저장하기 전에 돈다. 그래서 팝업의 AI 이름도 보정된 번호를 따르고, 다음 증분 실행의 baseline도 보정된 값이다. 캐시된 슬롯도 매 실행 이 단계를 거쳐 다시 저장된다. AI가 비어 있으면 Session으로 바꿀 때 이름 앞의 번호를 쓴다(이 값은 저장하지 않는다).
+3. `agenda_item` 또는 세션 이름을 `docs/agenda_item_description.json`과 연결해 설명 계층을 추가한다.
+4. `specified_start_time`이 있으면 `time_to_minutes()`로 분 단위로 바꾼다.
+5. 값이 없으면 방별 cursor를 이용해 앞 세션 종료 직후에 순차 배치한다.
+6. parser-derived `fallback_start_time`이 적용되는 예외라면 해당 시작 시각을 사용한다.
+7. duration을 더해 최종 `start_time`과 `end_time`을 `HH:MM`으로 생성한다.
+8. LLM으로 `group_header` 표기를 정리한 뒤, 남은 빈 group은 이름 일치 규칙으로 보완한다.
+9. AI 번호가 없는 셀은 이름을 회의별 매핑 목록(`docs/ran1/agenda_label_map/<meeting>.jsonl`)에서 찾아 `inferred_agenda_items`를 채운다. 목록에 없는 이름만 LLM에 묻고 답을 목록에 덧붙인다(`agenda_labels.py`, CLAUDE.md의 "AI 없는 셀의 AI 추정").
 
 `specified_start_time`을 분으로 바꿀 수 없는 경우 현재 구현은 오류를 중단시키지 않고 그 방의 순차 cursor로 fallback한다. 따라서 잘못된 문자열이 들어와도 빌드는 성공할 수 있지만 배치 시각이 원문과 달라질 가능성이 있다.
 

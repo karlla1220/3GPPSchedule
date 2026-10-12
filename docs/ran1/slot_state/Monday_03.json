@@ -306,13 +306,13 @@
       "specified_start_time": null,
       "chair": "Hiroki",
       "group_header": "6G 10.5.4.x",
-      "agenda_item": "10.5.4",
-      "description": "Downlink control channel, scheduling and HARQ operation",
+      "agenda_item": "10.5.4.4",
+      "description": "Handling of potential multiple uplink transmissions",
       "agenda_descriptions": [
         {
-          "agenda_item": "10.5.4",
-          "matched_agenda_item": "10.5.4",
-          "description": "Downlink control channel, scheduling and HARQ operation",
+          "agenda_item": "10.5.4.4",
+          "matched_agenda_item": "10.5.4.4",
+          "description": "Handling of potential multiple uplink transmissions",
           "hierarchy": [
             {
               "agenda_item": "10",
@@ -327,6 +327,11 @@
             {
               "agenda_item": "10.5.4",
               "description": "Downlink control channel, scheduling and HARQ operation",
+              "has_description": true
+            },
+            {
+              "agenda_item": "10.5.4.4",
+              "description": "Handling of potential multiple uplink transmissions",
               "has_description": true
             }
           ]
@@ -340,13 +345,13 @@
       "specified_start_time": null,
       "chair": "Hiroki",
       "group_header": "6G 10.5.4.x",
-      "agenda_item": "10.5.4",
-      "description": "Downlink control channel, scheduling and HARQ operation",
+      "agenda_item": "10.5.4.1",
+      "description": "Downlink control channel, scheduling for downlink and uplink transmission",
       "agenda_descriptions": [
         {
-          "agenda_item": "10.5.4",
-          "matched_agenda_item": "10.5.4",
-          "description": "Downlink control channel, scheduling and HARQ operation",
+          "agenda_item": "10.5.4.1",
+          "matched_agenda_item": "10.5.4.1",
+          "description": "Downlink control channel, scheduling for downlink and uplink transmission",
           "hierarchy": [
             {
               "agenda_item": "10",
@@ -361,6 +366,11 @@
             {
               "agenda_item": "10.5.4",
               "description": "Downlink control channel, scheduling and HARQ operation",
+              "has_description": true
+            },
+            {
+              "agenda_item": "10.5.4.1",
+              "description": "Downlink control channel, scheduling for downlink and uplink transmission",
               "has_description": true
             }
           ]
@@ -374,13 +384,13 @@
       "specified_start_time": null,
       "chair": "Hiroki",
       "group_header": "6G 10.5.4.x",
-      "agenda_item": "10.5.4",
-      "description": "Downlink control channel, scheduling and HARQ operation",
+      "agenda_item": "10.5.4.3",
+      "description": "HARQ related Aspects",
       "agenda_descriptions": [
         {
-          "agenda_item": "10.5.4",
-          "matched_agenda_item": "10.5.4",
-          "description": "Downlink control channel, scheduling and HARQ operation",
+          "agenda_item": "10.5.4.3",
+          "matched_agenda_item": "10.5.4.3",
+          "description": "HARQ related Aspects",
           "hierarchy": [
             {
               "agenda_item": "10",
@@ -395,6 +405,11 @@
             {
               "agenda_item": "10.5.4",
               "description": "Downlink control channel, scheduling and HARQ operation",
+              "has_description": true
+            },
+            {
+              "agenda_item": "10.5.4.3",
+              "description": "HARQ related Aspects",
               "has_description": true
             }
           ]
@@ -718,7 +733,7 @@
       ]
     }
   ],
-  "merged_at": "2026-10-12T00:41:17.644348+00:00",
+  "merged_at": "2026-10-12T04:21:10.562737+00:00",
   "meeting_id": "ran1#126bis",
   "schema_version": 2
 }
