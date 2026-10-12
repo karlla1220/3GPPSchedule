@@ -22,6 +22,12 @@
           "table_index": 0,
           "room_index_in_table": 0,
           "id": "brk2"
+        },
+        {
+          "name": "Breakout 3",
+          "table_index": 0,
+          "room_index_in_table": 0,
+          "id": "brk3"
         }
       ],
       "sessions": [
@@ -718,6 +724,27 @@
           ]
         },
         {
+          "name": "1630-1700 A-IoT paging configuration",
+          "duration_minutes": 120,
+          "start_time": "14:30",
+          "end_time": "16:30",
+          "day": "Monday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": null,
+          "group_header": "Offline",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [
+            "brk3"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "1630-1700 [401] A-IoT paging configuration (Huawei)"
+          ]
+        },
+        {
           "name": "Common CP/UP",
           "duration_minutes": 120,
           "start_time": "14:30",
@@ -950,9 +977,9 @@
       "sessions": [
         {
           "name": "NR20 AI mobility",
-          "duration_minutes": 90,
+          "duration_minutes": 130,
           "start_time": "08:30",
-          "end_time": "10:00",
+          "end_time": "10:40",
           "day": "Tuesday",
           "room_col_start": 2,
           "room_col_end": 3,
@@ -1140,10 +1167,10 @@
           ]
         },
         {
-          "name": "Offline for RRC details",
+          "name": "Offline [103] for RRC details",
           "duration_minutes": 60,
-          "start_time": "10:00",
-          "end_time": "11:00",
+          "start_time": "11:00",
+          "end_time": "12:00",
           "day": "Tuesday",
           "room_col_start": 2,
           "room_col_end": 3,
@@ -1157,46 +1184,7 @@
           ],
           "room_scope": "assigned",
           "notes": [
-            "Offline for RRC details"
-          ]
-        },
-        {
-          "name": "NR20 AI mobility",
-          "duration_minutes": 120,
-          "start_time": "11:00",
-          "end_time": "13:00",
-          "day": "Tuesday",
-          "room_col_start": 2,
-          "room_col_end": 3,
-          "chair": "Kyeongin",
-          "agenda_item": "8.3, 8.3.2, 8.3.3",
-          "group_header": "NR Rel-20",
-          "description": "AI/ML for mobility",
-          "agenda_descriptions": [
-            {
-              "agenda_item": "8.3",
-              "matched_agenda_item": "8.3",
-              "description": "AI/ML for mobility",
-              "hierarchy": [
-                {
-                  "agenda_item": "8",
-                  "description": "NR Rel-20"
-                },
-                {
-                  "agenda_item": "8.3",
-                  "description": "AI/ML for mobility"
-                }
-              ]
-            }
-          ],
-          "room_ids": [
-            "brk1"
-          ],
-          "room_scope": "assigned",
-          "notes": [
-            "[8.3] NR20 AI mobility [1] (Kyeongin)",
-            "[8.3.2] LCM procedure (continue)",
-            "[8.3.3] Data collection"
+            "Until 12:00, Offline [103] for RRC details"
           ]
         },
         {
@@ -1260,6 +1248,45 @@
           "notes": [
             "[9.3.1] User Plane",
             "[9.3.1.1] Functionalities of upper UP"
+          ]
+        },
+        {
+          "name": "NR20 AI mobility",
+          "duration_minutes": 60,
+          "start_time": "12:00",
+          "end_time": "13:00",
+          "day": "Tuesday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "Kyeongin",
+          "agenda_item": "8.3, 8.3.2, 8.3.3",
+          "group_header": "NR Rel-20",
+          "description": "AI/ML for mobility",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "8.3",
+              "matched_agenda_item": "8.3",
+              "description": "AI/ML for mobility",
+              "hierarchy": [
+                {
+                  "agenda_item": "8",
+                  "description": "NR Rel-20"
+                },
+                {
+                  "agenda_item": "8.3",
+                  "description": "AI/ML for mobility"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "brk1"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "[8.3] NR20 AI mobility [1] (Kyeongin)",
+            "[8.3.2] LCM procedure (continue)",
+            "[8.3.3] Data collection"
           ]
         },
         {
@@ -2960,7 +2987,7 @@
       ],
       "sessions": [
         {
-          "name": "CB Kyeongin (TBD)",
+          "name": "CB (TBD)",
           "duration_minutes": 60,
           "start_time": "08:30",
           "end_time": "09:30",
@@ -2982,7 +3009,7 @@
           ]
         },
         {
-          "name": "CB Erlin / CB for NR20 AI/M PHY, if needed, details TBD",
+          "name": "CB for NR20 AI/M PHY, if needed, details TBD",
           "duration_minutes": 60,
           "start_time": "09:30",
           "end_time": "10:30",
@@ -3130,16 +3157,16 @@
       }
     }
   ],
-  "source_file": "R2_135b_Schedule_v02.docx",
-  "generated_at": "2026-10-11 23:01",
+  "source_file": "R2_135b_Schedule_v03.docx",
+  "generated_at": "2026-10-12 13:21",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
-    "R2_135b_Schedule_v02.docx",
+    "R2_135b_Schedule_v03.docx",
     "agenda.csv"
   ],
   "source_labels": {
-    "R2_135b_Schedule_v02.docx": "Schedule",
+    "R2_135b_Schedule_v03.docx": "Schedule",
     "agenda.csv": "Agenda"
   },
   "timezone": "Asia/Seoul",
@@ -3213,6 +3240,13 @@
           "Day/Time",
           "Place",
           "Coordinator"
+        ],
+        [
+          "[401]",
+          "Dedicated paging monitoring configuration Spectrum aggregation (cont)",
+          "Mon 16:30-17:00",
+          "BO3",
+          "Huawei"
         ]
       ]
     },
