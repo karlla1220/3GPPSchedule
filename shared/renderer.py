@@ -541,12 +541,15 @@ def generate_html(schedule: Schedule, *, schedules=None, groups=None, presentati
             else:
                 data_ai = ""
             data_ai_attr = _esc(data_ai).replace('"', '&quot;')
-            data_ai_scope_attr = _esc(_ai_filter_scope(session.agenda_item)).replace('"', '&quot;')
+            # A cell without an AI is matched and opened by the items its label
+            # was read as (inferred_agenda_items); data-ai stays as written.
+            scope_ai = session.agenda_item or ", ".join(session.inferred_agenda_items)
+            data_ai_scope_attr = _esc(_ai_filter_scope(scope_ai)).replace('"', '&quot;')
             # The panel opens the chair-note sections an AI covers (10.6.x →
             # 10.6.1, 10.6.2). The filter keeps matching the AI as written.
             agreement_attrs = ""
             if agreement_sections is not None:
-                agreement_ai = "|".join(agenda_section_ids(session.agenda_item, agreement_sections))
+                agreement_ai = "|".join(agenda_section_ids(scope_ai, agreement_sections))
                 label = f"{session.name}, AI {session.agenda_item}" if session.agenda_item else session.name
                 agreement_attrs = (
                     ' tabindex="0" role="button" aria-controls="agreement-panel" aria-pressed="false"'

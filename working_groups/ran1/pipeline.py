@@ -69,6 +69,7 @@ from .downloader import (
 )
 from .merger import collect_time_slot_data
 from .config import load_config, with_meeting_folders
+from .agenda_labels import apply_inferred_agenda_items
 from .agenda_descriptions import (
     DEFAULT_JSON_PATH,
     descriptions_match_meeting,
@@ -569,6 +570,9 @@ def build_schedule(args) -> Schedule:
 
     # Step 4c: Fill missing groups by name/substring matching
     sessions = fill_missing_groups(sessions)
+
+    # Step 4d: Agenda items for cells whose schedule gives none
+    sessions = apply_inferred_agenda_items(sessions, current_meeting_id)
 
     # Step 5: Build Schedule model
     meeting_name = _extract_meeting_name(docx_path)
