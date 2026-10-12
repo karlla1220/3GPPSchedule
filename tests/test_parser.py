@@ -14,7 +14,15 @@ from working_groups.ran1.parser import (
     find_chair_notes_docx,
     parse_docx,
 )
-from working_groups.ran1.session_parser import _extract_agenda_item_from_name, _slot_result_to_sessions
+from working_groups.ran1.agenda_descriptions import annotate_sessions_with_agenda_descriptions
+from working_groups.ran1.session_parser import (
+    _extract_agenda_item_from_name,
+    _leaf_agenda_item,
+    _normalize_agenda_fields,
+    _strip_agenda_dots,
+    _strip_name_agenda_dot,
+    _slot_result_to_sessions,
+)
 
 _NS = "http://schemas.openxmlformats.org/wordprocessingml/2006/main"
 
@@ -226,6 +234,72 @@ class AgendaExtractionTests(unittest.TestCase):
         name, agenda_item = _extract_agenda_item_from_name("10.5.1.2/3")
         self.assertEqual(name, "10.5.1.2/3")
         self.assertEqual(agenda_item, "10.5.1.2/3")
+
+    def test_leaf_takes_its_own_number_over_a_copied_parent(self):
+        # Main ".10.5.4 (120)" split into Hiroki's leaves: the LLM copied 10.5.4.
+        self.assertEqual(_leaf_agenda_item("10.5.4.4", "10.5.4"), "10.5.4.4")
+        self.assertEqual(_leaf_agenda_item("10.5.4.1", "10.5.4.x"), "10.5.4.1")
+        self.assertEqual(_leaf_agenda_item("AI 9.1.1 AI/ML", "9.1"), "9.1.1")
+
+    def test_leaf_keeps_an_agenda_item_that_is_not_its_parent(self):
+        self.assertEqual(_leaf_agenda_item("10.5.4.4", "10.5.4.4"), "10.5.4.4")
+        self.assertEqual(_leaf_agenda_item("10.5.4.x", "10.5.4.2, 10.5.4.3"), "10.5.4.2, 10.5.4.3")
+        self.assertEqual(_leaf_agenda_item("6G 10.5.4.x", "10.5.4.1, 10.5.4.3"), "10.5.4.1, 10.5.4.3")
+        self.assertEqual(_leaf_agenda_item("10.6.x", "10.6.x"), "10.6.x")
+        self.assertEqual(_leaf_agenda_item("Sensing", "10.8"), "10.8")
+        self.assertEqual(_leaf_agenda_item("10.5.1.2/3", "10.5.1"), "10.5.1")
+        self.assertEqual(_leaf_agenda_item("10.50.1", "10.5"), "10.5")
+
+    def test_drops_the_dot_after_an_agenda_number(self):
+        # Hiroki wrote "10.8.1.(40)"; the LLM kept the dot in name and AI.
+        self.assertEqual(_strip_agenda_dots("10.8.1."), "10.8.1")
+        self.assertEqual(_strip_agenda_dots("10.8.3, 10.8.1."), "10.8.3, 10.8.1")
+        self.assertEqual(_strip_agenda_dots("10.6.x."), "10.6.x")
+        self.assertEqual(_strip_agenda_dots("10.3.1./4"), "10.3.1/4")
+        self.assertEqual(_strip_name_agenda_dot("10.8.1."), "10.8.1")
+        self.assertEqual(_strip_name_agenda_dot("10.8.1. Sensing"), "10.8.1 Sensing")
+        self.assertEqual(_strip_name_agenda_dot("AI 9.1.1. AI/ML"), "AI 9.1.1 AI/ML")
+        # Only the leading number of a name; other text keeps its dots.
+        self.assertEqual(_strip_name_agenda_dot("6G ISAC 10.8.1."), "6G ISAC 10.8.1.")
+        self.assertEqual(_strip_name_agenda_dot("Early dinner."), "Early dinner.")
+        self.assertEqual(_strip_agenda_dots("10.8.1"), "10.8.1")
+
+    def test_normalizes_merged_sessions_before_they_are_saved(self):
+        # LLM output as saved in slot_state (Monday block 3, Tuesday block 1).
+        merged = [
+            {"room_name": "RAN1_brk2", "name": "10.5.4.4", "agenda_item": "10.5.4"},
+            {"room_name": "RAN1_brk2", "name": "10.8.1.", "agenda_item": "10.8.1."},
+            {"room_name": "RAN1_off1", "name": "10.5.4.x", "agenda_item": "10.5.4.2, 10.5.4.3"},
+            {"room_name": "RAN1_main", "name": "Opening", "agenda_item": None},
+        ]
+
+        normalized = _normalize_agenda_fields(merged)
+
+        self.assertEqual(
+            [(s["name"], s["agenda_item"]) for s in normalized],
+            [
+                ("10.5.4.4", "10.5.4.4"),
+                ("10.8.1", "10.8.1"),
+                ("10.5.4.x", "10.5.4.2, 10.5.4.3"),
+                ("Opening", None),
+            ],
+        )
+        self.assertEqual(merged[0]["agenda_item"], "10.5.4")  # input untouched
+
+    def test_popup_description_follows_the_normalized_agenda_item(self):
+        descriptions = {
+            "10.5.4": "Downlink control channel, scheduling and HARQ operation",
+            "10.5.4.4": "Handling of potential multiple uplink transmissions",
+        }
+        merged = [{"name": "10.5.4.4", "agenda_item": "10.5.4"}]
+
+        annotated = annotate_sessions_with_agenda_descriptions(
+            _normalize_agenda_fields(merged), descriptions
+        )
+
+        self.assertEqual(
+            annotated[0]["description"], "Handling of potential multiple uplink transmissions"
+        )
 
     def test_slot_result_keeps_full_name_for_slash_shorthand(self):
         slot = MagicMock(
