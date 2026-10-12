@@ -18,20 +18,25 @@ from shared.schedule import (
 from shared.agreement_assets import package_agreements
 from working_groups.ran1.agreements import parse_agreements, track_changes
 
-ADDED_TEXT = "Preview revision: this paragraph was added in v10."
+ADDED_TEXT = (
+    "Preview revision: this paragraph was added in v10.",
+    "",  # A blank Word paragraph between added ones, which the bar spans.
+    "Preview revision: so was this one.",
+)
 
 
 def revised_note(note, directory):
-    """The same note with one paragraph added to AI 10.1, as a v10 would."""
+    """The same note with two paragraphs added to AI 10.1, as a v10 would."""
     from copy import deepcopy
     from docx import Document
     from docx.text.paragraph import Paragraph
 
     document = Document(note)
     label = next(p for p in document.paragraphs if p.text.strip() == "Agreement")
-    copy = deepcopy(label._p)
-    label._p.addnext(copy)
-    Paragraph(copy, label._parent).text = ADDED_TEXT
+    for text in reversed(ADDED_TEXT):
+        copy = deepcopy(label._p)
+        label._p.addnext(copy)
+        Paragraph(copy, label._parent).text = text
     path = directory / note.name.replace("v09", "v10")
     document.save(path)
     return path
@@ -42,7 +47,7 @@ def main():
     parser.add_argument("--output-dir", type=Path, default=Path("test_runs/agreements"))
     args = parser.parse_args()
     note = Path("tests/fixtures/ran1/Chair notes RAN1#124 - v09.docx")
-    # v09 is the baseline; v10 adds one paragraph to 10.1, so the panel shows
+    # v09 is the baseline; v10 adds two paragraphs to 10.1, so the panel shows
     # both an unchanged section and a dated change with a highlighted addition.
     baseline, _ = package_agreements(track_changes(
         parse_agreements(note, "ran1#124"), None,
