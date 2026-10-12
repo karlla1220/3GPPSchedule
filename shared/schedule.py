@@ -66,6 +66,9 @@ class Session:
     room_ids: list[str] = field(default_factory=list)
     room_scope: str = "assigned"  # assigned, shared, or unassigned (display span only)
     notes: list[str] = field(default_factory=list)
+    # Agenda items read from the label of a cell without one (RAN1
+    # agenda_labels.py). Used by the filter and the agreements only.
+    inferred_agenda_items: list[str] = field(default_factory=list)
 
 
 @dataclass

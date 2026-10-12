@@ -160,6 +160,7 @@ LLM 응답을 그대로 HTML에 쓰지는 않는다. 코드가 다음 후처리�
 5. parser-derived `fallback_start_time`이 적용되는 예외라면 해당 시작 시각을 사용한다.
 6. duration을 더해 최종 `start_time`과 `end_time`을 `HH:MM`으로 생성한다.
 7. LLM으로 `group_header` 표기를 정리한 뒤, 남은 빈 group은 이름 일치 규칙으로 보완한다.
+8. AI 번호가 없는 셀은 이름을 회의별 매핑 목록(`docs/ran1/agenda_label_map/<meeting>.jsonl`)에서 찾아 `inferred_agenda_items`를 채운다. 목록에 없는 이름만 LLM에 묻고 답을 목록에 덧붙인다(`agenda_labels.py`, CLAUDE.md의 "AI 없는 셀의 AI 추정").
 
 `specified_start_time`을 분으로 바꿀 수 없는 경우 현재 구현은 오류를 중단시키지 않고 그 방의 순차 cursor로 fallback한다. 따라서 잘못된 문자열이 들어와도 빌드는 성공할 수 있지만 배치 시각이 원문과 달라질 가능성이 있다.
 
@@ -205,6 +206,7 @@ LLM 응답을 그대로 HTML에 쓰지는 않는다. 코드가 다음 후처리�
 | agenda 설명 계층 결합 | 결정론적 코드 |
 | `specified_start_time` 적용 및 최종 시각 계산 | 결정론적 코드 |
 | group 이름 정규화 | LLM |
+| AI 없는 셀 이름 → agenda 항목 | LLM (회의별 목록에 저장, 한 이름은 한 번만 묻는다) |
 | HTML 생성 | 결정론적 코드 |
 
 
