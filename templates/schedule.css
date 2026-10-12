@@ -2,6 +2,7 @@
     --base-slot-height: 10px;
     --time-col-width: 36px;
     --header-height: 36px;
+    --grid-min-width: 600px;
     --page-bg: #F6F7F9;
     --surface: #FFFFFF;
     --hairline: #E7E9EE;
@@ -313,8 +314,16 @@ header .meta a:focus-visible,
     display: grid;
     grid-template-rows: var(--header-height) repeat(var(--time-rows), var(--slot-height));
     gap: 0;
-    min-width: 600px;
+    min-width: var(--grid-min-width);
     position: relative;
+    /* Set by a pinch on the grid (schedule.js). */
+    zoom: var(--grid-zoom, 1);
+}
+
+/* A pinch on the grid zooms the grid, not the page (see schedule.js);
+   browsers without CSS zoom keep the native pinch. */
+@supports (zoom: 1) {
+    .grid-wrapper { touch-action: pan-x pan-y; }
 }
 
 /* Room headers */
