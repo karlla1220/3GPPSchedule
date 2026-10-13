@@ -57,6 +57,36 @@ def test_schedules_without_concurrent_duplicates_pass(sessions):
     reject_concurrent_agenda_duplicates(sessions)
 
 
+@pytest.mark.parametrize("sessions, agenda_items", [
+    # Two rooms under one title, each on its own sub-item.
+    ([_session("10.5.2.x", "14:30", "16:30", 2, "10.5.2.x"),
+      _session("10.5.2.x", "14:30", "16:30", 4, "10.5.2.x")], ()),
+    ([_session("10.5.2 PDCCH", "14:30", "15:00", 2, "10.5.2, 10.5.2.1"),
+      _session("10.5.2 PDSCH", "14:30", "15:00", 4, "10.5.2, 10.5.2.2")], ()),
+    # The agenda alone says 10.5.2 is a title.
+    ([_session("10.5.2", "14:30", "16:30", 2, "10.5.2"),
+      _session("10.5.2", "14:30", "16:30", 4, "10.5.2")], ("10.5.2", "10.5.2.1")),
+])
+def test_one_title_in_two_rooms_at_once_passes(sessions, agenda_items):
+    reject_concurrent_agenda_duplicates(sessions, agenda_items=agenda_items)
+
+
+def test_same_detailed_item_under_a_title_is_rejected():
+    sessions = [
+        _session("10.5.2.x", "14:30", "16:30", 2, "10.5.2.x, 10.5.2.1"),
+        _session("10.5.2.1", "15:00", "15:30", 4, "10.5.2.1"),
+    ]
+    assert [n for n, _, _ in concurrent_agenda_duplicates(sessions)] == ["10.5.2.1"]
+
+
+def test_item_without_sub_items_is_detailed():
+    sessions = [
+        _session("AI 9.2 MIMO", "17:00", "17:40", 3, "9.2"),
+        _session("MIMO", "17:00", "17:40", 5, "9.2"),
+    ]
+    assert [n for n, _, _ in concurrent_agenda_duplicates(sessions, ("9.1", "9.1.1", "9.2"))] == ["9.2"]
+
+
 def test_rejected_paths_stay_removed_after_nested_rollbacks(tmp_path):
     slot = tmp_path / "slot.json"
     other = tmp_path / "other.json"

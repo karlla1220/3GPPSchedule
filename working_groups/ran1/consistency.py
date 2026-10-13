@@ -25,6 +25,18 @@ def _agenda_numbers(session: Session) -> set[str]:
     return set(_AGENDA_NUMBER.findall(session.agenda_item or ""))
 
 
+def _title_numbers(numbers) -> set[str]:
+    """Numbers that head other items: "10.5.2.x", or "10.5.2" when "10.5.2.1"
+    exists.  Two rooms can work under one title at the same time, each on
+    its own sub-item."""
+    numbers = set(numbers)
+    titles = {n for n in numbers if n.lower().endswith(".x")}
+    for number in numbers:
+        parts = number.split(".")
+        titles.update(".".join(parts[:i]) for i in range(1, len(parts)))
+    return titles
+
+
 def _overlaps(a: Session, b: Session) -> bool:
     return (time_to_minutes(a.start_time) < time_to_minutes(b.end_time)
             and time_to_minutes(b.start_time) < time_to_minutes(a.end_time))
@@ -40,19 +52,26 @@ def _time_block_index(session: Session) -> int | None:
 
 def concurrent_agenda_duplicates(
     sessions: list[Session],
+    agenda_items=(),
 ) -> list[tuple[str, Session, Session]]:
-    """Pairs of sessions in different rooms that overlap in time and share an
-    agenda number.
+    """Pairs of sessions in different rooms that overlap in time and share a
+    detailed agenda number.
 
-    RAN1 does not discuss one agenda item in two rooms at once.  A pair like
-    this means one source was placed in the wrong room (RAN1#126bis Thursday:
-    Hiroki's 10.5.4.x in both Tamna BC Hall and Yeongju B Hall, which also
-    dropped Tamna's own 10.5.3.x).
+    RAN1 does not discuss one detailed agenda item in two rooms at once.  A
+    pair like this means one source was placed in the wrong room (RAN1#126bis
+    Thursday: Hiroki's 10.5.4.x in both Tamna BC Hall and Yeongju B Hall,
+    which also dropped Tamna's own 10.5.3.x).  Title numbers ("10.5.2.x",
+    "10.5.2") are not compared: sessions under one title can run in parallel
+    on different sub-items.  ``agenda_items`` are this meeting's agenda
+    numbers; the schedule's own numbers also tell which numbers are titles.
     """
     by_day: dict[str, list[Session]] = defaultdict(list)
+    numbers = set(agenda_items)
     for session in sessions:
         if _agenda_numbers(session):
             by_day[session.day].append(session)
+            numbers |= _agenda_numbers(session)
+    titles = _title_numbers(numbers)
     pairs = []
     for day_sessions in by_day.values():
         for i, a in enumerate(day_sessions):
@@ -61,7 +80,8 @@ def concurrent_agenda_duplicates(
                     continue
                 if not _overlaps(a, b):
                     continue
-                for number in sorted(_agenda_numbers(a) & _agenda_numbers(b)):
+                shared = (_agenda_numbers(a) & _agenda_numbers(b)) - titles
+                for number in sorted(shared):
                     pairs.append((number, a, b))
     return pairs
 
@@ -73,13 +93,15 @@ def _room(session: Session, day_rooms_map) -> str:
     return " + ".join(names) or f"room column {session.room_col_start}"
 
 
-def reject_concurrent_agenda_duplicates(sessions: list[Session], day_rooms_map=None) -> None:
-    """Fail the build when an agenda item is in two rooms at the same time.
+def reject_concurrent_agenda_duplicates(
+    sessions: list[Session], day_rooms_map=None, agenda_items=(),
+) -> None:
+    """Fail the build when a detailed agenda item is in two rooms at the same time.
 
     The slot states of every slot involved are discarded, so the next build
     interprets them cold.  If the duplicate comes back, it fails again.
     """
-    pairs = concurrent_agenda_duplicates(sessions)
+    pairs = concurrent_agenda_duplicates(sessions, agenda_items)
     if not pairs:
         return
     lines = []
