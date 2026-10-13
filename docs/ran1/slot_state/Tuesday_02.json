@@ -3,7 +3,7 @@
   "time_block_index": 2,
   "source_hashes": {
     "Main Schedule": "4f4ba4e557930f58",
-    "Hiroki's schedule": "58e430b8174f6b1a",
+    "Hiroki's schedule": "f8e0ffafa2893394",
     "Sorour's schedule": "5280f5dd394b0343"
   },
   "merged_sessions": [
@@ -14,7 +14,7 @@
       "specified_start_time": null,
       "chair": null,
       "group_header": "6GR",
-      "agenda_item": null,
+      "agenda_item": "10.6.x",
       "description": "WUS and operation",
       "agenda_descriptions": [
         {
@@ -64,8 +64,8 @@
       "duration_minutes": 60,
       "specified_start_time": null,
       "chair": null,
-      "group_header": "",
-      "agenda_item": null,
+      "group_header": "6GR",
+      "agenda_item": "10.5.1.1",
       "description": "Synchronization acquisition and beam measurement",
       "agenda_descriptions": [
         {
@@ -220,7 +220,7 @@
       "duration_minutes": 10,
       "specified_start_time": null,
       "chair": "Hiroki",
-      "group_header": "",
+      "group_header": "TEI, AI 7/8.2",
       "agenda_item": "11",
       "description": "TEI",
       "agenda_descriptions": [
@@ -244,7 +244,7 @@
       "duration_minutes": 25,
       "specified_start_time": null,
       "chair": "Hiroki",
-      "group_header": "Maintenance",
+      "group_header": "TEI, AI 7/8.2 / Maintenance",
       "agenda_item": "8.2",
       "description": "Maintenance on others",
       "agenda_descriptions": [
@@ -273,7 +273,7 @@
       "duration_minutes": 25,
       "specified_start_time": null,
       "chair": "Hiroki",
-      "group_header": "Maintenance",
+      "group_header": "TEI, AI 7/8.2 / Maintenance",
       "agenda_item": "8.3",
       "description": "Maintenance on UE features",
       "agenda_descriptions": [
@@ -302,7 +302,7 @@
       "duration_minutes": 20,
       "specified_start_time": null,
       "chair": "Hiroki",
-      "group_header": "Maintenance",
+      "group_header": "TEI, AI 7/8.2 / Maintenance",
       "agenda_item": "8.2",
       "description": "Maintenance on others",
       "agenda_descriptions": [
@@ -327,12 +327,12 @@
     },
     {
       "room_name": "RAN1_brk2",
-      "name": "10.2.1",
+      "name": "6G waveform",
       "duration_minutes": 40,
       "specified_start_time": null,
       "chair": "Hiroki",
-      "group_header": "6G waveform",
-      "agenda_item": null,
+      "group_header": "6GR",
+      "agenda_item": "10.2.1",
       "description": "Waveform",
       "agenda_descriptions": [
         {
@@ -366,7 +366,7 @@
       "specified_start_time": null,
       "chair": "Xiaodong",
       "group_header": "6GR",
-      "agenda_item": null,
+      "agenda_item": "10.5.3.1",
       "description": "Aspects of downlink-based CSI acquisition",
       "agenda_descriptions": [
         {
@@ -405,7 +405,7 @@
       "specified_start_time": null,
       "chair": "Xiaodong",
       "group_header": "6GR",
-      "agenda_item": null,
+      "agenda_item": "10.5.3.2",
       "description": "Aspects of uplink-based CSI acquisition",
       "agenda_descriptions": [
         {
@@ -444,7 +444,7 @@
       "specified_start_time": null,
       "chair": "Xiaodong",
       "group_header": "6GR",
-      "agenda_item": null,
+      "agenda_item": "10.5.3.3",
       "description": "Other aspects",
       "agenda_descriptions": [
         {
@@ -483,7 +483,7 @@
       "specified_start_time": null,
       "chair": "Xiaodong",
       "group_header": "6GR",
-      "agenda_item": null,
+      "agenda_item": "10.5.3.4",
       "description": "Beam management for downlink and uplink",
       "agenda_descriptions": [
         {
@@ -578,7 +578,7 @@
       "specified_start_time": null,
       "chair": "Sorouri",
       "group_header": "6GR",
-      "agenda_item": null,
+      "agenda_item": "10.3.2",
       "description": "Modulation",
       "agenda_descriptions": [
         {
@@ -606,7 +606,7 @@
       ]
     }
   ],
-  "merged_at": "2026-10-13T06:01:19.060933+00:00",
+  "merged_at": "2026-10-13T06:19:01.131966+00:00",
   "meeting_id": "ran1#126bis",
   "schema_version": 2
 }

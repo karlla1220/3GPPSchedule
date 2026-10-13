@@ -13,7 +13,7 @@
       "specified_start_time": null,
       "chair": null,
       "group_header": "6GR",
-      "agenda_item": null,
+      "agenda_item": "10.5.1.1",
       "description": "Synchronization acquisition and beam measurement",
       "agenda_descriptions": [
         {
@@ -52,7 +52,7 @@
       "specified_start_time": null,
       "chair": null,
       "group_header": "6GR",
-      "agenda_item": null,
+      "agenda_item": "10.5.1.2",
       "description": "PRACH and RACH procedure",
       "agenda_descriptions": [
         {
@@ -91,7 +91,7 @@
       "specified_start_time": null,
       "chair": null,
       "group_header": "6GR",
-      "agenda_item": null,
+      "agenda_item": "10.5.1.3",
       "description": "Bandwidth operation",
       "agenda_descriptions": [
         {
@@ -130,7 +130,7 @@
       "specified_start_time": null,
       "chair": "Sorour",
       "group_header": "6GR",
-      "agenda_item": null,
+      "agenda_item": "10.3.2",
       "description": "Modulation",
       "agenda_descriptions": [
         {
@@ -164,7 +164,7 @@
       "specified_start_time": null,
       "chair": "Sorour",
       "group_header": "6GR",
-      "agenda_item": null,
+      "agenda_item": "10.3.1",
       "description": "Channel coding",
       "agenda_descriptions": [
         {
@@ -258,7 +258,7 @@
     },
     {
       "room_name": "RAN1_off2",
-      "name": "6G ISAC",
+      "name": "10.8.2 6G ISAC Sensing",
       "duration_minutes": 60,
       "specified_start_time": "11:30",
       "chair": "Hiroki",
@@ -292,15 +292,40 @@
     },
     {
       "room_name": "RAN1_off2",
-      "name": "6G waveform",
+      "name": "10.2.1 Waveform",
       "duration_minutes": 30,
       "specified_start_time": "12:30",
       "chair": "Hiroki",
       "group_header": "6GR",
-      "agenda_item": null
+      "agenda_item": "10.2.1",
+      "description": "Waveform",
+      "agenda_descriptions": [
+        {
+          "agenda_item": "10.2.1",
+          "matched_agenda_item": "10.2.1",
+          "description": "Waveform",
+          "hierarchy": [
+            {
+              "agenda_item": "10",
+              "description": "Rel-20 Study of 6GR",
+              "has_description": true
+            },
+            {
+              "agenda_item": "10.2",
+              "description": "Waveform for 6GR air interface",
+              "has_description": true
+            },
+            {
+              "agenda_item": "10.2.1",
+              "description": "Waveform",
+              "has_description": true
+            }
+          ]
+        }
+      ]
     }
   ],
-  "merged_at": "2026-10-13T06:01:19.053597+00:00",
+  "merged_at": "2026-10-13T06:19:01.122609+00:00",
   "meeting_id": "ran1#126bis",
   "schema_version": 2
 }

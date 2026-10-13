@@ -481,6 +481,14 @@ def _match_rooms_to_table(
     if not unique_table_colors:
         return None
 
+    # White is also what an unshaded cell reads as, so a table whose only
+    # colour is white carries no colour evidence.  Hiroki's single-column
+    # online table (heading "room: RAN1_Brk#2, Yeongju B") is unshaded and
+    # would otherwise match the white "Tamna BC Hall" TextBox.  Leave such
+    # tables generic so the heading decides the room.
+    if all(_colors_match(c, 'FFFFFF') for c in unique_table_colors):
+        return None
+
     # For each unique table colour, find matching TextBox
     matched_names: list[str] = []
     for tc in unique_table_colors:

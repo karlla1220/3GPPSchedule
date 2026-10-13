@@ -3,7 +3,7 @@
   "time_block_index": 2,
   "source_hashes": {
     "Main Schedule": "d30f688376ef7a2d",
-    "Hiroki's schedule": "568241182fc85e34",
+    "Hiroki's schedule": "a2f03d3b74cf6452",
     "Sorour's schedule": "c06fa5debd37c145"
   },
   "merged_sessions": [
@@ -103,7 +103,7 @@
       "duration_minutes": 40,
       "specified_start_time": null,
       "chair": "Sorour",
-      "group_header": "R20 NR",
+      "group_header": "R20",
       "agenda_item": "9.4",
       "description": "GNSS resilient NR-NTN operation",
       "agenda_descriptions": [
@@ -132,7 +132,7 @@
       "duration_minutes": 20,
       "specified_start_time": null,
       "chair": "Sorour",
-      "group_header": "R20 NR",
+      "group_header": "R20",
       "agenda_item": "9.5",
       "description": "NR NTN in systems using downlink compensation",
       "agenda_descriptions": [
@@ -191,11 +191,11 @@
     },
     {
       "room_name": "RAN1_brk2",
-      "name": "R20 A-IoT",
+      "name": "R20 A-IoT Phase2",
       "duration_minutes": 60,
       "specified_start_time": null,
       "chair": "Hiroki",
-      "group_header": "",
+      "group_header": "R20",
       "agenda_item": "9.3.1",
       "description": "R2D signals, channels, waveform and procedures",
       "agenda_descriptions": [
@@ -229,7 +229,7 @@
       "duration_minutes": 60,
       "specified_start_time": null,
       "chair": "Hiroki",
-      "group_header": "",
+      "group_header": "6GR",
       "agenda_item": "10.8.2",
       "description": "Aspects of integration with communication",
       "agenda_descriptions": [
@@ -541,7 +541,7 @@
       ]
     }
   ],
-  "merged_at": "2026-10-13T06:01:19.055028+00:00",
+  "merged_at": "2026-10-13T06:19:01.124306+00:00",
   "meeting_id": "ran1#126bis",
   "schema_version": 2
 }

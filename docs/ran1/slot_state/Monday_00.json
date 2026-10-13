@@ -3,7 +3,7 @@
   "time_block_index": 0,
   "source_hashes": {
     "Main Schedule": "ac8e2e616f5e0334",
-    "Hiroki's schedule": "4b3257c7f02028cb"
+    "Hiroki's schedule": "d4aa3f1081f42b68"
   },
   "merged_sessions": [
     {
@@ -85,7 +85,7 @@
       "specified_start_time": null,
       "chair": null,
       "group_header": "6GR",
-      "agenda_item": null,
+      "agenda_item": "10.5.1.1",
       "description": "Synchronization acquisition and beam measurement",
       "agenda_descriptions": [
         {
@@ -118,7 +118,7 @@
       ]
     }
   ],
-  "merged_at": "2026-10-13T06:01:19.052610+00:00",
+  "merged_at": "2026-10-13T06:19:01.120852+00:00",
   "meeting_id": "ran1#126bis",
   "schema_version": 2
 }

@@ -10,7 +10,7 @@
       "room_name": "ALL_ONLINE",
       "name": "Any other open issues. Session reports",
       "duration_minutes": 150,
-      "specified_start_time": "14:30",
+      "specified_start_time": null,
       "chair": null,
       "group_header": "",
       "agenda_item": null
@@ -34,7 +34,7 @@
       "agenda_item": null
     }
   ],
-  "merged_at": "2026-10-13T06:01:19.077089+00:00",
+  "merged_at": "2026-10-13T06:19:01.150903+00:00",
   "meeting_id": "ran1#126bis",
   "schema_version": 2
 }
