@@ -10,6 +10,7 @@ from working_groups.ran1.models import RoomInfo
 from working_groups.ran1.parser import (
     _determine_time_block_index,
     _get_cell_text,
+    _match_rooms_to_table,
     extract_meeting_location,
     find_chair_notes_docx,
     parse_docx,
@@ -195,6 +196,50 @@ def test_parse_docx_applies_grid_span_on_vmerge_time_continuation(tmp_path):
     assert dinners[0].time_block_index == 3
     assert dinners[0].room_indices == [0, 1, 2]
     assert dinners[0].fallback_start_time == "18:30"
+
+
+def _shade(cell, fill: str) -> None:
+    shd = cell._tc.get_or_add_tcPr().makeelement(f"{{{_NS}}}shd", {f"{{{_NS}}}fill": fill})
+    cell._tc.get_or_add_tcPr().append(shd)
+
+
+def _one_day_table(fills: list[str | None]):
+    document = Document()
+    table = document.add_table(rows=2, cols=len(fills) + 1)
+    if len(fills) > 1:
+        table.cell(0, 1).merge(table.cell(0, len(fills)))
+    table.cell(0, 1).text = "Thursday"
+    table.cell(1, 0).text = "17:00 ~ 19:30 (150 min)"
+    for i, fill in enumerate(fills, start=1):
+        table.cell(1, i).text = f"Session {i}"
+        if fill:
+            _shade(table.cell(1, i), fill)
+    return table
+
+
+_TEXTBOX_ROOMS = [
+    {"name": "Tamna BC Hall", "color": "FFFFFF"},
+    {"name": "Yeongju B Hall", "color": "FFD966"},
+    {"name": "Yeongju A Hall", "color": "D8D8D8"},
+]
+
+
+def test_room_colours_name_a_shaded_table():
+    table = _one_day_table([None, "D9D9D9", "FFD966"])
+    names = _match_rooms_to_table(
+        _TEXTBOX_ROOMS, table, {"Thursday": (1, 4)}, {"Thursday": 3},
+    )
+    assert names == ["Tamna BC Hall", "Yeongju A Hall", "Yeongju B Hall"]
+
+
+def test_unshaded_table_is_not_named_after_the_white_textbox():
+    # Hiroki's single-column online table is unshaded and its heading says
+    # Yeongju B.  White matches the Tamna BC Hall TextBox only by default.
+    table = _one_day_table([None])
+    names = _match_rooms_to_table(
+        _TEXTBOX_ROOMS, table, {"Thursday": (1, 2)}, {"Thursday": 1},
+    )
+    assert names is None
 
 
 def test_parse_docx_does_not_inherit_time_for_plain_blank_row(tmp_path):
