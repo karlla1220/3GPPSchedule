@@ -208,7 +208,7 @@ HTML은 `shared/page.py`, 표시 판단은 `templates/support-note.js`, 값은 `
     RAN2는 `Schedule`·`Agenda`, RAN P는 `Time plan`·`Agenda`다. 파일 이름에서 사람 이름을 추측하지 않는다.
   - 버전은 `page.py`가 파일 이름에서 읽는다(마지막 `v숫자`). 이름이 없는 파일(예전 스냅샷, 데모)은 파일 이름 그대로 보인다.
   - Draft 파일은 버전 앞에 `draft`를 적는다(`Main draft v03`). 의장이 `Draft`를 떼면서 `v00`부터 다시 매기므로,
-    숫자만 보면 `v03` 다음에 `v00`이 나와 뒤로 간 것처럼 보인다. Agreement 패널의 변경 줄(`· draft v01`)도 같다.
+    숫자만 보면 `v03` 다음에 `v00`이 나와 뒤로 간 것처럼 보인다. Agreement 패널의 변경 줄(`· Chair notes draft v01`)도 같다.
 - **제작자 줄은 맨 아래 두 줄이다.** `Created by 이름 (메일), 소개` 아래에 `면책 문구 · Feedback`.
   - 메일 주소는 그대로 적는다. `Feedback`(GitHub Issues)만 두면 계정이 없는 참석자는 연락할 방법이 없다.
   헤더 meta 링크는 meta 회색을 그대로 쓰고 밑줄로만 구별한다.
@@ -276,7 +276,8 @@ HTML은 `shared/page.py`, 표시 판단은 `templates/support-note.js`, 값은 `
 - **선택된 셀은 자기 `--accent`로 테두리를 한 줄 더 두른다.** 그림자는 더하지 않는다(그림자는 hover 전용). 파란 외곽선은 키보드 포커스(`:focus-visible`)에만 쓴다.
 - **필터와 패널은 AI 값을 따로 쓴다.** 필터는 일정 표기 그대로인 `data-ai`, 패널은 하위 섹션까지 푼 `data-agreement-ai`다. 하나로 합치면 `10.6.x` 같은 필터 항목이 셀과 맞지 않는다.
   AI가 없는 셀은 추정한 항목(`inferred_agenda_items`)으로 패널을 연다.
-- **바뀐 부분은 초록 한 색으로 보인다(`--added`).** 추가된 문단·표는 왼쪽 여백의 3px 막대, 최신 note에서 바뀐 AI 탭은 6px 점, 제목 아래 변경 줄(`Updated 6 Oct, 14:30 CEST · v10 · 1 added part marked`)도 같은 초록 막대다. Word 형광펜(녹색 포함)은 바탕만 있어서 막대로 구별된다.
+- **바뀐 부분은 초록 한 색으로 보인다(`--added`).** 추가된 문단·표는 왼쪽 여백의 3px 막대, 최신 note에서 바뀐 AI 탭은 6px 점, 제목 아래 변경 줄(`Updated 6 Oct, 14:30 CEST · Chair notes v10 · 1 added part marked`)도 같은 초록 막대다. Word 형광펜(녹색 포함)은 바탕만 있어서 막대로 구별된다.
+  변경 줄의 note 이름은 머리줄 출처 줄과 같은 표기다(`Chair notes v05`, `Session notes draft v02`, `noteLabel`). 버전만 적으면 누구의 note인지 알 수 없다.
   - 초록 바탕은 탭을 여는 순간에만 잠깐 보이고 사라진다(`added-flash`, 2초). 계속 남아 있으면 본문을 읽는 데 거슬린다. 남는 것은 막대뿐이다.
   - 막대는 문단의 들여쓰기와 상관없이 문서 왼쪽 여백(본문 왼쪽 선에서 10px 밖)에 선다. 문단 안쪽에 그리면 내어쓰기(`text-indent` 음수)된 문단에서 글자와 Word 형광펜 뒤에 가려진다.
     문단의 `margin-left`는 Word가 준 인라인 값이라 CSS에서 알 수 없다. 그래서 문단 왼쪽으로 길게 뻗은 초록 띠(`::before`)를 그리고, `.docx-document::after`의 흰 덮개가 왼쪽 3px만 남기고 가린다. 여백 밖으로 나간 부분은 `clip-path`가 자른다.
@@ -340,7 +341,7 @@ HTML은 `shared/page.py`, 표시 판단은 `templates/support-note.js`, 값은 `
   - 접힌 TDoc 목록은 하나로 보고 행이 많은 쪽을 둔다. 빈 줄만 있는 추가분은 넣지 않는다.
   - #126 EOM과 최종 세션 노트를 이렇게 합치면 AI마다 0~1블록이 겹쳐 남는다(의장이 한 줄을 두 문단으로 나눈 경우 등). 더 느슨하게 맞추면 세션에만 있는 합의를 지울 수 있어서 그대로 둔다.
 - **비교:** 합친 블록 키를 이전 빌드와 비교한다. 세션 노트의 블록이 체어맨 노트로 옮겨 와도 변경이 아니다.
-  섹션마다 문서별 몫의 digest(`sources`)를 두고, 몫이 바뀐 문서 중 가장 늦은 것을 `changed_in`으로 적는다(`Updated … · session notes draft v02`).
+  섹션마다 문서별 몫의 digest(`sources`)를 두고, 몫이 바뀐 문서 중 가장 늦은 것을 `changed_in`으로 적는다(`Updated … · Session notes draft v02`).
   - 세션 노트를 처음 읽는 빌드(이전 스냅숏에 `session_notes`가 없음)는 기준선이다. 이미 진행 중인 회의에서 세션 노트 전체가 강조되지 않는다.
     그 뒤에 새로 올라온 세션 노트는 추가로 강조된다.
 - **실패:** 세션 노트 하나를 읽지 못하면 그 노트가 들어 있던 AI는 직전에 게시한 섹션을 그대로 둔다. 목록·다운로드 실패는 체어맨 노트와 같이 빌드 전체가 이전 결과를 유지한다.

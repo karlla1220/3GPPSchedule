@@ -92,7 +92,7 @@ def main():
         # The preview's v10 added two paragraphs to 10.1, a blank one between
         # them (see preview_agreements.py).
         expect(page.locator(".agreement-change")).to_contain_text("Updated 6 Oct, 14:30")
-        expect(page.locator(".agreement-change")).to_contain_text("v10 · 2 added parts marked")
+        expect(page.locator(".agreement-change")).to_contain_text("Chair notes v10 · 2 added parts marked")
         expect(doc.locator(".agreement-added")).to_have_count(2)
         expect(doc.locator(".agreement-added").first).to_contain_text("this paragraph was added in v10")
         # One unbroken bar: the second reaches up across the margins and the
@@ -158,7 +158,7 @@ def main():
         page.screenshot(path=str(args.directory / "desktop.png"))
         select("Energy efficiency, AI 10.4")
         expect(doc.locator("article")).to_have_count(1)
-        expect(page.locator(".agreement-change")).to_have_text("As of 5 Oct, 09:00 CEST · v09")
+        expect(page.locator(".agreement-change")).to_have_text("As of 5 Oct, 09:00 CEST · Chair notes v09")
         expect(page.locator('[role="tab"] .agreement-updated')).to_have_count(0)
         expect(page.get_by_role("tab", name="AI 10.4", exact=True)).to_have_attribute(
             "aria-selected", "true"
@@ -266,7 +266,7 @@ def main():
         expect(page.get_by_text("Loading agreements…")).to_be_visible()
         select("Energy efficiency, AI 10.4")
         expect(doc.locator("article")).to_have_count(1)
-        expect(page.locator(".agreement-change")).to_have_text("As of 5 Oct, 09:00 CEST · v09")
+        expect(page.locator(".agreement-change")).to_have_text("As of 5 Oct, 09:00 CEST · Chair notes v09")
         expect(page.locator('[role="tab"] .agreement-updated')).to_have_count(0)
         page.wait_for_timeout(500)
         expect(doc.locator("article")).to_have_count(1)
