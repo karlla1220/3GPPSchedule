@@ -1,524 +1,396 @@
 # 3GPP Schedule Viewer
 
-WG별 독립 파이프라인의 결과를 공통 간트차트로 제공하는 GitHub Pages 사이트입니다. RAN1, RAN2, RAN Plenary는 각각 독립된 실제 문서 파서를 사용합니다.
+A GitHub Pages site that shows 3GPP RAN meeting schedules as a Gantt chart, one page per working group.
+RAN1, RAN2 and RAN Plenary each have their own pipeline. Each pipeline downloads the chairs' schedule
+documents from the 3GPP server, parses them (with rules and, where the documents are free-form, Gemini)
+and returns a common `Schedule` model. One shared renderer turns that model into a static HTML page.
 
-RAN1은 3GPP FTP 서버에서 최신 회의 스케줄 DOCX 파일을 다운로드하고, Gemini API로 비정형 테이블 텍스트를 파싱하여 **CSS Grid 기반 간트차트 스타일의 정적 HTML 페이지**를 생성합니다.
+The site is rebuilt automatically by GitHub Actions whenever a chair uploads a new version.
 
-## 주요 기능
+## Features
 
-- 3GPP FTP에서 최신 스케줄 DOCX 자동 다운로드 (ZIP 내 문서 자동 추출 지원)
-- **다중 소스 스케줄 통합**: Chair_notes 외 부의장(Hiroki, Sorour 등) 폴더의 스케줄도 자동 탐색·다운로드
-- **미팅 우선순위 인식**: 정규 미팅은 `RAN1#124 < RAN1#124bis < RAN1#125` 순으로 비교하고, 비정규 미팅(AH/e/기타)은 업로드 시각 기준으로 판단
-- `python-docx`로 테이블 구조 추출 및 병합 셀 처리 (TextBox 색상 기반 방 매칭)
-- Gemini API를 사용한 비정형 텍스트 → 구조화 세션 데이터 변환 (결과 캐싱)
-- **다중 소스 크로스레퍼런스**: 같은 시간대의 여러 스케줄 테이블을 하나의 LLM 호출로 통합하여 가장 상세한 세션 정보(AI 번호 등) 도출
-- **회의 시간대 자동 감지**: Agenda DOCX 또는 Chair notes DOCX/DOCM의 OOXML에서 개최지 정보를 추출하여 IANA 타임존 자동 설정
-- 요일별 탭 전환, 오늘 날짜 자동 선택되는 단일 HTML 간트차트 생성 (그룹별 색상, 자동 새로고침)
-- GitHub Actions를 통한 활성 WG별 주기적 변경 감지·빌드 및 GitHub Pages 배포
+**Viewer**
 
-## RAN1 Chairman agreements
+- One Gantt chart per day, with day tabs. Today's tab opens automatically.
+- A NOW line during the meeting, drawn in the venue's time zone.
+- Session cells show the title, duration, time range, agenda item (AI) and chair.
+  RAN2 cells also show the raw cell text when there is room.
+  Click a cell for the full details: group, chair, AI, time, room, notes and the agenda item tree.
+- **Filter by agenda item.** Matching follows the AI hierarchy: selecting `10.5.4.1` also keeps `10.5.4.x` and `10.5.4` sessions.
+  The filter is stored in the URL (`#filter=…`), so a link shares exactly what you see.
+  It is also remembered per WG and meeting.
+- **Pinch to zoom the grid** on phones, from "whole day fits the screen" up to 2×, with a detent at 100%.
+- **RAN1 chairman agreements panel.** Clicking a RAN1 cell shows the matching section of the latest chair notes below the grid,
+  with Word tables, math and figures preserved and changes since the previous version marked.
+- The header links to the other WGs' meetings and shows the source files with their versions.
+  The page refreshes itself every 5 minutes.
 
-RAN1 일정 셀을 선택하면 표 아래에 동일 회의·정확한 AI 번호의 chairman note 섹션 원문이 표시됩니다.
-Agreement/Potential agreement/Proposal 및 제목 없는 내용도 순서대로 유지하며, TDoc 목록·메타데이터 행만 제외합니다.
-기존 작은 상세 팝업을 유지하며, 자동 스크롤 없이 하단 `Agreements for`의 AI 탭을 갱신합니다.
-활성 AI의 HTML만 fetch하고 iframe·내부 스크롤 없이 페이지에 펼칩니다.
-DOCX 서식과 표·수식은 가능한 범위에서 보존하고, 글머리 기호는 깊이별 GFM 목록으로 통일합니다.
-변환 한계는 검증 보고서에 기록합니다.
-Java 21과 `uv run python scripts/setup_wmf2svg.py`를 준비하면 WMF 수식에 고정 버전의
-headless 변환기를 사용합니다. Java 미설치 시 Python 변환기로 처리합니다.
-[검증용 미리보기 실행법과 지원 범위](AGREEMENTS_VERIFICATION.md)를 참고하세요.
+**Pipelines**
 
-## 요구사항
+- Automatic selection of the current meeting and the latest document version. This covers draft vs. released files and `bis` meetings.
+- The meeting folder on the 3GPP server is found by meeting ID, so config does not need editing for each meeting.
+- Meeting dates, time zone and start/end times come from the 3GPP Portal.
+- Change detection with HTTP/FTP revalidation. Only WGs whose inputs changed are rebuilt.
+- HTTPS first, with an anonymous FTP fallback when the 3GPP web server fails.
+
+## Requirements
 
 - Python 3.12+
-- [uv](https://docs.astral.sh/uv/) 패키지 매니저
-- Google Gemini API 키 ([Google AI Studio](https://aistudio.google.com/apikey)에서 발급)
+- [uv](https://docs.astral.sh/uv/)
+- A Google Gemini API key ([Google AI Studio](https://aistudio.google.com/apikey)), used for:
+  - parsing new RAN1 and RAN Plenary documents,
+  - RAN2's fallback.
+  
+  Without a key, RAN2 uses its rule-based result.
+  `--render-only` needs no key and no network.
+- Optional: Java 21 for the pinned WMF→SVG converter used by the RAN1 agreements panel (see [Agreements panel](#chairman-agreements-panel)).
 
-## 설치
+## Installation
 
 ```bash
-# 저장소 클론
-git clone https://github.com/<your-username>/3GPPSchedule.git
+git clone https://github.com/karlla1220/3GPPSchedule.git
 cd 3GPPSchedule
-
-# 의존성 설치
 uv sync
+cp .env.example .env   # then set GEMINI_API_KEY
 ```
 
-## 환경 설정
-
-프로젝트 루트에 `.env` 파일을 생성하고 필요한 환경 변수를 설정합니다:
+## Usage
 
 ```bash
-cp .env.example .env
-```
-
-```dotenv
-GEMINI_API_KEY=your-api-key-here
-```
-
-- `GEMINI_API_KEY`: RAN1·RAN Plenary 파싱용 Gemini API 키 ([Google AI Studio](https://aistudio.google.com/apikey)에서 발급). RAN2는 규칙으로 읽고 규칙이 불확실한 부분만 Gemini로 보완하며, 키가 없으면 규칙 결과만 씁니다.
-제작자와 연락처는 환경변수 대신 `site.json`의 `presentation`에서 설정합니다.
-
-## 사용법
-
-### 전체 파이프라인 (다운로드 → 파싱 → HTML 생성)
-
-```bash
-uv run python main.py
-```
-
-RAN1 문서, RAN2 session schedule, RAN Plenary timeplan을 다운로드·파싱합니다. WG별 페이지와 기본 WG로 이동하는 `docs/index.html`을 함께 출력합니다.
-
-### 로컬 DOCX 파일 사용
-
-```bash
-uv run python main.py --wg ran1 --local "Chair_notes/RAN1#124 online and offline schedules - v00.docx"
-```
-
-이미 다운로드된 DOCX 파일을 직접 지정하여 HTML을 생성합니다.
-
-### 다운로드 건너뛰기
-
-```bash
-uv run python main.py --no-download
-```
-
-선택 WG의 다운로드 캐시를 사용합니다. RAN P는 `downloads/ran-plenary/inputs/`의 timeplan·agenda와 동일 회의의 메타데이터 또는 명시 설정이 필요합니다. LLM 캐시가 없으면 Gemini 호출은 수행합니다.
-
-### 출력 경로 지정
-
-```bash
-uv run python main.py --output-dir output
-```
-
-사이트 루트는 `docs/index.html`이며, WG별 페이지는 `docs/ran1/index.html`, `docs/ran2/index.html`, `docs/ran-plenary/index.html`입니다.
-
-## CLI 옵션 요약
-
-| 옵션 | 설명 |
-|---|---|
-| (없음) | FTP 다운로드 → 파싱 → HTML 생성 전체 파이프라인 |
-| `--local <path>` | 선택한 한 WG의 로컬 DOCX(RAN1·RAN2) 또는 RAN P ZIP으로 HTML 생성 |
-| `--no-download` | 다운로드 없이 최신 로컬 파일 사용 |
-| `--output-dir <path>` | 사이트 출력 폴더 (기본: `docs/`) |
-| `--wg <id>` | 갱신할 WG: `ran1`, `ran2`, `ran-plenary`, `all` (기본) |
-| `--render-only` | 저장된 `schedule.json`으로 HTML만 재생성; 파싱·네트워크 호출 없음 |
-| `--rebuild-slots` | RAN1 슬롯 상태 또는 RAN P timeplan 해석 캐시를 초기화하고 재해석 |
-
-## 프로젝트 구조
-
-```text
-main.py / build.py             # WG 실행, 결과 저장, 공통 사이트 조립
-ci.py / check_update.py        # 활성 WG 변경 감지, 계획 전달, 빌드, 배포 판단
-site.json                      # 기본 WG와 표시 순서
-working_groups/
-  registry.py                  # WG별 lifecycle의 명시적 등록 (지연 import)
-  ran1/
-    lifecycle.py               # check / prepare / reset / build 공통 인터페이스
-    pipeline.py                # build_schedule(options) → Schedule
-    parser.py / session_parser.py / merger.py
-    downloader.py / check_update.py / slot_state.py
-    agenda_descriptions.py / models.py / config.py
-    config.json / prompts/     # RAN1 전용 설정과 LLM 프롬프트
-  ran2/
-    lifecycle.py / sources.py  # Portal 날짜로 현재 미팅 선택, schedule·agenda.csv 재검증
-    document.py                # 표·병합 셀·변경 추적, 표 밖 문단·탭 표를 하단 정보로 추출
-    sessions.py                # 시각 표시로 셀을 나누고 제목·AI·Chair를 보수적으로 추정, 불확실한 셀 표시
-    llm.py / prompts/          # 불확실한 셀과 인식 못 한 양식의 Gemini 폴백, 근거 검증
-    pipeline.py / config.json  # Portal 메타데이터와 공통 Schedule 조립
-  ran_plenary/
-    lifecycle.py / sources.py  # 최신 timeplan·agenda 선택, 재검증, check→build 전달
-    document.py                # DOCX 문단·run·글씨 색·취소선·원문 위치 추출
-    interpreter.py             # LLM 해석, 근거·방 사용 시간·세션 범위 검증
-    pipeline.py                # Portal 메타데이터와 공통 Schedule 조립
-    config.json / prompts/     # RAN P 전용 설정과 프롬프트
-shared/
-  lifecycle.py                 # CheckResult, BuildOptions, WorkingGroup 규약
-  site_config.py               # 활성 WG와 기본 WG 검증
-  schedule.py                  # 공통 결과 모델과 JSON 저장/읽기
-  renderer.py                  # 기존 간트차트 HTML·CSS·JS
-  navigation.py                # WG 링크와 개최 상태
-# WG별 결과/상태는 아래 폴더에 격리
-docs/ran1/                     # index.html, schedule.json, slot_state/, 상태 JSON
-docs/ran2/                     # index.html, schedule.json, .schedule_state.json
-docs/ran-plenary/              # index.html, schedule.json
-downloads/ran1/                # 기존 다운로드와 extra_files
-.cache/ran1/                   # 기존 LLM 캐시
-.cache/ran2/                   # RAN2 LLM 폴백 결과 (입력 해시별)
-ref_in_manual/ran1/            # RAN1 수동 참조 문서
-```
-
-WG의 내부 단계는 자유입니다. 공통 실행기는 각 `build_schedule(options)`에서
-`shared.schedule.Schedule`을 받으며, WG끼리는 서로의 내부 모듈을 import하지 않습니다.
-새 WG는 독립 폴더와 pipeline을 만든 뒤 `registry.py`와 `site.json`에 등록합니다.
-공통 모델의 `DaySchedule.timeline`으로 날짜마다 시작/종료, 슬롯 간격, 눈금 간격,
-휴식과 시간 블록을 전달합니다. 새 WG는 방 ID(`RoomInfo.id`, `Session.room_ids`)를
-사용하며, RAN1의 기존 열 번호도 호환됩니다. 한 세션이 여러 방에 걸치면 방은 인접해야 합니다.
-
-`Schedule.starts_on`/`ends_on`은 ISO 날짜, `timezone`은 개최지의 IANA 시간대입니다.
-`starts_at`/`ends_at`에는 실제 시작·종료 시각을 UTC 오프셋 포함 ISO 형식으로 저장합니다
-(예: `2026-08-24T09:00:00+02:00`). 기존 스냅샷에 이 필드가 없으면 `null`로 읽습니다.
-날짜가 있는 미팅은 개최 중인 항목과 현재 선택 항목을 상단에 표시합니다.
-RAN1도 Portal 메타데이터로 개최 날짜와 시간을 확인하며,
-RAN Plenary는 Portal에서 동일 회의번호의 개최 날짜·장소를 조회해 실제 개최 상태를 표시합니다.
-
-## 다중 WG 빌드와 로컬 확인
-
-```bash
-# RAN1·RAN Plenary 실제 파이프라인 + 사이트 조립
+# Full pipeline for all enabled WGs: download → parse → render
 uv run python main.py
 
-# RAN Plenary만 갱신; RAN1은 저장된 결과를 유지
-uv run python main.py --wg ran-plenary
+# One WG only; the other WGs keep their saved results
+uv run python main.py --wg ran2
 
-# 저장된 두 WG 결과를 사용하여 화면만 재생성 (API 키 불필요)
+# Re-render HTML from saved schedule.json files (no API key, no network)
 uv run python main.py --render-only
 
-# 특정 RAN1 문서로 검증; 로컬 보조 문서를 자동 수집하지 않음
+# Reuse downloaded inputs (Gemini may still be called if its cache misses)
+uv run python main.py --no-download
+
+# Build one WG from a local document
 uv run python main.py --wg ran1 --local "path/to/RAN1 schedule.docx" --no-download
+uv run python main.py --wg ran2 --local "tests/fixtures/ran2/R2_135_Schedule_v11.docx"
+uv run python main.py --wg ran-plenary --local "tests/fixtures/ran_plenary/RAN#113 time plan v04.zip"
 
-# 정적 사이트 미리보기
+# Preview the static site
 python3 -m http.server 8000 --directory docs
+```
 
-# 회귀 테스트
+To check UI changes without touching `docs/`, render into a copy:
+
+```bash
+cp -R docs /tmp/out && uv run python main.py --render-only --output-dir /tmp/out
+python3 -m http.server 8765 -d /tmp/out   # http://localhost:8765/ran1/
+```
+
+| Option | Description |
+|---|---|
+| (none) | Download, parse and render every enabled WG |
+| `--wg <id>` | WG to rebuild: `ran1`, `ran2`, `ran-plenary` or `all` (default). The navigation of every WG is still regenerated |
+| `--local <path>` | Build from a local DOCX (RAN1, RAN2) or timeplan ZIP (RAN Plenary). Requires a single `--wg` |
+| `--no-download` | Use the latest downloaded inputs |
+| `--render-only` | Render from saved `schedule.json`. No parsing or network access. Fails if the default WG has no saved result |
+| `--rebuild-slots` | Clear the selected WG's interpretation state: RAN1 slot state, the RAN2 LLM cache, the RAN Plenary interpretation cache |
+| `--output-dir <path>` | Site output folder (default `docs/`) |
+| `--site-config <path>` | Site config file (default `site.json`) |
+
+If a WG fails, it keeps its last good `schedule.json`. The other WGs still build, and `main.py` exits with an error code.
+
+`uv run python -m working_groups.ran1.pipeline --output out/schedule.html` still renders RAN1 alone as a single HTML file.
+Its default output is `docs/ran1/index.html`, and it does not write the agreements panel data.
+
+### Tests
+
+```bash
 uv run pytest -q
 ```
 
-회귀 테스트는 머지 전에 직접 돌립니다. 20분마다 도는 Build and Deploy는 테스트를 돌리지 않습니다.
-CI에서 테스트가 도는 곳은 `network-check.yml`뿐이고, 3GPP 전송 코드(`shared/ftp_transport.py`, `shared/remote_files.py` 등)가 바뀌어 push될 때만 돕니다.
+Run the tests yourself before merging. The scheduled deploy workflow does not run them.
+CI runs the tests only in `network-check.yml`.
+That workflow runs on manual dispatch and on pushes that touch the 3GPP transport code, the certificates or their tests.
+Tests use the real documents in `tests/fixtures/` and fake Gemini responses. They need no network or API key.
 
-루트는 활성 WG 중 실제 저장된 스케줄의 미팅 번호와 Portal `ONGOING` 항목이
-일치하는 WG로 이동합니다. 동시에 개최 중이면 `site.json`의 `default_wg`를 우선하고,
-그 WG가 개최 중이 아니면 `working_groups` 순서를 따릅니다. 일치하는 개최 중 미팅이
-없으면 `default_wg`(기본 `ran1`)로 이동합니다. 데모와 다른 미팅 번호의 오래된
-스케줄은 자동 선택 후보가 아닙니다. 실제 RAN Plenary 스케줄은 동일 미팅이
-개최 중이면 자동 선택 후보에 포함됩니다.
+## Configuration
 
-API 장애 또는 `--render-only`/`--no-download`에서는 저장된 개최지 날짜로 판정합니다.
-CI는 미팅 상태에 따른 루트 이동 변경도 감지하여 문서 변경 없이 사이트를 다시 렌더링합니다.
-WG 링크는
-`../ran1/`, `../ran-plenary/`인 일반 링크이며 클릭 시 URL과 전체 페이지가 바뀝니다.
-GitHub Pages 프로젝트 하위 경로에서도 직접 접속·새로고침·뒤로가기가 동작합니다.
-선택된 미팅은 중앙에서 강조하고 다른 미팅은 같은 줄의 회색 링크로 표시합니다.
-날짜 탭과 NOW 표시 설정은 WG/미팅별로 분리해 저장합니다.
-NOW는 브라우저의 현재 시각이 `starts_at ≤ 현재 시각 ≤ ends_at`인 동안 기본 ON이며,
-해당 미팅에서 수동으로 OFF를 저장했다면 그 설정을 유지합니다. 기간 밖에서는 저장된
-ON 설정도 적용하지 않고 버튼과 NOW 선을 OFF로 둡니다. 시각 정보가 없거나 유효하지
-않은 스케줄 및 데모도 OFF입니다. 페이지를 열어 둔 상태에서는 시작·종료 경계와
-분 단위 갱신, 페이지 복귀 시 상태를 다시 확인합니다. 시간 비교는 절대 시각으로,
-NOW 선의 위치는 개최지 시간대로 계산합니다.
+### Environment
 
-한 WG만 빌드해도 사용 가능한 모든 WG의 내비게이션은 다시 생성합니다.
-실패한 WG는 마지막 정상 `schedule.json`을 유지하고 다른 WG 빌드는 계속하지만,
-로컬 `main.py` 명령은 실패 코드로 종료합니다. 운영 CI는 아래의 `ci.py` 절차를 사용해
-실패한 WG의 저장 상태까지 복원하고, 성공한 다른 WG의 갱신은 계속합니다.
-`--wg ran-plenary`는 RAN1 파서를 import하지 않지만 새로운 문서의 해석에는 Gemini API 키가 필요합니다.
-`--render-only`는 두 WG 모두 API 키·네트워크 없이 동작합니다.
-`--render-only`는 기존 `schedule.json`이 필요하며 설정된 기본 WG 결과가 없으면 오류로 종료합니다.
+| Variable | Use |
+|---|---|
+| `GEMINI_API_KEY` | Gemini API key (RAN1, RAN2 fallback, RAN Plenary) |
+| `SCHEDULE_MEETING_SYNC` | RAN1: overrides `meeting_sync` |
+| `SCHEDULE_MEETING_SPECIFIC_OVERRIDE` | RAN1: overrides `meeting_specific_override` (JSON array or comma-separated URLs; legacy name `SCHEDULE_MEETING_SPECIFIC`) |
+| `SCHEDULE_EXTRA_FOLDERS` | RAN1: JSON array that replaces `extra_folders` |
+| `SCHEDULE_EXTRA_FILES` | RAN1: JSON array that replaces `extra_files` |
 
-기존 루트의 RAN1 Python 파일·설정·프롬프트는 `working_groups/ran1/`로 이동했고,
-기존 `docs/`의 상태와 다운로드/캐시도 WG 하위 폴더로 옮겼습니다.
-외부 코드의 import 경로와 수동 참조 파일 위치를 새 경로로 변경하세요.
-RAN1만 단독 HTML로 출력하던 동작은
-`uv run python -m working_groups.ran1.pipeline --output output/schedule.html`로 사용할 수 있습니다.
-
-## RAN Plenary timeplan
-
-RAN P는 Chair 폴더의 `RAN#<번호> time plan v<버전>.zip`/`.docx`를
-**회의번호 → 숫자 버전 → 목록 메타데이터** 순으로 선택합니다. 오래된 회의·버전으로
-자동 후퇴하지 않으며 ZIP에는 같은 회의·버전의 DOCX가 하나 있어야 합니다.
-기본 주소는 `working_groups/ran_plenary/config.json`에 있습니다.
-
-- **sync의 Chair 폴더는 회의에 따라 생기고 사라집니다.** 폴더가 없거나(403), timeplan이 없거나, 빌드한 판보다 낮은 판만 있으면 오류 없이 마지막 빌드 입력을 `.cache/3gpp/`에서 꺼내 그대로 둡니다(`sources.built_bundle`). 빌드한 적이 없을 때만 오류입니다.
-- **`agenda.csv`는 미팅 폴더(`tsg_ran/TSG_RAN/TSGR_<번호>/Agenda/`)를 먼저 보고**, 없으면 sync(`agenda_url`), 그것도 없으면 같은 회의에서 빌드한 것을 씁니다. 다른 회의의 agenda는 물려받지 않습니다.
-  - 미팅 폴더는 timeplan의 회의 번호로 자동으로 찾습니다(아래 "미팅 폴더 자동 등록"). Portal의 `MtgDocURL`은 `.../TSGR_113/Docs/`처럼 하위 폴더를 가리키므로 그 위 폴더를 씁니다.
-  - 찾지 못하면(회의 전이라 아직 없는 폴더) sync로 넘어가고 다음 실행에서 다시 찾습니다.
-  - 찾은 폴더는 `config.json`의 `meeting_specific`에 기록됩니다. 직접 지정하려면 `meeting_specific_override`에 `https://www.3gpp.org/ftp/tsg_ran/TSG_RAN/TSGR_113/`처럼 적습니다. 그 회의에서는 자동으로 찾은 폴더보다 우선합니다. 둘 다 폴더 위치만 바꾸므로 `config_hash`에 넣지 않습니다.
-
-파서는 셀을 평문으로 뭉개지 않고 방 안내와 문단별 run의 글씨 색, 테마/스타일 상속,
-줄바꿈, 취소선, 원문 ID를 보존합니다. Gemini가 문서 전체를 읽어 물리적 장소,
-요일별 사용 가능 시간, 세션을 해석하고 코드는 원문 누락·시간 추정·방 중복·사용 기간을
-검증합니다. 검증 실패 시 오류를 포함해 한 번 수정 요청하고, 계속 실패하면 기존 결과를 유지합니다.
-시간이 없는 둘째 표는 순서를 유지한 별도 토픽·문서·AI 참조 목록입니다.
-표 바로 앞의 문단들(이전 표 이후)을 원문 순서와 문구 그대로 표시하며, 문단이 없으면
-안내문을 만들지 않습니다. 이 문구는 `Schedule.topic_preamble`에 저장됩니다.
-이 목록은 원본 하이라이트를 연한 배경색으로 표현하고 원본 하이퍼링크·강조·취소선을
-보존합니다. Agenda 설명은 상위 항목을 합친 들여쓰기 트리로 표시하므로 세부 항목의
-문맥을 확인할 수 있습니다. 이 서식은 스냅샷에 저장되며 서식만 변경되면 LLM 재호출 없이 반영됩니다.
-
-RAN#113 v04의 주요 표현:
-
-- 검은 일반 토픽은 `room_scope="unassigned"`로 하루 전체 방 열에 병합합니다.
-  공통 블록은 `shared`이며 둘 다 실제 모든 방을 예약한다는 의미는 아닙니다.
-- 명시적인 `Main:`/`in RAN main room`은 검은 글씨라도 Main으로 배치합니다.
-  개회·종료의 빨간 강조는 방 구분으로 사용하지 않습니다.
-- 화요일은 세 장소 열을 표시하고 12:30부터 Breakout을 Madrid 1–2에서
-  Neptuno + PTA Alcala로 옮깁니다. TBD도 해당 방 셀에 남습니다.
-- 휴식 중 회의도 보존하고 휴식 이름은 시간축에 표시합니다.
-  점심 세션은 12:30–13:30, 화요일 저녁은 19:00까지, 목요일은 17:00까지입니다.
-- AI는 timeplan의 명시 번호 또는 구체적으로 연결된 토픽 표에서만 얻습니다.
-  agenda.csv는 번호별 설명을 제공합니다. 근거가 없는 AI는 비워 둡니다.
-
-`Schedule.topic_references`, `Session.room_scope`, `Session.notes`는 선택 필드로
-기존 스냅샷도 읽을 수 있습니다. `--render-only`는 저장된 설명과 주석까지 재현합니다.
-
-### 날짜·시간대 및 오프라인 입력
-
-Portal 조회는 진행 중 여부가 아니라 선택한 RAN 회의번호로 일치시킵니다.
-조회 범위는 현재 연도 전후 1년이며 과거 회의는 아래 설정으로 보완할 수 있습니다.
-알려진 Portal 시간대는 공통 매핑으로 IANA 시간대로 변환하고, 미등록 표기는
-장소·국가를 LLM에 전달해 해석한 뒤 `ZoneInfo`로 검증합니다. Portal 시작·종료 시각은
-UTC 오프셋을 포함한 `starts_at`/`ends_at`으로 저장해 NOW 기간 제어에 사용합니다. 명시 설정이 우선이고, 조회 장애 시 같은 회의의 성공 메타데이터만 재사용합니다.
-새 회의의 날짜·시간대를 확보하지 못하면 UTC로 추측하지 않고 빌드에 실패합니다.
-
-아래 항목을 `working_groups/ran_plenary/config.json`에 설정하면 지정 v04를
-오프라인 입력으로 검증할 수 있습니다. `timezone` 대신 `location`/`country`만 주면
-시간대 해석에는 Gemini를 사용합니다. 전체 설정 예시는 `config.example.json`에 있습니다.
+### `site.json`
 
 ```json
 {
-  "local_agenda": "tests/fixtures/ran_plenary/agenda.csv",
-  "meetings": {
-    "113": {
-      "starts_on": "2026-09-14",
-      "ends_on": "2026-09-17",
-      "location": "Madrid",
-      "country": "ES",
-      "timezone": "Europe/Madrid"
-    }
-  }
+  "default_wg": "ran1",
+  "working_groups": [
+    {"id": "ran1", "label": "RAN1", "enabled": true},
+    {"id": "ran2", "label": "RAN2", "enabled": true},
+    {"id": "ran-plenary", "label": "RAN Plenary", "enabled": true}
+  ],
+  "presentation": { "...": "see Page header below" }
 }
 ```
 
-```bash
-uv run python main.py --wg ran-plenary --local "tests/fixtures/ran_plenary/RAN#113 time plan v04.zip"
-uv run python main.py --wg ran-plenary --no-download
-uv run python main.py --render-only
+- `working_groups[].enabled` (default `true`) decides whether a WG takes part.
+  A disabled WG is not imported, checked, parsed or shown in the navigation. Its saved output is kept.
+- `default_wg` must be an enabled WG.
+
+### Per-WG `config.json`
+
+Each WG has `working_groups/<wg>/config.json`. `config.example.json` next to it shows every key.
+
+- `meeting_specific` is written by the pipeline (see [Meeting folder discovery](#meeting-folder-discovery)). Do not edit it by hand.
+- To pin a meeting folder, use `meeting_specific_override`.
+- RAN2 and RAN Plenary also accept a `meetings` map (dates, location, time zone per meeting) and `local_agenda` for offline builds.
+
+## Project structure
+
+```text
+main.py / build.py             # local CLI: run WG pipelines, save results, assemble the site
+ci.py / check_update.py        # CI: per-WG change detection, plan hand-off, build, commit paths
+site.json                      # enabled WGs, default WG, page presentation
+working_groups/
+  registry.py                  # WG id → lifecycle module (lazy import)
+  ran1/
+    lifecycle.py               # check / prepare / reset / build adapter
+    pipeline.py                # build_schedule(options) → Schedule
+    downloader.py / check_update.py / config.py / config.json
+    parser.py                  # DOCX table structure, merged cells, room colors
+    session_parser.py          # Gemini parsing of time slots (prompts/)
+    merger.py / slot_state.py  # multi-source merge, incremental slot state
+    agenda_descriptions.py     # agenda item titles and hierarchy
+    agenda_labels.py           # AI inference for cells without an AI number
+    agreements.py              # chair-note sections per AI for the agreements panel
+  ran2/
+    lifecycle.py / sources.py  # current meeting via Portal dates, schedule + agenda.csv revalidation
+    document.py                # tables, merged cells, tracked changes, text outside the table
+    sessions.py                # rule-based cell splitting; title/AI/chair inference
+    llm.py / prompts/          # Gemini fallback for uncertain cells and unknown layouts
+    pipeline.py / config.json
+  ran_plenary/
+    lifecycle.py / sources.py  # latest timeplan + agenda selection and revalidation
+    document.py                # paragraphs, runs, font colors, strike-through, source ids
+    interpreter.py / prompts/  # Gemini interpretation and evidence validation
+    pipeline.py / config.json
+shared/
+  lifecycle.py                 # CheckResult, BuildOptions, WorkingGroup contract
+  schedule.py                  # common Schedule model, JSON load/save
+  site_config.py               # site.json validation
+  renderer.py                  # Gantt chart HTML
+  page.py                      # header: navigation, sources, notices, support, creator line
+  navigation.py                # WG links, meeting status, default WG selection
+  remote_files.py              # 3GPP listings/files, conditional revalidation, .cache/3gpp/
+  ftp_transport.py             # HTTPS with anonymous FTP fallback
+  meeting_folders.py           # archive meeting folder discovery
+  portal_meetings.py           # 3GPP Portal GetMeetings, time zone mapping
+  topic_references.py          # RAN Plenary topic list formatting
+  docx_html.py / docx_math.py  # OOXML → HTML, OMML → MathML (agreements panel)
+  agreement_assets.py          # content-addressed agreement pages + manifest
+  metafile_images.py / wmf2svg.py   # WMF/EMF rendering (Java backend optional)
+  vendor/                      # vendored OMML converter
+templates/                     # schedule.html/.css/.js, agreements-panel.js, support-note.js, favicon.svg
+scripts/                       # network check, CA bundle, agreements preview and verification, WMF setup
+tests/                         # pytest suite; fixtures/ holds real 3GPP documents
+certificates/                  # Sectigo intermediate for 3GPP HTTPS
+.github/                       # deploy / pages / network-check workflows, shared cache action
 ```
 
-### RAN P의 상태와 캐시
+Generated and runtime folders:
 
-- `docs/ran-plenary/.schedule_state.json`: 성공한 timeplan·agenda의 URL, 회의번호,
-  버전, SHA-256, HTTP validator 및 날짜·시간대 메타데이터. Git으로 추적합니다.
-- `downloads/ran-plenary/inputs/`: 검증 가능한 원문 캐시. Git에는 추가하지 않습니다.
-  check runner의 입력은 `.ci/transfers/ran-plenary/`로 build runner에 전달합니다.
-- `.cache/ran-plenary/`: 원문 구조·색·방 안내·프롬프트·모델을 포함한 해시별
-  LLM 결과와 원문 근거. 기존 CI의 `.cache/` 캐시 대상에 포함됩니다.
-
-색만 변경되어도 재해석합니다. agenda 설명만 변경되면 LLM 시간표 결과를 재사용하고
-설명을 다시 붙입니다. `force-deploy`는 입력·LLM 캐시를 비우되 마지막 성공 출력은
-새 빌드가 성공하기 전까지 유지합니다. 다운로드·파싱·검증·렌더링 실패를 성공 상태로
-기록하지 않으며 다음 check에서 다시 시도합니다.
-
-실제 v04 ZIP·agenda와 검수한 Gemini 결과는 `tests/fixtures/ran_plenary/`에 있으며
-자동 테스트는 실제 네트워크나 API 키를 사용하지 않습니다.
-
-## RAN2 session schedule
-
-RAN2 의장단은 미팅마다 `Agenda/` 폴더에 `R2_<미팅>_Schedule_v<NN>.docx`
-(`R2_135_Schedule_v11.docx`, `R2_133b_Schedule_v14.docx`, `R2_131bis_Schedule v19.docx`)를
-올립니다. 사람이 작성하는 문서라 작성자가 바뀌면 양식도 달라질 수 있으므로, **보수적으로
-추정**합니다. 일반적인 관례 몇 가지만 가정하고, 맞지 않는 내용은 세션으로 지어내거나
-빌드를 실패시키지 않고 원문 그대로 페이지 하단에 남깁니다. 규칙이 확신하지 못하는 부분은
-Gemini가 다시 읽되, 원문으로 확인되는 답만 씁니다(아래 "LLM 폴백"). RAN2#131bis~#135bis의 실제 문서로 확인했습니다.
-
-### 원본 선택
-
-- 목록은 `Meetings_3GPP_SYNC/RAN2/Agenda/`(회의 중 실시간 사본)와
-  `tsg_ran/WG2_RL2/TSGR2_<미팅>/Agenda/`(회의 전 v00과 `agenda.csv`)를 함께 봅니다.
-  아카이브 폴더는 Portal에서 끝나지 않은 다음 두 미팅과 마지막으로 빌드한 미팅만 조회합니다.
-  3GPP는 없는 폴더에 404가 아니라 403을 주므로, 미팅 폴더 목록에 `Agenda`가 있을 때만 엽니다.
-  미팅 폴더 자체가 아직 없으면(403) 빈 폴더로 봅니다.
-- **미팅 폴더는 미팅 ID로 자동으로 찾습니다(아래 "미팅 폴더 자동 등록").** Portal의 `MtgDocURL`,
-  `TSGR2_135bis`·`TSGR2_135b`(두 표기가 모두 쓰였습니다) 순입니다. 수백 항목인 `WG2_RL2/` 루트 목록은
-  둘 다 없을 때만, 미팅마다 6시간에 한 번 받습니다.
-- **찾은 폴더는 `config.json`의 `meeting_specific`에 기록됩니다.** 직접 지정하려면 `meeting_specific_override`에
-  `https://www.3gpp.org/ftp/tsg_ran/WG2_RL2/TSGR2_135bis/`처럼 미팅 폴더를 적습니다(RAN1과 같은 이름). 그 미팅에서는 자동으로 찾은 폴더보다 우선합니다.
-  둘 다 폴더 위치만 바꾸므로 `config_hash`에 넣지 않습니다(바꿔도, 자동으로 새 폴더를 찾아도 파서 캐시를 버리지 않습니다).
-- **두 폴더는 서로 대체하지 않습니다.** 미팅 폴더에는 회의 전(v00 등)과 회의 후에만 올라오고, 회의 중의 판은 sync 폴더에만 올라옵니다.
-- **sync 폴더는 회의에 따라 생기고 사라집니다.** 2026-10-11에는 #135bis 전날 `Agenda/`가 지워졌습니다(IIS 403, FTP 550).
-  - 없는 폴더(403·404)는 정상입니다(`sources.sync_listing`). 오류도, FTP 재시도도 없이 미팅 폴더로 계속합니다.
-  - 5xx·연결 실패처럼 "있는데 못 읽은" 경우만 실패입니다. 그때도 미팅 폴더로 페이지를 만들고, **회의 기간(Portal 날짜)이면 RAN2 오류로 보고합니다.**
-- **같은 미팅 안에서는 버전이 내려가지 않습니다(`sources.built_copy`).** 빌드한 판의 파일이 목록에서 사라지고(교체 중, sync 정리) 보이는 판이 같거나 낮으면, 빌드한 판을 `.cache/3gpp/`에서 꺼내 그대로 둡니다. 더 높은 판이 보이면 바로 그 판으로 바꿉니다. 원본이 캐시에 없으면 오류로 보고합니다.
-- **현재 미팅은 Portal 날짜로 정합니다.** 아직 끝나지 않은 미팅 중 가장 이른 미팅의 schedule을
-  씁니다. 진행 중인 RAN2#135bis가 있으면 일찍 올라온 RAN2#136 v00으로 넘어가지 않습니다.
-  끝나지 않은 미팅에 schedule이 없으면 가장 높은 미팅(`#135 < #135bis < #136`)을 유지합니다.
-- 같은 미팅에서는 가장 높은 버전을 쓰고, 같은 버전이면 sync 폴더 사본을 우선합니다.
-- `agenda.csv`는 같은 미팅의 아카이브 폴더에서 받아 AI 설명과 범례 그룹에 씁니다. 없으면 생략합니다.
-- 날짜·시간대·시작/종료 시각은 Portal(TB 380)에서 가져옵니다. 순서는
-  `config.json`의 `meetings` 지정 > Portal > 같은 미팅의 마지막 성공 상태입니다.
-  셋 다 없으면 UTC로 추측하지 않고 빌드에 실패합니다.
-
-### 표 읽기 (`working_groups/ran2/document.py`)
-
-- 첫 열에 시간 범위가 가장 많은 표를 일정표로 봅니다. 그 위 행의 셀 이름이 방 이름이고
-  (`Brk 1 room` → `Breakout 1`, 그 밖의 이름은 그대로), 전체 폭 행은 요일 또는 그날의 메모입니다.
-- 문서의 변경 추적은 수락한 상태로 읽습니다(삽입은 포함, 삭제·취소선은 제외).
-  python-docx의 `.text`는 `<w:ins>` 안의 글자를 놓치므로 쓰지 않습니다.
-- 세로 병합 셀은 XML 요소로 식별합니다. 두 시간 슬롯에 걸친 셀은 한 블록이 됩니다.
-- 시간이 없거나 읽을 수 없는 행, 첫 요일 앞의 행은 버리지 않고 "Notes in the schedule table"로 보냅니다.
-  요일 머리글이 비어 있고 시각이 앞으로 돌아가면 다음 요일로 추정하고, 그 사실도 메모로 남깁니다.
-- 미팅은 파일 이름으로 정합니다. 제목 문단이 이전 미팅 그대로여도(복사 후 미수정) 따르지 않습니다.
-  파일 이름에 미팅이 없을 때만 제목 문단(`RAN2-135 Session Schedule`)을 씁니다.
-
-### 셀 해석 규칙 (`working_groups/ran2/sessions.py`)
-
-- 줄 맨 앞의 시각 표시(`@12:30`, `@8:30-9:30`, `From 15:30:`, `11:00-12:00 [004] ...`)가 셀을 나눕니다.
-  콜론 없는 `8.10 NR20 MIMO`나 그날 슬롯과 동떨어진 시각은 시각으로 보지 않고 글자로 둡니다.
-  `end by 18:30` 같은 문장 속 시각은 해석하지 않습니다.
-- 첫 시각 표시가 셀 시작과 같으면 그 위 줄은 그 부분의 머리글입니다. 종료 시각이 적힌 부분 뒤의
-  빈 줄 다음 내용은 그 종료 시각부터 이어집니다. 그 밖에 머리글을 다른 시각으로 옮기지 않습니다.
-- 같은 방·슬롯을 여러 행으로 나눈 셀(Brk 3의 오프라인 등)은 시각이 적힌 블록을 먼저 놓고,
-  시각 없는 행이 남은 시간을 채웁니다. 한 방에는 한 번에 한 블록만 보입니다.
-- `[8.3]`처럼 대괄호 숫자는 AI입니다. 제목 뒤의 `[0]`, `[1.5]`(시간 예산)와 `[004]`, `[xxx]`,
-  `[POST133bis]`(오프라인 번호)는 AI가 아닙니다. `[6.0.2.1] - [6.0.2.12]`는 범위를 펼칩니다.
-  괄호 없는 숫자는 숫자만 있는 줄(`6.0.2.4, 5.1.3.2`)에서만 AI로 봅니다.
-- 괄호 속 사람 이름만 Chair입니다(`(Kyeongin)`, `(Erlin, Kyeongin)`). 회사(`(vivo)`)는 Chair가 아닙니다.
-  `CB Kyeongin`처럼 괄호 없는 이름은 제목에만 남습니다.
-- 제목은 처음 몇 줄에서 추정합니다: 하위 항목이 아닌 AI 줄, 괄호 속 Chair가 있는 줄, 짧은 첫 줄을
-  ` / `로 잇습니다(최대 3개). 아무것도 없으면 첫 줄을 그대로 씁니다(`[004] (Ericsson, Nokia)`).
-- 그룹(범례 색)은 `agenda.csv` 최상위 항목(`6GR Rel-20`, `NR Rel-19` 등)이고, 제목에 offline이 있거나
-  첫 줄에 오프라인 번호가 있으면 `Offline`입니다. 휴식은 슬롯 사이 빈 시간이고 이름은 문서의
-  Breaks 문단(`Morning coffee` 등)에서 가져옵니다.
-- 셀의 원문 줄은 모두 팝업의 Note로 남습니다. 추정이 틀려도 내용은 잃지 않습니다.
-
-### LLM 폴백 (`working_groups/ran2/llm.py`)
-
-규칙이 기본이고, Gemini(`config.json`의 `model`, 기본 `gemini-3.8-flash`)는 두 경우에만 씁니다.
-`GEMINI_API_KEY`가 없거나 `llm_fallback`이 `false`이면 규칙 결과를 그대로 씁니다.
-
-- **불확실한 셀**: 규칙이 다음을 발견한 셀만 이유와 규칙 결과를 함께 한 번의 요청으로 묻습니다.
-  - 문장 속 시각·소요 시간(`end by 18:30`, `(from 9:00)`, `(~15 minutes)`)
-  - 시각 표시 바로 위에 붙어 있는 머리글(작성자마다 머리글을 시각 위·아래에 씀)
-  - 읽을 수 없는 시각 표시(`@ TBD`), 이름 붙일 줄이 없는 부분
-  RAN2#131bis~#135bis 문서에서는 셀 50~63개 중 1~23개가 해당합니다.
-- **인식하지 못한 양식**: 첫 열에 시간 범위가 있는 표가 없거나 세션이 하나도 없으면
-  문서 전체(문단과 표 셀, 각각 id 포함)를 묻습니다. 이 경우 하단 정보에 그 사실과 문서 원문을 함께 보여 줍니다.
-
-답은 원문으로 확인될 때만 씁니다. 셀 답은 셀 단위로 확인해, 통과하지 못한 셀은 규칙 결과를 유지합니다.
-
-- 셀의 빈 줄이 아닌 모든 줄을 정확히 한 세션이 인용해야 합니다.
-- 시각은 셀 시작·끝이거나 원문에 적힌 시각이어야 합니다(5분 단위, 겹침 없음). 균등 분할 같은 추정은 거부합니다.
-- 제목의 단어는 인용한 줄에 있어야 하고(바꿔 쓰기 금지), Chair는 원문에 적힌 사람 이름(회사 제외),
-  AI는 인용한 줄에 적힌 번호여야 합니다.
-- 실패한 셀만 오류 내용과 함께 한 번 더 묻습니다. 그래도 실패하거나 요청 자체가 실패하면 규칙 결과로 빌드합니다.
-  문서 전체 해석이 실패하면 빌드가 실패하고 마지막 정상 결과가 유지됩니다.
-- 답은 입력·프롬프트·모델 해시별로 `.cache/ran2/`에 저장해 같은 문서에는 다시 묻지 않습니다.
-  `--rebuild-slots`나 `force-deploy`는 이 캐시를 비웁니다. 결과 요약(불확실 셀 수, 적용 수)은
-  `docs/ran2/.schedule_state.json`의 `llm`에 남습니다.
-
-### 일정표 밖의 정보 (페이지 하단)
-
-RAN Plenary의 Topics처럼, 일정표 밖의 문서 내용을 그리드 아래 "Additional information"에
-문서 순서대로 보여 줍니다(`Schedule.supplements`). 오프라인 목록을 그리드에 합치거나 블록 이름을 바꾸지 않습니다.
-
-- 짧은 굵은 문단은 소제목, 그 밖의 문단은 본문입니다(`Dates and deadlines`, `NOTE that this schedule ...`).
-- 탭으로 맞춘 연속 문단은 표가 됩니다(Breaks, List of Offline Face to Face discussions).
-  숫자가 없는 첫 행은 머리글이고, 앞이 탭으로 시작하는 줄은 앞 행의 제목이 이어진 것으로 합칩니다.
-- 표 안의 전체 폭 메모(`Colorful Polo Day`, `Social event – end at 18:30 ...`)와 그리드에 놓지 못한 행은
-  "Notes in the schedule table"에 요일과 함께 나옵니다.
-
-### 상태와 로컬 확인
-
-- `docs/ran2/.schedule_state.json`: 성공한 schedule·agenda.csv의 URL, SHA-256, HTTP validator,
-  미팅·버전, Portal 메타데이터. check는 이 값과 비교해 변경을 판단하고, 실패한 빌드는 기록하지 않습니다.
-- `downloads/ran2/inputs/`: 마지막 원본(Git 제외). check가 받은 원본은 `.ci/transfers/ran2/`로 build에 전달합니다.
-
-```bash
-uv run python main.py --wg ran2
-uv run python main.py --wg ran2 --no-download
-# 로컬 문서: 날짜·시간대는 Portal에서 찾고, Portal 조회 범위 밖이면 config.json의
-# meetings와 local_agenda로 지정합니다 (config.example.json 참고)
-uv run python main.py --wg ran2 --local "tests/fixtures/ran2/R2_135_Schedule_v11.docx"
+```text
+docs/                          # published site (committed)
+  index.html                   # redirects to the ongoing WG
+  .build_state.json            # input hashes of the last successful build
+  ran1/                        # index.html, schedule.json, .schedule_state.json, slot_state/,
+                               # agenda_item_description.json, agenda_label_map/, agreements/,
+                               # agreements-panel.js, .extra_files_state.json
+  ran2/                        # index.html, schedule.json, .schedule_state.json
+  ran-plenary/                 # index.html, schedule.json, .schedule_state.json
+downloads/                     # downloaded inputs (only downloads/ran1/extra_files/ is committed)
+.cache/                        # 3gpp/ originals, per-WG LLM/parser caches, meeting-folders.json (not committed)
+ref_in_manual/ran1/            # optional: manually supplied RAN1 documents (create when needed)
 ```
 
-실제 문서(RAN2#131bis v19, #135 v11, #135bis v00)와 `agenda.csv`는 `tests/fixtures/ran2/`에 있으며,
-테스트는 네트워크 없이 이 문서로 방별 겹침 없음, 휴식, Chair, 하단 정보를 확인합니다.
-다른 작성자의 양식(Main 열 없음, 시간 없는 행, 잘못된 시각, 제목 없음)이 실패 대신 메모로 남는지,
-LLM 폴백이 검증을 통과한 답만 쓰고 실패 시 규칙 결과를 유지하는지도 가짜 Gemini 응답으로 확인합니다.
+Related documents (in Korean):
 
-## 다중 소스 통합 파이프라인
+- [PARSING_ARCHITECTURE.md](PARSING_ARCHITECTURE.md): how RAN1 parsing works.
+- [AGREEMENTS_VERIFICATION.md](AGREEMENTS_VERIFICATION.md): agreements panel verification and limits.
+- `CLAUDE.md` and `.claude/rules/`: UI design rules and per-component conventions.
+
+## Architecture
+
+### WG pipelines and the common model
+
+WGs are independent. A WG never imports another WG's modules.
+The shared runner only calls each WG's `build_schedule(options)` and receives a `shared.schedule.Schedule`.
+
+- `DaySchedule.timeline` carries each day's start and end, slot interval, tick interval, breaks and time blocks.
+- Rooms are identified by `RoomInfo.id` / `Session.room_ids`. RAN1's older column numbers are still accepted.
+  A session that spans several rooms must use adjacent rooms.
+- `Schedule.starts_on` / `ends_on` are ISO dates and `timezone` is the venue's IANA zone.
+  `starts_at` / `ends_at` hold the real start and end times with a UTC offset (e.g. `2026-08-24T09:00:00+02:00`).
+- `Schedule.source_labels` maps source file names to short labels for the header (`Main v03 · Hiroki v01`).
+- Optional fields are read as empty from older snapshots:
+  - `topic_references`, `topic_preamble`, `supplements`,
+  - `Session.room_scope`, `notes`, `inferred_agenda_items`.
+
+### Lifecycle contract (`shared/lifecycle.py`)
+
+| Member | Responsibility of the WG |
+|---|---|
+| `check_updates() → CheckResult` | Report changed / unchanged / error with reasons. New files go only to `.ci/transfers/<wg>/` |
+| `prepare_build()` | On the fresh build runner, reuse the files handed over from check |
+| `build_schedule(BuildOptions) → Schedule` | WG-specific parsing and merging |
+| `reset_cache()` | Clear the WG's caches and incremental state for a forced build |
+| `input_paths` | Code, config and manual inputs. Content-hashed for change detection |
+| `persistent_paths` | Committed outputs, sources and state. Restored to the pre-build state on failure |
+| `cache_paths` | Regenerable caches (`.cache/<wg>/`) |
+
+### Adding a WG
+
+1. Create a WG folder with `lifecycle.py` and its processing code.
+2. Register the ID and lifecycle module in `working_groups/registry.py`.
+3. Add the WG to `site.json` and enable it.
+
+The workflow YAML needs no per-WG job, provided the WG uses the same runtime and credentials.
+Use `shared/remote_files.py` and `shared/portal_meetings.py` for all 3GPP access (see [Shared infrastructure](#shared-infrastructure)).
+
+## Site behaviour
+
+- **Root redirect.** `docs/index.html` sends visitors to the WG whose saved meeting matches an `ONGOING` meeting in the Portal.
+  - If several are ongoing, `default_wg` wins, then the `working_groups` order.
+  - If none is ongoing, the visitor goes to `default_wg`.
+  - Demo schedules and stale meetings are never auto-selected.
+  - When the Portal is unreachable, or with `--render-only` / `--no-download`, the saved venue dates decide.
+  - CI also detects redirect changes caused by meeting status and re-renders without document changes.
+- **Navigation.** WG links are plain relative links (`../ran1/`), so direct access, reload and back all work under the GitHub Pages project path.
+  The selected meeting is centred; other meetings are grey links on the same line.
+- **NOW line.**
+  - It is on by default while the browser's clock is within `starts_at ≤ now ≤ ends_at`, unless you turned it off for that meeting.
+  - It is off outside that window, and for schedules without valid times or for demos.
+  - The page re-checks at the start and end boundaries, every minute, and when the tab becomes visible again.
+- **Remembered state.**
+  - The day tab and grid zoom are kept in `sessionStorage`.
+  - The NOW toggle and the filter are kept in `localStorage`, per WG and meeting.
+
+## Working groups
+
+### RAN1
+
+RAN1 publishes a main schedule from the chair, plus detailed schedules from the vice-chairs (e.g. Hiroki, Sorour) in separate folders.
+The pipeline merges all of them.
 
 ```
-FTP Inbox/
-├── Chair_notes/     → 메인 스케줄 (방 레이아웃 기준)
-├── Hiroki_notes/    → 부의장 상세 스케줄
-└── Sorour_notes/    → 부의장 상세 스케줄
+Meetings_3GPP_SYNC/RAN1/Inbox/
+├── Chair_notes/     → main schedule (room layout)
+├── Hiroki_notes/    → vice-chair detailed schedule
+└── Sorour_notes/    → vice-chair detailed schedule
          ↓
-    discover_schedule_sources()    # Inbox/ 폴더 탐색, 스케줄 파일 발견
-    download_all_schedules()       # 모든 소스 다운로드 (ZIP 자동 추출)
+    discover_schedule_sources()    # find schedule files (sync folder + meeting folder)
+    download_all_schedules()       # download all sources (ZIPs extracted)
          ↓
-    parse_docx(main, max_tables=2)         # 메인 테이블 구조 추출
-    parse_docx(vc, max_tables=None)        # 부의장 전체 테이블 추출
+    parse_docx(main, max_tables=2) # main table structure
+    parse_docx(vc, max_tables=None)
          ↓
-    lookup_timezone_reference()   # Portal 미팅 번호/TB 매칭 → IANA 시간대 + 개최 날짜
-                                  # 확인된 표시 문자열은 코드 매핑, LLM 호출 없음
+    lookup_timezone_reference()    # Portal meeting → IANA zone + dates (no LLM)
          ↓
-    collect_time_slot_data()       # (day, time_block)별 데이터 수집 + 중복 제거
+    collect_time_slot_data()       # per (day, time block), de-duplicated
          ↓
-    parse_time_slots()             # 시간대별 1회 Gemini 호출 → 통합 세션 리스트
-    normalize_group_headers()      # 그룹명 정규화
-    fill_missing_groups()          # 누락된 그룹 이름 보완
+    parse_time_slots()             # one Gemini call per slot, sources cross-referenced
+    normalize_group_headers() / fill_missing_groups()
          ↓
-    save_html()                    # CSS Grid 간트차트 생성
+    agenda descriptions, AI inference, agreements → render
 ```
 
-부의장 스케줄은 메인 스케줄과 다른 테이블 구조를 가질 수 있으며, AI 번호(예: 9.1.1, 10.3.2) 같은 상세 정보를 포함합니다. 시스템은 LLM과 문서 컨텍스트를 활용하여 부의장 상세 정보를 메인 스케줄의 올바른 방에 매핑합니다.
+Vice-chair tables can have a different structure. They often carry details such as AI numbers (`9.1.1`, `10.3.2`)
+that the main schedule lacks. The LLM maps those details onto the right room of the main schedule using the document context.
+Slots are parsed concurrently. See [PARSING_ARCHITECTURE.md](PARSING_ARCHITECTURE.md) for the split between deterministic code and LLM.
 
-## 점진적 머지(Incremental Merge)와 `docs/ran1/slot_state/`
+#### Incremental merge (`docs/ran1/slot_state/`)
 
-각 `(요일, 시간 블록)` 슬롯의 머지 결과는 `docs/ran1/slot_state/{Day}_{TB:02d}.json` 으로 저장됩니다. 다음 실행에서 각 소스의 해시를 직전 스냅샷과 비교해 다음 중 하나로 분류합니다.
+Each `(day, time block)` merge result is saved as `docs/ran1/slot_state/{Day}_{TB:02d}.json`.
+On the next run, each source's hash is compared with the previous snapshot:
 
-- **STALE** — 이전과 동일한 내용. 모든 소스가 STALE이면 LLM 호출 없이 직전 머지 결과를 그대로 재사용합니다.
-- **FRESH / NEW / REMOVED** — 변경이 감지됨. LLM에는 *변경된 소스의 원문* 과 *직전 머지 결과(baseline)* 만 전달되며, 변경되지 않은 STALE 소스의 원문은 프롬프트에서 제외됩니다. 이렇게 하면 한 소스가 항목을 합쳐버린 변경(consolidation)을 다른 소스의 오래된 상세 정보가 되살리는 회귀를 막을 수 있습니다.
+- **STALE**: unchanged. If every source is stale, the previous merge is reused without an LLM call.
+- **FRESH / NEW / REMOVED**: changed. The LLM gets only the changed sources' text plus the previous merge (baseline).
+  Unchanged sources are left out, so stale details from another source cannot undo a consolidation.
 
-이 파일들은 깃으로 추적되므로 GitHub 웹 UI에서 한 파일만 지우면 해당 슬롯만 다음 실행에서 cold 경로로 재빌드되고, 나머지 슬롯은 그대로 점진적/숏-서킷 경로를 탑니다. 누적된 carry-forward 오류 등으로 전체를 다시 빌드해야 한다면 `python main.py --rebuild-slots` 로 디렉터리 전체를 비울 수 있습니다.
+The files are committed. Delete one file to rebuild only that slot from scratch.
+Use `--rebuild-slots` to clear them all.
 
-## 미팅 선택 규칙
+#### Meeting selection
 
-스케줄 파일 선택은 단순 업로드 시각 기준이 아니라, **미팅 ID 우선순위 + 상태 캐시**를 함께 사용합니다.
+The schedule file is chosen by **meeting ID order plus saved state**, not by upload time alone.
 
-- 정규 plenary 미팅은 이름 순서를 해석합니다.
-     - 예: `RAN1#124 < RAN1#124bis < RAN1#125`
-     - 따라서 `RAN1#124` 파일이 더 늦게 올라와도, `RAN1#124bis`가 이미 존재하면 `124bis`가 우선입니다.
-- 같은 미팅의 표기는 하나의 ID로 정규화합니다.
-     - `RAN1#126bis`, `RAN1#126-bis`, `RAN1#126 bis`, `RAN1#126b`, `TSGR1_126b`는 모두 `ran1#126bis`입니다.
-     - 접미사는 독립된 토큰일 때만 인정합니다. `RAN1#126 breakout`의 `b`는 접미사가 아닙니다.
-     - 화면의 미팅 이름도 이 ID에서 만들므로 파일명이 `RAN1#126b`여도 `RAN1#126bis`로 표시합니다.
-- 이전 실행의 `meeting_id`는 `docs/ran1/.schedule_state.json`에 저장되며, 다음 실행에서 **현재 미팅 힌트**로 사용됩니다.
-- 다만 이 힌트는 고정값이 아닙니다.
-     - 캐시에 `ran1#124bis`가 있어도 FTP에서 `ran1#125`가 나타나면, 새 실행은 `125`로 자동 전환하고 state도 갱신합니다.
-- `AH`, `adhoc`, `e` 등 **비정규 미팅**은 이름만으로 전체 순서를 확정할 수 없으므로 업로드 시각을 기준으로 선택합니다.
-- 같은 미팅 안에서는 **Draft가 아닌 파일 → 버전 → 업로드 시각** 순으로 고릅니다.
-     - 의장은 `Draft`를 떼면서 버전을 `v00`부터 다시 매깁니다. `Draft … v03`과 `… v00`이 함께 있으면 `v00`이 최신입니다.
-     - `Draft`는 파일 이름에 독립된 단어로 있을 때만 인정합니다(`drafting`은 아님).
-     - 스케줄, Chair notes, 부의장 스케줄, 로컬 파일(`ref_in_manual/`, 다운로드 캐시), `check_update.py`가 모두 같은 순서(`downloader.py`의 `_release_key`)를 씁니다.
-- Vice-chair/Hiroki/Sorour 같은 보조 소스도 가능한 한 현재 메인 미팅에 맞춰 정렬되며, 같은 폴더 안의 오래된 미팅 파일이 늦게 업로드되어도 현재 미팅을 덮어쓰지 못합니다.
+- Regular meetings are ordered by name: `RAN1#124 < RAN1#124bis < RAN1#125`. A late `RAN1#124` upload does not override `124bis`.
+- Spellings are normalised into one ID: `RAN1#126bis`, `RAN1#126-bis`, `RAN1#126 bis`, `RAN1#126b` and `TSGR1_126b` are all `ran1#126bis`.
+  - A suffix counts only as a separate token (the `b` in `RAN1#126 breakout` is not one).
+  - The displayed name comes from the ID.
+- The previous `meeting_id` (in `docs/ran1/.schedule_state.json`) is a hint, not a pin.
+  If `ran1#125` appears, the build switches to it.
+- Irregular meetings (`AH`, `adhoc`, `e`) cannot be ordered by name and are chosen by upload time.
+- Within a meeting, the order is **released over draft → version → upload time**.
+  - The chair restarts at `v00` when dropping `Draft`, so `… v00` beats `Draft … v03`.
+  - `Draft` must be a separate word (`drafting` is not).
+  - The same order (`downloader._release_key`) is used for schedules, chair notes, vice-chair schedules, local files and `check_update.py`.
+- Auxiliary sources follow the selected main meeting. An old meeting's file uploaded late cannot override the current meeting.
 
-### 참조 파일은 선택된 미팅을 따른다
+#### Reference files follow the selected meeting
 
-미팅 번호는 선택된 메인 스케줄 파일 이름에서 정해지고, 나머지 참조 파일은 그 번호와 일치할 때만 사용합니다. LLM 판단 없이 이름과 경로만으로 결정합니다.
+The meeting number comes from the selected main schedule's file name. Other files are used only when they match it.
+The decision uses names and paths only, with no LLM.
 
-- **미팅 폴더**: Portal에서 끝나지 않은 가장 이른 미팅과 마지막으로 빌드한 미팅의 폴더(`tsg_ran/WG1_RL1/TSGR1_126b/`)를 자동으로 찾아 `Inbox/`와 `Agenda/`를 봅니다(아래 "미팅 폴더 자동 등록"). 빌드한 미팅은 다음 미팅의 파일로 바뀔 때까지 남습니다. 찾은 폴더는 `config.json`의 `meeting_specific`에 기록되고, `meeting_specific_override`(환경 변수 `SCHEDULE_MEETING_SPECIFIC_OVERRIDE`)에 적은 폴더는 그 미팅에서 자동으로 찾은 폴더보다 우선합니다. 자동으로 찾지 못하거나 조회에 실패하면 sync 폴더만으로 계속합니다. `--no-download` 빌드는 기록된 폴더를 그대로 씁니다.
-- **Agenda**: 미팅 폴더 이름(`TSGR1_126b` → `ran1#126bis`)이 현재 미팅과 다르면 그 폴더의 Agenda는 읽지 않습니다. 다음 미팅 폴더가 먼저 잡히는 기간에도 다른 미팅의 Agenda가 섞이지 않습니다. 미팅을 알 수 없는 URL은 그대로 사용합니다.
-- **Agenda 설명**: `docs/ran1/agenda_item_description.json`의 출처(`source_url` 등)가 다른 미팅을 가리키면 세션에 붙이지 않고, 다운로드가 가능한 빌드에서 다시 생성합니다.
-- **로컬 Agenda 캐시**: `downloads/ran1/Agenda/<미팅>/`(예: `ran1_126bis/`)에 미팅별로 저장합니다. `agenda.csv`처럼 이름에 미팅이 없는 파일이 다음 미팅에 재사용되지 않습니다.
-- **Chair notes, 부의장 스케줄**: 현재 미팅 ID와 일치하는 파일만 사용합니다.
-- **sync 폴더는 회의에 따라 생기고 사라집니다.**
-  - Chair notes를 찾는 위치가 없으면(403) 실패로 세지 않습니다. 아직 note가 없는 회의 사이에도 CI가 빨개지지 않습니다.
-  - Chair notes가 잠깐 목록에서 사라지면(교체 중, 정리) 게시한 agreements와 그 식별자를 그대로 둡니다. check도 변경으로 보지 않습니다.
-  - 스케줄은 sync와 미러를 합칠 때 업로드 시각보다 **버전**을 먼저 봅니다. 높은 판이 목록에서 사라지기만 하고 새 판이 없으면 check는 변경으로 보지 않습니다(`check_update._only_lost_versions`).
-  - build는 check의 목록을 다시 쓰므로, 그사이 파일이 바뀌어 받지 못하면 목록을 새로 받아 한 번 더 시도합니다.
-- `check_update.py`도 같은 기준으로 Agenda 폴더를 고르므로 check와 build의 판단이 어긋나지 않습니다.
-- **미팅 변경은 항상 재빌드합니다.** 저장된 `meeting_id`나 `files`에 현재 미팅과 다른 미팅이 있으면 `check_update.py`는 변경으로 판정합니다. 새 미팅의 소스가 저장된 목록의 부분집합이어도(미팅이 섞여 저장된 과거 상태 등) "FTP 일시 실패" 규칙으로 넘기지 않습니다. Portal 메타데이터도 저장된 미팅이 아니라 이번에 선택될 미팅으로 조회합니다.
+- **Meeting folder.** The pipeline finds folders such as `tsg_ran/WG1_RL1/TSGR1_126b/` and reads their `Inbox/` and `Agenda/` (see [Meeting folder discovery](#meeting-folder-discovery)).
+  - It looks for the earliest unfinished meeting in the Portal and the last built meeting.
+  - The built meeting's folder stays until the next meeting's files replace it.
+  - If discovery fails, the build continues with the sync folder only.
+- **Agenda.** A folder whose name maps to another meeting (`TSGR1_126b` → `ran1#126bis`) is ignored, so the next meeting's agenda never mixes in.
+  - Agendas are cached per meeting in `downloads/ran1/Agenda/<meeting>/`.
+  - If `docs/ran1/agenda_item_description.json` points to another meeting, it is not attached and is regenerated on the next build that can download.
+- **Chair notes and vice-chair schedules.** Only files with the current meeting ID are used.
+- **Sync folders appear and disappear with meetings.**
+  - A missing chair-notes folder (403) is not a failure.
+  - If chair notes vanish briefly from the listing, the published agreements stay.
+  - When merging sync and mirror listings, the version beats upload time. A higher version that merely disappears is not a change (`check_update._only_lost_versions`).
+  - If a file changes between check and build, the build refreshes the listing and retries once.
+- **A meeting change always rebuilds.** If the saved `meeting_id` or `files` refer to another meeting, `check_update.py` reports a change.
+  Portal metadata is looked up for the meeting about to be selected.
 
-## 외부 파일 참조 (`extra_files`)
+#### Time zone and meeting dates
 
-`working_groups/ran1/config.json`의 `extra_files`에는 폴더가 아닌 **개별 원격 파일 URL**을 나열할 수 있습니다.
+- The time zone comes from the Portal row where **both the RAN1 meeting number and the TB id match**.
+  - `StartTimeZone` is a display string, so known strings plus `Country` are mapped in code. For example, the European string with `NL` becomes `Europe/Amsterdam`.
+  - DST is handled by `ZoneInfo`.
+  - The zone is never guessed from a bare GMT offset.
+- This path needs no document download or LLM. It also stores `starts_on` / `ends_on` / `starts_at` / `ends_at`.
+- When the Portal fails, the zone is unknown or the meeting is out of range, the saved Portal reference for the same meeting is reused.
+- Otherwise there is a document fallback:
+  - A direct Agenda DOCX is used first. Failing that, the venue is taken from the current chair notes and Gemini decides the zone.
+  - If the schedule appears before any reference, the build saves `UTC` with `timezone_status: "pending_timezone_ref"`.
+    `check_update.py` rebuilds when a reference appears.
+  - Agenda ZIP/CSV files are used for agenda descriptions only, never as a time zone reference.
+
+`docs/ran1/.schedule_state.json` stores:
+
+- the selected `files` per source with upload times,
+- `meeting_id`,
+- `timezone`, `timezone_status` (`resolved`, `pending_timezone_ref`, `detection_failed`),
+- `timezone_ref`: a Portal reference, or the Agenda/chair-notes identifier for the document fallback.
+
+#### External files (`extra_files`, `extra_folders`)
+
+`working_groups/ran1/config.json` can list individual remote files and extra folders:
 
 ```json
 {
+  "extra_folders": [{"url": "https://.../custom/", "person_name": "Alice"}],
   "extra_files": [
     {"url": "https://list.etsi.org/scripts/wa.exe?A3=ind2608C&...", "type": "schedule"},
     {"url": "https://example.org/hiroki_notes.docx", "type": "schedule", "person_name": "Hiroki"},
@@ -527,234 +399,418 @@ FTP Inbox/
 }
 ```
 
-각 엔트리의 필드:
+- `type`:
+  - `schedule` files join the source set (main, or vice-chair when `person_name` is given).
+  - `chair_notes` files are used for venue/time zone detection.
+- `is_main` defaults to `true` without `person_name` and `false` with it.
+- `name` is a file name fallback.
+- Files are downloaded like `curl -OJL` into `downloads/ran1/extra_files/` and committed.
+  URL, file name and SHA-256 are recorded in `docs/ran1/.extra_files_state.json`.
+- External hosts such as ETSI send no ETag/Last-Modified headers, so change detection uses the committed file's content hash.
+  - While the hash matches, neither check nor build downloads the file.
+  - An ETSI `wa.exe` URL is new for each message, so a new URL is what signals a change.
+  - To force a re-download, delete the cached file or its state entry.
+  - Public 3GPP URLs are revalidated through the shared cache instead.
+- Files fetched by check are passed to build as a workflow artifact.
 
-- `url` (필수): 다운로드 대상 파일 URL
-- `type` (필수): `schedule` 또는 `chair_notes`
-  - `schedule` → 로컬 제공 스케줄 소스(`ScheduleSource`)로 주입되어 main/vice-chair 중복 제거 규칙에 참여합니다. `is_main: true`면 메인 스케줄로, `person_name`을 주면 해당 부의장 소스로 취급됩니다.
-  - `chair_notes` → 다운로드된 Chair notes 문서는 미팅 개최지/타임존 감지에 사용됩니다.
-- `name` (선택): 파일명 폴백 — `Content-Disposition`, URL 경로에 파일명이 없을 때만 사용
-- `person_name` (선택): 명시 시 부의장(vice-chair) 소스
-- `is_main` (선택): 생략 시 **자동 구성** — `person_name`이 있으면 `false`, 없으면 `true`. 명시한(bool) 값은 항상 우선
+#### Chairman agreements panel
 
-빌드 시 `curl -OJL`과 등가 동작(redirect follow + Content-Disposition 기반 파일명)으로 `downloads/ran1/extra_files/`에 저장하고, 해당 파일도 Git에 커밋합니다. 파일명은 `Content-Disposition` → URL 경로 마지막 세그먼트 → `name` 필드 → 생성 순서로 결정됩니다. `docs/ran1/.extra_files_state.json`에는 URL별 다운로드 파일명과 SHA-256을 기록합니다.
+Clicking a RAN1 cell shows the section of the latest chair notes for that cell's AI, below the grid.
+The panel updates its AI tabs without scrolling, and only the active AI's HTML is fetched.
 
-ETSI 등 외부 호스트는 기록된 URL의 파일명이 존재하고 로컬 파일의 SHA-256이 기록값과 같으면 check와 build 모두 네트워크 다운로드를 생략합니다. 상태가 없거나 파일이 삭제·변조된 경우에만 원격 파일을 다시 받아 캐시를 복구합니다.
+- The section keeps Agreements, Working assumptions, Proposals and untitled content in order.
+  - Long TDoc lists (5+ rows) fold into `▸ N TDocs`.
+  - Short context rows such as LS, FL summaries and CR numbers stay.
+- Word formatting, tables (at Word's column widths, scaled to fit), math (OMML → MathML) and WMF/EMF figures are preserved.
+  Bullets are unified by depth.
+- Parts added since the previous chair notes are marked with a green bar. Tabs with changes get a dot.
+  The header shows the chair-notes version the panel reflects.
+- Cells without an AI number (`MIMO`, `AI/ML`) open the agenda items Gemini inferred from the cell name.
+  - Inferred items are used only for the filter and the panel; they never appear as the cell's AI.
+  - Judgements are kept per meeting in `docs/ran1/agenda_label_map/<meeting>.jsonl` and never asked again.
+  - To correct a judgement, append a line with the same name.
+- With Java 21 and `uv run python scripts/setup_wmf2svg.py`, a pinned headless converter renders WMF math. Otherwise a Python renderer is used.
+  See [AGREEMENTS_VERIFICATION.md](AGREEMENTS_VERIFICATION.md) for previews and limits.
 
-CI 변경 감지는 각 URL에 대응하는 커밋된 파일의 **콘텐츠 sha256**을 `docs/ran1/.extra_files_state.json`과 비교해 동작합니다(`check_update.py`). 헤더(ETag/Last-Modified) 비교는 ETSI가 해당 헤더를 제공하지 않아 사용하지 않으며, `ref_in_manual`과 동일한 콘텐츠 해시 방식을 따릅니다.
+### RAN2
 
-공개 3GPP 파일 URL은 예외로, 공통 라이브러리의 HTTP 조건부 요청/FTP 메타데이터 비교로 재검증합니다. 같은 URL에 덮어쓴 변경도 확인하며, 변경 없는 본문은 `.cache/3gpp/`에서 재사용합니다.
+The RAN2 chairs upload `R2_<meeting>_Schedule_v<NN>.docx` to the `Agenda/` folder each meeting
+(`R2_135_Schedule_v11.docx`, `R2_133b_Schedule_v14.docx`, `R2_131bis_Schedule v19.docx`).
+The document is hand-written and its layout changes with the author, so the parser **infers conservatively**.
 
-3GPP 요청은 모두 `shared/ftp_transport.py`를 지납니다.
+- It assumes only a few common conventions.
+- Anything that does not fit is shown verbatim at the bottom of the page, rather than made into sessions or failing the build.
+- Where the rules are unsure, Gemini re-reads the cell, and only answers confirmed by the source text are used.
 
-- 5xx나 연결 오류면 HTTPS를 1초 뒤 한 번 더 시도하고, 그래도 실패하면 익명 FTP(`ftp.3gpp.org`)로 같은 경로를 받습니다.
-- 3GPP 방화벽(WAF)의 차단 페이지가 담긴 403은 HTTPS를 다시 시도하지 않고 바로 FTP로 받습니다. 차단된 요청을 반복하지 않기 위해서입니다.
-- 그 밖의 403은 대부분 없는 경로입니다(IIS). `remote_files.is_absent`가 403·404와 FTP 550을 "없음"으로, 5xx·연결 실패를 "실패"로 가릅니다. 없는 폴더도 한 실행에서 한 번만 요청하고 build에 넘깁니다. 헤더와 본문 앞부분은 debug 로그에만 남깁니다.
-- 그 밖의 403은 그대로 HTTP 오류입니다. 3GPP는 없는 폴더에도 403을 주므로 FTP로 넘기지 않습니다.
-- FTP로 받을 때는 한 실행에서 FTP 접속 하나(로그인 한 번)를 계속 씁니다. 서버가 idle로 끊은 연결은 한 번만 다시 엽니다.
-- 한 실행에서 HTTPS가 실패한 곳은 다시 HTTPS로 요청하지 않고 바로 FTP로 받습니다. 5xx나 방화벽 403이면 그 폴더, 연결·TLS 실패면 호스트 전체가 대상입니다. 다음 실행은 다시 HTTPS부터 시도합니다.
-- 폴더 목록은 한 실행에서 URL마다 한 번만 받습니다(`remote_files.get_listing`). RAN1은 Inbox와 Chair_notes를 여러 곳에서 읽는데, 두 번째부터는 받은 목록을 씁니다. 실패한 목록은 기억하지 않고, `ci.py check`는 시작할 때 비웁니다.
-- **build는 같은 workflow의 check가 받은 목록과 Portal 결과를 씁니다.** check가 `.ci/listings.json`과 `.ci/plan.json`의 `portal_meetings`에 남기고, build job이 artifact로 받아 다시 조회하지 않습니다. check가 판단한 것과 같은 목록으로 빌드하게 됩니다. 파일 본문은 전부터 `.cache/3gpp/`를 재사용해 조건부 요청(304)만 보냅니다.
-- Portal 회의 목록도 한 프로세스에서 한 번(`get_meetings`)이고, 모든 WG가 같은 결과를 씁니다. RAN P도 따로 조회하지 않습니다.
-- User-Agent는 `3GPPSchedule/1.0 (+https://github.com/karlla1220/3GPPSchedule)` 하나입니다. 공유 클라이언트 없이 부르는 RAN1 요청도 같은 값을 보냅니다. Portal과 ETSI 같은 외부 호스트는 각자의 헤더를 씁니다.
+The parser was checked against the real RAN2#131bis–#135bis documents.
 
-ETSI 등 외부 호스트의 파일 요청은 다음과 같이 동작합니다.
+#### Source selection
 
-- `check` job은 먼저 커밋된 `downloads/ran1/extra_files/`의 파일을 기록된 SHA-256과 비교합니다. 일치하면 원격 URL을 요청하지 않습니다.
-- URL이 새로 추가되었거나 캐시 파일이 없거나 해시가 다르면 `check` job이 원격 파일을 다운로드해 변경 여부를 확인하고 build를 트리거합니다.
-- 변경이 감지되면 `check` job과 별도의 새 runner에서 `build` job이 실행됩니다. check에서 새로 받은 파일은 workflow artifact로 build job에 전달되므로 build에서 다시 다운로드하지 않으며, 성공한 build는 `docs/`와 `downloads/ran1/extra_files/`를 함께 커밋합니다.
-- 이후 workflow의 check/build는 커밋된 파일과 해시가 일치하는 동안 외부 파일을 다시 다운로드하지 않습니다.
-- 동일 URL의 원격 본문이 URL 변경 없이 바뀌는 경우에는 로컬 캐시만으로 알 수 없습니다. ETSI `wa.exe` URL은 메시지마다 새로 생성되므로 새 URL이 이 변경을 감지하는 기준입니다. 원격 재확인이 필요하면 해당 캐시 파일 또는 상태 항목을 삭제하고 build를 실행합니다.
-- build 실패 시 새 상태와 캐시 파일은 커밋되지 않아 다음 실행에서 이전 상태를 기준으로 다시 확인합니다.
+- **Two folders are read together:**
+  - `Meetings_3GPP_SYNC/RAN2/Agenda/`, the live copy during the meeting,
+  - `tsg_ran/WG2_RL2/TSGR2_<meeting>/Agenda/`, which holds the pre-meeting v00 and `agenda.csv`.
 
-### 캐시의 종류와 저장 위치
+  They do not replace each other: the archive gets the versions from before and after the meeting, and in-meeting versions appear only in the sync folder.
+- **Meeting folders.** Archive folders are queried only for the next two unfinished meetings in the Portal and the last built meeting.
+  - They are found by meeting ID (see [Meeting folder discovery](#meeting-folder-discovery)).
+  - A folder's `Agenda` is opened only when the folder listing contains it.
+  - A meeting folder that does not exist yet is treated as empty.
+- **The sync folder comes and goes.** On 2026-10-11 its `Agenda/` was removed the day before #135bis.
+  - A missing folder (403/404) is normal (`sources.sync_listing`).
+  - Only 5xx or connection failures count as failures. Even then the page is built from the meeting folder.
+  - During the meeting (Portal dates), such a failure is reported as a RAN2 error.
+- **Versions never go backwards within a meeting (`sources.built_copy`).**
+  - If the built version disappears and the visible one is the same or lower, the built copy is restored from `.cache/3gpp/`.
+  - A higher version is used immediately.
+- **The current meeting is the earliest unfinished one in the Portal.**
+  - An ongoing #135bis is not abandoned for an early #136 v00.
+  - If no unfinished meeting has a schedule, the highest meeting (`#135 < #135bis < #136`) is kept.
+- Within a meeting, the highest version wins. On a tie, the sync copy wins.
+- `agenda.csv` from the same meeting supplies AI descriptions and legend groups. It is optional.
+- Dates, time zone and times come from `config.json` `meetings`, then the Portal (TB 380), then the last successful state for that meeting.
+  With none of them the build fails rather than guessing UTC.
 
-이 프로젝트에서 `cache`라는 표현은 서로 다른 세 가지를 가리킬 수 있습니다.
+#### Reading the table (`document.py`)
 
-1. **GitHub Actions 서비스 캐시 — 공통 3GPP 원본과 WG별 LLM 결과**
-     - [공통 캐시 action](.github/actions/wg-cache/action.yml)이 `.cache/` 전체를 복원·저장합니다. `check`와 `build-and-deploy` 모두 같은 action을 사용합니다.
-     - `.cache/3gpp/`에는 URL별 원본과 파일명·정확한 바이트 크기·SHA-256·ETag·Last-Modified·FTP 수정 시각을 저장합니다. `.cache/<wg>/`에는 WG별 파서 결과를 저장합니다.
-     - check는 변경 없는 실행에서도 캐시를 저장합니다. 일부 WG 확인에 실패해도 정상 수신한 원본은 재사용하며, 성공한 빌드 상태는 별도로 Git에 기록합니다.
-     - 키는 `wg-cache-v2-<OS>-<run_id>-<run_attempt>-<job>`입니다. build는 같은 실행의 check 캐시를 우선 복원하고, 없으면 이전 실행의 최근 캐시를 복원합니다. 재실행은 새 키를 사용합니다. 최초 전환 시에는 기존 `wg-cache-v1-` 캐시도 복원해 LLM 결과를 유지합니다.
-     - `force-deploy`는 공통 3GPP 캐시를 한 번 비운 다음 각 활성 WG의 `reset_cache()`를 호출합니다. WG별 제거와 check artifact 복사는 `shared/lifecycle.py`의 공통 함수를 사용합니다.
+- **Which table.** The table with the most time ranges in its first column is the schedule.
+  - The row above holds room names (`Brk 1 room` → `Breakout 1`).
+  - Full-width rows are days or notes for the day.
+- **Tracked changes** are read as accepted: insertions in, deletions and strike-through out. python-docx's `.text` misses `<w:ins>`, so it is not used.
+- **Merged cells.** Vertical merges are identified from the XML. A cell spanning two time slots becomes one block.
+- **Rows that do not fit.** Rows without a readable time, and rows before the first day, go to "Notes in the schedule table".
+  When a day header is blank and the time goes backwards, the next day is assumed and noted.
+- **Meeting.** The meeting comes from the file name. The title paragraph (`RAN2-135 Session Schedule`) is used only if the file name has none.
 
-2. **Git 저장소에 커밋되는 캐시 — `extra_files` 원문**
-     - `downloads/ran1/extra_files/`의 실제 다운로드 파일과 `docs/ran1/.extra_files_state.json`의 URL·파일명·SHA-256 기록이 여기에 해당합니다.
-     - [deploy.yml](.github/workflows/deploy.yml)의 새 runner는 `actions/cache`에서 이 파일을 복원하는 것이 아니라 `actions/checkout`으로 Git 커밋에서 가져옵니다.
-     - 캐시 miss가 발생한 현재 workflow 안에서는 check job이 받은 파일과 상태를 `actions/upload-artifact`로 build job에 한 번 전달합니다. 이 artifact는 job 간 전달용이며 장기 보관용 캐시는 아닙니다.
-     - Python 코드가 checkout된 파일의 SHA-256을 상태 기록과 비교합니다. 일치하면 ETSI 등 외부 호스트는 네트워크 요청 없이 check/build 모두 파일을 재사용합니다. 공개 3GPP URL은 공통 캐시를 통해 재검증합니다.
-     - 이 캐시는 Git commit history에 포함되므로 runner가 바뀌거나 Actions 캐시가 만료되어도 유지됩니다. 대신 DOCX 파일이 Git 저장소 용량을 차지합니다.
-     - `force-deploy`는 이 디렉터리와 상태 파일도 삭제한 뒤 build하므로 원격 `extra_files`를 다시 다운로드합니다.
+#### Cell rules (`sessions.py`)
 
-3. **GitHub Actions 서비스 캐시 — Python/uv 패키지**
-     - `setup-uv`의 `enable-cache: true`가 의존성 다운로드 캐시를 관리합니다.
-     - 애플리케이션 입력 파일이나 LLM 결과가 아니며, 외부 파일 재사용 여부에도 영향을 주지 않습니다.
+- **Splitting.** Leading time markers split a cell: `@12:30`, `@8:30-9:30`, `From 15:30:`, `11:00-12:00 [004] ...`.
+  - `8.10 NR20 MIMO` (no colon) is text, and so is a time far from the slot.
+  - Times inside sentences (`end by 18:30`) are not interpreted.
+- **Headings.** If the first marker equals the cell start, the lines above it are that part's heading.
+  - Content after a blank line following an ended part continues from that end time.
+  - Headings are not moved to other times.
+- **Several rows for one room and slot.** Timed blocks are placed first, and untimed rows fill the remaining time. A room shows one block at a time.
+- **AI numbers.** `[8.3]` is an AI. `[6.0.2.1] - [6.0.2.12]` expands to a range.
+  - Time budgets after a title (`[0]`, `[1.5]`) and offline numbers (`[004]`, `[xxx]`, `[POST133bis]`) are not AIs.
+  - Bare numbers count only on number-only lines (`6.0.2.4, 5.1.3.2`).
+- **Chair.** Only a person's name in parentheses is the chair (`(Kyeongin)`, `(Erlin, Kyeongin)`).
+  - Companies (`(vivo)`) are not.
+  - `CB Kyeongin` stays in the title.
+- **Title.** Up to three of the following are joined with ` / `:
+  - non-sub-item AI lines,
+  - lines with a chair in parentheses,
+  - a short first line.
 
-ETSI 등의 `extra_files`는 Git 저장소에 커밋된 파일과 SHA-256 상태 기록으로 재사용합니다. 공개 3GPP URL은 공통 원본 캐시도 함께 사용합니다. GitHub Actions cache 서비스는 공통 3GPP 원본, LLM 결과와 Python 패키지 다운로드에 사용됩니다.
+  Otherwise the first line is used.
+- **Group (legend color).** It is the top-level item of `agenda.csv` (`6GR Rel-20`, `NR Rel-19`).
+  - Offline sessions are `Offline`.
+  - Breaks are gaps between slots, named from the document's Breaks paragraph.
+- **Raw text is kept.** Every source line stays as the session's notes, in the cell when there is room and in the popup otherwise. A wrong guess loses nothing.
 
-환경 변수 `SCHEDULE_EXTRA_FILES`로 JSON 배열을 지정하면 working_groups/ran1/config.json 값을 대체합니다.
+#### LLM fallback (`llm.py`)
 
-## 상태 파일(`docs/ran1/.schedule_state.json`)의 의미
+Rules come first. Gemini (`model` in `config.json`, default `gemini-3.8-flash`) is used in two cases only.
+Without `GEMINI_API_KEY`, or with `llm_fallback: false`, the rule result is used as is.
 
-성공적으로 HTML이 생성되면 다음 정보가 저장됩니다.
+- **Uncertain cells.** Cells where the rules found any of the following are sent in one request, with the reason and the rule result:
+  - times or durations inside sentences,
+  - a heading directly above a time marker,
+  - an unreadable marker (`@ TBD`),
+  - a part with no line to name it.
 
-- `files`: 각 소스 폴더에서 실제로 선택된 파일명과 업로드 시각
-- `meeting_id`: 이번 빌드의 기준 미팅 ID
-- `timezone`: 해당 미팅에서 감지한 IANA 타임존
-- `timezone_status`: `resolved`, `pending_timezone_ref`, `detection_failed` 중 하나
-- `timezone_ref`: 우선 `type: "portal"`인 API 미팅 ID·시간대·개최 날짜·장소. 문서 대체 경로에서는 Agenda/Chair notes 식별자이며, 미해결 시 `null`
+  In RAN2#131bis–#135bis documents this was 1–23 of 50–63 cells.
+- **Unknown layout.** If no table has time ranges in its first column, or no session results, the whole document (paragraphs and cells with ids) is sent.
+  The bottom of the page then says so and shows the source text.
 
-이 상태는 다음 용도로 사용됩니다.
+Answers are used only when the source text confirms them, checked cell by cell:
 
-- `check_update.py`가 FTP 변경 여부를 안정적으로 비교
-- 같은 미팅에서는 타임존 재탐지를 생략하여 LLM 호출 절감
-- FTP에 오래된 draft/오표기 파일이 뒤늦게 올라와도 기존 미팅 상태를 쉽게 되돌리지 않음
+- Every non-blank line of the cell is quoted by exactly one session.
+- Times are cell boundaries or times written in the cell (5-minute grid, no overlap). Even splits and similar guesses are rejected.
+- Title words appear in the quoted lines, chairs are names written in the cell (not companies), and AIs are numbers in the quoted lines.
 
-시간대는 `GetMeetings`에서 **해당 RAN1 미팅 번호와 TB ID가 모두 일치하는 행**을 우선
-사용합니다. `StartTimeZone`/`EndTimeZone`은 IANA 이름이 아닌 표시 문자열이므로,
-확인된 문자열과 `Country`를 코드로 매핑합니다. 예를 들어 유럽 표시 문자열과 `NL`은
-`Europe/Amsterdam`이 되며 서머타임은 `ZoneInfo`가 처리합니다. GMT 숫자만 보고 고정
-오프셋으로 추측하지 않습니다. 이 경로에서는 시간대용 문서 다운로드·장소 추출·LLM
-호출이 없고 `schedule.json`에 `starts_on`/`ends_on` 및 시각을 보존한
-`starts_at`/`ends_at`도 저장합니다. Agenda는 항목 설명
-생성에 계속 사용하며 변경 여부도 별도로 추적합니다.
+Failed cells are asked once more with the errors. If they still fail, or the request fails, the rule result is kept.
+A failed whole-document interpretation fails the build and keeps the last good result.
 
-Portal 목록은 한국 날짜 기준 과거 366일~미래 183일 범위를 복수 WG로 조회하며,
-프로세스/날짜별 성공 결과를 공유합니다. 100행이면 다음 페이지를 조회하고 최대
-20페이지 또는 반복 페이지는 오류로 처리합니다. 이 범위 밖의 과거 미팅을 모두
-찾는 기능은 아닙니다. `MtgDocURL`은 조회 결과에 보존하지만 FTP 소스 설정을 자동으로
-바꾸지는 않습니다.
+- Answers are cached in `.cache/ran2/` by input, prompt and model hash.
+- `--rebuild-slots` and `force-deploy` clear this cache.
+- A summary is kept in `docs/ran2/.schedule_state.json` under `llm`.
 
-API 장애·미등록 시간대·조회 범위 밖 미팅에서는 같은 미팅의 저장된 Portal 시간대를
-우선 재사용합니다. 사용할 Portal 참조가 없으면 기존 문서 대체 경로를 사용합니다.
-이 경로는 사용 가능한 직접 Agenda DOCX를 우선하고, 없으면 현재 미팅의 Chair notes
-DOCX/DOCM에서 개최지를 추출해 Gemini로 시간대를 판정합니다. 새 미팅의 스케줄이 시간대 참조보다 먼저 올라오면 우선 `UTC`, `timezone_status: "pending_timezone_ref"`, `timezone_ref: null`로 저장합니다. 이후 Agenda DOCX 또는 Chair notes가 나타나면 `check_update.py`가 `timezone_ref`의 변화를 별도로 감지해 빌드를 다시 실행하고, 성공한 빌드가 실제 IANA timezone과 참조 식별자를 저장합니다. 같은 파일명이 갱신된 경우에도 업로드 시각 변화로 재다운로드합니다. 로컬 참조는 파일 내용 SHA-256으로 추적합니다. Agenda ZIP/CSV는 agenda description 입력으로만 사용하며 timezone 참조로 승격하지 않습니다.
+#### Information outside the grid
 
-## GitHub Actions 자동 배포
+Content outside the schedule table is shown below the grid under "Additional information", in document order (`Schedule.supplements`).
 
-운영 진입점은 `ci.py`입니다. 로컬 미리보기용 `main.py`와 동일한 WG 등록부,
-활성 WG 설정, HTML 생성기를 사용하며 WG 내부의 파싱 절차는 강제하지 않습니다.
+- Short bold paragraphs are subheadings.
+- Tab-aligned paragraphs become tables (Breaks, List of Offline Face to Face discussions).
+- Full-width notes inside the table (`Colorful Polo Day`) and rows that could not be placed go to "Notes in the schedule table" with their day.
 
-```text
-repository_dispatch(cronjob_trigger) / workflow_dispatch
-  → ci.py check: 활성 WG별 조회, 변경/실패 사유 기록
-  → .ci/plan.json + .ci/transfers/<wg>/ 를 artifact로 전달
-  → ci.py build: 변경된 WG만 준비·파싱, 공통 사이트 조립
-  → 공개 파일 내용이 바뀐 경우만 Pages 배포
-  → 성공한 WG의 결과·상태를 커밋
+#### State
+
+- `docs/ran2/.schedule_state.json` records the last successful schedule and `agenda.csv`: URL, SHA-256, HTTP validators, meeting, version and Portal metadata.
+- `downloads/ran2/inputs/` holds the last originals (not committed). Check hands its downloads to build via `.ci/transfers/ran2/`.
+
+The real documents (#131bis v19, #135 v11, #135bis v00) and their `agenda.csv` files are in `tests/fixtures/ran2/`.
+
+### RAN Plenary
+
+RAN Plenary reads the chair's `RAN#<n> time plan v<version>.zip`/`.docx` from the Chair folder.
+
+- **Selection.** The order is meeting number → numeric version → listing metadata.
+  - It never falls back to an older meeting or version.
+  - A ZIP must contain exactly one DOCX of the same meeting and version.
+- **The sync Chair folder comes and goes.**
+  - Sometimes the folder is missing (403), has no timeplan, or has only versions lower than the built one.
+  - In those cases the last built input is restored from `.cache/3gpp/` without error (`sources.built_bundle`).
+  - Only a WG that has never been built fails.
+- **`agenda.csv`.** It comes from the meeting folder (`tsg_ran/TSG_RAN/TSGR_<n>/Agenda/`) first, then the sync `agenda_url`, then the same meeting's last build.
+  An agenda from another meeting is never inherited.
+
+The parser keeps the cell structure rather than flattening it to text. That includes:
+
+- room notes,
+- per-run font colors (with theme/style inheritance),
+- line breaks and strike-through,
+- source ids.
+
+Gemini reads the whole document and interprets venues, per-day room availability and sessions.
+Code then validates missing source text, guessed times, room overlaps and availability windows.
+On a validation failure the errors are sent back once. If it still fails, the previous result is kept.
+
+- **Breaks.** Meetings during breaks are kept, and break names appear on the time axis.
+- **Room scope.** Black general topics use `room_scope="unassigned"` and span every room column for the day. Common blocks are `shared`.
+  Neither means every room is actually booked.
+- **Main room.** Explicit `Main:` / `in RAN main room` text goes to Main even in black.
+  Red emphasis on opening and closing sessions is not a room marker.
+- **AIs.** They come only from explicit numbers in the timeplan or from a topic table entry clearly linked to the session.
+  `agenda.csv` supplies descriptions. AIs without evidence stay empty.
+- **Topic table.** The second, untimed table is an ordered list of topics, documents and AIs (`Schedule.topic_references`).
+  - The paragraphs right before it are shown verbatim (`Schedule.topic_preamble`).
+  - Highlights, hyperlinks, emphasis and strike-through are kept.
+  - Agenda descriptions are shown as an indented tree with their parent items.
+  - Formatting-only changes are applied without a new LLM call.
+
+**Dates and time zone.**
+
+- **Portal lookup.**
+  - It matches the RAN meeting number (not "ongoing").
+  - Known Portal zone strings are mapped in code.
+  - Unknown strings are resolved by Gemini from the venue and country, then validated with `ZoneInfo`.
+- **Priority.**
+  - Explicit config wins.
+  - On a Portal failure, only the same meeting's earlier successful metadata is reused.
+  - A new meeting without dates fails the build rather than guessing UTC.
+
+For offline or past meetings, set them in `config.json` (full example in `config.example.json`):
+
+```json
+{
+  "local_agenda": "tests/fixtures/ran_plenary/agenda.csv",
+  "meetings": {
+    "113": {"starts_on": "2026-09-14", "ends_on": "2026-09-17",
+            "location": "Madrid", "country": "ES", "timezone": "Europe/Madrid"}
+  }
+}
 ```
 
-자동 호출 주기는 외부 스케줄러에서 관리합니다. 저장소 workflow 자체에는 cron이 없습니다.
-`check`와 `build-and-deploy`는 기존 `github-pages` environment를 사용합니다.
-`deploy.yml`과 수동 파일 배포용 `pages.yml`은 동일한 `pages` 동시 실행 잠금을 사용하며,
-다음 주기 요청이 실행 중인 파서나 배포를 취소하지 않습니다.
+**State and caches.**
 
-### 활성 WG 설정과 추가 방법
+- `docs/ran-plenary/.schedule_state.json` records the successful timeplan and agenda: URL, meeting, version, SHA-256, validators, date and zone metadata.
+- `downloads/ran-plenary/inputs/` holds verifiable originals (not committed).
+- `.cache/ran-plenary/` holds LLM results and evidence, keyed by the hash of:
+  - structure,
+  - colors,
+  - room notes,
+  - prompt,
+  - model.
+- A color-only change triggers re-interpretation.
+- An agenda-only change reuses the timeplan result and re-attaches descriptions.
 
-`site.json`의 `working_groups[].enabled`로 참여 여부를 정합니다(생략하면 `true`).
-비활성 WG는 import·조회·파싱·캐시 초기화·내비게이션에서 제외합니다.
-기존 결과 파일은 보존하며 `default_wg`는 반드시 활성 WG여야 합니다.
+The real v04 ZIP, agenda and the reviewed Gemini result are in `tests/fixtures/ran_plenary/`.
 
-WG를 추가할 때는 다음 세 곳만 구성합니다. 동일한 실행 환경과 자격 증명을 사용한다면
-workflow YAML에 WG별 job이나 shell 분기를 추가할 필요가 없습니다.
+## Shared infrastructure
 
-1. 독립 WG 폴더에 `lifecycle.py`와 실제 처리 코드를 작성합니다.
-2. `working_groups/registry.py`에 ID와 lifecycle 모듈을 등록합니다.
-3. `site.json`에 WG를 추가하고 활성화합니다.
+### Remote files (`shared/remote_files.py`)
 
-`shared/lifecycle.py`의 공통 인터페이스:
+All 3GPP file access and the per-URL disk cache (`.cache/3gpp/`) go through this module.
+WGs only choose files and interpret documents. A new WG uses `get_listing()`, `fetch_file()` or `download()`.
+It does not add its own HTTP/FTP retries, and it does not skip a download based on the file name alone.
+Portal access is shared through `shared/portal_meetings.py`.
 
-| 항목 | WG의 책임 |
+- **HTTP.** A conditional GET uses the cached ETag/Last-Modified. A 304 reuses the cache.
+  Responses without validators are downloaded again, so an overwrite under the same name is never missed.
+- **FTP.** The cache is verified by SHA-256, then SIZE/MDTM are compared. If they are unchanged, the file is not fetched again (no RETR).
+- **Failures.** A failed download never overwrites the previous cache or a WG's successful state. A failed remote check is never reported as "unchanged".
+- **Listings.** Each listing URL is fetched once per run. Failed listings are not remembered, and `ci.py check` starts with a clean memo.
+- **Hand-off.** Build reuses the listings and Portal rows that check fetched (`.ci/listings.json`, `portal_meetings` in `.ci/plan.json`), so it builds exactly what check saw.
+- **Absent vs. failed.** 3GPP's IIS answers 403 for missing paths. `remote_files.is_absent` treats 403, 404 and FTP 550 as "absent". 5xx and connection errors are "failed".
+- **Cache is optional.** If the Actions cache is missing or expired, normal downloads restore it.
+
+### HTTPS and FTP fallback (`shared/ftp_transport.py`)
+
+Fallback applies only to public 3GPP file URLs (`www.3gpp.org/ftp/…`, `ftp.3gpp.org`) without credentials, query or fragment.
+The Portal API and external hosts are never sent to FTP.
+
+- **Retryable failures** are transport errors and HTTP 500, 502–504 and 520–526. A 200 response carrying an outage page also counts.
+  HTTPS is tried twice, 1 s apart, then anonymous passive FTP once (`ftp://ftp.3gpp.org`, same path).
+  WGs do not add retries of their own.
+- **A 403 from the 3GPP web application firewall** goes straight to FTP without retrying HTTPS.
+- **Any other 401/403/404** is returned unchanged as an HTTP response, and callers decide whether it means "absent" (see above).
+- **Within one run, a failed HTTPS location goes straight to FTP.** For 5xx or a firewall 403 this applies to the folder.
+  For connection or TLS failures it applies to the whole host. The next run starts with HTTPS again.
+- **One FTP connection per run** is reused, with one reconnect after an idle disconnect.
+- **Limits.** Files are capped at 64 MiB, a silent socket times out after 20 s, and a transfer after 180 s.
+  Size and modification time are compared before and after the transfer, to reject truncated files or files that changed mid-transfer.
+- **Listings.** Only the Microsoft FTP LIST format is supported.
+- **Logging.** State keeps the HTTPS URL, and FTP use is logged. FTP is plaintext and sends no credentials or headers.
+- **User-Agent.** Every 3GPP request uses `3GPPSchedule/1.0 (+https://github.com/karlla1220/3GPPSchedule)`.
+
+**Certificates.** The 3GPP server sometimes omits its intermediate certificate.
+CI runs `scripts/prepare_ca_bundle.py`, which adds the verified Sectigo intermediate to certifi's bundle and sets `SSL_CERT_FILE`.
+TLS and hostname verification stay on. See [certificates/README.md](certificates/README.md).
+
+To verify the transport locally without deploying:
+
+```bash
+uv run python scripts/prepare_ca_bundle.py /tmp/3gpp-ca-bundle.pem
+SSL_CERT_FILE=/tmp/3gpp-ca-bundle.pem uv run python scripts/check_3gpp_network.py
+```
+
+The **Verify 3GPP network recovery** workflow does the same check:
+
+- It injects HTTP 526, downloads real listings and files over FTP, and compares them with HTTPS by SHA-256.
+- It changes no schedule data and no site files.
+
+### Meeting folder discovery (`shared/meeting_folders.py`)
+
+Each WG reads two kinds of folder:
+
+- the sync folder, with live versions during the meeting,
+- the archive meeting folder, with versions from before and after the meeting and `agenda.csv`.
+
+The meeting folder is found by meeting ID, so nothing needs editing when the meeting changes. For each meeting:
+
+1. `meeting_specific_override` in the WG's `config.json`. It is set by hand and applies to that meeting only.
+2. The Portal's `MtgDocURL`. It is already in the per-run Portal list, so no request is needed.
+   - `ftp.3gpp.org` is rewritten to `www.3gpp.org/ftp`.
+   - Subfolders such as `Docs/` are lifted to the meeting folder.
+   - A URL naming another meeting is ignored.
+3. The folder recorded by a previous run (`meeting_specific`).
+4. A direct lookup of the folder name built from the ID: RAN1 `TSGR1_126b` / `TSGR1_126bis`, RAN2 `TSGR2_135bis` / `TSGR2_135b`, RAN Plenary `TSGR_113`.
+5. A search of the WG root listing, which also accepts suffixes such as `-e`.
+   The listing has hundreds of entries, so it is fetched at most once per meeting every 6 hours (timestamp in `.cache/meeting-folders.json`).
+
+- **Found folders are recorded in `meeting_specific` and committed.**
+  - Each check rewrites the list with that run's findings: the next meetings and the built meeting.
+  - When the list changes, that WG is built and the list is committed with the result. The check reason reads `meeting folders now …`.
+  - Meetings with an override are discovered and recorded too, but only the override is used. Maintainers compare the two to decide whether to keep the override.
+  - RAN2 and RAN Plenary builds reuse the list check wrote, via `.ci/plan.json`.
+  - A local checkout without the files records nothing.
+- **Effect on hashes and caches.**
+  - The list is excluded from the WG input fingerprint (`ci.py`), so recording it is not a "config change" and does not invalidate check's plan.
+  - `meeting_specific` and `meeting_specific_override` are excluded from `config_hash`, so parser and LLM caches survive a folder change.
+- **Missing is normal.** A folder that does not exist yet (IIS 403, FTP 550) is not recorded and is looked up again on the next run.
+  5xx or connection errors are errors.
+
+### Caches
+
+"Cache" here means three different things:
+
+1. **GitHub Actions cache: 3GPP originals and WG parser/LLM results (`.cache/`).**
+   - The [shared cache action](.github/actions/wg-cache/action.yml) restores and saves the whole `.cache/` directory for both check and build.
+   - `.cache/3gpp/` stores originals per URL with file name, size, SHA-256, ETag, Last-Modified and FTP modification time.
+   - `.cache/<wg>/` stores per-WG results.
+   - The key is `wg-cache-v2-<OS>-<run_id>-<run_attempt>-<job>`.
+     Build prefers the same run's check cache, then the latest earlier cache, then legacy `wg-cache-v1-`.
+   - Check saves the cache even when nothing changed.
+2. **Git-committed inputs.**
+   - These are `downloads/ran1/extra_files/` with its `.extra_files_state.json`, and the `meeting_specific` lists.
+   - They survive runner changes and cache expiry, at the cost of repository size.
+3. **uv package cache** (`setup-uv` `enable-cache: true`). It holds Python dependencies only.
+
+`force-deploy` clears the shared 3GPP cache, then calls every enabled WG's `reset_cache()`.
+
+## Deployment (GitHub Actions)
+
+`ci.py` is the production entry point. It uses the same WG registry, site config and renderer as `main.py`.
+
+```text
+repository_dispatch (cronjob_trigger) / workflow_dispatch
+  → ci.py check   per-WG check, reasons and errors recorded
+  → .ci/plan.json + .ci/transfers/<wg>/ passed as an artifact
+  → ci.py build   prepare and build only changed WGs, assemble the site
+  → deploy to Pages only when published files changed
+  → commit successful WGs' outputs and state ("Update WG schedules [skip ci]")
+```
+
+- **Schedule.** The schedule is set by an external scheduler that sends `repository_dispatch`. The workflows contain no cron.
+- **Environment.** Check and build use the `github-pages` environment.
+  `deploy.yml` and `pages.yml` share the `pages` concurrency group, so a new run never cancels a running parse or deploy.
+- **Java.** The build job installs Java 21 and the WMF converter.
+
+| `action` input | Behaviour |
 |---|---|
-| `check_updates() → CheckResult` | 문서 변경 여부·사유·오류를 반환. 새 파일은 `.ci/transfers/<wg>/`에만 임시 저장 |
-| `prepare_build()` | 새 build runner에서 전달된 파일을 재사용하도록 준비 |
-| `build_schedule(BuildOptions) → Schedule` | WG 고유 파싱·병합 후 공통 일정 반환 |
-| `reset_cache()` | 강제 빌드 시 해당 WG의 캐시·점진 상태 초기화 |
-| `input_paths` | 코드·설정·수동 입력 경로. 콘텐츠 해시로 변경 감지 |
-| `persistent_paths` | 커밋할 결과·원문·상태 경로. 실패 시 빌드 전 상태로 복원 |
-| `cache_paths` | 재생성 가능한 WG 캐시 경로 (`.cache/<wg>/` 사용) |
+| `check-build-deploy` (default) | Check enabled WGs, build only those that changed, deploy if published output changed |
+| `build-deploy` | Skip checks and build all enabled WGs |
+| `force-deploy` | Clear every enabled WG's caches, then build everything |
+| `deploy-only` | Deploy the current `docs/` without parsing |
 
-RAN1은 기존 FTP/문서/시간대/외부 파일 감지를 그대로 구현합니다.
-RAN2는 sync·아카이브 Agenda 폴더의 schedule과 agenda.csv를 재검증하고 Portal 날짜 변경도 감지합니다.
-RAN Plenary는 Chair의 timeplan과 agenda.csv를 독립적으로 HTTP 재검증하며, 같은 URL의 본문 변경과 Portal 메타데이터 변경도 감지합니다.
-공통 데이터 모델·의존성이 바뀌면 활성 WG를 다시 빌드합니다. 공통 화면 또는 기본 WG만
-바뀌면 저장된 일정으로 화면만 다시 생성합니다. 개최 날짜에 따른 내비게이션 변화도 검사합니다.
+Rebuild triggers:
 
-### 상태와 실패 처리
+- A WG is rebuilt when its documents, Portal metadata, code or config change.
+- A change to the shared model or dependencies rebuilds every enabled WG.
+- A change to the shared screen (templates, renderer) or to `default_wg` only re-renders from saved schedules.
+- Navigation changes caused by meeting dates are detected too.
 
-- `.ci/plan.json`: `build_ids`, WG별 `changed/unchanged/error`, 사유·오류, 입력 해시.
-- `.ci/build-report.json`: WG별 `built/skipped/failed`, 조회 결과, `site_changed`, `has_errors`, 커밋 대상 경로.
-- `docs/.build_state.json`: 마지막 성공 빌드의 WG 입력 해시와 사이트 입력 해시. 초기 도입 시 활성 WG를 한 번 빌드합니다.
-- WG가 실패하면 해당 WG의 선언된 영속 경로를 복원합니다. 중간에 쓴 슬롯·문서 상태도 성공으로 기록하지 않습니다.
-- 다른 WG의 성공 결과는 조립·배포할 수 있고, 마지막 단계에서 실패한 WG 때문에 workflow를 실패로 표시합니다.
-- 새 WG가 실패해 이전 결과도 없으면 내비게이션에 넣지 않습니다. 기본 WG 결과가 없으면 사이트 조립을 실패 처리합니다.
-- 문서 메타데이터만 바뀌고 일정은 같으면 기존 생성 시각을 유지해 불필요한 배포를 피합니다. 상태만 바뀌면 커밋만 합니다.
-- Pages 배포가 실패하면 새 상태를 커밋하지 않습니다. 다음 주기에서 같은 입력 변경을 다시 감지합니다.
-- RAN1 LLM 재시도가 모두 실패하거나 선택한 소스 다운로드가 실패하면 빌드를 실패 처리합니다. 빈 슬롯이나 누락된 부의장 자료를 성공 상태로 저장하지 않습니다.
-- RAN1 `ScheduleSource.origin`은 원격/수동 출처를 보존합니다. 다운로드 후 `local_path`가 생겨도 원격 파일 목록을 다음 조회에 사용할 상태에 남깁니다.
-- 수동 문서가 삭제되면 과거 `meeting_source: local` 기록만으로 이전 미팅에 고정하지 않습니다. 로컬 부의장 문서도 선택한 메인 미팅 ID에 맞춰 고릅니다.
-
-### 실행 모드
-
-| workflow 입력 | 동작 |
-|---|---|
-| `check-build-deploy` | 활성 WG 조회 후 필요한 WG만 빌드; 공개 결과가 달라지면 배포 |
-| `build-deploy` | 조회 생략, 활성 WG 전체 빌드; 공개 결과가 달라지면 배포 |
-| `force-deploy` | 활성 WG 각각의 캐시를 초기화하고 전체 빌드; 공개 결과가 달라지면 배포 |
-| `deploy-only` | 파싱 없이 현재 `docs/`를 명시적으로 배포 |
-
-로컬에서 동일한 운영 절차를 검증할 수 있습니다(저장소 루트에서 실행):
+Run the same steps locally from the repository root:
 
 ```bash
 uv run python ci.py check
 uv run python ci.py build
-# 조회를 생략하는 수동 모드
 uv run python ci.py build --action build-deploy
 uv run python ci.py build --action force-deploy
 ```
 
-`ci.py check/build`는 WG별 실패도 끝까지 수집하고 `has_errors`를 출력합니다.
-운영 workflow는 이 값을 검사해 실패 처리합니다. 위 명령 자체는 예측 가능한 WG 실패를
-보고서로 반환하므로 직접 실행할 때도 보고서를 확인하세요. 설정·계획 오류는 비정상 종료합니다.
-빌드는 계획 생성 이후 코드나 설정이 바뀐 경우 해당 계획을 거부합니다.
+`ci.py check/build` collects per-WG failures and prints `has_errors`. The workflow fails on it, so check the report when you run it yourself.
+Config or plan errors exit abnormally. Build rejects a plan if code or config changed after the plan was made.
 
-### 환경과 Pages 설정
+### State and failure handling
 
-- `github-pages` environment(또는 repository secrets)에 `GEMINI_API_KEY`를 둡니다.
-- 공통 제작자·연락처는 `site.json`의 `presentation`에서 읽습니다. WG 파서는 연락처 환경변수를 요구하지 않습니다.
-- Repository Settings → Pages → Source는 **GitHub Actions**입니다.
-- `pages.yml`은 `main`의 `docs/**` 변경 또는 수동 트리거로 저장된 사이트를 배포하는 별도 경로입니다.
+- `.ci/plan.json`: `build_ids`, per-WG `changed/unchanged/error`, reasons and input hashes.
+- `.ci/build-report.json`: per-WG `built/skipped/failed`, `site_changed`, `has_errors` and the paths to commit.
+- `docs/.build_state.json`: input hashes of the last successful build.
+- **Failed WG.**
+  - Its declared persistent paths are restored, so partial slot or document state is never recorded as success.
+  - Other WGs' results are still deployed, and the workflow is marked failed at the end.
+  - A new WG with no previous result is left out of the navigation. A missing default WG fails the site build.
+- **Unchanged schedule.** If only document metadata changed, the generation time is kept to avoid a needless deploy.
+  If only state changed, it is committed without deploying.
+- **Failed Pages deploy.** The new state is not committed, so the next run detects the same change again.
+- **RAN1.** A build fails if every LLM retry fails or a selected source cannot be downloaded. Empty slots or missing vice-chair data are never saved as success.
 
-## 라이선스
+### Repository settings
 
-MIT
+- Set `GEMINI_API_KEY` in the `github-pages` environment (or repository secrets).
+- Settings → Pages → Source: **GitHub Actions**.
+- `pages.yml` deploys the committed `docs/`. It runs on manual dispatch, or on a push to `main` touching `docs/**` (bot commits carry `[skip ci]`).
 
-## Bug report or Feature request
+## Page header (`site.json` `presentation`)
 
-Please send email to duckhyun.bae@lge.com or use issue in repo. 
-
-## 공통 페이지 정보와 WG별 레이아웃
-
-`site.json`의 `presentation`은 활성화된 모든 WG 페이지에 적용됩니다.
+`presentation` applies to every WG page:
 
 ```json
 "presentation": {
   "creator": "Duckhyun Bae",
-  "creator_url": "https://www.linkedin.com/in/...",
+  "creator_url": "https://www.linkedin.com/in/duckhyun-bae/",
   "creator_bio": "RAN1 delegate from LGE",
   "contact_email": "duckhyun.bae@lge.com",
   "disclaimer": "Personal side project · Not affiliated with LG Electronics or 3GPP",
   "feedback_url": "https://github.com/karlla1220/3GPPSchedule/issues",
   "support_title": "Proposal 1: Buy a coffee for Duckhyun",
   "support_links": [
-    {"label": "Patreon", "url": "https://www.patreon.com/..."},
-    {"label": "GitHub Sponsors", "url": "https://github.com/sponsors/..."}
-  ],
-  "notice": "자동 생성된 일정입니다. 오류나 개선 의견을 알려주세요."
+    {"label": "Patreon", "url": "https://www.patreon.com/duckhyunbae"},
+    {"label": "GitHub Sponsors", "url": "https://github.com/sponsors/karlla1220"}
+  ]
 }
 ```
-
-헤더 아래쪽 두 줄과 미팅 제목 줄 오른쪽 끝의 후원 안내가 이 값으로 만들어집니다.
 
 ```
                     RAN2#135bis   📅 RAN1#126bis   RAN#113        ☕ Proposal 1: Buy a coffee for Duckhyun
@@ -763,96 +819,36 @@ Created by Duckhyun Bae (duckhyun.bae@lge.com), RAN1 delegate from LGE
 Personal side project · Not affiliated with LG Electronics or 3GPP · Feedback
 ```
 
-- `creator_url`은 이름에, `feedback_url`은 `Feedback`에 걸립니다. 값을 비우면 그 링크(또는 그 줄)를 숨깁니다.
-- `support_links`는 후원 수단 목록입니다. 적은 순서대로 `label`이 링크 글자가 되어 `A or B`(셋 이상은 `A, B or C`)로 이어집니다.
-  첫 줄 문구는 `support_title`이고, 생략하면 `Support this tool`입니다.
-  화면 폭 1024px 이하에서는 제목 줄 아래 가운데 한 줄로 내려옵니다.
-  URL은 모두 `https://`만 받습니다. 저장소의 Sponsor 버튼은 `.github/FUNDING.yml`이 따로 정합니다.
-- `support_links`가 있으면 회의 마지막 날 정오(회의 시간대)부터 안내문 아래에 감사 인사 한 줄이 보입니다.
-  닫으면 그 회의에서는 다시 뜨지 않습니다(`localStorage`). 더미 미팅과 날짜를 모르는 회의에는 넣지 않습니다.
-- `contact_email`은 제작자 이름 뒤 괄호에 메일 링크로 붙습니다. GitHub 이슈를 쓰기 어려운 사용자를 위한 연락처입니다.
-  `contact_name`이 제작자와 다르면(또는 `creator`가 없으면) 예전처럼 따로 `Contact:` 줄을 만듭니다.
-- `notice`를 생략하면 기본 안내문을 사용하고, 빈 문자열이면 숨깁니다. 더미 미팅은 설정과 관계없이 Demo 안내를 표시합니다.
-- 메일 주소와 URL은 빌드 전 검증하고, 표시 문자열은 HTML 이스케이프합니다.
+- `creator_url` links the name, and `feedback_url` links `Feedback`. An empty value hides that link or line.
+- **Support links.** `support_links` are joined in order as `A or B` (`A, B or C`). `support_title` is the first line (default `Support this tool`).
+  - At 1024px and below, the note moves to one centred line under the meeting title.
+  - Only `https://` URLs are accepted.
+  - The repository's Sponsor button comes from `.github/FUNDING.yml`.
+- **End-of-meeting note.** With `support_links` set, a short thank-you appears under the notice from noon (venue time) on the last day of the meeting.
+  - Dismissing it hides it for that meeting (`localStorage`).
+  - It is not shown for demos or for meetings with an unknown end date.
+- **Contact.** `contact_email` is shown in parentheses after the creator's name. If `contact_name` differs from `creator`, a separate `Contact:` line is used.
+- **Notice.**
+  - Without `notice`, the default notice is shown. An empty string hides it.
+  - Demo meetings always show a demo notice.
+- **Safety.** Email addresses and URLs are validated at build time, and all text is HTML-escaped.
 
-`shared/page.py`의 `render_header()`가 WG 선택, 출처·생성 시각, 안내문, 회의 종료 인사, 제작자와 링크를
-함께 생성합니다. `shared/renderer.py`는 이 헤더와 일정 본문을 조립합니다. 이후 다른 WG용
-HTML 레이아웃을 작성할 때도 `render_header(schedule, presentation=..., schedules=..., groups=...)`를
-재사용할 수 있습니다. 헤더는 `meta`, `demo-notice`, 내비게이션 클래스와 현재 시각용
-`#tz-now`를 제공하며, 스타일과 시계 갱신은 사용하는 레이아웃이 담당합니다.
+`shared/page.py`'s `render_header()` builds:
 
-WG 파서는 일정 데이터만 반환합니다. 과거 `schedule.json`의 연락처 필드는 읽기 호환을 위해
-남겨 두지만 페이지에서는 사용하지 않습니다. 공통 정보 변경은 CI에서 HTML 재생성만 수행하며,
-WG 문서 다운로드나 파싱을 다시 실행하지 않습니다. 로컬 확인은 `uv run python build.py --render-only`입니다.
+- the WG navigation,
+- the sources and generation time,
+- the notice and the end-of-meeting note,
+- the creator lines.
 
+`shared/renderer.py` combines the header with the schedule body. A new layout can reuse `render_header(schedule, presentation=..., schedules=..., groups=...)`.
 
-탭 아이콘은 `templates/favicon.svg`이고, 페이지마다 `<link rel="icon">`의 data URI로 넣습니다(따로 배포할 파일이 없습니다).
+WG parsers return schedule data only. Changing `presentation` only re-renders HTML in CI and never re-downloads or re-parses documents.
+The tab icon is `templates/favicon.svg`, embedded as a data URI.
 
-공통 화면의 HTML/CSS/JavaScript 원본은 `templates/`에 있으며 `shared/renderer.py`가
-WG별 스케줄과 미팅 메타데이터를 주입합니다. 템플릿 변경도 CI의 렌더링 변경 감지에
-포함됩니다. RAN1 파서의 시간 계산과 LLM 역할은 [파싱 작동 원리](PARSING_ARCHITECTURE.md)를 참고하세요.
+## Feedback
 
-### WG 공통 원격 파일 라이브러리
+Send an email to duckhyun.bae@lge.com or open an [issue](https://github.com/karlla1220/3GPPSchedule/issues).
 
-`shared/remote_files.py`가 모든 WG의 3GPP 파일 접근과 URL별 디스크 캐시를 관리합니다.
-WG는 파일 선택과 문서 해석만 담당합니다. 새로운 WG도 `get_listing()`,
-`fetch_file()` 또는 `download()`를 사용하고 자체 HTTP/FTP 재시도나 파일명만으로
-다운로드를 생략하는 로직을 만들지 않습니다. Portal 조회와 페이지 처리는
-`shared/portal_meetings.py`를 공유합니다.
+## License
 
-- HTTP: 유효한 원본 캐시의 ETag/Last-Modified로 조건부 GET을 보냅니다. 304면 본문을 받지 않고 캐시를 재사용합니다.
-- FTP: 같은 URL의 캐시를 SHA-256으로 검증한 뒤 SIZE/MDTM을 비교합니다. 크기와 수정 시각이 같으면 RETR 없이 반환합니다.
-- 캐시가 없거나 손상되었으면 다시 받습니다. 검증자가 없는 HTTP 응답도 다시 받아 동일 파일명 덮어쓰기를 놓치지 않습니다.
-- 다운로드 실패는 이전 캐시와 성공한 WG 상태를 덮어쓰지 않습니다. 원격 확인 실패를 변경 없음으로 숨기지 않습니다.
-- RAN1의 목록 기반 변경 감지는 유지합니다. 실제 다운로드 단계에서는 기존 파일이 있어도 공통 라이브러리로 재검증합니다.
-- 캐시는 선택 사항입니다. GitHub Actions 캐시가 만료·누락되면 정상 다운로드로 복구합니다.
-
-### 미팅 폴더 자동 등록 (`shared/meeting_folders.py`)
-
-각 WG는 sync 폴더(회의 중 실시간 판)와 아카이브의 미팅 폴더(회의 전·후 판과 `agenda.csv`)를 함께 읽습니다.
-미팅 폴더는 미팅이 바뀌어도 설정을 고치지 않도록 미팅 ID로 찾습니다. 한 미팅의 폴더는 다음 순서로 정합니다.
-
-1. WG `config.json`의 `meeting_specific_override` (직접 지정, 그 미팅에만 적용)
-2. Portal의 `MtgDocURL` (실행마다 한 번 받는 Portal 목록에 이미 있어 요청이 없습니다. `ftp.3gpp.org`는 `www.3gpp.org/ftp`로 바꾸고, `Docs/` 같은 하위 폴더는 미팅 폴더로 올립니다. 다른 미팅 이름을 가리키면 쓰지 않습니다.)
-3. 이전 실행이 찾아 기록한 폴더 (`config.json`의 `meeting_specific`)
-4. 미팅 ID로 만든 폴더 이름을 바로 조회: RAN1 `TSGR1_126b`·`TSGR1_126bis`, RAN2 `TSGR2_135bis`·`TSGR2_135b`, RAN P `TSGR_113`
-5. WG 루트 목록에서 이름으로 찾기 (`-e` 같은 전자회의 접미사도 인정). 수백 항목이라 미팅마다 6시간에 한 번만 받습니다.
-
-- **찾은 폴더는 `config.json`의 `meeting_specific`에 기록되어 저장소에 남습니다.** CI가 확인할 때마다 그 실행에서 찾은 폴더(다음 미팅, 빌드한 미팅)로 목록을 다시 쓰고, 바뀌면 그 WG를 빌드해 빌드 결과와 함께 커밋합니다(`meeting folders now …`가 check의 변경 사유로 보입니다). 목록에 없는 미팅은 아직 찾지 못한 것입니다. 손으로 고치지 않습니다. 고정하려면 `meeting_specific_override`에 적습니다.
-  - override가 있는 미팅도 다른 미팅과 똑같이 찾아서 기록합니다. 사용하는 것은 override뿐입니다. 관리자는 `meeting_specific`에 기록된 폴더를 보고 override를 유지할지 지울지 정합니다.
-  - RAN2와 RAN P의 build는 check가 준비한 입력을 쓰고 폴더를 다시 찾지 않으므로, check가 쓴 목록을 CI 계획(`.ci/plan.json`)으로 build job에 넘겨 다시 씁니다.
-  - 이 목록은 WG 입력 지문(`ci.py`의 `fingerprint`)에서 빠집니다. 기록했다는 이유로 "설정 변경"이 되거나 check의 계획이 무효가 되지 않습니다.
-  - 파일이 없는 로컬 checkout에서는 기록하지 않습니다.
-- **없는 것은 정상입니다.** 폴더가 없으면(IIS 403, FTP 550) 기록하지 않고 다음 실행에서 다시 찾습니다. 회의 전에는 폴더가 아직 없는 경우가 많습니다. 5xx·연결 실패는 오류입니다. 루트 목록을 마지막으로 받은 시각만 `.cache/meeting-folders.json`에 둡니다.
-- 목록은 실행마다 한 번만 받고 check에서 build로 넘기므로(`.ci/listings.json`), 같은 실행에서 다시 찾아도 요청이 늘지 않습니다.
-- `meeting_specific`과 `meeting_specific_override`는 `config_hash`에 들어가지 않습니다. 폴더가 바뀌어도 파서·LLM 캐시는 그대로 쓰므로, 기록을 커밋하려고 도는 빌드는 가볍습니다.
-
-### 3GPP HTTPS 인증서와 FTP fallback
-
-CI의 check/build 작업은 `scripts/prepare_ca_bundle.py`로 기존 certifi CA 목록에
-검증된 Sectigo 중간 인증서를 보충하고 `SSL_CERT_FILE`을 설정합니다.
-3GPP 서버가 중간 인증서를 누락하는 경우에도 TLS·호스트명 검증을 유지합니다.
-인증서 출처와 갱신 방법은 [certificates/README.md](certificates/README.md)에 있습니다.
-
-RAN1·RAN Plenary 파일 조회는 HTTPS를 우선 사용합니다. 공개 3GPP 파일 URL에서
-연결 오류나 일시적인 서버 오류(523/525/526 포함)가 두 번 발생하면
-`ftp://ftp.3gpp.org`의 동일 경로를 익명·passive 모드로 읽습니다.
-FTP 전송은 평문입니다. 로그인 정보나 HTTP 헤더를 전달하지 않으며, Portal API,
-외부 사이트, 인증 정보 또는 query가 있는 URL, 401/403/404 응답은 fallback 대상에서 제외합니다.
-
-- 목록은 현재 Microsoft FTP 서버의 LIST 형식을 사용합니다. 지원하지 않는 형식은 실패로 처리합니다.
-- FTP 파일은 최대 64 MiB, 소켓 무응답은 20초, 전송 콜백 기준 전체 작업은 180초로 제한합니다.
-- 크기와 수정 시각을 전후 비교하여 잘리거나 전송 중 변경된 파일을 거부합니다.
-- 상태에는 기존 HTTPS URL을 유지하고 FTP 사용 여부는 로그에 남깁니다.
-- 3GPP 파일·목록의 재시도는 공통 전송 계층에서 HTTPS 최대 2회와 FTP 최대 1회로 관리합니다. WG에서 같은 요청을 추가 재시도하지 않습니다.
-
-로컬에서 배포 없이 인증서 보충과 실제 FTP 복구를 검증하려면:
-
-```bash
-uv run python scripts/prepare_ca_bundle.py /tmp/3gpp-ca-bundle.pem
-SSL_CERT_FILE=/tmp/3gpp-ca-bundle.pem uv run python scripts/check_3gpp_network.py
-```
-
-GitHub Actions의 **Verify 3GPP network recovery**도 같은 검증을 수행합니다.
-HTTP 526을 주입하여 실제 FTP 목록·파일 다운로드를 실행하고, HTTPS와 SHA-256을 비교합니다.
-이 워크플로는 스케줄 데이터나 사이트를 변경하지 않습니다.
+MIT
