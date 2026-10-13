@@ -62,3 +62,4 @@ TDoc 번호만 있는 moderator summary, vice-chair의 AI별 note는 파일명�
 실제 중간 문서 본문을 확보하기 전에는 위 방향의 경계 규칙을 검증했다고 주장할 수 없다.
 후속 요청에 따라 2–5번의 섹션 보존/TDoc 행 필터를 구현했다(parser version 12).
 실제 #124와 합성 fixture로 검증했으며, 1번의 다중 문서 취득·선택 확장은 적용하지 않았다.
+이후 1번 중 vice-chair의 AI별 session note를 체어맨 노트와 합치도록 적용했다(CLAUDE.md의 "세션 노트"). moderator summary는 여전히 읽지 않는다.

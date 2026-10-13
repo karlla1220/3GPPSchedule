@@ -438,9 +438,10 @@ def _rebase(sections, agenda_item, titles):
 
     A session note copies its headings from the agenda but restarts Word's
     numbering, so its 10.5.4.1 reads as 10.5.0.1 and its 9.2 as 8.1. Its first
-    heading is the stated agenda item, or one of its subsections when the
-    chairman note has a heading of the same title there. Subsections keep their
-    place relative to it; anything else stays under the stated item.
+    heading is the stated agenda item, or the item above or below it whose
+    heading in the chairman note has the same title (a note for 10.2.1 opens
+    with 10.2). Subsections keep their place relative to it; anything else
+    stays under the stated item.
     """
     if not sections:
         return {}
@@ -448,7 +449,9 @@ def _rebase(sections, agenda_item, titles):
     anchor = agenda_item
     wanted = _title_key(sections[first]["title"])
     for ai, title in titles.items():
-        if (ai == agenda_item or ai.startswith(agenda_item + ".")) and _title_key(title) == wanted:
+        related = (ai == agenda_item or ai.startswith(agenda_item + ".")
+                   or agenda_item.startswith(ai + "."))
+        if related and _title_key(title) == wanted:
             anchor = ai
             break
     old = first.split(".")
@@ -537,14 +540,15 @@ def _same_text(a, b):
     return matcher.real_quick_ratio() >= SIMILAR and matcher.ratio() >= SIMILAR
 
 
-def _merge_parts(base, extra):
+def _merge_parts(base, extra, *, extra_newer=False):
     """Both documents' blocks in one order, each shared block once.
 
-    The chairman note gathers the session notes at the end of the meeting, so
-    the two hold the same blocks; until then a session note runs ahead. Aligned
-    blocks appear once, and a block of either document alone stays where it
-    stands, after the base document's blocks at the same place. Where the
-    base reworded a block, its wording stands for both.
+    The chair gathers the session notes into the chairman note at some point,
+    so the two come to hold the same blocks; until then a session note runs
+    ahead. Aligned blocks appear once, and a block of either document alone
+    stays where it stands, after the base document's blocks at the same place.
+    A block one document reworded is one block in the wording of the document
+    uploaded later.
     """
     matcher = SequenceMatcher(
         None, [_token(p) for p in base], [_token(p) for p in extra], autojunk=False
@@ -567,6 +571,9 @@ def _merge_parts(base, extra):
             twin = next((a for a in unpaired if _same_text(a, b)), None)
             if twin is not None:
                 unpaired.remove(twin)
+                if extra_newer:
+                    at = next(i for i, part in enumerate(merged) if part is twin)
+                    merged[at] = b
             elif _token(b) == "~tdocs" and any(_token(a) == "~tdocs" for a in base[i1:i2]):
                 pass
             else:
@@ -581,15 +588,27 @@ def _source_digest(parts):
     return hashlib.sha1(json.dumps(keys).encode()).hexdigest()[:12] if keys else None
 
 
-def merge_session_notes(result, notes):
+def _later(a, b):
+    """True when upload time ``a`` is after ``b`` (ISO strings, either may be None)."""
+    try:
+        return datetime.fromisoformat(a) > datetime.fromisoformat(b)
+    except (TypeError, ValueError):
+        return False
+
+
+def merge_session_notes(result, notes, *, chair_at=None):
     """Fold session notes into the chairman note's sections.
 
     Each section records a digest of every document's share of it, so a
-    change can be dated by the document that made it.
+    change can be dated by the document that made it. ``chair_at`` and each
+    note's ``changed_at`` are upload times: the later wording of a reworded
+    block wins.
     """
-    for section in result["sections"].values():
+    latest = {}
+    for ai, section in result["sections"].items():
         digest = _source_digest(section.get("parts", []))
         section["sources"] = {CHAIR_SOURCE: digest} if digest else {}
+        latest[ai] = chair_at
     for note in notes:
         for ai, extra in note["sections"].items():
             section = result["sections"].get(ai)
@@ -597,7 +616,10 @@ def merge_session_notes(result, notes):
                 section = result["sections"][ai] = {
                     "title": extra["title"], "parts": [], "excluded_tdoc_rows": 0, "sources": {},
                 }
-            section["parts"] = _merge_parts(section["parts"], extra["parts"])
+            newer = _later(note["changed_at"], latest.get(ai))
+            section["parts"] = _merge_parts(section["parts"], extra["parts"], extra_newer=newer)
+            if newer or latest.get(ai) is None:
+                latest[ai] = note["changed_at"]
             section["excluded_tdoc_rows"] = max(
                 section["excluded_tdoc_rows"], extra["excluded_tdoc_rows"]
             )
@@ -703,12 +725,24 @@ def track_changes(result, previous, *, changed_at, document, sources=None):
     again from the next one.
     """
     before = (previous or {}).get("sections", {})
-    reparsed = previous is not None and previous.get("parser_version") != result.get("parser_version")
+    # Another parser version, or the first build that reads session notes:
+    # what the previous build did not read is no edit.
+    introduced = (previous is not None and "session_notes" not in previous
+                  and bool(result.get("session_notes")))
+    reparsed = previous is not None and (
+        previous.get("parser_version") != result.get("parser_version") or introduced
+    )
     same_chair = previous is not None and previous.get("sha256") == result.get("sha256")
     for ai, section in result["sections"].items():
         keys = section["blocks"]
         old = before.get(ai)
         if previous is None:
+            change = {"change": "initial", "added": []}
+        elif old is None and reparsed:
+            change = {"change": "initial", "added": []}
+        elif (introduced and old.get("blocks") != keys
+              and any(sid != CHAIR_SOURCE for sid in section.get("sources", {}))):
+            # Now read with its session notes: a baseline as of the latest of them.
             change = {"change": "initial", "added": []}
         elif old is None:
             change = {"change": "new", "added": list(range(len(keys)))}
@@ -881,10 +915,10 @@ def agreement_reference(cfg, meeting_id, listed=None):
 def _session_notes(cfg, meeting_id, *, offline, titles, now):
     """Parsed session notes of the meeting and their identities.
 
-    A note that cannot be read, or belongs to another meeting, is left out
-    with a warning; the others still count.
+    A note of another meeting is left out. One that cannot be read is
+    reported among the failed ids; the others still count.
     """
-    notes, references, warnings = [], [], []
+    notes, references, warnings, failed = [], [], [], []
     if offline:
         found = [(path, None, None) for path in local_session_notes()]
     else:
@@ -907,12 +941,13 @@ def _session_notes(cfg, meeting_id, *, offline, titles, now):
             print(f"Warning: session note {name} left out: {exc}")
             if "belongs to" not in str(exc):
                 warnings.append(f"Session note {name} could not be parsed: {exc}")
+                failed.append(session_note_id(name))
             continue
         note.update(id=session_note_id(name), name=name, changed_at=modified_at or now)
         if info:
             note["source_url"] = info["url"]
         notes.append(note)
-    return notes, references, warnings
+    return notes, references, warnings, failed
 
 
 def build_agreements(*, cfg, meeting_id, schedule_path, offline, previous=None,
@@ -962,7 +997,7 @@ def build_agreements(*, cfg, meeting_id, schedule_path, offline, previous=None,
             failure = f"Chairman note {identity['name']} could not be parsed: {exc}"
             print(f"Warning: {failure}")
     titles = {ai: s["title"] for ai, s in (result or {}).get("sections", {}).items()}
-    notes, references, warnings = _session_notes(
+    notes, references, warnings, failed = _session_notes(
         cfg, meeting_id, offline=offline, titles=titles, now=now
     )
     identity = _identity(identity, references)
@@ -989,7 +1024,7 @@ def build_agreements(*, cfg, meeting_id, schedule_path, offline, previous=None,
     for note in notes:
         sources[note["id"]] = {"name": note["name"], "changed_at": note["changed_at"]}
         result["warnings"] = sorted(set(result["warnings"] + note["warnings"]))
-    merge_session_notes(result, notes)
+    merge_session_notes(result, notes, chair_at=changed_at if path is not None else None)
     result["session_notes"] = {
         note["id"]: {
             "name": note["name"], "agenda_item": note["agenda_item"],
@@ -1004,6 +1039,11 @@ def build_agreements(*, cfg, meeting_id, schedule_path, offline, previous=None,
     )
     for section in result["sections"].values():
         section.pop("parts", None)
+    # A session note that cannot be read leaves its items as last published,
+    # rather than without what its sessions agreed, until it can be read again.
+    for ai, section in (previous or {}).get("sections", {}).items():
+        if any(sid in failed for sid in section.get("sources", {})):
+            result["sections"][ai] = section
     return result, identity
 
 

@@ -1154,8 +1154,10 @@ header .meta a:focus-visible,
     margin-left: auto;
     font-size: 12px;
     color: var(--ink-3);
-    white-space: nowrap;
+    text-align: right;
 }
+/* A note's version and time stay together; the line breaks between notes. */
+.agreement-source span { white-space: nowrap; }
 .agreement-tabs:empty { display: none; }
 .agreement-status:empty { display: none; }
 .agreement-status {
@@ -1234,7 +1236,7 @@ header .meta a:focus-visible,
 @media (max-width: 600px) {
     .agreement-header { padding: 8px 12px; }
     .agreement-tabs { max-width: 100%; }
-    .agreement-source { flex-basis: 100%; margin-left: 0; }
+    .agreement-source { flex-basis: 100%; margin-left: 0; text-align: left; }
     .agreement-tabs button { min-height: 36px; }
     #agreement-body { padding: 14px 14px 18px; }
     #agreement-body > h3 { flex-direction: column; gap: 2px; font-size: 15px; }
