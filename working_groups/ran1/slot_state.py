@@ -50,7 +50,7 @@ def hash_source_text(text: str) -> str:
     return hashlib.sha256(normalized.encode("utf-8")).hexdigest()[:16]
 
 
-def _state_path(day: str, time_block_index: int) -> Path:
+def slot_state_path(day: str, time_block_index: int) -> Path:
     return SLOT_STATE_DIR / f"{day}_{time_block_index:02d}.json"
 
 
@@ -64,7 +64,7 @@ def load_slot_state(
     enough that previous merge results cannot be trusted for incremental
     use, and the slot must be rebuilt cold.
     """
-    path = _state_path(day, time_block_index)
+    path = slot_state_path(day, time_block_index)
     if not path.exists():
         return None
     try:
@@ -92,7 +92,7 @@ def load_slot_state(
 def save_slot_state(state: SlotState) -> None:
     """Persist a slot state to ``docs/ran1/slot_state/{day}_{tb:02d}.json``."""
     SLOT_STATE_DIR.mkdir(parents=True, exist_ok=True)
-    path = _state_path(state.day, state.time_block_index)
+    path = slot_state_path(state.day, state.time_block_index)
     with open(path, "w") as f:
         json.dump(asdict(state), f, ensure_ascii=False, indent=2)
 

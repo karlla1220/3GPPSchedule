@@ -10,7 +10,7 @@ from pathlib import Path
 import shutil
 
 from build import render_site, render_root, fetch_site_meetings
-from shared.lifecycle import BuildOptions, preserve_on_failure, clear_paths
+from shared.lifecycle import BuildOptions, RejectedState, preserve_on_failure, clear_paths
 from shared.remote_files import CACHE_DIR as REMOTE_CACHE
 from shared.renderer import generate_html
 from shared.schedule import load_schedule, save_schedule
@@ -109,7 +109,10 @@ def check_site(config_path=Path('site.json')):
             if changed and not reasons:
                 reasons.append('source changed')
             errors.extend(result.errors)
-            if previous.get('groups', {}).get(wg) != input_hash:
+            recorded_hash = previous.get('groups', {}).get(wg)
+            if recorded_hash is None:
+                reasons.append('no successful build recorded')
+            elif recorded_hash != input_hash:
                 reasons.append('WG code, configuration or dependencies changed')
             # Only the build job commits: it writes the recorded meeting_specific
             # again from the plan, since a prepared bundle is not looked up again.
@@ -241,6 +244,10 @@ def _build_site(action, config, plan_path):
             results[wg] = {'status': 'built', 'errors': []}
         except (Exception, SystemExit) as exc:
             results[wg] = {'status': 'failed', 'errors': [str(exc)]}
+            if isinstance(exc, RejectedState):
+                # Its sources have not changed, so only a missing record makes
+                # the next check rebuild the state this build discarded.
+                state['groups'].pop(wg, None)
         print(f'[{wg}] {results[wg]["status"]}: {results[wg]["errors"]}')
     schedules = {}
     for wg in enabled:
