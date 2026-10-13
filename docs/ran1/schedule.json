@@ -10660,7 +10660,7 @@
     }
   ],
   "source_file": "RAN1#126b online and offline schedules - v00.docx",
-  "generated_at": "2026-10-13 10:41",
+  "generated_at": "2026-10-13 13:01",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
@@ -10689,7 +10689,7 @@
     "meeting_id": "ran1#126bis",
     "document_file": "Chair notes RAN1#126bis_v03.docx",
     "sha256": "c6b1870981674d2913b48fc4801ed0bf26b0605f44b0d8d353399436ad4d1115",
-    "parser_version": 18,
+    "parser_version": 19,
     "warnings": [],
     "unassigned_blocks": 13,
     "content_scope": "agenda-section-excluding-tdocs",
@@ -11405,7 +11405,7 @@
         ],
         "changed_at": "2026-10-13T01:31:19+00:00",
         "changed_in": "Chair notes RAN1#126bis_v03.docx",
-        "file": "agreements/8d80d300b4aee57f51f8.html"
+        "file": "agreements/c4877df956d7c9c7ee5a.html"
       },
       "10.5.1.2": {
         "title": "PRACH and RACH procedure",
@@ -11853,53 +11853,7 @@
       }
     },
     "retained_files": [
-      "agreements/007ba6bb188f4c730de6.html",
-      "agreements/0e2d43e3cdfc989de376.html",
-      "agreements/12815debe5ebb0f2fd48.html",
-      "agreements/14c3ffd2a3996df42f84.html",
-      "agreements/17c02082712d2230ef2b.html",
-      "agreements/180f8893cda264c709b5.html",
-      "agreements/19dad865368da8749102.html",
-      "agreements/1ec276dcc16f43bf7c93.html",
-      "agreements/2567c30492218f922b0d.html",
-      "agreements/2ddf6f33946769827df0.html",
-      "agreements/2ff88a80606507b890a9.html",
-      "agreements/41700798692e2ef6cc16.html",
-      "agreements/4f3fbf5642e7159d9116.html",
-      "agreements/5030a9f136a4c81ed8fd.html",
-      "agreements/511c6addece04395530c.html",
-      "agreements/54e2d49001e421e77ed2.html",
-      "agreements/5b528cb719a600073631.html",
-      "agreements/5da619a1d81a44f72b5e.html",
-      "agreements/63aa0a37e4c9c710ada1.html",
-      "agreements/6d4c2bf56381dad7ca3a.html",
-      "agreements/710a2ae39c837d843de8.html",
-      "agreements/79a17fb5b24fdd4ecd10.html",
-      "agreements/7dd4afd5a89f3e7cc464.html",
-      "agreements/823fbe3d73f3ffc655de.html",
-      "agreements/8c8da75e90e0c4484a1e.html",
-      "agreements/8c9ed4a9f0077be6ca92.html",
-      "agreements/8f311f77fb1a9b5a9c8e.html",
-      "agreements/9d32231347bcef0e2589.html",
-      "agreements/a10d4b2c40e9ceb8ddf9.html",
-      "agreements/a1480276d37404e72351.html",
-      "agreements/a52154267ddc5765ac8c.html",
-      "agreements/aa0a86959f42d495a061.html",
-      "agreements/af584ba12e020c754e7a.html",
-      "agreements/afa4eb8f7142e2efb336.html",
-      "agreements/b9986f4aafafc687bdeb.html",
-      "agreements/bbdf752586a82eb47a24.html",
-      "agreements/c029f21babfa8ee1d7fd.html",
-      "agreements/c2576206bf66c1170df6.html",
-      "agreements/df2ddfc557a81c8cce5b.html",
-      "agreements/e462292687d95f899c0c.html",
-      "agreements/e9803d9a122ab3b95868.html",
-      "agreements/ebd164b74acc94d42f5a.html",
-      "agreements/f2d1eafd034af347f81f.html",
-      "agreements/f5b60f845f613ed1f505.html",
-      "agreements/fa800b950febc93ee5b6.html",
-      "agreements/febe1c2344e3bf8a126d.html",
-      "agreements/ffff25e002defb482a02.html"
+      "agreements/8d80d300b4aee57f51f8.html"
     ]
   }
 }
