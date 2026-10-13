@@ -3595,7 +3595,7 @@
           "room_col_end": 5,
           "chair": "Hiroki",
           "agenda_item": "11",
-          "group_header": "Maintenance",
+          "group_header": "TEI",
           "description": "TEI",
           "agenda_descriptions": [
             {
@@ -6103,15 +6103,15 @@
           "inferred_agenda_items": []
         },
         {
-          "name": "7 pre-Rel-19 CRs, 8.3 UE features, 8.2 R19 Duplex",
-          "duration_minutes": 60,
+          "name": "7 pre-Rel-19 CRs, 8.2 R19 Duplex",
+          "duration_minutes": 50,
           "start_time": "15:00",
-          "end_time": "16:00",
+          "end_time": "15:50",
           "day": "Wednesday",
           "room_col_start": 4,
           "room_col_end": 5,
           "chair": "Hiroki",
-          "agenda_item": "7, 8.3, 8.2",
+          "agenda_item": "7, 8.2",
           "group_header": "Maintenance",
           "description": "Pre-Rel-19 NR Maintenance",
           "agenda_descriptions": [
@@ -6123,23 +6123,6 @@
                 {
                   "agenda_item": "7",
                   "description": "Pre-Rel-19 NR Maintenance",
-                  "has_description": true
-                }
-              ]
-            },
-            {
-              "agenda_item": "8.3",
-              "matched_agenda_item": "8.3",
-              "description": "Maintenance on UE features",
-              "hierarchy": [
-                {
-                  "agenda_item": "8",
-                  "description": "Maintenance on Rel-19 NR and E-UTRA",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "8.3",
-                  "description": "Maintenance on UE features",
                   "has_description": true
                 }
               ]
@@ -6157,6 +6140,37 @@
                 {
                   "agenda_item": "8.2",
                   "description": "Maintenance on others",
+                  "has_description": true
+                }
+              ]
+            }
+          ],
+          "room_ids": [],
+          "room_scope": "assigned",
+          "notes": [],
+          "inferred_agenda_items": []
+        },
+        {
+          "name": "11 TEI20",
+          "duration_minutes": 10,
+          "start_time": "15:50",
+          "end_time": "16:00",
+          "day": "Wednesday",
+          "room_col_start": 4,
+          "room_col_end": 5,
+          "chair": "Hiroki",
+          "agenda_item": "11",
+          "group_header": "Maintenance",
+          "description": "TEI",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "11",
+              "matched_agenda_item": "11",
+              "description": "TEI",
+              "hierarchy": [
+                {
+                  "agenda_item": "11",
+                  "description": "TEI",
                   "has_description": true
                 }
               ]
@@ -7692,7 +7706,7 @@
           "inferred_agenda_items": []
         },
         {
-          "name": "10.2.1 Waveform",
+          "name": "10.2.1 6G waveform",
           "duration_minutes": 40,
           "start_time": "08:30",
           "end_time": "09:10",
@@ -7733,7 +7747,7 @@
           "inferred_agenda_items": []
         },
         {
-          "name": "AI 7/8.2",
+          "name": "Maintenance",
           "duration_minutes": 80,
           "start_time": "09:10",
           "end_time": "10:30",
@@ -7741,22 +7755,10 @@
           "room_col_start": 4,
           "room_col_end": 5,
           "chair": "Hiroki",
-          "agenda_item": "7, 8.2, 8.3",
+          "agenda_item": "8.2, 7",
           "group_header": "Maintenance",
-          "description": "Pre-Rel-19 NR Maintenance",
+          "description": "Maintenance on others",
           "agenda_descriptions": [
-            {
-              "agenda_item": "7",
-              "matched_agenda_item": "7",
-              "description": "Pre-Rel-19 NR Maintenance",
-              "hierarchy": [
-                {
-                  "agenda_item": "7",
-                  "description": "Pre-Rel-19 NR Maintenance",
-                  "has_description": true
-                }
-              ]
-            },
             {
               "agenda_item": "8.2",
               "matched_agenda_item": "8.2",
@@ -7775,18 +7777,13 @@
               ]
             },
             {
-              "agenda_item": "8.3",
-              "matched_agenda_item": "8.3",
-              "description": "Maintenance on UE features",
+              "agenda_item": "7",
+              "matched_agenda_item": "7",
+              "description": "Pre-Rel-19 NR Maintenance",
               "hierarchy": [
                 {
-                  "agenda_item": "8",
-                  "description": "Maintenance on Rel-19 NR and E-UTRA",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "8.3",
-                  "description": "Maintenance on UE features",
+                  "agenda_item": "7",
+                  "description": "Pre-Rel-19 NR Maintenance",
                   "has_description": true
                 }
               ]
@@ -10678,17 +10675,17 @@
     }
   ],
   "source_file": "RAN1#126b online and offline schedules - v00.docx",
-  "generated_at": "2026-10-13 15:19",
+  "generated_at": "2026-10-13 15:38",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
     "RAN1#126b online and offline schedules - v00.docx",
-    "RAN1#126bis schedule for Hiroki Adhoc2 sessions_v04.docx",
+    "RAN1#126bis schedule for Hiroki Adhoc2 sessions_v05.docx",
     "RAN1#126b Sorour sessions online and offline schedules - v00.docx"
   ],
   "source_labels": {
     "RAN1#126b online and offline schedules - v00.docx": "Main",
-    "RAN1#126bis schedule for Hiroki Adhoc2 sessions_v04.docx": "Hiroki",
+    "RAN1#126bis schedule for Hiroki Adhoc2 sessions_v05.docx": "Hiroki",
     "RAN1#126b Sorour sessions online and offline schedules - v00.docx": "Sorour"
   },
   "timezone": "Asia/Seoul",

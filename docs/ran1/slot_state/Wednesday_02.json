@@ -3,7 +3,7 @@
   "time_block_index": 2,
   "source_hashes": {
     "Main Schedule": "cca031fd4d068dcd",
-    "Hiroki's schedule": "2865b89dae469c36",
+    "Hiroki's schedule": "87dddfe40d1ebae8",
     "Sorour's schedule": "75a4ab9e29db4311"
   },
   "merged_sessions": [
@@ -206,12 +206,12 @@
     },
     {
       "room_name": "RAN1_brk2",
-      "name": "7 pre-Rel-19 CRs, 8.3 UE features, 8.2 R19 Duplex",
-      "duration_minutes": 60,
+      "name": "7 pre-Rel-19 CRs, 8.2 R19 Duplex",
+      "duration_minutes": 50,
       "specified_start_time": null,
       "chair": "Hiroki",
       "group_header": "TEI, AI 7/8.2 / Maintenance",
-      "agenda_item": "7, 8.3, 8.2",
+      "agenda_item": "7, 8.2",
       "description": "Pre-Rel-19 NR Maintenance",
       "agenda_descriptions": [
         {
@@ -222,23 +222,6 @@
             {
               "agenda_item": "7",
               "description": "Pre-Rel-19 NR Maintenance",
-              "has_description": true
-            }
-          ]
-        },
-        {
-          "agenda_item": "8.3",
-          "matched_agenda_item": "8.3",
-          "description": "Maintenance on UE features",
-          "hierarchy": [
-            {
-              "agenda_item": "8",
-              "description": "Maintenance on Rel-19 NR and E-UTRA",
-              "has_description": true
-            },
-            {
-              "agenda_item": "8.3",
-              "description": "Maintenance on UE features",
               "has_description": true
             }
           ]
@@ -256,6 +239,30 @@
             {
               "agenda_item": "8.2",
               "description": "Maintenance on others",
+              "has_description": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "room_name": "RAN1_brk2",
+      "name": "11 TEI20",
+      "duration_minutes": 10,
+      "specified_start_time": null,
+      "chair": "Hiroki",
+      "group_header": "TEI, AI 7/8.2 / Maintenance",
+      "agenda_item": "11",
+      "description": "TEI",
+      "agenda_descriptions": [
+        {
+          "agenda_item": "11",
+          "matched_agenda_item": "11",
+          "description": "TEI",
+          "hierarchy": [
+            {
+              "agenda_item": "11",
+              "description": "TEI",
               "has_description": true
             }
           ]
@@ -545,7 +552,7 @@
       ]
     }
   ],
-  "merged_at": "2026-10-13T06:19:01.138518+00:00",
+  "merged_at": "2026-10-13T06:33:52.887093+00:00",
   "meeting_id": "ran1#126bis",
   "schema_version": 2
 }
