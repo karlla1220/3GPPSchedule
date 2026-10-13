@@ -1395,7 +1395,7 @@
           "inferred_agenda_items": []
         },
         {
-          "name": "CP offlines TBD",
+          "name": "CP offlines UE Capabilities",
           "duration_minutes": 60,
           "start_time": "14:30",
           "end_time": "15:30",
@@ -1412,7 +1412,7 @@
           ],
           "room_scope": "assigned",
           "notes": [
-            "CP offlines TBD"
+            "CP offlines [006] UE Capabilities"
           ],
           "inferred_agenda_items": []
         },
@@ -1634,7 +1634,7 @@
           ],
           "room_scope": "assigned",
           "notes": [
-            "[005] Offline on AI/ML (if needed)"
+            "[005] Offline on AI/ML (oppo)"
           ],
           "inferred_agenda_items": []
         }
@@ -1854,7 +1854,7 @@
           "inferred_agenda_items": []
         },
         {
-          "name": "ISAC/CP offline",
+          "name": "ISAC UE SE selection – Revise email discussion report R2-2607154",
           "duration_minutes": 60,
           "start_time": "10:00",
           "end_time": "11:00",
@@ -1871,7 +1871,7 @@
           ],
           "room_scope": "assigned",
           "notes": [
-            "ISAC/CP offline"
+            "10:00-11:00 ISAC UE SE selection (MediaTek) – Revise email discussion report R2-2607154"
           ],
           "inferred_agenda_items": []
         },
@@ -1928,22 +1928,22 @@
           "room_col_start": 2,
           "room_col_end": 3,
           "chair": null,
-          "agenda_item": "8.13",
+          "agenda_item": "8.14",
           "group_header": "NR Rel-20",
-          "description": "NR Others",
+          "description": "TEI20",
           "agenda_descriptions": [
             {
-              "agenda_item": "8.13",
-              "matched_agenda_item": "8.13",
-              "description": "NR Others",
+              "agenda_item": "8.14",
+              "matched_agenda_item": "8.14",
+              "description": "TEI20",
               "hierarchy": [
                 {
                   "agenda_item": "8",
                   "description": "NR Rel-20"
                 },
                 {
-                  "agenda_item": "8.13",
-                  "description": "NR Others"
+                  "agenda_item": "8.14",
+                  "description": "TEI20"
                 }
               ]
             }
@@ -1953,7 +1953,7 @@
           ],
           "room_scope": "assigned",
           "notes": [
-            "[8.13] TEI20"
+            "[8.14] TEI20"
           ],
           "inferred_agenda_items": []
         },
@@ -3222,16 +3222,16 @@
       }
     }
   ],
-  "source_file": "R2_135b_Schedule_v03.docx",
-  "generated_at": "2026-10-12 13:21",
+  "source_file": "R2_135b_Schedule_v04.docx",
+  "generated_at": "2026-10-13 10:41",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
-    "R2_135b_Schedule_v03.docx",
+    "R2_135b_Schedule_v04.docx",
     "agenda.csv"
   ],
   "source_labels": {
-    "R2_135b_Schedule_v03.docx": "Schedule",
+    "R2_135b_Schedule_v04.docx": "Schedule",
     "agenda.csv": "Agenda"
   },
   "timezone": "Asia/Seoul",
@@ -3312,6 +3312,20 @@
           "Mon 16:30-17:00",
           "BO3",
           "Huawei"
+        ],
+        [
+          "[005]",
+          "AI/ML",
+          "Tue 18:00-19:00",
+          "BO2",
+          "Zhongda Du (OPPO)"
+        ],
+        [
+          "[006]",
+          "UE Capabilities",
+          "Tue 14:30-15:30",
+          "BO2",
+          ""
         ]
       ]
     },

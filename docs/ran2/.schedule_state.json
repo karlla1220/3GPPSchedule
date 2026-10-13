@@ -1,15 +1,15 @@
 {
   "meeting_id": "ran2#135bis",
-  "version": 3,
+  "version": 4,
   "config_hash": "c6c411aa629f66fe98cdf07087bfd44847afbc5a4762e030c55fe7817b8286f4",
   "schedule": {
-    "name": "R2_135b_Schedule_v03.docx",
-    "url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN2/Agenda/R2_135b_Schedule_v03.docx",
-    "uploaded_at": "2026-10-12 04:10",
-    "size": 294698,
-    "sha256": "2d9f0a79e72e7c77f72e455687b2c6d8bb000b7a07a4536d7e4c6ded301dcac3",
-    "etag": "\"05c848cff59dd1:0\"",
-    "last_modified": "Mon, 12 Oct 2026 04:10:00 GMT",
+    "name": "R2_135b_Schedule_v04.docx",
+    "url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN2/Agenda/R2_135b_Schedule_v04.docx",
+    "uploaded_at": "2026-10-13 01:22",
+    "size": 295411,
+    "sha256": "7f864837e2ebdee9fb71f6c8c807af46deaf9189fa8f57ce3a5ed3d165cf2abe",
+    "etag": "\"8049f442b15add1:0\"",
+    "last_modified": "Tue, 13 Oct 2026 01:22:07 GMT",
     "ftp_modified": null,
     "content_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
     "content_disposition": null
@@ -38,8 +38,8 @@
   },
   "llm": {
     "model": "gemini-3.8-flash",
-    "uncertain": 5,
-    "applied": 5,
+    "uncertain": 6,
+    "applied": 6,
     "kept_rules": 0
   }
 }
