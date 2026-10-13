@@ -60,21 +60,131 @@ const joinAdded = root => {
     }).observe(root.querySelector('.docx-document') || root.host);
 };
 
-// A table keeps Word's column widths (its min-width) and is scaled down to
-// fit instead of wrapping again: small text can be zoomed, a reflowed grid
-// cannot. Only the outermost table is scaled; a nested one scales with it.
+// A table keeps Word's line breaks: they are laid out at Word's column widths
+// (the table's min-width). Small text can be zoomed, a reflowed grid cannot.
+// When the panel is narrower, each column gives up the room its lines do not
+// use, and the table is scaled (CSS zoom) to the largest size that fits with
+// a fixed on-screen cell padding. Only the outermost table is fitted.
+const FIT_PAD = { x: 4, y: 2 };
+// Text nodes in document order, plus boxes a line must hold whole (an
+// equation is one box: its scripts sit at other heights than its line).
+const pieces = cell => {
+    const found = [];
+    const walker = document.createTreeWalker(cell, NodeFilter.SHOW_ELEMENT | NodeFilter.SHOW_TEXT);
+    for (let node = walker.nextNode(); node; node = walker.nextNode()) {
+        if (node.nodeType === Node.TEXT_NODE ? node.data.trim() && !node.parentElement.closest('math') : node.matches('img, table, math')) found.push(node);
+    }
+    return found;
+};
+const rectsOf = node => {
+    if (node.nodeType !== Node.TEXT_NODE) return [...node.getClientRects()];
+    const range = document.createRange();
+    range.selectNodeContents(node);
+    return [...range.getClientRects()].filter(rect => rect.width > 0);
+};
+// Lines per cell: text boxes that overlap vertically share a line. Equal
+// counts mean the same line breaks; a wider column never needs more lines.
+const lineCounts = table => [...table.querySelectorAll('td, th')].map(cell => {
+    const boxes = pieces(cell).filter(node => !node.matches?.('table')).flatMap(rectsOf).sort((a, b) => a.top - b.top);
+    let lines = 0, bottom = -Infinity;
+    for (const box of boxes) {
+        if (box.top >= bottom - 1) { lines++; bottom = box.bottom; } else bottom = Math.max(bottom, box.bottom);
+    }
+    return lines;
+});
+// First grid column and span of every cell, through rowspans.
+const gridCells = table => {
+    const taken = [];
+    return [...table.rows].flatMap((row, r) => {
+        let column = 0;
+        return [...row.cells].map(cell => {
+            while (taken[r]?.[column]) column++;
+            for (let i = 0; i < cell.rowSpan; i++) for (let j = 0; j < cell.colSpan; j++) (taken[r + i] ??= [])[column + j] = true;
+            const placed = { cell, start: column, span: cell.colSpan };
+            column += cell.colSpan;
+            return placed;
+        });
+    });
+};
+const wordWidths = new WeakMap();
+const fitTable = table => {
+    const cols = [...table.querySelectorAll(':scope > colgroup > col')];
+    if (!wordWidths.has(table)) wordWidths.set(table, cols.map(col => col.style.width));
+    table.classList.remove('fitted');
+    table.style.zoom = table.style.width = '';
+    cols.forEach((col, i) => { col.style.width = wordWidths.get(table)[i]; });
+    const room = table.parentElement.clientWidth;
+    if (!room || table.offsetWidth <= room) return;
+
+    // Widest line of each cell at Word's widths, left-aligned: justified and
+    // centred lines take more room than their words need.
+    table.classList.add('measuring');
+    const need = cols.map(() => 0);
+    const word = cols.map(() => 0);
+    const cells = gridCells(table).map(placed => {
+        const box = placed.cell.getBoundingClientRect();
+        const style = getComputedStyle(placed.cell);
+        const left = box.left + parseFloat(style.borderLeftWidth) + parseFloat(style.paddingLeft);
+        // What overflows at Word's width overflows anyway: a wider column would reflow it.
+        const inner = placed.cell.clientWidth - parseFloat(style.paddingLeft) - parseFloat(style.paddingRight);
+        const right = Math.min(inner, Math.max(0, ...pieces(placed.cell).flatMap(rectsOf).map(rect => rect.right - left)));
+        return { ...placed, right, inner, edge: box.width - inner };
+    });
+    const before = lineCounts(table);
+    table.classList.remove('measuring');
+    for (const { start, span, right, inner } of cells) {
+        if (span !== 1 || start >= need.length) continue;
+        need[start] = Math.max(need[start], right);
+        word[start] = inner;
+    }
+    // A spanning cell widens its columns by what they lack together, from the
+    // room each has at Word's width, so none grows past it.
+    for (const { start, span, right, edge } of cells) {
+        if (span === 1) continue;
+        const columns = need.slice(start, start + span).map((width, i) => [start + i, width]);
+        const lack = right - columns.reduce((sum, [, width]) => sum + width, 0) - (span - 1) * edge;
+        const spare = columns.map(([c, width]) => Math.max(0, word[c] - width));
+        const free = spare.reduce((a, b) => a + b, 0);
+        if (lack <= 0) continue;
+        columns.forEach(([c], i) => { need[c] += lack * (free ? spare[i] / free : 1 / span); });
+    }
+
+    // Chrome raises text below its minimum font size, so a small enough scale
+    // wraps lines again. Then the table keeps the smallest scale that holds
+    // the lines and scrolls sideways (inside .table-pan, which leaves the
+    // added-part bar on .table-scroll unclipped).
+    const words = need.reduce((a, b) => a + b * 1.01 + 1, 0);
+    const frame = cols.length * (2 * FIT_PAD.x + 1) + 1;
+    for (let zoom = Math.min(1, (room - frame) / words); zoom > 0; zoom = Math.min(1, zoom * 1.08)) {
+        // Padding is set before zoom, so it stays the same on screen.
+        table.style.setProperty('--fit-pad-x', FIT_PAD.x / zoom + 'px');
+        table.style.setProperty('--fit-pad-y', FIT_PAD.y / zoom + 'px');
+        const widths = need.map(width => width * 1.01 + 1 + (2 * FIT_PAD.x + 1) / zoom);
+        cols.forEach((col, i) => { col.style.width = widths[i] + 'px'; });
+        table.style.width = zoom < 1 ? widths.reduce((a, b) => a + b, 0) + 'px' : '';
+        table.style.zoom = zoom < 1 ? zoom.toFixed(4) : '';
+        table.classList.add('fitted');
+        // Joined lines are fine (the column has room to spare); more lines are not.
+        if (zoom === 1 || lineCounts(table).every((count, i) => count <= before[i])) return;
+    }
+};
 const fitTables = root => {
     const tables = [...root.querySelectorAll('table.word-grid')].filter(table => !table.parentElement.closest('table'));
     if (!tables.length || !CSS.supports('zoom', '1')) return;
+    for (const table of tables) {
+        const pan = document.createElement('div');
+        pan.className = 'table-pan';
+        table.replaceWith(pan);
+        pan.append(table);
+    }
     let width = null;
-    new ResizeObserver(([entry]) => {
+    // Line widths are measured, so the web font must be in place first.
+    document.fonts.ready.then(() => new ResizeObserver(([entry]) => {
         // Scaling changes only the height; refit when the width changes.
         if (!entry.contentRect.width || entry.contentRect.width === width) return;
         width = entry.contentRect.width;
-        for (const table of tables) table.style.zoom = '';
-        const scales = tables.map(table => Math.min(1, table.parentElement.clientWidth / table.offsetWidth));
-        tables.forEach((table, i) => { if (scales[i] < 1) table.style.zoom = scales[i].toFixed(4); });
-    }).observe(root.querySelector('.docx-document') || root.host);
+        tables.forEach(fitTable);
+    }).observe(root.querySelector('.docx-document') || root.host));
 };
 
 async function start() {
