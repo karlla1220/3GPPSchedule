@@ -139,10 +139,13 @@ def _build_filter_data(all_sessions: list) -> str:
     # The agenda numbers a filter entry selects, where they differ from the
     # entry itself (10.5.4.x → 10.5.4). A cell matches when its scope
     # (data-ai-scope) holds the number, an item under it, or covers it.
-    ai_ids = {ai: _ai_ids(ai) for ai in all_ais}
+    # Iterate in sorted order: set order follows the per-process hash seed,
+    # and any change in the page makes CI re-render and commit it.
+    sorted_ais = sorted(all_ais, key=_natural_sort_key)
+    ai_ids = {ai: _ai_ids(ai) for ai in sorted_ais}
     result = {
         "groups": groups,
-        "allAIs": sorted(all_ais, key=_natural_sort_key),
+        "allAIs": sorted_ais,
         "aiIds": {ai: ids for ai, ids in ai_ids.items() if ids != [ai]},
     }
     return json.dumps(result, ensure_ascii=False).replace("<", "\\u003c")
