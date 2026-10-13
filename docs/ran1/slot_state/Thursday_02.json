@@ -3,7 +3,7 @@
   "time_block_index": 2,
   "source_hashes": {
     "Main Schedule": "dd9ab7b9709ca450",
-    "Hiroki's schedule": "1f2dfa2f8c093329",
+    "Hiroki's schedule": "b9d356fc375159eb",
     "Sorour's schedule": "23a61b49820501f1"
   },
   "merged_sessions": [
@@ -14,7 +14,7 @@
       "specified_start_time": null,
       "chair": null,
       "group_header": "6GR",
-      "agenda_item": null,
+      "agenda_item": "10.6.x",
       "description": "WUS and operation",
       "agenda_descriptions": [
         {
@@ -65,7 +65,7 @@
       "specified_start_time": null,
       "chair": null,
       "group_header": "6GR",
-      "agenda_item": null,
+      "agenda_item": "10.5.3.1",
       "description": "Aspects of downlink-based CSI acquisition",
       "agenda_descriptions": [
         {
@@ -220,7 +220,7 @@
       "duration_minutes": 40,
       "specified_start_time": null,
       "chair": "Hiroki",
-      "group_header": "6G ISAC",
+      "group_header": "6GR / 10.8 Sensing",
       "agenda_item": "10.8.1",
       "description": "Evaluations",
       "agenda_descriptions": [
@@ -254,7 +254,7 @@
       "duration_minutes": 40,
       "specified_start_time": null,
       "chair": "Hiroki",
-      "group_header": "6G ISAC",
+      "group_header": "6GR / 10.8 Sensing",
       "agenda_item": "10.8.2",
       "description": "Aspects of integration with communication",
       "agenda_descriptions": [
@@ -288,7 +288,7 @@
       "duration_minutes": 40,
       "specified_start_time": null,
       "chair": "Hiroki",
-      "group_header": "6G ISAC",
+      "group_header": "6GR / 10.8 Sensing",
       "agenda_item": "10.8.3",
       "description": "Waveform and frame structure",
       "agenda_descriptions": [
@@ -323,7 +323,7 @@
       "specified_start_time": null,
       "chair": "Xiaodong",
       "group_header": "6GR",
-      "agenda_item": null,
+      "agenda_item": "10.5.3.2",
       "description": "Aspects of uplink-based CSI acquisition",
       "agenda_descriptions": [
         {
@@ -362,7 +362,7 @@
       "specified_start_time": null,
       "chair": "Xiaodong",
       "group_header": "6GR",
-      "agenda_item": null,
+      "agenda_item": "10.5.3.3",
       "description": "Other aspects",
       "agenda_descriptions": [
         {
@@ -401,7 +401,7 @@
       "specified_start_time": null,
       "chair": "Sorour",
       "group_header": "6GR",
-      "agenda_item": null,
+      "agenda_item": "10.3.1",
       "description": "Channel coding",
       "agenda_descriptions": [
         {
@@ -435,7 +435,7 @@
       "specified_start_time": null,
       "chair": "Sorour",
       "group_header": "6GR",
-      "agenda_item": null,
+      "agenda_item": "10.3.2",
       "description": "Modulation",
       "agenda_descriptions": [
         {
@@ -464,11 +464,11 @@
     },
     {
       "room_name": "RAN1_off2",
-      "name": "6G 10.5.4.x",
+      "name": "10.5.4.x",
       "duration_minutes": 120,
-      "specified_start_time": "14:30",
+      "specified_start_time": null,
       "chair": "Hiroki",
-      "group_header": "6G",
+      "group_header": "6GR",
       "agenda_item": "10.5.4.4, 10.5.4.3, 10.5.4.2, 10.5.4.1",
       "description": "Handling of potential multiple uplink transmissions",
       "agenda_descriptions": [
@@ -583,7 +583,7 @@
       ]
     }
   ],
-  "merged_at": "2026-10-13T06:01:19.072992+00:00",
+  "merged_at": "2026-10-13T06:19:01.145739+00:00",
   "meeting_id": "ran1#126bis",
   "schema_version": 2
 }
