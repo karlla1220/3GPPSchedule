@@ -18,8 +18,13 @@ const version = name => {
     if (!found) return (name || '').replace(/\.(?:docx|docm|zip)$/i, '');
     return (/(?:^|[^a-z0-9])draft(?![a-z0-9])/i.test(name) ? 'draft ' : '') + found;
 };
-// A session note says so: its version alone would read as the chair's.
-const noteLabel = name => (/session\s*notes?/i.test(name || '') ? 'session notes ' : '') + version(name);
+// Which note a version belongs to, in the source line and each item's change
+// line alike: "v05" alone does not say whose note it is.
+const noteLabel = name => {
+    const shown = version(name);
+    if (/session\s*notes?/i.test(name || '')) return 'Session notes ' + shown;
+    return (/^(?:draft )?v\d/.test(shown) ? 'Chair notes ' : '') + shown;
+};
 // The notes the panel was built from: the chairman note, and the selected
 // item's session notes. A section's own line names the note that last
 // changed it, which says nothing about how far the panel has read.
@@ -33,12 +38,11 @@ const sourceNote = section => {
     line.className = 'agreement-source';
     const parts = [];
     if (noteFile) {
-        const shown = version(noteFile);
-        parts.push([noteFile, (/^(?:draft )?v\d/.test(shown) ? 'Chair notes ' : '') + shown
+        parts.push([noteFile, noteLabel(noteFile)
             + (manifest.document_changed_at ? ' · ' + when(manifest.document_changed_at) : '')]);
     }
     for (const note of held) {
-        parts.push([note.name, 'Session notes ' + version(note.name) + (note.changed_at ? ' · ' + when(note.changed_at) : '')]);
+        parts.push([note.name, noteLabel(note.name) + (note.changed_at ? ' · ' + when(note.changed_at) : '')]);
     }
     parts.forEach(([name, text], i) => {
         if (i) line.append(' + ');
