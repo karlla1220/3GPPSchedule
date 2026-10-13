@@ -241,7 +241,12 @@ def test_real_chairman_note_numbering_and_counts():
     assert sections["10.5.0"]["title"] == "General aspects and frameworks"
     assert result["content_scope"] == "agenda-section-excluding-tdocs"
     html = sections["10.1"]["html"]
-    assert "<table>" in html and "<math " in html
+    assert "<table" in html and "<math " in html
+    # Multi-column tables keep Word's column grid; a one-column box reflows.
+    dom = BeautifulSoup(html, "html.parser")
+    grid = dom.select("table.word-grid")
+    assert grid and all(t.colgroup and len(t.colgroup.find_all("col")) >= 2 for t in grid)
+    assert all(len(t.find("tr").find_all("td")) == 1 for t in dom.select("table:not(.word-grid)"))
     assert "R1-2601415" not in _shown(html)
     assert any(row.startswith("R1-2601415") for rows in _folded(html) for row in rows)
     assert "data:image/svg+xml;base64," in html

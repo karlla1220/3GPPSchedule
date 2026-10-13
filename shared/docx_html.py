@@ -488,11 +488,33 @@ class DocxHTML:
             return f'<td colspan="{c["span"]}" rowspan="{c["rows"]}"{shade}>{c["html"]}</td>'
 
         return (
-            '<div class="table-scroll"><table>'
+            '<div class="table-scroll">'
+            + self.table_grid(t)
             + "".join(
                 "<tr>" + "".join(cell_html(c) for c in row) + "</tr>" for row in rows
             )
             + "</table></div>"
+        )
+
+    def table_grid(self, t):
+        """Open a table at Word's column widths, so it wraps where Word does.
+
+        A narrow screen scales the whole table down (the panel sets CSS zoom)
+        instead of wrapping it again: small text can be zoomed, but a reflowed
+        grid cannot be undone. A one-column table is a box of prose and reflows
+        like the paragraphs around it.
+        """
+        widths = (attr(c, "w", "") for c in t.findall("w:tblGrid/w:gridCol", NS))
+        cols = [int(w) for w in widths if w and w.isdigit()]
+        if len(cols) < 2 or not all(cols):
+            return "<table>"
+        total = sum(cols)
+        # Twips to em of the table's text: 20 twips a point, 11pt body text is 1em.
+        width = total / 20 / 11 / TABLE_FONT_EM
+        return (
+            f'<table class="word-grid" style="min-width:{width:.4g}em"><colgroup>'
+            + "".join(f'<col style="width:{100 * w / total:.4g}%">' for w in cols)
+            + "</colgroup>"
         )
 
     def block(self, e):
@@ -504,4 +526,10 @@ class DocxHTML:
         return ""
 
 
-DOCUMENT_CSS = """:host{display:block;min-width:0}.docx-document{font-family:inherit;font-size:14px;color:var(--ink,#0f172a);line-height:1.55;overflow-wrap:anywhere;position:relative;margin-left:-10px;padding-left:10px;clip-path:inset(-8px -100vw -8px 0)}.docx-document::after{content:"";position:absolute;z-index:-2;inset:0 0 0 3px;background:var(--surface,#fff);box-shadow:0 1px var(--surface,#fff),0 -1px var(--surface,#fff)}ul,ol{margin:.4em 0;padding-left:1.6em}ul{list-style-type:disc}ul ul{list-style-type:circle}ul ul ul{list-style-type:square}ol{list-style-type:decimal}li>ul,li>ol{margin-top:0;margin-bottom:0}li+li{margin-top:.2em}li>p{margin:0!important}.list-gap{list-style-type:none}li::marker{color:var(--ink-3,#8a94a6)}p{white-space:pre-wrap;margin:0 0 .6em;min-height:.3em}img{max-width:100%;height:auto}table{border-collapse:collapse;width:100%;font-size:.93em}td,th{border:1px solid var(--hairline,#e7e9ee);padding:6px 8px;vertical-align:top}th{background:var(--break-bg,#f8f9fb);font-weight:600}.table-scroll{margin:12px 0}article{border-top:1px solid var(--hairline,#e7e9ee);padding-top:16px;margin-top:20px}article:first-child{border-top:0;padding-top:0;margin-top:0}math{font-size:1.1em}.equation-block{margin:8px 0}.tdoc-list{margin:0 0 .6em;font-size:.93em}.tdoc-list>summary{cursor:pointer;width:fit-content;color:var(--ink-3,#8a94a6)}.tdoc-list>summary:hover,.tdoc-list[open]>summary{color:var(--ink-2,#475569)}.tdoc-list>summary:focus-visible{outline:2px solid #2563EB;outline-offset:2px;border-radius:2px}.tdoc-list[open]>summary{margin-bottom:.3em}.tdoc-list p{margin:0 0 .2em 1.15em;color:var(--ink-2,#475569)}.agreement-added{position:relative;--added-reach:0px}.agreement-added::before,.agreement-added::after{content:"";position:absolute;top:calc(-1*var(--added-reach));bottom:0;background:var(--added,#2f9e62)}.agreement-added::before{z-index:-3;right:calc(100% - 3px);width:100vw}.agreement-added::after{z-index:-1;left:-100vw;right:0;opacity:0;animation:added-flash 2s ease-out}@keyframes added-flash{0%,40%{opacity:.1}100%{opacity:0}}a{color:#275d8c;text-decoration-color:#93adc4;text-underline-offset:2px}a:hover{color:#173f65;text-decoration-color:currentColor}@media(max-width:600px){.docx-document{font-size:13.5px}table,tbody,thead,tr,td,th{display:block;width:auto}tr{margin:12px 0}td,th{min-width:0}td+td,th+th{border-top:0}}"""
+TABLE_FONT_EM = 0.93
+
+DOCUMENT_CSS = (
+    """:host{display:block;min-width:0}.docx-document{font-family:inherit;font-size:14px;color:var(--ink,#0f172a);line-height:1.55;overflow-wrap:anywhere;position:relative;margin-left:-10px;padding-left:10px;clip-path:inset(-8px -100vw -8px 0)}.docx-document::after{content:"";position:absolute;z-index:-2;inset:0 0 0 3px;background:var(--surface,#fff);box-shadow:0 1px var(--surface,#fff),0 -1px var(--surface,#fff)}ul,ol{margin:.4em 0;padding-left:1.6em}ul{list-style-type:disc}ul ul{list-style-type:circle}ul ul ul{list-style-type:square}ol{list-style-type:decimal}li>ul,li>ol{margin-top:0;margin-bottom:0}li+li{margin-top:.2em}li>p{margin:0!important}.list-gap{list-style-type:none}li::marker{color:var(--ink-3,#8a94a6)}p{white-space:pre-wrap;margin:0 0 .6em;min-height:.3em}img{max-width:100%;height:auto}table{border-collapse:collapse;width:100%;font-size:"""
+    + f"{TABLE_FONT_EM}em"
+    + """}.word-grid{table-layout:fixed}.word-grid.fitted{min-width:0!important}.fitted>*>tr>td,.fitted>*>tr>th{padding:var(--fit-pad-y) var(--fit-pad-x)}.measuring td,.measuring td *{text-align:left!important}td,th{border:1px solid var(--hairline,#e7e9ee);padding:6px 8px;vertical-align:top}th{background:var(--break-bg,#f8f9fb);font-weight:600}.table-scroll{margin:12px 0}article{border-top:1px solid var(--hairline,#e7e9ee);padding-top:16px;margin-top:20px}article:first-child{border-top:0;padding-top:0;margin-top:0}math{font-size:1.1em}.equation-block{margin:8px 0}.tdoc-list{margin:0 0 .6em;font-size:.93em}.tdoc-list>summary{cursor:pointer;width:fit-content;color:var(--ink-3,#8a94a6)}.tdoc-list>summary:hover,.tdoc-list[open]>summary{color:var(--ink-2,#475569)}.tdoc-list>summary:focus-visible{outline:2px solid #2563EB;outline-offset:2px;border-radius:2px}.tdoc-list[open]>summary{margin-bottom:.3em}.tdoc-list p{margin:0 0 .2em 1.15em;color:var(--ink-2,#475569)}.agreement-added{position:relative;--added-reach:0px}.agreement-added::before,.agreement-added::after{content:"";position:absolute;top:calc(-1*var(--added-reach));bottom:0;background:var(--added,#2f9e62)}.agreement-added::before{z-index:-3;right:calc(100% - 3px);width:100vw}.agreement-added::after{z-index:-1;left:-100vw;right:0;opacity:0;animation:added-flash 2s ease-out}@keyframes added-flash{0%,40%{opacity:.1}100%{opacity:0}}a{color:#275d8c;text-decoration-color:#93adc4;text-underline-offset:2px}a:hover{color:#173f65;text-decoration-color:currentColor}.table-pan{overflow-x:auto}@supports not (zoom:1){.table-scroll{overflow-x:auto}}@media(max-width:600px){.docx-document{font-size:13.5px}}"""
+)

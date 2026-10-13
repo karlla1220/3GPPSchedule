@@ -31,7 +31,7 @@ from .downloader import (
 )
 from .parser import find_chair_notes_docx
 
-PARSER_VERSION = 18
+PARSER_VERSION = 19
 CACHE_DIR = Path(".cache/ran1/agreements")
 TDOC_ID = re.compile(r"R1-\d{6,}(?:\s*(?:rev\.?|r)\s*\d+)?", re.I)
 # "(Late contribution)", "(Revision of R1-…)", "(Withdrawn)" under a TDoc row.
