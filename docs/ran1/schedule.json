@@ -10675,7 +10675,7 @@
     }
   ],
   "source_file": "RAN1#126b online and offline schedules - v00.docx",
-  "generated_at": "2026-10-13 16:41",
+  "generated_at": "2026-10-13 18:41",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
@@ -12085,12 +12085,6 @@
         "changed_in": "Draft Chair notes RAN1#126bis_v00.docx"
       }
     },
-    "retained_files": [
-      "agreements/11335f3ce74abbf15365.html",
-      "agreements/6b02c92ffee6405dfd26.html",
-      "agreements/70a9f74affeadf670109.html",
-      "agreements/c4877df956d7c9c7ee5a.html",
-      "agreements/f439543f73c3f452c427.html"
-    ]
+    "retained_files": []
   }
 }
