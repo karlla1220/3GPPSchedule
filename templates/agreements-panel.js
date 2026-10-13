@@ -60,6 +60,23 @@ const joinAdded = root => {
     }).observe(root.querySelector('.docx-document') || root.host);
 };
 
+// A table keeps Word's column widths (its min-width) and is scaled down to
+// fit instead of wrapping again: small text can be zoomed, a reflowed grid
+// cannot. Only the outermost table is scaled; a nested one scales with it.
+const fitTables = root => {
+    const tables = [...root.querySelectorAll('table.word-grid')].filter(table => !table.parentElement.closest('table'));
+    if (!tables.length || !CSS.supports('zoom', '1')) return;
+    let width = null;
+    new ResizeObserver(([entry]) => {
+        // Scaling changes only the height; refit when the width changes.
+        if (!entry.contentRect.width || entry.contentRect.width === width) return;
+        width = entry.contentRect.width;
+        for (const table of tables) table.style.zoom = '';
+        const scales = tables.map(table => Math.min(1, table.parentElement.clientWidth / table.offsetWidth));
+        tables.forEach((table, i) => { if (scales[i] < 1) table.style.zoom = scales[i].toFixed(4); });
+    }).observe(root.querySelector('.docx-document') || root.host);
+};
+
 async function start() {
     const [{ createSignal, createResource, batch, For, Show, onCleanup }, { render }, { default: html }, { default: DOMPurify }] =
         await Promise.all([import('solid-js'), import('solid-js/web'), import('solid-js/html'), import('dompurify')]);
@@ -73,7 +90,7 @@ async function start() {
         style.textContent = manifest.document_css;
         const fragment = DOMPurify.sanitize(content, {
             RETURN_DOM_FRAGMENT: true,
-            ALLOWED_TAGS: ('div article p span br a img sub sup ins del ul ol li table thead tbody tr td th details summary ' +
+            ALLOWED_TAGS: ('div article p span br a img sub sup ins del ul ol li table colgroup col thead tbody tr td th details summary ' +
                 'math mrow mi mn mo mtext mspace ms mfrac msqrt mroot mstyle merror mpadded mphantom mfenced menclose msub msup msubsup munder mover munderover mmultiscripts mprescripts none mtable mtr mtd mlabeledtr').split(' '),
             FORBID_ATTR: ['id', 'name'],
             ALLOW_DATA_ATTR: false,
@@ -89,7 +106,7 @@ async function start() {
             link.setAttribute('rel', 'noopener noreferrer');
         }
         // node.style lists longhands: text-decoration arrives as text-decoration-line etc.
-        const properties = new Set(('font-weight font-style text-decoration text-decoration-line text-decoration-style text-decoration-color text-decoration-thickness color font-size font-family background-color margin-left margin-right text-indent margin-top margin-bottom text-align width max-width height background').split(' '));
+        const properties = new Set(('font-weight font-style text-decoration text-decoration-line text-decoration-style text-decoration-color text-decoration-thickness color font-size font-family background-color margin-left margin-right text-indent margin-top margin-bottom text-align width min-width max-width height background').split(' '));
         for (const node of fragment.querySelectorAll('[style]')) {
             for (const property of [...node.style]) {
                 const value = node.style.getPropertyValue(property);
@@ -98,6 +115,7 @@ async function start() {
         }
         root.append(style, fragment);
         joinAdded(root);
+        fitTables(root);
         return host;
     };
     mount.replaceChildren();
