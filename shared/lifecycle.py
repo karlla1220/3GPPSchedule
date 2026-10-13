@@ -68,9 +68,27 @@ def restore_staged(source, destination, *, rename=None, replace=False):
             shutil.copy2(entry, target)
 
 
+class RejectedState(RuntimeError):
+    """A build found its own saved state wrong and refuses to publish it.
+
+    The build fails like any other, so an operator sees it.  Unlike other
+    failures, rolling back is not enough: the rejected state would be reused
+    as is by the next build.  ``discard`` lists the paths to remove after the
+    rollback so that the next build regenerates them from scratch.
+    """
+
+    def __init__(self, message, discard=()):
+        super().__init__(message)
+        self.discard = tuple(Path(p) for p in discard)
+
+
 @contextmanager
 def preserve_on_failure(paths):
-    """Rollback committed WG state as well as HTML on failed builds."""
+    """Rollback committed WG state as well as HTML on failed builds.
+
+    A ``RejectedState`` failure also removes its ``discard`` paths after the
+    rollback, including from an enclosing rollback that saw the same failure.
+    """
     with tempfile.TemporaryDirectory(prefix='wg-build-') as directory:
         saved = []
         for i, path in enumerate(paths):
@@ -85,7 +103,7 @@ def preserve_on_failure(paths):
             saved.append((path, backup, exists))
         try:
             yield
-        except BaseException:
+        except BaseException as exc:
             for path, backup, existed in saved:
                 if path.is_dir():
                     shutil.rmtree(path)
@@ -97,4 +115,6 @@ def preserve_on_failure(paths):
                         shutil.copytree(backup, path)
                     else:
                         shutil.copy2(backup, path)
+            if isinstance(exc, RejectedState):
+                clear_paths(exc.discard)
             raise
