@@ -7,6 +7,7 @@ content, never extraction boundaries or an assertion that the text was agreed.
 from __future__ import annotations
 
 from copy import deepcopy
+from dataclasses import asdict
 from datetime import datetime, timezone
 from difflib import SequenceMatcher
 from email.utils import parsedate_to_datetime
@@ -25,14 +26,19 @@ from .agenda_descriptions import StyleMap, NumberingMap, _extract_leading_agenda
 from .downloader import (
     WORD_DOCUMENT_EXTENSIONS,
     _extract_meeting_id,
+    _extract_person_name,
     _local_doc_preference,
+    _remote_doc_preference,
+    list_inbox_subfolders,
+    list_remote_files,
     extract_document_from_zip,
     get_latest_chair_notes_info,
 )
 from .parser import find_chair_notes_docx
 
-PARSER_VERSION = 19
+PARSER_VERSION = 20
 CACHE_DIR = Path(".cache/ran1/agreements")
+SESSION_NOTES_DIR = Path("downloads/ran1/Session_notes")
 TDOC_ID = re.compile(r"R1-\d{6,}(?:\s*(?:rev\.?|r)\s*\d+)?", re.I)
 # "(Late contribution)", "(Revision of R1-…)", "(Withdrawn)" under a TDoc row.
 TDOC_REMARK = re.compile(r"\([^()]*\)\.?")
@@ -41,6 +47,15 @@ SESSION_TDOC = re.compile(r"\bsummary\b|\bmoderator\b", re.I)
 # Consecutive TDoc rows from this many on are a list of contributions. Fewer
 # are what the text is about: an incoming LS, an FL summary, mirror CRs.
 TDOC_LIST_ROWS = 5
+# The header of a TDoc: "3GPP TSG RAN WG1 #126bis", "TSG-RAN WG1 Meeting #126-bis".
+SESSION_MEETING = re.compile(
+    r"\bRAN\s*WG\s*(\d)\b[^#\n]{0,30}#\s*(\d+)\s*-?\s*(bis|b|e)?(?![A-Za-z0-9])", re.I
+)
+SESSION_NOTE = re.compile(r"Session\s*notes?\s+of\s+AI\s*(\d+(?:\.\d+)*)", re.I)
+CHAIR_SOURCE = "chair"
+# Text similarity at which two paragraphs are one paragraph reworded.
+SIMILAR = 0.9
+AGENDA_LINE = re.compile(r"\s*Agenda\s+item\s*:?\s*(\d+(?:\.\d+)*\.?)(?![\d.])", re.I)
 _RICH = ('.//*[local-name()="drawing" or local-name()="pict" '
          'or local-name()="oMath" or local-name()="object"]')
 
@@ -226,25 +241,62 @@ def _body_blocks(parent):
             yield block
 
 
-def parse_agreements(path: Path, meeting_id: str, *, source_name: str | None = None) -> dict:
-    """Return portable HTML fragments plus source identity; reject unknown meetings.
+def _part(rendered, key):
+    """One block of a section, kept as data until the section is rendered.
 
-    ``source_name`` is the published name when ``path`` was extracted from a
-    zip: the inner document is often named without the meeting.
+    Sections of two documents are merged block by block, so they are rendered
+    only once the merged order is known.
     """
-    if not meeting_id or _extract_meeting_id(source_name or path.name) != meeting_id.lower():
-        raise ValueError("Chairman note must identify the exact schedule meeting")
+    if isinstance(rendered, ListItem):
+        return {"item": asdict(rendered), "key": key}
+    return {"html": rendered, "key": key}
+
+
+def _render(section):
+    """Fill a section's html and block keys from its parts."""
+    blocks = []
+    rendered = []
+    for part in section["parts"]:
+        block = ListItem(**part["item"]) if "item" in part else part["html"]
+        if part["key"] is not None:
+            block = _tag_unit(block, len(blocks))
+            blocks.append(part["key"])
+        rendered.append(block)
+    section["html"] = render_blocks(rendered)
+    section["blocks"] = blocks
+    return section
+
+
+def _header_fields(lines):
+    """Meeting and agenda item a document states on its cover lines.
+
+    A session note is named by its TDoc number and agenda item alone; the
+    meeting appears only in the 3GPP header (``3GPP TSG RAN WG1 #126bis``).
+    """
+    meeting = agenda = None
+    for line in lines:
+        if meeting is None:
+            m = SESSION_MEETING.search(line)
+            if m:
+                suffix = (m[3] or "").lower()
+                meeting = f"ran{m[1]}#{m[2]}{'bis' if suffix == 'b' else suffix}"
+        if agenda is None:
+            m = AGENDA_LINE.match(line)
+            if m:
+                agenda = m[1].rstrip(".")
+    return {"meeting_id": meeting, "agenda_item": agenda}
+
+
+def _parse(path: Path) -> dict:
+    """Sections of one Word document, cached by its bytes."""
     digest = hashlib.sha256(path.read_bytes()).hexdigest()
     backend = hashlib.sha256(backend_identity().encode()).hexdigest()[:12]
     cache = CACHE_DIR / f"{PARSER_VERSION}-{backend}-{digest}.json"
     if cache.exists():
         try:
             cached = json.loads(cache.read_text())
-            if (
-                cached["meeting_id"] == meeting_id.lower()
-                and cached["sha256"] == digest
-            ):
-                return {**cached, "document_file": path.name}
+            if cached["sha256"] == digest and cached["parser_version"] == PARSER_VERSION:
+                return cached
         except (ValueError, KeyError, TypeError):
             pass
     converter = DocxHTML(path)
@@ -254,6 +306,7 @@ def parse_agreements(path: Path, meeting_id: str, *, source_name: str | None = N
     agenda = None
     pending = []  # Blocks of the current section: a list is judged as a whole.
     unassigned = 0
+    cover = []  # Text above the first agenda heading: the 3GPP header lines.
 
     def finish():
         nonlocal pending, unassigned
@@ -284,6 +337,8 @@ def parse_agreements(path: Path, meeting_id: str, *, source_name: str | None = N
             txt = text_of(block).strip()
             if agenda is None:
                 unassigned += bool(txt) and not _tdoc_rows(block)
+                if txt and len(cover) < 20:
+                    cover.extend(txt.splitlines())
                 continue
             has_content = bool(
                 txt or ET.QName(block).localname == "tbl" or clean.xpath(_RICH)
@@ -300,14 +355,7 @@ def parse_agreements(path: Path, meeting_id: str, *, source_name: str | None = N
             pieces.pop()
         while pieces and not pieces[0][0]:
             pieces.pop(0)
-        blocks = sections[agenda]["blocks"]
-        parts = []
-        for _, part, key in pieces:
-            if key is not None:
-                part = _tag_unit(part, len(blocks))
-                blocks.append(key)
-            parts.append(part)
-        sections[agenda]["html"] += render_blocks(parts)
+        sections[agenda]["parts"].extend(_part(part, key) for _, part, key in pieces)
         sections[agenda]["excluded_tdoc_rows"] += excluded
 
     for block in _body_blocks(converter.body):
@@ -339,29 +387,227 @@ def parse_agreements(path: Path, meeting_id: str, *, source_name: str | None = N
                     finish()
                     agenda = marker
                     sections.setdefault(agenda, {
-                        "title": title, "html": "", "excluded_tdoc_rows": 0,
-                        "blocks": [],
+                        "title": title, "parts": [], "excluded_tdoc_rows": 0,
                     })
                     converter.block(block)
                     continue
                 # Unnumbered subheadings remain part of the current section.
         pending.append(block)
     finish()
+    for section in sections.values():
+        _render(section)
     result = {
-        "status": "ready",
-        "meeting_id": meeting_id.lower(),
-        "document_file": path.name,
         "sha256": digest,
         "parser_version": PARSER_VERSION,
         "sections": sections,
         "warnings": sorted(converter.warnings),
         "unassigned_blocks": unassigned,
         "content_scope": "agenda-section-excluding-tdocs",
+        "header": _header_fields(cover),
     }
     cache.parent.mkdir(parents=True, exist_ok=True)
     temp = cache.with_suffix(".tmp")
     temp.write_text(json.dumps(result, ensure_ascii=False))
     temp.replace(cache)
+    return result
+
+
+def parse_agreements(path: Path, meeting_id: str, *, source_name: str | None = None) -> dict:
+    """Return portable HTML fragments plus source identity; reject unknown meetings.
+
+    ``source_name`` is the published name when ``path`` was extracted from a
+    zip: the inner document is often named without the meeting.
+    """
+    if not meeting_id or _extract_meeting_id(source_name or path.name) != meeting_id.lower():
+        raise ValueError("Chairman note must identify the exact schedule meeting")
+    parsed = _parse(path)
+    return {
+        "status": "ready",
+        "meeting_id": meeting_id.lower(),
+        "document_file": path.name,
+        **{k: v for k, v in parsed.items() if k != "header"},
+    }
+
+
+def _title_key(title):
+    return re.sub(r"[^a-z0-9]", "", (title or "").lower())
+
+
+def _rebase(sections, agenda_item, titles):
+    """Renumber a session note's sections under the agenda item it covers.
+
+    A session note copies its headings from the agenda but restarts Word's
+    numbering, so its 10.5.4.1 reads as 10.5.0.1 and its 9.2 as 8.1. Its first
+    heading is the stated agenda item, or one of its subsections when the
+    chairman note has a heading of the same title there. Subsections keep their
+    place relative to it; anything else stays under the stated item.
+    """
+    if not sections:
+        return {}
+    first = next(iter(sections))
+    anchor = agenda_item
+    wanted = _title_key(sections[first]["title"])
+    for ai, title in titles.items():
+        if (ai == agenda_item or ai.startswith(agenda_item + ".")) and _title_key(title) == wanted:
+            anchor = ai
+            break
+    old = first.split(".")
+    new = anchor.split(".")
+    rebased = {}
+    for marker, section in sections.items():
+        parts = marker.split(".")
+        if parts[:len(old)] == old:
+            target = new + parts[len(old):]
+        elif anchor != agenda_item and len(parts) >= len(old) and parts[:len(old) - 1] == old[:-1]:
+            # A sibling of a subsection anchor: 10.5.0.2 next to 10.5.0.1.
+            step = int(parts[len(old) - 1]) - int(old[-1])
+            target = new[:-1] + [str(int(new[-1]) + step)] + parts[len(old):]
+        else:
+            target = agenda_item.split(".")
+        ai = ".".join(target)
+        if ai in rebased:
+            rebased[ai]["parts"] += section["parts"]
+            rebased[ai]["excluded_tdoc_rows"] += section["excluded_tdoc_rows"]
+        else:
+            rebased[ai] = {k: deepcopy(section[k]) for k in ("title", "parts", "excluded_tdoc_rows")}
+    return rebased
+
+
+def session_note_agenda(name):
+    m = SESSION_NOTE.search(name)
+    return m[1].rstrip(".") if m else None
+
+
+def session_note_id(name):
+    """A session note keeps its TDoc number across versions."""
+    m = re.search(r"R1-\d{7}", name)
+    return m[0] if m else f"AI {session_note_agenda(name)}"
+
+
+def parse_session_note(path: Path, meeting_id: str, *, titles=None, source_name=None) -> dict:
+    """Sections of a vice-chair's session note, numbered like the chairman note.
+
+    Its file name has no meeting, so the meeting comes from the 3GPP header of
+    the document. ``titles`` are the chairman note's section titles by number.
+    """
+    parsed = _parse(path)
+    header = parsed["header"]
+    if not meeting_id or header["meeting_id"] != meeting_id.lower():
+        raise ValueError(
+            f"Session note belongs to {header['meeting_id'] or 'an unknown meeting'}"
+        )
+    agenda_item = header["agenda_item"] or session_note_agenda(source_name or path.name)
+    if not agenda_item:
+        raise ValueError("Session note states no agenda item")
+    sections = _rebase(parsed["sections"], agenda_item, titles or {})
+    return {
+        "document_file": path.name,
+        "sha256": parsed["sha256"],
+        "agenda_item": agenda_item,
+        "sections": sections,
+        "warnings": parsed["warnings"],
+    }
+
+
+def _html(part):
+    return part["item"]["html"] if "item" in part else part["html"]
+
+
+def _text(part):
+    return " ".join(re.sub(r"<[^>]+>", " ", _html(part)).split())
+
+
+def _token(part):
+    """What makes two parts the same block in two documents.
+
+    A folded TDoc list is one block wherever it is: the chairman note adds
+    the FL summaries to the session note's list, and two lists would read as
+    two. Blank paragraphs differ only in spacing.
+    """
+    if part["key"] is not None:
+        return part["key"]
+    return "~tdocs" if _html(part).startswith('<details class="tdoc-list"') else "~blank"
+
+
+def _same_text(a, b):
+    """A paragraph the chair edited while gathering it: same block, new wording."""
+    if a["key"] is None or b["key"] is None:
+        return False
+    matcher = SequenceMatcher(None, _text(a), _text(b), autojunk=False)
+    return matcher.real_quick_ratio() >= SIMILAR and matcher.ratio() >= SIMILAR
+
+
+def _merge_parts(base, extra):
+    """Both documents' blocks in one order, each shared block once.
+
+    The chairman note gathers the session notes at the end of the meeting, so
+    the two hold the same blocks; until then a session note runs ahead. Aligned
+    blocks appear once, and a block of either document alone stays where it
+    stands, after the base document's blocks at the same place. Where the
+    base reworded a block, its wording stands for both.
+    """
+    matcher = SequenceMatcher(
+        None, [_token(p) for p in base], [_token(p) for p in extra], autojunk=False
+    )
+    merged = []
+    for op, i1, i2, j1, j2 in matcher.get_opcodes():
+        if op == "equal":
+            # The longer of two TDoc lists has the summaries added since.
+            merged += [
+                b if _token(a) == "~tdocs" and len(_html(b)) > len(_html(a)) else a
+                for a, b in zip(base[i1:i2], extra[j1:j2])
+            ]
+            continue
+        merged += base[i1:i2]
+        if op == "delete":
+            continue
+        unpaired = [a for a in base[i1:i2] if a["key"] is not None]
+        added = []
+        for b in extra[j1:j2]:
+            twin = next((a for a in unpaired if _same_text(a, b)), None)
+            if twin is not None:
+                unpaired.remove(twin)
+            elif _token(b) == "~tdocs" and any(_token(a) == "~tdocs" for a in base[i1:i2]):
+                pass
+            else:
+                added.append(b)
+        if any(b["key"] is not None for b in added):  # Not blank lines alone.
+            merged += added
+    return merged
+
+
+def _source_digest(parts):
+    keys = [p["key"] for p in parts if p["key"] is not None]
+    return hashlib.sha1(json.dumps(keys).encode()).hexdigest()[:12] if keys else None
+
+
+def merge_session_notes(result, notes):
+    """Fold session notes into the chairman note's sections.
+
+    Each section records a digest of every document's share of it, so a
+    change can be dated by the document that made it.
+    """
+    for section in result["sections"].values():
+        digest = _source_digest(section.get("parts", []))
+        section["sources"] = {CHAIR_SOURCE: digest} if digest else {}
+    for note in notes:
+        for ai, extra in note["sections"].items():
+            section = result["sections"].get(ai)
+            if section is None:
+                section = result["sections"][ai] = {
+                    "title": extra["title"], "parts": [], "excluded_tdoc_rows": 0, "sources": {},
+                }
+            section["parts"] = _merge_parts(section["parts"], extra["parts"])
+            section["excluded_tdoc_rows"] = max(
+                section["excluded_tdoc_rows"], extra["excluded_tdoc_rows"]
+            )
+            digest = _source_digest(extra["parts"])
+            if digest:
+                section["sources"][note["id"]] = digest
+            _render(section)
+    result["sections"] = dict(sorted(
+        result["sections"].items(), key=lambda item: [int(n) for n in item[0].split(".")]
+    ))
     return result
 
 
@@ -419,8 +665,33 @@ def _store_note(name, body, directory=Path("downloads/ran1/Chair_notes")):
     return path
 
 
-def track_changes(result, previous, *, changed_at, document):
+def _changed_by(section, old, sources, same_chair):
+    """The document whose share of a section changed, latest first, or None.
+
+    Each section keeps a digest of every document's share. A snapshot from
+    before session notes were read has none: the chairman note's share then
+    counts as changed only when the note did.
+    """
+    current = section.get("sources")
+    if current is None or not sources:
+        return None
+    before = (old or {}).get("sources")
+    if before is None:
+        before = {CHAIR_SOURCE: current.get(CHAIR_SOURCE)} if same_chair and old else {}
+    moved = [
+        sources[sid] for sid in sorted(set(current) | set(before))
+        if current.get(sid) != before.get(sid) and sid in sources
+    ]
+    return max(moved, key=lambda source: source["changed_at"]) if moved else None
+
+
+def track_changes(result, previous, *, changed_at, document, sources=None):
     """Date each section's last change and highlight the blocks it added.
+
+    A section is compared as merged from the chairman and session notes, so a
+    block that moves from a session note into the chairman note is no change.
+    The change is dated by the document whose share of the section changed
+    (``sources``: id → name and upload time).
 
     Sections compare by block keys, so whitespace, run splits and listed TDocs
     do not count as changes. An unchanged section keeps its earlier change and
@@ -433,6 +704,7 @@ def track_changes(result, previous, *, changed_at, document):
     """
     before = (previous or {}).get("sections", {})
     reparsed = previous is not None and previous.get("parser_version") != result.get("parser_version")
+    same_chair = previous is not None and previous.get("sha256") == result.get("sha256")
     for ai, section in result["sections"].items():
         keys = section["blocks"]
         old = before.get(ai)
@@ -465,6 +737,18 @@ def track_changes(result, previous, *, changed_at, document):
                 for j in range(j1, j2)
             ]
             change = {"change": "updated", "added": added}
+        if "changed_at" not in change and sources:
+            source = None
+            if change["change"] in {"new", "updated"}:
+                source = _changed_by(section, old, sources, same_chair)
+            if source is None:
+                # A baseline is as of the latest document that has a share in it.
+                source = max(
+                    (sources[sid] for sid in section.get("sources", {}) if sid in sources),
+                    key=lambda source: source["changed_at"], default=None,
+                )
+            if source is not None:
+                change.update(changed_at=source["changed_at"], changed_in=source["name"])
         change.setdefault("changed_at", changed_at)
         change.setdefault("changed_in", document)
         section.update(change)
@@ -513,9 +797,132 @@ def local_note_path(cfg, meeting_id, *, offline=False, schedule_path=None):
     return max(paths, key=_local_doc_preference) if paths else None
 
 
+def list_session_notes(cfg):
+    """The latest version of each session note in the vice-chairs' folders.
+
+    Session notes sit beside the vice-chairs' schedules (``Hiroki_notes``),
+    one file per agenda item, named by TDoc number. The name carries no
+    meeting; the document is checked when it is parsed.
+    """
+    files = []
+    for inbox in cfg.get("inbox_urls", []):
+        try:
+            folders = list_inbox_subfolders(inbox)
+        except Exception as exc:
+            if remote_files.is_absent(exc):
+                continue
+            raise
+        for folder in folders:
+            if _extract_person_name(folder["name"]) is None:
+                continue
+            try:
+                listed = list_remote_files(folder["url"].rstrip("/"))
+            except Exception as exc:
+                if remote_files.is_absent(exc):
+                    continue
+                raise
+            files += [
+                {**f, "folder": folder["name"]} for f in listed
+                if SESSION_NOTE.search(f["name"]) and not f["name"].startswith("~$")
+            ]
+    latest = {}
+    for f in files:
+        key = session_note_id(f["name"])
+        if key not in latest or _remote_doc_preference(f) > _remote_doc_preference(latest[key]):
+            latest[key] = f
+    return [latest[key] for key in sorted(latest)]
+
+
+def local_session_notes(directory=SESSION_NOTES_DIR):
+    """Downloaded session notes, the latest version of each, for offline builds."""
+    latest = {}
+    for path in sorted(directory.glob("*/*")) if directory.is_dir() else []:
+        if (path.suffix.lower() not in WORD_DOCUMENT_EXTENSIONS
+                or not SESSION_NOTE.search(path.name) or path.name.startswith("~$")):
+            continue
+        key = session_note_id(path.name)
+        if key not in latest or _local_doc_preference(path) > _local_doc_preference(latest[key]):
+            latest[key] = path
+    return [latest[key] for key in sorted(latest)]
+
+
+def session_note_reference(info):
+    """A session note's identity by listing alone: each version is a new name."""
+    uploaded = info.get("uploaded_at")
+    return {
+        "name": info["name"],
+        "url": info["url"],
+        "uploaded_at": uploaded.isoformat() if isinstance(uploaded, datetime) else uploaded,
+    }
+
+
+def session_note_references(cfg):
+    return [session_note_reference(info) for info in list_session_notes(cfg)]
+
+
+def _identity(chair, notes):
+    """The documents a build read. Without session notes, the chairman note's alone."""
+    if chair is None and not notes:
+        return None
+    identity = dict(chair or {})
+    if notes:
+        identity["session_notes"] = notes
+    return identity
+
+
+def agreement_reference(cfg, meeting_id, listed=None):
+    """What the check job compares: (chairman note identity, all documents)."""
+    chair = local_note_reference(cfg, meeting_id)
+    if chair is None:
+        chair = reference_identity(remote_reference(cfg, meeting_id, listed))
+    return chair, _identity(chair, session_note_references(cfg))
+
+
+def _session_notes(cfg, meeting_id, *, offline, titles, now):
+    """Parsed session notes of the meeting and their identities.
+
+    A note that cannot be read, or belongs to another meeting, is left out
+    with a warning; the others still count.
+    """
+    notes, references, warnings = [], [], []
+    if offline:
+        found = [(path, None, None) for path in local_session_notes()]
+    else:
+        found = []
+        for info in list_session_notes(cfg):
+            references.append(session_note_reference(info))
+            body, meta = remote_files.fetch_file(None, info["url"])
+            path = _store_note(info["name"], body, SESSION_NOTES_DIR / info["folder"])
+            found.append((path, info, _modified_at(meta)))
+    for path, info, modified_at in found:
+        name = info["name"] if info else path.name
+        if info is None:
+            references.append({
+                "origin": "local", "name": name,
+                "sha256": hashlib.sha256(path.read_bytes()).hexdigest(),
+            })
+        try:
+            note = parse_session_note(path, meeting_id, titles=titles, source_name=name)
+        except Exception as exc:
+            print(f"Warning: session note {name} left out: {exc}")
+            if "belongs to" not in str(exc):
+                warnings.append(f"Session note {name} could not be parsed: {exc}")
+            continue
+        note.update(id=session_note_id(name), name=name, changed_at=modified_at or now)
+        if info:
+            note["source_url"] = info["url"]
+        notes.append(note)
+    return notes, references, warnings
+
+
 def build_agreements(*, cfg, meeting_id, schedule_path, offline, previous=None,
                      listed=None, now=None):
     """Return (agreements, source identity).
+
+    The chairman note is read with the vice-chairs' session notes: until the
+    chair gathers them at the end of the meeting, a session note holds what
+    its sessions agreed. Each agenda item shows both documents merged, and
+    changes are found in the merged text.
 
     ``previous`` is what was last published for this meeting: the baseline for
     change tracking, and what stays when the new note cannot be parsed. Its
@@ -527,40 +934,76 @@ def build_agreements(*, cfg, meeting_id, schedule_path, offline, previous=None,
         return _unavailable(meeting_id), None
     now = now or datetime.now(timezone.utc).isoformat(timespec="seconds")
     info = None
+    identity = None
     path = local_note_path(cfg, meeting_id, offline=offline, schedule_path=schedule_path)
-    if path is None:
-        if offline:
-            return _unavailable(meeting_id), None
+    if path is None and not offline:
         info, body = fetch_remote_note(cfg, meeting_id, listed)
-        if info is None:
-            if previous:
-                # Replaced or cleared in the sync folder: the caller keeps the
-                # published agreements and their identity.
-                raise LookupError(f"No chair notes listed for {meeting_id}")
-            return _unavailable(meeting_id), None
-        path = _store_note(info["name"], body)
-        identity = reference_identity(info)
-    else:
+        if info is None and previous:
+            # Replaced or cleared in the sync folder: the caller keeps the
+            # published agreements and their identity.
+            raise LookupError(f"No chair notes listed for {meeting_id}")
+        if info is not None:
+            path = _store_note(info["name"], body)
+            identity = reference_identity(info)
+    elif path is not None:
         identity = {
             "origin": "local",
             "name": path.name,
             "sha256": hashlib.sha256(path.read_bytes()).hexdigest(),
         }
-    try:
-        result = parse_agreements(
-            path, meeting_id, source_name=info["name"] if info else None
-        )
-    except Exception as exc:
-        warning = f"Chairman note {identity['name']} could not be parsed: {exc}"
-        print(f"Warning: {warning}")
-        return previous or _unavailable(meeting_id, warning), identity
+    result = None
+    failure = None
+    if path is not None:
+        try:
+            result = parse_agreements(
+                path, meeting_id, source_name=info["name"] if info else None
+            )
+        except Exception as exc:
+            failure = f"Chairman note {identity['name']} could not be parsed: {exc}"
+            print(f"Warning: {failure}")
+    titles = {ai: s["title"] for ai, s in (result or {}).get("sections", {}).items()}
+    notes, references, warnings = _session_notes(
+        cfg, meeting_id, offline=offline, titles=titles, now=now
+    )
+    identity = _identity(identity, references)
+    if failure:
+        return previous or _unavailable(meeting_id, failure), identity
+    if result is None:
+        if not notes:
+            return _unavailable(meeting_id), identity
+        result = {
+            "status": "ready", "meeting_id": meeting_id.lower(), "parser_version": PARSER_VERSION,
+            "sections": {}, "warnings": [], "unassigned_blocks": 0,
+            "content_scope": "agenda-section-excluding-tdocs",
+        }
     if info:
         result["source_url"] = info["url"]
         result["source_name"] = info["name"]
-        result["warnings"] = sorted(set(result["warnings"] + info.get("source_warnings", [])))
+        warnings += info.get("source_warnings", [])
+    result["warnings"] = sorted(set(result["warnings"] + warnings))
     # A local note has no upload time; the build that first sees it dates it.
     changed_at = (info or {}).get("modified_at") or now
-    track_changes(result, previous, changed_at=changed_at, document=identity["name"])
+    sources = {}
+    if path is not None:
+        sources[CHAIR_SOURCE] = {"name": identity["name"], "changed_at": changed_at}
+    for note in notes:
+        sources[note["id"]] = {"name": note["name"], "changed_at": note["changed_at"]}
+        result["warnings"] = sorted(set(result["warnings"] + note["warnings"]))
+    merge_session_notes(result, notes)
+    result["session_notes"] = {
+        note["id"]: {
+            "name": note["name"], "agenda_item": note["agenda_item"],
+            "changed_at": note["changed_at"], "sha256": note["sha256"],
+            **({"source_url": note["source_url"]} if "source_url" in note else {}),
+        }
+        for note in notes
+    }
+    track_changes(
+        result, previous, changed_at=changed_at,
+        document=identity["name"] if path is not None else None, sources=sources,
+    )
+    for section in result["sections"].values():
+        section.pop("parts", None)
     return result, identity
 
 

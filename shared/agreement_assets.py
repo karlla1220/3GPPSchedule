@@ -90,7 +90,8 @@ def package_agreements(data, previous=None):
     stored["sections"] = {}
     fragments = {}
     for ai, section in data.get("sections", {}).items():
-        entry = {k: v for k, v in section.items() if k != "html"}
+        # Parts are parse-time data for merging documents; the HTML becomes a file.
+        entry = {k: v for k, v in section.items() if k not in {"html", "parts"}}
         if section.get("html"):
             entry["file"], page = _fragment(
                 finish_units(section["html"], section.get("added", []))
