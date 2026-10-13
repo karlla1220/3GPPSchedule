@@ -70,6 +70,7 @@ from .downloader import (
 from .merger import collect_time_slot_data
 from .config import load_config, with_meeting_folders
 from .agenda_labels import apply_inferred_agenda_items
+from .consistency import reject_concurrent_agenda_duplicates
 from .agenda_descriptions import (
     DEFAULT_JSON_PATH,
     descriptions_match_meeting,
@@ -564,6 +565,10 @@ def build_schedule(args) -> Schedule:
     print("\nParsing time slots (Gemini API)...")
     sessions = parse_time_slots(time_slots, day_rooms_map, meeting_id=current_meeting_id)
     print(f"Parsed {len(sessions)} sessions")
+
+    # Step 4a: Refuse a merge that puts one agenda item in two rooms at once.
+    # The build fails and the slots involved are re-interpreted cold next time.
+    reject_concurrent_agenda_duplicates(sessions, day_rooms_map)
 
     # Step 4b: Normalize group headers for cleaner legend
     sessions = normalize_group_headers(sessions)

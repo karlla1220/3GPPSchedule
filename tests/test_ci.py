@@ -8,7 +8,7 @@ from unittest.mock import MagicMock
 import pytest
 
 import ci
-from shared.lifecycle import CheckResult
+from shared.lifecycle import CheckResult, RejectedState
 from shared.schedule import load_schedule
 from schedule_fixture import build_schedule as demo
 
@@ -22,6 +22,7 @@ class FakeWG:
         self.result = CheckResult()
         self.events = []
         self.fail = False
+        self.reject = False
         self.input_paths[0].parent.mkdir(exist_ok=True)
         self.input_paths[0].write_text('v1')
 
@@ -42,6 +43,8 @@ class FakeWG:
         state.write_text('new-state')
         if self.fail:
             raise RuntimeError('parser failed after writing state')
+        if self.reject:
+            raise RejectedState('slot rejected', discard=[self.persistent_paths[0] / 'slot.json'])
         return replace(demo(), wg_id=self.wg, meeting_id=self.wg, generated_at=str(len(self.events)))
 
 
@@ -130,6 +133,31 @@ def test_failed_parser_rolls_back_all_persistent_state_and_retries(site):
     assert Path('docs/ran1/.source-state.json').read_text() == 'old-state'
     assert Path('docs/ran1/schedule.json').read_bytes() == old
     assert ci.check_site()['build_ids'] == ['ran1', 'ran-plenary']
+
+
+def test_rejected_state_fails_build_discards_it_and_rebuilds_on_next_check(site):
+    bootstrap()
+    old = Path('docs/ran1/schedule.json').read_bytes()
+    Path('docs/ran1/.source-state.json').write_text('old-state')
+    Path('docs/ran1/slot.json').write_text('rejected merge')
+    site['ran1'].reject = True
+    site['ran1'].result = CheckResult(changed=True)
+    ci.check_site()
+    result = ci.build_site()
+    assert result['has_errors']
+    assert result['groups']['ran1']['errors'] == ['slot rejected']
+    # Rolled back like any failure, except the rejected slot is gone.
+    assert Path('docs/ran1/.source-state.json').read_text() == 'old-state'
+    assert Path('docs/ran1/schedule.json').read_bytes() == old
+    assert not Path('docs/ran1/slot.json').exists()
+    # Sources are unchanged, yet the next check retries the WG.
+    site['ran1'].result = CheckResult()
+    plan = ci.check_site()
+    assert plan['build_ids'] == ['ran1']
+    assert plan['groups']['ran1']['reasons'] == ['no successful build recorded']
+    site['ran1'].reject = False
+    assert not ci.build_site()['has_errors']
+    assert ci.check_site()['build_ids'] == []
 
 
 def test_check_error_is_reported_and_other_wg_can_advance(site):

@@ -163,6 +163,16 @@ LLM 응답을 그대로 HTML에 쓰지는 않는다. 코드가 다음 후처리�
 8. LLM으로 `group_header` 표기를 정리한 뒤, 남은 빈 group은 이름 일치 규칙으로 보완한다.
 9. AI 번호가 없는 셀은 이름을 회의별 매핑 목록(`docs/ran1/agenda_label_map/<meeting>.jsonl`)에서 찾아 `inferred_agenda_items`를 채운다. 목록에 없는 이름만 LLM에 묻고 답을 목록에 덧붙인다(`agenda_labels.py`, CLAUDE.md의 "AI 없는 셀의 AI 추정").
 
+### 같은 시각, 두 방의 같은 AI: 빌드 실패
+
+LLM 해석 직후(위 8·9단계 전) `consistency.py`가 같은 날 서로 다른 방에서 시간이 겹치는 세션이 같은 AI 번호를 가졌는지 본다. RAN1은 한 AI를 두 방에서 동시에 다루지 않으므로, 이런 세션은 어느 source가 엉뚱한 방에 놓였다는 뜻이다. RAN1#126bis 목요일에는 Hiroki의 10.5.4.x가 Tamna BC Hall과 Yeongju B Hall 두 곳에 들어가면서 Tamna의 10.5.3.x가 사라졌다.
+
+- 고치지 않는다. 빌드를 실패시켜 관리자가 알게 한다. 화면에는 직전에 배포된 일정이 그대로 남는다.
+- 해당 슬롯의 `slot_state`는 지운다(`RejectedState`). 다른 실패처럼 상태를 되돌리면 같은 결과가 다음 실행에도 재사용되기 때문이다. 지운 파일은 실패한 빌드에서도 커밋된다.
+- CI는 이 WG의 성공 기록(`docs/.build_state.json`)도 지운다. 소스가 그대로여도 다음 check가 빌드를 다시 하고(`no successful build recorded`), 지운 슬롯은 cold로 해석된다.
+- cold 해석에서도 같은 중복이 나오면 다시 실패하고 슬롯을 다시 지운다. 사람이 원인을 고칠 때까지 실행마다 반복된다.
+- AI 번호는 일정에 적힌 `agenda_item`만 본다. 추정한 `inferred_agenda_items`와 번호 없는 세션(식사, 휴식, 자리표시)은 보지 않는다.
+
 `specified_start_time`을 분으로 바꿀 수 없는 경우 현재 구현은 오류를 중단시키지 않고 그 방의 순차 cursor로 fallback한다. 따라서 잘못된 문자열이 들어와도 빌드는 성공할 수 있지만 배치 시각이 원문과 달라질 가능성이 있다.
 
 ## 6. Agenda 설명의 출처
