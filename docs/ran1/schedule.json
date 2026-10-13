@@ -10675,7 +10675,7 @@
     }
   ],
   "source_file": "RAN1#126b online and offline schedules - v00.docx",
-  "generated_at": "2026-10-13 18:41",
+  "generated_at": "2026-10-13 19:21",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
@@ -10704,18 +10704,145 @@
     "meeting_id": "ran1#126bis",
     "document_file": "Chair notes RAN1#126bis_v05.docx",
     "sha256": "6f161caa4a3b38ff39659b7b9060207e5ec5b248ce3814931bc6ad4ac14149bb",
-    "parser_version": 19,
-    "warnings": [],
+    "parser_version": 20,
+    "warnings": [
+      "An embedded object or legacy symbol requires the source document.",
+      "Embedded OLE objects are shown using their static image previews.",
+      "Tracked insertions/deletions are shown inline; Word revision balloons are not reproduced.",
+      "WMF/EMF converted with wmf2svg 0.10.6; browser font substitution may change spacing."
+    ],
     "unassigned_blocks": 13,
     "content_scope": "agenda-section-excluding-tdocs",
     "source_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Chair_notes/Chair%20notes%20RAN1%23126bis_v05.docx",
     "source_name": "Chair notes RAN1#126bis_v05.docx",
+    "session_notes": {
+      "R1-2607284": {
+        "name": "draft_R1-2607284_Session Notes of AI 7_v00.docx",
+        "agenda_item": "7",
+        "changed_at": "2026-10-11T10:42:40+00:00",
+        "sha256": "e871148c1e3d8914348b45d6bdbe074c6ed34827c81aba8da3b195432f96e706",
+        "source_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Hiroki_notes/draft_R1-2607284_Session%20Notes%20of%20AI%207_v00.docx"
+      },
+      "R1-2607285": {
+        "name": "draft_R1-2607285_Session Notes of AI 8.2_v01.docx",
+        "agenda_item": "8.2",
+        "changed_at": "2026-10-13T06:48:16+00:00",
+        "sha256": "abe0e0899ac282142b38ef548beb71b0a4d9b0f2f11bce3e4ba51566942de9ce",
+        "source_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Hiroki_notes/draft_R1-2607285_Session%20Notes%20of%20AI%208.2_v01.docx"
+      },
+      "R1-2607286": {
+        "name": "draft_R1-2607286_Session Notes of AI 9.3_v03.docx",
+        "agenda_item": "9.3",
+        "changed_at": "2026-10-13T09:47:05+00:00",
+        "sha256": "08ce9e0f511c46ff4138b921af7678b84c000276b9a6d737533d545678c47b15",
+        "source_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Hiroki_notes/draft_R1-2607286_Session%20Notes%20of%20AI%209.3_v03.docx"
+      },
+      "R1-2607287": {
+        "name": "draft_R1-2607287_Session Notes of AI 10.2.1_v02.docx",
+        "agenda_item": "10.2.1",
+        "changed_at": "2026-10-13T07:38:12+00:00",
+        "sha256": "4019cef0527d0da342fc932fedaa8f980998f9c71b0c8e92a273bcd36102f710",
+        "source_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Hiroki_notes/draft_R1-2607287_Session%20Notes%20of%20AI%2010.2.1_v02.docx"
+      },
+      "R1-2607288": {
+        "name": "draft_R1-2607288_Session Notes of AI 10.5.4_v02.docx",
+        "agenda_item": "10.5.4",
+        "changed_at": "2026-10-13T01:31:31+00:00",
+        "sha256": "e6bc29c167e95dd591a7a394501374389a164c447b4462ff1e74dcf90fdf05f6",
+        "source_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Hiroki_notes/draft_R1-2607288_Session%20Notes%20of%20AI%2010.5.4_v02.docx"
+      },
+      "R1-2607289": {
+        "name": "draft_R1-2607289_Session Notes of AI 10.8_v02.docx",
+        "agenda_item": "10.8",
+        "changed_at": "2026-10-13T04:21:06+00:00",
+        "sha256": "17275af641101d476470244da48c2ea8bb3a027f75f1065ac4412239ff7fe406",
+        "source_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Hiroki_notes/draft_R1-2607289_Session%20Notes%20of%20AI%2010.8_v02.docx"
+      },
+      "R1-2607290": {
+        "name": "draft_R1-2607290_Session Notes of AI 11_v01.docx",
+        "agenda_item": "11",
+        "changed_at": "2026-10-13T06:24:18+00:00",
+        "sha256": "0ac90173bc48f9cc4e28b40fb9db0b9caf463e1ed6fc968d29bd9a7aeddbcc19",
+        "source_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Hiroki_notes/draft_R1-2607290_Session%20Notes%20of%20AI%2011_v01.docx"
+      },
+      "R1-2607307": {
+        "name": "Draft R1-2607307 Session Notes of AI 8.1 - v01.docx",
+        "agenda_item": "8.1",
+        "changed_at": "2026-10-13T04:11:54+00:00",
+        "sha256": "52588a6ee38a6a7a1751710f4755e0e1d63b935126fffd856fc6e7e22a3ee2a1",
+        "source_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Sorour_notes/Draft%20R1-2607307%20Session%20Notes%20of%20AI%208.1%20-%20v01.docx"
+      },
+      "R1-2607308": {
+        "name": "Draft R1-2607308 Session Notes of AI 9.1 - v01.docx",
+        "agenda_item": "9.1",
+        "changed_at": "2026-10-13T02:42:51+00:00",
+        "sha256": "ee1363d5ccabe22b43391d2483a744c750bf3f9a5c6dfc01ebc8ff774539a845",
+        "source_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Sorour_notes/Draft%20R1-2607308%20Session%20Notes%20of%20AI%209.1%20-%20v01.docx"
+      },
+      "R1-2607309": {
+        "name": "Draft R1-2607309 Session Notes of AI 9.2 - v02.docx",
+        "agenda_item": "9.2",
+        "changed_at": "2026-10-13T03:22:04+00:00",
+        "sha256": "1e29e243f2a8bddb9e797da0b377467efd5e29ca1134e9bd0f6b93b19b58f3da",
+        "source_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Sorour_notes/Draft%20R1-2607309%20Session%20Notes%20of%20AI%209.2%20-%20v02.docx"
+      },
+      "R1-2607310": {
+        "name": "Draft R1-2607310 Session Notes of AI 9.4 - v03.docx",
+        "agenda_item": "9.4",
+        "changed_at": "2026-10-13T02:02:09+00:00",
+        "sha256": "fecc8999bcaedf036837d16481be6333c4c0800a88a3bd4b1d2615408cb326ec",
+        "source_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Sorour_notes/Draft%20R1-2607310%20Session%20Notes%20of%20AI%209.4%20-%20v03.docx"
+      },
+      "R1-2607311": {
+        "name": "Draft R1-2607311 Session Notes of AI 9.5 - v02.docx",
+        "agenda_item": "9.5",
+        "changed_at": "2026-10-13T04:14:06+00:00",
+        "sha256": "f02fab1b43041354e09fa82c43f47da450a60680f6aee925d2f18591bb25bb23",
+        "source_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Sorour_notes/Draft%20R1-2607311%20Session%20Notes%20of%20AI%209.5%20-%20v02.docx"
+      },
+      "R1-2607312": {
+        "name": "Draft R1-2607312 Session Notes of AI 10.3.1 (Channel Coding) - v02.docx",
+        "agenda_item": "10.3.1",
+        "changed_at": "2026-10-13T09:08:24+00:00",
+        "sha256": "8c1df8296545f48b4350292d192c737d73639199ec4c60606a96571dd52d3b0a",
+        "source_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Sorour_notes/Draft%20R1-2607312%20Session%20Notes%20of%20AI%2010.3.1%20(Channel%20Coding)%20-%20v02.docx"
+      },
+      "R1-2607313": {
+        "name": "Draft R1-2607313 Session Notes of AI 10.3.2 (Modulation) - v02.docx",
+        "agenda_item": "10.3.2",
+        "changed_at": "2026-10-13T09:33:50+00:00",
+        "sha256": "7a6249e225dfd91c82871a0fc334e1a8cd6a292553457197ea50654a7b951998",
+        "source_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Sorour_notes/Draft%20R1-2607313%20Session%20Notes%20of%20AI%2010.3.2%20(Modulation)%20-%20v02.docx"
+      },
+      "R1-2607314": {
+        "name": "Draft R1-2607314 Session Notes of AI 10.5.2 (MIMO Operation) - v02.docx",
+        "agenda_item": "10.5.2",
+        "changed_at": "2026-10-13T07:40:37+00:00",
+        "sha256": "7b43194454c522bb7cb76ca97f6d0e81d97961d4c7a117875afbce50c9abcaf0",
+        "source_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Sorour_notes/Draft%20R1-2607314%20Session%20Notes%20of%20AI%2010.5.2%20(MIMO%20Operation)%20-%20v02.docx"
+      },
+      "R1-2607315": {
+        "name": "Draft R1-2607315 Session Notes of AI 10.7 (NTN specific) - v02.docx",
+        "agenda_item": "10.7",
+        "changed_at": "2026-10-13T04:14:44+00:00",
+        "sha256": "639da72ce871bb77672c3067dd0c525b52575e72cd9c9c48c643f698514aa742",
+        "source_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Sorour_notes/Draft%20R1-2607315%20Session%20Notes%20of%20AI%2010.7%20(NTN%20specific)%20-%20v02.docx"
+      },
+      "R1-2608614": {
+        "name": "draft_R1-2608614_Session Notes of AI 8.3_v01.docx",
+        "agenda_item": "8.3",
+        "changed_at": "2026-10-13T06:24:06+00:00",
+        "sha256": "585a0268a1be9f12f561a30b9d2ba1bc5edc89568fce8d06181e9a2d4260f017",
+        "source_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Hiroki_notes/draft_R1-2608614_Session%20Notes%20of%20AI%208.3_v01.docx"
+      }
+    },
     "document_changed_at": "2026-10-13T07:35:31+00:00",
     "sections": {
       "1": {
         "title": "Opening of the meeting (Day 1: 9:00 am)",
         "excluded_tdoc_rows": 0,
         "blocks": [],
+        "sources": {},
         "change": "initial",
         "added": [],
         "changed_at": "2026-10-04T08:57:51+00:00",
@@ -10728,6 +10855,9 @@
           "80c073315116",
           "1a635ec011b5"
         ],
+        "sources": {
+          "chair": "15dcfa2c77bc"
+        },
         "change": "initial",
         "added": [],
         "changed_at": "2026-10-04T08:57:51+00:00",
@@ -10740,6 +10870,9 @@
         "blocks": [
           "83a4c1cba5e2"
         ],
+        "sources": {
+          "chair": "c82838927553"
+        },
         "change": "initial",
         "added": [],
         "changed_at": "2026-10-04T08:57:51+00:00",
@@ -10752,6 +10885,9 @@
         "blocks": [
           "f9adf9d3b808"
         ],
+        "sources": {
+          "chair": "efe5489ca353"
+        },
         "change": "initial",
         "added": [],
         "changed_at": "2026-10-04T08:57:51+00:00",
@@ -10764,6 +10900,9 @@
         "blocks": [
           "fd901bb383c2"
         ],
+        "sources": {
+          "chair": "8d892026cfe0"
+        },
         "change": "initial",
         "added": [],
         "changed_at": "2026-10-04T08:57:51+00:00",
@@ -10776,6 +10915,9 @@
         "blocks": [
           "551a95cbbc98"
         ],
+        "sources": {
+          "chair": "590b44fc6b71"
+        },
         "change": "initial",
         "added": [],
         "changed_at": "2026-10-04T08:57:51+00:00",
@@ -10788,6 +10930,9 @@
         "blocks": [
           "1a8093e2ce4a"
         ],
+        "sources": {
+          "chair": "a280c61e4842"
+        },
         "change": "initial",
         "added": [],
         "changed_at": "2026-10-04T08:57:51+00:00",
@@ -10801,6 +10946,9 @@
           "322eab104e69",
           "940cde3a834d"
         ],
+        "sources": {
+          "chair": "a52a2be491e7"
+        },
         "change": "initial",
         "added": [],
         "changed_at": "2026-10-04T08:57:51+00:00",
@@ -10813,6 +10961,9 @@
         "blocks": [
           "85b02ad49c8f"
         ],
+        "sources": {
+          "chair": "6eeb97191111"
+        },
         "change": "initial",
         "added": [],
         "changed_at": "2026-10-04T08:57:51+00:00",
@@ -10825,6 +10976,9 @@
         "blocks": [
           "44843e4f9347"
         ],
+        "sources": {
+          "chair": "de7de6a65165"
+        },
         "change": "initial",
         "added": [],
         "changed_at": "2026-10-04T08:57:51+00:00",
@@ -10898,6 +11052,9 @@
           "c1d60bbda798",
           "b757a3f2922a"
         ],
+        "sources": {
+          "chair": "eec96a7224df"
+        },
         "change": "updated",
         "added": [
           12,
@@ -10915,6 +11072,9 @@
           "28e360eb7c13",
           "109085beaaa8"
         ],
+        "sources": {
+          "chair": "2e5763133f5e"
+        },
         "change": "initial",
         "added": [],
         "changed_at": "2026-10-04T08:57:51+00:00",
@@ -10932,6 +11092,10 @@
           "334907737e61",
           "323bd77ca2df"
         ],
+        "sources": {
+          "chair": "c9b518a8b74f",
+          "R1-2607284": "c9b518a8b74f"
+        },
         "change": "initial",
         "added": [],
         "changed_at": "2026-10-04T08:57:51+00:00",
@@ -10944,6 +11108,9 @@
         "blocks": [
           "219f81b28842"
         ],
+        "sources": {
+          "chair": "aad5e826dc59"
+        },
         "change": "initial",
         "added": [],
         "changed_at": "2026-10-04T08:57:51+00:00",
@@ -10961,24 +11128,73 @@
           "334907737e61",
           "19dc7473d959",
           "5726fe87ab09",
+          "aebe42cccaf9",
+          "55a2b7caa3a6",
+          "d4a0001ac480",
+          "958300904a20",
+          "668544acaa68",
+          "02fb0de65dd6",
+          "44157584ac64",
+          "2cdf41db99a9",
+          "706b0aa05fa7",
+          "668544acaa68",
+          "effd28b2c60d",
+          "fba12852e609",
+          "cf527454f4f1",
+          "668544acaa68",
+          "6bdce2d66021",
+          "726c76493bcd",
+          "d338d487e47c",
+          "668544acaa68",
+          "171dd8e1be8e",
           "92a4f49e7738",
           "198db6c96fde",
+          "cae81298da35",
+          "668544acaa68",
+          "b4dc2c8de3e2",
+          "4f7921021968",
+          "62f439c1061a",
           "e5bc2ae3cccd",
+          "c5ab678988af",
+          "668544acaa68",
+          "aecbe6ebe165",
+          "4f7921021968",
           "0e1d9d250b93",
           "482ea8197076",
+          "077e625b61b9",
+          "e39262defe80",
+          "d9eae7884294",
           "cd863c1b1d45",
+          "caf28cb3b34a",
+          "668544acaa68",
+          "494e15d72b61",
+          "2bf9f79ae0d5",
+          "668544acaa68",
+          "0c1e9bf9c07a",
           "6255a09b9412",
-          "20c4688959c1"
+          "20c4688959c1",
+          "eb73e4a10934",
+          "668544acaa68",
+          "1e2afc8d6ffb",
+          "088aacbb72bd",
+          "c3046b04b13c",
+          "3d8475d5a939",
+          "2a2ac7930623",
+          "eeaa339a508b"
         ],
+        "sources": {
+          "chair": "320d395e3f3d",
+          "R1-2607307": "b537ebb17b03"
+        },
         "change": "initial",
         "added": [],
-        "changed_at": "2026-10-04T08:57:51+00:00",
-        "changed_in": "Draft Chair notes RAN1#126bis_v00.docx",
-        "file": "agreements/51ca47727de79ac47596.html"
+        "changed_at": "2026-10-13T07:35:31+00:00",
+        "changed_in": "Chair notes RAN1#126bis_v05.docx",
+        "file": "agreements/c591e1fbc42a332f5648.html"
       },
       "8.2": {
         "title": "Maintenance on others",
-        "excluded_tdoc_rows": 12,
+        "excluded_tdoc_rows": 17,
         "blocks": [
           "5d70abc43104",
           "e017ac1d8d44",
@@ -10987,21 +11203,66 @@
           "334907737e61",
           "8531f3edb8af",
           "019b025b3c2f",
+          "55f06e12cd98",
+          "668544acaa68",
+          "6e57bbbd6616",
+          "71aa4aef8e29",
+          "a7ad3d586fbe",
+          "668544acaa68",
+          "bdaab235544f",
+          "204174b61ddd",
+          "a7ad3d586fbe",
+          "93abd0b207b9",
+          "c0d453f58aed",
+          "cdbaa885445f",
+          "668544acaa68",
+          "e118d6b718ae",
+          "eb664cd3eb9c",
+          "0d56db90ff84",
+          "5a5158c6ea07",
+          "668544acaa68",
+          "8add08d55b48",
+          "b91d6f851f94",
+          "a7ad3d586fbe",
+          "93abd0b207b9",
+          "95003ea0d185",
+          "c5952a66ea2e",
           "e3a28fa41d79",
+          "ec2a1a0f0337",
+          "668544acaa68",
+          "4a9dcd83fb91",
+          "2da4c7243c75",
+          "7f9fe207d40f",
+          "a7ad3d586fbe",
           "616556d6c9aa",
           "b382a6344887",
           "9f36ab839620",
           "6dbc72fd8a3d",
+          "20a62abf3823",
           "b99fc5dcf4e9",
           "9c47e6f9fc84",
+          "668544acaa68",
+          "e118d6b718ae",
+          "167dbfa57087",
           "144666f92cf7",
-          "2b43e3fbc1db"
+          "2b43e3fbc1db",
+          "93abd0b207b9",
+          "0717786f8102",
+          "bd044be75420",
+          "f7bc3c27c0dd",
+          "7387157d1ed7",
+          "55faad26ad06",
+          "0faa266f2431"
         ],
+        "sources": {
+          "chair": "e3334aa4c1eb",
+          "R1-2607285": "eb0aa4d46fb2"
+        },
         "change": "initial",
         "added": [],
-        "changed_at": "2026-10-04T08:57:51+00:00",
-        "changed_in": "Draft Chair notes RAN1#126bis_v00.docx",
-        "file": "agreements/2066f660e6d9e3f546c5.html"
+        "changed_at": "2026-10-13T07:35:31+00:00",
+        "changed_in": "Chair notes RAN1#126bis_v05.docx",
+        "file": "agreements/7a228ed19826e3dca8a7.html"
       },
       "8.3": {
         "title": "Maintenance on UE features",
@@ -11028,13 +11289,22 @@
           "d98f93035623",
           "334907737e61",
           "6659c73df914",
-          "0faa266f2431"
+          "0faa266f2431",
+          "2d7a2c801d6e",
+          "668544acaa68",
+          "c7621490ec1a",
+          "56c1f36d6b9e",
+          "58b834b61509"
         ],
+        "sources": {
+          "chair": "1828bf4d9b0b",
+          "R1-2608614": "457921faad06"
+        },
         "change": "initial",
         "added": [],
-        "changed_at": "2026-10-04T08:57:51+00:00",
-        "changed_in": "Draft Chair notes RAN1#126bis_v00.docx",
-        "file": "agreements/0c032859747799da0f65.html"
+        "changed_at": "2026-10-13T07:35:31+00:00",
+        "changed_in": "Chair notes RAN1#126bis_v05.docx",
+        "file": "agreements/af141ee8e620beebd9f9.html"
       },
       "9": {
         "title": "Release 20 NR",
@@ -11042,6 +11312,9 @@
         "blocks": [
           "0ce2557d2220"
         ],
+        "sources": {
+          "chair": "06ec6821d0af"
+        },
         "change": "initial",
         "added": [],
         "changed_at": "2026-10-04T08:57:51+00:00",
@@ -11057,6 +11330,10 @@
           "334907737e61",
           "c811192bf09d"
         ],
+        "sources": {
+          "chair": "0a9199382b73",
+          "R1-2607308": "0a9199382b73"
+        },
         "change": "initial",
         "added": [],
         "changed_at": "2026-10-04T08:57:51+00:00",
@@ -11067,25 +11344,57 @@
         "title": "CSI spatial/frequency compression without temporal aspects (“Case 0”)",
         "excluded_tdoc_rows": 39,
         "blocks": [
-          "4990068f3b1a"
+          "4990068f3b1a",
+          "06a8a5fd91fd",
+          "20280ee67271",
+          "6fe46623e81c",
+          "db471e78015c",
+          "34e56aa3dd1b",
+          "e39262defe80",
+          "fc43d84a9a77",
+          "47237e7a7695",
+          "6f55c4c98c12",
+          "668544acaa68",
+          "4d6ca7a6f07e",
+          "a6cbf08c86af",
+          "36b9dca46e86",
+          "be6d223242e5",
+          "0becfe895aa5",
+          "b576823c791a",
+          "4c2ea2d10dc0",
+          "725c6c631d0d",
+          "8466609f8486"
         ],
+        "sources": {
+          "chair": "207a38856a5a",
+          "R1-2607308": "ec9ccd7c90b3"
+        },
         "change": "initial",
         "added": [],
-        "changed_at": "2026-10-04T08:57:51+00:00",
-        "changed_in": "Draft Chair notes RAN1#126bis_v00.docx",
-        "file": "agreements/be4e1cc4936c442a8b35.html"
+        "changed_at": "2026-10-13T07:35:31+00:00",
+        "changed_in": "Chair notes RAN1#126bis_v05.docx",
+        "file": "agreements/55d7865ecea504442da1.html"
       },
       "9.1.2": {
         "title": "Inter-vendor training collaboration for two-sided AI/ML models",
         "excluded_tdoc_rows": 32,
         "blocks": [
-          "934fcbb8e3ec"
+          "934fcbb8e3ec",
+          "2f410905bf93",
+          "c26be97355f7",
+          "0d9df1b535ff",
+          "d0b35f2e80cf",
+          "b629114132dd"
         ],
+        "sources": {
+          "chair": "9b040eb33654",
+          "R1-2607308": "e4637541e32a"
+        },
         "change": "initial",
         "added": [],
-        "changed_at": "2026-10-04T08:57:51+00:00",
-        "changed_in": "Draft Chair notes RAN1#126bis_v00.docx",
-        "file": "agreements/45c91e79473272e0831a.html"
+        "changed_at": "2026-10-13T07:35:31+00:00",
+        "changed_in": "Chair notes RAN1#126bis_v05.docx",
+        "file": "agreements/893e45348d21163e84dc.html"
       },
       "9.2": {
         "title": "NR MIMO Phase 6",
@@ -11098,68 +11407,259 @@
           "2051705dd8de",
           "267919023b28",
           "334907737e61",
-          "c44dc49ab8cc"
+          "c44dc49ab8cc",
+          "a47caa9e4cb0",
+          "fc36c95afa37",
+          "60b3024aac01",
+          "7b3b37bcd659",
+          "668544acaa68",
+          "71c84b87d546",
+          "0098fffa8c5e",
+          "668544acaa68",
+          "d6504c4d57cb",
+          "5e2e1e96e3e4",
+          "668544acaa68",
+          "1e68aa07a294",
+          "46644d481c10",
+          "a0a5b8d83ed9",
+          "2051705dd8de",
+          "a5585f468698",
+          "668544acaa68",
+          "9c4b4efbdb25",
+          "a62dbd25115a",
+          "b308f1a102d9",
+          "668544acaa68",
+          "34080d606518",
+          "fb55fd08d748",
+          "53ba861ed0ff",
+          "746da1fe4431",
+          "668544acaa68",
+          "268823a88ca1",
+          "0e070457f5e7",
+          "8f7348ea07f3",
+          "14e27b27ced7",
+          "668544acaa68",
+          "1fd01cd84d3d",
+          "5c5c38ab68c9",
+          "668544acaa68",
+          "f90232780c65",
+          "605eb6372492",
+          "124f962dc335",
+          "ce08acdab167"
         ],
+        "sources": {
+          "chair": "a9a92258115c",
+          "R1-2607309": "a15e5aecde50"
+        },
         "change": "initial",
         "added": [],
-        "changed_at": "2026-10-04T08:57:51+00:00",
-        "changed_in": "Draft Chair notes RAN1#126bis_v00.docx",
-        "file": "agreements/91375da20d947c5262aa.html"
+        "changed_at": "2026-10-13T07:35:31+00:00",
+        "changed_in": "Chair notes RAN1#126bis_v05.docx",
+        "file": "agreements/17fd226fc3f5cdf0fa60.html"
       },
       "9.3": {
         "title": "Solutions for Ambient IoT (Internet of Things) in NR Phase 2",
         "excluded_tdoc_rows": 0,
         "blocks": [
-          "1e6920da60af",
+          "87015de3dd54",
           "82b12a8534f4",
           "3baac502786d",
           "334907737e61",
           "8742b37b9bd3"
         ],
-        "change": "updated",
-        "added": [
-          0
-        ],
-        "changed_at": "2026-10-07T09:08:14+00:00",
-        "changed_in": "Draft Chair notes RAN1#126bis_v01.docx",
-        "file": "agreements/d347c673e1f233cf85cf.html"
+        "sources": {
+          "chair": "991cc58389bf",
+          "R1-2607286": "f2e928d13233"
+        },
+        "change": "initial",
+        "added": [],
+        "changed_at": "2026-10-13T09:47:05+00:00",
+        "changed_in": "draft_R1-2607286_Session Notes of AI 9.3_v03.docx",
+        "file": "agreements/1eaf3069d8d16bdd9929.html"
       },
       "9.3.1": {
         "title": "R2D signals, channels, waveform and procedures",
         "excluded_tdoc_rows": 32,
         "blocks": [
-          "9e89e69f5f99"
+          "9e89e69f5f99",
+          "b2fce0d7b407",
+          "668544acaa68",
+          "bad7a30ca951",
+          "a1a9b5b9bb12",
+          "668544acaa68",
+          "dc6fea4b9afb",
+          "4a26b31fb6f2",
+          "8068d4402721",
+          "6caf13955553",
+          "668544acaa68",
+          "8bcd2cb630df",
+          "f989851cc7a7",
+          "53c7e2f8a852",
+          "758204b254ab",
+          "668544acaa68",
+          "3b3edbbdf9eb",
+          "39323a1d624a",
+          "408e217e870b",
+          "62cfa21a0395",
+          "6ae2a47af5af",
+          "f52e7eda3bbb",
+          "7b86ece2f95b",
+          "f4e715f2472e",
+          "fd6403236aa4",
+          "33956721153c",
+          "05f440a9689e",
+          "0924ebf9ea69",
+          "d20370321f7f",
+          "48a4842aae80",
+          "66777b6cad95",
+          "fefc6c9b35e2",
+          "05f440a9689e",
+          "bf8434cce508",
+          "d0b9efb0b375",
+          "668544acaa68",
+          "08d4fe123e85",
+          "53f666e96cca",
+          "a12240c374c7",
+          "668544acaa68",
+          "3588ffc40341",
+          "9235f29ce657",
+          "1ec9c2466956",
+          "25d78f0ed897",
+          "668544acaa68",
+          "c9ff23576bd6",
+          "213be6ad5f0c",
+          "0469689719d6",
+          "668544acaa68",
+          "c9ff23576bd6",
+          "8902c8c2f508",
+          "93abd0b207b9",
+          "08999514f41c",
+          "e62064f9ff81",
+          "3c387ebb5014",
+          "6d2c11e6c674",
+          "cfe76b45691d",
+          "cf4caec94e7b",
+          "31e29838ebfd",
+          "285af4e807a3",
+          "6eb80a81f301",
+          "d44c1db308cd"
         ],
+        "sources": {
+          "chair": "da1e39b6e4fd",
+          "R1-2607286": "4b04544bc410"
+        },
         "change": "initial",
         "added": [],
-        "changed_at": "2026-10-04T08:57:51+00:00",
-        "changed_in": "Draft Chair notes RAN1#126bis_v00.docx",
-        "file": "agreements/9b87253fb12ad9d39744.html"
+        "changed_at": "2026-10-13T09:47:05+00:00",
+        "changed_in": "draft_R1-2607286_Session Notes of AI 9.3_v03.docx",
+        "file": "agreements/13dd387710eda11a8e6f.html"
       },
       "9.3.2": {
         "title": "D2R signals, channels, waveform and procedures",
         "excluded_tdoc_rows": 29,
         "blocks": [
-          "445ca829ee86"
+          "445ca829ee86",
+          "812b783a8cd0",
+          "668544acaa68",
+          "8c9013a8843d",
+          "668544acaa68",
+          "2d416833f54b",
+          "668544acaa68",
+          "3452e0cd7f14",
+          "30489f2a944b",
+          "180aa30a8043",
+          "668544acaa68",
+          "51482c522cf8",
+          "668544acaa68",
+          "557dfab501b1",
+          "668544acaa68",
+          "98141ccf3f76",
+          "668544acaa68",
+          "7487288f446e",
+          "d7b3de10c4d1",
+          "947601f041e7",
+          "668544acaa68",
+          "116c8409b53f",
+          "48906dae0353",
+          "aff82c2fed78",
+          "096da53852d9",
+          "155ca9f0a5ec",
+          "cd511c417faa",
+          "aff82c2fed78",
+          "9dc282db387b",
+          "668544acaa68",
+          "dd279832dce1",
+          "ffc6870eb5f6",
+          "09ae1910f228",
+          "3bc39f897b71",
+          "dd73470d193f",
+          "1777c79ec8bb",
+          "3fac388aa2d5",
+          "4b58a10340e0"
         ],
+        "sources": {
+          "chair": "1e62364262b6",
+          "R1-2607286": "570cc8d2f451"
+        },
         "change": "initial",
         "added": [],
-        "changed_at": "2026-10-04T08:57:51+00:00",
-        "changed_in": "Draft Chair notes RAN1#126bis_v00.docx",
-        "file": "agreements/3087a9cf2e8932075b65.html"
+        "changed_at": "2026-10-13T09:47:05+00:00",
+        "changed_in": "draft_R1-2607286_Session Notes of AI 9.3_v03.docx",
+        "file": "agreements/b04c6935f533f7d8f31b.html"
       },
       "9.3.3": {
         "title": "Other procedures",
         "excluded_tdoc_rows": 34,
         "blocks": [
           "1c24c9720642",
-          "e10ac19d46d0"
+          "e10ac19d46d0",
+          "ac6b3ab7156a",
+          "668544acaa68",
+          "117a7db5e915",
+          "668544acaa68",
+          "4240f2f412d1",
+          "977256e00961",
+          "668544acaa68",
+          "7de026a4dd8a",
+          "b9d79f3f0d02",
+          "c6cee502abb0",
+          "2949d88f0690",
+          "668544acaa68",
+          "3423da5c7c26",
+          "d096faffe809",
+          "570554253939",
+          "6763eebf696f",
+          "668544acaa68",
+          "7fb594e6336b",
+          "668544acaa68",
+          "b883a4fcf3f5",
+          "e8ecaf94b436",
+          "6c3cfc6461b0",
+          "668544acaa68",
+          "6c686ba48d3e",
+          "668544acaa68",
+          "d40286b91d8d",
+          "4966e05af50b",
+          "cfbfe4254271",
+          "668544acaa68",
+          "f6fe70e7e5fa",
+          "b9fc43a18726",
+          "90eba66ac3ae",
+          "5d26bfe9e3cd",
+          "31cae0267003",
+          "d74fc47a3b98",
+          "1a3d9273fd19",
+          "5bc07859bfae"
         ],
+        "sources": {
+          "chair": "46868e13b745",
+          "R1-2607286": "06946b7fe537"
+        },
         "change": "initial",
         "added": [],
-        "changed_at": "2026-10-04T08:57:51+00:00",
-        "changed_in": "Draft Chair notes RAN1#126bis_v00.docx",
-        "file": "agreements/5d44997e814a2d09a57d.html"
+        "changed_at": "2026-10-13T09:47:05+00:00",
+        "changed_in": "draft_R1-2607286_Session Notes of AI 9.3_v03.docx",
+        "file": "agreements/62e4842efb139471f6d0.html"
       },
       "9.4": {
         "title": "GNSS resilient NR-NTN operation",
@@ -11171,6 +11671,10 @@
           "6acdd9e8a08d",
           "f2383317649c"
         ],
+        "sources": {
+          "chair": "164246dc8999",
+          "R1-2607310": "164246dc8999"
+        },
         "change": "updated",
         "added": [
           0
@@ -11182,11 +11686,41 @@
       "9.4.1": {
         "title": "NR-NTN GNSS resilience",
         "excluded_tdoc_rows": 46,
-        "blocks": [],
+        "blocks": [
+          "8af902a5568a",
+          "73fa69646d83",
+          "86974557bc99",
+          "fc784a6cefba",
+          "668544acaa68",
+          "cd80d9f685e6",
+          "9dbc62c1a361",
+          "9e8ba7b988f2",
+          "4a126d04713f",
+          "0e07e2bb63af",
+          "668544acaa68",
+          "490aa705298b",
+          "7661fe10d10a",
+          "037053cb031d",
+          "1b9e6895f20b",
+          "e00557afcbc1",
+          "668544acaa68",
+          "577ed730057e",
+          "27f58f24672a",
+          "534c977a9a6f",
+          "1b9e6895f20b",
+          "e00557afcbc1",
+          "0993ab1ad773",
+          "37c73d925dab",
+          "0780642f9aed"
+        ],
+        "sources": {
+          "R1-2607310": "4680b81918df"
+        },
         "change": "initial",
         "added": [],
-        "changed_at": "2026-10-04T08:57:51+00:00",
-        "changed_in": "Draft Chair notes RAN1#126bis_v00.docx"
+        "changed_at": "2026-10-13T02:02:09+00:00",
+        "changed_in": "Draft R1-2607310 Session Notes of AI 9.4 - v03.docx",
+        "file": "agreements/d5eaa9ebeb2118d6bfa0.html"
       },
       "9.5": {
         "title": "NR NTN in systems using downlink compensation",
@@ -11198,6 +11732,10 @@
           "8de0c998d257",
           "d6e9c4242e0a"
         ],
+        "sources": {
+          "chair": "e1e7d710d750",
+          "R1-2607311": "e1e7d710d750"
+        },
         "change": "initial",
         "added": [],
         "changed_at": "2026-10-04T08:57:51+00:00",
@@ -11208,13 +11746,49 @@
         "title": "Study and identify possible solutions",
         "excluded_tdoc_rows": 43,
         "blocks": [
-          "09d55af1ba0a"
+          "09d55af1ba0a",
+          "7d756352b9e9",
+          "92661a0ac23c",
+          "3029ef4122f8",
+          "ebaa71d5341a",
+          "21d112b2de7c",
+          "293e2c21b44c",
+          "d18c870dbfd8",
+          "d0edaf73ff9c",
+          "af13d886bc01",
+          "472dbf1fffd1",
+          "19466212d6bd",
+          "c417ea27093a",
+          "cac9068ef6e5",
+          "4a5134f429ca",
+          "e46cd83fda44",
+          "0d180fd2ec09",
+          "a697ab60d405",
+          "90b2e60da28f",
+          "d15463cf461e",
+          "08d5d6148a3b",
+          "e36322706d6f",
+          "8b42e5281dd8",
+          "f5fd8265192e",
+          "04a495ae2986",
+          "0c343df4f1c7",
+          "203062ad8c62",
+          "1f7d50863199",
+          "cc83e9ac4001",
+          "a697ab60d405",
+          "0d180fd2ec09",
+          "1930522d7edd",
+          "45bb14e060e0"
         ],
+        "sources": {
+          "chair": "a3f53176f2ff",
+          "R1-2607311": "57c10ac524d1"
+        },
         "change": "initial",
         "added": [],
-        "changed_at": "2026-10-07T09:08:14+00:00",
-        "changed_in": "Draft Chair notes RAN1#126bis_v01.docx",
-        "file": "agreements/7b45564a3abeed2e7439.html"
+        "changed_at": "2026-10-13T07:35:31+00:00",
+        "changed_in": "Chair notes RAN1#126bis_v05.docx",
+        "file": "agreements/b8e41510e3da21467d40.html"
       },
       "10": {
         "title": "Rel-20 Study of 6GR",
@@ -11228,6 +11802,9 @@
           "03690c79f4ca",
           "b21a4ba24245"
         ],
+        "sources": {
+          "chair": "e817a50452b2"
+        },
         "change": "initial",
         "added": [],
         "changed_at": "2026-10-04T08:57:51+00:00",
@@ -11238,6 +11815,7 @@
         "title": "Tasks from RP",
         "excluded_tdoc_rows": 0,
         "blocks": [],
+        "sources": {},
         "change": "initial",
         "added": [],
         "changed_at": "2026-10-04T08:57:51+00:00",
@@ -11251,6 +11829,10 @@
           "334907737e61",
           "508ea7f0c806"
         ],
+        "sources": {
+          "chair": "bf6a8d7aeaac",
+          "R1-2607287": "bf6a8d7aeaac"
+        },
         "change": "initial",
         "added": [],
         "changed_at": "2026-10-04T08:57:51+00:00",
@@ -11261,13 +11843,42 @@
         "title": "Waveform",
         "excluded_tdoc_rows": 34,
         "blocks": [
-          "c1e2bf5fcfc7"
+          "c1e2bf5fcfc7",
+          "ab683a0c72f8",
+          "929017ada05a",
+          "cda1fb25fcfe",
+          "067a19586ec0",
+          "a965681969b9",
+          "40b157fcd0b1",
+          "cfbe438146dd",
+          "836a268a73c7",
+          "335dc3826004",
+          "b01d6de2940e",
+          "4313496f6c0b",
+          "fd21a1133098",
+          "41f3ce3e393c",
+          "a8339ea7e93c",
+          "28279880d12b",
+          "6cfb4d8732f3",
+          "c8603f88ba09",
+          "f934c1f57216",
+          "96fe5af22c42",
+          "e0da7ec31640",
+          "ac133011f45b",
+          "ba5aa3cd1d81",
+          "0230ad766cb3",
+          "a460cc37540b",
+          "93aad969bc2a"
         ],
+        "sources": {
+          "chair": "26e720c9c145",
+          "R1-2607287": "d4a10254126e"
+        },
         "change": "initial",
         "added": [],
-        "changed_at": "2026-10-04T08:57:51+00:00",
-        "changed_in": "Draft Chair notes RAN1#126bis_v00.docx",
-        "file": "agreements/f87d96ab743ec439fb86.html"
+        "changed_at": "2026-10-13T07:38:12+00:00",
+        "changed_in": "draft_R1-2607287_Session Notes of AI 10.2.1_v02.docx",
+        "file": "agreements/6c8cd01feab17eaee80a.html"
       },
       "10.3": {
         "title": "Channel coding and modulation for 6GR interface",
@@ -11275,6 +11886,9 @@
         "blocks": [
           "468fcf6b7ccb"
         ],
+        "sources": {
+          "chair": "6a135f0e5c18"
+        },
         "change": "initial",
         "added": [],
         "changed_at": "2026-10-04T08:57:51+00:00",
@@ -11283,17 +11897,65 @@
       },
       "10.3.1": {
         "title": "Channel coding",
-        "excluded_tdoc_rows": 33,
+        "excluded_tdoc_rows": 35,
         "blocks": [
           "f59e3c5e1364",
           "334907737e61",
-          "802f6e09c397"
+          "802f6e09c397",
+          "c8a59cd6c49e",
+          "5aaa5d8d63cc",
+          "2da9614c771f",
+          "d76a99cb3338",
+          "de61a0dcd033",
+          "0d99cf2e9309",
+          "7620d51db5c9",
+          "a39d33b32347",
+          "70b51cb64efd",
+          "4ce9126d4186",
+          "1195eebe5eb6",
+          "6124da432e01",
+          "49a21e930fc5",
+          "6fec11bd8836",
+          "ca09bca2c862",
+          "cf78da83efe7",
+          "7c72413dd67e",
+          "c3f07b24c048",
+          "91814b533f81",
+          "5876ef3219b9",
+          "40de50902ddd",
+          "7c4b6f724057",
+          "1b736fd460ea",
+          "b67838b9db59",
+          "0aa63dfb1190",
+          "ed1c08a0dfc7",
+          "b21989b03eb4",
+          "40de50902ddd",
+          "7c4b6f724057",
+          "1b736fd460ea",
+          "b67838b9db59",
+          "0aa63dfb1190",
+          "ed1c08a0dfc7",
+          "9ef01e7fc8a4",
+          "eb823c5723e7",
+          "40de50902ddd",
+          "7c4b6f724057",
+          "0aa63dfb1190",
+          "1b736fd460ea",
+          "a97bcd26fd62",
+          "bbbd196b9c31",
+          "0a5d3a0b570f",
+          "76cbf1eef891",
+          "767bc4e469d4"
         ],
+        "sources": {
+          "chair": "1e68dcd9da9e",
+          "R1-2607312": "459f05bc9160"
+        },
         "change": "initial",
         "added": [],
-        "changed_at": "2026-10-04T08:57:51+00:00",
-        "changed_in": "Draft Chair notes RAN1#126bis_v00.docx",
-        "file": "agreements/b439a27472cc137e7c5d.html"
+        "changed_at": "2026-10-13T09:08:24+00:00",
+        "changed_in": "Draft R1-2607312 Session Notes of AI 10.3.1 (Channel Coding) - v02.docx",
+        "file": "agreements/1bcb257df908250e42e4.html"
       },
       "10.3.2": {
         "title": "Modulation",
@@ -11302,13 +11964,49 @@
           "329b9f2c1f18",
           "dd83a7b9ac45",
           "334907737e61",
-          "94cb927e170e"
+          "94cb927e170e",
+          "c19238a78b40",
+          "668544acaa68",
+          "cb6523a25f7d",
+          "dd43adc9900d",
+          "668544acaa68",
+          "aee010fe7dd3",
+          "729394bbe51a",
+          "2df61e6c7295",
+          "c63c362f6743",
+          "0c8e0c0587af",
+          "0806c308cd91",
+          "537e8455b20e",
+          "608d158a51ae",
+          "0b93fb32b5f4",
+          "4a656ee0e48a",
+          "242ad4b63db3",
+          "02c62195f2fd",
+          "ab256e857840",
+          "0cfbb8e1a911",
+          "619a7462f841",
+          "cbb7517e71b8",
+          "c586dfa0d5f4",
+          "bb875d4bba03",
+          "58ac00d9d1c8",
+          "ac67542053f4",
+          "c0ee16c02ec2",
+          "85df66c0c396",
+          "4ce0b14422ca",
+          "384a7a5f8bbc",
+          "5d303fca13f0",
+          "73419e6236da",
+          "2958e935a034"
         ],
+        "sources": {
+          "chair": "1ba19f48c329",
+          "R1-2607313": "e23a07d8bd9b"
+        },
         "change": "initial",
         "added": [],
-        "changed_at": "2026-10-04T08:57:51+00:00",
-        "changed_in": "Draft Chair notes RAN1#126bis_v00.docx",
-        "file": "agreements/2098608303de1fd04046.html"
+        "changed_at": "2026-10-13T09:33:50+00:00",
+        "changed_in": "Draft R1-2607313 Session Notes of AI 10.3.2 (Modulation) - v02.docx",
+        "file": "agreements/ec2230c54c3befb3d365.html"
       },
       "10.4": {
         "title": "Multiple carrier operation",
@@ -11316,6 +12014,9 @@
         "blocks": [
           "9bfb36fc7bf8"
         ],
+        "sources": {
+          "chair": "a97f7fbff5e4"
+        },
         "change": "initial",
         "added": [],
         "changed_at": "2026-10-04T08:57:51+00:00",
@@ -11354,6 +12055,9 @@
           "bbd31d4b4e51",
           "d2219456b134"
         ],
+        "sources": {
+          "chair": "44a19fb0be6f"
+        },
         "change": "updated",
         "added": [
           2,
@@ -11419,6 +12123,9 @@
           "e5dd5d0db5e3",
           "f3db8c22cfaf"
         ],
+        "sources": {
+          "chair": "101e187f9702"
+        },
         "change": "updated",
         "added": [
           2,
@@ -11458,6 +12165,9 @@
         "blocks": [
           "19c81928e11a"
         ],
+        "sources": {
+          "chair": "31a794b19c15"
+        },
         "change": "initial",
         "added": [],
         "changed_at": "2026-10-04T08:57:51+00:00",
@@ -11470,6 +12180,9 @@
         "blocks": [
           "5c8f32c9bc4e"
         ],
+        "sources": {
+          "chair": "b7e80d286f29"
+        },
         "change": "initial",
         "added": [],
         "changed_at": "2026-10-04T08:57:51+00:00",
@@ -11543,6 +12256,9 @@
           "5129a2ead35d",
           "752acee1a7f2"
         ],
+        "sources": {
+          "chair": "947cc00610ba"
+        },
         "change": "updated",
         "added": [
           27,
@@ -11595,6 +12311,9 @@
           "c8fee8eabe07",
           "39f63f9f1481"
         ],
+        "sources": {
+          "chair": "0bf5e59373f7"
+        },
         "change": "updated",
         "added": [
           3,
@@ -11624,6 +12343,9 @@
           "d2d85ad2b48f",
           "e6849519cbf9"
         ],
+        "sources": {
+          "chair": "0398cf0b063d"
+        },
         "change": "updated",
         "added": [
           10,
@@ -11644,6 +12366,10 @@
           "6f88a224e768",
           "60f9d9182c33"
         ],
+        "sources": {
+          "chair": "d118ca058660",
+          "R1-2607314": "d118ca058660"
+        },
         "change": "initial",
         "added": [],
         "changed_at": "2026-10-04T08:57:51+00:00",
@@ -11656,13 +12382,50 @@
         "blocks": [
           "d5400d2235ef",
           "214433cb768a",
-          "334907737e61"
+          "334907737e61",
+          "051cee0938b3",
+          "9e6c9a62de51",
+          "d54d9eeda12a",
+          "6d529748f6f3",
+          "668544acaa68",
+          "e008078084b5",
+          "70956e2fc754",
+          "f26761207a38",
+          "25e26aa5df5d",
+          "f8a5e1c73d59",
+          "22b80d4ee063",
+          "7921a60d2221",
+          "e6c6a9a5be82",
+          "1b4f16d868f3",
+          "82eae3e2ca96",
+          "f9020047bcae",
+          "504baf65008b",
+          "668544acaa68",
+          "4118ad6b6a2d",
+          "1b0bfee4ea75",
+          "d947709449bf",
+          "bc763cd41210",
+          "6f2e8b601010",
+          "d1d6aa76dc9d",
+          "830e7627972b",
+          "6a72e0cc9d9a",
+          "4a5c2288486d",
+          "277b76208179",
+          "d26746a551fc",
+          "4e98069658df",
+          "3a903ce477db",
+          "0cc2dca32bba",
+          "4e23b4843d73"
         ],
+        "sources": {
+          "chair": "e9e2a8443454",
+          "R1-2607314": "c02ec4c9aebc"
+        },
         "change": "initial",
         "added": [],
-        "changed_at": "2026-10-04T08:57:51+00:00",
-        "changed_in": "Draft Chair notes RAN1#126bis_v00.docx",
-        "file": "agreements/503047996f775c648978.html"
+        "changed_at": "2026-10-13T07:40:37+00:00",
+        "changed_in": "Draft R1-2607314 Session Notes of AI 10.5.2 (MIMO Operation) - v02.docx",
+        "file": "agreements/c89478d0d82f29948781.html"
       },
       "10.5.2.2": {
         "title": "Downlink transmission scheme(s) for downlink shared channels",
@@ -11670,13 +12433,32 @@
         "blocks": [
           "53d66e56a274",
           "e11337955c4c",
-          "334907737e61"
+          "334907737e61",
+          "ee5f606d11f5",
+          "b89038c809d3",
+          "78b231550f64",
+          "9597b8a5ddd1",
+          "cb888bfad2e9",
+          "de19b6e8dbd8",
+          "668544acaa68",
+          "221ced023329",
+          "fbd3f2165037",
+          "f2f2d2c63608",
+          "05b54ab31389",
+          "01a5ea51847b",
+          "ea3e8d06311d",
+          "15a8eb7a97d0",
+          "2bc3e917e75c"
         ],
+        "sources": {
+          "chair": "a6d85210f66a",
+          "R1-2607314": "7b1d557a4092"
+        },
         "change": "initial",
         "added": [],
-        "changed_at": "2026-10-04T08:57:51+00:00",
-        "changed_in": "Draft Chair notes RAN1#126bis_v00.docx",
-        "file": "agreements/96863dc5ea589c1ffc86.html"
+        "changed_at": "2026-10-13T07:40:37+00:00",
+        "changed_in": "Draft R1-2607314 Session Notes of AI 10.5.2 (MIMO Operation) - v02.docx",
+        "file": "agreements/876696a2df343a102e3f.html"
       },
       "10.5.2.3": {
         "title": "Uplink transmission scheme(s) for uplink channels",
@@ -11684,18 +12466,85 @@
         "blocks": [
           "cf89236b5acf",
           "04c9da6a893c",
-          "334907737e61"
+          "334907737e61",
+          "292bda2840d7",
+          "8d0a5975e6bf",
+          "94eca156d40c",
+          "83cc1c9e2804",
+          "e83212fb348f",
+          "668544acaa68",
+          "8ef4ac35cce5",
+          "bcf2e08fe980",
+          "0ff8aba22188",
+          "ce2a515092e2",
+          "10faf5860606",
+          "497d14671579",
+          "283613bb5595",
+          "181153a67765",
+          "4ea9cb8e909d",
+          "46e8dbe25756",
+          "e599de8c5294",
+          "8cd859118f80",
+          "c8fee8eabe07",
+          "74d1c490404b",
+          "8886e83de075",
+          "d8edaea703b7",
+          "e14e37167d1f",
+          "5e8e6308b715",
+          "19745c6cbb13",
+          "bac111c469f1",
+          "283613bb5595",
+          "181153a67765",
+          "c84d130c6f7c",
+          "46e8dbe25756",
+          "a3bdb4a496b4",
+          "492177ff1b1b",
+          "625f76a1b8bd",
+          "786e1e80d788",
+          "8cd859118f80",
+          "c8fee8eabe07",
+          "5b620c1b6bf9",
+          "41b13504d097",
+          "d360e4acfec8",
+          "668544acaa68",
+          "383e47ff6bea",
+          "4fcd29a2eee3",
+          "7704245607e9",
+          "473ba364b7e6",
+          "58145bf21ea0",
+          "83d63ae23219",
+          "8b19a8bd7c7e",
+          "7916d4a44fb4",
+          "049ebf52308b",
+          "668544acaa68",
+          "8c82ebe27c0c",
+          "e0a262ba5b7a",
+          "4864c804d1e7",
+          "668544acaa68",
+          "8318525f7490",
+          "5f43c68f6923",
+          "e6e4fec994f7",
+          "3c154a4ae67e",
+          "448004618b47",
+          "1e5660eaf30a",
+          "0f3e9ac5b9aa",
+          "2fca032a1dba"
         ],
+        "sources": {
+          "chair": "471fc6e5acc0",
+          "R1-2607314": "e3012b4ce17b"
+        },
         "change": "initial",
         "added": [],
-        "changed_at": "2026-10-04T08:57:51+00:00",
-        "changed_in": "Draft Chair notes RAN1#126bis_v00.docx",
-        "file": "agreements/de3cc6286bffe935b4d1.html"
+        "changed_at": "2026-10-13T07:40:37+00:00",
+        "changed_in": "Draft R1-2607314 Session Notes of AI 10.5.2 (MIMO Operation) - v02.docx",
+        "file": "agreements/8d6bfeccc23df9dc42af.html"
       },
       "10.5.3": {
         "title": "CSI acquisition and report",
         "excluded_tdoc_rows": 0,
         "blocks": [],
+        "sources": {},
         "change": "initial",
         "added": [],
         "changed_at": "2026-10-04T08:57:51+00:00",
@@ -11712,6 +12561,9 @@
           "0c3487a8e81d",
           "7fb782e607ae"
         ],
+        "sources": {
+          "chair": "8ca74eed3800"
+        },
         "change": "initial",
         "added": [],
         "changed_at": "2026-10-04T08:57:51+00:00",
@@ -11726,6 +12578,9 @@
           "166433130676",
           "334907737e61"
         ],
+        "sources": {
+          "chair": "d149ac9a95a9"
+        },
         "change": "initial",
         "added": [],
         "changed_at": "2026-10-04T08:57:51+00:00",
@@ -11740,6 +12595,9 @@
           "1ea922a6cabf",
           "334907737e61"
         ],
+        "sources": {
+          "chair": "5cd48a46ba41"
+        },
         "change": "initial",
         "added": [],
         "changed_at": "2026-10-04T08:57:51+00:00",
@@ -11754,6 +12612,9 @@
           "1dcb0d81009d",
           "334907737e61"
         ],
+        "sources": {
+          "chair": "f371ada24842"
+        },
         "change": "initial",
         "added": [],
         "changed_at": "2026-10-04T08:57:51+00:00",
@@ -11768,6 +12629,10 @@
           "f2b24677e480",
           "8a478ad35ebc"
         ],
+        "sources": {
+          "chair": "0479e4694aa9",
+          "R1-2607288": "0479e4694aa9"
+        },
         "change": "initial",
         "added": [],
         "changed_at": "2026-10-04T08:57:51+00:00",
@@ -11780,13 +12645,50 @@
         "blocks": [
           "973dfd5e92c5",
           "5bf47b77ed9d",
-          "334907737e61"
+          "334907737e61",
+          "74205d6269c2",
+          "204c9877b9d4",
+          "763f37d4bf42",
+          "f4827811847a",
+          "6221438a4233",
+          "0861bb110d00",
+          "3251d05107cd",
+          "24ff25648357",
+          "91f0a6a65b11",
+          "93abd0b207b9",
+          "763f37d4bf42",
+          "e641c9dff2d0",
+          "b26671ae94f2",
+          "91f0a6a65b11",
+          "93abd0b207b9",
+          "96279b399d57",
+          "f4827811847a",
+          "500fd80accc9",
+          "30b16f0fa139",
+          "69e1a5a01599",
+          "9c0a3c9529a4",
+          "8120cf94110a",
+          "373f7051b0a9",
+          "a57169199165",
+          "806c1b0d37e0",
+          "c6e8b6b7d4c2",
+          "3b121794cc61",
+          "b68336caceb1",
+          "668544acaa68",
+          "fd6e36c4e47c",
+          "65092f634669",
+          "1e93d856f0fc",
+          "8f30e41ca245"
         ],
+        "sources": {
+          "chair": "0d98933810c6",
+          "R1-2607288": "61b49344dcf2"
+        },
         "change": "initial",
         "added": [],
-        "changed_at": "2026-10-07T09:08:14+00:00",
-        "changed_in": "Draft Chair notes RAN1#126bis_v01.docx",
-        "file": "agreements/08e31cb7792d8b61055c.html"
+        "changed_at": "2026-10-13T07:35:31+00:00",
+        "changed_in": "Chair notes RAN1#126bis_v05.docx",
+        "file": "agreements/4f5202a9e3b511c4d625.html"
       },
       "10.5.4.2": {
         "title": "Downlink and uplink transmission without dynamic scheduling",
@@ -11794,13 +12696,31 @@
         "blocks": [
           "c56ff4c80129",
           "7010edeb3f0c",
-          "334907737e61"
+          "334907737e61",
+          "f682b91bf966",
+          "668544acaa68",
+          "dd594fb0133a",
+          "668544acaa68",
+          "ee5445d2544d",
+          "8ad6beb3d95f",
+          "e4ba1304df8a",
+          "5f522e53d4c3",
+          "b277688f5e39",
+          "8b996bf39e6a",
+          "8cd2db36e495",
+          "e835ab080a7c",
+          "72209239e1e5",
+          "666f86591b4f"
         ],
+        "sources": {
+          "chair": "cb1cafb38ac4",
+          "R1-2607288": "7e364ecbaaec"
+        },
         "change": "initial",
         "added": [],
-        "changed_at": "2026-10-04T08:57:51+00:00",
-        "changed_in": "Draft Chair notes RAN1#126bis_v00.docx",
-        "file": "agreements/aed960ebf8ab1fff9b53.html"
+        "changed_at": "2026-10-13T07:35:31+00:00",
+        "changed_in": "Chair notes RAN1#126bis_v05.docx",
+        "file": "agreements/44bf90ae34c460c7e36b.html"
       },
       "10.5.4.3": {
         "title": "HARQ related Aspects",
@@ -11808,13 +12728,41 @@
         "blocks": [
           "eff050e947e9",
           "57502d008f8e",
-          "334907737e61"
+          "334907737e61",
+          "6e203d0dd4fb",
+          "d0b35f2e80cf",
+          "f16d4f1b7d59",
+          "b987c7f73748",
+          "668544acaa68",
+          "d4968bf36846",
+          "7aa9d576386c",
+          "b6767b480d3d",
+          "959258ccc180",
+          "668544acaa68",
+          "3611f25c8592",
+          "ffa5f8446bfd",
+          "6631e52dc8c6",
+          "5e6aa4e9098f",
+          "90f33f2de1dd",
+          "c22a34bb42c3",
+          "5cdbc77b6bc4",
+          "0bf83a9d2a54",
+          "8b33206b4338",
+          "16cae0110d25",
+          "eb8e8040931d",
+          "2abe0e7f3e67",
+          "ac07ff355056",
+          "da8ef258f0f2"
         ],
+        "sources": {
+          "chair": "62ee741510a7",
+          "R1-2607288": "e44ac1473b1e"
+        },
         "change": "initial",
         "added": [],
-        "changed_at": "2026-10-04T08:57:51+00:00",
-        "changed_in": "Draft Chair notes RAN1#126bis_v00.docx",
-        "file": "agreements/07ddf3a6b5697588b374.html"
+        "changed_at": "2026-10-13T07:35:31+00:00",
+        "changed_in": "Chair notes RAN1#126bis_v05.docx",
+        "file": "agreements/3e8ca85174c0043ecd49.html"
       },
       "10.5.4.4": {
         "title": "Handling of potential multiple uplink transmissions",
@@ -11822,13 +12770,32 @@
         "blocks": [
           "3aad2dd72957",
           "cb8033ff7b67",
-          "334907737e61"
+          "334907737e61",
+          "49a52cffa8ba",
+          "668544acaa68",
+          "86230e630b08",
+          "b3a2ad3f36f7",
+          "7398e675ec9e",
+          "7da15ff5e22a",
+          "38fdf0e3c959",
+          "945a515108bd",
+          "ea2708e6b8c8",
+          "074bbb238579",
+          "f8be17568929",
+          "e29768b4c1e1",
+          "3d35fe2c0712",
+          "41f20ccd6cda",
+          "446657c2801a"
         ],
+        "sources": {
+          "chair": "47dec3ecb56c",
+          "R1-2607288": "23d645362cb8"
+        },
         "change": "initial",
         "added": [],
-        "changed_at": "2026-10-04T08:57:51+00:00",
-        "changed_in": "Draft Chair notes RAN1#126bis_v00.docx",
-        "file": "agreements/45f2e5e22aeb74bfdea3.html"
+        "changed_at": "2026-10-13T07:35:31+00:00",
+        "changed_in": "Chair notes RAN1#126bis_v05.docx",
+        "file": "agreements/d54beb196fc5757a30fb.html"
       },
       "10.5.5": {
         "title": "Other physical layer signals, channels and procedure",
@@ -11847,6 +12814,9 @@
           "a848544daa33",
           "aff990cc8be2"
         ],
+        "sources": {
+          "chair": "c1fa838bda67"
+        },
         "change": "updated",
         "added": [
           4,
@@ -11868,6 +12838,9 @@
         "blocks": [
           "3b9d7ab48bdb"
         ],
+        "sources": {
+          "chair": "e554c69f214b"
+        },
         "change": "initial",
         "added": [],
         "changed_at": "2026-10-04T08:57:51+00:00",
@@ -11878,6 +12851,7 @@
         "title": "Downlink WUS and operation",
         "excluded_tdoc_rows": 0,
         "blocks": [],
+        "sources": {},
         "change": "initial",
         "added": [],
         "changed_at": "2026-10-04T08:57:51+00:00",
@@ -11905,6 +12879,9 @@
           "accbe0510054",
           "0667f23d8f99"
         ],
+        "sources": {
+          "chair": "73f1507e8181"
+        },
         "change": "updated",
         "added": [
           3,
@@ -11937,6 +12914,9 @@
           "120801ffb759",
           "af189f9c9d1e"
         ],
+        "sources": {
+          "chair": "b9283a556814"
+        },
         "change": "updated",
         "added": [
           2,
@@ -11956,6 +12936,9 @@
           "3dcf04ec806c",
           "334907737e61"
         ],
+        "sources": {
+          "chair": "270014ca64f7"
+        },
         "change": "initial",
         "added": [],
         "changed_at": "2026-10-04T08:57:51+00:00",
@@ -11970,6 +12953,9 @@
           "603ea4509c32",
           "334907737e61"
         ],
+        "sources": {
+          "chair": "299bcf677b1a"
+        },
         "change": "initial",
         "added": [],
         "changed_at": "2026-10-04T08:57:51+00:00",
@@ -11982,6 +12968,10 @@
         "blocks": [
           "11d02804620e"
         ],
+        "sources": {
+          "chair": "c7af92114230",
+          "R1-2607315": "c7af92114230"
+        },
         "change": "initial",
         "added": [],
         "changed_at": "2026-10-04T08:57:51+00:00",
@@ -11994,13 +12984,49 @@
         "blocks": [
           "2f1cd2531320",
           "ed5bb7752bbe",
-          "334907737e61"
+          "334907737e61",
+          "8d18d0d4c872",
+          "b1804989e147",
+          "f73b0c347009",
+          "668544acaa68",
+          "9e5fa8de3875",
+          "667d4849cfd1",
+          "75a4310413c1",
+          "88c995ae495b",
+          "633f7f00acf5",
+          "cfa0bbc8f035",
+          "9a5d532ebf4f",
+          "4ead55e7b9d5",
+          "56ee7a37f3c5",
+          "668544acaa68",
+          "38c983b7b76e",
+          "40e82db63775",
+          "5ddc02cfaf06",
+          "880eee5358a2",
+          "376449f2c94c",
+          "bd983ec4350b",
+          "dfc5b0de2b96",
+          "856c3bda1795",
+          "668544acaa68",
+          "398885def069",
+          "0e20989d2cbd",
+          "616d9ffc41f3",
+          "10d76363ae91",
+          "d3219e70fcf0",
+          "0e6fae20a647",
+          "ee32275f91eb",
+          "71bea5dba948",
+          "55ceb7aa5841"
         ],
+        "sources": {
+          "chair": "ba8ff3e78ac1",
+          "R1-2607315": "f8fd65d39cae"
+        },
         "change": "initial",
         "added": [],
-        "changed_at": "2026-10-04T08:57:51+00:00",
-        "changed_in": "Draft Chair notes RAN1#126bis_v00.docx",
-        "file": "agreements/a07ba1a3607cbb172b6e.html"
+        "changed_at": "2026-10-13T07:35:31+00:00",
+        "changed_in": "Chair notes RAN1#126bis_v05.docx",
+        "file": "agreements/7fa27512fdb8084f7326.html"
       },
       "10.8": {
         "title": "ISAC",
@@ -12009,6 +13035,10 @@
           "f4289414e43a",
           "dea35c78dccb"
         ],
+        "sources": {
+          "chair": "d9e888b5ba72",
+          "R1-2607289": "d9e888b5ba72"
+        },
         "change": "initial",
         "added": [],
         "changed_at": "2026-10-04T08:57:51+00:00",
@@ -12021,13 +13051,66 @@
         "blocks": [
           "cc8eeaaef8c9",
           "9ae52b0ed41d",
-          "334907737e61"
+          "334907737e61",
+          "8dda082e1015",
+          "668544acaa68",
+          "d7a17a694648",
+          "437c8053a665",
+          "668544acaa68",
+          "cb7e27b6a651",
+          "17651d67c4a0",
+          "668544acaa68",
+          "654724720ade",
+          "d31deec44ad4",
+          "668544acaa68",
+          "5525190be53f",
+          "6632f367108c",
+          "570919c698ef",
+          "668544acaa68",
+          "5525190be53f",
+          "7ace34a12160",
+          "7f7d2feae4cc",
+          "cafc17fa084d",
+          "8812768c4e27",
+          "314b1cfe58d6",
+          "2063e16c70a3",
+          "0b4ba2f3a267",
+          "096037b1e0ca",
+          "49138179dd67",
+          "d0b35f2e80cf",
+          "00086cd2a94f",
+          "54cd8abe66c7",
+          "6ffca1bd72c5",
+          "da96944d603d",
+          "d0b35f2e80cf",
+          "8c6422860437",
+          "5dbbd18dca3b",
+          "08e3eaab4f3e",
+          "ce9ab985ae3d",
+          "93abd0b207b9",
+          "45efc26fd468",
+          "a89a0cd0dc92",
+          "fb0c0bb4d065",
+          "2abb138eaf7a",
+          "0febbe85d360",
+          "c1bacc3e3f97",
+          "2af825067650",
+          "ab7013072bae",
+          "8e02697df6e6",
+          "2b8664c007d5",
+          "376cb1ec7ddd",
+          "26108265e999",
+          "6367f66feaf4"
         ],
+        "sources": {
+          "chair": "dc50d81b3366",
+          "R1-2607289": "6d6b6bb73ce6"
+        },
         "change": "initial",
         "added": [],
-        "changed_at": "2026-10-04T08:57:51+00:00",
-        "changed_in": "Draft Chair notes RAN1#126bis_v00.docx",
-        "file": "agreements/4f350e2aa4c4ea35060d.html"
+        "changed_at": "2026-10-13T07:35:31+00:00",
+        "changed_in": "Chair notes RAN1#126bis_v05.docx",
+        "file": "agreements/3abb544d4f57b55de993.html"
       },
       "10.8.2": {
         "title": "Aspects of integration with communication",
@@ -12035,13 +13118,41 @@
         "blocks": [
           "6889a55be845",
           "8a5ac25f63be",
-          "334907737e61"
+          "334907737e61",
+          "633917f2faa6",
+          "668544acaa68",
+          "2237523f7d50",
+          "df535680cfc2",
+          "0569dc4a6195",
+          "636d09d102c4",
+          "625e68cfe4c7",
+          "ece877a85f66",
+          "a95cb4ef17f2",
+          "0c25b457396f",
+          "994701be7be6",
+          "f3ab7525b65a",
+          "5d61b2799b9d",
+          "ec21e5763685",
+          "77b04fd754a1",
+          "349a64a03518",
+          "668544acaa68",
+          "181275c7a213",
+          "4146c367067a",
+          "42066f61188c",
+          "cfca27dae542",
+          "2841442d4483",
+          "3950d2a63479",
+          "946e4763c60b"
         ],
+        "sources": {
+          "chair": "902099d0af27",
+          "R1-2607289": "6d2c55247bf6"
+        },
         "change": "initial",
         "added": [],
-        "changed_at": "2026-10-04T08:57:51+00:00",
-        "changed_in": "Draft Chair notes RAN1#126bis_v00.docx",
-        "file": "agreements/8af2fbf53ad8b5c77736.html"
+        "changed_at": "2026-10-13T07:35:31+00:00",
+        "changed_in": "Chair notes RAN1#126bis_v05.docx",
+        "file": "agreements/e2c36b505dbac9a5d517.html"
       },
       "10.8.3": {
         "title": "Waveform and frame structure",
@@ -12049,13 +13160,46 @@
         "blocks": [
           "6613265e2547",
           "822262563c8e",
-          "334907737e61"
+          "334907737e61",
+          "4b5088fdabe1",
+          "c6dede37e16a",
+          "ee8291f7a829",
+          "db3994b0ef43",
+          "0b9f785d7140",
+          "e3f62b3c3df3",
+          "8c22bed81d40",
+          "a87c448005fc",
+          "eb6b2e7264aa",
+          "715807fa037d",
+          "9000d15fb315",
+          "64aa8ab866d1",
+          "bb906fa0ea67",
+          "af114bc6dd21",
+          "ec5612912a56",
+          "fd733c0ad265",
+          "7fde35feaa4f",
+          "9cbb87888979",
+          "836218e0d7fb",
+          "715807fa037d",
+          "3e85c8925795",
+          "6f08bd6b8b78",
+          "99a78e5670eb",
+          "7b34fa4543f6",
+          "1f752af1f284",
+          "ca2bad80b816",
+          "8651437b35fb",
+          "f7a901d37cf3",
+          "26e9a357183b"
         ],
+        "sources": {
+          "chair": "6531b9e50617",
+          "R1-2607289": "756530f7da4e"
+        },
         "change": "initial",
         "added": [],
-        "changed_at": "2026-10-04T08:57:51+00:00",
-        "changed_in": "Draft Chair notes RAN1#126bis_v00.docx",
-        "file": "agreements/15b04f237abc0f3023b7.html"
+        "changed_at": "2026-10-13T07:35:31+00:00",
+        "changed_in": "Chair notes RAN1#126bis_v05.docx",
+        "file": "agreements/0a8c39f96c0b7741579f.html"
       },
       "11": {
         "title": "TEI",
@@ -12064,27 +13208,58 @@
           "039281e8e9b1",
           "6aadcffb6424",
           "334907737e61",
-          "f866e0f010b6"
+          "f866e0f010b6",
+          "93abd0b207b9",
+          "7bc23071ad66"
         ],
-        "change": "updated",
-        "added": [
-          1,
-          2
-        ],
-        "changed_at": "2026-10-07T09:08:14+00:00",
-        "changed_in": "Draft Chair notes RAN1#126bis_v01.docx",
-        "file": "agreements/ade987f68792191e867b.html"
+        "sources": {
+          "chair": "bfeec928120e",
+          "R1-2607290": "f2bb60211b13"
+        },
+        "change": "initial",
+        "added": [],
+        "changed_at": "2026-10-13T07:35:31+00:00",
+        "changed_in": "Chair notes RAN1#126bis_v05.docx",
+        "file": "agreements/82b9fe8abbcea93ed265.html"
       },
       "12": {
         "title": "Closing of the meeting (Day 5, 17:00 pm at the latest)",
         "excluded_tdoc_rows": 0,
         "blocks": [],
+        "sources": {},
         "change": "initial",
         "added": [],
         "changed_at": "2026-10-04T08:57:51+00:00",
         "changed_in": "Draft Chair notes RAN1#126bis_v00.docx"
       }
     },
-    "retained_files": []
+    "retained_files": [
+      "agreements/07ddf3a6b5697588b374.html",
+      "agreements/08e31cb7792d8b61055c.html",
+      "agreements/0c032859747799da0f65.html",
+      "agreements/15b04f237abc0f3023b7.html",
+      "agreements/2066f660e6d9e3f546c5.html",
+      "agreements/2098608303de1fd04046.html",
+      "agreements/3087a9cf2e8932075b65.html",
+      "agreements/45c91e79473272e0831a.html",
+      "agreements/45f2e5e22aeb74bfdea3.html",
+      "agreements/4f350e2aa4c4ea35060d.html",
+      "agreements/503047996f775c648978.html",
+      "agreements/51ca47727de79ac47596.html",
+      "agreements/5d44997e814a2d09a57d.html",
+      "agreements/7b45564a3abeed2e7439.html",
+      "agreements/8af2fbf53ad8b5c77736.html",
+      "agreements/91375da20d947c5262aa.html",
+      "agreements/96863dc5ea589c1ffc86.html",
+      "agreements/9b87253fb12ad9d39744.html",
+      "agreements/a07ba1a3607cbb172b6e.html",
+      "agreements/ade987f68792191e867b.html",
+      "agreements/aed960ebf8ab1fff9b53.html",
+      "agreements/b439a27472cc137e7c5d.html",
+      "agreements/be4e1cc4936c442a8b35.html",
+      "agreements/d347c673e1f233cf85cf.html",
+      "agreements/de3cc6286bffe935b4d1.html",
+      "agreements/f87d96ab743ec439fb86.html"
+    ]
   }
 }
