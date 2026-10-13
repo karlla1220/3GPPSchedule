@@ -1395,7 +1395,7 @@
           "inferred_agenda_items": []
         },
         {
-          "name": "CP offlines UE Capabilities",
+          "name": "CP offlines [6G UE caps] Dynamic capability update",
           "duration_minutes": 60,
           "start_time": "14:30",
           "end_time": "15:30",
@@ -1412,7 +1412,7 @@
           ],
           "room_scope": "assigned",
           "notes": [
-            "CP offlines [006] UE Capabilities"
+            "CP offlines [006] [6G UE caps] Dynamic capability update (Xiaomi)"
           ],
           "inferred_agenda_items": []
         },
@@ -1685,6 +1685,12 @@
           "table_index": 0,
           "room_index_in_table": 0,
           "id": "brk2"
+        },
+        {
+          "name": "Breakout 3",
+          "table_index": 0,
+          "room_index_in_table": 0,
+          "id": "brk3"
         }
       ],
       "sessions": [
@@ -1872,6 +1878,28 @@
           "room_scope": "assigned",
           "notes": [
             "10:00-11:00 ISAC UE SE selection (MediaTek) – Revise email discussion report R2-2607154"
+          ],
+          "inferred_agenda_items": []
+        },
+        {
+          "name": "MANET offline",
+          "duration_minutes": 30,
+          "start_time": "10:30",
+          "end_time": "11:00",
+          "day": "Wednesday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": null,
+          "group_header": "Offline",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [
+            "brk3"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "[402] MANET offline (vivo)"
           ],
           "inferred_agenda_items": []
         },
@@ -2413,6 +2441,12 @@
           "table_index": 0,
           "room_index_in_table": 0,
           "id": "brk2"
+        },
+        {
+          "name": "Breakout 3",
+          "table_index": 0,
+          "room_index_in_table": 0,
+          "id": "brk3"
         }
       ],
       "sessions": [
@@ -2510,6 +2544,28 @@
           "room_scope": "assigned",
           "notes": [
             "UP offline"
+          ],
+          "inferred_agenda_items": []
+        },
+        {
+          "name": "[LPWUS] How to address the SA2 LS on subgrouping ID",
+          "duration_minutes": 120,
+          "start_time": "08:30",
+          "end_time": "10:30",
+          "day": "Thursday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": null,
+          "group_header": "Offline",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [
+            "brk3"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "[201][LPWUS] How to address the SA2 LS on subgrouping ID (Ericsson)"
           ],
           "inferred_agenda_items": []
         },
@@ -3222,16 +3278,16 @@
       }
     }
   ],
-  "source_file": "R2_135b_Schedule_v04.docx",
-  "generated_at": "2026-10-13 10:41",
+  "source_file": "R2_135b_Schedule_v05.docx",
+  "generated_at": "2026-10-13 15:01",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
-    "R2_135b_Schedule_v04.docx",
+    "R2_135b_Schedule_v05.docx",
     "agenda.csv"
   ],
   "source_labels": {
-    "R2_135b_Schedule_v04.docx": "Schedule",
+    "R2_135b_Schedule_v05.docx": "Schedule",
     "agenda.csv": "Agenda"
   },
   "timezone": "Asia/Seoul",
@@ -3322,10 +3378,31 @@
         ],
         [
           "[006]",
-          "UE Capabilities",
+          "Dynamic capability update",
           "Tue 14:30-15:30",
           "BO2",
-          ""
+          "Ziyi (Xiaomi)"
+        ],
+        [
+          "[002]",
+          "6G Mobility",
+          "Wed 08:30-10:00",
+          "BO2",
+          "Jedrzej (Nokoia)"
+        ],
+        [
+          "[402]",
+          "MANET",
+          "Wed 10:30-11:00",
+          "BO3",
+          "vivo"
+        ],
+        [
+          "[201]",
+          "LPWUS (How to address the SA2 LS on subgrouping ID)",
+          "Thr 09:00-09:30",
+          "BO3",
+          "Ericsson"
         ]
       ]
     },
