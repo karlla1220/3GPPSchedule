@@ -350,22 +350,22 @@ def check_updates(*, staging_dir=None) -> CheckResult:
             )
 
     # Chairman agreements do not depend on which document supplied timezone.
-    from .agreements import remote_reference, reference_identity, local_note_reference
+    # Session notes count too: until the chair gathers them, they hold what
+    # the vice-chairs' sessions agreed.
+    from .agreements import agreement_reference
     try:
-        current_agreements = local_note_reference(cfg, selected_meeting_id)
-        if current_agreements is None:
-            current_agreements = reference_identity(
-                remote_reference(cfg, selected_meeting_id, listed=chair_notes_info)
-            )
+        current_chair, current_agreements = agreement_reference(
+            cfg, selected_meeting_id, listed=chair_notes_info
+        )
         cached_agreements = state.get("agreements_ref")
-        if (current_agreements is None and isinstance(cached_agreements, dict)
+        if (current_chair is None and isinstance(cached_agreements, dict)
                 and _extract_meeting_id(str(cached_agreements.get("name", ""))) == selected_meeting_id):
             # The note is being replaced or the sync folder was cleared; the
             # build would keep the published agreements anyway.
             print("Chair notes not listed now; keeping the published agreements.")
         elif current_agreements != cached_agreements:
             changed = True
-            print("Chairman agreement document changed.")
+            print("Chairman or session note changed.")
     except Exception as exc:
         errors.append(f"Chairman agreement check failed: {exc}")
 

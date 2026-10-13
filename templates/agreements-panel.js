@@ -18,17 +18,35 @@ const version = name => {
     if (!found) return (name || '').replace(/\.(?:docx|docm|zip)$/i, '');
     return (/(?:^|[^a-z0-9])draft(?![a-z0-9])/i.test(name) ? 'draft ' : '') + found;
 };
-// The note the panel was built from. A section's own line names the note that
-// last changed it, which says nothing about how far the panel has read.
+// A session note says so: its version alone would read as the chair's.
+const noteLabel = name => (/session\s*notes?/i.test(name || '') ? 'session notes ' : '') + version(name);
+// The notes the panel was built from: the chairman note, and the selected
+// item's session notes. A section's own line names the note that last
+// changed it, which says nothing about how far the panel has read.
 const noteFile = manifest.source_name || manifest.document_file || '';
-const sourceNote = () => {
-    if (manifest.status !== 'ready' || !noteFile) return null;
+const sessionNotes = manifest.session_notes || {};
+const latestNotes = new Set([noteFile, ...Object.values(sessionNotes).map(note => note.name)].filter(Boolean));
+const sourceNote = section => {
+    const held = (section?.notes || []).map(id => sessionNotes[id]).filter(Boolean);
+    if (manifest.status !== 'ready' || (!noteFile && !held.length)) return null;
     const line = document.createElement('p');
     line.className = 'agreement-source';
-    line.title = noteFile;
-    const shown = version(noteFile);
-    line.textContent = (/^(?:draft )?v\d/.test(shown) ? 'Chair notes ' : '') + shown
-        + (manifest.document_changed_at ? ' · ' + when(manifest.document_changed_at) : '');
+    const parts = [];
+    if (noteFile) {
+        const shown = version(noteFile);
+        parts.push([noteFile, (/^(?:draft )?v\d/.test(shown) ? 'Chair notes ' : '') + shown
+            + (manifest.document_changed_at ? ' · ' + when(manifest.document_changed_at) : '')]);
+    }
+    for (const note of held) {
+        parts.push([note.name, 'Session notes ' + version(note.name) + (note.changed_at ? ' · ' + when(note.changed_at) : '')]);
+    }
+    parts.forEach(([name, text], i) => {
+        if (i) line.append(' + ');
+        const part = document.createElement('span');
+        part.title = name;
+        part.textContent = text;
+        line.append(part);
+    });
     return line;
 };
 // Shown before any cell is selected: the viewer loads on the first selection.
@@ -272,12 +290,12 @@ async function start() {
         const tabID = ai => 'agreement-tab-' + ai.replaceAll('.', '-');
         const updatedNow = ai => {
             const section = manifest.sections[ai];
-            return section && section.change !== 'initial' && section.changed_in === noteFile;
+            return section && section.change !== 'initial' && latestNotes.has(section.changed_in);
         };
         const changeNote = () => {
             const section = entry();
             if (!section?.changed_at) return '';
-            const source = version(section.changed_in);
+            const source = noteLabel(section.changed_in);
             if (section.change === 'initial') return 'As of ' + when(section.changed_at) + (source ? ' · ' + source : '');
             const label = section.change === 'new' ? 'Added ' : 'Updated ';
             const parts = section.added ? ' · ' + section.added + (section.added === 1 ? ' added part' : ' added parts') + ' marked' : '';
@@ -301,10 +319,10 @@ async function start() {
                             <${For} each=${() => selection().ais}>${ai => html`
                                 <button type="button" role="tab" id=${tabID(ai)} aria-controls="agreement-body"
                                     aria-selected=${() => activeAI() === ai ? 'true' : 'false'} tabindex=${() => activeAI() === ai ? 0 : -1}
-                                    onClick=${() => setActiveAI(ai)} onKeyDown=${event => keyTab(event, ai)}>AI ${ai}<${Show} when=${() => updatedNow(ai)}><span class="agreement-updated" title="Updated in the latest chair note"></span><//></button>`}<//>
+                                    onClick=${() => setActiveAI(ai)} onKeyDown=${event => keyTab(event, ai)}>AI ${ai}<${Show} when=${() => updatedNow(ai)}><span class="agreement-updated" title="Updated in the latest note"></span><//></button>`}<//>
                         </div>
                     <//>
-                    ${sourceNote}
+                    ${() => sourceNote(entry())}
                 </div>
                 <p class="agreement-status" role="status" aria-live="polite">${() => !selection() ? 'Select a schedule cell to read its agreements here.' : !selection().ais.length ? 'This cell has no agenda number.' : manifest.status !== 'ready' ? 'No chairman note is available for this meeting.' : document.loading ? 'Loading agreements…' : ''}</p>
                 <${Show} when=${() => activeAI() && manifest.status === 'ready'}>

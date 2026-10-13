@@ -19,6 +19,7 @@ RAN1은 3GPP FTP 서버에서 최신 회의 스케줄 DOCX 파일을 다운로�
 ## RAN1 Chairman agreements
 
 RAN1 일정 셀을 선택하면 표 아래에 동일 회의·정확한 AI 번호의 chairman note 섹션 원문이 표시됩니다.
+부의장 세션의 AI는 부의장 폴더(`Hiroki_notes` 등)의 세션 노트를 체어맨 노트와 블록 단위로 합쳐 보이고, 변경도 합친 상태로 비교합니다.
 Agreement/Potential agreement/Proposal 및 제목 없는 내용도 순서대로 유지하며, TDoc 목록·메타데이터 행만 제외합니다.
 기존 작은 상세 팝업을 유지하며, 자동 스크롤 없이 하단 `Agreements for`의 AI 탭을 갱신합니다.
 활성 AI의 HTML만 fetch하고 iframe·내부 스크롤 없이 페이지에 펼칩니다.

@@ -90,7 +90,8 @@ def package_agreements(data, previous=None):
     stored["sections"] = {}
     fragments = {}
     for ai, section in data.get("sections", {}).items():
-        entry = {k: v for k, v in section.items() if k != "html"}
+        # Parts are parse-time data for merging documents; the HTML becomes a file.
+        entry = {k: v for k, v in section.items() if k not in {"html", "parts"}}
         if section.get("html"):
             entry["file"], page = _fragment(
                 finish_units(section["html"], section.get("added", []))
@@ -127,6 +128,13 @@ def agreement_assets(schedule):
         sections={},
         document_css=DOCUMENT_CSS,
     )
+    # Session notes by id: name and upload time, for the panel's source line.
+    notes = {
+        sid: {k: note[k] for k in ("name", "changed_at") if note.get(k)}
+        for sid, note in (data.get("session_notes") or {}).items()
+    }
+    if notes:
+        manifest["session_notes"] = notes
     assets = {}
     for ai, section in data.get("sections", {}).items():
         if not re.fullmatch(r"\d+(?:\.\d+)*", ai):
@@ -138,6 +146,9 @@ def agreement_assets(schedule):
         for key in ("change", "changed_at", "changed_in"):
             if section.get(key):
                 entry[key] = section[key]
+        held = [sid for sid in section.get("sources", {}) if sid in notes]
+        if held:
+            entry["notes"] = held
         if section.get("added"):
             entry["added"] = len(section["added"])
         if _FILE.fullmatch(section.get("file") or ""):
