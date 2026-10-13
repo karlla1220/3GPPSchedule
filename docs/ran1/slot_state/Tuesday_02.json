@@ -3,7 +3,7 @@
   "time_block_index": 2,
   "source_hashes": {
     "Main Schedule": "4f4ba4e557930f58",
-    "Hiroki's schedule": "243c1d2496444352",
+    "Hiroki's schedule": "58e430b8174f6b1a",
     "Sorour's schedule": "5280f5dd394b0343"
   },
   "merged_sessions": [
@@ -522,31 +522,9 @@
       "specified_start_time": "14:30",
       "chair": "Hiroki",
       "group_header": "R20",
-      "agenda_item": "9.3.3, 9.3.1",
-      "description": "Other procedures",
+      "agenda_item": "9.3.1, 9.3.3",
+      "description": "R2D signals, channels, waveform and procedures",
       "agenda_descriptions": [
-        {
-          "agenda_item": "9.3.3",
-          "matched_agenda_item": "9.3.3",
-          "description": "Other procedures",
-          "hierarchy": [
-            {
-              "agenda_item": "9",
-              "description": "Release 20 NR",
-              "has_description": true
-            },
-            {
-              "agenda_item": "9.3",
-              "description": "Solutions for Ambient IoT (Internet of Things) in NR Phase 2",
-              "has_description": true
-            },
-            {
-              "agenda_item": "9.3.3",
-              "description": "Other procedures",
-              "has_description": true
-            }
-          ]
-        },
         {
           "agenda_item": "9.3.1",
           "matched_agenda_item": "9.3.1",
@@ -565,6 +543,28 @@
             {
               "agenda_item": "9.3.1",
               "description": "R2D signals, channels, waveform and procedures",
+              "has_description": true
+            }
+          ]
+        },
+        {
+          "agenda_item": "9.3.3",
+          "matched_agenda_item": "9.3.3",
+          "description": "Other procedures",
+          "hierarchy": [
+            {
+              "agenda_item": "9",
+              "description": "Release 20 NR",
+              "has_description": true
+            },
+            {
+              "agenda_item": "9.3",
+              "description": "Solutions for Ambient IoT (Internet of Things) in NR Phase 2",
+              "has_description": true
+            },
+            {
+              "agenda_item": "9.3.3",
+              "description": "Other procedures",
               "has_description": true
             }
           ]
@@ -606,7 +606,7 @@
       ]
     }
   ],
-  "merged_at": "2026-10-13T04:01:21.261475+00:00",
+  "merged_at": "2026-10-13T04:21:29.364369+00:00",
   "meeting_id": "ran1#126bis",
   "schema_version": 2
 }
