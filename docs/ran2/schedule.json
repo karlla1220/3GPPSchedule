@@ -2617,9 +2617,9 @@
         },
         {
           "name": "UP offline",
-          "duration_minutes": 120,
+          "duration_minutes": 60,
           "start_time": "08:30",
-          "end_time": "10:30",
+          "end_time": "09:30",
           "day": "Thursday",
           "room_col_start": 2,
           "room_col_end": 3,
@@ -2633,7 +2633,8 @@
           ],
           "room_scope": "assigned",
           "notes": [
-            "UP offline"
+            "UP offline",
+            "[009] [6G UP] CB-PUSCH (Oppo, Ericsson)"
           ],
           "inferred_agenda_items": []
         },
@@ -2699,6 +2700,28 @@
           "room_scope": "assigned",
           "notes": [
             "[201][LPWUS] How to address the SA2 LS on subgrouping ID (Ericsson)"
+          ],
+          "inferred_agenda_items": []
+        },
+        {
+          "name": "6G UP] LCP",
+          "duration_minutes": 30,
+          "start_time": "09:30",
+          "end_time": "10:00",
+          "day": "Thursday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": null,
+          "group_header": "Offline",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [
+            "brk2"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "[010] 6G UP] LCP"
           ],
           "inferred_agenda_items": []
         },
@@ -2894,6 +2917,28 @@
           "inferred_agenda_items": []
         },
         {
+          "name": "[AI PHY] WF for L3 signalling based performance monitoring",
+          "duration_minutes": 60,
+          "start_time": "12:00",
+          "end_time": "13:00",
+          "day": "Thursday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": null,
+          "group_header": "Offline",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [
+            "brk3"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "[204][AI PHY] WF for L3 signalling based performance monitoring (ZTE)"
+          ],
+          "inferred_agenda_items": []
+        },
+        {
           "name": "CB for Rel-19 LPWUS",
           "duration_minutes": 10,
           "start_time": "12:50",
@@ -2959,7 +3004,7 @@
           "inferred_agenda_items": []
         },
         {
-          "name": "CB Nathan / NR1718 Positioning / NR19 AIoT …",
+          "name": "CB Nathan / TEI20 positioning / NR20 AIoT",
           "duration_minutes": 120,
           "start_time": "14:30",
           "end_time": "16:30",
@@ -2967,45 +3012,22 @@
           "room_col_start": 2,
           "room_col_end": 3,
           "chair": null,
-          "agenda_item": "6.0.2.21, 7.2, 8.2",
-          "group_header": "NR Rel-18",
-          "description": "Expanded and improved NR positioning\nAmbient IoT\nAmbient IoT Ph2",
+          "agenda_item": "8.14, 8.2",
+          "group_header": "NR Rel-20",
+          "description": "TEI20\nAmbient IoT Ph2",
           "agenda_descriptions": [
             {
-              "agenda_item": "6.0.2.21",
-              "matched_agenda_item": "6.0.2.21",
-              "description": "Expanded and improved NR positioning",
+              "agenda_item": "8.14",
+              "matched_agenda_item": "8.14",
+              "description": "TEI20",
               "hierarchy": [
                 {
-                  "agenda_item": "6",
-                  "description": "NR Rel-18"
+                  "agenda_item": "8",
+                  "description": "NR Rel-20"
                 },
                 {
-                  "agenda_item": "6.0",
-                  "description": "Common"
-                },
-                {
-                  "agenda_item": "6.0.2",
-                  "description": "Rel-18 corrections"
-                },
-                {
-                  "agenda_item": "6.0.2.21",
-                  "description": "Expanded and improved NR positioning"
-                }
-              ]
-            },
-            {
-              "agenda_item": "7.2",
-              "matched_agenda_item": "7.2",
-              "description": "Ambient IoT",
-              "hierarchy": [
-                {
-                  "agenda_item": "7",
-                  "description": "NR Rel-19"
-                },
-                {
-                  "agenda_item": "7.2",
-                  "description": "Ambient IoT"
+                  "agenda_item": "8.14",
+                  "description": "TEI20"
                 }
               ]
             },
@@ -3030,10 +3052,10 @@
           ],
           "room_scope": "assigned",
           "notes": [
-            "CB Nathan (agenda items TBR during week)",
-            "[6.0.2.21] NR1718 Positioning",
-            "[7.2] NR19 AIoT",
-            "[8.2] NR20 AIoT"
+            "CB Nathan",
+            "[402] MANET offline",
+            "[8.14] TEI20 positioning",
+            "[8.2] NR20 AIoT (treat additional documents after conclusion of CBs)"
           ],
           "inferred_agenda_items": []
         },
@@ -3082,17 +3104,59 @@
           "inferred_agenda_items": []
         },
         {
-          "name": "CB Sergio / R18 NR NTN corrections / R18 IoT NTN corrections …",
-          "duration_minutes": 120,
-          "start_time": "17:00",
-          "end_time": "19:00",
+          "name": "Follow Up meeting of 6G Mobility – Early DL/UL synch, resource reservation",
+          "duration_minutes": 30,
+          "start_time": "16:30",
+          "end_time": "17:00",
           "day": "Thursday",
           "room_col_start": 2,
           "room_col_end": 3,
-          "chair": null,
-          "agenda_item": "6.0.2.17, 6.0.2.18, 7.8, 8.7, 8.7.3, 8.12",
+          "chair": "Jedrzej",
+          "agenda_item": "9.4.1",
+          "group_header": "6GR Rel-20",
+          "description": "Connected mode mobility",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "9.4.1",
+              "matched_agenda_item": "9.4.1",
+              "description": "Connected mode mobility",
+              "hierarchy": [
+                {
+                  "agenda_item": "9",
+                  "description": "6GR Rel-20 - Study on 6G Radio Access Technology"
+                },
+                {
+                  "agenda_item": "9.4",
+                  "description": "Mobility"
+                },
+                {
+                  "agenda_item": "9.4.1",
+                  "description": "Connected mode mobility"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "brk3"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "Follow Up meeting of [9.4.1] 6G Mobility (Jedrzej) – Early DL/UL synch, resource reservation"
+          ],
+          "inferred_agenda_items": []
+        },
+        {
+          "name": "R18 NR NTN corrections / R18 IoT NTN corrections / NR19 NR NTN",
+          "duration_minutes": 90,
+          "start_time": "17:00",
+          "end_time": "18:30",
+          "day": "Thursday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "Sergio",
+          "agenda_item": "6.0.2.17, 6.0.2.18, 7.8, 8.7, 8.7.3",
           "group_header": "NR Rel-18",
-          "description": "NR NTN enhancements\nIoT NTN enhancements\nNTN for NR Ph3\nIoT NTN Ph4\nNR NTN using DL compensation",
+          "description": "NR NTN enhancements\nIoT NTN enhancements\nNTN for NR Ph3\nIoT NTN Ph4",
           "agenda_descriptions": [
             {
               "agenda_item": "6.0.2.17",
@@ -3169,21 +3233,6 @@
                   "description": "IoT NTN Ph4"
                 }
               ]
-            },
-            {
-              "agenda_item": "8.12",
-              "matched_agenda_item": "8.12",
-              "description": "NR NTN using DL compensation",
-              "hierarchy": [
-                {
-                  "agenda_item": "8",
-                  "description": "NR Rel-20"
-                },
-                {
-                  "agenda_item": "8.12",
-                  "description": "NR NTN using DL compensation"
-                }
-              ]
             }
           ],
           "room_ids": [
@@ -3199,9 +3248,7 @@
             "[7.8] NR19 NR NTN [0]",
             "- issue marked CB Thursday",
             "[8.7] R20 IoT NTN [1]",
-            "[8.7.3] report of [301]",
-            "[8.12] R20 NR NTN DL compensation [0.5]",
-            "- issues marked CB Thursday"
+            "[8.7.3] report of [301]"
           ],
           "inferred_agenda_items": []
         },
@@ -3266,6 +3313,46 @@
             "Offline report",
             "Other untreated topics",
             "[9.4.2] measurements con’t (if needed or time allows)"
+          ],
+          "inferred_agenda_items": []
+        },
+        {
+          "name": "R20 NR NTN DL compensation",
+          "duration_minutes": 30,
+          "start_time": "18:30",
+          "end_time": "19:00",
+          "day": "Thursday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": "8.12",
+          "group_header": "NR Rel-20",
+          "description": "NR NTN using DL compensation",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "8.12",
+              "matched_agenda_item": "8.12",
+              "description": "NR NTN using DL compensation",
+              "hierarchy": [
+                {
+                  "agenda_item": "8",
+                  "description": "NR Rel-20"
+                },
+                {
+                  "agenda_item": "8.12",
+                  "description": "NR NTN using DL compensation"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "brk1"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "[8.12] R20 NR NTN DL compensation [0.5]",
+            "(not before 18:30)",
+            "- issues marked CB Thursday"
           ],
           "inferred_agenda_items": []
         }
@@ -3384,24 +3471,59 @@
           "inferred_agenda_items": []
         },
         {
-          "name": "CB Sergio",
+          "name": "CB Sergio / R20 IoT NTN / E-UTRA TN to NR NTN HO",
           "duration_minutes": 60,
           "start_time": "09:30",
           "end_time": "10:30",
           "day": "Friday",
           "room_col_start": 2,
           "room_col_end": 3,
-          "chair": null,
-          "agenda_item": null,
-          "group_header": "",
-          "description": null,
-          "agenda_descriptions": [],
+          "chair": "Sergio",
+          "agenda_item": "8.7, 8.8",
+          "group_header": "NR Rel-20",
+          "description": "IoT NTN Ph4\nE-UTRA TN to NR NTN HO",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "8.7",
+              "matched_agenda_item": "8.7",
+              "description": "IoT NTN Ph4",
+              "hierarchy": [
+                {
+                  "agenda_item": "8",
+                  "description": "NR Rel-20"
+                },
+                {
+                  "agenda_item": "8.7",
+                  "description": "IoT NTN Ph4"
+                }
+              ]
+            },
+            {
+              "agenda_item": "8.8",
+              "matched_agenda_item": "8.8",
+              "description": "E-UTRA TN to NR NTN HO",
+              "hierarchy": [
+                {
+                  "agenda_item": "8",
+                  "description": "NR Rel-20"
+                },
+                {
+                  "agenda_item": "8.8",
+                  "description": "E-UTRA TN to NR NTN HO"
+                }
+              ]
+            }
+          ],
           "room_ids": [
             "brk2"
           ],
           "room_scope": "assigned",
           "notes": [
-            "CB Sergio"
+            "CB Sergio",
+            "[8.7] R20 IoT NTN [1]",
+            "- issues marked CB Friday",
+            "[8.8] E-UTRA TN to NR NTN HO (Sergio)",
+            "- issue marked CB Friday"
           ],
           "inferred_agenda_items": []
         },
@@ -3512,16 +3634,16 @@
       }
     }
   ],
-  "source_file": "R2_135b_Schedule_v06.docx",
-  "generated_at": "2026-10-13 19:01",
+  "source_file": "R2_135b_Schedule_v07.docx",
+  "generated_at": "2026-10-14 15:41",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
-    "R2_135b_Schedule_v06.docx",
+    "R2_135b_Schedule_v07.docx",
     "agenda.csv"
   ],
   "source_labels": {
-    "R2_135b_Schedule_v06.docx": "Schedule",
+    "R2_135b_Schedule_v07.docx": "Schedule",
     "agenda.csv": "Agenda"
   },
   "timezone": "Asia/Seoul",
@@ -3636,7 +3758,7 @@
           "MANET",
           "Wed 10:30-11:00",
           "BO3",
-          "vivo"
+          "Qian Zheng (vivo)"
         ],
         [
           "[008]",
@@ -3651,6 +3773,20 @@
           "Wed 16:30-17:00",
           "BO3",
           "Ziyi (Xiaomi)"
+        ],
+        [
+          "[009]",
+          "[6G UP] CB-PUSCH",
+          "Thr 08:30-09:30",
+          "BO2",
+          "Oppo, Ericsson"
+        ],
+        [
+          "[010]",
+          "[6G UP] LCP",
+          "Thr 09:30-10:00",
+          "BO2",
+          ""
         ],
         [
           "[201]",
@@ -3672,6 +3808,13 @@
           "Thr 11:30-12:00",
           "BO3",
           "Lianhai (Lenovo)"
+        ],
+        [
+          "[204]",
+          "[AI PHY] WF for L3 signalling based performance monitoring",
+          "Thr 12:00-13:00",
+          "BO3",
+          "Fei Dong (ZTE)"
         ]
       ]
     },
