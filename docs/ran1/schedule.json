@@ -12070,7 +12070,7 @@
     }
   ],
   "source_file": "RAN1#126b online and offline schedules - v02.docx",
-  "generated_at": "2026-10-14 17:25",
+  "generated_at": "2026-10-14 17:42",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
@@ -12555,11 +12555,11 @@
         "source_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Hiroki_notes/draft_R1-2607286_Session%20Notes%20of%20AI%209.3_v04.docx"
       },
       "R1-2607287": {
-        "name": "draft_R1-2607287_Session Notes of AI 10.2.1_v02.docx",
+        "name": "draft_R1-2607287_Session Notes of AI 10.2.1_v03.docx",
         "agenda_item": "10.2.1",
-        "changed_at": "2026-10-13T07:38:12+00:00",
-        "sha256": "4019cef0527d0da342fc932fedaa8f980998f9c71b0c8e92a273bcd36102f710",
-        "source_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Hiroki_notes/draft_R1-2607287_Session%20Notes%20of%20AI%2010.2.1_v02.docx"
+        "changed_at": "2026-10-14T08:33:21+00:00",
+        "sha256": "a2f386e652f301f366a1a875a73ef8ef12340d70f18fb2c68758773b5d051e71",
+        "source_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Hiroki_notes/draft_R1-2607287_Session%20Notes%20of%20AI%2010.2.1_v03.docx"
       },
       "R1-2607288": {
         "name": "draft_R1-2607288_Session Notes of AI 10.5.4_v02.docx",
@@ -14009,19 +14009,38 @@
           "e0da7ec31640",
           "ac133011f45b",
           "ba5aa3cd1d81",
+          "d18c870dbfd8",
+          "e126cff98269",
+          "d18c870dbfd8",
+          "96fe5af22c42",
+          "33d9c2abe798",
+          "d18c870dbfd8",
+          "8369aaabe008",
+          "7f1af37ed95e",
+          "90214f5fdb50",
           "0230ad766cb3",
           "a460cc37540b",
           "93aad969bc2a"
         ],
         "sources": {
           "chair": "26e720c9c145",
-          "R1-2607287": "d4a10254126e"
+          "R1-2607287": "d7c846d3d925"
         },
-        "change": "initial",
-        "added": [],
-        "changed_at": "2026-10-13T07:38:12+00:00",
-        "changed_in": "draft_R1-2607287_Session Notes of AI 10.2.1_v02.docx",
-        "file": "agreements/6c8cd01feab17eaee80a.html"
+        "change": "updated",
+        "added": [
+          23,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31
+        ],
+        "changed_at": "2026-10-14T08:33:21+00:00",
+        "changed_in": "draft_R1-2607287_Session Notes of AI 10.2.1_v03.docx",
+        "file": "agreements/429b9136f22bd8db12f4.html"
       },
       "10.3": {
         "title": "Channel coding and modulation for 6GR interface",
@@ -16225,7 +16244,9 @@
         "changed_in": "Draft Chair notes RAN1#126bis_v00.docx"
       }
     },
-    "retained_files": []
+    "retained_files": [
+      "agreements/6c8cd01feab17eaee80a.html"
+    ]
   },
   "email_informal": {
     "10.5.4.4": [
