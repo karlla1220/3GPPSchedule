@@ -7697,7 +7697,24 @@
           "room_scope": "assigned",
           "notes": [],
           "inferred_agenda_items": [],
-          "email_details": []
+          "email_details": [
+            {
+              "kind": "session",
+              "session": "Wed 17:00-18:00 Yeongju A Hall",
+              "quote": "The FL summary for online has been uploaded",
+              "mode": "online",
+              "summary": "FL summary for upcoming online session uploaded",
+              "topics": [],
+              "day": "Wednesday",
+              "tdocs": [
+                "R1-2608629"
+              ],
+              "split": [],
+              "mail": "8ae7f29f.2610b",
+              "author": "<>",
+              "sent": "2026-10-14T16:54:17+09:00"
+            }
+          ]
         },
         {
           "name": "10.3.2 Modulation",
@@ -7912,7 +7929,27 @@
           "room_scope": "assigned",
           "notes": [],
           "inferred_agenda_items": [],
-          "email_details": []
+          "email_details": [
+            {
+              "kind": "session",
+              "session": "Wed 17:30-17:50 Yeongju B Hall",
+              "quote": "Following proposals/conclusions are going to be put forward to the coming up online session.",
+              "mode": "online",
+              "summary": "Proposals/conclusions for the upcoming online session",
+              "topics": [
+                "Conclusion 1-1-3 B",
+                "Proposal 1-3-2-Wed"
+              ],
+              "day": "Wednesday",
+              "tdocs": [
+                "R1-2607825"
+              ],
+              "split": [],
+              "mail": "b2ae1d45.2610b",
+              "author": "Lei Zhang (Fujitsu)",
+              "sent": "2026-10-14T16:46:14+09:00"
+            }
+          ]
         },
         {
           "name": "10.5.4.1",
@@ -7959,7 +7996,27 @@
           "room_scope": "assigned",
           "notes": [],
           "inferred_agenda_items": [],
-          "email_details": []
+          "email_details": [
+            {
+              "kind": "session",
+              "session": "Wed 17:50-18:20 Yeongju B Hall",
+              "quote": "R1-2608219 for online discussion is now available in Inbox. Please check Section 2.3.",
+              "mode": "online",
+              "summary": "Online discussion on R1-2608219 Section 2.3",
+              "topics": [
+                "R1-2608219",
+                "Section 2.3"
+              ],
+              "day": "Wednesday",
+              "tdocs": [
+                "R1-2608219"
+              ],
+              "split": [],
+              "mail": "1c5f1e71.2610b",
+              "author": "Sigen Ye",
+              "sent": "2026-10-14T16:58:31+09:00"
+            }
+          ]
         },
         {
           "name": "10.5.4.4",
@@ -8053,7 +8110,23 @@
           "room_scope": "assigned",
           "notes": [],
           "inferred_agenda_items": [],
-          "email_details": []
+          "email_details": [
+            {
+              "kind": "session",
+              "session": "Wed 18:50-19:30 Yeongju B Hall",
+              "quote": "Please have a check before the Wednesday online session in the afternoon for any error.",
+              "mode": "online",
+              "summary": "Check draft LS reply on DL fast ARQ before the Wednesday online session",
+              "topics": [
+                "draft LS reply on DL fast ARQ"
+              ],
+              "day": "Wednesday",
+              "split": [],
+              "mail": "aa1f40f4.2610b",
+              "author": "Kevin Lin",
+              "sent": "2026-10-14T16:50:19+09:00"
+            }
+          ]
         },
         {
           "name": "10.5.1.3",
@@ -11918,7 +11991,7 @@
     }
   ],
   "source_file": "RAN1#126b online and offline schedules - v01.docx",
-  "generated_at": "2026-10-14 16:43",
+  "generated_at": "2026-10-14 17:01",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
@@ -14539,9 +14612,9 @@
           "R1-2607314": "5749a235752b"
         },
         "change": "initial",
+        "added": [],
         "changed_at": "2026-10-13T07:40:37+00:00",
         "changed_in": "Draft R1-2607314 Session Notes of AI 10.5.2 (MIMO Operation) - v02.docx",
-        "added": [],
         "file": "agreements/443b20926e48bac8248b.html"
       },
       "10.5.2.2": {
@@ -14738,9 +14811,9 @@
           "R1-2607314": "d8b003e48127"
         },
         "change": "initial",
+        "added": [],
         "changed_at": "2026-10-13T07:40:37+00:00",
         "changed_in": "Draft R1-2607314 Session Notes of AI 10.5.2 (MIMO Operation) - v02.docx",
-        "added": [],
         "file": "agreements/d1904b912529c05393b7.html"
       },
       "10.5.3": {
@@ -15022,8 +15095,6 @@
           "chair": "db09d86a6a77"
         },
         "change": "updated",
-        "changed_at": "2026-10-14T04:28:06+00:00",
-        "changed_in": "Chair notes RAN1#126bis_v08.docx",
         "added": [
           24,
           25,
@@ -15031,6 +15102,8 @@
           27,
           28
         ],
+        "changed_at": "2026-10-14T04:28:06+00:00",
+        "changed_in": "Chair notes RAN1#126bis_v08.docx",
         "file": "agreements/a7fdcd174ac0f426067d.html"
       },
       "10.5.3.3": {
@@ -15228,8 +15301,6 @@
           "chair": "507584902381"
         },
         "change": "updated",
-        "changed_at": "2026-10-13T23:13:18+00:00",
-        "changed_in": "Chair notes RAN1#126bis_v06.docx",
         "added": [
           3,
           4,
@@ -15246,6 +15317,8 @@
           15,
           16
         ],
+        "changed_at": "2026-10-13T23:13:18+00:00",
+        "changed_in": "Chair notes RAN1#126bis_v06.docx",
         "file": "agreements/fef00c548075ae31d7c8.html"
       },
       "10.5.4": {
@@ -15514,8 +15587,6 @@
           "chair": "fe2d6c3c31d1"
         },
         "change": "updated",
-        "changed_at": "2026-10-13T07:35:31+00:00",
-        "changed_in": "Chair notes RAN1#126bis_v05.docx",
         "added": [
           3,
           4,
@@ -15532,6 +15603,8 @@
           15,
           16
         ],
+        "changed_at": "2026-10-13T07:35:31+00:00",
+        "changed_in": "Chair notes RAN1#126bis_v05.docx",
         "file": "agreements/31bb25fcf4a6f2b2188b.html"
       },
       "10.6.1.2": {
@@ -15557,14 +15630,14 @@
           "chair": "bf7cf2ca7f63"
         },
         "change": "updated",
-        "changed_at": "2026-10-13T07:35:31+00:00",
-        "changed_in": "Chair notes RAN1#126bis_v05.docx",
         "added": [
           2,
           3,
           4,
           5
         ],
+        "changed_at": "2026-10-13T07:35:31+00:00",
+        "changed_in": "Chair notes RAN1#126bis_v05.docx",
         "file": "agreements/bec046ec79fff0c1b876.html"
       },
       "10.6.2": {
@@ -15588,9 +15661,9 @@
           "chair": "064a15405bf6"
         },
         "change": "initial",
+        "added": [],
         "changed_at": "2026-10-04T08:57:51+00:00",
         "changed_in": "Draft Chair notes RAN1#126bis_v00.docx",
-        "added": [],
         "file": "agreements/53c2b42e8cf6d92b0cb8.html"
       },
       "10.6.3": {
@@ -15617,9 +15690,9 @@
           "chair": "50f6404cacae"
         },
         "change": "initial",
+        "added": [],
         "changed_at": "2026-10-04T08:57:51+00:00",
         "changed_in": "Draft Chair notes RAN1#126bis_v00.docx",
-        "added": [],
         "file": "agreements/72b9a6eae2de57815085.html"
       },
       "10.7": {
@@ -16073,58 +16146,7 @@
         "changed_in": "Draft Chair notes RAN1#126bis_v00.docx"
       }
     },
-    "retained_files": [
-      "agreements/003dafd46b20549a8aa8.html",
-      "agreements/007ba6bb188f4c730de6.html",
-      "agreements/0b7a94e85bf6368da139.html",
-      "agreements/0c02ee530b211cef6928.html",
-      "agreements/0feaa6f9afa19c96b4db.html",
-      "agreements/11113b287a4b8acf5d79.html",
-      "agreements/14c3ffd2a3996df42f84.html",
-      "agreements/180f8893cda264c709b5.html",
-      "agreements/19dad865368da8749102.html",
-      "agreements/2acbd1928bfb3fe0f9a8.html",
-      "agreements/2b800f32f6c48d26e98d.html",
-      "agreements/355e5b76466081138c1d.html",
-      "agreements/44c6576a4558e9b9c2c9.html",
-      "agreements/45c609181e5d7aee68cb.html",
-      "agreements/4aeb65561cc5b95f0cc8.html",
-      "agreements/4dc00dab02a3b48e0b03.html",
-      "agreements/52ecfd4af75032ee2a46.html",
-      "agreements/542fea47e06384e4b1b6.html",
-      "agreements/55faa0ca6075970bdbc2.html",
-      "agreements/5ed5531686c35aad54e3.html",
-      "agreements/660a4d22c412754fef19.html",
-      "agreements/710a2ae39c837d843de8.html",
-      "agreements/78e9ef025ef438f9d870.html",
-      "agreements/7c9ceddcc44af0bdf78c.html",
-      "agreements/7ce2a6ad1bb0a2396e78.html",
-      "agreements/7d7c467a8d48d9254675.html",
-      "agreements/89b2a878fe449c891631.html",
-      "agreements/8dbeabc918bb4e924a76.html",
-      "agreements/8e3b49273b7603a82943.html",
-      "agreements/8f57e6aee04571496cb9.html",
-      "agreements/a1480276d37404e72351.html",
-      "agreements/a55915a0aa1f38f02d7d.html",
-      "agreements/b52aae37d3c448696ad1.html",
-      "agreements/b9986f4aafafc687bdeb.html",
-      "agreements/c09ea5fad542d386333d.html",
-      "agreements/c317fb3c2a09f02c99a8.html",
-      "agreements/d3e3d2716225091b0a32.html",
-      "agreements/d4b0bc4c200b103ac5c1.html",
-      "agreements/d887fa9278c6dbd42835.html",
-      "agreements/dffe6d0d38b15305b855.html",
-      "agreements/e12c250aeadee2a22eb9.html",
-      "agreements/e41739efddf16f6a7255.html",
-      "agreements/e55ed4ebcfdfa154454e.html",
-      "agreements/e9270b894bbb50e15e37.html",
-      "agreements/ed76a7c7ab9afab8a4af.html",
-      "agreements/edc434b96c9594e7ac7d.html",
-      "agreements/f17bddf851e71a21dc4a.html",
-      "agreements/f202bbb758023443fb88.html",
-      "agreements/f27c0c725967e8b1cd3e.html",
-      "agreements/f381b5b7f5575bff957d.html"
-    ]
+    "retained_files": []
   },
   "email_informal": {
     "10.5.4.4": [
