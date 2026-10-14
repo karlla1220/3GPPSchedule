@@ -14,15 +14,16 @@
 - `email_threads_chair.json`: Chair notes(`Chair notes RAN1#126bis_v06.docx`)의 AI 절마다 적힌 이메일 토론 줄 38개(`[126bis-…] Email discussion on … – FL (회사)`). 태그, AI, FL 이름, 회사로 나눴다.
   `agreements.py`의 `email_threads`와 같은 형식이다. 두 줄은 노트에 `Ema-il discussion`으로 적혀 있다(8.3, 9.1).
 - `agenda_items.json`: 이 회의의 Agenda 번호 68개(`agenda.csv`).
-- `grid.json`: 정답을 붙일 때 쓴 시간표(커밋 `3d489af`). 세션 `id`는 `요일 시작-끝 방`이다(`Wed 12:30-13:00 201`).
+- `grid.json`: 정답을 붙일 때 쓴 시간표(커밋 `3d489af`). 세션 `id`는 `요일 시작-끝 방`이다(`Wed 12:30-13:00 Yeongju A Hall`). 방은 `room_col_start − 2`번째다(1열은 시간 축, 렌더러와 같다).
   수요일 칸은 10-13 15:38(제주 시각)부터 바뀌지 않았고, 50통은 모두 그 뒤에 왔다.
 - `labels.json`: 사람이 읽고 붙인 정답이다.
   - `mails`: 일정과 관련된 항목이 있는 메일 26통, 항목 35개. 메일 번호(`n`)마다 항목 목록이다.
-    - `kind: session` (28개): online 또는 offline 세션. 이 둘은 늘 방에서 열리므로 시간표의 세션 하나를 가리킨다. `session`이 그 세션의 `id`이고, `detail`이 셀에 더할 내용이다(다룰 Proposal, 시간 나눔, FL summary 등).
+    - `kind: session` (26개): online 또는 offline 세션. 이 둘은 늘 방에서 열리므로 시간표의 세션 하나를 가리킨다. `session`이 그 세션의 `id`이고, `detail`이 셀에 더할 내용이다(다룰 Proposal, 시간 나눔, FL summary 등).
       시각이 없어도 세션을 가리키면 여기에 든다("for Wednesday's online discussion", "our offline session today").
+    - `kind: tentative` (2개): 시간표에 없는 시각의 online·offline. 의장·부의장과 정해 두고 시간표가 아직 바뀌지 않은 것으로 본다.
+      그 AI의 다른 세션이 열리는 방에서 그 시각에 다른 AI가 잡힌 셀(`session`)에 "maybe <AI>"로 붙이고, 그 AI의 필터에도 걸리게 한다.
+      #15 "online session this morning from 12:00"(10.3.1): 10.3.1 online은 모두 Yeongju A Hall이고, 그 방 12:00 칸이 AI 8.1(Sorour)이다. #3은 그 세션용 FL proposal이다.
     - `kind: informal` (7개): off-offline이나 FL이 기다리는 곳. 방이 없거나 방 밖이다("outside Sorour's session room", "in front of Yeongju A Hall", "near the cute bears"). Agreement 아래 부차 정보로 갈 것들이다.
-    - `certain: false` (2개): 세션인 것은 분명한데 어느 세션인지 하나로 정할 수 없는 항목. `session`에 가장 그럴듯한 세션을, `candidates`에 후보를 적었다.
-      #15는 "online session this morning from 12:00"인데 그 시각에 10.3.1 세션이 없어 다음 세션(수 14:30 room 6)으로 두었다. #3은 #15를 따른다.
     - 메일 날짜는 보낸 사람의 시간대다(`+0800`, `+0000`, `+0900`). "today", "tomorrow"는 회의 시각(Asia/Seoul)으로 바꾼 송신 시각으로 읽는다.
       #32는 `00:42 +0800`(제주 수 01:42)에 보낸 메일이라 "PM session tomorrow"가 수요일 저녁 세션이다.
     - `quote`는 그 항목의 근거가 된 원문이다.

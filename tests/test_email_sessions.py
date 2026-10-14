@@ -251,6 +251,9 @@ def test_mail_agenda_items_in_the_test_set():
         result = got[int(n)]
         mine = result["agenda_items"] + result["other"]
         for item in labelled:
+            if item["kind"] == "tentative":
+                assert item["agenda_item"] in mine, n
+                continue
             for sid in [item.get("session")] + item.get("candidates", []):
                 if sid:
                     assert any(_covers(grid[sid], ai) for ai in mine), (n, sid, mine)
@@ -352,3 +355,21 @@ def test_informal_items_have_no_room_of_their_own():
         for item in labelled:
             if item["kind"] == "informal":
                 assert "session" not in item, n
+
+
+def test_tentative_items_sit_in_the_room_of_the_items_sessions():
+    # #15 "online session … from 12:00" for 10.3.1: the grid has no 10.3.1
+    # then, and Yeongju A Hall, where every 10.3.1 online is, has AI 8.1.
+    # The FL arranged the slot before the schedule caught up; the 8.1 cell
+    # shows "maybe 10.3.1".
+    from collections import Counter
+
+    grid = {g["id"]: g for g in json.loads((FIXTURE / "grid.json").read_text(encoding="utf-8"))["sessions"]}
+    tentative = [(n, item) for n, items in LABELS["mails"].items() for item in items if item["kind"] == "tentative"]
+    assert [n for n, _ in tentative] == ["3", "15"]
+    for n, item in tentative:
+        cell = grid[item["session"]]
+        ai = item["agenda_item"]
+        assert not _covers(cell, ai), n  # the grid gives the slot to another item
+        rooms = Counter(g["room"] for g in grid.values() if _covers(g, ai) and g["agenda_item"])
+        assert cell["room"] == rooms.most_common(1)[0][0], (n, rooms)
