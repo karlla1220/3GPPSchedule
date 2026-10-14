@@ -427,6 +427,13 @@ FL이 이메일 토론 스레드에 올리는 세션 계획("Offline 11:30 ~ 12:
   - 필터는 "maybe" 항목도 그 셀의 AI처럼 맞춘다(`data-ai-scope`에 더한다). `data-ai`와 필터 항목 목록, Agreement 패널은 그대로다.
   - 팝업에는 노트 아래, AI 이름 위에 `From email threads` 구획을 둔다. 공지 하나가 한 줄이다: `maybe 10.3.1 · Online 12:00 · 요약 · 나눔 · input 1 h before · R1-2608628 — 보낸 사람, Wed 11:47`.
     TDoc 번호는 하이픈에서 줄바꿈되지 않는다(`.popup-email-tdoc`). 나눔이 요약에 이미 들어 있으면 다시 적지 않는다. 보낸 사람이 가려진 메일(`<>`)은 시각만 적는다.
+  - **셀과 팝업의 TDoc 번호는 그 파일로 가는 링크다(`.tdoc-link`, 새 탭).** 주소는 빌드가 정해 세부 정보의 `tdoc_links`에 둔다(`email_updates.tdoc_links`).
+    - 메일이 그 파일을 링크했으면 그 파일이다. 회의장 서버(`http://10.10.10.10/ftp/RAN/RAN1/…`)와 sync 폴더 링크는 `meeting_sync`(config) 아래 같은 경로로 바꾼다. sync 폴더는 회의장 서버를 그대로 비추고 어디서나 열린다.
+      FL summary 초안은 아직 TDoc 파일이 없어서(`Docs`에 zip이 없다) FL이 링크한 `Inbox/drafts/…` 초안이 유일한 대상이다. 다른 3GPP 링크(회의 폴더)는 그대로 두고, 3GPP 밖 링크는 쓰지 않는다.
+    - 링크가 없으면 `meeting_sync/Docs/R1-xxxxxxx.zip`이다. 목록으로 있는지 확인하지 않는다. `Docs` 목록은 2MB이고, 페이지는 일정이 바뀔 때만 다시 만들어지므로 아직 올라오지 않은 파일도 나중에 열리는 편이 낫다.
+      그래서 다른 회의의 TDoc을 가리키는 번호(#126bis의 R1-2606947)는 404가 난다.
+    - 링크 대상은 수집 단계에서 `Mail.links`로 함께 모아 기록(`links`)에 둔다. 미리보기의 `<https://…>`와 본문의 링크는 `reply`에서 지워지기 때문이다. `links`가 없는 예전 기록은 `reply`에 남은 맨 주소를 쓴다.
+    - 링크는 노트 색 그대로 옅은 밑줄(`--edge-hover`)로만 구별하고 hover에서 진해진다. 셀의 click·keydown 핸들러와 off-offline 구획 스크립트는 링크를 누른 클릭을 셀 선택으로 보지 않는다.
   - **B(off-offline, FL이 기다리는 곳)는 Agreement 패널 아래의 별도 구획 하나에 모두 나열한다(`.email-informal`, `_render_email_informal`).** 시간표에 없는 offline도 B다.
     AI별로 나누지 않는다. 참석자는 그날의 비공식 모임을 한 번에 훑는다. Agreement 패널 안에 두면 셀을 골라야만 보이고, 고른 AI의 것만 보인다.
     한 줄은 `Wed 10:45 AI 9.4 요약 (장소) — 보낸 사람`이고 날짜·시각 순이다. 요약에 이미 있는 장소는 다시 적지 않는다(`_says`, 낱말 단위로 비교).

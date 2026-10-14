@@ -66,6 +66,7 @@ class Mail:
     reply: str | None = None  # newest reply; None when its body could not be read
     full_body: bool = False  # reply comes from the full text, not the preview
     tdocs: list[str] = field(default_factory=list)  # TDoc numbers of the newest reply, link targets included
+    links: list[str] = field(default_factory=list)  # files the newest reply links, named by a TDoc number
 
 
 def feed_url(list_name: str = LIST_NAME, limit: int = FEED_LIMIT) -> str:
@@ -239,12 +240,31 @@ def preview_text(description: str, *, links: bool = False) -> str:
     return text if links else _INLINE_URL.sub("", text)
 
 
-_TDOC = re.compile(r"(?<![\w-])R1-\d{7}(?!\d)")
+# An underscore may join the number to a draft's name ("draft_R1-2608345_FLS…").
+_TDOC = re.compile(r"(?<![A-Za-z0-9-])R1-\d{7}(?!\d)")
 
 
 def tdoc_numbers(text: str) -> list[str]:
     """TDoc numbers a text names, in order: "R1-2608628", also inside links and draft file names."""
     return list(dict.fromkeys(_TDOC.findall(unquote(text or ""))))
+
+
+_URL = re.compile(r"https?://[^\s<>\"]+")
+
+
+def document_links(text: str) -> list[str]:
+    """Links to a file named by a TDoc number, in order: ".../Inbox/R1-2608632.zip", a draft's .docx.
+
+    Punctuation that ends the sentence is not part of the link; a closing
+    parenthesis stays when the link opened one ("10.4.1%20(Operation...)").
+    """
+    links = []
+    for url in _URL.findall(text or ""):
+        while url and (url[-1] in ".,;:!?']" or url[-1] == ")" and url.count("(") < url.count(")")):
+            url = url[:-1]
+        if _TDOC.search(unquote(url.rsplit("/", 1)[-1])):
+            links.append(url)
+    return list(dict.fromkeys(links))
 
 
 def newest_reply(text: str) -> str:
@@ -281,6 +301,7 @@ def parse_feed(xml: str) -> list[Mail]:
             link=link,
             snippet=preview_text(item.findtext("description") or ""),
             tdocs=tdoc_numbers(newest_reply(preview_text(item.findtext("description") or "", links=True))),
+            links=document_links(newest_reply(preview_text(item.findtext("description") or "", links=True))),
         ))
     return mails
 
@@ -295,8 +316,16 @@ def body_url(message_page: str) -> str | None:
     return None
 
 
-def body_text(raw: str, *, is_html: bool = False) -> str:
-    """Body part as plain text. Masked addresses arrive as links; their text is kept."""
+def body_text(raw: str, *, is_html: bool = False, links: bool = False) -> str:
+    """Body part as plain text. Masked addresses arrive as links; their text is kept.
+
+    With ``links``, link targets stay in the text: "folder<https://…>" of a
+    plain part, the href of an HTML anchor.
+    """
+    if links:
+        raw = re.sub(r"<(https?://[^>\s]+)>", r" \1 ", raw)
+        if is_html:
+            raw = re.sub(r"<a\b[^>]*?\bhref=\"(https?://[^\"]+)\"[^>]*>", r" \1 ", raw, flags=re.IGNORECASE)
     if is_html:
         raw = re.sub(r"<(style|script)\b.*?</\1>", "", raw, flags=re.IGNORECASE | re.DOTALL)
         raw = re.sub(r"<br\s*/?>|</(?:p|div|li|tr)>", "\n", raw, flags=re.IGNORECASE)
@@ -355,9 +384,12 @@ def collect(
                 raw = _get(http, url, sleep)
             except httpx.HTTPError:
                 continue
-            mail.reply = newest_reply(body_text(raw, is_html="T=text%2Fhtml" in url))
+            is_html = "T=text%2Fhtml" in url
+            mail.reply = newest_reply(body_text(raw, is_html=is_html))
             mail.full_body = True
             mail.tdocs = list(dict.fromkeys(mail.tdocs + tdoc_numbers(mail.reply)))
+            mail.links = list(dict.fromkeys(
+                mail.links + document_links(newest_reply(body_text(raw, is_html=is_html, links=True)))))
         return mails
     finally:
         if own:

@@ -8,6 +8,7 @@ import pytest
 from working_groups.ran1.email_sessions import (
     body_url,
     collect,
+    document_links,
     is_meeting_thread,
     meeting_tag,
     needs_full_body,
@@ -129,6 +130,34 @@ def test_collect_fetches_only_cut_previews():
     assert len(calls) == 1 + 2 * len(full)
     by_id = {mail.id: mail for mail in mails}
     assert "I will be always there before 11:00 AM" in by_id[BY_N[39]["id"]].reply
+
+
+def test_collect_keeps_the_files_a_reply_links():
+    http, _ = _archive()
+    by_id = {mail.id: mail for mail in collect("126bis", http=http, sleep=lambda _: None)}
+    # #3: a bare link in the preview, to the venue's server.
+    assert by_id[BY_N[3]["id"]].links == ["http://10.10.10.10/ftp/RAN/RAN1/Inbox/R1-2608628.zip"]
+    # #34: an inline link target of the preview ("folder<https://…>").
+    assert by_id[BY_N[34]["id"]].links == [
+        "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/drafts/9.3%20(Ambient_IoT_Solutions_Ph2)"
+        "/9.3.3/Round2/Draft%20R1-2607194%20FL%20summary%20%232%20on%209.3.3%20AIoT%20procedures_v00_FL.docx"]
+    # #21: the full text; an underscore joins the number to the draft's name.
+    full = by_id[BY_N[21]["id"]]
+    assert full.full_body and full.tdocs == ["R1-2608345"]
+    assert [link.rsplit("/", 1)[-1] for link in full.links] == ["draft_R1-2608345_FLS_6GR_MC_CONNECTED_Round4_v06_HW3_Mod.docx"]
+
+
+@pytest.mark.parametrize("text, links", [
+    ("in http://10.10.10.10/ftp/RAN/RAN1/Inbox/R1-2608632.zip.", ["http://10.10.10.10/ftp/RAN/RAN1/Inbox/R1-2608632.zip"]),
+    # A parenthesis the link opened is its own; the one around it is not.
+    ("(see http://h/Inbox/drafts/10.4.1%20(Idle)/draft%20R1-2607205%20FL_v116.docx)",
+     ["http://h/Inbox/drafts/10.4.1%20(Idle)/draft%20R1-2607205%20FL_v116.docx"]),
+    # A folder, or a file named by no TDoc, is not a TDoc's file.
+    ("folder<https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/drafts/R1-2607205/>", []),
+    ("http://h/Inbox/drafts/R1-260xxxx%20Summary%20v026%20Mod.docx", []),
+])
+def test_document_links(text, links):
+    assert document_links(text) == links
 
 
 def test_collect_skips_seen_and_leaves_failures_for_next_run():

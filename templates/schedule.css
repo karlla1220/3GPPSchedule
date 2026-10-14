@@ -755,6 +755,21 @@ header .meta a:focus-visible,
     text-indent: -6px;
 }
 
+/* A TDoc number opens its file: the note's own tone, told apart by a faint
+   underline that darkens on hover. It never breaks at its hyphen. */
+.session-note .tdoc-link {
+    color: inherit;
+    white-space: nowrap;
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-decoration-color: var(--edge-hover);
+    text-underline-offset: 2px;
+}
+
+.session-note .tdoc-link:hover {
+    text-decoration-color: currentColor;
+}
+
 /* Pinned bottom-right with nothing behind it, so it needs clear space on
    its row. */
 .session-chair {
@@ -874,6 +889,17 @@ header .meta a:focus-visible,
 
 .popup-email-tdoc {
     white-space: nowrap;
+}
+
+.popup-email-tdoc .tdoc-link {
+    color: inherit;
+    text-decoration: underline;
+    text-decoration-color: rgba(255,255,255,0.45);
+    text-underline-offset: 2px;
+}
+
+.popup-email-tdoc .tdoc-link:hover {
+    text-decoration-color: currentColor;
 }
 
 /* Agenda names: the session's own items always, their parents folded

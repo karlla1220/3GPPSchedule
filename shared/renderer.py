@@ -500,7 +500,8 @@ def generate_html(schedule: Schedule, *, schedules=None, groups=None, presentati
             notes = _cell_notes(session)
             # What the email threads say the session will do shares the notes'
             # spare lines: delegates see it without opening the popup.
-            cell_lines = notes + [line for line in _email_cell_lines(session) if line not in notes]
+            cell_lines = [_esc(n) for n in notes] + [
+                line_html for text, line_html in _email_cell_lines(session) if text not in notes]
             notes_html = ""
             if cell_lines and dur_html:
                 notes_html = _notes_html(cell_lines, slots, ai_html, scope_label, chair_html)
@@ -664,8 +665,16 @@ def _subject(topic: str) -> str:
     return _LOOSE_ENDS.sub("", _LOOKUP_NUMBER.sub("", topic)).strip()
 
 
-def _email_cell_lines(session) -> list[str]:
-    """One short line per announcement for the cell: what the session will treat, at a glance.
+def _tdoc_html(tdoc: str, detail: dict) -> str:
+    """A TDoc number, linked to its file when the build found one (``tdoc_links``)."""
+    url = (detail.get("tdoc_links") or {}).get(tdoc)
+    if not url:
+        return _esc(tdoc)
+    return f'<a class="tdoc-link" href="{_esc(url)}" target="_blank" rel="noopener">{_esc(tdoc)}</a>'
+
+
+def _email_cell_lines(session) -> list[tuple[str, str]]:
+    """One short line per announcement for the cell, as (text, HTML): what the session will treat, at a glance.
 
     The TDoc numbers first (the document to open for the details), then the
     split if there is one, else the subjects the mail names ("Part 1 (PUSCH
@@ -674,10 +683,11 @@ def _email_cell_lines(session) -> list[str]:
     so does an announcement with none of these (a summary cut after "Check
     proposals in" says nothing). A line the title
     already holds ("PDSCH" on "10.5.2.2 PDSCH") is left out; an item another
-    session holds is named first ("10.3.1: …").
+    session holds is named first ("10.3.1: …"). The TDoc numbers link to
+    their files.
     """
     title = session.name.casefold()
-    lines = []
+    lines, texts = [], []
     for detail in getattr(session, "email_details", []):
         subjects = []
         for topic in detail.get("topics") or []:
@@ -687,15 +697,20 @@ def _email_cell_lines(session) -> list[str]:
         text = _split_text(detail, cell=True) or ", ".join(subjects)
         if text.casefold() in title:
             text = ""
-        # The document comes first: it is what to open to read the details.
-        text = " · ".join(filter(None, [", ".join(detail.get("tdocs") or []), text]))
-        if not text:
+        tdocs = detail.get("tdocs") or []
+        if not tdocs and not text:
             continue
-        text = text[0].upper() + text[1:]
+        if not tdocs:
+            text = text[0].upper() + text[1:]
+        # The document comes first: it is what to open to read the details.
+        line = " · ".join(filter(None, [", ".join(tdocs), text]))
+        line_html = " · ".join(filter(None, [", ".join(_tdoc_html(t, detail) for t in tdocs), _esc(text)]))
         if detail.get("kind") == "tentative":
-            text = f"{detail['agenda_item']}: {text}"
-        if text not in lines:
-            lines.append(text)
+            line = f"{detail['agenda_item']}: {line}"
+            line_html = f"{_esc(detail['agenda_item'])}: {line_html}"
+        if line not in texts:
+            texts.append(line)
+            lines.append((line, line_html))
     return lines
 
 
@@ -723,7 +738,7 @@ def _email_detail_line(detail: dict) -> str:
     line = _esc(" · ".join(parts))
     if detail.get("tdocs"):
         # A TDoc number never breaks at its hyphen.
-        tdocs = ", ".join(f'<span class="popup-email-tdoc">{_esc(t)}</span>' for t in detail["tdocs"])
+        tdocs = ", ".join(f'<span class="popup-email-tdoc">{_tdoc_html(t, detail)}</span>' for t in detail["tdocs"])
         line = f"{line} · {tdocs}" if line else tdocs
     sent = detail.get("sent") or ""
     author = (detail.get("author") or "").strip()
@@ -808,7 +823,7 @@ def _render_email_informal(schedule) -> str:
         "    // the cell's own handler stops the click from bubbling.\n"
         "    document.addEventListener('click', event => {\n"
         "        const block = event.target instanceof Element && event.target.closest('.session-block');\n"
-        "        if (!block) return;\n"
+        "        if (!block || event.target.closest('a[href]')) return;\n"
         "        const chosen = (block.dataset.aiScope || '').split('|').map(id => id.replace(/\\.\\*$/, '')).filter(Boolean);\n"
         "        const accent = getComputedStyle(block).getPropertyValue('--accent').trim();\n"
         "        if (accent) box.style.setProperty('--selected-accent', accent);\n"
@@ -849,7 +864,7 @@ def _cell_notes(session) -> list[str]:
 
 def _notes_html(notes: list[str], slots: float, ai_html: str, scope_label: str | None,
                 chair_html: str) -> str:
-    """Notes fill whole secondary lines left under the title, time and AI lines.
+    """Notes (HTML lines) fill whole secondary lines left under the title, time and AI lines.
 
     The container is clipped to a whole number of lines so no note is cut
     through the middle. The chair's row is kept clear while the chair shows;
@@ -865,7 +880,7 @@ def _notes_html(notes: list[str], slots: float, ai_html: str, scope_label: str |
     lines = max(0, int((free - _CHAIR_ROW) // _SECONDARY_LINE)) if chair_html else lines_full
     if not lines_full:
         return ""
-    items = "".join(f'<div class="session-note">{_esc(n)}</div>' for n in notes)
+    items = "".join(f'<div class="session-note">{n}</div>' for n in notes)
     # Without a line beside the chair, only columns that hide the chair show notes.
     classes = "session-notes" if lines else "session-notes beside-chair"
     return (

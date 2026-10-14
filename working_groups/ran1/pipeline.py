@@ -811,7 +811,7 @@ def build_schedule(args) -> Schedule:
     # Session plans from the email discussion threads. Optional like the
     # agreements: a failure leaves the schedule without them.
     from . import email_updates
-    email_updates.run(schedule, offline=bool(args.local or args.no_download))
+    email_updates.run(schedule, offline=bool(args.local or args.no_download), sync=cfg.get("meeting_sync"))
 
     return schedule
 

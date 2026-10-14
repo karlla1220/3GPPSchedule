@@ -571,10 +571,13 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     document.querySelectorAll('.session-block').forEach(block => {
         if (agreementPanel) block.addEventListener('keydown', e => {
+            if (e.target !== block) return;  // a TDoc link inside the cell opens its file
             if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); block.click(); }
         });
         block.addEventListener('click', function(e) {
             e.stopPropagation();
+            // A TDoc number in the cell opens its file, not the popup.
+            if (e.target instanceof Element && e.target.closest('a[href]')) return;
             // Opening one popup over another keeps the height already held.
             const html = this.getAttribute('data-popup');
             const opens = html && (!isPopupOpen() || popupContent.innerHTML !== html);

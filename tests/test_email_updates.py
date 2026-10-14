@@ -381,3 +381,66 @@ def test_cell_line_leads_with_the_document(meeting):
                 and "09:20" in b.select_one(".session-range").get_text())
     lines = [n.get_text() for n in cell.select(".session-note")]
     assert lines and lines[0].startswith("R1-2608681 · ")
+
+
+SYNC = "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/"
+
+
+def test_a_tdoc_opens_the_file_the_mail_links_on_the_sync_folder():
+    record = {
+        "tdocs": ["R1-2608628", "R1-2607205", "R1-2608637", "R1-2608700", "R1-2608681", "R1-2607548"],
+        "links": [
+            "http://10.10.10.10/ftp/RAN/RAN1/Inbox/R1-2608628.zip",  # the venue's server
+            SYNC + "Inbox/drafts/10.4.1%20(Idle)/draft%20R1-2607205%20FL_v116.docx",  # a draft: no TDoc yet
+            "http://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_126b/Inbox/R1-2608637.zip",  # 3GPP: kept
+            "https://example.sharepoint.com/R1-2608700.docx",  # not reachable for everyone
+        ],
+        # A record from before links were kept: the reply holds the bare link.
+        "reply": "Please see http://10.10.10.10/ftp/RAN/RAN1/Inbox/drafts/9.3/draft%20R1-2607548_v000.docx.",
+    }
+    assert email_updates.tdoc_links(record, SYNC) == {
+        "R1-2608628": SYNC + "Inbox/R1-2608628.zip",
+        "R1-2607205": SYNC + "Inbox/drafts/10.4.1%20(Idle)/draft%20R1-2607205%20FL_v116.docx",
+        "R1-2608637": "https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_126b/Inbox/R1-2608637.zip",
+        "R1-2608700": SYNC + "Docs/R1-2608700.zip",
+        "R1-2608681": SYNC + "Docs/R1-2608681.zip",  # named, not linked
+        "R1-2607548": SYNC + "Inbox/drafts/9.3/draft%20R1-2607548_v000.docx",
+    }
+    # Without a sync folder only the 3GPP link is left.
+    assert email_updates.tdoc_links(record, None) == {
+        "R1-2608637": "https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_126b/Inbox/R1-2608637.zip"}
+
+
+def test_the_tdoc_numbers_of_cell_and_popup_link_their_files(meeting):
+    from bs4 import BeautifulSoup
+    from shared.renderer import generate_html
+
+    _update(meeting, [])
+    email_updates.apply_records(meeting, SYNC)
+    page = BeautifulSoup(generate_html(meeting), "html.parser")
+    # #18 names R1-2608681 without a link: the TDoc in the sync folder's Docs.
+    cell = next(b for b in page.select(".session-block")
+                if b.select_one(".session-name").get_text() == "10.5.1.3"
+                and "09:20" in b.select_one(".session-range").get_text())
+    link = cell.select_one(".session-note a.tdoc-link")
+    assert link.get_text() == "R1-2608681" and link["href"] == SYNC + "Docs/R1-2608681.zip"
+    assert link["target"] == "_blank"
+    # #3 links the venue's server: the same file on the sync folder.
+    maybe = next(b for b in page.select(".session-block")
+                 if b.select_one(".session-name").get_text() == "AI 8.1" and "maybe" in b.get_text())
+    popup = BeautifulSoup(maybe["data-popup"], "html.parser")
+    link = popup.select_one(".popup-email-tdoc a.tdoc-link")
+    assert link.get_text() == "R1-2608628" and link["href"] == SYNC + "Inbox/R1-2608628.zip"
+    # The cell's click handler leaves a link to open its file.
+    assert "closest('a[href]')" in page.find(string=lambda s: s and "agreement-select" in s)
+
+
+def test_no_link_without_a_sync_folder(meeting):
+    from bs4 import BeautifulSoup
+    from shared.renderer import generate_html
+
+    _update(meeting, [])
+    email_updates.apply_records(meeting)
+    page = BeautifulSoup(generate_html(meeting), "html.parser")
+    assert not page.select(".session-note a")
+    assert all("tdoc-link" not in (b.get("data-popup") or "") for b in page.select(".session-block"))
