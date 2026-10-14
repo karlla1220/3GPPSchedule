@@ -341,9 +341,12 @@ def apply_records(schedule: Schedule) -> None:
             else:
                 notes.setdefault(key, []).append(item)
         plans.update(mine)
-    for key in sorted(set(plans) | set(notes), key=lambda k: k[1]):
-        sessions[key[1]].email_details.extend(
-            sorted(plans.get(key, []) + notes.get(key, []), key=lambda item: item["sent"]))
+    by_session: dict[str, list[dict]] = {}
+    for key in set(plans) | set(notes):
+        by_session.setdefault(key[1], []).extend(plans.get(key, []) + notes.get(key, []))
+    for session_id, items in by_session.items():
+        # Oldest first across threads; the order of a set must not reach the page.
+        sessions[session_id].email_details.extend(sorted(items, key=lambda item: (item["sent"], item["mail"])))
 
 
 def run(schedule: Schedule, *, offline: bool) -> None:
