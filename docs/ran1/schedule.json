@@ -10675,7 +10675,7 @@
     }
   ],
   "source_file": "RAN1#126b online and offline schedules - v00.docx",
-  "generated_at": "2026-10-14 10:01",
+  "generated_at": "2026-10-14 10:41",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
@@ -10780,11 +10780,11 @@
         "source_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Sorour_notes/Draft%20R1-2607308%20Session%20Notes%20of%20AI%209.1%20-%20v01.docx"
       },
       "R1-2607309": {
-        "name": "Draft R1-2607309 Session Notes of AI 9.2 - v02.docx",
+        "name": "Draft R1-2607309 Session Notes of AI 9.2 - v03.docx",
         "agenda_item": "9.2",
-        "changed_at": "2026-10-13T03:22:04+00:00",
-        "sha256": "1e29e243f2a8bddb9e797da0b377467efd5e29ca1134e9bd0f6b93b19b58f3da",
-        "source_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Sorour_notes/Draft%20R1-2607309%20Session%20Notes%20of%20AI%209.2%20-%20v02.docx"
+        "changed_at": "2026-10-14T01:34:46+00:00",
+        "sha256": "e419f4606359b8da384c08342ec77f44b5a65c3596d33869f457c24f3bdca29f",
+        "source_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Sorour_notes/Draft%20R1-2607309%20Session%20Notes%20of%20AI%209.2%20-%20v03.docx"
       },
       "R1-2607310": {
         "name": "Draft R1-2607310 Session Notes of AI 9.4 - v04.docx",
@@ -11409,7 +11409,6 @@
           "334907737e61",
           "c44dc49ab8cc",
           "a47caa9e4cb0",
-          "fc36c95afa37",
           "60b3024aac01",
           "7b3b37bcd659",
           "668544acaa68",
@@ -11422,6 +11421,32 @@
           "1e68aa07a294",
           "46644d481c10",
           "a0a5b8d83ed9",
+          "fc36c95afa37",
+          "668544acaa68",
+          "5103c08ad60e",
+          "988152d88fce",
+          "6295b10d3efc",
+          "1b172b7b9e57",
+          "c73fb7ccea1d",
+          "02809d6cfc82",
+          "583f7c5f8584",
+          "1af61ff6a522",
+          "a3c3b4e675ba",
+          "7726eb28b069",
+          "a15687dfb276",
+          "c01b4921579e",
+          "f322b3e3bbfd",
+          "0c7b516cc377",
+          "3f3d6d662f13",
+          "6e77db845da0",
+          "1c072f3059c2",
+          "4fdd9b34ba4c",
+          "668544acaa68",
+          "ea0b56b75248",
+          "3e95f1c5722b",
+          "5f895627c6f2",
+          "668544acaa68",
+          "898a1780bf41",
           "2051705dd8de",
           "a5585f468698",
           "668544acaa68",
@@ -11449,13 +11474,40 @@
         ],
         "sources": {
           "chair": "a9a92258115c",
-          "R1-2607309": "a15e5aecde50"
+          "R1-2607309": "0f03f4d85ff5"
         },
-        "change": "initial",
-        "added": [],
-        "changed_at": "2026-10-13T07:35:31+00:00",
-        "changed_in": "Chair notes RAN1#126bis_v05.docx",
-        "file": "agreements/17fd226fc3f5cdf0fa60.html"
+        "change": "updated",
+        "added": [
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45,
+          46
+        ],
+        "changed_at": "2026-10-14T01:34:46+00:00",
+        "changed_in": "Draft R1-2607309 Session Notes of AI 9.2 - v03.docx",
+        "file": "agreements/6229034e884d1175422f.html"
       },
       "9.3": {
         "title": "Solutions for Ambient IoT (Internet of Things) in NR Phase 2",
@@ -13574,7 +13626,7 @@
       }
     },
     "retained_files": [
-      "agreements/d5eaa9ebeb2118d6bfa0.html"
+      "agreements/17fd226fc3f5cdf0fa60.html"
     ]
   }
 }
