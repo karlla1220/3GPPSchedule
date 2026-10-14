@@ -62,7 +62,8 @@
           "notes": [
             "Opening at 09:00"
           ],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "TBD",
@@ -82,7 +83,8 @@
           ],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "Early items",
@@ -102,7 +104,8 @@
           ],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "TBD",
@@ -122,7 +125,8 @@
           ],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "TBD",
@@ -142,7 +146,8 @@
           ],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "Early items: Rel-21 5G-Adv",
@@ -162,7 +167,8 @@
           ],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "TBD",
@@ -182,7 +188,8 @@
           ],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "TBD",
@@ -202,7 +209,8 @@
           ],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "Early items: Rel-21 5G-Adv",
@@ -222,7 +230,8 @@
           ],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "Rel-21 5G-Adv (AI 15.2 – RAN1/2/3 NTN, Xiaodong)",
@@ -258,7 +267,8 @@
           ],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "6G diverse devices",
@@ -302,7 +312,8 @@
           ],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         }
       ],
       "date": "2026-09-14",
@@ -391,7 +402,8 @@
           ],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "ITU Adhoc",
@@ -411,7 +423,8 @@
           ],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "Early items",
@@ -431,7 +444,8 @@
           ],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "NTN time/frequency compensation",
@@ -471,7 +485,8 @@
           ],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "TBD",
@@ -491,7 +506,8 @@
           ],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "Early items",
@@ -511,7 +527,8 @@
           ],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "6G spec modernization",
@@ -531,7 +548,8 @@
           ],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "Rel-21 5G-Adv (AI 15.3 – RAN4 Others, Xutao)",
@@ -567,7 +585,8 @@
           ],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "Early items",
@@ -587,7 +606,8 @@
           ],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "TBD",
@@ -607,7 +627,8 @@
           ],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "NTN time/frequency compensation",
@@ -647,7 +668,8 @@
           ],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "Early items / 1st sweep",
@@ -667,7 +689,8 @@
           ],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "6G diverse devices",
@@ -713,7 +736,8 @@
           "notes": [
             "Close by 7pm for social event"
           ],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "Rel-21 5G-Adv (AI 15.3 – RAN4 NTN, Yang)",
@@ -749,7 +773,8 @@
           ],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         }
       ],
       "date": "2026-09-15",
@@ -840,7 +865,8 @@
           ],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "NTN time/frequency compensation",
@@ -880,7 +906,8 @@
           ],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "Report on 6G AS Security – RAN2/SA3 Chairs / 1st sweep / comebacks",
@@ -924,7 +951,8 @@
           ],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "TBD",
@@ -944,7 +972,8 @@
           ],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "TBD",
@@ -964,7 +993,8 @@
           ],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "1st sweep / comebacks",
@@ -984,7 +1014,8 @@
           ],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "6G Migration, Aggregation",
@@ -1028,7 +1059,8 @@
           ],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "Rel-21 5G-Adv (AI 15.2 – RAN1/2/3 NTN, Xiaodong)",
@@ -1064,7 +1096,8 @@
           ],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "Comebacks",
@@ -1084,7 +1117,8 @@
           ],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "TBD",
@@ -1104,7 +1138,8 @@
           ],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "6G diverse devices",
@@ -1148,7 +1183,8 @@
           ],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "Comebacks",
@@ -1168,7 +1204,8 @@
           ],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "TBD",
@@ -1188,7 +1225,8 @@
           ],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "Rel-21 5G-Adv (AI 15.3 – RAN4 NTN, Yang)",
@@ -1224,7 +1262,8 @@
           ],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         }
       ],
       "date": "2026-09-16",
@@ -1291,7 +1330,8 @@
           ],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "NTN time/frequency compensation",
@@ -1331,7 +1371,8 @@
           ],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "Comebacks",
@@ -1351,7 +1392,8 @@
           ],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "TBD",
@@ -1371,7 +1413,8 @@
           ],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "NTN time/frequency compensation",
@@ -1411,7 +1454,8 @@
           ],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "Comebacks",
@@ -1431,7 +1475,8 @@
           ],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "TBD",
@@ -1451,7 +1496,8 @@
           ],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "NTN time/frequency compensation",
@@ -1491,7 +1537,8 @@
           ],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "Comebacks",
@@ -1511,7 +1558,8 @@
           ],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "TBD",
@@ -1531,7 +1579,8 @@
           ],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "TBD",
@@ -1551,7 +1600,8 @@
           ],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "Comebacks",
@@ -1573,7 +1623,8 @@
           "notes": [
             "Closing by 17:00"
           ],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         }
       ],
       "date": "2026-09-17",
@@ -6478,5 +6529,6 @@
     "Plan is to discuss the RAN#113 topics according to the ordering in the table below unless noted otherwise."
   ],
   "supplements": [],
-  "chairman_agreements": {}
+  "chairman_agreements": {},
+  "email_informal": {}
 }

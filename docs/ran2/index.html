@@ -709,6 +709,12 @@ header .meta a:focus-visible,
     font-size: 9px;
 }
 
+/* "maybe 10.3.1": an item announced for this slot on the email threads.
+   The faintest tone of the cell, like the chair. */
+.session-maybe {
+    color: var(--chair);
+}
+
 .session-ai {
     white-space: normal;
     word-break: break-word;
@@ -856,6 +862,28 @@ header .meta a:focus-visible,
     padding-top: 4px;
     border-top: 1px solid rgba(255,255,255,0.16);
     line-height: 1.5;
+}
+
+/* What feature leads announced on the email threads: a second-hand source,
+   so it is set apart and quieter than the schedule's own lines. */
+.popup-email {
+    margin-top: 4px;
+    padding-top: 4px;
+    border-top: 1px solid rgba(255,255,255,0.16);
+    line-height: 1.5;
+}
+
+.popup-email-head {
+    font-size: 11px;
+    opacity: 0.7;
+}
+
+.popup-email-from {
+    opacity: 0.7;
+}
+
+.popup-email-tdoc {
+    white-space: nowrap;
 }
 
 /* Agenda names: the session's own items always, their parents folded
@@ -1262,6 +1290,49 @@ header .meta a:focus-visible,
 }
 .agreement-action:hover { color: var(--ink); border-color: #CDD3DB; }
 .agreement-panel button:focus-visible { outline: 2px solid #2563EB; outline-offset: 2px; }
+
+/* Off-offline and FL whereabouts from the email threads, all items in one
+   list below the agreements: the same surface, quieter text. Not the chair's
+   notes and not the schedule, which the header says. The selected cell's
+   items are bold on a wash of its accent. */
+.email-informal {
+    margin: 16px 0 24px;
+    background: var(--surface);
+    border-radius: var(--radius-lg);
+    box-shadow: 0 0 0 1px var(--hairline), 0 1px 2px rgba(15,23,42,.04);
+}
+.email-informal-header {
+    display: flex;
+    align-items: baseline;
+    gap: 4px 12px;
+    flex-wrap: wrap;
+    padding: 14px 16px 10px;
+    border-bottom: 1px solid var(--hairline);
+}
+.email-informal-header h2 {
+    font-size: 10.5px;
+    line-height: 1.4;
+    font-weight: 600;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    color: var(--ink-4);
+}
+.email-informal-header p { font-size: 12px; color: var(--ink-3); }
+.email-informal ul { list-style: none; margin: 0; padding: 8px 10px 12px; }
+.email-informal li {
+    padding: 3px 6px;
+    border-radius: 4px;
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--ink-2);
+}
+.email-informal-when { font-weight: 600; white-space: nowrap; }
+.email-informal-ai, .email-informal-from { color: var(--ink-3); }
+.email-informal-ai { white-space: nowrap; }
+.email-informal li.related { font-weight: 600; color: var(--ink); background: #EEF1F5; }
+@supports (color: color-mix(in oklch, red 10%, white)) {
+    .email-informal li.related { background: color-mix(in oklch, var(--selected-accent, #64748B) 12%, white); }
+}
 
 /* The cell whose agreements are shown: its own accent, drawn as a ring. */
 .session-block[aria-pressed="true"] {

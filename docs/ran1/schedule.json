@@ -114,7 +114,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "10.5.1.1",
@@ -160,7 +161,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "10.5.1.1",
@@ -206,7 +208,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "10.5.1.2",
@@ -252,7 +255,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "10.5.1.3",
@@ -298,7 +302,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "10.3.2",
@@ -339,7 +344,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "10.3.1",
@@ -380,7 +386,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "R20 A-IoT",
@@ -443,7 +450,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "MIMO",
@@ -463,7 +471,8 @@
           "notes": [],
           "inferred_agenda_items": [
             "9.2"
-          ]
+          ],
+          "email_details": []
         },
         {
           "name": "10.8.2 6G ISAC Sensing",
@@ -504,7 +513,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "10.2.1 Waveform",
@@ -545,7 +555,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "10.4.x",
@@ -591,7 +602,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "10.6.x",
@@ -649,7 +661,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "AI 9.4 NTN-NR",
@@ -685,7 +698,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "AI 9.5 NTN",
@@ -721,7 +735,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "AI 10.7.1 NTN",
@@ -762,7 +777,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "R20 A-IoT Phase2",
@@ -803,7 +819,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "6G ISAC",
@@ -844,7 +861,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "10.5.3.4",
@@ -890,7 +908,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "10.5.3.1",
@@ -936,7 +955,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "10.5.3.2",
@@ -982,7 +1002,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "10.5.3.3",
@@ -1028,7 +1049,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "10.5.5",
@@ -1069,7 +1091,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "6G 10.5.4.x",
@@ -1169,7 +1192,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "10.5.3.1",
@@ -1215,7 +1239,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "10.5.3.2",
@@ -1261,7 +1286,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "10.5.3.3",
@@ -1307,7 +1333,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "10.5.3.4",
@@ -1353,7 +1380,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "AI 9.2 MIMO",
@@ -1389,7 +1417,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "AI 10.3.2 Modulation",
@@ -1430,7 +1459,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "AI 10.3.1 Coding",
@@ -1471,7 +1501,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "AI 10.5.2.1 PDCCH",
@@ -1517,7 +1548,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "10.5.4.4",
@@ -1563,7 +1595,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "10.5.4.1",
@@ -1609,7 +1642,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "10.5.4.3",
@@ -1655,7 +1689,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "10.2.1 Waveform",
@@ -1696,7 +1731,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "10.5.1.1",
@@ -1742,7 +1778,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "10.5.1.3",
@@ -1788,7 +1825,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "10.5.1.2",
@@ -1834,7 +1872,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "10.4.1",
@@ -1875,7 +1914,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "10.5.2.1",
@@ -1921,7 +1961,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "10.7.1 NTN",
@@ -1962,7 +2003,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "9.5 NTN",
@@ -1998,7 +2040,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "9.4 NTN-NR",
@@ -2034,7 +2077,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         }
       ],
       "date": null,
@@ -2167,7 +2211,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "10.5.1.2",
@@ -2213,7 +2258,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "10.5.1.1",
@@ -2259,7 +2305,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "AI 10.7.1 NTN",
@@ -2300,7 +2347,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "AI 9.5 NTN",
@@ -2336,7 +2384,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "AI 9.4 NR-NTN",
@@ -2372,7 +2421,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "10.5.4.1",
@@ -2418,7 +2468,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "10.5.4.2",
@@ -2464,7 +2515,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "10.5.4.3",
@@ -2510,7 +2562,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "10.4.2",
@@ -2551,7 +2604,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "10.6.1.1",
@@ -2597,7 +2651,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "AI/ML",
@@ -2617,7 +2672,8 @@
           "notes": [],
           "inferred_agenda_items": [
             "9.1"
-          ]
+          ],
+          "email_details": []
         },
         {
           "name": "6G ISAC",
@@ -2680,7 +2736,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "6G waveform",
@@ -2721,7 +2778,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "10.5.5",
@@ -2762,7 +2820,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "10.4.2",
@@ -2803,7 +2862,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "10.4.1",
@@ -2844,7 +2904,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "AI 9.1 AIML",
@@ -2880,7 +2941,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "AI 9.2 MIMO",
@@ -2916,7 +2978,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "AI 8.1",
@@ -2952,7 +3015,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "10.8.3",
@@ -2993,7 +3057,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "10.8.1",
@@ -3034,7 +3099,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "A-IoT Phase2",
@@ -3075,7 +3141,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "10.6.1.2",
@@ -3121,7 +3188,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "10.6.2",
@@ -3162,7 +3230,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "10.6.3",
@@ -3203,7 +3272,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "10.5.1.2",
@@ -3249,7 +3319,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "10.5.2.3",
@@ -3295,7 +3366,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "10.5.2.2",
@@ -3341,7 +3413,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "10.6.x",
@@ -3399,7 +3472,65 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": [
+            {
+              "kind": "session",
+              "session": "Tue 14:30-15:30 Tamna BC Hall",
+              "quote": "Please see Sec. 2 in http://10.10.10.10/ftp/RAN/RAN1/Inbox/R1-2608632.zip for proposals for online discussion.",
+              "mode": "online",
+              "summary": "Proposals in Sec. 2 for online discussion",
+              "topics": [
+                "Sec. 2"
+              ],
+              "day": "Tuesday",
+              "tdocs": [
+                "R1-2608632"
+              ],
+              "split": [],
+              "mail": "141f8e9d.2610b",
+              "author": "Magnus Åström",
+              "sent": "2026-10-13T13:52:20+09:00"
+            },
+            {
+              "kind": "session",
+              "session": "Tue 14:30-15:30 Tamna BC Hall",
+              "quote": "please check the proposals in section 2.2 in R1-2607361 for coming online.",
+              "mode": "online",
+              "summary": "Proposals in section 2.2 in R1-2607361 for coming online session",
+              "topics": [
+                "section 2.2 in R1-2607361"
+              ],
+              "day": "Tuesday",
+              "tdocs": [
+                "R1-2607361"
+              ],
+              "split": [],
+              "mail": "fe694736.2610b",
+              "author": "Qu Xin (vivo)",
+              "sent": "2026-10-13T14:06:01+09:00"
+            },
+            {
+              "kind": "session",
+              "session": "Tue 14:30-15:30 Tamna BC Hall",
+              "quote": "the following proposals will be discussed during\nonline session.\n*\t[HIGH] Proposal #4-2-1b, for SSB\n*\t[HIGH] Proposal #4-2-2b, for SIB1\n*\t[HIGH] Proposal #4-3-1, for both SSB and SIB1",
+              "mode": "online",
+              "summary": "Online discussion on Proposals #4-2-1b, #4-2-2b, and #4-3-1",
+              "topics": [
+                "Proposal #4-2-1b",
+                "Proposal #4-2-2b",
+                "Proposal #4-3-1"
+              ],
+              "day": "Tuesday",
+              "tdocs": [
+                "R1-2608685"
+              ],
+              "split": [],
+              "mail": "e72474c2.2610b",
+              "author": "Seonwook Kim",
+              "sent": "2026-10-13T14:19:21+09:00"
+            }
+          ]
         },
         {
           "name": "10.5.1.1",
@@ -3445,7 +3576,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "AI 10.5.2.1 PDCCH",
@@ -3491,7 +3623,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "AI 10.5.2.2 PDSCH",
@@ -3537,7 +3670,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "AI 10.5.2.3 PUxCH",
@@ -3583,7 +3717,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "11 TEI20",
@@ -3614,7 +3749,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "8.2 R19 Duplex, R19 ISAC CM, R19 XR",
@@ -3650,7 +3786,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "8.3 UE features",
@@ -3686,7 +3823,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "8.2 R19 LP-WUS",
@@ -3722,7 +3860,28 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": [
+            {
+              "kind": "session",
+              "session": "Tue 15:30-15:50 Yeongju B Hall",
+              "quote": "Please check the proposals in section 2.1 in R1-2608700 coming online",
+              "mode": "online",
+              "summary": "Check proposals in section 2.1 in R1-2608700 for upcoming online session",
+              "topics": [
+                "section 2.1 in R1-2608700",
+                "R19 LP-WUS"
+              ],
+              "day": "Tuesday",
+              "tdocs": [
+                "R1-2608700"
+              ],
+              "split": [],
+              "mail": "ba0b6ad2.2610b",
+              "author": "Qu Xin (vivo)",
+              "sent": "2026-10-13T13:51:22+09:00"
+            }
+          ]
         },
         {
           "name": "6G waveform",
@@ -3763,7 +3922,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "10.5.3.1",
@@ -3809,7 +3969,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "10.5.3.2",
@@ -3855,7 +4016,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "10.5.3.3",
@@ -3901,7 +4063,24 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": [
+            {
+              "kind": "session",
+              "session": "Tue 15:40-16:00 201",
+              "quote": "The FL summary V012 is uploaded for our offline discussion and the proposals to be discussed are provided in section 2.2.",
+              "mode": "offline",
+              "summary": "Offline discussion on proposals in section 2.2 (FL summary V012)",
+              "topics": [
+                "section 2.2"
+              ],
+              "day": "Tuesday",
+              "split": [],
+              "mail": "7387bdb7.2610b",
+              "author": "Bingchao BC2 Liu",
+              "sent": "2026-10-13T14:50:13+09:00"
+            }
+          ]
         },
         {
           "name": "10.5.3.4",
@@ -3947,7 +4126,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "R20 A-IoT",
@@ -4010,7 +4190,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "10.3.2",
@@ -4051,7 +4232,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "10.5.3.2",
@@ -4097,7 +4279,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "10.5.3.3",
@@ -4143,7 +4326,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "10.5.3.4",
@@ -4189,7 +4373,25 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": [
+            {
+              "kind": "session",
+              "session": "Tue 18:00-18:30 Tamna BC Hall",
+              "quote": "proposals for today online",
+              "mode": "online",
+              "summary": "Proposals for today's online session in R1-2608006",
+              "topics": [],
+              "day": "Tuesday",
+              "tdocs": [
+                "R1-2608006"
+              ],
+              "split": [],
+              "mail": "6530bb48.2610b",
+              "author": "Bo Gao",
+              "sent": "2026-10-13T17:24:46+09:00"
+            }
+          ]
         },
         {
           "name": "AI 10.3.1 Coding",
@@ -4230,7 +4432,25 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": [
+            {
+              "kind": "session",
+              "session": "Tue 17:00-18:00 Yeongju A Hall",
+              "quote": "Please see FL summary for online in http://10.10.10.10/ftp/RAN/RAN1/Inbox/R1-2608627.zip",
+              "mode": "online",
+              "summary": "FL summary available for online session",
+              "topics": [],
+              "day": "Tuesday",
+              "tdocs": [
+                "R1-2608627"
+              ],
+              "split": [],
+              "mail": "9d481f00.2610b",
+              "author": "<>",
+              "sent": "2026-10-13T16:57:13+09:00"
+            }
+          ]
         },
         {
           "name": "AI 10.3.2 Modulation",
@@ -4271,7 +4491,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "9.3.1",
@@ -4312,7 +4533,24 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": [
+            {
+              "kind": "session",
+              "session": "Tue 17:00-17:30 Yeongju B Hall",
+              "quote": "adding proposals in section 4.4 for the coming afternoon online",
+              "mode": "online",
+              "summary": "Proposals in section 4.4 for the coming afternoon online",
+              "topics": [
+                "section 4.4"
+              ],
+              "day": "Tuesday",
+              "split": [],
+              "mail": "15a76d33.2610b",
+              "author": "Jinzhe (A)",
+              "sent": "2026-10-13T16:57:07+09:00"
+            }
+          ]
         },
         {
           "name": "9.3.3",
@@ -4353,7 +4591,25 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": [
+            {
+              "kind": "session",
+              "session": "Tue 17:30-18:30 Yeongju B Hall",
+              "quote": "I uploaded the FL summary_v22 in the draft folder for today’s offline discussion.",
+              "mode": "offline",
+              "summary": "Offline discussion based on FL summary_v22",
+              "topics": [],
+              "day": "Tuesday",
+              "tdocs": [
+                "R1-2607193"
+              ],
+              "split": [],
+              "mail": "217ca309.2610b",
+              "author": "Teng Ma",
+              "sent": "2026-10-13T14:38:47+09:00"
+            }
+          ]
         },
         {
           "name": "10.5.1.3",
@@ -4399,7 +4655,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "10.5.1.1",
@@ -4445,7 +4702,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "10.5.5",
@@ -4486,7 +4744,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "10.7.1 NTN",
@@ -4527,7 +4786,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "9.4 NTN-NR",
@@ -4563,7 +4823,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "Early dinner",
@@ -4581,7 +4842,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         }
       ],
       "date": null,
@@ -4714,7 +4976,38 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": [
+            {
+              "kind": "session",
+              "session": "Wed 08:30-09:20 Tamna BC Hall",
+              "quote": "FL summary has been uploaded in R1-2608447. You can find the proposals for online discussion in the beginning of the tdoc.",
+              "mode": "online",
+              "summary": "Proposals for online discussion available in R1-2608447",
+              "topics": [],
+              "day": "Wednesday",
+              "tdocs": [
+                "R1-2608447"
+              ],
+              "split": [],
+              "mail": "714670ea.2610b",
+              "author": "songxinghua",
+              "sent": "2026-10-13T15:31:09+09:00"
+            },
+            {
+              "kind": "session",
+              "session": "Wed 08:30-09:20 Tamna BC Hall",
+              "quote": "You can find the proposals for online discussion in the beginning of the tdoc.",
+              "mode": "online",
+              "summary": "Proposals for online discussion uploaded in FL summary #4",
+              "topics": [],
+              "day": "Wednesday",
+              "split": [],
+              "mail": "a2ead723.2610b",
+              "author": "songxinghua",
+              "sent": "2026-10-14T01:46:57+09:00"
+            }
+          ]
         },
         {
           "name": "10.5.1.3",
@@ -4760,7 +5053,29 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": [
+            {
+              "kind": "session",
+              "session": "Wed 09:20-10:00 Tamna BC Hall",
+              "quote": "R1-2608681 is uploaded for online discussion (Wed 9:20). Please check the proposals in Section 2 where focus is on DL bandwidth settings",
+              "mode": "online",
+              "summary": "Online discussion on Section 2 (DL bandwidth settings)",
+              "topics": [
+                "Section 2",
+                "DL bandwidth settings"
+              ],
+              "start": "09:20",
+              "day": "Wednesday",
+              "tdocs": [
+                "R1-2608681"
+              ],
+              "split": [],
+              "mail": "b94b5bc4.2610b",
+              "author": "Weide Wu (吳威德)",
+              "sent": "2026-10-14T08:49:11+09:00"
+            }
+          ]
         },
         {
           "name": "10.5.1.2",
@@ -4806,7 +5121,26 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": [
+            {
+              "kind": "session",
+              "session": "Wed 10:00-10:30 Tamna BC Hall",
+              "quote": "This will be used for online discussion for Wed. The order of the proposals for discussion in Section 2.",
+              "mode": "online",
+              "summary": "Online discussion for Wed using updated summary v33 (Section 2 proposals)",
+              "topics": [
+                "proposals in Section 2",
+                "proposals #4-4A",
+                "proposals #2-3B"
+              ],
+              "day": "Wednesday",
+              "split": [],
+              "mail": "bbec2c85.2610b",
+              "author": "Daewon Lee",
+              "sent": "2026-10-14T08:48:53+09:00"
+            }
+          ]
         },
         {
           "name": "AI 10.7.1 NTN",
@@ -4847,7 +5181,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "AI 9.4 NR-NTN",
@@ -4883,7 +5218,24 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": [
+            {
+              "kind": "session",
+              "session": "Wed 09:10-09:50 Yeongju A Hall",
+              "quote": "Please provide your comments on the proposals for upcoming online (refer to section 8).",
+              "mode": "online",
+              "summary": "Comments on proposals for upcoming online (Section 8)",
+              "topics": [
+                "proposals for upcoming online (refer to section 8)"
+              ],
+              "day": "Wednesday",
+              "split": [],
+              "mail": "537c1290.2610b",
+              "author": "EL JAAFARI Mohamed",
+              "sent": "2026-10-14T06:51:22+09:00"
+            }
+          ]
         },
         {
           "name": "AI 9.2 MIMO",
@@ -4919,7 +5271,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "9.3.2",
@@ -4960,7 +5313,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "9.3.3",
@@ -5001,7 +5355,25 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": [
+            {
+              "kind": "session",
+              "session": "Wed 09:10-09:50 Yeongju B Hall",
+              "quote": "Please have a check on the proposals for Wednesday morning online session.",
+              "mode": "online",
+              "summary": "Check proposals in FL summary#2_v00 for Wednesday morning online session",
+              "topics": [],
+              "day": "Wednesday",
+              "tdocs": [
+                "R1-2607194"
+              ],
+              "split": [],
+              "mail": "bf925a2a.2610b",
+              "author": "Teng Ma",
+              "sent": "2026-10-14T00:23:53+09:00"
+            }
+          ]
         },
         {
           "name": "9.3.1",
@@ -5042,7 +5414,27 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": [
+            {
+              "kind": "session",
+              "session": "Wed 09:50-10:30 Yeongju B Hall",
+              "quote": "adding proposals in section 4.5 for Wednesday morning online",
+              "mode": "online",
+              "summary": "Proposals in section 4.5 for Wednesday morning online",
+              "topics": [
+                "Section 4.5"
+              ],
+              "day": "Wednesday",
+              "tdocs": [
+                "R1-2607513"
+              ],
+              "split": [],
+              "mail": "9b74ffae.2610b",
+              "author": "Jinzhe (A)",
+              "sent": "2026-10-14T08:05:02+09:00"
+            }
+          ]
         },
         {
           "name": "10.5.5",
@@ -5083,7 +5475,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "10.2.1 Waveform",
@@ -5124,7 +5517,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "6G ISAC",
@@ -5187,7 +5581,22 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": [
+            {
+              "kind": "session",
+              "session": "Wed 09:30-10:30 201",
+              "quote": "proposals for offline/online session on Wednesday",
+              "mode": null,
+              "summary": "Proposals available for Wednesday offline/online session",
+              "topics": [],
+              "day": "Wednesday",
+              "split": [],
+              "mail": "f22de9cd.2610b",
+              "author": "Woo-Suk Ko",
+              "sent": "2026-10-13T22:04:16+09:00"
+            }
+          ]
         },
         {
           "name": "MIMO",
@@ -5207,6 +5616,25 @@
           "notes": [],
           "inferred_agenda_items": [
             "9.2"
+          ],
+          "email_details": [
+            {
+              "kind": "session",
+              "session": "Wed 08:30-09:10 203",
+              "quote": "updated schedule for the Wednesday offline discussion, where all offline time before coffee break will be assigned to CSI.\n1. 08:30 – 09:10: CSI",
+              "mode": "offline",
+              "summary": "Offline discussion on CSI",
+              "topics": [
+                "CSI"
+              ],
+              "start": "08:30",
+              "end": "09:10",
+              "day": "Wednesday",
+              "split": [],
+              "mail": "bde55eba.2610b",
+              "author": "Darcy Tsai (蔡承融)",
+              "sent": "2026-10-13T23:57:31+09:00"
+            }
           ]
         },
         {
@@ -5227,7 +5655,8 @@
           "notes": [],
           "inferred_agenda_items": [
             "9.1"
-          ]
+          ],
+          "email_details": []
         },
         {
           "name": "10.5.2.1",
@@ -5273,7 +5702,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "10.5.3.1",
@@ -5319,7 +5749,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "10.5.3.2",
@@ -5365,7 +5796,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "10.5.3.3",
@@ -5411,7 +5843,27 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": [
+            {
+              "kind": "session",
+              "session": "Wed 12:30-13:00 Tamna BC Hall",
+              "quote": "tomorrow's online meeting",
+              "mode": "online",
+              "summary": "Online session to discuss Round 3 proposals",
+              "topics": [
+                "Proposal 4-1A-r3",
+                "Proposal 4-1C-r3",
+                "Proposal 4-1B-r3",
+                "Proposal 3-2-r2"
+              ],
+              "day": "Wednesday",
+              "split": [],
+              "mail": "936d7b7a.2610b",
+              "author": "Bingchao BC2 Liu",
+              "sent": "2026-10-13T23:28:17+09:00"
+            }
+          ]
         },
         {
           "name": "AI 9.1 AIML",
@@ -5447,7 +5899,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "AI 10.3.1 Coding",
@@ -5488,7 +5941,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "AI 10.5.2.2 PDSCH",
@@ -5534,7 +5988,26 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": [
+            {
+              "kind": "session",
+              "session": "Wed 12:30-13:00 Yeongju A Hall",
+              "quote": "Online session 1 (12:30~13:00): RS for PDSCH",
+              "mode": "online",
+              "summary": "Online session 1 on RS for PDSCH",
+              "topics": [
+                "RS for PDSCH"
+              ],
+              "start": "12:30",
+              "end": "13:00",
+              "day": "Wednesday",
+              "split": [],
+              "mail": "c0926550.2610b",
+              "author": "Yushu Zhang",
+              "sent": "2026-10-14T11:12:12+09:00"
+            }
+          ]
         },
         {
           "name": "10.8.2",
@@ -5575,7 +6048,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "10.8.1",
@@ -5616,7 +6090,41 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": [
+            {
+              "kind": "session",
+              "session": "Wed 11:40-12:20 Yeongju B Hall",
+              "quote": "Since we do not have offline session before online session tomorrow, please try to provide your comments (if any) in FL summary via ftp by by Wednesday 9:30 local time.",
+              "mode": "online",
+              "summary": "Online session tomorrow with comments due by 09:30 Wednesday",
+              "topics": [],
+              "day": "Wednesday",
+              "input_due": {
+                "at": "09:30"
+              },
+              "split": [],
+              "mail": "efc84e87.2610b",
+              "author": "Yongqiang FEI (费永强)",
+              "sent": "2026-10-13T17:37:24+09:00"
+            },
+            {
+              "kind": "session",
+              "session": "Wed 11:40-12:20 Yeongju B Hall",
+              "quote": "The FL summary R1-2607430 for Wednesday's online discussion is uploaded in the inbox.",
+              "mode": "online",
+              "summary": "Online discussion with FL summary R1-2607430",
+              "topics": [],
+              "day": "Wednesday",
+              "tdocs": [
+                "R1-2607430"
+              ],
+              "split": [],
+              "mail": "f34c924c.2610b",
+              "author": "Yongqiang FEI (费永强)",
+              "sent": "2026-10-14T10:06:12+09:00"
+            }
+          ]
         },
         {
           "name": "10.8.3",
@@ -5657,7 +6165,22 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": [
+            {
+              "kind": "session",
+              "session": "Wed 12:20-13:00 Yeongju B Hall",
+              "quote": "proposals for offline/online session on Wednesday",
+              "mode": null,
+              "summary": "Proposals available for Wednesday offline/online session",
+              "topics": [],
+              "day": "Wednesday",
+              "split": [],
+              "mail": "f22de9cd.2610b",
+              "author": "Woo-Suk Ko",
+              "sent": "2026-10-13T22:04:16+09:00"
+            }
+          ]
         },
         {
           "name": "10.6.x",
@@ -5715,7 +6238,54 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": [
+            {
+              "kind": "session",
+              "session": "Wed 11:00-12:30 201",
+              "quote": "For Wednesday’s offline session we will do\n10.6.1.2: 40 min\n10.6.3: 30 min\n10.6.1.1: 20 min",
+              "mode": "offline",
+              "summary": "Offline split: 10.6.1.2 (40 min), 10.6.3 (30 min), 10.6.1.1 (20 min)",
+              "topics": [
+                "10.6.1.2",
+                "10.6.3",
+                "10.6.1.1"
+              ],
+              "day": "Wednesday",
+              "split": [
+                {
+                  "agenda_item": "10.6.1.2",
+                  "minutes": 40
+                },
+                {
+                  "agenda_item": "10.6.3",
+                  "minutes": 30
+                },
+                {
+                  "agenda_item": "10.6.1.1",
+                  "minutes": 20
+                }
+              ],
+              "mail": "6b71e171.2610b",
+              "author": "Magnus Åström",
+              "sent": "2026-10-13T23:07:56+09:00"
+            },
+            {
+              "kind": "session",
+              "session": "Wed 11:00-12:30 201",
+              "quote": "The FL summary is updated in v26 in draft folder for offline/online discussion tomorrow. Please take a look at proposals in section 2.3",
+              "mode": "offline",
+              "summary": "Offline discussion on proposals in section 2.3",
+              "topics": [
+                "proposals in section 2.3"
+              ],
+              "day": "Wednesday",
+              "split": [],
+              "mail": "d7254f27.2610b",
+              "author": "Qu Xin (vivo)",
+              "sent": "2026-10-13T23:38:40+09:00"
+            }
+          ]
         },
         {
           "name": "10.5.4.1",
@@ -5761,7 +6331,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "10.5.2.1",
@@ -5807,7 +6378,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "10.5.2.3",
@@ -5853,7 +6425,45 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": [
+            {
+              "kind": "session",
+              "session": "Wed 11:30-12:30 203",
+              "quote": "Please provide your inputs until 1hr before our offline session today.",
+              "mode": "offline",
+              "summary": "Provide inputs on Round-2 FL proposals until 1 hr before offline session",
+              "topics": [],
+              "day": "Wednesday",
+              "input_due": {
+                "minutes_before": 60
+              },
+              "split": [],
+              "mail": "8207ebd3.2610b",
+              "author": "Youngrok Jang",
+              "sent": "2026-10-14T06:45:37+09:00"
+            },
+            {
+              "kind": "session",
+              "session": "Wed 11:30-12:30 203",
+              "quote": "The plan for our offline session is as follows:\n* Time: 11:30 ~ 12:30 (1hr)\n* Issue\n* Part 1 (PUSCH MIMO)\n* Proposal 3.1.1-4: downloadable codebook\n* Proposal 3.1.1-5: decoupling PUSCH and SRS\n* Proposal 3.2.1-2/3: DL/UL reciprocity based scheme (calibration schemes)",
+              "mode": "offline",
+              "summary": "Offline on Part 1 (PUSCH MIMO) proposals 3.1.1-4, 3.1.1-5, 3.2.1-2/3",
+              "topics": [
+                "Part 1 (PUSCH MIMO)",
+                "Proposal 3.1.1-4",
+                "Proposal 3.1.1-5",
+                "Proposal 3.2.1-2/3"
+              ],
+              "start": "11:30",
+              "end": "12:30",
+              "day": "Wednesday",
+              "split": [],
+              "mail": "83dadb14.2610b",
+              "author": "Youngrok Jang",
+              "sent": "2026-10-14T09:44:13+09:00"
+            }
+          ]
         },
         {
           "name": "MIMO",
@@ -5873,6 +6483,25 @@
           "notes": [],
           "inferred_agenda_items": [
             "9.2"
+          ],
+          "email_details": [
+            {
+              "kind": "session",
+              "session": "Wed 12:30-13:00 203",
+              "quote": "Wednesday offline discussion\n2. 12:30 – 13:00: RRC",
+              "mode": "offline",
+              "summary": "Offline discussion on RRC",
+              "topics": [
+                "RRC"
+              ],
+              "start": "12:30",
+              "end": "13:00",
+              "day": "Wednesday",
+              "split": [],
+              "mail": "bde55eba.2610b",
+              "author": "Darcy Tsai (蔡承融)",
+              "sent": "2026-10-13T23:57:31+09:00"
+            }
           ]
         },
         {
@@ -5919,7 +6548,41 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": [
+            {
+              "kind": "session",
+              "session": "Wed 14:30-15:00 Tamna BC Hall",
+              "quote": "The official deadline of companies input for this round is 2 hours before Wednesday online.",
+              "mode": "online",
+              "summary": "Round#3 input deadline is 2 hours before Wednesday online session",
+              "topics": [],
+              "day": "Wednesday",
+              "input_due": {
+                "minutes_before": 120
+              },
+              "split": [],
+              "mail": "19d867e3.2610b",
+              "author": "Bo Gao",
+              "sent": "2026-10-13T23:07:30+09:00"
+            },
+            {
+              "kind": "session",
+              "session": "Wed 14:30-15:00 Tamna BC Hall",
+              "quote": "The final version (R1-2608007) with the proposals for today online can be found in the draft folder",
+              "mode": "online",
+              "summary": "Proposals for today's online session uploaded in R1-2608007",
+              "topics": [],
+              "day": "Wednesday",
+              "tdocs": [
+                "R1-2608007"
+              ],
+              "split": [],
+              "mail": "34700c49.2610b",
+              "author": "Bo Gao",
+              "sent": "2026-10-14T13:43:16+09:00"
+            }
+          ]
         },
         {
           "name": "10.6.x",
@@ -5977,7 +6640,60 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": [
+            {
+              "kind": "session",
+              "session": "Wed 15:00-16:30 Tamna BC Hall",
+              "quote": "The FL summary is updated in v26 in draft folder for offline/online discussion tomorrow. Please take a look at proposals in section 2.3",
+              "mode": "online",
+              "summary": "Online discussion on proposals in section 2.3",
+              "topics": [
+                "proposals in section 2.3"
+              ],
+              "day": "Wednesday",
+              "split": [],
+              "mail": "d7254f27.2610b",
+              "author": "Qu Xin (vivo)",
+              "sent": "2026-10-13T23:38:40+09:00"
+            },
+            {
+              "kind": "session",
+              "session": "Wed 15:00-16:30 Tamna BC Hall",
+              "quote": "I uploaded R1-2608686 for online session today. We will discuss three proposals in Section 2.",
+              "mode": "online",
+              "summary": "Online session today discussing three proposals in Section 2 (R1-2608686)",
+              "topics": [
+                "Section 2"
+              ],
+              "day": "Wednesday",
+              "tdocs": [
+                "R1-2608686"
+              ],
+              "split": [],
+              "mail": "dcded3e8.2610b",
+              "author": "Seonwook Kim",
+              "sent": "2026-10-14T12:41:56+09:00"
+            },
+            {
+              "kind": "session",
+              "session": "Wed 15:00-16:30 Tamna BC Hall",
+              "quote": "The FL proposal is updated in section 2.3 in R1-2608701 for coming online discussion.",
+              "mode": "online",
+              "summary": "Online discussion on section 2.3 in R1-2608701",
+              "topics": [
+                "section 2.3 in R1-2608701"
+              ],
+              "day": "Wednesday",
+              "tdocs": [
+                "R1-2608701"
+              ],
+              "split": [],
+              "mail": "6935b18c.2610b",
+              "author": "Qu Xin (vivo)",
+              "sent": "2026-10-14T13:33:15+09:00"
+            }
+          ]
         },
         {
           "name": "AI 10.5.2.1 PDCCH",
@@ -6023,7 +6739,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "AI 10.5.2.3 PUxCH",
@@ -6069,7 +6786,57 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": [
+            {
+              "kind": "session",
+              "session": "Wed 15:10-16:30 Yeongju A Hall",
+              "quote": "The plan for our online session is included in Section 7.1 including the following issues (until time permits)\n* Proposal 4.3.1-1/2: DMRS sequence (for CP-OFDM, DFTS-OFDM)",
+              "mode": "online",
+              "summary": "Online session topics: DMRS, PTRS, DL/UL reciprocity, PUSCH TDRA & repetition",
+              "topics": [
+                "Proposal 4.3.1-1/2: DMRS sequence (for CP-OFDM, DFTS-OFDM)",
+                "Proposal 4.3.1-3: FDM btw DMRS RE and data RE for DFTS-OFDM",
+                "Proposal 4.5.1-1/2: PTRS design, phase model",
+                "Proposal 3.2.1-1: DL/UL reciprocity scheme",
+                "Proposal 5.1.1-1: PUSCH TDRA within a slot",
+                "Proposal 5.1.1-2: PUSCH repetition scheme"
+              ],
+              "day": "Wednesday",
+              "tdocs": [
+                "R1-2607566"
+              ],
+              "split": [],
+              "mail": "1119889e.2610b",
+              "author": "Youngrok Jang",
+              "sent": "2026-10-13T22:06:18+09:00"
+            },
+            {
+              "kind": "session",
+              "session": "Wed 15:10-16:30 Yeongju A Hall",
+              "quote": "You can check section 7.2 for the plan for our online session as follows:\n*\tProposal 4.5.1.1: Additional evaluation assumption for AI receiver\n*\tProposal 5.1.1-1/2: TDRA for PUSCH within a slot and repetition",
+              "mode": "online",
+              "summary": "Plan for online session in section 7.2 covering listed proposals",
+              "topics": [
+                "Proposal 4.5.1.1",
+                "Proposal 5.1.1-1/2",
+                "Proposal 5.2.1-1/2",
+                "Proposal 3.1.1-4",
+                "Proposal 3.2.1-3",
+                "Proposal 3.1.1-1",
+                "Proposal 6.1-1",
+                "Proposal 3.7.1-1"
+              ],
+              "day": "Wednesday",
+              "tdocs": [
+                "R1-2607567"
+              ],
+              "split": [],
+              "mail": "b52358cb.2610b",
+              "author": "Youngrok Jang",
+              "sent": "2026-10-14T14:29:40+09:00"
+            }
+          ]
         },
         {
           "name": "8.2 R19 LP-WUS, R19/20 Mobility",
@@ -6105,7 +6872,60 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": [
+            {
+              "kind": "session",
+              "session": "Wed 14:30-15:00 Yeongju B Hall",
+              "quote": "I would like to quickly check whether draft RAN2 LS reply is acceptable for tomorrow online",
+              "mode": "online",
+              "summary": "Draft RAN2 LS reply for online",
+              "topics": [
+                "draft RAN2 LS reply",
+                "R19 Mobility Phase 4"
+              ],
+              "day": "Wednesday",
+              "split": [],
+              "mail": "dae66700.2610b",
+              "author": "Hong He",
+              "sent": "2026-10-13T19:11:51+09:00"
+            },
+            {
+              "kind": "session",
+              "session": "Wed 14:30-15:00 Yeongju B Hall",
+              "quote": "I just uploaded the FL proposals and draft LS to the following folder, which will be presented this afternoon online.",
+              "mode": "online",
+              "summary": "FL proposals and draft LS presented this afternoon online",
+              "topics": [
+                "FL proposals",
+                "draft LS"
+              ],
+              "day": "Wednesday",
+              "split": [],
+              "mail": "1981638.2610b",
+              "author": "Hong He",
+              "sent": "2026-10-14T09:58:42+09:00"
+            },
+            {
+              "kind": "session",
+              "session": "Wed 14:30-15:00 Yeongju B Hall",
+              "quote": "Please check the proposals in section 2.2 in R1-2608726 online",
+              "mode": "online",
+              "summary": "Check proposals in section 2.2 in R1-2608726 online",
+              "topics": [
+                "section 2.2 in R1-2608726",
+                "R19 LP-WUS"
+              ],
+              "day": "Wednesday",
+              "tdocs": [
+                "R1-2608726"
+              ],
+              "split": [],
+              "mail": "c8ca32e2.2610b",
+              "author": "Qu Xin (vivo)",
+              "sent": "2026-10-14T13:34:57+09:00"
+            }
+          ]
         },
         {
           "name": "7 pre-Rel-19 CRs, 8.2 R19 Duplex",
@@ -6153,7 +6973,28 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": [
+            {
+              "kind": "session",
+              "session": "Wed 15:00-15:50 Yeongju B Hall",
+              "quote": "As the online will be in Wednesday afternoon, if you are interested with this topic, please provide your inputs before Wednesday noon 12:00 local time.",
+              "mode": "online",
+              "summary": "Online session on Wednesday afternoon; inputs due by 12:00",
+              "topics": [
+                "Timing issue on Type-1 PHR",
+                "PUSCH overlap timing determination for Type 1 PHR"
+              ],
+              "day": "Wednesday",
+              "input_due": {
+                "at": "12:00"
+              },
+              "split": [],
+              "mail": "11332afd.2610b",
+              "author": "Xuanbo Shao (邵宣博)",
+              "sent": "2026-10-13T15:10:19+09:00"
+            }
+          ]
         },
         {
           "name": "11 TEI20",
@@ -6184,7 +7025,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "R20 Coverage RRC",
@@ -6202,7 +7044,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "6G 10.5.4.x",
@@ -6302,7 +7145,40 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": [
+            {
+              "kind": "session",
+              "session": "Wed 14:30-15:30 201",
+              "quote": "Wednesday offline discussion in the afternoon, the latest FL proposal v031 is now uploaded in the “Wednesday_offline” folder in the local server.\nPlease check Proposal 3-1 (II) in Section 4.2 which will be used",
+              "mode": "offline",
+              "summary": "Offline discussion using Proposal 3-1 (II) in Section 4.2",
+              "topics": [
+                "Proposal 3-1 (II) in Section 4.2"
+              ],
+              "day": "Wednesday",
+              "split": [],
+              "mail": "8d172bf4.2610b",
+              "author": "Kevin Lin",
+              "sent": "2026-10-14T13:01:58+09:00"
+            },
+            {
+              "kind": "session",
+              "session": "Wed 14:30-15:30 201",
+              "quote": "The candidate proposals for the offline discussion at 14:30 in room 201 has been updated in Section 4.1.",
+              "mode": "offline",
+              "summary": "Offline discussion in room 201 covering updated candidate proposals in Section 4.1",
+              "topics": [
+                "Section 4.1"
+              ],
+              "start": "14:30",
+              "day": "Wednesday",
+              "split": [],
+              "mail": "c00aefea.2610b",
+              "author": "Lei Zhang (Fujitsu)",
+              "sent": "2026-10-14T13:39:38+09:00"
+            }
+          ]
         },
         {
           "name": "10.4.2",
@@ -6343,7 +7219,36 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": [
+            {
+              "kind": "session",
+              "session": "Wed 15:30-16:00 201",
+              "quote": "In the upcoming offline, we will use the following:\r\nv16_HW4_Mod\r\nStill focusing on the same issues, below in order\r\nProposal 4.1-2c (post Tuesday Online):\r\nProposal 3.2-1:\r\nProposal 3.1-1:",
+              "mode": "offline",
+              "summary": "Upcoming offline will use v16_HW4_Mod on Proposals 4.1-2c, 3.2-1, 3.1-1",
+              "topics": [
+                "Proposal 4.1-2c",
+                "Proposal 3.2-1",
+                "Proposal 3.1-1"
+              ],
+              "day": "Wednesday",
+              "split": [
+                {
+                  "topic": "Proposal 4.1-2c (post Tuesday Online)"
+                },
+                {
+                  "topic": "Proposal 3.2-1"
+                },
+                {
+                  "topic": "Proposal 3.1-1"
+                }
+              ],
+              "mail": "a7bed1a8.2610b",
+              "author": "Naoya Shibaike",
+              "sent": "2026-10-14T14:57:45+09:00"
+            }
+          ]
         },
         {
           "name": "10.4.1",
@@ -6384,7 +7289,30 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": [
+            {
+              "kind": "session",
+              "session": "Wed 16:00-16:30 201",
+              "quote": "Please kindly check and feedback before 3:30PM today so that I can take your inputs into account for the offline discussion.",
+              "mode": "offline",
+              "summary": "Offline discussion; feedback on Proposal 1-9a by 15:30",
+              "topics": [
+                "Proposal 1-9a"
+              ],
+              "day": "Wednesday",
+              "tdocs": [
+                "R1-2607205"
+              ],
+              "input_due": {
+                "at": "15:30"
+              },
+              "split": [],
+              "mail": "975a5f06.2610b",
+              "author": "Yanping Xing",
+              "sent": "2026-10-14T12:17:02+09:00"
+            }
+          ]
         },
         {
           "name": "10.3.1",
@@ -6425,7 +7353,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "R20 A-IoT",
@@ -6510,7 +7439,31 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": [
+            {
+              "kind": "session",
+              "session": "Wed 15:10-16:30 203",
+              "quote": "The draft for the offline discussion has been uploaded. Please refer to Section 2.1 for the proposals to be discussed.",
+              "mode": "offline",
+              "summary": "Offline draft uploaded; Section 2.1 and Proposals 3.1-2B, 5.3-6A, 5.3-7A",
+              "topics": [
+                "Section 2.1",
+                "FL Proposal 3.1-2B",
+                "FL Proposal 5.3-6A",
+                "FL Proposal 5.3-7A"
+              ],
+              "day": "Wednesday",
+              "tdocs": [
+                "R1-2607548",
+                "R1-2606947"
+              ],
+              "split": [],
+              "mail": "41abc215.2610b",
+              "author": "Hyemin Choe",
+              "sent": "2026-10-14T12:54:29+09:00"
+            }
+          ]
         },
         {
           "name": "10.4.1",
@@ -6551,7 +7504,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "10.4.2",
@@ -6592,7 +7546,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "10.5.5",
@@ -6633,7 +7588,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "10.5.3.1",
@@ -6679,7 +7635,27 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": [
+            {
+              "kind": "session",
+              "session": "Wed 19:00-19:30 Tamna BC Hall",
+              "quote": "If no further comment by 14:00 Wed, I will propose to endorse Annex A as a starting point to draw observations for corresponding use cases in PM session tomorrow.",
+              "mode": null,
+              "summary": "Propose to endorse Annex A as starting point in PM session",
+              "topics": [
+                "Annex A"
+              ],
+              "day": "Wednesday",
+              "input_due": {
+                "at": "14:00"
+              },
+              "split": [],
+              "mail": "573f6fa8.2610b",
+              "author": "<>",
+              "sent": "2026-10-14T01:42:24+09:00"
+            }
+          ]
         },
         {
           "name": "10.3.1 Channel coding",
@@ -6720,7 +7696,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "10.3.2 Modulation",
@@ -6761,7 +7738,27 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": [
+            {
+              "kind": "session",
+              "session": "Wed 18:00-18:30 Yeongju A Hall",
+              "quote": "For the online session later today, I plan to start from the template for fixed MCS performance reporting in 2.1.3-1A and 2.1.3-1C. Hopefully these can be relatively easy.",
+              "mode": "online",
+              "summary": "Online session covering 2.1.3-1A, 2.1.3-1C, and potentially 2.1.3-2A, 2.1.3-3",
+              "topics": [
+                "2.1.3-1A",
+                "2.1.3-1C",
+                "2.1.3-2A",
+                "2.1.3-3"
+              ],
+              "day": "Wednesday",
+              "split": [],
+              "mail": "2c921579.2610b",
+              "author": "Jing Sun",
+              "sent": "2026-10-14T14:35:46+09:00"
+            }
+          ]
         },
         {
           "name": "10.5.2.2 PDSCH",
@@ -6807,7 +7804,26 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": [
+            {
+              "kind": "session",
+              "session": "Wed 18:30-19:30 Yeongju A Hall",
+              "quote": "Online session 2 (18:30~19:30): PDSCH",
+              "mode": "online",
+              "summary": "Online session 2 on PDSCH",
+              "topics": [
+                "PDSCH"
+              ],
+              "start": "18:30",
+              "end": "19:30",
+              "day": "Wednesday",
+              "split": [],
+              "mail": "c0926550.2610b",
+              "author": "Yushu Zhang",
+              "sent": "2026-10-14T11:12:12+09:00"
+            }
+          ]
         },
         {
           "name": "10.2.1 Waveform",
@@ -6848,7 +7864,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "10.5.4.2",
@@ -6894,7 +7911,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "10.5.4.1",
@@ -6940,7 +7958,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "10.5.4.4",
@@ -6986,7 +8005,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "10.5.4.3",
@@ -7032,7 +8052,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "10.5.1.3",
@@ -7078,7 +8099,26 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": [
+            {
+              "kind": "session",
+              "session": "Wed 17:00-17:30 201",
+              "quote": "For the offline discussion, please check the following 3 proposals updated in V24:\nProposal 5.1-1_rev [High] – Update after Wednesday noon off-offline:\nProposal 5.2-1_rev [High] – Update after Wednesday",
+              "mode": "offline",
+              "summary": "Offline discussion on updated Proposals 5.1-1_rev, 5.2-1_rev, 6.1-1_rev in V24",
+              "topics": [
+                "Proposal 5.1-1_rev",
+                "Proposal 5.2-1_rev",
+                "Proposal 6.1-1_rev"
+              ],
+              "day": "Wednesday",
+              "split": [],
+              "mail": "57043d0f.2610b",
+              "author": "Weide Wu (吳威德)",
+              "sent": "2026-10-14T14:44:47+09:00"
+            }
+          ]
         },
         {
           "name": "10.5.1.2",
@@ -7124,7 +8164,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "10.5.1.1",
@@ -7170,7 +8211,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "10.4.1",
@@ -7211,7 +8253,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "10.5.2.2",
@@ -7257,7 +8300,55 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": [
+            {
+              "kind": "session",
+              "session": "Wed 17:00-18:00 203",
+              "quote": "Offline session (17:00~18:00)\n      - 17:00~17:30: PDSCH\n      - 17:30~18:00: RS for PDSCH",
+              "mode": "offline",
+              "summary": "Offline session on PDSCH and RS for PDSCH",
+              "topics": [
+                "PDSCH",
+                "RS for PDSCH"
+              ],
+              "start": "17:00",
+              "end": "18:00",
+              "day": "Wednesday",
+              "split": [
+                {
+                  "topic": "PDSCH",
+                  "start": "17:00",
+                  "end": "17:30"
+                },
+                {
+                  "topic": "RS for PDSCH",
+                  "start": "17:30",
+                  "end": "18:00"
+                }
+              ],
+              "mail": "c0926550.2610b",
+              "author": "Yushu Zhang",
+              "sent": "2026-10-14T11:12:12+09:00"
+            },
+            {
+              "kind": "session",
+              "session": "Wed 17:00-18:00 203",
+              "quote": "For today’s offline session and for PDSCH part, we will treat the following proposals, in order:\n* Proposal 4-8-1: Layer-common/specific PRB bundling\n* Proposal 4-8-3: Per-subcarrier precoding",
+              "mode": "offline",
+              "summary": "Proposals 4-8-1, 4-8-3, 4-5-3 for PDSCH part of offline session",
+              "topics": [
+                "Proposal 4-8-1",
+                "Proposal 4-8-3",
+                "Proposal 4-5-3"
+              ],
+              "day": "Wednesday",
+              "split": [],
+              "mail": "9bb6872c.2610b",
+              "author": "Sven Jacobsson",
+              "sent": "2026-10-14T15:29:10+09:00"
+            }
+          ]
         },
         {
           "name": "10.7.1 NTN",
@@ -7298,7 +8389,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "9.5 NTN",
@@ -7334,7 +8426,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "9.4 NTN-NR",
@@ -7370,7 +8463,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         }
       ],
       "date": null,
@@ -7503,7 +8597,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "10.5.1.2",
@@ -7549,7 +8644,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "10.5.1.3",
@@ -7595,7 +8691,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "AI 10.7.1 NTN",
@@ -7636,7 +8733,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "AI 9.5 NTN",
@@ -7672,7 +8770,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "AI 9.4 NR-NTN",
@@ -7708,7 +8807,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "10.2.1 6G waveform",
@@ -7749,7 +8849,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "Maintenance",
@@ -7797,7 +8898,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "10.4.2",
@@ -7838,7 +8940,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "10.5.5",
@@ -7879,7 +8982,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "10.5.3.1",
@@ -7925,7 +9029,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "AI/ML",
@@ -7945,6 +9050,23 @@
           "notes": [],
           "inferred_agenda_items": [
             "9.1"
+          ],
+          "email_details": [
+            {
+              "kind": "session",
+              "session": "Thu 08:30-09:10 203",
+              "quote": "For the morning session, we will focus on Performance monitoring (Proposal 4.2).",
+              "mode": "offline",
+              "summary": "Performance monitoring (Proposal 4.2)",
+              "topics": [
+                "Performance monitoring (Proposal 4.2)"
+              ],
+              "day": "Thursday",
+              "split": [],
+              "mail": "f4419930.2610b",
+              "author": "Chenxi Hao",
+              "sent": "2026-10-14T15:42:47+09:00"
+            }
           ]
         },
         {
@@ -8013,7 +9135,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "10.5.5",
@@ -8054,7 +9177,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "10.4.1",
@@ -8095,7 +9219,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "10.4.2",
@@ -8136,7 +9261,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "10.3.1 Channel coding",
@@ -8177,7 +9303,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "AI 9.1 AIML",
@@ -8213,7 +9340,24 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": [
+            {
+              "kind": "session",
+              "session": "Thu 11:30-12:20 Yeongju A Hall",
+              "quote": "For the morning session, we will focus on Performance monitoring (Proposal 4.2).",
+              "mode": "online",
+              "summary": "Performance monitoring (Proposal 4.2)",
+              "topics": [
+                "Performance monitoring (Proposal 4.2)"
+              ],
+              "day": "Thursday",
+              "split": [],
+              "mail": "f4419930.2610b",
+              "author": "Chenxi Hao",
+              "sent": "2026-10-14T15:42:47+09:00"
+            }
+          ]
         },
         {
           "name": "AI 9.2 MIMO",
@@ -8249,7 +9393,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "9.3.3",
@@ -8290,7 +9435,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "9.3.1",
@@ -8331,7 +9477,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "9.3.2",
@@ -8372,7 +9519,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "10.8.x Sensing",
@@ -8457,7 +9605,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "10.5.3.2",
@@ -8503,7 +9652,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "10.5.2.3",
@@ -8549,7 +9699,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "10.5.2.1",
@@ -8595,7 +9746,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "10.5.2.2",
@@ -8641,7 +9793,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "10.6.x",
@@ -8699,7 +9852,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "10.5.3.1",
@@ -8745,7 +9899,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "AI 10.5.2.1 PDCCH",
@@ -8791,7 +9946,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "AI 10.5.2.2 PDSCH",
@@ -8837,7 +9993,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "AI 10.5.2.3 PUxCH",
@@ -8883,7 +10040,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "10.8.1",
@@ -8924,7 +10082,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "10.8.2",
@@ -8965,7 +10124,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "10.8.3",
@@ -9006,7 +10166,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "10.5.3.2",
@@ -9052,7 +10213,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "10.5.3.3",
@@ -9098,7 +10260,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "10.3.1",
@@ -9139,7 +10302,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "10.3.2",
@@ -9180,7 +10344,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "10.5.4.x",
@@ -9307,7 +10472,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "10.5.3.1",
@@ -9353,7 +10519,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "10.5.3.2",
@@ -9399,7 +10566,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "10.5.3.3",
@@ -9445,7 +10613,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "10.5.3.4",
@@ -9491,7 +10660,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "AI 10.3.1 Coding",
@@ -9532,7 +10702,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "AI 10.3.2 Modulation",
@@ -9573,7 +10744,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "AI 9.1 AIML",
@@ -9609,7 +10781,26 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": [
+            {
+              "kind": "session",
+              "session": "Thu 18:30-19:30 Yeongju A Hall",
+              "quote": "For the afternoon session, we will discuss RRC list, discussion point 6.2 and proposal 5.1.",
+              "mode": "online",
+              "summary": "Discuss RRC list, discussion point 6.2 and proposal 5.1",
+              "topics": [
+                "RRC list",
+                "discussion point 6.2",
+                "proposal 5.1"
+              ],
+              "day": "Thursday",
+              "split": [],
+              "mail": "f4419930.2610b",
+              "author": "Chenxi Hao",
+              "sent": "2026-10-14T15:42:47+09:00"
+            }
+          ]
         },
         {
           "name": "10.5.4.4",
@@ -9655,7 +10846,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "10.5.4.3",
@@ -9701,7 +10893,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "10.5.4.1",
@@ -9747,7 +10940,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "10.5.4.2",
@@ -9793,7 +10987,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "10.5.1.1",
@@ -9839,7 +11034,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "10.5.1.2",
@@ -9885,7 +11081,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "10.5.1.3",
@@ -9931,7 +11128,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "10.7.1 NTN",
@@ -9972,7 +11170,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "AI/ML",
@@ -9992,6 +11191,25 @@
           "notes": [],
           "inferred_agenda_items": [
             "9.1"
+          ],
+          "email_details": [
+            {
+              "kind": "session",
+              "session": "Thu 17:00-17:40 203",
+              "quote": "For the afternoon session, we will discuss RRC list, discussion point 6.2 and proposal 5.1.",
+              "mode": "offline",
+              "summary": "Discuss RRC list, discussion point 6.2 and proposal 5.1",
+              "topics": [
+                "RRC list",
+                "discussion point 6.2",
+                "proposal 5.1"
+              ],
+              "day": "Thursday",
+              "split": [],
+              "mail": "f4419930.2610b",
+              "author": "Chenxi Hao",
+              "sent": "2026-10-14T15:42:47+09:00"
+            }
           ]
         },
         {
@@ -10077,7 +11295,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         }
       ],
       "date": null,
@@ -10210,7 +11429,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "10.5.1.2",
@@ -10256,7 +11476,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "10.5.1.3",
@@ -10302,7 +11523,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "10.7.1 NTN",
@@ -10343,7 +11565,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "10.5.2.x",
@@ -10398,7 +11621,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "9.3.1",
@@ -10439,7 +11663,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "9.3.2",
@@ -10480,7 +11705,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "9.3.3",
@@ -10521,7 +11747,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "Sweep",
@@ -10539,7 +11766,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "TBD",
@@ -10557,7 +11785,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "TBD",
@@ -10575,7 +11804,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "Any other open issues. Session reports",
@@ -10593,7 +11823,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "To be assigned by Sorour",
@@ -10611,7 +11842,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         },
         {
           "name": "To be assigned by Hiroki",
@@ -10629,7 +11861,8 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": []
+          "inferred_agenda_items": [],
+          "email_details": []
         }
       ],
       "date": null,
@@ -10685,7 +11918,7 @@
     }
   ],
   "source_file": "RAN1#126b online and offline schedules - v01.docx",
-  "generated_at": "2026-10-14 15:04",
+  "generated_at": "2026-10-14 16:43",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
@@ -10712,9 +11945,9 @@
   "chairman_agreements": {
     "status": "ready",
     "meeting_id": "ran1#126bis",
-    "document_file": "Chair notes RAN1#126bis_v08.docx",
-    "sha256": "cc863925a763377b1dac3023656a893e1695a726073b0d80ce8a6cee636172f2",
-    "parser_version": 20,
+    "document_file": "Chair notes RAN1#126bis_v09.docx",
+    "sha256": "4207255abc55684bf39362aff5c2f7b0a2d9640d4a2868162f675a5fe09fa361",
+    "parser_version": 22,
     "warnings": [
       "An embedded object or legacy symbol requires the source document.",
       "Embedded OLE objects are shown using their static image previews.",
@@ -10723,8 +11956,430 @@
     ],
     "unassigned_blocks": 13,
     "content_scope": "agenda-section-excluding-tdocs",
-    "source_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Chair_notes/Chair%20notes%20RAN1%23126bis_v08.docx",
-    "source_name": "Chair notes RAN1#126bis_v08.docx",
+    "email_threads": [
+      {
+        "agenda_item": "7",
+        "tag": "126bis-R19-AI 7",
+        "line": "[126bis-R19-AI 7] Email discussion on Pre-Rel-19 NR Maintenance topics for AI 7.",
+        "fl": [],
+        "companies": []
+      },
+      {
+        "agenda_item": "8.1",
+        "tag": "126bis-R19-AI 8.1",
+        "line": "[126bis-R19-AI 8.1] Email discussion on Rel-19 Maintenance topics for AI 8.1",
+        "fl": [],
+        "companies": []
+      },
+      {
+        "agenda_item": "8.2",
+        "tag": "126bis-R19-AI 8.2",
+        "line": "[126bis-R19-AI 8.2] Email discussion on Rel-19 Maintenance topics for AI 8.2",
+        "fl": [],
+        "companies": []
+      },
+      {
+        "agenda_item": "8.3",
+        "tag": "126bis-R19-UE feature",
+        "line": "[126bis-R19-UE feature] Ema-il discussion on Rel-19 UE feature – Ralf (AT&T)",
+        "fl": [
+          "Ralf"
+        ],
+        "companies": [
+          "AT&T"
+        ]
+      },
+      {
+        "agenda_item": "9.1",
+        "tag": "126bis-R20-AI/ML",
+        "line": "[126bis-R20-AI/ML] Ema-il discussion on Rel-20 AI/ML – Chenxi (Qualcomm)",
+        "fl": [
+          "Chenxi"
+        ],
+        "companies": [
+          "Qualcomm"
+        ]
+      },
+      {
+        "agenda_item": "9.2",
+        "tag": "126bis-R20-MIMO",
+        "line": "[126bis-R20-MIMO] Email discussion on Rel-20 MIMO – Darcy (MTK)",
+        "fl": [
+          "Darcy"
+        ],
+        "companies": [
+          "MTK"
+        ]
+      },
+      {
+        "agenda_item": "9.3",
+        "tag": "126bis-R20-A-IoT Phase 2",
+        "line": "[126bis-R20-A-IoT Phase 2] Email discussion on Rel-20 A-IoT Phase 2 – Zhe (Huawei)",
+        "fl": [
+          "Zhe"
+        ],
+        "companies": [
+          "Huawei"
+        ]
+      },
+      {
+        "agenda_item": "9.4",
+        "tag": "126bis-R20-NR-NTN",
+        "line": "[126bis-R20-NR-NTN] Email discussion on Rel-20 NR-NTN – Mohamed (Thales)",
+        "fl": [
+          "Mohamed"
+        ],
+        "companies": [
+          "Thales"
+        ]
+      },
+      {
+        "agenda_item": "9.5",
+        "tag": "126bis-R20-NR-NTN-Using downlink compensation",
+        "line": "[126bis-R20-NR-NTN-Using downlink compensation] Email discussion on Rel-20 NR-NTN-Using downlink compensation – Albert (Qualcomm)",
+        "fl": [
+          "Albert"
+        ],
+        "companies": [
+          "Qualcomm"
+        ]
+      },
+      {
+        "agenda_item": "10.2",
+        "tag": "126bis-R20-6GR-Waveform",
+        "line": "[126bis-R20-6GR-Waveform] Email discussion on Rel-20 6GR-Waveform – Karri (Nokia)",
+        "fl": [
+          "Karri"
+        ],
+        "companies": [
+          "Nokia"
+        ]
+      },
+      {
+        "agenda_item": "10.3.1",
+        "tag": "126bis-R20-6GR-Channel coding",
+        "line": "[126bis-R20-6GR-Channel coding] Email discussion on Rel-20 6GR- Channel coding and Modulation – Mengzhu (ZTE)",
+        "fl": [
+          "Mengzhu"
+        ],
+        "companies": [
+          "ZTE"
+        ]
+      },
+      {
+        "agenda_item": "10.3.2",
+        "tag": "126bis-R20-6GR-Modulation, joint channel coding and modulation",
+        "line": "[126bis-R20-6GR-Modulation, joint channel coding and modulation] Email discussion on Rel-20 6GR-Modulation,joint channel coding and modulation –Jing (Qualcomm)",
+        "fl": [
+          "Jing"
+        ],
+        "companies": [
+          "Qualcomm"
+        ]
+      },
+      {
+        "agenda_item": "10.4.1",
+        "tag": "126bis-R20-6GR-MC-Operation in idle mode",
+        "line": "[126bis-R20-6GR-MC-Operation in idle mode] Email discussion on Rel-20 6GR-MC-Operation in idle mode –Yanping (Xiaomi)",
+        "fl": [
+          "Yanping"
+        ],
+        "companies": [
+          "Xiaomi"
+        ]
+      },
+      {
+        "agenda_item": "10.4.2",
+        "tag": "126bis-R20-6GR-MC-Operation in connected mode",
+        "line": "[126bis-R20-6GR-MC-Operation in connected mode] Email discussion on Rel-20 6GR-MC-Operation in connected mode –Naoya (NTT DOCOMO, INC.)",
+        "fl": [
+          "Naoya"
+        ],
+        "companies": [
+          "NTT DOCOMO",
+          "INC."
+        ]
+      },
+      {
+        "agenda_item": "10.5.1.1",
+        "tag": "126bis-R20-6GR-Synchronization and Beam Measurement",
+        "line": "[126bis-R20-6GR-Synchronization and Beam Measurement] Email discussion on Rel-20 6GR- Synchronization and Beam Measurement – Xinghua (Huawei)",
+        "fl": [
+          "Xinghua"
+        ],
+        "companies": [
+          "Huawei"
+        ]
+      },
+      {
+        "agenda_item": "10.5.1.2",
+        "tag": "126bis-R20-6GR-PRACH",
+        "line": "[126bis-R20-6GR-PRACH] Email discussion on Rel-20 6GR-PRACH and RACH procedure – Daewon (IDC)",
+        "fl": [
+          "Daewon"
+        ],
+        "companies": [
+          "IDC"
+        ]
+      },
+      {
+        "agenda_item": "10.5.1.3",
+        "tag": "126bis-R20-6GR-Bandwidth operation",
+        "line": "[126bis-R20-6GR-Bandwidth operation] Email discussion on Rel-20 6GR-Bandwidth operation – Weide(MTK)",
+        "fl": [
+          "Weide"
+        ],
+        "companies": [
+          "MTK"
+        ]
+      },
+      {
+        "agenda_item": "10.5.2.1",
+        "tag": "126bis-R20-6GR-Transmission scheme for DL control channel",
+        "line": "[126bis-R20-6GR-Transmission scheme for DL control channel] Email discussion on Rel-20 6GR-How to transmit downlink control channel – Dimitri (Nokia)",
+        "fl": [
+          "Dimitri"
+        ],
+        "companies": [
+          "Nokia"
+        ]
+      },
+      {
+        "agenda_item": "10.5.2.2",
+        "tag": "126bis-R20-6GR-Transmission scheme for DL shared channel",
+        "line": "[126bis-R20-6GR-Transmission scheme for DL shared channel] Email discussion on Rel-20 6GR-How to transmit downlink shared channel – Sven, Yushu (Ericsson, Google)",
+        "fl": [
+          "Sven",
+          "Yushu"
+        ],
+        "companies": [
+          "Ericsson",
+          "Google"
+        ]
+      },
+      {
+        "agenda_item": "10.5.2.3",
+        "tag": "126bis-R20-6GR-Transmission scheme for UL channels",
+        "line": "[126bis-R20-6GR-Transmission scheme for UL channels] Email discussion on Rel-20 6GR-How to transmit uplink channels – Youngrok (Samsung)",
+        "fl": [
+          "Youngrok"
+        ],
+        "companies": [
+          "Samsung"
+        ]
+      },
+      {
+        "agenda_item": "10.5.3.1",
+        "tag": "126bis-R20-6GR-Aspects of DL based CSI acquisition",
+        "line": "[126bis-R20-6GR-Aspects of DL based CSI acquisition] Email discussion on Rel-20 6GR-Aspects of DL based CSI acquisition – Feifei, Hao (Samsung, vivo)",
+        "fl": [
+          "Feifei",
+          "Hao"
+        ],
+        "companies": [
+          "Samsung",
+          "vivo"
+        ]
+      },
+      {
+        "agenda_item": "10.5.3.2",
+        "tag": "126bis-R20-6GR-Aspects of UL based CSI acquisition",
+        "line": "[126bis-R20-6GR-Aspects of UL based CSI acquisition] Email discussion on Rel-20 6GR-Aspects of UL based CSI acquisition – Xin (CATT)",
+        "fl": [
+          "Xin"
+        ],
+        "companies": [
+          "CATT"
+        ]
+      },
+      {
+        "agenda_item": "10.5.3.3",
+        "tag": "126bis-R20-6GR-Other Aspects related to CSI",
+        "line": "[126bis-R20-6GR-Other Aspects related to CSI] Email discussion on Rel-20 6GR-Other Aspects related to CSI – Bingchao (Lenovo)",
+        "fl": [
+          "Bingchao"
+        ],
+        "companies": [
+          "Lenovo"
+        ]
+      },
+      {
+        "agenda_item": "10.5.3.4",
+        "tag": "126bis-R20-6GR-Beam management",
+        "line": "[126bis-R20-6GR-Beam management] Email discussion on Rel-20 6GR-Beam management – Bo (ZTE)",
+        "fl": [
+          "Bo"
+        ],
+        "companies": [
+          "ZTE"
+        ]
+      },
+      {
+        "agenda_item": "10.5.3.4",
+        "tag": null,
+        "line": "Email discussion for the templates and collect results for 6GR beam prediction: a) spatial/temporal domain MTRP prediction; b) cross-frequency prediction.",
+        "fl": [],
+        "companies": []
+      },
+      {
+        "agenda_item": "10.5.4.1",
+        "tag": "126bis-R20-6GR-DL control channel and scheduling",
+        "line": "[126bis-R20-6GR-DL control channel and scheduling] Email discussion on Rel-20 6GR-What to transmit in DL control – Xiaodong, Sigen (CMCC, Apple)",
+        "fl": [
+          "Xiaodong",
+          "Sigen"
+        ],
+        "companies": [
+          "CMCC",
+          "Apple"
+        ]
+      },
+      {
+        "agenda_item": "10.5.4.2",
+        "tag": "126bis-R20-6GR-DL/UL transmission without dynamic scheduling",
+        "line": "[126bis-R20-6GR-DL/UL transmission without dynamic scheduling] Email discussion on Rel-20 6GR- DL/UL transmission without dynamic scheduling] – Lei (1Finity)",
+        "fl": [
+          "Lei"
+        ],
+        "companies": [
+          "1Finity"
+        ]
+      },
+      {
+        "agenda_item": "10.5.4.3",
+        "tag": "126bis-R20-6GR-HARQ related",
+        "line": "[126bis-R20-6GR-HARQ related] Email discussion on Rel-20 6GR-HARQ related – Kevin (OPPO)",
+        "fl": [
+          "Kevin"
+        ],
+        "companies": [
+          "OPPO"
+        ]
+      },
+      {
+        "agenda_item": "10.5.4.4",
+        "tag": "126bis-R20-6GR-Handling of potential multiple uplink transmissions",
+        "line": "[126bis-R20-6GR-Handling of potential multiple uplink transmissions] Email discussion on Rel-20 6GR- Handling of potential multiple uplink transmissions – Mohammed (MTK)",
+        "fl": [
+          "Mohammed"
+        ],
+        "companies": [
+          "MTK"
+        ]
+      },
+      {
+        "agenda_item": "10.5.5",
+        "tag": "126bis-R20-6GR-Other signals, channels, and procedures",
+        "line": "[126bis-R20-6GR-Other signals, channels, and procedures] Email discussion on Rel-20 6GR-Other signals, channels, and procedures – Li (OPPO)",
+        "fl": [
+          "Li"
+        ],
+        "companies": [
+          "OPPO"
+        ]
+      },
+      {
+        "agenda_item": "10.6.1.1",
+        "tag": "126bis-R20-6GR-Design of WUS",
+        "line": "[126bis-R20-6GR-Design of WUS] Email discussion on Rel-20 6GR-Design of WUS – Magnus (Ericsson)",
+        "fl": [
+          "Magnus"
+        ],
+        "companies": [
+          "Ericsson"
+        ]
+      },
+      {
+        "agenda_item": "10.6.1.2",
+        "tag": "126bis-R20-6GR-WUS operation in RRC states",
+        "line": "[126bis-R20-6GR-WUS operation in RRC states] Email discussion on Rel-20 6GR-WUS operation in RRC states – Xin (vivo)",
+        "fl": [
+          "Xin"
+        ],
+        "companies": [
+          "vivo"
+        ]
+      },
+      {
+        "agenda_item": "10.6.2",
+        "tag": "126bis-R20-6GR-Uplink WUS",
+        "line": "[126bis-R20-6GR-Uplink WUS] Email discussion on Rel-20 6GR-Uplink WUS– Seonwook (LGE)",
+        "fl": [
+          "Seonwook"
+        ],
+        "companies": [
+          "LGE"
+        ]
+      },
+      {
+        "agenda_item": "10.6.3",
+        "tag": "126bis-R20-6GR-WUS operation with other functionalities",
+        "line": "[126bis-R20-6GR-WUS operation with other functionalities] Email discussion on Rel-20 6GR- WUS operation with other functionalities– Hong (Apple)",
+        "fl": [
+          "Hong"
+        ],
+        "companies": [
+          "Apple"
+        ]
+      },
+      {
+        "agenda_item": "10.7.1",
+        "tag": "126bis-R20-6GR-NTN specific requirement and design",
+        "line": "[126bis-R20-6GR-NTN specific requirement and design] Email discussion on Rel-20 6GR-NTN specific requirement and design– Alberto (Qualcomm)",
+        "fl": [
+          "Alberto"
+        ],
+        "companies": [
+          "Qualcomm"
+        ]
+      },
+      {
+        "agenda_item": "10.8.1",
+        "tag": "126bis-R20-6GR-ISAC-Evaluations",
+        "line": "[126bis-R20-6GR-ISAC-Evaluations] Email discussion on Rel-20 6GR-ISAC-Evaluations–Yongqiang (CATT)",
+        "fl": [
+          "Yongqiang"
+        ],
+        "companies": [
+          "CATT"
+        ]
+      },
+      {
+        "agenda_item": "10.8.2",
+        "tag": "126bis-R20-6GR-ISAC-Integration",
+        "line": "[126bis-R20-6GR-ISAC-Integration] Email discussion on Rel-20 6GR-ISAC-integration–Yingyang (Xiaomi)",
+        "fl": [
+          "Yingyang"
+        ],
+        "companies": [
+          "Xiaomi"
+        ]
+      },
+      {
+        "agenda_item": "10.8.3",
+        "tag": "126bis-R20-6GR-ISAC-Waveform and FS",
+        "line": "[126bis-R20-6GR-ISAC-Waveform and FS] Email discussion on Rel-20 6GR-ISAC-Waveforme and FS–Woo-Suk (LGE)",
+        "fl": [
+          "Woo-Suk"
+        ],
+        "companies": [
+          "LGE"
+        ]
+      },
+      {
+        "agenda_item": "11",
+        "tag": "126bis-R20-TEI",
+        "line": "[126bis-R20-TEI] Email discussion on Rel-20 TEI–Xiang (ASTRUM)",
+        "fl": [
+          "Xiang"
+        ],
+        "companies": [
+          "ASTRUM"
+        ]
+      }
+    ],
+    "source_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Chair_notes/Chair%20notes%20RAN1%23126bis_v09.docx",
+    "source_name": "Chair notes RAN1#126bis_v09.docx",
     "session_notes": {
       "R1-2607284": {
         "name": "draft_R1-2607284_Session Notes of AI 7_v00.docx",
@@ -10825,11 +12480,11 @@
         "source_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Sorour_notes/Draft%20R1-2607313%20Session%20Notes%20of%20AI%2010.3.2%20(Modulation)%20-%20v02.docx"
       },
       "R1-2607314": {
-        "name": "Draft R1-2607314 Session Notes of AI 10.5.2 (MIMO Operation) - v03.docx",
+        "name": "Draft R1-2607314 Session Notes of AI 10.5.2 (MIMO Operation) - v04.docx",
         "agenda_item": "10.5.2",
-        "changed_at": "2026-10-14T04:08:31+00:00",
-        "sha256": "0fbce5c6da90c363eb6635d513c407bed3496cd4895dac5f9e67720be333dd2e",
-        "source_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Sorour_notes/Draft%20R1-2607314%20Session%20Notes%20of%20AI%2010.5.2%20(MIMO%20Operation)%20-%20v03.docx"
+        "changed_at": "2026-10-14T07:37:04+00:00",
+        "sha256": "21c9375734cdc28618b934c19787ba0f827163e1a7014758e55e74815683b6a2",
+        "source_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Sorour_notes/Draft%20R1-2607314%20Session%20Notes%20of%20AI%2010.5.2%20(MIMO%20Operation)%20-%20v04.docx"
       },
       "R1-2607315": {
         "name": "Draft R1-2607315 Session Notes of AI 10.7 (NTN specific) - v03.docx",
@@ -10846,7 +12501,7 @@
         "source_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Hiroki_notes/draft_R1-2608614_Session%20Notes%20of%20AI%208.3_v01.docx"
       }
     },
-    "document_changed_at": "2026-10-14T04:28:06+00:00",
+    "document_changed_at": "2026-10-14T07:35:11+00:00",
     "sections": {
       "1": {
         "title": "Opening of the meeting (Day 1: 9:00 am)",
@@ -10872,7 +12527,7 @@
         "added": [],
         "changed_at": "2026-10-04T08:57:51+00:00",
         "changed_in": "Draft Chair notes RAN1#126bis_v00.docx",
-        "file": "agreements/4dc00dab02a3b48e0b03.html"
+        "file": "agreements/41ef0053905d2eb6cf4a.html"
       },
       "1.2": {
         "title": "Competition Law Statement",
@@ -10902,7 +12557,7 @@
         "added": [],
         "changed_at": "2026-10-04T08:57:51+00:00",
         "changed_in": "Draft Chair notes RAN1#126bis_v00.docx",
-        "file": "agreements/edc434b96c9594e7ac7d.html"
+        "file": "agreements/659c6931a86703848ffb.html"
       },
       "1.4": {
         "title": "Consensus Principles Reminder",
@@ -10917,7 +12572,7 @@
         "added": [],
         "changed_at": "2026-10-04T08:57:51+00:00",
         "changed_in": "Draft Chair notes RAN1#126bis_v00.docx",
-        "file": "agreements/dffe6d0d38b15305b855.html"
+        "file": "agreements/a6240356ab78912536d4.html"
       },
       "1.5": {
         "title": "Streamlined Standards",
@@ -11072,7 +12727,7 @@
         ],
         "changed_at": "2026-10-12T04:04:14+00:00",
         "changed_in": "Chair notes RAN1#126bis_v01.docx",
-        "file": "agreements/a55915a0aa1f38f02d7d.html"
+        "file": "agreements/e6d7745d311c995fd833.html"
       },
       "6": {
         "title": "Pre-Rel-19 E-UTRA Maintenance",
@@ -11110,7 +12765,7 @@
         "added": [],
         "changed_at": "2026-10-04T08:57:51+00:00",
         "changed_in": "Draft Chair notes RAN1#126bis_v00.docx",
-        "file": "agreements/ed76a7c7ab9afab8a4af.html"
+        "file": "agreements/419932a138b60c48ac14.html"
       },
       "8": {
         "title": "Maintenance on Rel-19 NR and E-UTRA",
@@ -11200,7 +12855,7 @@
         "added": [],
         "changed_at": "2026-10-13T07:35:31+00:00",
         "changed_in": "Chair notes RAN1#126bis_v05.docx",
-        "file": "agreements/11113b287a4b8acf5d79.html"
+        "file": "agreements/c591e1fbc42a332f5648.html"
       },
       "8.2": {
         "title": "Maintenance on others",
@@ -11272,7 +12927,7 @@
         "added": [],
         "changed_at": "2026-10-13T07:35:31+00:00",
         "changed_in": "Chair notes RAN1#126bis_v05.docx",
-        "file": "agreements/d887fa9278c6dbd42835.html"
+        "file": "agreements/7a228ed19826e3dca8a7.html"
       },
       "8.3": {
         "title": "Maintenance on UE features",
@@ -11314,7 +12969,7 @@
         "added": [],
         "changed_at": "2026-10-13T07:35:31+00:00",
         "changed_in": "Chair notes RAN1#126bis_v05.docx",
-        "file": "agreements/52ecfd4af75032ee2a46.html"
+        "file": "agreements/af141ee8e620beebd9f9.html"
       },
       "9": {
         "title": "Release 20 NR",
@@ -11348,7 +13003,7 @@
         "added": [],
         "changed_at": "2026-10-04T08:57:51+00:00",
         "changed_in": "Draft Chair notes RAN1#126bis_v00.docx",
-        "file": "agreements/710a2ae39c837d843de8.html"
+        "file": "agreements/9c253e291f988317fec7.html"
       },
       "9.1.1": {
         "title": "CSI spatial/frequency compression without temporal aspects (“Case 0”)",
@@ -11383,7 +13038,7 @@
         "added": [],
         "changed_at": "2026-10-13T07:35:31+00:00",
         "changed_in": "Chair notes RAN1#126bis_v05.docx",
-        "file": "agreements/7ce2a6ad1bb0a2396e78.html"
+        "file": "agreements/77e0170736d43aec2376.html"
       },
       "9.1.2": {
         "title": "Inter-vendor training collaboration for two-sided AI/ML models",
@@ -11420,7 +13075,7 @@
         ],
         "changed_at": "2026-10-14T04:12:17+00:00",
         "changed_in": "Draft R1-2607308 Session Notes of AI 9.1 - v02.docx",
-        "file": "agreements/2acbd1928bfb3fe0f9a8.html"
+        "file": "agreements/7bfba1178dae2fcf8994.html"
       },
       "9.2": {
         "title": "NR MIMO Phase 6",
@@ -11533,7 +13188,7 @@
         ],
         "changed_at": "2026-10-14T01:34:46+00:00",
         "changed_in": "Draft R1-2607309 Session Notes of AI 9.2 - v03.docx",
-        "file": "agreements/8dbeabc918bb4e924a76.html"
+        "file": "agreements/6229034e884d1175422f.html"
       },
       "9.3": {
         "title": "Solutions for Ambient IoT (Internet of Things) in NR Phase 2",
@@ -11555,7 +13210,7 @@
         ],
         "changed_at": "2026-10-14T04:02:20+00:00",
         "changed_in": "Chair notes RAN1#126bis_v07.docx",
-        "file": "agreements/007ba6bb188f4c730de6.html"
+        "file": "agreements/d347c673e1f233cf85cf.html"
       },
       "9.3.1": {
         "title": "R2D signals, channels, waveform and procedures",
@@ -11678,7 +13333,7 @@
         ],
         "changed_at": "2026-10-14T01:41:03+00:00",
         "changed_in": "draft_R1-2607286_Session Notes of AI 9.3_v04.docx",
-        "file": "agreements/542fea47e06384e4b1b6.html"
+        "file": "agreements/c928c98f91d988cc657b.html"
       },
       "9.3.2": {
         "title": "D2R signals, channels, waveform and procedures",
@@ -11826,7 +13481,7 @@
         ],
         "changed_at": "2026-10-14T01:41:03+00:00",
         "changed_in": "draft_R1-2607286_Session Notes of AI 9.3_v04.docx",
-        "file": "agreements/44c6576a4558e9b9c2c9.html"
+        "file": "agreements/61aaadddf4cef994c2b9.html"
       },
       "9.3.3": {
         "title": "Other procedures",
@@ -11917,7 +13572,7 @@
         ],
         "changed_at": "2026-10-14T01:41:03+00:00",
         "changed_in": "draft_R1-2607286_Session Notes of AI 9.3_v04.docx",
-        "file": "agreements/e55ed4ebcfdfa154454e.html"
+        "file": "agreements/6e253e8f43c8949dc8af.html"
       },
       "9.4": {
         "title": "GNSS resilient NR-NTN operation",
@@ -11939,7 +13594,7 @@
         ],
         "changed_at": "2026-10-07T09:08:14+00:00",
         "changed_in": "Draft Chair notes RAN1#126bis_v01.docx",
-        "file": "agreements/19dad865368da8749102.html"
+        "file": "agreements/e7c77a2d35c200703bea.html"
       },
       "9.4.1": {
         "title": "NR-NTN GNSS resilience",
@@ -12076,7 +13731,7 @@
         "added": [],
         "changed_at": "2026-10-04T08:57:51+00:00",
         "changed_in": "Draft Chair notes RAN1#126bis_v00.docx",
-        "file": "agreements/14c3ffd2a3996df42f84.html"
+        "file": "agreements/e2516ee55c91e9d0dc5d.html"
       },
       "9.5.1": {
         "title": "Study and identify possible solutions",
@@ -12124,7 +13779,7 @@
         "added": [],
         "changed_at": "2026-10-13T07:35:31+00:00",
         "changed_in": "Chair notes RAN1#126bis_v05.docx",
-        "file": "agreements/8f57e6aee04571496cb9.html"
+        "file": "agreements/b8e41510e3da21467d40.html"
       },
       "10": {
         "title": "Rel-20 Study of 6GR",
@@ -12173,7 +13828,7 @@
         "added": [],
         "changed_at": "2026-10-04T08:57:51+00:00",
         "changed_in": "Draft Chair notes RAN1#126bis_v00.docx",
-        "file": "agreements/180f8893cda264c709b5.html"
+        "file": "agreements/a4d8ada5f234c23aa1d7.html"
       },
       "10.2.1": {
         "title": "Waveform",
@@ -12214,7 +13869,7 @@
         "added": [],
         "changed_at": "2026-10-13T07:38:12+00:00",
         "changed_in": "draft_R1-2607287_Session Notes of AI 10.2.1_v02.docx",
-        "file": "agreements/e41739efddf16f6a7255.html"
+        "file": "agreements/6c8cd01feab17eaee80a.html"
       },
       "10.3": {
         "title": "Channel coding and modulation for 6GR interface",
@@ -12303,7 +13958,7 @@
         ],
         "changed_at": "2026-10-14T03:31:23+00:00",
         "changed_in": "Draft R1-2607312 Session Notes of AI 10.3.1 (Channel Coding) - v03.docx",
-        "file": "agreements/2b800f32f6c48d26e98d.html"
+        "file": "agreements/236bca9056eb2182a586.html"
       },
       "10.3.2": {
         "title": "Modulation",
@@ -12354,7 +14009,7 @@
         "added": [],
         "changed_at": "2026-10-13T09:33:50+00:00",
         "changed_in": "Draft R1-2607313 Session Notes of AI 10.3.2 (Modulation) - v02.docx",
-        "file": "agreements/0feaa6f9afa19c96b4db.html"
+        "file": "agreements/ec2230c54c3befb3d365.html"
       },
       "10.4": {
         "title": "Multiple carrier operation",
@@ -12436,7 +14091,7 @@
         ],
         "changed_at": "2026-10-13T04:06:48+00:00",
         "changed_in": "Chair notes RAN1#126bis_v04.docx",
-        "file": "agreements/f381b5b7f5575bff957d.html"
+        "file": "agreements/55e9e237ad1ca1da5880.html"
       },
       "10.4.2": {
         "title": "Operation in connected mode",
@@ -12505,7 +14160,7 @@
         ],
         "changed_at": "2026-10-13T04:06:48+00:00",
         "changed_in": "Chair notes RAN1#126bis_v04.docx",
-        "file": "agreements/8e3b49273b7603a82943.html"
+        "file": "agreements/5969a2042470df784d59.html"
       },
       "10.5": {
         "title": "Multi-antenna system",
@@ -12702,7 +14357,7 @@
         ],
         "changed_at": "2026-10-14T04:02:20+00:00",
         "changed_in": "Chair notes RAN1#126bis_v07.docx",
-        "file": "agreements/e9270b894bbb50e15e37.html"
+        "file": "agreements/7c00e6cc1877517940a4.html"
       },
       "10.5.1.2": {
         "title": "PRACH and RACH procedure",
@@ -12740,7 +14395,7 @@
         ],
         "changed_at": "2026-10-14T04:02:20+00:00",
         "changed_in": "Chair notes RAN1#126bis_v07.docx",
-        "file": "agreements/78e9ef025ef438f9d870.html"
+        "file": "agreements/ef3503f978e26f1dcccc.html"
       },
       "10.5.1.3": {
         "title": "Bandwidth operation",
@@ -12794,7 +14449,7 @@
         ],
         "changed_at": "2026-10-14T04:02:20+00:00",
         "changed_in": "Chair notes RAN1#126bis_v07.docx",
-        "file": "agreements/c317fb3c2a09f02c99a8.html"
+        "file": "agreements/79bd1efc60b870f59578.html"
       },
       "10.5.2": {
         "title": "MIMO operation",
@@ -12821,7 +14476,6 @@
           "d5400d2235ef",
           "214433cb768a",
           "334907737e61",
-          "051cee0938b3",
           "9e6c9a62de51",
           "d54d9eeda12a",
           "6d529748f6f3",
@@ -12842,28 +14496,53 @@
           "4118ad6b6a2d",
           "1b0bfee4ea75",
           "d947709449bf",
-          "bc763cd41210",
+          "051cee0938b3",
+          "d18c870dbfd8",
           "6f2e8b601010",
           "d1d6aa76dc9d",
-          "830e7627972b",
-          "6a72e0cc9d9a",
-          "4a5c2288486d",
+          "ede54c211b0d",
+          "adc52fe181f1",
+          "6cf5b0c2ec5c",
           "277b76208179",
-          "d26746a551fc",
-          "4e98069658df",
-          "3a903ce477db",
-          "0cc2dca32bba",
-          "4e23b4843d73"
+          "32cba5d9e644",
+          "d18c870dbfd8",
+          "61a31a8a3f9b",
+          "f1316c43a118",
+          "3226c0f62886",
+          "833486195f2d",
+          "56cd91a31e20",
+          "5ebada0fbbdd",
+          "b0e28f569614",
+          "494133b14053",
+          "d09f03f33e05",
+          "4123897a6152",
+          "48ba76e5f938",
+          "d0b35f2e80cf",
+          "203f368a180c",
+          "d0b35f2e80cf",
+          "050c6cb46559",
+          "9e4ed8157a1f",
+          "c5fb84b4ea99",
+          "c2ff267a5343",
+          "668544acaa68",
+          "5e273877a861",
+          "d0b35f2e80cf",
+          "b13d541e3418",
+          "6a9fe275dc67",
+          "668544acaa68",
+          "750ea0dfbcb3",
+          "d0b35f2e80cf",
+          "b7ccb3c2a3ec"
         ],
         "sources": {
           "chair": "e9e2a8443454",
-          "R1-2607314": "c02ec4c9aebc"
+          "R1-2607314": "5749a235752b"
         },
         "change": "initial",
-        "added": [],
         "changed_at": "2026-10-13T07:40:37+00:00",
         "changed_in": "Draft R1-2607314 Session Notes of AI 10.5.2 (MIMO Operation) - v02.docx",
-        "file": "agreements/55faa0ca6075970bdbc2.html"
+        "added": [],
+        "file": "agreements/443b20926e48bac8248b.html"
       },
       "10.5.2.2": {
         "title": "Downlink transmission scheme(s) for downlink shared channels",
@@ -12943,7 +14622,7 @@
         ],
         "changed_at": "2026-10-14T04:08:31+00:00",
         "changed_in": "Draft R1-2607314 Session Notes of AI 10.5.2 (MIMO Operation) - v03.docx",
-        "file": "agreements/003dafd46b20549a8aa8.html"
+        "file": "agreements/0c21bc4cec650b380fa0.html"
       },
       "10.5.2.3": {
         "title": "Uplink transmission scheme(s) for uplink channels",
@@ -12952,7 +14631,6 @@
           "cf89236b5acf",
           "04c9da6a893c",
           "334907737e61",
-          "292bda2840d7",
           "8d0a5975e6bf",
           "94eca156d40c",
           "83cc1c9e2804",
@@ -13013,17 +14691,57 @@
           "448004618b47",
           "1e5660eaf30a",
           "0f3e9ac5b9aa",
-          "2fca032a1dba"
+          "2fca032a1dba",
+          "292bda2840d7",
+          "668544acaa68",
+          "ca1f3e6974f5",
+          "265e811064a2",
+          "2c52a0f8c860",
+          "668544acaa68",
+          "d5f32fa3193b",
+          "259c7cc9930d",
+          "b140932f078b",
+          "94aaedfff6a3",
+          "77b847be2538",
+          "71ace0a31a4a",
+          "668544acaa68",
+          "09fd0efe4806",
+          "2cacdae190ac",
+          "e8bed3d935a0",
+          "668544acaa68",
+          "1e03c1be118e",
+          "0151e6444639",
+          "40714d3d39cd",
+          "83057b507b7c",
+          "2b779e0a6281",
+          "7d4f8a400c75",
+          "668544acaa68",
+          "7f9fd811724c",
+          "be238155a0c8",
+          "3ed7abafe3b6",
+          "24b866ed6361",
+          "faa8f646170e",
+          "668544acaa68",
+          "04e3f096d38b",
+          "8b14ac07ade6",
+          "4c1c2dc58bf4",
+          "ed3c274f4465",
+          "44f999c90a0e",
+          "0cfb67644ab9",
+          "81cad49a7acd",
+          "29e282b9c7cb",
+          "271b03195c58",
+          "643ed73a080a"
         ],
         "sources": {
           "chair": "471fc6e5acc0",
-          "R1-2607314": "e3012b4ce17b"
+          "R1-2607314": "d8b003e48127"
         },
         "change": "initial",
-        "added": [],
         "changed_at": "2026-10-13T07:40:37+00:00",
         "changed_in": "Draft R1-2607314 Session Notes of AI 10.5.2 (MIMO Operation) - v02.docx",
-        "file": "agreements/355e5b76466081138c1d.html"
+        "added": [],
+        "file": "agreements/d1904b912529c05393b7.html"
       },
       "10.5.3": {
         "title": "CSI acquisition and report",
@@ -13242,7 +14960,7 @@
         ],
         "changed_at": "2026-10-14T04:02:20+00:00",
         "changed_in": "Chair notes RAN1#126bis_v07.docx",
-        "file": "agreements/f27c0c725967e8b1cd3e.html"
+        "file": "agreements/d63a24e60ebb3120fb09.html"
       },
       "10.5.3.2": {
         "title": "Aspects of uplink-based CSI acquisition",
@@ -13273,14 +14991,6 @@
           "523821cd203c",
           "c8fee8eabe07",
           "12dcc3495c26",
-          "dc305a45d8f8",
-          "8929c17da3b4",
-          "4f21a967740b",
-          "f0542c6710a2",
-          "960de315850b",
-          "fca73725d9c3",
-          "c8fee8eabe07",
-          "12dcc3495c26",
           "e02c7e4e1a29",
           "d8fe9adae438",
           "58eedad449e2",
@@ -13309,19 +15019,19 @@
           "7b3017b16eb3"
         ],
         "sources": {
-          "chair": "55dd94721fe5"
+          "chair": "db09d86a6a77"
         },
         "change": "updated",
-        "added": [
-          32,
-          33,
-          34,
-          35,
-          36
-        ],
         "changed_at": "2026-10-14T04:28:06+00:00",
         "changed_in": "Chair notes RAN1#126bis_v08.docx",
-        "file": "agreements/d3e3d2716225091b0a32.html"
+        "added": [
+          24,
+          25,
+          26,
+          27,
+          28
+        ],
+        "file": "agreements/a7fdcd174ac0f426067d.html"
       },
       "10.5.3.3": {
         "title": "Other aspects",
@@ -13472,7 +15182,7 @@
         ],
         "changed_at": "2026-10-14T04:02:20+00:00",
         "changed_in": "Chair notes RAN1#126bis_v07.docx",
-        "file": "agreements/0c02ee530b211cef6928.html"
+        "file": "agreements/f7c0fccf4a90808957cb.html"
       },
       "10.5.3.4": {
         "title": "Beam management for downlink and uplink",
@@ -13494,12 +15204,32 @@
           "d8975fd758dd",
           "2e8ec851d08b",
           "9d6c03e37dcd",
-          "e29f5781359d"
+          "e29f5781359d",
+          "c8fee8eabe07",
+          "03fcc42cc478",
+          "e4396f4ad961",
+          "6fa0bd688dbd",
+          "b5dfcdf0dde1",
+          "73363c4f4314",
+          "b04ea4f77ec5",
+          "4c441cc9f014",
+          "5a0b723c4b56",
+          "faddc0d30918",
+          "cf98554feeba",
+          "c8fee8eabe07",
+          "d22d245a6974",
+          "e4396f4ad961",
+          "1e2158a349ba",
+          "0297cd2478c4",
+          "cf98554feeba",
+          "b467191805d4"
         ],
         "sources": {
-          "chair": "18807ed51dce"
+          "chair": "507584902381"
         },
         "change": "updated",
+        "changed_at": "2026-10-13T23:13:18+00:00",
+        "changed_in": "Chair notes RAN1#126bis_v06.docx",
         "added": [
           3,
           4,
@@ -13516,9 +15246,7 @@
           15,
           16
         ],
-        "changed_at": "2026-10-13T23:13:18+00:00",
-        "changed_in": "Chair notes RAN1#126bis_v06.docx",
-        "file": "agreements/f17bddf851e71a21dc4a.html"
+        "file": "agreements/fef00c548075ae31d7c8.html"
       },
       "10.5.4": {
         "title": "Downlink control channel, scheduling and HARQ operation",
@@ -13587,7 +15315,7 @@
         "added": [],
         "changed_at": "2026-10-13T07:35:31+00:00",
         "changed_in": "Chair notes RAN1#126bis_v05.docx",
-        "file": "agreements/c09ea5fad542d386333d.html"
+        "file": "agreements/4f5202a9e3b511c4d625.html"
       },
       "10.5.4.2": {
         "title": "Downlink and uplink transmission without dynamic scheduling",
@@ -13619,7 +15347,7 @@
         "added": [],
         "changed_at": "2026-10-13T07:35:31+00:00",
         "changed_in": "Chair notes RAN1#126bis_v05.docx",
-        "file": "agreements/f202bbb758023443fb88.html"
+        "file": "agreements/58345328eafb6e834a1a.html"
       },
       "10.5.4.3": {
         "title": "HARQ related Aspects",
@@ -13661,7 +15389,7 @@
         "added": [],
         "changed_at": "2026-10-13T07:35:31+00:00",
         "changed_in": "Chair notes RAN1#126bis_v05.docx",
-        "file": "agreements/89b2a878fe449c891631.html"
+        "file": "agreements/3e8ca85174c0043ecd49.html"
       },
       "10.5.4.4": {
         "title": "Handling of potential multiple uplink transmissions",
@@ -13694,7 +15422,7 @@
         "added": [],
         "changed_at": "2026-10-13T07:35:31+00:00",
         "changed_in": "Chair notes RAN1#126bis_v05.docx",
-        "file": "agreements/d4b0bc4c200b103ac5c1.html"
+        "file": "agreements/d54beb196fc5757a30fb.html"
       },
       "10.5.5": {
         "title": "Other physical layer signals, channels and procedure",
@@ -13729,7 +15457,7 @@
         ],
         "changed_at": "2026-10-13T04:06:48+00:00",
         "changed_in": "Chair notes RAN1#126bis_v04.docx",
-        "file": "agreements/5ed5531686c35aad54e3.html"
+        "file": "agreements/9bf6649d12cc05eeb990.html"
       },
       "10.6": {
         "title": "WUS and operation",
@@ -13758,7 +15486,7 @@
       },
       "10.6.1.1": {
         "title": "Design of WUS with OFDM based sequence",
-        "excluded_tdoc_rows": 37,
+        "excluded_tdoc_rows": 38,
         "blocks": [
           "fb9a87179e9b",
           "552fdf14e62a",
@@ -13776,12 +15504,18 @@
           "8df2df82ca74",
           "c8fee8eabe07",
           "accbe0510054",
-          "0667f23d8f99"
+          "0667f23d8f99",
+          "c8fee8eabe07",
+          "c05ac25ff3a0",
+          "f9bc72e06812",
+          "69a36ff9608b"
         ],
         "sources": {
-          "chair": "73f1507e8181"
+          "chair": "fe2d6c3c31d1"
         },
         "change": "updated",
+        "changed_at": "2026-10-13T07:35:31+00:00",
+        "changed_in": "Chair notes RAN1#126bis_v05.docx",
         "added": [
           3,
           4,
@@ -13798,51 +15532,66 @@
           15,
           16
         ],
-        "changed_at": "2026-10-13T07:35:31+00:00",
-        "changed_in": "Chair notes RAN1#126bis_v05.docx",
-        "file": "agreements/0b7a94e85bf6368da139.html"
+        "file": "agreements/31bb25fcf4a6f2b2188b.html"
       },
       "10.6.1.2": {
         "title": "WUS operation in RRC states",
-        "excluded_tdoc_rows": 39,
+        "excluded_tdoc_rows": 40,
         "blocks": [
           "788dabdd6849",
           "334907737e61",
           "c8fee8eabe07",
           "501c79f6c62a",
           "120801ffb759",
-          "af189f9c9d1e"
+          "af189f9c9d1e",
+          "c8fee8eabe07",
+          "85e0a77b7c87",
+          "03566b29b8aa",
+          "a126993551f5",
+          "dc4db6b7b071",
+          "c8fee8eabe07",
+          "0235d3a21964",
+          "0c9257716475"
         ],
         "sources": {
-          "chair": "b9283a556814"
+          "chair": "bf7cf2ca7f63"
         },
         "change": "updated",
+        "changed_at": "2026-10-13T07:35:31+00:00",
+        "changed_in": "Chair notes RAN1#126bis_v05.docx",
         "added": [
           2,
           3,
           4,
           5
         ],
-        "changed_at": "2026-10-13T07:35:31+00:00",
-        "changed_in": "Chair notes RAN1#126bis_v05.docx",
-        "file": "agreements/660a4d22c412754fef19.html"
+        "file": "agreements/bec046ec79fff0c1b876.html"
       },
       "10.6.2": {
         "title": "Uplink WUS and operation",
-        "excluded_tdoc_rows": 32,
+        "excluded_tdoc_rows": 33,
         "blocks": [
           "3c927234baeb",
           "3dcf04ec806c",
-          "334907737e61"
+          "334907737e61",
+          "c8fee8eabe07",
+          "e127f0778ae0",
+          "a68141af57ea",
+          "c8fee8eabe07",
+          "da24551021ed",
+          "f436b3ba043d",
+          "c8fee8eabe07",
+          "1cadfb2fe989",
+          "8f9205c2d3ff"
         ],
         "sources": {
-          "chair": "270014ca64f7"
+          "chair": "064a15405bf6"
         },
         "change": "initial",
-        "added": [],
         "changed_at": "2026-10-04T08:57:51+00:00",
         "changed_in": "Draft Chair notes RAN1#126bis_v00.docx",
-        "file": "agreements/a1480276d37404e72351.html"
+        "added": [],
+        "file": "agreements/53c2b42e8cf6d92b0cb8.html"
       },
       "10.6.3": {
         "title": "WUS operation with other functionalities",
@@ -13850,16 +15599,28 @@
         "blocks": [
           "362fbe7e4e9c",
           "603ea4509c32",
-          "334907737e61"
+          "334907737e61",
+          "c8fee8eabe07",
+          "76e6ba35ac3f",
+          "42d453a773bb",
+          "665cac639af9",
+          "676c1541db29",
+          "847be15ad11c",
+          "6c4a9df8bd19",
+          "5808b8099036",
+          "c9850d7f1f47",
+          "1a9e1acb7d4c",
+          "a4b6eff190db",
+          "eedebbf364d8"
         ],
         "sources": {
-          "chair": "299bcf677b1a"
+          "chair": "50f6404cacae"
         },
         "change": "initial",
-        "added": [],
         "changed_at": "2026-10-04T08:57:51+00:00",
         "changed_in": "Draft Chair notes RAN1#126bis_v00.docx",
-        "file": "agreements/b9986f4aafafc687bdeb.html"
+        "added": [],
+        "file": "agreements/72b9a6eae2de57815085.html"
       },
       "10.7": {
         "title": "NTN",
@@ -13875,7 +15636,7 @@
         "added": [],
         "changed_at": "2026-10-04T08:57:51+00:00",
         "changed_in": "Draft Chair notes RAN1#126bis_v00.docx",
-        "file": "agreements/7d7c467a8d48d9254675.html"
+        "file": "agreements/c2d8d859fe7169b301fb.html"
       },
       "10.7.1": {
         "title": "NTN specific requirements and design",
@@ -13969,7 +15730,7 @@
         ],
         "changed_at": "2026-10-14T00:12:11+00:00",
         "changed_in": "Draft R1-2607315 Session Notes of AI 10.7 (NTN specific) - v03.docx",
-        "file": "agreements/e12c250aeadee2a22eb9.html"
+        "file": "agreements/9552d0181818c2ce30c4.html"
       },
       "10.8": {
         "title": "ISAC",
@@ -14084,7 +15845,7 @@
         ],
         "changed_at": "2026-10-14T04:15:14+00:00",
         "changed_in": "draft_R1-2607289_Session Notes of AI 10.8_v03.docx",
-        "file": "agreements/7c9ceddcc44af0bdf78c.html"
+        "file": "agreements/4031c731526254737f3e.html"
       },
       "10.8.2": {
         "title": "Aspects of integration with communication",
@@ -14165,7 +15926,7 @@
         ],
         "changed_at": "2026-10-14T04:15:14+00:00",
         "changed_in": "draft_R1-2607289_Session Notes of AI 10.8_v03.docx",
-        "file": "agreements/45c609181e5d7aee68cb.html"
+        "file": "agreements/9f18eef75e81a4815fca.html"
       },
       "10.8.3": {
         "title": "Waveform and frame structure",
@@ -14278,7 +16039,7 @@
         ],
         "changed_at": "2026-10-14T04:15:14+00:00",
         "changed_in": "draft_R1-2607289_Session Notes of AI 10.8_v03.docx",
-        "file": "agreements/b52aae37d3c448696ad1.html"
+        "file": "agreements/d419ae4055489cf69011.html"
       },
       "11": {
         "title": "TEI",
@@ -14299,7 +16060,7 @@
         "added": [],
         "changed_at": "2026-10-13T07:35:31+00:00",
         "changed_in": "Chair notes RAN1#126bis_v05.docx",
-        "file": "agreements/4aeb65561cc5b95f0cc8.html"
+        "file": "agreements/82b9fe8abbcea93ed265.html"
       },
       "12": {
         "title": "Closing of the meeting (Day 5, 17:00 pm at the latest)",
@@ -14312,6 +16073,271 @@
         "changed_in": "Draft Chair notes RAN1#126bis_v00.docx"
       }
     },
-    "retained_files": []
+    "retained_files": [
+      "agreements/003dafd46b20549a8aa8.html",
+      "agreements/007ba6bb188f4c730de6.html",
+      "agreements/0b7a94e85bf6368da139.html",
+      "agreements/0c02ee530b211cef6928.html",
+      "agreements/0feaa6f9afa19c96b4db.html",
+      "agreements/11113b287a4b8acf5d79.html",
+      "agreements/14c3ffd2a3996df42f84.html",
+      "agreements/180f8893cda264c709b5.html",
+      "agreements/19dad865368da8749102.html",
+      "agreements/2acbd1928bfb3fe0f9a8.html",
+      "agreements/2b800f32f6c48d26e98d.html",
+      "agreements/355e5b76466081138c1d.html",
+      "agreements/44c6576a4558e9b9c2c9.html",
+      "agreements/45c609181e5d7aee68cb.html",
+      "agreements/4aeb65561cc5b95f0cc8.html",
+      "agreements/4dc00dab02a3b48e0b03.html",
+      "agreements/52ecfd4af75032ee2a46.html",
+      "agreements/542fea47e06384e4b1b6.html",
+      "agreements/55faa0ca6075970bdbc2.html",
+      "agreements/5ed5531686c35aad54e3.html",
+      "agreements/660a4d22c412754fef19.html",
+      "agreements/710a2ae39c837d843de8.html",
+      "agreements/78e9ef025ef438f9d870.html",
+      "agreements/7c9ceddcc44af0bdf78c.html",
+      "agreements/7ce2a6ad1bb0a2396e78.html",
+      "agreements/7d7c467a8d48d9254675.html",
+      "agreements/89b2a878fe449c891631.html",
+      "agreements/8dbeabc918bb4e924a76.html",
+      "agreements/8e3b49273b7603a82943.html",
+      "agreements/8f57e6aee04571496cb9.html",
+      "agreements/a1480276d37404e72351.html",
+      "agreements/a55915a0aa1f38f02d7d.html",
+      "agreements/b52aae37d3c448696ad1.html",
+      "agreements/b9986f4aafafc687bdeb.html",
+      "agreements/c09ea5fad542d386333d.html",
+      "agreements/c317fb3c2a09f02c99a8.html",
+      "agreements/d3e3d2716225091b0a32.html",
+      "agreements/d4b0bc4c200b103ac5c1.html",
+      "agreements/d887fa9278c6dbd42835.html",
+      "agreements/dffe6d0d38b15305b855.html",
+      "agreements/e12c250aeadee2a22eb9.html",
+      "agreements/e41739efddf16f6a7255.html",
+      "agreements/e55ed4ebcfdfa154454e.html",
+      "agreements/e9270b894bbb50e15e37.html",
+      "agreements/ed76a7c7ab9afab8a4af.html",
+      "agreements/edc434b96c9594e7ac7d.html",
+      "agreements/f17bddf851e71a21dc4a.html",
+      "agreements/f202bbb758023443fb88.html",
+      "agreements/f27c0c725967e8b1cd3e.html",
+      "agreements/f381b5b7f5575bff957d.html"
+    ]
+  },
+  "email_informal": {
+    "10.5.4.4": [
+      {
+        "kind": "informal",
+        "quote": "As we will have an offline session on Wednesday ~4:00PM, please provide your comments and inputs by 2:00PM Wednesday.",
+        "mode": "offline",
+        "summary": "Offline session on Wednesday ~4:00 PM; comments due by 2:00 PM",
+        "topics": [],
+        "start": "16:00",
+        "day": "Wednesday",
+        "mail": "7c530618.2610b",
+        "author": "Mohammed Al-Imari",
+        "sent": "2026-10-13T14:02:59+09:00",
+        "date": "2026-10-14"
+      }
+    ],
+    "10.4.2": [
+      {
+        "kind": "informal",
+        "quote": "In the following time slots, I will be in the main room (back left side).\n*   Today, 17:00 - 18:30",
+        "mode": null,
+        "summary": "FL available in main room (back left side)",
+        "topics": [],
+        "start": "17:00",
+        "end": "18:30",
+        "day": "Tuesday",
+        "place": "the main room (back left side)",
+        "mail": "d2756982.2610b",
+        "author": "Naoya Shibaike",
+        "sent": "2026-10-13T15:02:20+09:00",
+        "date": "2026-10-13"
+      },
+      {
+        "kind": "informal",
+        "quote": "In the following time slots, I will be in the main room (back left side).\n*   Today, 17:00 - 18:30\n  *   Tomorrow, 8:30 - 13:00",
+        "mode": null,
+        "summary": "FL available in main room (back left side)",
+        "topics": [],
+        "start": "08:30",
+        "end": "13:00",
+        "day": "Wednesday",
+        "place": "the main room (back left side)",
+        "mail": "d2756982.2610b",
+        "author": "Naoya Shibaike",
+        "sent": "2026-10-13T15:02:20+09:00",
+        "date": "2026-10-14"
+      },
+      {
+        "kind": "informal",
+        "quote": "I’ll be in main room so please feel free to reach me for any comments/suggestions.",
+        "mode": null,
+        "summary": "FL available in main room for comments/suggestions",
+        "topics": [],
+        "day": "Wednesday",
+        "place": "main room",
+        "mail": "8a8be730.2610b",
+        "author": "Naoya Shibaike",
+        "sent": "2026-10-14T08:28:10+09:00",
+        "date": "2026-10-14"
+      }
+    ],
+    "9.5": [
+      {
+        "kind": "informal",
+        "quote": "Let's start the offline at 3:30pm",
+        "mode": "offline",
+        "summary": "Offline discussion postponed to 15:30",
+        "topics": [],
+        "start": "15:30",
+        "day": "Tuesday",
+        "mail": "6f7588b5.2610b",
+        "author": "Alberto Rico Alvarino",
+        "sent": "2026-10-13T15:02:32+09:00",
+        "date": "2026-10-13"
+      },
+      {
+        "kind": "informal",
+        "quote": "Let's have an off-offline today at 3pm, same place as yesterday.",
+        "mode": "off-offline",
+        "summary": "Off-offline discussion at 15:00, same place as yesterday",
+        "topics": [],
+        "start": "15:00",
+        "day": "Wednesday",
+        "place": "same place as yesterday",
+        "mail": "7e2ba9ec.2610b",
+        "author": "Alberto Rico Alvarino",
+        "sent": "2026-10-14T10:50:36+09:00",
+        "date": "2026-10-14"
+      }
+    ],
+    "10.5.2.1": [
+      {
+        "kind": "informal",
+        "quote": "let’s meet outside Sorour room for the offline at 16:30",
+        "mode": "offline",
+        "summary": "Offline meeting outside Sorour room",
+        "topics": [],
+        "start": "16:30",
+        "day": "Tuesday",
+        "place": "outside Sorour room",
+        "mail": "7c40983a.2610b",
+        "author": "Dimitri Gold (Nokia)",
+        "sent": "2026-10-13T16:09:19+09:00",
+        "date": "2026-10-13"
+      }
+    ],
+    "10.5.3.3": [
+      {
+        "kind": "informal",
+        "quote": "having an off-offline discussion from 9:00 to 10:00 AM on Wednesday morning in one outside the RAN1 main room. I will be always there before 11:00 AM",
+        "mode": "off-offline",
+        "summary": "Off-offline discussion outside RAN1 main room (FL there until 11:00)",
+        "topics": [],
+        "start": "09:00",
+        "end": "10:00",
+        "day": "Wednesday",
+        "place": "one outside the RAN1 main room",
+        "mail": "936d7b7a.2610b",
+        "author": "Bingchao BC2 Liu",
+        "sent": "2026-10-13T23:28:17+09:00",
+        "date": "2026-10-14"
+      }
+    ],
+    "9.4": [
+      {
+        "kind": "informal",
+        "quote": "We would like to have an off-offline discussion at 10:45 today. Let’s meet in front of Yeongju A Hall",
+        "mode": "off-offline",
+        "summary": "Off-offline discussion at 10:45 in front of Yeongju A Hall",
+        "topics": [],
+        "start": "10:45",
+        "day": "Wednesday",
+        "place": "in front of Yeongju A Hall",
+        "mail": "4be0ad7.2610b",
+        "author": "EL JAAFARI Mohamed",
+        "sent": "2026-10-14T08:30:41+09:00",
+        "date": "2026-10-14"
+      }
+    ],
+    "10.5.1.3": [
+      {
+        "kind": "informal",
+        "quote": "Moderator will also be outside offline room (201) during 12:00 - 13:00, and welcome to join our discussion",
+        "mode": null,
+        "summary": "Informal discussion outside offline room (201)",
+        "topics": [],
+        "start": "12:00",
+        "end": "13:00",
+        "day": "Wednesday",
+        "tdocs": [
+          "R1-2608681"
+        ],
+        "place": "outside offline room (201)",
+        "mail": "b94b5bc4.2610b",
+        "author": "Weide Wu (吳威德)",
+        "sent": "2026-10-14T08:49:11+09:00",
+        "date": "2026-10-14"
+      }
+    ],
+    "10.5.4.2": [
+      {
+        "kind": "informal",
+        "quote": "I will be near the cute bears on the 3rd floor between 11:00 and 12:00 (same place as yesterday). Please feel free to approach me if you have any questions, comments, or concerns regarding Round 3.",
+        "mode": null,
+        "summary": "FL available near cute bears on 3rd floor for Round 3 questions",
+        "topics": [
+          "Round 3"
+        ],
+        "start": "11:00",
+        "end": "12:00",
+        "day": "Wednesday",
+        "place": "near the cute bears on the 3rd floor",
+        "mail": "daa98104.2610b",
+        "author": "Lei Zhang (Fujitsu)",
+        "sent": "2026-10-14T09:08:41+09:00",
+        "date": "2026-10-14"
+      }
+    ],
+    "10.5.3.1": [
+      {
+        "kind": "informal",
+        "quote": "I will be around the area outside RAN1 MAIN this afternoon, before online starts.",
+        "mode": null,
+        "summary": "FL around outside RAN1 MAIN this afternoon before online starts for comments",
+        "topics": [
+          "observations"
+        ],
+        "day": "Wednesday",
+        "place": "around the area outside RAN1 MAIN",
+        "mail": "b9cd73ae.2610b",
+        "author": "Hao Wu",
+        "sent": "2026-10-14T14:29:18+09:00",
+        "date": "2026-10-14"
+      }
+    ],
+    "10.6.1.1": [
+      {
+        "kind": "informal",
+        "quote": "I will be outside main meeting room for DL WUS design discussions at 5 pm today (after the afternoon coffee break).",
+        "mode": null,
+        "summary": "DL WUS design discussions outside main meeting room",
+        "topics": [
+          "DL WUS design discussions"
+        ],
+        "start": "17:00",
+        "day": "Wednesday",
+        "place": "outside main meeting room",
+        "mail": "f02cb9dc.2610b",
+        "author": "Magnus Åström",
+        "sent": "2026-10-14T16:01:46+09:00",
+        "date": "2026-10-14"
+      }
+    ]
   }
 }
