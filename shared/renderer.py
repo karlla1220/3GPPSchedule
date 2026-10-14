@@ -729,15 +729,19 @@ def _email_detail_line(detail: dict) -> str:
     author = (detail.get("author") or "").strip()
     who = ", ".join(filter(None, [author if author not in {"<>", ""} else "",
                                   _short_time(sent)]))
-    who_html = _mail_link(detail.get("url"), who)
-    return line + (f' <span class="popup-email-from">— {who_html}</span>' if who_html else "")
+    source = _mail_source(who, detail.get("url"))
+    return line + (f' <span class="popup-email-from">{source}</span>' if source else "")
 
 
-def _mail_link(url: str | None, text: str) -> str:
-    """The sender, linked to the mail in the list archive; "mail" when the sender is not known."""
-    if not url:
-        return _esc(text)
-    return f'<a href="{_esc(url)}" target="_blank" rel="noopener">{_esc(text or "mail")}</a>'
+def _mail_source(who: str, url: str | None) -> str:
+    """"— sender · mail ↗": the sender as plain text, the mail in the list archive after it.
+
+    Not the sender's name as the link: a linked name reads as an address to write to.
+    """
+    parts = [f"— {_esc(who)}"] if who else []
+    if url:
+        parts.append(f'<a class="mail-link" href="{_esc(url)}" target="_blank" rel="noopener">mail&nbsp;↗</a>')
+    return " · ".join(parts)
 
 
 def _short_time(iso: str) -> str:
@@ -800,7 +804,7 @@ def _render_email_informal(schedule) -> str:
             f'<li data-ai="{_esc(ai)}" data-date="{_esc(day)}" data-day="{weekday}">'
             + (f'<span class="email-informal-when">{_esc(when)}</span> ' if when else "")
             + f'<span class="email-informal-ai">AI {_esc(ai)}</span> {_esc(text)}'
-            + (f' <span class="email-informal-from">— {who}</span>' if (who := _mail_link(url, author)) else "")
+            + (f' <span class="email-informal-from">{source}</span>' if (source := _mail_source(author, url)) else "")
             + "</li>"
         )
     return (
