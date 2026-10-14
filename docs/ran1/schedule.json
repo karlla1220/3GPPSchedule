@@ -12482,7 +12482,7 @@
     }
   ],
   "source_file": "RAN1#126b online and offline schedules - v02.docx",
-  "generated_at": "2026-10-15 03:41",
+  "generated_at": "2026-10-15 07:41",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
@@ -12946,11 +12946,11 @@
     "source_name": "Chair notes RAN1#126bis_v10.docx",
     "session_notes": {
       "R1-2607284": {
-        "name": "draft_R1-2607284_Session Notes of AI 7_v00.docx",
+        "name": "draft_R1-2607284_Session Notes of AI 7_v02.docx",
         "agenda_item": "7",
-        "changed_at": "2026-10-11T10:42:40+00:00",
-        "sha256": "e871148c1e3d8914348b45d6bdbe074c6ed34827c81aba8da3b195432f96e706",
-        "source_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Hiroki_notes/draft_R1-2607284_Session%20Notes%20of%20AI%207_v00.docx"
+        "changed_at": "2026-10-14T22:39:42+00:00",
+        "sha256": "7191318f683bc5e8b04e5cb5869d537b4d65a79457c3056d22f0f930d533ab07",
+        "source_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Hiroki_notes/draft_R1-2607284_Session%20Notes%20of%20AI%207_v02.docx"
       },
       "R1-2607285": {
         "name": "draft_R1-2607285_Session Notes of AI 8.2_v01.docx",
@@ -13319,17 +13319,52 @@
           "63a50518cda7",
           "49468cd7d133",
           "334907737e61",
-          "323bd77ca2df"
+          "323bd77ca2df",
+          "ea2d0e277408",
+          "fcc93f254033",
+          "4150f68c7bec",
+          "668544acaa68",
+          "eea758e9bbe9",
+          "802a401bece8",
+          "e6aa124f1f3e",
+          "9ee1612c035d",
+          "6c6af2b9645a",
+          "668544acaa68",
+          "4801e7698e37",
+          "f24998013929",
+          "0b873495a145",
+          "03165182ebdb",
+          "efbb78d78c79",
+          "668544acaa68",
+          "0a1d4bc14288"
         ],
         "sources": {
           "chair": "c9b518a8b74f",
-          "R1-2607284": "c9b518a8b74f"
+          "R1-2607284": "be624928f53f"
         },
-        "change": "initial",
-        "added": [],
-        "changed_at": "2026-10-04T08:57:51+00:00",
-        "changed_in": "Draft Chair notes RAN1#126bis_v00.docx",
-        "file": "agreements/419932a138b60c48ac14.html"
+        "change": "updated",
+        "added": [
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22
+        ],
+        "changed_at": "2026-10-14T22:39:42+00:00",
+        "changed_in": "draft_R1-2607284_Session Notes of AI 7_v02.docx",
+        "file": "agreements/082af30125612db9900e.html"
       },
       "8": {
         "title": "Maintenance on Rel-19 NR and E-UTRA",
@@ -16748,7 +16783,9 @@
         "changed_in": "Draft Chair notes RAN1#126bis_v00.docx"
       }
     },
-    "retained_files": []
+    "retained_files": [
+      "agreements/419932a138b60c48ac14.html"
+    ]
   },
   "email_informal": {
     "10.5.4.4": [
