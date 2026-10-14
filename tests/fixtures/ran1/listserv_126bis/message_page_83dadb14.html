@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="title" content="LISTSERV - 3GPP_TSG_RAN_WG1 Archives - LIST.ETSI.ORG">
+<meta name="theme-color" content="#054483" />
+<title>LISTSERV - 3GPP_TSG_RAN_WG1 Archives - LIST.ETSI.ORG</title>
+<link rel="manifest" href="/scripts/wa.exe?SHOWTPL=MANIFEST&L=3GPP_TSG_RAN_WG1">
+<link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+<style></style>
+
+<link href="/archives/js/jquery-ui-1.13.2/jquery-ui.custom.css" rel="stylesheet">
+
+<style></style>
+<link rel="alternate" type="application/rss+xml" title="3GPP_TSG_RAN_WG1 - RSS 1.0" href="/scripts/wa.exe?RSS&L=3GPP_TSG_RAN_WG1&v=1.0&LIMIT=100">
+<link rel="alternate" type="application/rss+xml" title="3GPP_TSG_RAN_WG1 - RSS 2.0" href="/scripts/wa.exe?RSS&L=3GPP_TSG_RAN_WG1&v=2.0&LIMIT=100">
+<link rel="alternate" type="application/atom+xml" title="3GPP_TSG_RAN_WG1 - Atom 1.0" href="/scripts/wa.exe?RSS&L=3GPP_TSG_RAN_WG1&v=ATOM1.0&LIMIT=100">
+<script type="text/javascript" src="/archives/js/jquery-3.7.1/jquery.min.js"></script>
+<script type="text/javascript" src="/archives/js/jquery-ui-1.13.2/jquery-ui.min.js"></script>
+<script type="text/javascript" src="/archives/js/tablesorter-2.31.3/jquery.tablesorter.combined.min.js"></script>
+<script type="text/javascript" src="/archives/js/tablesorter-2.31.3/widgets/widget-pager.min.js"></script>
+<script type="text/javascript" src="/archives/js/tablesorter-2.31.3/widgets/widget-output.min.js"></script>
+
+<script type="text/javascript">
+var change = 0;
+
+function entryChanged() {
+  change = 1;
+}
+function goTo(url) {
+  location.href=url;
+}
+function reloadPage() {
+  location.reload();
+}
+function loadXMLDoc(url, reqfunc) {
+  req = $.get(url, {}, reqfunc);
+}
+function postXMLDoc(url, params, reqfunc) {
+  req = $.post(url, params, reqfunc);
+}
+function getFirstChild(n) {
+  x=n.firstChild;
+  while (x.nodeType!=1) {x=x.nextSibling}
+  return x;
+}
+function getEditorContent(areaid) {
+  var content;
+  if (document.getElementById(areaid)) {
+  try { var oEditor = CKEDITOR.instances[areaid]; content = oEditor.getData(); content = content.replace(/&amp;/g,"&"); return content; }
+  catch (err) { return document.getElementById(areaid).value; }
+  }
+}
+function clearField(id) {
+  $("#"+id).val("");
+}
+function clearSessionStorage() {
+  sessionStorage.clear();
+}
+function clearLocalStorage() {
+  localStorage.removeItem('tablesorter-filters');
+}
+function isEmpty(x) {
+  if ($(x).val()) {return 0} else {return 1};
+}
+function inputFocus(id) {
+  $("#"+id).addClass("blank");
+}
+function inputBlur(id) {
+  $("#"+id).removeClass("blank");
+}
+function ck(c) {
+  if (c) { $("."+c+":visible").prop("checked", true); } else { $(".ckbox:visible").prop("checked", true); }
+}
+function unck(c) {
+  if (c) { $("."+c).prop("checked", false); } else { $(".ckbox").prop("checked", false); }
+}
+function setWidth() {
+  if ($(window).width() < 479) { return 300 } else if ($(window).width() < 639) { return 450 } else { return 600 }
+}
+function setMaxHeight() {
+  if ($(window).width() < 479) { return 525 } else if ($(window).width() < 639) { return 650 } else { return 650 }
+}
+function showHelp(title,template,section) {
+  var w = setWidth();
+  var mh = setMaxHeight();
+  helptext = "/scripts/wa.exe?SHOWTPL=" + template + "&S=" + section + "";
+  $.ajax({ type: "GET", url: helptext, dataType: "html", cache: false, success: function(html) { $("#help").dialog({ autoOpen:false, width:w, height:"auto", maxHeight:mh, modal:false, title:title }); $("#help").html(html); $("#help").dialog("open"); } });
+}
+function showWarning(title,template,section,button) {
+  var w = setWidth();
+  var mh = setMaxHeight();
+  helptext = "/scripts/wa.exe?SHOWTPL=" + template + "&S=" + section + "";
+  $.ajax({ type: "GET", url: helptext, dataType: "html", cache: false, success: function(html) { $("#help").dialog({ autoOpen:false, width:w, height:"auto", maxHeight:mh, modal:true, title:title, buttons: [ { text:button, click: function() { $(this).dialog("close"); } } ] } ); $("#help").html(html); $("#help").dialog("open"); } });
+}
+function showConfig(title,url) {
+  var w = setWidth();
+  var mh = setMaxHeight();
+  $.ajax({ type: "GET", url: url, dataType: "html", cache: false, success: function(html) { $("#prompt").dialog({ autoOpen:false, width:w, height:"auto", maxHeight:mh, modal:true, title:title }); $("#prompt").html("<br />" + html + "<br />"); $("#prompt").dialog("open"); } });
+}
+function showIframe(title,url) {
+  var w = setWidth();
+  var mh = setMaxHeight();
+  $("#iframe").dialog({ width:w, height:"auto", maxHeight:mh, modal:true, title:title, close: function(event, ui) { reloadPage() } }); $("#iframe").html("<br /><iframe src=\"" + url + "\" style=\"width:100%; height:400px; border:none; background:none\"></div>"); $("#iframe").dialog("open");
+}
+function showPrompt(title,prompt,button) {
+  var w = setWidth();
+  $("#prompt").dialog({ autoOpen:false, width:w, height:"auto", modal:true, title:title, buttons: [ { text:button, click: function() { $(this).dialog("close"); } } ] });
+  $("#prompt").html("<br />" + prompt + "<br />");
+  $("#prompt").dialog("open");
+}
+function showDialog(title) {
+  var w = setWidth();
+  $("#dialog").dialog({ width:w, height:"auto", modal:true, title:title }); $("#dialog").dialog("open");
+}
+function showNonModalDialog(title) {
+  var w = setWidth();
+  $("#nmdialog").dialog({ width:w, height:"auto", modal:false, title:title }); $("#dialog").dialog("open");
+}
+function confirmAction(title,prompt,yes,no,url) {
+  var w = setWidth();
+  $("#prompt").dialog({ autoOpen:false, width:w, height:"auto", modal:true, title:title, buttons: [ { text:yes, click: function() { self.location.href = url; } }, { text:no, click: function() { $(this).dialog("close"); } } ] });
+  $("#prompt").html("<br />" + prompt + "<br />");
+  $("#prompt").dialog("open");
+}
+function confirmChange(title,prompt,yes,no,url) {
+  var w = setWidth();
+  if (change == 1) {
+  $("#prompt").dialog({ autoOpen:false, width:w, height:"auto", modal:true, title:title, buttons: [ { text:yes, click: function() { self.location.href = url; } }, { text:no, click: function() { $(this).dialog("close"); } } ] });
+  $("#prompt").html("<br />" + prompt + "<br />");
+  $("#prompt").dialog("open");
+  } else {
+  self.location.href = url;
+  }
+}
+function confirmOpt(name,title,prompt,yes,no,id) {
+  var w = setWidth();
+  $("#prompt").dialog({ autoOpen:false, width:w, height:"auto", modal:true, title:title, buttons: [ { text:yes, click: function() { $("#"+name).val(title); document.forms[id].submit(); } }, { text:no, click: function() { $(this).dialog("close"); } } ] });
+  $("#prompt").html("<br />" + prompt + "<br />");
+  $("#prompt").dialog("open");
+}
+function loadVariable() {
+  $.ajax({ type: "GET", url: "/scripts/wa.exe?VARED=" + $("#vared").val() + "&name=" + $("#name").val() + "", dataType: "html", cache: false, success: function(html) { html = html.replace(/\n/g,""); fields = $("#name").val().split(','); $("#vname").val(fields[0]); $("#vtemplate").val(fields[1]); $("#data").val(html); if ($("#name").val() == "") { $("#emsave").prop("disabled", true) } else { $("#emsave").prop("disabled", false) } } });
+}
+function saveVariable() {
+  showSpinner();
+  $.ajax({ type: "GET", url: "/scripts/wa.exe?VARED=" + $("#vared").val() + "&name=" + $("#vname").val() + "&template=" + $("#vtemplate").val() + "&data=" + encodeURIComponent($("#data").val()) + "&U=1", dataType: "html", cache: false, success: function(html) { reloadPage(); } });
+}
+function showDesc(desc,listname,listtitle) {
+  var w = setWidth();
+  $("#listdesc").css( { "width": w+"px" } );
+  desc = desc.replace(/border-collapse/g,"x-collapse");
+  if(desc) {
+  $("#listdesc").html("<table class=\"nopadding\"><tr><td class=\"nopadding\"><img src=\"/archives/images/material_menu_boxcorner1_16x16.png\" alt=\"\" class=\"block\" /></td><td class=\"nopadding\" background=\"/archives/images/material_menu_boxtop_16x16.png\"></td><td class=\"nopadding\"><img src=\"/archives/images/material_menu_boxcorner2_16x16.png\" alt=\"\" class=\"block\" /></td></tr><tr><td class=\"nopadding\" background=\"/archives/images/material_menu_boxleft_16x16.png\"></td><td class=\"width-100\"><table class=\"width-100 nopadding border\"><tr><td class=\"normalgroup\"><b>" + unescape(listname) + "</b><br />" + unescape(listtitle) + "</td></tr><tr><td class=\"normalgroup\">" + unescape(desc) + "</td></tr></table></td><td class=\"nopadding\" background=\"/archives/images/material_menu_boxright_16x16.png\"></td></tr><tr><td class=\"nopadding\"><img src=\"/archives/images/material_menu_boxcorner3_16x16.png\" alt=\"\" class=\"block\" /></td><td class=\"nopadding\" background=\"/archives/images/material_menu_boxbottom_16x16.png\"></td><td class=\"nopadding\"><img src=\"/archives/images/material_menu_boxcorner4_16x16.png\" alt=\"\" class=\"block\" /></td></tr></table>");
+  } else {
+  $("#listdesc").html("<table class=\"nopadding\"><tr><td class=\"nopadding\"><img src=\"/archives/images/material_menu_boxcorner1_16x16.png\" alt=\"\" class=\"block\" /></td><td class=\"nopadding\" background=\"/archives/images/material_menu_boxtop_16x16.png\"></td><td class=\"nopadding\"><img src=\"/archives/images/material_menu_boxcorner2_16x16.png\" alt=\"\" class=\"block\" /></td></tr><tr><td class=\"nopadding\" background=\"/archives/images/material_menu_boxleft_16x16.png\"></td><td class=\"width-100\"><table class=\"width-100 nopadding border\"><tr><td class=\"normalgroup\"><b>" + unescape(listname) + "</b><br />" + unescape(listtitle) + "</td></tr></table></td><td class=\"nopadding\" background=\"/archives/images/material_menu_boxright_16x16.png\"></td></tr><tr><td class=\"nopadding\"><img src=\"/archives/images/material_menu_boxcorner3_16x16.png\" alt=\"\" class=\"block\" /></td><td class=\"nopadding\" background=\"/archives/images/material_menu_boxbottom_16x16.png\"></td><td class=\"nopadding\"><img src=\"/archives/images/material_menu_boxcorner4_16x16.png\" alt=\"\" class=\"block\" /></td></tr></table>");
+  }
+  $(document).mousemove(function(e){
+  $("#listdesc").css( { "left": e.pageX+10 + "px", "top": e.pageY+10 + "px" } );
+  var size = e.pageY+10 + $("#listdesc").height();
+  var pos = $(window).height() + $(window).scrollTop();
+  if (size > pos) {
+  if ($("#listdesc").height() < $(window).height()) {
+  $("#listdesc").css( { "left": e.pageX+10 + "px", "top": e.pageY+10 - $("#listdesc").height() + "px" } );
+  }
+  }
+  });
+}
+function showMaestro(title,description) {
+  var w = setWidth();
+  $("#listdesc").css( { "width": w+"px" } );
+  $("#listdesc").css( { "z-index": 31 } );
+  $("#listdesc").html("<table class=\"nopadding\"><tr><td class=\"nopadding\"><img src=\"/archives/images/material_menu_boxcorner1_16x16.png\" alt=\"\" class=\"block\" /></td><td class=\"nopadding\" background=\"/archives/images/material_menu_boxtop_16x16.png\"></td><td class=\"nopadding\"><img src=\"/archives/images/material_menu_boxcorner2_16x16.png\" alt=\"\" class=\"block\" /></td></tr><tr><td class=\"nopadding\" background=\"/archives/images/material_menu_boxleft_16x16.png\"></td><td class=\"width-100\"><table class=\"width-100 nopadding border\"><tr><td class=\"normalgroup\"><b>" + unescape(title) + "</b><br />" + unescape(description) + "</td></tr></table></td><td class=\"nopadding\" background=\"/archives/images/material_menu_boxright_16x16.png\"></td></tr><tr><td class=\"nopadding\"><img src=\"/archives/images/material_menu_boxcorner3_16x16.png\" alt=\"\" class=\"block\" /></td><td class=\"nopadding\" background=\"/archives/images/material_menu_boxbottom_16x16.png\"></td><td class=\"nopadding\"><img src=\"/archives/images/material_menu_boxcorner4_16x16.png\" alt=\"\" class=\"block\" /></td></tr></table>");
+  $(document).mousemove(function(e){
+  $("#listdesc").css( { "left": e.pageX+10 + "px", "top": e.pageY+10 + "px" } );
+  var size = e.pageY+10 + $("#listdesc").height();
+  var pos = $(window).height() + $(window).scrollTop();
+  if (size > pos) {
+  if ($("#listdesc").height() < $(window).height()) {
+  $("#listdesc").css( { "left": e.pageX+10 + "px", "top": e.pageY+10 - $("#listdesc").height() + "px" } );
+  }
+  }
+  });
+}
+function hideDesc() {
+  $("#listdesc").html("");
+}
+function showSpinner() {
+  $("#loading").show(); $("#spinner").show(); $("#spinner").html("<img src=\"/archives/images/material_status_spinner_100x100.gif\" style=\"border:1px solid #999999\" />");
+}
+function hideSpinner() {
+  $("#loading").hide(); $("#spinner").hide(); $("#spinner").html("");
+}
+function toggleProfile() {
+  closeNavOpts();
+  $("#profile").fadeToggle("fast");
+}
+function editProfile() {
+  showConfig('Edit Profile','/scripts/wa.exe?SHOWTPL=PROFILE-MAIN');
+}
+function editNewsProfile() {
+  showConfig('Edit Newsletter Profile','/scripts/wa.exe?SHOWTPL=PROFILE-NEWS');
+}
+function closeProfile() {
+  if ($("#profile").css("display") == "block") { $("#profile").fadeToggle("fast"); }
+}
+function saveProfile() {
+  var data = new FormData($("#editprofile")[0]);
+  $("#prompt").dialog("close");
+  showSpinner();
+  $.ajax({ method: "POST", url: "/scripts/wa.exe", data: data, cache: false, contentType: false, processData: false, success: function(result) { reloadPage(); } });
+}
+function toggleNavOpts(event) {
+  closeProfile();
+  navoptpos = $("#navtrigger").position();
+  $("#navopts").css( { "top": navoptpos.top + 25 + "px" } );
+  $("#navopts").css( { "left": navoptpos.left - $("#navopts").width() + 24 + "px" } );
+  if ($("#navopts").css("display") == "block") { $(".navtrigger").css( { "border-bottom": "1px solid #CCCCCC" } ) } else { $(".navtrigger").css( { "border-bottom": "1px solid #FFFFFF" } ) }
+  $("#navopts").fadeToggle("fast"); event.stopPropagation();
+}
+function closeNavOpts() {
+  if ($("#navopts").css("display") == "block") { $("#navopts").fadeToggle("fast"); $(".navtrigger").css( { "border-bottom": "1px solid #CCCCCC" } ); }
+}
+function keepNavOpts(event) {
+  event.stopPropagation();
+}
+function toggleSubnav(x) {
+  closeNavOpts();
+  closeProfile();
+  if ($(window).width() < 768) { $("#subnav-wrap").css( { "width": "100%" } ); }
+  if ($("#subnav-wrap").css("display") == "block") {
+  $("#menu-subnav").attr( { "src": "/archives/images/material_menu_caret_closed_white_40x40.png" } );
+  $("#subnav-wrap").fadeToggle("fast", function() { $("#subnav-wrap").css( { "height": "auto" } ); $("#content-wrap").css( { "height": "auto" } ); positionSubnav(); });
+  } else {
+  $("#menu-subnav").attr( { "src": "/archives/images/material_menu_caret_open_white_40x40.png" } );
+  if (x != 1) {
+  $("#subnav-wrap").fadeToggle("fast", function() { $("#subnav-wrap").css( { "height": "auto" } ); $("#content-wrap").css( { "height": "auto" } ); positionSubnav(); });
+  } else {
+  if ($(window).width() > 767) { $("#subnav-wrap").css( { "display": "block" } ); $("#subnav-wrap").css( { "height": "auto" } ); $("#content-wrap").css( { "height": "auto" } ); positionSubnav(); }
+  }
+  }
+}
+function toggleAdmin() {
+  if ($("#admin").css("display") == "none") {
+  $.ajax({ type: "GET", url: "/scripts/wa.exe", data: "PREF&0=GLOBAL_SUBNAV_ADMIN&1=1&0=GLOBAL_SUBNAV_OWNER&1=0&0=GLOBAL_SUBNAV_MAESTRO&1=0&0=GLOBAL_SUBNAV_ARCHIVE&1=0" });
+  $("#admin-trigger").removeClass("border-top");
+  $("#owner-trigger").removeClass("border-top");
+  $("#maestro-trigger").removeClass("border-top");
+  $("#archive-trigger").removeClass("border-top");
+  $("#admin-arrow").html("&#9662;");
+  $("#owner-arrow").html("&#9656;");
+  $("#maestro-arrow").html("&#9656;");
+  $("#archive-arrow").html("&#9656;");
+  $("#owner-trigger").addClass("border-top");
+  $("#admin").slideToggle("fast", function() { $("#subnav-wrap").css( { "height": "auto" } ); $("#content-wrap").css( { "height": "auto" } ); positionSubnav(); });
+  if ($("#owner").css("display") == "block") {
+  $("#owner").slideToggle("fast", function() { $("#subnav-wrap").css( { "height": "auto" } ); $("#content-wrap").css( { "height": "auto" } ); positionSubnav(); });
+  }
+  if ($("#maestro").css("display") == "block") {
+  $("#maestro").slideToggle("fast", function() { $("#subnav-wrap").css( { "height": "auto" } ); $("#content-wrap").css( { "height": "auto" } ); positionSubnav(); });
+  }
+  if ($("#archive").css("display") == "block") {
+  $("#archive").slideToggle("fast", function() { $("#subnav-wrap").css( { "height": "auto" } ); $("#content-wrap").css( { "height": "auto" } ); positionSubnav(); });
+  }
+  } else {
+  $.ajax({ type: "GET", url: "/scripts/wa.exe", data: "PREF&0=GLOBAL_SUBNAV_ADMIN&1=0" });
+  $("#admin-arrow").html("&#9656;");
+  $("#owner-trigger").removeClass("border-top");
+  $("#admin").slideToggle("fast", function() { $("#subnav-wrap").css( { "height": "auto" } ); $("#content-wrap").css( { "height": "auto" } ); positionSubnav(); });
+  }
+}
+function toggleOwner() {
+  if ($("#owner").css("display") == "none") {
+  $.ajax({ type: "GET", url: "/scripts/wa.exe", data: "PREF&0=GLOBAL_SUBNAV_ADMIN&1=0&0=GLOBAL_SUBNAV_OWNER&1=1&0=GLOBAL_SUBNAV_MAESTRO&1=0&0=GLOBAL_SUBNAV_ARCHIVE&1=0" });
+  $("#admin-trigger").removeClass("border-top");
+  $("#owner-trigger").removeClass("border-top");
+  $("#maestro-trigger").removeClass("border-top");
+  $("#archive-trigger").removeClass("border-top");
+  $("#admin-arrow").html("&#9656;");
+  $("#owner-arrow").html("&#9662;");
+  $("#maestro-arrow").html("&#9656;");
+  $("#archive-arrow").html("&#9656;");
+  $("#archive-trigger").addClass("border-top");
+  $("#owner").slideToggle("fast", function() { $("#subnav-wrap").css( { "height": "auto" } ); $("#content-wrap").css( { "height": "auto" } ); positionSubnav(); });
+  if ($("#admin").css("display") == "block") {
+  $("#admin").slideToggle("fast", function() { $("#subnav-wrap").css( { "height": "auto" } ); $("#content-wrap").css( { "height": "auto" } ); positionSubnav(); });
+  }
+  if ($("#maestro").css("display") == "block") {
+  $("#maestro").slideToggle("fast", function() { $("#subnav-wrap").css( { "height": "auto" } ); $("#content-wrap").css( { "height": "auto" } ); positionSubnav(); });
+  }
+  if ($("#archive").css("display") == "block") {
+  $("#archive").slideToggle("fast", function() { $("#subnav-wrap").css( { "height": "auto" } ); $("#content-wrap").css( { "height": "auto" } ); positionSubnav(); });
+  }
+  } else {
+  $.ajax({ type: "GET", url: "/scripts/wa.exe", data: "PREF&0=GLOBAL_SUBNAV_OWNER&1=0" });
+  $("#owner-arrow").html("&#9656;");
+  $("#archive-trigger").removeClass("border-top");
+  $("#owner").slideToggle("fast", function() { $("#subnav-wrap").css( { "height": "auto" } ); $("#content-wrap").css( { "height": "auto" } ); positionSubnav(); });
+  }
+}
+function toggleMaestro() {
+  if ($("#maestro").css("display") == "none") {
+  $.ajax({ type: "GET", url: "/scripts/wa.exe", data: "PREF&0=GLOBAL_SUBNAV_ADMIN&1=0&0=GLOBAL_SUBNAV_OWNER&1=0&0=GLOBAL_SUBNAV_MAESTRO&1=1&0=GLOBAL_SUBNAV_ARCHIVE&1=0" });
+  $("#admin-trigger").removeClass("border-top");
+  $("#owner-trigger").removeClass("border-top");
+  $("#maestro-trigger").removeClass("border-top");
+  $("#archive-trigger").removeClass("border-top");
+  $("#admin-arrow").html("&#9656;");
+  $("#owner-arrow").html("&#9656;");
+  $("#maestro-arrow").html("&#9662;");
+  $("#archive-arrow").html("&#9656;");
+  $("#admin-trigger").addClass("border-top");
+  $("#maestro").slideToggle("fast", function() { $("#subnav-wrap").css( { "height": "auto" } ); $("#content-wrap").css( { "height": "auto" } ); positionSubnav(); });
+  if ($("#admin").css("display") == "block") {
+  $("#admin").slideToggle("fast", function() { $("#subnav-wrap").css( { "height": "auto" } ); $("#content-wrap").css( { "height": "auto" } ); positionSubnav(); });
+  }
+  if ($("#owner").css("display") == "block") {
+  $("#owner").slideToggle("fast", function() { $("#subnav-wrap").css( { "height": "auto" } ); $("#content-wrap").css( { "height": "auto" } ); positionSubnav(); });
+  }
+  if ($("#archive").css("display") == "block") {
+  $("#archive").slideToggle("fast", function() { $("#subnav-wrap").css( { "height": "auto" } ); $("#content-wrap").css( { "height": "auto" } ); positionSubnav(); });
+  }
+  } else {
+  $.ajax({ type: "GET", url: "/scripts/wa.exe", data: "PREF&0=GLOBAL_SUBNAV_MAESTRO&1=0" });
+  $("#maestro-arrow").html("&#9656;");
+  $("#admin-trigger").removeClass("border-top");
+  $("#maestro").slideToggle("fast", function() { $("#subnav-wrap").css( { "height": "auto" } ); $("#content-wrap").css( { "height": "auto" } ); positionSubnav(); });
+  }
+}
+function toggleArchive() {
+  if ($("#archive").css("display") == "none") {
+  $.ajax({ type: "GET", url: "/scripts/wa.exe", data: "PREF&0=GLOBAL_SUBNAV_ADMIN&1=0&0=GLOBAL_SUBNAV_OWNER&1=0&0=GLOBAL_SUBNAV_MAESTRO&1=0&0=GLOBAL_SUBNAV_ARCHIVE&1=1" });
+  $("#admin-trigger").removeClass("border-top");
+  $("#owner-trigger").removeClass("border-top");
+  $("#maestro-trigger").removeClass("border-top");
+  $("#archive-trigger").removeClass("border-top");
+  $("#admin-arrow").html("&#9656;");
+  $("#owner-arrow").html("&#9656;");
+  $("#maestro-arrow").html("&#9656;");
+  $("#archive-arrow").html("&#9662;");
+  $("#archive").slideToggle("fast", function() { $("#subnav-wrap").css( { "height": "auto" } ); $("#content-wrap").css( { "height": "auto" } ); positionSubnav(); });
+  if ($("#admin").css("display") == "block") {
+  $("#admin").slideToggle("fast", function() { $("#subnav-wrap").css( { "height": "auto" } ); $("#content-wrap").css( { "height": "auto" } ); positionSubnav(); });
+  }
+  if ($("#owner").css("display") == "block") {
+  $("#owner").slideToggle("fast", function() { $("#subnav-wrap").css( { "height": "auto" } ); $("#content-wrap").css( { "height": "auto" } ); positionSubnav(); });
+  }
+  if ($("#maestro").css("display") == "block") {
+  $("#maestro").slideToggle("fast", function() { $("#subnav-wrap").css( { "height": "auto" } ); $("#content-wrap").css( { "height": "auto" } ); positionSubnav(); });
+  }
+  } else {
+  $.ajax({ type: "GET", url: "/scripts/wa.exe", data: "PREF&0=GLOBAL_SUBNAV_ARCHIVE&1=0" });
+  $("#archive-arrow").html("&#9656;");
+  $("#archive").slideToggle("fast", function() { $("#subnav-wrap").css( { "height": "auto" } ); $("#content-wrap").css( { "height": "auto" } ); positionSubnav(); });
+  }
+}
+function setAdmin() {
+  $("#admin").css( { "display": "block" } );
+  $("#admin-arrow").html("&#9662;");
+  $("#owner-trigger").addClass("border-top");
+}
+function setOwner() {
+  $("#owner").css( { "display": "block" } );
+  $("#owner-arrow").html("&#9662;");
+  $("#archive-trigger").addClass("border-top");
+}
+function setMaestro() {
+  $("#maestro").css( { "display": "block" } );
+  $("#maestro-arrow").html("&#9662;");
+  $("#admin-trigger").addClass("border-top");
+}
+function setArchive() {
+  $("#archive").css( { "display": "block" } );
+  $("#archive-arrow").html("&#9662;");
+}
+function positionSubnav() {
+  $("#subnav-wrap").css( { "height": "auto" } );
+  if ($("#subnav-wrap").css("display") == "block") {
+  if ($(window).width() > 767) {
+  $("#subnav-wrap").css( { "width": "auto" } ); $("#content-wrap").css( { "width": $(window).width() - $("#subnav-wrap").width() + "px" } ); $("#content-wrap").css( { "left": $("#subnav-wrap").width() + "px" } );
+  } else {
+  $("#subnav-wrap").css( { "width": "100%" } ); $("#subnav-wrap").css( { "height": "auto" } ); $("#content-wrap").css( { "width": "100%" } ); $("#content-wrap").css( { "left": "0px" } );
+  }
+  } else {
+  $("#content-wrap").css( { "width": "100%" } ); $("#content-wrap").css( { "left": "0px" } );
+  }
+  if ($("#subnav-wrap").height() > $(window).height()) {
+  if ($("#subnav-wrap").height() > $("#content-wrap").height()) { $("#subnav-wrap").css( { "position": "absolute" } ); $("#subnav-wrap").css( { "height": $(document).height() } ); } else { $("#subnav-wrap").css( { "position": "absolute" } ); $("#subnav-wrap").css( { "height": $("#content-wrap").height() + $("#content-wrap").position().top } ); }
+  } else {
+  $("#subnav-wrap").css( { "position": "fixed" } ); $("#subnav-wrap").css( { "height": "100%" } );
+  }
+  adjustTableWrap();
+}
+function adjustTableWrap() {
+  if ($("#subnav-wrap").css("display") == "block") {
+  if ($("body").innerWidth() != $("#subnav-wrap").width()) { $("#table-wrap").css( { "width": $("body").innerWidth()-$("#subnav-wrap").width()-46 } ) }
+  } else {
+  $("#table-wrap").css( { "width": $("body").innerWidth()-46 } );
+  }
+}
+function downloadCSV() {
+  $(".nocsv img").each(function () {
+  $(this).attr("onmouseover",$(this).attr("onmouseover").replace(/</ig,"&lt;"));
+  $(this).attr("onmouseover",$(this).attr("onmouseover").replace(/>/ig,"&gt;"));
+  })
+  var $this = $("#table-wrap");
+  $table = $this.find("table");
+  $table.trigger("outputTable");
+  $(".nocsv img").each(function () {
+  $(this).attr("onmouseover",$(this).attr("onmouseover").replace(/&lt;/ig,"<"));
+  $(this).attr("onmouseover",$(this).attr("onmouseover").replace(/&gt;/ig,">"));
+  })
+  $("#format").val("table");
+  return false;
+}
+function selectA1Style(t) {
+  showSpinner();
+  $.ajax({ type: "GET", url: "/scripts/wa.exe", data: "PREF&0=GLOBAL_ARCSTYLE&1="+t+"", success: function() { reloadPage(); } });
+}
+function useA2PropFont() {
+  showSpinner();
+  $.ajax({ type: "GET", url: "/scripts/wa.exe", data: "PREF&0=GLOBAL_FONT&1=a", success: function() { reloadPage(); } });
+}
+function useA2MonoFont() {
+  showSpinner();
+  $.ajax({ type: "GET", url: "/scripts/wa.exe", data: "PREF&0=GLOBAL_FONT&1=b", success: function() { reloadPage(); } });
+}
+function showA2Text() {
+  showSpinner();
+  $.ajax({ type: "GET", url: "/scripts/wa.exe", data: "PREF&0=DEFAULTPART&1=text/plain", success: function() { reloadPage(); } });
+}
+function showA2HTML() {
+  showSpinner();
+  $.ajax({ type: "GET", url: "/scripts/wa.exe", data: "PREF&0=DEFAULTPART&1=text/html", success: function() { reloadPage(); } });
+}
+function showA2ShortHeaders() {
+  showSpinner();
+  $.ajax({ type: "GET", url: "/scripts/wa.exe", data: "PREF&0=GLOBAL_HEADER&1=a", success: function() { reloadPage(); } });
+}
+function showA2AllHeaders() {
+  showSpinner();
+  $.ajax({ type: "GET", url: "/scripts/wa.exe", data: "PREF&0=GLOBAL_HEADER&1=b", success: function() { reloadPage(); } });
+}
+function printA2Message() {
+  var message=document.getElementById("printable");
+  var newWindow=window.open('','Print-Window');
+  var webfonts = "<link href=\"https://fonts.googleapis.com/css?family=Montserrat\" rel=\"stylesheet\">";
+  newWindow.document.open();
+  newWindow.document.write("<html><head>"+webfonts+"<style></style></head><body onload=\"window.print()\">"+message.innerHTML+"</body></html>");
+  newWindow.document.close();
+}
+function dismissWhatsNew() {
+  $("#whatsnew").css( { "display": "none" } );
+  $.ajax({ type: "GET", url: "/scripts/wa.exe", data: "PREF&0=GLOBAL_WHATSNEW&1=b" });
+}
+</script>
+</head>
+<body>
+<div id="background"></div>
+<div id="header-wrap">
+<div id="header">
+<a href="#skipnavigation"><img src="/archives/images/material_menu_blank_1x1.gif" alt="Skip Navigational Links" class="none" /></a>
+<div id="navbar" class="noselect">
+<div id="navbar-left">
+<div class="logo"><a href="https://www.lsoft.com" target="_blank" rel="noopener"><img src="/archives/images/material_menu_logo_white_40x40.png" id="menu-logo" alt="LISTSERV email list manager" title="LISTSERV email list manager" class="float-left" /></a></div>
+<div class="listserv"><a href="/scripts/wa.exe?INDEX"><img src="/archives/images/material_menu_listserv_white_160x40.png" id="menu-listserv" alt="LISTSERV - LIST.ETSI.ORG" title="LISTSERV - LIST.ETSI.ORG" class="float-left" /></a></div>
+<div class="subnav"><a href="javascript:toggleSubnav()"><img src="/archives/images/material_menu_caret_closed_white_40x40.png" id="menu-subnav" alt="LISTSERV Menu" title="LISTSERV Menu" class="float-left" /></a></div>
+</div>
+<div id="navbar-right">
+<div class="email" title="Log In"><a href="/scripts/wa.exe?LOGON=A2%3D3GPP_TSG_RAN_WG1%3B83dadb14.2610B%26S%3D&L=3GPP_TSG_RAN_WG1">Log In</a></div>
+<div class="profile"><a href="/scripts/wa.exe?LOGON=A2%3D3GPP_TSG_RAN_WG1%3B83dadb14.2610B%26S%3D&L=3GPP_TSG_RAN_WG1"><img src="/archives/images/material_menu_login_white_40x40.png" id="menu-profile" alt="Log In" title="Log In" class="float-right" /></a></div>
+<div class="help"><a href="/scripts/wa.exe?SHOWTPL=HELP-A2&L=3GPP_TSG_RAN_WG1" target="_help"><img src="/archives/images/material_menu_help_white_40x40.png" id="menu-help" alt="LISTSERV 17.5 Help - 3GPP_TSG_RAN_WG1 Archives" title="LISTSERV 17.5 Help - 3GPP_TSG_RAN_WG1 Archives" class="float-right" /></a></div>
+</div>
+</div>
+</div>
+</div>
+<div id="subnav-wrap" class="noselect" role="navigation">
+<div id="subnav">
+<script type="text/javascript">
+$(document).ready(function() {
+});
+$(window).resize(function() {
+$("#profile").css( { "display": "none" } );
+$("#navopts").css( { "display": "none" } );
+$(".navtrigger").css( { "border-bottom": "1px solid #CCCCCC" } );
+positionSubnav();
+});
+</script>
+<div class="spacer"></div>
+<div class="subitem" onclick="goTo('/scripts/wa.exe?INDEX')"><div class="subicon"><img src="/archives/images/material_archive_index_22x22.png" alt="LISTSERV Archives" title="LISTSERV Archives" /></div><div class="subitemlink"><a href="javascript:event.stopPropagation();goTo('/scripts/wa.exe?INDEX')">LISTSERV Archives</a></div></div>
+<div class="subitem" onclick="goTo('/scripts/wa.exe?REPORT&z=4')"><div class="subicon"><img src="/archives/images/material_archive_search_22x22.png" alt="Search Archives" title="Search Archives" /></div><div class="subitemlink"><a href="javascript:event.stopPropagation();goTo('/scripts/wa.exe?REPORT&z=4')">Search Archives</a></div></div>
+<div class="subitem border-top" onclick="goTo('/scripts/wa.exe?GETPW1')"><div class="subicon"><img src="/archives/images/material_archive_password_22x22.png" alt="Register" title="Register" /></div><div class="subitemlink"><a href="javascript:event.stopPropagation();goTo('/scripts/wa.exe?GETPW1')">Register</a></div></div>
+<div class="subitem border-bottom" onclick="goTo('/scripts/wa.exe?LOGON=A2%3D3GPP_TSG_RAN_WG1%3B83dadb14.2610B%26S%3D&L=3GPP_TSG_RAN_WG1')"><div class="subicon"><img src="/archives/images/material_archive_login_22x22.png" alt="Log In" title="Log In" /></div><div class="subitemlink"><a href="javascript:event.stopPropagation();goTo('/scripts/wa.exe?LOGON=A2%3D3GPP_TSG_RAN_WG1%3B83dadb14.2610B%26S%3D&L=3GPP_TSG_RAN_WG1')">Log In</a></div></div>
+</div>
+</div>
+<div id="content-wrap" onclick="closeProfile(); closeNavOpts()">
+<div id="content">
+<a name="skipnavigation"></a>
+<div id="pagetitle">
+<table class="pagetitle" role="presentation">
+<tr>
+<td class="pad-right"><img src="/archives/images/material_archive_home_64x64.png" alt="" class="block reduce" /></td>
+<td class="width-100 pad-left">
+<h2>3GPP_TSG_RAN_WG1 Archives</h2>
+<h5 class="hide-xs"> October 2026, Week 2</h5>
+</td>
+</tr>
+</table>
+</div>
+<div id="output">
+<table class="output" role="presentation">
+<tr><td>
+<table class="pad-content" role="presentation">
+<tr>
+<td class="width-95 top">
+<h2 class="listaddress" title="3GPP_TSG_RAN_WG1@LIST.ETSI.ORG">3GPP_TSG_RAN_WG1@LIST.ETSI.ORG</h2>
+</td>
+<td class="width-5 top">
+<div id="navtrigger" class="noselect">
+<table class="navtrigger" role="presentation">
+<tr><td><a href="javascript:" onclick="toggleNavOpts(event)" class="pointer"><img src="/archives/images/material_menu_subnav_small_22x22.png" alt="Menu" title="Menu" class="block" /></a></td></tr>
+</table>
+</div>
+<div id="navopts" class="noselect" onclick="keepNavOpts(event)">
+<table class="navopts" role="presentation">
+<tr>
+<td class="width-5 pad-right"><a href="/scripts/wa.exe?INDEX"><img src="/archives/images/material_archive_index_22x22.png" alt="LISTSERV Archives" title="LISTSERV Archives" class="block" /></a></td>
+<td class="width-95 pad-left nowrap"><a href="/scripts/wa.exe?INDEX">LISTSERV Archives</a></td>
+</tr>
+<tr>
+<td class="width-5 pad-right"><a href="/scripts/wa.exe?A0=3GPP_TSG_RAN_WG1"><img src="/archives/images/material_archive_home_22x22.png" alt="3GPP_TSG_RAN_WG1 Home" title="3GPP_TSG_RAN_WG1 Home" class="block" /></a></td>
+<td class="width-95 pad-left nowrap"><a href="/scripts/wa.exe?A0=3GPP_TSG_RAN_WG1">3GPP_TSG_RAN_WG1 Home</a></td>
+</tr>
+<tr>
+<td class="width-5 pad-right"></td>
+<td class="width-95 pad-left nowrap"><a href="/scripts/wa.exe?A1=ind2610B&L=3GPP_TSG_RAN_WG1">3GPP_TSG_RAN_WG1  October 2026, Week 2</a></td>
+</tr>
+<tr><td colspan="2"><hr /></td></tr>
+<tr>
+<td class="width-5 pad-right"><a href="/scripts/wa.exe?LOGON=A2%3D3GPP_TSG_RAN_WG1%3B83dadb14.2610B%26S%3D&L=3GPP_TSG_RAN_WG1"><img src="/archives/images/material_archive_login_22x22.png" alt="Log In" title="Log In" class="block" /></a></td>
+<td class="width-95 pad-left nowrap"><a href="/scripts/wa.exe?LOGON=A2%3D3GPP_TSG_RAN_WG1%3B83dadb14.2610B%26S%3D&L=3GPP_TSG_RAN_WG1">Log In</a></td>
+</tr>
+<tr>
+<td class="width-5 pad-right"><a href="/scripts/wa.exe?GETPW1"><img src="/archives/images/material_archive_password_22x22.png" alt="Register" title="Register" class="block" /></a></td>
+<td class="width-95 pad-left nowrap"><a href="/scripts/wa.exe?GETPW1">Register</a></td>
+</tr>
+<tr><td colspan="2"><hr /></td></tr>
+<tr>
+<td class="width-5 pad-right"><a href="/scripts/wa.exe?SUBED1=3GPP_TSG_RAN_WG1&A=1"><img src="/archives/images/material_archive_subscribe_22x22.png" alt="Subscribe or Unsubscribe" title="Subscribe or Unsubscribe" class="block" /></a></td>
+<td class="width-95 pad-left nowrap"><a href="/scripts/wa.exe?SUBED1=3GPP_TSG_RAN_WG1&A=1">Subscribe or Unsubscribe</a></td>
+</tr>
+
+
+<tr><td colspan="2"><hr /></td></tr>
+<tr>
+<td class="width-5 pad-right"><a href="/scripts/wa.exe?REPORT=3GPP_TSG_RAN_WG1&z=4&L=3GPP_TSG_RAN_WG1&1=3GPP_TSG_RAN_WG1"><img src="/archives/images/material_archive_search_22x22.png" alt="Search Archives" title="Search Archives" class="block" /></a></td>
+<td class="width-95 pad-left nowrap"><a href="/scripts/wa.exe?REPORT=3GPP_TSG_RAN_WG1&z=4&L=3GPP_TSG_RAN_WG1&1=3GPP_TSG_RAN_WG1">Search Archives</a></td>
+</tr>
+</table>
+</div>
+</td>
+</tr>
+</table>
+<table class="pad-content" role="presentation">
+<tr>
+<td>
+<table class="nopadding" role="presentation">
+<tr>
+<td class="top pad-right"><b>Options:</b></td>
+<td>
+<span id="font-link"><a href="/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;83dadb14.2610B&FT=M&P=&H=&S=">Use Monospaced Font</a></span>
+<br /><span id="part-link"><a href="/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;83dadb14.2610B&FT=&P=T&H=&S=">Show Text Part by Default</a></span>
+<br /><span id="header-link"><a href="/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;83dadb14.2610B&FT=&P=&H=A&S=">Show All Mail Headers</a></span>
+<br />
+<br />
+</td>
+</tr>
+<tr>
+<td class="top pad-right"><b>Message:</b></td>
+<td><span class="nowrap">[<a href="/scripts/wa.exe?A2=ind2610B&L=3GPP_TSG_RAN_WG1&D=0&P=72" aria-label="First Message">&#60;&#60; First</a>] [<a href="/scripts/wa.exe?A2=ind2610B&L=3GPP_TSG_RAN_WG1&D=0&P=207291" aria-label="Prev Message">&#60; Prev</a>]</span> <span class="nowrap">[<a href="/scripts/wa.exe?A2=ind2610B&L=3GPP_TSG_RAN_WG1&D=0&P=208948" aria-label="Next Message">Next &#62;</a>] [<a href="/scripts/wa.exe?A2=ind2610B&L=3GPP_TSG_RAN_WG1&D=0&P=216932" aria-label="Last Message">Last &#62;&#62;</a>]</span></td>
+</tr>
+<tr>
+<td class="top pad-right"><b>Topic:</b></td>
+<td><span class="nowrap">[<a href="/scripts/wa.exe?A2=ind2610B&L=3GPP_TSG_RAN_WG1&D=0&P=13576" aria-label="First Message By Topic">&#60;&#60; First</a>] [<a href="/scripts/wa.exe?A2=ind2610B&L=3GPP_TSG_RAN_WG1&D=0&P=195009" aria-label="Prev Message By Topic">&#60; Prev</a>]</span> <span class="nowrap">[Next &#62;</a>] [Last &#62;&#62;</a>]</span></td>
+</tr>
+<tr>
+<td class="top pad-right"><b>Author:</b></td>
+<td><span class="nowrap">[<a href="/scripts/wa.exe?A2=ind2610B&L=3GPP_TSG_RAN_WG1&D=0&P=13576" aria-label="First Message By Author">&#60;&#60; First</a>] [<a href="/scripts/wa.exe?A2=ind2610B&L=3GPP_TSG_RAN_WG1&D=0&P=195009" aria-label="Prev Message By Author">&#60; Prev</a>]</span> <span class="nowrap">[Next &#62;</a>] [Last &#62;&#62;</a>]</span></td>
+</tr>
+</table>
+<br />
+<table class="width-100 nopadding border" role="presentation">
+<tr>
+<td class="normalgroup">
+<div id="printable">
+<table class="width-100 nopadding border" role="presentation">
+<tr>
+<td class="emphasizedgroup">
+<span class="float-right"><a href="javascript:printA2Message()"><img src="/archives/images/material_archive_print_22x22.png" alt="Print" title="Print" class="block noprint" /></a> <a href="/scripts/wa.exe?LOGON=A2%3D3GPP_TSG_RAN_WG1%3B83dadb14.2610B%26S%3D"><img src="/archives/images/material_archive_reply_22x22.png" alt="Reply" title="Reply" class="block noprint" /></a></span>
+<table class="width-90 nopadding" role="presentation">
+<tr><td class="listgroup top row-m nowrap" scope="row"><b>Subject:</b></td><td class="width-100 listgroup top row-m"><div class="forcewrap"><a href="/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;83dadb14.2610B&FT=&P=&H=&S=">     Re: [126bis-R20-6GR-Transmission scheme for UL channels] Email discussion on Rel-20 6GR-How to transmit uplink channels</a></div></td></tr>
+<tr><td class="listgroup top row-m nowrap" scope="row"><b>From:</b></td><td class="width-100 listgroup top row-m"><div class="forcewrap">        Youngrok Jang &#60;<a href="/scripts/wa.exe?LOGON=A2%3D3GPP_TSG_RAN_WG1%3B83dadb14.2610B%26S%3D" target="_parent" >[log in to unmask]</a>&#62;</div></td></tr>
+<tr><td class="listgroup top row-m nowrap" scope="row"><b>Reply To:</b></td><td class="width-100 listgroup top row-m"><div class="forcewrap">Youngrok Jang &#60;<a href="/scripts/wa.exe?LOGON=A2%3D3GPP_TSG_RAN_WG1%3B83dadb14.2610B%26S%3D" target="_parent" >[log in to unmask]</a>&#62;</div></td></tr>
+<tr><td class="listgroup top row-m nowrap" scope="row"><b>Date:</b></td><td class="width-100 listgroup top row-m"><div class="forcewrap">Wed, 14 Oct 2026 09:44:13 +0900</div></td></tr>
+<tr><td class="listgroup top row-m nowrap" scope="row"><b>Content-Type:</b></td><td class="width-100 listgroup top row-m"><div class="forcewrap">multipart/related</div></td></tr>
+<tr>
+<td class="listgroup top row-m nowrap" scope="row"><b>Parts/Attachments:</b></td>
+<td class="width-100 listgroup top row-m"><div class="forcewrap"><a href="/scripts/wa.exe?A3=ind2610B&L=3GPP_TSG_RAN_WG1&E=quoted-printable&P=11299921&B=------%3D_NextPart_001_01B1_01DD5BC0.92891A10&T=text%2Fplain;%20charset=utf-8&header=1">text/plain</a>
+ (10 kB)
+<a href="/scripts/wa.exe?A3=ind2610B&L=3GPP_TSG_RAN_WG1&E=quoted-printable&P=11299921&B=------%3D_NextPart_001_01B1_01DD5BC0.92891A10&T=text%2Fplain;%20charset=utf-8&header=1">multipart/related</a>
+ (10 kB)
+, <a href="/scripts/wa.exe?A3=ind2610B&L=3GPP_TSG_RAN_WG1&E=quoted-printable&P=11311188&B=------Vy2HBH0yY2-nFQgDzTetS3iiqYOgv3XpEZ3cD3MB8MYNBdp7%3D_1b24a7_&T=text%2Fhtml;%20charset=utf-8&XSS=3&header=1">text/html</a>
+ (54 kB)
+, <a href="/scripts/wa.exe?A3=ind2610B&L=3GPP_TSG_RAN_WG1&E=base64&P=11369009&B=------Vy2HBH0yY2-nFQgDzTetS3iiqYOgv3XpEZ3cD3MB8MYNBdp7%3D_1b24a7_&T=image%2Fpng&XSS=3&header=1">image/png</a>
+ (39 kB)
+, <a href="/scripts/wa.exe?A3=ind2610B&L=3GPP_TSG_RAN_WG1&E=0&P=11422427&B=------%3D_NextPart_001_01B1_01DD5BC0.92891A10&T=text%2Fplain&XSS=3&header=1">text/plain</a>
+ (39 kB)
+</div></td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td><iframe src="/scripts/wa.exe?A3=ind2610B&L=3GPP_TSG_RAN_WG1&E=quoted-printable&P=11311188&B=------Vy2HBH0yY2-nFQgDzTetS3iiqYOgv3XpEZ3cD3MB8MYNBdp7%3D_1b24a7_&T=text%2Fhtml;%20charset=utf-8&pending=" style="border:none" id="a2" sandbox="allow-same-origin allow-popups">Your browser doesn't support iframes.<br /><br /><a href="/scripts/wa.exe?A3=ind2610B&L=3GPP_TSG_RAN_WG1&E=quoted-printable&P=11311188&B=------Vy2HBH0yY2-nFQgDzTetS3iiqYOgv3XpEZ3cD3MB8MYNBdp7%3D_1b24a7_&T=text%2Fhtml;%20charset=utf-8" target="_blank">View Message</a></iframe></td>
+</tr>
+</table>
+</div>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+<br />
+<table class="pad-content" role="presentation">
+<tr>
+<td class="right pad-bottom">
+<a style="background-color: #99ccff; font-weight: bold; color: #ffffff; padding: 4px 8px 4px 8px; text-decoration: none" href="/scripts/wa.exe?RSS&L=3GPP_TSG_RAN_WG1&v=ATOM1.0&LIMIT=100">ATOM</a>
+<a style="background-color: #ff8800; font-weight: bold; color: #ffffff; padding: 4px 8px 4px 8px; text-decoration: none" href="/scripts/wa.exe?RSS&L=3GPP_TSG_RAN_WG1&v=1.0&LIMIT=100">RSS1</a>
+<a style="background-color: #ff8800; font-weight: bold; color: #ffffff; padding: 4px 8px 4px 8px; text-decoration: none" href="/scripts/wa.exe?RSS&L=3GPP_TSG_RAN_WG1&v=2.0&LIMIT=100">RSS2</a>
+</td>
+</tr>
+</table>
+<script type="text/javascript">
+$("#a2").on("load",function() {
+  var aheight = $("#a2").contents().height();
+  var bheight = $("#a2").contents().height()-2 + "px !important";
+  $("#a2").css( { "height": aheight } );
+  $("#a2").contents().find("html").attr("style", "height:"+bheight);
+  $("#a2").contents().find("a").attr("target", "_blank");
+  positionSubnav();
+});
+</script>
+</td></tr>
+</table>
+</div>
+<br />
+<div id="trailer">
+<table class="trailer" role="presentation">
+<tr>
+<td class="left hide-xs"><a href="/scripts/wa.exe?INDEX">LIST.ETSI.ORG</a></td>
+<td class="right">
+<a href="https://www.lsoft.com/catalist.html" target="_blank" rel="noopener"><img src="/archives/images/material_logo_catalist_25x25.png" alt="CataList Email List Search" title="CataList Email List Search" /></a>
+<a href="https://www.lsoft.com/products/listserv-powered.asp" target="_blank" rel="noopener"><img src="/archives/images/material_logo_listserv_25x25.png" alt="Powered by LISTSERV" title="Powered by LISTSERV" /></a>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div id="spinner"></div>
+<div id="loading"></div>
+<div id="help"></div>
+<div id="prompt"></div>
+<div id="iframe"></div>
+<div id="listdesc"></div>
+</body>
+</html>
+</pre>
