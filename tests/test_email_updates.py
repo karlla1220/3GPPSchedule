@@ -258,6 +258,12 @@ def test_the_grid_shows_maybe_items_filters_them_and_lists_the_mails(meeting):
     line = popup.select_one(".popup-email-item").get_text()
     assert line.startswith("maybe 10.3.1 · Online 12:00 · ")
     assert popup.select_one(".popup-email-tdoc").get_text() == "R1-2608628"
+    # "mail ↗" after the sender opens the mail in the list archive; the name is not a link.
+    source = popup.select_one(".popup-email-from")
+    link = source.select_one("a.mail-link")
+    assert link["href"].startswith("https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;")
+    assert link["target"] == "_blank" and link.get_text() == "mail\xa0↗"
+    assert source.get_text().endswith(" · mail\xa0↗") and len(source.select("a")) == 1
     # A plan with a split, given by lengths only, keeps the lengths.
     wus = next(b for b in page.select(".session-block") if "10.6.1.2" in (b.get("data-popup") or "") and "From email" in b["data-popup"])
     text = BeautifulSoup(wus["data-popup"], "html.parser").select_one(".popup-email").get_text()
@@ -300,18 +306,21 @@ def test_off_offline_is_one_list_below_the_agreements(meeting):
     rows = box.select("li")
     # Every item, whatever its agenda item, in time order, each with its item and date.
     assert len(rows) == sum(len(items) for items in meeting.email_informal.values())
-    keys = [(r["data-date"], r.select_one(".email-informal-when").get_text()) for r in rows]
-    assert [k[0] for k in keys] == sorted(k[0] for k in keys)
+    dates = [r["data-date"] for r in rows]
+    assert dates == sorted(dates)
     row = next(r for r in rows if r["data-ai"] == "9.4" and "10:45" in r.get_text())
     # #20: "off-offline discussion at 10:45 today. Let's meet in front of Yeongju A Hall" (Wed 08:30).
-    assert row["data-date"] == "2026-10-14"
-    assert row.select_one(".email-informal-when").get_text() == "Wed 10:45"
+    assert row["data-date"] == "2026-10-14" and row["data-day"] == "wednesday"
+    # No weekday on the row: the list follows the day tab.
+    assert row.select_one(".email-informal-when").get_text() == "10:45"
     assert row.select_one(".email-informal-ai").get_text() == "AI 9.4"
     assert "Yeongju A Hall" in row.get_text()
-    # The script after it hides the days gone by and marks the selected cell's rows.
+    assert row.select_one(".email-informal-from").get_text() == "— EL JAAFARI Mohamed · mail\xa0↗"
+    link = row.select_one(".email-informal-from a.mail-link")
+    assert link["href"] == f"https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;{next(i['mail'] for i in meeting.email_informal['9.4'] if i.get('start') == '10:45')}"
+    # The script after it shows the selected tab's day and marks the selected cell's rows.
     script = box.find_next_sibling("script").string
-    assert "row.dataset.date < today" in script and "classList.toggle('related'" in script
-    assert '"Asia/Seoul"' in script
+    assert "row.dataset.day !== day" in script and "classList.toggle('related'" in script
 
 
 def test_no_list_without_off_offline(meeting):
