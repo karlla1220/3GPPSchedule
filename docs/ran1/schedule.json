@@ -9272,7 +9272,25 @@
           "room_scope": "assigned",
           "notes": [],
           "inferred_agenda_items": [],
-          "email_details": []
+          "email_details": [
+            {
+              "kind": "session",
+              "session": "Thu 09:30-10:30 201",
+              "quote": "For the offline tmr, I will take a quick look on some running proposals (i.e., marked as C). \nFor the draft proposals in good form, I plan to only collect questions offline",
+              "mode": "offline",
+              "summary": "Offline tomorrow on running proposals marked C and collecting questions",
+              "topics": [
+                "running proposals (marked as C)",
+                "draft proposals in good form"
+              ],
+              "day": "Thursday",
+              "split": [],
+              "mail": "1c774b93.2610b",
+              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;1c774b93.2610b",
+              "author": "<>",
+              "sent": "2026-10-15T00:53:53+09:00"
+            }
+          ]
         },
         {
           "name": "AI/ML",
@@ -12412,7 +12430,7 @@
     }
   ],
   "source_file": "RAN1#126b online and offline schedules - v02.docx",
-  "generated_at": "2026-10-15 00:01",
+  "generated_at": "2026-10-15 01:01",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
