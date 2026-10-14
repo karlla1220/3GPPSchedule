@@ -429,6 +429,20 @@ document.addEventListener('DOMContentLoaded', function() {
     function closePopup() {
         popupEl.classList.remove('show');
         backdrop.classList.remove('active');
+        releasePanelHeight();
+    }
+
+    // A cell click also swaps the agreement panel below the grid (a loading
+    // line in place of a long note, then the new note). A shorter page pulls
+    // the scroll position up when the view is near its end, and that scroll
+    // would close the popup just opened. So the panel keeps at least its
+    // height while the popup is open; the page can only grow under it.
+    const agreementPanel = document.getElementById('agreement-panel');
+    function holdPanelHeight() {
+        if (agreementPanel) agreementPanel.style.minHeight = agreementPanel.offsetHeight + 'px';
+    }
+    function releasePanelHeight() {
+        if (agreementPanel) agreementPanel.style.minHeight = '';
     }
 
     function isPopupOpen() {
@@ -549,7 +563,6 @@ document.addEventListener('DOMContentLoaded', function() {
         if (popupEl.scrollHeight <= popupEl.clientHeight) e.preventDefault();
     }, { passive: false });
 
-    const agreementPanel = document.getElementById('agreement-panel');
     if (agreementPanel) {
         document.querySelectorAll('.tab').forEach(tab => tab.addEventListener('click', () => {
             document.querySelectorAll('.session-block[aria-pressed="true"]').forEach(block => block.setAttribute('aria-pressed', 'false'));
@@ -562,6 +575,11 @@ document.addEventListener('DOMContentLoaded', function() {
         });
         block.addEventListener('click', function(e) {
             e.stopPropagation();
+            // Opening one popup over another keeps the height already held.
+            const html = this.getAttribute('data-popup');
+            const opens = html && (!isPopupOpen() || popupContent.innerHTML !== html);
+            if (opens) holdPanelHeight();
+            else closePopup();
             if (agreementPanel) {
                 document.querySelectorAll('.session-block[aria-pressed="true"]').forEach(item => item.setAttribute('aria-pressed', 'false'));
                 this.setAttribute('aria-pressed', 'true');
@@ -570,11 +588,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     ais: [...new Set((this.dataset.agreementAi || '').split('|').filter(Boolean))]
                 }}));
             }
-            const html = this.getAttribute('data-popup');
-            if (!html) return;
-            const wasOpen = isPopupOpen();
-            closePopup();
-            if (!wasOpen || popupContent.innerHTML !== html) {
+            if (opens) {
                 popupContent.innerHTML = html;
                 syncAgendaToggle();
                 popupEl.scrollTop = 0;
