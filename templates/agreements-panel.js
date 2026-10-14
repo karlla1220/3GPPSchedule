@@ -291,6 +291,24 @@ async function start() {
             } catch { return { error: true }; }
         });
         onCleanup(() => controller?.abort());
+        // Off-offline and FL whereabouts of the item from the email threads:
+        // not on the schedule, so below the agreements and quieter. Days gone
+        // by are left out (the meeting's date, not the viewer's).
+        const today = () => {
+            try { return new Intl.DateTimeFormat('en-CA', { timeZone: manifest.timezone || 'UTC', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date()); }
+            catch { return new Date().toISOString().slice(0, 10); }
+        };
+        const weekday = date => new Date(date + 'T12:00:00Z').toLocaleDateString('en-GB', { weekday: 'short', timeZone: 'UTC' });
+        const informal = () => {
+            const ai = activeAI();
+            if (!ai) return [];
+            const from = today();
+            return Object.entries(manifest.email_informal || {})
+                .filter(([item]) => item === ai || item.startsWith(ai + '.') || ai.startsWith(item + '.'))
+                .flatMap(([, rows]) => rows)
+                .filter(row => row.date >= from)
+                .sort((a, b) => (a.date + a.time).localeCompare(b.date + b.time));
+        };
         const tabID = ai => 'agreement-tab-' + ai.replaceAll('.', '-');
         const updatedNow = ai => {
             const section = manifest.sections[ai];
@@ -337,6 +355,13 @@ async function start() {
                             <${Show} when=${() => document()?.error}><p>Could not load this agreement. <button type="button" class="agreement-action" onClick=${() => refetch()}>Retry</button></p><//>
                             <${Show} when=${() => !document()?.error && !document()?.content}><p class="agreement-note">${emptyNote}</p><//>
                             <${Show} when=${() => document()?.content} keyed=${true}>${content => documentView(content)}<//>
+                        <//>
+                        <${Show} when=${() => informal().length}>
+                            <aside class="agreement-email">
+                                <p class="agreement-email-head">Off-offline and FL whereabouts · from the email threads, not on the schedule</p>
+                                <ul><${For} each=${informal}>${row => html`
+                                    <li><span class="agreement-email-when">${weekday(row.date) + (row.time ? ' ' + row.time : '')}</span>${' '}${row.text}<${Show} when=${row.from}><span class="agreement-email-from">${' — ' + row.from}</span><//></li>`}<//></ul>
+                            </aside>
                         <//>
                     </section>
                 <//>

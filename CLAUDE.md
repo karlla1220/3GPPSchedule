@@ -350,7 +350,7 @@ HTML은 `shared/page.py`, 표시 판단은 `templates/support-note.js`, 값은 `
 
 ## 이메일 토론 (RAN1)
 
-FL이 이메일 토론 스레드에 올리는 세션 계획("Offline 11:30 ~ 12:30: Part 1 PUSCH MIMO")을 셀 세부 정보에 쓰려고 모은다. 아직 화면에는 나오지 않는다. 수집은 `working_groups/ran1/email_sessions.py`, 테스트셋은 `tests/fixtures/ran1/listserv_126bis/`다.
+FL이 이메일 토론 스레드에 올리는 세션 계획("Offline 11:30 ~ 12:30: Part 1 PUSCH MIMO")을 모아 셀과 팝업, Agreement 패널에 보인다. 수집은 `working_groups/ran1/email_sessions.py`, 테스트셋은 `tests/fixtures/ran1/listserv_126bis/`다.
 
 - **스레드의 AI는 Chair notes가 정한다.** AI 절마다 `[126bis-R20-MIMO] Email discussion on Rel-20 MIMO – Darcy (MTK)` 줄이 있고, 대괄호 태그가 메일 제목의 태그다.
   - `agreements.py`가 체어맨 노트를 읽을 때 이 줄을 `email_threads`(AI, 태그, FL, 회사)로 함께 낸다. 태그는 회의마다 바뀌므로 회의마다 그 회의의 노트에서 다시 모은다.
@@ -398,10 +398,13 @@ FL이 이메일 토론 스레드에 올리는 세션 계획("Offline 11:30 ~ 12:
   사용자는 변경 안내를 읽지 않는다. 팝업을 열어야만 보이면 이 정보가 있는지 모른다.
   - "maybe"는 AI 줄에 ` · `로 잇고 Chair와 같은 가장 약한 톤(`--chair`, `.session-maybe`)이다. 새 줄을 쓰지 않아 높이 예산이 바뀌지 않는다. AI 줄이 보이는 셀(30분 이상)에서만 보인다.
   - 공지 하나가 셀의 Note 자리 한 줄이다(RAN2 Note와 같은 높이 예산과 톤, `_email_cell_lines`). 셀은 이미 시각과 종류를 보이므로 무엇을 다루는지만 적는다.
-    순서: 나눔(`10.6.1.2 40 min · 10.6.3 30 min · 10.6.1.1 20 min`) → 메일이 든 주제(`Part 1 (PUSCH MIMO), Proposal 3.1.1-4`, `:` 뒤 설명은 뗀다) → TDoc 번호 → 머리말("Offline discussion on")을 뗀 요약.
-    요약부터 쓰면 짧은 셀에서 "Check proposals in"까지만 보여 아무것도 말하지 않는다. 제목에 이미 있는 줄("10.5.2.2 PDSCH"의 `PDSCH`)은 뺀다.
+    순서: 나눔(`10.6.1.2 40 min · 10.6.3 30 min · 10.6.1.1 20 min`) → 메일이 든 주제(`Part 1 (PUSCH MIMO), Proposal 3.1.1-4`, `:` 뒤 설명은 뗀다) → TDoc 번호. 셋 다 없는 공지는 셀에 넣지 않고 팝업에만 둔다.
+    요약은 셀에 쓰지 않는다. 짧은 셀에서 "Check proposals in"까지만 보여 아무것도 말하지 않는다. 제목에 이미 있는 줄("10.5.2.2 PDSCH"의 `PDSCH`)은 뺀다.
   - 필터는 "maybe" 항목도 그 셀의 AI처럼 맞춘다(`data-ai-scope`에 더한다). `data-ai`와 필터 항목 목록, Agreement 패널은 그대로다.
   - 팝업에는 노트 아래, AI 이름 위에 `From email threads` 구획을 둔다. 공지 하나가 한 줄이다: `maybe 10.3.1 · Online 12:00 · 요약 · 나눔 · input 1 h before · R1-2608628 — 보낸 사람, Wed 11:47`.
     TDoc 번호는 하이픈에서 줄바꿈되지 않는다(`.popup-email-tdoc`). 나눔이 요약에 이미 들어 있으면 다시 적지 않는다. 보낸 사람이 가려진 메일(`<>`)은 시각만 적는다.
-  - B(off-offline, `Schedule.email_informal`)는 아직 화면에 없다. Agreement 패널 아래에 둘 예정이다. 시간표에 없는 offline도 B다.
+  - **B(off-offline, FL이 기다리는 곳)는 Agreement 패널의 본문 아래에 둔다(`.agreement-email`).** 시간표에 없는 offline도 B다.
+    헤어라인으로 가르고 본문보다 작고 연하다(12.5px, `--ink-2`, 머리줄 `--ink-3`). 머리줄은 `Off-offline and FL whereabouts · from the email threads, not on the schedule`이다. 의장 글이 아니라는 것을 밝힌다.
+    한 줄은 `Wed 10:45 요약 (장소) — 보낸 사람`이다. 고른 AI 탭과 그 상위·하위 항목의 것을 시각 순으로 모은다.
+    지난 날의 것은 뺀다. 날짜는 빌드가 정하고(`date`: 적힌 요일의 다음 날짜, 없으면 보낸 날), 오늘은 페이지가 회의 시간대로 정한다. 페이지는 일정이 바뀔 때만 다시 만들어지기 때문이다.
 

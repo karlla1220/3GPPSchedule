@@ -1213,6 +1213,27 @@ header .meta a:focus-visible,
 }
 #agreement-body > p { font-size: 13px; color: var(--ink-2); }
 #agreement-body > .agreement-note { color: var(--ink-3); }
+/* Off-offline from the email threads: below the agreements, quieter than
+   them, and set apart by a hairline. Not the chair's text. */
+.agreement-email {
+    margin-top: 18px;
+    padding-top: 10px;
+    border-top: 1px solid var(--hairline);
+    font-size: 12.5px;
+    line-height: 1.5;
+    color: var(--ink-2);
+}
+.agreement-email-head {
+    margin-bottom: 4px;
+    font-size: 11.5px;
+    color: var(--ink-3);
+}
+.agreement-email ul { list-style: none; margin: 0; padding: 0; }
+.agreement-email-when {
+    font-weight: 600;
+    white-space: nowrap;
+}
+.agreement-email-from { color: var(--ink-3); }
 #agreement-body > .agreement-change {
     margin: -8px 0 14px;
     font-size: 12px;

@@ -39,6 +39,7 @@ from shared.schedule import Schedule, Session
 from .agenda_labels import _agenda_for_meeting
 from .agenda_descriptions import DEFAULT_JSON_PATH
 from .email_details import (
+    DAYS,
     EXTRACT_INSTRUCTION,
     EXTRACT_MODEL,
     Cell,
@@ -181,11 +182,15 @@ def wanted(mail: Mail, index: dict, agenda) -> bool:
 
 
 def _sent(mail_date, tz: ZoneInfo) -> datetime | None:
-    try:
-        when = mail_date if isinstance(mail_date, datetime) else parsedate_to_datetime(mail_date)
-    except (TypeError, ValueError):
-        return None
-    return when.astimezone(tz) if when else None
+    """A sending time in meeting time: a datetime, a record's ISO date or a mail's RFC 2822 date."""
+    when = mail_date if isinstance(mail_date, datetime) else None
+    for parse in (datetime.fromisoformat, parsedate_to_datetime):
+        if when is None:
+            try:
+                when = parse(mail_date)
+            except (TypeError, ValueError):
+                pass
+    return when.astimezone(tz) if when and when.tzinfo else None
 
 
 def pending(schedule: Schedule, *, now: datetime | None = None, http=None) -> list[Mail] | None:
@@ -306,6 +311,14 @@ def update_records(schedule: Schedule, *, now: datetime | None = None, http=None
     return new
 
 
+def _on_date(item: dict, sent: datetime) -> str:
+    """The date an informal meeting is on: its weekday's next date from the mail, else the mail's day."""
+    if item.get("day") in DAYS:
+        ahead = (DAYS.index(item["day"]) - sent.weekday()) % 7
+        return (sent.date() + timedelta(days=ahead)).isoformat()
+    return sent.date().isoformat()
+
+
 def apply_records(schedule: Schedule) -> None:
     """Put every recorded answer on the grid as it is now.
 
@@ -333,6 +346,7 @@ def apply_records(schedule: Schedule) -> None:
         for item in resolved[record["id"]]:
             item = {**item, **source}
             if item["kind"] == "informal":
+                item["date"] = _on_date(item, _sent(record["date"], tz))
                 schedule.email_informal.setdefault(record["agenda_items"][0], []).append(item)
                 continue
             key = (record.get("thread") or record["id"], item["session"])

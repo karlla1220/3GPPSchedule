@@ -285,3 +285,29 @@ def test_the_cell_shows_the_plan_where_it_has_room(meeting):
     assert pdsch == ["17:00–17:30 PDSCH · 17:30–18:00 RS for PDSCH"]
     maybe = [n.get_text() for n in cell("AI 8.1", "12:00").select(".session-note")]
     assert maybe == []  # 30 minutes: title, time and AI line fill the cell
+
+
+def test_off_offline_goes_to_the_agreement_panel_with_its_date(meeting):
+    from shared.agreement_assets import agreement_assets
+
+    _update(meeting, [])
+    email_updates.apply_records(meeting)
+    meeting.chairman_agreements.update(status="ready", sections={"9.4": {"title": "NR-NTN"}})
+    manifest, _ = agreement_assets(meeting)
+    rows = manifest["email_informal"]
+    # #20: "off-offline discussion at 10:45 today. Let's meet in front of Yeongju A Hall" (Wed 08:30).
+    assert {"date": "2026-10-14", "time": "10:45"}.items() <= next(
+        r for r in rows["9.4"] if r["time"] == "10:45").items()
+    assert "Yeongju A Hall" in next(r for r in rows["9.4"] if r["time"] == "10:45")["text"]
+    # An "offline" the schedule does not have is off-offline too (9.5, Tuesday 15:30 in the live feed).
+    assert all(r["date"] >= "2026-10-13" for items in rows.values() for r in items)
+    assert all(not r["from"] or r["from"] != "<>" for items in rows.values() for r in items)
+
+
+def test_sending_times_of_records_and_mails_both_read():
+    from zoneinfo import ZoneInfo
+
+    seoul = ZoneInfo("Asia/Seoul")
+    assert email_updates._sent("2026-10-14T01:42:24+09:00", seoul).strftime("%a %H:%M") == "Wed 01:42"
+    assert email_updates._sent("Wed, 14 Oct 2026 00:42:24 +0800", seoul).strftime("%a %H:%M") == "Wed 01:42"
+    assert email_updates._sent("not a date", seoul) is None

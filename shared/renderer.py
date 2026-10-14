@@ -628,13 +628,6 @@ def _maybe_items(session) -> list[str]:
     ))
 
 
-_ANNOUNCED = re.compile(
-    r"^(?:(?:on-?line|off-?line|off-?off(?:line)?)(?:\s+(?:session|discussion|meeting)s?)?(?:\s+\d(?![\d:.]))?"
-    r"(?:\s+(?:topics|split|plan))?\s*(?::|\b(?:on|for|about|of|with|to discuss|discussing)\b)?\s*)+",
-    re.IGNORECASE,
-)
-
-
 def _split_text(detail: dict, cell: bool = False) -> str:
     pieces = []
     for part in detail.get("split") or []:
@@ -652,9 +645,9 @@ def _email_cell_lines(session) -> list[str]:
     """One short line per announcement for the cell: what the session will treat.
 
     The split if there is one, else the subjects the mail names ("Part 1
-    (PUSCH MIMO), Proposal 3.1.1-4"), else its TDoc numbers, else the
-    summary without its lead-in: the cell already shows the session's time,
-    and a short cell cut off after "Check proposals in" says nothing. A line
+    (PUSCH MIMO), Proposal 3.1.1-4"), else its TDoc numbers. A summary is
+    left to the popup: cut off after "Check proposals in" in a short cell
+    it says nothing. A line
     the title already holds ("PDSCH" on "10.5.2.2 PDSCH") is left out; an
     item another session holds is named first ("10.3.1: …").
     """
@@ -663,8 +656,7 @@ def _email_cell_lines(session) -> list[str]:
     for detail in getattr(session, "email_details", []):
         topics = [t.split(": ")[0].strip() for t in detail.get("topics") or [] if t.strip()]
         text = (_split_text(detail, cell=True) or ", ".join(dict.fromkeys(topics))
-                or ", ".join(detail.get("tdocs") or [])
-                or _ANNOUNCED.sub("", detail.get("summary") or "").lstrip(" ;,:·-").strip())
+                or ", ".join(detail.get("tdocs") or []))
         if not text or text.casefold() in title:
             continue
         text = text[0].upper() + text[1:]
