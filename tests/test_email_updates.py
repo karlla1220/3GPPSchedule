@@ -300,18 +300,18 @@ def test_off_offline_is_one_list_below_the_agreements(meeting):
     rows = box.select("li")
     # Every item, whatever its agenda item, in time order, each with its item and date.
     assert len(rows) == sum(len(items) for items in meeting.email_informal.values())
-    keys = [(r["data-date"], r.select_one(".email-informal-when").get_text()) for r in rows]
-    assert [k[0] for k in keys] == sorted(k[0] for k in keys)
+    dates = [r["data-date"] for r in rows]
+    assert dates == sorted(dates)
     row = next(r for r in rows if r["data-ai"] == "9.4" and "10:45" in r.get_text())
     # #20: "off-offline discussion at 10:45 today. Let's meet in front of Yeongju A Hall" (Wed 08:30).
-    assert row["data-date"] == "2026-10-14"
-    assert row.select_one(".email-informal-when").get_text() == "Wed 10:45"
+    assert row["data-date"] == "2026-10-14" and row["data-day"] == "wednesday"
+    # No weekday on the row: the list follows the day tab.
+    assert row.select_one(".email-informal-when").get_text() == "10:45"
     assert row.select_one(".email-informal-ai").get_text() == "AI 9.4"
     assert "Yeongju A Hall" in row.get_text()
-    # The script after it hides the days gone by and marks the selected cell's rows.
+    # The script after it shows the selected tab's day and marks the selected cell's rows.
     script = box.find_next_sibling("script").string
-    assert "row.dataset.date < today" in script and "classList.toggle('related'" in script
-    assert '"Asia/Seoul"' in script
+    assert "row.dataset.day !== day" in script and "classList.toggle('related'" in script
 
 
 def test_no_list_without_off_offline(meeting):

@@ -761,9 +761,9 @@ def _render_email_informal(schedule) -> str:
     """Every off-offline and FL whereabouts from the email threads, in one list below the agreements.
 
     Not by agenda item: a delegate scans the day's informal meetings at once.
-    Each row carries its item and date; the script after it leaves out the
-    days gone by (meeting time, read by the page, which is not rebuilt each
-    day) and marks the rows of the cell last selected.
+    Each row carries its item and date; the script after it shows the rows of
+    the day tab selected above, so a row needs no weekday, and marks the rows
+    of the cell last selected.
     """
     rows = []
     for ai, items in (getattr(schedule, "email_informal", None) or {}).items():
@@ -778,19 +778,23 @@ def _render_email_informal(schedule) -> str:
                 text = f"{text} ({place})" if text else place
             author = (item.get("author") or "").strip()
             rows.append((day, when, ai, text, "" if author in {"", "<>"} else author))
+    # A row shows under the tab of its weekday, so a date outside the meeting
+    # week (sent the weekend before) would land on the wrong day.
+    first, last = (str(value or "")[:10] for value in (schedule.starts_at, schedule.ends_at))
+    if first and last:
+        rows = [row for row in rows if first <= row[0] <= last]
     if not rows:
         return ""
     items_html = []
     for day, when, ai, text, author in sorted(rows):
-        weekday = datetime.fromisoformat(day).strftime("%a")
+        weekday = datetime.fromisoformat(day).strftime("%A").lower()
         items_html.append(
-            f'<li data-ai="{_esc(ai)}" data-date="{_esc(day)}">'
-            f'<span class="email-informal-when">{_esc(" ".join(filter(None, [weekday, when])))}</span> '
-            f'<span class="email-informal-ai">AI {_esc(ai)}</span> {_esc(text)}'
+            f'<li data-ai="{_esc(ai)}" data-date="{_esc(day)}" data-day="{weekday}">'
+            + (f'<span class="email-informal-when">{_esc(when)}</span> ' if when else "")
+            + f'<span class="email-informal-ai">AI {_esc(ai)}</span> {_esc(text)}'
             + (f' <span class="email-informal-from">— {_esc(author)}</span>' if author else "")
             + "</li>"
         )
-    timezone = json.dumps(schedule.timezone or "UTC")
     return (
         '<section class="email-informal" aria-labelledby="email-informal-title">'
         '<div class="email-informal-header"><h2 id="email-informal-title">Off-offline and FL whereabouts</h2>'
@@ -798,12 +802,18 @@ def _render_email_informal(schedule) -> str:
         f'<ul>{"".join(items_html)}</ul></section>\n'
         "<script>(() => {\n"
         "    const box = document.currentScript.previousElementSibling;\n"
-        "    let today;\n"
-        f"    try {{ today = new Intl.DateTimeFormat('en-CA', {{ timeZone: {timezone}, year: 'numeric', month: '2-digit', day: '2-digit' }}).format(new Date()); }}\n"
-        "    catch { today = new Date().toISOString().slice(0, 10); }\n"
         "    const rows = [...box.querySelectorAll('li[data-date]')];\n"
-        "    rows.forEach(row => { row.hidden = row.dataset.date < today; });\n"
-        "    if (rows.every(row => row.hidden)) { box.hidden = true; return; }\n"
+        "    // Only the day of the tab selected above; the tabs are already in the page.\n"
+        "    // RAN1 day panels carry no date, so the weekday decides.\n"
+        "    const showDay = tab => {\n"
+        "        const day = tab ? tab.dataset.day : '';\n"
+        "        const panel = day && document.getElementById(day);\n"
+        "        const date = panel ? panel.dataset.date : '';\n"
+        "        rows.forEach(row => { row.hidden = row.dataset.day !== day || (!!date && row.dataset.date !== date); });\n"
+        "        box.hidden = rows.every(row => row.hidden);\n"
+        "    };\n"
+        "    document.querySelectorAll('.tab[data-day]').forEach(tab => tab.addEventListener('click', () => showDay(tab)));\n"
+        "    showDay(document.querySelector('.tab.active'));\n"
         "    // The rows of the selected cell's items, in its own accent. Capture:\n"
         "    // the cell's own handler stops the click from bubbling.\n"
         "    document.addEventListener('click', event => {\n"
