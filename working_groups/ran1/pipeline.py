@@ -808,6 +808,11 @@ def build_schedule(args) -> Schedule:
         ends_at=portal_ref.get("ends_at") if portal_ref else None,
     )
 
+    # Session plans from the email discussion threads. Optional like the
+    # agreements: a failure leaves the schedule without them.
+    from . import email_updates
+    email_updates.run(schedule, offline=bool(args.local or args.no_download))
+
     return schedule
 
 

@@ -69,6 +69,10 @@ class Session:
     # Agenda items read from the label of a cell without one (RAN1
     # agenda_labels.py). Used by the filter and the agreements only.
     inferred_agenda_items: list[str] = field(default_factory=list)
+    # What feature leads announced for this cell on the email discussion
+    # threads (RAN1 email_updates.py): "session" items of its own agenda
+    # item, "tentative" items of another item held in its slot.
+    email_details: list[dict] = field(default_factory=list)
 
 
 @dataclass
@@ -111,6 +115,9 @@ class Schedule:
     # {"type": "table", "rows": [[cell, ...]], "header": first row is a header}.
     supplements: list[dict] = field(default_factory=list)
     chairman_agreements: dict = field(default_factory=dict)
+    # Off-offline and FL whereabouts from the email threads, by agenda item
+    # (RAN1 email_updates.py), shown below that item's agreements.
+    email_informal: dict = field(default_factory=dict)
     # Agreement HTML files by path relative to schedule.json. Saved as files
     # beside the snapshot, not inside it; a loaded snapshot has none.
     agreement_fragments: dict = field(default_factory=dict, repr=False, compare=False)

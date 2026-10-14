@@ -484,14 +484,26 @@ def generate_html(schedule: Schedule, *, schedules=None, groups=None, presentati
                     f'<span class="session-range">\u00b7 {session.start_time}\u2013{session.end_time}</span>'
                     f"</div>"
                 )
+            # Another item an FL announced for this slot before the schedule
+            # caught up (RAN1 email threads): "maybe 10.3.1", in the faintest tone.
+            maybe = _maybe_items(session)
+            maybe_html = (
+                f'<span class="session-maybe">maybe {_esc(", ".join(maybe))}</span>' if maybe else ""
+            )
             if session.agenda_item and slots >= 6:
                 ai_html = (
-                    f'<div class="session-ai">AI {_esc(session.agenda_item)}</div>'
+                    f'<div class="session-ai">AI {_esc(session.agenda_item)}'
+                    f'{" · " + maybe_html if maybe_html else ""}</div>'
                 )
+            elif maybe_html and slots >= 6:
+                ai_html = f'<div class="session-ai">{maybe_html}</div>'
             notes = _cell_notes(session)
+            # What the email threads say the session will do shares the notes'
+            # spare lines: delegates see it without opening the popup.
+            cell_lines = notes + [line for line in _email_cell_lines(session) if line not in notes]
             notes_html = ""
-            if notes and dur_html:
-                notes_html = _notes_html(notes, slots, ai_html, scope_label, chair_html)
+            if cell_lines and dur_html:
+                notes_html = _notes_html(cell_lines, slots, ai_html, scope_label, chair_html)
 
             # Popup (click-to-show)
             popup_lines = [f"<strong>{_esc(session.name)}</strong>"]
@@ -517,6 +529,9 @@ def generate_html(schedule: Schedule, *, schedules=None, groups=None, presentati
                 popup_lines.append(
                     '<div class="popup-notes">' + "<br>".join(_esc(n) for n in notes) + "</div>"
                 )
+            email_html = _email_popup_html(session)
+            if email_html:
+                popup_lines.append(email_html)
             # Agenda names last: the notes say what this session covers.
             popup_lines.extend(_agenda_description_popup_lines(session))
             popup_html = _join_popup_lines(popup_lines)
@@ -547,7 +562,9 @@ def generate_html(schedule: Schedule, *, schedules=None, groups=None, presentati
             # A cell without an AI is matched and opened by the items its label
             # was read as (inferred_agenda_items); data-ai stays as written.
             scope_ai = session.agenda_item or ", ".join(session.inferred_agenda_items)
-            data_ai_scope_attr = _esc(_ai_filter_scope(scope_ai)).replace('"', '&quot;')
+            # A "maybe" item is filtered like the cell's own: the slot may be its session.
+            filter_ai = ", ".join(filter(None, [scope_ai, *maybe]))
+            data_ai_scope_attr = _esc(_ai_filter_scope(filter_ai)).replace('"', '&quot;')
             # The panel opens the chair-note sections an AI covers (10.6.x →
             # 10.6.1, 10.6.2). The filter keeps matching the AI as written.
             agreement_attrs = ""
@@ -585,6 +602,7 @@ def generate_html(schedule: Schedule, *, schedules=None, groups=None, presentati
         )
 
     html_parts.append(render_agreement_panel(schedule))
+    html_parts.append(_render_email_informal(schedule))
     html_parts.append(render_topic_references(schedule.topic_references, schedule.topic_preamble))
     html_parts.append(render_supplements(schedule.supplements))
 
@@ -601,6 +619,206 @@ def generate_html(schedule: Schedule, *, schedules=None, groups=None, presentati
             starts_at=None if schedule.is_demo else schedule.starts_at,
             ends_at=None if schedule.is_demo else schedule.ends_at),
     })
+
+
+def _maybe_items(session) -> list[str]:
+    """Items announced on the email threads for this slot although the schedule gives it to another."""
+    return list(dict.fromkeys(
+        d["agenda_item"] for d in getattr(session, "email_details", [])
+        if d.get("kind") == "tentative" and d.get("agenda_item")
+    ))
+
+
+def _split_text(detail: dict, cell: bool = False) -> str:
+    pieces = []
+    for part in detail.get("split") or []:
+        label = part.get("agenda_item") or part.get("topic") or ""
+        when = "–".join(filter(None, [part.get("start"), part.get("end")]))
+        size = f"{part['minutes']} min" if part.get("minutes") else ""
+        if cell:
+            pieces.append(" ".join(filter(None, [when, label, size if not when else ""])))
+        else:
+            pieces.append(" ".join(filter(None, [when, label, f"({size})" if size and not when else ""])))
+    return (" · " if cell else ", ").join(p for p in pieces if p)
+
+
+# Numbers a delegate looks up in the document, not read at a glance: they
+# stay in the popup. "Proposal 3.1.1-4", "FL Proposal 5.3-6A", "proposals
+# #4-4A", "Proposal 3-1 (II)", "observation 3.1.2". TDoc numbers are taken
+# out of a topic too, since the cell line leads with the mail's own list.
+_LOOKUP_NUMBER = re.compile(
+    r"\b(?:FL\s+)?(?:proposals?|observations?|obs\.?|prop\.?)\s*#?\s*[\w./-]*\d[\w./-]*(?:\s*\([IVX]+\))?"
+    r"(?:\s*(?:,|and|&)\s*#?[\w./-]*\d[\w./-]*(?:\s*\([IVX]+\))?)*"
+    r"|#[\w.-]*\d[\w.-]*|\bR1-\d{7}\b",
+    re.IGNORECASE,
+)
+_LOOSE_ENDS = re.compile(r"^(?:\s|,|;|:|-|\b(?:in|of|on|and|for|with)\b)+|(?:\s|,|;|:|-|\b(?:in|of|on|and|for|with)\b)+$",
+                         re.IGNORECASE)
+
+
+def _subject(topic: str) -> str:
+    """What a topic is about, without the numbers to look up: "Proposal 4.3.1-1/2: DMRS sequence" -> "DMRS sequence"."""
+    head, sep, tail = topic.partition(": ")
+    if sep and not _LOOKUP_NUMBER.sub("", head).strip(" ,;:-"):
+        topic = tail  # the number names what follows
+    return _LOOSE_ENDS.sub("", _LOOKUP_NUMBER.sub("", topic)).strip()
+
+
+def _email_cell_lines(session) -> list[str]:
+    """One short line per announcement for the cell: what the session will treat, at a glance.
+
+    The TDoc numbers first (the document to open for the details), then the
+    split if there is one, else the subjects the mail names ("Part 1 (PUSCH
+    MIMO)", "Section 2.3", "DMRS sequence"). Proposal numbers are looked up
+    in the documents, not read at a glance, so they stay in the popup, and
+    so does an announcement with none of these (a summary cut after "Check
+    proposals in" says nothing). A line the title
+    already holds ("PDSCH" on "10.5.2.2 PDSCH") is left out; an item another
+    session holds is named first ("10.3.1: …").
+    """
+    title = session.name.casefold()
+    lines = []
+    for detail in getattr(session, "email_details", []):
+        subjects = []
+        for topic in detail.get("topics") or []:
+            subject = _subject(topic)
+            if subject and subject.casefold() not in {s.casefold() for s in subjects}:
+                subjects.append(subject)
+        text = _split_text(detail, cell=True) or ", ".join(subjects)
+        if text.casefold() in title:
+            text = ""
+        # The document comes first: it is what to open to read the details.
+        text = " · ".join(filter(None, [", ".join(detail.get("tdocs") or []), text]))
+        if not text:
+            continue
+        text = text[0].upper() + text[1:]
+        if detail.get("kind") == "tentative":
+            text = f"{detail['agenda_item']}: {text}"
+        if text not in lines:
+            lines.append(text)
+    return lines
+
+
+def _email_detail_line(detail: dict) -> str:
+    """One announcement, short: "maybe 10.3.1 · Online 12:00 · FL proposal uploaded · R1-2608628 — Yushu, Wed 11:12"."""
+    parts = []
+    if detail.get("kind") == "tentative":
+        parts.append(f"maybe {detail['agenda_item']}")
+    head = (detail.get("mode") or "").capitalize()
+    when = "–".join(filter(None, [detail.get("start"), detail.get("end")]))
+    if head or when:
+        parts.append(" ".join(filter(None, [head, when])))
+    if detail.get("summary"):
+        parts.append(detail["summary"])
+    split = _split_text(detail)
+    summary = detail.get("summary") or ""
+    if split and not all(piece in summary for piece in split.split(", ")):  # the summary often says it already
+        parts.append(split)
+    due = detail.get("input_due") or {}
+    if due.get("at"):
+        parts.append(f"input by {due['at']}")
+    elif due.get("minutes_before"):
+        minutes = due["minutes_before"]
+        parts.append(f"input {minutes // 60} h before" if minutes % 60 == 0 else f"input {minutes} min before")
+    line = _esc(" · ".join(parts))
+    if detail.get("tdocs"):
+        # A TDoc number never breaks at its hyphen.
+        tdocs = ", ".join(f'<span class="popup-email-tdoc">{_esc(t)}</span>' for t in detail["tdocs"])
+        line = f"{line} · {tdocs}" if line else tdocs
+    sent = detail.get("sent") or ""
+    author = (detail.get("author") or "").strip()
+    who = ", ".join(filter(None, [author if author not in {"<>", ""} else "",
+                                  _short_time(sent)]))
+    return line + (f' <span class="popup-email-from">— {_esc(who)}</span>' if who else "")
+
+
+def _short_time(iso: str) -> str:
+    try:
+        return datetime.fromisoformat(iso).strftime("%a %H:%M")
+    except (TypeError, ValueError):
+        return ""
+
+
+def _email_popup_html(session) -> str:
+    """What the email threads add to this cell, one line per announcement, oldest first."""
+    details = getattr(session, "email_details", [])
+    if not details:
+        return ""
+    lines = "".join(f'<div class="popup-email-item">{_email_detail_line(d)}</div>' for d in details)
+    return f'<div class="popup-email"><div class="popup-email-head">From email threads</div>{lines}</div>'
+
+
+_FILLER = {"the", "a", "an", "one", "on", "in", "at", "of", "to", "by", "and"}
+
+
+def _says(text: str, place: str) -> bool:
+    """The summary already names the place ("near cute bears on 3rd floor" for "near the cute bears on the 3rd floor")."""
+    words = set(re.findall(r"[a-z0-9]+", text.casefold()))
+    return all(w in words for w in re.findall(r"[a-z0-9]+", place.casefold()) if w not in _FILLER)
+
+
+def _render_email_informal(schedule) -> str:
+    """Every off-offline and FL whereabouts from the email threads, in one list below the agreements.
+
+    Not by agenda item: a delegate scans the day's informal meetings at once.
+    Each row carries its item and date; the script after it leaves out the
+    days gone by (meeting time, read by the page, which is not rebuilt each
+    day) and marks the rows of the cell last selected.
+    """
+    rows = []
+    for ai, items in (getattr(schedule, "email_informal", None) or {}).items():
+        for item in items:
+            day = item.get("date")
+            if not day:
+                continue
+            when = "–".join(filter(None, [item.get("start"), item.get("end")]))
+            text = item.get("summary") or item.get("quote") or ""
+            place = item.get("place") or ""
+            if place and not _says(text, place):
+                text = f"{text} ({place})" if text else place
+            author = (item.get("author") or "").strip()
+            rows.append((day, when, ai, text, "" if author in {"", "<>"} else author))
+    if not rows:
+        return ""
+    items_html = []
+    for day, when, ai, text, author in sorted(rows):
+        weekday = datetime.fromisoformat(day).strftime("%a")
+        items_html.append(
+            f'<li data-ai="{_esc(ai)}" data-date="{_esc(day)}">'
+            f'<span class="email-informal-when">{_esc(" ".join(filter(None, [weekday, when])))}</span> '
+            f'<span class="email-informal-ai">AI {_esc(ai)}</span> {_esc(text)}'
+            + (f' <span class="email-informal-from">— {_esc(author)}</span>' if author else "")
+            + "</li>"
+        )
+    timezone = json.dumps(schedule.timezone or "UTC")
+    return (
+        '<section class="email-informal" aria-labelledby="email-informal-title">'
+        '<div class="email-informal-header"><h2 id="email-informal-title">Off-offline and FL whereabouts</h2>'
+        "<p>From the email threads, not on the schedule</p></div>"
+        f'<ul>{"".join(items_html)}</ul></section>\n'
+        "<script>(() => {\n"
+        "    const box = document.currentScript.previousElementSibling;\n"
+        "    let today;\n"
+        f"    try {{ today = new Intl.DateTimeFormat('en-CA', {{ timeZone: {timezone}, year: 'numeric', month: '2-digit', day: '2-digit' }}).format(new Date()); }}\n"
+        "    catch { today = new Date().toISOString().slice(0, 10); }\n"
+        "    const rows = [...box.querySelectorAll('li[data-date]')];\n"
+        "    rows.forEach(row => { row.hidden = row.dataset.date < today; });\n"
+        "    if (rows.every(row => row.hidden)) { box.hidden = true; return; }\n"
+        "    // The rows of the selected cell's items, in its own accent. Capture:\n"
+        "    // the cell's own handler stops the click from bubbling.\n"
+        "    document.addEventListener('click', event => {\n"
+        "        const block = event.target instanceof Element && event.target.closest('.session-block');\n"
+        "        if (!block) return;\n"
+        "        const chosen = (block.dataset.aiScope || '').split('|').map(id => id.replace(/\\.\\*$/, '')).filter(Boolean);\n"
+        "        const accent = getComputedStyle(block).getPropertyValue('--accent').trim();\n"
+        "        if (accent) box.style.setProperty('--selected-accent', accent);\n"
+        "        rows.forEach(row => {\n"
+        "            const ai = row.dataset.ai;\n"
+        "            row.classList.toggle('related', chosen.some(id => ai === id || ai.startsWith(id + '.') || id.startsWith(ai + '.')));\n"
+        "        });\n"
+        "    }, true);\n"
+        "})();</script>\n"
+    )
 
 
 def _join_popup_lines(lines: list[str]) -> str:

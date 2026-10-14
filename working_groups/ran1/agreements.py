@@ -36,7 +36,7 @@ from .downloader import (
 )
 from .parser import find_chair_notes_docx
 
-PARSER_VERSION = 20
+PARSER_VERSION = 22
 CACHE_DIR = Path(".cache/ran1/agreements")
 SESSION_NOTES_DIR = Path("downloads/ran1/Session_notes")
 TDOC_ID = re.compile(r"R1-\d{6,}(?:\s*(?:rev\.?|r)\s*\d+)?", re.I)
@@ -56,6 +56,15 @@ CHAIR_SOURCE = "chair"
 # Text similarity at which two paragraphs are one paragraph reworded.
 SIMILAR = 0.9
 AGENDA_LINE = re.compile(r"\s*Agenda\s+item\s*:?\s*(\d+(?:\.\d+)*\.?)(?![\d.])", re.I)
+# The email discussion a section names: "[126bis-R20-MIMO] Email discussion
+# on Rel-20 MIMO – Darcy (MTK)". The bracketed tag is the subject tag of the
+# thread on the mailing list; the FLs and their companies follow the dash.
+# The words are typed by hand and come broken ("Ema-il discussion",
+# "E-mail discussion"), so a hyphen or space may fall between any letters.
+_EMAIL_DISCUSSION = r"\W{0,2}".join("emaildiscussion")
+EMAIL_THREAD = re.compile(rf"\[([^\[\]]+)\]\s*{_EMAIL_DISCUSSION}\b", re.I)
+EMAIL_THREAD_WORDS = re.compile(rf"\b{_EMAIL_DISCUSSION}\b", re.I)
+EMAIL_THREAD_FL = re.compile(r"[–—]\s*([^–—()]+?)\s*\(([^()]*)\)\s*\.?\s*$")
 _RICH = ('.//*[local-name()="drawing" or local-name()="pict" '
          'or local-name()="oMath" or local-name()="object"]')
 
@@ -179,6 +188,27 @@ def _without_tdocs(table):
             elif clean is not child:
                 cell.replace(child, clean)
     return filtered, removed
+
+
+def _email_thread(line):
+    """Tag, FLs and companies of an email discussion line, or None.
+
+    A line that starts with the words but no bracketed tag before them is
+    kept with tag None, so a note that breaks the tag shows up in the
+    snapshot instead of dropping its thread unseen.
+    """
+    m = EMAIL_THREAD.match(line)
+    if not m and not EMAIL_THREAD_WORDS.match(line.lstrip("[]–- ")):
+        return None
+    line = " ".join(line.split())
+    fl = EMAIL_THREAD_FL.search(line)
+    names = lambda text: [name.strip() for name in text.split(",") if name.strip()]
+    return {
+        "tag": " ".join(m[1].split()) if m else None,
+        "line": line,
+        "fl": names(fl[1]) if fl else [],
+        "companies": names(fl[2]) if fl else [],
+    }
 
 
 def _struck(t):
@@ -307,6 +337,7 @@ def _parse(path: Path) -> dict:
     pending = []  # Blocks of the current section: a list is judged as a whole.
     unassigned = 0
     cover = []  # Text above the first agenda heading: the 3GPP header lines.
+    threads = []  # Email discussions the sections name, in document order.
 
     def finish():
         nonlocal pending, unassigned
@@ -343,6 +374,11 @@ def _parse(path: Path) -> dict:
             has_content = bool(
                 txt or ET.QName(block).localname == "tbl" or clean.xpath(_RICH)
             )
+            if ET.QName(block).localname == "p":
+                for line in txt.splitlines():
+                    thread = _email_thread(line.strip())
+                    if thread:
+                        threads.append({"agenda_item": agenda, **thread})
             pieces.append((has_content, rendered, _unit_key(clean) if has_content else None))
         pending = []
         if agenda is None:
@@ -403,6 +439,7 @@ def _parse(path: Path) -> dict:
         "warnings": sorted(converter.warnings),
         "unassigned_blocks": unassigned,
         "content_scope": "agenda-section-excluding-tdocs",
+        "email_threads": threads,
         "header": _header_fields(cover),
     }
     cache.parent.mkdir(parents=True, exist_ok=True)
@@ -1009,7 +1046,7 @@ def build_agreements(*, cfg, meeting_id, schedule_path, offline, previous=None,
         result = {
             "status": "ready", "meeting_id": meeting_id.lower(), "parser_version": PARSER_VERSION,
             "sections": {}, "warnings": [], "unassigned_blocks": 0,
-            "content_scope": "agenda-section-excluding-tdocs",
+            "content_scope": "agenda-section-excluding-tdocs", "email_threads": [],
         }
     if info:
         result["source_url"] = info["url"]

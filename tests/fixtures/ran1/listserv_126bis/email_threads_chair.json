@@ -1,0 +1,419 @@
+{
+ "meeting_id": "ran1#126bis",
+ "source": "Chair notes RAN1#126bis_v06.docx",
+ "threads": [
+  {
+   "agenda_item": "7",
+   "tag": "126bis-R19-AI 7",
+   "line": "[126bis-R19-AI 7] Email discussion on Pre-Rel-19 NR Maintenance topics for AI 7.",
+   "fl": [],
+   "companies": []
+  },
+  {
+   "agenda_item": "8.1",
+   "tag": "126bis-R19-AI 8.1",
+   "line": "[126bis-R19-AI 8.1] Email discussion on Rel-19 Maintenance topics for AI 8.1",
+   "fl": [],
+   "companies": []
+  },
+  {
+   "agenda_item": "8.2",
+   "tag": "126bis-R19-AI 8.2",
+   "line": "[126bis-R19-AI 8.2] Email discussion on Rel-19 Maintenance topics for AI 8.2",
+   "fl": [],
+   "companies": []
+  },
+  {
+   "agenda_item": "8.3",
+   "tag": "126bis-R19-UE feature",
+   "line": "[126bis-R19-UE feature] Ema-il discussion on Rel-19 UE feature – Ralf (AT&T)",
+   "fl": [
+    "Ralf"
+   ],
+   "companies": [
+    "AT&T"
+   ]
+  },
+  {
+   "agenda_item": "9.1",
+   "tag": "126bis-R20-AI/ML",
+   "line": "[126bis-R20-AI/ML] Ema-il discussion on Rel-20 AI/ML – Chenxi (Qualcomm)",
+   "fl": [
+    "Chenxi"
+   ],
+   "companies": [
+    "Qualcomm"
+   ]
+  },
+  {
+   "agenda_item": "9.2",
+   "tag": "126bis-R20-MIMO",
+   "line": "[126bis-R20-MIMO] Email discussion on Rel-20 MIMO – Darcy (MTK)",
+   "fl": [
+    "Darcy"
+   ],
+   "companies": [
+    "MTK"
+   ]
+  },
+  {
+   "agenda_item": "9.3",
+   "tag": "126bis-R20-A-IoT Phase 2",
+   "line": "[126bis-R20-A-IoT Phase 2] Email discussion on Rel-20 A-IoT Phase 2 – Zhe (Huawei)",
+   "fl": [
+    "Zhe"
+   ],
+   "companies": [
+    "Huawei"
+   ]
+  },
+  {
+   "agenda_item": "9.4",
+   "tag": "126bis-R20-NR-NTN",
+   "line": "[126bis-R20-NR-NTN] Email discussion on Rel-20 NR-NTN – Mohamed (Thales)",
+   "fl": [
+    "Mohamed"
+   ],
+   "companies": [
+    "Thales"
+   ]
+  },
+  {
+   "agenda_item": "9.5",
+   "tag": "126bis-R20-NR-NTN-Using downlink compensation",
+   "line": "[126bis-R20-NR-NTN-Using downlink compensation] Email discussion on Rel-20 NR-NTN-Using downlink compensation – Albert (Qualcomm)",
+   "fl": [
+    "Albert"
+   ],
+   "companies": [
+    "Qualcomm"
+   ]
+  },
+  {
+   "agenda_item": "10.2",
+   "tag": "126bis-R20-6GR-Waveform",
+   "line": "[126bis-R20-6GR-Waveform] Email discussion on Rel-20 6GR-Waveform – Karri (Nokia)",
+   "fl": [
+    "Karri"
+   ],
+   "companies": [
+    "Nokia"
+   ]
+  },
+  {
+   "agenda_item": "10.3.1",
+   "tag": "126bis-R20-6GR-Channel coding",
+   "line": "[126bis-R20-6GR-Channel coding] Email discussion on Rel-20 6GR- Channel coding and Modulation – Mengzhu (ZTE)",
+   "fl": [
+    "Mengzhu"
+   ],
+   "companies": [
+    "ZTE"
+   ]
+  },
+  {
+   "agenda_item": "10.3.2",
+   "tag": "126bis-R20-6GR-Modulation, joint channel coding and modulation",
+   "line": "[126bis-R20-6GR-Modulation, joint channel coding and modulation] Email discussion on Rel-20 6GR-Modulation,joint channel coding and modulation –Jing (Qualcomm)",
+   "fl": [
+    "Jing"
+   ],
+   "companies": [
+    "Qualcomm"
+   ]
+  },
+  {
+   "agenda_item": "10.4.1",
+   "tag": "126bis-R20-6GR-MC-Operation in idle mode",
+   "line": "[126bis-R20-6GR-MC-Operation in idle mode] Email discussion on Rel-20 6GR-MC-Operation in idle mode –Yanping (Xiaomi)",
+   "fl": [
+    "Yanping"
+   ],
+   "companies": [
+    "Xiaomi"
+   ]
+  },
+  {
+   "agenda_item": "10.4.2",
+   "tag": "126bis-R20-6GR-MC-Operation in connected mode",
+   "line": "[126bis-R20-6GR-MC-Operation in connected mode] Email discussion on Rel-20 6GR-MC-Operation in connected mode –Naoya (NTT DOCOMO, INC.)",
+   "fl": [
+    "Naoya"
+   ],
+   "companies": [
+    "NTT DOCOMO",
+    "INC."
+   ]
+  },
+  {
+   "agenda_item": "10.5.1.1",
+   "tag": "126bis-R20-6GR-Synchronization and Beam Measurement",
+   "line": "[126bis-R20-6GR-Synchronization and Beam Measurement] Email discussion on Rel-20 6GR- Synchronization and Beam Measurement – Xinghua (Huawei)",
+   "fl": [
+    "Xinghua"
+   ],
+   "companies": [
+    "Huawei"
+   ]
+  },
+  {
+   "agenda_item": "10.5.1.2",
+   "tag": "126bis-R20-6GR-PRACH",
+   "line": "[126bis-R20-6GR-PRACH] Email discussion on Rel-20 6GR-PRACH and RACH procedure – Daewon (IDC)",
+   "fl": [
+    "Daewon"
+   ],
+   "companies": [
+    "IDC"
+   ]
+  },
+  {
+   "agenda_item": "10.5.1.3",
+   "tag": "126bis-R20-6GR-Bandwidth operation",
+   "line": "[126bis-R20-6GR-Bandwidth operation] Email discussion on Rel-20 6GR-Bandwidth operation – Weide(MTK)",
+   "fl": [
+    "Weide"
+   ],
+   "companies": [
+    "MTK"
+   ]
+  },
+  {
+   "agenda_item": "10.5.2.1",
+   "tag": "126bis-R20-6GR-Transmission scheme for DL control channel",
+   "line": "[126bis-R20-6GR-Transmission scheme for DL control channel] Email discussion on Rel-20 6GR-How to transmit downlink control channel – Dimitri (Nokia)",
+   "fl": [
+    "Dimitri"
+   ],
+   "companies": [
+    "Nokia"
+   ]
+  },
+  {
+   "agenda_item": "10.5.2.2",
+   "tag": "126bis-R20-6GR-Transmission scheme for DL shared channel",
+   "line": "[126bis-R20-6GR-Transmission scheme for DL shared channel] Email discussion on Rel-20 6GR-How to transmit downlink shared channel – Sven, Yushu (Ericsson, Google)",
+   "fl": [
+    "Sven",
+    "Yushu"
+   ],
+   "companies": [
+    "Ericsson",
+    "Google"
+   ]
+  },
+  {
+   "agenda_item": "10.5.2.3",
+   "tag": "126bis-R20-6GR-Transmission scheme for UL channels",
+   "line": "[126bis-R20-6GR-Transmission scheme for UL channels] Email discussion on Rel-20 6GR-How to transmit uplink channels – Youngrok (Samsung)",
+   "fl": [
+    "Youngrok"
+   ],
+   "companies": [
+    "Samsung"
+   ]
+  },
+  {
+   "agenda_item": "10.5.3.1",
+   "tag": "126bis-R20-6GR-Aspects of DL based CSI acquisition",
+   "line": "[126bis-R20-6GR-Aspects of DL based CSI acquisition] Email discussion on Rel-20 6GR-Aspects of DL based CSI acquisition – Feifei, Hao (Samsung, vivo)",
+   "fl": [
+    "Feifei",
+    "Hao"
+   ],
+   "companies": [
+    "Samsung",
+    "vivo"
+   ]
+  },
+  {
+   "agenda_item": "10.5.3.2",
+   "tag": "126bis-R20-6GR-Aspects of UL based CSI acquisition",
+   "line": "[126bis-R20-6GR-Aspects of UL based CSI acquisition] Email discussion on Rel-20 6GR-Aspects of UL based CSI acquisition – Xin (CATT)",
+   "fl": [
+    "Xin"
+   ],
+   "companies": [
+    "CATT"
+   ]
+  },
+  {
+   "agenda_item": "10.5.3.3",
+   "tag": "126bis-R20-6GR-Other Aspects related to CSI",
+   "line": "[126bis-R20-6GR-Other Aspects related to CSI] Email discussion on Rel-20 6GR-Other Aspects related to CSI – Bingchao (Lenovo)",
+   "fl": [
+    "Bingchao"
+   ],
+   "companies": [
+    "Lenovo"
+   ]
+  },
+  {
+   "agenda_item": "10.5.3.4",
+   "tag": "126bis-R20-6GR-Beam management",
+   "line": "[126bis-R20-6GR-Beam management] Email discussion on Rel-20 6GR-Beam management – Bo (ZTE)",
+   "fl": [
+    "Bo"
+   ],
+   "companies": [
+    "ZTE"
+   ]
+  },
+  {
+   "agenda_item": "10.5.4.1",
+   "tag": "126bis-R20-6GR-DL control channel and scheduling",
+   "line": "[126bis-R20-6GR-DL control channel and scheduling] Email discussion on Rel-20 6GR-What to transmit in DL control – Xiaodong, Sigen (CMCC, Apple)",
+   "fl": [
+    "Xiaodong",
+    "Sigen"
+   ],
+   "companies": [
+    "CMCC",
+    "Apple"
+   ]
+  },
+  {
+   "agenda_item": "10.5.4.2",
+   "tag": "126bis-R20-6GR-DL/UL transmission without dynamic scheduling",
+   "line": "[126bis-R20-6GR-DL/UL transmission without dynamic scheduling] Email discussion on Rel-20 6GR- DL/UL transmission without dynamic scheduling] – Lei (1Finity)",
+   "fl": [
+    "Lei"
+   ],
+   "companies": [
+    "1Finity"
+   ]
+  },
+  {
+   "agenda_item": "10.5.4.3",
+   "tag": "126bis-R20-6GR-HARQ related",
+   "line": "[126bis-R20-6GR-HARQ related] Email discussion on Rel-20 6GR-HARQ related – Kevin (OPPO)",
+   "fl": [
+    "Kevin"
+   ],
+   "companies": [
+    "OPPO"
+   ]
+  },
+  {
+   "agenda_item": "10.5.4.4",
+   "tag": "126bis-R20-6GR-Handling of potential multiple uplink transmissions",
+   "line": "[126bis-R20-6GR-Handling of potential multiple uplink transmissions] Email discussion on Rel-20 6GR- Handling of potential multiple uplink transmissions – Mohammed (MTK)",
+   "fl": [
+    "Mohammed"
+   ],
+   "companies": [
+    "MTK"
+   ]
+  },
+  {
+   "agenda_item": "10.5.5",
+   "tag": "126bis-R20-6GR-Other signals, channels, and procedures",
+   "line": "[126bis-R20-6GR-Other signals, channels, and procedures] Email discussion on Rel-20 6GR-Other signals, channels, and procedures – Li (OPPO)",
+   "fl": [
+    "Li"
+   ],
+   "companies": [
+    "OPPO"
+   ]
+  },
+  {
+   "agenda_item": "10.6.1.1",
+   "tag": "126bis-R20-6GR-Design of WUS",
+   "line": "[126bis-R20-6GR-Design of WUS] Email discussion on Rel-20 6GR-Design of WUS – Magnus (Ericsson)",
+   "fl": [
+    "Magnus"
+   ],
+   "companies": [
+    "Ericsson"
+   ]
+  },
+  {
+   "agenda_item": "10.6.1.2",
+   "tag": "126bis-R20-6GR-WUS operation in RRC states",
+   "line": "[126bis-R20-6GR-WUS operation in RRC states] Email discussion on Rel-20 6GR-WUS operation in RRC states – Xin (vivo)",
+   "fl": [
+    "Xin"
+   ],
+   "companies": [
+    "vivo"
+   ]
+  },
+  {
+   "agenda_item": "10.6.2",
+   "tag": "126bis-R20-6GR-Uplink WUS",
+   "line": "[126bis-R20-6GR-Uplink WUS] Email discussion on Rel-20 6GR-Uplink WUS– Seonwook (LGE)",
+   "fl": [
+    "Seonwook"
+   ],
+   "companies": [
+    "LGE"
+   ]
+  },
+  {
+   "agenda_item": "10.6.3",
+   "tag": "126bis-R20-6GR-WUS operation with other functionalities",
+   "line": "[126bis-R20-6GR-WUS operation with other functionalities] Email discussion on Rel-20 6GR- WUS operation with other functionalities– Hong (Apple)",
+   "fl": [
+    "Hong"
+   ],
+   "companies": [
+    "Apple"
+   ]
+  },
+  {
+   "agenda_item": "10.7.1",
+   "tag": "126bis-R20-6GR-NTN specific requirement and design",
+   "line": "[126bis-R20-6GR-NTN specific requirement and design] Email discussion on Rel-20 6GR-NTN specific requirement and design– Alberto (Qualcomm)",
+   "fl": [
+    "Alberto"
+   ],
+   "companies": [
+    "Qualcomm"
+   ]
+  },
+  {
+   "agenda_item": "10.8.1",
+   "tag": "126bis-R20-6GR-ISAC-Evaluations",
+   "line": "[126bis-R20-6GR-ISAC-Evaluations] Email discussion on Rel-20 6GR-ISAC-Evaluations–Yongqiang (CATT)",
+   "fl": [
+    "Yongqiang"
+   ],
+   "companies": [
+    "CATT"
+   ]
+  },
+  {
+   "agenda_item": "10.8.2",
+   "tag": "126bis-R20-6GR-ISAC-Integration",
+   "line": "[126bis-R20-6GR-ISAC-Integration] Email discussion on Rel-20 6GR-ISAC-integration–Yingyang (Xiaomi)",
+   "fl": [
+    "Yingyang"
+   ],
+   "companies": [
+    "Xiaomi"
+   ]
+  },
+  {
+   "agenda_item": "10.8.3",
+   "tag": "126bis-R20-6GR-ISAC-Waveform and FS",
+   "line": "[126bis-R20-6GR-ISAC-Waveform and FS] Email discussion on Rel-20 6GR-ISAC-Waveforme and FS–Woo-Suk (LGE)",
+   "fl": [
+    "Woo-Suk"
+   ],
+   "companies": [
+    "LGE"
+   ]
+  },
+  {
+   "agenda_item": "11",
+   "tag": "126bis-R20-TEI",
+   "line": "[126bis-R20-TEI] Email discussion on Rel-20 TEI–Xiang (ASTRUM)",
+   "fl": [
+    "Xiang"
+   ],
+   "companies": [
+    "ASTRUM"
+   ]
+  }
+ ]
+}
