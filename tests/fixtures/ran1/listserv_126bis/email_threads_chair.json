@@ -24,6 +24,28 @@
    "companies": []
   },
   {
+   "agenda_item": "8.3",
+   "tag": "126bis-R19-UE feature",
+   "line": "[126bis-R19-UE feature] Ema-il discussion on Rel-19 UE feature – Ralf (AT&T)",
+   "fl": [
+    "Ralf"
+   ],
+   "companies": [
+    "AT&T"
+   ]
+  },
+  {
+   "agenda_item": "9.1",
+   "tag": "126bis-R20-AI/ML",
+   "line": "[126bis-R20-AI/ML] Ema-il discussion on Rel-20 AI/ML – Chenxi (Qualcomm)",
+   "fl": [
+    "Chenxi"
+   ],
+   "companies": [
+    "Qualcomm"
+   ]
+  },
+  {
    "agenda_item": "9.2",
    "tag": "126bis-R20-MIMO",
    "line": "[126bis-R20-MIMO] Email discussion on Rel-20 MIMO – Darcy (MTK)",

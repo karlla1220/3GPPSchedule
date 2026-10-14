@@ -2,90 +2,303 @@
  "meeting": "RAN1#126bis",
  "timezone": "Asia/Seoul",
  "today": "2026-10-14 (Wed)",
- "schedule": [
-  {
-   "n": 5,
-   "id": "c0926550.2610b",
-   "kind": "session_schedule",
-   "summary": "Online 1 12:30-13:00 RS for PDSCH; Online 2 18:30-19:30 PDSCH; Offline 17:00-18:00 (17:00-17:30 PDSCH, 17:30-18:00 RS for PDSCH)"
-  },
-  {
-   "n": 12,
-   "id": "83dadb14.2610b",
-   "kind": "session_schedule",
-   "summary": "Offline 11:30-12:30, Part 1 PUSCH MIMO (Proposal 3.1.1-4, 3.1.1-5, 3.2.1-2/3)"
-  },
-  {
-   "n": 36,
-   "id": "bde55eba.2610b",
-   "kind": "session_schedule",
-   "summary": "Wed offline 08:30-09:10 CSI, 12:30-13:00 RRC (supersedes #38)"
-  },
-  {
-   "n": 38,
-   "id": "df15fae0.2610b",
-   "kind": "session_schedule",
-   "summary": "Wed offline 08:30-08:40 SRS, 08:40-09:10 CSI, 12:30-13:00 RRC (superseded by #36)"
-  },
-  {
-   "n": 41,
-   "id": "6b71e171.2610b",
-   "kind": "session_schedule",
-   "summary": "Wed offline order/durations: 10.6.1.2 40 min, 10.6.3 30 min, 10.6.1.1 20 min (no start time)"
-  },
-  {
-   "n": 39,
-   "id": "936d7b7a.2610b",
-   "kind": "time_place_meetup",
-   "summary": "Wed 09:00-10:00 off-offline outside RAN1 main room; FL around until 11:00"
-  },
-  {
-   "n": 20,
-   "id": "4be0ad7.2610b",
-   "kind": "time_place_meetup",
-   "summary": "10:45 off-offline in front of Yeongju A Hall"
-  },
-  {
-   "n": 6,
-   "id": "7e2ba9ec.2610b",
-   "kind": "time_place_meetup",
-   "summary": "15:00 off-offline, 'same place as yesterday'"
-  },
-  {
-   "n": 17,
-   "id": "daa98104.2610b",
-   "kind": "time_place_meetup",
-   "summary": "FL at 3rd floor near the cute bears 11:00-12:00"
-  },
-  {
-   "n": 18,
-   "id": "b94b5bc4.2610b",
-   "kind": "time_place_meetup",
-   "summary": "Online Wed 09:20; FL outside offline room 201 12:00-13:00"
-  },
-  {
-   "n": 15,
-   "id": "44ed34d1.2610b",
-   "kind": "time_place_meetup",
-   "summary": "Online session 'this morning from 12:00am' (likely noon)"
-  }
- ],
- "not_schedule": {
-  "topic_only": [
-   46,
-   19,
-   24,
-   34,
-   47
+ "grid": "grid.json",
+ "kinds": {
+  "session": "names a session of the grid; its detail goes to that cell",
+  "informal": "off-offline, FL availability: a time or place outside the grid"
+ },
+ "mails": {
+  "3": [
+   {
+    "kind": "session",
+    "quote": "The FL propsal for online has been uploaded in …/R1-2608628.zip",
+    "session": null,
+    "candidates": [
+     "Wed 14:30-15:10 6",
+     "Wed 17:00-18:00 201"
+    ],
+    "detail": "FL proposal R1-2608628",
+    "certain": false,
+    "note": "Next 10.3.1 session after 11:47; #15 of the same FL says an online at 12:00, which the grid does not have."
+   }
   ],
-  "deadline_only": [
-   23,
-   32,
-   42,
-   43,
-   44,
-   49
+  "5": [
+   {
+    "kind": "session",
+    "quote": "Online session 1 (12:30~13:00): RS for PDSCH",
+    "session": "Wed 12:30-13:00 201",
+    "detail": "RS for PDSCH",
+    "time": "12:30-13:00"
+   },
+   {
+    "kind": "session",
+    "quote": "Online session 2 (18:30~19:30): PDSCH",
+    "session": "Wed 18:30-19:30 201",
+    "detail": "PDSCH",
+    "time": "18:30-19:30"
+   },
+   {
+    "kind": "session",
+    "quote": "Offline session (17:00~18:00) - 17:00~17:30: PDSCH - 17:30~18:00: RS for PDSCH",
+    "session": "Wed 17:00-18:00 6",
+    "detail": "17:00-17:30 PDSCH, 17:30-18:00 RS for PDSCH",
+    "time": "17:00-18:00"
+   }
+  ],
+  "6": [
+   {
+    "kind": "informal",
+    "quote": "Let's have an off-offline today at 3pm, same place as yesterday.",
+    "detail": "same place as yesterday",
+    "time": "15:00"
+   }
+  ],
+  "9": [
+   {
+    "kind": "session",
+    "quote": "The FL summary R1-2607430 for Wednesday's online discussion is uploaded",
+    "session": "Wed 11:40-12:20 203",
+    "detail": "FL summary R1-2607430"
+   }
+  ],
+  "10": [
+   {
+    "kind": "session",
+    "quote": "FL proposals and draft LS … which will be presented this afternoon online",
+    "session": "Wed 14:30-15:00 203",
+    "detail": "R19 Mobility Phase 4: FL proposals and draft LS reply",
+    "note": "Two 8.2 sessions in the afternoon; the R19/20 Mobility one by its title."
+   }
+  ],
+  "12": [
+   {
+    "kind": "session",
+    "quote": "The plan for our offline session: Time: 11:30 ~ 12:30 (1hr)",
+    "session": "Wed 11:30-12:30 6",
+    "detail": "Part 1 (PUSCH MIMO): Proposal 3.1.1-4, 3.1.1-5, 3.2.1-2/3",
+    "time": "11:30-12:30"
+   }
+  ],
+  "15": [
+   {
+    "kind": "session",
+    "quote": "We will have an online session this morning from 12:00am.",
+    "session": null,
+    "time": "12:00",
+    "certain": false,
+    "note": "No 10.3.1 session on Wednesday morning or at 12:00 (14:30 room 6, 17:00 room 201)."
+   }
+  ],
+  "17": [
+   {
+    "kind": "informal",
+    "quote": "I will be near the cute bears on the 3rd floor between 11:00 and 12:00",
+    "detail": "FL takes questions on Round 3",
+    "time": "11:00-12:00"
+   }
+  ],
+  "18": [
+   {
+    "kind": "session",
+    "quote": "R1-2608681 is uploaded for online discussion (Wed 9:20)",
+    "session": "Wed 09:20-10:00 Yeongju B Hall",
+    "detail": "R1-2608681, proposals in Section 2 (DL bandwidth settings)",
+    "time": "09:20"
+   },
+   {
+    "kind": "informal",
+    "quote": "Moderator will also be outside offline room (201) during 12:00 - 13:00",
+    "detail": "outside offline room 201",
+    "time": "12:00-13:00"
+   }
+  ],
+  "19": [
+   {
+    "kind": "session",
+    "quote": "This will be used for online discussion for Wed. The order of the proposals for discussion in Section 2.",
+    "session": "Wed 10:00-10:30 Yeongju B Hall",
+    "detail": "moderator summary v33, Section 2 in order"
+   }
+  ],
+  "20": [
+   {
+    "kind": "informal",
+    "quote": "off-offline discussion at 10:45 today. Let's meet in front of Yeongju A Hall",
+    "detail": "in front of Yeongju A Hall",
+    "time": "10:45"
+   }
+  ],
+  "21": [
+   {
+    "kind": "informal",
+    "quote": "I'll be in main room so please feel free to reach me",
+    "detail": "FL in the main room",
+    "note": "No time."
+   }
+  ],
+  "24": [
+   {
+    "kind": "session",
+    "quote": "v026 … adding proposals in section 4.5 for Wednesday morning online",
+    "session": "Wed 09:50-10:30 203",
+    "detail": "proposals in section 4.5 (v026)"
+   }
+  ],
+  "27": [
+   {
+    "kind": "session",
+    "quote": "Please provide your comments on the proposals for upcoming online (refer to section 8).",
+    "session": "Wed 09:10-09:50 201",
+    "detail": "FLS v200, Section 8"
+   }
+  ],
+  "28": [
+   {
+    "kind": "session",
+    "quote": "Please provide your inputs until 1hr before our offline session today.",
+    "session": "Wed 11:30-12:30 6",
+    "detail": "Round-2 FL summary; inputs due 1 hr before"
+   }
+  ],
+  "31": [
+   {
+    "kind": "session",
+    "quote": "You can find the proposals for online discussion in the beginning of the tdoc.",
+    "session": "Wed 08:30-09:20 Yeongju B Hall",
+    "detail": "FL summary #4"
+   }
+  ],
+  "32": [
+   {
+    "kind": "session",
+    "quote": "I will propose to endorse Annex A … in PM session tomorrow.",
+    "session": null,
+    "candidates": [
+     "Thu 16:00-16:30 Yeongju B Hall",
+     "Thu 17:00-17:50 Yeongju B Hall"
+    ],
+    "detail": "endorse Annex A as a starting point",
+    "certain": false,
+    "note": "Sent Wednesday 09:42; two 10.5.3.1 sessions on Thursday afternoon."
+   }
+  ],
+  "34": [
+   {
+    "kind": "session",
+    "quote": "Please have a check on the proposals for Wednesday morning online session.",
+    "session": "Wed 09:10-09:50 203",
+    "detail": "FL summary #2 v00"
+   }
+  ],
+  "36": [
+   {
+    "kind": "session",
+    "quote": "08:30 – 09:10: CSI",
+    "session": "Wed 08:30-09:10 6",
+    "detail": "CSI",
+    "time": "08:30-09:10"
+   },
+   {
+    "kind": "session",
+    "quote": "12:30 – 13:00: RRC",
+    "session": "Wed 12:30-13:00 6",
+    "detail": "RRC",
+    "time": "12:30-13:00"
+   }
+  ],
+  "37": [
+   {
+    "kind": "session",
+    "quote": "The FL summary is updated in v26 … for offline/online discussion tomorrow. … proposals in section 2.3",
+    "session": "Wed 11:00-12:30 5",
+    "detail": "FL summary v26, Section 2.3"
+   },
+   {
+    "kind": "session",
+    "quote": "(same) online",
+    "session": "Wed 15:00-16:30 Yeongju B Hall",
+    "detail": "FL summary v26, Section 2.3"
+   }
+  ],
+  "38": [
+   {
+    "kind": "session",
+    "quote": "08:30 – 08:40: SRS / 08:40 – 09:10: CSI",
+    "session": "Wed 08:30-09:10 6",
+    "detail": "08:30-08:40 SRS, 08:40-09:10 CSI",
+    "time": "08:30-09:10",
+    "note": "Superseded by #36."
+   },
+   {
+    "kind": "session",
+    "quote": "12:30 – 13:00: RRC",
+    "session": "Wed 12:30-13:00 6",
+    "detail": "RRC",
+    "time": "12:30-13:00",
+    "note": "Superseded by #36."
+   }
+  ],
+  "39": [
+   {
+    "kind": "session",
+    "quote": "I plan to discuss Proposal 4-1A-r3, 4-1C-r3, 4-1B-r3, and 3-2-r2 … before tomorrow's online meeting",
+    "session": "Wed 12:30-13:00 Yeongju B Hall",
+    "detail": "Proposal 4-1A-r3, 4-1C-r3, 4-1B-r3, 3-2-r2"
+   },
+   {
+    "kind": "informal",
+    "quote": "off-offline discussion from 9:00 to 10:00 AM on Wednesday morning in one outside the RAN1 main room",
+    "detail": "outside the RAN1 main room",
+    "time": "09:00-10:00"
+   },
+   {
+    "kind": "informal",
+    "quote": "I will be always there before 11:00 AM",
+    "time": "until 11:00"
+   }
+  ],
+  "41": [
+   {
+    "kind": "session",
+    "quote": "For Wednesday's offline session: 10.6.1.2 40 min, 10.6.3 30 min, 10.6.1.1 20 min",
+    "session": "Wed 11:00-12:30 5",
+    "detail": "10.6.1.2 40 min, 10.6.3 30 min, 10.6.1.1 20 min"
+   }
+  ],
+  "42": [
+   {
+    "kind": "session",
+    "quote": "The official deadline of companies input for this round is 2 hours before Wednesday online.",
+    "session": "Wed 14:30-15:00 Yeongju B Hall",
+    "detail": "Round #3 summary; inputs due 2 hours before"
+   }
+  ],
+  "46": [
+   {
+    "kind": "session",
+    "quote": "The plan for our online session is included in Section 7.1 including the following issues",
+    "session": "Wed 15:10-16:30 201",
+    "detail": "R1-2607566 Section 7.1: Proposal 4.3.1-1/2, 4.3.1-3, 4.5.1-1/2, 3.2.1-1, 5.1.1-1, 5.1.1-2",
+    "note": "11:30 on the same day is the offline (#12)."
+   }
+  ],
+  "47": [
+   {
+    "kind": "session",
+    "quote": "You can also find the proposals for offline/online session on Wednesday.",
+    "session": "Wed 09:30-10:30 5",
+    "detail": "FL summary v035 [FL3]"
+   },
+   {
+    "kind": "session",
+    "quote": "(same) online",
+    "session": "Wed 12:20-13:00 203",
+    "detail": "FL summary v035 [FL3]"
+   }
   ]
+ },
+ "superseded": {
+  "38": "36"
  },
  "need_full_body": [
   2,

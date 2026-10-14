@@ -75,36 +75,159 @@ def meeting_tag(meeting_id: str) -> str:
     return meeting_id.split("#", 1)[-1].lower()
 
 
+# A thread tag: meeting, then the rest ("126bis-R20-6GR-Waveform"). The
+# meeting is written "126bis", "126b" or "126-bis"; "Post-126-…" is the
+# discussion after meeting #126.
+_TAG = re.compile(r"(post-)?(\d+)\s*-?\s*(bis|b|e)?\s*-\s*(\S.*)", re.IGNORECASE)
+_SUBJECT_TAG = re.compile(r"\[([^\[\]]+)\]")
+
+
+def _tag_parts(tag: str) -> tuple[bool, str, str] | None:
+    """(after the meeting, meeting, rest) of a tag, the meeting as "126bis"."""
+    m = _TAG.fullmatch(" ".join(tag.split()))
+    if not m:
+        return None
+    suffix = (m[3] or "").lower()
+    meeting = m[2] + ("bis" if suffix in {"b", "bis"} else suffix)
+    return bool(m[1]), meeting, " ".join(m[4].split()).lower()
+
+
 def is_meeting_thread(title: str, tag: str) -> bool:
-    """An email discussion of this meeting: "[126bis-R20-…]" or "[RAN1#126bis] …"."""
-    lowered = title.lower()
-    return f"[{tag}-" in lowered or f"#{tag}]" in lowered
+    """A mail of this meeting: a "[126bis-…]" or "[126b-…]" thread, or "[RAN1#126bis] …"."""
+    for subject_tag in _SUBJECT_TAG.findall(title):
+        parts = _tag_parts(subject_tag)
+        if parts and not parts[0] and parts[1] == tag:
+            return True
+        m = re.fullmatch(r"\s*RAN\s*1\s*#\s*(\d+)\s*(bis|b|e)?\s*", subject_tag, re.IGNORECASE)
+        if m and m[1] + ("bis" if (m[2] or "").lower() in {"b", "bis"} else (m[2] or "").lower()) == tag:
+            return True
+    return False
 
 
-def _tag_key(tag: str) -> str:
-    return " ".join(tag.split()).lower()
-
-
-def thread_index(threads: list[dict]) -> dict[str, dict]:
+def thread_index(threads: list[dict]) -> dict:
     """Email discussions the chairman note names, by subject tag.
 
     ``threads`` is ``email_threads`` of the agreements: one entry per line
     "[tag] Email discussion on … – FL (company)", with its agenda item.
     """
-    return {_tag_key(thread["tag"]): thread for thread in threads}
+    by_rest = {}
+    meeting = None
+    for thread in threads:
+        parts = _tag_parts(thread.get("tag") or "")
+        if parts and not parts[0]:
+            meeting = meeting or parts[1]
+            by_rest.setdefault(parts[2], thread)
+    return {"meeting": meeting, "by_rest": by_rest}
 
 
-def thread_of(title: str, index: dict[str, dict]) -> dict | None:
-    """The discussion a mail belongs to: the first bracketed tag of its subject that the note names.
+def thread_of(title: str, index: dict) -> dict | None:
+    """The discussion a mail belongs to, by the first bracketed tag of its subject.
 
-    Replies keep the tag and vary the rest ("Re:", "回复:", a subject cut to
-    the tag, a subject the FL rewrote after the tag).
+    Replies keep the tag and vary the rest of the subject ("Re:", "回复:", a
+    subject cut to the tag, a subject the FL rewrote after the tag). The tag
+    itself is compared after the meeting: "126b-" and "126bis-" are the same
+    meeting. A tag that carries an earlier meeting with the rest of a thread
+    of this meeting is that thread, copied from the last meeting's tag
+    ("match": "earlier_meeting"). "Post-126-…" is never this meeting.
     """
-    for tag in re.findall(r"\[([^\[\]]+)\]", title):
-        thread = index.get(_tag_key(tag))
-        if thread:
-            return thread
+    for tag in _SUBJECT_TAG.findall(title):
+        parts = _tag_parts(tag)
+        if not parts or parts[0]:
+            continue
+        thread = index["by_rest"].get(parts[2])
+        if thread is None:
+            continue
+        if parts[1] == index["meeting"]:
+            return {**thread, "match": "tag"}
+        if index["meeting"] and parts[1].isdigit() and int(parts[1]) <= int(re.match(r"\d+", index["meeting"])[0]):
+            return {**thread, "match": "earlier_meeting"}
     return None
+
+
+# Agenda item numbers a mail states: "AI 8.2", "agenda item 9.4.1",
+# "(Agenda 9.5.1)", "[9.3.3]", a dotted number on its own ("10.5.2.2",
+# "9.3.1" on the first line), and the deepest numbered folder of a drafts
+# path ("drafts/10.5.3 (CSI acquisition)/10.5.3.4 Beam Management/"). Only
+# numbers on this meeting's agenda count, and a dotted number is not an
+# agenda item when a word says what else it is ("Proposal 3.1.1-4",
+# "Section 8.2", "Table 9.1", "v1.2", "TS 38.211").
+_NUMBER = r"(\d+(?:\.\d+)*)"
+_STATED = [
+    re.compile(rf"\bAI\s*#?\s*{_NUMBER}(?![\d.]*\d)", re.IGNORECASE),
+    re.compile(rf"\bagenda(?:\s+item)?\s*:?\s*{_NUMBER}", re.IGNORECASE),
+    re.compile(rf"\[\s*{_NUMBER}\s*\]"),
+]
+_DOTTED = re.compile(r"(?<![\w.\-#/])(\d+(?:\.\d+)+)(?![\w\-]|\.\d)")
+_NOT_AGENDA = re.compile(
+    r"\b(?:proposals?|prop|observations?|obs|sections?|sec|clauses?|table|figure|fig|annex|step|options?"
+    r"|alt|alternatives?|round|version|ver|v|ts|tr|rel|release|equation|eq|issue|question"
+    r"|part|chapter|page)\.?\s*[#:]?\s*$",
+    re.IGNORECASE,
+)
+_DRAFTS = re.compile(r"drafts/[^\n]*", re.IGNORECASE)
+_FOLDER = re.compile(rf"/\s*{_NUMBER}(?=%20|[ (/>\"]|$)")
+
+
+def _dotted(text: str) -> list[str]:
+    return [m[1] for m in _DOTTED.finditer(text) if not _NOT_AGENDA.search(text[max(0, m.start() - 16):m.start()])]
+
+
+def stated_agenda_items(subject: str, body: str, agenda: set[str]) -> dict[str, list[str]]:
+    """Numbers of this meeting's agenda the subject and the body state, in order."""
+    def keep(found):
+        return list(dict.fromkeys(n.rstrip(".") for n in found if n.rstrip(".") in agenda))
+
+    def stated(text):
+        return [m[1] for rx in _STATED for m in rx.finditer(text)] + _dotted(text)
+
+    found = stated(body)
+    for path in _DRAFTS.findall(body):
+        numbers = keep(_FOLDER.findall("/" + path[len("drafts/"):]))
+        if numbers:
+            found.append(max(numbers, key=lambda n: n.count(".")))
+    return {"subject": keep(stated(subject)), "body": keep(found)}
+
+
+def _under(item: str, parent: str) -> bool:
+    return item == parent or item.startswith(parent + ".")
+
+
+def _deepest(items: list[str]) -> list[str]:
+    return [i for i in items if not any(o != i and _under(o, i) for o in items)]
+
+
+def agenda_of(title: str, reply: str, index: dict, agenda: set[str]) -> dict:
+    """Agenda items of a mail: its thread's, narrowed by the numbers it states.
+
+    - A mail on a thread of the chairman note takes the thread's item. A
+      thread over several items (9.3 A-IoT) names its sub-item in the mail
+      ("[9.3.3]" on the first line); a stated number under the thread's item
+      narrows it. A stated number outside it is a reference to another item
+      and is reported in "other", not used.
+    - A mail on no known thread ("Updated tdoc - AI 10.5.2.2") takes the
+      numbers its subject states, else those its body states ("match":
+      "stated").
+    - Without this meeting's agenda no number is trusted.
+    """
+    thread = thread_of(title, index)
+    stated = stated_agenda_items(title, reply, agenda) if agenda else {"subject": [], "body": []}
+    numbers = list(dict.fromkeys(stated["subject"] + stated["body"]))
+    if thread is not None:
+        own = thread["agenda_item"]
+        inside = [n for n in numbers if _under(n, own)]
+        return {
+            "agenda_items": _deepest(inside) if inside else [own],
+            "thread": thread["tag"],
+            "match": thread["match"],
+            "other": [n for n in numbers if not _under(n, own) and not _under(own, n)],
+        }
+    chosen = stated["subject"] or stated["body"]
+    return {
+        "agenda_items": _deepest(chosen),
+        "thread": None,
+        "match": "stated" if chosen else None,
+        "other": [],
+    }
 
 
 def preview_text(description: str) -> str:
@@ -186,8 +309,12 @@ def collect(
     http: httpx.Client | None = None,
     sleep: Callable[[float], None] = time.sleep,
     max_bodies: int = MAX_BODIES,
+    wanted: Callable[[Mail], bool] | None = None,
 ) -> list[Mail]:
     """New mails on this meeting's threads, newest first, each with its newest reply.
+
+    ``wanted`` picks the mails by their feed entry; by default a subject
+    tagged for this meeting (``is_meeting_thread``).
 
     A mail whose full text is needed but could not be read (or is over this
     run's budget) has ``reply`` None and is not meant to be marked seen, so
@@ -198,7 +325,7 @@ def collect(
     try:
         mails = [
             mail for mail in parse_feed(_get(http, feed_url(), sleep))
-            if mail.id not in seen and is_meeting_thread(mail.title, tag)
+            if mail.id not in seen and (wanted(mail) if wanted else is_meeting_thread(mail.title, tag))
         ]
         fetched = 0
         for mail in mails:

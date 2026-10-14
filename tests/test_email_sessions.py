@@ -1,4 +1,5 @@
 import json
+import re
 from pathlib import Path
 
 import httpx
@@ -78,9 +79,12 @@ def test_meeting_threads():
     assert is_meeting_thread("[RAN1#126bis] [7] TDoc Revision", tag)
     assert not is_meeting_thread("Jeju On-site Updates – Lost & Found", tag)
     assert not is_meeting_thread("Re: [126-R20-MIMO] last meeting", tag)
+    assert is_meeting_thread("Re: [126b-R20-AI/ML] Email discussion on Rel-20 NR AIML", tag)
+    assert is_meeting_thread("[RAN1#126b][10.5.5] t-doc revision R1-2608694", tag)
+    assert not is_meeting_thread("Re: [Post-126bis-6GR-waveform] results", tag)
     kept = [mail for mail in parse_feed(FEED) if is_meeting_thread(mail.title, tag)]
     assert len(kept) == 48
-    assert {mail.id for mail in kept} >= {item["id"] for item in LABELS["schedule"]}
+    assert {mail.id for mail in kept} >= {BY_N[int(n)]["id"] for n in LABELS["mails"]}
 
 
 def test_body_url_is_first_plain_part_without_header():
@@ -169,3 +173,154 @@ def test_threads_from_chair_notes_name_the_agenda_item():
         20: "9.4", 6: "9.5", 17: "10.5.4.2", 18: "10.5.1.3", 15: "10.3.1",
     }
     assert thread_of("Re: [126BIS-R20-mimo]  Email discussion", index)["agenda_item"] == "9.2"
+
+
+WEEK = parse_feed((FIXTURE / "feed_rss2_week.xml").read_text(encoding="utf-8"))
+AGENDA = {item["agenda_item"] for item in json.loads((FIXTURE / "agenda_items.json").read_text(encoding="utf-8"))["agenda_items"]}
+
+
+def _index():
+    from working_groups.ran1.email_sessions import thread_index
+
+    return thread_index(json.loads((FIXTURE / "email_threads_chair.json").read_text(encoding="utf-8"))["threads"])
+
+
+@pytest.mark.parametrize("title, agenda_item, match", [
+    ("Re: [126bis-R20-MIMO] Email discussion on Rel-20 MIMO", "9.2", "tag"),
+    # The note's line reads "Ema-il discussion"; the mails write the meeting "126b".
+    ("Re: [126b-R20-AI/ML] Email discussion on Rel-20 NR AIML air interface Ph2", "9.1", "tag"),
+    ("Re: [126b-R20-6GR-ISAC-Evaluations] Email discussion", "10.8.1", "tag"),
+    ("[126bis-R19-UE feature] Email discussion on Rel-19 UE feature", "8.3", "tag"),
+    # The FL of 10.3.2 kept the tag of meeting #126.
+    ("Re: [126-R20-6GR-Modulation, joint channel coding and modulation] Email discussion", "10.3.2", "earlier_meeting"),
+])
+def test_thread_tag_variants(title, agenda_item, match):
+    from working_groups.ran1.email_sessions import thread_of
+
+    thread = thread_of(title, _index())
+    assert (thread["agenda_item"], thread["match"]) == (agenda_item, match)
+
+
+@pytest.mark.parametrize("title", [
+    "Re: [Post-126-6GR-waveform] UL Low PAPR results collection",  # after meeting #126
+    "Re: [126-R20-6GR-Something new] Email discussion",  # #126 thread with no #126bis twin
+    "Re: [RAN1#126bis] Meeting management",
+    "[6G modulation] Open-source link-level simulator with AMC",
+])
+def test_not_a_thread_of_this_meeting(title):
+    from working_groups.ran1.email_sessions import thread_of
+
+    assert thread_of(title, _index()) is None
+
+
+def test_week_threads():
+    from working_groups.ran1.email_sessions import thread_of
+
+    index = _index()
+    matches = [(thread_of(mail.title, index) or {}).get("match") for mail in WEEK]
+    assert len(WEEK) == 268
+    assert matches.count("tag") == 227
+    assert matches.count("earlier_meeting") == 4
+    # The rest: Post-126 threads, notices, and TDoc revisions that state an item instead.
+    rest = [mail for mail, match in zip(WEEK, matches) if match is None]
+    assert len(rest) == 37
+    assert not any("email discussion" in mail.title.lower() for mail in rest)
+
+
+def test_mail_agenda_items_in_the_test_set():
+    from working_groups.ran1.email_sessions import agenda_of
+
+    index = _index()
+    got = {
+        mail["n"]: agenda_of(mail["title"], newest_reply(mail["body"]), index, AGENDA)
+        for mail in MAILS
+    }
+    items = {n: result["agenda_items"] for n, result in got.items()}
+    assert items[14] == ["9.3.1"] and items[24] == ["9.3.1"]  # "9.3.1" alone on the first line
+    assert items[25] == ["9.3.3"] and items[34] == ["9.3.3"]  # "[9.3.3]"
+    assert items[30] == ["9.4.1"]  # "for agenda item 9.4.1" in the 9.4 thread
+    assert items[35] == ["10.5.3.1"]  # drafts/10.5.3 (CSI acquisition)/… : the parent folder adds nothing
+    assert items[10] == ["8.2"]
+    assert items[11] == ["7"] and got[11]["match"] == "stated"  # "[RAN1#126bis] [7] TDoc Revision"
+    assert items[13] == [] and items[22] == []
+    # Only #41 names other items: it plans the joint 10.6.x offline session.
+    assert {n: result["other"] for n, result in got.items() if result["other"]} == {41: ["10.6.1.2", "10.6.3"]}
+    # A labelled session is a session of the mail's item, or of an item it names.
+    grid = {g["id"]: g for g in json.loads((FIXTURE / "grid.json").read_text(encoding="utf-8"))["sessions"]}
+    for n, labelled in LABELS["mails"].items():
+        result = got[int(n)]
+        mine = result["agenda_items"] + result["other"]
+        for item in labelled:
+            for sid in [item.get("session")] + item.get("candidates", []):
+                if sid:
+                    assert any(_covers(grid[sid], ai) for ai in mine), (n, sid, mine)
+
+
+def _covers(session, ai):
+    """The grid cell is about ``ai``: its items, "10.6.x" for all of 10.6, or the item inferred for "MIMO"."""
+    stated = re.split(r"[,/]\s*", session["agenda_item"] or "") + session["inferred_agenda_items"]
+    for item in filter(None, (s.strip() for s in stated)):
+        root = item[:-2] if item.endswith(".x") else item
+        if ai == root or ai.startswith(root + ".") or root.startswith(ai + "."):
+            return True
+    return False
+
+
+@pytest.mark.parametrize("title, body, items, match", [
+    ("Updated tdoc - AI 10.5.2.2 DL transmission schemes for PDSCH", "", ["10.5.2.2"], "stated"),
+    ("Updated tdoc - NTN requirements and design 10.7.1", "", ["10.7.1"], "stated"),
+    ("[RAN1#126b][10.5.5] t-doc revision R1-2608694 from R1-2607476", "", ["10.5.5"], "stated"),
+    ("Tdoc revision", "Revised R1-2608001 for AI 10.6.2.", ["10.6.2"], "stated"),
+    # Proposal, section and version numbers are not agenda items.
+    ("Re: [126bis-R20-6GR-PRACH]", "Proposal 3.1.1-4 in Section 6.1.1.3 of v33", ["10.5.1.2"], "tag"),
+    # A number outside the thread's item is a reference, not the mail's item.
+    ("Re: [126bis-R20-6GR-PRACH]", "Aligned with AI 10.5.2.1.", ["10.5.1.2"], "tag"),
+    # Not on this meeting's agenda.
+    ("Updated tdoc - AI 10.9.9 Something", "", [], None),
+    # A number alone, in the subject or the body.
+    ("Offline plan 8.2", "", ["8.2"], "stated"),
+    ("Offline plan", "8.2\nDear all, the offline is at 15:00.", ["8.2"], "stated"),
+    ("Offline plan", "Dear all, 30min for 10.5.4.1 after the break.", ["10.5.4.1"], "stated"),
+    ("Offline plan", "R1-2608001 (10.5.2.2) revised", ["10.5.2.2"], "stated"),
+    # A word says the number is something else.
+    ("Offline plan", "See Section 8.2 and Clause 8.1 of TS 38.213, Table 9.1, v10.2", [], None),
+    ("Offline plan", "Proposal 3.1.1-4, observation 3.1.2, 0.3 – 1.62 dB, http://10.10.10.10/ftp", [], None),
+])
+def test_stated_agenda_items(title, body, items, match):
+    from working_groups.ran1.email_sessions import agenda_of
+
+    result = agenda_of(title, body, _index(), AGENDA)
+    assert (result["agenda_items"], result["match"]) == (items, match)
+
+
+def test_reference_outside_the_thread_is_reported():
+    from working_groups.ran1.email_sessions import agenda_of
+
+    result = agenda_of("Re: [126bis-R20-6GR-PRACH]", "Aligned with AI 10.5.2.1.", _index(), AGENDA)
+    assert result["other"] == ["10.5.2.1"]
+
+
+def test_no_agenda_trusts_no_number():
+    from working_groups.ran1.email_sessions import agenda_of
+
+    index = _index()
+    assert agenda_of("Updated tdoc - AI 10.5.2.2", "", index, set())["agenda_items"] == []
+    assert agenda_of("Re: [126bis-R20-A-IoT Phase 2] x", "[9.3.3]", index, set())["agenda_items"] == ["9.3"]
+
+
+def test_untagged_tdoc_notices_state_their_item():
+    from working_groups.ran1.email_sessions import agenda_of, thread_of
+
+    index = _index()
+    rest = [mail for mail in WEEK if thread_of(mail.title, index) is None]
+    stated = {
+        mail.title: agenda_of(mail.title, newest_reply(mail.snippet), index, AGENDA)["agenda_items"]
+        for mail in rest
+    }
+    notices = {t: items for t, items in stated.items() if re.search(r"t-?doc|\btoc\b", t, re.I)}
+    assert len(notices) == 20
+    assert all(len(items) == 1 for items in notices.values())
+    assert stated["Tdoc revision"] == ["9.5.1"]  # "(Agenda 9.5.1)" on the first line
+    assert stated["Updated tdoc - NTN requirements and design 10.7.1"] == ["10.7.1"]
+    # Post-meeting and admin mails state no item of this meeting.
+    assert all(not items for t, items in stated.items() if t not in notices)

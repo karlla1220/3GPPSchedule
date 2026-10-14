@@ -267,6 +267,25 @@ def test_email_discussion_lines(tmp_path):
     ]
 
 
+def test_broken_email_discussion_lines(tmp_path):
+    d = Document()
+    d.add_heading("9.1 AI/ML for NR air interface", level=1)
+    # Typed into RAN1#126bis v06 this way.
+    d.add_paragraph("[126bis-R20-AI/ML] Ema-il discussion on Rel-20 AI/ML – Chenxi (Qualcomm)")
+    d.add_heading("9.2 NR MIMO Phase 6", level=1)
+    d.add_paragraph("[126bis-R20-MIMO] E-mail  discussion on Rel-20 MIMO – Darcy (MTK)")
+    d.add_heading("9.4 NR-NTN", level=1)
+    d.add_paragraph("Email discussion on Rel-20 NR-NTN – Mohamed (Thales)")  # tag lost
+    path = tmp_path / "Chair notes RAN1#126bis_v06.docx"
+    d.save(path)
+    threads = a.parse_agreements(path, "ran1#126bis")["email_threads"]
+    assert [(t["agenda_item"], t["tag"], t["fl"]) for t in threads] == [
+        ("9.1", "126bis-R20-AI/ML", ["Chenxi"]),
+        ("9.2", "126bis-R20-MIMO", ["Darcy"]),
+        ("9.4", None, ["Mohamed"]),  # kept, so the broken line is visible
+    ]
+
+
 def test_email_threads_stay_in_the_snapshot_not_the_page(tmp_path):
     from shared.agreement_assets import package_agreements
 

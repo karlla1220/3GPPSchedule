@@ -59,7 +59,11 @@ AGENDA_LINE = re.compile(r"\s*Agenda\s+item\s*:?\s*(\d+(?:\.\d+)*\.?)(?![\d.])",
 # The email discussion a section names: "[126bis-R20-MIMO] Email discussion
 # on Rel-20 MIMO – Darcy (MTK)". The bracketed tag is the subject tag of the
 # thread on the mailing list; the FLs and their companies follow the dash.
-EMAIL_THREAD = re.compile(r"\[([^\[\]]+)\]\s*Email\s+discussion\b", re.I)
+# The words are typed by hand and come broken ("Ema-il discussion",
+# "E-mail discussion"), so a hyphen or space may fall between any letters.
+_EMAIL_DISCUSSION = r"\W{0,2}".join("emaildiscussion")
+EMAIL_THREAD = re.compile(rf"\[([^\[\]]+)\]\s*{_EMAIL_DISCUSSION}\b", re.I)
+EMAIL_THREAD_WORDS = re.compile(rf"\b{_EMAIL_DISCUSSION}\b", re.I)
 EMAIL_THREAD_FL = re.compile(r"[–—]\s*([^–—()]+?)\s*\(([^()]*)\)\s*\.?\s*$")
 _RICH = ('.//*[local-name()="drawing" or local-name()="pict" '
          'or local-name()="oMath" or local-name()="object"]')
@@ -187,15 +191,20 @@ def _without_tdocs(table):
 
 
 def _email_thread(line):
-    """Tag, FLs and companies of an email discussion line, or None."""
+    """Tag, FLs and companies of an email discussion line, or None.
+
+    A line that starts with the words but no bracketed tag before them is
+    kept with tag None, so a note that breaks the tag shows up in the
+    snapshot instead of dropping its thread unseen.
+    """
     m = EMAIL_THREAD.match(line)
-    if not m:
+    if not m and not EMAIL_THREAD_WORDS.match(line.lstrip("[]–- ")):
         return None
     line = " ".join(line.split())
     fl = EMAIL_THREAD_FL.search(line)
     names = lambda text: [name.strip() for name in text.split(",") if name.strip()]
     return {
-        "tag": " ".join(m[1].split()),
+        "tag": " ".join(m[1].split()) if m else None,
         "line": line,
         "fl": names(fl[1]) if fl else [],
         "companies": names(fl[2]) if fl else [],
