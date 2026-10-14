@@ -402,10 +402,15 @@ def test_a_tdoc_opens_the_file_the_mail_links_on_the_sync_folder():
         "R1-2608628": SYNC + "Inbox/R1-2608628.zip",
         "R1-2607205": SYNC + "Inbox/drafts/10.4.1%20(Idle)/draft%20R1-2607205%20FL_v116.docx",
         "R1-2608637": "https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_126b/Inbox/R1-2608637.zip",
-        "R1-2608700": SYNC + "Docs/R1-2608700.zip",
-        "R1-2608681": SYNC + "Docs/R1-2608681.zip",  # named, not linked
+        "R1-2608700": SYNC + "Inbox/R1-2608700.zip",
+        "R1-2608681": SYNC + "Inbox/R1-2608681.zip",  # named, not linked: uploaded during the meeting
         "R1-2607548": SYNC + "Inbox/drafts/9.3/draft%20R1-2607548_v000.docx",
     }
+    # A TDoc the Inbox does not list is a contribution from before the meeting.
+    links = email_updates.tdoc_links(record, SYNC, inbox={"R1-2608681"})
+    assert links["R1-2608681"] == SYNC + "Inbox/R1-2608681.zip"
+    assert links["R1-2608700"] == SYNC + "Docs/R1-2608700.zip"
+    assert links["R1-2608628"] == SYNC + "Inbox/R1-2608628.zip"  # the mail's own link stands
     # Without a sync folder only the 3GPP link is left.
     assert email_updates.tdoc_links(record, None) == {
         "R1-2608637": "https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_126b/Inbox/R1-2608637.zip"}
@@ -418,12 +423,12 @@ def test_the_tdoc_numbers_of_cell_and_popup_link_their_files(meeting):
     _update(meeting, [])
     email_updates.apply_records(meeting, SYNC)
     page = BeautifulSoup(generate_html(meeting), "html.parser")
-    # #18 names R1-2608681 without a link: the TDoc in the sync folder's Docs.
+    # #18 names R1-2608681 without a link: the TDoc in the sync folder's Inbox.
     cell = next(b for b in page.select(".session-block")
                 if b.select_one(".session-name").get_text() == "10.5.1.3"
                 and "09:20" in b.select_one(".session-range").get_text())
     link = cell.select_one(".session-note a.tdoc-link")
-    assert link.get_text() == "R1-2608681" and link["href"] == SYNC + "Docs/R1-2608681.zip"
+    assert link.get_text() == "R1-2608681" and link["href"] == SYNC + "Inbox/R1-2608681.zip"
     assert link["target"] == "_blank"
     # #3 links the venue's server: the same file on the sync folder.
     maybe = next(b for b in page.select(".session-block")
@@ -444,3 +449,19 @@ def test_no_link_without_a_sync_folder(meeting):
     page = BeautifulSoup(generate_html(meeting), "html.parser")
     assert not page.select(".session-note a")
     assert all("tdoc-link" not in (b.get("data-popup") or "") for b in page.select(".session-block"))
+
+
+def test_the_inbox_listing_names_its_tdoc_files(monkeypatch):
+    from shared import remote_files
+
+    page = ('<a href="https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/R1-2608632.zip">R1-2608632.zip</a>'
+            '<a href="https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/drafts">drafts</a>')
+    monkeypatch.setattr(remote_files, "get_listing",
+                        lambda url, **_: httpx.Response(200, text=page, request=httpx.Request("GET", url)))
+    assert email_updates.inbox_tdocs(SYNC) == {"R1-2608632"}
+
+    def fail(url, **_):
+        raise httpx.ConnectError("down")
+
+    monkeypatch.setattr(remote_files, "get_listing", fail)
+    assert email_updates.inbox_tdocs(SYNC) is None

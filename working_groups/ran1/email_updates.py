@@ -319,14 +319,34 @@ _MIRRORED = re.compile(r"https?://[^/]+/ftp/RAN/RAN1/|https?://www\.3gpp\.org/ft
                        re.IGNORECASE)
 
 
-def tdoc_links(record: dict, sync: str | None) -> dict[str, str]:
-    """Where each TDoc of a mail opens: the file the mail links, else the TDoc in the sync folder's Docs.
+def inbox_tdocs(sync: str) -> set[str] | None:
+    """TDoc files in the sync folder's Inbox; None when it cannot be listed.
+
+    The build lists this folder already (session notes), so it is read
+    from that run's listings without another request.
+    """
+    from shared import remote_files
+
+    try:
+        listing = remote_files.get_listing(sync + "Inbox/")
+    except Exception:  # noqa: BLE001 - links fall back to the Inbox
+        return None
+    return set(re.findall(r"(?<![\w-])(R1-\d{7})\.zip\b", unquote(listing.text)))
+
+
+def tdoc_links(record: dict, sync: str | None, inbox: set[str] | None = None) -> dict[str, str]:
+    """Where each TDoc of a mail opens: the file the mail links, else the TDoc in the sync folder.
 
     A link to the venue's server or the sync folder is read on the sync
     folder (``meeting_sync``), which mirrors it and is reachable from
     anywhere: a draft FL summary has no TDoc of its own yet, only the draft
     the FL linked. Another 3GPP link is kept; a link elsewhere is not.
     Older records have no ``links``; their reply still holds bare links.
+
+    A TDoc no link names is in the Inbox: what a mail announces during the
+    meeting is uploaded there; Docs holds the contributions made before it.
+    So it opens in Docs only when ``inbox`` (the Inbox's TDocs) is known
+    and does not have it.
     """
     urls = list(record.get("links") or []) + document_links(record.get("reply") or "")
     out = {}
@@ -343,7 +363,8 @@ def tdoc_links(record: dict, sync: str | None) -> dict[str, str]:
                 break
         else:
             if sync:
-                out[tdoc] = f"{sync}Docs/{tdoc}.zip"
+                folder = "Docs" if inbox is not None and tdoc not in inbox else "Inbox"
+                out[tdoc] = f"{sync}{folder}/{tdoc}.zip"
     return out
 
 
@@ -355,13 +376,13 @@ def _on_date(item: dict, sent: datetime) -> str:
     return sent.date().isoformat()
 
 
-def apply_records(schedule: Schedule, sync: str | None = None) -> None:
+def apply_records(schedule: Schedule, sync: str | None = None, inbox: set[str] | None = None) -> None:
     """Put every recorded answer on the grid as it is now.
 
     Sessions and tentative slots get ``email_details``, oldest first;
     off-offline goes to ``schedule.email_informal`` by agenda item. With
     ``sync`` (the meeting_sync folder), each detail's TDoc numbers get
-    their links (``tdoc_links``).
+    their links (``tdoc_links``, ``inbox`` the TDocs listed in its Inbox).
     """
     records = load_records(schedule.meeting_id)
     cells, sessions = cells_of(schedule)
@@ -380,7 +401,7 @@ def apply_records(schedule: Schedule, sync: str | None = None) -> None:
         if record.get("status") != "asked":
             continue
         source = {"mail": record["id"], "author": record.get("author", ""), "sent": record["date"]}
-        links = tdoc_links(record, sync)
+        links = tdoc_links(record, sync, inbox)
         mine: dict[tuple, list[dict]] = {}
         for item in resolved[record["id"]]:
             item = {**item, **source}
@@ -412,6 +433,6 @@ def run(schedule: Schedule, *, offline: bool, sync: str | None = None) -> None:
             if new:
                 asked = sum(r["status"] == "asked" for r in new)
                 print(f"  Email discussions: {len(new)} new mail(s) recorded, {asked} asked")
-        apply_records(schedule, sync)
+        apply_records(schedule, sync, inbox_tdocs(sync) if sync and not offline else None)
     except Exception as exc:  # noqa: BLE001 - the schedule is published without email details
         print(f"Warning: email session details unavailable: {exc}")

@@ -430,8 +430,10 @@ FL이 이메일 토론 스레드에 올리는 세션 계획("Offline 11:30 ~ 12:
   - **셀과 팝업의 TDoc 번호는 그 파일로 가는 링크다(`.tdoc-link`, 새 탭).** 주소는 빌드가 정해 세부 정보의 `tdoc_links`에 둔다(`email_updates.tdoc_links`).
     - 메일이 그 파일을 링크했으면 그 파일이다. 회의장 서버(`http://10.10.10.10/ftp/RAN/RAN1/…`)와 sync 폴더 링크는 `meeting_sync`(config) 아래 같은 경로로 바꾼다. sync 폴더는 회의장 서버를 그대로 비추고 어디서나 열린다.
       FL summary 초안은 아직 TDoc 파일이 없어서(`Docs`에 zip이 없다) FL이 링크한 `Inbox/drafts/…` 초안이 유일한 대상이다. 다른 3GPP 링크(회의 폴더)는 그대로 두고, 3GPP 밖 링크는 쓰지 않는다.
-    - 링크가 없으면 `meeting_sync/Docs/R1-xxxxxxx.zip`이다. 목록으로 있는지 확인하지 않는다. `Docs` 목록은 2MB이고, 페이지는 일정이 바뀔 때만 다시 만들어지므로 아직 올라오지 않은 파일도 나중에 열리는 편이 낫다.
-      그래서 다른 회의의 TDoc을 가리키는 번호(#126bis의 R1-2606947)는 404가 난다.
+    - 링크가 없으면 `meeting_sync/Inbox/R1-xxxxxxx.zip`이다. 회의 중 메일이 알리는 문서는 Inbox에 올라온다. `Docs`는 회의 전에 낸 기고다.
+      sync `Inbox/` 목록(`inbox_tdocs`, 세션 노트를 찾느라 빌드가 이미 받은 목록이라 요청이 늘지 않는다)에 없는 번호만 `Docs/`로 보낸다.
+      목록을 못 받으면(오프라인 포함) Inbox다. `Docs` 목록은 2MB라 보지 않는다.
+      #126bis 기록의 24개 중 23개가 Inbox였다. 남은 R1-2606947은 다른 회의의 TDoc이라 어느 쪽이든 404다.
     - 링크 대상은 수집 단계에서 `Mail.links`로 함께 모아 기록(`links`)에 둔다. 미리보기의 `<https://…>`와 본문의 링크는 `reply`에서 지워지기 때문이다. `links`가 없는 예전 기록은 `reply`에 남은 맨 주소를 쓴다.
     - 링크는 노트 색 그대로 옅은 밑줄(`--edge-hover`)로만 구별하고 hover에서 진해진다. 셀의 click·keydown 핸들러와 off-offline 구획 스크립트는 링크를 누른 클릭을 셀 선택으로 보지 않는다.
   - **B(off-offline, FL이 기다리는 곳)는 Agreement 패널 아래의 별도 구획 하나에 모두 나열한다(`.email-informal`, `_render_email_informal`).** 시간표에 없는 offline도 B다.
