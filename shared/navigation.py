@@ -5,7 +5,8 @@ from zoneinfo import ZoneInfo
 
 from shared.portal_meetings import find_meeting
 
-# Marks the page's own meeting title; sibling meeting links stay plain.
+# Marks every meeting name, the page's own title and its sibling links alike,
+# so the other WGs read as meetings to switch to rather than meta text.
 TITLE_EMOJI = '<span class="wg-emoji" aria-hidden="true">📅</span>'
 
 
@@ -59,7 +60,7 @@ def render_navigation(selected, schedules, groups):
         if group["id"] == selected.wg_id:
             current = f'<div class="wg-current"><h1><a href="{escape(href)}" aria-current="page">{TITLE_EMOJI}{escape(label)}</a></h1><span class="meeting-status">{status}</span></div>'
         else:
-            entries.append(f'<a class="wg-link" href="{escape(href)}">{escape(label)}<span class="meeting-status">{status}</span></a>')
+            entries.append(f'<a class="wg-link" href="{escape(href)}">{TITLE_EMOJI}{escape(label)}<span class="meeting-status">{status}</span></a>')
     middle = (len(entries) + 1) // 2
     return ('<nav class="wg-navigation" aria-label="Working group meetings">'
             '<div class="wg-side wg-left">' + ''.join(entries[:middle]) + '</div>'
