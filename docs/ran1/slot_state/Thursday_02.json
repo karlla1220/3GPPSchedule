@@ -3,7 +3,7 @@
   "time_block_index": 2,
   "source_hashes": {
     "Main Schedule": "dd9ab7b9709ca450",
-    "Hiroki's schedule": "b9d356fc375159eb",
+    "Hiroki's schedule": "dceffa3850b7b291",
     "Sorour's schedule": "23a61b49820501f1"
   },
   "merged_sessions": [
@@ -217,10 +217,10 @@
     {
       "room_name": "RAN1_brk2",
       "name": "10.8.1",
-      "duration_minutes": 40,
+      "duration_minutes": 20,
       "specified_start_time": null,
       "chair": "Hiroki",
-      "group_header": "6GR / 10.8 Sensing",
+      "group_header": "6G ISAC",
       "agenda_item": "10.8.1",
       "description": "Evaluations",
       "agenda_descriptions": [
@@ -251,10 +251,10 @@
     {
       "room_name": "RAN1_brk2",
       "name": "10.8.2",
-      "duration_minutes": 40,
+      "duration_minutes": 50,
       "specified_start_time": null,
       "chair": "Hiroki",
-      "group_header": "6GR / 10.8 Sensing",
+      "group_header": "6G ISAC",
       "agenda_item": "10.8.2",
       "description": "Aspects of integration with communication",
       "agenda_descriptions": [
@@ -285,10 +285,10 @@
     {
       "room_name": "RAN1_brk2",
       "name": "10.8.3",
-      "duration_minutes": 40,
+      "duration_minutes": 50,
       "specified_start_time": null,
       "chair": "Hiroki",
-      "group_header": "6GR / 10.8 Sensing",
+      "group_header": "6G ISAC",
       "agenda_item": "10.8.3",
       "description": "Waveform and frame structure",
       "agenda_descriptions": [
@@ -466,9 +466,9 @@
       "room_name": "RAN1_off2",
       "name": "10.5.4.x",
       "duration_minutes": 120,
-      "specified_start_time": null,
+      "specified_start_time": "14:30",
       "chair": "Hiroki",
-      "group_header": "6GR",
+      "group_header": "6G",
       "agenda_item": "10.5.4.4, 10.5.4.3, 10.5.4.2, 10.5.4.1",
       "description": "Handling of potential multiple uplink transmissions",
       "agenda_descriptions": [
@@ -583,7 +583,7 @@
       ]
     }
   ],
-  "merged_at": "2026-10-14T03:41:03.740438+00:00",
+  "merged_at": "2026-10-14T04:21:08.973975+00:00",
   "meeting_id": "ran1#126bis",
   "schema_version": 2
 }
