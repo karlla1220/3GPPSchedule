@@ -369,7 +369,7 @@ def generate_html(schedule: Schedule, *, schedules=None, groups=None, presentati
         timeline = day_schedule.timeline
 
         # Grid template columns
-        col_template = f"var(--time-col-width) repeat({num_rooms}, 1fr)"
+        col_template = f"var(--axis-col-width) repeat({num_rooms}, 1fr)"
 
         html_parts.append(
             f'    <div class="day-panel" id="{day_lower}" data-date="{_esc(day_schedule.date or "")}">\n'
@@ -383,7 +383,7 @@ def generate_html(schedule: Schedule, *, schedules=None, groups=None, presentati
         # Room headers
         html_parts.append(
             '                <div class="room-header time-col" '
-            'style="grid-column:1;grid-row:1">Time</div>\n'
+            'style="grid-column:1;grid-row:1"><span>Time</span></div>\n'
         )
         for ri, room in enumerate(day_schedule.rooms):
             col = ri + 2
@@ -400,7 +400,7 @@ def generate_html(schedule: Schedule, *, schedules=None, groups=None, presentati
             span = min(timeline.label_minutes // timeline.slot_minutes, timeline.rows + 2 - row)
             label = f"{minute // 60:02d}:{minute % 60:02d}"
             major = " major" if minute % 60 == 0 else ""
-            html_parts.append(f'<div class="time-label" style="grid-row:{row}/{row + span}">{label}</div>')
+            html_parts.append(f'<div class="time-label" style="grid-row:{row}/{row + span}"><span>{label}</span></div>')
             html_parts.append(f'<div class="grid-line{major}" style="grid-row:{row}"></div>')
 
         for brk in timeline.breaks:
