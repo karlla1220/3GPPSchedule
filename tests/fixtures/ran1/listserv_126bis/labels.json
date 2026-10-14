@@ -1,0 +1,115 @@
+{
+ "meeting": "RAN1#126bis",
+ "timezone": "Asia/Seoul",
+ "today": "2026-10-14 (Wed)",
+ "schedule": [
+  {
+   "n": 5,
+   "id": "c0926550.2610b",
+   "kind": "session_schedule",
+   "summary": "Online 1 12:30-13:00 RS for PDSCH; Online 2 18:30-19:30 PDSCH; Offline 17:00-18:00 (17:00-17:30 PDSCH, 17:30-18:00 RS for PDSCH)"
+  },
+  {
+   "n": 12,
+   "id": "83dadb14.2610b",
+   "kind": "session_schedule",
+   "summary": "Offline 11:30-12:30, Part 1 PUSCH MIMO (Proposal 3.1.1-4, 3.1.1-5, 3.2.1-2/3)"
+  },
+  {
+   "n": 36,
+   "id": "bde55eba.2610b",
+   "kind": "session_schedule",
+   "summary": "Wed offline 08:30-09:10 CSI, 12:30-13:00 RRC (supersedes #38)"
+  },
+  {
+   "n": 38,
+   "id": "df15fae0.2610b",
+   "kind": "session_schedule",
+   "summary": "Wed offline 08:30-08:40 SRS, 08:40-09:10 CSI, 12:30-13:00 RRC (superseded by #36)"
+  },
+  {
+   "n": 41,
+   "id": "6b71e171.2610b",
+   "kind": "session_schedule",
+   "summary": "Wed offline order/durations: 10.6.1.2 40 min, 10.6.3 30 min, 10.6.1.1 20 min (no start time)"
+  },
+  {
+   "n": 39,
+   "id": "936d7b7a.2610b",
+   "kind": "time_place_meetup",
+   "summary": "Wed 09:00-10:00 off-offline outside RAN1 main room; FL around until 11:00"
+  },
+  {
+   "n": 20,
+   "id": "4be0ad7.2610b",
+   "kind": "time_place_meetup",
+   "summary": "10:45 off-offline in front of Yeongju A Hall"
+  },
+  {
+   "n": 6,
+   "id": "7e2ba9ec.2610b",
+   "kind": "time_place_meetup",
+   "summary": "15:00 off-offline, 'same place as yesterday'"
+  },
+  {
+   "n": 17,
+   "id": "daa98104.2610b",
+   "kind": "time_place_meetup",
+   "summary": "FL at 3rd floor near the cute bears 11:00-12:00"
+  },
+  {
+   "n": 18,
+   "id": "b94b5bc4.2610b",
+   "kind": "time_place_meetup",
+   "summary": "Online Wed 09:20; FL outside offline room 201 12:00-13:00"
+  },
+  {
+   "n": 15,
+   "id": "44ed34d1.2610b",
+   "kind": "time_place_meetup",
+   "summary": "Online session 'this morning from 12:00am' (likely noon)"
+  }
+ ],
+ "not_schedule": {
+  "topic_only": [
+   46,
+   19,
+   24,
+   34,
+   47
+  ],
+  "deadline_only": [
+   23,
+   32,
+   42,
+   43,
+   44,
+   49
+  ]
+ },
+ "need_full_body": [
+  2,
+  5,
+  7,
+  8,
+  9,
+  10,
+  11,
+  13,
+  16,
+  19,
+  21,
+  22,
+  23,
+  26,
+  28,
+  32,
+  33,
+  39,
+  40,
+  43,
+  45,
+  46,
+  49
+ ]
+}

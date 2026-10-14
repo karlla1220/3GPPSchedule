@@ -1,0 +1,466 @@
+<?xml version="1.0"?>
+<rss version="2.0">
+<channel>
+<title>3GPP_TSG_RAN_WG1 List</title>
+<link>https://list.etsi.org/scripts/wa.exe?A0=3GPP_TSG_RAN_WG1</link>
+<description>3GPP_TSG_RAN_WG1 List Archives</description>
+<lastBuildDate>14 Oct 2026 03:09:08 Z</lastBuildDate>
+<image>
+<url>https://www.lsoft.com/images/listserv_64x64.png</url>
+<link>https://list.etsi.org/scripts/wa.exe?A0=3GPP_TSG_RAN_WG1</link>
+<title>Powered by L-Soft's LISTSERV email list software</title>
+</image>
+<generator>LISTSERV 17.5</generator>
+
+<item>
+  <title>Re: [126bis-R20-6GR-MC-Operation in connected mode] Email discussion on Rel-20 6GR-MC-Operation in connected mode</title>
+  <link>https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;7362206c.2610b</link>
+  <description>Hi all,&lt;br&gt;&lt;br&gt;Would like to inform you that:&lt;br&gt;&lt;br&gt;* Further revised Proposal 4.1-2c&lt;br&gt;&lt;br&gt;O Appreciated if you can also check my comment added before offline.&lt;br&gt;&lt;br&gt;* Section 5 are now updated.&lt;br&gt;&lt;br&gt;Also wanted to encourage you to tell me contact information from your companies for which a spreadsheet was set earlier.&lt;br&gt;http://10.10.10.10/ftp/RAN/RAN1/Inbox/drafts/10.4.2%20(Operation%20in%20connected%20mode)/Contact%20info&lt;br&gt;&lt;br&gt;Thanks again,&lt;br&gt;Naoya&lt;br&gt;&lt;br&gt;From: 3gpp_tsg_ran_wg1: tsg ran working group 1 &amp;lt;3GPP_TSG_RAN_WG1@LIST.ETSI.ORG&amp;gt; On Behalf Of Naoya Shibaike&lt;br&gt;Sent: Wednesday, October 14, 2026 8:28 AM&lt;br&gt;To: 3GPP_TSG_RAN_WG1@LIST.ETSI.ORG&lt;br&gt;Subject: Re: [126bis-R20-6GR-MC-Operation in connected mode] Email discussion on Rel-20 6GR-MC-Operation in connected mode [...]</description>
+  <guid>https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;7362206c.2610b</guid>
+   <author>Naoya Shibaike</author>
+  <pubDate>Wed, 14 Oct 2026 03:08:04 +0000</pubDate>
+</item>
+
+<item>
+  <title>Re: [126bis-R20-6GR-Waveform]</title>
+  <link>https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;5fde6ebe.2610b</link>
+  <description>With regard to the new ZTE results, I missed to scan the full batch of their FDSS-ST results for the numbers.&lt;br&gt;&lt;br&gt;The new paragraph would read&lt;br&gt;&lt;br&gt;[When the UE is using a steep-roll-off transmit filter with ST, and where the receiver processing utilizes the knowledge of the transmit filter, one source reported additional gain from non-transparency is typically [0.3 – 1.62]*** dB compared to using the same filter, but not utilizing the knowledge of the filter in the receiver processing.]&lt;br&gt;***New data from Wednesday night, ZTE data sets 7-7 - 7-20 [...] </description>
+  <guid>https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;5fde6ebe.2610b</guid>
+   <author>Karri Ranta-aho (Nokia)</author>
+  <pubDate>Wed, 14 Oct 2026 02:57:16 +0000</pubDate>
+</item>
+
+<item>
+  <title>Re: [126bis-R20-6GR-Channel coding] Email discussion on Rel-20 6GR- Channel coding and Modulation </title>
+  <link>https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;7199d779.2610b</link>
+  <description>Dear all,&lt;br&gt;&lt;br&gt;Thanks for the discussion. The FL propsal for online has been uploaded in http://10.10.10.10/ftp/RAN/RAN1/Inbox/R1-2608628.zip&lt;br&gt;&lt;br&gt;陈梦竹00206166&lt;br&gt;&lt;br&gt;Best Regards,&lt;br&gt;Mengzhu CHEN (陈梦竹)&lt;br&gt;ZTE&lt;br&gt;&lt;br&gt;Original&lt;br&gt;&lt;br&gt;From: 陈梦竹&lt;br&gt;To: 3GPP_TSG_RAN_WG1@LIST.ETSI.ORG &amp;lt;3GPP_TSG_RAN_WG1@LIST.ETSI.ORG&amp;gt;;&lt;br&gt;Date: 2026年10月14日 08:11&lt;br&gt;Subject: Re: [126bis-R20-6GR-Channel coding] Email discussion on Rel-20 6GR- Channel coding and Modulation&lt;br&gt;&lt;br&gt;Dear all,&lt;br&gt;&lt;br&gt;We will have an online session this morning from 12:00am.&lt;br&gt;See you there.&lt;br&gt;&lt;br&gt;陈梦竹00206166&lt;br&gt;&lt;br&gt;Best Regards,&lt;br&gt;Mengzhu CHEN (陈梦竹)&lt;br&gt;ZTE [...]</description>
+  <guid>https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;7199d779.2610b</guid>
+   <author>&lt;&gt;</author>
+  <pubDate>Wed, 14 Oct 2026 10:47:54 +0800</pubDate>
+</item>
+
+<item>
+  <title>Re: [126bis-R20-6GR-PRACH]</title>
+  <link>https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;62b2a0ec.2610b</link>
+  <description>Dear All,&lt;br&gt;&lt;br&gt;Please continue to provide inputs on top of v33 for further discussions.&lt;br&gt;&lt;br&gt;Best Regards,&lt;br&gt;Daewon Lee </description>
+  <guid>https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;62b2a0ec.2610b</guid>
+   <author>Daewon Lee</author>
+  <pubDate>Wed, 14 Oct 2026 02:20:42 +0000</pubDate>
+</item>
+
+<item>
+  <title>Re: [126bis-R20-6GR-Transmission scheme for DL shared channel] Email discussion on Rel-20 6GR-How to transmit downlink shared channel</title>
+  <link>https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;c0926550.2610b</link>
+  <description>Dear all,&lt;br&gt;&lt;br&gt;Thank you for the good discussion yesterday.&lt;br&gt;&lt;br&gt;Today's schedule for online/offline discussion is as follows:&lt;br&gt;&lt;br&gt;- *Online session*&lt;br&gt;- *Online session 1 (12:30~13:00): RS for PDSCH*&lt;br&gt;- *Online session 2 (18:30~19:30): PDSCH*&lt;br&gt;- *Offline session (17:00~18:00)*&lt;br&gt;- *17:00~17:30: PDSCH*&lt;br&gt;- *17:30~18:00: RS for PDSCH*&lt;br&gt;&lt;br&gt;Best Regards,&lt;br&gt;Yushu&lt;br&gt;&lt;br&gt;On Wed, Oct 14, 2026 at 7:21 AM Sven Jacobsson &amp;lt;&lt;br&gt;000006f90223127b-dmarc-request@list.etsi.org&amp;gt; wrote:&lt;br&gt;&lt;br&gt;&amp;gt; Dear DL Tx experts,&lt;br&gt;&amp;gt;&lt;br&gt;&amp;gt; Thanks for taking the time this meeting to discuss template for CW2L&lt;br&gt;&amp;gt; mapping results collection.&lt;br&gt;&amp;gt;&lt;br&gt;&amp;gt; An Excel sheet for *SLS results* is available in “results collection”&lt;br&gt;&gt; folder in [...]</description>
+  <guid>https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;c0926550.2610b</guid>
+   <author>Yushu Zhang</author>
+  <pubDate>Wed, 14 Oct 2026 11:12:12 +0900</pubDate>
+</item>
+
+<item>
+  <title>Re: [126bis-R20-NR-NTN-Using downlink compensation] Email discussion on Rel-20 NR-NTN-Using downlink compensation</title>
+  <link>https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;7e2ba9ec.2610b</link>
+  <description>Dear all,&lt;br&gt;&lt;br&gt;Let&apos;s have an off-offline today at 3pm, same place as yesterday.&lt;br&gt;&lt;br&gt;Thanks,&lt;br&gt;Alberto&lt;br&gt;&lt;br&gt;From: Alberto Rico Alvarino &amp;lt;albertor@qti.qualcomm.com&amp;gt;&lt;br&gt;Sent: Tuesday, October 13, 2026 4:56 PM&lt;br&gt;To: Alberto Rico Alvarino &amp;lt;albertor@qti.qualcomm.com&amp;gt;; 3GPP_TSG_RAN_WG1@LIST.ETSI.ORG&lt;br&gt;Subject: RE: [126bis-R20-NR-NTN-Using downlink compensation] Email discussion on Rel-20 NR-NTN-Using downlink compensation&lt;br&gt;&lt;br&gt;Dear all,&lt;br&gt;&lt;br&gt;The outcome of the off-offline is in here: http://10.10.10.10/ftp/RAN/RAN1/Inbox/drafts/9.5%20(NR_NTN_DLCOMP)/FLS_AfterOff-Offline_v000_Moderator.docx&lt;br&gt;&lt;br&gt;Cyan text is the outcome of the off-offline. I added a couple of boxes in Section 5 for you to provide your comments. [...] </description>
+  <guid>https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;7e2ba9ec.2610b</guid>
+   <author>Alberto Rico Alvarino</author>
+  <pubDate>Wed, 14 Oct 2026 01:50:36 +0000</pubDate>
+</item>
+
+<item>
+  <title>Re: [126bis-R20-6GR-DL/UL transmission without dynamic scheduling]Email Discussion for AI 10.5.4.2</title>
+  <link>https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;bd463d53.2610b</link>
+  <description>Hi all,&lt;br&gt;&lt;br&gt;Following the version we had at the end of yesterday online session, the proposal has been reorganized as follows for your consideration in Section 6.1.1.3.&lt;br&gt;&lt;br&gt;Proposal 1-3-2-Wed:&lt;br&gt;For dynamic adjustment of parameters at least for SPS-PDSCH configurations and CG-PUSCH configurations that are not immediately activated and are subsequently activated by an activation DCI, study which parameter is or is not dynamically adjusted. [...]</description>
+  <guid>https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;bd463d53.2610b</guid>
+   <author>Lei Zhang (Fujitsu)</author>
+  <pubDate>Wed, 14 Oct 2026 01:32:39 +0000</pubDate>
+</item>
+
+<item>
+  <title>Re: [126bis-R20-6GR-Waveform]</title>
+  <link>https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;146ef4f6.2610b</link>
+  <description>Dear Waveform colleagues,&lt;br&gt;&lt;br&gt;In addition to what we discussed in the offline, ZTE new data provided last night has transparent FDSS-ST to non-transparent FDSS-ST comparison, so it is not any more correct to state that there is no data for that case. So I am re-adding the paragraph on FDSS-ST with ZTE numbers and stating that these are from one source. See below. [...] </description>
+  <guid>https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;146ef4f6.2610b</guid>
+   <author>Karri Ranta-aho (Nokia)</author>
+  <pubDate>Wed, 14 Oct 2026 01:29:08 +0000</pubDate>
+</item>
+
+<item>
+  <title>Re: [126bis-R20-6GR-ISAC-Evaluations] Email discussion on Rel-20 6GR-ISAC-Evaluations</title>
+  <link>https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;f34c924c.2610b</link>
+  <description>[For AI 10.8.1 FL summary] Dear all, The FL summary R1-2607430 for Wednesday's online discussion is uploaded in the inbox. B.R. Yongqiang FEI CICT Mobile/CATT -----原始邮件----- 发件人: &quot;Yongqiang FEI (费永强)&quot; &lt;feiyongqiang@cictmobile.com&gt; 发送时间: 2026-10-13 21:48:35 收件人: &quot;Yongqiang FEI (费永强)&quot; &lt;feiyongqiang@CICTMOBILE.COM&gt;,&quot;3GPP_TSG_RAN_WG1&quot; &lt;3GPP_TSG_RAN_WG1@LIST.ETSI.ORG&gt; 抄送: 主题: Re: [126bis-R20-6GR-ISAC-Evaluations] Email discussion on Rel-20 6GR-ISAC-Evaluations [For LS on parameters] Dear all, A revised draft LS with suffix 'v01' is now uploaded into the inbox. Most of the suggestions on revision is adopted. Really appreciate your careful check and review! I also upload my reply to the comments in the discussion document (v07), explaining why a few [...]</description>
+  <guid>https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;f34c924c.2610b</guid>
+   <author>Yongqiang FEI (费永强)</author>
+  <pubDate>Wed, 14 Oct 2026 09:06:12 +0800</pubDate>
+</item>
+
+<item>
+  <title>Re: [126bis-R19-AI 8.2] Email discussion on Rel-19 Maintenance topics for AI 8.2</title>
+  <link>https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;1981638.2610b</link>
+  <description>Dear Jae, and deal all,&lt;br&gt;&lt;br&gt;Thanks for confirmation over email and offline.&lt;br&gt;I just uploaded the FL proposals and draft LS to the following folder, which will be presented this afternoon online.&lt;br&gt;http://10.10.10.10/ftp/RAN/RAN1/Inbox/drafts/8.2%20(Maintenance%20on%20others)/Mobility%20Phase%204/Round%232&lt;br&gt;&lt;br&gt;Please let me know if you have any questions or comment.&lt;br&gt;&lt;br&gt;BRs, —Hong---&lt;br&gt;&lt;br&gt;&amp;gt; On Oct 14, 2026, at 12:57 AM, Jae-Nam Shim &amp;lt;jshim@OFINNO.COM&amp;gt; wrote:&lt;br&gt;&amp;gt;&lt;br&gt;&amp;gt; R19 Mobility Phase 4&lt;br&gt;&amp;gt;&lt;br&gt;&amp;gt; Dear Hong, and all,&lt;br&gt;&amp;gt; Thank you for preparing the draft LS reply.&lt;br&gt;&gt; The draft looks fine to us. It answers the two questions from RAN2 at a suitable level for now, and it [...]</description>
+  <guid>https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;1981638.2610b</guid>
+   <author>Hong He</author>
+  <pubDate>Wed, 14 Oct 2026 09:58:42 +0900</pubDate>
+</item>
+
+<item>
+  <title>[RAN1&#35;126bis] [7] TDoc Revision: from R1-2607184 to R1-2608719</title>
+  <link>https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;30cf71a8.2610b</link>
+  <description>Dear Pre-Rel-19 NR Maintenance colleagues and all,&lt;br&gt;&lt;br&gt;We have revised our contribution from R1-2607184 to R1-2608719 in agenda item 7. A new version of the CR is included.&lt;br&gt;&lt;br&gt;The new contribution has been uploaded to the Inbox.&lt;br&gt;https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/R1-2608719.zip&lt;br&gt;&lt;br&gt;Best regards&lt;br&gt;Mingju&lt;br&gt;Xiaomi&lt;br&gt;&lt;br&gt;#/******本邮件及其附件含有小米公司的保密信息，仅限于发送给上面地址中列出的个人或群组。禁止任何其他人以任何形式使用（包括但不限于全部或部分地泄露、复制、或散发）本邮件中的信息。如果您错收了本邮件，请您立即电话或邮件通知发件人并删除本邮件！ This e-mail and its attachments contain confidential information from XIAOMI, which is intended only for the person or entity whose address is listed above. Any use of the information contained herein in any way (including, but not limited to, total or partial disclosure, reproduction, or dissemination) by persons other than the intended recipient(s) is prohibited. If you [...] </description>
+  <guid>https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;30cf71a8.2610b</guid>
+   <author>李明菊</author>
+  <pubDate>Wed, 14 Oct 2026 00:57:01 +0000</pubDate>
+</item>
+
+<item>
+  <title>Re: [126bis-R20-6GR-Transmission scheme for UL channels] Email discussion on Rel-20 6GR-How to transmit uplink channels</title>
+  <link>https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;83dadb14.2610b</link>
+  <description>Dear UL TX experts,&lt;br&gt;&lt;br&gt;The plan for our offline session is as follows:&lt;br&gt;&lt;br&gt;* Time: 11:30 ~ 12:30 (1hr)&lt;br&gt;* Issue&lt;br&gt;&lt;br&gt;* Part 1 (PUSCH MIMO)&lt;br&gt;&lt;br&gt;* Proposal 3.1.1-4: downloadable codebook&lt;br&gt;&lt;br&gt;* Proposal 3.1.1-5: decoupling PUSCH and SRS&lt;br&gt;&lt;br&gt;* Proposal 3.2.1-2/3: DL/UL reciprocity based scheme (calibration schemes)&lt;br&gt;&lt;br&gt;Thanks and BR,&lt;br&gt;&lt;br&gt;Youngrok (Samsung)&lt;br&gt;&lt;br&gt;From: 3gpp_tsg_ran_wg1: tsg ran working group 1 &amp;lt;3GPP_TSG_RAN_WG1@LIST.ETSI.ORG&amp;gt; On Behalf Of Youngrok Jang&lt;br&gt;Sent: Wednesday, October 14, 2026 6:46 AM&lt;br&gt;To: 3GPP_TSG_RAN_WG1@LIST.ETSI.ORG&lt;br&gt;Subject: Re: [126bis-R20-6GR-Transmission scheme for UL channels] Email discussion on Rel-20 6GR-How to transmit uplink channels [...]</description>
+  <guid>https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;83dadb14.2610b</guid>
+   <author>Youngrok Jang</author>
+  <pubDate>Wed, 14 Oct 2026 09:44:13 +0900</pubDate>
+</item>
+
+<item>
+  <title>RAN4 reply LS on uplink frequency domain spectrum shaping (response to R1-2605069)</title>
+  <link>https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;4471f80e.2610b</link>
+  <description>Dear RAN1 delegates.&lt;br&gt;&lt;br&gt;We have received a response from RAN4 to the LS on uplink frequency domain spectrum shaping. It is uploaded to the inbox as R1-2606993.&lt;br&gt;&lt;br&gt;3GPP TSG RAN WG4 Meeting #120bis R4-2621614&lt;br&gt;Jeju, Korea, Oct 12 - 16, 2026&lt;br&gt;&lt;br&gt;Title: Reply LS on uplink frequency domain spectrum shaping&lt;br&gt;Response to: R1-2605069&lt;br&gt;Release: Rel-20&lt;br&gt;Work Item: FS_6G_Radio [...]</description>
+  <guid>https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;4471f80e.2610b</guid>
+   <author>Jussi Kahtava</author>
+  <pubDate>Wed, 14 Oct 2026 00:21:33 +0000</pubDate>
+</item>
+
+<item>
+  <title>回复: [126bis-R20-A-IoT Phase 2] Email discussion on Rel-20 A-IoT Phase 2</title>
+  <link>https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;3d8d1c90.2610b</link>
+  <description>9.3.1&lt;br&gt;&lt;br&gt;Dear all&lt;br&gt;&lt;br&gt;I have upload v027 to the draft folder&amp;lt;https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/drafts/9.3%20(Ambient_IoT_Solutions_Ph2)/9.3.1&amp;gt;, with some editorial edits.&lt;br&gt;zip file R1-2607513 has also been uploaded&lt;br&gt;&lt;br&gt;BR Zhe&lt;br&gt;&lt;br&gt;发件人: 3gpp_tsg_ran_wg1: tsg ran working group 1 &amp;lt;3GPP_TSG_RAN_WG1@LIST.ETSI.ORG&amp;gt; 代表 Jinzhe (A)&lt;br&gt;发送时间: 2026年10月14日星期三 上午7:05&lt;br&gt;收件人: 3GPP_TSG_RAN_WG1@LIST.ETSI.ORG&lt;br&gt;主题: 回复: [126bis-R20-A-IoT Phase 2] Email discussion on Rel-20 A-IoT Phase 2&lt;br&gt;&lt;br&gt;9.3.1&lt;br&gt;&lt;br&gt;Dear all&lt;br&gt;&lt;br&gt;I have upload v026 to the draft folder&amp;lt;https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/drafts/9.3%20(Ambient_IoT_Solutions_Ph2)/9.3.1&amp;gt;, with adding proposals in section 4.5 for Wednesday morning online&lt;br&gt;zip file R1-2607513 will be uploaded later before 9.3.1 start [...] </description>
+  <guid>https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;3d8d1c90.2610b</guid>
+   <author>Jinzhe (A)</author>
+  <pubDate>Wed, 14 Oct 2026 00:17:17 +0000</pubDate>
+</item>
+
+<item>
+  <title>Re: [126bis-R20-6GR-Channel coding] Email discussion on Rel-20 6GR- Channel coding and Modulation </title>
+  <link>https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;44ed34d1.2610b</link>
+  <description>Dear all,&lt;br&gt;&lt;br&gt;We will have an online session this morning from 12:00am.&lt;br&gt;See you there.&lt;br&gt;&lt;br&gt;陈梦竹00206166&lt;br&gt;&lt;br&gt;Best Regards,&lt;br&gt;Mengzhu CHEN (陈梦竹)&lt;br&gt;ZTE&lt;br&gt;&lt;br&gt;Original&lt;br&gt;&lt;br&gt;From: 陈梦竹&lt;br&gt;To: 3GPP_TSG_RAN_WG1@LIST.ETSI.ORG &amp;lt;3GPP_TSG_RAN_WG1@LIST.ETSI.ORG&amp;gt;;&lt;br&gt;Date: 2026年10月13日 15:57&lt;br&gt;Subject: Re: [126bis-R20-6GR-Channel coding] Email discussion on Rel-20 6GR- Channel coding and Modulation&lt;br&gt;&lt;br&gt;Dear all,&lt;br&gt;&lt;br&gt;Thanks for the discussion. Please see FL summary for online in http://10.10.10.10/ftp/RAN/RAN1/Inbox/R1-2608627.zip&lt;br&gt;&lt;br&gt;陈梦竹00206166&lt;br&gt;&lt;br&gt;Best Regards,&lt;br&gt;Mengzhu CHEN (陈梦竹)&lt;br&gt;ZTE&lt;br&gt;&lt;br&gt;From: 陈梦竹&lt;br&gt;To: 3GPP_TSG_RAN_WG1@LIST.ETSI.ORG &amp;lt;3GPP_TSG_RAN_WG1@LIST.ETSI.ORG&amp;gt;;&lt;br&gt;Date: 2026年10月13日 15:24&lt;br&gt;Subject: Re: [126bis-R20-6GR-Channel coding] Email discussion on Rel-20 6GR- Channel coding and Modulation [...]</description>
+  <guid>https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;44ed34d1.2610b</guid>
+   <author>&lt;&gt;</author>
+  <pubDate>Wed, 14 Oct 2026 08:10:47 +0800</pubDate>
+</item>
+
+<item>
+  <title>Re: [126bis-R20-6GR-WUS operation in RRC states]</title>
+  <link>https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;e9eb4a5c.2610b</link>
+  <description>Dear Xin, all,&lt;br&gt;Thank you. We couldn&#8217;t find a place to provide feedback on Proposal 5.2.2-1r2, please find them below.&lt;br&gt;In our view, how the UE performs the RLM measurements is up to the UE and whether the UE performs the measurements in EE or non-EE mode should also be left to UE implementation (our position was not captured in Section 5.2.5 of the FL summary). We would therefore like to add the following points to Proposal 5.2.2-1r2: [...] </description>
+  <guid>https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;e9eb4a5c.2610b</guid>
+   <author>Diana Maamari</author>
+  <pubDate>Wed, 14 Oct 2026 00:10:12 +0000</pubDate>
+</item>
+
+<item>
+  <title>Re: [126bis-R20-6GR-DL/UL transmission without dynamic scheduling]Email Discussion for AI 10.5.4.2</title>
+  <link>https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;daa98104.2610b</link>
+  <description>Hi all,&lt;br&gt;&lt;br&gt;I will be near the cute bears on the 3rd floor between 11:00 and 12:00 (same place as yesterday). Please feel free to approach me if you have any questions, comments, or concerns regarding Round 3.&lt;br&gt;&lt;br&gt;Thanks,&lt;br&gt;&lt;br&gt;Lei (1Finity)&lt;br&gt;&lt;br&gt;From: 3gpp_tsg_ran_wg1: tsg ran working group 1 &amp;lt;3GPP_TSG_RAN_WG1@LIST.ETSI.ORG&amp;gt; On Behalf Of Lei Zhang (Fujitsu)&lt;br&gt;Sent: Tuesday, October 13, 2026 8:48 PM&lt;br&gt;To: 3GPP_TSG_RAN_WG1@LIST.ETSI.ORG&lt;br&gt;Subject: Re: [126bis-R20-6GR-DL/UL transmission without dynamic scheduling]Email Discussion for AI 10.5.4.2 [...]</description>
+  <guid>https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;daa98104.2610b</guid>
+   <author>Lei Zhang (Fujitsu)</author>
+  <pubDate>Wed, 14 Oct 2026 00:08:41 +0000</pubDate>
+</item>
+
+<item>
+  <title>Re: [126bis-R20-6GR-Bandwidth operation] Email discussion on Rel-20 6GR-Bandwidth operation</title>
+  <link>https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;b94b5bc4.2610b</link>
+  <description>Dear all,&lt;br&gt;&lt;br&gt;R1-2608681 is uploaded for online discussion (Wed 9:20). Please check the proposals in Section 2 where focus is on DL bandwidth settings&lt;br&gt;&lt;br&gt;Moderator will also be outside offline room (201) during 12:00 - 13:00, and welcome to join our discussion&lt;br&gt;&lt;br&gt;Best regards&lt;br&gt;&lt;br&gt;Weide&lt;br&gt;Moderator (MediaTek Inc.) </description>
+  <guid>https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;b94b5bc4.2610b</guid>
+   <author>Weide Wu (吳威德)</author>
+  <pubDate>Tue, 13 Oct 2026 23:49:11 +0000</pubDate>
+</item>
+
+<item>
+  <title>Re: [126bis-R20-6GR-PRACH]</title>
+  <link>https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;bbec2c85.2610b</link>
+  <description>Dear All,&lt;br&gt;&lt;br&gt;Updated moderator summary is available as v33 in the drafts folder.&lt;br&gt;This will be used for online discussion for Wed. The order of the proposals for discussion in Section 2.&lt;br&gt;&lt;br&gt;I would like to ask companies to continue to provide inputs to the moderator summary even after the online session Today (Wed). We have many issues to go through and I would like to get as much comments from companies as possible. Especially the observation proposals #4-4A and #2-3B need careful check by companies. [...] </description>
+  <guid>https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;bbec2c85.2610b</guid>
+   <author>Daewon Lee</author>
+  <pubDate>Tue, 13 Oct 2026 23:48:53 +0000</pubDate>
+</item>
+
+<item>
+  <title>Re: [126bis-R20-NR-NTN] Email discussion on Rel-20 NR-NTN</title>
+  <link>https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;4be0ad7.2610b</link>
+  <description>Dear all,&lt;br&gt;&lt;br&gt;We would like to have an off-offline discussion at 10:45 today. Let&#8217;s meet in front of Yeongju A Hall&lt;br&gt;&lt;br&gt;Thank you for the great effort.&lt;br&gt;&lt;br&gt;Best regards&lt;br&gt;&lt;br&gt;Mohamed </description>
+  <guid>https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;4be0ad7.2610b</guid>
+   <author>EL JAAFARI Mohamed</author>
+  <pubDate>Tue, 13 Oct 2026 23:30:41 +0000</pubDate>
+</item>
+
+<item>
+  <title>Re: [126bis-R20-6GR-MC-Operation in connected mode] Email discussion on Rel-20 6GR-MC-Operation in connected mode</title>
+  <link>https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;8a8be730.2610b</link>
+  <description>Hi all,&lt;br&gt;&lt;br&gt;Please note that in the following v06 in round 3:&lt;br&gt;http://10.10.10.10/ftp/RAN/RAN1/Inbox/drafts/10.4.2%20(Operation%20in%20connected%20mode)/Round%203/draft_R1-2608345_FLS_6GR_MC_CONNECTED_Round4_v06_HW3_Mod.docx&lt;br&gt;&lt;br&gt;I have revised Proposal 4.1-2c a bit, to hopefully address company $B!G (Bs recent comment (thanks for the inputs!).&lt;br&gt;&lt;br&gt;I will work on 6GR BW related soon. I $B!G (Bll be in main room so please feel free to reach me for any comments/suggestions. Thanks! [...]</description>
+  <guid>https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;8a8be730.2610b</guid>
+   <author>Naoya Shibaike</author>
+  <pubDate>Tue, 13 Oct 2026 23:28:10 +0000</pubDate>
+</item>
+
+<item>
+  <title>Jeju On-site Updates – Lost &amp; Found</title>
+  <link>https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;b3309fec.2610b</link>
+  <description>Dear all in Jeju,&lt;br&gt;&lt;br&gt;Please see below the latest lost and found information.&lt;br&gt;&lt;br&gt;*1. Found Items – Available at the Hospitality Desk*&lt;br&gt;&lt;br&gt;The following items have been found and are being kept at the Hospitality&lt;br&gt;Desk:&lt;br&gt;&lt;br&gt;-&lt;br&gt;&lt;br&gt;Hotel room key card (Seaside Arden)&lt;br&gt;-&lt;br&gt;&lt;br&gt;Glasses (possibly Foster Grant brand, found in the RAN4 Main Room)&lt;br&gt;-&lt;br&gt;&lt;br&gt;Marriott hotel key card [...]</description>
+  <guid>https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;b3309fec.2610b</guid>
+   <author>Jaeyun JEONG</author>
+  <pubDate>Wed, 14 Oct 2026 08:17:15 +0900</pubDate>
+</item>
+
+<item>
+  <title>Re: [126bis-R20-6GR-Aspects of UL based CSI acquisition]</title>
+  <link>https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;c5729e4e.2610b</link>
+  <description>Dear all, Round-3 FL summary on UL-based CSI is now available. Please provide your inputs (if any) in the tables listed in FL summary by Wednesday, 11:00 Jeju local time. Thanks and best regards, Xin -----原始邮件----- 发件人: &quot;Xin Su (蘇昕)&quot; &lt;suxin@cictmobile.com&gt; 发送时间: 2026-10-13 09:51:48 收件人: &quot;Xin Su (蘇昕)&quot; &lt;suxin@CICTMOBILE.COM&gt; 抄送: &quot;3GPP_TSG_RAN_WG1&quot; &lt;3GPP_TSG_RAN_WG1@LIST.ETSI.ORG&gt; 主题: Re: [126bis-R20-6GR-Aspects of UL based CSI acquisition] Dear all, Round-2 FL summary on UL-based CSI for 6GR has been uploaded. The draft observations on evaluations of SRS sequence designs have been updated in v002. Please check both documents and provide your inputs (if any) in the tables [...]</description>
+  <guid>https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;c5729e4e.2610b</guid>
+   <author>Xin Su (蘇昕)</author>
+  <pubDate>Wed, 14 Oct 2026 07:07:59 +0800</pubDate>
+</item>
+
+<item>
+  <title>回复: [126bis-R20-A-IoT Phase 2] Email discussion on Rel-20 A-IoT Phase 2</title>
+  <link>https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;9b74ffae.2610b</link>
+  <description>9.3.1&lt;br&gt;&lt;br&gt;Dear all&lt;br&gt;&lt;br&gt;I have upload v026 to the draft folder&amp;lt;https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/drafts/9.3%20(Ambient_IoT_Solutions_Ph2)/9.3.1&amp;gt;, with adding proposals in section 4.5 for Wednesday morning online&lt;br&gt;zip file R1-2607513 will be uploaded later before 9.3.1 start&lt;br&gt;&lt;br&gt;BR Zhe&lt;br&gt;&lt;br&gt;发件人: 3gpp_tsg_ran_wg1: tsg ran working group 1 &amp;lt;3GPP_TSG_RAN_WG1@LIST.ETSI.ORG&amp;gt; 代表 Jinzhe (A)&lt;br&gt;发送时间: 2026年10月13日星期二 下午3:57&lt;br&gt;收件人: 3GPP_TSG_RAN_WG1@LIST.ETSI.ORG&lt;br&gt;主题: 回复: [126bis-R20-A-IoT Phase 2] Email discussion on Rel-20 A-IoT Phase 2 [...] </description>
+  <guid>https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;9b74ffae.2610b</guid>
+   <author>Jinzhe (A)</author>
+  <pubDate>Tue, 13 Oct 2026 23:05:02 +0000</pubDate>
+</item>
+
+<item>
+  <title>Re: [126bis-R20-A-IoT Phase 2] Email discussion on Rel-20 A-IoT Phase 2</title>
+  <link>https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;39b561f9.2610b</link>
+  <description>[9.3.3]&lt;br&gt;&lt;br&gt;Dear all,&lt;br&gt;&lt;br&gt;A FL summary#2_v01&amp;lt;https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/drafts/9.3%20(Ambient_IoT_Solutions_Ph2)/9.3.3/Round2/Draft%20R1-2607194%20FL%20summary%20%232%20on%209.3.3%20AIoT%20procedures_v01_FL_FL2.docx&amp;gt; is uploaded to the draft folder.&lt;br&gt;&lt;br&gt;The draft reply LS to RAN2&amp;lt;https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/drafts/9.3%20(Ambient_IoT_Solutions_Ph2)/9.3.3/LS%20Reply/R1-2608713%20Draft%20LS%20reply%20to%20RAN2_v00_FL.docx&amp;gt; is also in the draft folder.&lt;br&gt;&lt;br&gt;Please have further check.&lt;br&gt;&lt;br&gt;Best Regards,&lt;br&gt;Teng Ma&lt;br&gt;Xiaomi&lt;br&gt;&lt;br&gt;From: 3gpp_tsg_ran_wg1: tsg ran working group 1 &amp;lt;3GPP_TSG_RAN_WG1@LIST.ETSI.ORG&amp;gt; On Behalf Of Teng Ma&lt;br&gt;Sent: Wednesday, October 14, 2026 12:24 AM&lt;br&gt;To: 3GPP_TSG_RAN_WG1@LIST.ETSI.ORG&lt;br&gt;Subject: Re: [126bis-R20-A-IoT Phase 2] Email discussion on Rel-20 A-IoT Phase 2 [...]</description>
+  <guid>https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;39b561f9.2610b</guid>
+   <author>Teng Ma</author>
+  <pubDate>Tue, 13 Oct 2026 23:02:53 +0000</pubDate>
+</item>
+
+<item>
+  <title>Re: [126bis-R20-6GR-Transmission scheme for DL shared channel] Email discussion on Rel-20 6GR-How to transmit downlink shared channel</title>
+  <link>https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;27f51018.2610b</link>
+  <description>Dear DL Tx experts,&lt;br&gt;&lt;br&gt;Thanks for taking the time this meeting to discuss template for CW2L mapping results collection.&lt;br&gt;&lt;br&gt;An Excel sheet for SLS results is available in “results collection” folder in drafts folder (and here: template&amp;lt;https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/drafts/10.5.2%20(MIMO%20operation)/10.5.2.2%20Downlink%20transmission%20for%20shared/results%20collection/6GR_DL_CW2L_results_v002_Mod1_Mod1.xlsx&amp;gt;). Please add your company's simulation results to the Excel sheet.&lt;br&gt;&lt;br&gt;The goal is to make observation on CW2L mapping schemes evaluated so far and make down-selection of alternatives to further study based on those. [...]</description>
+  <guid>https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;27f51018.2610b</guid>
+   <author>Sven Jacobsson</author>
+  <pubDate>Tue, 13 Oct 2026 22:21:17 +0000</pubDate>
+</item>
+
+<item>
+  <title>Re: [126bis-R20-NR-NTN] Email discussion on Rel-20 NR-NTN</title>
+  <link>https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;537c1290.2610b</link>
+  <description>Dear NTN colleagues,&lt;br&gt;&lt;br&gt;The FLS has been revised to v200, based on companies comments on 2nd round proposals. It is uploaded in: Inbox/drafts/9.4 (GNSS resilient NR-NTN)/2nd round/v200.&lt;br&gt;&lt;br&gt;Please provide your comments on the proposals for upcoming online (refer to section 8).&lt;br&gt;&lt;br&gt;Best regards&lt;br&gt;&lt;br&gt;Mohamed </description>
+  <guid>https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;537c1290.2610b</guid>
+   <author>EL JAAFARI Mohamed</author>
+  <pubDate>Tue, 13 Oct 2026 21:51:22 +0000</pubDate>
+</item>
+
+<item>
+  <title>Re: [126bis-R20-6GR-Transmission scheme for UL channels] Email discussion on Rel-20 6GR-How to transmit uplink channels</title>
+  <link>https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;8207ebd3.2610b</link>
+  <description>Dear UL TX experts,&lt;br&gt;&lt;br&gt;Round-2 FL summary proposals have been uploaded in draft folder.&lt;br&gt;&lt;br&gt;Please provide your inputs until 1hr before our offline session today.&lt;br&gt;&lt;br&gt;Some notes are here:&lt;br&gt;&lt;br&gt;* For Part-1 (PUSCH MIMO): new observations are added.&lt;br&gt;&lt;br&gt;* For fixed codebook (observation 3.1.2)&lt;br&gt;&lt;br&gt;* For codeword-to-layer mapping (observation 3.3.2)&lt;br&gt;&lt;br&gt;* Please take a look, and please provide your comments. [...]</description>
+  <guid>https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;8207ebd3.2610b</guid>
+   <author>Youngrok Jang</author>
+  <pubDate>Wed, 14 Oct 2026 06:45:37 +0900</pubDate>
+</item>
+
+<item>
+  <title>Re: [126bis-R20-6GR-DL control channel and scheduling] Email discussion on Rel-20 6GR-What to transmit in DL control</title>
+  <link>https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;fcd3c6f3.2610b</link>
+  <description>Dear all,&lt;br&gt;&lt;br&gt;Both Xiaodong and I updated the proposals based on the discussions. Please check the latest version v040.&lt;br&gt;&lt;br&gt;Thanks and BR,&lt;br&gt;Sigen&lt;br&gt;&lt;br&gt;On Oct 13, 2026, at 12:00 PM, minwoo song &amp;lt;minwoo1.song@LGE.COM&amp;gt; wrote:&lt;br&gt;&lt;br&gt;Dear DCI &amp;amp; scheduling colleagues,&lt;br&gt;&lt;br&gt;We noticed that some of our comments were missing due to my mistake.&lt;br&gt;Our 1st round comments on Part 2 have now been added to RAN1-126bis_10.5.4.1_FLS_Round2_V036_LGE_LGE2.docx. [...]</description>
+  <guid>https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;fcd3c6f3.2610b</guid>
+   <author>Sigen Ye</author>
+  <pubDate>Wed, 14 Oct 2026 05:19:11 +0900</pubDate>
+</item>
+
+<item>
+  <title>Re: [126bis-R20-NR-NTN] Email discussion on Rel-20 NR-NTN</title>
+  <link>https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;b3623896.2610b</link>
+  <description>Dear NTN delegates,&lt;br&gt;&lt;br&gt;We have updated our tdoc R1-2607085 to R1-2608710 for agenda item 9.4.1. The updates are in Appendix B where root pair tables have been added.&lt;br&gt;&lt;br&gt;Best regards,&lt;br&gt;&lt;br&gt;Stefan (Ericsson)&lt;br&gt;&lt;br&gt;From: 3gpp_tsg_ran_wg1: tsg ran working group 1 &amp;lt;3GPP_TSG_RAN_WG1@LIST.ETSI.ORG&amp;gt; On Behalf Of EL JAAFARI Mohamed&lt;br&gt;Sent: Tuesday, 13 October 2026 20:28&lt;br&gt;To: 3GPP_TSG_RAN_WG1@LIST.ETSI.ORG&lt;br&gt;Subject: Re: [126bis-R20-NR-NTN] Email discussion on Rel-20 NR-NTN [...]</description>
+  <guid>https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;b3623896.2610b</guid>
+   <author>Stefan Eriksson G</author>
+  <pubDate>Tue, 13 Oct 2026 17:32:58 +0000</pubDate>
+</item>
+
+<item>
+  <title>Re: [126bis-R20-6GR-Synchronization and Beam Measurement] Email discussion on Rel-20 6GR- Synchronization and Beam Measurement</title>
+  <link>https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;a2ead723.2610b</link>
+  <description>Dear all&lt;br&gt;&lt;br&gt;The FL summary #4 have been uploaded to the draft folder. You can find the proposals for online discussion in the beginning of the tdoc.&lt;br&gt;&lt;br&gt;Br/Xinghua&lt;br&gt;&lt;br&gt;From: songxinghua &amp;lt;songxinghua@huawei.com&amp;gt;&lt;br&gt;Sent: Tuesday, October 13, 2026 3:31 PM&lt;br&gt;To: songxinghua &amp;lt;songxinghua@huawei.com&amp;gt;; 3GPP_TSG_RAN_WG1@LIST.ETSI.ORG&lt;br&gt;Subject: RE: [126bis-R20-6GR-Synchronization and Beam Measurement] Email discussion on Rel-20 6GR- Synchronization and Beam Measurement [...] </description>
+  <guid>https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;a2ead723.2610b</guid>
+   <author>songxinghua</author>
+  <pubDate>Tue, 13 Oct 2026 16:46:57 +0000</pubDate>
+</item>
+
+<item>
+  <title>Re: [126bis-R20-6GR-Aspects of DL based CSI acquisition] Email discussion on Rel-20 6GR-Aspects of DL based CSI acquisition</title>
+  <link>https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;573f6fa8.2610b</link>
+  <description>Dear all,&lt;br&gt;&lt;br&gt;I have updated the observation in Annex A and Annex B, based on companies’ comments/inputs.&lt;br&gt;&lt;br&gt;For AI-based CSI compression,&lt;br&gt;&lt;br&gt;* One new LLS for JSCM proposal has been added. Please take a look on whether such figure and criterion are reasonable or not.&lt;br&gt;&lt;br&gt;* SLS proposal has been updated according to Qualcomm’s comment, with noting the assumptions on UL and DL channel estimation assumption. [...]</description>
+  <guid>https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;573f6fa8.2610b</guid>
+   <author>&lt;&gt;</author>
+  <pubDate>Wed, 14 Oct 2026 00:42:24 +0800</pubDate>
+</item>
+
+<item>
+  <title>Re: [126bis-R19-AI 8.2] Email discussion on Rel-19 Maintenance topics for AI 8.2</title>
+  <link>https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;8eb6a7b.2610b</link>
+  <description>R19 Mobility Phase 4&lt;br&gt;&lt;br&gt;Dear Hong, and all,&lt;br&gt;Thank you for preparing the draft LS reply.&lt;br&gt;The draft looks fine to us. It answers the two questions from RAN2 at a suitable level for now, and it still leaves room for further discussion in RAN2, as well as in RAN1 if needed, in the upcoming meetings.&lt;br&gt;Best regards,&lt;br&gt;Jae-Nam [...]</description>
+  <guid>https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;8eb6a7b.2610b</guid>
+   <author>Jae-Nam Shim</author>
+  <pubDate>Tue, 13 Oct 2026 15:57:20 +0000</pubDate>
+</item>
+
+<item>
+  <title>Re: [126bis-R20-A-IoT Phase 2] Email discussion on Rel-20 A-IoT Phase 2</title>
+  <link>https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;bf925a2a.2610b</link>
+  <description>[9.3.3]&lt;br&gt;&lt;br&gt;Dear all,&lt;br&gt;&lt;br&gt;A FL summary#2_v00&amp;lt;https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/drafts/9.3%20(Ambient_IoT_Solutions_Ph2)/9.3.3/Round2/Draft%20R1-2607194%20FL%20summary%20%232%20on%209.3.3%20AIoT%20procedures_v00_FL.docx&amp;gt; is uploaded to the draft folder.&lt;br&gt;Please have a check on the proposals for Wednesday morning online session.&lt;br&gt;&lt;br&gt;Best Regards,&lt;br&gt;Teng Ma&lt;br&gt;Xiaomi&lt;br&gt;&lt;br&gt;From: 3gpp_tsg_ran_wg1: tsg ran working group 1 &amp;lt;3GPP_TSG_RAN_WG1@LIST.ETSI.ORG&amp;gt; On Behalf Of Teng Ma&lt;br&gt;Sent: Tuesday, October 13, 2026 5:13 PM&lt;br&gt;To: 3GPP_TSG_RAN_WG1@LIST.ETSI.ORG&lt;br&gt;Subject: Re: [126bis-R20-A-IoT Phase 2] Email discussion on Rel-20 A-IoT Phase 2 [...]</description>
+  <guid>https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;bf925a2a.2610b</guid>
+   <author>Teng Ma</author>
+  <pubDate>Tue, 13 Oct 2026 15:23:53 +0000</pubDate>
+</item>
+
+<item>
+  <title>Re: [126bis-R20-6GR-Aspects of DL based CSI acquisition] Email discussion on Rel-20 6GR-Aspects of DL based CSI acquisition</title>
+  <link>https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;4907158b.2610b</link>
+  <description>Dear all&lt;br&gt;&lt;br&gt;In Round 2, a mess starts due to my mistake on uploading a wrong version.&lt;br&gt;&lt;br&gt;I created Round 3 folder for future discussion, with updated proposed on explicit H, DLable codebook.&lt;br&gt;&lt;br&gt;http://10.10.10.10/ftp/RAN/RAN1/Inbox/drafts/10.5.3 (CSI acquisition)/10.5.3.1 Aspects of Downlink CSI/Round 3&lt;br&gt;&lt;br&gt;Best regards&lt;br&gt;&lt;br&gt;Feifei&lt;br&gt;&lt;br&gt;From: feifei.sun@samsung.com &amp;lt;feifei.sun@samsung.com&amp;gt;&lt;br&gt;Sent: Tuesday, October 13, 2026 4:03 PM&lt;br&gt;To: 'feifei.sun@SAMSUNG.COM' &amp;lt;feifei.sun@SAMSUNG.COM&amp;gt;; '3GPP_TSG_RAN_WG1@LIST.ETSI.ORG' &amp;lt;3GPP_TSG_RAN_WG1@LIST.ETSI.ORG&amp;gt;&lt;br&gt;Subject: RE: [126bis-R20-6GR-Aspects of DL based CSI acquisition] Email discussion on Rel-20 6GR-Aspects of DL based CSI acquisition [...]</description>
+  <guid>https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;4907158b.2610b</guid>
+   <author>&lt;&gt;</author>
+  <pubDate>Tue, 13 Oct 2026 22:59:03 +0800</pubDate>
+</item>
+
+<item>
+  <title>Re: [126bis-R20-MIMO] Email discussion on Rel-20 MIMO</title>
+  <link>https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;bde55eba.2610b</link>
+  <description>Hi MIMO experts,&lt;br&gt;&lt;br&gt;Please find the following updated schedule for the Wednesday offline discussion, where all offline time before coffee break will be assigned to CSI.&lt;br&gt;&lt;br&gt;1. 08:30 – 09:10: CSI&lt;br&gt;&lt;br&gt;2. 12:30 – 13:00: RRC&lt;br&gt;&lt;br&gt;[cid:image001.png@01DD5B6E.985AF190]&lt;br&gt;&lt;br&gt;Regards,&lt;br&gt;Darcy&lt;br&gt;&lt;br&gt;From: Darcy Tsai (蔡承融)&lt;br&gt;Sent: Tuesday, October 13, 2026 11:37 PM&lt;br&gt;To: '3GPP_TSG_RAN_WG1@LIST.ETSI.ORG' &amp;lt;3GPP_TSG_RAN_WG1@LIST.ETSI.ORG&amp;gt;&lt;br&gt;Subject: RE: [126bis-R20-MIMO] Email discussion on Rel-20 MIMO [...]</description>
+  <guid>https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;bde55eba.2610b</guid>
+   <author>Darcy Tsai (蔡承融)</author>
+  <pubDate>Tue, 13 Oct 2026 14:57:31 +0000</pubDate>
+</item>
+
+<item>
+  <title>回复: [126bis-R20-6GR-WUS operation in RRC states]</title>
+  <link>https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;d7254f27.2610b</link>
+  <description>Dear all,&lt;br&gt;&lt;br&gt;The FL summary is updated in v26 in draft folder for offline/online discussion tomorrow. Please take a look at proposals in section 2.3&lt;br&gt;&lt;br&gt;Best Regards,&lt;br&gt;&lt;br&gt;Xin (vivo) </description>
+  <guid>https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;d7254f27.2610b</guid>
+   <author>Qu Xin (vivo)</author>
+  <pubDate>Tue, 13 Oct 2026 14:38:40 +0000</pubDate>
+</item>
+
+<item>
+  <title>Re: [126bis-R20-MIMO] Email discussion on Rel-20 MIMO</title>
+  <link>https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;df15fae0.2610b</link>
+  <description>Hi MIMO experts,&lt;br&gt;&lt;br&gt;Please find the following schedule for the Wednesday offline discussion:&lt;br&gt;&lt;br&gt;1. 08:30 – 08:40: SRS&lt;br&gt;&lt;br&gt;2. 08:40 – 09:10: CSI&lt;br&gt;&lt;br&gt;3. 12:30 – 13:00: RRC&lt;br&gt;&lt;br&gt;[cid:image002.png@01DD5B6B.B368EFD0]&lt;br&gt;&lt;br&gt;Regards,&lt;br&gt;Darcy&lt;br&gt;&lt;br&gt;From: Darcy Tsai (蔡承融)&lt;br&gt;Sent: Monday, October 12, 2026 9:17 AM&lt;br&gt;To: 3GPP_TSG_RAN_WG1@LIST.ETSI.ORG&lt;br&gt;Subject: RE: [126bis-R20-MIMO] Email discussion on Rel-20 MIMO&lt;br&gt;&lt;br&gt;Hi MIMO experts,&lt;br&gt;&lt;br&gt;Please find the following schedule for our 1st offline discussion after morning break: [...]</description>
+  <guid>https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;df15fae0.2610b</guid>
+   <author>Darcy Tsai (蔡承融)</author>
+  <pubDate>Tue, 13 Oct 2026 14:36:48 +0000</pubDate>
+</item>
+
+<item>
+  <title>Re: [126bis-R20-6GR-Other Aspects related to CSI] Email discussion on Rel-20 6GR-Other Aspects related to CSI</title>
+  <link>https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;936d7b7a.2610b</link>
+  <description>Dear all,&lt;br&gt;&lt;br&gt;Thanks a lot for all your constructive discussion today.&lt;br&gt;&lt;br&gt;The FL summary for the third-round discussion is now available in Round 3 folder. You can find the proposals in &apos;FL Proposals (Round 3)&apos; sections.&lt;br&gt;&lt;br&gt;I plan to discuss Proposal 4-1A-r3, Proposal 4-1C-r3, Proposal 4-1B-r3, and Proposal 3-2-r2 in this round.&lt;br&gt;&lt;br&gt;Since we do not have any offline session before tomorrow&apos;s online meeting, I suggest having an off-offline discussion from 9:00 to 10:00 AM on Wednesday morning in one outside the RAN1 main room. [...] </description>
+  <guid>https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;936d7b7a.2610b</guid>
+   <author>Bingchao BC2 Liu</author>
+  <pubDate>Tue, 13 Oct 2026 14:28:17 +0000</pubDate>
+</item>
+
+<item>
+  <title>Re: [126bis-R20-6GR-Waveform]</title>
+  <link>https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;c3c850c9.2610b</link>
+  <description>Dear Waveform Colleagues,&lt;br&gt;&lt;br&gt;I have now uploaded an updated version of the FL summary to the drafts folder.&lt;br&gt;&lt;br&gt;Please check the section 8&lt;br&gt;&lt;br&gt;*&lt;br&gt;updates over what was discussed in the online session. There is also a table with the source data behind the new numbers, ZTE and Samsung data was only received today, so it is probably new to most&lt;br&gt;*&lt;br&gt;A compressed FL proposal on 16QAM observations. There is also the more elaborate text from which this compressed set is obtained from. [...] </description>
+  <guid>https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;c3c850c9.2610b</guid>
+   <author>Karri Ranta-aho (Nokia)</author>
+  <pubDate>Tue, 13 Oct 2026 14:12:07 +0000</pubDate>
+</item>
+
+<item>
+  <title>Re: [126bis-R20-6GR-Design of WUS] Email discussion on Rel-20 6GR-Design of WUS</title>
+  <link>https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;6b71e171.2610b</link>
+  <description>Dear all,&lt;br&gt;&lt;br&gt;For Wednesday’s offline session we will do&lt;br&gt;&lt;br&gt;10.6.1.2: 40 min&lt;br&gt;10.6.3: 30 min&lt;br&gt;10.6.1.1: 20 min&lt;br&gt;&lt;br&gt;I doubt there will be any online time for 10.6.1.1 considering the lengthy discussions Monday and Tuesday.&lt;br&gt;&lt;br&gt;Kind regards,&lt;br&gt;Magnus&lt;br&gt;&lt;br&gt;From: 3gpp_tsg_ran_wg1: tsg ran working group 1 &amp;lt;3GPP_TSG_RAN_WG1@LIST.ETSI.ORG&amp;gt; On Behalf Of Magnus Åström&lt;br&gt;Sent: Tuesday, October 13, 2026 4:51 PM&lt;br&gt;To: 3GPP_TSG_RAN_WG1@LIST.ETSI.ORG&lt;br&gt;Subject: Re: [126bis-R20-6GR-Design of WUS] Email discussion on Rel-20 6GR-Design of WUS [...]</description>
+  <guid>https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;6b71e171.2610b</guid>
+   <author>Magnus Åström</author>
+  <pubDate>Tue, 13 Oct 2026 14:07:56 +0000</pubDate>
+</item>
+
+<item>
+  <title>Re: [126bis-R20-6GR-Beam management] Email discussion on Rel-20 6GR-Beam management</title>
+  <link>https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;19d867e3.2610b</link>
+  <description>Dear all,&lt;br&gt;&lt;br&gt;Thanks for good discussion. The round#3 summary is uploaded in the draft folder: /RAN/RAN1/Inbox/drafts/10.5.3 (CSI acquisition)/10.5.3.4 Beam Management/ROUND#3&lt;br&gt;&lt;br&gt;The official deadline of companies input for this round is 2 hours before Wednesday online.&lt;br&gt;&lt;br&gt;高波10190306&lt;br&gt;&lt;br&gt;Best regards,&lt;br&gt;Bo GAO&lt;br&gt;ZTE Corporation&lt;br&gt;&lt;br&gt;Original&lt;br&gt;&lt;br&gt;From: 高波&lt;br&gt;To: 3GPP_TSG_RAN_WG1@LIST.ETSI.ORG &amp;lt;3GPP_TSG_RAN_WG1@LIST.ETSI.ORG&amp;gt;;&lt;br&gt;Date: 2026年10月13日 16:26&lt;br&gt;Subject: Re: [126bis-R20-6GR-Beam management] Email discussion on Rel-20 6GR-Beam management [...]</description>
+  <guid>https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;19d867e3.2610b</guid>
+   <author>Bo Gao</author>
+  <pubDate>Tue, 13 Oct 2026 22:07:30 +0800</pubDate>
+</item>
+
+<item>
+  <title>Re: [126bis-R20-6GR-ISAC-Evaluations] Email discussion on Rel-20 6GR-ISAC-Evaluations</title>
+  <link>https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;3421a7e6.2610b</link>
+  <description>[For LS on parameters] Dear all, A revised draft LS with suffix 'v01' is now uploaded into the inbox. Most of the suggestions on revision is adopted. Really appreciate your careful check and review! I also upload my reply to the comments in the discussion document (v07), explaining why a few suggested changes are not adopted or further modified/simplified. Note that: It is intended to send the LS with attachment, which includes two ANNEX, one for 5G-A and one for 6G . Nothing is going to be missing. FL also encourage interested companies to look at the comments from other [...]</description>
+  <guid>https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;3421a7e6.2610b</guid>
+   <author>Yongqiang FEI (费永强)</author>
+  <pubDate>Tue, 13 Oct 2026 21:48:35 +0800</pubDate>
+</item>
+
+<item>
+  <title>Re: [126bis-R19-AI 8.2] Email discussion on Rel-19 Maintenance topics for AI 8.2</title>
+  <link>https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;145dbabb.2610b</link>
+  <description>Dear all,&lt;br&gt;&lt;br&gt;The draft CR for antenna port number is now available in draft folder.&lt;br&gt;Please let me know by 12.00pm Wednesday if you want to co-source it.&lt;br&gt;&lt;br&gt;Best Regards,&lt;br&gt;&lt;br&gt;Xin (vivo) </description>
+  <guid>https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;145dbabb.2610b</guid>
+   <author>Qu Xin (vivo)</author>
+  <pubDate>Tue, 13 Oct 2026 13:37:07 +0000</pubDate>
+</item>
+
+<item>
+  <title>Re: [126bis-R20-6GR-ISAC-Integration] Email discussion on Rel-20 6GR-ISAC-integration</title>
+  <link>https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;e165f53d.2610b</link>
+  <description>Dear all,&lt;br&gt;&lt;br&gt;So far, we at least have 5 issues for evaluations&lt;br&gt;&lt;br&gt;1) RE pattern&lt;br&gt;&lt;br&gt;2) Phase continuity&lt;br&gt;&lt;br&gt;3) AOD vs. AOA&lt;br&gt;&lt;br&gt;4) Interference handling&lt;br&gt;&lt;br&gt;5) Beam related aspect (best Tx-Rx beam pair for sensing)&lt;br&gt;&lt;br&gt;To accelerate the process, I draft a template for result collection. I use Yongqiang’s template as starting point. Removing some column, e.g., tracking related. Add some columns for the above 5 purpose.&lt;br&gt;/RAN/RAN1/Inbox/drafts/10.8 (ISAC)/10.8.2 (Aspects of integration)/Template of results collection [...]</description>
+  <guid>https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;e165f53d.2610b</guid>
+   <author>Yingyang Li 李迎阳</author>
+  <pubDate>Tue, 13 Oct 2026 13:24:42 +0000</pubDate>
+</item>
+
+<item>
+  <title>Re: [126bis-R20-6GR-Transmission scheme for UL channels] Email discussion on Rel-20 6GR-How to transmit uplink channels</title>
+  <link>https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;1119889e.2610b</link>
+  <description>Dear UL TX experts,&lt;br&gt;&lt;br&gt;Thanks for your great discussion during offline.&lt;br&gt;&lt;br&gt;R1-2607566 has been uploaded in INBOX.&lt;br&gt;&lt;br&gt;The plan for our online session is included in Section 7.1 including the following issues (until time permits)&lt;br&gt;&lt;br&gt;* Proposal 4.3.1-1/2: DMRS sequence (for CP-OFDM, DFTS-OFDM)&lt;br&gt;* Proposal 4.3.1-3: FDM btw DMRS RE and data RE for DFTS-OFDM&lt;br&gt;* Proposal 4.5.1-1/2: PTRS design, phase model&lt;br&gt;* Proposal 3.2.1-1: DL/UL reciprocity scheme&lt;br&gt;* Proposal 5.1.1-1: PUSCH TDRA within a slot&lt;br&gt;* Proposal 5.1.1-2: PUSCH repetition scheme [...]</description>
+  <guid>https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;1119889e.2610b</guid>
+   <author>Youngrok Jang</author>
+  <pubDate>Tue, 13 Oct 2026 22:06:18 +0900</pubDate>
+</item>
+
+<item>
+  <title>Re: [126bis-R20-6GR-ISAC-Waveform and FS] Email discussion on Rel-20 6GR-ISAC-Waveforme and FS</title>
+  <link>https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;f22de9cd.2610b</link>
+  <description>Dear 6G ISAC fans,&lt;br&gt;&lt;br&gt;FL summary was updated as v035, which includes the updated proposals marked&lt;br&gt;as [FL3]. Please continue to provide feedback to the proposals.&lt;br&gt;&lt;br&gt;You can also find the proposals for offline/online session on Wednesday.&lt;br&gt;&lt;br&gt;BR,&lt;br&gt;&lt;br&gt;Woo-Suk&lt;br&gt;&lt;br&gt;From: 3gpp_tsg_ran_wg1: tsg ran working group 1&lt;br&gt;&amp;lt;3GPP_TSG_RAN_WG1@LIST.ETSI.ORG&amp;gt; On Behalf Of Woo-Suk Ko&lt;br&gt;Sent: Tuesday, October 13, 2026 12:26 PM&lt;br&gt;To: 3GPP_TSG_RAN_WG1@LIST.ETSI.ORG&lt;br&gt;Subject: Re: [126bis-R20-6GR-ISAC-Waveform and FS] Email discussion on&lt;br&gt;Rel-20 6GR-ISAC-Waveforme and FS [...] </description>
+  <guid>https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;f22de9cd.2610b</guid>
+   <author>Woo-Suk Ko</author>
+  <pubDate>Tue, 13 Oct 2026 22:04:16 +0900</pubDate>
+</item>
+
+<item>
+  <title>Re: [126bis-R20-6GR-DL/UL transmission without dynamic scheduling]Email Discussion for AI 10.5.4.2</title>
+  <link>https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;a517eccc.2610b</link>
+  <description>One more thing.&lt;br&gt;&lt;br&gt;Discussion on Section 6.1.1.2 remains open, as the FL would like to collect additional views from companies to facilitate mutual understanding among different perspectives.&lt;br&gt;&lt;br&gt;Section 6.2.2 also remains open due to its later start.&lt;br&gt;&lt;br&gt;Feedback on either section is highly appreciated.&lt;br&gt;&lt;br&gt;Thanks.&lt;br&gt;Lei&lt;br&gt;From: 3gpp_tsg_ran_wg1: tsg ran working group 1 &amp;lt;3GPP_TSG_RAN_WG1@LIST.ETSI.ORG&amp;gt; On Behalf Of Lei Zhang (Fujitsu)&lt;br&gt;Sent: Tuesday, October 13, 2026 8:43 PM&lt;br&gt;To: 3GPP_TSG_RAN_WG1@LIST.ETSI.ORG&lt;br&gt;Subject: Re: [126bis-R20-6GR-DL/UL transmission without dynamic scheduling]Email Discussion for AI 10.5.4.2 [...]</description>
+  <guid>https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;a517eccc.2610b</guid>
+   <author>Lei Zhang (Fujitsu)</author>
+  <pubDate>Tue, 13 Oct 2026 11:48:09 +0000</pubDate>
+</item>
+
+<item>
+  <title>Re: [126bis-R20-6GR-DL/UL transmission without dynamic scheduling]Email Discussion for AI 10.5.4.2</title>
+  <link>https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;73c197fc.2610b</link>
+  <description>Dear all,&lt;br&gt;&lt;br&gt;Thank you very much for your support and cooperation.&lt;br&gt;&lt;br&gt;Round 3 has been kicked off in the Round 3 folder.&lt;br&gt;&lt;br&gt;Based on the feedback received from companies in the previous round, at least at this stage, for CG-PUSCH, discussing ‘reactivation’ and ‘dynamic parameter adjustment’ in parallel appears to be beneficial for facilitating the discussion. For SPS-PDSCH, there appears to be no need to distinguish between ‘reactivation’ and ‘dynamic parameter adjustment’. Two draft conclusions are provided for your consideration. [...]</description>
+  <guid>https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;73c197fc.2610b</guid>
+   <author>Lei Zhang (Fujitsu)</author>
+  <pubDate>Tue, 13 Oct 2026 11:43:18 +0000</pubDate>
+</item>
+
+<item>
+  <title>Re: [126bis-R20-NR-NTN] Email discussion on Rel-20 NR-NTN</title>
+  <link>https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;1e17ce35.2610b</link>
+  <description>Dear all,&lt;br&gt;&lt;br&gt;Thank you for the good discussion during today&apos;s offine .&lt;br&gt;&lt;br&gt;The FLS has been revised to v100 and uploaded in: Inbox/drafts/9.4 (GNSS resilient NR-NTN)/2nd round/v100.&lt;br&gt;&lt;br&gt;Please provide your comments on the 2nd round proposals is section 7.&lt;br&gt;&lt;br&gt;Best regards&lt;br&gt;&lt;br&gt;Mohamed </description>
+  <guid>https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;1e17ce35.2610b</guid>
+   <author>EL JAAFARI Mohamed</author>
+  <pubDate>Tue, 13 Oct 2026 11:28:00 +0000</pubDate>
+</item>
+
+</channel>
+</rss>
