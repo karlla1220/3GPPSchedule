@@ -326,6 +326,9 @@ header .meta a:focus-visible,
    browsers without CSS zoom keep the native pinch. */
 @supports (zoom: 1) {
     .grid-wrapper { touch-action: pan-x pan-y; }
+    /* The page is zoomed in and the grid is at its smallest: the browser
+       pinches, so pinching out zooms the page back out. */
+    .pinch-zooms-page .grid-wrapper { touch-action: manipulation; }
 }
 
 /* While the fingers move, the grid is scaled as drawn and the box takes the

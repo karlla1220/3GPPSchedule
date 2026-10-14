@@ -174,6 +174,20 @@ document.addEventListener('DOMContentLoaded', function() {
         return Math.max(minGridZoom(), Math.min(z, GRID_ZOOM_MAX));
     }
 
+    // With the page zoomed in (the header was pinched) and the grid already
+    // as small as it goes, a pinch on the grid zooms the page instead, so
+    // pinching out still leads back to the whole page. The browser decides
+    // what a gesture may do when it starts, so this is set beforehand, as a
+    // class whose touch-action lets the browser pinch.
+    function pinchZoomsPage() {
+        const vv = window.visualViewport;
+        return !!vv && vv.scale > 1.01 && gridZoom <= minGridZoom() + 0.001;
+    }
+
+    function updatePinchTarget() {
+        document.documentElement.classList.toggle('pinch-zooms-page', pinchZoomsPage());
+    }
+
     // Zoom magnifies the grid as it is laid out at 100%, so --grid-width holds
     // that width. Left to fit the box at each zoom (box width / zoom), the
     // columns of a wide screen would change as the grid grows.
@@ -184,6 +198,7 @@ document.addEventListener('DOMContentLoaded', function() {
         root.style.setProperty('--grid-zoom', String(gridZoom));
         if (gridZoom === 1 || !wrapper) root.style.removeProperty('--grid-width');
         else root.style.setProperty('--grid-width', Math.max(wrapper.clientWidth, gridMinWidth()) + 'px');
+        updatePinchTarget();
     }
 
     if (gridZoomSupported) {
@@ -224,7 +239,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const grid = wrapper.querySelector('.schedule-grid');
             wrapper.addEventListener('touchstart', function(e) {
                 finishPinch();
-                if (e.touches.length !== 2) return;
+                if (e.touches.length !== 2 || pinchZoomsPage()) return;
                 const mid = touchMid(e.touches);
                 const rect = grid.getBoundingClientRect();
                 const box = wrapper.getBoundingClientRect();
@@ -293,6 +308,8 @@ document.addEventListener('DOMContentLoaded', function() {
         window.addEventListener('resize', function() {
             if (!pinch) setGridZoom(gridZoom);
         });
+        if (window.visualViewport) window.visualViewport.addEventListener('resize', updatePinchTarget);
+        updatePinchTarget();
     }
 
     // Restore saved state or auto-select today's tab
