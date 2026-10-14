@@ -2,8 +2,8 @@
   "files": [
     {
       "folder": "Chair_notes",
-      "name": "RAN1#126b online and offline schedules - v00.docx",
-      "uploaded_at": "2026-10-11T05:48:00"
+      "name": "RAN1#126b online and offline schedules - v01.docx",
+      "uploaded_at": "2026-10-14T05:44:00"
     },
     {
       "folder": "Chair_notes",
@@ -132,18 +132,18 @@
   },
   "agenda": {
     "name": "agenda.csv",
-    "uploaded_at": "2026-10-13T05:42:00",
+    "uploaded_at": "2026-10-14T05:42:00",
     "url": "https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_126b/Agenda/agenda.csv",
     "source_url": "https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_126b/Agenda/",
     "document_file": "agenda.csv",
     "local_path": "downloads/ran1/Agenda/ran1_126bis/agenda.csv",
     "description_json": "docs/ran1/agenda_item_description.json",
-    "description_generated_at": "2026-10-14T04:38:55.794159+00:00",
+    "description_generated_at": "2026-10-14T06:01:16.543064+00:00",
     "description_source_type": "agenda_csv",
     "description_source_file": "agenda.csv",
     "description_source_agenda_file": "agenda.csv",
     "description_source_url": "https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_126b/Agenda/agenda.csv",
-    "description_source_uploaded_at": "2026-10-13T05:42:00"
+    "description_source_uploaded_at": "2026-10-14T05:42:00"
   },
   "local_refs": {}
 }

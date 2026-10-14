@@ -8139,7 +8139,7 @@
           "inferred_agenda_items": []
         },
         {
-          "name": "AI 10.3.1 Coding",
+          "name": "10.3.1 Channel coding",
           "duration_minutes": 30,
           "start_time": "11:00",
           "end_time": "11:30",
@@ -10684,17 +10684,17 @@
       }
     }
   ],
-  "source_file": "RAN1#126b online and offline schedules - v00.docx",
-  "generated_at": "2026-10-14 13:39",
+  "source_file": "RAN1#126b online and offline schedules - v01.docx",
+  "generated_at": "2026-10-14 15:04",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
-    "RAN1#126b online and offline schedules - v00.docx",
+    "RAN1#126b online and offline schedules - v01.docx",
     "RAN1#126bis schedule for Hiroki Adhoc2 sessions_v06.docx",
     "RAN1#126b Sorour sessions online and offline schedules - v01.docx"
   ],
   "source_labels": {
-    "RAN1#126b online and offline schedules - v00.docx": "Main",
+    "RAN1#126b online and offline schedules - v01.docx": "Main",
     "RAN1#126bis schedule for Hiroki Adhoc2 sessions_v06.docx": "Hiroki",
     "RAN1#126b Sorour sessions online and offline schedules - v01.docx": "Sorour"
   },
@@ -14312,57 +14312,6 @@
         "changed_in": "Draft Chair notes RAN1#126bis_v00.docx"
       }
     },
-    "retained_files": [
-      "agreements/04e41c074ab10b9e2780.html",
-      "agreements/0c21bc4cec650b380fa0.html",
-      "agreements/14d431c39a9be068ae5c.html",
-      "agreements/236bca9056eb2182a586.html",
-      "agreements/294fffc639b6e14317d2.html",
-      "agreements/3e8ca85174c0043ecd49.html",
-      "agreements/4031c731526254737f3e.html",
-      "agreements/419932a138b60c48ac14.html",
-      "agreements/419bcc6eb64bc2074a49.html",
-      "agreements/41ef0053905d2eb6cf4a.html",
-      "agreements/4f5202a9e3b511c4d625.html",
-      "agreements/55e9e237ad1ca1da5880.html",
-      "agreements/58345328eafb6e834a1a.html",
-      "agreements/5969a2042470df784d59.html",
-      "agreements/605f21c8ff3a1234aa67.html",
-      "agreements/61aaadddf4cef994c2b9.html",
-      "agreements/6229034e884d1175422f.html",
-      "agreements/659c6931a86703848ffb.html",
-      "agreements/6c8cd01feab17eaee80a.html",
-      "agreements/6e253e8f43c8949dc8af.html",
-      "agreements/77e0170736d43aec2376.html",
-      "agreements/79bd1efc60b870f59578.html",
-      "agreements/7a228ed19826e3dca8a7.html",
-      "agreements/7bfba1178dae2fcf8994.html",
-      "agreements/7c00e6cc1877517940a4.html",
-      "agreements/82b9fe8abbcea93ed265.html",
-      "agreements/9552d0181818c2ce30c4.html",
-      "agreements/9bf6649d12cc05eeb990.html",
-      "agreements/9c253e291f988317fec7.html",
-      "agreements/9f18eef75e81a4815fca.html",
-      "agreements/a33492a8113190d1a7ba.html",
-      "agreements/a4d8ada5f234c23aa1d7.html",
-      "agreements/a6240356ab78912536d4.html",
-      "agreements/af141ee8e620beebd9f9.html",
-      "agreements/b8e41510e3da21467d40.html",
-      "agreements/c2d8d859fe7169b301fb.html",
-      "agreements/c591e1fbc42a332f5648.html",
-      "agreements/c928c98f91d988cc657b.html",
-      "agreements/cfe11277a1af8c298fce.html",
-      "agreements/d347c673e1f233cf85cf.html",
-      "agreements/d419ae4055489cf69011.html",
-      "agreements/d54beb196fc5757a30fb.html",
-      "agreements/d64ea3d3018a4ba9b223.html",
-      "agreements/defdf09e2886b380863e.html",
-      "agreements/e2516ee55c91e9d0dc5d.html",
-      "agreements/e6d7745d311c995fd833.html",
-      "agreements/e7c77a2d35c200703bea.html",
-      "agreements/ec2230c54c3befb3d365.html",
-      "agreements/ef3503f978e26f1dcccc.html",
-      "agreements/fe03853b512bffe749d5.html"
-    ]
+    "retained_files": []
   }
 }
