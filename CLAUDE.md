@@ -347,3 +347,16 @@ HTML은 `shared/page.py`, 표시 판단은 `templates/support-note.js`, 값은 `
 - **실패:** 세션 노트 하나를 읽지 못하면 그 노트가 들어 있던 AI는 직전에 게시한 섹션을 그대로 둔다. 목록·다운로드 실패는 체어맨 노트와 같이 빌드 전체가 이전 결과를 유지한다.
 - **변경 감지:** check 잡의 식별값은 체어맨 노트 식별값에 `session_notes`(이름, URL, 업로드 시각)를 더한 것이다. 세션 노트는 버전마다 이름이 바뀌므로 내려받지 않고 목록만 본다.
   세션 노트가 없으면 예전 식별값과 같다.
+
+## 이메일 토론 (RAN1)
+
+FL이 이메일 토론 스레드에 올리는 세션 계획("Offline 11:30 ~ 12:30: Part 1 PUSCH MIMO")을 셀 세부 정보에 쓰려고 모은다. 아직 화면에는 나오지 않는다. 수집은 `working_groups/ran1/email_sessions.py`, 테스트셋은 `tests/fixtures/ran1/listserv_126bis/`다.
+
+- **스레드의 AI는 Chair notes가 정한다.** AI 절마다 `[126bis-R20-MIMO] Email discussion on Rel-20 MIMO – Darcy (MTK)` 줄이 있고, 대괄호 태그가 메일 제목의 태그다.
+  - `agreements.py`가 체어맨 노트를 읽을 때 이 줄을 `email_threads`(AI, 태그, FL, 회사)로 함께 낸다. 태그는 회의마다 바뀌므로 회의마다 그 회의의 노트에서 다시 모은다.
+  - 스냅숏(`schedule.json`의 `chairman_agreements`)에만 두고 페이지 데이터에는 넣지 않는다. 노트를 읽지 못하면 직전 결과가 그대로 남는다.
+  - 세션 노트의 같은 줄은 쓰지 않는다(`_rebase`가 옮기지 않는다).
+- **메일은 제목의 첫 대괄호 태그로 스레드에 붙인다(`thread_of`).** 대소문자와 공백만 맞춘다. `Re:`, `回复:`, 태그만 남은 제목, 태그 뒤를 고친 제목이 모두 같은 스레드다.
+  - 여러 AI를 묶은 스레드(9.3 A-IoT, 8.2 등)는 Chair notes에 상위 AI만 있다. 하위 AI는 본문 첫 줄(`[9.3.1]`)에만 있다.
+  - 보낸 사람이 Chair notes의 FL인지는 거르는 기준이 아니다. 묶인 스레드의 하위 주제 담당자는 FL 목록에 없다.
+- **A(셀 세부 정보)와 B(Agreement 아래 부차 정보)는 방 이름이나 시각으로 가르지 않는다.** 방 이름은 회의마다 다르고, off-offline 안내도 방 이름을 쓴다("in front of Yeongju A Hall"). 시각 없이 "오늘 오후 offline"이라고만 쓴 메일도 있다.

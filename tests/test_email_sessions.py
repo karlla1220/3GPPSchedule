@@ -150,3 +150,22 @@ def test_feed_failure_raises():
     http = httpx.Client(transport=httpx.MockTransport(lambda request: httpx.Response(503)))
     with pytest.raises(httpx.HTTPStatusError):
         collect("126bis", http=http, sleep=lambda _: None)
+
+
+def test_threads_from_chair_notes_name_the_agenda_item():
+    from working_groups.ran1.email_sessions import thread_index, thread_of
+
+    chair = json.loads((FIXTURE / "email_threads_chair.json").read_text(encoding="utf-8"))
+    index = thread_index(chair["threads"])
+    found = {mail["n"]: thread_of(mail["title"], index) for mail in MAILS}
+    # Every email discussion mail; the rest are a TDoc revision notice, an LS and lost & found.
+    assert [n for n, thread in found.items() if thread is None] == [11, 13, 22]
+    agenda = {n: thread["agenda_item"] for n, thread in found.items() if thread}
+    assert agenda[4] == "10.5.1.2"  # "Re: [126bis-R20-6GR-PRACH]", subject cut to the tag
+    assert agenda[7] == "10.5.4.2"  # "…scheduling]Email Discussion for AI 10.5.4.2", rewritten after the tag
+    assert agenda[14] == "9.3"  # "回复: [126bis-R20-A-IoT Phase 2] …"; 9.3.1 is only in the body
+    assert {n: agenda[n] for n in (5, 12, 36, 41, 39, 20, 6, 17, 18, 15)} == {
+        5: "10.5.2.2", 12: "10.5.2.3", 36: "9.2", 41: "10.6.1.1", 39: "10.5.3.3",
+        20: "9.4", 6: "9.5", 17: "10.5.4.2", 18: "10.5.1.3", 15: "10.3.1",
+    }
+    assert thread_of("Re: [126BIS-R20-mimo]  Email discussion", index)["agenda_item"] == "9.2"

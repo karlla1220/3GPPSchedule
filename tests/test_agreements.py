@@ -227,6 +227,63 @@ def test_reject_other_or_unknown_meeting(note, meeting):
         a.parse_agreements(note, meeting)
 
 
+def test_real_chairman_note_names_its_email_discussions():
+    threads = a.parse_agreements(REAL_NOTE, "ran1#124")["email_threads"]
+    assert len(threads) == 39
+    by_ai = {t["agenda_item"]: t for t in threads}
+    assert by_ai["9.2"] == {
+        "agenda_item": "9.2", "tag": "124-R20-MIMO",
+        "line": "[124-R20-MIMO] Email discussion on Rel-20 MIMO – Darcy (MTK)",
+        "fl": ["Darcy"], "companies": ["MTK"],
+    }
+    # Two FLs; no space before the dash; a dash and commas inside the tag.
+    assert by_ai["10.5.2.3"]["fl"] == ["Naoya", "Youngrok"]
+    assert by_ai["10.5.2.3"]["companies"] == ["NTT DOCOMO", "Samsung"]
+    assert by_ai["8.5"]["fl"] == ["Ajit"]
+    assert by_ai["10.3.2"]["tag"] == "124-R20-6GR-Modulation, joint channel coding and modulation"
+    assert by_ai["10.9"]["tag"] == "124-R20-AI/ML for RAN#111"
+
+
+def test_email_discussion_lines(tmp_path):
+    d = Document()
+    d.add_heading("9.2 NR MIMO Phase 6", level=1)
+    d.add_paragraph("[126bis-R20-MIMO] Email discussion on Rel-20 MIMO – Darcy (MTK)")
+    d.add_paragraph("Please see the [126bis-R20-MIMO] Email discussion thread.")
+    d.add_heading("10.5.2.2 Downlink shared channel", level=1)
+    d.add_paragraph(
+        "[126bis-R20-6GR-Transmission scheme for DL shared channel] Email discussion on "
+        "Rel-20 6GR-How to transmit downlink shared channel – Sven, Yushu (Ericsson, Google)"
+    )
+    d.add_heading("7 Pre-Rel-19 NR Maintenance", level=1)
+    d.add_paragraph("[126bis-R19-AI 7] Email discussion on Pre-Rel-19 NR Maintenance topics for AI 7.")
+    path = tmp_path / "Chair notes RAN1#126bis_v06.docx"
+    d.save(path)
+    threads = a.parse_agreements(path, "ran1#126bis")["email_threads"]
+    assert [(t["agenda_item"], t["tag"], t["fl"], t["companies"]) for t in threads] == [
+        ("9.2", "126bis-R20-MIMO", ["Darcy"], ["MTK"]),
+        ("10.5.2.2", "126bis-R20-6GR-Transmission scheme for DL shared channel",
+         ["Sven", "Yushu"], ["Ericsson", "Google"]),
+        ("7", "126bis-R19-AI 7", [], []),  # Maintenance threads name no FL.
+    ]
+
+
+def test_email_threads_stay_in_the_snapshot_not_the_page(tmp_path):
+    from shared.agreement_assets import package_agreements
+
+    d = Document()
+    d.add_heading("9.2 NR MIMO Phase 6", level=1)
+    d.add_paragraph("[126bis-R20-MIMO] Email discussion on Rel-20 MIMO – Darcy (MTK)")
+    path = tmp_path / "Chair notes RAN1#126bis_v06.docx"
+    d.save(path)
+    stored, _ = package_agreements(a.parse_agreements(path, "ran1#126bis"))
+    assert stored["email_threads"][0]["agenda_item"] == "9.2"
+    save_schedule(schedule(stored, meeting="ran1#126bis"), tmp_path / "schedule.json")
+    saved = load_schedule(tmp_path / "schedule.json")
+    assert saved.chairman_agreements["email_threads"] == stored["email_threads"]
+    manifest, _ = agreement_assets(saved)
+    assert "email_threads" not in manifest
+
+
 def test_real_chairman_note_numbering_and_counts():
     result = a.parse_agreements(REAL_NOTE, "ran1#124")
     sections = result["sections"]

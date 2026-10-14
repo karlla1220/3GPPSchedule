@@ -81,6 +81,32 @@ def is_meeting_thread(title: str, tag: str) -> bool:
     return f"[{tag}-" in lowered or f"#{tag}]" in lowered
 
 
+def _tag_key(tag: str) -> str:
+    return " ".join(tag.split()).lower()
+
+
+def thread_index(threads: list[dict]) -> dict[str, dict]:
+    """Email discussions the chairman note names, by subject tag.
+
+    ``threads`` is ``email_threads`` of the agreements: one entry per line
+    "[tag] Email discussion on … – FL (company)", with its agenda item.
+    """
+    return {_tag_key(thread["tag"]): thread for thread in threads}
+
+
+def thread_of(title: str, index: dict[str, dict]) -> dict | None:
+    """The discussion a mail belongs to: the first bracketed tag of its subject that the note names.
+
+    Replies keep the tag and vary the rest ("Re:", "回复:", a subject cut to
+    the tag, a subject the FL rewrote after the tag).
+    """
+    for tag in re.findall(r"\[([^\[\]]+)\]", title):
+        thread = index.get(_tag_key(tag))
+        if thread:
+            return thread
+    return None
+
+
 def preview_text(description: str) -> str:
     """Feed item HTML as plain text. Inline link targets ("folder<https://…>") are dropped."""
     text = re.sub(r"<br\s*/?>", "\n", description or "", flags=re.IGNORECASE)
