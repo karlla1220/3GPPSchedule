@@ -394,10 +394,14 @@ FL이 이메일 토론 스레드에 올리는 세션 계획("Offline 11:30 ~ 12:
     같은 스레드의 뒤 메일이 같은 세션의 시각·나눔을 다시 적으면 앞 메일의 것을 바꾼다(#36이 #38을). 시각 없는 덧붙임("FL proposal for online")은 더한다.
 - **check 잡은 피드 하나만 본다(`pending`).** 회의 기간에만, 요청 한 번이다. 목록에 없고, 스레드에 붙고, 미리보기에 시각·장소 낱말이 있는 메일이 있을 때만 빌드 사유가 된다. 실패는 check 오류가 아니라 경고다.
 - 테스트는 메일 리스트에 요청하지 않는다. `tests/conftest.py`가 회의 기간 판정을 끄고 목록 경로를 임시 폴더로 바꾼다. `tests/test_email_updates.py`는 테스트셋의 피드·본문과 기록해 둔 LLM 답(`llm_answers.json`)으로 실행 두 번을 흉내 낸다.
-- **화면(`renderer.py`): 셀은 AI 줄 끝의 "maybe 10.3.1" 하나, 나머지는 팝업이다.**
+- **화면(`renderer.py`): 셀에는 AI 줄 끝의 "maybe 10.3.1"과, 자리가 있으면 Note 자리의 한 줄씩, 나머지는 팝업이다.**
+  사용자는 변경 안내를 읽지 않는다. 팝업을 열어야만 보이면 이 정보가 있는지 모른다.
   - "maybe"는 AI 줄에 ` · `로 잇고 Chair와 같은 가장 약한 톤(`--chair`, `.session-maybe`)이다. 새 줄을 쓰지 않아 높이 예산이 바뀌지 않는다. AI 줄이 보이는 셀(30분 이상)에서만 보인다.
+  - 공지 하나가 셀의 Note 자리 한 줄이다(RAN2 Note와 같은 높이 예산과 톤, `_email_cell_lines`). 셀은 이미 시각과 종류를 보이므로 무엇을 다루는지만 적는다.
+    순서: 나눔(`10.6.1.2 40 min · 10.6.3 30 min · 10.6.1.1 20 min`) → 메일이 든 주제(`Part 1 (PUSCH MIMO), Proposal 3.1.1-4`, `:` 뒤 설명은 뗀다) → TDoc 번호 → 머리말("Offline discussion on")을 뗀 요약.
+    요약부터 쓰면 짧은 셀에서 "Check proposals in"까지만 보여 아무것도 말하지 않는다. 제목에 이미 있는 줄("10.5.2.2 PDSCH"의 `PDSCH`)은 뺀다.
   - 필터는 "maybe" 항목도 그 셀의 AI처럼 맞춘다(`data-ai-scope`에 더한다). `data-ai`와 필터 항목 목록, Agreement 패널은 그대로다.
   - 팝업에는 노트 아래, AI 이름 위에 `From email threads` 구획을 둔다. 공지 하나가 한 줄이다: `maybe 10.3.1 · Online 12:00 · 요약 · 나눔 · input 1 h before · R1-2608628 — 보낸 사람, Wed 11:47`.
     TDoc 번호는 하이픈에서 줄바꿈되지 않는다(`.popup-email-tdoc`). 나눔이 요약에 이미 들어 있으면 다시 적지 않는다. 보낸 사람이 가려진 메일(`<>`)은 시각만 적는다.
-  - B(off-offline, `Schedule.email_informal`)는 아직 화면에 없다. Agreement 패널 아래에 둘 예정이다.
+  - B(off-offline, `Schedule.email_informal`)는 아직 화면에 없다. Agreement 패널 아래에 둘 예정이다. 시간표에 없는 offline도 B다.
 

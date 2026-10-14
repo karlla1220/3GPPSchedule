@@ -498,9 +498,12 @@ def generate_html(schedule: Schedule, *, schedules=None, groups=None, presentati
             elif maybe_html and slots >= 6:
                 ai_html = f'<div class="session-ai">{maybe_html}</div>'
             notes = _cell_notes(session)
+            # What the email threads say the session will do shares the notes'
+            # spare lines: delegates see it without opening the popup.
+            cell_lines = notes + [line for line in _email_cell_lines(session) if line not in notes]
             notes_html = ""
-            if notes and dur_html:
-                notes_html = _notes_html(notes, slots, ai_html, scope_label, chair_html)
+            if cell_lines and dur_html:
+                notes_html = _notes_html(cell_lines, slots, ai_html, scope_label, chair_html)
 
             # Popup (click-to-show)
             popup_lines = [f"<strong>{_esc(session.name)}</strong>"]
@@ -625,6 +628,53 @@ def _maybe_items(session) -> list[str]:
     ))
 
 
+_ANNOUNCED = re.compile(
+    r"^(?:(?:on-?line|off-?line|off-?off(?:line)?)(?:\s+(?:session|discussion|meeting)s?)?(?:\s+\d(?![\d:.]))?"
+    r"(?:\s+(?:topics|split|plan))?\s*(?::|\b(?:on|for|about|of|with|to discuss|discussing)\b)?\s*)+",
+    re.IGNORECASE,
+)
+
+
+def _split_text(detail: dict, cell: bool = False) -> str:
+    pieces = []
+    for part in detail.get("split") or []:
+        label = part.get("agenda_item") or part.get("topic") or ""
+        when = "–".join(filter(None, [part.get("start"), part.get("end")]))
+        size = f"{part['minutes']} min" if part.get("minutes") else ""
+        if cell:
+            pieces.append(" ".join(filter(None, [when, label, size if not when else ""])))
+        else:
+            pieces.append(" ".join(filter(None, [when, label, f"({size})" if size and not when else ""])))
+    return (" · " if cell else ", ").join(p for p in pieces if p)
+
+
+def _email_cell_lines(session) -> list[str]:
+    """One short line per announcement for the cell: what the session will treat.
+
+    The split if there is one, else the subjects the mail names ("Part 1
+    (PUSCH MIMO), Proposal 3.1.1-4"), else its TDoc numbers, else the
+    summary without its lead-in: the cell already shows the session's time,
+    and a short cell cut off after "Check proposals in" says nothing. A line
+    the title already holds ("PDSCH" on "10.5.2.2 PDSCH") is left out; an
+    item another session holds is named first ("10.3.1: …").
+    """
+    title = session.name.casefold()
+    lines = []
+    for detail in getattr(session, "email_details", []):
+        topics = [t.split(": ")[0].strip() for t in detail.get("topics") or [] if t.strip()]
+        text = (_split_text(detail, cell=True) or ", ".join(dict.fromkeys(topics))
+                or ", ".join(detail.get("tdocs") or [])
+                or _ANNOUNCED.sub("", detail.get("summary") or "").lstrip(" ;,:·-").strip())
+        if not text or text.casefold() in title:
+            continue
+        text = text[0].upper() + text[1:]
+        if detail.get("kind") == "tentative":
+            text = f"{detail['agenda_item']}: {text}"
+        if text not in lines:
+            lines.append(text)
+    return lines
+
+
 def _email_detail_line(detail: dict) -> str:
     """One announcement, short: "maybe 10.3.1 · Online 12:00 · FL proposal uploaded · R1-2608628 — Yushu, Wed 11:12"."""
     parts = []
@@ -636,15 +686,10 @@ def _email_detail_line(detail: dict) -> str:
         parts.append(" ".join(filter(None, [head, when])))
     if detail.get("summary"):
         parts.append(detail["summary"])
-    split = []
-    for part in detail.get("split") or []:
-        label = part.get("agenda_item") or part.get("topic") or ""
-        when = "–".join(filter(None, [part.get("start"), part.get("end")]))
-        size = f"{part['minutes']} min" if part.get("minutes") else ""
-        split.append(" ".join(filter(None, [when, label, f"({size})" if size and not when else ""])))
+    split = _split_text(detail)
     summary = detail.get("summary") or ""
-    if split and not all(piece in summary for piece in split):  # the summary often says it already
-        parts.append(", ".join(split))
+    if split and not all(piece in summary for piece in split.split(", ")):  # the summary often says it already
+        parts.append(split)
     due = detail.get("input_due") or {}
     if due.get("at"):
         parts.append(f"input by {due['at']}")

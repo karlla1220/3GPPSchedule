@@ -262,3 +262,26 @@ def test_the_grid_shows_maybe_items_filters_them_and_lists_the_mails(meeting):
     wus = next(b for b in page.select(".session-block") if "10.6.1.2" in (b.get("data-popup") or "") and "From email" in b["data-popup"])
     text = BeautifulSoup(wus["data-popup"], "html.parser").select_one(".popup-email").get_text()
     assert "10.6.1.2 (40 min), 10.6.3 (30 min), 10.6.1.1 (20 min)" in text
+
+
+def test_the_cell_shows_the_plan_where_it_has_room(meeting):
+    # Delegates do not read release notes: what the FL announced is in the
+    # cell's spare lines, not only in the popup.
+    from bs4 import BeautifulSoup
+    from shared.renderer import generate_html
+
+    _update(meeting, [])
+    email_updates.apply_records(meeting)
+    page = BeautifulSoup(generate_html(meeting), "html.parser")
+
+    def cell(title, start):
+        return next(b for b in page.select(".session-block")
+                    if b.select_one(".session-name").get_text() == title
+                    and b.select_one(".session-range") and start in b.select_one(".session-range").get_text())
+
+    wus = [n.get_text() for n in cell("10.6.x", "11:00").select(".session-note")]
+    assert wus[0] == "10.6.1.2 40 min · 10.6.3 30 min · 10.6.1.1 20 min"  # lengths, no clock times
+    pdsch = [n.get_text() for n in cell("10.5.2.2", "17:00").select(".session-note")]
+    assert pdsch == ["17:00–17:30 PDSCH · 17:30–18:00 RS for PDSCH"]
+    maybe = [n.get_text() for n in cell("AI 8.1", "12:00").select(".session-note")]
+    assert maybe == []  # 30 minutes: title, time and AI line fill the cell
