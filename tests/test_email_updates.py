@@ -287,21 +287,37 @@ def test_the_cell_shows_the_plan_where_it_has_room(meeting):
     assert maybe == []  # 30 minutes: title, time and AI line fill the cell
 
 
-def test_off_offline_goes_to_the_agreement_panel_with_its_date(meeting):
-    from shared.agreement_assets import agreement_assets
+def test_off_offline_is_one_list_below_the_agreements(meeting):
+    from bs4 import BeautifulSoup
+    from shared.renderer import generate_html
 
     _update(meeting, [])
     email_updates.apply_records(meeting)
-    meeting.chairman_agreements.update(status="ready", sections={"9.4": {"title": "NR-NTN"}})
-    manifest, _ = agreement_assets(meeting)
-    rows = manifest["email_informal"]
+    page = BeautifulSoup(generate_html(meeting), "html.parser")
+    box = page.select_one("section.email-informal")
+    # After the agreement panel, not inside it.
+    assert box is not None and box.find_parent(id="agreement-panel") is None
+    rows = box.select("li")
+    # Every item, whatever its agenda item, in time order, each with its item and date.
+    assert len(rows) == sum(len(items) for items in meeting.email_informal.values())
+    keys = [(r["data-date"], r.select_one(".email-informal-when").get_text()) for r in rows]
+    assert [k[0] for k in keys] == sorted(k[0] for k in keys)
+    row = next(r for r in rows if r["data-ai"] == "9.4" and "10:45" in r.get_text())
     # #20: "off-offline discussion at 10:45 today. Let's meet in front of Yeongju A Hall" (Wed 08:30).
-    assert {"date": "2026-10-14", "time": "10:45"}.items() <= next(
-        r for r in rows["9.4"] if r["time"] == "10:45").items()
-    assert "Yeongju A Hall" in next(r for r in rows["9.4"] if r["time"] == "10:45")["text"]
-    # An "offline" the schedule does not have is off-offline too (9.5, Tuesday 15:30 in the live feed).
-    assert all(r["date"] >= "2026-10-13" for items in rows.values() for r in items)
-    assert all(not r["from"] or r["from"] != "<>" for items in rows.values() for r in items)
+    assert row["data-date"] == "2026-10-14"
+    assert row.select_one(".email-informal-when").get_text() == "Wed 10:45"
+    assert row.select_one(".email-informal-ai").get_text() == "AI 9.4"
+    assert "Yeongju A Hall" in row.get_text()
+    # The script after it hides the days gone by and marks the selected cell's rows.
+    script = box.find_next_sibling("script").string
+    assert "row.dataset.date < today" in script and "classList.toggle('related'" in script
+    assert '"Asia/Seoul"' in script
+
+
+def test_no_list_without_off_offline(meeting):
+    from shared.renderer import generate_html
+
+    assert '<section class="email-informal"' not in generate_html(meeting)
 
 
 def test_sending_times_of_records_and_mails_both_read():
@@ -311,3 +327,11 @@ def test_sending_times_of_records_and_mails_both_read():
     assert email_updates._sent("2026-10-14T01:42:24+09:00", seoul).strftime("%a %H:%M") == "Wed 01:42"
     assert email_updates._sent("Wed, 14 Oct 2026 00:42:24 +0800", seoul).strftime("%a %H:%M") == "Wed 01:42"
     assert email_updates._sent("not a date", seoul) is None
+
+
+def test_a_place_the_summary_names_is_not_repeated():
+    from shared.renderer import _says
+
+    assert _says("FL available near cute bears on 3rd floor", "near the cute bears on the 3rd floor")
+    assert _says("Off-offline outside RAN1 main room", "one outside the RAN1 main room")
+    assert not _says("Off-offline at 15:00", "same place as yesterday")

@@ -602,6 +602,7 @@ def generate_html(schedule: Schedule, *, schedules=None, groups=None, presentati
         )
 
     html_parts.append(render_agreement_panel(schedule))
+    html_parts.append(_render_email_informal(schedule))
     html_parts.append(render_topic_references(schedule.topic_references, schedule.topic_preamble))
     html_parts.append(render_supplements(schedule.supplements))
 
@@ -714,6 +715,79 @@ def _email_popup_html(session) -> str:
         return ""
     lines = "".join(f'<div class="popup-email-item">{_email_detail_line(d)}</div>' for d in details)
     return f'<div class="popup-email"><div class="popup-email-head">From email threads</div>{lines}</div>'
+
+
+_FILLER = {"the", "a", "an", "one", "on", "in", "at", "of", "to", "by", "and"}
+
+
+def _says(text: str, place: str) -> bool:
+    """The summary already names the place ("near cute bears on 3rd floor" for "near the cute bears on the 3rd floor")."""
+    words = set(re.findall(r"[a-z0-9]+", text.casefold()))
+    return all(w in words for w in re.findall(r"[a-z0-9]+", place.casefold()) if w not in _FILLER)
+
+
+def _render_email_informal(schedule) -> str:
+    """Every off-offline and FL whereabouts from the email threads, in one list below the agreements.
+
+    Not by agenda item: a delegate scans the day's informal meetings at once.
+    Each row carries its item and date; the script after it leaves out the
+    days gone by (meeting time, read by the page, which is not rebuilt each
+    day) and marks the rows of the cell last selected.
+    """
+    rows = []
+    for ai, items in (getattr(schedule, "email_informal", None) or {}).items():
+        for item in items:
+            day = item.get("date")
+            if not day:
+                continue
+            when = "–".join(filter(None, [item.get("start"), item.get("end")]))
+            text = item.get("summary") or item.get("quote") or ""
+            place = item.get("place") or ""
+            if place and not _says(text, place):
+                text = f"{text} ({place})" if text else place
+            author = (item.get("author") or "").strip()
+            rows.append((day, when, ai, text, "" if author in {"", "<>"} else author))
+    if not rows:
+        return ""
+    items_html = []
+    for day, when, ai, text, author in sorted(rows):
+        weekday = datetime.fromisoformat(day).strftime("%a")
+        items_html.append(
+            f'<li data-ai="{_esc(ai)}" data-date="{_esc(day)}">'
+            f'<span class="email-informal-when">{_esc(" ".join(filter(None, [weekday, when])))}</span> '
+            f'<span class="email-informal-ai">AI {_esc(ai)}</span> {_esc(text)}'
+            + (f' <span class="email-informal-from">— {_esc(author)}</span>' if author else "")
+            + "</li>"
+        )
+    timezone = json.dumps(schedule.timezone or "UTC")
+    return (
+        '<section class="email-informal" aria-labelledby="email-informal-title">'
+        '<div class="email-informal-header"><h2 id="email-informal-title">Off-offline and FL whereabouts</h2>'
+        "<p>From the email threads, not on the schedule</p></div>"
+        f'<ul>{"".join(items_html)}</ul></section>\n'
+        "<script>(() => {\n"
+        "    const box = document.currentScript.previousElementSibling;\n"
+        "    let today;\n"
+        f"    try {{ today = new Intl.DateTimeFormat('en-CA', {{ timeZone: {timezone}, year: 'numeric', month: '2-digit', day: '2-digit' }}).format(new Date()); }}\n"
+        "    catch { today = new Date().toISOString().slice(0, 10); }\n"
+        "    const rows = [...box.querySelectorAll('li[data-date]')];\n"
+        "    rows.forEach(row => { row.hidden = row.dataset.date < today; });\n"
+        "    if (rows.every(row => row.hidden)) { box.hidden = true; return; }\n"
+        "    // The rows of the selected cell's items, in its own accent. Capture:\n"
+        "    // the cell's own handler stops the click from bubbling.\n"
+        "    document.addEventListener('click', event => {\n"
+        "        const block = event.target instanceof Element && event.target.closest('.session-block');\n"
+        "        if (!block) return;\n"
+        "        const chosen = (block.dataset.aiScope || '').split('|').map(id => id.replace(/\\.\\*$/, '')).filter(Boolean);\n"
+        "        const accent = getComputedStyle(block).getPropertyValue('--accent').trim();\n"
+        "        if (accent) box.style.setProperty('--selected-accent', accent);\n"
+        "        rows.forEach(row => {\n"
+        "            const ai = row.dataset.ai;\n"
+        "            row.classList.toggle('related', chosen.some(id => ai === id || ai.startsWith(id + '.') || id.startsWith(ai + '.')));\n"
+        "        });\n"
+        "    }, true);\n"
+        "})();</script>\n"
+    )
 
 
 def _join_popup_lines(lines: list[str]) -> str:

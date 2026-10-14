@@ -135,9 +135,6 @@ def agreement_assets(schedule):
     }
     if notes:
         manifest["session_notes"] = notes
-    informal = _email_informal(schedule)
-    if informal:
-        manifest["email_informal"] = informal
     assets = {}
     for ai, section in data.get("sections", {}).items():
         if not re.fullmatch(r"\d+(?:\.\d+)*", ai):
@@ -164,32 +161,6 @@ def agreement_assets(schedule):
             entry["url"] = "./" + filename
         manifest["sections"][ai] = entry
     return manifest, assets
-
-
-def _email_informal(schedule):
-    """Off-offline and FL whereabouts from the email threads, by agenda item, for the panel.
-
-    Each entry carries its date so the page can leave out the days gone by.
-    """
-    out = {}
-    for ai, items in (getattr(schedule, "email_informal", None) or {}).items():
-        rows = []
-        for item in items:
-            if not item.get("date"):
-                continue
-            when = "–".join(filter(None, [item.get("start"), item.get("end")]))
-            text = item.get("summary") or item.get("quote") or ""
-            place = item.get("place") or ""
-            if place and place.casefold() not in text.casefold():
-                text = f"{text} ({place})" if text else place
-            author = (item.get("author") or "").strip()
-            rows.append({
-                "date": item["date"], "time": when, "text": text,
-                "from": "" if author in {"", "<>"} else author,
-            })
-        if rows:
-            out[ai] = sorted(rows, key=lambda row: (row["date"], row["time"]))
-    return out
 
 
 def write_agreement_assets(schedule, directory):

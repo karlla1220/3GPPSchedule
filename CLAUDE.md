@@ -403,8 +403,11 @@ FL이 이메일 토론 스레드에 올리는 세션 계획("Offline 11:30 ~ 12:
   - 필터는 "maybe" 항목도 그 셀의 AI처럼 맞춘다(`data-ai-scope`에 더한다). `data-ai`와 필터 항목 목록, Agreement 패널은 그대로다.
   - 팝업에는 노트 아래, AI 이름 위에 `From email threads` 구획을 둔다. 공지 하나가 한 줄이다: `maybe 10.3.1 · Online 12:00 · 요약 · 나눔 · input 1 h before · R1-2608628 — 보낸 사람, Wed 11:47`.
     TDoc 번호는 하이픈에서 줄바꿈되지 않는다(`.popup-email-tdoc`). 나눔이 요약에 이미 들어 있으면 다시 적지 않는다. 보낸 사람이 가려진 메일(`<>`)은 시각만 적는다.
-  - **B(off-offline, FL이 기다리는 곳)는 Agreement 패널의 본문 아래에 둔다(`.agreement-email`).** 시간표에 없는 offline도 B다.
-    헤어라인으로 가르고 본문보다 작고 연하다(12.5px, `--ink-2`, 머리줄 `--ink-3`). 머리줄은 `Off-offline and FL whereabouts · from the email threads, not on the schedule`이다. 의장 글이 아니라는 것을 밝힌다.
-    한 줄은 `Wed 10:45 요약 (장소) — 보낸 사람`이다. 고른 AI 탭과 그 상위·하위 항목의 것을 시각 순으로 모은다.
-    지난 날의 것은 뺀다. 날짜는 빌드가 정하고(`date`: 적힌 요일의 다음 날짜, 없으면 보낸 날), 오늘은 페이지가 회의 시간대로 정한다. 페이지는 일정이 바뀔 때만 다시 만들어지기 때문이다.
+  - **B(off-offline, FL이 기다리는 곳)는 Agreement 패널 아래의 별도 구획 하나에 모두 나열한다(`.email-informal`, `_render_email_informal`).** 시간표에 없는 offline도 B다.
+    AI별로 나누지 않는다. 참석자는 그날의 비공식 모임을 한 번에 훑는다. Agreement 패널 안에 두면 셀을 골라야만 보이고, 고른 AI의 것만 보인다.
+    한 줄은 `Wed 10:45 AI 9.4 요약 (장소) — 보낸 사람`이고 날짜·시각 순이다. 요약에 이미 있는 장소는 다시 적지 않는다(`_says`, 낱말 단위로 비교).
+    패널과 같은 표면이고 글은 더 연하다. 머리줄 `Off-offline and FL whereabouts` 옆에 `From the email threads, not on the schedule`을 적는다. 의장 글도 시간표도 아니라는 것을 밝힌다.
+    셀을 고르면 그 셀 AI(상위·하위 포함, `data-ai-scope`)의 줄이 굵어지고 그 셀의 `--accent`를 12% 깐다. 선택된 셀 테두리와 같은 색이라 어느 셀의 것인지 보인다.
+    셀의 click 핸들러가 전파를 막으므로 구획 스크립트는 capture 단계에서 듣는다.
+    지난 날의 줄은 숨기고, 다 숨으면 구획도 숨긴다. 날짜는 빌드가 정하고(`date`: 적힌 요일의 다음 날짜, 없으면 보낸 날), 오늘은 페이지가 회의 시간대로 정한다. 페이지는 일정이 바뀔 때만 다시 만들어진다.
 
