@@ -258,6 +258,10 @@ def test_the_grid_shows_maybe_items_filters_them_and_lists_the_mails(meeting):
     line = popup.select_one(".popup-email-item").get_text()
     assert line.startswith("maybe 10.3.1 · Online 12:00 · ")
     assert popup.select_one(".popup-email-tdoc").get_text() == "R1-2608628"
+    # The sender links to the mail in the list archive.
+    link = popup.select_one(".popup-email-from a")
+    assert link["href"].startswith("https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;")
+    assert link["target"] == "_blank" and link.get_text() in line
     # A plan with a split, given by lengths only, keeps the lengths.
     wus = next(b for b in page.select(".session-block") if "10.6.1.2" in (b.get("data-popup") or "") and "From email" in b["data-popup"])
     text = BeautifulSoup(wus["data-popup"], "html.parser").select_one(".popup-email").get_text()
@@ -309,6 +313,9 @@ def test_off_offline_is_one_list_below_the_agreements(meeting):
     assert row.select_one(".email-informal-when").get_text() == "10:45"
     assert row.select_one(".email-informal-ai").get_text() == "AI 9.4"
     assert "Yeongju A Hall" in row.get_text()
+    link = row.select_one(".email-informal-from a")
+    assert link.get_text() == "EL JAAFARI Mohamed"
+    assert link["href"] == f"https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;{next(i['mail'] for i in meeting.email_informal['9.4'] if i.get('start') == '10:45')}"
     # The script after it shows the selected tab's day and marks the selected cell's rows.
     script = box.find_next_sibling("script").string
     assert "row.dataset.day !== day" in script and "classList.toggle('related'" in script

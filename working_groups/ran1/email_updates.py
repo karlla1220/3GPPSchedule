@@ -54,6 +54,7 @@ from .email_sessions import (
     agenda_of,
     collect,
     meeting_tag,
+    message_url,
     newest_reply,
     stated_agenda_items,
     thread_index,
@@ -341,7 +342,8 @@ def apply_records(schedule: Schedule) -> None:
     for record in sorted(records.values(), key=lambda r: r["date"]):
         if record.get("status") != "asked":
             continue
-        source = {"mail": record["id"], "author": record.get("author", ""), "sent": record["date"]}
+        source = {"mail": record["id"], "url": message_url(record["id"]),
+                  "author": record.get("author", ""), "sent": record["date"]}
         mine: dict[tuple, list[dict]] = {}
         for item in resolved[record["id"]]:
             item = {**item, **source}

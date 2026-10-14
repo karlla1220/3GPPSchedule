@@ -729,7 +729,15 @@ def _email_detail_line(detail: dict) -> str:
     author = (detail.get("author") or "").strip()
     who = ", ".join(filter(None, [author if author not in {"<>", ""} else "",
                                   _short_time(sent)]))
-    return line + (f' <span class="popup-email-from">— {_esc(who)}</span>' if who else "")
+    who_html = _mail_link(detail.get("url"), who)
+    return line + (f' <span class="popup-email-from">— {who_html}</span>' if who_html else "")
+
+
+def _mail_link(url: str | None, text: str) -> str:
+    """The sender, linked to the mail in the list archive; "mail" when the sender is not known."""
+    if not url:
+        return _esc(text)
+    return f'<a href="{_esc(url)}" target="_blank" rel="noopener">{_esc(text or "mail")}</a>'
 
 
 def _short_time(iso: str) -> str:
@@ -777,7 +785,7 @@ def _render_email_informal(schedule) -> str:
             if place and not _says(text, place):
                 text = f"{text} ({place})" if text else place
             author = (item.get("author") or "").strip()
-            rows.append((day, when, ai, text, "" if author in {"", "<>"} else author))
+            rows.append((day, when, ai, text, "" if author in {"", "<>"} else author, item.get("url") or ""))
     # A row shows under the tab of its weekday, so a date outside the meeting
     # week (sent the weekend before) would land on the wrong day.
     first, last = (str(value or "")[:10] for value in (schedule.starts_at, schedule.ends_at))
@@ -786,13 +794,13 @@ def _render_email_informal(schedule) -> str:
     if not rows:
         return ""
     items_html = []
-    for day, when, ai, text, author in sorted(rows):
+    for day, when, ai, text, author, url in sorted(rows):
         weekday = datetime.fromisoformat(day).strftime("%A").lower()
         items_html.append(
             f'<li data-ai="{_esc(ai)}" data-date="{_esc(day)}" data-day="{weekday}">'
             + (f'<span class="email-informal-when">{_esc(when)}</span> ' if when else "")
             + f'<span class="email-informal-ai">AI {_esc(ai)}</span> {_esc(text)}'
-            + (f' <span class="email-informal-from">— {_esc(author)}</span>' if author else "")
+            + (f' <span class="email-informal-from">— {who}</span>' if (who := _mail_link(url, author)) else "")
             + "</li>"
         )
     return (

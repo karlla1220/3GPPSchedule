@@ -427,6 +427,9 @@ FL이 이메일 토론 스레드에 올리는 세션 계획("Offline 11:30 ~ 12:
   - 필터는 "maybe" 항목도 그 셀의 AI처럼 맞춘다(`data-ai-scope`에 더한다). `data-ai`와 필터 항목 목록, Agreement 패널은 그대로다.
   - 팝업에는 노트 아래, AI 이름 위에 `From email threads` 구획을 둔다. 공지 하나가 한 줄이다: `maybe 10.3.1 · Online 12:00 · 요약 · 나눔 · input 1 h before · R1-2608628 — 보낸 사람, Wed 11:47`.
     TDoc 번호는 하이픈에서 줄바꿈되지 않는다(`.popup-email-tdoc`). 나눔이 요약에 이미 들어 있으면 다시 적지 않는다. 보낸 사람이 가려진 메일(`<>`)은 시각만 적는다.
+  - **원문 메일 링크는 보낸 사람 자리에 건다(`_mail_link`).** 팝업은 `보낸 사람, Wed 11:47`, off-offline 줄은 보낸 사람 이름이 링크이고 새 탭으로 열린다. 보낸 사람을 모르면 `mail`이라고 적는다.
+    따로 아이콘이나 `[mail]`을 두지 않는다. 줄 끝의 출처가 이미 "누가 언제 보냈나"라서 그 글자가 원문으로 가는 자리다.
+    주소는 LISTSERV 메시지 id로 만든다(`email_sessions.message_url`, `wa.exe?A2=3GPP_TSG_RAN_WG1;<id>`). 기록에는 id만 있고, `apply_records`가 빌드마다 `url`을 붙인다.
   - **B(off-offline, FL이 기다리는 곳)는 Agreement 패널 아래의 별도 구획 하나에 모두 나열한다(`.email-informal`, `_render_email_informal`).** 시간표에 없는 offline도 B다.
     AI별로 나누지 않는다. 참석자는 그날의 비공식 모임을 한 번에 훑는다. Agreement 패널 안에 두면 셀을 골라야만 보이고, 고른 AI의 것만 보인다.
     한 줄은 `10:45 AI 9.4 요약 (장소) — 보낸 사람`이고 시각 순이다. 요일은 적지 않는다. 위에서 고른 요일 탭의 줄만 보인다. 요약에 이미 있는 장소는 다시 적지 않는다(`_says`, 낱말 단위로 비교).

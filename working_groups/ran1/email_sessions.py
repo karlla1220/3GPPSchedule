@@ -68,6 +68,11 @@ class Mail:
     tdocs: list[str] = field(default_factory=list)  # TDoc numbers of the newest reply, link targets included
 
 
+def message_url(message_id: str, list_name: str = LIST_NAME) -> str:
+    """The archive page of one mail, as the feed links it."""
+    return f"{ARCHIVE}/scripts/wa.exe?A2={list_name};{message_id}"
+
+
 def feed_url(list_name: str = LIST_NAME, limit: int = FEED_LIMIT) -> str:
     return f"{ARCHIVE}/scripts/wa.exe?RSS&L={list_name}&v=2.0&LIMIT={limit}"
 
