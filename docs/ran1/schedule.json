@@ -8890,7 +8890,24 @@
           "room_scope": "assigned",
           "notes": [],
           "inferred_agenda_items": [],
-          "email_details": []
+          "email_details": [
+            {
+              "kind": "session",
+              "session": "Thu 08:30-09:20 Yeongju A Hall",
+              "quote": "2 proposals to be discussed in the online session tomorrow",
+              "mode": "online",
+              "summary": "Online session to discuss 2 proposals from uploaded FLS",
+              "topics": [
+                "2 proposals"
+              ],
+              "day": "Thursday",
+              "split": [],
+              "mail": "59c6da5d.2610b",
+              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;59c6da5d.2610b",
+              "author": "Alberto Rico Alvarino",
+              "sent": "2026-10-14T20:20:11+09:00"
+            }
+          ]
         },
         {
           "name": "AI 9.5 NTN",
@@ -8927,7 +8944,25 @@
           "room_scope": "assigned",
           "notes": [],
           "inferred_agenda_items": [],
-          "email_details": []
+          "email_details": [
+            {
+              "kind": "session",
+              "session": "Thu 09:20-09:50 Yeongju A Hall",
+              "quote": "I have uploaded a new version of the FLS in /RAN/RAN1/Inbox/drafts/9.5 (NR_NTN_DLCOMP)/ThursdayOnline with the outcome of the offline session.",
+              "mode": "online",
+              "summary": "Updated FLS uploaded for Thursday online session; comments by ~6am tomorrow",
+              "topics": [],
+              "day": "Thursday",
+              "input_due": {
+                "at": "06:00"
+              },
+              "split": [],
+              "mail": "fd33e58a.2610b",
+              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;fd33e58a.2610b",
+              "author": "Alberto Rico Alvarino",
+              "sent": "2026-10-14T20:01:20+09:00"
+            }
+          ]
         },
         {
           "name": "AI 9.4 NR-NTN",
@@ -12259,7 +12294,7 @@
     }
   ],
   "source_file": "RAN1#126b online and offline schedules - v02.docx",
-  "generated_at": "2026-10-14 20:01",
+  "generated_at": "2026-10-14 20:21",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
@@ -16525,19 +16560,7 @@
         "changed_in": "Draft Chair notes RAN1#126bis_v00.docx"
       }
     },
-    "retained_files": [
-      "agreements/0c21bc4cec650b380fa0.html",
-      "agreements/31bb25fcf4a6f2b2188b.html",
-      "agreements/443b20926e48bac8248b.html",
-      "agreements/53c2b42e8cf6d92b0cb8.html",
-      "agreements/55e9e237ad1ca1da5880.html",
-      "agreements/5969a2042470df784d59.html",
-      "agreements/9bf6649d12cc05eeb990.html",
-      "agreements/a7fdcd174ac0f426067d.html",
-      "agreements/bec046ec79fff0c1b876.html",
-      "agreements/d1904b912529c05393b7.html",
-      "agreements/d63a24e60ebb3120fb09.html"
-    ]
+    "retained_files": []
   },
   "email_informal": {
     "10.5.4.4": [
@@ -16781,6 +16804,24 @@
         "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;41de5b91.2610b",
         "author": "Yanping Xing",
         "sent": "2026-10-14T19:40:57+09:00",
+        "date": "2026-10-15"
+      }
+    ],
+    "10.7.1": [
+      {
+        "kind": "informal",
+        "quote": "we would have an off-offline Thursday afternoon at 2:30pm to discuss remaining issues of link budget template and evaluation assumption parameters.",
+        "mode": "off-offline",
+        "summary": "Off-offline on link budget template and evaluation assumption parameters",
+        "topics": [
+          "remaining issues of link budget template and evaluation assumption parameters"
+        ],
+        "start": "14:30",
+        "day": "Thursday",
+        "mail": "59c6da5d.2610b",
+        "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;59c6da5d.2610b",
+        "author": "Alberto Rico Alvarino",
+        "sent": "2026-10-14T20:20:11+09:00",
         "date": "2026-10-15"
       }
     ]
