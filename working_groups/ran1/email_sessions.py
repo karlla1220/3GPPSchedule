@@ -21,7 +21,8 @@ from __future__ import annotations
 import html
 import re
 import time
-from dataclasses import dataclass
+from urllib.parse import unquote
+from dataclasses import dataclass, field
 from email.utils import parsedate_to_datetime
 from datetime import datetime
 from typing import Callable
@@ -64,6 +65,7 @@ class Mail:
     snippet: str  # feed preview as plain text, "[...]" kept
     reply: str | None = None  # newest reply; None when its body could not be read
     full_body: bool = False  # reply comes from the full text, not the preview
+    tdocs: list[str] = field(default_factory=list)  # TDoc numbers of the newest reply, link targets included
 
 
 def feed_url(list_name: str = LIST_NAME, limit: int = FEED_LIMIT) -> str:
@@ -230,11 +232,19 @@ def agenda_of(title: str, reply: str, index: dict, agenda: set[str]) -> dict:
     }
 
 
-def preview_text(description: str) -> str:
-    """Feed item HTML as plain text. Inline link targets ("folder<https://…>") are dropped."""
+def preview_text(description: str, *, links: bool = False) -> str:
+    """Feed item HTML as plain text. Inline link targets ("folder<https://…>") are dropped unless ``links``."""
     text = re.sub(r"<br\s*/?>", "\n", description or "", flags=re.IGNORECASE)
     text = html.unescape(re.sub(r"<[^>]+>", "", text))
-    return _INLINE_URL.sub("", text)
+    return text if links else _INLINE_URL.sub("", text)
+
+
+_TDOC = re.compile(r"(?<![\w-])R1-\d{7}(?!\d)")
+
+
+def tdoc_numbers(text: str) -> list[str]:
+    """TDoc numbers a text names, in order: "R1-2608628", also inside links and draft file names."""
+    return list(dict.fromkeys(_TDOC.findall(unquote(text or ""))))
 
 
 def newest_reply(text: str) -> str:
@@ -270,6 +280,7 @@ def parse_feed(xml: str) -> list[Mail]:
             date=date,
             link=link,
             snippet=preview_text(item.findtext("description") or ""),
+            tdocs=tdoc_numbers(newest_reply(preview_text(item.findtext("description") or "", links=True))),
         ))
     return mails
 
@@ -346,6 +357,7 @@ def collect(
                 continue
             mail.reply = newest_reply(body_text(raw, is_html="T=text%2Fhtml" in url))
             mail.full_body = True
+            mail.tdocs = list(dict.fromkeys(mail.tdocs + tdoc_numbers(mail.reply)))
         return mails
     finally:
         if own:
