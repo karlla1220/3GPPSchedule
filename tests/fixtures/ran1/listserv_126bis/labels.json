@@ -4,22 +4,22 @@
  "today": "2026-10-14 (Wed)",
  "grid": "grid.json",
  "kinds": {
-  "session": "names a session of the grid; its detail goes to that cell",
-  "informal": "off-offline, FL availability: a time or place outside the grid"
+  "session": "an online or offline session: always held in a room, so a session of the grid; its detail goes to that cell",
+  "informal": "off-offline or an FL waiting somewhere: no room, or outside / in front of / near one ('outside Sorour's session room', 'in front of Yeongju A Hall')"
  },
  "mails": {
   "3": [
    {
     "kind": "session",
     "quote": "The FL propsal for online has been uploaded in …/R1-2608628.zip",
-    "session": null,
+    "session": "Wed 14:30-15:10 6",
     "candidates": [
      "Wed 14:30-15:10 6",
      "Wed 17:00-18:00 201"
     ],
     "detail": "FL proposal R1-2608628",
     "certain": false,
-    "note": "Next 10.3.1 session after 11:47; #15 of the same FL says an online at 12:00, which the grid does not have."
+    "note": "The online of #15, 2 h 37 min later; follows #15."
    }
   ],
   "5": [
@@ -83,10 +83,14 @@
    {
     "kind": "session",
     "quote": "We will have an online session this morning from 12:00am.",
-    "session": null,
+    "session": "Wed 14:30-15:10 6",
+    "candidates": [
+     "Wed 14:30-15:10 6",
+     "Wed 17:00-18:00 201"
+    ],
     "time": "12:00",
     "certain": false,
-    "note": "No 10.3.1 session on Wednesday morning or at 12:00 (14:30 room 6, 17:00 room 201)."
+    "note": "An online session is held in a room, so it is a grid session; the grid has no 10.3.1 at 12:00, and the next is 14:30 in room 6."
    }
   ],
   "17": [
@@ -171,15 +175,10 @@
   "32": [
    {
     "kind": "session",
-    "quote": "I will propose to endorse Annex A … in PM session tomorrow.",
-    "session": null,
-    "candidates": [
-     "Thu 16:00-16:30 Yeongju B Hall",
-     "Thu 17:00-17:50 Yeongju B Hall"
-    ],
+    "quote": "If no further comment by 14:00 Wed, I will propose to endorse Annex A … in PM session tomorrow.",
+    "session": "Wed 19:00-19:30 Yeongju B Hall",
     "detail": "endorse Annex A as a starting point",
-    "certain": false,
-    "note": "Sent Wednesday 09:42; two 10.5.3.1 sessions on Thursday afternoon."
+    "note": "Sent Wednesday 01:42 (00:42 +0800): 'tomorrow' is Wednesday to the writer, after the 14:00 Wed deadline; the PM 10.5.3.1 session that day."
    }
   ],
   "34": [
@@ -323,5 +322,6 @@
   45,
   46,
   49
- ]
+ ],
+ "sent_times": "Mail dates carry the sender's zone (+0800, +0000, +0900); read 'today' and 'tomorrow' in meeting time (Asia/Seoul)."
 }

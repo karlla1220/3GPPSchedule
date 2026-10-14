@@ -324,3 +324,31 @@ def test_untagged_tdoc_notices_state_their_item():
     assert stated["Updated tdoc - NTN requirements and design 10.7.1"] == ["10.7.1"]
     # Post-meeting and admin mails state no item of this meeting.
     assert all(not items for t, items in stated.items() if t not in notices)
+
+
+def test_labelled_sessions_come_after_the_mail_in_meeting_time():
+    # Mail dates carry the sender's zone; "tomorrow" in #32 (00:42 +0800) is
+    # Wednesday 01:42 in Jeju, and the session it names is that evening.
+    from datetime import datetime, timedelta
+    from email.utils import parsedate_to_datetime
+    from zoneinfo import ZoneInfo
+
+    seoul = ZoneInfo("Asia/Seoul")
+    days = {"Mon": 12, "Tue": 13, "Wed": 14, "Thu": 15, "Fri": 16}
+    grid = {g["id"]: g for g in json.loads((FIXTURE / "grid.json").read_text(encoding="utf-8"))["sessions"]}
+    for n, labelled in LABELS["mails"].items():
+        sent = parsedate_to_datetime(BY_N[int(n)]["date"]).astimezone(seoul)
+        for item in labelled:
+            for sid in filter(None, [item.get("session")] + item.get("candidates", [])):
+                hour, minute = map(int, grid[sid]["start"].split(":"))
+                start = datetime(2026, 10, days[sid[:3]], hour, minute, tzinfo=seoul)
+                assert sent < start < sent + timedelta(days=2), (n, sid, sent)
+
+
+def test_informal_items_have_no_room_of_their_own():
+    # Online and offline sessions are held in a room; a meeting outside, in
+    # front of or near one, or with no room, is off-offline.
+    for n, labelled in LABELS["mails"].items():
+        for item in labelled:
+            if item["kind"] == "informal":
+                assert "session" not in item, n

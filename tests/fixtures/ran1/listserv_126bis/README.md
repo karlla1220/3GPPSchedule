@@ -18,11 +18,13 @@
   수요일 칸은 10-13 15:38(제주 시각)부터 바뀌지 않았고, 50통은 모두 그 뒤에 왔다.
 - `labels.json`: 사람이 읽고 붙인 정답이다.
   - `mails`: 일정과 관련된 항목이 있는 메일 26통, 항목 35개. 메일 번호(`n`)마다 항목 목록이다.
-    - `kind: session` (28개): 시간표의 세션 하나를 가리킨다. `session`이 그 세션의 `id`이고, `detail`이 셀에 더할 내용이다(다룰 Proposal, 시간 나눔, FL summary 등).
+    - `kind: session` (28개): online 또는 offline 세션. 이 둘은 늘 방에서 열리므로 시간표의 세션 하나를 가리킨다. `session`이 그 세션의 `id`이고, `detail`이 셀에 더할 내용이다(다룰 Proposal, 시간 나눔, FL summary 등).
       시각이 없어도 세션을 가리키면 여기에 든다("for Wednesday's online discussion", "our offline session today").
-    - `kind: informal` (7개): 시간표 밖의 시각·장소(off-offline, FL이 기다리는 곳). Agreement 아래 부차 정보로 갈 것들이다.
-    - `certain: false` (3개): 사람이 읽어도 하나로 정할 수 없는 항목. `candidates`에 후보 세션을 적었다.
-      #15는 "online session this morning from 12:00"인데 그 시각에 10.3.1 세션이 없다.
+    - `kind: informal` (7개): off-offline이나 FL이 기다리는 곳. 방이 없거나 방 밖이다("outside Sorour's session room", "in front of Yeongju A Hall", "near the cute bears"). Agreement 아래 부차 정보로 갈 것들이다.
+    - `certain: false` (2개): 세션인 것은 분명한데 어느 세션인지 하나로 정할 수 없는 항목. `session`에 가장 그럴듯한 세션을, `candidates`에 후보를 적었다.
+      #15는 "online session this morning from 12:00"인데 그 시각에 10.3.1 세션이 없어 다음 세션(수 14:30 room 6)으로 두었다. #3은 #15를 따른다.
+    - 메일 날짜는 보낸 사람의 시간대다(`+0800`, `+0000`, `+0900`). "today", "tomorrow"는 회의 시각(Asia/Seoul)으로 바꾼 송신 시각으로 읽는다.
+      #32는 `00:42 +0800`(제주 수 01:42)에 보낸 메일이라 "PM session tomorrow"가 수요일 저녁 세션이다.
     - `quote`는 그 항목의 근거가 된 원문이다.
   - 마감만 적은 메일(#23, #43, #44, #49), 지난 세션 이야기(#8, #40, #50), 다음 세션에서 다루지 않는다는 말(#41의 10.6.1.1 online, #45)은 항목이 없다.
   - `superseded`: 뒤 메일이 앞 메일의 계획을 바꾼 경우(#36이 #38을 바꿨다).
