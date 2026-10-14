@@ -427,10 +427,10 @@ FL이 이메일 토론 스레드에 올리는 세션 계획("Offline 11:30 ~ 12:
   - 필터는 "maybe" 항목도 그 셀의 AI처럼 맞춘다(`data-ai-scope`에 더한다). `data-ai`와 필터 항목 목록, Agreement 패널은 그대로다.
   - 팝업에는 노트 아래, AI 이름 위에 `From email threads` 구획을 둔다. 공지 하나가 한 줄이다: `maybe 10.3.1 · Online 12:00 · 요약 · 나눔 · input 1 h before · R1-2608628 — 보낸 사람, Wed 11:47`.
     TDoc 번호는 하이픈에서 줄바꿈되지 않는다(`.popup-email-tdoc`). 나눔이 요약에 이미 들어 있으면 다시 적지 않는다. 보낸 사람이 가려진 메일(`<>`)은 시각만 적는다.
-  - **원문 메일 링크는 줄 끝의 `mail ↗`이다(`_mail_source`).** 팝업은 `— 보낸 사람, Wed 11:47 · mail ↗`, off-offline 줄은 `— 보낸 사람 · mail ↗`이고 새 탭으로 열린다.
+  - **원문 메일 링크는 보낸 사람 뒤의 `↗` 하나다(`_mail_source`).** 팝업은 `— 보낸 사람, Wed 11:47 ↗`, off-offline 줄은 `— 보낸 사람 ↗`이고 새 탭으로 열린다.
     보낸 사람 이름에 걸지 않는다. 이름이 링크이면 메일 주소(쓰기)처럼 보여 누르기 망설여진다.
-    `mail`은 무엇이 열리는지, `↗`는 바깥 사이트의 새 탭임을 말한다. `[link]`는 줄마다 대괄호가 생겨 지저분하고, `↗`만으로는 누를 자리가 작다.
-    `mail ↗`은 줄바꿈되지 않는다(`&nbsp;`, `.mail-link`).
+    밑줄도 `mail` 같은 낱말도 두지 않는다. 줄마다 낱말과 밑줄이 붙으니 목록보다 링크가 먼저 눈에 들어왔다. `↗`는 바깥 사이트의 새 탭이라는 표시로 충분하고, 무엇이 열리는지는 `title`(hover)에 둔다.
+    글자 하나라 누를 자리가 작아서 padding으로 넓히고 같은 값의 음수 margin으로 줄 배치는 그대로 둔다(`.mail-link`). `&nbsp;`로 이름에 붙여 화살표만 다음 줄로 떨어지지 않게 한다.
     주소는 LISTSERV 메시지 id로 만든다(`email_sessions.message_url`, `wa.exe?A2=3GPP_TSG_RAN_WG1;<id>`). 기록에는 id만 있고, `apply_records`가 빌드마다 `url`을 붙인다.
   - **B(off-offline, FL이 기다리는 곳)는 Agreement 패널 아래의 별도 구획 하나에 모두 나열한다(`.email-informal`, `_render_email_informal`).** 시간표에 없는 offline도 B다.
     AI별로 나누지 않는다. 참석자는 그날의 비공식 모임을 한 번에 훑는다. Agreement 패널 안에 두면 셀을 골라야만 보이고, 고른 AI의 것만 보인다.

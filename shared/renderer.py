@@ -734,14 +734,17 @@ def _email_detail_line(detail: dict) -> str:
 
 
 def _mail_source(who: str, url: str | None) -> str:
-    """"— sender · mail ↗": the sender as plain text, the mail in the list archive after it.
+    """"— sender ↗": the sender as plain text, an arrow after it to the mail in the list archive.
 
-    Not the sender's name as the link: a linked name reads as an address to write to.
+    Not the sender's name as the link: a linked name reads as an address to
+    write to. Only the arrow, not underlined: a word and an underline on every
+    row stood out more than the rows themselves.
     """
     parts = [f"— {_esc(who)}"] if who else []
     if url:
-        parts.append(f'<a class="mail-link" href="{_esc(url)}" target="_blank" rel="noopener">mail&nbsp;↗</a>')
-    return " · ".join(parts)
+        parts.append(f'<a class="mail-link" href="{_esc(url)}" target="_blank" rel="noopener"'
+                     ' title="Original mail" aria-label="Original mail">↗</a>')
+    return "&nbsp;".join(parts)
 
 
 def _short_time(iso: str) -> str:
