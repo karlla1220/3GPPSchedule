@@ -881,6 +881,9 @@ header .meta a:focus-visible,
 .popup-email-from {
     opacity: 0.7;
 }
+/* "mail ↗" after the sender opens the mail in the list archive. */
+.mail-link { color: inherit; white-space: nowrap; text-underline-offset: 2px; }
+.popup-email-from .mail-link:focus-visible { outline: 2px solid #93C5FD; outline-offset: 2px; border-radius: 2px; }
 
 .popup-email-tdoc {
     white-space: nowrap;
@@ -1329,6 +1332,8 @@ header .meta a:focus-visible,
 .email-informal-when { font-weight: 600; white-space: nowrap; }
 .email-informal-ai, .email-informal-from { color: var(--ink-3); }
 .email-informal-ai { white-space: nowrap; }
+.email-informal-from .mail-link:hover { color: var(--ink); }
+.email-informal-from .mail-link:focus-visible { outline: 2px solid #2563EB; outline-offset: 2px; border-radius: 2px; }
 .email-informal li.related { font-weight: 600; color: var(--ink); background: #EEF1F5; }
 @supports (color: color-mix(in oklch, red 10%, white)) {
     .email-informal li.related { background: color-mix(in oklch, var(--selected-accent, #64748B) 12%, white); }
