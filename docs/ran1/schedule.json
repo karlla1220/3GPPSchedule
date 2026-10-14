@@ -10675,7 +10675,7 @@
     }
   ],
   "source_file": "RAN1#126b online and offline schedules - v00.docx",
-  "generated_at": "2026-10-14 11:01",
+  "generated_at": "2026-10-14 12:41",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
@@ -10801,11 +10801,11 @@
         "source_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Sorour_notes/Draft%20R1-2607311%20Session%20Notes%20of%20AI%209.5%20-%20v02.docx"
       },
       "R1-2607312": {
-        "name": "Draft R1-2607312 Session Notes of AI 10.3.1 (Channel Coding) - v02.docx",
+        "name": "Draft R1-2607312 Session Notes of AI 10.3.1 (Channel Coding) - v03.docx",
         "agenda_item": "10.3.1",
-        "changed_at": "2026-10-13T09:08:24+00:00",
-        "sha256": "8c1df8296545f48b4350292d192c737d73639199ec4c60606a96571dd52d3b0a",
-        "source_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Sorour_notes/Draft%20R1-2607312%20Session%20Notes%20of%20AI%2010.3.1%20(Channel%20Coding)%20-%20v02.docx"
+        "changed_at": "2026-10-14T03:31:23+00:00",
+        "sha256": "03d9adb2e004c2c50c3617482e915c8a1644bcc914e81001d741e702fb64e1e2",
+        "source_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Sorour_notes/Draft%20R1-2607312%20Session%20Notes%20of%20AI%2010.3.1%20(Channel%20Coding)%20-%20v03.docx"
       },
       "R1-2607313": {
         "name": "Draft R1-2607313 Session Notes of AI 10.3.2 (Modulation) - v02.docx",
@@ -12212,7 +12212,6 @@
           "f59e3c5e1364",
           "334907737e61",
           "802f6e09c397",
-          "c8a59cd6c49e",
           "5aaa5d8d63cc",
           "2da9614c771f",
           "d76a99cb3338",
@@ -12255,17 +12254,30 @@
           "bbbd196b9c31",
           "0a5d3a0b570f",
           "76cbf1eef891",
-          "767bc4e469d4"
+          "767bc4e469d4",
+          "c8a59cd6c49e",
+          "668544acaa68",
+          "af5f5aecd075",
+          "967b6f9e07ff",
+          "b5063e549a20",
+          "701584b013cf"
         ],
         "sources": {
           "chair": "1e68dcd9da9e",
-          "R1-2607312": "459f05bc9160"
+          "R1-2607312": "4c922c5ed098"
         },
-        "change": "initial",
-        "added": [],
-        "changed_at": "2026-10-13T09:08:24+00:00",
-        "changed_in": "Draft R1-2607312 Session Notes of AI 10.3.1 (Channel Coding) - v02.docx",
-        "file": "agreements/1bcb257df908250e42e4.html"
+        "change": "updated",
+        "added": [
+          46,
+          47,
+          48,
+          49,
+          50,
+          51
+        ],
+        "changed_at": "2026-10-14T03:31:23+00:00",
+        "changed_in": "Draft R1-2607312 Session Notes of AI 10.3.1 (Channel Coding) - v03.docx",
+        "file": "agreements/236bca9056eb2182a586.html"
       },
       "10.3.2": {
         "title": "Modulation",
@@ -13804,10 +13816,7 @@
       }
     },
     "retained_files": [
-      "agreements/13dd387710eda11a8e6f.html",
-      "agreements/62e4842efb139471f6d0.html",
-      "agreements/b04c6935f533f7d8f31b.html",
-      "agreements/d347c673e1f233cf85cf.html"
+      "agreements/1bcb257df908250e42e4.html"
     ]
   }
 }
