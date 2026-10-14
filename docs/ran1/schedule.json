@@ -9182,6 +9182,21 @@
               "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;e94d5045.2610b",
               "author": "Naoya Shibaike",
               "sent": "2026-10-14T19:43:24+09:00"
+            },
+            {
+              "kind": "session",
+              "session": "Thu 08:30-09:00 201",
+              "quote": "To facilitate the upcoming offline better (potentially), I’ve uploaded a slide set in which I have tried to clarify each case to be discussed in the round 4 draft folder.",
+              "mode": "offline",
+              "summary": "Uploaded slide set in Round 4 draft folder to clarify cases for upcoming offline",
+              "topics": [],
+              "start": "08:30",
+              "day": "Thursday",
+              "split": [],
+              "mail": "d7c033.2610c",
+              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;d7c033.2610c",
+              "author": "Naoya Shibaike",
+              "sent": "2026-10-15T08:13:57+09:00"
             }
           ]
         },
@@ -12482,7 +12497,7 @@
     }
   ],
   "source_file": "RAN1#126b online and offline schedules - v02.docx",
-  "generated_at": "2026-10-15 08:01",
+  "generated_at": "2026-10-15 08:21",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
@@ -12995,11 +13010,11 @@
         "source_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Hiroki_notes/draft_R1-2607290_Session%20Notes%20of%20AI%2011_v01.docx"
       },
       "R1-2607307": {
-        "name": "Draft R1-2607307 Session Notes of AI 8.1 - v01.docx",
+        "name": "Draft R1-2607307 Session Notes of AI 8.1 - v02.docx",
         "agenda_item": "8.1",
-        "changed_at": "2026-10-13T04:11:54+00:00",
-        "sha256": "52588a6ee38a6a7a1751710f4755e0e1d63b935126fffd856fc6e7e22a3ee2a1",
-        "source_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Sorour_notes/Draft%20R1-2607307%20Session%20Notes%20of%20AI%208.1%20-%20v01.docx"
+        "changed_at": "2026-10-14T23:14:58+00:00",
+        "sha256": "2aec526b10d6405cfcb545db14cd751d66a31b2c7e8c9fce8b36ba9b65b976ac",
+        "source_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Sorour_notes/Draft%20R1-2607307%20Session%20Notes%20of%20AI%208.1%20-%20v02.docx"
       },
       "R1-2607308": {
         "name": "Draft R1-2607308 Session Notes of AI 9.1 - v02.docx",
@@ -13393,7 +13408,9 @@
           "19dc7473d959",
           "5726fe87ab09",
           "aebe42cccaf9",
-          "55a2b7caa3a6",
+          "91d23005cd13",
+          "668544acaa68",
+          "3e78cfe560b0",
           "d4a0001ac480",
           "958300904a20",
           "668544acaa68",
@@ -13448,13 +13465,17 @@
         ],
         "sources": {
           "chair": "320d395e3f3d",
-          "R1-2607307": "b537ebb17b03"
+          "R1-2607307": "7007a8aff648"
         },
-        "change": "initial",
-        "added": [],
-        "changed_at": "2026-10-13T07:35:31+00:00",
-        "changed_in": "Chair notes RAN1#126bis_v05.docx",
-        "file": "agreements/c591e1fbc42a332f5648.html"
+        "change": "updated",
+        "added": [
+          8,
+          9,
+          10
+        ],
+        "changed_at": "2026-10-14T23:14:58+00:00",
+        "changed_in": "Draft R1-2607307 Session Notes of AI 8.1 - v02.docx",
+        "file": "agreements/9597417851af6d313362.html"
       },
       "8.2": {
         "title": "Maintenance on others",
@@ -16927,12 +16948,7 @@
       }
     },
     "retained_files": [
-      "agreements/3e8ca85174c0043ecd49.html",
-      "agreements/4f5202a9e3b511c4d625.html",
-      "agreements/58345328eafb6e834a1a.html",
-      "agreements/7a228ed19826e3dca8a7.html",
-      "agreements/af141ee8e620beebd9f9.html",
-      "agreements/d54beb196fc5757a30fb.html"
+      "agreements/c591e1fbc42a332f5648.html"
     ]
   },
   "email_informal": {
