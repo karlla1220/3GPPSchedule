@@ -175,18 +175,24 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // With the page zoomed in (the header was pinched) and the grid already
-    // as small as it goes, a pinch on the grid zooms the page instead, so
-    // pinching out still leads back to the whole page. The browser decides
-    // what a gesture may do when it starts, so this is set beforehand, as a
-    // class whose touch-action lets the browser pinch.
-    function pinchZoomsPage() {
+    // as small as it goes, closing fingers on the grid zoom the page out, so
+    // pinching out still leads back to the whole page; spreading ones still
+    // zoom the grid. The browser decides what a gesture may do when it
+    // starts, so a class whose touch-action lets the browser pinch is set
+    // beforehand, and the pinch hands itself over once it turns out to close.
+    function pinchMayZoomPage() {
         const vv = window.visualViewport;
         return !!vv && vv.scale > 1.01 && gridZoom <= minGridZoom() + 0.001;
     }
 
     function updatePinchTarget() {
-        document.documentElement.classList.toggle('pinch-zooms-page', pinchZoomsPage());
+        document.documentElement.classList.toggle('pinch-zooms-page', pinchMayZoomPage());
     }
+
+    // Above 100% the time axis keeps its 100% width and text, and only its
+    // rows follow the zoom: the width goes to the rooms. Below, it shrinks
+    // with the grid. This is its size on screen relative to 100%.
+    const axisScale = z => Math.min(z, 1);
 
     // Zoom magnifies the grid as it is laid out at 100%, so --grid-width holds
     // that width. Left to fit the box at each zoom (box width / zoom), the
@@ -196,6 +202,8 @@ document.addEventListener('DOMContentLoaded', function() {
         const root = document.documentElement;
         const wrapper = activeGridWrapper();
         root.style.setProperty('--grid-zoom', String(gridZoom));
+        if (gridZoom > 1) root.style.setProperty('--axis-unzoom', String(1 / gridZoom));
+        else root.style.removeProperty('--axis-unzoom');
         if (gridZoom === 1 || !wrapper) root.style.removeProperty('--grid-width');
         else root.style.setProperty('--grid-width', Math.max(wrapper.clientWidth, gridMinWidth()) + 'px');
         updatePinchTarget();
@@ -205,6 +213,9 @@ document.addEventListener('DOMContentLoaded', function() {
         const touchMid = t => ({ x: (t[0].clientX + t[1].clientX) / 2, y: (t[0].clientY + t[1].clientY) / 2 });
         const touchDistance = t => Math.hypot(t[0].clientX - t[1].clientX, t[0].clientY - t[1].clientY);
         let pinch = null;
+        // Finger travel (screen px) that tells a closing pinch from a spreading
+        // one, before the browser would start its own pinch.
+        const PINCH_DIRECTION_PX = 3;
 
         // Pinch position (log of the finger spread ratio) -> zoom, with a flat
         // stretch at 100%; and back, for the zoom a pinch starts from.
@@ -225,7 +236,11 @@ document.addEventListener('DOMContentLoaded', function() {
             p.wrapper.classList.remove('pinching');
             p.grid.style.transform = '';
             p.wrapper.style.height = '';
-            p.axis.forEach(el => el.style.removeProperty('--pinch-shift'));
+            p.axis.forEach(el => {
+                el.style.removeProperty('--pinch-shift');
+                el.style.removeProperty('--axis-sx');
+                el.style.removeProperty('--axis-sy');
+            });
             const moved = p.zoom !== gridZoom;
             setGridZoom(p.zoom);
             if (moved) {
@@ -239,13 +254,15 @@ document.addEventListener('DOMContentLoaded', function() {
             const grid = wrapper.querySelector('.schedule-grid');
             wrapper.addEventListener('touchstart', function(e) {
                 finishPinch();
-                if (e.touches.length !== 2 || pinchZoomsPage()) return;
+                if (e.touches.length !== 2) return;
                 const mid = touchMid(e.touches);
                 const rect = grid.getBoundingClientRect();
                 const box = wrapper.getBoundingClientRect();
                 pinch = {
                     wrapper: wrapper,
                     grid: grid,
+                    // Closing fingers may still go to the page (pinchMayZoomPage).
+                    pending: pinchMayZoomPage(),
                     distance: touchDistance(e.touches) || 1,
                     position: detentPosition(gridZoom),
                     zoom: gridZoom,
@@ -260,16 +277,28 @@ document.addEventListener('DOMContentLoaded', function() {
                     boxLeft: box.left,
                     boxWidth: wrapper.clientWidth,
                     boxExtra: box.height - rect.height,
+                    axisWidth: parseFloat(getComputedStyle(document.documentElement)
+                        .getPropertyValue('--time-col-width')) || 36,
                     // The sticky time axis (.now-line carries its NOW label).
                     axis: grid.querySelectorAll('.time-label, .room-header.time-col, .break-axis, .now-line')
                 };
-                wrapper.classList.add('pinching');
             }, { passive: true });
             wrapper.addEventListener('touchmove', function(e) {
                 if (!pinch || pinch.wrapper !== wrapper || e.touches.length !== 2) return;
+                const distance = touchDistance(e.touches);
+                if (pinch.pending) {
+                    // Nothing is held until the fingers show their direction.
+                    // Closing ones (or a browser that has already started to
+                    // pan) keep the gesture; the grid lets go of it.
+                    const travel = (distance - pinch.distance) * window.visualViewport.scale;
+                    if (travel <= -PINCH_DIRECTION_PX || !e.cancelable) { pinch = null; return; }
+                    if (travel < PINCH_DIRECTION_PX) return;
+                    pinch.pending = false;
+                }
                 if (e.cancelable) e.preventDefault();
+                wrapper.classList.add('pinching');
                 // Past either end, move the start so turning back reacts at once.
-                let u = pinch.position + Math.log(touchDistance(e.touches) / pinch.distance);
+                let u = pinch.position + Math.log(distance / pinch.distance);
                 const lo = detentPosition(minGridZoom());
                 const hi = detentPosition(GRID_ZOOM_MAX);
                 if (u < lo || u > hi) {
@@ -280,21 +309,37 @@ document.addEventListener('DOMContentLoaded', function() {
                 const before = pinch.zoom;
                 const zoom = pinch.zoom = clampGridZoom(detentZoom(u));
                 if (zoom === 1 && before !== 1) tickAt100();
-                grid.style.transform = 'scale(' + zoom / gridZoom + ')';
+                // Rows scale with the zoom. Across, the rooms go where the
+                // fingers' zoom will lay them out: from the end of the time
+                // axis (its own width, not the zoom's) to the grid's end.
+                const g = gridZoom, W = pinch.gridWidth, A = pinch.axisWidth;
+                const sx = (W * zoom - A * axisScale(zoom)) / (W * g - A * axisScale(g));
+                const sy = zoom / g;
+                const tx = W * zoom - W * g * sx;
+                grid.style.transform = 'translateX(' + tx / g + 'px) scale(' + sx + ',' + sy + ')';
                 wrapper.style.height = pinch.boxExtra + pinch.gridHeight * zoom + 'px';
                 // Keep that grid point under the fingers as they move. A grid
                 // scaled down still scrolls as far as its unscaled width, so
                 // the end of the scaled grid is held here.
                 const mid = touchMid(e.touches);
-                pinch.scrollLeft = Math.max(0, Math.min(pinch.boxLeft + pinch.x * zoom - mid.x,
-                    pinch.gridWidth * zoom - pinch.boxWidth));
+                pinch.scrollLeft = Math.max(0, Math.min(pinch.boxLeft + tx + pinch.x * g * sx - mid.x,
+                    W * zoom - pinch.boxWidth));
                 pinch.scrollTop = pinch.gridTop + pinch.y * zoom - mid.y;
                 wrapper.scrollLeft = pinch.scrollLeft;
                 window.scrollTo(window.scrollX, pinch.scrollTop);
-                // Sticky offsets are worked out before the scale: an axis held
-                // at scrollLeft inside the grid lands at scrollLeft * scale.
-                const shift = wrapper.scrollLeft * (gridZoom / zoom - 1) / gridZoom + 'px';
-                pinch.axis.forEach(el => el.style.setProperty('--pinch-shift', shift));
+                // Sticky offsets are worked out before the transform: an axis
+                // held at scrollLeft inside the grid lands at tx + scrollLeft * sx.
+                // The axis is in its own units (--axis-unzoom above 100%).
+                const shift = (wrapper.scrollLeft * (1 - sx) - tx) / (g * sx) * Math.max(g, 1) + 'px';
+                // Its width and text go from their size at this zoom to their
+                // size at the fingers' zoom, the same way across and down.
+                const axisSx = String(axisScale(zoom) / axisScale(g) / sx);
+                const axisSy = String(axisScale(zoom) / axisScale(g) / sy);
+                pinch.axis.forEach(el => {
+                    el.style.setProperty('--pinch-shift', shift);
+                    el.style.setProperty('--axis-sx', axisSx);
+                    el.style.setProperty('--axis-sy', axisSy);
+                });
             }, { passive: false });
             const endPinch = function(e) {
                 if (e.touches.length < 2) finishPinch();
