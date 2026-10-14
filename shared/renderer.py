@@ -644,7 +644,8 @@ def _split_text(detail: dict, cell: bool = False) -> str:
 
 # Numbers a delegate looks up in the document, not read at a glance: they
 # stay in the popup. "Proposal 3.1.1-4", "FL Proposal 5.3-6A", "proposals
-# #4-4A", "Proposal 3-1 (II)", "observation 3.1.2", and TDoc numbers.
+# #4-4A", "Proposal 3-1 (II)", "observation 3.1.2". TDoc numbers are taken
+# out of a topic too, since the cell line leads with the mail's own list.
 _LOOKUP_NUMBER = re.compile(
     r"\b(?:FL\s+)?(?:proposals?|observations?|obs\.?|prop\.?)\s*#?\s*[\w./-]*\d[\w./-]*(?:\s*\([IVX]+\))?"
     r"(?:\s*(?:,|and|&)\s*#?[\w./-]*\d[\w./-]*(?:\s*\([IVX]+\))?)*"
@@ -666,11 +667,12 @@ def _subject(topic: str) -> str:
 def _email_cell_lines(session) -> list[str]:
     """One short line per announcement for the cell: what the session will treat, at a glance.
 
-    The split if there is one, else the subjects the mail names ("Part 1
-    (PUSCH MIMO)", "Section 2.3", "DMRS sequence"). Proposal and TDoc
-    numbers are looked up in the documents, not read at a glance, so they
-    stay in the popup, and so does an announcement with nothing else (a
-    summary cut after "Check proposals in" says nothing). A line the title
+    The TDoc numbers first (the document to open for the details), then the
+    split if there is one, else the subjects the mail names ("Part 1 (PUSCH
+    MIMO)", "Section 2.3", "DMRS sequence"). Proposal numbers are looked up
+    in the documents, not read at a glance, so they stay in the popup, and
+    so does an announcement with none of these (a summary cut after "Check
+    proposals in" says nothing). A line the title
     already holds ("PDSCH" on "10.5.2.2 PDSCH") is left out; an item another
     session holds is named first ("10.3.1: …").
     """
@@ -683,7 +685,11 @@ def _email_cell_lines(session) -> list[str]:
             if subject and subject.casefold() not in {s.casefold() for s in subjects}:
                 subjects.append(subject)
         text = _split_text(detail, cell=True) or ", ".join(subjects)
-        if not text or text.casefold() in title:
+        if text.casefold() in title:
+            text = ""
+        # The document comes first: it is what to open to read the details.
+        text = " · ".join(filter(None, [", ".join(detail.get("tdocs") or []), text]))
+        if not text:
             continue
         text = text[0].upper() + text[1:]
         if detail.get("kind") == "tentative":

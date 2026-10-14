@@ -398,8 +398,9 @@ FL이 이메일 토론 스레드에 올리는 세션 계획("Offline 11:30 ~ 12:
   사용자는 변경 안내를 읽지 않는다. 팝업을 열어야만 보이면 이 정보가 있는지 모른다.
   - "maybe"는 AI 줄에 ` · `로 잇고 Chair와 같은 가장 약한 톤(`--chair`, `.session-maybe`)이다. 새 줄을 쓰지 않아 높이 예산이 바뀌지 않는다. AI 줄이 보이는 셀(30분 이상)에서만 보인다.
   - 공지 하나가 셀의 Note 자리 한 줄이다(RAN2 Note와 같은 높이 예산과 톤, `_email_cell_lines`). 셀은 이미 시각과 종류를 보이므로 무엇을 다루는지만 적는다.
-    순서: 나눔(`10.6.1.2 40 min · 10.6.3 30 min · 10.6.1.1 20 min`) → 메일이 든 주제(`Part 1 (PUSCH MIMO)`, `Section 2.3`, `DMRS sequence`). 둘 다 없는 공지는 셀에 넣지 않고 팝업에만 둔다.
-    Proposal·Observation 번호와 TDoc 번호는 셀에 쓰지 않는다(`_subject`). 문서를 열어 찾아야 하는 번호라 한눈에 읽는 정보가 아니다. 팝업에는 남는다.
+    한 줄은 `TDoc 번호 · 나눔 또는 주제`다(`R1-2608681 · Section 2, DL bandwidth settings`). TDoc 번호를 맨 앞에 둔다. 세부를 이해하려면 가장 먼저 열어 볼 문서다.
+    그 뒤는 나눔(`10.6.1.2 40 min · 10.6.3 30 min · 10.6.1.1 20 min`), 없으면 메일이 든 주제(`Part 1 (PUSCH MIMO)`, `Section 2.3`, `DMRS sequence`)다. 셋 다 없는 공지는 셀에 넣지 않고 팝업에만 둔다.
+    Proposal·Observation 번호는 셀에 쓰지 않는다(`_subject`). 그 문서 안에서 찾는 번호라 한눈에 읽는 정보가 아니다. 팝업에는 남는다.
     번호에 설명이 붙은 주제(`Proposal 4.3.1-1/2: DMRS sequence`)는 설명을 남긴다.
     요약은 셀에 쓰지 않는다. 짧은 셀에서 "Check proposals in"까지만 보여 아무것도 말하지 않는다. 제목에 이미 있는 줄("10.5.2.2 PDSCH"의 `PDSCH`)은 뺀다.
   - 필터는 "maybe" 항목도 그 셀의 AI처럼 맞춘다(`data-ai-scope`에 더한다). `data-ai`와 필터 항목 목록, Agreement 패널은 그대로다.

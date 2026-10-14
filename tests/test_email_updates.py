@@ -365,3 +365,19 @@ def test_cell_line_names_the_subject_not_the_proposals(meeting):
                 and "11:30" in b.select_one(".session-range").get_text())
     assert [n.get_text() for n in cell.select(".session-note")] == ["Part 1 (PUSCH MIMO)"]
     assert "3.1.1-4" in cell["data-popup"]  # still in the popup
+
+
+def test_cell_line_leads_with_the_document(meeting):
+    # #18: "R1-2608681 is uploaded for online discussion (Wed 9:20). Please
+    # check the proposals in Section 2 where focus is on DL bandwidth settings".
+    from bs4 import BeautifulSoup
+    from shared.renderer import generate_html
+
+    _update(meeting, [])
+    email_updates.apply_records(meeting)
+    page = BeautifulSoup(generate_html(meeting), "html.parser")
+    cell = next(b for b in page.select(".session-block")
+                if b.select_one(".session-name").get_text() == "10.5.1.3"
+                and "09:20" in b.select_one(".session-range").get_text())
+    lines = [n.get_text() for n in cell.select(".session-note")]
+    assert lines and lines[0].startswith("R1-2608681 · ")
