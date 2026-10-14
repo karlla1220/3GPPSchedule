@@ -91,3 +91,16 @@ def test_informal_keeps_its_place():
                    "9.4", _sent(14, "08:30"))
     assert got == [{"kind": "informal", "quote": "q", "mode": "off-offline", "summary": "s", "topics": [],
                     "start": "10:45", "place": "in front of Yeongju A Hall"}]
+
+
+def test_an_input_deadline_before_the_session_becomes_a_clock_time():
+    # #28: "inputs until 1hr before our offline session today" (11:30 offline).
+    got = _resolve([_item(session_id="Wed 11:30-12:30 203", input_due={"at": None, "minutes_before": 60})],
+                   "10.5.2.3", _sent(14, "06:45"))
+    assert got[0]["input_due"] == "10:30"
+
+
+def test_after_midnight_the_request_says_whose_tomorrow_it_is():
+    text = request_text("t", _sent(14, "01:42"), ["10.5.3.1"], {}, [], "reply")
+    assert "to the writer, 'today' may still be Tuesday and 'tomorrow' Wednesday" in text
+    assert "after midnight" not in request_text("t", _sent(14, "09:10"), ["10.5.3.1"], {}, [], "reply")

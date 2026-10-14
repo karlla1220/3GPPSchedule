@@ -95,7 +95,8 @@ Kinds
 - "informal": an off-offline (also written "off-off", "offoff") or an FL waiting to take questions. These are held outside, in front of or near a room, in a corridor or lobby, or with no room. "outside Sorour's session room", "in front of Yeongju A Hall", "near the bears on the 3rd floor", "I'll be in the main room" are informal.
 - A mail can hold several announcements (an offline and an online, an online and an off-offline). Give each its own item.
 - "offline/online on Wednesday", "for offline/online discussion tomorrow": two sessions, one item each. When the mail does not tell which listed session is the offline and which the online, give one item for each listed session of that day, in time order.
-- Not announcements: deadlines for input ("comments by 14:00 Wed", "inputs until 1 hr before the offline" is a deadline, but the offline it names is a session item when the mail says what that session will treat), sessions that are over ("thanks for the discussion in the offline"), uploads that name no session, and statements that something will not be discussed. A mail with none of these returns no items.
+- An input deadline tied to a session is a "session" item of that session: "inputs until 1 hr before our offline session today", "deadline … 2 hours before Wednesday online". Put the deadline in input_due.
+- Not announcements: deadlines tied to no session ("comments by 14:00 Wed"), sessions that are over ("thanks for the discussion in the offline"), uploads that name no session, and statements that something will not be discussed. A mail with none of these returns no items.
 
 Sessions
 - The user message lists the schedule's sessions of the thread's agenda items that start after the mail was sent. For a "session" item, give the id of the one it names, judged by day, time, online/offline and order ("next", "upcoming", "this afternoon"). Use exactly an id from the list.
@@ -110,6 +111,7 @@ Fields
 - place: where an informal meeting is held, as written, else null.
 - topics: what will be treated, short, from the mail: issues, proposal numbers, parts, sections ("Part 1 (PUSCH MIMO)", "Proposal 3.1.1-4", "Section 7.1"). Empty when the mail does not say.
 - split: when the mail divides the session by time or by agenda item, one entry per part in order: start/end "HH:MM" if stated, minutes if a length is stated, agenda_item if the part is an agenda item number, topic otherwise. Empty when not divided.
+- input_due: the input deadline for the session: at "HH:MM" when a clock time is stated, minutes_before when it is stated relative to the session ("1 hr before" is 60). Null when the mail sets none.
 - summary: one line in English, at most 80 characters, of what the delegate needs to know, without day and time (shown beside it). Keep proposal and section numbers."""
 
 _NULLABLE_STRING = {"type": "string", "nullable": True}
@@ -143,6 +145,14 @@ EXTRACT_SCHEMA = {
                             },
                         },
                     },
+                    "input_due": {
+                        "type": "object",
+                        "nullable": True,
+                        "properties": {
+                            "at": _NULLABLE_STRING,
+                            "minutes_before": {"type": "integer", "nullable": True},
+                        },
+                    },
                     "summary": {"type": "string"},
                 },
                 "required": ["quote", "kind", "session_id", "topics", "split", "summary"],
@@ -174,9 +184,17 @@ def request_text(title: str, sent: datetime, agenda_items: list[str], agenda: di
     before = ""
     if earlier:
         before = "Earlier announcements on this thread (oldest first):\n" + "\n".join(map(_announced, earlier)) + "\n\n"
+    late = ""
+    if sent.hour < 5:
+        # Up after midnight, the writer still lives the day before: #126bis
+        # 10.5.3.1 sent Wednesday 01:42 "PM session tomorrow" for Wednesday.
+        before_day = (sent - timedelta(days=1)).strftime("%A")
+        late = (f"Sent after midnight: to the writer, 'today' may still be {before_day} "
+                f"and 'tomorrow' {sent:%A}.\n")
     return (
         f"Subject: {title}\n"
         f"Sent: {sent:%A %d %b %H:%M} meeting time\n"
+        f"{late}"
         f"Agenda items of the thread:\n{items}\n\n"
         f"Sessions of these items after the mail was sent (id, day and time, room, cell title):\n{sessions}\n\n"
         f"{before}"
@@ -247,6 +265,16 @@ def _split(parts: list[dict], cell: Cell | None) -> list[dict]:
     return out
 
 
+def _input_due(due, cell: Cell | None) -> str | None:
+    """The input deadline as a clock time: stated, or the cell's start less the stated minutes."""
+    if not isinstance(due, dict):
+        return None
+    at = _time(due.get("at"))
+    if at is None and cell is not None and isinstance(due.get("minutes_before"), int) and due["minutes_before"] > 0:
+        at = _minutes(cell.start) - due["minutes_before"]
+    return _hhmm(at) if at is not None and at >= 0 else None
+
+
 def resolve(answer: dict, *, offered: list[Cell], cells: list[Cell], agenda_items: list[str],
             sent: datetime, tdocs: list[str] = ()) -> list[dict]:
     """The LLM's items checked against the grid: session, tentative or informal.
@@ -282,7 +310,9 @@ def resolve(answer: dict, *, offered: list[Cell], cells: list[Cell], agenda_item
             continue
         cell = by_id.get(item.get("session_id") or "")
         if cell is not None and (day is None or cell.day == day) and _overlaps(cell, start, end):
-            out.append({"kind": "session", "session": cell.id, **base, "split": _split(item.get("split"), cell)})
+            due = _input_due(item.get("input_due"), cell)
+            out.append({"kind": "session", "session": cell.id, **base, **({"input_due": due} if due else {}),
+                        "split": _split(item.get("split"), cell)})
             continue
         if start is None or not agenda_items:
             continue

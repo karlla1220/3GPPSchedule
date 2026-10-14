@@ -90,15 +90,18 @@ def score(results: dict, labels: dict) -> dict:
         got = [(i["kind"], i.get("session")) for i in results.get(n, [])]
         left = list(got)
         hit = 0
+        missed = []
         for item in want:
             if item in left:
                 left.remove(item)
                 hit += 1
+            else:
+                missed.append(item)
         total["expected"] += len(want)
         total["found"] += len(got)
         total["matched"] += hit
         if hit != len(want) or left:
-            rows.append((n, [w for w in want if w not in got], left))
+            rows.append((n, missed, left))
     total["recall"] = round(total["matched"] / total["expected"], 3) if total["expected"] else None
     total["precision"] = round(total["matched"] / total["found"], 3) if total["found"] else None
     return {"total": total, "misses": rows}

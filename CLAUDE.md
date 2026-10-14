@@ -371,3 +371,12 @@ FL이 이메일 토론 스레드에 올리는 세션 계획("Offline 11:30 ~ 12:
 - **시간표에 없는 시각의 online·offline은 그 AI가 쓰는 방의 그 시각 셀에 "maybe <AI>"로 붙인다.** FL이 의장·부의장과 정해 두었는데 시간표가 아직 바뀌지 않은 경우다.
   - #126bis 10.3.1: "online session this morning from 12:00"인데 12:00에 10.3.1이 없다. 10.3.1 online은 모두 Yeongju A Hall이고, 그 방 12:00 칸이 AI 8.1이다. 8.1 셀에 "maybe 10.3.1"을 두고 10.3.1 필터에도 걸리게 한다.
   - 방은 시간표의 열에서 읽는다. 방 이름은 `day.rooms[room_col_start − 2]`다(1열이 시간 축). 열 번호를 그대로 쓰면 두 칸 밀린다.
+- **추출은 스키마로 묶은 LLM이 하고, 판정은 코드가 한다(`email_details.py`, Gemini thinking `low`).**
+  - LLM에 주는 것: 제목, 회의 시각으로 바꾼 송신 시각, 스레드의 AI, 그 AI의 남은 시간표 세션(id·요일·시각·방·셀 이름), 같은 스레드에서 앞서 공지된 일정, 최신 답장.
+    "FL proposal for online"은 앞선 "online from 12:00"을 알아야 읽힌다. 자정~05:00에 보낸 메일에는 "보낸 사람에게 오늘은 아직 전날일 수 있다"를 한 줄 더한다.
+  - LLM이 답하는 것: 항목마다 kind(`session`·`informal`), 세션 id, 적힌 요일·시각, 장소, 다룰 내용, 시간 나눔(`split`), 입력 마감(`input_due`), 80자 요약.
+    "offline/online on Wednesday"는 그날 그 AI의 세션마다 항목 하나씩이다. 세션에 걸린 입력 마감("1 hr before our offline")은 그 세션의 세부 정보다.
+  - 코드가 하는 것: 세션 id가 받은 목록에 있고 적힌 시각과 겹치는지 본다. 아니면 tentative 자리를 찾고, 그것도 없으면 버린다. 길이만 적힌 `split`과 `minutes_before`는 셀 시작에서 시각으로 바꾼다.
+  - TDoc 번호는 LLM에 맡기지 않고 최신 답장에서 패턴으로 뽑는다. 미리보기의 링크 대상(`…<https://…R1-2607194…docx>`)에도 번호가 있어서 링크를 지우기 전에 읽는다.
+  - 평가는 `scripts/eval_email_details.py`다. #126bis 테스트셋에서 recall 0.971(34/35), precision 1.0이고, 새로 물은 두 번째 실행도 같았다. 남은 하나는 #39의 비공식 일정 두 개가 하나로 합쳐진 것이다.
+
