@@ -76,14 +76,19 @@ def test_an_id_not_offered_and_no_time_is_dropped():
     assert _resolve([_item(session_id="made up")], "10.3.1", _sent(14, "09:10")) == []
 
 
-def test_lengths_are_laid_out_from_the_cells_start():
+def test_lengths_stay_lengths():
     # #41: 10.6.1.2 40 min, 10.6.3 30 min, 10.6.1.1 20 min in the 10.6.x offline.
+    # The mail states no clock time, so none is made up from the cell's start.
     split = [{"agenda_item": "10.6.1.2", "minutes": 40}, {"agenda_item": "10.6.3", "minutes": 30},
              {"agenda_item": "10.6.1.1", "minutes": 20}]
     got = _resolve([_item(session_id="Wed 11:00-12:30 201", split=split)], "10.6.1.1", _sent(13, "23:07"))
-    assert [(p["agenda_item"], p["start"], p["end"]) for p in got[0]["split"]] == [
-        ("10.6.1.2", "11:00", "11:40"), ("10.6.3", "11:40", "12:10"), ("10.6.1.1", "12:10", "12:30"),
+    assert got[0]["split"] == [
+        {"agenda_item": "10.6.1.2", "minutes": 40}, {"agenda_item": "10.6.3", "minutes": 30},
+        {"agenda_item": "10.6.1.1", "minutes": 20},
     ]
+    stated = [{"topic": "PDSCH", "start": "17:00", "end": "17:30"}]
+    got = _resolve([_item(session_id="Wed 17:00-18:00 203", split=stated)], "10.5.2.2", _sent(14, "11:12"))
+    assert got[0]["split"] == stated
 
 
 def test_informal_keeps_its_place():
@@ -93,11 +98,15 @@ def test_informal_keeps_its_place():
                     "start": "10:45", "place": "in front of Yeongju A Hall"}]
 
 
-def test_an_input_deadline_before_the_session_becomes_a_clock_time():
-    # #28: "inputs until 1hr before our offline session today" (11:30 offline).
+def test_an_input_deadline_stays_as_written():
+    # #28: "inputs until 1hr before our offline session today". The offline
+    # may not start at 11:30, so no 10:30 is made up.
     got = _resolve([_item(session_id="Wed 11:30-12:30 203", input_due={"at": None, "minutes_before": 60})],
                    "10.5.2.3", _sent(14, "06:45"))
-    assert got[0]["input_due"] == "10:30"
+    assert got[0]["input_due"] == {"minutes_before": 60}
+    got = _resolve([_item(session_id="Wed 19:00-19:30 Tamna BC Hall", input_due={"at": "14:00"})],
+                   "10.5.3.1", _sent(14, "01:42"))
+    assert got[0]["input_due"] == {"at": "14:00"}
 
 
 def test_after_midnight_the_request_says_whose_tomorrow_it_is():

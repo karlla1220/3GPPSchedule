@@ -110,7 +110,7 @@ Fields
 - day: the full weekday name in meeting time, else null. start, end: "HH:MM" in meeting time as stated, else null.
 - place: where an informal meeting is held, as written, else null.
 - topics: what will be treated, short, from the mail: issues, proposal numbers, parts, sections ("Part 1 (PUSCH MIMO)", "Proposal 3.1.1-4", "Section 7.1"). Empty when the mail does not say.
-- split: when the mail divides the session by time or by agenda item, one entry per part in order: start/end "HH:MM" if stated, minutes if a length is stated, agenda_item if the part is an agenda item number, topic otherwise. Empty when not divided.
+- split: when the mail divides the session by time or by agenda item, one entry per part in the mail's order: start/end "HH:MM" only if the mail states them, minutes if it states a length, agenda_item if the part is an agenda item number, topic otherwise. Never work out a time the mail does not state. Empty when not divided.
 - input_due: the input deadline for the session: at "HH:MM" when a clock time is stated, minutes_before when it is stated relative to the session ("1 hr before" is 60). Null when the mail sets none.
 - summary: one line in English, at most 80 characters, of what the delegate needs to know, without day and time (shown beside it). Keep proposal and section numbers."""
 
@@ -245,14 +245,11 @@ def _home_room(cells: list[Cell], ai: str) -> str | None:
     return rooms.most_common(1)[0][0] if rooms else None
 
 
-def _split(parts: list[dict], cell: Cell | None) -> list[dict]:
-    """Parts with clock times; lengths alone are laid out from the cell's start."""
+def _split(parts: list[dict]) -> list[dict]:
+    """Parts as the mail states them. A length stays a length: no clock time is assumed from it."""
     out = []
-    at = _minutes(cell.start) if cell else None
     for part in parts or []:
         start, end, minutes = _time(part.get("start")), _time(part.get("end")), part.get("minutes")
-        if start is None and at is not None and isinstance(minutes, int) and minutes > 0:
-            start, end = at, at + minutes
         entry = {k: part[k] for k in ("agenda_item", "topic") if part.get(k)}
         if start is not None:
             entry["start"] = _hhmm(start)
@@ -260,19 +257,22 @@ def _split(parts: list[dict], cell: Cell | None) -> list[dict]:
             entry["end"] = _hhmm(end)
         if isinstance(minutes, int) and minutes > 0:
             entry["minutes"] = minutes
-        at = end if end is not None else None
         out.append(entry)
     return out
 
 
-def _input_due(due, cell: Cell | None) -> str | None:
-    """The input deadline as a clock time: stated, or the cell's start less the stated minutes."""
+def _input_due(due) -> dict | None:
+    """The input deadline as the mail states it: a clock time, or minutes before the session.
+
+    A relative deadline stays relative: the session may not start on time.
+    """
     if not isinstance(due, dict):
         return None
     at = _time(due.get("at"))
-    if at is None and cell is not None and isinstance(due.get("minutes_before"), int) and due["minutes_before"] > 0:
-        at = _minutes(cell.start) - due["minutes_before"]
-    return _hhmm(at) if at is not None and at >= 0 else None
+    if at is not None:
+        return {"at": _hhmm(at)}
+    before = due.get("minutes_before")
+    return {"minutes_before": before} if isinstance(before, int) and before > 0 else None
 
 
 def resolve(answer: dict, *, offered: list[Cell], cells: list[Cell], agenda_items: list[str],
@@ -282,7 +282,8 @@ def resolve(answer: dict, *, offered: list[Cell], cells: list[Cell], agenda_item
     A session id must be one the mail was offered, on the stated day, and
     hold the stated time. Otherwise a session with a stated time is placed in
     the item's home room at that time (tentative), and one that cannot be
-    placed is dropped rather than shown on a guess.
+    placed is dropped rather than shown on a guess. Times are only those the
+    mail states: lengths and "1 hr before" are kept as written.
     """
     by_id = {cell.id: cell for cell in offered}
     out = []
@@ -310,9 +311,9 @@ def resolve(answer: dict, *, offered: list[Cell], cells: list[Cell], agenda_item
             continue
         cell = by_id.get(item.get("session_id") or "")
         if cell is not None and (day is None or cell.day == day) and _overlaps(cell, start, end):
-            due = _input_due(item.get("input_due"), cell)
+            due = _input_due(item.get("input_due"))
             out.append({"kind": "session", "session": cell.id, **base, **({"input_due": due} if due else {}),
-                        "split": _split(item.get("split"), cell)})
+                        "split": _split(item.get("split"))})
             continue
         if start is None or not agenda_items:
             continue
@@ -323,5 +324,5 @@ def resolve(answer: dict, *, offered: list[Cell], cells: list[Cell], agenda_item
         if host is None or covers(host, ai):
             continue
         out.append({"kind": "tentative", "session": host.id, "agenda_item": ai, **base,
-                    "split": _split(item.get("split"), None)})
+                    "split": _split(item.get("split"))})
     return out
