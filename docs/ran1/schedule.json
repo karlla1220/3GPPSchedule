@@ -9310,6 +9310,24 @@
               "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;7517045b.2610b",
               "author": "Seonwook Kim",
               "sent": "2026-10-14T17:50:04+09:00"
+            },
+            {
+              "kind": "session",
+              "session": "Thu 09:10-10:30 203",
+              "quote": "The following proposals will be discussed in tomorrow’s sessions:\nFL Proposal 3.7.2:\nDL WUS to support configurable bandwidths. FFS BWs to support (5/6 PRBs, 11/12 PRBs, 20/22/24 PRBs).\nFL Proposal 3.10.3:",
+              "mode": null,
+              "summary": "Proposals 3.7.2, 3.10.3, and 3.6.2 for discussion in tomorrow's sessions",
+              "topics": [
+                "FL Proposal 3.7.2",
+                "FL Proposal 3.10.3",
+                "FL Proposal 3.6.2"
+              ],
+              "day": "Thursday",
+              "split": [],
+              "mail": "95321442.2610b",
+              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;95321442.2610b",
+              "author": "Magnus Åström",
+              "sent": "2026-10-14T19:25:38+09:00"
             }
           ]
         },
@@ -10063,7 +10081,26 @@
           "room_scope": "assigned",
           "notes": [],
           "inferred_agenda_items": [],
-          "email_details": []
+          "email_details": [
+            {
+              "kind": "session",
+              "session": "Thu 14:30-16:00 Tamna BC Hall",
+              "quote": "The following proposals will be discussed in tomorrow’s sessions:\nFL Proposal 3.7.2:\nDL WUS to support configurable bandwidths. FFS BWs to support (5/6 PRBs, 11/12 PRBs, 20/22/24 PRBs).\nFL Proposal 3.10.3:",
+              "mode": null,
+              "summary": "Proposals 3.7.2, 3.10.3, and 3.6.2 for discussion in tomorrow's sessions",
+              "topics": [
+                "FL Proposal 3.7.2",
+                "FL Proposal 3.10.3",
+                "FL Proposal 3.6.2"
+              ],
+              "day": "Thursday",
+              "split": [],
+              "mail": "95321442.2610b",
+              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;95321442.2610b",
+              "author": "Magnus Åström",
+              "sent": "2026-10-14T19:25:38+09:00"
+            }
+          ]
         },
         {
           "name": "10.5.3.1",
@@ -12187,7 +12224,7 @@
     }
   ],
   "source_file": "RAN1#126b online and offline schedules - v02.docx",
-  "generated_at": "2026-10-14 19:21",
+  "generated_at": "2026-10-14 19:41",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
