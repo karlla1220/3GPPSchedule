@@ -10,6 +10,7 @@
   - `n`은 피드 순서(1이 최신)이고, `id`는 LISTSERV 메시지 ID다.
   - 본문은 메일 페이지(`A2`)에 있는 첫 `text/plain` 부분의 `A3` 링크에서 `&header=1`을 빼고 받았다. 메일 주소는 아카이브가 `[log in to unmask]`로 가린다.
 - `message_page_83dadb14.html`: 메일 페이지(`A2`) 하나. 본문 부분 링크를 찾는 테스트용이고, 큰 인라인 `<style>`만 비웠다.
+- `email_threads_chair.json`: Chair notes(`Chair notes RAN1#126bis_v06.docx`)의 AI 절마다 적힌 이메일 토론 줄 36개(`[126bis-…] Email discussion on … – FL (회사)`). 태그, AI, FL 이름, 회사로 나눴다.
 - `labels.json`: 사람이 읽고 붙인 정답이다.
   - `schedule`: 세부 일정이 있는 메일 11통.
     - `session_schedule`: 세션별 시간표. 5통.
