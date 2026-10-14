@@ -232,6 +232,26 @@ def _time(value) -> int | None:
     return int(m[1]) * 60 + int(m[2]) if m else None
 
 
+_CLOCK = re.compile(r"(?<![\d.:])([01]?\d|2[0-3])(?:[:.]([0-5]\d))?\s*([ap])?\.?\s*m?\b", re.IGNORECASE)
+
+
+def times_in(text: str) -> set[int]:
+    """Clock times a text states, in minutes, both halves of the day ("3:30pm", "15:30", "12:00am").
+
+    Used to keep only times the mail states: an LLM can put a time on an
+    item that its mail never gave.
+    """
+    found = set()
+    for m in _CLOCK.finditer(text or ""):
+        if m[2] is None and m[3] is None:
+            continue  # a bare number is not a time
+        hour, minute = int(m[1]), int(m[2] or 0)
+        for h in {hour % 12, hour % 12 + 12, hour}:
+            if h < 24:
+                found.add(h * 60 + minute)
+    return found
+
+
 def _overlaps(cell: Cell, start: int | None, end: int | None) -> bool:
     if start is None:
         return True
@@ -245,11 +265,14 @@ def _home_room(cells: list[Cell], ai: str) -> str | None:
     return rooms.most_common(1)[0][0] if rooms else None
 
 
-def _split(parts: list[dict]) -> list[dict]:
+def _split(parts: list[dict], allowed: set[int] | None = None) -> list[dict]:
     """Parts as the mail states them. A length stays a length: no clock time is assumed from it."""
     out = []
     for part in parts or []:
         start, end, minutes = _time(part.get("start")), _time(part.get("end")), part.get("minutes")
+        if allowed is not None:
+            start = start if start in allowed else None
+            end = end if end in allowed else None
         entry = {k: part[k] for k in ("agenda_item", "topic") if part.get(k)}
         if start is not None:
             entry["start"] = _hhmm(start)
@@ -276,14 +299,21 @@ def _input_due(due) -> dict | None:
 
 
 def resolve(answer: dict, *, offered: list[Cell], cells: list[Cell], agenda_items: list[str],
-            sent: datetime, tdocs: list[str] = ()) -> list[dict]:
+            sent: datetime, tdocs: list[str] = (), allowed_times: set[int] | None = None) -> list[dict]:
     """The LLM's items checked against the grid: session, tentative or informal.
 
     A session id must be one the mail was offered, on the stated day, and
     hold the stated time. Otherwise a session with a stated time is placed in
     the item's home room at that time (tentative), and one that cannot be
     placed is dropped rather than shown on a guess. Times are only those the
-    mail states: lengths and "1 hr before" are kept as written.
+    mail states: lengths and "1 hr before" are kept as written, and with
+    ``allowed_times`` (the times of the mail and the earlier announcements
+    it was given) a time from anywhere else is dropped.
+
+    Only an online goes to another item's slot. An "offline" at a time the
+    schedule does not have is an off-offline: online sessions need the
+    chair, offline is what FLs also call their off-offlines ("start the
+    offline at 3:30pm", then "same place as yesterday").
     """
     by_id = {cell.id: cell for cell in offered}
     out = []
@@ -291,6 +321,9 @@ def resolve(answer: dict, *, offered: list[Cell], cells: list[Cell], agenda_item
         if not isinstance(item, dict):
             continue
         start, end = _time(item.get("start")), _time(item.get("end"))
+        if allowed_times is not None:
+            start = start if start in allowed_times else None
+            end = end if end in allowed_times else None
         day = item.get("day") if item.get("day") in DAYS else None
         base = {
             "quote": item.get("quote") or "",
@@ -313,9 +346,12 @@ def resolve(answer: dict, *, offered: list[Cell], cells: list[Cell], agenda_item
         if cell is not None and (day is None or cell.day == day) and _overlaps(cell, start, end):
             due = _input_due(item.get("input_due"))
             out.append({"kind": "session", "session": cell.id, **base, **({"input_due": due} if due else {}),
-                        "split": _split(item.get("split"))})
+                        "split": _split(item.get("split"), allowed_times)})
             continue
         if start is None or not agenda_items:
+            continue
+        if item.get("mode") != "online":
+            out.append({"kind": "informal", **base})
             continue
         ai = agenda_items[0]
         room = _home_room(cells, ai)
@@ -324,5 +360,5 @@ def resolve(answer: dict, *, offered: list[Cell], cells: list[Cell], agenda_item
         if host is None or covers(host, ai):
             continue
         out.append({"kind": "tentative", "session": host.id, "agenda_item": ai, **base,
-                    "split": _split(item.get("split"))})
+                    "split": _split(item.get("split"), allowed_times)})
     return out

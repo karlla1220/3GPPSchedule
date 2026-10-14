@@ -671,6 +671,12 @@ header .meta a:focus-visible,
     font-size: 9px;
 }
 
+/* "maybe 10.3.1": an item announced for this slot on the email threads.
+   The faintest tone of the cell, like the chair. */
+.session-maybe {
+    color: var(--chair);
+}
+
 .session-ai {
     white-space: normal;
     word-break: break-word;
@@ -818,6 +824,28 @@ header .meta a:focus-visible,
     padding-top: 4px;
     border-top: 1px solid rgba(255,255,255,0.16);
     line-height: 1.5;
+}
+
+/* What feature leads announced on the email threads: a second-hand source,
+   so it is set apart and quieter than the schedule's own lines. */
+.popup-email {
+    margin-top: 4px;
+    padding-top: 4px;
+    border-top: 1px solid rgba(255,255,255,0.16);
+    line-height: 1.5;
+}
+
+.popup-email-head {
+    font-size: 11px;
+    opacity: 0.7;
+}
+
+.popup-email-from {
+    opacity: 0.7;
+}
+
+.popup-email-tdoc {
+    white-space: nowrap;
 }
 
 /* Agenda names: the session's own items always, their parents folded

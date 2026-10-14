@@ -368,7 +368,8 @@ FL이 이메일 토론 스레드에 올리는 세션 계획("Offline 11:30 ~ 12:
   - 방 이름 자체로는 가르지 않는다. 방 이름은 회의마다 다르고, off-offline 안내도 방 이름을 쓴다.
   - 시각으로도 가르지 않는다. 시각 없이 "오늘 오후 offline"이라고만 쓴 메일이 있고, 적힌 시각이 시간표와 다른 메일도 있다.
   - "today", "tomorrow"는 회의 시간대로 바꾼 송신 시각으로 읽는다. 메일 날짜는 보낸 사람의 시간대(`+0800` 등)이고, 자정을 넘겨 쓴 "tomorrow"는 그날이다.
-- **시간표에 없는 시각의 online·offline은 그 AI가 쓰는 방의 그 시각 셀에 "maybe <AI>"로 붙인다.** FL이 의장·부의장과 정해 두었는데 시간표가 아직 바뀌지 않은 경우다.
+- **시간표에 없는 시각의 online은 그 AI가 쓰는 방의 그 시각 셀에 "maybe <AI>"로 붙인다.** FL이 의장·부의장과 정해 두었는데 시간표가 아직 바뀌지 않은 경우다.
+  - offline은 붙이지 않고 B로 보낸다. online은 의장이 있어야 열리지만, FL은 off-offline도 offline이라고 부른다. #126bis 9.5: "start the offline at 3:30pm" 다음 날 "off-offline … same place as yesterday".
   - #126bis 10.3.1: "online session this morning from 12:00"인데 12:00에 10.3.1이 없다. 10.3.1 online은 모두 Yeongju A Hall이고, 그 방 12:00 칸이 AI 8.1이다. 8.1 셀에 "maybe 10.3.1"을 두고 10.3.1 필터에도 걸리게 한다.
   - 방은 시간표의 열에서 읽는다. 방 이름은 `day.rooms[room_col_start − 2]`다(1열이 시간 축). 열 번호를 그대로 쓰면 두 칸 밀린다.
 - **추출은 스키마로 묶은 LLM이 하고, 판정은 코드가 한다(`email_details.py`, Gemini thinking `low`).**
@@ -377,6 +378,7 @@ FL이 이메일 토론 스레드에 올리는 세션 계획("Offline 11:30 ~ 12:
   - LLM이 답하는 것: 항목마다 kind(`session`·`informal`), 세션 id, 적힌 요일·시각, 장소, 다룰 내용, 시간 나눔(`split`), 입력 마감(`input_due`), 80자 요약.
     "offline/online on Wednesday"는 그날 그 AI의 세션마다 항목 하나씩이다. 세션에 걸린 입력 마감("1 hr before our offline")은 그 세션의 세부 정보다.
   - 코드가 하는 것: 세션 id가 받은 목록에 있고 적힌 시각과 겹치는지 본다. 아니면 tentative 자리를 찾고, 그것도 없으면 버린다.
+  - **LLM이 준 시각은 메일에 있는지 코드가 확인한다(`times_in`).** 그 메일이나 같은 스레드의 앞 메일에 없는 시각은 지운다. 9.3.3 "For Tuesday Online session …"에 LLM이 17:00을 붙여 다른 셀로 갈 뻔했다.
   - **시각은 메일에 적힌 것만 쓴다.** 길이만 적힌 나눔("10.6.1.2: 40 min")은 길이로, "1 hr before" 마감은 그대로 둔다. 셀 시작에서 시각을 셈하지 않는다. 세션이 제시각에 시작한다는 보장이 없다.
   - TDoc 번호는 LLM에 맡기지 않고 최신 답장에서 패턴으로 뽑는다. 미리보기의 링크 대상(`…<https://…R1-2607194…docx>`)에도 번호가 있어서 링크를 지우기 전에 읽는다.
   - 평가는 `scripts/eval_email_details.py`다. #126bis 테스트셋에서 recall 0.971(34/35), precision 1.0이고, 새로 물은 두 번째 실행도 같았다. 남은 하나는 #39의 비공식 일정 두 개가 하나로 합쳐진 것이다.
@@ -392,4 +394,10 @@ FL이 이메일 토론 스레드에 올리는 세션 계획("Offline 11:30 ~ 12:
     같은 스레드의 뒤 메일이 같은 세션의 시각·나눔을 다시 적으면 앞 메일의 것을 바꾼다(#36이 #38을). 시각 없는 덧붙임("FL proposal for online")은 더한다.
 - **check 잡은 피드 하나만 본다(`pending`).** 회의 기간에만, 요청 한 번이다. 목록에 없고, 스레드에 붙고, 미리보기에 시각·장소 낱말이 있는 메일이 있을 때만 빌드 사유가 된다. 실패는 check 오류가 아니라 경고다.
 - 테스트는 메일 리스트에 요청하지 않는다. `tests/conftest.py`가 회의 기간 판정을 끄고 목록 경로를 임시 폴더로 바꾼다. `tests/test_email_updates.py`는 테스트셋의 피드·본문과 기록해 둔 LLM 답(`llm_answers.json`)으로 실행 두 번을 흉내 낸다.
+- **화면(`renderer.py`): 셀은 AI 줄 끝의 "maybe 10.3.1" 하나, 나머지는 팝업이다.**
+  - "maybe"는 AI 줄에 ` · `로 잇고 Chair와 같은 가장 약한 톤(`--chair`, `.session-maybe`)이다. 새 줄을 쓰지 않아 높이 예산이 바뀌지 않는다. AI 줄이 보이는 셀(30분 이상)에서만 보인다.
+  - 필터는 "maybe" 항목도 그 셀의 AI처럼 맞춘다(`data-ai-scope`에 더한다). `data-ai`와 필터 항목 목록, Agreement 패널은 그대로다.
+  - 팝업에는 노트 아래, AI 이름 위에 `From email threads` 구획을 둔다. 공지 하나가 한 줄이다: `maybe 10.3.1 · Online 12:00 · 요약 · 나눔 · input 1 h before · R1-2608628 — 보낸 사람, Wed 11:47`.
+    TDoc 번호는 하이픈에서 줄바꿈되지 않는다(`.popup-email-tdoc`). 나눔이 요약에 이미 들어 있으면 다시 적지 않는다. 보낸 사람이 가려진 메일(`<>`)은 시각만 적는다.
+  - B(off-offline, `Schedule.email_informal`)는 아직 화면에 없다. Agreement 패널 아래에 둘 예정이다.
 

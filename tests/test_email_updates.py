@@ -218,3 +218,47 @@ def test_calls_per_run_are_capped(meeting, monkeypatch):
     assert len(asked) == 40 and len(first) == 47  # the newest mail waits
     again, _ = _update(meeting, asked)
     assert len(asked) == 41 and [r["id"] for r in again] == [MAILS[0]["id"]]
+
+
+def test_a_run_stopped_half_way_keeps_what_it_asked(meeting):
+    asked = []
+
+    class Stop(BaseException):
+        pass
+
+    answers = _extract(asked)
+
+    def extract(text):
+        if len(asked) == 5:
+            raise Stop  # the runner is killed
+        return answers(text)
+
+    http, _ = _archive()
+    with pytest.raises(Stop):
+        email_updates.update_records(meeting, now=NOW, http=http, extract=extract, sleep=lambda _: None)
+    kept = email_updates.load_records("ran1#126bis")
+    assert sum(r["status"] == "asked" for r in kept.values()) == 5
+    again, _ = _update(meeting, asked)
+    assert len(asked) == 41  # the five are not asked again
+
+
+def test_the_grid_shows_maybe_items_filters_them_and_lists_the_mails(meeting):
+    from bs4 import BeautifulSoup
+    from shared.renderer import generate_html
+
+    _update(meeting, [])
+    email_updates.apply_records(meeting)
+    page = BeautifulSoup(generate_html(meeting), "html.parser")
+    blocks = [b for b in page.select(".session-block") if b.select_one(".session-name").get_text() == "AI 8.1"]
+    cell = next(b for b in blocks if "maybe" in b.get_text())
+    assert cell.select_one(".session-ai").get_text() == "AI 8.1 · maybe 10.3.1"
+    assert cell.select_one(".session-maybe").get_text() == "maybe 10.3.1"
+    assert cell["data-ai-scope"] == "8.1.*|10.3.1.*" and cell["data-ai"] == "8.1"  # filtered like its own
+    popup = BeautifulSoup(cell["data-popup"], "html.parser")
+    line = popup.select_one(".popup-email-item").get_text()
+    assert line.startswith("maybe 10.3.1 · Online 12:00 · ")
+    assert popup.select_one(".popup-email-tdoc").get_text() == "R1-2608628"
+    # A plan with a split, given by lengths only, keeps the lengths.
+    wus = next(b for b in page.select(".session-block") if "10.6.1.2" in (b.get("data-popup") or "") and "From email" in b["data-popup"])
+    text = BeautifulSoup(wus["data-popup"], "html.parser").select_one(".popup-email").get_text()
+    assert "10.6.1.2 (40 min), 10.6.3 (30 min), 10.6.1.1 (20 min)" in text

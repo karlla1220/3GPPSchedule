@@ -24,7 +24,7 @@ from zoneinfo import ZoneInfo
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from working_groups.ran1.email_details import (  # noqa: E402
-    EXTRACT_INSTRUCTION, Cell, candidates, gemini_extract, request_text, resolve,
+    EXTRACT_INSTRUCTION, Cell, candidates, gemini_extract, request_text, resolve, times_in,
 )
 from working_groups.ran1.email_sessions import (  # noqa: E402
     agenda_of, needs_full_body, newest_reply, parse_feed, tdoc_numbers, thread_index,
@@ -74,8 +74,10 @@ def run(out: Path) -> dict:
             out.mkdir(parents=True, exist_ok=True)
             cache_path.write_text(json.dumps(cache, ensure_ascii=False, indent=1))
             print(f"asked #{mail['n']}", flush=True)
+        allowed = times_in(reply) | times_in(" ".join(f'{i.get("start", "")} {i.get("end", "")}' for i in earlier))
         results[mail["n"]] = resolve(cache[key]["answer"], offered=offered, cells=cells,
-                                     agenda_items=found["agenda_items"], sent=sent, tdocs=tdocs)
+                                     agenda_items=found["agenda_items"], sent=sent, tdocs=tdocs,
+                                     allowed_times=allowed)
         if found["thread"]:
             threads.setdefault(found["thread"], []).extend(results[mail["n"]])
     return {"results": results, "labels": labels["mails"]}

@@ -46,6 +46,7 @@ from .email_details import (
     gemini_extract,
     request_text,
     resolve,
+    times_in,
 )
 from .email_sessions import (
     Mail,
@@ -220,12 +221,27 @@ def pending(schedule: Schedule, *, now: datetime | None = None, http=None) -> li
     ]
 
 
-def _resolved(record: dict, cells: list[Cell], tz: ZoneInfo) -> list[dict]:
-    by_id = {cell.id: cell for cell in cells}
-    offered = [by_id[i] for i in record.get("offered", []) if i in by_id]
-    sent = _sent(record["date"], tz)
-    return resolve(record["answer"], offered=offered, cells=cells, agenda_items=record["agenda_items"],
-                   sent=sent, tdocs=record.get("tdocs") or [])
+def _history(records, cells: list[Cell], tz: ZoneInfo) -> dict[str, list[dict]]:
+    """Resolved items of every asked record, by message id.
+
+    A time counts when the mail states it or an earlier mail of its thread
+    did (the FL proposal "for online" after "online from 12:00").
+    """
+    out, known = {}, {}
+    for record in sorted(records, key=lambda r: r["date"]):
+        if record.get("status") != "asked":
+            continue
+        by_id = {cell.id: cell for cell in cells}
+        thread = record.get("thread") or record["id"]
+        allowed = times_in(record.get("reply") or "") | known.get(thread, set())
+        items = resolve(record["answer"], offered=[by_id[i] for i in record.get("offered", []) if i in by_id],
+                        cells=cells, agenda_items=record["agenda_items"], sent=_sent(record["date"], tz),
+                        tdocs=record.get("tdocs") or [], allowed_times=allowed)
+        out[record["id"]] = items
+        for item in items:
+            known.setdefault(thread, set()).update(
+                times_in(" ".join(filter(None, [item.get("start"), item.get("end")]))))
+    return out
 
 
 def update_records(schedule: Schedule, *, now: datetime | None = None, http=None,
@@ -247,7 +263,14 @@ def update_records(schedule: Schedule, *, now: datetime | None = None, http=None
                     wanted=lambda mail: wanted(mail, index, agenda), **kwargs)
     cells, _ = cells_of(schedule)
     can_ask = extract is not gemini_extract or bool(os.environ.get("GEMINI_API_KEY"))
+    append_records(meeting_id, [])  # the two lists catch up before anything new
     new, asked = [], 0
+
+    def keep(record):
+        # Written at once: a run stopped half-way keeps every answer it paid for.
+        new.append(record)
+        append_records(meeting_id, [record])
+
     for mail in sorted(mails, key=lambda m: m.date or now):
         sent = _sent(mail.date, tz)
         if mail.reply is None or sent is None or sent.date() < first:
@@ -256,19 +279,20 @@ def update_records(schedule: Schedule, *, now: datetime | None = None, http=None
         base = {"id": mail.id, "date": sent.isoformat(), "title": mail.title, "author": mail.author,
                 "thread": found["thread"], "agenda_items": found["agenda_items"], "other": found["other"]}
         if not found["agenda_items"]:
-            new.append({**base, "status": "skipped", "reason": "no agenda item"})
+            keep({**base, "status": "skipped", "reason": "no agenda item"})
             continue
         if not SCHEDULE_WORDS.search(mail.reply):
-            new.append({**base, "status": "skipped", "reason": "no word of time or place"})
+            keep({**base, "status": "skipped", "reason": "no word of time or place"})
             continue
         if not can_ask or asked >= MAX_ASKS:
             continue
         items = found["agenda_items"] + found["other"]
         offered = candidates(cells, items, sent, _meeting_days(schedule)[0], tz)
         earlier = []
-        for record in sorted(list(records.values()) + new, key=lambda r: r["date"]):
-            if record.get("status") == "asked" and found["thread"] and record.get("thread") == found["thread"]:
-                earlier.extend(_resolved(record, cells, tz))
+        if found["thread"]:
+            prior = [r for r in list(records.values()) + new if r.get("thread") == found["thread"]]
+            for announced in _history(prior, cells, tz).values():
+                earlier.extend(announced)
         text = request_text(mail.title, sent, items, agenda, offered, mail.reply, earlier[-EARLIER:])
         asked += 1
         try:
@@ -276,10 +300,9 @@ def update_records(schedule: Schedule, *, now: datetime | None = None, http=None
         except Exception as exc:  # noqa: BLE001 - one mail's failure is tried again next run
             print(f"  Email {mail.id}: extraction failed, will retry: {exc}")
             continue
-        new.append({**base, "status": "asked", "reply": mail.reply[:6000], "tdocs": mail.tdocs,
-                    "offered": [cell.id for cell in offered], "answer": answer,
-                    "model": EXTRACT_MODEL, "prompt_version": PROMPT_VERSION})
-    append_records(meeting_id, new)  # also when nothing is new: the two lists catch up
+        keep({**base, "status": "asked", "reply": mail.reply[:6000], "tdocs": mail.tdocs,
+              "offered": [cell.id for cell in offered], "answer": answer,
+              "model": EXTRACT_MODEL, "prompt_version": PROMPT_VERSION})
     return new
 
 
@@ -301,12 +324,13 @@ def apply_records(schedule: Schedule) -> None:
     # online") adds to the 12:00 online of #15.
     plans: dict[tuple, list[dict]] = {}
     notes: dict[tuple, list[dict]] = {}
+    resolved = _history(records.values(), cells, tz)
     for record in sorted(records.values(), key=lambda r: r["date"]):
         if record.get("status") != "asked":
             continue
         source = {"mail": record["id"], "author": record.get("author", ""), "sent": record["date"]}
         mine: dict[tuple, list[dict]] = {}
-        for item in _resolved(record, cells, tz):
+        for item in resolved[record["id"]]:
             item = {**item, **source}
             if item["kind"] == "informal":
                 schedule.email_informal.setdefault(record["agenda_items"][0], []).append(item)

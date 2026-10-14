@@ -61,8 +61,8 @@ def test_online_at_a_time_the_grid_lacks_is_tentative_in_the_items_room():
     # #15: "online session this morning from 12:00". Every 10.3.1 online is in
     # Yeongju A Hall, which has AI 8.1 at 12:00.
     for answer in (
-        _item(day="Wednesday", start="12:00"),
-        _item(session_id="Wed 14:30-15:10 203", start="12:00"),  # an id that does not hold the time
+        _item(mode="online", day="Wednesday", start="12:00"),
+        _item(mode="online", session_id="Wed 14:30-15:10 203", start="12:00"),  # an id that does not hold the time
     ):
         got = _resolve([answer], "10.3.1", _sent(14, "09:10"), tdocs=["R1-2608628"])
         assert [(g["kind"], g["session"], g["agenda_item"]) for g in got] == [
@@ -113,3 +113,33 @@ def test_after_midnight_the_request_says_whose_tomorrow_it_is():
     text = request_text("t", _sent(14, "01:42"), ["10.5.3.1"], {}, [], "reply")
     assert "to the writer, 'today' may still be Tuesday and 'tomorrow' Wednesday" in text
     assert "after midnight" not in request_text("t", _sent(14, "09:10"), ["10.5.3.1"], {}, [], "reply")
+
+
+def test_an_offline_at_a_time_the_grid_lacks_is_off_offline():
+    # 9.5: "Let's start the offline at 3:30pm"; the next day the same FL
+    # held an "off-offline … same place as yesterday".
+    got = _resolve([_item(mode="offline", day="Tuesday", start="15:30")], "9.5", _sent(13, "15:02"))
+    assert [(g["kind"], g["start"]) for g in got] == [("informal", "15:30")]
+
+
+def test_a_time_the_mail_does_not_state_is_dropped():
+    from working_groups.ran1.email_details import times_in
+
+    # 9.3.3: "For Tuesday Online session, FL summary R1-2607193 is now
+    # available"; the answer put 17:00 on it, the 9.3.3 online is at 17:30.
+    reply = "For Tuesday Online session, FL summary R1-2607193 is now available in the inbox."
+    answer = _item(mode="online", day="Tuesday", start="17:00")
+    got = _resolve([answer], "9.3.3", _sent(13, "17:12"), allowed_times=times_in(reply))
+    assert got == []  # no time and no session: nothing shown on a guess
+    stated = _item(mode="online", session_id="Tue 17:30-18:30 Yeongju B Hall", start="17:00")
+    got = _resolve([stated], "9.3.3", _sent(13, "17:12"), allowed_times=times_in(reply))
+    assert [(g["kind"], g["session"], "start" in g) for g in got] == [("session", "Tue 17:30-18:30 Yeongju B Hall", False)]
+
+
+def test_times_in():
+    from working_groups.ran1.email_details import times_in
+
+    assert {15 * 60 + 30, 3 * 60 + 30} <= times_in("start the offline at 3:30pm")
+    assert 12 * 60 in times_in("online session this morning from 12:00am")
+    assert 16 * 60 in times_in("offline session on Wednesday ~4:00PM")
+    assert times_in("Proposal 3.1.1-4 in v33, 2 hours before") == set()

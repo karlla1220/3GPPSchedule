@@ -36,7 +36,7 @@ from .downloader import (
 )
 from .parser import find_chair_notes_docx
 
-PARSER_VERSION = 21
+PARSER_VERSION = 22
 CACHE_DIR = Path(".cache/ran1/agreements")
 SESSION_NOTES_DIR = Path("downloads/ran1/Session_notes")
 TDOC_ID = re.compile(r"R1-\d{6,}(?:\s*(?:rev\.?|r)\s*\d+)?", re.I)

@@ -484,10 +484,19 @@ def generate_html(schedule: Schedule, *, schedules=None, groups=None, presentati
                     f'<span class="session-range">\u00b7 {session.start_time}\u2013{session.end_time}</span>'
                     f"</div>"
                 )
+            # Another item an FL announced for this slot before the schedule
+            # caught up (RAN1 email threads): "maybe 10.3.1", in the faintest tone.
+            maybe = _maybe_items(session)
+            maybe_html = (
+                f'<span class="session-maybe">maybe {_esc(", ".join(maybe))}</span>' if maybe else ""
+            )
             if session.agenda_item and slots >= 6:
                 ai_html = (
-                    f'<div class="session-ai">AI {_esc(session.agenda_item)}</div>'
+                    f'<div class="session-ai">AI {_esc(session.agenda_item)}'
+                    f'{" · " + maybe_html if maybe_html else ""}</div>'
                 )
+            elif maybe_html and slots >= 6:
+                ai_html = f'<div class="session-ai">{maybe_html}</div>'
             notes = _cell_notes(session)
             notes_html = ""
             if notes and dur_html:
@@ -517,6 +526,9 @@ def generate_html(schedule: Schedule, *, schedules=None, groups=None, presentati
                 popup_lines.append(
                     '<div class="popup-notes">' + "<br>".join(_esc(n) for n in notes) + "</div>"
                 )
+            email_html = _email_popup_html(session)
+            if email_html:
+                popup_lines.append(email_html)
             # Agenda names last: the notes say what this session covers.
             popup_lines.extend(_agenda_description_popup_lines(session))
             popup_html = _join_popup_lines(popup_lines)
@@ -547,7 +559,9 @@ def generate_html(schedule: Schedule, *, schedules=None, groups=None, presentati
             # A cell without an AI is matched and opened by the items its label
             # was read as (inferred_agenda_items); data-ai stays as written.
             scope_ai = session.agenda_item or ", ".join(session.inferred_agenda_items)
-            data_ai_scope_attr = _esc(_ai_filter_scope(scope_ai)).replace('"', '&quot;')
+            # A "maybe" item is filtered like the cell's own: the slot may be its session.
+            filter_ai = ", ".join(filter(None, [scope_ai, *maybe]))
+            data_ai_scope_attr = _esc(_ai_filter_scope(filter_ai)).replace('"', '&quot;')
             # The panel opens the chair-note sections an AI covers (10.6.x →
             # 10.6.1, 10.6.2). The filter keeps matching the AI as written.
             agreement_attrs = ""
@@ -601,6 +615,68 @@ def generate_html(schedule: Schedule, *, schedules=None, groups=None, presentati
             starts_at=None if schedule.is_demo else schedule.starts_at,
             ends_at=None if schedule.is_demo else schedule.ends_at),
     })
+
+
+def _maybe_items(session) -> list[str]:
+    """Items announced on the email threads for this slot although the schedule gives it to another."""
+    return list(dict.fromkeys(
+        d["agenda_item"] for d in getattr(session, "email_details", [])
+        if d.get("kind") == "tentative" and d.get("agenda_item")
+    ))
+
+
+def _email_detail_line(detail: dict) -> str:
+    """One announcement, short: "maybe 10.3.1 · Online 12:00 · FL proposal uploaded · R1-2608628 — Yushu, Wed 11:12"."""
+    parts = []
+    if detail.get("kind") == "tentative":
+        parts.append(f"maybe {detail['agenda_item']}")
+    head = (detail.get("mode") or "").capitalize()
+    when = "–".join(filter(None, [detail.get("start"), detail.get("end")]))
+    if head or when:
+        parts.append(" ".join(filter(None, [head, when])))
+    if detail.get("summary"):
+        parts.append(detail["summary"])
+    split = []
+    for part in detail.get("split") or []:
+        label = part.get("agenda_item") or part.get("topic") or ""
+        when = "–".join(filter(None, [part.get("start"), part.get("end")]))
+        size = f"{part['minutes']} min" if part.get("minutes") else ""
+        split.append(" ".join(filter(None, [when, label, f"({size})" if size and not when else ""])))
+    summary = detail.get("summary") or ""
+    if split and not all(piece in summary for piece in split):  # the summary often says it already
+        parts.append(", ".join(split))
+    due = detail.get("input_due") or {}
+    if due.get("at"):
+        parts.append(f"input by {due['at']}")
+    elif due.get("minutes_before"):
+        minutes = due["minutes_before"]
+        parts.append(f"input {minutes // 60} h before" if minutes % 60 == 0 else f"input {minutes} min before")
+    line = _esc(" · ".join(parts))
+    if detail.get("tdocs"):
+        # A TDoc number never breaks at its hyphen.
+        tdocs = ", ".join(f'<span class="popup-email-tdoc">{_esc(t)}</span>' for t in detail["tdocs"])
+        line = f"{line} · {tdocs}" if line else tdocs
+    sent = detail.get("sent") or ""
+    author = (detail.get("author") or "").strip()
+    who = ", ".join(filter(None, [author if author not in {"<>", ""} else "",
+                                  _short_time(sent)]))
+    return line + (f' <span class="popup-email-from">— {_esc(who)}</span>' if who else "")
+
+
+def _short_time(iso: str) -> str:
+    try:
+        return datetime.fromisoformat(iso).strftime("%a %H:%M")
+    except (TypeError, ValueError):
+        return ""
+
+
+def _email_popup_html(session) -> str:
+    """What the email threads add to this cell, one line per announcement, oldest first."""
+    details = getattr(session, "email_details", [])
+    if not details:
+        return ""
+    lines = "".join(f'<div class="popup-email-item">{_email_detail_line(d)}</div>' for d in details)
+    return f'<div class="popup-email"><div class="popup-email-head">From email threads</div>{lines}</div>'
 
 
 def _join_popup_lines(lines: list[str]) -> str:
