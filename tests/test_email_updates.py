@@ -335,3 +335,33 @@ def test_a_place_the_summary_names_is_not_repeated():
     assert _says("FL available near cute bears on 3rd floor", "near the cute bears on the 3rd floor")
     assert _says("Off-offline outside RAN1 main room", "one outside the RAN1 main room")
     assert not _says("Off-offline at 15:00", "same place as yesterday")
+
+
+@pytest.mark.parametrize("topic, subject", [
+    ("Part 1 (PUSCH MIMO)", "Part 1 (PUSCH MIMO)"),
+    ("Proposal 4.3.1-1/2: DMRS sequence (for CP-OFDM, DFTS-OFDM)", "DMRS sequence (for CP-OFDM, DFTS-OFDM)"),
+    ("Proposal 3-1 (II) in Section 4.2", "Section 4.2"),
+    ("section 2.3 in R1-2608701", "section 2.3"),
+    ("proposals in Section 2", "proposals in Section 2"),
+    # Numbers to look up in the document stay in the popup.
+    ("Proposal 3.1.1-4", ""), ("FL Proposal 5.3-6A", ""), ("proposals #4-4A", ""),
+    ("observation 3.1.2", ""), ("Proposals 3.1-2B and 5.3-7A", ""),
+])
+def test_cell_subjects_leave_numbers_to_the_popup(topic, subject):
+    from shared.renderer import _subject
+
+    assert _subject(topic) == subject
+
+
+def test_cell_line_names_the_subject_not_the_proposals(meeting):
+    from bs4 import BeautifulSoup
+    from shared.renderer import generate_html
+
+    _update(meeting, [])
+    email_updates.apply_records(meeting)
+    page = BeautifulSoup(generate_html(meeting), "html.parser")
+    cell = next(b for b in page.select(".session-block")
+                if b.select_one(".session-name").get_text() == "10.5.2.3"
+                and "11:30" in b.select_one(".session-range").get_text())
+    assert [n.get_text() for n in cell.select(".session-note")] == ["Part 1 (PUSCH MIMO)"]
+    assert "3.1.1-4" in cell["data-popup"]  # still in the popup

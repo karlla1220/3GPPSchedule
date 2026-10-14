@@ -642,22 +642,47 @@ def _split_text(detail: dict, cell: bool = False) -> str:
     return (" · " if cell else ", ").join(p for p in pieces if p)
 
 
+# Numbers a delegate looks up in the document, not read at a glance: they
+# stay in the popup. "Proposal 3.1.1-4", "FL Proposal 5.3-6A", "proposals
+# #4-4A", "Proposal 3-1 (II)", "observation 3.1.2", and TDoc numbers.
+_LOOKUP_NUMBER = re.compile(
+    r"\b(?:FL\s+)?(?:proposals?|observations?|obs\.?|prop\.?)\s*#?\s*[\w./-]*\d[\w./-]*(?:\s*\([IVX]+\))?"
+    r"(?:\s*(?:,|and|&)\s*#?[\w./-]*\d[\w./-]*(?:\s*\([IVX]+\))?)*"
+    r"|#[\w.-]*\d[\w.-]*|\bR1-\d{7}\b",
+    re.IGNORECASE,
+)
+_LOOSE_ENDS = re.compile(r"^(?:\s|,|;|:|-|\b(?:in|of|on|and|for|with)\b)+|(?:\s|,|;|:|-|\b(?:in|of|on|and|for|with)\b)+$",
+                         re.IGNORECASE)
+
+
+def _subject(topic: str) -> str:
+    """What a topic is about, without the numbers to look up: "Proposal 4.3.1-1/2: DMRS sequence" -> "DMRS sequence"."""
+    head, sep, tail = topic.partition(": ")
+    if sep and not _LOOKUP_NUMBER.sub("", head).strip(" ,;:-"):
+        topic = tail  # the number names what follows
+    return _LOOSE_ENDS.sub("", _LOOKUP_NUMBER.sub("", topic)).strip()
+
+
 def _email_cell_lines(session) -> list[str]:
-    """One short line per announcement for the cell: what the session will treat.
+    """One short line per announcement for the cell: what the session will treat, at a glance.
 
     The split if there is one, else the subjects the mail names ("Part 1
-    (PUSCH MIMO), Proposal 3.1.1-4"), else its TDoc numbers. A summary is
-    left to the popup: cut off after "Check proposals in" in a short cell
-    it says nothing. A line
-    the title already holds ("PDSCH" on "10.5.2.2 PDSCH") is left out; an
-    item another session holds is named first ("10.3.1: …").
+    (PUSCH MIMO)", "Section 2.3", "DMRS sequence"). Proposal and TDoc
+    numbers are looked up in the documents, not read at a glance, so they
+    stay in the popup, and so does an announcement with nothing else (a
+    summary cut after "Check proposals in" says nothing). A line the title
+    already holds ("PDSCH" on "10.5.2.2 PDSCH") is left out; an item another
+    session holds is named first ("10.3.1: …").
     """
     title = session.name.casefold()
     lines = []
     for detail in getattr(session, "email_details", []):
-        topics = [t.split(": ")[0].strip() for t in detail.get("topics") or [] if t.strip()]
-        text = (_split_text(detail, cell=True) or ", ".join(dict.fromkeys(topics))
-                or ", ".join(detail.get("tdocs") or []))
+        subjects = []
+        for topic in detail.get("topics") or []:
+            subject = _subject(topic)
+            if subject and subject.casefold() not in {s.casefold() for s in subjects}:
+                subjects.append(subject)
+        text = _split_text(detail, cell=True) or ", ".join(subjects)
         if not text or text.casefold() in title:
             continue
         text = text[0].upper() + text[1:]
