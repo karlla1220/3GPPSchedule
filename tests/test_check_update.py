@@ -492,3 +492,33 @@ def test_only_lost_versions_is_not_a_change():
     assert not _only_lost_versions(built, newer)
     assert not _only_lost_versions(built, built)
     assert not _only_lost_versions(built, lost + [{"folder": "Sorour_notes", "name": "RAN1#126 S - v00.docx"}])
+
+
+def _unchanged_check(**patches):
+    timezone_ref = {
+        "type": "chair_notes",
+        "name": "Chair notes RAN1#126_v00.docm",
+        "uploaded_at": "2026-08-23T14:29:00",
+        "url": "https://example.org/Chair%20notes%20RAN1%23126_v00.docm",
+        "source_url": "https://example.org/Chair_notes",
+    }
+    with patch.multiple("working_groups.ran1.email_updates", **patches):
+        outputs, _ = _run_check(
+            state={"files": [], "meeting_id": "ran1#126", "timezone": "Europe/Amsterdam",
+                   "timezone_status": "resolved", "timezone_ref": timezone_ref, "local_refs": {}},
+            local_refs={}, remote=[], chair_notes_info=timezone_ref,
+        )
+    return outputs
+
+
+def test_new_email_discussion_mails_are_a_reason_to_build():
+    assert _unchanged_check(pending=lambda schedule: ["mail"]) == [("changed", "true")]
+    assert _unchanged_check(pending=lambda schedule: []) == [("changed", "false")]
+    assert _unchanged_check(pending=lambda schedule: None) == [("changed", "false")]  # not in the meeting
+
+
+def test_a_failed_email_check_is_not_a_check_error():
+    def down(schedule):
+        raise OSError("list.etsi.org unreachable")
+
+    assert _unchanged_check(pending=down) == [("changed", "false")]

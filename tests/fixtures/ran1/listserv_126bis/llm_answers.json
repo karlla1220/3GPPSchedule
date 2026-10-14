@@ -1,0 +1,804 @@
+{
+ "model": "gemini-3.8-flash",
+ "thinking": "low",
+ "note": "Answers of evaluation run 3 (recall 0.971, precision 1.0), by message id, for offline tests.",
+ "answers": {
+  "1e17ce35.2610b": {
+   "items": [],
+   "no_items_reason": "The mail only thanks delegates for a past offline discussion and asks for comments on uploaded proposals without announcing any upcoming session."
+  },
+  "73c197fc.2610b": {
+   "items": [],
+   "no_items_reason": "The email announces the kickoff of Round 3 email discussion and asks for feedback before tomorrow lunchtime, without announcing any upcoming session or meeting."
+  },
+  "a517eccc.2610b": {
+   "items": [],
+   "no_items_reason": "The mail only announces that discussions on Section 6.1.1.2 and Section 6.2.2 remain open for feedback, with no announcement of upcoming online, offline, or informal sessions."
+  },
+  "f22de9cd.2610b": {
+   "items": [
+    {
+     "quote": "proposals for offline/online session on Wednesday",
+     "kind": "session",
+     "mode": null,
+     "session_id": "Wed 09:30-10:30 201",
+     "day": "Wednesday",
+     "start": "09:30",
+     "end": "10:30",
+     "place": null,
+     "topics": [],
+     "split": [],
+     "input_due": null,
+     "summary": "First Wednesday session for 6G ISAC"
+    },
+    {
+     "quote": "proposals for offline/online session on Wednesday",
+     "kind": "session",
+     "mode": null,
+     "session_id": "Wed 12:20-13:00 Yeongju B Hall",
+     "day": "Wednesday",
+     "start": "12:20",
+     "end": "13:00",
+     "place": null,
+     "topics": [],
+     "split": [],
+     "input_due": null,
+     "summary": "Second Wednesday session for AI 10.8.3"
+    }
+   ]
+  },
+  "1119889e.2610b": {
+   "items": [
+    {
+     "quote": "The plan for our online session is included in Section 7.1 including the following issues (until time permits)\n* Proposal 4.3.1-1/2: DMRS sequence (for CP-OFDM, DFTS-OFDM)",
+     "kind": "session",
+     "mode": "online",
+     "session_id": "Wed 15:10-16:30 Yeongju A Hall",
+     "day": null,
+     "start": null,
+     "end": null,
+     "place": null,
+     "topics": [
+      "Section 7.1",
+      "Proposal 4.3.1-1/2: DMRS sequence (for CP-OFDM, DFTS-OFDM)",
+      "Proposal 4.3.1-3: FDM btw DMRS RE and data RE for DFTS-OFDM",
+      "Proposal 4.5.1-1/2: PTRS design, phase model",
+      "Proposal 3.2.1-1: DL/UL reciprocity scheme",
+      "Proposal 5.1.1-1: PUSCH TDRA within a slot",
+      "Proposal 5.1.1-2: PUSCH repetition scheme"
+     ],
+     "split": [],
+     "input_due": null,
+     "summary": "Online session topics in Sec 7.1: Proposals 4.3.1-1/2/3, 4.5.1-1/2, 3.2.1-1, 5.1.1-1/2"
+    }
+   ]
+  },
+  "e165f53d.2610b": {
+   "items": [],
+   "no_items_reason": "The email explicitly states that the template document will not be discussed in tomorrow's offline session and does not announce or schedule any upcoming session or informal meeting."
+  },
+  "145dbabb.2610b": {
+   "items": [],
+   "no_items_reason": "The email only mentions the availability of a draft CR and a deadline for co-sourcing, with no announcement of a meeting or session."
+  },
+  "3421a7e6.2610b": {
+   "items": [],
+   "no_items_reason": "The email only mentions document uploads and sets an email comment deadline ('Wednesday 19:30 local time') without announcing or tying it to any upcoming session or informal meeting."
+  },
+  "19d867e3.2610b": {
+   "items": [
+    {
+     "quote": "The official deadline of companies input for this round is 2 hours before Wednesday online.",
+     "kind": "session",
+     "mode": "online",
+     "session_id": "Wed 14:30-15:00 Tamna BC Hall",
+     "day": "Wednesday",
+     "start": null,
+     "end": null,
+     "place": null,
+     "topics": [],
+     "split": [],
+     "input_due": {
+      "at": null,
+      "minutes_before": 120
+     },
+     "summary": "Round#3 input deadline 2 hours before online session"
+    }
+   ]
+  },
+  "6b71e171.2610b": {
+   "items": [
+    {
+     "quote": "For Wednesday’s offline session we will do\n10.6.1.2: 40 min\n10.6.3: 30 min\n10.6.1.1: 20 min",
+     "kind": "session",
+     "mode": "offline",
+     "session_id": "Wed 11:00-12:30 201",
+     "day": "Wednesday",
+     "start": null,
+     "end": null,
+     "place": null,
+     "topics": [
+      "10.6.1.2",
+      "10.6.3",
+      "10.6.1.1"
+     ],
+     "split": [
+      {
+       "start": null,
+       "end": null,
+       "minutes": 40,
+       "agenda_item": "10.6.1.2",
+       "topic": null
+      },
+      {
+       "start": null,
+       "end": null,
+       "minutes": 30,
+       "agenda_item": "10.6.3",
+       "topic": null
+      },
+      {
+       "start": null,
+       "end": null,
+       "minutes": 20,
+       "agenda_item": "10.6.1.1",
+       "topic": null
+      }
+     ],
+     "input_due": null,
+     "summary": "Offline split: 40m for 10.6.1.2, 30m for 10.6.3, 20m for 10.6.1.1"
+    }
+   ]
+  },
+  "c3c850c9.2610b": {
+   "items": [],
+   "no_items_reason": "The email only mentions an upload of an updated FL summary and references what was already discussed in a past online session, without announcing any upcoming sessions or meetings."
+  },
+  "936d7b7a.2610b": {
+   "items": [
+    {
+     "quote": "tomorrow's online meeting",
+     "kind": "session",
+     "mode": "online",
+     "session_id": "Wed 12:30-13:00 Tamna BC Hall",
+     "day": "Wednesday",
+     "start": "12:30",
+     "end": "13:00",
+     "place": null,
+     "topics": [],
+     "split": [],
+     "input_due": null,
+     "summary": "Online meeting"
+    },
+    {
+     "quote": "I suggest having an off-offline discussion from 9:00 to 10:00 AM on Wednesday morning in one outside the RAN1 main room. I will be always there before 11:00 AM",
+     "kind": "informal",
+     "mode": "off-offline",
+     "session_id": null,
+     "day": "Wednesday",
+     "start": "09:00",
+     "end": "10:00",
+     "place": "outside the RAN1 main room",
+     "topics": [
+      "Proposal 4-1A-r3",
+      "Proposal 4-1C-r3",
+      "Proposal 4-1B-r3",
+      "Proposal 3-2-r2"
+     ],
+     "split": [],
+     "input_due": null,
+     "summary": "Off-offline discussion outside RAN1 main room (FL there until 11:00)"
+    }
+   ]
+  },
+  "df15fae0.2610b": {
+   "items": [
+    {
+     "quote": "Wednesday offline discussion:\n1. 08:30 – 08:40: SRS\n2. 08:40 – 09:10: CSI",
+     "kind": "session",
+     "mode": "offline",
+     "session_id": "Wed 08:30-09:10 203",
+     "day": "Wednesday",
+     "start": "08:30",
+     "end": "09:10",
+     "place": null,
+     "topics": [
+      "SRS",
+      "CSI"
+     ],
+     "split": [
+      {
+       "start": "08:30",
+       "end": "08:40",
+       "minutes": null,
+       "agenda_item": null,
+       "topic": "SRS"
+      },
+      {
+       "start": "08:40",
+       "end": "09:10",
+       "minutes": null,
+       "agenda_item": null,
+       "topic": "CSI"
+      }
+     ],
+     "input_due": null,
+     "summary": "Offline on SRS (08:30-08:40) and CSI (08:40-09:10)"
+    },
+    {
+     "quote": "Wednesday offline discussion:\n3. 12:30 – 13:00: RRC",
+     "kind": "session",
+     "mode": "offline",
+     "session_id": "Wed 12:30-13:00 203",
+     "day": "Wednesday",
+     "start": "12:30",
+     "end": "13:00",
+     "place": null,
+     "topics": [
+      "RRC"
+     ],
+     "split": [
+      {
+       "start": "12:30",
+       "end": "13:00",
+       "minutes": null,
+       "agenda_item": null,
+       "topic": "RRC"
+      }
+     ],
+     "input_due": null,
+     "summary": "Offline on RRC"
+    }
+   ]
+  },
+  "d7254f27.2610b": {
+   "items": [
+    {
+     "quote": "The FL summary is updated in v26 in draft folder for offline/online discussion tomorrow. Please take a look at proposals in section 2.3",
+     "kind": "session",
+     "mode": null,
+     "session_id": "Wed 11:00-12:30 201",
+     "day": "Wednesday",
+     "start": null,
+     "end": null,
+     "place": null,
+     "topics": [
+      "section 2.3"
+     ],
+     "split": [],
+     "input_due": null,
+     "summary": "Offline/online discussion; check proposals in section 2.3"
+    },
+    {
+     "quote": "The FL summary is updated in v26 in draft folder for offline/online discussion tomorrow. Please take a look at proposals in section 2.3",
+     "kind": "session",
+     "mode": null,
+     "session_id": "Wed 15:00-16:30 Tamna BC Hall",
+     "day": "Wednesday",
+     "start": null,
+     "end": null,
+     "place": null,
+     "topics": [
+      "section 2.3"
+     ],
+     "split": [],
+     "input_due": null,
+     "summary": "Offline/online discussion; check proposals in section 2.3"
+    }
+   ]
+  },
+  "bde55eba.2610b": {
+   "items": [
+    {
+     "quote": "Wednesday offline discussion, where all offline time before coffee break will be assigned to CSI.\n1. 08:30 – 09:10: CSI",
+     "kind": "session",
+     "mode": "offline",
+     "session_id": "Wed 08:30-09:10 203",
+     "day": "Wednesday",
+     "start": "08:30",
+     "end": "09:10",
+     "place": null,
+     "topics": [
+      "CSI"
+     ],
+     "split": [],
+     "input_due": null,
+     "summary": "Offline discussion on CSI"
+    },
+    {
+     "quote": "Wednesday offline discussion\n2. 12:30 – 13:00: RRC",
+     "kind": "session",
+     "mode": "offline",
+     "session_id": "Wed 12:30-13:00 203",
+     "day": "Wednesday",
+     "start": "12:30",
+     "end": "13:00",
+     "place": null,
+     "topics": [
+      "RRC"
+     ],
+     "split": [],
+     "input_due": null,
+     "summary": "Offline discussion on RRC"
+    }
+   ]
+  },
+  "4907158b.2610b": {
+   "items": [],
+   "no_items_reason": "The email only announces the creation of a Round 3 folder with updated proposals on the FTP and does not announce any upcoming online, offline, or informal sessions."
+  },
+  "bf925a2a.2610b": {
+   "items": [
+    {
+     "quote": "Please have a check on the proposals for Wednesday morning online session.",
+     "kind": "session",
+     "mode": "online",
+     "session_id": "Wed 09:10-09:50 Yeongju B Hall",
+     "day": "Wednesday",
+     "start": null,
+     "end": null,
+     "place": null,
+     "topics": [],
+     "split": [],
+     "input_due": null,
+     "summary": "Check FL summary#2 proposals for Wednesday morning online session"
+    }
+   ]
+  },
+  "8eb6a7b.2610b": {
+   "items": [],
+   "no_items_reason": "The email only contains comments supporting a draft LS reply and does not announce any upcoming sessions or informal meetings."
+  },
+  "573f6fa8.2610b": {
+   "items": [
+    {
+     "quote": "If no further comment by 14:00 Wed, I will propose to endorse Annex A as a starting point to draw observations for corresponding use cases in PM session tomorrow.",
+     "kind": "session",
+     "mode": null,
+     "session_id": "Wed 19:00-19:30 Tamna BC Hall",
+     "day": "Wednesday",
+     "start": null,
+     "end": null,
+     "place": null,
+     "topics": [
+      "Annex A"
+     ],
+     "split": [],
+     "input_due": {
+      "at": "14:00",
+      "minutes_before": null
+     },
+     "summary": "Propose to endorse Annex A as starting point for observations in PM session"
+    }
+   ]
+  },
+  "a2ead723.2610b": {
+   "items": [
+    {
+     "quote": "You can find the proposals for online discussion in the beginning of the tdoc.",
+     "kind": "session",
+     "mode": "online",
+     "session_id": "Wed 08:30-09:20 Tamna BC Hall",
+     "day": "Wednesday",
+     "start": "08:30",
+     "end": "09:20",
+     "place": null,
+     "topics": [],
+     "split": [],
+     "input_due": null,
+     "summary": "Proposals for online discussion uploaded in FL summary #4"
+    }
+   ]
+  },
+  "b3623896.2610b": {
+   "items": [],
+   "no_items_reason": "The email only announces an updated tdoc (R1-2608710) with no session or informal meeting announcements."
+  },
+  "fcd3c6f3.2610b": {
+   "items": [],
+   "no_items_reason": "The mail only announces an updated document version (v040) and does not announce any upcoming session, meeting, or informal discussion."
+  },
+  "8207ebd3.2610b": {
+   "items": [
+    {
+     "quote": "Please provide your inputs until 1hr before our offline session today.",
+     "kind": "session",
+     "mode": "offline",
+     "session_id": "Wed 11:30-12:30 203",
+     "day": "Wednesday",
+     "start": null,
+     "end": null,
+     "place": null,
+     "topics": [],
+     "split": [],
+     "input_due": {
+      "at": null,
+      "minutes_before": 60
+     },
+     "summary": "Provide inputs 1 hour before today's offline session"
+    }
+   ]
+  },
+  "537c1290.2610b": {
+   "items": [
+    {
+     "quote": "Please provide your comments on the proposals for upcoming online (refer to section 8).",
+     "kind": "session",
+     "mode": "online",
+     "session_id": "Wed 09:10-09:50 Yeongju A Hall",
+     "day": "Wednesday",
+     "start": "09:10",
+     "end": "09:50",
+     "place": null,
+     "topics": [
+      "proposals for upcoming online (refer to section 8)"
+     ],
+     "split": [],
+     "input_due": null,
+     "summary": "Online discussion on proposals in section 8"
+    }
+   ]
+  },
+  "27f51018.2610b": {
+   "items": [],
+   "no_items_reason": "The email only provides information about an Excel template upload and asks companies to provide simulation results, without announcing any upcoming sessions or meetings."
+  },
+  "39b561f9.2610b": {
+   "items": [],
+   "no_items_reason": "The email only announces the upload of FL summary#2_v01 and a draft reply LS to RAN2, without announcing or referring to any upcoming session."
+  },
+  "9b74ffae.2610b": {
+   "items": [
+    {
+     "quote": "with adding proposals in section 4.5 for Wednesday morning online",
+     "kind": "session",
+     "mode": "online",
+     "session_id": "Wed 09:50-10:30 Yeongju B Hall",
+     "day": "Wednesday",
+     "start": null,
+     "end": null,
+     "place": null,
+     "topics": [
+      "section 4.5"
+     ],
+     "split": [],
+     "input_due": null,
+     "summary": "Wednesday morning online covers section 4.5"
+    }
+   ]
+  },
+  "c5729e4e.2610b": {
+   "items": [],
+   "no_items_reason": "The mail only announces an email discussion deadline tied to no online/offline session."
+  },
+  "8a8be730.2610b": {
+   "items": [
+    {
+     "quote": "I’ll be in main room so please feel free to reach me for any comments/suggestions.",
+     "kind": "informal",
+     "mode": null,
+     "session_id": null,
+     "day": "Wednesday",
+     "start": null,
+     "end": null,
+     "place": "main room",
+     "topics": [],
+     "split": [],
+     "input_due": null,
+     "summary": "FL available in main room for comments/suggestions"
+    }
+   ]
+  },
+  "4be0ad7.2610b": {
+   "items": [
+    {
+     "quote": "We would like to have an off-offline discussion at 10:45 today. Let’s meet in front of Yeongju A Hall",
+     "kind": "informal",
+     "mode": "off-offline",
+     "session_id": null,
+     "day": "Wednesday",
+     "start": "10:45",
+     "end": null,
+     "place": "in front of Yeongju A Hall",
+     "topics": [],
+     "split": [],
+     "input_due": null,
+     "summary": "Off-offline discussion in front of Yeongju A Hall"
+    }
+   ]
+  },
+  "bbec2c85.2610b": {
+   "items": [
+    {
+     "quote": "Updated moderator summary is available as v33 in the drafts folder. This will be used for online discussion for Wed. The order of the proposals for discussion in Section 2.",
+     "kind": "session",
+     "mode": "online",
+     "session_id": "Wed 10:00-10:30 Tamna BC Hall",
+     "day": "Wednesday",
+     "start": null,
+     "end": null,
+     "place": null,
+     "topics": [
+      "proposals in Section 2",
+      "proposals #4-4A",
+      "proposals #2-3B"
+     ],
+     "split": [],
+     "input_due": null,
+     "summary": "Online discussion using moderator summary v33, covering Section 2 proposals"
+    }
+   ]
+  },
+  "b94b5bc4.2610b": {
+   "items": [
+    {
+     "quote": "R1-2608681 is uploaded for online discussion (Wed 9:20). Please check the proposals in Section 2 where focus is on DL bandwidth settings",
+     "kind": "session",
+     "mode": "online",
+     "session_id": "Wed 09:20-10:00 Tamna BC Hall",
+     "day": "Wednesday",
+     "start": "09:20",
+     "end": null,
+     "place": null,
+     "topics": [
+      "proposals in Section 2",
+      "DL bandwidth settings"
+     ],
+     "split": [],
+     "input_due": null,
+     "summary": "Online discussion on Section 2 proposals focusing on DL bandwidth settings"
+    },
+    {
+     "quote": "Moderator will also be outside offline room (201) during 12:00 - 13:00, and welcome to join our discussion",
+     "kind": "informal",
+     "mode": null,
+     "session_id": null,
+     "day": "Wednesday",
+     "start": "12:00",
+     "end": "13:00",
+     "place": "outside offline room (201)",
+     "topics": [],
+     "split": [],
+     "input_due": null,
+     "summary": "Informal discussion outside room 201"
+    }
+   ]
+  },
+  "daa98104.2610b": {
+   "items": [
+    {
+     "quote": "I will be near the cute bears on the 3rd floor between 11:00 and 12:00 (same place as yesterday). Please feel free to approach me if you have any questions, comments, or concerns regarding Round 3.",
+     "kind": "informal",
+     "mode": null,
+     "session_id": null,
+     "day": "Wednesday",
+     "start": "11:00",
+     "end": "12:00",
+     "place": "near the cute bears on the 3rd floor",
+     "topics": [
+      "Round 3"
+     ],
+     "split": [],
+     "input_due": null,
+     "summary": "FL available for questions/comments on Round 3"
+    }
+   ]
+  },
+  "e9eb4a5c.2610b": {
+   "items": [],
+   "no_items_reason": "The email does not contain any announcements about upcoming sessions or informal meetings; it is delegate feedback and questions regarding proposals."
+  },
+  "44ed34d1.2610b": {
+   "items": [
+    {
+     "quote": "We will have an online session this morning from 12:00am.",
+     "kind": "session",
+     "mode": "online",
+     "session_id": null,
+     "day": "Wednesday",
+     "start": "12:00",
+     "end": null,
+     "place": null,
+     "topics": [],
+     "split": [],
+     "input_due": null,
+     "summary": "Online session starting at 12:00"
+    }
+   ]
+  },
+  "3d8d1c90.2610b": {
+   "items": [],
+   "no_items_reason": "The email only mentions uploading documents (v027 and R1-2607513) to the draft folder with editorial edits, and does not announce any upcoming sessions or informal meetings."
+  },
+  "83dadb14.2610b": {
+   "items": [
+    {
+     "quote": "The plan for our offline session is as follows:\n* Time: 11:30 ~ 12:30 (1hr)\n* Issue\n* Part 1 (PUSCH MIMO)\n* Proposal 3.1.1-4: downloadable codebook\n* Proposal 3.1.1-5: decoupling PUSCH and SRS\n* Proposal 3.2.1-2/3",
+     "kind": "session",
+     "mode": "offline",
+     "session_id": "Wed 11:30-12:30 203",
+     "day": "Wednesday",
+     "start": "11:30",
+     "end": "12:30",
+     "place": null,
+     "topics": [
+      "Part 1 (PUSCH MIMO)",
+      "Proposal 3.1.1-4",
+      "Proposal 3.1.1-5",
+      "Proposal 3.2.1-2/3"
+     ],
+     "split": [],
+     "input_due": null,
+     "summary": "Offline plan on Part 1 (Proposals 3.1.1-4, 3.1.1-5, 3.2.1-2/3)"
+    }
+   ]
+  },
+  "30cf71a8.2610b": {
+   "items": [],
+   "no_items_reason": "The email only announces a TDoc revision upload to the Inbox and does not announce any upcoming session, meeting, or session-related input deadline."
+  },
+  "1981638.2610b": {
+   "items": [
+    {
+     "quote": "I just uploaded the FL proposals and draft LS to the following folder, which will be presented this afternoon online.",
+     "kind": "session",
+     "mode": "online",
+     "session_id": "Wed 14:30-15:00 Yeongju B Hall",
+     "day": "Wednesday",
+     "start": null,
+     "end": null,
+     "place": null,
+     "topics": [
+      "FL proposals and draft LS",
+      "Mobility Phase 4"
+     ],
+     "split": [],
+     "input_due": null,
+     "summary": "FL proposals and draft LS to be presented online this afternoon"
+    }
+   ]
+  },
+  "f34c924c.2610b": {
+   "items": [
+    {
+     "quote": "The FL summary R1-2607430 for Wednesday's online discussion is uploaded in the inbox.",
+     "kind": "session",
+     "mode": "online",
+     "session_id": "Wed 11:40-12:20 Yeongju B Hall",
+     "day": "Wednesday",
+     "start": "11:40",
+     "end": "12:20",
+     "place": null,
+     "topics": [],
+     "split": [],
+     "input_due": null,
+     "summary": "FL summary R1-2607430 uploaded for Wednesday's online discussion"
+    }
+   ]
+  },
+  "146ef4f6.2610b": {
+   "items": [],
+   "no_items_reason": "The email only refers to a past offline discussion ('what we discussed in the offline') and mentions uploading a summary shortly, but announces no upcoming session or informal meeting."
+  },
+  "bd463d53.2610b": {
+   "items": [],
+   "no_items_reason": "The email only reorganizes and presents Proposal 1-3-2-Wed for Section 6.1.1.3 based on yesterday's online session, without announcing any upcoming sessions, informal meetings, or session-tied deadlines."
+  },
+  "7e2ba9ec.2610b": {
+   "items": [
+    {
+     "quote": "Let's have an off-offline today at 3pm, same place as yesterday.",
+     "kind": "informal",
+     "mode": "off-offline",
+     "session_id": null,
+     "day": "Wednesday",
+     "start": "15:00",
+     "end": null,
+     "place": "same place as yesterday",
+     "topics": [],
+     "split": [],
+     "input_due": null,
+     "summary": "Off-offline discussion"
+    }
+   ]
+  },
+  "c0926550.2610b": {
+   "items": [
+    {
+     "quote": "Online session 1 (12:30~13:00): RS for PDSCH",
+     "kind": "session",
+     "mode": "online",
+     "session_id": "Wed 12:30-13:00 Yeongju A Hall",
+     "day": "Wednesday",
+     "start": "12:30",
+     "end": "13:00",
+     "place": null,
+     "topics": [
+      "RS for PDSCH"
+     ],
+     "split": [],
+     "input_due": null,
+     "summary": "Online session on RS for PDSCH"
+    },
+    {
+     "quote": "Offline session (17:00~18:00)\n      - 17:00~17:30: PDSCH\n      - 17:30~18:00: RS for PDSCH",
+     "kind": "session",
+     "mode": "offline",
+     "session_id": "Wed 17:00-18:00 203",
+     "day": "Wednesday",
+     "start": "17:00",
+     "end": "18:00",
+     "place": null,
+     "topics": [
+      "PDSCH",
+      "RS for PDSCH"
+     ],
+     "split": [
+      {
+       "start": "17:00",
+       "end": "17:30",
+       "minutes": null,
+       "agenda_item": null,
+       "topic": "PDSCH"
+      },
+      {
+       "start": "17:30",
+       "end": "18:00",
+       "minutes": null,
+       "agenda_item": null,
+       "topic": "RS for PDSCH"
+      }
+     ],
+     "input_due": null,
+     "summary": "Offline session split into PDSCH and RS for PDSCH"
+    },
+    {
+     "quote": "Online session 2 (18:30~19:30): PDSCH",
+     "kind": "session",
+     "mode": "online",
+     "session_id": "Wed 18:30-19:30 Yeongju A Hall",
+     "day": "Wednesday",
+     "start": "18:30",
+     "end": "19:30",
+     "place": null,
+     "topics": [
+      "PDSCH"
+     ],
+     "split": [],
+     "input_due": null,
+     "summary": "Online session on PDSCH"
+    }
+   ]
+  },
+  "62b2a0ec.2610b": {
+   "items": [],
+   "no_items_reason": "The mail only asks delegates to continue providing inputs on top of v33, without announcing any upcoming session, deadline, or informal meeting."
+  },
+  "7199d779.2610b": {
+   "items": [
+    {
+     "quote": "The FL propsal for online has been uploaded in http://10.10.10.10/ftp/RAN/RAN1/Inbox/R1-2608628.zip",
+     "kind": "session",
+     "mode": "online",
+     "session_id": null,
+     "day": "Wednesday",
+     "start": "12:00",
+     "end": null,
+     "place": null,
+     "topics": [],
+     "split": [],
+     "input_due": null,
+     "summary": "FL proposal for online uploaded"
+    }
+   ]
+  },
+  "5fde6ebe.2610b": {
+   "items": [],
+   "no_items_reason": "The email only discusses proposed text/results regarding ZTE FDSS-ST data sets and does not announce or reference any upcoming session or informal meeting."
+  },
+  "7362206c.2610b": {
+   "items": [],
+   "no_items_reason": "The email only informs about updates to proposals, sections, and a contact spreadsheet, without announcing any upcoming session or informal meeting."
+  }
+ }
+}

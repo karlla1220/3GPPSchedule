@@ -440,12 +440,29 @@ def check_updates(*, staging_dir=None) -> CheckResult:
                 "file state remains — treating as changed."
             )
 
+    # 5. Email discussion mails: one feed request, only during the meeting.
+    # A new mail is a reason to build, never a check error.
+    email_reason = None
+    try:
+        from pathlib import Path
+        from shared.schedule import load_schedule
+        from . import email_updates
+        mails = email_updates.pending(load_schedule(Path("docs/ran1/schedule.json")))
+        if mails:
+            email_reason = f"{len(mails)} new email discussion mail(s)"
+            print(f"Email discussions: {email_reason}")
+    except Exception as e:  # noqa: BLE001
+        print(f"Email discussion check skipped: {e}")
+
     print(f"Cached: {cached}")
     print(f"Changed: {changed}")
 
     # State is saved by the build-and-deploy job (committed to repo),
     # not here — so a failed build will retry on the next check.
     reasons = ["RAN1 document or metadata changed"] if changed else []
+    if email_reason:
+        changed = True
+        reasons.append(email_reason)
     if extra_files:
         # Keep the legacy CLI output for existing RAN1-specific callers/tests.
         reasons.append("external-files-staged" if extra_files_artifact_ready else "external-files-checked")
