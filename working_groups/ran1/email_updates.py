@@ -38,7 +38,7 @@ from shared.schedule import Schedule, Session
 
 from .agenda_labels import _agenda_for_meeting
 from .agenda_descriptions import DEFAULT_JSON_PATH
-from .rooms import online_rooms
+from .rooms import online_rooms, tells_kinds
 from .email_details import (
     DAYS,
     EXTRACT_INSTRUCTION,
@@ -135,14 +135,14 @@ def cells_of(schedule: Schedule) -> tuple[list[Cell], dict[str, Session]]:
     """Grid cells with ids "Wed 12:30-13:00 Yeongju A Hall", and their sessions.
 
     Rooms are the day's rooms from column 2 (column 1 is the time axis). A
-    cell is online when all its rooms are online rooms (``rooms``); a day
-    with one table of rooms does not tell.
+    cell is online when all its rooms are online rooms (``rooms``: the table
+    heading, else the first table); a day whose rooms do not tell is None.
     """
     cells, sessions = [], {}
     for day in schedule.days:
         names = [room.name for room in day.rooms]
-        online = set(online_rooms((room.name, room.table_index) for room in day.rooms))
-        tells = len({room.table_index for room in day.rooms}) > 1
+        online = set(online_rooms(day.rooms))
+        tells = tells_kinds(day.rooms)
         parts = day_parts(day.timeline.breaks)
         for session in day.sessions:
             span = names[max(session.room_col_start - 2, 0):max(session.room_col_end - 2, 0)]

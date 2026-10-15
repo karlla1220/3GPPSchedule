@@ -2,7 +2,7 @@
  "meeting_id": "ran1#126bis",
  "timezone": "Asia/Seoul",
  "generated_at": "2026-10-14 11:01",
- "note": "Grid as published at commit 3d489af; Wednesday unchanged since 2026-10-13 15:38 KST, before every mail of the test set. online: all rooms of the cell are in the first table (Tamna BC Hall, Yeongju A Hall, Yeongju B Hall); part: from the day's breaks.",
+ "note": "Grid as published at commit 3d489af; Wednesday unchanged since 2026-10-13 15:38 KST, before every mail of the test set. online: all rooms of the cell are under the \"Online Session Schedule\" heading (Tamna BC Hall, Yeongju A Hall, Yeongju B Hall); part: from the day's breaks.",
  "sessions": [
   {
    "id": "Mon 09:00-10:00 Tamna BC Hall + Yeongju A Hall + Yeongju B Hall",

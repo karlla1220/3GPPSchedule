@@ -386,9 +386,12 @@ FL이 이메일 토론 스레드에 올리는 세션 계획("Offline 11:30 ~ 12:
   - 스레드가 있으면 그 AI이고, 적힌 번호가 그 아래이면 좁힌다. 바깥 번호는 `other`로 따로 둔다(10.6.x 세션을 짜는 메일의 10.6.1.2, 10.6.3). 스레드가 없으면 제목, 없으면 본문의 번호다.
   - 보낸 사람이 Chair notes의 FL인지는 거르는 기준이 아니다. 묶인 스레드의 하위 주제 담당자는 FL 목록에 없다.
 - **A(셀 세부 정보)는 online·offline 세션이고, B(Agreement 아래 부차 정보)는 off-offline이다.** online과 offline은 늘 방에서 열리므로 시간표의 세션이다. 방이 없거나 방 밖에서 모이면(`outside Sorour's session room`, `in front of Yeongju A Hall`) off-offline이다.
-  - **online은 메인 방 세 개(Main, Brk1, Brk2) 중 하나에서 열린다.** 메인 일정의 첫 표의 방이 online 방이고(#126bis: Tamna BC Hall, Yeongju A Hall, Yeongju B Hall), 다른 표의 방(201, 203)이 offline 방이다.
-    정의는 `working_groups/ran1/rooms.py`의 `online_rooms` 한 곳이고, 부의장 표의 방 이름을 맞추는 `merger.py`도 같은 것을 쓴다. 근거는 방의 `table_index`라서 의장이 문서의 표 순서를 바꾸면 틀린다.
-    셀은 모든 방이 online 방이면 online이다(`Cell.online`). 표가 하나뿐인 날은 알 수 없다(`None`, 거르지 않는다).
+  - **online은 메인 방 세 개(Main, Brk1, Brk2) 중 하나에서 열린다.** 의장의 일정 문서는 표마다 무엇인지 제목을 단다.
+    `RAN1#126b Online Session Schedule` 아래 표가 online 방(#126bis: Tamna BC Hall, Yeongju A Hall, Yeongju B Hall), 다음 쪽의 `RAN1#126b Offline Session Schedule` 아래 표가 offline 방(201, 203)이다. #126 v04도 같다.
+    - 파서가 표 바로 위 글(`context_text`)의 마지막 `Online`/`Offline` 낱말을 방의 `RoomInfo.kind`로 남긴다(`rooms.table_kind`). 그 글은 앞 표부터 이어져 방 이름 글상자가 먼저 오므로 마지막 낱말이 그 표의 제목이다.
+    - 제목이 둘 다 아닌 표만 있거나 kind를 읽기 전에 저장한 일정은 표 순서로 정한다(첫 표가 online). 회의 중에는 표 순서가 바뀌지 않는다고 본다.
+    - 정의는 `working_groups/ran1/rooms.py`의 `online_rooms` 한 곳이고, 부의장 표의 방 이름을 맞추는 `merger.py`도 같은 것을 쓴다.
+    - 셀은 모든 방이 online 방이면 online이다(`Cell.online`). 제목도 없고 표도 하나뿐인 날은 알 수 없다(`None`, 거르지 않는다).
   - 방 이름 자체로는 가르지 않는다. 방 이름은 회의마다 다르고, off-offline 안내도 방 이름을 쓴다.
   - 시각으로도 가르지 않는다. 시각 없이 "오늘 오후 offline"이라고만 쓴 메일이 있고, 적힌 시각이 시간표와 다른 메일도 있다.
   - "today", "tomorrow"는 회의 시간대로 바꾼 송신 시각으로 읽는다. 메일 날짜는 보낸 사람의 시간대(`+0800` 등)이고, 자정을 넘겨 쓴 "tomorrow"는 그날이다.

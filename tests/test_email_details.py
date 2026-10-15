@@ -149,11 +149,20 @@ def test_times_in():
     assert times_in("Proposal 3.1.1-4 in v33, 2 hours before") == set()
 
 
-def test_online_rooms_are_the_first_table():
-    from working_groups.ran1.rooms import online_rooms
+def test_online_rooms_are_those_the_table_heading_names():
+    from shared.schedule import RoomInfo
+    from working_groups.ran1.rooms import online_rooms, table_kind, tells_kinds
 
-    rooms = [("Tamna BC Hall", 0), ("Yeongju A Hall", 0), ("Yeongju B Hall", 0), ("201", 1), ("203", 1)]
-    assert online_rooms(rooms) == ["Tamna BC Hall", "Yeongju A Hall", "Yeongju B Hall"]
+    # The text above a table holds the room text boxes, then the heading.
+    assert table_kind("Tamna BC HallYeongju A HallRAN1#126b Online Session Schedule") == "online"
+    assert table_kind("201203RAN1#126b Offline Session Schedule") == "offline"
+    assert table_kind("RAN1#126 Detailed Schedule for RAN1 Main Session") == ""
+    names = ["Tamna BC Hall", "Yeongju A Hall", "Yeongju B Hall", "201", "203"]
+    headed = [RoomInfo(n, t, kind=k) for n, t, k in zip(names, [0, 0, 0, 1, 1], ["online"] * 3 + ["offline"] * 2)]
+    assert online_rooms(headed) == names[:3]
+    # Saved before kinds were read: the first table, as the order of tables holds during a meeting.
+    assert online_rooms([RoomInfo(n, t) for n, t in zip(names, [0, 0, 0, 1, 1])]) == names[:3]
+    assert not tells_kinds([RoomInfo(n) for n in names]) and tells_kinds(headed)
     assert online_rooms([]) == []
 
 
