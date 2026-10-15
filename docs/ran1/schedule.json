@@ -10675,6 +10675,32 @@
               "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;7e1f51e0.2610c",
               "author": "<>",
               "sent": "2026-10-15T14:58:33+09:00"
+            },
+            {
+              "kind": "session",
+              "session": "Thu 16:00-16:30 Tamna BC Hall",
+              "quote": "FL summary for today’s online can be found in R1-2607574.zip  .\nThe full list of the proposals for your easy reading.",
+              "mode": "online",
+              "summary": "Proposals for today's online listed in R1-2607574.zip",
+              "topics": [
+                "Proposal 3.1.4D",
+                "Proposal 3.6.1C",
+                "Proposal 3.3.1C",
+                "Proposal 3.9.1.3C",
+                "Proposal 3.9.2.1C",
+                "Proposal 2.2.1B",
+                "Proposal 2.3B",
+                "Proposal 3.5"
+              ],
+              "day": "Thursday",
+              "tdocs": [
+                "R1-2607574"
+              ],
+              "split": [],
+              "mail": "5a621f95.2610c",
+              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;5a621f95.2610c",
+              "author": "<>",
+              "sent": "2026-10-15T15:17:38+09:00"
             }
           ]
         },
@@ -11032,6 +11058,23 @@
               "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;2ee5250b.2610b",
               "author": "Woo-Suk Ko",
               "sent": "2026-10-14T22:26:43+09:00"
+            },
+            {
+              "kind": "session",
+              "session": "Thu 15:40-16:30 Yeongju B Hall",
+              "quote": "FL summary was updated as R1-2607996, which includes the proposals for online discussion.",
+              "mode": "online",
+              "summary": "Proposals for online discussion updated in R1-2607996",
+              "topics": [],
+              "day": "Thursday",
+              "tdocs": [
+                "R1-2607996"
+              ],
+              "split": [],
+              "mail": "ffd2a42a.2610c",
+              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;ffd2a42a.2610c",
+              "author": "Woo-Suk Ko",
+              "sent": "2026-10-15T15:16:11+09:00"
             }
           ]
         },
@@ -13404,7 +13447,7 @@
     }
   ],
   "source_file": "RAN1#126b online and offline schedules - v03.docx",
-  "generated_at": "2026-10-15 15:01",
+  "generated_at": "2026-10-15 15:21",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
