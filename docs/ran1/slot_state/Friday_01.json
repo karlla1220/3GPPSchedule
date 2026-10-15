@@ -2,7 +2,7 @@
   "day": "Friday",
   "time_block_index": 1,
   "source_hashes": {
-    "Main Schedule": "d2d9cfaec1a4fe6c",
+    "Main Schedule": "da3009ce5ead2f20",
     "Hiroki's schedule": "4d4ef91e30c72b28",
     "Sorour's schedule": "5a9ea9126af8c1e8"
   },
@@ -100,7 +100,7 @@
       "duration_minutes": 30,
       "specified_start_time": null,
       "chair": "Hiroki",
-      "group_header": "6G 10.5.4.x",
+      "group_header": "6GR / 10.5.4.x",
       "agenda_item": "10.5.4.3",
       "description": "HARQ related Aspects",
       "agenda_descriptions": [
@@ -139,7 +139,7 @@
       "duration_minutes": 30,
       "specified_start_time": null,
       "chair": "Hiroki",
-      "group_header": "6G 10.5.4.x",
+      "group_header": "6GR / 10.5.4.x",
       "agenda_item": "10.5.4.1",
       "description": "Downlink control channel, scheduling for downlink and uplink transmission",
       "agenda_descriptions": [
@@ -174,7 +174,7 @@
     },
     {
       "room_name": "RAN1_brk2",
-      "name": "6G waveform",
+      "name": "10.2.1 Waveform",
       "duration_minutes": 10,
       "specified_start_time": null,
       "chair": "Hiroki",
@@ -208,7 +208,7 @@
     },
     {
       "room_name": "RAN1_brk2",
-      "name": "6G ISAC",
+      "name": "10.8 Sensing",
       "duration_minutes": 50,
       "specified_start_time": null,
       "chair": "Hiroki",
@@ -236,7 +236,7 @@
       ]
     }
   ],
-  "merged_at": "2026-10-15T10:41:19.904562+00:00",
+  "merged_at": "2026-10-15T11:01:33.668748+00:00",
   "meeting_id": "ran1#126bis",
   "schema_version": 2
 }
