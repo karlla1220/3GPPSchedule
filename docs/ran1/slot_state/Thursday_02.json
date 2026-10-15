@@ -220,7 +220,7 @@
       "duration_minutes": 20,
       "specified_start_time": null,
       "chair": "Hiroki",
-      "group_header": "6G ISAC",
+      "group_header": "6GR / 10.8 Sensing",
       "agenda_item": "10.8.1",
       "description": "Evaluations",
       "agenda_descriptions": [
@@ -254,7 +254,7 @@
       "duration_minutes": 50,
       "specified_start_time": null,
       "chair": "Hiroki",
-      "group_header": "6G ISAC",
+      "group_header": "6GR / 10.8 Sensing",
       "agenda_item": "10.8.2",
       "description": "Aspects of integration with communication",
       "agenda_descriptions": [
@@ -288,7 +288,7 @@
       "duration_minutes": 50,
       "specified_start_time": null,
       "chair": "Hiroki",
-      "group_header": "6G ISAC",
+      "group_header": "6GR / 10.8 Sensing",
       "agenda_item": "10.8.3",
       "description": "Waveform and frame structure",
       "agenda_descriptions": [
@@ -468,7 +468,7 @@
       "duration_minutes": 120,
       "specified_start_time": "14:30",
       "chair": "Hiroki",
-      "group_header": "6G",
+      "group_header": "6GR",
       "agenda_item": "10.5.4.4, 10.5.4.3, 10.5.4.2, 10.5.4.1",
       "description": "Handling of potential multiple uplink transmissions",
       "agenda_descriptions": [
@@ -583,7 +583,7 @@
       ]
     }
   ],
-  "merged_at": "2026-10-15T23:21:10.464205+00:00",
+  "merged_at": "2026-10-15T23:24:57.602887+00:00",
   "meeting_id": "ran1#126bis",
   "schema_version": 2
 }

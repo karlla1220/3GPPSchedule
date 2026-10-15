@@ -3229,7 +3229,7 @@
           "email_details": []
         },
         {
-          "name": "CB Sergio / R18 NR NTN corrections / R18 IoT NTN corrections / NR19 NR NTN / R20 IoT NTN / R20 NR NTN DL compensation",
+          "name": "CB Sergio / R18 NR NTN corrections / R18 IoT NTN corrections / NR19 NR NTN",
           "duration_minutes": 120,
           "start_time": "17:00",
           "end_time": "19:00",
@@ -3473,7 +3473,7 @@
       ],
       "sessions": [
         {
-          "name": "R20 AI Mob comebacks/continue",
+          "name": "CB Kyeongin / R20 AI Mob comebacks/continue",
           "duration_minutes": 60,
           "start_time": "08:30",
           "end_time": "09:30",
@@ -3514,7 +3514,7 @@
           "email_details": []
         },
         {
-          "name": "CB for NR20 AI/M PHY",
+          "name": "CB Erlin / CB for NR20 AI/M PHY",
           "duration_minutes": 60,
           "start_time": "09:30",
           "end_time": "10:30",
@@ -3726,7 +3726,7 @@
     }
   ],
   "source_file": "R2_135b_Schedule_v10.docx",
-  "generated_at": "2026-10-16 01:21",
+  "generated_at": "2026-10-16 08:26",
   "contact_name": "",
   "contact_email": "",
   "source_files": [

@@ -195,7 +195,7 @@
       "room_name": "RAN1_off1",
       "name": "R20 A-IoT",
       "duration_minutes": 60,
-      "specified_start_time": "12:00",
+      "specified_start_time": null,
       "chair": "Hiroki",
       "group_header": "R20",
       "agenda_item": "9.3.1, 9.3.2",
@@ -258,9 +258,9 @@
     },
     {
       "room_name": "RAN1_off2",
-      "name": "10.8.2 6G ISAC Sensing",
+      "name": "10.8.2 6G ISAC",
       "duration_minutes": 60,
-      "specified_start_time": "11:30",
+      "specified_start_time": null,
       "chair": "Hiroki",
       "group_header": "6GR",
       "agenda_item": "10.8.2",
@@ -292,9 +292,9 @@
     },
     {
       "room_name": "RAN1_off2",
-      "name": "10.2.1 Waveform",
+      "name": "10.2.1 6G waveform",
       "duration_minutes": 30,
-      "specified_start_time": "12:30",
+      "specified_start_time": null,
       "chair": "Hiroki",
       "group_header": "6GR",
       "agenda_item": "10.2.1",
@@ -325,7 +325,7 @@
       ]
     }
   ],
-  "merged_at": "2026-10-15T23:21:10.445889+00:00",
+  "merged_at": "2026-10-15T23:24:57.588406+00:00",
   "meeting_id": "ran1#126bis",
   "schema_version": 2
 }

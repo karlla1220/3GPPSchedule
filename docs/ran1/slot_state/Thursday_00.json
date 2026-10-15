@@ -221,7 +221,7 @@
       "name": "10.2.1 Waveform",
       "duration_minutes": 80,
       "specified_start_time": null,
-      "chair": "Hiroki",
+      "chair": null,
       "group_header": "6GR",
       "agenda_item": "10.2.1",
       "description": "Waveform",
@@ -255,11 +255,23 @@
       "name": "AI 7/8.2",
       "duration_minutes": 40,
       "specified_start_time": null,
-      "chair": "Hiroki",
-      "group_header": "Maintenance",
-      "agenda_item": "8.2, 7",
-      "description": "Maintenance on others",
+      "chair": null,
+      "group_header": "",
+      "agenda_item": "7, 8.2",
+      "description": "Pre-Rel-19 NR Maintenance",
       "agenda_descriptions": [
+        {
+          "agenda_item": "7",
+          "matched_agenda_item": "7",
+          "description": "Pre-Rel-19 NR Maintenance",
+          "hierarchy": [
+            {
+              "agenda_item": "7",
+              "description": "Pre-Rel-19 NR Maintenance",
+              "has_description": true
+            }
+          ]
+        },
         {
           "agenda_item": "8.2",
           "matched_agenda_item": "8.2",
@@ -273,18 +285,6 @@
             {
               "agenda_item": "8.2",
               "description": "Maintenance on others",
-              "has_description": true
-            }
-          ]
-        },
-        {
-          "agenda_item": "7",
-          "matched_agenda_item": "7",
-          "description": "Pre-Rel-19 NR Maintenance",
-          "hierarchy": [
-            {
-              "agenda_item": "7",
-              "description": "Pre-Rel-19 NR Maintenance",
               "has_description": true
             }
           ]
@@ -469,7 +469,7 @@
       ]
     }
   ],
-  "merged_at": "2026-10-15T23:21:10.461597+00:00",
+  "merged_at": "2026-10-15T23:24:57.600888+00:00",
   "meeting_id": "ran1#126bis",
   "schema_version": 2
 }

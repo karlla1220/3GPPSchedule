@@ -9,6 +9,45 @@
   "merged_sessions": [
     {
       "room_name": "RAN1_main",
+      "name": "10.5.1.3",
+      "duration_minutes": 30,
+      "specified_start_time": null,
+      "chair": null,
+      "group_header": "6GR",
+      "agenda_item": "10.5.1.3",
+      "description": "Bandwidth operation",
+      "agenda_descriptions": [
+        {
+          "agenda_item": "10.5.1.3",
+          "matched_agenda_item": "10.5.1.3",
+          "description": "Bandwidth operation",
+          "hierarchy": [
+            {
+              "agenda_item": "10",
+              "description": "Rel-20 Study of 6GR",
+              "has_description": true
+            },
+            {
+              "agenda_item": "10.5",
+              "description": "Multi-antenna system",
+              "has_description": true
+            },
+            {
+              "agenda_item": "10.5.1",
+              "description": "Initial access and mobility",
+              "has_description": true
+            },
+            {
+              "agenda_item": "10.5.1.3",
+              "description": "Bandwidth operation",
+              "has_description": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "room_name": "RAN1_main",
       "name": "10.5.1.1",
       "duration_minutes": 50,
       "specified_start_time": null,
@@ -86,48 +125,18 @@
       ]
     },
     {
-      "room_name": "RAN1_main",
-      "name": "10.5.1.3",
-      "duration_minutes": 30,
+      "room_name": "RAN1_brk1",
+      "name": "NR-NTN",
+      "duration_minutes": 20,
       "specified_start_time": null,
       "chair": null,
-      "group_header": "6GR",
-      "agenda_item": "10.5.1.3",
-      "description": "Bandwidth operation",
-      "agenda_descriptions": [
-        {
-          "agenda_item": "10.5.1.3",
-          "matched_agenda_item": "10.5.1.3",
-          "description": "Bandwidth operation",
-          "hierarchy": [
-            {
-              "agenda_item": "10",
-              "description": "Rel-20 Study of 6GR",
-              "has_description": true
-            },
-            {
-              "agenda_item": "10.5",
-              "description": "Multi-antenna system",
-              "has_description": true
-            },
-            {
-              "agenda_item": "10.5.1",
-              "description": "Initial access and mobility",
-              "has_description": true
-            },
-            {
-              "agenda_item": "10.5.1.3",
-              "description": "Bandwidth operation",
-              "has_description": true
-            }
-          ]
-        }
-      ]
+      "group_header": "R20",
+      "agenda_item": null
     },
     {
       "room_name": "RAN1_brk1",
       "name": "10.7.1 NTN",
-      "duration_minutes": 60,
+      "duration_minutes": 40,
       "specified_start_time": null,
       "chair": null,
       "group_header": "6GR",
@@ -160,18 +169,18 @@
     },
     {
       "room_name": "RAN1_brk1",
-      "name": "10.5.2.x",
+      "name": "10.5.2.1",
       "duration_minutes": 60,
       "specified_start_time": null,
       "chair": null,
       "group_header": "6GR",
-      "agenda_item": "10.5.2.x",
-      "description": "MIMO operation",
+      "agenda_item": "10.5.2.1",
+      "description": "Downlink transmission scheme(s) for downlink control channels",
       "agenda_descriptions": [
         {
-          "agenda_item": "10.5.2.x",
-          "matched_agenda_item": "10.5.2",
-          "description": "MIMO operation",
+          "agenda_item": "10.5.2.1",
+          "matched_agenda_item": "10.5.2.1",
+          "description": "Downlink transmission scheme(s) for downlink control channels",
           "hierarchy": [
             {
               "agenda_item": "10",
@@ -187,20 +196,11 @@
               "agenda_item": "10.5.2",
               "description": "MIMO operation",
               "has_description": true
-            }
-          ],
-          "children": [
+            },
             {
               "agenda_item": "10.5.2.1",
-              "description": "Downlink transmission scheme(s) for downlink control channels"
-            },
-            {
-              "agenda_item": "10.5.2.2",
-              "description": "Downlink transmission scheme(s) for downlink shared channels"
-            },
-            {
-              "agenda_item": "10.5.2.3",
-              "description": "Uplink transmission scheme(s) for uplink channels"
+              "description": "Downlink transmission scheme(s) for downlink control channels",
+              "has_description": true
             }
           ]
         }
@@ -212,7 +212,7 @@
       "duration_minutes": 60,
       "specified_start_time": null,
       "chair": "Hiroki",
-      "group_header": "R20 / A-IoT",
+      "group_header": "R20 / A-IoT Phase2",
       "agenda_item": "9.3.3",
       "description": "Other procedures",
       "agenda_descriptions": [
@@ -246,7 +246,7 @@
       "duration_minutes": 40,
       "specified_start_time": null,
       "chair": "Hiroki",
-      "group_header": "R20 / A-IoT",
+      "group_header": "R20 / A-IoT Phase2",
       "agenda_item": "9.3.1",
       "description": "R2D signals, channels, waveform and procedures",
       "agenda_descriptions": [
@@ -280,7 +280,7 @@
       "duration_minutes": 20,
       "specified_start_time": null,
       "chair": "Hiroki",
-      "group_header": "R20 / A-IoT",
+      "group_header": "R20 / A-IoT Phase2",
       "agenda_item": "9.3.2",
       "description": "D2R signals, channels, waveform and procedures",
       "agenda_descriptions": [
@@ -426,7 +426,7 @@
       "duration_minutes": 30,
       "specified_start_time": null,
       "chair": "Hiroki",
-      "group_header": "6G / 10.5.4.x",
+      "group_header": "6GR / 10.5.4.x",
       "agenda_item": "10.5.4.1",
       "description": "Downlink control channel, scheduling for downlink and uplink transmission",
       "agenda_descriptions": [
@@ -465,7 +465,7 @@
       "duration_minutes": 30,
       "specified_start_time": null,
       "chair": "Hiroki",
-      "group_header": "6G / 10.5.4.x",
+      "group_header": "6GR / 10.5.4.x",
       "agenda_item": "10.5.4.3",
       "description": "HARQ related Aspects",
       "agenda_descriptions": [
@@ -500,7 +500,7 @@
     },
     {
       "room_name": "RAN1_off2",
-      "name": "6G ISAC",
+      "name": "10.8.x Sensing",
       "duration_minutes": 60,
       "specified_start_time": null,
       "chair": "Hiroki",
@@ -542,7 +542,7 @@
       ]
     }
   ],
-  "merged_at": "2026-10-15T23:21:10.467347+00:00",
+  "merged_at": "2026-10-15T23:24:57.605254+00:00",
   "meeting_id": "ran1#126bis",
   "schema_version": 2
 }

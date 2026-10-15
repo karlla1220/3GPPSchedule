@@ -11,10 +11,10 @@
     "uploaded_at": "",
     "size": 571880,
     "sha256": "4be9c72ec3d8824fc859a0d496a06aa9d8a4574f70e4ca637b4158b28044d59e",
-    "etag": null,
+    "etag": "\"8082b8d77e46dd1:0\"",
     "last_modified": "Thu, 17 Sep 2026 08:30:49 GMT",
-    "ftp_modified": "213 20260917083049",
-    "content_type": "application/octet-stream",
+    "ftp_modified": null,
+    "content_type": "application/x-zip-compressed",
     "content_disposition": null
   },
   "agenda": {
@@ -22,21 +22,11 @@
     "name": "agenda.csv",
     "size": 13936,
     "sha256": "a0c12c8882e45c535d689f090c9f6eca162a1e3d9e08aea582ca7f832afec5df",
-    "etag": null,
+    "etag": "\"85b2e2d19e5bdd1:0\"",
     "last_modified": "Wed, 14 Oct 2026 05:42:37 GMT",
-    "ftp_modified": "213 20261014054237",
+    "ftp_modified": null,
     "content_type": "application/octet-stream",
     "content_disposition": null
-  },
-  "portal_metadata": {
-    "starts_at": "2026-09-14T09:00:00+02:00",
-    "ends_at": "2026-09-17T17:30:00+02:00",
-    "starts_on": "2026-09-14",
-    "ends_on": "2026-09-17",
-    "location": "Madrid",
-    "country": "ES",
-    "portal_timezone": "(GMT+02.00)  Brussels, Copenhagen, Madrid, Paris",
-    "portal_id": 60799
   },
   "metadata": {
     "starts_at": "2026-09-14T09:00:00+02:00",

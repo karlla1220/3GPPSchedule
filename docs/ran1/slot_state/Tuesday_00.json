@@ -129,7 +129,7 @@
       "name": "AI 10.7.1 NTN",
       "duration_minutes": 50,
       "specified_start_time": null,
-      "chair": "Sorour",
+      "chair": null,
       "group_header": "6GR",
       "agenda_item": "10.7.1",
       "description": "NTN specific requirements and design",
@@ -163,8 +163,8 @@
       "name": "AI 9.5 NTN",
       "duration_minutes": 30,
       "specified_start_time": null,
-      "chair": "Sorour",
-      "group_header": "R20",
+      "chair": null,
+      "group_header": "R20 / R20 NR",
       "agenda_item": "9.5",
       "description": "NR NTN in systems using downlink compensation",
       "agenda_descriptions": [
@@ -192,8 +192,8 @@
       "name": "AI 9.4 NR-NTN",
       "duration_minutes": 40,
       "specified_start_time": null,
-      "chair": "Sorour",
-      "group_header": "R20",
+      "chair": null,
+      "group_header": "R20 / R20 NR",
       "agenda_item": "9.4",
       "description": "GNSS resilient NR-NTN operation",
       "agenda_descriptions": [
@@ -221,8 +221,8 @@
       "name": "10.5.4.1",
       "duration_minutes": 40,
       "specified_start_time": null,
-      "chair": "Hiroki",
-      "group_header": "6GR",
+      "chair": null,
+      "group_header": "6GR / 6G 10.5.4.x",
       "agenda_item": "10.5.4.1",
       "description": "Downlink control channel, scheduling for downlink and uplink transmission",
       "agenda_descriptions": [
@@ -260,8 +260,8 @@
       "name": "10.5.4.2",
       "duration_minutes": 40,
       "specified_start_time": null,
-      "chair": "Hiroki",
-      "group_header": "6GR",
+      "chair": null,
+      "group_header": "6GR / 6G 10.5.4.x",
       "agenda_item": "10.5.4.2",
       "description": "Downlink and uplink transmission without dynamic scheduling",
       "agenda_descriptions": [
@@ -299,8 +299,8 @@
       "name": "10.5.4.3",
       "duration_minutes": 40,
       "specified_start_time": null,
-      "chair": "Hiroki",
-      "group_header": "6GR",
+      "chair": null,
+      "group_header": "6GR / 6G 10.5.4.x",
       "agenda_item": "10.5.4.3",
       "description": "HARQ related Aspects",
       "agenda_descriptions": [
@@ -506,7 +506,7 @@
       ]
     }
   ],
-  "merged_at": "2026-10-15T23:21:10.450268+00:00",
+  "merged_at": "2026-10-15T23:24:57.592261+00:00",
   "meeting_id": "ran1#126bis",
   "schema_version": 2
 }

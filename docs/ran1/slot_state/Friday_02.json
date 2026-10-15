@@ -14,27 +14,9 @@
       "chair": null,
       "group_header": "",
       "agenda_item": null
-    },
-    {
-      "room_name": "RAN1_off1",
-      "name": "To be assigned by Sorour",
-      "duration_minutes": 120,
-      "specified_start_time": null,
-      "chair": "Sorour",
-      "group_header": "",
-      "agenda_item": null
-    },
-    {
-      "room_name": "RAN1_off2",
-      "name": "To be assigned by Hiroki",
-      "duration_minutes": 120,
-      "specified_start_time": null,
-      "chair": "Hiroki",
-      "group_header": "",
-      "agenda_item": null
     }
   ],
-  "merged_at": "2026-10-15T23:21:10.469192+00:00",
+  "merged_at": "2026-10-15T23:24:57.606644+00:00",
   "meeting_id": "ran1#126bis",
   "schema_version": 2
 }

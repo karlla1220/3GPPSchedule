@@ -150,7 +150,7 @@
     },
     {
       "room_name": "RAN1_brk1",
-      "name": "10.3.1 Channel coding",
+      "name": "AI 10.3.1 Coding",
       "duration_minutes": 60,
       "specified_start_time": null,
       "chair": null,
@@ -184,7 +184,7 @@
     },
     {
       "room_name": "RAN1_brk1",
-      "name": "10.3.2 Modulation",
+      "name": "AI 10.3.2 Modulation",
       "duration_minutes": 30,
       "specified_start_time": null,
       "chair": null,
@@ -218,7 +218,7 @@
     },
     {
       "room_name": "RAN1_brk1",
-      "name": "10.5.2.2 PDSCH",
+      "name": "AI 10.5.2.2 PDSCH",
       "duration_minutes": 60,
       "specified_start_time": null,
       "chair": null,
@@ -257,7 +257,7 @@
     },
     {
       "room_name": "RAN1_brk2",
-      "name": "10.2.1 Waveform",
+      "name": "6G waveform",
       "duration_minutes": 30,
       "specified_start_time": null,
       "chair": "Hiroki",
@@ -295,7 +295,7 @@
       "duration_minutes": 20,
       "specified_start_time": null,
       "chair": "Hiroki",
-      "group_header": "6GR / 6G 10.5.4.x",
+      "group_header": "6GR / 10.5.4.x",
       "agenda_item": "10.5.4.2",
       "description": "Downlink and uplink transmission without dynamic scheduling",
       "agenda_descriptions": [
@@ -334,7 +334,7 @@
       "duration_minutes": 30,
       "specified_start_time": null,
       "chair": "Hiroki",
-      "group_header": "6GR / 6G 10.5.4.x",
+      "group_header": "6GR / 10.5.4.x",
       "agenda_item": "10.5.4.1",
       "description": "Downlink control channel, scheduling for downlink and uplink transmission",
       "agenda_descriptions": [
@@ -373,7 +373,7 @@
       "duration_minutes": 30,
       "specified_start_time": null,
       "chair": "Hiroki",
-      "group_header": "6GR / 6G 10.5.4.x",
+      "group_header": "6GR / 10.5.4.x",
       "agenda_item": "10.5.4.4",
       "description": "Handling of potential multiple uplink transmissions",
       "agenda_descriptions": [
@@ -412,7 +412,7 @@
       "duration_minutes": 40,
       "specified_start_time": null,
       "chair": "Hiroki",
-      "group_header": "6GR / 6G 10.5.4.x",
+      "group_header": "6GR / 10.5.4.x",
       "agenda_item": "10.5.4.3",
       "description": "HARQ related Aspects",
       "agenda_descriptions": [
@@ -728,7 +728,7 @@
       ]
     }
   ],
-  "merged_at": "2026-10-15T23:21:10.459966+00:00",
+  "merged_at": "2026-10-15T23:24:57.599586+00:00",
   "meeting_id": "ran1#126bis",
   "schema_version": 2
 }
