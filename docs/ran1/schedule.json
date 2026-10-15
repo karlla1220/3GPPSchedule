@@ -13162,7 +13162,27 @@
           "room_scope": "assigned",
           "notes": [],
           "inferred_agenda_items": [],
-          "email_details": []
+          "email_details": [
+            {
+              "kind": "session",
+              "session": "Fri 08:30-09:15 201",
+              "quote": "Please note that we will discuss observation for frequency interleaving in today’s 8:30 offline session.\nPlease consider the following update to the observation after coffee break discussions and early-morning clean up.\nIf there is any time left, we will discuss semi-open loop transmission.",
+              "mode": "offline",
+              "summary": "Discuss frequency interleaving (Observation 4-7-4); semi-open loop if time permits",
+              "topics": [
+                "observation for frequency interleaving",
+                "Observation 4-7-4",
+                "semi-open loop transmission"
+              ],
+              "start": "08:30",
+              "day": "Friday",
+              "split": [],
+              "mail": "a2bbd3c9.2610c",
+              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;a2bbd3c9.2610c",
+              "author": "Sven Jacobsson",
+              "sent": "2026-10-16T08:12:40+09:00"
+            }
+          ]
         },
         {
           "name": "10.5.2.3",
@@ -13965,7 +13985,7 @@
     }
   ],
   "source_file": "RAN1#126b online and offline schedules - v05.docx",
-  "generated_at": "2026-10-16 07:42",
+  "generated_at": "2026-10-16 08:21",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
