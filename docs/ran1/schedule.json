@@ -12740,7 +12740,25 @@
           "room_scope": "assigned",
           "notes": [],
           "inferred_agenda_items": [],
-          "email_details": []
+          "email_details": [
+            {
+              "kind": "session",
+              "session": "Fri 09:00-09:50 Tamna BC Hall",
+              "quote": "The FL summary #6 have been uploaded in R1-2608450. You can find the proposals for online discussion in the beginning of the tdoc.",
+              "mode": "online",
+              "summary": "Proposals for online discussion are in beginning of FL summary #6 (R1-2608450)",
+              "topics": [],
+              "day": "Friday",
+              "tdocs": [
+                "R1-2608450"
+              ],
+              "split": [],
+              "mail": "62549a1b.2610c",
+              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;62549a1b.2610c",
+              "author": "songxinghua",
+              "sent": "2026-10-16T08:38:03+09:00"
+            }
+          ]
         },
         {
           "name": "10.5.1.2",
@@ -13242,7 +13260,25 @@
           "room_scope": "assigned",
           "notes": [],
           "inferred_agenda_items": [],
-          "email_details": []
+          "email_details": [
+            {
+              "kind": "session",
+              "session": "Fri 09:15-10:00 201",
+              "quote": "Today offline plan is as follows (sorry for late notice)\n* CW2L template (excel sheet)\n* TDRA for PUSCH (across-slot): if time allows",
+              "mode": "offline",
+              "summary": "Offline plan: CW2L template and TDRA for PUSCH (across-slot) if time allows",
+              "topics": [
+                "CW2L template (excel sheet)",
+                "TDRA for PUSCH (across-slot)"
+              ],
+              "day": "Friday",
+              "split": [],
+              "mail": "58982388.2610c",
+              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;58982388.2610c",
+              "author": "Youngrok Jang",
+              "sent": "2026-10-16T08:31:31+09:00"
+            }
+          ]
         },
         {
           "name": "10.4.2",
@@ -13978,7 +14014,7 @@
     }
   ],
   "source_file": "RAN1#126b online and offline schedules - v05.docx",
-  "generated_at": "2026-10-16 08:26",
+  "generated_at": "2026-10-16 08:41",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
