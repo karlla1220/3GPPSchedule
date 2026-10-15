@@ -9,25 +9,29 @@
           "name": "Main",
           "table_index": 0,
           "room_index_in_table": 0,
-          "id": "main"
+          "id": "main",
+          "kind": ""
         },
         {
           "name": "Breakout 1",
           "table_index": 0,
           "room_index_in_table": 0,
-          "id": "brk1"
+          "id": "brk1",
+          "kind": ""
         },
         {
           "name": "Breakout 2",
           "table_index": 0,
           "room_index_in_table": 0,
-          "id": "brk2"
+          "id": "brk2",
+          "kind": ""
         },
         {
           "name": "Breakout 3",
           "table_index": 0,
           "room_index_in_table": 0,
-          "id": "brk3"
+          "id": "brk3",
+          "kind": ""
         }
       ],
       "sessions": [
@@ -987,19 +991,22 @@
           "name": "Main",
           "table_index": 0,
           "room_index_in_table": 0,
-          "id": "main"
+          "id": "main",
+          "kind": ""
         },
         {
           "name": "Breakout 1",
           "table_index": 0,
           "room_index_in_table": 0,
-          "id": "brk1"
+          "id": "brk1",
+          "kind": ""
         },
         {
           "name": "Breakout 2",
           "table_index": 0,
           "room_index_in_table": 0,
-          "id": "brk2"
+          "id": "brk2",
+          "kind": ""
         }
       ],
       "sessions": [
@@ -1702,25 +1709,29 @@
           "name": "Main",
           "table_index": 0,
           "room_index_in_table": 0,
-          "id": "main"
+          "id": "main",
+          "kind": ""
         },
         {
           "name": "Breakout 1",
           "table_index": 0,
           "room_index_in_table": 0,
-          "id": "brk1"
+          "id": "brk1",
+          "kind": ""
         },
         {
           "name": "Breakout 2",
           "table_index": 0,
           "room_index_in_table": 0,
-          "id": "brk2"
+          "id": "brk2",
+          "kind": ""
         },
         {
           "name": "Breakout 3",
           "table_index": 0,
           "room_index_in_table": 0,
-          "id": "brk3"
+          "id": "brk3",
+          "kind": ""
         }
       ],
       "sessions": [
@@ -2569,25 +2580,29 @@
           "name": "Main",
           "table_index": 0,
           "room_index_in_table": 0,
-          "id": "main"
+          "id": "main",
+          "kind": ""
         },
         {
           "name": "Breakout 1",
           "table_index": 0,
           "room_index_in_table": 0,
-          "id": "brk1"
+          "id": "brk1",
+          "kind": ""
         },
         {
           "name": "Breakout 2",
           "table_index": 0,
           "room_index_in_table": 0,
-          "id": "brk2"
+          "id": "brk2",
+          "kind": ""
         },
         {
           "name": "Breakout 3",
           "table_index": 0,
           "room_index_in_table": 0,
-          "id": "brk3"
+          "id": "brk3",
+          "kind": ""
         }
       ],
       "sessions": [
@@ -3461,19 +3476,22 @@
           "name": "Main",
           "table_index": 0,
           "room_index_in_table": 0,
-          "id": "main"
+          "id": "main",
+          "kind": ""
         },
         {
           "name": "Breakout 1",
           "table_index": 0,
           "room_index_in_table": 0,
-          "id": "brk1"
+          "id": "brk1",
+          "kind": ""
         },
         {
           "name": "Breakout 2",
           "table_index": 0,
           "room_index_in_table": 0,
-          "id": "brk2"
+          "id": "brk2",
+          "kind": ""
         }
       ],
       "sessions": [

@@ -9,13 +9,15 @@
           "name": "Main: Madrid 3/4/5/6",
           "table_index": 0,
           "room_index_in_table": 0,
-          "id": "madrid-3-4-5-6"
+          "id": "madrid-3-4-5-6",
+          "kind": ""
         },
         {
           "name": "Breakout: Madrid 1-2",
           "table_index": 0,
           "room_index_in_table": 0,
-          "id": "madrid-1-2"
+          "id": "madrid-1-2",
+          "kind": ""
         }
       ],
       "sessions": [
@@ -352,19 +354,22 @@
           "name": "Main: Madrid 3/4/5/6",
           "table_index": 0,
           "room_index_in_table": 0,
-          "id": "madrid-3-4-5-6"
+          "id": "madrid-3-4-5-6",
+          "kind": ""
         },
         {
           "name": "Breakout: Madrid 1-2 (08:00–12:30)",
           "table_index": 0,
           "room_index_in_table": 0,
-          "id": "madrid-1-2"
+          "id": "madrid-1-2",
+          "kind": ""
         },
         {
           "name": "Breakout: Neptuno + PTA Alcala (12:30–19:00)",
           "table_index": 0,
           "room_index_in_table": 0,
-          "id": "neptuno-pta-alcala"
+          "id": "neptuno-pta-alcala",
+          "kind": ""
         }
       ],
       "sessions": [
@@ -813,13 +818,15 @@
           "name": "Main: Madrid 3/4/5/6",
           "table_index": 0,
           "room_index_in_table": 0,
-          "id": "madrid-3-4-5-6"
+          "id": "madrid-3-4-5-6",
+          "kind": ""
         },
         {
           "name": "Breakout: Neptuno + PTA Alcala",
           "table_index": 0,
           "room_index_in_table": 0,
-          "id": "neptuno-pta-alcala"
+          "id": "neptuno-pta-alcala",
+          "kind": ""
         }
       ],
       "sessions": [
@@ -1302,13 +1309,15 @@
           "name": "Main: Madrid 3/4/5/6",
           "table_index": 0,
           "room_index_in_table": 0,
-          "id": "madrid-3-4-5-6"
+          "id": "madrid-3-4-5-6",
+          "kind": ""
         },
         {
           "name": "Breakout: Neptuno + PTA Alcala",
           "table_index": 0,
           "room_index_in_table": 0,
-          "id": "neptuno-pta-alcala"
+          "id": "neptuno-pta-alcala",
+          "kind": ""
         }
       ],
       "sessions": [

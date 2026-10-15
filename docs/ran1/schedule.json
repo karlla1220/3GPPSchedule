@@ -9,31 +9,36 @@
           "name": "Tamna BC Hall",
           "table_index": 0,
           "room_index_in_table": 0,
-          "id": ""
+          "id": "",
+          "kind": "online"
         },
         {
           "name": "Yeongju A Hall",
           "table_index": 0,
           "room_index_in_table": 1,
-          "id": ""
+          "id": "",
+          "kind": "online"
         },
         {
           "name": "Yeongju B Hall",
           "table_index": 0,
           "room_index_in_table": 2,
-          "id": ""
+          "id": "",
+          "kind": "online"
         },
         {
           "name": "201",
           "table_index": 1,
           "room_index_in_table": 0,
-          "id": ""
+          "id": "",
+          "kind": "offline"
         },
         {
           "name": "203",
           "table_index": 1,
           "room_index_in_table": 1,
-          "id": ""
+          "id": "",
+          "kind": "offline"
         }
       ],
       "sessions": [
@@ -2139,31 +2144,36 @@
           "name": "Tamna BC Hall",
           "table_index": 0,
           "room_index_in_table": 0,
-          "id": ""
+          "id": "",
+          "kind": "online"
         },
         {
           "name": "Yeongju A Hall",
           "table_index": 0,
           "room_index_in_table": 1,
-          "id": ""
+          "id": "",
+          "kind": "online"
         },
         {
           "name": "Yeongju B Hall",
           "table_index": 0,
           "room_index_in_table": 2,
-          "id": ""
+          "id": "",
+          "kind": "online"
         },
         {
           "name": "201",
           "table_index": 1,
           "room_index_in_table": 0,
-          "id": ""
+          "id": "",
+          "kind": "offline"
         },
         {
           "name": "203",
           "table_index": 1,
           "room_index_in_table": 1,
-          "id": ""
+          "id": "",
+          "kind": "offline"
         }
       ],
       "sessions": [
@@ -4604,19 +4614,19 @@
             {
               "kind": "session",
               "session": "Tue 17:30-18:30 Yeongju B Hall",
-              "quote": "I uploaded the FL summary_v22 in the draft folder for today’s offline discussion.",
-              "mode": "offline",
-              "summary": "Offline discussion based on FL summary_v22",
+              "quote": "For Tuesday Online session, FL summary R1-2607193 is now available in the inbox.",
+              "mode": "online",
+              "summary": "FL summary R1-2607193 available for Tuesday online session",
               "topics": [],
               "day": "Tuesday",
               "tdocs": [
                 "R1-2607193"
               ],
               "split": [],
-              "mail": "217ca309.2610b",
-              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;217ca309.2610b",
+              "mail": "16812660.2610b",
+              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;16812660.2610b",
               "author": "Teng Ma",
-              "sent": "2026-10-13T14:38:47+09:00"
+              "sent": "2026-10-13T17:12:31+09:00"
             }
           ]
         },
@@ -4913,31 +4923,36 @@
           "name": "Tamna BC Hall",
           "table_index": 0,
           "room_index_in_table": 0,
-          "id": ""
+          "id": "",
+          "kind": "online"
         },
         {
           "name": "Yeongju A Hall",
           "table_index": 0,
           "room_index_in_table": 1,
-          "id": ""
+          "id": "",
+          "kind": "online"
         },
         {
           "name": "Yeongju B Hall",
           "table_index": 0,
           "room_index_in_table": 2,
-          "id": ""
+          "id": "",
+          "kind": "online"
         },
         {
           "name": "201",
           "table_index": 1,
           "room_index_in_table": 0,
-          "id": ""
+          "id": "",
+          "kind": "offline"
         },
         {
           "name": "203",
           "table_index": 1,
           "room_index_in_table": 1,
-          "id": ""
+          "id": "",
+          "kind": "offline"
         }
       ],
       "sessions": [
@@ -5961,7 +5976,26 @@
           "room_scope": "assigned",
           "notes": [],
           "inferred_agenda_items": [],
-          "email_details": []
+          "email_details": [
+            {
+              "kind": "session",
+              "session": "Wed 12:00-12:30 Yeongju A Hall",
+              "quote": "The FL propsal for online has been uploaded in http://10.10.10.10/ftp/RAN/RAN1/Inbox/R1-2608628.zip",
+              "mode": "online",
+              "summary": "FL proposal for online session uploaded",
+              "topics": [],
+              "start": "12:00",
+              "day": "Wednesday",
+              "tdocs": [
+                "R1-2608628"
+              ],
+              "split": [],
+              "mail": "7199d779.2610b",
+              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;7199d779.2610b",
+              "author": "<>",
+              "sent": "2026-10-14T11:47:54+09:00"
+            }
+          ]
         },
         {
           "name": "AI 10.5.2.2 PDSCH",
@@ -8681,31 +8715,36 @@
           "name": "Tamna BC Hall",
           "table_index": 0,
           "room_index_in_table": 0,
-          "id": ""
+          "id": "",
+          "kind": "online"
         },
         {
           "name": "Yeongju A Hall",
           "table_index": 0,
           "room_index_in_table": 1,
-          "id": ""
+          "id": "",
+          "kind": "online"
         },
         {
           "name": "Yeongju B Hall",
           "table_index": 0,
           "room_index_in_table": 2,
-          "id": ""
+          "id": "",
+          "kind": "online"
         },
         {
           "name": "201",
           "table_index": 1,
           "room_index_in_table": 0,
-          "id": ""
+          "id": "",
+          "kind": "offline"
         },
         {
           "name": "203",
           "table_index": 1,
           "room_index_in_table": 1,
-          "id": ""
+          "id": "",
+          "kind": "offline"
         }
       ],
       "sessions": [
@@ -11063,22 +11102,6 @@
             {
               "kind": "session",
               "session": "Thu 15:40-16:30 Yeongju B Hall",
-              "quote": "provide contents and facilitate tomorrow's offline discussion",
-              "mode": "offline",
-              "summary": "Offline discussion on auto/cross-correlation for sensing sequence design",
-              "topics": [
-                "auto-correlation and cross-correlation aspects for sensing sequence design"
-              ],
-              "day": "Thursday",
-              "split": [],
-              "mail": "a833898b.2610b",
-              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;a833898b.2610b",
-              "author": "WU JIANMING",
-              "sent": "2026-10-14T22:00:27+09:00"
-            },
-            {
-              "kind": "session",
-              "session": "Thu 15:40-16:30 Yeongju B Hall",
               "quote": "proposals for offline/online session on Thursday",
               "mode": null,
               "summary": "Proposals for Thursday offline/online session",
@@ -12067,24 +12090,7 @@
           "room_scope": "assigned",
           "notes": [],
           "inferred_agenda_items": [],
-          "email_details": [
-            {
-              "kind": "session",
-              "session": "Thu 18:10-19:00 Yeongju B Hall",
-              "quote": "the proposals for offline discussion is updated section 2.4. Please check.",
-              "mode": "offline",
-              "summary": "Offline proposals updated in Section 2.4 (V051)",
-              "topics": [
-                "section 2.4"
-              ],
-              "day": "Thursday",
-              "split": [],
-              "mail": "76fd45ec.2610c",
-              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;76fd45ec.2610c",
-              "author": "Xiaodong Shen",
-              "sent": "2026-10-15T15:25:34+09:00"
-            }
-          ]
+          "email_details": []
         },
         {
           "name": "10.5.4.2",
@@ -12310,6 +12316,23 @@
               "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;73f0dceb.2610c",
               "author": "Weide Wu (吳威德)",
               "sent": "2026-10-15T14:28:37+09:00"
+            },
+            {
+              "kind": "session",
+              "session": "Thu 18:30-19:00 201",
+              "quote": "For offline discussion later today (Thur 18:30 Room 201), please check \"V928_Offline4\" in the offline subfolder, where 3 offline proposals are included in Section 2.",
+              "mode": "offline",
+              "summary": "Check V928_Offline4 Section 2 (3 proposals) for offline discussion",
+              "topics": [
+                "Section 2"
+              ],
+              "start": "18:30",
+              "day": "Thursday",
+              "split": [],
+              "mail": "440c7a49.2610c",
+              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;440c7a49.2610c",
+              "author": "Weide Wu (吳威德)",
+              "sent": "2026-10-15T17:13:57+09:00"
             }
           ]
         },
@@ -12557,31 +12580,36 @@
           "name": "Tamna BC Hall",
           "table_index": 0,
           "room_index_in_table": 0,
-          "id": ""
+          "id": "",
+          "kind": "online"
         },
         {
           "name": "Yeongju A Hall",
           "table_index": 0,
           "room_index_in_table": 1,
-          "id": ""
+          "id": "",
+          "kind": "online"
         },
         {
           "name": "Yeongju B Hall",
           "table_index": 0,
           "room_index_in_table": 2,
-          "id": ""
+          "id": "",
+          "kind": "online"
         },
         {
           "name": "201",
           "table_index": 1,
           "room_index_in_table": 0,
-          "id": ""
+          "id": "",
+          "kind": "offline"
         },
         {
           "name": "203",
           "table_index": 1,
           "room_index_in_table": 1,
-          "id": ""
+          "id": "",
+          "kind": "offline"
         }
       ],
       "sessions": [
@@ -12835,25 +12863,7 @@
           "room_scope": "assigned",
           "notes": [],
           "inferred_agenda_items": [],
-          "email_details": [
-            {
-              "kind": "session",
-              "session": "Fri 09:30-10:30 Yeongju A Hall",
-              "quote": "We will treat Observation 4-7-4 on Friday morning online session.\nWe will also treat TB mapping within a PDSCH on Friday morning online session.",
-              "mode": "online",
-              "summary": "Observation 4-7-4 and TB mapping within a PDSCH",
-              "topics": [
-                "Observation 4-7-4",
-                "TB mapping within a PDSCH"
-              ],
-              "day": "Friday",
-              "split": [],
-              "mail": "8baf41ac.2610b",
-              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;8baf41ac.2610b",
-              "author": "Sven Jacobsson",
-              "sent": "2026-10-15T01:04:48+09:00"
-            }
-          ]
+          "email_details": []
         },
         {
           "name": "9.3.1",
@@ -13115,7 +13125,26 @@
           "room_scope": "assigned",
           "notes": [],
           "inferred_agenda_items": [],
-          "email_details": []
+          "email_details": [
+            {
+              "kind": "session",
+              "session": "Fri 10:00-10:30 201",
+              "quote": "we will have 30min offline and then online tomorrow. Detailed slots to be updated.",
+              "mode": "offline",
+              "summary": "30-min offline session tomorrow; detailed slot to be updated",
+              "topics": [],
+              "day": "Friday",
+              "split": [
+                {
+                  "minutes": 30
+                }
+              ],
+              "mail": "1e72da93.2610c",
+              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;1e72da93.2610c",
+              "author": "Naoya Shibaike",
+              "sent": "2026-10-15T14:10:06+09:00"
+            }
+          ]
         },
         {
           "name": "10.8.x Sensing",
@@ -13292,7 +13321,25 @@
           "room_scope": "assigned",
           "notes": [],
           "inferred_agenda_items": [],
-          "email_details": []
+          "email_details": [
+            {
+              "kind": "session",
+              "session": "Fri 11:00-12:00 Yeongju A Hall",
+              "quote": "We will treat Observation 4-7-4 on Friday morning online session.\nWe will also treat TB mapping within a PDSCH on Friday morning online session.",
+              "mode": "online",
+              "summary": "Observation 4-7-4 and TB mapping within a PDSCH",
+              "topics": [
+                "Observation 4-7-4",
+                "TB mapping within a PDSCH"
+              ],
+              "day": "Friday",
+              "split": [],
+              "mail": "8baf41ac.2610b",
+              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;8baf41ac.2610b",
+              "author": "Sven Jacobsson",
+              "sent": "2026-10-15T01:04:48+09:00"
+            }
+          ]
         },
         {
           "name": "10.5.2.3",
@@ -13381,7 +13428,24 @@
           "room_scope": "assigned",
           "notes": [],
           "inferred_agenda_items": [],
-          "email_details": []
+          "email_details": [
+            {
+              "kind": "session",
+              "session": "Fri 11:00-11:10 Yeongju B Hall",
+              "quote": "I would like to invite the interested parties to discuss the proposed conclusion that we will try to reach an agreement on in the Friday session.",
+              "mode": null,
+              "summary": "Try to reach an agreement on proposed conclusion in Friday session",
+              "topics": [
+                "Proposed conclusion"
+              ],
+              "day": "Friday",
+              "split": [],
+              "mail": "ffc9b831.2610c",
+              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;ffc9b831.2610c",
+              "author": "Karri Ranta-aho (Nokia)",
+              "sent": "2026-10-15T11:14:21+09:00"
+            }
+          ]
         },
         {
           "name": "10.8 Sensing",
@@ -13418,7 +13482,28 @@
           "room_scope": "assigned",
           "notes": [],
           "inferred_agenda_items": [],
-          "email_details": []
+          "email_details": [
+            {
+              "kind": "session",
+              "session": "Fri 11:10-12:00 Yeongju B Hall",
+              "quote": "I will suggest replacing the reference Tdoc number in online session tomorrow.",
+              "mode": "online",
+              "summary": "Online session to suggest replacing the reference Tdoc number",
+              "topics": [
+                "replacing the reference Tdoc number"
+              ],
+              "day": "Friday",
+              "tdocs": [
+                "R1-2608753",
+                "R1-2607995"
+              ],
+              "split": [],
+              "mail": "43c5b14e.2610c",
+              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;43c5b14e.2610c",
+              "author": "Woo-Suk Ko",
+              "sent": "2026-10-15T11:39:48+09:00"
+            }
+          ]
         },
         {
           "name": "10.5.4.x",
@@ -13591,7 +13676,7 @@
     }
   ],
   "source_file": "RAN1#126b online and offline schedules - v04.docx",
-  "generated_at": "2026-10-15 17:01",
+  "generated_at": "2026-10-15 17:21",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
@@ -18565,14 +18650,7 @@
         "changed_in": "Draft Chair notes RAN1#126bis_v00.docx"
       }
     },
-    "retained_files": [
-      "agreements/058c705730619214665e.html",
-      "agreements/3b801a135376b1a5bd31.html",
-      "agreements/4031c731526254737f3e.html",
-      "agreements/8a94976e05f864974f6b.html",
-      "agreements/9f18eef75e81a4815fca.html",
-      "agreements/d419ae4055489cf69011.html"
-    ]
+    "retained_files": []
   },
   "email_informal": {
     "10.5.4.4": [
