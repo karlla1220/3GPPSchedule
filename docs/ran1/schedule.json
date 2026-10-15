@@ -12809,7 +12809,24 @@
             "9.4",
             "9.5"
           ],
-          "email_details": []
+          "email_details": [
+            {
+              "kind": "session",
+              "session": "Fri 08:30-08:50 Yeongju A Hall",
+              "quote": "Please provide your comments on the proposals for the upcoming online (refer to section 7).",
+              "mode": "online",
+              "summary": "Upcoming online session covering proposals in section 7",
+              "topics": [
+                "section 7"
+              ],
+              "day": "Friday",
+              "split": [],
+              "mail": "4890e344.2610c",
+              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;4890e344.2610c",
+              "author": "EL JAAFARI Mohamed",
+              "sent": "2026-10-15T19:04:13+09:00"
+            }
+          ]
         },
         {
           "name": "10.7.1 NTN",
@@ -13772,7 +13789,7 @@
     }
   ],
   "source_file": "RAN1#126b online and offline schedules - v04.docx",
-  "generated_at": "2026-10-15 18:42",
+  "generated_at": "2026-10-15 19:21",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
@@ -18736,9 +18753,7 @@
         "changed_in": "Draft Chair notes RAN1#126bis_v00.docx"
       }
     },
-    "retained_files": [
-      "agreements/d259ae1e1b56b82d098c.html"
-    ]
+    "retained_files": []
   },
   "email_informal": {
     "10.5.4.4": [
