@@ -10871,7 +10871,32 @@
           "room_scope": "assigned",
           "notes": [],
           "inferred_agenda_items": [],
-          "email_details": []
+          "email_details": [
+            {
+              "kind": "session",
+              "session": "Thu 15:45-16:30 Yeongju A Hall",
+              "quote": "Today’s online plan is as follows:\n* PUSCH antenna selection\n* Sensitivity check for DL/UL reciprocity based PUSCH\n* Coherency of UL precoder\n* Additional evaluation methodology for PUCCH\n* PUCCH format",
+              "mode": "online",
+              "summary": "Online plan: PUSCH antenna selection, reciprocity, coherency, PUCCH topics",
+              "topics": [
+                "PUSCH antenna selection",
+                "Sensitivity check for DL/UL reciprocity based PUSCH",
+                "Coherency of UL precoder",
+                "Additional evaluation methodology for PUCCH",
+                "PUCCH format",
+                "PUCCH repetition"
+              ],
+              "day": "Thursday",
+              "tdocs": [
+                "R1-2607568"
+              ],
+              "split": [],
+              "mail": "cf3d339f.2610c",
+              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;cf3d339f.2610c",
+              "author": "Youngrok Jang",
+              "sent": "2026-10-15T15:33:08+09:00"
+            }
+          ]
         },
         {
           "name": "10.8.1",
@@ -11962,7 +11987,24 @@
           "room_scope": "assigned",
           "notes": [],
           "inferred_agenda_items": [],
-          "email_details": []
+          "email_details": [
+            {
+              "kind": "session",
+              "session": "Thu 18:10-19:00 Yeongju B Hall",
+              "quote": "the proposals for offline discussion is updated section 2.4. Please check.",
+              "mode": "offline",
+              "summary": "Offline proposals updated in Section 2.4 (V051)",
+              "topics": [
+                "section 2.4"
+              ],
+              "day": "Thursday",
+              "split": [],
+              "mail": "76fd45ec.2610c",
+              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;76fd45ec.2610c",
+              "author": "Xiaodong Shen",
+              "sent": "2026-10-15T15:25:34+09:00"
+            }
+          ]
         },
         {
           "name": "10.5.4.2",
@@ -13447,7 +13489,7 @@
     }
   ],
   "source_file": "RAN1#126b online and offline schedules - v03.docx",
-  "generated_at": "2026-10-15 15:21",
+  "generated_at": "2026-10-15 15:41",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
