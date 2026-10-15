@@ -13176,7 +13176,25 @@
           "room_scope": "assigned",
           "notes": [],
           "inferred_agenda_items": [],
-          "email_details": []
+          "email_details": [
+            {
+              "kind": "session",
+              "session": "Fri 08:30-09:30 203",
+              "quote": "tomorrow’s (Friday 9am) offline session in room 203. For this offline session, I plan to discuss only one Proposal 3-2 (III) in Section 4.4.",
+              "mode": "offline",
+              "summary": "Offline session on Proposal 3-2 (III) in Section 4.4",
+              "topics": [
+                "Proposal 3-2 (III) in Section 4.4"
+              ],
+              "start": "09:00",
+              "day": "Friday",
+              "split": [],
+              "mail": "28b965dc.2610c",
+              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;28b965dc.2610c",
+              "author": "Kevin Lin",
+              "sent": "2026-10-15T23:22:11+09:00"
+            }
+          ]
         },
         {
           "name": "10.8.x Sensing",
@@ -13446,7 +13464,24 @@
           "room_scope": "assigned",
           "notes": [],
           "inferred_agenda_items": [],
-          "email_details": []
+          "email_details": [
+            {
+              "kind": "session",
+              "session": "Fri 11:00-11:30 Yeongju B Hall",
+              "quote": "my plan for the Friday online session, which includes proposals to endorse evaluation results captured in Table 5-1 and 5-2 (FLS Section 3.5).",
+              "mode": "online",
+              "summary": "Online session to endorse evaluation results in Table 5-1 and 5-2",
+              "topics": [
+                "endorse evaluation results in Table 5-1 and 5-2 (FLS Section 3.5)"
+              ],
+              "day": "Friday",
+              "split": [],
+              "mail": "28b965dc.2610c",
+              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;28b965dc.2610c",
+              "author": "Kevin Lin",
+              "sent": "2026-10-15T23:22:11+09:00"
+            }
+          ]
         },
         {
           "name": "10.5.4.1",
@@ -13760,7 +13795,7 @@
     }
   ],
   "source_file": "RAN1#126b online and offline schedules - v05.docx",
-  "generated_at": "2026-10-15 23:01",
+  "generated_at": "2026-10-15 23:41",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
