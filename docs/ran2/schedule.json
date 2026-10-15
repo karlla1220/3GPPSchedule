@@ -2979,75 +2979,6 @@
           "email_details": []
         },
         {
-          "name": "CB Mattias / CB EUTRA&NR15161718 / CB NR19 SONMDT …",
-          "duration_minutes": 60,
-          "start_time": "12:00",
-          "end_time": "13:00",
-          "day": "Thursday",
-          "room_col_start": 2,
-          "room_col_end": 3,
-          "chair": "Mattias",
-          "agenda_item": "6.0.2.4, 5.1.3.2, 6.0.2, 6.0.2.2, 6.0.2.11, 6.0.2.23",
-          "group_header": "NR Rel-18",
-          "description": "UE capabilities\nRel-18 corrections",
-          "agenda_descriptions": [
-            {
-              "agenda_item": "5.1.3.2",
-              "matched_agenda_item": "5.1.3.2",
-              "description": "UE capabilities",
-              "hierarchy": [
-                {
-                  "agenda_item": "5",
-                  "description": "NR Rel-17 and earlier"
-                },
-                {
-                  "agenda_item": "5.1",
-                  "description": "NR Common"
-                },
-                {
-                  "agenda_item": "5.1.3",
-                  "description": "Control Plane corrections"
-                },
-                {
-                  "agenda_item": "5.1.3.2",
-                  "description": "UE capabilities"
-                }
-              ]
-            },
-            {
-              "agenda_item": "6.0.2",
-              "matched_agenda_item": "6.0.2",
-              "description": "Rel-18 corrections",
-              "hierarchy": [
-                {
-                  "agenda_item": "6",
-                  "description": "NR Rel-18"
-                },
-                {
-                  "agenda_item": "6.0",
-                  "description": "Common"
-                },
-                {
-                  "agenda_item": "6.0.2",
-                  "description": "Rel-18 corrections"
-                }
-              ]
-            }
-          ],
-          "room_ids": [
-            "brk2"
-          ],
-          "room_scope": "assigned",
-          "notes": [
-            "CB Mattias",
-            "CB EUTRA&NR15161718 (Mattias)",
-            "CB NR19 SONMDT [0] (Mattias)",
-            "CB NR20 SONMDT [0.5] (Mattias)"
-          ],
-          "inferred_agenda_items": [],
-          "email_details": []
-        },
-        {
           "name": "[AI PHY] WF for L3 signalling based performance monitoring",
           "duration_minutes": 60,
           "start_time": "12:00",
@@ -3724,9 +3655,9 @@
           "room_col_start": 2,
           "room_col_end": 3,
           "chair": null,
-          "agenda_item": "9.3.1",
+          "agenda_item": "9.3.1, 9.2.1",
           "group_header": "6GR Rel-20",
-          "description": "User plane",
+          "description": "User plane\nUE capability framework",
           "agenda_descriptions": [
             {
               "agenda_item": "9.3.1",
@@ -3746,6 +3677,25 @@
                   "description": "User plane"
                 }
               ]
+            },
+            {
+              "agenda_item": "9.2.1",
+              "matched_agenda_item": "9.2.1",
+              "description": "UE capability framework",
+              "hierarchy": [
+                {
+                  "agenda_item": "9",
+                  "description": "6GR Rel-20 - Study on 6G Radio Access Technology"
+                },
+                {
+                  "agenda_item": "9.2",
+                  "description": "General aspects"
+                },
+                {
+                  "agenda_item": "9.2.1",
+                  "description": "UE capability framework"
+                }
+              ]
             }
           ],
           "room_ids": [
@@ -3754,7 +3704,7 @@
           "room_scope": "assigned",
           "notes": [
             "[9.3.1] 6GR Control Plane",
-            "TBD",
+            "CB for [9.2.1] UE capability [006] offline and compression",
             "Reports from breakout sessions",
             "EoM"
           ],
@@ -3779,16 +3729,16 @@
       }
     }
   ],
-  "source_file": "R2_135b_Schedule_v08.docx",
-  "generated_at": "2026-10-14 19:21",
+  "source_file": "R2_135b_Schedule_v09.docx",
+  "generated_at": "2026-10-15 10:02",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
-    "R2_135b_Schedule_v08.docx",
+    "R2_135b_Schedule_v09.docx",
     "agenda.csv"
   ],
   "source_labels": {
-    "R2_135b_Schedule_v08.docx": "Schedule",
+    "R2_135b_Schedule_v09.docx": "Schedule",
     "agenda.csv": "Agenda"
   },
   "timezone": "Asia/Seoul",

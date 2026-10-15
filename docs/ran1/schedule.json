@@ -10079,6 +10079,20 @@
               "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;2ee5250b.2610b",
               "author": "Woo-Suk Ko",
               "sent": "2026-10-14T22:26:43+09:00"
+            },
+            {
+              "kind": "session",
+              "session": "Thu 11:00-12:30 201",
+              "quote": "The FL summary v28 is uploaded in the inbox for today's offline discussion.",
+              "mode": "offline",
+              "summary": "FL summary v28 uploaded for today's offline discussion",
+              "topics": [],
+              "day": "Thursday",
+              "split": [],
+              "mail": "dddc269.2610c",
+              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;dddc269.2610c",
+              "author": "Yongqiang FEI (费永强)",
+              "sent": "2026-10-15T09:46:09+09:00"
             }
           ]
         },
@@ -10191,7 +10205,30 @@
           "room_scope": "assigned",
           "notes": [],
           "inferred_agenda_items": [],
-          "email_details": []
+          "email_details": [
+            {
+              "kind": "session",
+              "session": "Thu 11:00-11:45 203",
+              "quote": "I would like to share my plan for offline:\n* Time: 11:00am ~ 11:45am\n* Issue:\n* Proposal 3.8.1-1: PUSCH antenna selection\n* Proposal 3.8.1-2: DL/UL reciprocity calibration schemes",
+              "mode": "offline",
+              "summary": "Offline plan on Proposals 3.8.1-1, 3.8.1-2, 4.1.1-1, 4.1.1-2, 3.1.1-3",
+              "topics": [
+                "Proposal 3.8.1-1: PUSCH antenna selection",
+                "Proposal 3.8.1-2: DL/UL reciprocity calibration schemes",
+                "Proposal 4.1.1-1: DMRS Comb size, FD-OCC length",
+                "Proposal 4.1.1-2: Nmax for X=1",
+                "Proposal 3.1.1-3: DFTS-OFDM precoder for rank-1"
+              ],
+              "start": "11:00",
+              "end": "11:45",
+              "day": "Thursday",
+              "split": [],
+              "mail": "48aeb4f2.2610c",
+              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;48aeb4f2.2610c",
+              "author": "Youngrok Jang",
+              "sent": "2026-10-15T09:43:03+09:00"
+            }
+          ]
         },
         {
           "name": "10.5.2.1",
@@ -12602,7 +12639,7 @@
     }
   ],
   "source_file": "RAN1#126b online and offline schedules - v02.docx",
-  "generated_at": "2026-10-15 09:41",
+  "generated_at": "2026-10-15 10:02",
   "contact_name": "",
   "contact_email": "",
   "source_files": [

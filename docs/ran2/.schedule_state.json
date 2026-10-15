@@ -1,15 +1,15 @@
 {
   "meeting_id": "ran2#135bis",
-  "version": 8,
+  "version": 9,
   "config_hash": "c6c411aa629f66fe98cdf07087bfd44847afbc5a4762e030c55fe7817b8286f4",
   "schedule": {
-    "name": "R2_135b_Schedule_v08.docx",
-    "url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN2/Agenda/R2_135b_Schedule_v08.docx",
-    "uploaded_at": "2026-10-14 10:07",
-    "size": 297896,
-    "sha256": "58a5a464226fc3a16cb84d62504e39428fc197c5b205bef5886e30eb792ab59d",
-    "etag": "\"0a7d9c1c35bdd1:0\"",
-    "last_modified": "Wed, 14 Oct 2026 10:07:02 GMT",
+    "name": "R2_135b_Schedule_v09.docx",
+    "url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN2/Agenda/R2_135b_Schedule_v09.docx",
+    "uploaded_at": "2026-10-15 00:44",
+    "size": 298761,
+    "sha256": "5309cc3b74e456e132de8807ddf7ab254f886ed24a790ffec764d7f7dfd6e92b",
+    "etag": "\"808f405e3e5cdd1:0\"",
+    "last_modified": "Thu, 15 Oct 2026 00:44:43 GMT",
     "ftp_modified": null,
     "content_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
     "content_disposition": null
