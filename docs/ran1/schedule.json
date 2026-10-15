@@ -12961,7 +12961,25 @@
           "inferred_agenda_items": [
             "9.3"
           ],
-          "email_details": []
+          "email_details": [
+            {
+              "kind": "session",
+              "session": "Fri 08:30-10:30 Yeongju B Hall",
+              "quote": "Please have a check on proposals for Friday Online discussion.",
+              "mode": "online",
+              "summary": "Check proposals in FL summary #4_v01 for Friday online session",
+              "topics": [],
+              "day": "Friday",
+              "tdocs": [
+                "R1-2607196"
+              ],
+              "split": [],
+              "mail": "99a11750.2610c",
+              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;99a11750.2610c",
+              "author": "Teng Ma",
+              "sent": "2026-10-16T00:22:39+09:00"
+            }
+          ]
         },
         {
           "name": "10.5.2.2",
@@ -13795,7 +13813,7 @@
     }
   ],
   "source_file": "RAN1#126b online and offline schedules - v05.docx",
-  "generated_at": "2026-10-15 23:41",
+  "generated_at": "2026-10-16 00:41",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
