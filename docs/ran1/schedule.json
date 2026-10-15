@@ -12898,7 +12898,32 @@
           "room_scope": "assigned",
           "notes": [],
           "inferred_agenda_items": [],
-          "email_details": []
+          "email_details": [
+            {
+              "kind": "session",
+              "session": "Fri 09:30-10:30 Yeongju A Hall",
+              "quote": "For tomorrow Online, I am going to treat topics in the following order:\n•     Observations in 3.1, 3.2, and 3.3 or email discussion for those",
+              "mode": "online",
+              "summary": "Online session covering Observations 3.1-3.3, 3.1-1, 4.1-2/3, 4.2-3, 5.1-3, 7.1, 6.1, 3.6",
+              "topics": [
+                "Observations in 3.1, 3.2, and 3.3",
+                "3.1-1 (REG bundle size)",
+                "4.1-2 (Interleaver)",
+                "4.1-3 (overlapping CORESETs)",
+                "4.2-3 (CORESET FD size)",
+                "5.1-3 (Coverage approaches)",
+                "7.1 (UE capabilities)",
+                "6.1 (SS set parameters)",
+                "3.6 (mTRP)"
+              ],
+              "day": "Friday",
+              "split": [],
+              "mail": "507fefde.2610c",
+              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;507fefde.2610c",
+              "author": "Dimitri Gold (Nokia)",
+              "sent": "2026-10-15T18:17:22+09:00"
+            }
+          ]
         },
         {
           "name": "9.3.1",
@@ -13711,7 +13736,7 @@
     }
   ],
   "source_file": "RAN1#126b online and offline schedules - v04.docx",
-  "generated_at": "2026-10-15 17:41",
+  "generated_at": "2026-10-15 18:22",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
@@ -14267,11 +14292,11 @@
         "source_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Sorour_notes/Draft%20R1-2607311%20Session%20Notes%20of%20AI%209.5%20-%20v03.docx"
       },
       "R1-2607312": {
-        "name": "Draft R1-2607312 Session Notes of AI 10.3.1 (Channel Coding) - v05.docx",
+        "name": "Draft R1-2607312 Session Notes of AI 10.3.1 (Channel Coding) - v06.docx",
         "agenda_item": "10.3.1",
-        "changed_at": "2026-10-15T02:37:32+00:00",
-        "sha256": "5f09eedc870e3d1611372b500ed78e018b485f16d11f7752b56f6ef6542e872b",
-        "source_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Sorour_notes/Draft%20R1-2607312%20Session%20Notes%20of%20AI%2010.3.1%20(Channel%20Coding)%20-%20v05.docx"
+        "changed_at": "2026-10-15T09:02:58+00:00",
+        "sha256": "3bb9a3927c173b1555c654324ee027cf0291dce2dbebda0b98c1ff267a72bb25",
+        "source_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Sorour_notes/Draft%20R1-2607312%20Session%20Notes%20of%20AI%2010.3.1%20(Channel%20Coding)%20-%20v06.docx"
       },
       "R1-2607313": {
         "name": "Draft R1-2607313 Session Notes of AI 10.3.2 (Modulation) - v03.docx",
@@ -15942,6 +15967,20 @@
           "802f6e09c397",
           "d76a99cb3338",
           "de61a0dcd033",
+          "c8a59cd6c49e",
+          "668544acaa68",
+          "af5f5aecd075",
+          "967b6f9e07ff",
+          "b5063e549a20",
+          "701584b013cf",
+          "5aaa5d8d63cc",
+          "2da9614c771f",
+          "668544acaa68",
+          "6cad1eb4f095",
+          "ab37490c2b87",
+          "50db806a08d9",
+          "cb5c4b06fb9f",
+          "0d36c0a69157",
           "0d99cf2e9309",
           "7620d51db5c9",
           "a39d33b32347",
@@ -15960,69 +15999,59 @@
           "40de50902ddd",
           "7c4b6f724057",
           "1b736fd460ea",
-          "b67838b9db59",
           "0aa63dfb1190",
           "ed1c08a0dfc7",
-          "b21989b03eb4",
+          "52f914e59a1d",
           "40de50902ddd",
           "7c4b6f724057",
           "1b736fd460ea",
-          "b67838b9db59",
           "0aa63dfb1190",
           "ed1c08a0dfc7",
           "9ef01e7fc8a4",
-          "eb823c5723e7",
+          "5e8ef157471e",
           "40de50902ddd",
           "7c4b6f724057",
           "0aa63dfb1190",
           "1b736fd460ea",
-          "a97bcd26fd62",
+          "97d2bba434bb",
           "bbbd196b9c31",
           "0a5d3a0b570f",
           "76cbf1eef891",
           "767bc4e469d4",
-          "c8a59cd6c49e",
-          "668544acaa68",
-          "af5f5aecd075",
-          "967b6f9e07ff",
-          "b5063e549a20",
-          "701584b013cf",
-          "5aaa5d8d63cc",
-          "668544acaa68",
-          "202f5cf86594",
-          "c44dadd816f1",
-          "668544acaa68",
-          "81a22bc1de64",
-          "e8c376112943",
-          "9c1c9da9c481",
-          "dd2d9a625650",
-          "241c644126e9",
-          "a0c18e1ae4e4",
-          "ee802472c013",
-          "b2bb7604c825",
-          "2da9614c771f",
-          "668544acaa68",
-          "6cad1eb4f095",
-          "ab37490c2b87",
-          "50db806a08d9",
-          "cb5c4b06fb9f"
+          "6a516d4deff8",
+          "e39262defe80",
+          "ec5d777f49fd"
         ],
         "sources": {
           "chair": "1e68dcd9da9e",
-          "R1-2607312": "0137a9d877bd"
+          "R1-2607312": "d83cfabb304b"
         },
         "change": "updated",
         "added": [
-          63,
-          64,
-          65,
-          66,
-          67,
-          68
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          39,
+          46,
+          51,
+          56,
+          57,
+          58
         ],
-        "changed_at": "2026-10-15T02:37:32+00:00",
-        "changed_in": "Draft R1-2607312 Session Notes of AI 10.3.1 (Channel Coding) - v05.docx",
-        "file": "agreements/c23e609d2a8ce2bd47a1.html"
+        "changed_at": "2026-10-15T09:02:58+00:00",
+        "changed_in": "Draft R1-2607312 Session Notes of AI 10.3.1 (Channel Coding) - v06.docx",
+        "file": "agreements/f775ed29c46cc47cd411.html"
       },
       "10.3.2": {
         "title": "Modulation",
@@ -18685,7 +18714,9 @@
         "changed_in": "Draft Chair notes RAN1#126bis_v00.docx"
       }
     },
-    "retained_files": []
+    "retained_files": [
+      "agreements/c23e609d2a8ce2bd47a1.html"
+    ]
   },
   "email_informal": {
     "10.5.4.4": [
@@ -18798,6 +18829,21 @@
         "author": "Dimitri Gold (Nokia)",
         "sent": "2026-10-13T16:09:19+09:00",
         "date": "2026-10-13"
+      },
+      {
+        "kind": "informal",
+        "quote": "I will be at 9:00 at or in front of Brk#1 (Sorour’s room) for your last minute offline comment.",
+        "mode": "offline",
+        "summary": "FL available for last minute offline comments at/in front of Brk#1 (Sorour's room)",
+        "topics": [],
+        "start": "09:00",
+        "day": "Friday",
+        "place": "at or in front of Brk#1 (Sorour’s room)",
+        "mail": "507fefde.2610c",
+        "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;507fefde.2610c",
+        "author": "Dimitri Gold (Nokia)",
+        "sent": "2026-10-15T18:17:22+09:00",
+        "date": "2026-10-16"
       }
     ],
     "10.5.3.3": [
