@@ -11658,7 +11658,24 @@
           "room_scope": "assigned",
           "notes": [],
           "inferred_agenda_items": [],
-          "email_details": []
+          "email_details": [
+            {
+              "kind": "session",
+              "session": "Thu 18:30-19:00 Tamna BC Hall",
+              "quote": "Proposals for today's online is provided in section 2.4.",
+              "mode": "online",
+              "summary": "Proposals for online session in section 2.4",
+              "topics": [
+                "section 2.4"
+              ],
+              "day": "Thursday",
+              "split": [],
+              "mail": "8562dc0b.2610c",
+              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;8562dc0b.2610c",
+              "author": "Bingchao BC2 Liu",
+              "sent": "2026-10-15T16:22:34+09:00"
+            }
+          ]
         },
         {
           "name": "10.5.3.4",
@@ -13506,7 +13523,7 @@
     }
   ],
   "source_file": "RAN1#126b online and offline schedules - v03.docx",
-  "generated_at": "2026-10-15 16:01",
+  "generated_at": "2026-10-15 16:41",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
