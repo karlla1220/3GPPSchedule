@@ -11808,6 +11808,23 @@
               "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;8fc4fa24.2610b",
               "author": "Bo Gao",
               "sent": "2026-10-14T17:55:28+09:00"
+            },
+            {
+              "kind": "session",
+              "session": "Thu 19:00-19:30 Tamna BC Hall",
+              "quote": "The final version (R1-2608008) with the proposals for today online can be found in the draft folder",
+              "mode": "online",
+              "summary": "Online session: final proposals in R1-2608008",
+              "topics": [],
+              "day": "Thursday",
+              "tdocs": [
+                "R1-2608008"
+              ],
+              "split": [],
+              "mail": "ff5d5c97.2610c",
+              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;ff5d5c97.2610c",
+              "author": "Bo Gao",
+              "sent": "2026-10-15T17:23:13+09:00"
             }
           ]
         },
@@ -12519,7 +12536,25 @@
           "room_scope": "assigned",
           "notes": [],
           "inferred_agenda_items": [],
-          "email_details": []
+          "email_details": [
+            {
+              "kind": "session",
+              "session": "Thu 17:40-19:30 203",
+              "quote": "I have upload v034 to the draft folder, for coming offline\nFL plan is from what we stopped at the end of online for SIP, followed by proposals from section 3.6",
+              "mode": "offline",
+              "summary": "Offline discussion resuming SIP from online, followed by section 3.6 proposals",
+              "topics": [
+                "SIP",
+                "section 3.6"
+              ],
+              "day": "Thursday",
+              "split": [],
+              "mail": "b2f16637.2610c",
+              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;b2f16637.2610c",
+              "author": "Jinzhe (A)",
+              "sent": "2026-10-15T17:34:17+09:00"
+            }
+          ]
         }
       ],
       "date": null,
@@ -13676,7 +13711,7 @@
     }
   ],
   "source_file": "RAN1#126b online and offline schedules - v04.docx",
-  "generated_at": "2026-10-15 17:21",
+  "generated_at": "2026-10-15 17:41",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
