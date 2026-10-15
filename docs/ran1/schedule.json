@@ -8878,7 +8878,28 @@
           "room_scope": "assigned",
           "notes": [],
           "inferred_agenda_items": [],
-          "email_details": []
+          "email_details": [
+            {
+              "kind": "session",
+              "session": "Thu 10:00-10:30 Tamna BC Hall",
+              "quote": "R1-2608682 is uploaded for online discussion (Thur 10:00). Please check the proposals in Section 2.",
+              "mode": "online",
+              "summary": "Online discussion on Section 2 proposals (R1-2608682)",
+              "topics": [
+                "Section 2"
+              ],
+              "start": "10:00",
+              "day": "Thursday",
+              "tdocs": [
+                "R1-2608682"
+              ],
+              "split": [],
+              "mail": "6beb8e2d.2610c",
+              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;6beb8e2d.2610c",
+              "author": "Weide Wu (吳威德)",
+              "sent": "2026-10-15T09:35:09+09:00"
+            }
+          ]
         },
         {
           "name": "AI 10.7.1 NTN",
@@ -9678,7 +9699,24 @@
           "room_scope": "assigned",
           "notes": [],
           "inferred_agenda_items": [],
-          "email_details": []
+          "email_details": [
+            {
+              "kind": "session",
+              "session": "Thu 11:00-11:30 Yeongju A Hall",
+              "quote": "For the online discussion this morning, I plan to discuss proposal 4.2-1.",
+              "mode": "online",
+              "summary": "Online session to discuss Proposal 4.2-1",
+              "topics": [
+                "proposal 4.2-1"
+              ],
+              "day": "Thursday",
+              "split": [],
+              "mail": "e4c7e008.2610c",
+              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;e4c7e008.2610c",
+              "author": "<>",
+              "sent": "2026-10-15T09:39:48+09:00"
+            }
+          ]
         },
         {
           "name": "AI 9.1 AIML",
@@ -11058,6 +11096,28 @@
               "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;d5f365a1.2610b",
               "author": "Mohammed Al-Imari",
               "sent": "2026-10-15T01:38:53+09:00"
+            },
+            {
+              "kind": "session",
+              "session": "Thu 14:30-16:30 203",
+              "quote": "Your feedback by 13:00 local time would be highly appreciated. We will have an offline discussion session after lunch in Room 203.",
+              "mode": "offline",
+              "summary": "Offline discussion in Room 203 on Proposals 1-5-3-1 and 1-5-3-2 (Sec 6.1.5.3)",
+              "topics": [
+                "Proposal 1-5-3-1",
+                "Proposal 1-5-3-2",
+                "Section 6.1.5.3"
+              ],
+              "start": "14:30",
+              "day": "Thursday",
+              "input_due": {
+                "at": "13:00"
+              },
+              "split": [],
+              "mail": "f0d03d1.2610c",
+              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;f0d03d1.2610c",
+              "author": "Lei Zhang (Fujitsu)",
+              "sent": "2026-10-15T09:38:36+09:00"
             }
           ]
         },
@@ -12542,7 +12602,7 @@
     }
   ],
   "source_file": "RAN1#126b online and offline schedules - v02.docx",
-  "generated_at": "2026-10-15 08:41",
+  "generated_at": "2026-10-15 09:41",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
@@ -17161,6 +17221,25 @@
         "author": "Weide Wu (吳威德)",
         "sent": "2026-10-14T08:49:11+09:00",
         "date": "2026-10-14"
+      },
+      {
+        "kind": "informal",
+        "quote": "Moderator will also be outside RAN1 main room during 12:00 - 13:00, and welcome to join our discussion",
+        "mode": null,
+        "summary": "Moderator available outside RAN1 main room",
+        "topics": [],
+        "start": "12:00",
+        "end": "13:00",
+        "day": "Thursday",
+        "tdocs": [
+          "R1-2608682"
+        ],
+        "place": "outside RAN1 main room",
+        "mail": "6beb8e2d.2610c",
+        "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;6beb8e2d.2610c",
+        "author": "Weide Wu (吳威德)",
+        "sent": "2026-10-15T09:35:09+09:00",
+        "date": "2026-10-15"
       }
     ],
     "10.5.4.2": [
