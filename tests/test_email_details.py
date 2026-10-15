@@ -9,7 +9,8 @@ FIXTURE = Path(__file__).parent / "fixtures" / "ran1" / "listserv_126bis"
 TZ = ZoneInfo("Asia/Seoul")
 MONDAY = date(2026, 10, 12)
 CELLS = [
-    Cell(g["id"], g["day"], g["start"], g["end"], g["room"], g["name"], g["agenda_item"], tuple(g["inferred_agenda_items"]))
+    Cell(g["id"], g["day"], g["start"], g["end"], g["room"], g["name"], g["agenda_item"], tuple(g["inferred_agenda_items"]),
+         online=g["online"], part=g["part"])
     for g in json.loads((FIXTURE / "grid.json").read_text(encoding="utf-8"))["sessions"]
 ]
 BY_ID = {cell.id: cell for cell in CELLS}
@@ -130,7 +131,10 @@ def test_a_time_the_mail_does_not_state_is_dropped():
     reply = "For Tuesday Online session, FL summary R1-2607193 is now available in the inbox."
     answer = _item(mode="online", day="Tuesday", start="17:00")
     got = _resolve([answer], "9.3.3", _sent(13, "17:12"), allowed_times=times_in(reply))
-    assert got == []  # no time and no session: nothing shown on a guess
+    # The 17:00 goes; "Tuesday online" still names one session, in an online room.
+    assert [(g["kind"], g["session"], "start" in g) for g in got] == [("session", "Tue 17:30-18:30 Yeongju B Hall", False)]
+    assert _resolve([_item(day="Tuesday", start="17:00")], "9.3.3", _sent(13, "17:12"), allowed_times=set()) == [
+        g | {"mode": None} for g in got]
     stated = _item(mode="online", session_id="Tue 17:30-18:30 Yeongju B Hall", start="17:00")
     got = _resolve([stated], "9.3.3", _sent(13, "17:12"), allowed_times=times_in(reply))
     assert [(g["kind"], g["session"], "start" in g) for g in got] == [("session", "Tue 17:30-18:30 Yeongju B Hall", False)]
@@ -143,3 +147,107 @@ def test_times_in():
     assert 12 * 60 in times_in("online session this morning from 12:00am")
     assert 16 * 60 in times_in("offline session on Wednesday ~4:00PM")
     assert times_in("Proposal 3.1.1-4 in v33, 2 hours before") == set()
+
+
+def test_online_rooms_are_those_the_table_heading_names():
+    from shared.schedule import RoomInfo
+    from working_groups.ran1.rooms import online_rooms, table_kind, tells_kinds
+
+    # The text above a table holds the room text boxes, then the heading.
+    assert table_kind("Tamna BC HallYeongju A HallRAN1#126b Online Session Schedule") == "online"
+    assert table_kind("201203RAN1#126b Offline Session Schedule") == "offline"
+    assert table_kind("RAN1#126 Detailed Schedule for RAN1 Main Session") == ""
+    names = ["Tamna BC Hall", "Yeongju A Hall", "Yeongju B Hall", "201", "203"]
+    headed = [RoomInfo(n, t, kind=k) for n, t, k in zip(names, [0, 0, 0, 1, 1], ["online"] * 3 + ["offline"] * 2)]
+    assert online_rooms(headed) == names[:3]
+    # Saved before kinds were read: the first table, as the order of tables holds during a meeting.
+    assert online_rooms([RoomInfo(n, t) for n, t in zip(names, [0, 0, 0, 1, 1])]) == names[:3]
+    assert not tells_kinds([RoomInfo(n) for n in names]) and tells_kinds(headed)
+    assert online_rooms([]) == []
+
+
+def test_parts_of_the_day_come_from_its_breaks():
+    from working_groups.ran1.email_details import day_parts, part_of
+
+    breaks = [{"name": "Morning Coffee Break", "start": "10:30", "end": "11:00"},
+              {"name": "Lunch Break", "start": "13:00", "end": "14:30"},
+              {"name": "Afternoon Coffee Break", "start": "16:30", "end": "17:00"}]
+    parts = day_parts(breaks)
+    assert [part_of(t, parts) for t in ["08:30", "12:00", "14:30", "16:00", "17:00", "19:00"]] == [
+        "morning", "morning", "afternoon", "afternoon", "evening", "evening"]
+    assert day_parts(breaks[:1]) is None  # no lunch break: no parts, rather than assumed hours
+    assert part_of("09:00", None) is None
+
+
+def test_the_request_says_which_rooms_are_online():
+    offered = candidates(CELLS, ["10.3.1"], _sent(14, "09:10"), MONDAY, TZ)
+    text = request_text("t", _sent(14, "09:10"), ["10.3.1"], {}, offered, "reply")
+    assert "room: 203 (offline room)" in text
+    assert "room: Yeongju A Hall (online room)" in text
+
+
+FRIDAY = [  # #126bis Friday after the chair split "10.5.2.x" (09:30 Yeongju A Hall, Sorour)
+    Cell("Fri 08:30-09:15 201", "Friday", "08:30", "09:15", "201", "10.5.2.2", "10.5.2.2", online=False, part="morning"),
+    Cell("Fri 09:30-10:30 Yeongju A Hall", "Friday", "09:30", "10:30", "Yeongju A Hall", "10.5.2.1", "10.5.2.1",
+         online=True, part="morning"),
+    Cell("Fri 11:00-12:00 Yeongju A Hall", "Friday", "11:00", "12:00", "Yeongju A Hall", "10.5.2.2", "10.5.2.2",
+         online=True, part="morning"),
+    Cell("Fri 14:30-15:30 203", "Friday", "14:30", "15:30", "203", "10.5.2.2", "10.5.2.2", online=False, part="afternoon"),
+]
+PARTS = {"Friday": (13 * 60, 14 * 60 + 30, 17 * 60)}
+
+
+def _bound(answer, cells, asked=None, ai="10.5.2.2"):
+    offered = candidates(cells, [ai], _sent(15, "01:04"), MONDAY, TZ)
+    got = resolve({"items": [answer]}, offered=offered, cells=cells, agenda_items=[ai], sent=_sent(15, "01:04"),
+                  asked=asked, day_parts=PARTS)
+    return [(g["kind"], g.get("session")) for g in got]
+
+
+def test_a_recorded_session_is_found_again_when_the_schedule_changes():
+    # "We will treat Observation 4-7-4 on Friday morning online session" was
+    # read when Fri 09:30 Yeongju A Hall was "10.5.2.x", the only Friday
+    # 10.5.2.2 session. The online is the one in an online room: 11:00, not
+    # Sorour's 08:30 in 201.
+    picked = _item(mode="online", day="Friday", session_id="Fri 09:30-10:30 Yeongju A Hall")
+    assert _bound(picked, FRIDAY, asked=["Fri 09:30-10:30 Yeongju A Hall"]) == [
+        ("session", "Fri 11:00-12:00 Yeongju A Hall")]
+
+
+def test_a_mail_from_the_chairs_forecast_waits_for_the_schedule():
+    # "After discussing with Mr Chair, we will have 30min offline and then
+    # online tomorrow. Detailed slots to be updated." (10.4.2)
+    forecast = _item(mode="online", day="Friday", part_of_day="morning")
+    assert _bound(forecast, FRIDAY[:2], asked=[]) == []  # no 10.5.2.2 online yet: nothing shown
+    assert _bound(forecast, FRIDAY, asked=[]) == [("session", "Fri 11:00-12:00 Yeongju A Hall")]
+    afternoon = _item(mode="offline", day="Friday", part_of_day="afternoon")
+    assert _bound(afternoon, FRIDAY, asked=[]) == [("session", "Fri 14:30-15:30 203")]
+
+
+def test_without_day_time_or_pick_nothing_is_bound():
+    assert _bound(_item(mode="online"), FRIDAY, asked=[]) == []
+
+
+def test_a_pick_against_what_the_mail_says_is_not_followed():
+    # 10.8.3 "tomorrow's offline discussion": the answer picked the online at
+    # Thu 15:40 Yeongju B Hall; the offlines are at 11:00 and 14:30 in 201.
+    cells = [
+        Cell("Thu 11:00-12:30 201", "Thursday", "11:00", "12:30", "201", "10.8.3", "10.8.3", online=False, part="morning"),
+        Cell("Thu 14:30-15:00 201", "Thursday", "14:30", "15:00", "201", "10.8.3", "10.8.3", online=False, part="afternoon"),
+        Cell("Thu 15:40-16:30 Yeongju B Hall", "Thursday", "15:40", "16:30", "Yeongju B Hall", "10.8.3", "10.8.3",
+             online=True, part="afternoon"),
+    ]
+    picked = _item(mode="offline", day="Thursday", session_id="Thu 15:40-16:30 Yeongju B Hall")
+    sent = _sent(14, "22:00")
+    got = resolve({"items": [picked]}, offered=candidates(cells, ["10.8.3"], sent, MONDAY, TZ), cells=cells,
+                  agenda_items=["10.8.3"], sent=sent, day_parts={"Thursday": PARTS["Friday"]})
+    assert got == []  # two offlines, and the pick's time says nothing about which
+
+
+def test_a_tentative_slot_is_in_an_online_room():
+    from working_groups.ran1.email_details import _home_room
+
+    cells = [Cell(f"Wed {h}:00-{h}:30 201", "Wednesday", f"{h}:00", f"{h}:30", "201", "9.9", "9.9", online=False)
+             for h in (14, 15)] + [Cell("Wed 16:00-16:30 Yeongju B Hall", "Wednesday", "16:00", "16:30",
+                                        "Yeongju B Hall", "9.9", "9.9", online=True)]
+    assert _home_room(cells, "9.9") == "Yeongju B Hall"

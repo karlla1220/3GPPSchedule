@@ -15,6 +15,7 @@ from pathlib import Path
 
 from .models import CellData, RoomInfo, TIME_BLOCKS
 from .parser import parse_docx, build_room_list
+from .rooms import online_rooms as _online_rooms
 from .slot_state import hash_source_text, load_slot_state
 
 
@@ -106,12 +107,14 @@ def _build_room_hints(main_rooms_map: dict[str, list[RoomInfo]]) -> dict:
     # Room name -> best-known position tuple for stable ordering
     # (table_index, room_index_in_table)
     room_pos: dict[str, tuple[int, int]] = {}
+    first_seen: dict[str, RoomInfo] = {}
 
     for rooms in main_rooms_map.values():
         for r in rooms:
             pos = (r.table_index, r.room_index_in_table)
             if r.name not in room_pos or pos < room_pos[r.name]:
                 room_pos[r.name] = pos
+                first_seen[r.name] = r
 
     if not room_pos:
         return {
@@ -125,9 +128,8 @@ def _build_room_hints(main_rooms_map: dict[str, list[RoomInfo]]) -> dict:
     ordered = sorted(room_pos.items(), key=lambda x: x[1])
     all_rooms = [name for name, _ in ordered]
 
-    first_table_idx = ordered[0][1][0]
-    online_rooms = [name for name, (ti, _) in ordered if ti == first_table_idx]
-    offline_rooms = [name for name, (ti, _) in ordered if ti != first_table_idx]
+    online_rooms = _online_rooms(first_seen[name] for name in all_rooms)
+    offline_rooms = [name for name in all_rooms if name not in online_rooms]
 
     main_room = online_rooms[0] if online_rooms else (all_rooms[0] if all_rooms else None)
     breakout_rooms = online_rooms[1:] if len(online_rooms) > 1 else []

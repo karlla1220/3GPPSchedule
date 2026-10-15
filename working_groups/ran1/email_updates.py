@@ -38,13 +38,17 @@ from shared.schedule import Schedule, Session
 
 from .agenda_labels import _agenda_for_meeting
 from .agenda_descriptions import DEFAULT_JSON_PATH
+from .rooms import online_rooms, tells_kinds
 from .email_details import (
     DAYS,
     EXTRACT_INSTRUCTION,
     EXTRACT_MODEL,
     Cell,
     candidates,
+    covers,
+    day_parts,
     gemini_extract,
+    part_of,
     request_text,
     resolve,
     times_in,
@@ -130,11 +134,16 @@ def append_records(meeting_id: str, new: list[dict], directories=None) -> None:
 def cells_of(schedule: Schedule) -> tuple[list[Cell], dict[str, Session]]:
     """Grid cells with ids "Wed 12:30-13:00 Yeongju A Hall", and their sessions.
 
-    Rooms are the day's rooms from column 2 (column 1 is the time axis).
+    Rooms are the day's rooms from column 2 (column 1 is the time axis). A
+    cell is online when all its rooms are online rooms (``rooms``: the table
+    heading, else the first table); a day whose rooms do not tell is None.
     """
     cells, sessions = [], {}
     for day in schedule.days:
         names = [room.name for room in day.rooms]
+        online = set(online_rooms(day.rooms))
+        tells = tells_kinds(day.rooms)
+        parts = day_parts(day.timeline.breaks)
         for session in day.sessions:
             span = names[max(session.room_col_start - 2, 0):max(session.room_col_end - 2, 0)]
             room = " + ".join(span) if span else "?"
@@ -143,8 +152,14 @@ def cells_of(schedule: Schedule) -> tuple[list[Cell], dict[str, Session]]:
                 continue
             sessions[cell_id] = session
             cells.append(Cell(cell_id, day.day_name, session.start_time, session.end_time, room, session.name,
-                              session.agenda_item, tuple(session.inferred_agenda_items)))
+                              session.agenda_item, tuple(session.inferred_agenda_items),
+                              online=(bool(span) and set(span) <= online) if tells else None,
+                              part=part_of(session.start_time, parts)))
     return cells, sessions
+
+
+def _day_parts(schedule: Schedule) -> dict:
+    return {day.day_name: day_parts(day.timeline.breaks) for day in schedule.days}
 
 
 def _meeting_days(schedule: Schedule) -> tuple[date, date] | None:
@@ -227,24 +242,36 @@ def pending(schedule: Schedule, *, now: datetime | None = None, http=None) -> li
     ]
 
 
-def _history(records, cells: list[Cell], tz: ZoneInfo) -> dict[str, list[dict]]:
-    """Resolved items of every asked record, by message id.
+def _offered(cells: list[Cell], items: list[str], sent: datetime | None, first_day: date | None,
+             tz: ZoneInfo) -> list[Cell]:
+    """The items' sessions after the mail was sent, in the grid as it is now."""
+    if sent is None or first_day is None:
+        return [cell for cell in cells if any(covers(cell, ai) for ai in items)]
+    return candidates(cells, items, sent, first_day, tz)
+
+
+def _history(records, cells: list[Cell], tz: ZoneInfo, first_day: date | None = None,
+             day_parts: dict | None = None) -> dict[str, list[dict]]:
+    """Resolved items of every asked record, by message id, against the grid as it is now.
 
     A time counts when the mail states it or an earlier mail of its thread
-    did (the FL proposal "for online" after "online from 12:00").
+    did (the FL proposal "for online" after "online from 12:00"). Sessions
+    are found again from what the mail says (``resolve``): the ids recorded
+    with it are those of the grid it was read against.
     """
     out, known = {}, {}
     for record in sorted(records, key=lambda r: r["date"]):
         if record.get("status") != "asked":
             continue
-        by_id = {cell.id: cell for cell in cells}
         thread = record.get("thread") or record["id"]
         allowed = times_in(record.get("reply") or "") | known.get(thread, set())
-        items = resolve(record["answer"], offered=[by_id[i] for i in record.get("offered", []) if i in by_id],
-                        cells=cells, agenda_items=record["agenda_items"], sent=_sent(record["date"], tz),
-                        tdocs=record.get("tdocs") or [], allowed_times=allowed)
-        out[record["id"]] = items
-        for item in items:
+        sent = _sent(record["date"], tz)
+        offered = _offered(cells, record["agenda_items"] + record.get("other", []), sent, first_day, tz)
+        resolved = resolve(record["answer"], offered=offered, cells=cells, agenda_items=record["agenda_items"],
+                           sent=sent, tdocs=record.get("tdocs") or [], allowed_times=allowed,
+                           asked=record.get("offered", []), day_parts=day_parts)
+        out[record["id"]] = resolved
+        for item in resolved:
             known.setdefault(thread, set()).update(
                 times_in(" ".join(filter(None, [item.get("start"), item.get("end")]))))
     return out
@@ -268,6 +295,7 @@ def update_records(schedule: Schedule, *, now: datetime | None = None, http=None
     mails = collect(meeting_tag(meeting_id), set(records),
                     wanted=lambda mail: wanted(mail, index, agenda), **kwargs)
     cells, _ = cells_of(schedule)
+    first_day, parts = _meeting_days(schedule)[0], _day_parts(schedule)
     can_ask = extract is not gemini_extract or bool(os.environ.get("GEMINI_API_KEY"))
     append_records(meeting_id, [])  # the two lists catch up before anything new
     new, asked = [], 0
@@ -293,11 +321,11 @@ def update_records(schedule: Schedule, *, now: datetime | None = None, http=None
         if not can_ask or asked >= MAX_ASKS:
             continue
         items = found["agenda_items"] + found["other"]
-        offered = candidates(cells, items, sent, _meeting_days(schedule)[0], tz)
+        offered = candidates(cells, items, sent, first_day, tz)
         earlier = []
         if found["thread"]:
             prior = [r for r in list(records.values()) + new if r.get("thread") == found["thread"]]
-            for announced in _history(prior, cells, tz).values():
+            for announced in _history(prior, cells, tz, first_day, parts).values():
                 earlier.extend(announced)
         text = request_text(mail.title, sent, items, agenda, offered, mail.reply, earlier[-EARLIER:])
         asked += 1
@@ -338,7 +366,8 @@ def apply_records(schedule: Schedule) -> None:
     # online") adds to the 12:00 online of #15.
     plans: dict[tuple, list[dict]] = {}
     notes: dict[tuple, list[dict]] = {}
-    resolved = _history(records.values(), cells, tz)
+    days = _meeting_days(schedule)
+    resolved = _history(records.values(), cells, tz, days[0] if days else None, _day_parts(schedule))
     for record in sorted(records.values(), key=lambda r: r["date"]):
         if record.get("status") != "asked":
             continue

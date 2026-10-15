@@ -45,6 +45,7 @@ class RoomInfo:
     table_index: int = 0
     room_index_in_table: int = 0  # legacy RAN1 table position
     id: str = ""
+    kind: str = ""  # "online" or "offline" when the schedule says so (RAN1 table headings)
 
 
 @dataclass

@@ -7,7 +7,7 @@ from pathlib import Path
 import httpx
 import pytest
 
-from shared.schedule import DaySchedule, RoomInfo, Schedule, Session, load_schedule, save_schedule
+from shared.schedule import DaySchedule, RoomInfo, Schedule, Session, Timeline, load_schedule, save_schedule
 from working_groups.ran1 import email_updates
 from working_groups.ran1.email_sessions import body_text, needs_full_body, newest_reply, parse_feed
 
@@ -21,8 +21,18 @@ LABELS = read("labels.json")["mails"]
 NOW = datetime(2026, 10, 14, 3, 30, tzinfo=timezone.utc)  # Wednesday 12:30 in Jeju, after the last mail
 
 
+# The day's breaks of RAN1#126bis: morning before 13:00, afternoon from 14:30, evening from 17:00.
+BREAKS = [{"name": "Morning Coffee Break", "start": "10:30", "end": "11:00"},
+          {"name": "Lunch Break", "start": "13:00", "end": "14:30"},
+          {"name": "Afternoon Coffee Break", "start": "16:30", "end": "17:00"}]
+
+
 def _schedule():
-    """The RAN1#126bis grid of the test set as a schedule, with its email threads."""
+    """The RAN1#126bis grid of the test set as a schedule, with its email threads.
+
+    The online rooms (main and breakouts) are the first table, as in the chair's document.
+    """
+    online = {g["room"] for g in read("grid.json")["sessions"] if g["online"] and " + " not in g["room"]}
     days = {}
     for g in read("grid.json")["sessions"]:
         days.setdefault(g["day"], []).append(g)
@@ -40,7 +50,8 @@ def _schedule():
             sessions.append(Session(g["name"], 0, g["start"], g["end"], day, start, start + len(span),
                                     chair=g["chair"], agenda_item=g["agenda_item"],
                                     inferred_agenda_items=list(g["inferred_agenda_items"])))
-        built.append(DaySchedule(day, [RoomInfo(name) for name in rooms], sessions))
+        built.append(DaySchedule(day, [RoomInfo(name, 0 if name in online else 1) for name in rooms], sessions,
+                                 timeline=Timeline(start="08:30", end="19:45", breaks=BREAKS)))
     return Schedule("RAN1#126bis", built, "schedule.docx", "2026-10-14 12:30", timezone="Asia/Seoul",
                     wg_id="ran1", meeting_id="ran1#126bis", starts_on="2026-10-12", ends_on="2026-10-16",
                     chairman_agreements={"status": "ready", "meeting_id": "ran1#126bis",
@@ -390,3 +401,11 @@ def test_cell_line_leads_with_the_document(meeting):
                 and "09:20" in b.select_one(".session-range").get_text())
     lines = [n.get_text() for n in cell.select(".session-note")]
     assert lines and lines[0].startswith("R1-2608681 · ")
+
+
+
+def test_cells_know_their_room_kind_and_part_of_day():
+    cells = {cell.id: cell for cell in email_updates.cells_of(_schedule())[0]}
+    assert (cells["Wed 12:00-12:30 Yeongju A Hall"].online, cells["Wed 12:00-12:30 Yeongju A Hall"].part) == (True, "morning")
+    assert (cells["Wed 15:10-16:30 203"].online, cells["Wed 15:10-16:30 203"].part) == (False, "afternoon")
+    assert cells["Mon 09:00-10:00 Tamna BC Hall + Yeongju A Hall + Yeongju B Hall"].online is True

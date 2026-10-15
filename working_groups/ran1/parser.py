@@ -10,6 +10,7 @@ from zipfile import BadZipFile, ZipFile
 from docx import Document
 
 from .downloader import _extract_meeting_id, _iter_local_files, _local_doc_preference
+from .rooms import table_kind
 from .models import (
     TIME_BLOCKS,
     CellData,
@@ -750,6 +751,7 @@ def parse_docx(
                 "day_columns": day_columns,
                 "day_rooms": day_rooms,
                 "context_text": table_contexts.get(orig_idx, ''),
+                "kind": table_kind(table_contexts.get(orig_idx, '')),
             }
         )
 
@@ -891,6 +893,7 @@ def build_room_list(tables_meta: list[dict]) -> dict[str, list[RoomInfo]]:
                         name=room_name,
                         table_index=meta["table_index"],
                         room_index_in_table=ri,
+                        kind=meta.get("kind", ""),
                     )
                 )
 

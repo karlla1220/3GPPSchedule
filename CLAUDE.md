@@ -386,19 +386,31 @@ FL이 이메일 토론 스레드에 올리는 세션 계획("Offline 11:30 ~ 12:
   - 스레드가 있으면 그 AI이고, 적힌 번호가 그 아래이면 좁힌다. 바깥 번호는 `other`로 따로 둔다(10.6.x 세션을 짜는 메일의 10.6.1.2, 10.6.3). 스레드가 없으면 제목, 없으면 본문의 번호다.
   - 보낸 사람이 Chair notes의 FL인지는 거르는 기준이 아니다. 묶인 스레드의 하위 주제 담당자는 FL 목록에 없다.
 - **A(셀 세부 정보)는 online·offline 세션이고, B(Agreement 아래 부차 정보)는 off-offline이다.** online과 offline은 늘 방에서 열리므로 시간표의 세션이다. 방이 없거나 방 밖에서 모이면(`outside Sorour's session room`, `in front of Yeongju A Hall`) off-offline이다.
+  - **online은 메인 방 세 개(Main, Brk1, Brk2) 중 하나에서 열린다.** 의장의 일정 문서는 표마다 무엇인지 제목을 단다.
+    `RAN1#126b Online Session Schedule` 아래 표가 online 방(#126bis: Tamna BC Hall, Yeongju A Hall, Yeongju B Hall), 다음 쪽의 `RAN1#126b Offline Session Schedule` 아래 표가 offline 방(201, 203)이다. #126 v04도 같다.
+    - 파서가 표 바로 위 글(`context_text`)의 마지막 `Online`/`Offline` 낱말을 방의 `RoomInfo.kind`로 남긴다(`rooms.table_kind`). 그 글은 앞 표부터 이어져 방 이름 글상자가 먼저 오므로 마지막 낱말이 그 표의 제목이다.
+    - 제목이 둘 다 아닌 표만 있거나 kind를 읽기 전에 저장한 일정은 표 순서로 정한다(첫 표가 online). 회의 중에는 표 순서가 바뀌지 않는다고 본다.
+    - 정의는 `working_groups/ran1/rooms.py`의 `online_rooms` 한 곳이고, 부의장 표의 방 이름을 맞추는 `merger.py`도 같은 것을 쓴다.
+    - 셀은 모든 방이 online 방이면 online이다(`Cell.online`). 제목도 없고 표도 하나뿐인 날은 알 수 없다(`None`, 거르지 않는다).
   - 방 이름 자체로는 가르지 않는다. 방 이름은 회의마다 다르고, off-offline 안내도 방 이름을 쓴다.
   - 시각으로도 가르지 않는다. 시각 없이 "오늘 오후 offline"이라고만 쓴 메일이 있고, 적힌 시각이 시간표와 다른 메일도 있다.
   - "today", "tomorrow"는 회의 시간대로 바꾼 송신 시각으로 읽는다. 메일 날짜는 보낸 사람의 시간대(`+0800` 등)이고, 자정을 넘겨 쓴 "tomorrow"는 그날이다.
-- **시간표에 없는 시각의 online은 그 AI가 쓰는 방의 그 시각 셀에 "maybe <AI>"로 붙인다.** FL이 의장·부의장과 정해 두었는데 시간표가 아직 바뀌지 않은 경우다.
+- **시간표에 없는 시각의 online은 그 AI가 쓰는 online 방의 그 시각 셀에 "maybe <AI>"로 붙인다.** FL이 의장·부의장과 정해 두었는데 시간표가 아직 바뀌지 않은 경우다.
   - offline은 붙이지 않고 B로 보낸다. online은 의장이 있어야 열리지만, FL은 off-offline도 offline이라고 부른다. #126bis 9.5: "start the offline at 3:30pm" 다음 날 "off-offline … same place as yesterday".
   - #126bis 10.3.1: "online session this morning from 12:00"인데 12:00에 10.3.1이 없다. 10.3.1 online은 모두 Yeongju A Hall이고, 그 방 12:00 칸이 AI 8.1이다. 8.1 셀에 "maybe 10.3.1"을 두고 10.3.1 필터에도 걸리게 한다.
   - 방은 시간표의 열에서 읽는다. 방 이름은 `day.rooms[room_col_start − 2]`다(1열이 시간 축). 열 번호를 그대로 쓰면 두 칸 밀린다.
 - **추출은 스키마로 묶은 LLM이 하고, 판정은 코드가 한다(`email_details.py`, Gemini thinking `low`).**
-  - LLM에 주는 것: 제목, 회의 시각으로 바꾼 송신 시각, 스레드의 AI, 그 AI의 남은 시간표 세션(id·요일·시각·방·셀 이름), 같은 스레드에서 앞서 공지된 일정, 최신 답장.
+  - LLM에 주는 것: 제목, 회의 시각으로 바꾼 송신 시각, 스레드의 AI, 그 AI의 남은 시간표 세션(id·요일·시각·방과 그 방이 online/offline 방인지·셀 이름), 같은 스레드에서 앞서 공지된 일정, 최신 답장.
     "FL proposal for online"은 앞선 "online from 12:00"을 알아야 읽힌다. 자정~05:00에 보낸 메일에는 "보낸 사람에게 오늘은 아직 전날일 수 있다"를 한 줄 더한다.
-  - LLM이 답하는 것: 항목마다 kind(`session`·`informal`), 세션 id, 적힌 요일·시각, 장소, 다룰 내용, 시간 나눔(`split`), 입력 마감(`input_due`), 80자 요약.
+  - LLM이 답하는 것: 항목마다 kind(`session`·`informal`), 세션 id, online/offline, 적힌 요일·시간대(`part_of_day`: morning·afternoon·evening)·시각, 장소, 다룰 내용, 시간 나눔(`split`), 입력 마감(`input_due`), 80자 요약.
     "offline/online on Wednesday"는 그날 그 AI의 세션마다 항목 하나씩이다. 세션에 걸린 입력 마감("1 hr before our offline")은 그 세션의 세부 정보다.
-  - 코드가 하는 것: 세션 id가 받은 목록에 있고 적힌 시각과 겹치는지 본다. 아니면 tentative 자리를 찾고, 그것도 없으면 버린다.
+  - 코드가 하는 것: 메일이 한 말에 맞는 세션을 지금 시간표에서 찾는다(`_bind`). 없으면 tentative 자리를 찾고, 그것도 없으면 버린다.
+  - **세션은 LLM이 고른 id가 아니라 메일이 한 말로 정한다.** 맞는 세션은 그 AI를 다루고, 메일 뒤에 시작하고, online/offline 방·요일·시간대·시각이 메일과 맞는 셀이다.
+    - 고른 id가 아직 맞으면 그 셀이다. 맞지 않으면 맞는 셀이 하나뿐일 때만 그 셀이다. id도 요일도 시각도 없는 항목은 붙이지 않는다.
+    - 맞는 셀이 여럿이면, 고른 id가 시간표에서 사라졌거나 다른 AI가 되었을 때만 그 id의 요일·시간대로 가린다. id가 그대로 있는데 메일과 맞지 않으면(offline인데 online 방) 그 id의 시각은 아무것도 말하지 않으므로 붙이지 않는다.
+    - 시간대는 시각을 가정하지 않고 그날의 휴식 구간으로 읽는다(`day_parts`). 점심 전이 morning, 점심 뒤가 afternoon, 점심 뒤 마지막 휴식 뒤가 evening이다(#126bis: 13:00 전, 14:30부터, 17:00부터). "afternoon"은 evening 블록도 포함한다. 점심이 없는 날은 시간대로 거르지 않는다.
+    - 그래서 시간표가 바뀌면 세부 정보가 따라가고, 의장의 forecast로 미리 쓴 메일("After discussing with Mr Chair, … online tomorrow. Detailed slots to be updated.")은 시간표에 그 세션이 생기는 빌드에서 붙는다. 다시 묻지 않는다.
+    - #126bis 10.5.2.2: "Friday morning online"을 물을 때 금 09:30 Yeongju A Hall(`10.5.2.x`, Sorour)이 유일한 후보였다. 의장이 09:30 10.5.2.1, 11:00 10.5.2.2(의장), 08:30 201 10.5.2.2(Sorour)로 바꾼 뒤에도 세부 정보가 10.5.2.1 셀에 남았다. 지금은 online 방의 11:00 하나만 맞는다.
   - **LLM이 준 시각은 메일에 있는지 코드가 확인한다(`times_in`).** 그 메일이나 같은 스레드의 앞 메일에 없는 시각은 지운다. 9.3.3 "For Tuesday Online session …"에 LLM이 17:00을 붙여 다른 셀로 갈 뻔했다.
   - **시각은 메일에 적힌 것만 쓴다.** 길이만 적힌 나눔("10.6.1.2: 40 min")은 길이로, "1 hr before" 마감은 그대로 둔다. 셀 시작에서 시각을 셈하지 않는다. 세션이 제시각에 시작한다는 보장이 없다.
   - TDoc 번호는 LLM에 맡기지 않고 최신 답장에서 패턴으로 뽑는다. 미리보기의 링크 대상(`…<https://…R1-2607194…docx>`)에도 번호가 있어서 링크를 지우기 전에 읽는다.
@@ -412,6 +424,7 @@ FL이 이메일 토론 스레드에 올리는 세션 계획("Offline 11:30 ~ 12:
   - 묻지 않고 `skipped`로 적는 메일: AI를 정할 수 없는 메일, 최신 답장에 시각·장소를 가리키는 낱말이 하나도 없는 메일(`SCHEDULE_WORDS`). 테스트셋에서 이 낱말 필터는 정답 메일을 하나도 거르지 않고 48통 중 7통을 뺐다.
   - 아무 요청도 보내지 않는 때: 회의 기간 밖(시작 3일 전부터 마지막 날까지만), 더미 미팅, Chair notes가 이메일 토론을 아직 적지 않은 때, 이 회의의 agenda가 없을 때.
   - 기록한 답은 빌드마다 지금 시간표에 다시 맞춘다(`apply_records`, 호출 없음). 시간표가 바뀌면 세부 정보도 따라 옮겨지거나 빠진다.
+    기록의 `offered`는 물을 때 보인 셀 id이고, 묶을 때는 LLM이 고른 id가 그 안에 있었는지만 본다. 후보는 빌드마다 지금 시간표에서 다시 만든다.
     같은 스레드의 뒤 메일이 같은 세션의 시각·나눔을 다시 적으면 앞 메일의 것을 바꾼다(#36이 #38을). 시각 없는 덧붙임("FL proposal for online")은 더한다.
 - **check 잡은 피드 하나만 본다(`pending`).** 회의 기간에만, 요청 한 번이다. 목록에 없고, 스레드에 붙고, 미리보기에 시각·장소 낱말이 있는 메일이 있을 때만 빌드 사유가 된다. 실패는 check 오류가 아니라 경고다.
 - 테스트는 메일 리스트에 요청하지 않는다. `tests/conftest.py`가 회의 기간 판정을 끄고 목록 경로를 임시 폴더로 바꾼다. `tests/test_email_updates.py`는 테스트셋의 피드·본문과 기록해 둔 LLM 답(`llm_answers.json`)으로 실행 두 번을 흉내 낸다.
