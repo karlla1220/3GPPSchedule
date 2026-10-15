@@ -390,3 +390,39 @@ def test_cell_line_leads_with_the_document(meeting):
                 and "09:20" in b.select_one(".session-range").get_text())
     lines = [n.get_text() for n in cell.select(".session-note")]
     assert lines and lines[0].startswith("R1-2608681 · ")
+
+
+def _cell(cell_id, ai):
+    day, times, room = cell_id.split(" ", 2)
+    start, end = times.split("-")
+    name = {"Fri": "Friday"}[day]
+    return email_updates.Cell(cell_id, name, start, end, room, ai, ai)
+
+
+def test_a_recorded_session_follows_its_item_when_the_schedule_changes():
+    # #126bis: "We will treat Observation 4-7-4 on Friday morning online
+    # session" (10.5.2.2) was asked when Fri 09:30 Yeongju A Hall was
+    # "10.5.2.x". The chair then split it: 10.5.2.1 at 09:30, 10.5.2.2 at 11:00.
+    record = {
+        "id": "8baf41ac.2610b", "status": "asked", "date": "2026-10-15T01:04:48+09:00",
+        "thread": "126bis-R20-6GR-Transmission scheme for DL shared channel",
+        "agenda_items": ["10.5.2.2"], "other": [], "tdocs": [], "reply": "Friday morning online session",
+        "offered": ["Thu 12:15-13:00 203", "Fri 09:30-10:30 Yeongju A Hall"],
+        "answer": {"items": [{"kind": "session", "mode": "online", "day": "Friday", "quote": "q", "summary": "s",
+                              "topics": [], "split": [], "session_id": "Fri 09:30-10:30 Yeongju A Hall"}]},
+    }
+    tz = email_updates.ZoneInfo("Asia/Seoul")
+
+    def placed(*cells):
+        return [item["session"] for item in email_updates._history([record], list(cells), tz)[record["id"]]]
+
+    before = _cell("Fri 09:30-10:30 Yeongju A Hall", "10.5.2.x")
+    assert placed(before, _cell("Fri 11:00-12:00 Yeongju A Hall", "TBD")) == ["Fri 09:30-10:30 Yeongju A Hall"]
+    split = [_cell("Fri 09:30-10:30 Yeongju A Hall", "10.5.2.1"), _cell("Fri 11:00-12:00 Yeongju A Hall", "10.5.2.2")]
+    assert placed(*split) == ["Fri 11:00-12:00 Yeongju A Hall"]
+    # A shifted cell is the same session.
+    assert placed(_cell("Fri 09:45-10:45 Yeongju A Hall", "10.5.2.2")) == ["Fri 09:45-10:45 Yeongju A Hall"]
+    # Another room is another chair's session: not followed.
+    assert placed(split[0], _cell("Fri 11:00-12:00 201", "10.5.2.2")) == []
+    # Two candidates and none at the old time: no guess.
+    assert placed(split[0], split[1], _cell("Fri 14:00-15:00 Yeongju A Hall", "10.5.2.2")) == []

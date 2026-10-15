@@ -44,6 +44,7 @@ from .email_details import (
     EXTRACT_MODEL,
     Cell,
     candidates,
+    covers,
     gemini_extract,
     request_text,
     resolve,
@@ -227,24 +228,62 @@ def pending(schedule: Schedule, *, now: datetime | None = None, http=None) -> li
     ]
 
 
+_CELL_ID = re.compile(r"(\w{3}) (\d\d:\d\d)-(\d\d:\d\d) (.+)")
+
+
+def _follow(cell_id: str, cells: list[Cell], agenda_items: list[str]) -> Cell | None:
+    """The cell a recorded session id names in the grid as it is now.
+
+    Ids are day, time and room, so a schedule change can leave an id on
+    another item's session or on none. #126bis 10.5.2.2: "Friday morning
+    online" was Fri 09:30 Yeongju A Hall, then "10.5.2.x"; the chair split it
+    into 10.5.2.1 at 09:30 and 10.5.2.2 at 11:00. The mail is then about the
+    item's session in the same room on the same day (the same chair, so the
+    same kind of session): the one at the old time if there is one, else the
+    only one. Otherwise nothing, rather than a guess.
+    """
+    by_id = {cell.id: cell for cell in cells}
+    cell = by_id.get(cell_id)
+    if cell is not None and any(covers(cell, ai) for ai in agenda_items):
+        return cell
+    match = _CELL_ID.fullmatch(cell_id)
+    if match is None:
+        return None
+    day, start, end, room = match.groups()
+    same = [c for c in cells
+            if c.day[:3] == day and c.room == room and any(covers(c, ai) for ai in agenda_items)]
+    at_time = [c for c in same if c.start < end and c.end > start]
+    if len(at_time) == 1:
+        return at_time[0]
+    return same[0] if len(same) == 1 else None
+
+
 def _history(records, cells: list[Cell], tz: ZoneInfo) -> dict[str, list[dict]]:
     """Resolved items of every asked record, by message id.
 
     A time counts when the mail states it or an earlier mail of its thread
-    did (the FL proposal "for online" after "online from 12:00").
+    did (the FL proposal "for online" after "online from 12:00"). Session
+    ids are followed to the grid as it is now (``_follow``).
     """
     out, known = {}, {}
     for record in sorted(records, key=lambda r: r["date"]):
         if record.get("status") != "asked":
             continue
-        by_id = {cell.id: cell for cell in cells}
         thread = record.get("thread") or record["id"]
         allowed = times_in(record.get("reply") or "") | known.get(thread, set())
-        items = resolve(record["answer"], offered=[by_id[i] for i in record.get("offered", []) if i in by_id],
-                        cells=cells, agenda_items=record["agenda_items"], sent=_sent(record["date"], tz),
-                        tdocs=record.get("tdocs") or [], allowed_times=allowed)
-        out[record["id"]] = items
-        for item in items:
+        items = record["agenda_items"] + record.get("other", [])
+        moved = {old: _follow(old, cells, items) for old in record.get("offered", [])}
+        answer = {**record["answer"], "items": [
+            {**item, "session_id": getattr(moved.get(item.get("session_id")), "id", None)}
+            if isinstance(item, dict) else item
+            for item in record["answer"].get("items") or []
+        ]}
+        offered = list({cell.id: cell for cell in moved.values() if cell is not None}.values())
+        resolved = resolve(answer, offered=offered, cells=cells, agenda_items=record["agenda_items"],
+                           sent=_sent(record["date"], tz), tdocs=record.get("tdocs") or [],
+                           allowed_times=allowed)
+        out[record["id"]] = resolved
+        for item in resolved:
             known.setdefault(thread, set()).update(
                 times_in(" ".join(filter(None, [item.get("start"), item.get("end")]))))
     return out
