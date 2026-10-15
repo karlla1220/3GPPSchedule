@@ -10661,6 +10661,20 @@
               "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;f1b4f076.2610c",
               "author": "<>",
               "sent": "2026-10-15T12:53:12+09:00"
+            },
+            {
+              "kind": "session",
+              "session": "Thu 16:00-16:30 Tamna BC Hall",
+              "quote": "I am about to upload the Tdoc for online in 10min. \nPlease find me if there are some quick comment that we can fix before online.",
+              "mode": "online",
+              "summary": "Online session with Tdoc V055 uploaded",
+              "topics": [],
+              "day": "Thursday",
+              "split": [],
+              "mail": "7e1f51e0.2610c",
+              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;7e1f51e0.2610c",
+              "author": "<>",
+              "sent": "2026-10-15T14:58:33+09:00"
             }
           ]
         },
@@ -10756,7 +10770,35 @@
           "room_scope": "assigned",
           "notes": [],
           "inferred_agenda_items": [],
-          "email_details": []
+          "email_details": [
+            {
+              "kind": "session",
+              "session": "Thu 15:00-15:45 Yeongju A Hall",
+              "quote": "online proposals for Thursday afternoon session in R1-2607734. Please note that we will start with RS for PDSCH part followed by PDSCH part.",
+              "mode": "online",
+              "summary": "Online proposals in R1-2607734; start with RS for PDSCH then PDSCH",
+              "topics": [
+                "RS for PDSCH part",
+                "PDSCH part"
+              ],
+              "day": "Thursday",
+              "tdocs": [
+                "R1-2607734"
+              ],
+              "split": [
+                {
+                  "topic": "RS for PDSCH part"
+                },
+                {
+                  "topic": "PDSCH part"
+                }
+              ],
+              "mail": "27342c57.2610c",
+              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;27342c57.2610c",
+              "author": "Sven Jacobsson",
+              "sent": "2026-10-15T14:50:20+09:00"
+            }
+          ]
         },
         {
           "name": "AI 10.5.2.3 PUxCH",
@@ -13362,7 +13404,7 @@
     }
   ],
   "source_file": "RAN1#126b online and offline schedules - v03.docx",
-  "generated_at": "2026-10-15 14:41",
+  "generated_at": "2026-10-15 15:01",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
@@ -18260,6 +18302,23 @@
         "author": "Lei Zhang (Fujitsu)",
         "sent": "2026-10-14T09:08:41+09:00",
         "date": "2026-10-14"
+      },
+      {
+        "kind": "informal",
+        "quote": "We will have 30-minute offline slot in room 203 starting at 15:30. The following proposals are planned for the discussion, See you there.",
+        "mode": "offline",
+        "summary": "Offline slot in room 203 on Proposal 1-5-3-1 and 1-5-3-2",
+        "topics": [
+          "Proposal 1-5-3-1",
+          "Proposal 1-5-3-2"
+        ],
+        "start": "15:30",
+        "day": "Thursday",
+        "mail": "f6cafbc3.2610c",
+        "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;f6cafbc3.2610c",
+        "author": "Lei Zhang (Fujitsu)",
+        "sent": "2026-10-15T14:55:11+09:00",
+        "date": "2026-10-15"
       }
     ],
     "10.5.3.1": [
@@ -18278,6 +18337,19 @@
         "author": "Hao Wu",
         "sent": "2026-10-14T14:29:18+09:00",
         "date": "2026-10-14"
+      },
+      {
+        "kind": "informal",
+        "quote": "Please find me if there are some quick comment that we can fix before online.",
+        "mode": null,
+        "summary": "Find FL for quick comments before online",
+        "topics": [],
+        "day": "Thursday",
+        "mail": "7e1f51e0.2610c",
+        "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;7e1f51e0.2610c",
+        "author": "<>",
+        "sent": "2026-10-15T14:58:33+09:00",
+        "date": "2026-10-15"
       }
     ],
     "10.6.1.1": [
