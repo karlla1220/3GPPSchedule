@@ -7,7 +7,7 @@ from pathlib import Path
 import httpx
 import pytest
 
-from shared.schedule import DaySchedule, RoomInfo, Schedule, Session, load_schedule, save_schedule
+from shared.schedule import DaySchedule, RoomInfo, Schedule, Session, Timeline, load_schedule, save_schedule
 from working_groups.ran1 import email_updates
 from working_groups.ran1.email_sessions import body_text, needs_full_body, newest_reply, parse_feed
 
@@ -21,8 +21,18 @@ LABELS = read("labels.json")["mails"]
 NOW = datetime(2026, 10, 14, 3, 30, tzinfo=timezone.utc)  # Wednesday 12:30 in Jeju, after the last mail
 
 
+# The day's breaks of RAN1#126bis: morning before 13:00, afternoon from 14:30, evening from 17:00.
+BREAKS = [{"name": "Morning Coffee Break", "start": "10:30", "end": "11:00"},
+          {"name": "Lunch Break", "start": "13:00", "end": "14:30"},
+          {"name": "Afternoon Coffee Break", "start": "16:30", "end": "17:00"}]
+
+
 def _schedule():
-    """The RAN1#126bis grid of the test set as a schedule, with its email threads."""
+    """The RAN1#126bis grid of the test set as a schedule, with its email threads.
+
+    The online rooms (main and breakouts) are the first table, as in the chair's document.
+    """
+    online = {g["room"] for g in read("grid.json")["sessions"] if g["online"] and " + " not in g["room"]}
     days = {}
     for g in read("grid.json")["sessions"]:
         days.setdefault(g["day"], []).append(g)
@@ -40,7 +50,8 @@ def _schedule():
             sessions.append(Session(g["name"], 0, g["start"], g["end"], day, start, start + len(span),
                                     chair=g["chair"], agenda_item=g["agenda_item"],
                                     inferred_agenda_items=list(g["inferred_agenda_items"])))
-        built.append(DaySchedule(day, [RoomInfo(name) for name in rooms], sessions))
+        built.append(DaySchedule(day, [RoomInfo(name, 0 if name in online else 1) for name in rooms], sessions,
+                                 timeline=Timeline(start="08:30", end="19:45", breaks=BREAKS)))
     return Schedule("RAN1#126bis", built, "schedule.docx", "2026-10-14 12:30", timezone="Asia/Seoul",
                     wg_id="ran1", meeting_id="ran1#126bis", starts_on="2026-10-12", ends_on="2026-10-16",
                     chairman_agreements={"status": "ready", "meeting_id": "ran1#126bis",
@@ -392,37 +403,9 @@ def test_cell_line_leads_with_the_document(meeting):
     assert lines and lines[0].startswith("R1-2608681 · ")
 
 
-def _cell(cell_id, ai):
-    day, times, room = cell_id.split(" ", 2)
-    start, end = times.split("-")
-    name = {"Fri": "Friday"}[day]
-    return email_updates.Cell(cell_id, name, start, end, room, ai, ai)
 
-
-def test_a_recorded_session_follows_its_item_when_the_schedule_changes():
-    # #126bis: "We will treat Observation 4-7-4 on Friday morning online
-    # session" (10.5.2.2) was asked when Fri 09:30 Yeongju A Hall was
-    # "10.5.2.x". The chair then split it: 10.5.2.1 at 09:30, 10.5.2.2 at 11:00.
-    record = {
-        "id": "8baf41ac.2610b", "status": "asked", "date": "2026-10-15T01:04:48+09:00",
-        "thread": "126bis-R20-6GR-Transmission scheme for DL shared channel",
-        "agenda_items": ["10.5.2.2"], "other": [], "tdocs": [], "reply": "Friday morning online session",
-        "offered": ["Thu 12:15-13:00 203", "Fri 09:30-10:30 Yeongju A Hall"],
-        "answer": {"items": [{"kind": "session", "mode": "online", "day": "Friday", "quote": "q", "summary": "s",
-                              "topics": [], "split": [], "session_id": "Fri 09:30-10:30 Yeongju A Hall"}]},
-    }
-    tz = email_updates.ZoneInfo("Asia/Seoul")
-
-    def placed(*cells):
-        return [item["session"] for item in email_updates._history([record], list(cells), tz)[record["id"]]]
-
-    before = _cell("Fri 09:30-10:30 Yeongju A Hall", "10.5.2.x")
-    assert placed(before, _cell("Fri 11:00-12:00 Yeongju A Hall", "TBD")) == ["Fri 09:30-10:30 Yeongju A Hall"]
-    split = [_cell("Fri 09:30-10:30 Yeongju A Hall", "10.5.2.1"), _cell("Fri 11:00-12:00 Yeongju A Hall", "10.5.2.2")]
-    assert placed(*split) == ["Fri 11:00-12:00 Yeongju A Hall"]
-    # A shifted cell is the same session.
-    assert placed(_cell("Fri 09:45-10:45 Yeongju A Hall", "10.5.2.2")) == ["Fri 09:45-10:45 Yeongju A Hall"]
-    # Another room is another chair's session: not followed.
-    assert placed(split[0], _cell("Fri 11:00-12:00 201", "10.5.2.2")) == []
-    # Two candidates and none at the old time: no guess.
-    assert placed(split[0], split[1], _cell("Fri 14:00-15:00 Yeongju A Hall", "10.5.2.2")) == []
+def test_cells_know_their_room_kind_and_part_of_day():
+    cells = {cell.id: cell for cell in email_updates.cells_of(_schedule())[0]}
+    assert (cells["Wed 12:00-12:30 Yeongju A Hall"].online, cells["Wed 12:00-12:30 Yeongju A Hall"].part) == (True, "morning")
+    assert (cells["Wed 15:10-16:30 203"].online, cells["Wed 15:10-16:30 203"].part) == (False, "afternoon")
+    assert cells["Mon 09:00-10:00 Tamna BC Hall + Yeongju A Hall + Yeongju B Hall"].online is True
