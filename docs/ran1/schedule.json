@@ -10701,6 +10701,23 @@
               "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;5a621f95.2610c",
               "author": "<>",
               "sent": "2026-10-15T15:17:38+09:00"
+            },
+            {
+              "kind": "session",
+              "session": "Thu 16:00-16:30 Tamna BC Hall",
+              "quote": "Updated version for online http://10.10.10.10/ftp/RAN/RAN1/Inbox/R1-2608731.zip",
+              "mode": "online",
+              "summary": "Updated version for online available in R1-2608731.zip",
+              "topics": [],
+              "day": "Thursday",
+              "tdocs": [
+                "R1-2608731"
+              ],
+              "split": [],
+              "mail": "47fbc4b8.2610c",
+              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;47fbc4b8.2610c",
+              "author": "<>",
+              "sent": "2026-10-15T15:50:55+09:00"
             }
           ]
         },
@@ -13489,7 +13506,7 @@
     }
   ],
   "source_file": "RAN1#126b online and offline schedules - v03.docx",
-  "generated_at": "2026-10-15 15:41",
+  "generated_at": "2026-10-15 16:01",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
