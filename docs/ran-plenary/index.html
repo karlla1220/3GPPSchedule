@@ -878,6 +878,27 @@ header .meta a:focus-visible,
     opacity: 0.7;
 }
 
+/* One announcement: the gist, the TDocs and input deadline, the split,
+   the topics in full, then who said it. The popup scrolls, so nothing is
+   cut short; announcements are kept apart by space, not rules. */
+.popup-email-item + .popup-email-item {
+    margin-top: 8px;
+}
+
+.popup-email-facts,
+.popup-email-split {
+    opacity: 0.85;
+}
+
+.popup-email-topics {
+    margin: 1px 0 0;
+    padding-left: 14px;
+}
+
+.popup-email-topics li {
+    padding-left: 2px;
+}
+
 .popup-email-from {
     opacity: 0.7;
 }
