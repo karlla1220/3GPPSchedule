@@ -1,6 +1,6 @@
 """Contracts between independent WG pipelines, the site builder and renderer."""
 from dataclasses import replace
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 import json
 from pathlib import Path
 import subprocess
@@ -87,8 +87,8 @@ def test_building_one_wg_preserves_other_snapshot_and_connects_real_pages(tmp_pa
     for wg, sibling in [('ran1', 'ran-plenary'), ('ran-plenary', 'ran1')]:
         html = BeautifulSoup((opts.output_dir / wg / 'index.html').read_text(), 'html.parser')
         assert html.select_one('[aria-current="page"]')['href'] == f'../{wg}/'
-        assert html.select_one('.wg-link')['href'] == f'../{sibling}/'
-        assert html.select_one('.wg-current h1') is not None
+        assert html.select_one('.wg-switch-item:not([aria-current])')['href'] == f'../{sibling}/'
+        assert html.select_one('.wg-switch summary h1') is not None
     assert load_schedule(opts.output_dir / 'ran1/schedule.json') == ran1
 
 
@@ -131,9 +131,43 @@ def test_navigation_uses_venue_dates_and_keeps_latest_ended_meeting():
     html = BeautifulSoup(generate_html(ended, schedules={'ran1': ended, 'ran-plenary': demo}, groups=groups), 'html.parser')
     assert html.select_one('[aria-current]')['href'] == '../ran1/'
     html = BeautifulSoup(generate_html(demo, schedules={'ran1': ended, 'ran-plenary': demo}, groups=groups), 'html.parser')
-    link = html.select_one('.wg-link')
+    link = html.select_one('.wg-switch-item:not([aria-current])')
     assert link['href'] == '../ran1/'
-    assert link.select_one('.meeting-status').text == 'Ended'
+    assert link.find_previous('p', class_='wg-switch-group').text == 'Ended'
+    assert link.select_one('.wg-switch-dates').text == '1\u20132 Jan'
+
+
+def _meeting(wg_id, name, starts_on, ends_on):
+    return replace(plenary_schedule(), wg_id=wg_id, meeting_id=wg_id, meeting_name=name, is_demo=False,
+                   starts_on=starts_on, ends_on=ends_on, timezone='Asia/Seoul')
+
+
+def test_switch_menu_lists_active_meetings_first_in_3gpp_order():
+    today = datetime.now(timezone.utc).date()
+    on = (str(today - timedelta(days=1)), str(today + timedelta(days=1)))
+    soon = (str(today + timedelta(days=20)), str(today + timedelta(days=24)))
+    past = ('2000-01-30', '2000-02-02')
+    schedules = {
+        'sa2': _meeting('sa2', 'SA2#1', *soon), 'ran-plenary': _meeting('ran-plenary', 'RAN#1', *past),
+        'ran2': _meeting('ran2', 'RAN2#1', *on), 'ran1': _meeting('ran1', 'RAN1#1', *on),
+        'ct1': _meeting('ct1', 'CT1#1', *past), 'ran4': _meeting('ran4', 'RAN4#1', *soon),
+    }
+    groups = [{'id': wg} for wg in schedules]
+    html = BeautifulSoup(generate_html(schedules['ran2'], schedules=schedules, groups=groups), 'html.parser')
+    menu = html.select_one('.wg-switch-menu')
+    assert [el.text for el in menu.select('.wg-switch-group, .wg-switch-item > span:first-child')] == [
+        'In progress', 'RAN1#1', 'RAN2#1', 'Upcoming', 'RAN4#1', 'SA2#1', 'Ended', 'RAN#1', 'CT1#1']
+    assert menu.select_one('[aria-current]')['href'] == '../ran2/'
+    assert menu.select('.wg-switch-dates')[-1].text == '30 Jan \u2013 2 Feb'
+    assert 'RAN1#1, RAN4#1, SA2#1, RAN#1, CT1#1' in html.select_one('#wg-switch-hint').text
+    assert html.select_one('#wg-switch-hint').has_attr('hidden')
+
+
+def test_single_meeting_has_a_plain_title():
+    schedule = _meeting('ran1', 'RAN1#1', '2000-01-01', '2000-01-02')
+    html = BeautifulSoup(generate_html(schedule, schedules={'ran1': schedule}, groups=[{'id': 'ran1'}]), 'html.parser')
+    assert html.select_one('.wg-title h1').text.endswith('RAN1#1')
+    assert html.select_one('.wg-switch') is None and html.select_one('#wg-switch-hint') is None
 
 
 @pytest.mark.parametrize('kwargs', [{'slot_minutes': 0}, {'label_minutes': -1}, {'start': '18:00'}, {'slot_minutes': 7}, {'slot_minutes': 15, 'label_minutes': 20}])

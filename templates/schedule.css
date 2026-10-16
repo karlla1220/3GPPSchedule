@@ -71,25 +71,130 @@ header .meta {
     color: var(--text-muted);
 }
 
-/* WG selection keeps the active meeting at the center of the page. */
-.wg-navigation {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
-    align-items: baseline;
-    gap: 24px;
+/* The meeting title is the WG switcher. It looks like a control at rest
+   (white face, hairline, round chevron) so visitors see it can be opened. */
+.wg-title {
+    position: relative;
     margin: 8px auto 18px;
 }
-.wg-side { display: flex; gap: 20px; align-items: baseline; flex-wrap: wrap; }
-.wg-left { justify-content: flex-end; }
-.wg-right { justify-content: flex-start; }
-.wg-link { color: var(--ink-3); font-size: 13px; font-weight: 500; line-height: 1.2; text-decoration: none; }
-/* A zero-width strut the size of the current title: a sibling's first line
-   gets the title's height and baseline, so names and statuses line up. */
-.wg-link::before { content: "\200B"; font-size: var(--title-size); line-height: var(--title-line); }
-.wg-link:hover { color: var(--ink); text-decoration: underline; }
-.wg-current h1 { margin: 0; }
-.wg-current a { color: var(--ink); text-decoration: none; }
-.wg-navigation a:focus-visible { outline: 2px solid #2563EB; outline-offset: 5px; border-radius: 2px; }
+.wg-switch { display: inline-block; position: relative; }
+.wg-switch summary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 3px 8px 3px 12px;
+    border-radius: 10px;
+    background: var(--surface);
+    box-shadow: 0 0 0 1px var(--hairline), 0 1px 2px rgba(15,23,42,.05);
+    list-style: none;
+    cursor: pointer;
+}
+.wg-switch summary::-webkit-details-marker { display: none; }
+.wg-switch summary:hover,
+.wg-switch[open] summary { box-shadow: 0 0 0 1px #D3D7DE, 0 2px 6px rgba(15,23,42,.08); }
+.wg-switch summary:focus-visible { outline: 2px solid #2563EB; outline-offset: 3px; }
+.wg-title h1 { margin: 0; }
+.wg-switch-chevron {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #ECEEF2;
+    color: var(--ink-2);
+    font-size: 9px;
+    line-height: 1;
+}
+.wg-switch[open] .wg-switch-chevron { transform: rotate(180deg); }
+/* Every WG's meeting: in progress, upcoming, then ended, each in 3GPP order. */
+.wg-switch-menu {
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 50%;
+    z-index: 60;
+    min-width: 270px;
+    max-width: calc(100vw - 32px);
+    padding: 6px;
+    transform: translateX(-50%);
+    background: var(--surface);
+    border-radius: var(--radius-lg);
+    box-shadow: 0 0 0 1px var(--hairline), 0 8px 24px rgba(15,23,42,.12);
+    text-align: left;
+}
+.wg-switch-group {
+    padding: 8px 10px 3px;
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    color: var(--ink-4);
+}
+.wg-switch-item {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 6px 10px;
+    border-radius: 7px;
+    color: var(--ink);
+    font-size: 13.5px;
+    font-weight: 500;
+    line-height: 20px;
+    text-decoration: none;
+    white-space: nowrap;
+}
+.wg-switch-item:hover { background: var(--page-bg); }
+.wg-switch-item[aria-current] { background: #ECEEF2; }
+.wg-switch-item:focus-visible { outline: 2px solid #2563EB; outline-offset: -2px; }
+.wg-switch-past { color: var(--ink-3); }
+.wg-switch-dates { color: var(--ink-4); font-size: 12px; font-weight: 400; }
+/* Shown once (and again when a WG is added), under the title it points at. */
+.wg-switch-hint {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 50%;
+    z-index: 55;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: max-content;
+    max-width: min(360px, calc(100vw - 32px));
+    padding: 8px 8px 8px 12px;
+    transform: translateX(-50%);
+    border-radius: 10px;
+    background: var(--ink);
+    color: #fff;
+    font-size: 12.5px;
+    line-height: 17px;
+    text-align: left;
+    box-shadow: 0 6px 18px rgba(15,23,42,.18);
+}
+.wg-switch-hint[hidden] { display: none; }
+.wg-switch-hint::before {
+    content: "";
+    position: absolute;
+    top: -5px;
+    left: 50%;
+    width: 10px;
+    height: 10px;
+    background: var(--ink);
+    transform: translateX(-50%) rotate(45deg);
+}
+.wg-switch-hint strong { font-weight: 600; }
+.wg-switch-hint button {
+    flex: none;
+    padding: 3px 9px;
+    border: 0;
+    border-radius: 6px;
+    background: rgba(255,255,255,.14);
+    color: #fff;
+    font: inherit;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+}
+.wg-switch-hint button:hover { background: rgba(255,255,255,.24); }
+.wg-switch-hint button:focus-visible { outline: 2px solid #93C5FD; outline-offset: 2px; }
 .meeting-status {
     display: block;
     margin-top: 2px;
@@ -112,8 +217,8 @@ header .meta a:focus-visible,
    the centred titles and the grid below stay where they are. */
 .support-links {
     position: absolute;
-    /* Centred on the title and its status line (46px); the block is 32px. */
-    top: 7px;
+    /* Centred on the title switcher and its status line (51px); the block is 32px. */
+    top: 9px;
     right: 0;
     display: flex;
     align-items: center;
@@ -178,9 +283,6 @@ header .meta a:focus-visible,
 .support-note-close:hover { color: var(--ink); background: var(--page-bg); }
 @media (max-width: 600px) {
     header { --title-size: 18px; --title-line: 24px; }
-    .wg-navigation { gap: 10px; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); }
-    .wg-link { font-size: 12px; overflow-wrap: anywhere; }
-    .wg-side { gap: 8px; }
 }
 
 /* Tabs */
