@@ -14108,7 +14108,7 @@
     }
   ],
   "source_file": "RAN1#126b online and offline schedules - v05.docx",
-  "generated_at": "2026-10-16 15:41",
+  "generated_at": "2026-10-16 16:01",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
@@ -20367,53 +20367,7 @@
         "changed_in": "Draft Chair notes RAN1#126bis_v00.docx"
       }
     },
-    "retained_files": [
-      "agreements/08f007e06ba7fc95f6dd.html",
-      "agreements/09225b2313b259b51564.html",
-      "agreements/15b6f6bd0ab5af40de4a.html",
-      "agreements/1bafda50951e4cf60b20.html",
-      "agreements/1e5a26c0620ea626db63.html",
-      "agreements/24d63245777fbced53ad.html",
-      "agreements/353cd978af96694a9aef.html",
-      "agreements/44e5f993e2b5c20b0dbb.html",
-      "agreements/48aed5adf791d5f55b6f.html",
-      "agreements/551cc47e18ddb8b2b4b5.html",
-      "agreements/6266adebd0ba893c7d3f.html",
-      "agreements/75a2f406c843714f91e1.html",
-      "agreements/79c4988c7c0be0932329.html",
-      "agreements/7a00f68189a9425751e4.html",
-      "agreements/7adf9e53a8211f573882.html",
-      "agreements/83353323da7579db6de1.html",
-      "agreements/85d0980ca0809d1f84b5.html",
-      "agreements/899cd2aea25602851074.html",
-      "agreements/8f3c1ae80332b460e883.html",
-      "agreements/914f6b85b5bc5427b0a3.html",
-      "agreements/92a048b3860975a59474.html",
-      "agreements/9597417851af6d313362.html",
-      "agreements/98e82dbcf0ac226609e7.html",
-      "agreements/995ef09eca8f096c80bb.html",
-      "agreements/9995ff66e15359cce812.html",
-      "agreements/9c253e291f988317fec7.html",
-      "agreements/9fc8646ba36c0a9816cc.html",
-      "agreements/a4d8ada5f234c23aa1d7.html",
-      "agreements/aabb13942659ccce55fc.html",
-      "agreements/ad83fa1d14e7e7e1f96f.html",
-      "agreements/b0480227bf541c75e575.html",
-      "agreements/b1dfcbf1c6c79e19b37b.html",
-      "agreements/bba264d0a5eddb64f473.html",
-      "agreements/c2d8d859fe7169b301fb.html",
-      "agreements/c34f64ff9f3ae1c775d1.html",
-      "agreements/d1ca1cecd26cfffe158b.html",
-      "agreements/d347c673e1f233cf85cf.html",
-      "agreements/e2516ee55c91e9d0dc5d.html",
-      "agreements/e289a2d959d555fddf60.html",
-      "agreements/e4a96b2a0fa32b622ba5.html",
-      "agreements/e4daf15032bf3ed71eb8.html",
-      "agreements/e7c77a2d35c200703bea.html",
-      "agreements/ea6764e2aa5f249f3399.html",
-      "agreements/eb6c3eed5e23760a0105.html",
-      "agreements/f775ed29c46cc47cd411.html"
-    ]
+    "retained_files": []
   },
   "email_informal": {
     "10.5.4.4": [
