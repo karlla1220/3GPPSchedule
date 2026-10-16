@@ -13104,7 +13104,26 @@
           "room_scope": "assigned",
           "notes": [],
           "inferred_agenda_items": [],
-          "email_details": []
+          "email_details": [
+            {
+              "kind": "session",
+              "session": "Fri 09:30-10:10 Yeongju B Hall",
+              "quote": "proposals for coming online in section 4.9",
+              "mode": "online",
+              "summary": "Discuss proposals in Section 4.9 in coming online",
+              "topics": [
+                "section 4.9"
+              ],
+              "tdocs": [
+                "R1-2607515"
+              ],
+              "split": [],
+              "mail": "21521371.2610c",
+              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;21521371.2610c",
+              "author": "Jinzhe (A)",
+              "sent": "2026-10-16T09:29:27+09:00"
+            }
+          ]
         },
         {
           "name": "9.3.2",
@@ -14036,7 +14055,7 @@
     }
   ],
   "source_file": "RAN1#126b online and offline schedules - v05.docx",
-  "generated_at": "2026-10-16 09:21",
+  "generated_at": "2026-10-16 09:41",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
@@ -14616,11 +14635,11 @@
         "source_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Sorour_notes/Draft%20R1-2607314%20Session%20Notes%20of%20AI%2010.5.2%20(MIMO%20Operation)%20-%20v06.docx"
       },
       "R1-2607315": {
-        "name": "Draft R1-2607315 Session Notes of AI 10.7 (NTN specific) - v04.docx",
+        "name": "Draft R1-2607315 Session Notes of AI 10.7 (NTN specific) - v05.docx",
         "agenda_item": "10.7",
-        "changed_at": "2026-10-15T01:59:51+00:00",
-        "sha256": "5a4b90546fa632e7a8d44ed77463cc58948b28cf652504f814a95c771b75b407",
-        "source_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Sorour_notes/Draft%20R1-2607315%20Session%20Notes%20of%20AI%2010.7%20(NTN%20specific)%20-%20v04.docx"
+        "changed_at": "2026-10-16T00:34:48+00:00",
+        "sha256": "0110cd7404d7f61fa8509297b7c6fc785d34b7d5e55287a54ea7312d989effbf",
+        "source_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Sorour_notes/Draft%20R1-2607315%20Session%20Notes%20of%20AI%2010.7%20(NTN%20specific)%20-%20v05.docx"
       },
       "R1-2608614": {
         "name": "draft_R1-2608614_Session Notes of AI 8.3_v02.docx",
@@ -19027,6 +19046,16 @@
           "885060c0f95f",
           "26a1b325911c",
           "2bcae7c8243f",
+          "9f4457a155ed",
+          "e39262defe80",
+          "37b1aa550640",
+          "1e662d557ec5",
+          "245d8c873e4b",
+          "66c2f0a98d21",
+          "1701220930dd",
+          "14754a3d3a8b",
+          "77b72609d39f",
+          "12e850357775",
           "d18c870dbfd8",
           "733eef110e57",
           "c3f2dbfd8807",
@@ -19035,34 +19064,29 @@
           "012464f2606e",
           "988ca789d724",
           "f2879093c961",
+          "2fb4bef5e6ec",
+          "1f74e0d37572",
           "d9cf3047cb44",
-          "1a0a6404e53a",
+          "0b188b08f8ae",
+          "49894cc6ecf2",
+          "7ee9adfe4d9e",
+          "5f240e2af7b1",
           "9017fd36d0a5",
           "c1c470f11fa1",
-          "1683940cfe74",
+          "019c84a274fa",
           "09f15d9889f3",
           "43897deca790",
-          "9c57fbc9ff6d",
-          "41a4fcdc47e3",
-          "c2f697849cbf",
-          "58a98ac86099"
+          "1cd1f1f9b1c4",
+          "a1506e873da6",
+          "668544acaa68",
+          "d0197e087d8e"
         ],
         "sources": {
           "chair": "ba8ff3e78ac1",
-          "R1-2607315": "774fd2a24da6"
+          "R1-2607315": "0aef5386ed1b"
         },
         "change": "updated",
         "added": [
-          34,
-          51,
-          52,
-          53,
-          55,
-          58,
-          59,
-          60,
-          61,
-          62,
           63,
           64,
           65,
@@ -19073,19 +19097,21 @@
           70,
           71,
           72,
-          73,
-          74,
-          75,
-          76,
-          77,
-          78,
-          79,
-          80,
-          81
+          81,
+          82,
+          84,
+          85,
+          86,
+          87,
+          90,
+          93,
+          94,
+          95,
+          96
         ],
-        "changed_at": "2026-10-15T01:59:51+00:00",
-        "changed_in": "Draft R1-2607315 Session Notes of AI 10.7 (NTN specific) - v04.docx",
-        "file": "agreements/e3b0c8784ee3c9f31177.html"
+        "changed_at": "2026-10-16T00:34:48+00:00",
+        "changed_in": "Draft R1-2607315 Session Notes of AI 10.7 (NTN specific) - v05.docx",
+        "file": "agreements/353cd978af96694a9aef.html"
       },
       "10.8": {
         "title": "ISAC",
@@ -19518,7 +19544,7 @@
       }
     },
     "retained_files": [
-      "agreements/3f05862b11fee75faba6.html"
+      "agreements/e3b0c8784ee3c9f31177.html"
     ]
   },
   "email_informal": {
