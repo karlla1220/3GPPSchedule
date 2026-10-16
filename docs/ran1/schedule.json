@@ -13674,7 +13674,29 @@
           "room_scope": "assigned",
           "notes": [],
           "inferred_agenda_items": [],
-          "email_details": []
+          "email_details": [
+            {
+              "kind": "session",
+              "session": "Fri 12:00-13:00 Yeongju A Hall",
+              "quote": "Today online plan is as follows:\n* Proposal 6.1-2: PUCCH format\n* Proposal 6.1-1: additional EVM for PUCCH\n* Proposal 6.1-3: PUCCH repetition\n* Proposal 3.7.1-1: multi-TRP",
+              "mode": "online",
+              "summary": "Online session plan covering Proposals 6.1-2, 6.1-1, 6.1-3, 3.7.1-1, 3.1.1-1, 5.1.1-4",
+              "topics": [
+                "Proposal 6.1-2: PUCCH format",
+                "Proposal 6.1-1: additional EVM for PUCCH",
+                "Proposal 6.1-3: PUCCH repetition",
+                "Proposal 3.7.1-1: multi-TRP",
+                "Proposal 3.1.1-1: coherency of PUSCH precoder",
+                "Proposal 5.1.1-4: TDRA for PUSCH (across-slot)"
+              ],
+              "day": "Friday",
+              "split": [],
+              "mail": "bf8cc345.2610c",
+              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;bf8cc345.2610c",
+              "author": "Youngrok Jang",
+              "sent": "2026-10-16T09:10:33+09:00"
+            }
+          ]
         },
         {
           "name": "10.5.4.3",
@@ -14014,7 +14036,7 @@
     }
   ],
   "source_file": "RAN1#126b online and offline schedules - v05.docx",
-  "generated_at": "2026-10-16 08:41",
+  "generated_at": "2026-10-16 09:21",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
@@ -14559,11 +14581,11 @@
         "source_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Sorour_notes/Draft%20R1-2607309%20Session%20Notes%20of%20AI%209.2%20-%20v04.docx"
       },
       "R1-2607310": {
-        "name": "Draft R1-2607310 Session Notes of AI 9.4 - v05.docx",
+        "name": "Draft R1-2607310 Session Notes of AI 9.4 - v06.docx",
         "agenda_item": "9.4",
-        "changed_at": "2026-10-15T02:00:00+00:00",
-        "sha256": "4ed3692266dd1c3df5478bc6a94c99aa0129905c9892a2e1b1d91af0d6d64496",
-        "source_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Sorour_notes/Draft%20R1-2607310%20Session%20Notes%20of%20AI%209.4%20-%20v05.docx"
+        "changed_at": "2026-10-15T23:57:02+00:00",
+        "sha256": "d6d8dedba9412fa2c26ac0e0146c343c7981c27dbfb23c41da32cfeb95b835e9",
+        "source_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Sorour_notes/Draft%20R1-2607310%20Session%20Notes%20of%20AI%209.4%20-%20v06.docx"
       },
       "R1-2607311": {
         "name": "Draft R1-2607311 Session Notes of AI 9.5 - v03.docx",
@@ -15835,7 +15857,6 @@
         "title": "NR-NTN GNSS resilience",
         "excluded_tdoc_rows": 46,
         "blocks": [
-          "86974557bc99",
           "fc784a6cefba",
           "668544acaa68",
           "cd80d9f685e6",
@@ -15929,62 +15950,83 @@
           "267167a815f5",
           "c321570087e3",
           "fd0d0735c383",
-          "e3789a016ea9"
+          "e3789a016ea9",
+          "86974557bc99",
+          "668544acaa68",
+          "fdbba13181b1",
+          "d059b1577cf5",
+          "52419fc1f794",
+          "16ccfe402dd8",
+          "243da3be9627",
+          "afc35ea1683b",
+          "58505ebfdc51",
+          "8b3291ddea0d",
+          "67098bcf5cb2",
+          "d0f3955a803f",
+          "984a8e53872c",
+          "88de10eb62ab",
+          "9eb27cf2f95f",
+          "984a8e53872c",
+          "0f94d1e069b4",
+          "00b0c6d56741",
+          "cb808b826ed5",
+          "797fc6072d15",
+          "8db809cb6c8b",
+          "a78732097f29",
+          "668544acaa68",
+          "0b86c968816c",
+          "bb595e4bc804",
+          "668544acaa68",
+          "41a0499e1e33",
+          "668544acaa68",
+          "fe22e74b3502",
+          "d203565a4c8e",
+          "cc4364131b39",
+          "e91df84b96f6",
+          "242e893e3e82"
         ],
         "sources": {
-          "R1-2607310": "967529208de2"
+          "R1-2607310": "28525c719ccd"
         },
         "change": "updated",
         "added": [
-          50,
-          51,
-          52,
-          53,
-          54,
-          55,
-          56,
-          57,
-          58,
-          59,
-          60,
-          61,
-          62,
-          63,
-          64,
-          65,
-          66,
-          67,
-          68,
-          69,
-          70,
-          71,
-          72,
-          73,
-          74,
-          75,
-          76,
-          77,
-          78,
-          79,
-          80,
-          81,
-          82,
-          83,
-          84,
-          85,
-          86,
-          87,
-          88,
-          89,
-          90,
-          91,
-          92,
-          93,
-          94
+          94,
+          95,
+          96,
+          97,
+          98,
+          99,
+          100,
+          101,
+          102,
+          103,
+          104,
+          105,
+          106,
+          107,
+          108,
+          109,
+          110,
+          111,
+          112,
+          113,
+          114,
+          115,
+          116,
+          117,
+          118,
+          119,
+          120,
+          121,
+          122,
+          123,
+          124,
+          125,
+          126
         ],
-        "changed_at": "2026-10-15T02:00:00+00:00",
-        "changed_in": "Draft R1-2607310 Session Notes of AI 9.4 - v05.docx",
-        "file": "agreements/3f05862b11fee75faba6.html"
+        "changed_at": "2026-10-15T23:57:02+00:00",
+        "changed_in": "Draft R1-2607310 Session Notes of AI 9.4 - v06.docx",
+        "file": "agreements/551cc47e18ddb8b2b4b5.html"
       },
       "9.5": {
         "title": "NR NTN in systems using downlink compensation",
@@ -19475,7 +19517,9 @@
         "changed_in": "Draft Chair notes RAN1#126bis_v00.docx"
       }
     },
-    "retained_files": []
+    "retained_files": [
+      "agreements/3f05862b11fee75faba6.html"
+    ]
   },
   "email_informal": {
     "10.5.4.4": [
