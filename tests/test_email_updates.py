@@ -1,6 +1,7 @@
 """The email step across runs: what is fetched, what is asked, what is kept."""
 
 import json
+import re
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -266,8 +267,9 @@ def test_the_grid_shows_maybe_items_filters_them_and_lists_the_mails(meeting):
     assert cell.select_one(".session-maybe").get_text() == "maybe 10.3.1"
     assert cell["data-ai-scope"] == "8.1.*|10.3.1.*" and cell["data-ai"] == "8.1"  # filtered like its own
     popup = BeautifulSoup(cell["data-popup"], "html.parser")
-    line = popup.select_one(".popup-email-item").get_text()
-    assert line.startswith("maybe 10.3.1 · Online 12:00 · ")
+    # No "Online": the delegate opened the cell. The time is the cell's, so it is not repeated.
+    gist = popup.select_one(".popup-email-gist").get_text()
+    assert gist.startswith("maybe 10.3.1 · ") and "Online 12:00" not in gist
     assert popup.select_one(".popup-email-tdoc").get_text() == "R1-2608628"
     # "↗" after the sender opens the mail in the list archive; the name is not a link.
     source = popup.select_one(".popup-email-from")
@@ -278,7 +280,7 @@ def test_the_grid_shows_maybe_items_filters_them_and_lists_the_mails(meeting):
     # A plan with a split, given by lengths only, keeps the lengths.
     wus = next(b for b in page.select(".session-block") if "10.6.1.2" in (b.get("data-popup") or "") and "From email" in b["data-popup"])
     text = BeautifulSoup(wus["data-popup"], "html.parser").select_one(".popup-email").get_text()
-    assert "10.6.1.2 (40 min), 10.6.3 (30 min), 10.6.1.1 (20 min)" in text
+    assert "10.6.1.2 40 min · 10.6.3 30 min · 10.6.1.1 20 min" in text  # as the cell writes it
 
 
 def test_the_cell_shows_the_plan_where_it_has_room(meeting):
@@ -409,3 +411,27 @@ def test_cells_know_their_room_kind_and_part_of_day():
     assert (cells["Wed 12:00-12:30 Yeongju A Hall"].online, cells["Wed 12:00-12:30 Yeongju A Hall"].part) == (True, "morning")
     assert (cells["Wed 15:10-16:30 203"].online, cells["Wed 15:10-16:30 203"].part) == (False, "afternoon")
     assert cells["Mon 09:00-10:00 Tamna BC Hall + Yeongju A Hall + Yeongju B Hall"].online is True
+
+
+def test_the_popup_spells_out_what_the_cell_says(meeting):
+    # The popup is read on its own: everything the cell line names is in it,
+    # with more (the topics with their proposal numbers), so the delegate
+    # does not put the two together.
+    from bs4 import BeautifulSoup
+    from shared.renderer import generate_html
+
+    _update(meeting, [])
+    email_updates.apply_records(meeting)
+    page = BeautifulSoup(generate_html(meeting), "html.parser")
+    checked = 0
+    for block in page.select(".session-block"):
+        if "From email" not in (block.get("data-popup") or ""):
+            continue
+        popup = BeautifulSoup(block["data-popup"], "html.parser").select_one(".popup-email")
+        text = popup.get_text().casefold()
+        for note in block.select(".session-note"):
+            line = re.sub(r"^[\d.]+: ", "", note.get_text())  # "10.3.1: …" for a maybe item
+            for piece in re.split(r" · |, ", line):
+                assert piece.casefold() in text, (piece, text)
+                checked += 1
+    assert checked > 10

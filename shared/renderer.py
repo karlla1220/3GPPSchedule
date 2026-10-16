@@ -629,17 +629,15 @@ def _maybe_items(session) -> list[str]:
     ))
 
 
-def _split_text(detail: dict, cell: bool = False) -> str:
+def _split_text(detail: dict) -> str:
+    """The plan's split as the cell writes it: "10.6.1.2 40 min · 10.6.3 30 min", "08:30–08:40 SRS · 08:40–09:10 CSI"."""
     pieces = []
     for part in detail.get("split") or []:
         label = part.get("agenda_item") or part.get("topic") or ""
         when = "–".join(filter(None, [part.get("start"), part.get("end")]))
-        size = f"{part['minutes']} min" if part.get("minutes") else ""
-        if cell:
-            pieces.append(" ".join(filter(None, [when, label, size if not when else ""])))
-        else:
-            pieces.append(" ".join(filter(None, [when, label, f"({size})" if size and not when else ""])))
-    return (" · " if cell else ", ").join(p for p in pieces if p)
+        size = f"{part['minutes']} min" if part.get("minutes") and not when else ""
+        pieces.append(" ".join(filter(None, [when, label, size])))
+    return " · ".join(p for p in pieces if p)
 
 
 # Numbers a delegate looks up in the document, not read at a glance: they
@@ -684,7 +682,7 @@ def _email_cell_lines(session) -> list[str]:
             subject = _subject(topic)
             if subject and subject.casefold() not in {s.casefold() for s in subjects}:
                 subjects.append(subject)
-        text = _split_text(detail, cell=True) or ", ".join(subjects)
+        text = _split_text(detail) or ", ".join(subjects)
         if text.casefold() in title:
             text = ""
         # The document comes first: it is what to open to read the details.
@@ -699,38 +697,74 @@ def _email_cell_lines(session) -> list[str]:
     return lines
 
 
-def _email_detail_line(detail: dict) -> str:
-    """One announcement, short: "maybe 10.3.1 · Online 12:00 · FL proposal uploaded · R1-2608628 — Yushu, Wed 11:12"."""
-    parts = []
+_TDOC = re.compile(r"\bR1-\d{7}\b")
+
+
+def _nowrap_tdocs(text: str) -> str:
+    """Escaped text in which a TDoc number never breaks at its hyphen."""
+    return _TDOC.sub(lambda m: f'<span class="popup-email-tdoc">{m.group(0)}</span>', _esc(text))
+
+
+def _email_detail_html(detail: dict, session) -> str:
+    """One announcement in full: the cell's line spelled out, then who said it.
+
+    The popup holds everything the cell line says (the TDoc numbers, the
+    split, the subjects) and expands it: the mail's gist, every topic with
+    its proposal numbers, the input deadline. Read alone, it needs nothing
+    from the cell. No "Online"/"Offline" label: the delegate opened this
+    cell, and the cell is the session. The mail's time is given only where
+    it is not the cell's own.
+    """
+    gist = []
     if detail.get("kind") == "tentative":
-        parts.append(f"maybe {detail['agenda_item']}")
-    head = (detail.get("mode") or "").capitalize()
-    when = "–".join(filter(None, [detail.get("start"), detail.get("end")]))
-    if head or when:
-        parts.append(" ".join(filter(None, [head, when])))
-    if detail.get("summary"):
-        parts.append(detail["summary"])
-    split = _split_text(detail)
-    summary = detail.get("summary") or ""
-    if split and not all(piece in summary for piece in split.split(", ")):  # the summary often says it already
-        parts.append(split)
+        gist.append(f"maybe {detail['agenda_item']}")
+    start, end = detail.get("start"), detail.get("end")
+    if (start or end) and (start or session.start_time, end or session.end_time) != (session.start_time, session.end_time):
+        gist.append("–".join(filter(None, [start, end])))
+    summary = (detail.get("summary") or "").strip()
+    if summary:
+        gist.append(summary)
+    rows = [f'<div class="popup-email-gist">{_nowrap_tdocs(" · ".join(gist))}</div>'] if gist else []
+
+    # What the gist already says is not said again below it.
+    told = summary.casefold()
+    facts = [", ".join(f'<span class="popup-email-tdoc">{_esc(t)}</span>'
+                       for t in detail.get("tdocs") or [] if t.casefold() not in told)]
     due = detail.get("input_due") or {}
     if due.get("at"):
-        parts.append(f"input by {due['at']}")
-    elif due.get("minutes_before"):
+        if due["at"] not in told:
+            facts.append(f"Input by {_esc(due['at'])}")
+    elif due.get("minutes_before") is not None and not re.search(r"\bbefore\b", told):  # "until 1 hr before offline"
         minutes = due["minutes_before"]
-        parts.append(f"input {minutes // 60} h before" if minutes % 60 == 0 else f"input {minutes} min before")
-    line = _esc(" · ".join(parts))
-    if detail.get("tdocs"):
-        # A TDoc number never breaks at its hyphen.
-        tdocs = ", ".join(f'<span class="popup-email-tdoc">{_esc(t)}</span>' for t in detail["tdocs"])
-        line = f"{line} · {tdocs}" if line else tdocs
+        facts.append("Input before the session" if not minutes
+                     else f"Input {minutes // 60} h before" if minutes % 60 == 0 else f"Input {minutes} min before")
+    if any(facts):
+        rows.append(f'<div class="popup-email-facts">{" · ".join(f for f in facts if f)}</div>')
+
+    split = _split_text(detail)
+    if split:
+        rows.append(f'<div class="popup-email-split">{_esc(split)}</div>')
+    # The topics in full, proposal numbers included. Ones the split or the
+    # TDoc line already names are not repeated.
+    said = {p.get(k, "").casefold() for p in detail.get("split") or [] for k in ("agenda_item", "topic") if p.get(k)}
+    said |= {t.casefold() for t in detail.get("tdocs") or []}
+    topics = []
+    for topic in detail.get("topics") or []:
+        topic = topic.strip()
+        if topic and topic.casefold() not in said and topic.casefold() not in told and topic not in topics:
+            topics.append(topic)
+    if topics:
+        items = "".join(f"<li>{_nowrap_tdocs(t[0].upper() + t[1:])}</li>" for t in topics)
+        rows.append(f'<ul class="popup-email-topics">{items}</ul>')
+
     sent = detail.get("sent") or ""
     author = (detail.get("author") or "").strip()
     who = ", ".join(filter(None, [author if author not in {"<>", ""} else "",
                                   _short_time(sent)]))
     source = _mail_source(who, detail.get("url"))
-    return line + (f' <span class="popup-email-from">{source}</span>' if source else "")
+    if source:
+        rows.append(f'<div class="popup-email-from">{source}</div>')
+    return "".join(rows)
 
 
 def _mail_source(who: str, url: str | None) -> str:
@@ -755,11 +789,11 @@ def _short_time(iso: str) -> str:
 
 
 def _email_popup_html(session) -> str:
-    """What the email threads add to this cell, one line per announcement, oldest first."""
+    """What the email threads add to this cell, one block per announcement, oldest first."""
     details = getattr(session, "email_details", [])
     if not details:
         return ""
-    lines = "".join(f'<div class="popup-email-item">{_email_detail_line(d)}</div>' for d in details)
+    lines = "".join(f'<div class="popup-email-item">{_email_detail_html(d, session)}</div>' for d in details)
     return f'<div class="popup-email"><div class="popup-email-head">From email threads</div>{lines}</div>'
 
 
