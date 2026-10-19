@@ -293,7 +293,10 @@ HTML은 `shared/page.py`, 표시 판단은 `templates/support-note.js`, 값은 `
 
 - **페이지와 같은 문법을 쓴다.** 패널은 그리드와 같은 표면(흰 바탕, 헤어라인 그림자, `--radius-lg`)이고, AI 탭은 요일 탭의 세그먼트 컨트롤을 선택자만 더해 함께 쓴다. 따로 버튼 스타일을 만들지 않는다.
 - **본문 서체는 Times New Roman이다(`DOCUMENT_CSS`의 `.docx-document`).** 3GPP 문서의 서체라 참석자가 Word에서 보던 모습 그대로 읽힌다. 패널 머리줄, AI 제목, 변경 줄은 페이지 서체(Source Sans 3) 그대로다.
-  - Times New Roman이 없는 기기(Android, Linux)는 같은 글자 폭의 Tinos(Google Fonts, SIL OFL)를 쓴다. `schedule.html`의 `<link>`에 있지만, Times New Roman이 있는 기기에서는 내려받지 않는다.
+  - Times New Roman이 없는 기기(Android, Linux)는 STIX Two Text(Google Fonts, SIL OFL)를 쓴다. Times 계열이라 모양이 가깝고 수식 서체와 짝이 맞는다.
+    Tinos(Times New Roman과 글자 폭이 같음)는 모양이 덜 닮아서 버렸다. STIX는 글자가 조금 커서 Word와 다른 자리에서 줄바꿈되지만, 표는 `fitTables`가 셀마다 줄 수를 다시 세므로 깨지지 않는다.
+  - 수식(MathML)은 STIX Two Math다. 기기마다 다른 기본 수식 서체 대신 본문과 짝인 서체로 맞춘다. 수식 그림(`metafile_images.py`)의 글자도 같은 서체를 쓴다.
+  - 둘 다 `schedule.html`의 `<link>`에 있고, 브라우저는 실제로 쓰는 글자가 있을 때만 내려받는다(Times New Roman이 있으면 STIX Two Text는 그 서체에 없는 기호가 나올 때만 받는다).
   - Word 문단의 글꼴은 버리고 기호·수식·고정폭 글꼴만 남긴다(`_KEPT_FONTS`). 글자 크기는 Word 본문 11pt 기준 `em`이라 패널의 14px가 전체 배율을 정한다.
 - **Word 형광펜은 같은 색조로 옅게 바꾼다.** 원색 녹색·노랑은 페이지에서 가장 튀는 요소가 된다.
 - **선택된 셀은 자기 `--accent`로 테두리를 한 줄 더 두른다.** 그림자는 더하지 않는다(그림자는 hover 전용). 파란 외곽선은 키보드 포커스(`:focus-visible`)에만 쓴다.
