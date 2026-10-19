@@ -292,7 +292,9 @@ HTML은 `shared/page.py`, 표시 판단은 `templates/support-note.js`, 값은 `
 셀을 누르면 그리드 아래 패널에 그 셀 AI의 chair notes 본문이 나온다. HTML은 `shared/docx_html.py`, 패널은 `templates/agreements-panel.js`, 스타일은 `templates/schedule.css`의 agreement 구획이다.
 
 - **페이지와 같은 문법을 쓴다.** 패널은 그리드와 같은 표면(흰 바탕, 헤어라인 그림자, `--radius-lg`)이고, AI 탭은 요일 탭의 세그먼트 컨트롤을 선택자만 더해 함께 쓴다. 따로 버튼 스타일을 만들지 않는다.
-- **본문 서체는 페이지를 따른다.** Word의 본문 글꼴은 버리고 기호·수식·고정폭 글꼴만 남긴다(`_KEPT_FONTS`). 글자 크기는 Word 본문 11pt 기준 `em`이라 패널의 14px가 전체 배율을 정한다.
+- **본문 서체는 Times New Roman이다(`DOCUMENT_CSS`의 `.docx-document`).** 3GPP 문서의 서체라 참석자가 Word에서 보던 모습 그대로 읽힌다. 패널 머리줄, AI 제목, 변경 줄은 페이지 서체(Source Sans 3) 그대로다.
+  - Times New Roman이 없는 기기(Android, Linux)는 같은 글자 폭의 Tinos(Google Fonts, SIL OFL)를 쓴다. `schedule.html`의 `<link>`에 있지만, Times New Roman이 있는 기기에서는 내려받지 않는다.
+  - Word 문단의 글꼴은 버리고 기호·수식·고정폭 글꼴만 남긴다(`_KEPT_FONTS`). 글자 크기는 Word 본문 11pt 기준 `em`이라 패널의 14px가 전체 배율을 정한다.
 - **Word 형광펜은 같은 색조로 옅게 바꾼다.** 원색 녹색·노랑은 페이지에서 가장 튀는 요소가 된다.
 - **선택된 셀은 자기 `--accent`로 테두리를 한 줄 더 두른다.** 그림자는 더하지 않는다(그림자는 hover 전용). 파란 외곽선은 키보드 포커스(`:focus-visible`)에만 쓴다.
 - **필터와 패널은 AI 값을 따로 쓴다.** 필터는 일정 표기 그대로인 `data-ai`, 패널은 하위 섹션까지 푼 `data-agreement-ai`다. 하나로 합치면 `10.6.x` 같은 필터 항목이 셀과 맞지 않는다.
