@@ -292,8 +292,19 @@ HTML은 `shared/page.py`, 표시 판단은 `templates/support-note.js`, 값은 `
 셀을 누르면 그리드 아래 패널에 그 셀 AI의 chair notes 본문이 나온다. HTML은 `shared/docx_html.py`, 패널은 `templates/agreements-panel.js`, 스타일은 `templates/schedule.css`의 agreement 구획이다.
 
 - **페이지와 같은 문법을 쓴다.** 패널은 그리드와 같은 표면(흰 바탕, 헤어라인 그림자, `--radius-lg`)이고, AI 탭은 요일 탭의 세그먼트 컨트롤을 선택자만 더해 함께 쓴다. 따로 버튼 스타일을 만들지 않는다.
-- **본문 서체는 페이지를 따른다.** Word의 본문 글꼴은 버리고 기호·수식·고정폭 글꼴만 남긴다(`_KEPT_FONTS`). 글자 크기는 Word 본문 11pt 기준 `em`이라 패널의 14px가 전체 배율을 정한다.
+- **본문 서체는 Times New Roman이다(`DOCUMENT_CSS`의 `.docx-document`).** 3GPP 문서의 서체라 참석자가 Word에서 보던 모습 그대로 읽힌다. 패널 머리줄, AI 제목, 변경 줄은 페이지 서체(Source Sans 3) 그대로다.
+  - Times New Roman이 없는 기기(Android, Linux)는 STIX Two Text(Google Fonts, SIL OFL)를 쓴다. Times 계열이라 모양이 가깝고 수식 서체와 짝이 맞는다.
+    Tinos(Times New Roman과 글자 폭이 같음)는 모양이 덜 닮아서 버렸다. STIX는 글자가 조금 커서 Word와 다른 자리에서 줄바꿈되지만, 표는 `fitTables`가 셀마다 줄 수를 다시 세므로 깨지지 않는다.
+  - 수식(MathML)은 STIX Two Math다. 기기마다 다른 기본 수식 서체 대신 본문과 짝인 서체로 맞춘다. 수식 그림(`metafile_images.py`)의 글자도 같은 서체를 쓴다.
+  - 둘 다 `schedule.html`의 `<link>`에 있고, 브라우저는 실제로 쓰는 글자가 있을 때만 내려받는다(Times New Roman이 있으면 STIX Two Text는 그 서체에 없는 기호가 나올 때만 받는다).
+  - Word 문단의 글꼴은 버리고 기호·수식·고정폭 글꼴만 남긴다(`_KEPT_FONTS`). 글자 크기는 Word 본문 11pt 기준 `em`이라 패널의 14px가 전체 배율을 정한다.
 - **Word 형광펜은 같은 색조로 옅게 바꾼다.** 원색 녹색·노랑은 페이지에서 가장 튀는 요소가 된다.
+- **Word 변경 추적(`<ins>`, `<del>`)은 글자색으로 가른다.** 넣은 글은 초록(`#17784a`)에 옅은 초록 밑줄, 지운 글은 빨강(`#b42318`)에 반투명 빨간 취소선이다. 둘 다 1px이다.
+  - 브라우저 기본(검은 밑줄·취소선)으로 두면 넣은 글이 `Agreement:` 머리말(굵은 밑줄)이나 Word 밑줄과 구별되지 않는다.
+  - 바탕색은 쓰지 않는다. Word 형광펜(녹색 `Agreement:` 등)과 겹친다. 밑줄·취소선은 남긴다. 빨강·초록을 가리지 못하는 사람도 선 모양으로 구별한다.
+  - 선은 글자보다 옅게 둔다. 취소선이 진하면 지운 글을 읽기 어렵고, 밑줄이 진하면 링크처럼 보인다.
+  - 글자색은 안쪽 run의 색(Word가 `color:#000000`을 적는다)을 덮는다(`!important`). 형광펜 바탕은 그대로다.
+  - 의장이 손으로 칠한 빨간 밑줄·취소선(CR 표기)은 원문 서식 그대로 둔다. 변경 추적이 아니다.
 - **선택된 셀은 자기 `--accent`로 테두리를 한 줄 더 두른다.** 그림자는 더하지 않는다(그림자는 hover 전용). 파란 외곽선은 키보드 포커스(`:focus-visible`)에만 쓴다.
 - **필터와 패널은 AI 값을 따로 쓴다.** 필터는 일정 표기 그대로인 `data-ai`, 패널은 하위 섹션까지 푼 `data-agreement-ai`다. 하나로 합치면 `10.6.x` 같은 필터 항목이 셀과 맞지 않는다.
   AI가 없는 셀은 추정한 항목(`inferred_agenda_items`)으로 패널을 연다.
