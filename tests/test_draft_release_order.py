@@ -15,6 +15,7 @@ import working_groups.ran1.check_update as check_update
 from test_check_update import _run_check
 from working_groups.ran1.downloader import (
     _dedup_sources,
+    _closing_stage,
     _eom_number,
     _is_draft_name,
     discover_schedule_sources,
@@ -243,8 +244,8 @@ def test_check_job_selects_the_note_the_build_publishes(built_from, changed):
     assert outputs == [("changed", changed)]
 
 
-# The end-of-meeting notes follow the last numbered version and count on their
-# own.  Listings seen on 2026-10-19 in ``TSGR1_*/Inbox/Chair_notes``.
+# The closing notes (Final, then EOM) follow the last numbered version and
+# count on their own.  Listings seen on 2026-10-19 in ``TSGR1_*/Inbox/Chair_notes``.
 EOM_NOTES = "Chair notes RAN1#126_eom.docx"
 EOM_LISTING = [
     _f("Chair notes RAN1#126_v14.docx", datetime(2026, 8, 29, 9, 0)),
@@ -287,6 +288,43 @@ def test_eom_notes_are_ordered_by_their_own_number(names, expected):
     uploads = [_f(name, datetime(2026, 9, 1, 8, 0)) for name in names]
     assert find_latest_chair_notes(uploads)["name"] == expected
     assert find_latest_chair_notes([_f(name) for name in reversed(names)])["name"] == expected
+
+
+@pytest.mark.parametrize("names, expected", [
+    # The #104bis-e order (v011, v012, final) in today's naming.
+    (["Chair notes RAN1#130 v011.zip", "Chair notes RAN1#130 v012.zip", "Chair notes RAN1#130 final.zip"],
+     "Chair notes RAN1#130 final.zip"),
+    # vNN, then Final, then EOM, whatever the upload order.
+    (["Chair notes RAN1#130_v15.docx", "Chair notes RAN1#130_eom.docx", "Chair notes RAN1#130_final.docx"],
+     "Chair notes RAN1#130_eom.docx"),
+    (["Chair notes RAN1#130_final2.docx", "Chair notes RAN1#130_final.docx", "Chair notes RAN1#130_v20.docx"],
+     "Chair notes RAN1#130_final2.docx"),
+])
+def test_final_sits_between_the_versions_and_eom(names, expected):
+    uploads = [_f(name, datetime(2026, 9, 1, 8, 0)) for name in names]
+    assert find_latest_chair_notes(uploads)["name"] == expected
+    assert find_latest_chair_notes([_f(name) for name in reversed(names)])["name"] == expected
+
+
+@pytest.mark.parametrize("name, stage", [
+    ("Chair notes RAN1#126_v15.docx", (0, 0)),
+    ("Chair's Notes RAN1#105-e final.zip", (1, 0)),
+    ("Chair notes RAN1#130 Final_01.docx", (1, 1)),
+    ("Chair notes RAN1#126_eom.docx", (2, 0)),
+    ("Chair notes RAN1#126_eom1.docx", (2, 1)),
+    ("Chair notes RAN1#130 finalized v01.docx", (0, 0)),
+])
+def test_closing_stage_is_read_from_whole_words(name, stage):
+    assert _closing_stage(name) == stage
+
+
+def test_final_after_the_last_version_is_not_a_downgrade():
+    v12 = _ref("Chair notes RAN1#130_v12.docx", "2026-08-29T16:00:00")
+    final = _ref("Chair notes RAN1#130_final.docx", "2026-08-30T08:00:00")
+    eom = _ref("Chair notes RAN1#130_eom.docx", "2026-08-31T08:00:00")
+    assert not check_update._is_chair_notes_downgrade(final, v12)
+    assert not check_update._is_chair_notes_downgrade(eom, final)
+    assert check_update._is_chair_notes_downgrade(final, eom)
 
 
 def test_eom_of_a_past_meeting_does_not_beat_the_next_meeting():
