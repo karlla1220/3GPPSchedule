@@ -18,6 +18,10 @@ _HTTPS_URL = r"https://[^\s\"'<>\\]+"
 _VERSION = re.compile(r"(?<![A-Za-z0-9])v\d+(?![A-Za-z0-9])", re.IGNORECASE)
 # "Draft" standing alone: the chair restarts at v00 when the draft is released.
 _DRAFT = re.compile(r"(?<![A-Za-z0-9])draft(?![A-Za-z0-9])", re.IGNORECASE)
+# "Final" and "EOM" standing alone, with their own number glued on ("eom",
+# "eom1", "eom_02"): the closing notes, after the last version.
+_CLOSING = re.compile(r"(?<![A-Za-z0-9])(eom|final)(?:_?(\d+))?(?![A-Za-z0-9])", re.IGNORECASE)
+_CLOSING_LABEL = {"eom": "EOM", "final": "Final"}
 
 
 def normalize_presentation(value=None):
@@ -111,12 +115,16 @@ def _source(name, label):
 
     A draft says so ("Main draft v03"): its numbers and the released file's are
     separate series, so "v03" alone does not tell which one is shown.
+    The closing notes count on their own ("Main Final", "Main EOM", "Main EOM2").
     The file name stays on hover. A file without a label is shown by its name.
     """
     if not label:
         return escape(name)
     versions = _VERSION.findall(name)
-    shown = [label, "draft" if _DRAFT.search(name) else "", versions[-1].lower() if versions else ""]
+    closing = _CLOSING.search(name)
+    shown = [label, "draft" if _DRAFT.search(name) else "",
+             f"{_CLOSING_LABEL[closing[1].lower()]}{int(closing[2]) if closing[2] else ''}" if closing else "",
+             versions[-1].lower() if versions else ""]
     text = escape(" ".join(filter(None, shown))).replace(" ", "&nbsp;")
     return f'<span title="{escape(name, quote=True)}">{text}</span>'
 
