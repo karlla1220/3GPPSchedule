@@ -230,6 +230,7 @@ HTML은 `shared/page.py`, 표시 판단은 `templates/support-note.js`, 값은 `
   - 버전은 `page.py`가 파일 이름에서 읽는다(마지막 `v숫자`). 이름이 없는 파일(예전 스냅샷, 데모)은 파일 이름 그대로 보인다.
   - Draft 파일은 버전 앞에 `draft`를 적는다(`Main draft v03`). 의장이 `Draft`를 떼면서 `v00`부터 다시 매기므로,
     숫자만 보면 `v03` 다음에 `v00`이 나와 뒤로 간 것처럼 보인다. Agreement 패널의 변경 줄(`· Chair notes draft v01`)도 같다.
+  - EOM 파일은 `EOM`과 그 번호를 적는다(`Chair notes EOM`, `Chair notes EOM2`). 버전 번호가 없다.
 - **제작자 줄은 맨 아래 두 줄이다.** `Created by 이름 (메일), 소개` 아래에 `면책 문구 · Feedback`.
   - 메일 주소는 그대로 적는다. `Feedback`(GitHub Issues)만 두면 계정이 없는 참석자는 연락할 방법이 없다.
   헤더 meta 링크는 meta 회색을 그대로 쓰고 밑줄로만 구별한다.
@@ -357,6 +358,11 @@ HTML은 `shared/page.py`, 표시 판단은 `templates/support-note.js`, 값은 `
     목록 중간의 summary 행은 번호만 잡아 둔 것이라 함께 접는다. 제목 낱말로 행의 종류를 가리는 규칙은 이것 하나뿐이다.
   - 행 아래의 괄호 주석(`(Late contribution)`, `(Revision of R1-…)`)은 그 행을 따라 접힌다. 주석만 밖에 남지 않게 한다.
   - 표는 TDoc 목록 표만 통째로 뺀다. `Tdoc number | Issue`처럼 TDoc으로 항목을 가리키는 표는 행을 빼지 않는다. 일부 행만 빠진 표는 원문과 다른 말을 한다.
+- **회의가 끝나면 체어맨 노트는 EOM 파일로 이어진다(`downloader.py`의 `_release_key`, `_eom_number`).** EOM은 마지막 `vNN` 뒤에 오고 버전 번호 없이 자기 번호를 센다.
+  - 순서는 정식본 > draft, 그다음 EOM > `vNN`, 그다음 번호다. EOM끼리는 `eom`(= `eom0`) < `eom1` < `eom2` …이다. 업로드 시각은 같은 키일 때만 가른다.
+  - 표기는 FTP(`TSGR1_111` ~ `TSGR1_126`의 `Inbox/Chair_notes`)에서 본 그대로 받는다: `_eom`, ` eom0`, `_eom1`, ` - eom3`, ` - eom_01`(#124). 번호는 건너뛰기도 하고(#118: `eom2` → `eom4`) `eom1`부터 시작하기도 한다(#116bis).
+  - 회의 중에 앞 버전이 지워져 `v00`과 EOM만 남기도 한다(#126: `v00.docm`, `eom`, `eom1`). 번호 없는 `eom`을 버전 없음(-1)으로 읽으면 `v00`이 이긴다.
+  - 선택, 로컬 캐시, check 잡의 downgrade 판정이 모두 이 키를 쓴다. 세션 노트도 같은 키다.
 - 문서 형식이나 출력이 바뀌면 `working_groups/ran1/agreements.py`의 `PARSER_VERSION`을 올려 캐시를 무효화한다.
 
 ### 세션 노트

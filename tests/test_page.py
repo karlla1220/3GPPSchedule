@@ -52,6 +52,10 @@ def test_sources_are_short_labels_with_the_version_and_the_file_name_on_hover():
     ('RAN1#126b online and offline schedules - v00.docx', 'Main\xa0v00'),
     ('DRAFT_schedule.docx', 'Main\xa0draft'),
     ('Schedule for drafting sessions v02.docx', 'Main\xa0v02'),   # A word, not the marker.
+    # The end-of-meeting note has no number of its own.
+    ('Chair notes RAN1#126_eom.docx', 'Main\xa0EOM'),
+    ('Chair notes RAN1#126_eom1.docx', 'Main\xa0EOM1'),
+    ('Chair notes RAN1#124 - eom_02.docx', 'Main\xa0EOM2'),
 ])
 def test_source_version_is_read_from_the_file_name(name, shown):
     assert sources(source_files=[name], source_labels={name: 'Main'})[0] == f'Sources: {shown} '

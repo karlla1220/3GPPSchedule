@@ -15,6 +15,7 @@ import working_groups.ran1.check_update as check_update
 from test_check_update import _run_check
 from working_groups.ran1.downloader import (
     _dedup_sources,
+    _eom_number,
     _is_draft_name,
     discover_schedule_sources,
     find_latest_chair_notes,
@@ -240,3 +241,84 @@ def test_check_job_selects_the_note_the_build_publishes(built_from, changed):
     ):
         outputs, _ = _run_check(state=state, local_refs={}, remote=[], chair_notes_info=listed)
     assert outputs == [("changed", changed)]
+
+
+# The end-of-meeting notes follow the last numbered version and count on their
+# own.  Listings seen on 2026-10-19 in ``TSGR1_*/Inbox/Chair_notes``.
+EOM_NOTES = "Chair notes RAN1#126_eom.docx"
+EOM_LISTING = [
+    _f("Chair notes RAN1#126_v14.docx", datetime(2026, 8, 29, 9, 0)),
+    _f("Chair notes RAN1#126_v15.docx", datetime(2026, 8, 29, 16, 0)),
+    _f(EOM_NOTES, datetime(2026, 9, 3, 3, 36)),
+]
+
+
+@pytest.mark.parametrize("preferred", [None, "ran1#126"])
+def test_eom_note_follows_the_last_version(preferred):
+    assert find_latest_chair_notes(EOM_LISTING, preferred_meeting_id=preferred)["name"] == EOM_NOTES
+    # Upload times do not decide: a mirror may copy v15 after the EOM.
+    assert find_latest_chair_notes([_f(f["name"]) for f in EOM_LISTING])["name"] == EOM_NOTES
+    late_copy = [*EOM_LISTING[:2], _f("Chair notes RAN1#126_v15.docx", datetime(2026, 9, 5, 8, 0)),
+                 EOM_LISTING[2]]
+    assert find_latest_chair_notes(late_copy)["name"] == EOM_NOTES
+
+
+@pytest.mark.parametrize("names, expected", [
+    # #126: eom, then eom1.
+    (["Chair notes RAN1#126_v00.docm", EOM_NOTES, "Chair notes RAN1#126_eom1.docx"],
+     "Chair notes RAN1#126_eom1.docx"),
+    # #124bis: eom … eom5 after v15; eom10 would sort after eom5, not after eom1.
+    (["Chair notes RAN1#124bis_v15.docx", "Chair notes RAN1#124bis_eom.docx",
+      *[f"Chair notes RAN1#124bis_eom{n}.docx" for n in range(1, 6)]],
+     "Chair notes RAN1#124bis_eom5.docx"),
+    (["Chair notes RAN1#124bis_eom5.docx", "Chair notes RAN1#124bis_eom10.docx"],
+     "Chair notes RAN1#124bis_eom10.docx"),
+    # #124: an underscore before the number.
+    (["Chair notes RAN1#124 - v10.docx", "Chair notes RAN1#124 - eom.docx",
+      "Chair notes RAN1#124 - eom_01.docx", "Chair notes RAN1#124 - eom_03.docx"],
+     "Chair notes RAN1#124 - eom_03.docx"),
+    # #117: eom0 first; #118 skips eom3.
+    (["Chair notes RAN1#117 v19.zip", "Chair notes RAN1#117 eom0.zip", "Chair notes RAN1#117 eom1.zip"],
+     "Chair notes RAN1#117 eom1.zip"),
+    (["Chair notes RAN1#118 eom2.zip", "Chair notes RAN1#118 eom4.zip", "Chair notes RAN1#118 v20.zip"],
+     "Chair notes RAN1#118 eom4.zip"),
+])
+def test_eom_notes_are_ordered_by_their_own_number(names, expected):
+    uploads = [_f(name, datetime(2026, 9, 1, 8, 0)) for name in names]
+    assert find_latest_chair_notes(uploads)["name"] == expected
+    assert find_latest_chair_notes([_f(name) for name in reversed(names)])["name"] == expected
+
+
+def test_eom_of_a_past_meeting_does_not_beat_the_next_meeting():
+    listing = [*EOM_LISTING, _f("Draft Chair notes RAN1#126bis_v00.docx", datetime(2026, 10, 4, 8, 57))]
+    assert find_latest_chair_notes(listing)["name"] == "Draft Chair notes RAN1#126bis_v00.docx"
+
+
+@pytest.mark.parametrize("name, eom", [
+    (EOM_NOTES, 0),
+    ("Chair notes RAN1#117 eom0.zip", 0),
+    ("Chair notes RAN1#126_eom1.docx", 1),
+    ("Chair notes RAN1#123 - eom3.docx", 3),
+    ("Chair notes RAN1#124 - eom_02.docx", 2),
+    ("Chair notes RAN1#126_v15.docx", None),
+    ("Chair notes RAN1#126 geometry_v01.docx", None),
+    ("Chair notes RAN1#126 eomx.docx", None),
+])
+def test_eom_is_a_whole_word_in_the_file_name(name, eom):
+    assert _eom_number(name) == eom
+
+
+def test_local_eom_note_follows_the_remote_order(tmp_path):
+    for name in ("Chair notes RAN1#126_v15.docx", EOM_NOTES, "Chair notes RAN1#126_eom1.docx"):
+        (tmp_path / name).write_bytes(b"note")
+    assert find_chair_notes_docx(tmp_path, meeting_id="ran1#126").name == "Chair notes RAN1#126_eom1.docx"
+
+
+def test_eom_after_the_last_version_is_not_a_downgrade():
+    v15 = _ref("Chair notes RAN1#126_v15.docx", "2026-08-29T16:00:00")
+    eom = _ref(EOM_NOTES, "2026-09-03T03:36:00")
+    eom1 = _ref("Chair notes RAN1#126_eom1.docx", "2026-09-04T09:24:00")
+    assert not check_update._is_chair_notes_downgrade(eom, v15)
+    assert not check_update._is_chair_notes_downgrade(eom1, eom)
+    assert check_update._is_chair_notes_downgrade(v15, eom)
+    assert check_update._is_chair_notes_downgrade(eom, eom1)

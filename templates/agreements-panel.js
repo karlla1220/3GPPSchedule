@@ -12,18 +12,21 @@ const when = iso => {
     catch { return new Intl.DateTimeFormat('en-GB', { ...options, timeZone: 'UTC' }).format(new Date(iso)); }
 };
 // "_v01" counts ("_" is not a boundary for \b). A draft says so: the chair
-// restarts at v00 when the draft is released.
+// restarts at v00 when the draft is released. The end-of-meeting notes come
+// after the last version and count on their own: "EOM", "EOM1" ("eom_01").
 const version = name => {
     const found = (name || '').match(/(?:^|[^a-z0-9])(v\d+(?:\.\d+)*)(?![a-z0-9])/i)?.[1];
-    if (!found) return (name || '').replace(/\.(?:docx|docm|zip)$/i, '');
-    return (/(?:^|[^a-z0-9])draft(?![a-z0-9])/i.test(name) ? 'draft ' : '') + found;
+    const eom = (name || '').match(/(?:^|[^a-z0-9])eom(?:_?(\d+))?(?![a-z0-9])/i);
+    if (!found && !eom) return (name || '').replace(/\.(?:docx|docm|zip)$/i, '');
+    return (/(?:^|[^a-z0-9])draft(?![a-z0-9])/i.test(name) ? 'draft ' : '')
+        + [eom ? 'EOM' + (eom[1] ? Number(eom[1]) : '') : '', found || ''].filter(Boolean).join(' ');
 };
 // Which note a version belongs to, in the source line and each item's change
 // line alike: "v05" alone does not say whose note it is.
 const noteLabel = name => {
     const shown = version(name);
     if (/session\s*notes?/i.test(name || '')) return 'Session notes ' + shown;
-    return (/^(?:draft )?v\d/.test(shown) ? 'Chair notes ' : '') + shown;
+    return (/^(?:draft )?(?:v\d|EOM)/.test(shown) ? 'Chair notes ' : '') + shown;
 };
 // The notes the panel was built from: the chairman note, and the selected
 // item's session notes. A section's own line names the note that last
