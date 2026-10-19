@@ -14108,7 +14108,7 @@
     }
   ],
   "source_file": "RAN1#126b online and offline schedules - v05.docx",
-  "generated_at": "2026-10-16 16:01",
+  "generated_at": "2026-10-19 18:21",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
@@ -14135,8 +14135,8 @@
   "chairman_agreements": {
     "status": "ready",
     "meeting_id": "ran1#126bis",
-    "document_file": "Chair notes RAN1#126bis_v15.docx",
-    "sha256": "c40d7a38516ae4d63514f4f1491c7421a8bfd0dbcdf0976392bcbb51d4b2b140",
+    "document_file": "Chair notes RAN1#126bis_eom.docx",
+    "sha256": "7aad94e50033be0bbf5bc95119f2970b6c035cd013d78275ba55d6a6da18fc06",
     "parser_version": 22,
     "warnings": [
       "A WMF/EMF figure was only partially rendered; verify it against the original document.",
@@ -14666,8 +14666,8 @@
         ]
       }
     ],
-    "source_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Chair_notes/Chair%20notes%20RAN1%23126bis_v15.docx",
-    "source_name": "Chair notes RAN1#126bis_v15.docx",
+    "source_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Chair_notes/Chair%20notes%20RAN1%23126bis_eom.docx",
+    "source_name": "Chair notes RAN1#126bis_eom.docx",
     "session_notes": {
       "R1-2607284": {
         "name": "draft_R1-2607284_Session Notes of AI 7_v03.docx",
@@ -14719,60 +14719,60 @@
         "source_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Hiroki_notes/draft_R1-2607290_Session%20Notes%20of%20AI%2011_v01.docx"
       },
       "R1-2607307": {
-        "name": "Draft R1-2607307 Session Notes of AI 8.1 - v02.docx",
+        "name": "Draft R1-2607307 Session Notes of AI 8.1 - final.docx",
         "agenda_item": "8.1",
-        "changed_at": "2026-10-14T23:14:58+00:00",
-        "sha256": "2aec526b10d6405cfcb545db14cd751d66a31b2c7e8c9fce8b36ba9b65b976ac",
-        "source_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Sorour_notes/Draft%20R1-2607307%20Session%20Notes%20of%20AI%208.1%20-%20v02.docx"
+        "changed_at": "2026-10-15T23:09:15+00:00",
+        "sha256": "ff5634b409bc55bf8c3cf19a785b087048f28f9e1512850b9cd7f13a82e63eed",
+        "source_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Sorour_notes/Draft%20R1-2607307%20Session%20Notes%20of%20AI%208.1%20-%20final.docx"
       },
       "R1-2607308": {
-        "name": "Draft R1-2607308 Session Notes of AI 9.1 - v04.docx",
+        "name": "Draft R1-2607308 Session Notes of AI 9.1 - final.docx",
         "agenda_item": "9.1",
-        "changed_at": "2026-10-15T10:36:39+00:00",
-        "sha256": "14635adfba6aecd00f00c3108c9357a7d1f8609454304369c3782735b3467d25",
-        "source_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Sorour_notes/Draft%20R1-2607308%20Session%20Notes%20of%20AI%209.1%20-%20v04.docx"
+        "changed_at": "2026-10-15T23:09:09+00:00",
+        "sha256": "de994854753bef30a7ea26293c92396dcf3b43b124f89ee7fe5bfd862fd35daa",
+        "source_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Sorour_notes/Draft%20R1-2607308%20Session%20Notes%20of%20AI%209.1%20-%20final.docx"
       },
       "R1-2607309": {
-        "name": "Draft R1-2607309 Session Notes of AI 9.2 - v04.docx",
+        "name": "Draft R1-2607309 Session Notes of AI 9.2 - final.docx",
         "agenda_item": "9.2",
-        "changed_at": "2026-10-15T04:15:44+00:00",
-        "sha256": "632ad5eedeee7e6c64d1dc4526700e65ef3ee16c5c53a562936c825fa3841335",
-        "source_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Sorour_notes/Draft%20R1-2607309%20Session%20Notes%20of%20AI%209.2%20-%20v04.docx"
+        "changed_at": "2026-10-15T23:09:00+00:00",
+        "sha256": "437b009e79e36d5ac2369862d3eebef44b2c433bbd070c4eb7fb09ef48083fa2",
+        "source_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Sorour_notes/Draft%20R1-2607309%20Session%20Notes%20of%20AI%209.2%20-%20final.docx"
       },
       "R1-2607310": {
-        "name": "Draft R1-2607310 Session Notes of AI 9.4 - v06.docx",
+        "name": "Draft R1-2607310 Session Notes of AI 9.4 - final.docx",
         "agenda_item": "9.4",
-        "changed_at": "2026-10-15T23:57:02+00:00",
+        "changed_at": "2026-10-16T04:56:10+00:00",
         "sha256": "d6d8dedba9412fa2c26ac0e0146c343c7981c27dbfb23c41da32cfeb95b835e9",
-        "source_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Sorour_notes/Draft%20R1-2607310%20Session%20Notes%20of%20AI%209.4%20-%20v06.docx"
+        "source_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Sorour_notes/Draft%20R1-2607310%20Session%20Notes%20of%20AI%209.4%20-%20final.docx"
       },
       "R1-2607311": {
-        "name": "Draft R1-2607311 Session Notes of AI 9.5 - v03.docx",
+        "name": "Draft R1-2607311 Session Notes of AI 9.5 - final.docx",
         "agenda_item": "9.5",
-        "changed_at": "2026-10-15T02:00:05+00:00",
-        "sha256": "73639cf3c8112f6a32dc516104a20c99403de3a7bde9e8890d25535135649459",
-        "source_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Sorour_notes/Draft%20R1-2607311%20Session%20Notes%20of%20AI%209.5%20-%20v03.docx"
+        "changed_at": "2026-10-15T23:08:48+00:00",
+        "sha256": "0c6ec15337671b35f60a81b2ef0102134ed8196f7d9a37c09e42c232502d10df",
+        "source_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Sorour_notes/Draft%20R1-2607311%20Session%20Notes%20of%20AI%209.5%20-%20final.docx"
       },
       "R1-2607312": {
-        "name": "Draft R1-2607312 Session Notes of AI 10.3.1 (Channel Coding) - v06.docx",
+        "name": "Draft R1-2607312 Session Notes of AI 10.3.1 (Channel Coding) - final.docx",
         "agenda_item": "10.3.1",
-        "changed_at": "2026-10-15T09:02:58+00:00",
-        "sha256": "3bb9a3927c173b1555c654324ee027cf0291dce2dbebda0b98c1ff267a72bb25",
-        "source_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Sorour_notes/Draft%20R1-2607312%20Session%20Notes%20of%20AI%2010.3.1%20(Channel%20Coding)%20-%20v06.docx"
+        "changed_at": "2026-10-15T23:08:40+00:00",
+        "sha256": "dd1106a7c78ef0127f732f076d97d54c3cdadc0089a96299d51d439c12f797a3",
+        "source_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Sorour_notes/Draft%20R1-2607312%20Session%20Notes%20of%20AI%2010.3.1%20(Channel%20Coding)%20-%20final.docx"
       },
       "R1-2607313": {
-        "name": "Draft R1-2607313 Session Notes of AI 10.3.2 (Modulation) - v04.docx",
+        "name": "Draft R1-2607313 Session Notes of AI 10.3.2 (Modulation) - final.docx",
         "agenda_item": "10.3.2",
-        "changed_at": "2026-10-15T09:33:42+00:00",
+        "changed_at": "2026-10-15T23:08:31+00:00",
         "sha256": "54d5fe636f53b85f4ade706f0a8974d83c033d0962f529d82fa9784209349426",
-        "source_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Sorour_notes/Draft%20R1-2607313%20Session%20Notes%20of%20AI%2010.3.2%20(Modulation)%20-%20v04.docx"
+        "source_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Sorour_notes/Draft%20R1-2607313%20Session%20Notes%20of%20AI%2010.3.2%20(Modulation)%20-%20final.docx"
       },
       "R1-2607314": {
-        "name": "Draft R1-2607314 Session Notes of AI 10.5.2 (MIMO Operation) - v08.docx",
+        "name": "Draft R1-2607314 Session Notes of AI 10.5.2 (MIMO Operation) - final.docx",
         "agenda_item": "10.5.2",
-        "changed_at": "2026-10-16T04:53:53+00:00",
+        "changed_at": "2026-10-16T04:54:30+00:00",
         "sha256": "5635cb96f9596b7f1f1aec0d7ef8d3f42a472b9c1f392b0480227c0cd2e975f1",
-        "source_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Sorour_notes/Draft%20R1-2607314%20Session%20Notes%20of%20AI%2010.5.2%20(MIMO%20Operation)%20-%20v08.docx"
+        "source_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Sorour_notes/Draft%20R1-2607314%20Session%20Notes%20of%20AI%2010.5.2%20(MIMO%20Operation)%20-%20final.docx"
       },
       "R1-2607315": {
         "name": "Draft R1-2607315 Session Notes of AI 10.7 (NTN specific) - v05.docx",
@@ -14789,7 +14789,7 @@
         "source_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Hiroki_notes/draft_R1-2608614_Session%20Notes%20of%20AI%208.3_v02.docx"
       }
     },
-    "document_changed_at": "2026-10-16T06:33:34+00:00",
+    "document_changed_at": "2026-10-16T06:45:03+00:00",
     "sections": {
       "1": {
         "title": "Opening of the meeting (Day 1: 9:00 am)",
@@ -15161,7 +15161,7 @@
         ],
         "sources": {
           "chair": "d9a9c52316c1",
-          "R1-2607307": "7007a8aff648"
+          "R1-2607307": "1d1f8b8f4194"
         },
         "change": "updated",
         "added": [
@@ -16409,7 +16409,7 @@
         ],
         "changed_at": "2026-10-15T02:00:05+00:00",
         "changed_in": "Draft R1-2607311 Session Notes of AI 9.5 - v03.docx",
-        "file": "agreements/39cca9dc4c0f0425565f.html"
+        "file": "agreements/6d2d5c566386414f4856.html"
       },
       "10": {
         "title": "Rel-20 Study of 6GR",
@@ -16971,39 +16971,6 @@
           "b61f8e3fdbbe",
           "731bc80854fe",
           "c8fee8eabe07",
-          "78a57b492bc3",
-          "bbaa1d419da7",
-          "cc27d396598e",
-          "c27ab139e508",
-          "43e4c600bde5",
-          "b5db42482c52",
-          "b723fa75f8ac",
-          "10da9b8906e4",
-          "872d83959d87",
-          "6b9f4f7b5e93",
-          "f8c9bf71837c",
-          "5cbcfda31b46",
-          "e7014529b6ea",
-          "12790be7de33",
-          "28f361c34cc9",
-          "bbaa1d419da7",
-          "cc27d396598e",
-          "c27ab139e508",
-          "43e4c600bde5",
-          "b5db42482c52",
-          "b723fa75f8ac",
-          "10da9b8906e4",
-          "872d83959d87",
-          "6b9f4f7b5e93",
-          "f8c9bf71837c",
-          "75e4041216e7",
-          "2f6f912da747",
-          "12790be7de33",
-          "d4ea16b34d41",
-          "1057ae2e1ba4",
-          "ea97c8cd263f",
-          "2cb4ed7b5154",
-          "c8fee8eabe07",
           "f3787880cb15",
           "bbaa1d419da7",
           "cc27d396598e",
@@ -17043,16 +17010,13 @@
           "2cb4ed7b5154"
         ],
         "sources": {
-          "chair": "c49ffc5d8672"
+          "chair": "4d1d74857bd1"
         },
         "change": "updated",
-        "added": [
-          3,
-          4
-        ],
-        "changed_at": "2026-10-16T06:33:34+00:00",
-        "changed_in": "Chair notes RAN1#126bis_v15.docx",
-        "file": "agreements/da1ce896e58ec4f59771.html"
+        "added": [],
+        "changed_at": "2026-10-16T06:45:03+00:00",
+        "changed_in": "Chair notes RAN1#126bis_eom.docx",
+        "file": "agreements/7938629ccc531b080fb4.html"
       },
       "10.5.1.2": {
         "title": "PRACH and RACH procedure",
@@ -17510,7 +17474,7 @@
         ],
         "changed_at": "2026-10-16T04:00:05+00:00",
         "changed_in": "Chair notes RAN1#126bis_v14.docx",
-        "file": "agreements/3eed6e60ef3fbbc8c2a8.html"
+        "file": "agreements/70fc926de018cddba560.html"
       },
       "10.5.1.3": {
         "title": "Bandwidth operation",
@@ -17568,7 +17532,7 @@
         ],
         "changed_at": "2026-10-16T04:00:05+00:00",
         "changed_in": "Chair notes RAN1#126bis_v14.docx",
-        "file": "agreements/475f1fc9ed5a69303b33.html"
+        "file": "agreements/809938478cb60fd63fd6.html"
       },
       "10.5.2": {
         "title": "MIMO operation",
@@ -17635,7 +17599,7 @@
         ],
         "changed_at": "2026-10-16T06:33:34+00:00",
         "changed_in": "Chair notes RAN1#126bis_v15.docx",
-        "file": "agreements/80f3ed18d89655c2cdde.html"
+        "file": "agreements/7017aadca04f64ccd028.html"
       },
       "10.5.2.1": {
         "title": "Downlink transmission scheme(s) for downlink control channels",
@@ -17739,7 +17703,7 @@
           "8bf817182377"
         ],
         "sources": {
-          "chair": "29e06c30eb95",
+          "chair": "a0c2e6d241eb",
           "R1-2607314": "3d54bc4dab38"
         },
         "change": "updated",
@@ -17791,7 +17755,7 @@
         ],
         "changed_at": "2026-10-16T02:05:39+00:00",
         "changed_in": "Draft R1-2607314 Session Notes of AI 10.5.2 (MIMO Operation) - v07.docx",
-        "file": "agreements/b2c8ebfdb355aee0da5a.html"
+        "file": "agreements/5d788f0fb2baadbee0d2.html"
       },
       "10.5.2.2": {
         "title": "Downlink transmission scheme(s) for downlink shared channels",
@@ -18296,7 +18260,7 @@
         ],
         "changed_at": "2026-10-16T04:53:53+00:00",
         "changed_in": "Draft R1-2607314 Session Notes of AI 10.5.2 (MIMO Operation) - v08.docx",
-        "file": "agreements/4528a158f5177336baf0.html"
+        "file": "agreements/49652d82c860cef5693f.html"
       },
       "10.5.3": {
         "title": "CSI acquisition and report",
@@ -18589,33 +18553,6 @@
           "d9bcd3007f54",
           "43bdc6ff4910",
           "c8fee8eabe07",
-          "668f920a9cee",
-          "a6334260d34f",
-          "a2ff5a80a5be",
-          "65d6e6817bbd",
-          "7b00c1b326ad",
-          "ab8964234423",
-          "0efa0c00f307",
-          "953b210e1b6c",
-          "25d4392f912d",
-          "d51d3e118ebb",
-          "953b210e1b6c",
-          "edf62443ff91",
-          "549e49c12d7c",
-          "17175df86f5e",
-          "81bcd0676aa3",
-          "1bd8f9fa8f7b",
-          "ecfb334d1852",
-          "2c83a61d9a38",
-          "575f246458ec",
-          "55b80bde34c7",
-          "85ad9c69cb98",
-          "b56326ebe54a",
-          "53d442abfe32",
-          "b3ecdc9687d0",
-          "ed91ff5dae15",
-          "97cb3ad5fc4d",
-          "c8fee8eabe07",
           "8ef5fcf1f844",
           "e87688e2e311",
           "f1b51144d2f0",
@@ -18655,52 +18592,13 @@
           "65cc4a1f21a6"
         ],
         "sources": {
-          "chair": "26a8c170e424"
+          "chair": "1a28fecc1bd2"
         },
         "change": "updated",
-        "added": [
-          303,
-          304,
-          305,
-          306,
-          307,
-          308,
-          309,
-          310,
-          311,
-          312,
-          313,
-          314,
-          315,
-          316,
-          317,
-          318,
-          319,
-          320,
-          321,
-          322,
-          323,
-          324,
-          325,
-          326,
-          327,
-          328,
-          329,
-          330,
-          331,
-          332,
-          333,
-          334,
-          335,
-          336,
-          337,
-          338,
-          339,
-          340
-        ],
-        "changed_at": "2026-10-16T04:00:05+00:00",
-        "changed_in": "Chair notes RAN1#126bis_v14.docx",
-        "file": "agreements/17541baffb5c9b7fda8b.html"
+        "added": [],
+        "changed_at": "2026-10-16T06:45:03+00:00",
+        "changed_in": "Chair notes RAN1#126bis_eom.docx",
+        "file": "agreements/94492760519501d7d2ca.html"
       },
       "10.5.3.2": {
         "title": "Aspects of uplink-based CSI acquisition",
@@ -18830,7 +18728,7 @@
         ],
         "changed_at": "2026-10-16T06:33:34+00:00",
         "changed_in": "Chair notes RAN1#126bis_v15.docx",
-        "file": "agreements/a5bf54a675aa4ded1678.html"
+        "file": "agreements/6eac911c71b77a731964.html"
       },
       "10.5.3.3": {
         "title": "Other aspects",
@@ -19689,30 +19587,23 @@
         "blocks": [
           "11d02804620e",
           "eb6153926189",
-          "245d8c873e4b",
-          "66c2f0a98d21",
+          "344a07dc044f",
           "1701220930dd",
-          "14754a3d3a8b",
-          "77b72609d39f",
+          "f728d638feef",
           "12e850357775"
         ],
         "sources": {
-          "chair": "2ca9bf230b78",
+          "chair": "191a1f1b77ac",
           "R1-2607315": "c7af92114230"
         },
         "change": "updated",
         "added": [
-          1,
           2,
-          3,
-          4,
-          5,
-          6,
-          7
+          4
         ],
-        "changed_at": "2026-10-16T06:33:34+00:00",
-        "changed_in": "Chair notes RAN1#126bis_v15.docx",
-        "file": "agreements/f28630b5ab6c5aeda2bd.html"
+        "changed_at": "2026-10-16T06:45:03+00:00",
+        "changed_in": "Chair notes RAN1#126bis_eom.docx",
+        "file": "agreements/9368895197d06de8908e.html"
       },
       "10.7.1": {
         "title": "NTN specific requirements and design",
@@ -20367,7 +20258,18 @@
         "changed_in": "Draft Chair notes RAN1#126bis_v00.docx"
       }
     },
-    "retained_files": []
+    "retained_files": [
+      "agreements/17541baffb5c9b7fda8b.html",
+      "agreements/39cca9dc4c0f0425565f.html",
+      "agreements/3eed6e60ef3fbbc8c2a8.html",
+      "agreements/4528a158f5177336baf0.html",
+      "agreements/475f1fc9ed5a69303b33.html",
+      "agreements/80f3ed18d89655c2cdde.html",
+      "agreements/a5bf54a675aa4ded1678.html",
+      "agreements/b2c8ebfdb355aee0da5a.html",
+      "agreements/da1ce896e58ec4f59771.html",
+      "agreements/f28630b5ab6c5aeda2bd.html"
+    ]
   },
   "email_informal": {
     "10.5.4.4": [
