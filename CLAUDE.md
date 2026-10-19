@@ -364,6 +364,8 @@ HTML은 `shared/page.py`, 표시 판단은 `templates/support-note.js`, 값은 `
   - 표기는 FTP(`TSGR1_111` ~ `TSGR1_126`의 `Inbox/Chair_notes`)에서 본 그대로 받는다: `_eom`, ` eom0`, `_eom1`, ` - eom3`, ` - eom_01`(#124). 번호는 건너뛰기도 하고(#118: `eom2` → `eom4`) `eom1`부터 시작하기도 한다(#116bis).
   - 회의 중에 앞 버전이 지워져 `v00`과 EOM만 남기도 한다(#126: `v00.docm`, `eom`, `eom1`). 번호 없는 `eom`을 버전 없음(-1)으로 읽으면 `v00`이 이긴다.
   - 선택, 로컬 캐시, check 잡의 downgrade 판정이 모두 이 키를 쓴다. 세션 노트도 같은 키다.
+- **체어맨 노트는 이름의 `Chair notes`·`Chairman notes`·`Chair's notes`로 찾는다(`_is_chair_notes_name`).** `Chair's Notes`는 #115까지 쓰던 표기이고, Final을 쓰던 회의도 이 표기였다. 낱말 사이는 공백이나 `_`다.
+  - 회의 번호의 `#` 자리에 `_`를 쓴 이름(`RAN1_111 v03`)도 같은 회의다(`_MEETING_ID_PATTERN`). #110bis와 #111은 회의 도중 `RAN1#111`에서 `RAN1_111`로 바뀌어서, 읽지 못하면 `#111` 묶음의 `v02`가 마지막 버전이 된다.
 - 문서 형식이나 출력이 바뀌면 `working_groups/ran1/agreements.py`의 `PARSER_VERSION`을 올려 캐시를 무효화한다.
 
 ### 세션 노트

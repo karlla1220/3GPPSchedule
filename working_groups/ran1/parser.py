@@ -9,7 +9,7 @@ from zipfile import BadZipFile, ZipFile
 
 from docx import Document
 
-from .downloader import _extract_meeting_id, _iter_local_files, _local_doc_preference
+from .downloader import _extract_meeting_id, _is_chair_notes_name, _iter_local_files, _local_doc_preference
 from .rooms import table_kind
 from .models import (
     TIME_BLOCKS,
@@ -71,7 +71,7 @@ def find_chair_notes_docx(
 ) -> Path | None:
     """Find the latest Chair notes document in the local directory.
 
-    Looks for files with 'chair note' (case-insensitive) in the name,
+    Looks for files named as Chair notes (``_is_chair_notes_name``),
     supporting .docx and .docm extensions. When a meeting ID
     is supplied, a document from another identified meeting is never used.
     A released note beats a "Draft" one; within the same class the highest
@@ -82,7 +82,7 @@ def find_chair_notes_docx(
     chair_files = [
         f
         for f in _iter_local_files(dest_dir, supported_extensions)
-        if any(label in f.name.lower() for label in ("chair note", "chair_note", "chairman note", "chairman_note"))
+        if _is_chair_notes_name(f.name)
     ]
     if meeting_id is not None:
         chair_files = [

@@ -179,6 +179,17 @@ def _extract_version_parts_from_name(filename: str) -> tuple[int, ...]:
     return (int(m.group(1)), *suffix_parts)
 
 
+# "Chair notes" and "Chairman notes", and "Chair's Notes" as the chair wrote it
+# up to #115 (``Chair's notes RAN1#115 eom3.zip``).  A space or an underscore
+# may stand between the words.
+_CHAIR_NOTES_RE = re.compile(r"chair(?:man)?(?:['\u2019]?s)?[ _]notes?", re.IGNORECASE)
+
+
+def _is_chair_notes_name(filename: str) -> bool:
+    """True when the filename names a Chair notes document."""
+    return _CHAIR_NOTES_RE.search(filename) is not None
+
+
 # "Draft" as a whole word marks a document the chair has not released yet
 # (``Draft Chair notes RAN1#126bis_v01.docx``).
 _DRAFT_RE = re.compile(r"(?<![A-Za-z0-9])draft(?![A-Za-z0-9])", re.IGNORECASE)
@@ -279,9 +290,11 @@ _SUFFIX_END = r"(?![A-Za-z0-9])"
 
 # Pattern to extract meeting identifiers like RAN1#124, RAN1#124bis,
 # RAN1#124-bis, RAN1#124 bis, RAN1#124b, etc.  The suffix part is optional
-# and may be separated by a hyphen or space.
+# and may be separated by a hyphen or space.  The chair sometimes writes an
+# underscore for the ``#`` (``Chair's notes RAN1_111 v03.zip`` after
+# ``… RAN1#111 v02.zip``), which is the same meeting.
 _MEETING_ID_PATTERN = re.compile(
-    rf"(RAN\d+#\d+)(?:[- ]?({_MEETING_SUFFIXES}){_SUFFIX_END})?",
+    rf"(RAN\d+)[#_](\d+)(?:[- ]?({_MEETING_SUFFIXES}){_SUFFIX_END})?",
     re.IGNORECASE,
 )
 
@@ -309,6 +322,7 @@ def _extract_meeting_id(filename: str) -> str | None:
         'RAN1#124-bis schedule - v01.docx'                  → 'ran1#124bis'
         'RAN1#124 bis schedule - v01.docx'                  → 'ran1#124bis'
         'Draft RAN1#126b online and offline schedules.docx' → 'ran1#126bis'
+        "Chair's notes RAN1_111 eom3.zip"                   → 'ran1#111'
         'TSGR1_126 online and offline schedules - v02.docx' → 'ran1#126'
         'TSGR1_124b schedule - v01.docx'                    → 'ran1#124bis'
         'custom schedule name.docx'                         → None
@@ -320,7 +334,7 @@ def _extract_meeting_id(filename: str) -> str | None:
 
     Two naming conventions are recognised:
 
-    - Legacy ``RAN<N>#<num>`` (regex ``_MEETING_ID_PATTERN``)
+    - Legacy ``RAN<N>#<num>`` or ``RAN<N>_<num>`` (regex ``_MEETING_ID_PATTERN``)
     - Newer ``TSGR<N>_<num>`` (regex ``_TSGR_ID_PATTERN``), used by the
       ``tsg_ran/WG*/TSGR*_*`` FTP folders for recent meetings.  Both
       normalise to the same output so that files from the same meeting
@@ -328,8 +342,8 @@ def _extract_meeting_id(filename: str) -> str | None:
     """
     m = _MEETING_ID_PATTERN.search(filename)
     if m:
-        base = m.group(1).lower()
-        suffix = (m.group(2) or "").lower()
+        base = f"{m.group(1).lower()}#{m.group(2)}"
+        suffix = (m.group(3) or "").lower()
         if suffix == "b":
             suffix = "bis"
         return f"{base}{suffix}"
@@ -986,7 +1000,7 @@ def find_latest_chair_notes(
 ) -> dict | None:
     """Find the latest Chair notes file using meeting-aware grouping.
 
-    Looks for files containing 'chair note' (case-insensitive) in the name.
+    Looks for files named as Chair notes (``_is_chair_notes_name``).
     Supports .docx, .docm, and .zip files.
 
     Uses the same meeting-aware grouping strategy as find_latest_schedule():
@@ -997,12 +1011,7 @@ def find_latest_chair_notes(
         f for f in files
         if (
             f["name"].lower().endswith(CHAIR_NOTES_EXTENSIONS)
-            and (
-                "chair note" in f["name"].lower()
-                or "chair_note" in f["name"].lower()
-                or "chairman note" in f["name"].lower()
-                or "chairman_note" in f["name"].lower()
-            )
+            and _is_chair_notes_name(f["name"])
         )
     ]
 

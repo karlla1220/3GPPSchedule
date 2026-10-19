@@ -16,6 +16,8 @@ from test_check_update import _run_check
 from working_groups.ran1.downloader import (
     _dedup_sources,
     _closing_stage,
+    _extract_meeting_id,
+    _is_chair_notes_name,
     _eom_number,
     _is_draft_name,
     discover_schedule_sources,
@@ -291,9 +293,9 @@ def test_eom_notes_are_ordered_by_their_own_number(names, expected):
 
 
 @pytest.mark.parametrize("names, expected", [
-    # The #104bis-e order (v011, v012, final) in today's naming.
-    (["Chair notes RAN1#130 v011.zip", "Chair notes RAN1#130 v012.zip", "Chair notes RAN1#130 final.zip"],
-     "Chair notes RAN1#130 final.zip"),
+    # #104bis-e: final after v012.
+    (["Chair's Notes RAN1#104b-e v011.docx", "Chair's Notes RAN1#104b-e v012.zip",
+      "Chair's Notes RAN1#104b-e final.zip"], "Chair's Notes RAN1#104b-e final.zip"),
     # vNN, then Final, then EOM, whatever the upload order.
     (["Chair notes RAN1#130_v15.docx", "Chair notes RAN1#130_eom.docx", "Chair notes RAN1#130_final.docx"],
      "Chair notes RAN1#130_eom.docx"),
@@ -360,3 +362,42 @@ def test_eom_after_the_last_version_is_not_a_downgrade():
     assert not check_update._is_chair_notes_downgrade(eom1, eom)
     assert check_update._is_chair_notes_downgrade(v15, eom)
     assert check_update._is_chair_notes_downgrade(eom, eom1)
+
+
+@pytest.mark.parametrize("name, chair_notes", [
+    ("Chair notes RAN1#126_eom1.docx", True),
+    ("Draft Chair notes RAN1#126bis_v01.docx", True),
+    ("Chair_notes RAN1#126bis_v01.docx", True),
+    ("Chairman notes RAN1#126_v01.docx", True),
+    ("Chair's notes RAN1_111 eom3.zip", True),          # As written up to #115.
+    ("Chair's Notes RAN1#106bis-e v11 (not shared 2).zip", True),
+    ("Chair\u2019s notes RAN1#130 v01.docx", True),
+    ("Chairs notes RAN1#130 v01.docx", True),
+    ("RAN1#126b online and offline schedules - v00.docx", False),
+    ("Session Notes of AI 9.1 R1-2601234 v01.docx", False),
+])
+def test_chair_notes_names(name, chair_notes):
+    assert _is_chair_notes_name(name) is chair_notes
+
+
+def test_chairs_notes_are_found_remotely_and_locally(tmp_path):
+    names = ["Chair's notes RAN1#115 v18.zip", "Chair's notes RAN1#115 eom.zip", "Chair's notes RAN1#115 eom3.zip"]
+    assert find_latest_chair_notes([_f(name) for name in names])["name"] == names[-1]
+    for name in ("Chair's notes RAN1#115 v18.docx", "Chair's notes RAN1#115 eom3.docx"):
+        (tmp_path / name).write_bytes(b"note")
+    assert find_chair_notes_docx(tmp_path, meeting_id="ran1#115").name == "Chair's notes RAN1#115 eom3.docx"
+
+
+def test_underscore_for_hash_is_the_same_meeting():
+    """#111 switched from ``RAN1#111`` to ``RAN1_111`` after v02."""
+    listing = [
+        _f("Chair's notes RAN1#111 v01.zip", datetime(2022, 11, 14, 9, 0)),
+        _f("Chair's notes RAN1#111 v02.zip", datetime(2022, 11, 15, 9, 0)),
+        _f("Chair's notes RAN1_111 v15.zip", datetime(2022, 11, 18, 9, 0)),
+        _f("Chair's notes RAN1_111 eom.zip", datetime(2022, 11, 19, 9, 0)),
+        _f("Chair's notes RAN1_111 eom3.zip", datetime(2022, 11, 21, 9, 0)),
+    ]
+    assert _extract_meeting_id("Chair's notes RAN1_111 eom3.zip") == "ran1#111"
+    assert _extract_meeting_id("Chair's notes RAN1_110bis-e v04.zip") == "ran1#110bis"
+    for preferred in (None, "ran1#111"):
+        assert find_latest_chair_notes(listing, preferred_meeting_id=preferred)["name"] == "Chair's notes RAN1_111 eom3.zip"
