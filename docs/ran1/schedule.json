@@ -14108,7 +14108,7 @@
     }
   ],
   "source_file": "RAN1#126b online and offline schedules - v05.docx",
-  "generated_at": "2026-10-20 11:22",
+  "generated_at": "2026-10-20 15:01",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
@@ -20258,26 +20258,7 @@
         "changed_in": "Draft Chair notes RAN1#126bis_v00.docx"
       }
     },
-    "retained_files": [
-      "agreements/007d4fc245bc53536916.html",
-      "agreements/1e28c18dd40fe80194f2.html",
-      "agreements/1eabcdbbfc5793e8f94c.html",
-      "agreements/49652d82c860cef5693f.html",
-      "agreements/5d788f0fb2baadbee0d2.html",
-      "agreements/6eac911c71b77a731964.html",
-      "agreements/83f3f042d7e155e891fe.html",
-      "agreements/858ef9d103a36fc834bb.html",
-      "agreements/86fe1fe70ee449bbaefb.html",
-      "agreements/92171d70f004849279d8.html",
-      "agreements/94492760519501d7d2ca.html",
-      "agreements/99a27f3ce13767b6dfc5.html",
-      "agreements/a8424ce145888f79b74b.html",
-      "agreements/b9dbbe5ca6b63a3f9ff9.html",
-      "agreements/c887edcb363e6fbacf3f.html",
-      "agreements/d4c282ba697d89edbe54.html",
-      "agreements/d7b2890be079dc75ca5a.html",
-      "agreements/dca3dde3fbb5bc4f48a2.html"
-    ]
+    "retained_files": []
   },
   "email_informal": {
     "10.5.4.4": [
