@@ -5,6 +5,7 @@ from functools import partial
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 import threading
+from urllib.parse import urlsplit
 
 from playwright.sync_api import sync_playwright, expect
 
@@ -24,9 +25,25 @@ def main():
     threading.Thread(target=server.serve_forever, daemon=True).start()
     base = f"http://127.0.0.1:{server.server_port}"
     checks = []
+    # A check run downloads nothing but the page's runtime: the CDN modules and
+    # web fonts. Any other outside request is blocked and fails the run.
+    allowed = {"cdn.jsdelivr.net", "fonts.googleapis.com", "fonts.gstatic.com"}
+    outside = []
+
+    def block(route):
+        outside.append(route.request.url)
+        route.abort()
+
     with sync_playwright() as p:
         browser = p.chromium.launch()
-        page = browser.new_page(viewport={"width": 1440, "height": 1000})
+
+        def new_page(**options):
+            # Later routes (a check's own) take precedence over this one.
+            page = browser.new_page(**options)
+            page.route(lambda url: not url.startswith(base) and urlsplit(url).hostname not in allowed, block)
+            return page
+
+        page = new_page(viewport={"width": 1440, "height": 1000})
         errors, requests = [], []
         page.on("pageerror", lambda error: errors.append(str(error)))
         page.on("request", lambda request: requests.append(request.url))
@@ -345,8 +362,8 @@ def main():
             page.get_by_text("No chairman note is available for this meeting.")
         ).to_be_visible()
         expect(page.locator(".agreement-document")).to_have_count(0)
-        checks.append("RAN1#126 does not borrow #124 agreements")
-        mobile = browser.new_page(
+        checks.append("A later meeting does not borrow #124 agreements")
+        mobile = new_page(
             viewport={"width": 390, "height": 844}, is_mobile=True, has_touch=True
         )
         mobile.goto(base + "/ran1/", wait_until="networkidle")
@@ -367,7 +384,7 @@ def main():
         )
         mobile.screenshot(path=str(args.directory / "mobile.png"))
         checks.append("Mobile touch, preserved popup and naturally expanding document")
-        offline = browser.new_page()
+        offline = new_page()
         offline.route("https://cdn.jsdelivr.net/**", lambda route: route.abort())
         offline.goto(base + "/ran1/", wait_until="networkidle")
         offline.get_by_role(
@@ -377,6 +394,7 @@ def main():
         expect(offline.locator("#popup-floating")).to_have_class("popup-floating show")
         checks.append("CDN failure leaves original popup usable")
         assert not errors, errors
+        assert not outside, f"outside requests: {outside}"
         browser.close()
     server.shutdown()
     for check in checks:
