@@ -113,8 +113,13 @@ def main():
     for s in [schedule, other]:
         save_schedule(s, root / s.wg_id / "schedule.json")
     render_site(config, root, {"ran1": schedule, "ran-plenary": other})
-    # A separate real current schedule verifies that #124 notes cannot appear in #126.
+    # A separate real current schedule verifies that #124 notes cannot appear
+    # in a later meeting. It is handed them on purpose: its own notes in docs/
+    # would otherwise decide what the page shows.
     current = load_schedule(Path("docs/ran1/schedule.json"))
+    assert current.meeting_id.lower() != stored["meeting_id"], current.meeting_id
+    current.chairman_agreements = stored
+    current.agreement_fragments = fragments
     from shared.renderer import save_html
 
     save_html(current, root / "current-ran1/index.html")
