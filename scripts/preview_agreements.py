@@ -1,5 +1,6 @@
 """Create a reproducible offline input preview; serve via HTTP for module/fetch support."""
 
+from dataclasses import replace
 from pathlib import Path
 import argparse
 import sys
@@ -13,7 +14,6 @@ from shared.schedule import (
     RoomInfo,
     Session,
     save_schedule,
-    load_schedule,
 )
 from shared.agreement_assets import package_agreements
 from working_groups.ran1.agreements import parse_agreements, track_changes
@@ -23,6 +23,23 @@ ADDED_TEXT = (
     "",  # A blank Word paragraph between added ones, which the bar spans.
     "Preview revision: so was this one.",
 )
+
+
+def plenary_schedule():
+    """RAN#113 from its test fixtures: the document and its recorded interpretation."""
+    from working_groups.ran_plenary import document, interpreter
+
+    fixtures = Path("tests/fixtures/ran_plenary")
+    name = "RAN#113 time plan v04.zip"
+    return interpreter.make_schedule(
+        document.extract_document((fixtures / name).read_bytes(), name),
+        interpreter.Interpretation.model_validate_json((fixtures / "interpretation.json").read_text()),
+        document.agenda_map((fixtures / "agenda.csv").read_bytes()),
+        {"starts_on": "2026-09-14", "ends_on": "2026-09-17", "location": "Madrid",
+         "country": "ES", "timezone": "Europe/Madrid"},
+        name,
+        "2026-09-15 02:00",
+    )
 
 
 def revised_note(note, directory):
@@ -101,7 +118,7 @@ def main():
         chairman_agreements=stored,
         agreement_fragments=fragments,
     )
-    other = load_schedule(Path("docs/ran-plenary/schedule.json"))
+    other = plenary_schedule()
     config = {
         "default_wg": "ran1",
         "working_groups": [{"id": "ran1"}, {"id": "ran-plenary"}],
@@ -113,13 +130,8 @@ def main():
     for s in [schedule, other]:
         save_schedule(s, root / s.wg_id / "schedule.json")
     render_site(config, root, {"ran1": schedule, "ran-plenary": other})
-    # A separate real current schedule verifies that #124 notes cannot appear
-    # in a later meeting. It is handed them on purpose: its own notes in docs/
-    # would otherwise decide what the page shows.
-    current = load_schedule(Path("docs/ran1/schedule.json"))
-    assert current.meeting_id.lower() != stored["meeting_id"], current.meeting_id
-    current.chairman_agreements = stored
-    current.agreement_fragments = fragments
+    # A later meeting handed the #124 notes verifies that they cannot appear there.
+    current = replace(schedule, meeting_name="RAN1#125 · Agreement verification", meeting_id="ran1#125")
     from shared.renderer import save_html
 
     save_html(current, root / "current-ran1/index.html")
