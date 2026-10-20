@@ -119,6 +119,39 @@ def main():
         )
         expect(page.locator('[role="tab"] .agreement-updated')).to_have_count(1)
         checks.append("Section change is dated and its added paragraphs marked with one bar")
+        # Copying: Markdown keeps list depth, tables, TeX and struck text; the
+        # HTML carries the document's look inline. A selection reaching out of
+        # the document copies as the browser does.
+        copy = """([start, end]) => {
+            const root = document.querySelector('.agreement-document').shadowRoot;
+            const at = where => typeof where === 'string'
+                ? [...root.querySelectorAll('li')].findLast(li => li.textContent.includes(where)).querySelector('span').firstChild
+                : document.querySelector('#agreement-body h3');
+            const range = document.createRange();
+            if (start === null) range.selectNodeContents(root.querySelector('.docx-document'));
+            else { range.setStart(at(start), start ? 2 : 0); range.setEnd(at(end), 4); }
+            getSelection().removeAllRanges();
+            getSelection().addRange(range);
+            const event = new ClipboardEvent('copy', { clipboardData: new DataTransfer(), bubbles: true, cancelable: true, composed: true });
+            root.querySelector('p').dispatchEvent(event);
+            return { plain: event.clipboardData.getData('text/plain'), html: event.clipboardData.getData('text/html'), handled: event.defaultPrevented };
+        }"""
+        whole = page.evaluate(copy, [None, None])
+        assert whole["handled"]
+        assert "\n- Candidate2: Directional" in whole["plain"]
+        assert "\n  - CPE can be equipped" in whole["plain"]
+        assert "\n| --- | --- |\n" in whole["plain"]
+        assert "~~The values defined in option2" in whole["plain"]
+        assert "$θ''$" in whole["plain"], "formulas copy as their TeX"
+        assert "line-through" in whole["html"] and "<table" in whole["html"]
+        assert "agreement-added" not in whole["html"] and "--added-reach" not in whole["html"]
+        part = page.evaluate(copy, ["Candidate2", "CPE can be"])
+        assert part["plain"].startswith("- ndidate2") and "\n  - CPE" in part["plain"], part["plain"]
+        word = page.evaluate(copy, ["Candidate2", "Candidate2"])
+        assert word["plain"] == "nd", repr(word)
+        assert not page.evaluate(copy, [0, "Candidate2"])["handled"]
+        page.evaluate("getSelection().removeAllRanges()")
+        checks.append("Copy as Markdown and inline-styled HTML, with list context")
         for selector, marker in [
             ("ul", "disc"),
             ("ul ul", "circle"),

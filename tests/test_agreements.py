@@ -2,6 +2,7 @@
 
 import base64
 from pathlib import Path
+import re
 from unittest.mock import patch
 from zipfile import ZipFile
 
@@ -520,6 +521,8 @@ def test_all_real_omml_equations_convert_independently():
     assert all("<math" in m for m in converted)
     assert any("<mfrac>" in m for m in converted)
     assert any("<msubsup>" in m for m in converted)
+    # The TeX goes along for copying the formula as Markdown.
+    assert all(re.search(r'<math [^>]*alttext="[^"]+"', m) for m in converted)
 
 
 def test_metafile_symbol_mapping_and_active_svg_rejection(monkeypatch):
