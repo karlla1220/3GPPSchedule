@@ -134,13 +134,13 @@ const gridCells = table => {
         });
     });
 };
-const wordWidths = new WeakMap();
 const fitTable = table => {
     const cols = [...table.querySelectorAll(':scope > colgroup > col')];
-    if (!wordWidths.has(table)) wordWidths.set(table, cols.map(col => col.style.width));
+    // Word's widths stay on each column, for refits and for copying.
+    for (const col of cols) col.dataset.word ??= col.style.width;
     table.classList.remove('fitted');
     table.style.zoom = table.style.width = '';
-    cols.forEach((col, i) => { col.style.width = wordWidths.get(table)[i]; });
+    cols.forEach(col => { col.style.width = col.dataset.word; });
     const room = table.parentElement.clientWidth;
     if (!room || table.offsetWidth <= room) return;
 
@@ -215,6 +215,246 @@ const fitTables = root => {
     }).observe(root.querySelector('.docx-document') || root.host));
 };
 
+// A copied selection keeps the document's structure: Markdown as plain text
+// (list numbers and nesting survive in a chat or an editor) and HTML with the
+// screen's formatting written inline (the document CSS stays in the Shadow
+// DOM) for Word and mail. Deleted text is copied struck through.
+const selectedRange = root => {
+    const selection = document.getSelection();
+    let found = null;
+    if (selection?.getComposedRanges) {
+        // Safari 17 takes the shadow roots as arguments, not in a dictionary.
+        try { [found] = selection.getComposedRanges({ shadowRoots: [root] }); }
+        catch { try { [found] = selection.getComposedRanges(root); } catch { found = null; } }
+    } else if (root.getSelection) {
+        const inner = root.getSelection();
+        found = inner?.rangeCount ? inner.getRangeAt(0) : null;
+    } else if (selection?.rangeCount) found = selection.getRangeAt(0);
+    if (!found || found.collapsed) return null;
+    const range = document.createRange();
+    range.setStart(found.startContainer, found.startOffset);
+    range.setEnd(found.endContainer, found.endOffset);
+    return range;
+};
+// The selection with the elements around it: within one paragraph only its
+// runs (a word in a list item is not a list item), across paragraphs the
+// enclosing lists and table up to the table cell, so numbers and depth hold.
+const selectedContent = (range, doc) => {
+    let common = range.commonAncestorContainer;
+    if (common.nodeType !== Node.ELEMENT_NODE) common = common.parentElement;
+    const stop = common.closest('p, summary') || common.closest('td, th') || doc;
+    let content = range.cloneContents();
+    for (let node = common; node !== stop; node = node.parentElement) {
+        const shell = node.cloneNode(false);
+        shell.append(content);
+        content = shell;
+    }
+    const box = document.createElement('div');
+    box.append(content);
+    return { box, inline: stop.matches('p, summary') };
+};
+
+// Struck through: a deletion, or a strike-through anywhere above the run.
+// Bold and italics are left out: they do not change what the text says.
+const struck = node => {
+    for (let el = node; el; el = el.parentElement) {
+        if (el.localName === 'del' || el.style?.textDecorationLine.includes('line-through')) return true;
+    }
+    return false;
+};
+// Only what would change the reading: markers, code and HTML tags
+// ("<unchanged text omitted>" would vanish as a tag).
+const escapeMarkdown = text => text.replace(/[\\`*~]/g, '\\$&').replace(/<(?=[a-z/!?])/gi, '\\<');
+// TeX between dollars; a formula without its TeX (an older build) as its text.
+const texOf = (math, open = '$', close = open) => {
+    const tex = math.getAttribute('alttext')?.trim();
+    return tex ? open + tex + close : math.textContent.trim();
+};
+// Runs of one paragraph. A strike-through opens and closes where it starts
+// and ends, outside the surrounding spaces, so split Word runs do not each
+// get markers.
+const inlineMarkdown = nodes => {
+    const pieces = [];
+    const walk = nodes => {
+        for (const node of nodes) {
+            if (node.nodeType === Node.TEXT_NODE) {
+                if (node.data) pieces.push({ text: escapeMarkdown(node.data), struck: struck(node.parentElement) });
+                continue;
+            }
+            if (node.nodeType !== Node.ELEMENT_NODE) continue;
+            const name = node.localName;
+            if (name === 'br') pieces.push({ text: '\n' });
+            else if (name === 'img') pieces.push({ text: '[Figure]' });
+            else if (name === 'math') pieces.push({ text: texOf(node) });
+            else if (name === 'sup' || name === 'sub') {
+                const text = node.textContent.trim();
+                if (!text) continue;
+                const mark = name === 'sup' ? '^' : '_';
+                pieces.push({ text: mark + escapeMarkdown(/^[\w.+\-−]+$/.test(text) ? text : '(' + text + ')'), struck: struck(node) });
+            } else if (name === 'a' && node.getAttribute('href')) {
+                const href = node.getAttribute('href');
+                const text = node.textContent.trim();
+                const url = href.replace(/[()\s]/g, encodeURIComponent);
+                pieces.push({ text: !text || text === href ? url : '[' + escapeMarkdown(text) + '](' + url + ')', struck: struck(node) });
+            } else walk(node.childNodes);
+        }
+    };
+    walk(nodes);
+    let out = '', open = false;
+    const close = () => {
+        const trail = out.match(/\s*$/)[0];
+        out = out.slice(0, out.length - trail.length) + '~~' + trail;
+        open = false;
+    };
+    for (const piece of pieces) {
+        // Spaces, breaks and equations stay inside or outside as they are.
+        if (piece.struck === undefined || !piece.text.trim()) { out += piece.text; continue; }
+        if (open && !piece.struck) close();
+        const lead = piece.text.match(/^\s*/)[0];
+        out += lead + (piece.struck && !open ? '~~' : '') + piece.text.slice(lead.length);
+        open = piece.struck;
+    }
+    if (open) close();
+    out = out.trim().replace(/[ \t]*\n[ \t]*/g, '  \n');
+    // A paragraph opening with # or > would turn into a heading or a quote.
+    return /^[#>]/.test(out) ? '\\' + out : out;
+};
+
+const BLOCKS = new Set(['p', 'ul', 'ol', 'li', 'table', 'tbody', 'thead', 'tr', 'td', 'th', 'div', 'article', 'details', 'summary']);
+// One string per Markdown block; loose runs between blocks form a paragraph.
+const markdownBlocks = parent => {
+    const blocks = [];
+    let loose = [], articles = 0;
+    const flush = () => {
+        const text = inlineMarkdown(loose);
+        if (text) blocks.push(text);
+        loose = [];
+    };
+    for (const node of parent.childNodes) {
+        const name = node.nodeType === Node.ELEMENT_NODE ? node.localName : '';
+        if (!BLOCKS.has(name)) { loose.push(node); continue; }
+        flush();
+        if (name === 'article') {
+            const inner = markdownBlocks(node);
+            if (inner.length && articles++) blocks.push('---');
+            blocks.push(...inner);
+        } else blocks.push(...blockMarkdown(node));
+    }
+    flush();
+    return blocks;
+};
+const blockMarkdown = node => {
+    const name = node.localName;
+    if (name === 'p') return markdownBlocks(node);
+    if (name === 'ul' || name === 'ol') return [listMarkdown(node)].filter(Boolean);
+    if (name === 'table') return [tableMarkdown(node)].filter(Boolean);
+    // The TDoc list control is not text; a folded list is not on screen.
+    if (name === 'summary') return [];
+    // An opened TDoc list is one row a line, as on screen.
+    if (name === 'details') return node.open ? [markdownBlocks(node).join('  \n')].filter(Boolean) : [];
+    if (node.classList.contains('equation-block')) {
+        // A table cell holds one line: its formulas stay inline.
+        const [open, close] = node.closest('td, th') ? ['$', '$'] : ['$$\n', '\n$$'];
+        return [...node.querySelectorAll('math')].map(math => texOf(math, open, close));
+    }
+    return markdownBlocks(node);
+};
+// Word's numbers ("value"), and each sublist under its item's text.
+const listMarkdown = list => {
+    const items = [];
+    let number = +(list.getAttribute('start') || 1);
+    for (const item of list.children) {
+        if (item.localName !== 'li') continue;
+        if (item.hasAttribute('value')) number = +item.getAttribute('value');
+        // A gap stands for a missing parent level: indented, no marker.
+        const marker = item.classList.contains('list-gap') ? '' : list.localName === 'ol' ? number++ + '. ' : '- ';
+        const body = markdownBlocks(item).join('\n');
+        if (!body) continue;
+        const pad = ' '.repeat(marker.length || 2);
+        items.push(body.split('\n').map((line, i) => (i ? (line ? pad : '') : marker || pad) + line).join('\n'));
+    }
+    return items.join('\n');
+};
+// GFM table; a merged cell keeps its text in its first slot. A one-column
+// table is a box of prose (an IPR notice), so it becomes a quote.
+const tableMarkdown = table => {
+    const placed = gridCells(table);
+    if (!placed.length) return '';
+    const rows = [...table.rows];
+    const width = Math.max(...placed.map(({ start, span }) => start + span));
+    const cellBlocks = cell => markdownBlocks(cell);
+    if (width === 1) {
+        const text = placed.flatMap(({ cell }) => cellBlocks(cell)).join('\n\n');
+        return text && text.split('\n').map(line => line ? '> ' + line : '>').join('\n');
+    }
+    const grid = rows.map(() => Array(width).fill(''));
+    for (const { cell, start } of placed) {
+        const r = rows.indexOf(cell.parentElement);
+        grid[r][start] = cellBlocks(cell).join('<br>').replace(/ *\n */g, '<br>').replace(/\|/g, '\\|');
+    }
+    if (grid.every(row => row.every(text => !text))) return '';
+    const line = cells => '| ' + cells.join(' | ') + ' |';
+    return [line(grid[0]), line(grid[0].map(() => '---')), ...grid.slice(1).map(line)].join('\n');
+};
+
+// Inline styles for what the document CSS draws, so Word and mail show it.
+const COPY_STYLE = {
+    p: 'margin:0 0 .6em',
+    ul: 'margin:.4em 0;padding-left:1.6em',
+    ol: 'margin:.4em 0;padding-left:1.6em',
+    table: 'border-collapse:collapse;width:100%;font-size:.93em;margin:12px 0',
+    td: 'border:1px solid #c8ccd4;padding:4px 6px;vertical-align:top',
+    th: 'border:1px solid #c8ccd4;padding:4px 6px;vertical-align:top;font-weight:600',
+    ins: 'color:#17784a;text-decoration:underline',
+    del: 'color:#b42318;text-decoration:line-through',
+    a: 'color:#275d8c',
+};
+const htmlCopy = ({ box, inline }) => {
+    for (const details of box.querySelectorAll('details')) {
+        if (!details.open) { details.remove(); continue; }
+        for (const p of details.querySelectorAll('p')) p.setAttribute('style', 'margin:0 0 .2em 1.15em;font-size:.93em;color:#475569;' + (p.getAttribute('style') || ''));
+        details.querySelector(':scope > summary')?.remove();
+        details.replaceWith(...details.childNodes);
+    }
+    // The table's on-screen fit goes; Word lays it out at its own widths.
+    for (const table of box.querySelectorAll('table')) table.removeAttribute('style');
+    for (const col of box.querySelectorAll('col')) {
+        if (col.dataset.word) col.style.width = col.dataset.word;
+        col.removeAttribute('data-word');
+    }
+    for (const el of box.querySelectorAll('ins *, del *')) el.style?.removeProperty('color');
+    for (const el of box.querySelectorAll('*')) {
+        if (el.style) for (const property of [...el.style]) if (property.startsWith('--')) el.style.removeProperty(property);
+        const name = el.localName;
+        let base = COPY_STYLE[name] || '';
+        if (name === 'p' && el.parentElement?.localName === 'li') base = 'margin:0';
+        if ((name === 'ul' || name === 'ol') && el.parentElement?.localName === 'li') base += ';margin:0';
+        if (name === 'li' && el.classList.contains('list-gap')) base = 'list-style-type:none';
+        if (el.classList.contains('equation-block')) base = 'margin:8px 0';
+        if (base) el.setAttribute('style', base + ';' + (el.getAttribute('style') || ''));
+        if (el.getAttribute('colspan') === '1') el.removeAttribute('colspan');
+        if (el.getAttribute('rowspan') === '1') el.removeAttribute('rowspan');
+        el.removeAttribute('class');
+    }
+    // Word's own size: run sizes are em of its 11pt body text.
+    const tag = inline ? 'span' : 'div';
+    return `<${tag} style="font-family:'Times New Roman',Times,serif;font-size:11pt">${box.innerHTML}</${tag}>`;
+};
+
+document.addEventListener('copy', event => {
+    const root = mount.querySelector('.agreement-document')?.shadowRoot;
+    const doc = root?.querySelector('.docx-document');
+    const range = doc && selectedRange(root);
+    // A selection reaching outside the document copies as the browser does.
+    if (!range || !doc.contains(range.startContainer) || !doc.contains(range.endContainer) || !event.clipboardData) return;
+    const content = selectedContent(range, doc);
+    const markdown = markdownBlocks(content.box).join('\n\n');
+    if (!markdown) return;
+    event.clipboardData.setData('text/plain', markdown);
+    event.clipboardData.setData('text/html', htmlCopy(content));
+    event.preventDefault();
+});
+
 async function start() {
     const [{ createSignal, createResource, batch, For, Show, onCleanup }, { render }, { default: html }, { default: DOMPurify }] =
         await Promise.all([import('solid-js'), import('solid-js/web'), import('solid-js/html'), import('dompurify')]);
@@ -230,6 +470,8 @@ async function start() {
             RETURN_DOM_FRAGMENT: true,
             ALLOWED_TAGS: ('div article p span br a img sub sup ins del ul ol li table colgroup col thead tbody tr td th details summary ' +
                 'math mrow mi mn mo mtext mspace ms mfrac msqrt mroot mstyle merror mpadded mphantom mfenced menclose msub msup msubsup munder mover munderover mmultiscripts mprescripts none mtable mtr mtd mlabeledtr').split(' '),
+            // A formula's TeX, for copying it as Markdown.
+            ADD_ATTR: ['alttext'],
             FORBID_ATTR: ['id', 'name'],
             ALLOW_DATA_ATTR: false,
         });

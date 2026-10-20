@@ -14108,7 +14108,7 @@
     }
   ],
   "source_file": "RAN1#126b online and offline schedules - v05.docx",
-  "generated_at": "2026-10-19 18:21",
+  "generated_at": "2026-10-20 11:22",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
@@ -14137,7 +14137,7 @@
     "meeting_id": "ran1#126bis",
     "document_file": "Chair notes RAN1#126bis_eom.docx",
     "sha256": "7aad94e50033be0bbf5bc95119f2970b6c035cd013d78275ba55d6a6da18fc06",
-    "parser_version": 22,
+    "parser_version": 23,
     "warnings": [
       "A WMF/EMF figure was only partially rendered; verify it against the original document.",
       "An embedded object or legacy symbol requires the source document.",
@@ -15175,7 +15175,7 @@
         ],
         "changed_at": "2026-10-16T06:33:34+00:00",
         "changed_in": "Chair notes RAN1#126bis_v15.docx",
-        "file": "agreements/86fe1fe70ee449bbaefb.html"
+        "file": "agreements/1a5d51503e432255953f.html"
       },
       "8.2": {
         "title": "Maintenance on others",
@@ -15286,7 +15286,7 @@
         ],
         "changed_at": "2026-10-16T06:33:34+00:00",
         "changed_in": "Chair notes RAN1#126bis_v15.docx",
-        "file": "agreements/1e28c18dd40fe80194f2.html"
+        "file": "agreements/7774205de41598bd27e1.html"
       },
       "8.3": {
         "title": "Maintenance on UE features",
@@ -15440,7 +15440,7 @@
         ],
         "changed_at": "2026-10-15T10:36:39+00:00",
         "changed_in": "Draft R1-2607308 Session Notes of AI 9.1 - v04.docx",
-        "file": "agreements/99a27f3ce13767b6dfc5.html"
+        "file": "agreements/1ba403c07222eaa3fff6.html"
       },
       "9.1.2": {
         "title": "Inter-vendor training collaboration for two-sided AI/ML models",
@@ -15562,7 +15562,7 @@
         ],
         "changed_at": "2026-10-16T06:33:34+00:00",
         "changed_in": "Chair notes RAN1#126bis_v15.docx",
-        "file": "agreements/a8424ce145888f79b74b.html"
+        "file": "agreements/c4627d5e346aed9dc481.html"
       },
       "9.3": {
         "title": "Solutions for Ambient IoT (Internet of Things) in NR Phase 2",
@@ -15745,7 +15745,7 @@
         ],
         "changed_at": "2026-10-16T01:45:12+00:00",
         "changed_in": "draft_R1-2607286_Session Notes of AI 9.3_v07.docx",
-        "file": "agreements/d4c282ba697d89edbe54.html"
+        "file": "agreements/aebf280948a8b35afcf4.html"
       },
       "9.3.2": {
         "title": "D2R signals, channels, waveform and procedures",
@@ -15911,7 +15911,7 @@
         ],
         "changed_at": "2026-10-16T06:33:34+00:00",
         "changed_in": "Chair notes RAN1#126bis_v15.docx",
-        "file": "agreements/007d4fc245bc53536916.html"
+        "file": "agreements/52c40539d0fbf12bc40a.html"
       },
       "9.3.3": {
         "title": "Other procedures",
@@ -16074,7 +16074,7 @@
         ],
         "changed_at": "2026-10-16T01:45:12+00:00",
         "changed_in": "draft_R1-2607286_Session Notes of AI 9.3_v07.docx",
-        "file": "agreements/d7b2890be079dc75ca5a.html"
+        "file": "agreements/49589ca1dcbda134e14d.html"
       },
       "9.4": {
         "title": "GNSS resilient NR-NTN operation",
@@ -16273,7 +16273,7 @@
         ],
         "changed_at": "2026-10-15T23:57:02+00:00",
         "changed_in": "Draft R1-2607310 Session Notes of AI 9.4 - v06.docx",
-        "file": "agreements/c887edcb363e6fbacf3f.html"
+        "file": "agreements/ab2b3e75a4ba4bc47ed5.html"
       },
       "9.5": {
         "title": "NR NTN in systems using downlink compensation",
@@ -16617,7 +16617,7 @@
         ],
         "changed_at": "2026-10-16T06:33:34+00:00",
         "changed_in": "Chair notes RAN1#126bis_v15.docx",
-        "file": "agreements/b9dbbe5ca6b63a3f9ff9.html"
+        "file": "agreements/d2c7c5f76150cc48a8d7.html"
       },
       "10.3.2": {
         "title": "Modulation",
@@ -16685,7 +16685,7 @@
         ],
         "changed_at": "2026-10-16T06:33:34+00:00",
         "changed_in": "Chair notes RAN1#126bis_v15.docx",
-        "file": "agreements/83f3f042d7e155e891fe.html"
+        "file": "agreements/8a4e3eb3402036cbd6b8.html"
       },
       "10.4": {
         "title": "Multiple carrier operation",
@@ -17755,7 +17755,7 @@
         ],
         "changed_at": "2026-10-16T02:05:39+00:00",
         "changed_in": "Draft R1-2607314 Session Notes of AI 10.5.2 (MIMO Operation) - v07.docx",
-        "file": "agreements/5d788f0fb2baadbee0d2.html"
+        "file": "agreements/b6c1f82fab0ed68b4d23.html"
       },
       "10.5.2.2": {
         "title": "Downlink transmission scheme(s) for downlink shared channels",
@@ -18039,7 +18039,7 @@
         ],
         "changed_at": "2026-10-16T04:53:53+00:00",
         "changed_in": "Draft R1-2607314 Session Notes of AI 10.5.2 (MIMO Operation) - v08.docx",
-        "file": "agreements/858ef9d103a36fc834bb.html"
+        "file": "agreements/f35e78e36f6a2a846ddb.html"
       },
       "10.5.2.3": {
         "title": "Uplink transmission scheme(s) for uplink channels",
@@ -18260,7 +18260,7 @@
         ],
         "changed_at": "2026-10-16T04:53:53+00:00",
         "changed_in": "Draft R1-2607314 Session Notes of AI 10.5.2 (MIMO Operation) - v08.docx",
-        "file": "agreements/49652d82c860cef5693f.html"
+        "file": "agreements/8aa149050c2e77c37a7e.html"
       },
       "10.5.3": {
         "title": "CSI acquisition and report",
@@ -18598,7 +18598,7 @@
         "added": [],
         "changed_at": "2026-10-16T06:45:03+00:00",
         "changed_in": "Chair notes RAN1#126bis_eom.docx",
-        "file": "agreements/94492760519501d7d2ca.html"
+        "file": "agreements/2e85dc5077c17903679b.html"
       },
       "10.5.3.2": {
         "title": "Aspects of uplink-based CSI acquisition",
@@ -18728,7 +18728,7 @@
         ],
         "changed_at": "2026-10-16T06:33:34+00:00",
         "changed_in": "Chair notes RAN1#126bis_v15.docx",
-        "file": "agreements/6eac911c71b77a731964.html"
+        "file": "agreements/baf5cc337d7cea04e1c4.html"
       },
       "10.5.3.3": {
         "title": "Other aspects",
@@ -19908,7 +19908,7 @@
         ],
         "changed_at": "2026-10-15T07:49:58+00:00",
         "changed_in": "draft_R1-2607289_Session Notes of AI 10.8_v04.docx",
-        "file": "agreements/92171d70f004849279d8.html"
+        "file": "agreements/df867a39351d377ea1ac.html"
       },
       "10.8.2": {
         "title": "Aspects of integration with communication",
@@ -20087,7 +20087,7 @@
         ],
         "changed_at": "2026-10-16T04:11:37+00:00",
         "changed_in": "draft_R1-2607289_Session Notes of AI 10.8_v05.docx",
-        "file": "agreements/1eabcdbbfc5793e8f94c.html"
+        "file": "agreements/345cee22d9d6e7c20e6f.html"
       },
       "10.8.3": {
         "title": "Waveform and frame structure",
@@ -20219,7 +20219,7 @@
         ],
         "changed_at": "2026-10-16T04:11:37+00:00",
         "changed_in": "draft_R1-2607289_Session Notes of AI 10.8_v05.docx",
-        "file": "agreements/dca3dde3fbb5bc4f48a2.html"
+        "file": "agreements/885386eb5c4c14751057.html"
       },
       "11": {
         "title": "TEI",
@@ -20259,16 +20259,24 @@
       }
     },
     "retained_files": [
-      "agreements/17541baffb5c9b7fda8b.html",
-      "agreements/39cca9dc4c0f0425565f.html",
-      "agreements/3eed6e60ef3fbbc8c2a8.html",
-      "agreements/4528a158f5177336baf0.html",
-      "agreements/475f1fc9ed5a69303b33.html",
-      "agreements/80f3ed18d89655c2cdde.html",
-      "agreements/a5bf54a675aa4ded1678.html",
-      "agreements/b2c8ebfdb355aee0da5a.html",
-      "agreements/da1ce896e58ec4f59771.html",
-      "agreements/f28630b5ab6c5aeda2bd.html"
+      "agreements/007d4fc245bc53536916.html",
+      "agreements/1e28c18dd40fe80194f2.html",
+      "agreements/1eabcdbbfc5793e8f94c.html",
+      "agreements/49652d82c860cef5693f.html",
+      "agreements/5d788f0fb2baadbee0d2.html",
+      "agreements/6eac911c71b77a731964.html",
+      "agreements/83f3f042d7e155e891fe.html",
+      "agreements/858ef9d103a36fc834bb.html",
+      "agreements/86fe1fe70ee449bbaefb.html",
+      "agreements/92171d70f004849279d8.html",
+      "agreements/94492760519501d7d2ca.html",
+      "agreements/99a27f3ce13767b6dfc5.html",
+      "agreements/a8424ce145888f79b74b.html",
+      "agreements/b9dbbe5ca6b63a3f9ff9.html",
+      "agreements/c887edcb363e6fbacf3f.html",
+      "agreements/d4c282ba697d89edbe54.html",
+      "agreements/d7b2890be079dc75ca5a.html",
+      "agreements/dca3dde3fbb5bc4f48a2.html"
     ]
   },
   "email_informal": {
