@@ -248,22 +248,15 @@ const selectedContent = (range, doc) => {
     return { box, inline: stop.matches('p, summary') };
 };
 
-// How a run looks, from its inline styles up: the nearest weight or slant
-// wins, a strike-through anywhere above strikes it.
-const runStyle = node => {
-    let strike = false, bold = null, italic = null;
+// Struck through: a deletion, or a strike-through anywhere above the run.
+// Bold and italics are left out: they do not change what the text says.
+const struck = node => {
     for (let el = node; el; el = el.parentElement) {
-        if (el.localName === 'del') strike = true;
-        if (!el.style) continue;
-        if (el.style.textDecorationLine.includes('line-through')) strike = true;
-        if (bold === null && el.style.fontWeight) bold = el.style.fontWeight === 'bold' || +el.style.fontWeight >= 600;
-        if (italic === null && el.style.fontStyle) italic = el.style.fontStyle !== 'normal';
+        if (el.localName === 'del' || el.style?.textDecorationLine.includes('line-through')) return true;
     }
-    return { strike, bold: !!bold, italic: !!italic };
+    return false;
 };
-const EMPHASIS = [['strike', '~~'], ['bold', '**'], ['italic', '*']];
-const MARK = Object.fromEntries(EMPHASIS);
-// Only what would change the reading: emphasis, code and HTML tags
+// Only what would change the reading: markers, code and HTML tags
 // ("<unchanged text omitted>" would vanish as a tag).
 const escapeMarkdown = text => text.replace(/[\\`*~]/g, '\\$&').replace(/<(?=[a-z/!?])/gi, '\\<');
 // TeX between dollars; a formula without its TeX (an older build) as its text.
@@ -271,14 +264,15 @@ const texOf = (math, open = '$', close = open) => {
     const tex = math.getAttribute('alttext')?.trim();
     return tex ? open + tex + close : math.textContent.trim();
 };
-// Runs of one paragraph. Emphasis opens and closes where the style changes,
-// outside the surrounding spaces, so split Word runs do not each get markers.
+// Runs of one paragraph. A strike-through opens and closes where it starts
+// and ends, outside the surrounding spaces, so split Word runs do not each
+// get markers.
 const inlineMarkdown = nodes => {
     const pieces = [];
     const walk = nodes => {
         for (const node of nodes) {
             if (node.nodeType === Node.TEXT_NODE) {
-                if (node.data) pieces.push({ text: escapeMarkdown(node.data), style: runStyle(node.parentElement) });
+                if (node.data) pieces.push({ text: escapeMarkdown(node.data), struck: struck(node.parentElement) });
                 continue;
             }
             if (node.nodeType !== Node.ELEMENT_NODE) continue;
@@ -290,37 +284,31 @@ const inlineMarkdown = nodes => {
                 const text = node.textContent.trim();
                 if (!text) continue;
                 const mark = name === 'sup' ? '^' : '_';
-                pieces.push({ text: mark + escapeMarkdown(/^[\w.+\-−]+$/.test(text) ? text : '(' + text + ')'), style: runStyle(node) });
+                pieces.push({ text: mark + escapeMarkdown(/^[\w.+\-−]+$/.test(text) ? text : '(' + text + ')'), struck: struck(node) });
             } else if (name === 'a' && node.getAttribute('href')) {
                 const href = node.getAttribute('href');
                 const text = node.textContent.trim();
                 const url = href.replace(/[()\s]/g, encodeURIComponent);
-                pieces.push({ text: !text || text === href ? url : '[' + escapeMarkdown(text) + '](' + url + ')', style: runStyle(node) });
+                pieces.push({ text: !text || text === href ? url : '[' + escapeMarkdown(text) + '](' + url + ')', struck: struck(node) });
             } else walk(node.childNodes);
         }
     };
     walk(nodes);
-    let out = '';
-    const open = [];
-    const close = count => {
+    let out = '', open = false;
+    const close = () => {
         const trail = out.match(/\s*$/)[0];
-        out = out.slice(0, out.length - trail.length);
-        while (count-- > 0) out += MARK[open.pop()];
-        out += trail;
+        out = out.slice(0, out.length - trail.length) + '~~' + trail;
+        open = false;
     };
-    for (const { text, style } of pieces) {
-        // Spaces, breaks and equations keep the current emphasis.
-        if (!style || !text.trim()) { out += text; continue; }
-        const from = open.findIndex(flag => !style[flag]);
-        if (from >= 0) close(open.length - from);
-        const lead = text.match(/^\s*/)[0];
-        out += lead;
-        for (const [flag, mark] of EMPHASIS) {
-            if (style[flag] && !open.includes(flag)) { open.push(flag); out += mark; }
-        }
-        out += text.slice(lead.length);
+    for (const piece of pieces) {
+        // Spaces, breaks and equations stay inside or outside as they are.
+        if (piece.struck === undefined || !piece.text.trim()) { out += piece.text; continue; }
+        if (open && !piece.struck) close();
+        const lead = piece.text.match(/^\s*/)[0];
+        out += lead + (piece.struck && !open ? '~~' : '') + piece.text.slice(lead.length);
+        open = piece.struck;
     }
-    close(open.length);
+    if (open) close();
     out = out.trim().replace(/[ \t]*\n[ \t]*/g, '  \n');
     // A paragraph opening with # or > would turn into a heading or a quote.
     return /^[#>]/.test(out) ? '\\' + out : out;
