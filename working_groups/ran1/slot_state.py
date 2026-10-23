@@ -1,11 +1,13 @@
 """Persistent per-slot state for incremental merge.
 
 Each (day, time_block) gets a JSON file under ``docs/ran1/slot_state/`` recording
-the hashes of every source that contributed to it and the merged session
-list produced by the LLM. On the next run the merger compares current
-source hashes against these snapshots to decide which slots can short-
-circuit, which need an incremental LLM call, and which must be rebuilt
-from scratch.
+the hashes of every source that contributed to it, the merged session list
+produced by the LLM, and the cells that merge was made from (the cell
+ledger). On the next run the merger compares current source hashes against
+these snapshots to decide which slots can short-circuit, and compares the
+current cells against the ledger to find which cells an incremental LLM call
+must apply. A slot without a ledger is rebuilt from scratch. Terms are in
+GLOSSARY.md.
 
 The directory lives under ``docs/ran1/`` rather than ``.cache/`` so files are
 git-tracked and operators can force a single-slot rebuild by deleting one
@@ -42,6 +44,10 @@ class SlotState:
     merged_at: str = ""
     meeting_id: str = ""
     schema_version: int = SCHEMA_VERSION
+    # Cell ledger: source label → the cells ``merged_sessions`` was made
+    # from ({room_label, cell_text, fallback_start_time, since}). None for
+    # a state saved before ledgers existed.
+    source_entries: dict[str, list[dict]] | None = None
 
 
 def hash_source_text(text: str) -> str:
@@ -86,6 +92,7 @@ def load_slot_state(
         merged_at=data.get("merged_at", ""),
         meeting_id=data.get("meeting_id", ""),
         schema_version=data.get("schema_version", SCHEMA_VERSION),
+        source_entries=data.get("source_entries"),
     )
 
 
