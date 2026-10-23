@@ -1062,7 +1062,7 @@
           "chair": "Nathan",
           "agenda_item": "5.2, 6.0.2.21, 7.2, 8.13.2, 8.14",
           "group_header": "NR Rel-17 and earlier",
-          "description": "NR Positioning Corrections\nExpanded and improved NR positioning\nAmbient IoT\nOther WGs\nTEI20",
+          "description": "NR Positioning Corrections\nExpanded and improved NR positioning\nAmbient IoT\nNR Others\nTEI20",
           "agenda_descriptions": [
             {
               "agenda_item": "5.2",
@@ -1119,8 +1119,8 @@
             },
             {
               "agenda_item": "8.13.2",
-              "matched_agenda_item": "8.13.2",
-              "description": "Other WGs",
+              "matched_agenda_item": "8.13",
+              "description": "NR Others",
               "hierarchy": [
                 {
                   "agenda_item": "8",
@@ -1129,10 +1129,6 @@
                 {
                   "agenda_item": "8.13",
                   "description": "NR Others"
-                },
-                {
-                  "agenda_item": "8.13.2",
-                  "description": "Other WGs"
                 }
               ]
             },
@@ -3730,7 +3726,7 @@
     }
   ],
   "source_file": "R2_135b_Schedule_v10.docx",
-  "generated_at": "2026-10-23 15:01",
+  "generated_at": "2026-10-23 15:40",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
