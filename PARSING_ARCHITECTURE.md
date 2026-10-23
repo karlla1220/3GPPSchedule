@@ -23,6 +23,7 @@ CellData + 방 목록
   ├─ [결정론적] 같은 (요일, 시간 블록)의 Main/vice-chair 셀 수집
   ├─ [LLM 보조] vice-chair 문서의 모호한 Room A/B 이름 해석
   ├─ [결정론적] source hash 및 이전 slot state 비교
+  ├─ [결정론적] 칸 이력과 지금 칸을 비교해 칸마다 변경 표시
   ▼
 TimeSlotData
   │
@@ -102,6 +103,18 @@ vice-chair 문서가 방 이름 대신 `Room A`처럼 모호한 이름만 제공
 - `NEW`: 새 source가 생김
 - `REMOVED`: 이전 source가 사라짐
 
+이 상태는 슬롯을 건너뛸지 정하는 데만 쓴다. 칸 하나만 바뀌어도 source 전체가 `FRESH`가 되기 때문이다.
+무엇이 바뀌었는지는 칸 단위로 본다. slot state에는 직전 병합에 쓴 칸들(칸 이력, `source_entries`)이 함께 저장되고,
+`merger.py:diff_source_entries()`가 지금 칸을 그것과 맞춰 칸마다 `UNCHANGED`·`CHANGED`·`NEW`를 붙이고 사라진 칸을 `REMOVED`로 모은다.
+비교는 파싱 결과끼리만 한다. LLM 결과는 실행마다 달라질 수 있어 기준이 되지 못한다. 용어는 `GLOSSARY.md`에 있다.
+
+- 칸은 방 label과 원문(공백 무시)으로 맞춘다. 같은 방 label에 다른 원문이 있었으면 `CHANGED`이고 이전 원문을 함께 둔다.
+  병합 칸이 나뉘거나 합쳐지면 방 label이 바뀌므로 `NEW`와 `REMOVED`가 된다. 방 배치를 따로 해석하지 않아서 방이 몇 개이든 같다.
+- 칸마다 `since`(칸이 지금 원문이 된 실행 시각)를 둔다. 바뀌지 않은 칸은 이전 값을 잇고, 바뀐 칸은 그 병합 시각이 된다. 칸 이력이 없던 때부터 그대로인 칸은 `null`이다.
+  지금은 기록만 하고 병합에는 쓰지 않는다.
+- RAN1#126bis 금요일 08:30 두 업데이트가 테스트다(`tests/test_cell_changes.py`). Main v04 → v05는 203 칸만, Hiroki v07 → v08은 Hiroki의 Yeongju B Hall 칸만 바뀐 것으로 나와야 한다.
+  예전 증분 병합은 source 단위로 판단해서 Main v05가 Yeongju B Hall의 Hiroki 세부를 지웠고, Hiroki v08 안의 옛 Main 사본이 Tamna BC Hall·Yeongju A Hall을 Main v02로 되돌렸다.
+
 ## 4. 비정형 셀 해석: LLM 영역
 
 `session_parser.py:parse_time_slots()`는 시간 슬롯마다 Gemini를 호출한다. LLM은 다음 의미 해석을 담당한다.
@@ -143,11 +156,17 @@ LLM에 의해 다음처럼 해석된다.
 
 | 경로 | LLM에 전달되는 데이터 | 사용 조건 |
 |---|---|---|
-| Cold | 현재 모든 source의 원문 | 이전 slot state가 없거나 `--rebuild-slots` 실행 |
-| Incremental | 이전 merge baseline + 변경된 source 원문 | 이전 state가 있고 일부 source가 변경됨 |
+| Cold | 현재 모든 source의 모든 칸 | 이전 slot state가 없음, 칸 이력이 없음, 또는 칸은 그대로인데 hash만 바뀜(prompt version) |
+| Incremental | 이전 merge baseline + 모든 source의 모든 칸(칸마다 변경 표시) + 사라진 칸 | 이전 state에 칸 이력이 있고 바뀐 칸이 있음 |
 | Short-circuit | 전달 없음 | 모든 source가 `STALE`; 이전 merge 결과 재사용 |
 
-`force-deploy`는 `.cache/`와 상태 파일을 지우고 `main.py --rebuild-slots`로 실행하므로 모든 시간 슬롯이 이전 baseline 없이 cold 경로로 재생성된다.
+증분 병합은 `UNCHANGED`가 아닌 칸이 걸친 영역(방)만 다시 만들고, 다른 영역은 baseline을 그대로 옮긴다(`prompts/multi_source_incremental_prefix.md`).
+다시 만드는 영역은 그 영역의 모든 칸으로 cold와 같은 규칙에 따라 만든다. Main 칸만 바뀌어도 바뀌지 않은 부의장 칸의 세부가 그 방에 다시 들어간다.
+바뀌지 않은 칸까지 모두 보내는 것은 병합 칸이 여러 방에 걸치고 부의장 칸이 다른 방의 세부를 알려 주기 때문이다. 바뀌지 않은 칸은 그것만으로 baseline을 바꾸지 않는다.
+
+baseline에 들어간 오류는 그 영역의 칸이 다시 바뀌기 전까지 남는다. 그때는 cold로 다시 만든다.
+`force-deploy`는 `.cache/`와 상태 파일을 지우고 `main.py --rebuild-slots`로 실행하므로 모든 시간 슬롯이 이전 baseline 없이 cold 경로로 재생성된다. 칸 이력도 함께 지워져 `since`가 처음부터 다시 쌓인다.
+칸 이력이 생기기 전에 저장된 slot state는 그대로 읽힌다. 바뀌지 않은 슬롯은 건너뛰면서 칸 이력을 저장하고, 바뀐 슬롯은 한 번 cold로 만든다.
 
 ## 5. LLM 응답 이후의 결정론적 처리
 
@@ -191,7 +210,7 @@ LLM 해석 직후(위 8·9단계 전) `consistency.py`가 같은 날 서로 다�
 
 ## 7. 특정 일정의 출처 추적 방법
 
-현재 slot state는 source별 hash와 최종 merge 결과를 저장하지만, **각 세션이 어느 source의 어느 셀에서 유래했는지에 대한 per-session provenance는 저장하지 않는다.** 따라서 다음 순서로 역추적한다.
+현재 slot state는 source별 hash, 최종 merge 결과, 그 merge에 쓴 칸(칸 이력, 칸마다 `since`)을 저장하지만, **각 세션이 어느 source의 어느 셀에서 유래했는지에 대한 per-session provenance는 저장하지 않는다.** 따라서 다음 순서로 역추적한다. 칸 이력의 `since`로 어느 칸이 언제 바뀌었는지는 바로 볼 수 있다.
 
 1. `docs/ran1/index.html` 또는 `docs/ran1/slot_state/{Day}_{TB}.json`에서 최종 일정 확인
 2. slot state의 `source_hashes`에서 참여한 source 확인

@@ -1,6 +1,6 @@
 # CLAUDE.md
 
-프로젝트 구조와 실행 방법은 `README.md`, 파싱 설계는 `PARSING_ARCHITECTURE.md`를 본다.
+프로젝트 구조와 실행 방법은 `README.md`, 파싱 설계는 `PARSING_ARCHITECTURE.md`, RAN1 병합의 용어(칸, 칸 이력, baseline, cold·증분)는 `GLOSSARY.md`를 본다.
 
 ## 세션 블록 디자인
 
