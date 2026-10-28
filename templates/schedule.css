@@ -71,6 +71,17 @@ header .meta {
     color: var(--text-muted);
 }
 
+/* Switching meetings cross-fades instead of flashing a blank page: both
+   pages opt in. index.html does not, so arriving there shows the schedule
+   at once instead of fading it in. A reload (auto refresh) never animates. */
+@view-transition { navigation: auto; }
+::view-transition-old(root),
+::view-transition-new(root) { animation-duration: .18s; }
+@media (prefers-reduced-motion: reduce) {
+    ::view-transition-old(root),
+    ::view-transition-new(root) { animation: none; }
+}
+
 /* The meeting title is the WG switcher. It looks like a control at rest
    (white face, hairline, round chevron) so visitors see it can be opened. */
 .wg-title {

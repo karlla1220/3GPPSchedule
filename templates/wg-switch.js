@@ -27,10 +27,49 @@
         }
     }
 
+    // Fetch the other meetings while the visitor is still choosing, so the
+    // switch needs no network. Browsers with speculation rules (Chrome, Edge,
+    // Samsung Internet) also render the active ones in the background and swap
+    // them in at once; ended meetings are only fetched, a full page each costs memory.
+    let warmed = false;
+    function warm() {
+        if (warmed) return;
+        warmed = true;
+        const others = Array.from(menu.querySelectorAll('.wg-switch-item:not([aria-current])'));
+        const active = others.filter(a => !a.classList.contains('wg-switch-past')).map(a => a.href);
+        const past = others.filter(a => a.classList.contains('wg-switch-past')).map(a => a.href);
+        if (HTMLScriptElement.supports && HTMLScriptElement.supports('speculationrules')) {
+            const rules = document.createElement('script');
+            rules.type = 'speculationrules';
+            rules.textContent = JSON.stringify({
+                prerender: active.length ? [{ urls: active, eagerness: 'immediate' }] : [],
+                prefetch: past.length ? [{ urls: past, eagerness: 'immediate' }] : [],
+            });
+            document.head.appendChild(rules);
+        } else {
+            active.concat(past).forEach(function(href) {
+                const link = document.createElement('link');
+                link.rel = 'prefetch';
+                link.href = href;
+                document.head.appendChild(link);
+            });
+        }
+    }
+
     if (unseen()) hint.hidden = false;
+    // A page rendered ahead (see warm) read the storage before the visitor
+    // opened the menu on the page they came from; read it again when shown.
+    document.addEventListener('prerenderingchange', function() {
+        if (!unseen()) hint.hidden = true;
+    });
     hint.querySelector('button').addEventListener('click', dismiss);
+    // A pointer resting on the title is the earliest sign; opening it is the sure one.
+    menu.querySelector('summary').addEventListener('pointerenter', warm);
     menu.addEventListener('toggle', function() {
-        if (menu.open) dismiss();
+        if (menu.open) {
+            dismiss();
+            warm();
+        }
     });
 
     // Capture: session cells stop their clicks from bubbling.

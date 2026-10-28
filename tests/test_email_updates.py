@@ -304,6 +304,8 @@ def test_off_offline_is_one_list_below_the_agreements(meeting):
     # After the agreement panel, not inside it.
     assert box is not None and box.find_parent(id="agreement-panel") is None
     rows = box.select("li")
+    # Hidden until the script after it shows the selected day's rows: no flash of every day's.
+    assert box.has_attr("hidden") and all(r.has_attr("hidden") for r in rows)
     # Every item, whatever its agenda item, in time order, each with its item and date.
     assert len(rows) == sum(len(items) for items in meeting.email_informal.values())
     dates = [r["data-date"] for r in rows]

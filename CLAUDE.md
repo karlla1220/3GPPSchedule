@@ -216,6 +216,30 @@ HTML은 `shared/navigation.py`(`render_navigation`), 동작은 `templates/wg-swi
   - 순서는 페이지마다 같다. 예전에는 현재 미팅이 늘 가운데라 같은 WG가 페이지마다 다른 자리에 있었다.
 - WG가 하나뿐이면 버튼 없이 제목만 둔다.
 
+## 페이지 전환과 첫 화면
+
+WG 페이지는 따로 된 정적 페이지이고 SPA로 바꾸지 않았다. 바꿀 때 아끼는 것은 네트워크 왕복뿐이고(그리드 배치와 `schedule.js` 초기화는 그대로 든다),
+`schedule.js`의 전역 리스너·타이머·핀치 상태를 모두 붙였다 떼는 구조로 다시 짜야 한다. 공유된 `/ran1/` 링크 때문에 개별 페이지는 어차피 남는다.
+대신 아래 셋으로 전환을 SPA처럼 보이게 한다.
+
+- **메뉴를 열면 다른 미팅을 미리 받는다(`wg-switch.js`의 `warm`).** 제목에 포인터가 올라가거나 메뉴가 열릴 때 한 번 한다.
+  - speculation rules를 지원하는 브라우저(Chrome, Edge, 삼성 인터넷)는 진행 중·다가오는 미팅을 미리 그려 둔다(`prerender`, `immediate`).
+    누르면 그린 페이지로 바로 바뀐다. 끝난 미팅은 받기만 한다(`prefetch`). 미리 그린 페이지 하나가 페이지 하나만큼 메모리를 쓴다.
+  - 지원하지 않는 브라우저는 `<link rel="prefetch">`로 받기만 한다.
+  - 미리 그린 페이지는 메뉴를 열기 전에 저장소를 읽었을 수 있어서, 화면에 나올 때(`prerenderingchange`) 말풍선을 다시 확인한다.
+  - 확인할 때 Playwright는 쓸 수 없다. DevTools가 붙으면 Chrome이 미리 그리기를 끈다(`PrerenderingDisabledByDevTools`).
+    자동화 없이 띄운 Chrome에서 확인했다: 메뉴를 열고 4초 뒤 누르면 53ms에 바뀐다.
+- **페이지 사이를 짧게 겹쳐 바꾼다(`@view-transition { navigation: auto; }`, 0.18초, `schedule.css`).** 같은 헤더는 그대로 있고 그리드만 바뀌는 것처럼 보인다.
+  - `index.html`은 참여하지 않는다. 처음 들어올 때는 흰 화면에서 서서히 나타나지 않고 바로 보인다. 새로고침(자동 새로고침 포함)도 애니메이션이 없다.
+  - 움직임 줄이기 설정(`prefers-reduced-motion`)에서는 애니메이션을 끈다.
+- **요일은 그리드가 오기 전에 고른다(`templates/day-select.js`, 요일 탭 바로 뒤 인라인).** 고른 요일의 패널을 규칙(`#initial-day`)으로 보이게 해서
+  그리드가 받아지는 대로 제자리에 그려진다. 예전에는 `DOMContentLoaded`까지 패널이 하나도 보이지 않아서, 아래 구획(Agreement 패널, off-offline 목록)이
+  그리드 자리에 먼저 그려졌다가 밀려 내려갔다. 휴대폰 조건(CPU 4배 감속, 느린 4G)에서 그리드가 다 보이는 때가 4.4초에서 1.8초로 당겨졌다.
+  - 고르는 순서는 그 탭에서 마지막으로 본 요일(`sessionStorage`), 없으면 회의 시간대의 오늘, 없으면 첫 요일이다.
+  - `schedule.js`는 표시된 탭을 눌러 이어받고 규칙을 지운다. 저장된 배율과 스크롤은 저장된 요일과 같을 때만 되살린다.
+  - off-offline 목록은 처음에 숨겨 두고(`hidden`), 바로 뒤 스크립트가 고른 요일의 줄만 연다. 모든 요일의 줄이 잠깐 보였다 사라지지 않는다.
+  - 첫 방문에는 웹폰트가 늦게 와서 대체 글꼴에서 바뀌는 순간이 한 번 있다(Google Fonts, `display=swap`). 다음부터는 캐시에 있다.
+
 ## 헤더의 후원 안내, 제작자 줄, 회의 종료 인사
 
 HTML은 `shared/page.py`, 표시 판단은 `templates/support-note.js`, 값은 `site.json`의 `presentation`이다.

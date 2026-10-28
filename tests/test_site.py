@@ -253,3 +253,20 @@ def test_offline_default_uses_saved_venue_dates_and_preserves_query_and_hash(tmp
     assert select_default_wg(cfg, schedules, [], now=now) == 'ran-plenary'
     root = build.render_root(cfg, schedules, [])
     assert 'location.search + location.hash' in root
+
+
+def test_day_is_chosen_before_its_grid_is_parsed():
+    html = generate_html(plenary_schedule())
+    # The script after the tabs shows a day by a rule, so the grid is drawn in place as it arrives.
+    assert html.index("style.id = 'initial-day'") < html.index('class="day-panel"')
+    assert html.index('class="tab"') < html.index("style.id = 'initial-day'")
+
+
+def test_switching_meetings_cross_fades_but_entering_from_the_root_does_not(tmp_path):
+    opts = options(tmp_path)
+    seed_ran1(opts)
+    opts.render_only = True
+    save_schedule(plenary_schedule(), opts.output_dir / 'ran-plenary/schedule.json')
+    build.build_site(opts)
+    assert '@view-transition { navigation: auto; }' in (opts.output_dir / 'ran1/index.html').read_text()
+    assert '@view-transition' not in (opts.output_dir / 'index.html').read_text()

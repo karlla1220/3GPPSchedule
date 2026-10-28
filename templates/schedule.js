@@ -127,6 +127,9 @@ document.addEventListener('DOMContentLoaded', function() {
             const day = this.dataset.day;
             const panel = document.getElementById(day);
             if (panel) panel.classList.add('active');
+            // day-select.js showed the first day by a rule; .active holds it from here.
+            const initialDay = document.getElementById('initial-day');
+            if (initialDay) initialDay.remove();
             saveUserState();
         });
     });
@@ -357,26 +360,15 @@ document.addEventListener('DOMContentLoaded', function() {
         updatePinchTarget();
     }
 
-    // Restore saved state or auto-select today's tab
+    // day-select.js already marked the day (saved, else today, else the first);
+    // its saved zoom and scroll come back only with the day they were left on.
     const saved = loadUserState();
-    if (saved && saved.activeDay) {
-        const savedTab = document.querySelector('[data-day="' + saved.activeDay + '"]');
-        if (savedTab) {
-            savedTab.click();
+    const initialTab = document.querySelector('.tab.active') || document.querySelector('.tab');
+    if (initialTab) {
+        initialTab.click();
+        if (saved && saved.activeDay === initialTab.dataset.day) {
             if (gridZoomSupported && saved.gridZoom) setGridZoom(saved.gridZoom);
             window.scrollTo(saved.scrollX || 0, saved.scrollY || 0);
-        } else {
-            const firstTab = document.querySelector('.tab');
-            if (firstTab) firstTab.click();
-        }
-    } else {
-        const { weekday: today } = nowInMeetingTZ();
-        const todayTab = document.querySelector(`[data-day="${today}"]`);
-        if (todayTab) {
-            todayTab.click();
-        } else {
-            const firstTab = document.querySelector('.tab');
-            if (firstTab) firstTab.click();
         }
     }
 
