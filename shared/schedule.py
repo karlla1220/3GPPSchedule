@@ -48,10 +48,17 @@ class RoomInfo:
     kind: str = ""  # "online" or "offline" when the schedule says so (RAN1 table headings)
 
 
+# The shortest piece of a split block: the length at which a cell shows its AI line.
+MIN_PART_MINUTES = 30
+
+
 @dataclass
 class Session:
     """A parsed session with calculated times."""
 
+    # The cell title: the cell's primary line as the schedule writes it. RAN1,
+    # RAN2 and RAN Plenary write the AI there; other WGs write their own label
+    # ("7.3.3 AI", "KI#18 (AI for Network)"), kept as is.
     name: str
     duration_minutes: int
     start_time: str  # "HH:MM"
@@ -74,6 +81,20 @@ class Session:
     # threads (RAN1 email_updates.py): "session" items of its own agenda
     # item, "tentative" items of another item held in its slot.
     email_details: list[dict] = field(default_factory=list)
+    # [k, n]: piece k of n of the block start_time-end_time, for topics the
+    # schedule lists in order without times. Drawn as equal heights; the times
+    # stay the block's.
+    part: list[int] | None = None
+
+    def __post_init__(self):
+        if self.part is None:
+            return
+        k, n = self.part
+        if n < 2 or not 1 <= k <= n:
+            raise ValueError(f"Invalid session part: {self.part}")
+        # Shorter pieces lose the AI line; such topics stay one cell with a list.
+        if self.duration_minutes < n * MIN_PART_MINUTES:
+            raise ValueError(f"{n} parts of {self.duration_minutes} min are shorter than {MIN_PART_MINUTES} min")
 
 
 @dataclass
