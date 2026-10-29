@@ -7,7 +7,8 @@ In order, a meeting's folder is:
 1. the WG's ``meeting_specific_override`` entry for it (set by hand),
 2. Portal's ``MtgDocURL`` (already fetched once per run, no request),
 3. the WG's ``meeting_specific``, which records what earlier runs found,
-4. the first candidate name that lists (``TSGR1_126b``; one request each),
+4. the first candidate name that lists (``TSGR1_126b``; one request each;
+   none for SA, whose folder names carry the venue),
 5. the WG root listing (several hundred entries), at most every ROOT_EVERY.
 
 Each run writes the folders it found to ``meeting_specific`` in the WG's

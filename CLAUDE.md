@@ -292,12 +292,14 @@ HTML은 `shared/page.py`, 표시 판단은 `templates/support-note.js`, 값은 `
 ## 회의 상태와 기본 WG
 
 `shared/navigation.py`의 `meeting_phase`가 정한다. 상태 줄(`In progress`, `Upcoming`, `Ended`), 미팅 메뉴의 구획, 루트의 기본 WG가 모두 이 판단을 쓴다.
+날짜가 없는 페이지는 `Latest schedule`, 데모는 `Demo`다.
 
 - **회의 시간대의 날짜로 정한다.** 개최지 시간대로 오늘이 회의 첫날~마지막 날 안이면 진행 중, 첫날 전이면 Upcoming, 마지막 날 뒤면 Ended다.
   시각(09:00 개회)이 아니라 날짜다. 월요일 아침 개회 전에도 그 회의가 기본 WG가 되어야 한다.
 - **Portal의 `MeetingPeriod`는 쓰지 않는다.** 아직 열리지 않은 회의를 `ONGOING`으로 준다(2026-10 조회: RAN2#137, RAN3#135, RAN4#122, SA2#179 등 2027년 회의).
   루트의 기본 WG는 Portal 행의 날짜와 그 행의 시간대로 정하고(`portal_phase`), 행의 시간대를 알 수 없으면 저장된 페이지의 시간대를 쓴다.
   Portal에 그 회의 행이 없으면 진행 중으로 치지 않는다(빈 응답은 "진행 중인 회의 없음"이다).
+  Portal을 받지 못한 실행(장애, `--render-only`)은 저장된 페이지의 날짜와 시간대로 정한다.
 - 다음 회의 시간표가 아직 없으면 각 WG는 sync와 지난 회의 폴더로 지난 회의 페이지를 만든다. 그 페이지는 날짜대로 `Ended`이고 기본 WG가 되지 않는다.
 
 ## 회의 시간대
@@ -305,23 +307,25 @@ HTML은 `shared/page.py`, 표시 판단은 `templates/support-note.js`, 값은 `
 모든 WG가 `shared/timezones.py` 하나로 정한다. WG 코드에 시간대 표나 LLM 호출을 따로 두지 않는다.
 
 - **순서:** IANA 이름 그대로 → Portal 라벨 표(`ZONES`, 국가로 지역 별칭) → 개최지 목록(`docs/timezone_map.jsonl`) → LLM(Gemini, thinking `low`).
-  - Portal 라벨은 표시용 이름이다(`(GMT+02.00) Belgrade, Bratislava, Budapest, Ljubljana, Prague`). 앞의 GMT 값은 계절마다 바뀔 수 있어서 이름으로 맞춘다.
+  - Portal 라벨은 표시용 이름이다(`(GMT+02.00) Belgrade, Bratislava, Budapest, Ljubljana, Prague`). GMT 값만으로는 지역의 서머타임 규칙을 알 수 없어서 이름으로 맞춘다.
   - 처음 보는 라벨이 Portal에 나오면 `ZONES`에 더한다. 목록과 LLM은 표에 없는 개최지를 위한 것이다.
 - **LLM은 빌드만 묻는다(`timezones.resolve`).** check 잡과 사이트 탐색은 목록까지만 본다(`timezones.known`, `portal_meetings.timezone_reference`의 기본값).
   빌드가 답을 목록에 남기면 다음 check가 호출 없이 같은 답을 얻는다. RAN1은 Portal 조회와 agenda·체어맨 노트의 개최지 줄 모두 `resolve`로 묻는다.
 - **답은 검사한 뒤에만 남긴다.** IANA 이름이어야 하고, 라벨에 GMT 값이 있으면 그 회의 해의 1월이나 7월 오프셋과 같아야 한다(Prague의 `+02.00`은 겨울 회의에도 맞는다).
   틀린 답, 실패한 호출, API 키가 없는 실행은 적지 않는다. 다음 빌드에서 다시 묻는다.
 - **목록은 개최지 하나가 한 줄이다.** 키는 (라벨, 국가, 장소) 원문이고, LLM의 원래 답(`raw`)을 함께 둔다. 판정을 고치려면 같은 개최지로 줄을 덧붙인다(뒤의 줄이 이긴다).
-  목록은 빌드 입력 지문에 넣지 않는다. 빌드가 줄을 더하는 순간 같은 실행의 다른 WG가 "입력이 바뀌었다"로 멈추기 때문이다. 손으로 고친 줄은 force-deploy로 반영한다.
-- 시간대를 끝내 정하지 못하면 WG의 기존 동작 그대로다(RAN2·RAN P는 `config.json`에 적으라는 오류, RAN1은 `UTC`와 `detection_failed`).
+  목록은 빌드 입력 지문(`ci.py`)에 넣지 않는다. 빌드가 줄을 더하는 순간 같은 실행의 다른 WG가 "입력이 바뀌었다"로 멈추기 때문이다.
+  그래서 고친 줄은 그 WG가 다음에 빌드될 때 반영된다. RAN P는 개최지가 같으면 지난 빌드의 시간대를 다시 쓰므로, 고치려면 `config.json`의 `meetings`에 `timezone`을 적는다.
+- 시간대를 끝내 정하지 못하면 WG마다 다르다. RAN2·RAN P는 `config.json`에 적으라는 오류로 빌드가 멈춘다.
+  RAN1은 `UTC`로 빌드하고 `timezone_status`를 남긴다(개최지 줄을 읽었지만 정하지 못하면 `detection_failed`, 개최지를 읽을 문서가 없으면 `pending_timezone_ref`).
 
 ## Experimental WG
 
 RAN Plenary, RAN1, RAN2 밖의 WG는 `site.json`의 WG 항목에 `"experimental": true`를 둔다. 새 원본을 읽는 파서라서 틀리게 읽을 수 있다는 것을 페이지에서 밝힌다.
 
-- 상태 줄 끝에 `· Experimental`(호박색), 미팅 메뉴의 회의 이름 뒤에 같은 표시가 붙는다. 마우스를 올리면 의장 파일을 확인하라는 말이 보인다.
+- 상태 줄 끝에 ` · Experimental`이 붙고(글자는 호박색), 미팅 메뉴의 회의 이름 뒤에도 같은 표시가 붙는다. 마우스를 올리면 의장 파일을 확인하라는 말이 보인다.
 - 표시는 상태 줄과 메뉴 두 곳뿐이다. 그리드 위 배너나 셀 표시는 두지 않는다(시간표를 가리지 않는다).
-- 파서가 몇 회의 동안 맞게 읽으면 플래그를 뗀다.
+- 값은 불리언이어야 한다(`shared/site_config.py`가 검사한다). 없으면 `false`다.
 
 ## 탭 아이콘
 

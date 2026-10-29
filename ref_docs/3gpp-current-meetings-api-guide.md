@@ -1,14 +1,14 @@
 # 3GPP 현재 개최 중인 미팅 조회 매뉴얼
 
-검증일: 2026-09-15. 대상: 다른 프로그램의 서버에서 3GPP Portal을 직접 조회하는 개발자.
+검증일: 2026-09-15, 개최 중 판정과 SA TB ID는 2026-10-29에 고쳤다. 대상: 다른 프로그램의 서버에서 3GPP Portal을 직접 조회하는 개발자.
 
 ## 1. 연동 방식
 
-**`GetMeetings`에 POST 요청을 한 번 보내 여러 WG의 미팅 목록을 받고, 응답 중 `MeetingPeriod == "ONGOING"`인 항목을 선택한다.** 필터링과 중복 제거에는 추가 API 호출이 필요 없다.
+**`GetMeetings`에 POST 요청을 한 번 보내 여러 WG의 미팅 목록을 받고, 개최지 날짜로 오늘이 `StartDate`~`EndDate` 안인 항목을 선택한다.** 필터링과 중복 제거에는 추가 API 호출이 필요 없다.
 
 현재 저장소에서 확인한 범위는 RAN 전체회의와 RAN1~4다. SA 계열 TB ID는 2026-10-29 조회로 확인했다: SA 전체회의 375, SA1 384, SA2 385, SA3 386, SA4 387, SA5 388(코드의 `TB_IDS`에는 SA1·SA2만 있다). CT는 검증하지 않았다.
 
-**주의(2026-10-29 조회):** `MeetingPeriod`는 아직 열리지 않은 회의를 `ONGOING`으로 줄 때가 있다. 같은 조회에서 2027년의 RAN2#137, RAN3#135, RAN4#122, SA2#179 등이 `ONGOING`으로 나왔다. 이 저장소는 `MeetingPeriod`를 쓰지 않고, 진행 여부를 `StartDate`·`EndDate`와 개최지 시간대로 정한다(`shared/navigation.py`의 `meeting_phase`).
+**`MeetingPeriod`는 믿을 수 없다.** 2026-10-29 조회에서 아직 열리지 않은 2027년의 RAN2#137, RAN3#135, RAN4#122, SA2#179 등이 `ONGOING`이었다(2026-09-15 조회에서는 미래 항목이 `NOT_STARTED`였다). 그래서 개최 중 여부는 날짜로 정한다(§3).
 
 현재 코드는 현재 진행 중인 미팅만 요청하는 서버 측 필터를 사용하지 않는다. 아래 방식은 일정 범위의 첫 페이지를 한 번 조회하는 방식이며, 모든 미팅의 누락 없는 조회를 항상 보장하는 방식은 아니다. 조회 기간과 페이지 제한은 §6을 참고한다.
 
@@ -92,21 +92,26 @@ RAN1만 조회하려면 `"Tbs": [379]`를 사용한다. 앱 내부 WG 번호인 
 
 판정 규칙은 다음과 같다.
 
-1. `MeetingPeriod == "ONGOING"`인 행을 선택한다. 종료된 항목의 `"ENDED"` 값도 실응답에서 확인했다.
+1. 개최지의 오늘 날짜가 `StartDate`의 날짜 이상, `EndDate`의 날짜 이하인 행을 선택한다. 두 값은 UTC 오프셋 없는 개최지 현지 시각이다(`2026-08-24 09:00:00`).
+   개최지의 오늘은 `StartTimeZone`으로 정한다(아래 "시간대"). 회의 첫날은 개회 시각 전에도 개최 중으로 본다.
 2. 같은 `Id`를 하나로 합친다. 여러 TB에 속하는 동일 이벤트가 TB별로 반환되므로 `TBId`는 배열로 모아 보존한다.
 3. 동시 개최에 대응하도록 결과는 항상 배열로 반환한다.
-4. `MeetingPeriod`가 없거나 알 수 없는 값이면 개최 중으로 추측하지 않고 모니터링한다. `Status`는 별도 필드이며 실응답에서는 빈 문자열이었다.
+4. 날짜를 읽을 수 없는 행은 개최 중으로 추측하지 않고 모니터링한다. `MeetingPeriod`와 `Status`는 판정에 쓰지 않는다(`Status`는 실응답에서 빈 문자열이었다).
 
-이는 **Portal이 개최 중으로 분류한 미팅**이다. 해당 순간에 개별 세션이 진행되고 있다는 보장은 아니다.
+이는 **Portal 일정상 개최 기간인 미팅**이다. 해당 순간에 개별 세션이 진행되고 있다는 보장은 아니다.
+
+**시간대:** `StartTimeZone`은 IANA 이름이 아니라 `(GMT+02.00)  Belgrade, Bratislava, Budapest, Ljubljana, Prague` 같은 표시 문자열이다.
+앞의 GMT 값이 서머타임을 따라 바뀌는지는 확인하지 못했다. 이 값으로 계산한 날짜는 자정 전후 1시간 안에서만 틀릴 수 있으므로 날짜만 가르는 용도라면 충분하고(§4 예제),
+시각까지 정확해야 하면 표시 이름을 IANA 지역 시간대로 매핑한다(§8).
 
 | 필드 | 용도 및 주의점 |
 |---|---|
 | `Id` | Portal 미팅 ID. 자체 DB의 ID와 구별 |
 | `TBId` | 소속 조직 ID |
 | `Title` / `ShortTitle` | 미팅 이름 |
-| `StartDate` / `EndDate` | 일정. 문자열에 UTC 오프셋이 없음 |
-| `StartTimeZone` / `EndTimeZone` | 실응답에 존재하지만 값의 규격과 시간 변환 방식은 미검증 |
-| `MeetingPeriod` | 개최 기간 분류. 현재 개최 중 필터에 사용 |
+| `StartDate` / `EndDate` | 일정. 개최지 현지 시각이고 문자열에 UTC 오프셋이 없음. 개최 중 판정에 사용 |
+| `StartTimeZone` / `EndTimeZone` | 개최지 시간대의 표시 문자열(`(GMT+09:00) Seoul`). IANA 이름이 아님 |
+| `MeetingPeriod` | 개최 기간 분류. 미래 회의를 `ONGOING`으로 주기도 해서 판정에 쓰지 않음 |
 | `Location` / `LocFreeText` / `Country` | 장소, 자유 기재 장소, 국가 |
 | `Type` | 미팅 종류. 기존 코드에 `OR`, `AH`, `WS` 설명이 있음 |
 | `MtgDocURL` | 미팅별 자료 URL. `null`일 수 있음 |
@@ -118,9 +123,30 @@ Python 3.9 이상 표준 라이브러리만 사용한다. 검색 기간은 예�
 
 ```python
 import json
-from datetime import datetime, timedelta
+import re
+from datetime import datetime, timedelta, timezone
 from urllib.request import Request, urlopen
 from zoneinfo import ZoneInfo
+
+
+def venue_today(label):
+    """Today at the venue, from the label's GMT offset; None when the label has none."""
+    match = re.match(r"\((?:GMT|UTC)([+-])(\d{2})[:.](\d{2})\)", label or "")
+    if not match:
+        return None
+    sign = -1 if match[1] == "-" else 1
+    offset = timedelta(hours=int(match[2]), minutes=int(match[3])) * sign
+    return datetime.now(timezone(offset)).date()
+
+
+def is_ongoing(row):
+    today = venue_today(row.get("StartTimeZone"))
+    try:
+        starts = datetime.fromisoformat(row["StartDate"]).date()
+        ends = datetime.fromisoformat(row["EndDate"]).date()
+    except (KeyError, TypeError, ValueError):
+        return False
+    return today is not None and starts <= today <= ends
 
 
 def get_current_meetings():
@@ -162,7 +188,7 @@ def get_current_meetings():
 
     meetings = {}
     for row in rows:
-        if row.get("MeetingPeriod") != "ONGOING":
+        if not is_ongoing(row):
             continue
         meeting_id = row.get("Id")
         if type(meeting_id) is not int:
@@ -179,7 +205,7 @@ if __name__ == "__main__":
     print(json.dumps(get_current_meetings(), ensure_ascii=False, indent=2))
 ```
 
-`[]`는 조회된 검색 범위에 개최 중인 미팅이 없다는 뜻이다. HTTP 오류, 타임아웃, JSON 형식 오류, 페이지 상한 도달은 예외로 처리하고 ‘개최 중인 미팅 없음’으로 바꾸지 않는다. 자동 재시도나 추가 페이지 요청은 하지 않는다.
+`[]`는 조회된 검색 범위에 개최 중인 미팅이 없다는 뜻이다. 시간대 문자열에 GMT 값이 없는 행(`Greenwich Mean Time` 등)은 판정하지 않으므로, 그런 회의를 다루려면 §8처럼 이름을 매핑한다. HTTP 오류, 타임아웃, JSON 형식 오류, 페이지 상한 도달은 예외로 처리하고 ‘개최 중인 미팅 없음’으로 바꾸지 않는다. 자동 재시도나 추가 페이지 요청은 하지 않는다.
 
 ## 5. 현행 앱과의 차이
 
@@ -193,9 +219,9 @@ if __name__ == "__main__":
 
 - **검색 기간:** `StartDate` / `EndDate` 조건이 시작일 기준인지 기간 중첩 기준인지는 미확정이다. 실측에서는 검색 종료일 이후에 끝나는 개최 중 미팅도 반환됐다. 오늘만 지정하지 않고 과거 기간을 포함하지만, 31일 전보다 먼저 시작한 장기 이벤트의 조회를 보장하지는 못한다.
 - **페이지 제한:** 100행이 반환되면 다음 페이지가 있을 수 있다. 기존 코드는 반환 행 수만큼 `StartRow`를 늘려 추가 조회한다. 한 번만 호출한다면 불완전할 수 있음을 알려야 한다. 서버가 별도 상한을 적용할 가능성도 있어 100행 미만이라는 사실만으로 절대적인 전수 조회를 보장하지 않는다.
-- **시간:** UTC나 현지 시간을 추측해 날짜를 비교하지 않고, 이 용도에서는 `MeetingPeriod`를 사용한다.
+- **시간:** 날짜는 개최지 기준으로 비교한다. 한국이나 UTC 날짜로 비교하면 회의 첫날과 마지막 날이 하루 어긋난다(Calgary 월요일 아침은 UTC로 월요일 오후, 한국으로 화요일 새벽이다).
 - **이벤트 범위:** `IncludeNonTBMeetings: false`여도 TB에 연결된 Social Event가 반환됐다. 기술 회의만 원한다면 실제 종류 값을 확인해 별도 필터를 정의해야 한다.
-- **호환성:** 현행 코드와 공개 엔드포인트 실측에 기반한 연동 절차다. 공식적인 안정성 보장을 확인한 API 명세는 아니다. 미지의 `MeetingPeriod`, 응답 형식 변경, 조회 실패를 감지한다.
+- **호환성:** 현행 코드와 공개 엔드포인트 실측에 기반한 연동 절차다. 공식적인 안정성 보장을 확인한 API 명세는 아니다. 읽을 수 없는 날짜·시간대, 응답 형식 변경, 조회 실패를 감지한다.
 
 ‘이용 프로그램에서 한 번 호출하면 항상 전체 결과를 받아야 한다’는 엄격한 요구라면 중계 API에서 페이지 조회와 집계를 수행하는 설계가 필요하다. 이 경우 3GPP에 보내는 HTTP 요청은 여러 번일 수 있다.
 
@@ -207,7 +233,8 @@ if __name__ == "__main__":
 - [정규화 테스트](../repos/tdoc-service/packages/tdoc-service/tests/test_portal_meetings.py): 날짜, ID, `MeetingPeriod` 등의 저장.
 - [자체 API 라우터](../repos/tdoc-service/packages/tdoc-service/src/tdoc_service/api/routers/meetings.py): `/api/meetings`의 DB 조회 동작.
 - 2026-09-15 실제 HTTP POST: §2의 JSON으로 9행 조회. `Id=60799`의 `ONGOING`과 동일 `Id=86014`의 TB별 중복을 확인했다. API키, Cookie, Authorization은 사용하지 않았다.
-- Python 예제는 저장한 실제 응답으로 개최 중 항목 추출을 검증했고, 중복 행을 이용해 ID별 병합도 확인했다.
+- 2026-10-29 실제 HTTP POST(TB 373, 375, 379~382, 384~390): 2027년 회의의 `ONGOING`과 SA 계열 TB ID를 확인했다.
+- Python 예제는 저장한 실제 응답으로 개최 중 항목 추출을 검증했고, 중복 행을 이용해 ID별 병합도 확인했다. 2026-10-29에 날짜 판정으로 바꾼 예제는 오늘 기준의 합성 행으로 다시 확인했다.
 
 
 ## 8. 3GPPSchedule 적용 시 확인한 시간대 형식
@@ -216,14 +243,17 @@ if __name__ == "__main__":
 표시 문자열이었다. 예: RAN1#126(Maastricht, NL)은
 `(GMT+02.00)  Brussels, Copenhagen, Madrid, Paris`, RAN1#126-bis(KR)는
 `(GMT+09:00) Seoul`, RAN1#127(Calgary, CA)은
-`(GMT-07:00) Mountain Time (US & Canada)`였다. 미래 항목의 `MeetingPeriod`는
-`NOT_STARTED`였으며 `MtgDocURL`이 없는 항목도 있었다.
+`(GMT-07:00) Mountain Time (US & Canada)`였다. 그때 미래 항목의 `MeetingPeriod`는
+`NOT_STARTED`였으나 2026-10-29에는 2027년 회의가 `ONGOING`이었다(§1). `MtgDocURL`이 없는 항목도 있었다.
+SA 회의의 `MtgDocURL`은 슬래시가 겹친다(`https://www.3gpp.org/ftp//tsg_sa/WG1_Serv/TSGS1_116_Calgary/`).
 
-`shared/portal_meetings.py`는 확인된 표시 이름과 국가를 IANA 지역 시간대로
-매핑한다. 숫자 오프셋만으로 시간대를 추측하지 않고, 미등록 이름이나 시작/종료의
-서로 다른 시간대는 미해결로 돌려보낸다. 이 매핑에는 LLM이 필요 없다.
+`shared/timezones.py`는 확인된 표시 이름과 국가를 IANA 지역 시간대로 매핑한다(`ZONES`).
+숫자 오프셋만으로 시간대를 정하지 않는다. 표에 없는 이름은 개최지 목록(`docs/timezone_map.jsonl`)을 보고,
+그래도 없으면 빌드에서만 Gemini에 개최지를 물어 표시 문자열의 GMT 값과 맞는 답을 목록에 남긴다.
+시작/종료의 시간대가 서로 다르면 미해결로 돌려보낸다.
 선별한 공개 응답은 `tests/fixtures/portal_meetings.json`에 보관했다.
 
 이 저장소의 운영 조회 범위는 과거 366일~미래 183일이며, 첫 페이지가 가득 차면
 추가 페이지를 조회한다. §4의 단일 호출 예제와 구별한다. 사이트 자동 기본값은
-활성 WG의 실제 스케줄과 번호가 일치하는 `ONGOING` 미팅만 우선하며 데모는 제외한다.
+활성 WG의 실제 스케줄과 번호가 일치하고 개최지 날짜로 개최 기간인 미팅만 우선하며 데모는 제외한다
+(`shared/navigation.py`의 `meeting_phase`, `portal_phase`).

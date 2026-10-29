@@ -4,8 +4,8 @@
 
 이 문서는 RAN1 파이프라인을 설명합니다. 아래의 파서·모델·세션 모듈 이름은
 `working_groups/ran1/` 기준이며 공통 HTML 생성기는 `shared/renderer.py`,
-화면 템플릿은 `templates/`에 있습니다. 시간대는 Portal API를 우선 사용하며
-실제 시작·종료 시각에 따른 NOW 제어는 공통 화면에서 처리합니다.
+화면 템플릿은 `templates/`에 있습니다. 시간대는 Portal API를 우선 사용하고
+모든 WG가 공통 `shared/timezones.py`로 정하며, 실제 시작·종료 시각에 따른 NOW 제어는 공통 화면에서 처리합니다.
 
 ## 전체 흐름
 
