@@ -159,6 +159,8 @@ WG의 내부 단계는 자유입니다. 공통 실행기는 각 `build_schedule(
 `shared.schedule.Schedule`을 받으며, WG끼리는 서로의 내부 모듈을 import하지 않습니다.
 새 WG는 독립 폴더와 pipeline을 만든 뒤 `registry.py`와 `site.json`에 등록합니다.
 
+Office 문서는 python-docx · python-pptx · openpyxl로 읽습니다. 외부 CLI(OfficeCLI, docx-cli)를 시험한 결과와 다시 볼 때의 조건은 `ref_docs/office-document-readers.md`에 있습니다(추후 고려).
+
 LLM을 어디에 쓸지는 원본의 계보로 정합니다. RAN1은 의장과 부의장들이 따로 만든 불규칙한 문서 여러 개를
 한 시간표로 합쳐야 해서 LLM이 주 해석기입니다. 시간표가 파일 하나의 판으로 이어지는 WG(RAN2, SA1, SA2, RAN3, RAN4)는
 규칙이 기본이고, 규칙이 불확실하다고 표시한 칸이나 알아보지 못한 양식만 LLM에 묻는 RAN2 방식(아래 "LLM 폴백")을 씁니다.
