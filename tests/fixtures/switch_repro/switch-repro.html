@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Meeting switch repro</title>
+<!--
+  One file that reproduces the meeting switch of the schedule pages
+  (schedule.css, @view-transition) so a browser can be checked by opening
+  this file alone. See the notes at the top of the page.
+
+  Query / controls:  v=plain|move|fix  variant (default move)
+                     slow=1            every duration x10
+                     hold=0.5          pause the switch at that fraction (tests)
+                     page=a|b          the meeting shown (cross-document mode)
+-->
+<style>@view-transition { navigation: auto; }</style>
+<script>
+    // Before anything is drawn: the variant class must be on <html> when the
+    // first frame of a cross-document switch is captured.
+    (function () {
+        var q = new URLSearchParams(location.search);
+        var v = q.get('v');
+        document.documentElement.className = (v === 'plain' || v === 'fix' ? v : 'move') + (q.get('slow') ? ' slow' : '');
+    })();
+</script>
+<style>
+:root { --k: 1; }
+html.slow { --k: 10; }
+body { margin: 0; font-family: "Source Sans 3", system-ui, sans-serif; color: #1F2937; background: #F6F7F9; }
+.container { max-width: 1400px; margin: 0 auto; padding: 16px; }
+.notes { font-size: 13px; line-height: 1.5; background: #FFFBEB; border: 1px solid #FDE68A; border-radius: 10px; padding: 10px 12px; margin-bottom: 12px; }
+.notes code { font-size: 12px; }
+.controls { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; font-size: 13px; margin-bottom: 12px; }
+.controls button { font: inherit; padding: 6px 12px; border: 1px solid #D3D7DE; border-radius: 8px; background: #fff; }
+.readout { font-family: ui-monospace, monospace; font-size: 12px; white-space: pre-wrap; background: #fff; border: 1px solid #E5E7EB; border-radius: 8px; padding: 8px 10px; margin-bottom: 12px; height: 10.5em; overflow: auto; box-sizing: border-box; }
+.probes { display: flex; gap: 12px; margin-bottom: 14px; }
+.probe { flex: 1; display: flex; align-items: center; justify-content: center; border: 1px solid #D3D7DE; border-radius: 8px; background: #fff; font-weight: 700; font-size: 18px; overflow: hidden; }
+.probe small { font-weight: 400; font-size: 11px; margin-left: 6px; color: #6B7280; }
+header { text-align: center; }
+.title { display: inline-block; margin: 8px 0 2px; padding: 4px 14px; border: 1px solid #D3D7DE; border-radius: 10px; background: #fff; font-size: 22px; font-weight: 700; }
+.title .chevron { display: inline-block; width: 18px; height: 18px; margin-left: 8px; border-radius: 50%; background: #ECEEF2; font-size: 10px; line-height: 18px; vertical-align: 3px; }
+.status { font-size: 11px; letter-spacing: .08em; color: #8A94A6; margin-bottom: 8px; }
+.meta { font-size: 12px; color: #6B7280; line-height: 1.5; }
+.banner { margin: 10px auto; padding: 10px 14px; background: #fff; border-radius: 12px; box-shadow: 0 0 0 1px rgba(15,23,42,.06); font-size: 14px; max-width: 640px; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 13px; margin: 14px 0; }
+.legend span::before { content: ""; display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--c); margin-right: 6px; }
+.toolbar { display: flex; align-items: center; gap: 8px; margin-bottom: 14px; }
+.tabs { display: flex; gap: 2px; flex: 0 1 auto; padding: 3px; background: #ECEEF2; border-radius: 10px; }
+.tab { padding: 6px 16px; border: none; background: transparent; color: #6B7280; font: inherit; font-size: 13.5px; font-weight: 500; border-radius: 7px; }
+.tab.active { background: #fff; color: #1F2937; font-weight: 600; box-shadow: 0 1px 2px rgba(15,23,42,.08); }
+.now { margin-left: auto; height: 30px; padding: 0 12px; border: 1px solid #E5E7EB; border-radius: 999px; background: #fff; color: #9CA3AF; font-size: 11px; font-weight: 600; }
+.grid-wrapper { overflow: auto; background: #fff; border-radius: 12px; box-shadow: 0 0 0 1px rgba(15,23,42,.06); }
+.schedule-grid { display: grid; grid-template-columns: 48px repeat(var(--rooms), 1fr); grid-template-rows: 36px repeat(var(--rows), 10px); min-width: 600px; position: relative; }
+.room-header { grid-row: 1; font-size: 11.5px; font-weight: 600; text-align: center; line-height: 36px; border-bottom: 1px solid #E5E7EB; }
+.time-head { grid-column: 1; grid-row: 1; font-size: 10px; font-weight: 600; color: #9CA3AF; line-height: 36px; text-align: center; border-right: 1px solid #E5E7EB; }
+.time-label { grid-column: 1; font-size: 11px; color: #9CA3AF; padding: 2px 4px; border-right: 1px solid #E5E7EB; font-variant-numeric: tabular-nums; }
+.cell { margin: 2px; padding: 4px 8px 2px 10px; border: 1px solid color-mix(in srgb, var(--c) 16%, transparent); border-radius: 6px; background: linear-gradient(color-mix(in srgb, var(--c) 4%, #fff), color-mix(in srgb, var(--c) 10%, #fff)); font-size: 13.5px; font-weight: 600; position: relative; }
+.cell::before { content: ""; position: absolute; left: 3px; top: 3px; bottom: 3px; width: 3px; border-radius: 2px; background: var(--c); }
+.cell small { display: block; font-size: 10.5px; font-weight: 400; color: #7C8698; }
+.panel { margin-top: 16px; padding: 16px; background: #fff; border-radius: 12px; box-shadow: 0 0 0 1px rgba(15,23,42,.06); font-size: 14px; line-height: 1.6; }
+
+/* --- The switch, as schedule.css has it. ---------------------------------- */
+::view-transition-old(root),
+::view-transition-new(root) { animation-duration: calc(.18s * var(--k)); }
+/* plain: the root cross-fade alone. Nothing else is named (the probes stay). */
+html.plain .container :not(.probe) { view-transition-name: none !important; }
+/* move and fix: the frame resizes, the cells leave and arrive, the tabs and
+   the time axis move. The names are inline on the elements (as renderer.py). */
+::view-transition-group(grid-cells),
+::view-transition-group(*.grid-move) { animation-duration: calc(.22s * var(--k)); animation-delay: calc(.06s * var(--k)); animation-timing-function: ease-in-out; }
+::view-transition-old(*.grid-move),
+::view-transition-new(*.grid-move) { animation-duration: calc(.22s * var(--k)); animation-delay: calc(.06s * var(--k)); }
+::view-transition-old(grid-frame),
+::view-transition-new(grid-frame),
+::view-transition-old(day-tabs),
+::view-transition-new(day-tabs) { height: 100%; }
+::view-transition-old(grid-cells) { animation: grid-cells-leave calc(.1s * var(--k)) ease-in both; }
+::view-transition-new(grid-cells) { animation: grid-cells-arrive calc(.12s * var(--k)) calc(.26s * var(--k)) ease-out both; }
+::view-transition-old(*.grid-move):only-child { animation: grid-cells-leave calc(.1s * var(--k)) ease-in both; }
+::view-transition-new(*.grid-move):only-child { animation: grid-cells-arrive calc(.12s * var(--k)) calc(.26s * var(--k)) ease-out both; }
+@keyframes grid-cells-leave { to { opacity: 0; } }
+@keyframes grid-cells-arrive { from { opacity: 0; } }
+/* fix: the page's and the cells' snapshots are never scaled to their box. */
+html.fix::view-transition-old(root),
+html.fix::view-transition-new(root),
+html.fix::view-transition-old(grid-cells),
+html.fix::view-transition-new(grid-cells) { height: 100%; object-fit: none; object-position: top left; }
+
+/* --- Probes: a box whose height halves. The left one is the engine's
+   default; the right one carries the fix. An engine that stretches old
+   snapshots to their box squashes the left text while it moves. */
+::view-transition-group(probe-default),
+::view-transition-group(probe-fixed) { animation-duration: calc(.6s * var(--k)); }
+::view-transition-old(probe-default),
+::view-transition-new(probe-default),
+::view-transition-old(probe-fixed),
+::view-transition-new(probe-fixed) { animation-duration: calc(.6s * var(--k)); }
+::view-transition-old(probe-fixed),
+::view-transition-new(probe-fixed) { height: 100%; object-fit: none; object-position: top left; }
+</style>
+</head>
+<body>
+<div class="container">
+<div class="notes">
+    <b>Meeting switch reproduction.</b> Tap <b>Switch (same page)</b>: this works from a downloaded file.
+    <b>Switch (new page)</b> is the real cross-document switch and needs the file served over HTTP.
+    The two probe boxes halve in height on every switch: if the left text squashes vertically while the
+    right one does not, this browser stretches old snapshots to their box (the site's fix is the right one).
+    The read-out below measures the same thing from the pseudo-elements.
+</div>
+<div class="controls">
+    <button id="switch-same" type="button">Switch (same page)</button>
+    <button id="switch-page" type="button">Switch (new page)</button>
+    <label>variant <select id="variant"><option value="plain">plain: root fade only</option><option value="move">move: as the site</option><option value="fix">fix: with the snapshot fix</option></select></label>
+    <label><input type="checkbox" id="slow"> slow motion (×10)</label>
+    <label><input type="checkbox" id="hold"> hold half-way</label>
+    <button id="resume" type="button" hidden>Resume</button>
+</div>
+<div class="readout" id="readout">No switch yet.</div>
+<div class="probes">
+    <div class="probe" id="probe-default" style="view-transition-name:probe-default">PROBE<small>default</small></div>
+    <div class="probe" id="probe-fixed" style="view-transition-name:probe-fixed">PROBE<small>object-fit: none</small></div>
+</div>
+<div id="meeting"></div>
+</div>
+<script>
+(function () {
+    const MEETINGS = {
+        a: { title: 'RAN1#126bis', days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'], start: 8 * 60 + 30, end: 18 * 60, probe: 90,
+             rooms: ['Tamna BC Hall', 'Yeongju A Hall', 'Yeongju B Hall', '201', '203'],
+             cells: [[2, 510, 560, '10.5.1.1', '#2563EB'], [2, 560, 600, '10.5.1.2', '#2563EB'], [3, 510, 560, 'AI 10.7.1 NTN', '#7C3AED'],
+                     [4, 510, 590, '10.2.1 Waveform', '#2563EB'], [5, 510, 540, '10.4.2', '#DB2777'], [6, 510, 550, 'AI/ML', '#0D9488'],
+                     [2, 900, 960, '10.6.1', '#DB2777'], [3, 900, 930, '9.3.1', '#7C3AED'], [4, 930, 990, '10.8.x Sensing', '#0D9488']],
+             legend: [['6GR', '#2563EB'], ['R20', '#DB2777'], ['TEI', '#0D9488']], banner: '' },
+        b: { title: 'RAN#113', days: ['Mon', 'Tue', 'Wed', 'Thu'], start: 8 * 60, end: 17 * 60, probe: 45,
+             rooms: ['Main: Madrid 3/4/5/6', 'Breakout'],
+             cells: [[2, 480, 540, 'TBD', '#0D9488'], [3, 480, 540, 'NTN time/freq', '#DB2777'], [2, 540, 630, 'Comebacks', '#7C3AED'],
+                     [2, 630, 660, 'TBD', '#0D9488'], [3, 630, 660, 'NTN time/freq', '#DB2777'], [2, 660, 750, 'Comebacks', '#7C3AED']],
+             legend: [['6G', '#2563EB'], ['Comebacks', '#7C3AED'], ['Early items', '#0D9488'], ['Rel-20', '#DB2777'], ['Rel-21 5G-Adv', '#4F46E5'], ['TBD', '#0E7490']],
+             banner: '<div class="banner">Hope this helped you through RAN#113. I build and maintain it on my own time. If it saved you some time, you can buy me a coffee ☕. Or just say hi at the next meeting!</div>' },
+    };
+    const hhmm = m => String(Math.floor(m / 60)).padStart(2, '0') + ':' + String(m % 60).padStart(2, '0');
+    const q = new URLSearchParams(location.search);
+    let page = q.get('page') === 'b' ? 'b' : 'a';
+
+    function render(id) {
+        const m = MEETINGS[id];
+        const row = t => (t - m.start) / 5 + 2;
+        let axis = '';
+        for (let t = m.start; t < m.end; t += 30) {
+            axis += `<div class="time-label" style="grid-row:${row(t)}/${row(t) + 6};view-transition-name:time-${t};view-transition-class:grid-move">${hhmm(t)}</div>`;
+        }
+        document.getElementById('meeting').innerHTML = `
+<header>
+    <div class="title">📅 ${m.title}<span class="chevron">▼</span></div>
+    <div class="status">ENDED</div>
+    <div class="meta">Sources: Main v03 · Agenda | Generated: 2026-10-16 01:31 | Now: 2026-10-29 16:18<br>
+    ℹ️ This page is a reproduction of the meeting switch. Nothing here is a real schedule.</div>
+    ${m.banner}
+</header>
+<div class="legend">${m.legend.map(([t, c]) => `<span style="--c:${c}">${t}</span>`).join('')}</div>
+<div class="toolbar">
+    <div class="tabs" style="view-transition-name:day-tabs;view-transition-class:grid-move">${m.days.map(d =>
+        `<button class="tab${d === 'Thu' ? ' active' : ''}" style="view-transition-name:day-tab-${d.toLowerCase()};view-transition-class:grid-move">${d}</button>`).join('')}</div>
+    <button class="now" style="view-transition-name:now-toggle;view-transition-class:grid-move">NOW</button>
+</div>
+<div class="grid-wrapper" style="view-transition-name:grid-frame;view-transition-class:grid-move">
+    <div class="schedule-grid" style="--rooms:${m.rooms.length};--rows:${(m.end - m.start) / 5};view-transition-name:grid-cells">
+        <div class="time-head" style="view-transition-name:time-head;view-transition-class:grid-move">TIME</div>
+        ${m.rooms.map((r, i) => `<div class="room-header" style="grid-column:${i + 2}">${r}</div>`).join('')}
+        ${axis}
+        ${m.cells.map(([c, s, e, t, col]) => `<div class="cell" style="grid-column:${c};grid-row:${row(s)}/${row(e)};--c:${col}">${t}<small>${e - s} min · ${hhmm(s)}–${hhmm(e)}</small></div>`).join('')}
+    </div>
+</div>
+<div class="panel">Agreements panel. ${'Long enough that the page scrolls. '.repeat(40)}</div>`;
+        for (const p of document.querySelectorAll('.probe')) p.style.height = m.probe + 'px';
+        page = id;
+    }
+
+    // --- Measuring the switch's pseudo-elements, held at a fraction of its time.
+    const PSEUDOS = ['::view-transition-group(root)', '::view-transition-old(root)', '::view-transition-new(root)',
+                     '::view-transition-group(probe-default)', '::view-transition-old(probe-default)',
+                     '::view-transition-group(probe-fixed)', '::view-transition-old(probe-fixed)',
+                     '::view-transition-group(day-tabs)', '::view-transition-old(day-tabs)',
+                     '::view-transition-group(grid-cells)', '::view-transition-old(grid-cells)', '::view-transition-new(grid-cells)',
+                     '::view-transition-group(time-540)', '::view-transition-old(time-540)'];
+    let captured = {};
+    const probeHeight = () => document.getElementById('probe-default').getBoundingClientRect().height;
+    function capture() {
+        captured = { root: [innerWidth, innerHeight], probe: probeHeight() };
+    }
+    function sample(mode) {
+        const html = document.documentElement, boxes = {};
+        for (const p of PSEUDOS) {
+            const s = getComputedStyle(html, p);
+            boxes[p] = { width: s.width, height: s.height, objectFit: s.objectFit, opacity: s.opacity };
+        }
+        const px = v => parseFloat(v) || 0;
+        const groupH = px(boxes['::view-transition-group(probe-default)'].height);
+        const oldH = px(boxes['::view-transition-old(probe-default)'].height);
+        let verdict = 'probe not in this switch';
+        if (groupH && oldH) {
+            verdict = Math.abs(oldH - captured.probe) < 1 ? 'old snapshots keep their captured size (as Chrome)'
+                : Math.abs(oldH - groupH) < 1 ? 'OLD SNAPSHOTS ARE STRETCHED TO THEIR BOX (the squash)'
+                : `old snapshot ${oldH}px for a ${groupH}px box, captured ${captured.probe}px`;
+        }
+        const out = { mode, variant: html.className, captured, viewport: [innerWidth, innerHeight], verdict, boxes };
+        window.__sample = out;
+        document.getElementById('readout').textContent = `${mode} switch · ${html.className}\n${verdict}\n`
+            + `root: group ${boxes['::view-transition-group(root)'].height}, old image ${boxes['::view-transition-old(root)'].height} (captured ${captured.root[1]}px), object-fit ${boxes['::view-transition-old(root)'].objectFit}\n`
+            + `probe: group ${boxes['::view-transition-group(probe-default)'].height}, old image ${boxes['::view-transition-old(probe-default)'].height} (captured ${captured.probe}px)\n`
+            + navigator.userAgent;
+        return out;
+    }
+    const holdAt = () => { const h = parseFloat(q.get('hold')); return h >= 0 && h <= 1 ? h : (document.getElementById('hold').checked ? 0.5 : null); };
+    function holdAndSample(transition, mode) {
+        transition.ready.then(() => {
+            const at = holdAt();
+            const anims = document.getAnimations();
+            const longest = Math.max(...anims.map(a => (a.effect.getTiming().delay || 0) + (parseFloat(a.effect.getTiming().duration) || 0)), 0);
+            anims.forEach(a => { a.pause(); a.currentTime = (at === null ? 0.5 : at) * longest; });
+            sample(mode);
+            window.__vt = 'paused';
+            const resume = () => { anims.forEach(a => a.play()); window.__vt = 'running'; document.getElementById('resume').hidden = true; };
+            if (at === null) resume();
+            else { document.getElementById('resume').hidden = false; document.getElementById('resume').onclick = resume; }
+        }).catch(() => { window.__vt = 'none'; document.getElementById('readout').textContent = 'No view transition ran. ' + navigator.userAgent; });
+    }
+
+    // --- Controls.
+    const variant = document.getElementById('variant'), slow = document.getElementById('slow');
+    variant.value = document.documentElement.className.split(' ')[0];
+    slow.checked = document.documentElement.classList.contains('slow');
+    const setClass = () => { document.documentElement.className = variant.value + (slow.checked ? ' slow' : ''); };
+    variant.onchange = slow.onchange = setClass;
+    const query = () => { const p = new URLSearchParams(); p.set('page', page === 'a' ? 'b' : 'a'); p.set('v', variant.value); if (slow.checked) p.set('slow', '1'); if (q.get('hold')) p.set('hold', q.get('hold')); return '?' + p; };
+    document.getElementById('switch-same').onclick = () => {
+        if (!document.startViewTransition) { document.getElementById('readout').textContent = 'document.startViewTransition is not supported. ' + navigator.userAgent; return; }
+        capture();
+        window.__vt = 'pending';
+        holdAndSample(document.startViewTransition(() => render(page === 'a' ? 'b' : 'a')), 'same-document');
+    };
+    document.getElementById('switch-page').onclick = () => { location.assign(location.pathname + query()); };
+    window.addEventListener('pageswap', () => { try { sessionStorage.setItem('switch-repro-captured', JSON.stringify({ root: [innerWidth, innerHeight], probe: probeHeight() })); } catch (e) {} });
+    window.addEventListener('pagereveal', (e) => {
+        if (!e.viewTransition) { window.__vt = 'none'; return; }
+        try { captured = JSON.parse(sessionStorage.getItem('switch-repro-captured')) || captured; } catch (e2) {}
+        window.__vt = 'pending';
+        holdAndSample(e.viewTransition, 'cross-document');
+    });
+    render(page);
+})();
+</script>
+</body>
+</html>
