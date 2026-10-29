@@ -11,4 +11,4 @@ def group_label(item: str | None, descriptions: dict) -> str:
         return ''
     top = item.split('.')[0]
     description = descriptions.get(top)
-    return description.split(' - ')[0].strip() if description else f'AI {top}'
+    return description.split(' - ')[0].strip().rstrip(' -–') if description else f'AI {top}'
