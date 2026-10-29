@@ -606,6 +606,8 @@ def generate_html(schedule: Schedule, *, schedules=None, groups=None, presentati
             "    </div>\n"
         )
 
+    # The end of the grids, which a page arriving from another WG waits for (switch-arrival.js).
+    html_parts.append('    <div id="grid-end" hidden></div>\n')
     html_parts.append(render_agreement_panel(schedule))
     html_parts.append(_render_email_informal(schedule))
     html_parts.append(render_topic_references(schedule.topic_references, schedule.topic_preamble))
@@ -617,6 +619,7 @@ def generate_html(schedule: Schedule, *, schedules=None, groups=None, presentati
         "FAVICON": "data:image/svg+xml," + quote(_load_template("favicon.svg").replace("\n", "").replace("\r", "")),
         "HEADER": page_header,
         "STYLES": _generate_css(10),
+        "ARRIVAL_SCRIPT": _load_template("switch-arrival.js"),
         "SCHEDULE_CONTENT": "".join(html_parts),
         "FILTER_DATA": filter_data_json,
         "SCRIPT": _generate_js(schedule.timezone,

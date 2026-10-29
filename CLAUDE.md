@@ -230,6 +230,16 @@ WG 페이지는 따로 된 정적 페이지이고 SPA로 바꾸지 않았다. �
   - 확인할 때 Playwright는 쓸 수 없다. DevTools가 붙으면 Chrome이 미리 그리기를 끈다(`PrerenderingDisabledByDevTools`).
     자동화 없이 띄운 Chrome에서 확인했다: 메뉴를 열고 4초 뒤 누르면 53ms에 바뀐다.
 - **페이지 사이를 짧게 겹쳐 바꾼다(`@view-transition { navigation: auto; }`, 0.18초, `schedule.css`).** 같은 헤더는 그대로 있고 그리드만 바뀌는 것처럼 보인다.
+  - **그리드는 겹치지 않고 세 단계로 바뀐다: 셀이 사라지고(0~0.1초) → 틀이 새 크기로 맞춰지고(0.06~0.28초) → 새 셀이 나타난다(0.26~0.38초).**
+    그리드 배율은 WG마다 따로 저장되어서, 셀을 겹쳐 바꾸면 배율이 다른 두 그리드가 한꺼번에 보여 글자가 찌그러진 것처럼 보였다.
+    - 보이는 요일의 `.grid-wrapper`(틀: 흰 바탕과 테두리뿐이라 늘어나도 찌그러질 것이 없다)와 `.schedule-grid`(셀, 시간 축, 방 이름)에 따로 이름을 준다(`grid-frame`, `grid-cells`).
+      `.day-panel.active`와 `day-select.js`의 규칙 두 곳에서 같은 이름을 준다. `DOMContentLoaded` 전에는 `.active`가 없다.
+    - 배율은 WG마다 따로 둔다. WG를 바꾸면 100%로 돌아가는 편이 맞을 수 있지만, 우선은 지금처럼 둔다.
+  - **다른 WG 페이지에서 왔으면 새 페이지의 첫 화면은 그리드가 다 받아질 때까지 기다린다(`templates/switch-arrival.js`, `<link rel="expect" href="#grid-end" blocking="render">`).**
+    기다리지 않으면 첫 화면에 아직 그리드가 없어서 움직일 짝이 없고, 새 셀이 페이지 전체의 겹쳐 바꾸기 안에서 받아지는 대로 채워진다. 기다리는 동안은 이전 페이지가 보인다.
+    - 첫 화면을 붙잡을 수 있는 것은 `<head>`에서 파서가 쓴 `<link>`뿐이다. 그래서 `<head>`의 인라인 스크립트가 `document.write`로 쓴다. `body`가 생긴 뒤 스크립트로 넣은 것은 붙잡지 못한다.
+    - 같은 사이트의 다른 WG 페이지(`/ran2/` → `/ran1/`, 뒤로·앞으로 포함)에서 왔을 때만이다. `index.html`에서 들어오거나, 새로고침(자동 새로고침 포함), 다른 사이트에서 왔으면 바로 그린다.
+    - `#grid-end`는 요일 패널들 바로 뒤의 빈 요소다(`renderer.py`). 미리 그린 페이지는 화면에 나오기 전에 다 받아지므로 기다릴 것이 없다.
   - `index.html`은 참여하지 않는다. 처음 들어올 때는 흰 화면에서 서서히 나타나지 않고 바로 보인다. 새로고침(자동 새로고침 포함)도 애니메이션이 없다.
   - 움직임 줄이기 설정(`prefers-reduced-motion`)에서는 애니메이션을 끈다.
 - **요일은 그리드가 오기 전에 고른다(`templates/day-select.js`, 요일 탭 바로 뒤 인라인).** 고른 요일의 패널을 규칙(`#initial-day`)으로 보이게 해서
@@ -244,7 +254,8 @@ WG 페이지는 따로 된 정적 페이지이고 SPA로 바꾸지 않았다. �
   - 첫 방문에는 웹폰트가 늦게 와서 대체 글꼴에서 바뀌는 순간이 한 번 있다(Google Fonts, `display=swap`). 다음부터는 캐시에 있다.
     글꼴 파일을 사이트에 직접 두는 방법은 쓰지 않는다. 웹폰트(Google Fonts) 그대로 둔다.
 - 테스트는 다른 브라우저 동작 테스트와 같이 Node `vm`에 가짜 DOM을 두고 생성된 스크립트를 실행한다.
-  요일 선택과 `schedule.js`의 이어받기는 `tests/test_day_select.py`, 메뉴·말풍선·미리 받기는 `tests/test_wg_switch.py`다.
+  요일 선택과 `schedule.js`의 이어받기는 `tests/test_day_select.py`, 메뉴·말풍선·미리 받기는 `tests/test_wg_switch.py`,
+  첫 화면을 기다릴지는 `tests/test_switch_arrival.py`다.
 
 ## 헤더의 후원 안내, 제작자 줄, 회의 종료 인사
 

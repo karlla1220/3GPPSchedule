@@ -36,7 +36,10 @@ def test_today_at_the_venue_is_shown_before_the_grids_arrive():
     state, = run_page()
     assert state['activeTabs'] == ['thursday']
     # A rule, not a class: the panel is not parsed yet when this runs.
-    assert state['rule'] == '#thursday.day-panel { display: block; }'
+    assert state['rule'].startswith('#thursday.day-panel { display: block; }')
+    # The same names as .day-panel.active gets (schedule.css): the switch animates this grid.
+    assert '#thursday.day-panel .grid-wrapper { view-transition-name: grid-frame; }' in state['rule']
+    assert '#thursday.day-panel .schedule-grid { view-transition-name: grid-cells; }' in state['rule']
 
 
 def test_the_day_left_in_this_tab_comes_back():

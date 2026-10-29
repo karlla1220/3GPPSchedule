@@ -270,3 +270,14 @@ def test_switching_meetings_cross_fades_but_entering_from_the_root_does_not(tmp_
     build.build_site(opts)
     assert '@view-transition { navigation: auto; }' in (opts.output_dir / 'ran1/index.html').read_text()
     assert '@view-transition' not in (opts.output_dir / 'index.html').read_text()
+
+
+def test_the_grid_end_follows_the_day_panels_and_the_arrival_check_is_in_the_head():
+    html = generate_html(plenary_schedule())
+    head, body = html.split('</head>', 1)
+    assert 'blocking="render"' in head  # switch-arrival.js, parser-run in <head>.
+    panels = BeautifulSoup(body, 'html.parser')
+    end = panels.select_one('#grid-end')
+    assert end is not None and end.has_attr('hidden')
+    assert not end.find_all_next(class_='day-panel')
+    assert end.find_all_previous(class_='day-panel')
