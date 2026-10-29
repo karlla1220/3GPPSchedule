@@ -1520,52 +1520,37 @@ header .meta a:focus-visible,
 
 /* ── Help ── */
 /* The top left of the titles' row, out of the flow like the coffee block at
-   the right. A control at rest, like the title switcher: white face,
-   hairline, round glyph. Centred on the switcher (34px tall at 8px). */
+   the right. A "?" alone in a round control: white face and hairline like
+   the title switcher, centred on that button (34px tall, the header's top);
+   the coffee block's two lines centre on the button and its status line. */
 .help-button {
     position: absolute;
-    top: 9px;
+    top: 1px;
     left: 0;
     z-index: 2;
     display: inline-flex;
     align-items: center;
-    gap: 6px;
+    justify-content: center;
+    width: 32px;
     height: 32px;
-    padding: 0 12px 0 6px;
+    padding: 0;
     border: none;
-    border-radius: 10px;
+    border-radius: 50%;
     background: var(--surface);
     box-shadow: 0 0 0 1px var(--hairline), 0 1px 2px rgba(15,23,42,.05);
     color: var(--ink-2);
     font: inherit;
-    font-size: 13px;
-    font-weight: 500;
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1;
     cursor: pointer;
 }
 .help-button[hidden] { display: none; }
 .help-button:hover { color: var(--ink); box-shadow: 0 0 0 1px #D3D7DE, 0 2px 6px rgba(15,23,42,.08); }
 .help-button:focus-visible { outline: 2px solid #2563EB; outline-offset: 3px; }
-.help-icon {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    background: #ECEEF2;
-    color: var(--ink-2);
-    font-size: 12px;
-    font-weight: 700;
-    line-height: 1;
-}
 @media (max-width: 600px) {
     /* The switcher is 30px tall here. */
-    .help-button { top: 8px; height: 30px; padding-right: 10px; font-size: 12.5px; }
-}
-/* Too narrow for the word beside the title: the glyph alone. */
-@media (max-width: 380px) {
-    .help-button { width: 30px; padding: 0; justify-content: center; font-size: 0; gap: 0; }
-    .help-icon { font-size: 12px; }
+    .help-button { top: 0; width: 30px; height: 30px; font-size: 14px; }
 }
 
 /* The tour: the page stays, dimmed around the one thing a step points at.

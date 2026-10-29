@@ -515,6 +515,8 @@
         next.textContent = index === tour.steps.length - 1 ? 'Done' : 'Next';
         playScene(step, step.found);
         const node = step.found.el;
+        // The spotlight keeps the target's own corners, PAD further out: round for the "?" button.
+        spot.style.borderRadius = Math.max(8, (parseFloat(getComputedStyle(node).borderTopLeftRadius) || 0) + PAD) + 'px';
         let rect = node.getBoundingClientRect();
         if (!fixedPosition(node)) {
             card.classList.remove('help-card-top');

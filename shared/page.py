@@ -152,8 +152,8 @@ def render_help():
     # "<" is escaped so no step text can close the inline script.
     steps = json.dumps(HELP_STEPS, ensure_ascii=False).replace("<", "\\u003c")
     return (
-        '<button type="button" class="help-button" id="help-button" aria-haspopup="dialog" aria-controls="help-guide">'
-        '<span class="help-icon" aria-hidden="true">?</span>Help</button>\n'
+        '<button type="button" class="help-button" id="help-button" aria-label="Help" title="How to use this page" '
+        'aria-haspopup="dialog" aria-controls="help-guide"><span aria-hidden="true">?</span></button>\n'
         '<dialog class="help-guide" id="help-guide" aria-labelledby="help-title" aria-describedby="help-text">'
         '<div class="help-spot" aria-hidden="true"></div>'
         '<section class="help-card"><div class="help-card-head"><span class="help-count"></span>'

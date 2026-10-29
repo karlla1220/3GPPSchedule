@@ -53,7 +53,7 @@ const window = {
 };
 vm.runInNewContext(input.script, {
     window, setTimeout, requestAnimationFrame: fn => fn(), localStorage: storage, sessionStorage: storage,
-    getComputedStyle: () => ({position: 'static'}),
+    getComputedStyle: () => ({position: "static", borderTopLeftRadius: "0px"}),
     document: {
         body: {}, documentElement: {scrollHeight: 5000},
         getElementById: id => ({'help-button': button, 'help-guide': guide})[id] || null,
