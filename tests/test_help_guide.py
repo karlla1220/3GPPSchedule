@@ -51,14 +51,14 @@ def test_every_scene_a_step_names_is_one_the_script_plays():
     assert all(step['title'] and step['text'] and step['target'] for step in HELP_STEPS)
 
 
-def run_tour(steps, *, targets, dialog=True, touch=False, grid=False, scroll_y=300):
+def run_tour(steps, *, targets, dialog=True, touch=False, grid=False, scroll_y=300, width=1000):
     node = shutil.which('node')
     if not node:
         pytest.skip('Node.js is required to execute browser logic')
     result = subprocess.run([node, str(Path(__file__).parent / 'fixtures/help_guide_browser.cjs')],
                             input=json.dumps({'script': guide_script(), 'steps': steps, 'targets': targets,
                                               'dialog': dialog, 'touch': touch, 'grid': grid,
-                                              'scrollY': scroll_y}),
+                                              'scrollY': scroll_y, 'width': width}),
                             text=True, capture_output=True, check=True, encoding='utf-8')
     return json.loads(result.stdout)
 
@@ -105,3 +105,13 @@ def test_every_way_out_ends_the_tour_where_the_visitor_was():
 
 def test_the_tour_never_touches_storage():
     assert run_tour(['start', 'next', 'close', 'start', 'close'], targets=RAN2)['touched'] == []
+
+
+def test_a_narrow_target_covered_above_and_below_keeps_its_side_free():
+    # The Filter tab on a short phone: the card narrows to the other side of the screen.
+    states = run_tour(['start', 'next', 'next'], targets=RAN2 | {'.filter-toggle': 'fixed'}, width=400)['states']
+    assert states[2]['title'] == TITLES['.filter-toggle']
+    assert states[2]['card'] == {'top': False, 'side': True, 'left': '8px', 'width': '274px'}
+    # The next step lays the card out afresh.
+    states = run_tour(['start', 'next', 'next', 'next'], targets=RAN2 | {'.filter-toggle': 'fixed'}, width=400)['states']
+    assert states[3]['card'] == {'top': False, 'side': False, 'left': '', 'width': ''}

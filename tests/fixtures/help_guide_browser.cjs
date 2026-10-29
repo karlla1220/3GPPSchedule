@@ -22,7 +22,7 @@ function element(rect = {top: 0, left: 0, width: 10, height: 10}) {
     };
 }
 const button = element();
-const card = Object.assign(element({top: 600, left: 100, width: 400, height: 150}), {offsetHeight: 150});
+const card = Object.assign(element({top: 600, left: 100, width: 400, height: 150}), {offsetHeight: 150, offsetWidth: 400});
 const parts = {'.help-spot': element(), '.help-card': card, '.help-count': element(), '#help-title': element(),
                '#help-text': element(), '.help-stage': element(), '.help-back': element(), '.help-next': element(),
                '.help-close': element()};
@@ -35,7 +35,9 @@ const guide = Object.assign(element(), {
 if (!input.dialog) delete guide.showModal;
 const targets = {};
 for (const [sel, state] of Object.entries(input.targets)) {
-    targets[sel] = Object.assign(element({top: 2000, left: 20, width: 300, height: 100}), {hidden: state === 'hidden'});
+    // A fixed target sits where the card is, wherever the card goes (the fake card does not move).
+    const rect = state === 'fixed' ? {top: 620, left: 300, width: 30, height: 60} : {top: 2000, left: 20, width: 300, height: 100};
+    targets[sel] = Object.assign(element(rect), {hidden: state === 'hidden', fixed: state === 'fixed'});
 }
 if (input.grid) {
     // A grid whose sessions are all out of view: no "cell" step, but a "grid" one.
@@ -45,7 +47,7 @@ if (input.grid) {
 }
 const storage = new Proxy({}, {get(_, key) { touched.push(String(key)); return () => null; }});
 const window = {
-    innerWidth: 1000, innerHeight: 800,
+    innerWidth: input.width ?? 1000, innerHeight: 800,
     get scrollX() { return 0; }, get scrollY() { return scrollY; },
     scrollTo(options) { scrolls.push(options); scrollY = options.top; },
     matchMedia: query => ({matches: query.includes('coarse') ? !!input.touch : false}),
@@ -53,7 +55,7 @@ const window = {
 };
 vm.runInNewContext(input.script, {
     window, setTimeout, requestAnimationFrame: fn => fn(), localStorage: storage, sessionStorage: storage,
-    getComputedStyle: () => ({position: "static", borderTopLeftRadius: "0px"}),
+    getComputedStyle: node => ({position: node.fixed ? 'fixed' : 'static', borderTopLeftRadius: '0px'}),
     document: {
         body: {}, documentElement: {scrollHeight: 5000},
         getElementById: id => ({'help-button': button, 'help-guide': guide})[id] || null,
@@ -74,6 +76,8 @@ for (const step of input.steps) {
         open: guide.open, buttonHidden: button.hidden, focused: !!button.focused, scrollY,
         count: parts['.help-count'].textContent, title: parts['#help-title'].textContent,
         next: parts['.help-next'].textContent, backDisabled: parts['.help-back'].disabled,
+        card: {top: card.classList.contains('help-card-top'), side: card.classList.contains('help-card-side'),
+               left: card.style.left, width: card.style.width},
     });
 }
 process.stdout.write(JSON.stringify({states, touched, scrolls}));
