@@ -1,7 +1,9 @@
-// The Help button opens a guide of short scenes. Each scene is played on
-// copies of this page's own cells (same markup, same CSS, this meeting's
-// sessions), so the guide shows the page as it is now and never goes stale.
-// Nothing is written to storage and the page itself is never touched.
+// The Help button starts a tour of the page itself: each step scrolls to a
+// feature, spotlights it and says what it does in a card. Steps that show a
+// gesture (tap, filter, pinch) also play it in the card, on copies of this
+// page's own cells (same markup, same CSS, this meeting's sessions), so the
+// tour never goes stale. The tour only points: it never taps, filters or
+// zooms the page, writes nothing to storage, and puts the scroll back.
 (function() {
     const button = document.getElementById('help-button');
     const guide = document.getElementById('help-guide');
@@ -10,12 +12,23 @@
         button.hidden = true;
         return;
     }
-    const body = guide.querySelector('.help-guide-body');
+    const STEPS = {{HELP_STEPS_JSON}};
+    const spot = guide.querySelector('.help-spot');
+    const card = guide.querySelector('.help-card');
+    const count = guide.querySelector('.help-count');
+    const title = guide.querySelector('#help-title');
+    const text = guide.querySelector('#help-text');
+    const stage = guide.querySelector('.help-stage');
+    const back = guide.querySelector('.help-back');
+    const next = guide.querySelector('.help-next');
     const STOP = {};
     // A scene holds its last frame this long before it plays again.
     const HOLD_MS = 2200;
-    let running = [];
-    let observer = null;
+    // Room around the spotlighted target, and between it, the card and the screen's edges.
+    const PAD = 6;
+    const EDGE = 8;
+    const GAP = 12;
+    let tour = null;
 
     function el(tag, cls) {
         const node = document.createElement(tag);
@@ -133,12 +146,13 @@
         return { x: stage.clientWidth - 30, y: stage.clientHeight + 20 };
     }
 
-    // ── Scenes ──
+    // ── Scenes played in the card ──
     const scenes = {
         details: {
-            build(stage) {
+            // The copy of the very cell the tour spotlights, when there is one.
+            build(stage, index) {
                 const view = gridView(stage);
-                const block = view && pickBlock(view.grid);
+                const block = view && (view.grid.querySelectorAll('.session-block')[index] || pickBlock(view.grid));
                 if (!block) return null;
                 const popup = el('div', 'popup-floating help-popup');
                 const content = el('div');
@@ -178,70 +192,6 @@
                 this.open(c);
             },
         },
-
-        agreements: {
-            needs: () => !!document.getElementById('agreement-panel'),
-            build(stage) {
-                if (!sourceGrid()) return null;
-                const page = el('div', 'help-page');
-                stage.appendChild(page);
-                const view = gridView(page);
-                const block = view && pickBlock(view.grid, b => !!b.dataset.agreementAi);
-                if (!block) return null;
-                const panel = el('section', 'agreement-panel help-agreement');
-                const header = el('div', 'agreement-header');
-                const title = el('h2');
-                title.textContent = 'Agreements for';
-                header.appendChild(title);
-                const status = el('p', 'agreement-status help-agreement-status');
-                status.textContent = 'Select a schedule cell to read its agreements here.';
-                const text = el('div', 'help-agreement-body');
-                const heading = el('p', 'help-agreement-ai');
-                heading.textContent = 'AI ' + block.dataset.agreementAi.split('|')[0];
-                text.appendChild(heading);
-                [0.92, 0.78, 0.86, 0.64, 0.9, 0.7].forEach((width, i) => {
-                    const line = el('span', 'help-line' + (i === 3 || i === 4 ? ' help-added' : ''));
-                    line.style.width = (width * 100) + '%';
-                    line.style.animationDelay = (i * 70) + 'ms';
-                    text.appendChild(line);
-                });
-                panel.appendChild(header);
-                panel.appendChild(status);
-                panel.appendChild(text);
-                page.appendChild(panel);
-                return { stage: stage, page: page, view: view, block: block, panel: panel, dot: finger(stage) };
-            },
-            reset(c) {
-                focus(c.view, c.block);
-                c.block.setAttribute('aria-pressed', 'false');
-                c.page.style.transform = '';
-                c.panel.classList.remove('shown', 'flash');
-                hide(c.dot, rest(c.stage));
-            },
-            select(c) {
-                c.block.setAttribute('aria-pressed', 'true');
-                // The page moves up until the panel fills the lower part, the tapped cell still in sight.
-                const cellTop = c.view.wrapper.offsetTop + c.block.offsetTop - c.view.wrapper.scrollTop;
-                const lift = Math.max(0, Math.min(c.panel.offsetTop - c.stage.clientHeight * 0.4, cellTop - 12));
-                c.page.style.transform = 'translateY(' + -lift + 'px)';
-                c.panel.classList.add('shown');
-            },
-            async play(c, token) {
-                await moveTo(c.dot, within(c.stage, c.block, 0.45, 0.55), token, 800);
-                await tap(c.dot, token);
-                c.block.setAttribute('aria-pressed', 'true');
-                await sleep(500, token);
-                hide(c.dot);
-                this.select(c);
-                await sleep(900, token);
-                c.panel.classList.add('flash');
-                await sleep(2200, token);
-            },
-            end(c) {
-                this.select(c);
-            },
-        },
-
         filter: {
             needs: () => !!document.querySelector('.filter-list > .filter-item input[data-ai]'),
             build(stage) {
@@ -311,7 +261,6 @@
                 this.check(c);
             },
         },
-
         pinch: {
             build(stage) {
                 const view = gridView(stage);
@@ -364,42 +313,6 @@
                 this.scale(c, this.smallest(c), 0);
             },
         },
-
-        switch: {
-            needs: () => !!document.getElementById('wg-switch'),
-            build(stage) {
-                const source = document.getElementById('wg-switch');
-                const others = source.querySelectorAll('.wg-switch-item:not([aria-current])');
-                if (!others.length) return null;
-                const top = el('div', 'help-title');
-                const menu = copy(source);
-                menu.open = false;
-                top.appendChild(menu);
-                stage.appendChild(top);
-                return {
-                    stage: stage, menu: menu, summary: menu.querySelector('summary'),
-                    item: menu.querySelectorAll('.wg-switch-item:not([aria-current])')[0], dot: finger(stage),
-                };
-            },
-            reset(c) {
-                c.menu.open = false;
-                c.item.classList.remove('help-hover');
-                hide(c.dot, rest(c.stage));
-            },
-            async play(c, token) {
-                await moveTo(c.dot, within(c.stage, c.summary, 0.55, 0.6), token, 800);
-                await tap(c.dot, token);
-                c.menu.open = true;
-                await sleep(600, token);
-                await moveTo(c.dot, within(c.stage, c.item, 0.4, 0.55), token, 700);
-                c.item.classList.add('help-hover');
-                await sleep(1400, token);
-                await moveTo(c.dot, rest(c.stage), token, 500);
-            },
-            end(c) {
-                c.menu.open = true;
-            },
-        },
     };
 
     // Beside the cell like the real popup: right, then left, else under it.
@@ -446,9 +359,115 @@
             return values.indexOf(ai) < 0 && !scope.some(scopeMatches);
         });
     }
-
     function stillMotion() {
-        return window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        return !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+    }
+
+    function touchScreen() {
+        return !!(window.matchMedia && window.matchMedia('(any-pointer: coarse)').matches);
+    }
+
+    function shown(node) {
+        return !!node && !node.hidden && node.getClientRects().length > 0;
+    }
+
+    function viewport() {
+        const v = window.visualViewport;
+        return { width: v ? v.width : window.innerWidth, height: v ? v.height : window.innerHeight };
+    }
+
+    // A session in view to point at: the grid scrolls sideways in its own box,
+    // and moving it would leave the visitor somewhere else.
+    function visibleCell() {
+        const grid = sourceGrid();
+        if (!grid) return null;
+        const box = grid.parentElement.getBoundingClientRect();
+        const cell = pickBlock(grid, block => {
+            const r = block.getBoundingClientRect();
+            return r.left >= box.left && r.right <= box.right;
+        });
+        return cell && { el: cell, index: Array.from(grid.querySelectorAll('.session-block')).indexOf(cell) };
+    }
+
+    function target(step) {
+        if (step.touch && !touchScreen()) return null;
+        if (step.target === 'cell') return visibleCell();
+        if (step.target === 'grid') {
+            const grid = sourceGrid();
+            return grid && { el: grid.parentElement };
+        }
+        const node = document.querySelector(step.target);
+        return shown(node) ? { el: node } : null;
+    }
+
+    function fixedPosition(node) {
+        for (let n = node; n && n !== document.body; n = n.parentElement) {
+            if (getComputedStyle(n).position === 'fixed') return true;
+        }
+        return false;
+    }
+
+    // The card sits at the bottom of the screen, or at the top when it hides
+    // less of the target there (a fixed target, the end of the page). Never
+    // over the target's start: a tall section is read from its heading.
+    function dock(rect) {
+        const hidden = () => {
+            const c = card.getBoundingClientRect();
+            const w = Math.min(rect.right + PAD, c.right) - Math.max(rect.left - PAD, c.left);
+            const h = Math.min(rect.bottom + PAD, c.bottom) - Math.max(rect.top - PAD, c.top);
+            return Math.max(0, w) * Math.max(0, h);
+        };
+        card.classList.remove('help-card-top');
+        const bottom = hidden();
+        if (!bottom) return;
+        card.classList.add('help-card-top');
+        const top = hidden();
+        const start = card.getBoundingClientRect().bottom > rect.top - PAD && top > 0 && rect.bottom - rect.top > card.offsetHeight;
+        if (top >= bottom || start) card.classList.remove('help-card-top');
+    }
+
+    // Scroll so the target is in the free part of the screen above the card:
+    // centred when it fits. A taller one (a section below the grid) starts a
+    // quarter of the way down, so what is above it shows where it is.
+    function scrollTo(node, smooth) {
+        const v = viewport();
+        const rect = node.getBoundingClientRect();
+        const free = v.height - card.offsetHeight - EDGE - GAP;
+        const top = rect.height + 2 * PAD > free - EDGE ? EDGE + PAD + Math.min(120, free / 4) : (free - rect.height) / 2;
+        const max = document.documentElement.scrollHeight - v.height;
+        const y = Math.max(0, Math.min(max, window.scrollY + rect.top - top));
+        window.scrollTo({ top: y, behavior: smooth ? 'smooth' : 'auto' });
+        return rect.top - (y - window.scrollY);
+    }
+
+    // The spotlight follows its target on every frame the page moves.
+    function placeSpot() {
+        if (!tour || !tour.current) return;
+        const v = viewport();
+        const r = tour.current.el.getBoundingClientRect();
+        const top = Math.max(EDGE, r.top - PAD);
+        const left = Math.max(EDGE, r.left - PAD);
+        const bottom = Math.min(v.height - EDGE, r.bottom + PAD);
+        const right = Math.min(v.width - EDGE, r.right + PAD);
+        spot.style.transform = 'translate(' + left + 'px, ' + top + 'px)';
+        spot.style.width = Math.max(0, right - left) + 'px';
+        spot.style.height = Math.max(0, bottom - top) + 'px';
+    }
+
+    let frame = 0;
+    function follow() {
+        if (frame) return;
+        frame = requestAnimationFrame(() => {
+            frame = 0;
+            placeSpot();
+        });
+    }
+
+    function stopScene() {
+        if (!tour) return;
+        if (tour.token) tour.token.live = false;
+        tour.token = null;
+        stage.innerHTML = '';
     }
 
     async function loop(scene, c, token) {
@@ -464,75 +483,112 @@
         }
     }
 
-    function start(entry) {
-        if (entry.token) return;
-        entry.token = { live: true };
-        loop(entry.scene, entry.c, entry.token);
+    function playScene(step, found) {
+        const scene = step.scene && scenes[step.scene];
+        stage.hidden = !scene;
+        if (!scene) return;
+        // No room for it (a phone on its side): the words alone.
+        if (!stage.offsetHeight) return;
+        const c = scene.build(stage, found.index);
+        if (!c) {
+            stage.hidden = true;
+            return;
+        }
+        scene.reset(c);
+        if (stillMotion()) {
+            scene.end(c);
+            return;
+        }
+        tour.token = { live: true };
+        loop(scene, c, tour.token);
     }
 
-    function stop(entry) {
-        if (!entry.token) return;
-        entry.token.live = false;
-        entry.token = null;
+    function show(index, smooth) {
+        stopScene();
+        const step = tour.steps[index];
+        tour.index = index;
+        tour.current = step.found;
+        count.textContent = (index + 1) + ' / ' + tour.steps.length;
+        title.textContent = step.title;
+        text.textContent = step.text;
+        back.disabled = index === 0;
+        next.textContent = index === tour.steps.length - 1 ? 'Done' : 'Next';
+        playScene(step, step.found);
+        const node = step.found.el;
+        let rect = node.getBoundingClientRect();
+        if (!fixedPosition(node)) {
+            card.classList.remove('help-card-top');
+            const top = scrollTo(node, smooth);
+            rect = { top: top, bottom: top + rect.height, left: rect.left, right: rect.right };
+        }
+        dock(rect);
+        placeSpot();
+        next.focus({ preventScroll: true });
     }
 
-    function build() {
-        running = [];
-        guide.querySelectorAll('.help-scene').forEach(section => {
-            const scene = scenes[section.dataset.scene];
-            const stage = section.querySelector('.help-stage');
-            stage.innerHTML = '';
-            const c = scene && (!scene.needs || scene.needs()) ? scene.build(stage) : null;
-            section.hidden = !c;
-            if (!c) return;
-            const entry = { section: section, stage: stage, scene: scene, c: c, token: null };
-            running.push(entry);
-            scene.reset(c);
-            // Still pictures for those who asked for less motion: each scene's last frame.
-            if (stillMotion()) {
-                section.classList.add('help-still');
-                scene.end(c);
-            }
-        });
-        if (stillMotion() || !('IntersectionObserver' in window)) return;
-        // A scene plays while its stage is on screen, from its start each time it
-        // comes back. The stage, not the whole scene: on a short screen (a phone
-        // on its side) the text and stage together never fit.
-        observer = new IntersectionObserver(entries => {
-            entries.forEach(item => {
-                const entry = running.find(r => r.stage === item.target);
-                if (!entry) return;
-                if (item.isIntersecting) start(entry);
-                else {
-                    stop(entry);
-                    entry.scene.reset(entry.c);
-                }
-            });
-        }, { root: body, threshold: 0.5 });
-        running.forEach(entry => observer.observe(entry.stage));
-    }
-
-    function teardown() {
-        if (observer) observer.disconnect();
-        observer = null;
-        running.forEach(stop);
-        running = [];
-        guide.querySelectorAll('.help-stage').forEach(stage => { stage.innerHTML = ''; });
-    }
-
-    // Built at every opening: the copies follow the day and the filter shown now.
-    button.addEventListener('click', () => {
+    function start() {
+        const steps = STEPS.map(step => Object.assign({ found: target(step) }, step)).filter(step => step.found);
+        if (!steps.length) return;
+        tour = { steps: steps, index: 0, current: null, token: null, width: viewport().width,
+                 scrollX: window.scrollX, scrollY: window.scrollY };
+        guide.classList.toggle('help-still', stillMotion());
         guide.showModal();
-        body.scrollTop = 0;
-        build();
+        spot.classList.add('help-spot-jump');
+        show(0, false);
+        // The first spotlight appears where it is; later ones glide.
+        requestAnimationFrame(() => spot.classList.remove('help-spot-jump'));
+        window.addEventListener('scroll', follow, true);
+        window.addEventListener('resize', relayout);
+        if (window.visualViewport) window.visualViewport.addEventListener('resize', relayout);
+    }
+
+    // A new width (rotation, a resized window) lays the step out again. A new
+    // height alone is a phone's toolbar showing or hiding as the page scrolls:
+    // the spotlight follows, the page is not scrolled back.
+    function relayout() {
+        if (!tour) return;
+        const width = viewport().width;
+        if (width === tour.width) {
+            placeSpot();
+            return;
+        }
+        tour.width = width;
+        show(tour.index, false);
+    }
+
+    function finish() {
+        if (!tour) return;
+        stopScene();
+        window.removeEventListener('scroll', follow, true);
+        window.removeEventListener('resize', relayout);
+        if (window.visualViewport) window.visualViewport.removeEventListener('resize', relayout);
+        window.scrollTo({ left: tour.scrollX, top: tour.scrollY, behavior: 'auto' });
+        tour = null;
+        button.focus({ preventScroll: true });
+    }
+
+    button.addEventListener('click', start);
+    next.addEventListener('click', () => {
+        if (tour.index < tour.steps.length - 1) show(tour.index + 1, !stillMotion());
+        else guide.close();
     });
-    guide.querySelector('.help-guide-close').addEventListener('click', () => guide.close());
-    // A click on the backdrop lands on the dialog itself; its content fills the box.
+    back.addEventListener('click', () => {
+        if (tour.index > 0) show(tour.index - 1, !stillMotion());
+    });
+    guide.querySelector('.help-close').addEventListener('click', () => guide.close());
+    guide.addEventListener('keydown', event => {
+        if (!tour) return;
+        if (event.key === 'ArrowRight') next.click();
+        else if (event.key === 'ArrowLeft' && !back.disabled) back.click();
+    });
+    // A tap beside the card ends the tour; one on the spotlight does nothing,
+    // since it may be a try at the feature it shows.
     guide.addEventListener('click', event => {
-        if (event.target === guide) guide.close();
+        if (event.target !== guide) return;
+        const s = spot.getBoundingClientRect();
+        const inSpot = event.clientX >= s.left && event.clientX <= s.right && event.clientY >= s.top && event.clientY <= s.bottom;
+        if (!inSpot) guide.close();
     });
-    guide.addEventListener('close', () => {
-        teardown();
-        button.focus();
-    });
+    // Esc (the dialog's cancel) and every other way out end here.
+    guide.addEventListener('close', finish);
 })();

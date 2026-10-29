@@ -110,47 +110,59 @@ def render_support_note(schedule, support_links):
     )
 
 
-# Each scene: (key, heading, text). The script plays it on copies of this
-# page's own cells and hides a scene the page has nothing for (no agreement
-# panel outside RAN1, no menu with one WG).
-HELP_SCENES = (
-    ("details", "Tap a session for its details",
-     "Group, chair, room, notes and the agenda item names. Tap again, or anywhere else, to close it."),
-    ("agreements", "Read its agreements below the grid",
-     "The same tap opens the chair notes for the session\u2019s agenda item under the grid. "
-     "Parts added in the latest notes have a green bar."),
-    ("filter", "Follow only your agenda items",
-     "Open Filter on the right edge and tick what you follow; other sessions fade. "
-     "The filter is kept for this meeting and is part of the link, so you can share what you see."),
-    ("pinch", "Pinch to see the whole day",
-     "On a phone, pinch the grid itself to see every room at once. "
-     "Spreading back, it stops at 100% for a moment."),
-    ("switch", "Switch meetings from the title",
-     "The meeting name opens every WG\u2019s meeting, ongoing ones first."),
-)
-HELP_TIPS = (
-    "<strong>NOW</strong> marks the current time on today\u2019s grid during the meeting.",
-    "The page reloads itself every few minutes and comes back to the day and spot you were looking at.",
+# The tour, top of the page to the bottom. Each step spotlights its target on
+# the page itself: a CSS selector, or "cell" (a session in view) and "grid"
+# (the day's grid) which the script finds. A step whose target the page does
+# not have or does not show is skipped, so each WG gets the steps for what it
+# has (the agreement panel on RAN1, the additional information on RAN2, the
+# topics on RAN P). "scene" plays that feature on copies of the page's own
+# cells in the card; "touch" steps are for phones only.
+HELP_STEPS = (
+    {"key": "switch", "target": "#wg-switch summary", "title": "Switch meetings from the title",
+     "text": "The meeting name opens every WG\u2019s meeting, ongoing ones first."},
+    {"key": "days", "target": ".schedule-toolbar", "title": "Pick a day",
+     "text": "Each day of the meeting has its own grid. During the meeting, NOW marks the current time on today\u2019s."},
+    {"key": "details", "target": "cell", "scene": "details", "title": "Tap a session for its details",
+     "text": "Group, chair, room, notes and the agenda item names. Tap again, or anywhere else, to close it."},
+    {"key": "filter", "target": ".filter-toggle", "scene": "filter", "title": "Follow only your agenda items",
+     "text": "Open Filter here and tick what you follow; other sessions fade. "
+             "The filter is kept for this meeting and is part of the link, so you can share what you see."},
+    {"key": "pinch", "target": "grid", "scene": "pinch", "touch": True, "title": "Pinch to see the whole day",
+     "text": "Pinch the grid itself to see every room at once. Spreading back, it stops at 100% for a moment."},
+    {"key": "agreements", "target": "#agreement-panel", "title": "Agreements below the grid",
+     "text": "Tapping a session shows the chair notes for its agenda item here. "
+             "Parts added in the latest notes have a green bar."},
+    {"key": "informal", "target": ".email-informal", "title": "Off-offline and FL whereabouts",
+     "text": "Informal meetings announced on the email threads for the chosen day. "
+             "They are not on the schedule; tapping a session marks its own."},
+    {"key": "supplements", "target": ".supplements", "title": "Additional information",
+     "text": "What the chair\u2019s schedule says besides the grid, such as deadlines, breaks and offline discussions. "
+             "Tap the heading to fold it."},
+    {"key": "topics", "target": ".topic-references", "title": "Topics",
+     "text": "The chair\u2019s topics with their documents, notes and agenda items. Tap the heading to fold it."},
+    {"key": "help", "target": "#help-button", "title": "Help is always here",
+     "text": "Start this tour again any time. The page reloads itself every few minutes "
+             "and comes back to the day and spot you were looking at."},
 )
 
 
 def render_help():
-    """The Help button at the top left and the guide it opens."""
+    """The Help button at the top left and the tour it starts."""
     script = (Path(__file__).resolve().parent.parent / "templates" / "help-guide.js").read_text(encoding="utf-8")
-    scenes = "".join(
-        f'<section class="help-scene" data-scene="{key}"><div class="help-scene-text">'
-        f'<h3>{escape(heading)}</h3><p>{escape(text)}</p></div>'
-        '<div class="help-stage" aria-hidden="true" inert></div></section>'
-        for key, heading, text in HELP_SCENES)
-    tips = "".join(f"<li>{tip}</li>" for tip in HELP_TIPS)
+    # "<" is escaped so no step text can close the inline script.
+    steps = json.dumps(HELP_STEPS, ensure_ascii=False).replace("<", "\\u003c")
     return (
         '<button type="button" class="help-button" id="help-button" aria-haspopup="dialog" aria-controls="help-guide">'
         '<span class="help-icon" aria-hidden="true">?</span>Help</button>\n'
-        '<dialog class="help-guide" id="help-guide" aria-labelledby="help-guide-title">'
-        '<div class="help-guide-head"><h2 id="help-guide-title">How to use this page</h2>'
-        '<button type="button" class="help-guide-close" aria-label="Close">&times;</button></div>'
-        f'<div class="help-guide-body">{scenes}<ul class="help-tips">{tips}</ul></div></dialog>\n'
-        f'<script>{script}</script>'
+        '<dialog class="help-guide" id="help-guide" aria-labelledby="help-title" aria-describedby="help-text">'
+        '<div class="help-spot" aria-hidden="true"></div>'
+        '<section class="help-card"><div class="help-card-head"><span class="help-count"></span>'
+        '<button type="button" class="help-close" aria-label="Close the tour">&times;</button></div>'
+        '<h2 id="help-title"></h2><p id="help-text"></p>'
+        '<div class="help-stage" aria-hidden="true" inert></div>'
+        '<div class="help-nav"><button type="button" class="help-back">Back</button>'
+        '<button type="button" class="help-next">Next</button></div></section></dialog>\n'
+        f'<script>{script.replace("{{HELP_STEPS_JSON}}", steps)}</script>'
     )
 
 
