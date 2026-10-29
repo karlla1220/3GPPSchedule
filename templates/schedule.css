@@ -92,6 +92,16 @@ header .meta {
 ::view-transition-group(*.grid-move) { animation-duration: .22s; animation-delay: .06s; animation-timing-function: ease-in-out; }
 ::view-transition-old(*.grid-move),
 ::view-transition-new(*.grid-move) { animation-duration: .22s; animation-delay: .06s; }
+/* The page's own snapshot (the header, the sections below the grid) and the
+   cells are drawn at their captured size, anchored at the top, never scaled
+   to their box. Samsung Internet sizes the old page's snapshot to the new
+   page's area, so the header and the meeting title squash vertically during
+   the cross-fade (Chrome for Android keeps the aspect). A different height
+   now crops the bottom or leaves it blank, where nothing is read mid-switch. */
+::view-transition-old(root),
+::view-transition-new(root),
+::view-transition-old(grid-cells),
+::view-transition-new(grid-cells) { height: 100%; object-fit: none; object-position: top left; }
 /* Empty surfaces: stretched to the moving box, they show no distortion.
    The tab bar is only as wide as its days (four or five), and a snapshot
    keeps its aspect ratio by default, so a narrower bar would shrink whole. */
