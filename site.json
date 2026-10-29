@@ -15,6 +15,12 @@
       "id": "ran-plenary",
       "label": "RAN Plenary",
       "enabled": true
+    },
+    {
+      "id": "sa2",
+      "label": "SA2",
+      "enabled": true,
+      "experimental": true
     }
   ],
   "presentation": {

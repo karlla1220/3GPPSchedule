@@ -328,17 +328,18 @@ def _other_table(table) -> dict:
     return {'type': 'table', 'header': False, 'rows': [r + [''] * (width - len(r)) for r in rows]}
 
 
-def supplements(doc, schedule_table) -> list[dict]:
+def supplements(doc, schedule_table, *, titled=False) -> list[dict]:
     """Everything outside the schedule table, in document order.
 
     The heading paragraphs up to the "session plan" title are left out: the
     first upload copies them from the previous meeting (#177's first plan
-    named #176's dates).
+    named #176's dates). Without a schedule table (``titled``), every
+    paragraph and table is kept.
     """
-    blocks, titled = [], False
+    blocks = []
     for child in doc.element.body.iterchildren():
         if child.tag == W + 'tbl':
-            if titled and child is not schedule_table._tbl:
+            if titled and (schedule_table is None or child is not schedule_table._tbl):
                 block = _other_table(next(t for t in doc.tables if t._tbl is child))
                 if block['rows']:
                     blocks.append(block)

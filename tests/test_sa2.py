@@ -221,8 +221,7 @@ def test_cells_the_rules_are_unsure_about_say_why():
 def r20():
     return sessions.make_schedule(extract(R20), agenda(), META_176, [R20, 'agenda.csv'],
                                   {R20: 'Session Plan r20', 'agenda.csv': 'Agenda'}, '2026-08-28 12:00',
-                                  chairs={'Mike': 'Michael STARSINIC', 'Wanqiang': 'Wanqiang ZHANG'},
-                                  group_label=lambda item, agenda: agenda.get(item.split('.')[0], '').split(' - ')[0])
+                                  chairs={'Mike': 'Michael STARSINIC', 'Wanqiang': 'Wanqiang ZHANG'})
 
 
 def test_chairs_come_from_the_convener_line_only(r20):

@@ -19,6 +19,7 @@ import re
 
 from shared.schedule import (MIN_PART_MINUTES, DaySchedule, RoomInfo, Schedule, Session, Timeline,
                              minutes_to_time, time_to_minutes)
+from shared.agenda_groups import group_label
 from .document import clock
 
 AI = r'\d{1,2}(?:\.\d{1,2})*'
@@ -268,7 +269,8 @@ def interpret(document: dict, agenda: dict | None = None, refine=None) -> tuple[
 
     ``refine`` is the LLM fallback. It receives the cells the rules are unsure
     about, with the reasons and the rule-based reading, and returns validated
-    readings by cell id; every other cell keeps the rules.
+    readings (title, agenda items, times within the cell) by session id; every
+    other session keeps the rules.
     """
     agenda = agenda or {}
     quarters, notes, found = {}, [], []
@@ -291,12 +293,12 @@ def interpret(document: dict, agenda: dict | None = None, refine=None) -> tuple[
         found.extend(_quarter(day, q, stream, halves, document, agenda))
     for (day, b), cells in break_cells.items():
         found.extend(_break_row(day, b, cells, document, agenda))
+    for n, session in enumerate(found):
+        session['id'] = f"{session['cell']}.{n}"
+        session['block'] = (session['start'], session['end'])
     doubtful = [s for s in found if s['reasons']]
     replaced = refine(doubtful) if refine and doubtful else {}
-    sessions = []
-    for session in found:
-        better = replaced.get(session['cell'])
-        sessions.append({**session, **better} if better else session)
+    sessions = [{**s, **replaced[s['id']]} if s['id'] in replaced else s for s in found]
     order = {day: i for i, day in enumerate(document['days'])}
     sessions.sort(key=lambda s: (order[s['day']], s['start'], s['part'] or [0], s['rooms']))
     return sessions, notes
@@ -322,14 +324,17 @@ def is_descendant(item: str, ancestor: str) -> bool:
 
 def make_schedule(document: dict, agenda: dict | None, metadata: dict, source_files: list[str],
                   source_labels: dict[str, str], generated_at: str, *, chairs: dict[str, str] | None = None,
-                  group_label=None, refine=None) -> Schedule:
-    """``chairs`` maps a convener as written ("Mike") to the name shown ("Michael STARSINIC")."""
+                  refine=None, sessions: list[dict] | None = None) -> Schedule:
+    """``chairs`` maps a convener as written ("Mike") to the name shown ("Michael STARSINIC").
+
+    ``sessions`` replaces the cell reading when the LLM read the whole document.
+    """
     agenda = agenda or {}
     chairs = chairs or {}
     first, last = date.fromisoformat(metadata['starts_on']), date.fromisoformat(metadata['ends_on'])
     dates = {(first + timedelta(days=i)).strftime('%A'): (first + timedelta(days=i)).isoformat()
              for i in range(min((last - first).days, 6) + 1)}
-    sessions, notes = interpret(document, agenda, refine)
+    sessions, notes = interpret(document, agenda, refine) if sessions is None else (sessions, [])
     # The convener of a stream is linked by colour: the name's highlight in the
     # "Convener" line is the highlight on that stream's row labels.
     convener = {stream: document['conveners'].get(colour) for stream, colour in document['stream_colours'].items()}
@@ -365,7 +370,7 @@ def make_schedule(document: dict, agenda: dict | None, metadata: dict, source_fi
                 room_ids=s['rooms'], room_scope=s['scope'], part=s['part'],
                 chair=chairs.get(label, label) if label else None,
                 agenda_item=', '.join(s['agenda_items']) or None,
-                group_header=group_label(s['group_item'], agenda) if group_label and s['group_item'] else '',
+                group_header=group_label(s['group_item'], agenda),
                 description='\n'.join(d['description'] for d in descriptions) or None,
                 agenda_descriptions=descriptions, notes=s['lines']))
         days.append(DaySchedule(day_name=day, date=dates.get(day), rooms=rooms, sessions=built,
