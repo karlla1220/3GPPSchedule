@@ -72,6 +72,33 @@ def test_legacy_timezone_cache_without_reference_is_rechecked():
     assert not main_module._timezone_cache_is_current(state, "ran1#126", None)
 
 
+_AGENDA_CSV = {
+    "name": "agenda.csv",
+    "url": "https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_126b/Agenda/agenda.csv",
+    "source_url": "https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_126b/Agenda/",
+}
+
+
+def test_agenda_rewritten_without_changes_keeps_its_upload_time(tmp_path):
+    # 3GPP rewrites agenda.csv every morning at 05:42 with the same content.
+    downloaded = tmp_path / "agenda.csv"
+    downloaded.write_bytes(b"10.1,Overview\n")
+    first = main_module._settled_agenda_info(
+        {**_AGENDA_CSV, "uploaded_at": datetime(2026, 10, 20, 5, 42)}, downloaded, None)
+    saved = _agenda_state_for_save(first, downloaded, tmp_path / "missing.json")
+    assert saved["uploaded_at"] == "2026-10-20T05:42:00" and saved["sha256"]
+
+    later = main_module._settled_agenda_info(
+        {**_AGENDA_CSV, "uploaded_at": datetime(2026, 10, 29, 5, 42)}, downloaded, saved)
+    assert later["uploaded_at"] == "2026-10-20T05:42:00"
+
+    downloaded.write_bytes(b"10.1,Overview of Rel-20\n")
+    edited = main_module._settled_agenda_info(
+        {**_AGENDA_CSV, "uploaded_at": datetime(2026, 10, 29, 5, 42)}, downloaded, saved)
+    assert edited["uploaded_at"] == datetime(2026, 10, 29, 5, 42)
+    assert edited["sha256"] != saved["sha256"]
+
+
 def test_cached_remote_agenda_reference_survives_listing_failure(tmp_path):
     agenda_path = tmp_path / "RAN1#126 agenda.docx"
     agenda_path.write_bytes(b"cached-remote-agenda")

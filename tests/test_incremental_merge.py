@@ -173,6 +173,17 @@ class SlotStateFilesystemTests(unittest.TestCase):
         self.assertEqual(loaded.source_hashes, {"Main Schedule": "abc"})
         self.assertEqual(loaded.merged_sessions, [{"name": "x"}])
 
+    def test_unchanged_merge_keeps_its_time(self):
+        def merge(at, sessions):
+            save_slot_state(SlotState(day="Tuesday", time_block_index=3,
+                                      source_hashes={"Main Schedule": "abc"},
+                                      merged_sessions=sessions, merged_at=at))
+            return json.loads(slot_state.slot_state_path("Tuesday", 3).read_text())["merged_at"]
+
+        self.assertEqual(merge("2026-10-28T06:01:17", [{"name": "x"}]), "2026-10-28T06:01:17")
+        self.assertEqual(merge("2026-10-29T06:01:30", [{"name": "x"}]), "2026-10-28T06:01:17")
+        self.assertEqual(merge("2026-10-30T06:01:30", [{"name": "y"}]), "2026-10-30T06:01:30")
+
     def test_missing_returns_none(self):
         self.assertIsNone(load_slot_state("Friday", 0))
 

@@ -21,6 +21,7 @@ from __future__ import annotations
 import os
 import shutil
 import sys
+from shared import remote_files
 from shared.lifecycle import CheckResult
 from shared.portal_meetings import lookup_timezone_reference
 
@@ -63,6 +64,28 @@ def _timezone_reference(ref_type: str, info: dict | None) -> dict | None:
         }.items()
         if value is not None
     }
+
+
+def _agenda_changed(cached: dict, current: dict) -> bool:
+    """Whether the listed agenda differs from the one the last build read.
+
+    3GPP rewrites agenda.csv every morning without changing it, so a new
+    upload time alone is settled by the content hash the build recorded.
+    """
+    differing = {key for key, value in current.items()
+                 if key != "type" and cached.get(key) != value}
+    url = current.get("url")
+    if differing != {"uploaded_at"} or not cached.get("sha256") or not url:
+        return bool(differing)
+    try:
+        _, info = remote_files.fetch_file(None, url)
+    except Exception as exc:
+        print(f"Warning: could not read agenda {url}: {exc}")
+        return True
+    if info.get("sha256") != cached["sha256"]:
+        return True
+    print(f"Agenda re-uploaded without changes ({current['uploaded_at']})")
+    return False
 
 
 def _is_chair_notes_downgrade(
@@ -284,10 +307,7 @@ def check_updates(*, staging_dir=None) -> CheckResult:
         agenda_ref = _timezone_reference(
             "agenda", get_latest_agenda_info(agenda_urls)
         )
-        if agenda_ref is not None and any(
-            (state.get("agenda") or {}).get(key) != value
-            for key, value in agenda_ref.items() if key != "type"
-        ):
+        if agenda_ref is not None and _agenda_changed(state.get("agenda") or {}, agenda_ref):
             changed = True
             print("Agenda description source changed")
     if portal_ref is not None:

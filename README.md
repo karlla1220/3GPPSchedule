@@ -604,6 +604,12 @@ ETSI 등의 `extra_files`는 Git 저장소에 커밋된 파일과 SHA-256 상태
 - `timezone`: 해당 미팅에서 감지한 IANA 타임존
 - `timezone_status`: `resolved`, `pending_timezone_ref`, `detection_failed` 중 하나
 - `timezone_ref`: 우선 `type: "portal"`인 API 미팅 ID·시간대·개최 날짜·장소. 문서 대체 경로에서는 Agenda/Chair notes 식별자이며, 미해결 시 `null`
+- `agenda`: AI 설명에 쓴 Agenda 파일의 이름·URL·업로드 시각·SHA-256.
+  3GPP는 회의 폴더의 `agenda.csv`를 내용 그대로 매일 05:42에 다시 씁니다. 그래서 업로드 시각은 지금 내용이 처음 올라온 시각으로 두고,
+  check는 시각만 다르면 파일을 받아 SHA-256으로 비교합니다. 내용이 같으면 빌드하지 않습니다.
+
+빌드가 커밋하는 시각(`slot_state/*.json`의 `merged_at`, `agenda_item_description.json`의 `generated_at`)은 내용이 바뀔 때만 바뀝니다.
+변경 없는 재빌드가 시각만 바뀐 커밋을 만들지 않게 합니다.
 
 이 상태는 다음 용도로 사용됩니다.
 

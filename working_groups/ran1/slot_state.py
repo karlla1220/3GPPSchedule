@@ -90,11 +90,26 @@ def load_slot_state(
 
 
 def save_slot_state(state: SlotState) -> None:
-    """Persist a slot state to ``docs/ran1/slot_state/{day}_{tb:02d}.json``."""
+    """Persist a slot state to ``docs/ran1/slot_state/{day}_{tb:02d}.json``.
+
+    A merge that reproduces the saved slot keeps its ``merged_at``: the file
+    is committed, and a rebuild that changes nothing must not change it.
+    """
     SLOT_STATE_DIR.mkdir(parents=True, exist_ok=True)
     path = slot_state_path(state.day, state.time_block_index)
+    data = json.loads(json.dumps(asdict(state)))
+    try:
+        previous = json.loads(path.read_text())
+    except (OSError, ValueError):
+        previous = None
+    if (
+        isinstance(previous, dict)
+        and previous.get("merged_at")
+        and {**previous, "merged_at": None} == {**data, "merged_at": None}
+    ):
+        data["merged_at"] = previous["merged_at"]
     with open(path, "w") as f:
-        json.dump(asdict(state), f, ensure_ascii=False, indent=2)
+        json.dump(data, f, ensure_ascii=False, indent=2)
 
 
 def clear_all_slot_states() -> int:
