@@ -21,6 +21,24 @@
       "label": "RAN4",
       "enabled": true,
       "experimental": true
+    },
+    {
+      "id": "ran3",
+      "label": "RAN3",
+      "enabled": true,
+      "experimental": true
+    },
+    {
+      "id": "sa2",
+      "label": "SA2",
+      "enabled": true,
+      "experimental": true
+    },
+    {
+      "id": "sa1",
+      "label": "SA1",
+      "enabled": true,
+      "experimental": true
     }
   ],
   "presentation": {
