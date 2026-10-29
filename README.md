@@ -143,6 +143,8 @@ shared/
   portal_meetings.py           # Portal 회의 목록, 회의 ID(RAN·SA), TB ID
   timezones.py                 # 개최지 시간대: Portal 표기 → 개최지 목록 → Gemini
   officials.py                 # 의장·부의장 이력(3GPP officials), 회의 날짜의 임기, 원본 표기 → 전체 이름
+  llm_cells.py                 # 규칙이 불확실한 항목만 Gemini에 묻는 폴백: 요청, 캐시, 검증·재시도, 공통 검사
+  agenda_groups.py             # 셀 색 그룹 = agenda 최상위 항목(RAN1 제외)
   meeting_folders.py           # 아카이브의 미팅 폴더 찾기
 # WG별 결과/상태는 아래 폴더에 격리
 docs/ran1/                     # index.html, schedule.json, slot_state/, 상태 JSON
@@ -420,7 +422,13 @@ Gemini가 다시 읽되, 원문으로 확인되는 답만 씁니다(아래 "LLM 
   Breaks 문단(`Morning coffee` 등)에서 가져옵니다.
 - 셀의 원문 줄은 모두 팝업의 Note로 남습니다. 추정이 틀려도 내용은 잃지 않습니다.
 
-### LLM 폴백 (`working_groups/ran2/llm.py`)
+### LLM 폴백 (`working_groups/ran2/llm.py`, 공용 `shared/llm_cells.py`)
+
+요청, 캐시, "검사 → 실패한 항목만 오류를 붙여 한 번 더 묻기 → 통과한 답만 쓰기"는 `shared/llm_cells.ask`가 하고,
+시각 · 제목 낱말 · 원문에 적힌 의장과 AI · 인용 줄 검사도 공용(`check_times`, `title_errors`, `written_errors`, `citation_errors`)입니다.
+무엇을 불확실한 항목으로 볼지, 프롬프트, 답의 모양(pydantic 모델, `id` 필드 필수)과 그 검사는 WG가 정합니다.
+캐시 파일은 `<WG 캐시>/<이름>-<프롬프트·모델·항목 해시>.json`이고, 요청이 실패하면 아무 답도 쓰지 않고 캐시도 남기지 않습니다.
+
 
 규칙이 기본이고, Gemini(`config.json`의 `model`, 기본 `gemini-3.8-flash`)는 두 경우에만 씁니다.
 `GEMINI_API_KEY`가 없거나 `llm_fallback`이 `false`이면 규칙 결과를 그대로 씁니다.
