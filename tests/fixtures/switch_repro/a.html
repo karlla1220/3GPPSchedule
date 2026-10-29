@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RAN1#126bis (switch repro)</title>
+<!-- The opt-in must be inline and early on both pages. -->
+<style>@view-transition { navigation: auto; }</style>
+<script src="repro.js"></script>
+<link rel="stylesheet" href="repro.css">
+</head>
+<body>
+<div class="container">
+<header>
+    <a class="title" data-switch="b.html" href="b.html">📅 RAN1#126bis<span class="chevron">▼</span></a>
+    <div class="status">ENDED</div>
+    <div class="meta">Sources: Main v03 · Agenda | Generated: 2026-10-16 01:31 | Now: 2026-10-29 16:18<br>
+    ℹ️ This page reproduces the meeting switch. Tap the title to switch to the other meeting.<br>
+    <label><input type="checkbox" id="slow"> slow motion (×10)</label> · variant: <code>?v=plain</code> root fade only · <code>?v=move</code> as the site · <code>?v=fix</code> with the snapshot fix</div>
+    
+</header>
+<div class="legend"><span style="--c:#2563EB">6GR</span><span style="--c:#DB2777">R20</span><span style="--c:#0D9488">TEI</span></div>
+<div class="toolbar">
+    <div class="tabs" style="view-transition-name:day-tabs;view-transition-class:grid-move"><button class="tab" style="view-transition-name:day-tab-mon;view-transition-class:grid-move">Mon</button><button class="tab" style="view-transition-name:day-tab-tue;view-transition-class:grid-move">Tue</button><button class="tab" style="view-transition-name:day-tab-wed;view-transition-class:grid-move">Wed</button><button class="tab active" style="view-transition-name:day-tab-thu;view-transition-class:grid-move">Thu</button><button class="tab" style="view-transition-name:day-tab-fri;view-transition-class:grid-move">Fri</button></div>
+    <button class="now" style="view-transition-name:now-toggle;view-transition-class:grid-move">NOW</button>
+</div>
+<div class="grid-wrapper" style="view-transition-name:grid-frame;view-transition-class:grid-move">
+    <div class="schedule-grid" style="--rooms:5;--rows:114;view-transition-name:grid-cells">
+        <div class="time-head" style="view-transition-name:time-head;view-transition-class:grid-move">TIME</div>
+        <div class="room-header" style="grid-column:2">Tamna BC Hall</div><div class="room-header" style="grid-column:3">Yeongju A Hall</div><div class="room-header" style="grid-column:4">Yeongju B Hall</div><div class="room-header" style="grid-column:5">201</div><div class="room-header" style="grid-column:6">203</div>
+        <div class="time-label" style="grid-row:2/8;view-transition-name:time-510;view-transition-class:grid-move">08:30</div><div class="time-label" style="grid-row:8/14;view-transition-name:time-540;view-transition-class:grid-move">09:00</div><div class="time-label" style="grid-row:14/20;view-transition-name:time-570;view-transition-class:grid-move">09:30</div><div class="time-label" style="grid-row:20/26;view-transition-name:time-600;view-transition-class:grid-move">10:00</div><div class="time-label" style="grid-row:26/32;view-transition-name:time-630;view-transition-class:grid-move">10:30</div><div class="time-label" style="grid-row:32/38;view-transition-name:time-660;view-transition-class:grid-move">11:00</div><div class="time-label" style="grid-row:38/44;view-transition-name:time-690;view-transition-class:grid-move">11:30</div><div class="time-label" style="grid-row:44/50;view-transition-name:time-720;view-transition-class:grid-move">12:00</div><div class="time-label" style="grid-row:50/56;view-transition-name:time-750;view-transition-class:grid-move">12:30</div><div class="time-label" style="grid-row:56/62;view-transition-name:time-780;view-transition-class:grid-move">13:00</div><div class="time-label" style="grid-row:62/68;view-transition-name:time-810;view-transition-class:grid-move">13:30</div><div class="time-label" style="grid-row:68/74;view-transition-name:time-840;view-transition-class:grid-move">14:00</div><div class="time-label" style="grid-row:74/80;view-transition-name:time-870;view-transition-class:grid-move">14:30</div><div class="time-label" style="grid-row:80/86;view-transition-name:time-900;view-transition-class:grid-move">15:00</div><div class="time-label" style="grid-row:86/92;view-transition-name:time-930;view-transition-class:grid-move">15:30</div><div class="time-label" style="grid-row:92/98;view-transition-name:time-960;view-transition-class:grid-move">16:00</div><div class="time-label" style="grid-row:98/104;view-transition-name:time-990;view-transition-class:grid-move">16:30</div><div class="time-label" style="grid-row:104/110;view-transition-name:time-1020;view-transition-class:grid-move">17:00</div><div class="time-label" style="grid-row:110/116;view-transition-name:time-1050;view-transition-class:grid-move">17:30</div>
+        <div class="cell" style="grid-column:2;grid-row:2/12;--c:#2563EB">10.5.1.1<small>50 min · 08:30–09:20</small></div><div class="cell" style="grid-column:2;grid-row:12/20;--c:#2563EB">10.5.1.2<small>40 min · 09:20–10:00</small></div><div class="cell" style="grid-column:3;grid-row:2/12;--c:#7C3AED">AI 10.7.1 NTN<small>50 min · 08:30–09:20</small></div><div class="cell" style="grid-column:4;grid-row:2/18;--c:#2563EB">10.2.1 Waveform<small>80 min · 08:30–09:50</small></div><div class="cell" style="grid-column:5;grid-row:2/8;--c:#DB2777">10.4.2<small>30 min · 08:30–09:00</small></div><div class="cell" style="grid-column:6;grid-row:2/10;--c:#0D9488">AI/ML<small>40 min · 08:30–09:10</small></div><div class="cell" style="grid-column:2;grid-row:80/92;--c:#DB2777">10.6.1<small>60 min · 15:00–16:00</small></div><div class="cell" style="grid-column:3;grid-row:80/86;--c:#7C3AED">9.3.1<small>30 min · 15:00–15:30</small></div><div class="cell" style="grid-column:4;grid-row:86/98;--c:#0D9488">10.8.x Sensing<small>60 min · 15:30–16:30</small></div>
+    </div>
+</div>
+<div class="panel">Agreements panel. Long enough that the page scrolls. Long enough that the page scrolls. Long enough that the page scrolls. Long enough that the page scrolls. Long enough that the page scrolls. Long enough that the page scrolls. Long enough that the page scrolls. Long enough that the page scrolls. Long enough that the page scrolls. Long enough that the page scrolls. Long enough that the page scrolls. Long enough that the page scrolls. Long enough that the page scrolls. Long enough that the page scrolls. Long enough that the page scrolls. Long enough that the page scrolls. Long enough that the page scrolls. Long enough that the page scrolls. Long enough that the page scrolls. Long enough that the page scrolls. Long enough that the page scrolls. Long enough that the page scrolls. Long enough that the page scrolls. Long enough that the page scrolls. Long enough that the page scrolls. Long enough that the page scrolls. Long enough that the page scrolls. Long enough that the page scrolls. Long enough that the page scrolls. Long enough that the page scrolls. Long enough that the page scrolls. Long enough that the page scrolls. Long enough that the page scrolls. Long enough that the page scrolls. Long enough that the page scrolls. Long enough that the page scrolls. Long enough that the page scrolls. Long enough that the page scrolls. Long enough that the page scrolls. Long enough that the page scrolls. </div>
+</div>
+</body>
+</html>
