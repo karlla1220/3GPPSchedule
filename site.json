@@ -12,6 +12,12 @@
       "enabled": true
     },
     {
+      "id": "ran3",
+      "label": "RAN3",
+      "enabled": true,
+      "experimental": true
+    },
+    {
       "id": "ran-plenary",
       "label": "RAN Plenary",
       "enabled": true

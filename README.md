@@ -483,6 +483,124 @@ uv run python main.py --wg ran2 --local "tests/fixtures/ran2/R2_135_Schedule_v11
 다른 작성자의 양식(Main 열 없음, 시간 없는 행, 잘못된 시각, 제목 없음)이 실패 대신 메모로 남는지,
 LLM 폴백이 검증을 통과한 답만 쓰고 실패 시 규칙 결과를 유지하는지도 가짜 Gemini 응답으로 확인합니다.
 
+## RAN3 time plan
+
+RAN3 의장은 agenda, 의장 notes, 시간표를 문서 하나로 운영합니다. 이 문서가 living agenda
+(`RAN3_<미팅>_agenda_<YYYYMMDD>[_<HHMM>][_EOM].docx`)이고, 시간표는 그 끝에 있는 고정 양식의 표입니다.
+양식이 #129(2025-08)부터 같아서 **규칙으로 읽습니다.** 표가 그 양식이 아니면 추정하지 않고 빌드를 실패시킵니다.
+offline room은 따로 된 XLSX(`RAN3 offline discussion_ver_NN.xlsx`)입니다. 규칙이 모르는 줄이 있는 칸만
+Gemini가 다시 읽고, 원문으로 확인되는 답만 씁니다(아래 "LLM 폴백"). RAN3#129, #133bis(회의 중 판, EOM), #134 회의 전 판으로 확인했습니다.
+
+### 원본 선택 (`working_groups/ran3/sources.py`)
+
+- 목록은 두 곳을 함께 봅니다.
+  - `Meetings_3GPP_SYNC/RAN3/Inbox/Chairs_Notes/`: 회의 중 판이 이곳에만 올라옵니다(하루 2~5판).
+  - `tsg_ran/WG3_Iu/TSGR3_<미팅>/Inbox/Chairs_Notes/`: 회의 전 판, 그리고 폐회 직후 한꺼번에 복사된 판이 있습니다.
+  - 아카이브 폴더 이름은 `TSGR3_133-bis`처럼 하이픈이 들어갑니다. 미팅 폴더 찾기·기록·`meeting_specific_override`는 RAN2와 같습니다(`shared/meeting_folders.py`).
+- **판은 파일 이름의 날짜·시각 순입니다.** `vNN`이 없습니다. 같은 날이면 `_EOM`이 마지막입니다(`20261016_1300` < `20261016_EOM`).
+- **부의장 사본은 고르지 않습니다.** 이름 끝에 이니셜이 붙은 파일(`_LX`, `_yxd`, `-yxd`)입니다.
+  #133의 `_LX` 두 판은 회의 전 시간표를 그대로 들고 있었습니다.
+- 현재 미팅을 Portal 날짜로 정하는 것, 빌드한 판이 목록에서 사라지면 그대로 두는 것(`built_copy`), sync 폴더의 부재와 실패를 가르는 것은 RAN2와 같습니다.
+- **offline room 시트는 고른 living agenda와 같은 곳에서 가져옵니다.** 회의 중(sync에서 고름)이면 `Meetings_3GPP_SYNC/RAN3/Offline_meeting_room/`, 그 밖에는 그 미팅 폴더의 `Offline_meeting_room/`입니다. 가장 높은 `ver_NN`을 씁니다.
+  - 파일 이름에 미팅이 없고, sync 폴더는 다음 회의가 시작될 때까지 지난 회의의 시트를 들고 있습니다.
+  - 그래서 시트 이름의 날짜(`Oct14 Wed`)가 이번 미팅의 그 요일 날짜와 다르면 그 시트는 버리고 경고합니다.
+- `agenda.csv`는 그 미팅 폴더의 `Agenda/`에서 받습니다. AI 번호 확인, AI 설명, 범례 색에 씁니다.
+- 날짜·시간대는 RAN2와 같이 `config.json`의 `meetings` 지정 > Portal(TB 381) > 마지막 성공 상태 순입니다.
+
+### 표 읽기 (`working_groups/ran3/document.py`)
+
+- **첫 행이 Monday~Friday인 13행 × 7열 표가 시간표입니다.** 첫 열은 시각, 요일마다 한 열이고, 방은 주 세션 방 하나입니다.
+- **블록 시각은 시각 열에서 셉니다.**
+  - 휴식 행은 범위를 적습니다(`10:30~11:00`, #129는 `1030~1100`).
+  - 첫 행들은 시작을 적습니다(`08:00 / 08:30`, `09:00`).
+  - 시각 칸이 빈 블록은 위 휴식의 끝부터 다음에 적힌 시각까지입니다(11:00–13:00, 14:30–16:30, 17:00–19:00).
+- **한 시각 칸 아래 시각 없는 행 여러 개는 한 블록의 조각입니다.** 17:00–19:00의 두 행이 따로 쓰이면 `1/2 of 120 min`, `2/2 of 120 min`이고, 18:00 같은 시각을 지어내지 않습니다.
+  두 행에 걸친 칸은 한 블록입니다.
+- **마지막 `19:00 / 20:00` 행들은 한 블록 19:00–20:00입니다.** 두 행에 한 글이 나뉘어 적히므로(`RAN3 Social Event` / `(self-funded dinner)`) 한 칸으로 합칩니다.
+- **휴식 칸의 첫 줄이 휴식 이름입니다(`Coffee Break`, `Lunch Time`).** 그 아래 줄은 휴식 시간에 주 세션 방에서 열리는 세션입니다(`6G Offline (CB#8)`). 휴식은 시간 축에만 표시합니다(`label_position: time-axis`).
+- 표 바로 아래 범례(`L, X` → `chaired by Vice-Chairs`, `*` → `if needed`)는 "Key to the time plan"으로 페이지 하단에 둡니다.
+- **취소선은 범례대로 "not treated"입니다.** 그 글자는 AI 번호에서 빼고 Note에 `Not treated: …`로 남깁니다(#129 월 `AI 9/31`의 `/31`).
+- **CB 블록:** 시간표는 `6G Offline (CB#8)`만 적고, 본문의 AI 절에 `CB: # 8_6GSBI … (moderator - CATT)`가 있습니다.
+  - CB 번호 → 그 절의 AI와 moderator 표를 읽습니다. 2.5절의 양식 예(`CB: # 1_Name`)는 뺍니다.
+  - EOM 판에서는 이 블록이 지워지므로, 같은 미팅에서 본 표를 상태 파일(`cbs`)에 남겨 둡니다.
+- offline room 시트는 요일마다 한 장(`Oct14 Wed`)입니다. 머리 `Time Slot | Topic | Moderator` 아래 30분 칸이고, 반복된 칸과 세로 병합 모두 읽습니다.
+
+### 칸 해석 (`working_groups/ran3/sessions.py`)
+
+- **줄의 종류**
+  - 라벨 줄: `6G SI: AI 10.7, 10.4`, `Corrections: AI 9/31`, `IoT NTN WI AI 15`
+  - 번호 줄: `10.3.1.1 (cont.)`, `AI32, AI6`
+  - 이니셜: `L`, `X`, `G`
+  - offline: `6G Offline (CB#8)`, `Offline*`
+  - 진행: `CBs`, `Early CBs`
+  - 괄호 꾸밈: `(1hr until 19:30 at latest)`
+  - 앞머리 시각: `08:15 6G Offline`, `1930: Social Event`
+  - 표지: `0900 START OF MEETING`, `END OF MEETING`
+- **나눔 표시는 `라벨: AI` 줄입니다.** 라벨 줄 하나가 조각 하나이고 적힌 순서대로 `k/n`입니다(`Corrections: AI 9` / `6G SI: AI 10.1, 10.3.1` → `1/2`, `2/2 of 120 min`).
+  - 칸에 빈 줄이 있으면 빈 줄로 갈린 묶음이 조각입니다(#129 `NR NTN WI … / IoT NTN WI … // Network ES WI …` → 두 조각).
+  - 그 밖의 줄(번호, 꾸밈, 같은 행의 offline, 표지)은 위 조각에 붙고 조각이 되지 않습니다.
+  - 조각이 30분보다 짧아지면 나누지 않고 한 셀(` / `로 이은 제목)에 둡니다. 시간표 행 조각 안에서 다시 나뉘면 블록의 `4`등분처럼 겹쳐 셉니다.
+- **제목은 라벨 원문입니다(`AIML RAN`, `6G SI`).** 라벨이 없으면 첫 줄입니다. 둥근 괄호는 RAN2처럼 뗍니다(`6G Offline (CB#8)` → `6G Offline`, `AI 8 (cont.)` → `AI 8`).
+- **Note는 그 조각의 원문 줄 전부입니다.** 라벨 줄과 이니셜도 포함하고, 화면은 제목과 같은 줄만 뺍니다. offline 칸에는 본문 CB 블록 줄(`CB: # 8_6GSBI (moderator - CATT)`)을 더합니다.
+- **AI**
+  - 라벨과 번호 줄의 번호를 씁니다. `1-8`은 그 회의 `agenda.csv`에 있는 1~8로 풉니다.
+  - offline 칸은 CB 블록의 AI입니다(`CB#8` → 10.3.1.3). 번호 없는 offline room 주제는 AI 줄을 비웁니다.
+  - `agenda.csv`에 없는 번호는 AI 줄과 필터에서 빼고 경고합니다.
+- **Chair는 칸에 적힌 이니셜만입니다.** `config.json`의 `chair_aliases`(`L` → `XU, Lixiang`)와 officials 이력(`officials_code: R3`)으로 이름을 풉니다.
+  - 이니셜은 빈 줄 묶음이 있으면 그 묶음에, 없으면 칸 전체의 조각에 붙습니다.
+  - 표시 없는 칸은 비웁니다.
+  - offline room 칸은 시트의 `Moderator` 이름(회사는 Note)이고, `TBD`는 비웁니다.
+- **offline room 시트에서 세션이 아닌 줄은 넣지 않습니다.**
+  - 예약 금지 표시: `No parallel offlines with main session`, `No offlines`
+  - 주 세션 표에 같은 세션이 있는 줄: `6G offline in Main Room`, `Reserved (6G offline)`
+  - `Social Event`
+- 색은 첫 AI의 agenda 최상위 항목입니다(`shared/agenda_groups.py`). AI가 없는 칸은 기본색입니다.
+
+### LLM 폴백 (`working_groups/ran3/llm.py`)
+
+규칙이 기본이고, Gemini는 **규칙이 모르는 꼴의 줄이 있는 칸**에만 씁니다. 저녁 행은 적힌 그대로 두므로 묻지 않습니다.
+
+- 예: #129 목 14:30 `All CBs in AI8, AI9, AI31 will be treated`(Early CBs 조각의 AI), #134 금 14:30 `End of Year Social`.
+- 표본 여섯 회의에서 두 칸입니다.
+- 문장 속 시각(`(1hr until 19:30 at latest)`)은 묻지 않습니다. 조각 시각은 블록 시각이고 원문에 다른 시각이 없어서, 답이 검증을 통과할 수 없습니다.
+
+답은 칸의 조각 목록이고, 다음을 통과할 때만 씁니다(호출·재시도·캐시는 `shared/llm_cells.py`).
+
+- 모든 줄을 한 조각이 한 번씩 인용합니다.
+- 제목 낱말은 인용한 줄에 있어야 합니다.
+- Chair는 칸에 적힌 이니셜이어야 합니다.
+- AI는 인용한 줄에 적힌 번호(범위 포함)이고 `agenda.csv`에 있어야 합니다.
+- 조각은 30분 이상이어야 합니다.
+
+키가 없거나 답이 떨어지면 규칙 결과로 빌드합니다. 결과 요약은 상태 파일의 `llm`에 남습니다.
+
+### 상태와 로컬 확인
+
+- `docs/ran3/.schedule_state.json`에는 다음이 들어갑니다. check는 이 값과 비교해 변경을 판단합니다.
+  - 성공한 living agenda·offline 시트·`agenda.csv`의 URL, SHA-256, HTTP validator
+  - 미팅·판, Portal 메타데이터, CB 표, 경고
+- `downloads/ran3/inputs/`: 마지막 원본(Git 제외).
+- 헤더의 원본 이름은 `Agenda 14 Oct 18:25`, `Agenda EOM`, `Offline room v03`입니다.
+
+```bash
+uv run python main.py --wg ran3
+uv run python main.py --wg ran3 --no-download
+# 로컬 문서: offline 시트와 agenda.csv는 config.json의 local_offline·local_agenda로 지정합니다 (config.example.json 참고)
+uv run python main.py --wg ran3 --local tests/fixtures/ran3/RAN3_133bis_agenda_20261016_EOM.docx
+```
+
+실제 문서와 시트는 `tests/fixtures/ran3/`에 있습니다.
+
+- living agenda: #133bis EOM과 회의 중 판, #134 회의 전 판, #129 EOM
+- offline 시트: #129, #131, #133bis
+- `agenda.csv`: #133bis, #134
+
+테스트는 네트워크 없이 이 파일들로 확인합니다.
+
+- 블록 시각, 조각, 제목·Note·AI·Chair, CB 표가 EOM 뒤에도 남는지, offline 시트 거르기와 날짜 확인
+- 부의장 사본 제외, 판 고르기
+- LLM 폴백이 검증을 통과한 답만 쓰는지(가짜 Gemini 응답)
+
 ## SA2 Session Plan
 
 SA2 의장은 회의마다 `S2-<TDoc>_SA2-<미팅>-Session Plan - r<N>.docx` 하나를 판을 올려 가며 고칩니다
