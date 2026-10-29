@@ -1,6 +1,6 @@
 # CLAUDE.md
 
-프로젝트 구조와 실행 방법은 `README.md`, 파싱 설계는 `PARSING_ARCHITECTURE.md`, WG 전환과 첫 화면의 설계는 `WG_SWITCH_DESIGN.md`를 본다.
+프로젝트 구조와 실행 방법은 `README.md`, 파싱 설계는 `PARSING_ARCHITECTURE.md`, WG 전환과 첫 화면의 설계는 `WG_SWITCH_DESIGN.md`, Help 투어를 고치고 단계를 더하는 규칙은 `HELP_TOUR.md`를 본다.
 
 ## 세션 블록 디자인
 
@@ -309,6 +309,20 @@ HTML은 `shared/page.py`, 표시 판단은 `templates/support-note.js`, 값은 `
   - 스크립트는 인사 바로 뒤에 인라인으로 둔다. 그리드가 그려지기 전에 실행되어, 보고 있던 화면이 밀리지 않는다.
   - 닫으면 회의마다 한 번만 기억한다(`localStorage`, 키에 `wg_id:meeting_id`). 다음 회의에서는 다시 보인다.
   - 더미 미팅, 끝나는 날을 모르는 회의, `support_links`가 없는 사이트에는 넣지 않는다.
+
+## Help 투어
+
+HTML과 단계 문구는 `shared/page.py`(`render_help`, `HELP_STEPS`), 동작은 `templates/help-guide.js`, 스타일은 `templates/schedule.css`의 Help 구획이다.
+문구·장면·배치 규칙, 새 기능을 소개하는 절차, 버린 방식과 확인 방법은 `HELP_TOUR.md`에 있다. 기능을 새로 만들거나 화면을 바꾸면 그 문서를 따라 투어도 고친다.
+
+- **헤더 왼쪽 위의 원형 `?` 버튼(글자 없음)이 투어를 시작한다.** 사용자가 누를 때만이고, 자동으로 띄우지 않는다.
+  미팅 전환 버튼과 같은 문법(흰 바탕, 헤어라인)이고 그 버튼의 가운데 높이에 맞춘다. 이름은 `aria-label`과 `title`에 둔다.
+- **투어는 실제 화면에서 위치를 짚는다.** 단계마다 그 기능으로 스크롤하고, 그 요소만 밝게 두고(스포트라이트) 카드에 설명을 쓴다.
+  단계는 `HELP_STEPS`에 페이지 위에서 아래 순서로 두고, 페이지에 없거나 숨은 대상의 단계는 건너뛴다. 그래서 WG마다 가진 것만 나온다(그리드 아래 구획 포함).
+- **투어는 짚기만 한다.** 실제 셀을 누르거나, 필터를 체크하거나, 줌하지 않는다. 동작은 카드 안 무대에서 이 페이지의 셀을 복제해 보인다(팝업, 필터, 핀치).
+  필터 장면은 `applyFilter`와 같은 규칙을 쓴다(`dimmedBy`). 필터 규칙을 바꾸면 둘 다 바꾼다.
+- **투어는 저장소에 쓰지 않고, 끝나면 시작할 때의 스크롤 위치로 돌아간다.** 열려 있는 동안은 자동 새로고침을 건너뛴다(`schedule.js`의 `.help-guide[open]`).
+- 테스트는 `tests/test_help_guide.py`다. 배치와 움직임은 브라우저에서 본다(`HELP_TOUR.md`의 "확인 방법").
 
 ## 회의 상태와 기본 WG
 
