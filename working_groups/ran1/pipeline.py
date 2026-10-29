@@ -37,9 +37,10 @@ load_dotenv()
 
 from .models import DAY_ORDER, DaySchedule, Schedule, ScheduleSource, ran1_timeline
 from .parser import build_room_list, parse_docx, extract_meeting_location, find_chair_notes_docx
-from .session_parser import parse_time_slots, get_timezone_from_location, normalize_group_headers, fill_missing_groups
+from .session_parser import parse_time_slots, normalize_group_headers, fill_missing_groups
 from shared.renderer import save_html
 from shared.portal_meetings import lookup_timezone_reference
+from shared.timezones import resolve as resolve_timezone
 from shared import remote_files
 from .downloader import (
     download_latest_schedule,
@@ -620,7 +621,7 @@ def build_schedule(args) -> Schedule:
 
     # Prefer Portal metadata for this exact meeting. Reuse a resolved Portal
     # reference offline or during an outage; never borrow another meeting's TZ.
-    portal_ref = (lookup_timezone_reference("ran1", current_meeting_id)
+    portal_ref = (lookup_timezone_reference("ran1", current_meeting_id, resolve_timezone)
                   if not args.no_download else None)
     if (portal_ref is None and prev_state.get("meeting_id") == current_meeting_id
             and prev_state.get("timezone_status") == "resolved"
@@ -725,7 +726,7 @@ def build_schedule(args) -> Schedule:
                 location_text = extract_meeting_location(location_source)
                 if location_text:
                     print(f"  Location line: {location_text}")
-                    tz = get_timezone_from_location(location_text)
+                    tz = resolve_timezone(location=location_text)
                     if tz:
                         meeting_tz = tz
                         timezone_status = "resolved"

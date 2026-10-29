@@ -19,6 +19,10 @@ def fresh_listings(tmp_path, monkeypatch):
     monkeypatch.setattr(email_updates, 'in_meeting', lambda *a, **k: False)
     monkeypatch.setattr(email_updates, 'RECORD_DIR', tmp_path / 'email' / 'docs')
     monkeypatch.setattr(email_updates, 'CACHE_DIR', tmp_path / 'email' / 'cache')
+    # Venue timezones: never the repository's list, never a live LLM call.
+    from shared import timezones
+    monkeypatch.setattr(timezones, 'MAP_PATH', tmp_path / 'timezone_map.jsonl')
+    monkeypatch.setattr(timezones, 'gemini_request', lambda *a, **k: None)
     # RAN1 tests give their own folders; the lookup has its own tests.
     for module in ('check_update', 'pipeline'):
         monkeypatch.setattr(f'working_groups.ran1.{module}.with_meeting_folders', lambda cfg, *a, **k: cfg)

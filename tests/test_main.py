@@ -305,7 +305,7 @@ class MainExtraFilesWiringTests(unittest.TestCase):
                 for name, value in [("find_local_schedule_sources", ([], None)), ("find_chair_notes_docx", None),
                                     ("download_latest_chair_notes", None),
                                     ("extract_meeting_location", "Malta, Malta"),
-                                    ("get_timezone_from_location", "Europe/Malta")]:
+                                    ("resolve_timezone", "Europe/Malta")]:
                     stack.enter_context(patch(f"working_groups.ran1.pipeline.{name}", return_value=value))
                 discover = stack.enter_context(
                     patch("working_groups.ran1.pipeline.discover_schedule_sources", return_value=[source]))
@@ -425,7 +425,7 @@ class MainExtraFilesWiringTests(unittest.TestCase):
                     patch("working_groups.ran1.pipeline.extract_meeting_location", return_value="Malta, Malta")
                 )
                 stack.enter_context(
-                    patch("working_groups.ran1.pipeline.get_timezone_from_location", return_value="Europe/Malta")
+                    patch("working_groups.ran1.pipeline.resolve_timezone", return_value="Europe/Malta")
                 )
                 mock_dl = stack.enter_context(
                     patch(
@@ -513,7 +513,7 @@ class MainExtraFilesWiringTests(unittest.TestCase):
                     patch("working_groups.ran1.pipeline.extract_meeting_location", return_value="Malta, Malta")
                 )
                 stack.enter_context(
-                    patch("working_groups.ran1.pipeline.get_timezone_from_location", return_value="Europe/Malta")
+                    patch("working_groups.ran1.pipeline.resolve_timezone", return_value="Europe/Malta")
                 )
                 mock_ftp = stack.enter_context(patch("working_groups.ran1.pipeline.download_latest_chair_notes"))
 
@@ -605,7 +605,7 @@ class MainExtraFilesWiringTests(unittest.TestCase):
                 )
                 stack.enter_context(
                     patch(
-                        "working_groups.ran1.pipeline.get_timezone_from_location",
+                        "working_groups.ran1.pipeline.resolve_timezone",
                         return_value="Europe/Amsterdam",
                     )
                 )
@@ -652,7 +652,7 @@ class MainExtraFilesWiringTests(unittest.TestCase):
                     patch("working_groups.ran1.pipeline.extract_meeting_location", return_value="Malta, Malta")
                 )
                 stack.enter_context(
-                    patch("working_groups.ran1.pipeline.get_timezone_from_location", return_value="Europe/Malta")
+                    patch("working_groups.ran1.pipeline.resolve_timezone", return_value="Europe/Malta")
                 )
                 mock_ftp = stack.enter_context(patch("working_groups.ran1.pipeline.download_latest_chair_notes"))
                 mock_parse = stack.enter_context(
@@ -741,7 +741,7 @@ def test_portal_timezone_bypasses_document_location_and_llm(tmp_path, offline):
         chair = stack.enter_context(patch.object(main_module, 'get_latest_chair_notes_info'))
         download = stack.enter_context(patch.object(main_module, 'download_latest_chair_notes'))
         location = stack.enter_context(patch.object(main_module, 'extract_meeting_location'))
-        llm = stack.enter_context(patch.object(main_module, 'get_timezone_from_location'))
+        llm = stack.enter_context(patch.object(main_module, "resolve_timezone"))
         save = stack.enter_context(patch.object(main_module, 'save_schedule_state'))
         agreement_data = {'status': 'ready', 'meeting_id': 'ran1#126', 'sections': {}}
         agreement_ref = {'name': 'Chair notes RAN1#126.docx', 'sha256': 'new'}
@@ -764,7 +764,7 @@ def test_portal_timezone_bypasses_document_location_and_llm(tmp_path, offline):
     if offline:
         lookup.assert_not_called()
     else:
-        lookup.assert_called_once_with('ran1', 'ran1#126')
+        lookup.assert_called_once_with('ran1', 'ran1#126', llm)
         assert save.call_args.kwargs['timezone_ref'] == ref
 
 
