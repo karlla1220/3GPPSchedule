@@ -28,7 +28,7 @@
     // The names give the switch's animation its grid (schedule.css, @view-transition).
     const panel = '#' + CSS.escape(chosen.dataset.day) + '.day-panel';
     style.textContent = panel + ' { display: block; }'
-        + ' ' + panel + ' .grid-wrapper { view-transition-name: grid-frame; }'
+        + ' ' + panel + ' .grid-wrapper { view-transition-name: grid-frame; view-transition-class: grid-move; }'
         + ' ' + panel + ' .schedule-grid { view-transition-name: grid-cells; }';
     document.head.appendChild(style);
 

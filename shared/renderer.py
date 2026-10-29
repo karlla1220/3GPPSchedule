@@ -350,11 +350,12 @@ def generate_html(schedule: Schedule, *, schedules=None, groups=None, presentati
         day_lower = day_schedule.day_name.lower()
         day_short = day_schedule.day_name[:3]
         html_parts.append(
-            f'            <button class="tab" data-day="{day_lower}">{day_short}</button>\n'
+            # Named so the meeting switch slides each day's tab to its place (schedule.css).
+            f'            <button class="tab" data-day="{day_lower}" style="view-transition-name:day-tab-{day_lower};view-transition-class:grid-move">{day_short}</button>\n'
         )
     html_parts.append("        </div>\n")
     html_parts.append(
-        '        <button class="now-toggle" id="now-toggle" type="button" '
+        '        <button class="now-toggle" id="now-toggle" type="button" style="view-transition-name:now-toggle;view-transition-class:grid-move" '
         'aria-pressed="false" disabled title="NOW is available during the meeting">NOW</button>\n'
     )
     html_parts.append("    </div>\n")
@@ -388,7 +389,7 @@ def generate_html(schedule: Schedule, *, schedules=None, groups=None, presentati
         # Room headers
         html_parts.append(
             '                <div class="room-header time-col" '
-            'style="grid-column:1;grid-row:1"><span>Time</span></div>\n'
+            'style="grid-column:1;grid-row:1;view-transition-name:time-head;view-transition-class:grid-move"><span>Time</span></div>\n'
         )
         for ri, room in enumerate(day_schedule.rooms):
             col = ri + 2
@@ -405,7 +406,8 @@ def generate_html(schedule: Schedule, *, schedules=None, groups=None, presentati
             span = min(timeline.label_minutes // timeline.slot_minutes, timeline.rows + 2 - row)
             label = f"{minute // 60:02d}:{minute % 60:02d}"
             major = " major" if minute % 60 == 0 else ""
-            html_parts.append(f'<div class="time-label" style="grid-row:{row}/{row + span}"><span>{label}</span></div>')
+            # Named by its time: the meeting switch moves 09:00 to where 09:00 is on the next grid.
+            html_parts.append(f'<div class="time-label" style="grid-row:{row}/{row + span};view-transition-name:time-{minute};view-transition-class:grid-move"><span>{label}</span></div>')
             html_parts.append(f'<div class="grid-line{major}" style="grid-row:{row}"></div>')
 
         for brk in timeline.breaks:
