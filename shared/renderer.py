@@ -358,6 +358,11 @@ def generate_html(schedule: Schedule, *, schedules=None, groups=None, presentati
         'aria-pressed="false" disabled title="NOW is available during the meeting">NOW</button>\n'
     )
     html_parts.append("    </div>\n")
+    # Picks the day before its grid is parsed, so the page never draws without one.
+    html_parts.append("    <script>" + _render_template("day-select.js", {
+        "STATE_ID_JSON": json.dumps(schedule.wg_id + ":" + schedule.meeting_id).replace("<", "\\u003c"),
+        "MEETING_TIMEZONE_JSON": json.dumps(schedule.timezone).replace("<", "\\u003c"),
+    }) + "</script>\n")
 
     # Day panels
     for day_schedule in schedule.days:
@@ -838,14 +843,15 @@ def _render_email_informal(schedule) -> str:
     for day, when, ai, text, author, url in sorted(rows):
         weekday = datetime.fromisoformat(day).strftime("%A").lower()
         items_html.append(
-            f'<li data-ai="{_esc(ai)}" data-date="{_esc(day)}" data-day="{weekday}">'
+            f'<li data-ai="{_esc(ai)}" data-date="{_esc(day)}" data-day="{weekday}" hidden>'
             + (f'<span class="email-informal-when">{_esc(when)}</span> ' if when else "")
             + f'<span class="email-informal-ai">AI {_esc(ai)}</span> {_esc(text)}'
             + (f' <span class="email-informal-from">{source}</span>' if (source := _mail_source(author, url)) else "")
             + "</li>"
         )
     return (
-        '<section class="email-informal" aria-labelledby="email-informal-title">'
+        # Hidden until the script below picks the day's rows: no flash of every day's.
+        '<section class="email-informal" aria-labelledby="email-informal-title" hidden>'
         '<div class="email-informal-header"><h2 id="email-informal-title">Off-offline and FL whereabouts</h2>'
         "<p>From the email threads, not on the schedule</p></div>"
         f'<ul>{"".join(items_html)}</ul></section>\n'
