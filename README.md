@@ -483,6 +483,93 @@ uv run python main.py --wg ran2 --local "tests/fixtures/ran2/R2_135_Schedule_v11
 다른 작성자의 양식(Main 열 없음, 시간 없는 행, 잘못된 시각, 제목 없음)이 실패 대신 메모로 남는지,
 LLM 폴백이 검증을 통과한 답만 쓰고 실패 시 규칙 결과를 유지하는지도 가짜 Gemini 응답으로 확인합니다.
 
+## SA1 chair file (Experimental)
+
+SA1 의장은 아젠다, 일정표, TDoc 결론 표를 **한 파일**(chair file, Readme의 "Chair's Notes")로 관리합니다.
+일정표는 요일이 열이고 고정 칸 `Q0`~`Q5`(08:00–09:00 … 18:10–19:30)가 행이며, 방은 열이 아니라 셀 안에서
+`Breakout 1:` / `=====` / `Breakout 2:`로 나뉩니다. 규칙으로 읽고, 규칙이 확신하지 못하는 셀만 Gemini가
+다시 읽습니다(RAN2와 같은 방식). 근거와 결정은 조사 보고서와 `research/sa1/DECISIONS.md`에 있고,
+SA1#112·#113·#115의 실제 문서로 확인했습니다. `site.json`에서 `experimental: true`입니다.
+
+### 원본 선택 (`working_groups/sa1/sources.py`)
+
+- 회의 중 최신본은 `Meetings_3GPP_SYNC/SA1/Inbox/agenda/`, 이전 판은 `…/agenda/previous_ones/`에 있습니다.
+  회의 전 2nd draft와 Agenda는 TDoc zip(`S1-263001.zip`, `S1-263002.zip`)으로 sync `Inbox/`나 미팅 폴더 `Docs/`에,
+  회의 뒤 마지막 판은 미팅 폴더의 `temp_reports/`·`report/`·`draft_report/`에 올라옵니다.
+  미팅 폴더(`TSGS1_116_Calgary`)는 이름에 개최지가 붙어 Portal `MtgDocURL`이나 루트 목록으로 찾습니다(`shared/meeting_folders.py`).
+- **판 이름에 vNN이 없습니다.** 이름의 현지 요일·시각이 순서입니다(`Agenda for SA1#115_Thursday_1030.docx`,
+  `S1-263002_Agenda for SA1#115_Monday_10_30.docx`, `S1-261408_Agenda_SA1#113_16_00_friday.docx`).
+  2nd draft < Agenda < 회의 중 판 < `_END_OF_MEETING`·보고서 폴더의 판 순입니다. FTP 목록 시각은 쓰지 않습니다
+  (sync 폴더가 통째로 다시 복사되어 2026-08-28 10:18로 바뀐 적이 있습니다). 이름에 시각이 없는 판
+  (`SA1#116_ChairNotes.docx`처럼 한 이름을 덮어쓰는 경우)은 그 미팅에 시각 있는 판이 없을 때만 올린 시각으로 비교합니다.
+- 세션 의장 파일(`Agenda_AI_SA1#115_WED_10_30.docx`, `AgendaDrafting_Massive_…`)은 일정표가 없어 쓰지 않습니다.
+- **시간표만 뽑은 파일**(`Breakout sessions schedule_Prague_WED_1730.docx`)은 회의 기간에 올라왔고 이름의 요일·시각이
+  최신 의장 파일보다 늦을 때 씁니다. #115에서 이 파일이 목요일 계획을 의장 파일보다 14시간쯤 먼저 담았습니다.
+  agenda와 의장은 그때도 최신 의장 파일에서 읽고, 머리줄 Sources에 두 파일이 함께 보입니다.
+- 일정표가 없는 판(1st draft `S1-xx3000`, #114 사후본)은 건너뛰고 그 앞 판을 씁니다. 같은 미팅 안에서 판이 뒤로 가지 않습니다.
+- 현재 미팅은 Portal 날짜로 정합니다(TB 384). 끝나지 않은 가장 이른 미팅에 의장 파일이 아직 없으면 지난 미팅을 보입니다(Ended).
+  sync `Inbox/`의 agenda TDoc zip은 이름에 미팅이 없어서, 다음 미팅에 다른 파일이 아직 없을 때만 열어 봅니다.
+- 머리줄 Sources는 `Chair's Notes Thu 10:30`, `Chair's Notes EOM`, `Breakout schedule Wed 17:30`, `Chair's Notes S1-264001`입니다.
+
+### 표 읽기 (`working_groups/sa1/document.py`)
+
+- 첫 행에 요일 이름이 셋 이상 있는 표가 일정표입니다. 둘째 열(또는 첫 열)에 시각 둘이 있는 행이 칸이고, 그 사이의
+  `Coffee`·`Lunch` 행은 휴식입니다. 이름 없는 18:00–18:10 행은 휴식이 아닌 빈 시간입니다. #113처럼 요일 사이에
+  시각 열이 반복돼도 요일 열만 읽습니다. 변경 추적은 수락한 상태로 읽습니다.
+- 방은 표 위 `MEETING ROOMS:` 문단입니다(`Plenary/ Breakout 1: D3/D4, Floor 3`). 콜론 앞이 열 이름이고, 그 안의
+  `Plenary`·`Breakout N`·`Drafting N`이 셀 머리말과 방을 잇습니다(#112·#113은 `Drafting 1`/`Drafting 2`).
+- 브레이크아웃 의장은 표 아래 NOTE의 `주제 – chaired by 이름` 줄입니다(#112~#114는 한 행짜리 표).
+- agenda는 같은 파일 TDoc 표의 제목 행(`Überschrift1~3`/`Heading 1~3`)과 Word 번호입니다. 번호는 직접 셉니다.
+  제목 스타일에 따로 목록 번호가 붙은 문단은 한 단계 아래이고(#112 `Editor's notes solving` = 8.1.3.1),
+  번호를 지우고 손으로 친 번호(`8.1.2.1 Editor's notes solving`)는 그대로 씁니다. `agenda.csv`는 SA1에 없습니다.
+- 그리드 아래 "Additional information"에는 `MEETING ROOMS:`와 NOTE 문단만 원문 그대로 보입니다(아젠다 본문은 넣지 않습니다).
+
+### 셀 해석 규칙 (`working_groups/sa1/sessions.py`)
+
+- 셀의 머리말(`Plenary`, `Breakout 1:`, `Drafting 2:`)이 방을 정하고 `=====`가 방을 닫습니다.
+  머리말 앞의 줄은 방이 없어 모든 방 열을 덮습니다(`Room unassigned`: Q0 드래프팅, 점심 드래프팅).
+- **cell title은 원본 셀의 모양입니다.** Plenary 칸은 항목 수와 상관없이 `Plenary`가 제목이고 항목 줄은 Note입니다.
+  브레이크아웃 칸은 남는 줄이 제목입니다(`7.3.3 AI` — 이 `AI`는 인공지능, `7.3.6 Immersive+7.3.10 IMS`).
+  머리 없이 여러 줄이면 앞 셋을 ` / `로 잇습니다. 둥근 괄호는 제목에서만 뺍니다(RAN2와 같음).
+- **시각 없이 나누지 않습니다.** SA1 원본은 칸 안을 빈 줄이나 따로 된 칸으로 나누지 않으므로 `part`(`k/n`)를 쓰지 않습니다.
+  적힌 시각만 씁니다: `13:00- 14:00h Drafting …`(그 시각의 블록), `MMS ⏎ (18:30-20:00)`, `Meeting ends 16:00`(칸 끝을 늘림),
+  `Last 30 min 8.1.7 Massive+…`(끝 30분을 따로). `(start at 09:00)`은 칸 시각과 같아 줄만 뺍니다.
+- 시작만 적힌 행사(`MMS ⏎ (18:30)`)와, 방 없는 블록이 다른 칸을 덮게 되는 경우(#112 `12:00 – 13:30 1st round VC elections`)는
+  시각을 지어내지 않고 그리드 아래 "Not placed on the grid"에 요일과 함께 둡니다.
+- AI는 줄 앞과 `+` 뒤의 번호입니다(`2. Reports` → 2, `7.3.6 Immersive+7.3.10 IMS` → 7.3.6, 7.3.10). 그 미팅 agenda에 없는 번호는
+  그 이름의 항목이 하나뿐일 때 그 번호로 바꾸고(#112 `8.8 Verticals` → 8.1.8), 아니면 AI 줄에서 뺍니다. 번호 없는
+  Plenary 항목(#112 `Immersive`)은 같은 표에서 그 이름에 붙은 번호를 씁니다. 드래프팅 칸에는 AI를 붙이지 않습니다.
+- Chair는 원본이 그 칸에 적은 사람만입니다. 브레이크아웃 칸은 NOTE 주제(`,`·`+`로 나눔)가 칸 이름을 가리키는 줄이 하나뿐일 때
+  그 의장이고, Plenary 칸과 방 없는 칸은 비웁니다. 이름은 officials 이력(코드 `S1`, `officials_code`)으로 3GPP 표기로 풉니다
+  (`Qun Wei` → `QUN WEI`). officials에 없는 사람(`Erik Guttman`)과 페이지를 못 읽은 빌드는 NOTE 표기 그대로입니다.
+- 색(범례)은 셀 첫 AI의 agenda 최상위 항목입니다(`shared/agenda_groups.py`, #115에서는 대부분 `Rel-21 contributions`).
+
+### LLM 폴백 (`working_groups/sa1/llm.py`, 공용 `shared/llm_cells.py`)
+
+규칙 결과가 기본이고, `GEMINI_API_KEY`가 없거나 `llm_fallback`이 `false`이면 그대로 씁니다.
+다음 셀만 이유와 규칙 결과를 함께 묻습니다. 실제 문서(#112·#113·#115 16판)에서는 해당하는 셀이 없습니다.
+
+- 위 규칙이 읽는 모양 밖의 시각·소요 시간이 있는 줄(`end by 11:45`)
+- `MEETING ROOMS:`의 방과 맞지 않는 머리말(`Breakout 3:`)
+- 방 머리말 앞의 알 수 없는 줄
+- 휴식 행에서 시각 없이 적힌 줄
+
+답은 RAN2와 같은 공용 검사(줄마다 한 번 인용, 원문의 시각, 인용한 줄의 낱말로 된 제목, 원문의 AI)에 더해,
+세션마다 방이 그 줄들의 머리말 방과 같고 같은 방 안에서 겹치지 않아야 받습니다. 의장은 묻지 않고 NOTE 규칙으로 붙입니다.
+답은 `.cache/sa1/`에 캐시하고, 요약은 `docs/sa1/.schedule_state.json`의 `llm`에 남습니다.
+
+### 상태와 로컬 확인
+
+- `docs/sa1/.schedule_state.json`: 성공한 판의 이름·URL·SHA-256, 판 순서(`order`), 시간표만 뽑은 파일을 쓸 때의 의장 파일, Portal 메타데이터.
+- `downloads/sa1/inputs/`: 마지막 원본(Git 제외). check가 받은 원본은 `.ci/transfers/sa1/`로 build에 전달합니다.
+
+```bash
+uv run python main.py --wg sa1
+uv run python main.py --wg sa1 --local "tests/fixtures/sa1/Agenda for SA1#115_Friday_1550_END_OF_MEETING.docx"
+```
+
+`tests/fixtures/sa1/`에 #115 마지막 판과 시간표만 뽑은 파일, #112·#113 마지막 판이 있습니다(`tests/test_sa1.py`, `tests/test_sa1_sources.py`).
+
 ## 다중 소스 통합 파이프라인
 
 ```
