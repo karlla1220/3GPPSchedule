@@ -77,9 +77,36 @@ header .meta {
 @view-transition { navigation: auto; }
 ::view-transition-old(root),
 ::view-transition-new(root) { animation-duration: .18s; }
+/* The grid changes in three steps: its cells leave, its frame (an empty
+   surface, nothing to distort) moves to the new size, the new cells arrive.
+   Cross-fading the cells would show two grids at different zooms at once.
+   Only the shown day's grid carries the names (also the day-select.js rule). */
+.day-panel.active .grid-wrapper { view-transition-name: grid-frame; view-transition-class: grid-move; }
+.day-panel.active .schedule-grid { view-transition-name: grid-cells; }
+/* What both pages have moves to its new place with the frame instead of
+   fading: the day tabs (one name per day, renderer.py), the NOW button, and
+   the time axis (one name per time, so 09:00 lands where 09:00 now is).
+   Those names are on the elements (renderer.py); a hidden day's are not drawn. */
+.schedule-toolbar .tabs { view-transition-name: day-tabs; view-transition-class: grid-move; }
+::view-transition-group(grid-cells),
+::view-transition-group(*.grid-move) { animation-duration: .22s; animation-delay: .06s; animation-timing-function: ease-in-out; }
+::view-transition-old(*.grid-move),
+::view-transition-new(*.grid-move) { animation-duration: .22s; animation-delay: .06s; }
+/* An empty surface: stretched to the moving box, it shows no distortion. */
+::view-transition-old(grid-frame),
+::view-transition-new(grid-frame) { height: 100%; }
+::view-transition-old(grid-cells) { animation: grid-cells-leave .1s ease-in both; }
+::view-transition-new(grid-cells) { animation: grid-cells-arrive .12s .26s ease-out both; }
+/* Without a partner on the other page (a time one grid lacks), it leaves and
+   arrives with the cells, not in the middle of the others moving. */
+::view-transition-old(*.grid-move):only-child { animation: grid-cells-leave .1s ease-in both; }
+::view-transition-new(*.grid-move):only-child { animation: grid-cells-arrive .12s .26s ease-out both; }
+@keyframes grid-cells-leave { to { opacity: 0; } }
+@keyframes grid-cells-arrive { from { opacity: 0; } }
 @media (prefers-reduced-motion: reduce) {
-    ::view-transition-old(root),
-    ::view-transition-new(root) { animation: none; }
+    ::view-transition-group(*),
+    ::view-transition-old(*),
+    ::view-transition-new(*) { animation: none; }
 }
 
 /* The meeting title is the WG switcher. It looks like a control at rest

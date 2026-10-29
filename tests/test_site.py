@@ -295,3 +295,26 @@ def test_switching_meetings_cross_fades_but_entering_from_the_root_does_not(tmp_
     build.build_site(opts)
     assert '@view-transition { navigation: auto; }' in (opts.output_dir / 'ran1/index.html').read_text()
     assert '@view-transition' not in (opts.output_dir / 'index.html').read_text()
+
+
+def test_the_grid_end_follows_the_day_panels_and_the_arrival_check_is_in_the_head():
+    html = generate_html(plenary_schedule())
+    head, body = html.split('</head>', 1)
+    assert 'blocking="render"' in head  # switch-arrival.js, parser-run in <head>.
+    panels = BeautifulSoup(body, 'html.parser')
+    end = panels.select_one('#grid-end')
+    assert end is not None and end.has_attr('hidden')
+    assert not end.find_all_next(class_='day-panel')
+    assert end.find_all_previous(class_='day-panel')
+
+
+def test_what_both_pages_have_is_named_to_move_on_a_meeting_switch():
+    html = BeautifulSoup(generate_html(plenary_schedule()), 'html.parser')
+    # One name per day tab and, within a day, per time: each moves to its partner on the next page.
+    assert [t['style'] for t in html.select('.schedule-toolbar .tab')] == [
+        f"view-transition-name:day-tab-{t['data-day']};view-transition-class:grid-move"
+        for t in html.select('.schedule-toolbar .tab')]
+    for panel in html.select('.day-panel'):
+        names = [label['style'].split('view-transition-name:')[1].split(';')[0] for label in panel.select('.time-label')]
+        assert names and len(set(names)) == len(names)
+        assert names[0] == f"time-{panel.select_one('.schedule-grid')['data-start']}"
