@@ -56,9 +56,9 @@ MIN_PART_MINUTES = 30
 class Session:
     """A parsed session with calculated times."""
 
-    # The cell title: the cell's primary line as the schedule writes it. RAN1,
-    # RAN2 and RAN Plenary write the AI there; other WGs write their own label
-    # ("7.3.3 AI", "KI#18 (AI for Network)"), kept as is.
+    # The cell title: the source cell's head line in its own words (RAN1 cells
+    # mostly hold just the AI, "10.5.2.1"; RAN2 "NR20 MIMO"; SA1 "7.3.3 AI").
+    # Several heads join as "A / B / C …"; the other lines are notes.
     name: str
     duration_minutes: int
     start_time: str  # "HH:MM"

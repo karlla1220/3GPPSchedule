@@ -162,15 +162,18 @@ WG의 내부 단계는 자유입니다. 공통 실행기는 각 `build_schedule(
 휴식과 시간 블록을 전달합니다. 새 WG는 방 ID(`RoomInfo.id`, `Session.room_ids`)를
 사용하며, RAN1의 기존 열 번호도 호환됩니다. 한 세션이 여러 방에 걸치면 방은 인접해야 합니다.
 
-`Session.name`은 cell title(셀의 주 정보)입니다. RAN1·RAN2·RAN Plenary는 AI를 title로 쓰고,
-다른 WG는 셀 원문의 표기를 줄이거나 고치지 않고 씁니다(SA1 `7.3.3 AI`, SA2 `KI#18 (AI for Network)`).
+`Session.name`은 cell title(셀의 주 정보)이고, 원본 셀의 모양을 옮깁니다. 셀 머리 줄이 title이고
+나머지 원문 줄은 `Session.notes`에 둡니다. RAN1은 셀 글이 대개 AI 번호라 title이 AI이고, RAN2는 셀 머리 줄(`NR20 MIMO`),
+RAN Plenary는 셀 원문입니다. 머리 없이 주제가 여럿이면 앞 셋을 ` / `로 잇습니다(RAN2 `title_and_chair`).
+원문 낱말은 바꾸지 않고, 다른 줄이 보이는 괄호(AI 번호, 의장·회사, 조건)만 뗍니다.
 AI 번호는 어느 WG든 `agenda_item`에 따로 두고, 셀의 AI 줄과 필터가 그것을 씁니다.
 
-원본이 한 블록에 시각 없이 차례로 적은 주제는 `Session.part = [k, n]`으로 나눕니다.
+원본이 시각 없이 블록을 몇 조각으로 나눠 놓았으면 `Session.part = [k, n]`으로 나눕니다.
 조각마다 Session 하나이고 `start_time`/`end_time`/`duration_minutes`는 블록의 값입니다.
 렌더러가 블록을 같은 높이로 나눠 그리고 시간 줄에 `2/3 of 90 min · 13:00–14:30`으로 적습니다.
-조각이 30분(`MIN_PART_MINUTES`)보다 짧아지면 나누지 않고 한 셀에 목록으로 둡니다(모델이 거부합니다).
-나열 순서가 진행 순서라는 근거가 있을 때만 나눕니다. 병렬인 방, 한 세션으로 묶인 주제, 후보 목록은 나누지 않습니다.
+나눔 표시는 WG마다 다릅니다(SA2 표 칸, RAN4 칸 안의 빈 줄, RAN3 `라벨: AI` 줄). 한 칸에 주제를 줄줄이 적은 것은 나누지 않고
+한 셀 + Note로 둡니다. 조각이 30분(`MIN_PART_MINUTES`)보다 짧아져도 나누지 않습니다(모델이 거부합니다).
+병렬인 방, 한 세션으로 묶인 주제, 후보 목록, 휴식 중 세션은 조각이 아닙니다.
 
 `Session.chair`는 원본이 그 셀이나 열에 적은 사람만입니다. 이니셜이나 이름만 적혀 있으면
 `shared/officials.py`가 회의 날짜의 officials로 전체 이름을 찾습니다. WG 설정에는 officials 코드(`R3`, `S2`)와
