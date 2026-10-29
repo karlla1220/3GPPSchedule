@@ -1,0 +1,16 @@
+{
+  "sync_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN4/Inbox/Meeting_Arrangements/",
+  "sync_agenda_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN4/Agenda/",
+  "archive_url": "https://www.3gpp.org/ftp/tsg_ran/WG4_Radio/",
+  "meeting_specific": [],
+  "meeting_specific_override": [],
+  "local_topics": null,
+  "local_agenda": null,
+  "llm_fallback": true,
+  "model": "gemini-3.8-flash",
+  "officials": "R4",
+  "chair_aliases": {
+    "Yang": "TANG, Yang"
+  },
+  "meetings": {}
+}

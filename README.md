@@ -483,6 +483,88 @@ uv run python main.py --wg ran2 --local "tests/fixtures/ran2/R2_135_Schedule_v11
 다른 작성자의 양식(Main 열 없음, 시간 없는 행, 잘못된 시각, 제목 없음)이 실패 대신 메모로 남는지,
 LLM 폴백이 검증을 통과한 답만 쓰고 실패 시 규칙 결과를 유지하는지도 가짜 Gemini 응답으로 확인합니다.
 
+## RAN4 meeting schedule (experimental)
+
+RAN4 의장단은 미팅마다 `Inbox/Meeting_Arrangements/`에 PPTX 시간표
+(`RAN4_120bis_meeting_schedule_THU_afternoon.pptx`)와 토픽 목록 XLSX
+(`List_Topics_moderators-RAN4_120bis_final.xlsx`)를 올립니다. 시간표는 표지 다음에 요일마다 슬라이드
+한 장, 표 하나이고, 열은 방이 아니라 세션(`RAN4 Main (Yang Session)`, `Ad hoc room`)입니다.
+셀은 AI가 아니라 토픽(메일 스레드) 번호(`[101-A]`, `[346]`)로 적히므로 토픽 목록으로 AI를 찾습니다.
+#118bis~#120bis 네 회의의 실제 문서로 확인했습니다.
+
+### 원본 선택 (`working_groups/ran4/sources.py`)
+
+- 목록은 `Meetings_3GPP_SYNC/RAN4/Inbox/Meeting_Arrangements/`(회의 중 실시간 사본, 루트에 최신 판 하나)와
+  `Meetings_3GPP_SYNC/RAN4/Agenda/`, 그리고 `tsg_ran/WG4_Radio/TSGR4_<미팅>/`의 `Inbox/Meeting_Arrangements/`와
+  `Agenda/`(회의 전·후)입니다. 미팅 폴더는 RAN2처럼 미팅 ID로 찾아 `meeting_specific`에 기록합니다
+  (`meeting_specific_override`가 우선). 끝나지 않은 다음 두 미팅, 마지막으로 끝난 미팅, 마지막으로 빌드한 미팅의 폴더를 봅니다.
+- **현재 미팅은 Portal(TB 382) 날짜로 정합니다.** 끝나지 않은 미팅 중 시간표가 있는 가장 이른 미팅, 없으면 시간표가 있는 가장 높은 미팅입니다.
+- **같은 미팅의 판은 PPTX의 `cp:revision`(`docProps/core.xml`)으로 고릅니다.** 파일 이름은 순서가 없고
+  (`v04` → `THU` → `THU_morning` → `THU_afternoon`), 목록 시각은 회의 뒤 다시 복사되어 믿을 수 없습니다.
+  같은 미팅의 후보를 모두 받아 읽습니다(두 번째부터는 조건부 요청). 같으면 `dcterms:modified`, 그다음 sync 사본입니다.
+  PowerPoint 잠금 파일(`~$…`)은 뺍니다. 빌드한 판이 목록에서 사라지고 보이는 판이 더 낮으면 빌드한 판을 유지합니다.
+- 토픽 목록은 같은 미팅의 `List_Topics…`·`… list of topics …` XLSX 중 `final`, 그다음 가장 높은 `vNN`입니다.
+  없으면 AI 없이 빌드하고 경고합니다. `agenda.csv`는 미팅 폴더의 `Agenda/`, 없으면 sync `Agenda/`에서 받습니다.
+- 날짜·시간대·시작/종료 시각은 `config.json`의 `meetings` 지정 > Portal > 같은 미팅의 마지막 성공 상태입니다.
+
+### 표 읽기 (`working_groups/ran4/document.py`)
+
+- python-pptx 없이 zip의 XML을 읽습니다. 표가 있는 슬라이드의 제목 도형이 요일입니다(도형 순서에 기대지 않습니다).
+- 첫 열이 시각(`8:30-10:30`, `14:00-EOM`)인 행이 블록입니다. 시각 칸 바탕이 `FFC000`인 행이 휴식이고,
+  이름은 원문 그대로입니다(`커피 타임`, `茶歇`, `Waqfa għall-kafè`). 합친 폭은 날마다 달라서 쓰지 않습니다.
+- 열 이름은 머리 행의 원문 그대로입니다. `(Yang Session)`이 있으면 그 이름이 열의 의장 표기입니다.
+- 셀의 문단 하나가 한 줄이고, 빈 문단은 빈 줄로 남깁니다(의장이 블록을 나누는 표시). 취소선 글은 지운 글로 보고 읽지 않습니다.
+  가로 병합(`gridSpan`, 개회 칸)은 여러 열, 세로 병합(`rowSpan`)은 여러 행에 걸친 한 셀입니다.
+- 시각을 읽을 수 없는 행은 버리지 않고 "Notes in the schedule table"로, 표 밖 문단(`Note: … additional morning AH sessions …`)은 요일 소제목과 함께 하단 정보로 보냅니다.
+
+### 셀 해석 규칙 (`working_groups/ran4/sessions.py`)
+
+- **적힌 시각이 블록을 나눕니다**: 대시 구분선(`—12:00—`, `----9.30-------`, `---3:00pm`), 혼자 선 범위(`8:30 – 10:30`),
+  괄호 속 범위(`BR2 Ad-hoc: 5G BSRF (14:30 – 15:30)`), `Start at 8:00`, `(until 11:00)`.
+  괄호 범위처럼 내용 줄에 붙은 시각 뒤의 빈 줄 다음은 그 끝 시각부터 이어집니다.
+- **시각 없는 블록은 원본이 빈 줄로 가른 묶음만 나눕니다**(`Session.part = [k, n]`, 같은 높이).
+  빈 줄 없이 줄줄이 적은 토픽은 한 셀이고 원문 줄은 Note입니다. 후보 목록(`Return to`, `EARLY RETURN TO`)은 빈 줄이 있어도 한 셀입니다.
+  괄호 주석만 있는 묶음(`(107-B and 107-A)`)은 앞 묶음에, 아래 항목의 머리만 있는 묶음(`Maintenance`, `Main Ad-hoc:`)은 다음 묶음에 붙습니다.
+  `5G UE RF (cont)`처럼 `(cont)`로 끝나는 머리는 자기 조각입니다. 조각이 30분보다 짧아지면 나누지 않습니다.
+- **cell title은 맨 위 단위**입니다: 아래에 토픽이 오는 범주 줄(`NTN`, `Rel-20 Demod`), 범주 아래에 있지 않은 토픽 줄(`[101-A] System Parameter`),
+  ad hoc 표지(`Main Ad-hoc`). 여럿이면 앞 셋을 ` / `로 잇습니다(`Main Ad-hoc / [105-A] 6G RRM`). 같은 줄의 표지는 줄 그대로입니다(`BR2 Ad-hoc: Ambient IoT D2T2`).
+  둥근 괄호는 RAN2처럼 내용과 상관없이 떼고(`NTN (cont)` → `NTN`), `Chaired by …`도 뗍니다. 괄호에 기대는 판단(`(cont)`, 시각, 토픽 번호)은 떼기 전의 원문 줄로 합니다.
+- **AI는 토픽 번호에서 찾습니다**: `[346]`, `[214] [215]`, `105-B`, `(346, 347)` → 토픽 목록의 AI 칸 → `agenda.csv`에 있는 번호만.
+  접미사 없는 `[105]`는 105-A·105-B, `[102-A/B]`는 둘 다입니다. 셀의 이름이 다른 번호의 토픽 이름이면(`[206] NR_Mob_Ph5_RRM`은 207) AI를 비우고 경고합니다.
+  셀에 직접 적힌 `(AI 8.11.4)`도 씁니다. 그룹(범례 색)은 첫 AI의 최상위 항목입니다(`shared/agenda_groups.py`).
+- **Chair**: 셀의 `Chaired by Jerry (Apple)`·`by Aijun (CATT)`는 이름만(`Jerry`) 씁니다. 그런 표기가 없는 Main·BR1·BR2 열의 칸은
+  ad hoc 표기가 없을 때만 열 머리의 의장이고, officials 이력(`R4`, 회의 첫날의 임원)으로 전체 이름(`Yang TANG`)으로 풉니다.
+  `Yang`은 TANG Yang과 YANG Shan 둘에 맞아서 `chair_aliases`가 정합니다. 이력을 받지 못하면 적힌 이름 그대로 두고 경고합니다. 표기 없는 ad hoc·offline 칸은 비웁니다.
+- **휴식 중 세션**(`Coffee break AH: 105-B 6G RRM, chaired by Jinyup`)은 블록 바로 뒤 휴식 시각의 별도 셀입니다. 그 휴식의 라벨은 시간 축으로 갑니다.
+- `14:00-EOM` 행은 Portal 종료 시각(#120bis 17:30)까지, 없으면 18:00까지이고 경고합니다.
+
+### LLM 폴백 (`working_groups/ran4/llm.py`, 공용 `shared/llm_cells.py`)
+
+RAN2와 같은 방식입니다. 규칙이 다음을 발견한 셀만 이유와 규칙 결과를 함께 묻습니다.
+
+- 읽지 못한 시각 구분선, 문장 속 시각(`(not earlier than 3pm)`, `by 13:30pm`, `Starting 14:45`)
+- 휴식 안내처럼 보이는데 못 읽은 줄, 읽지 못한 의장 표기(`charied by`), 행 시각에 붙은 말(`15:00 (or earlier time) -16:00`)
+- 적힌 시각이 블록을 다 차지해 시간이 남지 않은 묶음, 이름 붙일 줄이 없는 부분
+
+답은 토픽 번호로 받고 AI는 토픽 목록으로 찾습니다. 검사: 모든 줄을 한 번씩 인용, 시각은 블록·뒤 휴식·원문에 적힌 시각,
+조각(`part`)은 빈 줄 묶음 하나씩, 제목 낱말은 인용한 줄에 있음, 의장·토픽 번호는 원문에 적힘. 통과하지 못한 셀은 규칙 결과입니다.
+열 머리의 의장은 셀에 없으므로 답을 받은 뒤 규칙과 같은 방식으로 붙입니다. 캐시는 `.cache/ran4/`, 요약은 상태 파일의 `llm`입니다.
+양식을 아예 못 알아보면(요일 없는 표 슬라이드, 세션 없음) 지금은 빌드가 실패하고 마지막 정상 결과가 남습니다.
+
+### 상태와 로컬 확인
+
+- `docs/ran4/.schedule_state.json`: 고른 시간표(URL, SHA-256, `cp:revision`)·토픽 목록·agenda.csv, Portal 메타데이터, 빌드 경고.
+- 헤더의 `Sources:`는 `Schedule THU afternoon · Topics Final · Agenda`처럼 보입니다(판 이름이 `vNN`이면 `Schedule v11`).
+
+```bash
+uv run python main.py --wg ran4
+uv run python main.py --wg ran4 --no-download
+# 로컬 문서: config.json의 meetings, local_topics, local_agenda로 날짜와 보조 파일을 지정 (config.example.json 참고)
+uv run python main.py --wg ran4 --local "tests/fixtures/ran4/RAN4_120bis_meeting_schedule_THU_afternoon.pptx"
+```
+
+실제 문서(#119 v11, #120bis `THU_afternoon`), #120bis 토픽 목록·`agenda.csv`, R4 officials 이력(표만 남김)은 `tests/fixtures/ran4/`에 있습니다.
+
 ## RAN3 time plan
 
 RAN3 의장은 agenda, 의장 notes, 시간표를 문서 하나로 운영합니다. 이 문서가 living agenda

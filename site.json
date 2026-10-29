@@ -12,15 +12,21 @@
       "enabled": true
     },
     {
-      "id": "ran3",
-      "label": "RAN3",
+      "id": "ran-plenary",
+      "label": "RAN Plenary",
+      "enabled": true
+    },
+    {
+      "id": "ran4",
+      "label": "RAN4",
       "enabled": true,
       "experimental": true
     },
     {
-      "id": "ran-plenary",
-      "label": "RAN Plenary",
-      "enabled": true
+      "id": "ran3",
+      "label": "RAN3",
+      "enabled": true,
+      "experimental": true
     },
     {
       "id": "sa2",
