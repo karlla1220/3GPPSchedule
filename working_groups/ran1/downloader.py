@@ -179,6 +179,17 @@ def _extract_version_parts_from_name(filename: str) -> tuple[int, ...]:
     return (int(m.group(1)), *suffix_parts)
 
 
+# "Chair notes" and "Chairman notes", and "Chair's Notes" as the chair wrote it
+# up to #115 (``Chair's notes RAN1#115 eom3.zip``).  A space or an underscore
+# may stand between the words.
+_CHAIR_NOTES_RE = re.compile(r"chair(?:man)?(?:['\u2019]?s)?[ _]notes?", re.IGNORECASE)
+
+
+def _is_chair_notes_name(filename: str) -> bool:
+    """True when the filename names a Chair notes document."""
+    return _CHAIR_NOTES_RE.search(filename) is not None
+
+
 # "Draft" as a whole word marks a document the chair has not released yet
 # (``Draft Chair notes RAN1#126bis_v01.docx``).
 _DRAFT_RE = re.compile(r"(?<![A-Za-z0-9])draft(?![A-Za-z0-9])", re.IGNORECASE)
@@ -189,17 +200,64 @@ def _is_draft_name(filename: str) -> bool:
     return _DRAFT_RE.search(filename) is not None
 
 
-def _release_key(filename: str) -> tuple[int, tuple[int, ...]]:
-    """Order documents of one meeting: released before draft, then version.
+# Closing notes follow the last numbered version with a series of their own.
+# "EOM" (end of meeting), seen in TSGR1_111 … TSGR1_126 Chair_notes: ``_eom``
+# or ``eom0`` first, then ``eom1``, ``eom2`` … (numbers may skip), and
+# ``eom_01`` in #124.  "Final" was used before EOM (``… final.zip`` after
+# ``… v012.zip`` in #104bis-e and #105-e) and may come back.  Each marker is a
+# whole word, its number is glued to it.
+_EOM_RE = re.compile(r"(?<![A-Za-z0-9])eom(?:_?(\d+))?(?![A-Za-z0-9])", re.IGNORECASE)
+_FINAL_RE = re.compile(r"(?<![A-Za-z0-9])final(?:_?(\d+))?(?![A-Za-z0-9])", re.IGNORECASE)
+
+
+def _marker_number(pattern: re.Pattern, filename: str) -> int | None:
+    m = pattern.search(filename)
+    if m is None:
+        return None
+    return int(m.group(1)) if m.group(1) else 0
+
+
+def _eom_number(filename: str) -> int | None:
+    """The EOM revision in the filename (plain ``eom`` is 0), None when not EOM."""
+    return _marker_number(_EOM_RE, filename)
+
+
+def _final_number(filename: str) -> int | None:
+    """The Final revision in the filename (plain ``final`` is 0), None when not Final."""
+    return _marker_number(_FINAL_RE, filename)
+
+
+def _closing_stage(filename: str) -> tuple[int, int]:
+    """Where a file stands after the numbered versions: (stage, number).
+
+    Numbered versions are stage 0, Final 1, EOM 2; the number orders the
+    revisions of one stage.
+    """
+    eom = _eom_number(filename)
+    if eom is not None:
+        return (2, eom)
+    final = _final_number(filename)
+    if final is not None:
+        return (1, final)
+    return (0, 0)
+
+
+def _release_key(filename: str) -> tuple[int, tuple[int, int], tuple[int, ...]]:
+    """Order documents of one meeting: released before draft, closing stage, then version.
 
     The chair restarts the version number when the "Draft" prefix is dropped
     (``Draft … v03`` is followed by ``… v00``), so a version is only
-    comparable within one class.  Every selection of a schedule or Chair
-    notes file — remote, local and the check job — ranks by this key after
-    the meeting, so they all agree on which file is the latest.
+    comparable within one class.  The closing notes come after the last
+    numbered version (``… v15`` → ``… final`` → ``… _eom`` → ``… _eom1``) and
+    count on their own, so they outrank every version of their class: vNN,
+    then Final, then EOM, each ordered by its own number.  Every selection of
+    a schedule or Chair notes file — remote, local and the check job — ranks
+    by this key after the meeting, so they all agree on which file is the
+    latest.
     """
     return (
         0 if _is_draft_name(filename) else 1,
+        _closing_stage(filename),
         _extract_version_parts_from_name(filename),
     )
 
@@ -232,9 +290,11 @@ _SUFFIX_END = r"(?![A-Za-z0-9])"
 
 # Pattern to extract meeting identifiers like RAN1#124, RAN1#124bis,
 # RAN1#124-bis, RAN1#124 bis, RAN1#124b, etc.  The suffix part is optional
-# and may be separated by a hyphen or space.
+# and may be separated by a hyphen or space.  The chair sometimes writes an
+# underscore for the ``#`` (``Chair's notes RAN1_111 v03.zip`` after
+# ``… RAN1#111 v02.zip``), which is the same meeting.
 _MEETING_ID_PATTERN = re.compile(
-    rf"(RAN\d+#\d+)(?:[- ]?({_MEETING_SUFFIXES}){_SUFFIX_END})?",
+    rf"(RAN\d+)[#_](\d+)(?:[- ]?({_MEETING_SUFFIXES}){_SUFFIX_END})?",
     re.IGNORECASE,
 )
 
@@ -262,6 +322,7 @@ def _extract_meeting_id(filename: str) -> str | None:
         'RAN1#124-bis schedule - v01.docx'                  → 'ran1#124bis'
         'RAN1#124 bis schedule - v01.docx'                  → 'ran1#124bis'
         'Draft RAN1#126b online and offline schedules.docx' → 'ran1#126bis'
+        "Chair's notes RAN1_111 eom3.zip"                   → 'ran1#111'
         'TSGR1_126 online and offline schedules - v02.docx' → 'ran1#126'
         'TSGR1_124b schedule - v01.docx'                    → 'ran1#124bis'
         'custom schedule name.docx'                         → None
@@ -273,7 +334,7 @@ def _extract_meeting_id(filename: str) -> str | None:
 
     Two naming conventions are recognised:
 
-    - Legacy ``RAN<N>#<num>`` (regex ``_MEETING_ID_PATTERN``)
+    - Legacy ``RAN<N>#<num>`` or ``RAN<N>_<num>`` (regex ``_MEETING_ID_PATTERN``)
     - Newer ``TSGR<N>_<num>`` (regex ``_TSGR_ID_PATTERN``), used by the
       ``tsg_ran/WG*/TSGR*_*`` FTP folders for recent meetings.  Both
       normalise to the same output so that files from the same meeting
@@ -281,8 +342,8 @@ def _extract_meeting_id(filename: str) -> str | None:
     """
     m = _MEETING_ID_PATTERN.search(filename)
     if m:
-        base = m.group(1).lower()
-        suffix = (m.group(2) or "").lower()
+        base = f"{m.group(1).lower()}#{m.group(2)}"
+        suffix = (m.group(3) or "").lower()
         if suffix == "b":
             suffix = "bis"
         return f"{base}{suffix}"
@@ -477,7 +538,9 @@ def _pick_latest_in_meeting_group(
                  back to the preferred group when present, else to the group
                  whose most-recent ``uploaded_at`` is newest.
     3. Within the chosen group a released file beats any "Draft" file;
-       within the same class pick the highest version number, using
+       within the same class the closing notes beat every numbered version
+       (Final, then EOM, each by its own number), then pick the highest
+       version number, using
        ``uploaded_at`` as a tiebreaker (see ``_release_key``).
 
     All files must have a non-None ``uploaded_at``.
@@ -551,9 +614,11 @@ def _pick_latest_in_meeting_group(
     current_group = groups[current_mid]
 
     latest = max(current_group, key=_remote_doc_preference)
+    stage, number = _closing_stage(latest["name"])
     print(
         f"Latest {label} (meeting={current_mid}, "
-        f"{'draft' if _is_draft_name(latest['name']) else 'released'}, "
+        f"{'draft' if _is_draft_name(latest['name']) else 'released'}"
+        f"{('', f', Final {number}', f', EOM {number}')[stage]}, "
         f"version={_extract_version_from_name(latest['name'])}, "
         f"uploaded={latest['uploaded_at']}): {latest['name']}"
     )
@@ -935,7 +1000,7 @@ def find_latest_chair_notes(
 ) -> dict | None:
     """Find the latest Chair notes file using meeting-aware grouping.
 
-    Looks for files containing 'chair note' (case-insensitive) in the name.
+    Looks for files named as Chair notes (``_is_chair_notes_name``).
     Supports .docx, .docm, and .zip files.
 
     Uses the same meeting-aware grouping strategy as find_latest_schedule():
@@ -946,12 +1011,7 @@ def find_latest_chair_notes(
         f for f in files
         if (
             f["name"].lower().endswith(CHAIR_NOTES_EXTENSIONS)
-            and (
-                "chair note" in f["name"].lower()
-                or "chair_note" in f["name"].lower()
-                or "chairman note" in f["name"].lower()
-                or "chairman_note" in f["name"].lower()
-            )
+            and _is_chair_notes_name(f["name"])
         )
     ]
 

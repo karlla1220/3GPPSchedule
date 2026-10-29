@@ -9,25 +9,29 @@
           "name": "Main",
           "table_index": 0,
           "room_index_in_table": 0,
-          "id": "main"
+          "id": "main",
+          "kind": ""
         },
         {
           "name": "Breakout 1",
           "table_index": 0,
           "room_index_in_table": 0,
-          "id": "brk1"
+          "id": "brk1",
+          "kind": ""
         },
         {
           "name": "Breakout 2",
           "table_index": 0,
           "room_index_in_table": 0,
-          "id": "brk2"
+          "id": "brk2",
+          "kind": ""
         },
         {
           "name": "Breakout 3",
           "table_index": 0,
           "room_index_in_table": 0,
-          "id": "brk3"
+          "id": "brk3",
+          "kind": ""
         }
       ],
       "sessions": [
@@ -987,19 +991,22 @@
           "name": "Main",
           "table_index": 0,
           "room_index_in_table": 0,
-          "id": "main"
+          "id": "main",
+          "kind": ""
         },
         {
           "name": "Breakout 1",
           "table_index": 0,
           "room_index_in_table": 0,
-          "id": "brk1"
+          "id": "brk1",
+          "kind": ""
         },
         {
           "name": "Breakout 2",
           "table_index": 0,
           "room_index_in_table": 0,
-          "id": "brk2"
+          "id": "brk2",
+          "kind": ""
         }
       ],
       "sessions": [
@@ -1055,7 +1062,7 @@
           "chair": "Nathan",
           "agenda_item": "5.2, 6.0.2.21, 7.2, 8.13.2, 8.14",
           "group_header": "NR Rel-17 and earlier",
-          "description": "NR Positioning Corrections\nExpanded and improved NR positioning\nAmbient IoT\nNR Others\nTEI20",
+          "description": "NR Positioning Corrections\nExpanded and improved NR positioning\nAmbient IoT\nOther WGs\nTEI20",
           "agenda_descriptions": [
             {
               "agenda_item": "5.2",
@@ -1112,8 +1119,8 @@
             },
             {
               "agenda_item": "8.13.2",
-              "matched_agenda_item": "8.13",
-              "description": "NR Others",
+              "matched_agenda_item": "8.13.2",
+              "description": "Other WGs",
               "hierarchy": [
                 {
                   "agenda_item": "8",
@@ -1122,6 +1129,10 @@
                 {
                   "agenda_item": "8.13",
                   "description": "NR Others"
+                },
+                {
+                  "agenda_item": "8.13.2",
+                  "description": "Other WGs"
                 }
               ]
             },
@@ -1201,7 +1212,7 @@
           "email_details": []
         },
         {
-          "name": "Offline [103] for RRC details",
+          "name": "Offline for RRC details",
           "duration_minutes": 60,
           "start_time": "11:00",
           "end_time": "12:00",
@@ -1702,25 +1713,29 @@
           "name": "Main",
           "table_index": 0,
           "room_index_in_table": 0,
-          "id": "main"
+          "id": "main",
+          "kind": ""
         },
         {
           "name": "Breakout 1",
           "table_index": 0,
           "room_index_in_table": 0,
-          "id": "brk1"
+          "id": "brk1",
+          "kind": ""
         },
         {
           "name": "Breakout 2",
           "table_index": 0,
           "room_index_in_table": 0,
-          "id": "brk2"
+          "id": "brk2",
+          "kind": ""
         },
         {
           "name": "Breakout 3",
           "table_index": 0,
           "room_index_in_table": 0,
-          "id": "brk3"
+          "id": "brk3",
+          "kind": ""
         }
       ],
       "sessions": [
@@ -2569,25 +2584,29 @@
           "name": "Main",
           "table_index": 0,
           "room_index_in_table": 0,
-          "id": "main"
+          "id": "main",
+          "kind": ""
         },
         {
           "name": "Breakout 1",
           "table_index": 0,
           "room_index_in_table": 0,
-          "id": "brk1"
+          "id": "brk1",
+          "kind": ""
         },
         {
           "name": "Breakout 2",
           "table_index": 0,
           "room_index_in_table": 0,
-          "id": "brk2"
+          "id": "brk2",
+          "kind": ""
         },
         {
           "name": "Breakout 3",
           "table_index": 0,
           "room_index_in_table": 0,
-          "id": "brk3"
+          "id": "brk3",
+          "kind": ""
         }
       ],
       "sessions": [
@@ -3214,17 +3233,17 @@
           "email_details": []
         },
         {
-          "name": "R18 NR NTN corrections / R18 IoT NTN corrections / NR19 NR NTN",
-          "duration_minutes": 90,
+          "name": "CB Sergio / R18 NR NTN corrections / R18 IoT NTN corrections / NR19 NR NTN",
+          "duration_minutes": 120,
           "start_time": "17:00",
-          "end_time": "18:30",
+          "end_time": "19:00",
           "day": "Thursday",
           "room_col_start": 2,
           "room_col_end": 3,
           "chair": "Sergio",
-          "agenda_item": "6.0.2.17, 6.0.2.18, 7.8, 8.7, 8.7.3",
+          "agenda_item": "6.0.2.17, 6.0.2.18, 7.8, 8.7, 8.7.3, 8.12",
           "group_header": "NR Rel-18",
-          "description": "NR NTN enhancements\nIoT NTN enhancements\nNTN for NR Ph3\nIoT NTN Ph4",
+          "description": "NR NTN enhancements\nIoT NTN enhancements\nNTN for NR Ph3\nIoT NTN Ph4\nNR NTN using DL compensation",
           "agenda_descriptions": [
             {
               "agenda_item": "6.0.2.17",
@@ -3301,6 +3320,21 @@
                   "description": "IoT NTN Ph4"
                 }
               ]
+            },
+            {
+              "agenda_item": "8.12",
+              "matched_agenda_item": "8.12",
+              "description": "NR NTN using DL compensation",
+              "hierarchy": [
+                {
+                  "agenda_item": "8",
+                  "description": "NR Rel-20"
+                },
+                {
+                  "agenda_item": "8.12",
+                  "description": "NR NTN using DL compensation"
+                }
+              ]
             }
           ],
           "room_ids": [
@@ -3316,7 +3350,10 @@
             "[7.8] NR19 NR NTN [0]",
             "- issue marked CB Thursday",
             "[8.7] R20 IoT NTN [1]",
-            "[8.7.3] report of [301]"
+            "[8.7.3] report of [301]",
+            "[8.12] R20 NR NTN DL compensation [0.5]",
+            "(not before 18:30)",
+            "- issues marked CB Thursday"
           ],
           "inferred_agenda_items": [],
           "email_details": []
@@ -3385,47 +3422,6 @@
           ],
           "inferred_agenda_items": [],
           "email_details": []
-        },
-        {
-          "name": "R20 NR NTN DL compensation",
-          "duration_minutes": 30,
-          "start_time": "18:30",
-          "end_time": "19:00",
-          "day": "Thursday",
-          "room_col_start": 2,
-          "room_col_end": 3,
-          "chair": null,
-          "agenda_item": "8.12",
-          "group_header": "NR Rel-20",
-          "description": "NR NTN using DL compensation",
-          "agenda_descriptions": [
-            {
-              "agenda_item": "8.12",
-              "matched_agenda_item": "8.12",
-              "description": "NR NTN using DL compensation",
-              "hierarchy": [
-                {
-                  "agenda_item": "8",
-                  "description": "NR Rel-20"
-                },
-                {
-                  "agenda_item": "8.12",
-                  "description": "NR NTN using DL compensation"
-                }
-              ]
-            }
-          ],
-          "room_ids": [
-            "brk1"
-          ],
-          "room_scope": "assigned",
-          "notes": [
-            "[8.12] R20 NR NTN DL compensation [0.5]",
-            "(not before 18:30)",
-            "- issues marked CB Thursday"
-          ],
-          "inferred_agenda_items": [],
-          "email_details": []
         }
       ],
       "date": "2026-10-15",
@@ -3461,24 +3457,27 @@
           "name": "Main",
           "table_index": 0,
           "room_index_in_table": 0,
-          "id": "main"
+          "id": "main",
+          "kind": ""
         },
         {
           "name": "Breakout 1",
           "table_index": 0,
           "room_index_in_table": 0,
-          "id": "brk1"
+          "id": "brk1",
+          "kind": ""
         },
         {
           "name": "Breakout 2",
           "table_index": 0,
           "room_index_in_table": 0,
-          "id": "brk2"
+          "id": "brk2",
+          "kind": ""
         }
       ],
       "sessions": [
         {
-          "name": "R20 AI Mob comebacks/continue",
+          "name": "CB Kyeongin / R20 AI Mob comebacks/continue",
           "duration_minutes": 60,
           "start_time": "08:30",
           "end_time": "09:30",
@@ -3519,7 +3518,7 @@
           "email_details": []
         },
         {
-          "name": "CB for NR20 AI/M PHY",
+          "name": "CB Erlin / CB for NR20 AI/M PHY",
           "duration_minutes": 60,
           "start_time": "09:30",
           "end_time": "10:30",
@@ -3538,7 +3537,8 @@
           "notes": [
             "CB Erlin",
             "@9:30-10:30",
-            "CB for NR20 AI/M PHY, if needed, details TBD"
+            "CB for NR20 AI/M PHY,",
+            "a) NW side data collection, b) report of offline#204, c) other CB points in order"
           ],
           "inferred_agenda_items": [],
           "email_details": []
@@ -3655,14 +3655,14 @@
           "room_col_start": 2,
           "room_col_end": 3,
           "chair": null,
-          "agenda_item": "9.3.1, 9.2.1",
+          "agenda_item": "9.3.2, 9.2.1",
           "group_header": "6GR Rel-20",
-          "description": "User plane\nUE capability framework",
+          "description": "Control plane\nUE capability framework",
           "agenda_descriptions": [
             {
-              "agenda_item": "9.3.1",
-              "matched_agenda_item": "9.3.1",
-              "description": "User plane",
+              "agenda_item": "9.3.2",
+              "matched_agenda_item": "9.3.2",
+              "description": "Control plane",
               "hierarchy": [
                 {
                   "agenda_item": "9",
@@ -3673,8 +3673,8 @@
                   "description": "Radio protocol architecture"
                 },
                 {
-                  "agenda_item": "9.3.1",
-                  "description": "User plane"
+                  "agenda_item": "9.3.2",
+                  "description": "Control plane"
                 }
               ]
             },
@@ -3703,7 +3703,7 @@
           ],
           "room_scope": "assigned",
           "notes": [
-            "[9.3.1] 6GR Control Plane",
+            "[9.3.2] 6GR Control Plane",
             "CB for [9.2.1] UE capability [006] offline and compression",
             "Reports from breakout sessions",
             "EoM"
@@ -3729,16 +3729,16 @@
       }
     }
   ],
-  "source_file": "R2_135b_Schedule_v09.docx",
-  "generated_at": "2026-10-15 10:02",
+  "source_file": "R2_135b_Schedule_v10.docx",
+  "generated_at": "2026-10-23 16:26",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
-    "R2_135b_Schedule_v09.docx",
+    "R2_135b_Schedule_v10.docx",
     "agenda.csv"
   ],
   "source_labels": {
-    "R2_135b_Schedule_v09.docx": "Schedule",
+    "R2_135b_Schedule_v10.docx": "Schedule",
     "agenda.csv": "Agenda"
   },
   "timezone": "Asia/Seoul",

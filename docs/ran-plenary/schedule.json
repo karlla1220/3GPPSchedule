@@ -9,13 +9,15 @@
           "name": "Main: Madrid 3/4/5/6",
           "table_index": 0,
           "room_index_in_table": 0,
-          "id": "madrid-3-4-5-6"
+          "id": "madrid-3-4-5-6",
+          "kind": ""
         },
         {
           "name": "Breakout: Madrid 1-2",
           "table_index": 0,
           "room_index_in_table": 0,
-          "id": "madrid-1-2"
+          "id": "madrid-1-2",
+          "kind": ""
         }
       ],
       "sessions": [
@@ -28,33 +30,10 @@
           "room_col_start": 2,
           "room_col_end": 3,
           "chair": null,
-          "agenda_item": "7, 5",
+          "agenda_item": null,
           "group_header": "Early items",
-          "description": "Liaison activities of TSG RAN\nRAN WG reports/coordination",
-          "agenda_descriptions": [
-            {
-              "agenda_item": "7",
-              "matched_agenda_item": "7",
-              "description": "Liaison activities of TSG RAN",
-              "hierarchy": [
-                {
-                  "agenda_item": "7",
-                  "description": "Liaison activities of TSG RAN"
-                }
-              ]
-            },
-            {
-              "agenda_item": "5",
-              "matched_agenda_item": "5",
-              "description": "RAN WG reports/coordination",
-              "hierarchy": [
-                {
-                  "agenda_item": "5",
-                  "description": "RAN WG reports/coordination"
-                }
-              ]
-            }
-          ],
+          "description": null,
+          "agenda_descriptions": [],
           "room_ids": [
             "madrid-3-4-5-6"
           ],
@@ -352,19 +331,22 @@
           "name": "Main: Madrid 3/4/5/6",
           "table_index": 0,
           "room_index_in_table": 0,
-          "id": "madrid-3-4-5-6"
+          "id": "madrid-3-4-5-6",
+          "kind": ""
         },
         {
           "name": "Breakout: Madrid 1-2 (08:00–12:30)",
           "table_index": 0,
           "room_index_in_table": 0,
-          "id": "madrid-1-2"
+          "id": "madrid-1-2",
+          "kind": ""
         },
         {
           "name": "Breakout: Neptuno + PTA Alcala (12:30–19:00)",
           "table_index": 0,
           "room_index_in_table": 0,
-          "id": "neptuno-pta-alcala"
+          "id": "neptuno-pta-alcala",
+          "kind": ""
         }
       ],
       "sessions": [
@@ -415,7 +397,7 @@
           "room_col_end": 3,
           "chair": null,
           "agenda_item": null,
-          "group_header": "ITU Adhoc",
+          "group_header": "Early items",
           "description": null,
           "agenda_descriptions": [],
           "room_ids": [
@@ -681,7 +663,7 @@
           "room_col_end": 3,
           "chair": null,
           "agenda_item": null,
-          "group_header": "Early items / Comebacks",
+          "group_header": "Early items",
           "description": null,
           "agenda_descriptions": [],
           "room_ids": [
@@ -813,13 +795,15 @@
           "name": "Main: Madrid 3/4/5/6",
           "table_index": 0,
           "room_index_in_table": 0,
-          "id": "madrid-3-4-5-6"
+          "id": "madrid-3-4-5-6",
+          "kind": ""
         },
         {
           "name": "Breakout: Neptuno + PTA Alcala",
           "table_index": 0,
           "room_index_in_table": 0,
-          "id": "neptuno-pta-alcala"
+          "id": "neptuno-pta-alcala",
+          "kind": ""
         }
       ],
       "sessions": [
@@ -918,34 +902,10 @@
           "room_col_start": 2,
           "room_col_end": 3,
           "chair": null,
-          "agenda_item": "8.2.1.3",
-          "group_header": "6G / Comebacks",
-          "description": "Any other 6G study topics",
-          "agenda_descriptions": [
-            {
-              "agenda_item": "8.2.1.3",
-              "matched_agenda_item": "8.2.1.3",
-              "description": "Any other 6G study topics",
-              "hierarchy": [
-                {
-                  "agenda_item": "8",
-                  "description": "6G"
-                },
-                {
-                  "agenda_item": "8.2",
-                  "description": "Open REL-20 6G SIs"
-                },
-                {
-                  "agenda_item": "8.2.1",
-                  "description": "Study on 6G Radio [RAN1 led SI: FS_6G_Radio]"
-                },
-                {
-                  "agenda_item": "8.2.1.3",
-                  "description": "Any other 6G study topics"
-                }
-              ]
-            }
-          ],
+          "agenda_item": null,
+          "group_header": "6G",
+          "description": null,
+          "agenda_descriptions": [],
           "room_ids": [
             "madrid-3-4-5-6"
           ],
@@ -1302,13 +1262,15 @@
           "name": "Main: Madrid 3/4/5/6",
           "table_index": 0,
           "room_index_in_table": 0,
-          "id": "madrid-3-4-5-6"
+          "id": "madrid-3-4-5-6",
+          "kind": ""
         },
         {
           "name": "Breakout: Neptuno + PTA Alcala",
           "table_index": 0,
           "room_index_in_table": 0,
-          "id": "neptuno-pta-alcala"
+          "id": "neptuno-pta-alcala",
+          "kind": ""
         }
       ],
       "sessions": [
@@ -1658,7 +1620,7 @@
     }
   ],
   "source_file": "RAN#113 time plan v09.zip",
-  "generated_at": "2026-10-11 08:54",
+  "generated_at": "2026-10-16 01:31",
   "contact_name": "",
   "contact_email": "",
   "source_files": [

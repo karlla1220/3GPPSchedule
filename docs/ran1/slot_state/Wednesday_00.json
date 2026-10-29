@@ -354,7 +354,7 @@
     },
     {
       "room_name": "RAN1_off1",
-      "name": "10.2.1 Waveform",
+      "name": "6G waveform",
       "duration_minutes": 30,
       "specified_start_time": "09:00",
       "chair": "Hiroki",
@@ -500,7 +500,7 @@
       ]
     }
   ],
-  "merged_at": "2026-10-15T01:01:21.902293+00:00",
+  "merged_at": "2026-10-28T06:01:17.582816+00:00",
   "meeting_id": "ran1#126bis",
   "schema_version": 2
 }

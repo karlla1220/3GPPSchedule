@@ -10,10 +10,17 @@ and what it adds. The code then checks the answer against the grid:
 
 - ``session``: an online or offline names a session of the grid. Both are
   held in a room, so they are always a cell; its detail goes to that cell.
-- ``tentative``: an online or offline at a time the grid has no session of
-  the item for. The FL arranged it with the chair before the schedule caught
-  up, in the room the item's sessions are held in, so it goes to the cell of
+  An online is in an online room (the main and breakout rooms, ``rooms``),
+  an offline in an offline room.
+- ``tentative``: an online at a time the grid has no session of the item
+  for. The FL arranged it with the chair before the schedule caught up, in
+  the online room the item's sessions are held in, so it goes to the cell of
   that room at that time as "maybe <item>" ("maybe 10.3.1" on the 8.1 cell).
+
+The session is found again on every build from what the mail says (agenda
+item, online or offline, day, part of day, time), not from the id the LLM
+picked: the schedule changes after a mail, and FLs write from the chair's
+forecast before it does (``resolve``).
 - ``informal``: off-offline or an FL waiting somewhere, outside the grid:
   outside, in front of or near a room, or no room at all.
 
@@ -33,6 +40,7 @@ from zoneinfo import ZoneInfo
 EXTRACT_MODEL = "gemini-3.8-flash"
 EXTRACT_THINKING = "low"
 DAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+PARTS = ["morning", "afternoon", "evening"]
 
 
 @dataclass(frozen=True)
@@ -47,6 +55,8 @@ class Cell:
     name: str
     agenda_item: str | None = None
     inferred_agenda_items: tuple[str, ...] = field(default_factory=tuple)
+    online: bool | None = None  # in an online room; None when the grid does not tell
+    part: str | None = None  # morning, afternoon or evening of its day (``part_of``)
 
     def items(self) -> list[str]:
         stated = re.split(r"[,/]\s*", self.agenda_item or "") + list(self.inferred_agenda_items)
@@ -69,6 +79,32 @@ def _minutes(hhmm: str) -> int:
 
 def _hhmm(minutes: int) -> str:
     return f"{minutes // 60:02d}:{minutes % 60:02d}"
+
+
+def day_parts(breaks: list[dict]) -> tuple[int, int, int | None] | None:
+    """Where a day's morning ends and its afternoon and evening start, read from its breaks.
+
+    Morning is before the lunch break, afternoon after it, evening after the
+    last break that follows lunch (#126bis: 08:30-13:00, from 14:30, from
+    17:00). No time of day is assumed: a day without a lunch break has no parts.
+    """
+    lunch = next((b for b in breaks if "lunch" in str(b.get("name", "")).lower()), None)
+    if lunch is None:
+        return None
+    after = [b for b in breaks if _minutes(b["start"]) >= _minutes(lunch["end"])]
+    return _minutes(lunch["start"]), _minutes(lunch["end"]), (_minutes(after[-1]["end"]) if after else None)
+
+
+def part_of(start: str, parts: tuple[int, int, int | None] | None) -> str | None:
+    """The part of the day a session starting at ``start`` is in, or None (unknown, or over lunch)."""
+    if parts is None:
+        return None
+    minute, (lunch_start, lunch_end, evening) = _minutes(start), parts
+    if minute < lunch_start:
+        return "morning"
+    if evening is not None and minute >= evening:
+        return "evening"
+    return "afternoon" if minute >= lunch_end else None
 
 
 def cell_start(cell: Cell, first_day: date, tz: ZoneInfo) -> datetime:
@@ -100,6 +136,7 @@ Kinds
 
 Sessions
 - The user message lists the schedule's sessions of the thread's agenda items that start after the mail was sent. For a "session" item, give the id of the one it names, judged by day, time, online/offline and order ("next", "upcoming", "this afternoon"). Use exactly an id from the list.
+- Each listed session says whether its room is an online room (the main room and the breakout rooms, where the chair or a vice-chair holds online sessions) or an offline room. An online is held in an online room, an offline in an offline room.
 - When the mail states a time and no listed session of that day fits it, or names no session the list has, give session_id null and the day and time as stated. Do not move the item to another session.
 - The user message may list earlier announcements on the same thread. A mail that refers to one of them ("the FL proposal for online" after "online session from 12:00") is about that one: give its session_id, or session_id null with its day and time when it had no session.
 - Days: read "today", "tomorrow", "this morning" from the sending time given in meeting time. A mail sent after midnight but before the morning often still calls the coming day "tomorrow"; a weekday or a deadline in the mail decides.
@@ -108,6 +145,7 @@ Fields
 - quote: the words of the mail the item comes from, verbatim, at most 200 characters.
 - mode: "online", "offline" or "off-offline" as the mail says it, else null.
 - day: the full weekday name in meeting time, else null. start, end: "HH:MM" in meeting time as stated, else null.
+- part_of_day: "morning", "afternoon" or "evening" when the mail names it ("Friday morning online", "this afternoon", "evening session"), else null. Not worked out from a time.
 - place: where an informal meeting is held, as written, else null.
 - topics: what will be treated, short, from the mail: issues, proposal numbers, parts, sections ("Part 1 (PUSCH MIMO)", "Proposal 3.1.1-4", "Section 7.1"). Empty when the mail does not say.
 - split: when the mail divides the session by time or by agenda item, one entry per part in the mail's order: start/end "HH:MM" only if the mail states them, minutes if it states a length, agenda_item if the part is an agenda item number, topic otherwise. Never work out a time the mail does not state. Empty when not divided.
@@ -128,6 +166,7 @@ EXTRACT_SCHEMA = {
                     "mode": {"type": "string", "enum": ["online", "offline", "off-offline"], "nullable": True},
                     "session_id": _NULLABLE_STRING,
                     "day": {"type": "string", "enum": DAYS[:5], "nullable": True},
+                    "part_of_day": {"type": "string", "enum": PARTS, "nullable": True},
                     "start": _NULLABLE_STRING,
                     "end": _NULLABLE_STRING,
                     "place": _NULLABLE_STRING,
@@ -178,8 +217,10 @@ def request_text(title: str, sent: datetime, agenda_items: list[str], agenda: di
                  cells: list[Cell], reply: str, earlier: list[dict] = ()) -> str:
     """The user message for one mail. ``earlier``: resolved items of earlier mails on the thread."""
     items = "\n".join(f"{ai}\t{agenda.get(ai, '')}" for ai in agenda_items) or "(unknown)"
+    kind = {True: " (online room)", False: " (offline room)", None: ""}
     sessions = "\n".join(
-        f'{cell.id}\t{cell.day} {cell.start}-{cell.end}\troom: {cell.room}\tcell: "{cell.name}"' for cell in cells
+        f'{cell.id}\t{cell.day} {cell.start}-{cell.end}\troom: {cell.room}{kind[cell.online]}\tcell: "{cell.name}"'
+        for cell in cells
     ) or "(none)"
     before = ""
     if earlier:
@@ -260,8 +301,9 @@ def _overlaps(cell: Cell, start: int | None, end: int | None) -> bool:
 
 
 def _home_room(cells: list[Cell], ai: str) -> str | None:
-    """The room most sessions stated for ``ai`` are held in."""
-    rooms = Counter(cell.room for cell in cells if cell.agenda_item and covers(cell, ai))
+    """The online room most sessions stated for ``ai`` are held in."""
+    rooms = Counter(cell.room for cell in cells
+                    if cell.agenda_item and covers(cell, ai) and cell.online is not False)
     return rooms.most_common(1)[0][0] if rooms else None
 
 
@@ -298,13 +340,68 @@ def _input_due(due) -> dict | None:
     return {"minutes_before": before} if isinstance(before, int) and before > 0 else None
 
 
+_MODE_ONLINE = {"online": True, "offline": False}
+_CELL_ID = re.compile(r"(\w{3}) (\d\d:\d\d)-(\d\d:\d\d) (.+)")
+
+
+def _part_fits(stated: str | None, part: str | None) -> bool:
+    # "this afternoon" also covers the evening block (17:00 is still afternoon to most).
+    return stated is None or part == stated or (stated == "afternoon" and part == "evening")
+
+
+def _bind(item: dict, *, day: str | None, start: int | None, end: int | None, offered: list[Cell],
+          asked: set[str], day_parts: dict) -> Cell | None:
+    """The session of the grid as it is now that the item names, or None.
+
+    A session fits what the mail says: online or offline room, day, part of
+    day, time. The id the LLM picked counts while it fits. When it no longer
+    does (the schedule changed) or the mail was read before the schedule had
+    the session (the chair's forecast), the one session that fits is taken;
+    of several, the one on the day and part of day of the picked id if the
+    grid changed under it. Without an id, a day or a time, nothing is taken.
+    """
+    part = item.get("part_of_day") if item.get("part_of_day") in PARTS else None
+    online = _MODE_ONLINE.get(item.get("mode"))
+
+    def fits(cell: Cell) -> bool:
+        return ((day is None or cell.day == day) and _part_fits(part, cell.part) and _overlaps(cell, start, end)
+                and (online is None or cell.online is None or cell.online == online))
+
+    picked = item.get("session_id") if item.get("session_id") in asked else None
+    hint = next((cell for cell in offered if cell.id == picked), None)
+    if hint is not None and fits(hint):
+        return hint
+    if picked is None and day is None and start is None:
+        return None
+    found = [cell for cell in offered if fits(cell)]
+    if len(found) == 1:
+        return found[0]
+    # The day and part of day of the picked id break a tie only when the grid
+    # changed under it. A pick that is still there but does not fit (an
+    # online room for an "offline") contradicts the mail, and its time says
+    # nothing about which session the mail meant.
+    when = _CELL_ID.fullmatch(picked or "") if hint is None else None
+    if when:
+        on = next((d for d in DAYS if d.startswith(when[1])), None)
+        then = part_of(when[2], day_parts.get(on))
+        found = [cell for cell in found if cell.day == on and (then is None or cell.part == then)]
+        if len(found) == 1:
+            return found[0]
+    return None
+
+
 def resolve(answer: dict, *, offered: list[Cell], cells: list[Cell], agenda_items: list[str],
-            sent: datetime, tdocs: list[str] = (), allowed_times: set[int] | None = None) -> list[dict]:
+            sent: datetime, tdocs: list[str] = (), allowed_times: set[int] | None = None,
+            asked: list[str] | None = None, day_parts: dict | None = None) -> list[dict]:
     """The LLM's items checked against the grid: session, tentative or informal.
 
-    A session id must be one the mail was offered, on the stated day, and
-    hold the stated time. Otherwise a session with a stated time is placed in
-    the item's home room at that time (tentative), and one that cannot be
+    ``offered`` are the item's sessions after the mail in the grid as it is
+    now, ``asked`` the ids the LLM was shown (``offered`` when it was asked
+    just now), ``day_parts`` the parts of each day (``day_parts``).
+
+    A session item goes to the session that fits what the mail says
+    (``_bind``). Otherwise an online with a stated time is placed in the
+    item's online room at that time (tentative), and one that cannot be
     placed is dropped rather than shown on a guess. Times are only those the
     mail states: lengths and "1 hr before" are kept as written, and with
     ``allowed_times`` (the times of the mail and the earlier announcements
@@ -315,7 +412,8 @@ def resolve(answer: dict, *, offered: list[Cell], cells: list[Cell], agenda_item
     chair, offline is what FLs also call their off-offlines ("start the
     offline at 3:30pm", then "same place as yesterday").
     """
-    by_id = {cell.id: cell for cell in offered}
+    asked = set(asked if asked is not None else (cell.id for cell in offered))
+    day_parts = day_parts or {}
     out = []
     for item in answer.get("items") or []:
         if not isinstance(item, dict):
@@ -342,8 +440,8 @@ def resolve(answer: dict, *, offered: list[Cell], cells: list[Cell], agenda_item
         if item.get("kind") == "informal":
             out.append({"kind": "informal", **base, **({"place": item["place"]} if item.get("place") else {})})
             continue
-        cell = by_id.get(item.get("session_id") or "")
-        if cell is not None and (day is None or cell.day == day) and _overlaps(cell, start, end):
+        cell = _bind(item, day=day, start=start, end=end, offered=offered, asked=asked, day_parts=day_parts)
+        if cell is not None:
             due = _input_due(item.get("input_due"))
             out.append({"kind": "session", "session": cell.id, **base, **({"input_due": due} if due else {}),
                         "split": _split(item.get("split"), allowed_times)})

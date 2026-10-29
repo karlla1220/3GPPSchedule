@@ -273,6 +273,7 @@ HTML은 `shared/page.py`, 표시 판단은 `templates/support-note.js`, 값은 `
   - 버전은 `page.py`가 파일 이름에서 읽는다(마지막 `v숫자`). 이름이 없는 파일(예전 스냅샷, 데모)은 파일 이름 그대로 보인다.
   - Draft 파일은 버전 앞에 `draft`를 적는다(`Main draft v03`). 의장이 `Draft`를 떼면서 `v00`부터 다시 매기므로,
     숫자만 보면 `v03` 다음에 `v00`이 나와 뒤로 간 것처럼 보인다. Agreement 패널의 변경 줄(`· Chair notes draft v01`)도 같다.
+  - Final·EOM 파일은 그 낱말과 번호를 적는다(`Chair notes Final`, `Chair notes EOM`, `Chair notes EOM2`). 버전 번호가 없다.
 - **제작자 줄은 맨 아래 두 줄이다.** `Created by 이름 (메일), 소개` 아래에 `면책 문구 · Feedback`.
   - 메일 주소는 그대로 적는다. `Feedback`(GitHub Issues)만 두면 계정이 없는 참석자는 연락할 방법이 없다.
   헤더 meta 링크는 meta 회색을 그대로 쓰고 밑줄로만 구별한다.
@@ -335,8 +336,19 @@ HTML은 `shared/page.py`, 표시 판단은 `templates/support-note.js`, 값은 `
 셀을 누르면 그리드 아래 패널에 그 셀 AI의 chair notes 본문이 나온다. HTML은 `shared/docx_html.py`, 패널은 `templates/agreements-panel.js`, 스타일은 `templates/schedule.css`의 agreement 구획이다.
 
 - **페이지와 같은 문법을 쓴다.** 패널은 그리드와 같은 표면(흰 바탕, 헤어라인 그림자, `--radius-lg`)이고, AI 탭은 요일 탭의 세그먼트 컨트롤을 선택자만 더해 함께 쓴다. 따로 버튼 스타일을 만들지 않는다.
-- **본문 서체는 페이지를 따른다.** Word의 본문 글꼴은 버리고 기호·수식·고정폭 글꼴만 남긴다(`_KEPT_FONTS`). 글자 크기는 Word 본문 11pt 기준 `em`이라 패널의 14px가 전체 배율을 정한다.
+- **본문 서체는 Times New Roman이다(`DOCUMENT_CSS`의 `.docx-document`).** 3GPP 문서의 서체라 참석자가 Word에서 보던 모습 그대로 읽힌다. 패널 머리줄, AI 제목, 변경 줄은 페이지 서체(Source Sans 3) 그대로다.
+  - Times New Roman이 없는 기기(Android, Linux)는 STIX Two Text(Google Fonts, SIL OFL)를 쓴다. Times 계열이라 모양이 가깝고 수식 서체와 짝이 맞는다.
+    Tinos(Times New Roman과 글자 폭이 같음)는 모양이 덜 닮아서 버렸다. STIX는 글자가 조금 커서 Word와 다른 자리에서 줄바꿈되지만, 표는 `fitTables`가 셀마다 줄 수를 다시 세므로 깨지지 않는다.
+  - 수식(MathML)은 STIX Two Math다. 기기마다 다른 기본 수식 서체 대신 본문과 짝인 서체로 맞춘다. 수식 그림(`metafile_images.py`)의 글자도 같은 서체를 쓴다.
+  - 둘 다 `schedule.html`의 `<link>`에 있고, 브라우저는 실제로 쓰는 글자가 있을 때만 내려받는다(Times New Roman이 있으면 STIX Two Text는 그 서체에 없는 기호가 나올 때만 받는다).
+  - Word 문단의 글꼴은 버리고 기호·수식·고정폭 글꼴만 남긴다(`_KEPT_FONTS`). 글자 크기는 Word 본문 11pt 기준 `em`이라 패널의 14px가 전체 배율을 정한다.
 - **Word 형광펜은 같은 색조로 옅게 바꾼다.** 원색 녹색·노랑은 페이지에서 가장 튀는 요소가 된다.
+- **Word 변경 추적(`<ins>`, `<del>`)은 글자색으로 가른다.** 넣은 글은 초록(`#17784a`)에 옅은 초록 밑줄, 지운 글은 빨강(`#b42318`)에 반투명 빨간 취소선이다. 둘 다 1px이다.
+  - 브라우저 기본(검은 밑줄·취소선)으로 두면 넣은 글이 `Agreement:` 머리말(굵은 밑줄)이나 Word 밑줄과 구별되지 않는다.
+  - 바탕색은 쓰지 않는다. Word 형광펜(녹색 `Agreement:` 등)과 겹친다. 밑줄·취소선은 남긴다. 빨강·초록을 가리지 못하는 사람도 선 모양으로 구별한다.
+  - 선은 글자보다 옅게 둔다. 취소선이 진하면 지운 글을 읽기 어렵고, 밑줄이 진하면 링크처럼 보인다.
+  - 글자색은 안쪽 run의 색(Word가 `color:#000000`을 적는다)을 덮는다(`!important`). 형광펜 바탕은 그대로다.
+  - 의장이 손으로 칠한 빨간 밑줄·취소선(CR 표기)은 원문 서식 그대로 둔다. 변경 추적이 아니다.
 - **선택된 셀은 자기 `--accent`로 테두리를 한 줄 더 두른다.** 그림자는 더하지 않는다(그림자는 hover 전용). 파란 외곽선은 키보드 포커스(`:focus-visible`)에만 쓴다.
 - **필터와 패널은 AI 값을 따로 쓴다.** 필터는 일정 표기 그대로인 `data-ai`, 패널은 하위 섹션까지 푼 `data-agreement-ai`다. 하나로 합치면 `10.6.x` 같은 필터 항목이 셀과 맞지 않는다.
   AI가 없는 셀은 추정한 항목(`inferred_agenda_items`)으로 패널을 연다.
@@ -389,6 +401,29 @@ HTML은 `shared/page.py`, 표시 판단은 `templates/support-note.js`, 값은 `
     목록 중간의 summary 행은 번호만 잡아 둔 것이라 함께 접는다. 제목 낱말로 행의 종류를 가리는 규칙은 이것 하나뿐이다.
   - 행 아래의 괄호 주석(`(Late contribution)`, `(Revision of R1-…)`)은 그 행을 따라 접힌다. 주석만 밖에 남지 않게 한다.
   - 표는 TDoc 목록 표만 통째로 뺀다. `Tdoc number | Issue`처럼 TDoc으로 항목을 가리키는 표는 행을 빼지 않는다. 일부 행만 빠진 표는 원문과 다른 말을 한다.
+- **복사하면 화면의 구조가 함께 간다(`agreements-panel.js`의 `copy` 핸들러).** 선택이 문서 안에만 있을 때만 가로챈다. 패널 머리줄처럼 문서 밖까지 걸치면 브라우저 기본 복사다.
+  - `text/plain`은 Markdown이다. 메신저나 에디터에 붙여도 목록 번호와 단계가 남는다. 번호는 Word 번호(`li`의 `value`) 그대로이고, 하위 목록은 상위 표지 폭만큼 들여 쓴다.
+  - `text/html`은 화면 서식을 인라인 스타일로 적은 HTML이다(Word, 메일). 문서 CSS는 Shadow DOM 안에 있어서 붙여넣은 곳에 따라가지 않는다.
+    `preventDefault()`를 하면 브라우저가 만든 HTML도 사라지므로 두 형식을 모두 직접 만든다. 글자 크기는 Word 본문 11pt 기준이다(run의 `em`이 Word 크기가 된다).
+  - 지운 글(`<del>`)과 의장이 손으로 그은 취소선은 `~~취소선~~`으로 남긴다. 빼면 반영본처럼 읽혀 원문과 다른 말이 된다. 넣은 글은 일반 글이다. 굵게·기울임·형광펜·밑줄은 Markdown에 넣지 않는다(HTML에는 남는다).
+    붙여넣은 글은 읽고 뜻을 지키려는 것이고, `**`·`*`는 일반 텍스트에서 읽기만 방해한다. 취소선은 뜻을 바꾸므로 남긴다.
+  - `~~`는 Word run마다 붙이지 않고 취소선이 시작하고 끝나는 자리에서만 연다. 표시는 앞뒤 공백 밖에 둔다.
+  - 한 문단 안의 선택은 그 글자만 간다. 목록 항목 안의 낱말이 `- 낱말`이 되면 안 된다.
+    여러 문단에 걸치면 선택을 둘러싼 목록·표를 표 칸까지 함께 복제한다(`selectedContent`). 그래서 첫 항목의 중간부터 골라도 번호와 깊이가 맞는다.
+  - 표는 GFM 표다. 병합 셀의 글은 첫 칸에 두고, 칸 안의 줄바꿈은 `<br>`이다. 한 열짜리 표(글 상자)는 인용(`>`)이다.
+  - 수식은 TeX다(`$…$`, 수식 블록은 `$$`, 표 칸 안에서는 `$…$`). `docx_math.py`가 `<math>`의 `alttext`에 TeX를 남기고, 패널의 DOMPurify가 그 속성을 허용한다(`ADD_ATTR`).
+    `alttext`가 없는 예전 조각은 수식의 글자만 간다. `$`로 감싸면 TeX가 아닌 글이 TeX처럼 보인다.
+  - 접힌 TDoc 목록은 화면에 없으므로 빠진다. 펼친 목록은 한 행이 한 줄이다. `▸ 48 TDocs` 줄은 컨트롤이라 넣지 않는다.
+  - 표 맞춤(`fitTables`)의 배율과 px 열 폭은 복사하지 않는다. Word 열 폭이 각 `<col>`의 `data-word`에 남아 있어 그것을 쓴다.
+  - Markdown 이스케이프는 읽기를 해치지 않는 만큼만 한다: `\`, `` ` ``, `*`, `~`, 태그처럼 보이는 `<`(`<unchanged text omitted>`가 태그로 사라진다), 문단 첫머리의 `#`·`>`.
+- **회의가 끝나면 체어맨 노트는 Final·EOM 파일로 이어진다(`downloader.py`의 `_release_key`, `_closing_stage`).** 마지막 `vNN` 뒤에 오고 버전 번호 없이 자기 번호를 센다.
+  - 순서는 정식본 > draft, 그다음 `vNN` < Final < EOM, 그다음 각자의 번호다. EOM끼리는 `eom`(= `eom0`) < `eom1` < `eom2` …이고 Final도 같다(`final` < `final1`). 업로드 시각은 같은 키일 때만 가른다.
+  - Final은 EOM 전에 쓰던 표기다(#104bis-e, #105-e: `v012` 다음 `final`). 지금은 쓰지 않지만 다시 쓸 수 있어서 받는다. 둘이 함께 나오면 EOM이 나중이다.
+  - 표기는 FTP(`TSGR1_111` ~ `TSGR1_126`의 `Inbox/Chair_notes`)에서 본 그대로 받는다: `_eom`, ` eom0`, `_eom1`, ` - eom3`, ` - eom_01`(#124). 번호는 건너뛰기도 하고(#118: `eom2` → `eom4`) `eom1`부터 시작하기도 한다(#116bis).
+  - 회의 중에 앞 버전이 지워져 `v00`과 EOM만 남기도 한다(#126: `v00.docm`, `eom`, `eom1`). 번호 없는 `eom`을 버전 없음(-1)으로 읽으면 `v00`이 이긴다.
+  - 선택, 로컬 캐시, check 잡의 downgrade 판정이 모두 이 키를 쓴다. 세션 노트도 같은 키다.
+- **체어맨 노트는 이름의 `Chair notes`·`Chairman notes`·`Chair's notes`로 찾는다(`_is_chair_notes_name`).** `Chair's Notes`는 #115까지 쓰던 표기이고, Final을 쓰던 회의도 이 표기였다. 낱말 사이는 공백이나 `_`다.
+  - 회의 번호의 `#` 자리에 `_`를 쓴 이름(`RAN1_111 v03`)도 같은 회의다(`_MEETING_ID_PATTERN`). #110bis와 #111은 회의 도중 `RAN1#111`에서 `RAN1_111`로 바뀌어서, 읽지 못하면 `#111` 묶음의 `v02`가 마지막 버전이 된다.
 - 문서 형식이나 출력이 바뀌면 `working_groups/ran1/agreements.py`의 `PARSER_VERSION`을 올려 캐시를 무효화한다.
 
 ### 세션 노트
@@ -429,19 +464,31 @@ FL이 이메일 토론 스레드에 올리는 세션 계획("Offline 11:30 ~ 12:
   - 스레드가 있으면 그 AI이고, 적힌 번호가 그 아래이면 좁힌다. 바깥 번호는 `other`로 따로 둔다(10.6.x 세션을 짜는 메일의 10.6.1.2, 10.6.3). 스레드가 없으면 제목, 없으면 본문의 번호다.
   - 보낸 사람이 Chair notes의 FL인지는 거르는 기준이 아니다. 묶인 스레드의 하위 주제 담당자는 FL 목록에 없다.
 - **A(셀 세부 정보)는 online·offline 세션이고, B(Agreement 아래 부차 정보)는 off-offline이다.** online과 offline은 늘 방에서 열리므로 시간표의 세션이다. 방이 없거나 방 밖에서 모이면(`outside Sorour's session room`, `in front of Yeongju A Hall`) off-offline이다.
+  - **online은 메인 방 세 개(Main, Brk1, Brk2) 중 하나에서 열린다.** 의장의 일정 문서는 표마다 무엇인지 제목을 단다.
+    `RAN1#126b Online Session Schedule` 아래 표가 online 방(#126bis: Tamna BC Hall, Yeongju A Hall, Yeongju B Hall), 다음 쪽의 `RAN1#126b Offline Session Schedule` 아래 표가 offline 방(201, 203)이다. #126 v04도 같다.
+    - 파서가 표 바로 위 글(`context_text`)의 마지막 `Online`/`Offline` 낱말을 방의 `RoomInfo.kind`로 남긴다(`rooms.table_kind`). 그 글은 앞 표부터 이어져 방 이름 글상자가 먼저 오므로 마지막 낱말이 그 표의 제목이다.
+    - 제목이 둘 다 아닌 표만 있거나 kind를 읽기 전에 저장한 일정은 표 순서로 정한다(첫 표가 online). 회의 중에는 표 순서가 바뀌지 않는다고 본다.
+    - 정의는 `working_groups/ran1/rooms.py`의 `online_rooms` 한 곳이고, 부의장 표의 방 이름을 맞추는 `merger.py`도 같은 것을 쓴다.
+    - 셀은 모든 방이 online 방이면 online이다(`Cell.online`). 제목도 없고 표도 하나뿐인 날은 알 수 없다(`None`, 거르지 않는다).
   - 방 이름 자체로는 가르지 않는다. 방 이름은 회의마다 다르고, off-offline 안내도 방 이름을 쓴다.
   - 시각으로도 가르지 않는다. 시각 없이 "오늘 오후 offline"이라고만 쓴 메일이 있고, 적힌 시각이 시간표와 다른 메일도 있다.
   - "today", "tomorrow"는 회의 시간대로 바꾼 송신 시각으로 읽는다. 메일 날짜는 보낸 사람의 시간대(`+0800` 등)이고, 자정을 넘겨 쓴 "tomorrow"는 그날이다.
-- **시간표에 없는 시각의 online은 그 AI가 쓰는 방의 그 시각 셀에 "maybe <AI>"로 붙인다.** FL이 의장·부의장과 정해 두었는데 시간표가 아직 바뀌지 않은 경우다.
+- **시간표에 없는 시각의 online은 그 AI가 쓰는 online 방의 그 시각 셀에 "maybe <AI>"로 붙인다.** FL이 의장·부의장과 정해 두었는데 시간표가 아직 바뀌지 않은 경우다.
   - offline은 붙이지 않고 B로 보낸다. online은 의장이 있어야 열리지만, FL은 off-offline도 offline이라고 부른다. #126bis 9.5: "start the offline at 3:30pm" 다음 날 "off-offline … same place as yesterday".
   - #126bis 10.3.1: "online session this morning from 12:00"인데 12:00에 10.3.1이 없다. 10.3.1 online은 모두 Yeongju A Hall이고, 그 방 12:00 칸이 AI 8.1이다. 8.1 셀에 "maybe 10.3.1"을 두고 10.3.1 필터에도 걸리게 한다.
   - 방은 시간표의 열에서 읽는다. 방 이름은 `day.rooms[room_col_start − 2]`다(1열이 시간 축). 열 번호를 그대로 쓰면 두 칸 밀린다.
 - **추출은 스키마로 묶은 LLM이 하고, 판정은 코드가 한다(`email_details.py`, Gemini thinking `low`).**
-  - LLM에 주는 것: 제목, 회의 시각으로 바꾼 송신 시각, 스레드의 AI, 그 AI의 남은 시간표 세션(id·요일·시각·방·셀 이름), 같은 스레드에서 앞서 공지된 일정, 최신 답장.
+  - LLM에 주는 것: 제목, 회의 시각으로 바꾼 송신 시각, 스레드의 AI, 그 AI의 남은 시간표 세션(id·요일·시각·방과 그 방이 online/offline 방인지·셀 이름), 같은 스레드에서 앞서 공지된 일정, 최신 답장.
     "FL proposal for online"은 앞선 "online from 12:00"을 알아야 읽힌다. 자정~05:00에 보낸 메일에는 "보낸 사람에게 오늘은 아직 전날일 수 있다"를 한 줄 더한다.
-  - LLM이 답하는 것: 항목마다 kind(`session`·`informal`), 세션 id, 적힌 요일·시각, 장소, 다룰 내용, 시간 나눔(`split`), 입력 마감(`input_due`), 80자 요약.
+  - LLM이 답하는 것: 항목마다 kind(`session`·`informal`), 세션 id, online/offline, 적힌 요일·시간대(`part_of_day`: morning·afternoon·evening)·시각, 장소, 다룰 내용, 시간 나눔(`split`), 입력 마감(`input_due`), 80자 요약.
     "offline/online on Wednesday"는 그날 그 AI의 세션마다 항목 하나씩이다. 세션에 걸린 입력 마감("1 hr before our offline")은 그 세션의 세부 정보다.
-  - 코드가 하는 것: 세션 id가 받은 목록에 있고 적힌 시각과 겹치는지 본다. 아니면 tentative 자리를 찾고, 그것도 없으면 버린다.
+  - 코드가 하는 것: 메일이 한 말에 맞는 세션을 지금 시간표에서 찾는다(`_bind`). 없으면 tentative 자리를 찾고, 그것도 없으면 버린다.
+  - **세션은 LLM이 고른 id가 아니라 메일이 한 말로 정한다.** 맞는 세션은 그 AI를 다루고, 메일 뒤에 시작하고, online/offline 방·요일·시간대·시각이 메일과 맞는 셀이다.
+    - 고른 id가 아직 맞으면 그 셀이다. 맞지 않으면 맞는 셀이 하나뿐일 때만 그 셀이다. id도 요일도 시각도 없는 항목은 붙이지 않는다.
+    - 맞는 셀이 여럿이면, 고른 id가 시간표에서 사라졌거나 다른 AI가 되었을 때만 그 id의 요일·시간대로 가린다. id가 그대로 있는데 메일과 맞지 않으면(offline인데 online 방) 그 id의 시각은 아무것도 말하지 않으므로 붙이지 않는다.
+    - 시간대는 시각을 가정하지 않고 그날의 휴식 구간으로 읽는다(`day_parts`). 점심 전이 morning, 점심 뒤가 afternoon, 점심 뒤 마지막 휴식 뒤가 evening이다(#126bis: 13:00 전, 14:30부터, 17:00부터). "afternoon"은 evening 블록도 포함한다. 점심이 없는 날은 시간대로 거르지 않는다.
+    - 그래서 시간표가 바뀌면 세부 정보가 따라가고, 의장의 forecast로 미리 쓴 메일("After discussing with Mr Chair, … online tomorrow. Detailed slots to be updated.")은 시간표에 그 세션이 생기는 빌드에서 붙는다. 다시 묻지 않는다.
+    - #126bis 10.5.2.2: "Friday morning online"을 물을 때 금 09:30 Yeongju A Hall(`10.5.2.x`, Sorour)이 유일한 후보였다. 의장이 09:30 10.5.2.1, 11:00 10.5.2.2(의장), 08:30 201 10.5.2.2(Sorour)로 바꾼 뒤에도 세부 정보가 10.5.2.1 셀에 남았다. 지금은 online 방의 11:00 하나만 맞는다.
   - **LLM이 준 시각은 메일에 있는지 코드가 확인한다(`times_in`).** 그 메일이나 같은 스레드의 앞 메일에 없는 시각은 지운다. 9.3.3 "For Tuesday Online session …"에 LLM이 17:00을 붙여 다른 셀로 갈 뻔했다.
   - **시각은 메일에 적힌 것만 쓴다.** 길이만 적힌 나눔("10.6.1.2: 40 min")은 길이로, "1 hr before" 마감은 그대로 둔다. 셀 시작에서 시각을 셈하지 않는다. 세션이 제시각에 시작한다는 보장이 없다.
   - TDoc 번호는 LLM에 맡기지 않고 최신 답장에서 패턴으로 뽑는다. 미리보기의 링크 대상(`…<https://…R1-2607194…docx>`)에도 번호가 있어서 링크를 지우기 전에 읽는다.
@@ -455,6 +502,7 @@ FL이 이메일 토론 스레드에 올리는 세션 계획("Offline 11:30 ~ 12:
   - 묻지 않고 `skipped`로 적는 메일: AI를 정할 수 없는 메일, 최신 답장에 시각·장소를 가리키는 낱말이 하나도 없는 메일(`SCHEDULE_WORDS`). 테스트셋에서 이 낱말 필터는 정답 메일을 하나도 거르지 않고 48통 중 7통을 뺐다.
   - 아무 요청도 보내지 않는 때: 회의 기간 밖(시작 3일 전부터 마지막 날까지만), 더미 미팅, Chair notes가 이메일 토론을 아직 적지 않은 때, 이 회의의 agenda가 없을 때.
   - 기록한 답은 빌드마다 지금 시간표에 다시 맞춘다(`apply_records`, 호출 없음). 시간표가 바뀌면 세부 정보도 따라 옮겨지거나 빠진다.
+    기록의 `offered`는 물을 때 보인 셀 id이고, 묶을 때는 LLM이 고른 id가 그 안에 있었는지만 본다. 후보는 빌드마다 지금 시간표에서 다시 만든다.
     같은 스레드의 뒤 메일이 같은 세션의 시각·나눔을 다시 적으면 앞 메일의 것을 바꾼다(#36이 #38을). 시각 없는 덧붙임("FL proposal for online")은 더한다.
 - **check 잡은 피드 하나만 본다(`pending`).** 회의 기간에만, 요청 한 번이다. 목록에 없고, 스레드에 붙고, 미리보기에 시각·장소 낱말이 있는 메일이 있을 때만 빌드 사유가 된다. 실패는 check 오류가 아니라 경고다.
 - 테스트는 메일 리스트에 요청하지 않는다. `tests/conftest.py`가 회의 기간 판정을 끄고 목록 경로를 임시 폴더로 바꾼다. `tests/test_email_updates.py`는 테스트셋의 피드·본문과 기록해 둔 LLM 답(`llm_answers.json`)으로 실행 두 번을 흉내 낸다.
@@ -468,8 +516,18 @@ FL이 이메일 토론 스레드에 올리는 세션 계획("Offline 11:30 ~ 12:
     번호에 설명이 붙은 주제(`Proposal 4.3.1-1/2: DMRS sequence`)는 설명을 남긴다.
     요약은 셀에 쓰지 않는다. 짧은 셀에서 "Check proposals in"까지만 보여 아무것도 말하지 않는다. 제목에 이미 있는 줄("10.5.2.2 PDSCH"의 `PDSCH`)은 뺀다.
   - 필터는 "maybe" 항목도 그 셀의 AI처럼 맞춘다(`data-ai-scope`에 더한다). `data-ai`와 필터 항목 목록, Agreement 패널은 그대로다.
-  - 팝업에는 노트 아래, AI 이름 위에 `From email threads` 구획을 둔다. 공지 하나가 한 줄이다: `maybe 10.3.1 · Online 12:00 · 요약 · 나눔 · input 1 h before · R1-2608628 — 보낸 사람, Wed 11:47`.
-    TDoc 번호는 하이픈에서 줄바꿈되지 않는다(`.popup-email-tdoc`). 나눔이 요약에 이미 들어 있으면 다시 적지 않는다. 보낸 사람이 가려진 메일(`<>`)은 시각만 적는다.
+  - 팝업에는 노트 아래, AI 이름 위에 `From email threads` 구획을 둔다. 공지 하나가 한 덩어리다(`_email_detail_html`).
+    **팝업은 셀 줄을 펼친 것이다.** 셀 줄에 있는 것(TDoc 번호, 나눔, 주제)을 모두 담고 더 자세히 적는다. 사용자가 셀과 팝업을 맞춰 읽지 않고 팝업만 보면 되게 한다. 팝업은 스크롤되므로 길어도 된다.
+    ```
+    maybe 10.3.1 · 요약                     ← 요지(LLM 80자 요약)
+    R1-2608628 · Input 1 h before          ← 요지에 없는 TDoc 번호와 입력 마감
+    10.6.1.2 40 min · 10.6.3 30 min        ← 나눔(셀과 같은 표기)
+    • Proposal 6.1-2: PUCCH format         ← 주제 전부, 한 줄에 하나, Proposal 번호 포함
+    — 보낸 사람, Fri 09:10 ↗
+    ```
+    - `Online`·`Offline` 같은 종류 표시는 두지 않는다. 사용자는 이미 그 세션 셀을 눌렀다. 메일의 시각도 셀의 시각과 같으면 적지 않는다.
+    - 요지가 이미 말한 것은 아래에 다시 적지 않는다(요약에 있는 TDoc 번호·마감·주제, 나눔에 있는 주제).
+    - TDoc 번호는 하이픈에서 줄바꿈되지 않는다(`.popup-email-tdoc`). 보낸 사람이 가려진 메일(`<>`)은 시각만 적는다.
   - **원문 메일 링크는 보낸 사람 뒤의 `↗` 하나다(`_mail_source`).** 팝업은 `— 보낸 사람, Wed 11:47 ↗`, off-offline 줄은 `— 보낸 사람 ↗`이고 새 탭으로 열린다.
     보낸 사람 이름에 걸지 않는다. 이름이 링크이면 메일 주소(쓰기)처럼 보여 누르기 망설여진다.
     밑줄도 `mail` 같은 낱말도 두지 않는다. 줄마다 낱말과 밑줄이 붙으니 목록보다 링크가 먼저 눈에 들어왔다. `↗`는 바깥 사이트의 새 탭이라는 표시로 충분하고, 무엇이 열리는지는 `title`(hover)에 둔다.

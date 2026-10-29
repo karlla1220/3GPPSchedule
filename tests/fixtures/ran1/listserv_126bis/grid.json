@@ -2,7 +2,7 @@
  "meeting_id": "ran1#126bis",
  "timezone": "Asia/Seoul",
  "generated_at": "2026-10-14 11:01",
- "note": "Grid as published at commit 3d489af; Wednesday unchanged since 2026-10-13 15:38 KST, before every mail of the test set.",
+ "note": "Grid as published at commit 3d489af; Wednesday unchanged since 2026-10-13 15:38 KST, before every mail of the test set. online: all rooms of the cell are under the \"Online Session Schedule\" heading (Tamna BC Hall, Yeongju A Hall, Yeongju B Hall); part: from the day's breaks.",
  "sessions": [
   {
    "id": "Mon 09:00-10:00 Tamna BC Hall + Yeongju A Hall + Yeongju B Hall",
@@ -13,7 +13,9 @@
    "name": "RAN1#126b commences at 09:00 on Monday",
    "agenda_item": "1, 2, 3, 4, 5",
    "inferred_agenda_items": [],
-   "chair": null
+   "chair": null,
+   "online": true,
+   "part": "morning"
   },
   {
    "id": "Mon 10:00-10:30 Tamna BC Hall + Yeongju A Hall + Yeongju B Hall",
@@ -24,7 +26,9 @@
    "name": "10.5.1.1",
    "agenda_item": "10.5.1.1",
    "inferred_agenda_items": [],
-   "chair": null
+   "chair": null,
+   "online": true,
+   "part": "morning"
   },
   {
    "id": "Mon 11:00-11:30 Tamna BC Hall + Yeongju A Hall + Yeongju B Hall",
@@ -35,7 +39,9 @@
    "name": "10.5.1.1",
    "agenda_item": "10.5.1.1",
    "inferred_agenda_items": [],
-   "chair": null
+   "chair": null,
+   "online": true,
+   "part": "morning"
   },
   {
    "id": "Mon 11:00-11:20 201",
@@ -46,7 +52,9 @@
    "name": "10.3.2",
    "agenda_item": "10.3.2",
    "inferred_agenda_items": [],
-   "chair": "Sorour"
+   "chair": "Sorour",
+   "online": false,
+   "part": "morning"
   },
   {
    "id": "Mon 11:00-11:30 203",
@@ -59,7 +67,9 @@
    "inferred_agenda_items": [
     "9.2"
    ],
-   "chair": "Sorour"
+   "chair": "Sorour",
+   "online": false,
+   "part": "morning"
   },
   {
    "id": "Mon 11:20-12:00 201",
@@ -70,7 +80,9 @@
    "name": "10.3.1",
    "agenda_item": "10.3.1",
    "inferred_agenda_items": [],
-   "chair": "Sorour"
+   "chair": "Sorour",
+   "online": false,
+   "part": "morning"
   },
   {
    "id": "Mon 11:30-12:20 Tamna BC Hall + Yeongju A Hall + Yeongju B Hall",
@@ -81,7 +93,9 @@
    "name": "10.5.1.2",
    "agenda_item": "10.5.1.2",
    "inferred_agenda_items": [],
-   "chair": null
+   "chair": null,
+   "online": true,
+   "part": "morning"
   },
   {
    "id": "Mon 11:30-12:30 203",
@@ -92,7 +106,9 @@
    "name": "10.8.2 6G ISAC Sensing",
    "agenda_item": "10.8.2",
    "inferred_agenda_items": [],
-   "chair": "Hiroki"
+   "chair": "Hiroki",
+   "online": false,
+   "part": "morning"
   },
   {
    "id": "Mon 12:00-13:00 201",
@@ -103,7 +119,9 @@
    "name": "R20 A-IoT",
    "agenda_item": "9.3.1, 9.3.2",
    "inferred_agenda_items": [],
-   "chair": "Hiroki"
+   "chair": "Hiroki",
+   "online": false,
+   "part": "morning"
   },
   {
    "id": "Mon 12:20-13:00 Tamna BC Hall + Yeongju A Hall + Yeongju B Hall",
@@ -114,7 +132,9 @@
    "name": "10.5.1.3",
    "agenda_item": "10.5.1.3",
    "inferred_agenda_items": [],
-   "chair": null
+   "chair": null,
+   "online": true,
+   "part": "morning"
   },
   {
    "id": "Mon 12:30-13:00 203",
@@ -125,7 +145,9 @@
    "name": "10.2.1 Waveform",
    "agenda_item": "10.2.1",
    "inferred_agenda_items": [],
-   "chair": "Hiroki"
+   "chair": "Hiroki",
+   "online": false,
+   "part": "morning"
   },
   {
    "id": "Mon 14:30-15:30 Tamna BC Hall",
@@ -136,7 +158,9 @@
    "name": "10.4.x",
    "agenda_item": "10.4.x",
    "inferred_agenda_items": [],
-   "chair": null
+   "chair": null,
+   "online": true,
+   "part": "afternoon"
   },
   {
    "id": "Mon 14:30-15:10 Yeongju A Hall",
@@ -147,7 +171,9 @@
    "name": "AI 9.4 NTN-NR",
    "agenda_item": "9.4",
    "inferred_agenda_items": [],
-   "chair": "Sorour"
+   "chair": "Sorour",
+   "online": true,
+   "part": "afternoon"
   },
   {
    "id": "Mon 14:30-15:30 Yeongju B Hall",
@@ -158,7 +184,9 @@
    "name": "R20 A-IoT Phase2",
    "agenda_item": "9.3.1",
    "inferred_agenda_items": [],
-   "chair": "Hiroki"
+   "chair": "Hiroki",
+   "online": true,
+   "part": "afternoon"
   },
   {
    "id": "Mon 14:30-14:55 201",
@@ -169,7 +197,9 @@
    "name": "10.5.3.4",
    "agenda_item": "10.5.3.4",
    "inferred_agenda_items": [],
-   "chair": "Xiaodong"
+   "chair": "Xiaodong",
+   "online": false,
+   "part": "afternoon"
   },
   {
    "id": "Mon 14:30-15:00 203",
@@ -180,7 +210,9 @@
    "name": "10.5.5",
    "agenda_item": "10.5.5",
    "inferred_agenda_items": [],
-   "chair": "Xiaodong"
+   "chair": "Xiaodong",
+   "online": false,
+   "part": "afternoon"
   },
   {
    "id": "Mon 14:55-15:40 201",
@@ -191,7 +223,9 @@
    "name": "10.5.3.1",
    "agenda_item": "10.5.3.1",
    "inferred_agenda_items": [],
-   "chair": "Xiaodong"
+   "chair": "Xiaodong",
+   "online": false,
+   "part": "afternoon"
   },
   {
    "id": "Mon 15:00-16:30 203",
@@ -202,7 +236,9 @@
    "name": "6G 10.5.4.x",
    "agenda_item": "10.5.4.1, 10.5.4.3, 10.5.4.4",
    "inferred_agenda_items": [],
-   "chair": "Hiroki"
+   "chair": "Hiroki",
+   "online": false,
+   "part": "afternoon"
   },
   {
    "id": "Mon 15:10-15:30 Yeongju A Hall",
@@ -213,7 +249,9 @@
    "name": "AI 9.5 NTN",
    "agenda_item": "9.5",
    "inferred_agenda_items": [],
-   "chair": "Sorour"
+   "chair": "Sorour",
+   "online": true,
+   "part": "afternoon"
   },
   {
    "id": "Mon 15:30-16:30 Tamna BC Hall",
@@ -224,7 +262,9 @@
    "name": "10.6.x",
    "agenda_item": "10.6.x",
    "inferred_agenda_items": [],
-   "chair": null
+   "chair": null,
+   "online": true,
+   "part": "afternoon"
   },
   {
    "id": "Mon 15:30-16:30 Yeongju A Hall",
@@ -235,7 +275,9 @@
    "name": "AI 10.7.1 NTN",
    "agenda_item": "10.7.1",
    "inferred_agenda_items": [],
-   "chair": "Sorour"
+   "chair": "Sorour",
+   "online": true,
+   "part": "afternoon"
   },
   {
    "id": "Mon 15:30-16:30 Yeongju B Hall",
@@ -246,7 +288,9 @@
    "name": "6G ISAC",
    "agenda_item": "10.8.2",
    "inferred_agenda_items": [],
-   "chair": "Hiroki"
+   "chair": "Hiroki",
+   "online": true,
+   "part": "afternoon"
   },
   {
    "id": "Mon 15:40-16:05 201",
@@ -257,7 +301,9 @@
    "name": "10.5.3.2",
    "agenda_item": "10.5.3.2",
    "inferred_agenda_items": [],
-   "chair": "Xiaodong"
+   "chair": "Xiaodong",
+   "online": false,
+   "part": "afternoon"
   },
   {
    "id": "Mon 16:05-16:30 201",
@@ -268,7 +314,9 @@
    "name": "10.5.3.3",
    "agenda_item": "10.5.3.3",
    "inferred_agenda_items": [],
-   "chair": "Xiaodong"
+   "chair": "Xiaodong",
+   "online": false,
+   "part": "afternoon"
   },
   {
    "id": "Mon 17:00-18:00 Tamna BC Hall",
@@ -279,7 +327,9 @@
    "name": "10.5.3.1",
    "agenda_item": "10.5.3.1",
    "inferred_agenda_items": [],
-   "chair": null
+   "chair": null,
+   "online": true,
+   "part": "evening"
   },
   {
    "id": "Mon 17:00-17:40 Yeongju A Hall",
@@ -290,7 +340,9 @@
    "name": "AI 9.2 MIMO",
    "agenda_item": "9.2",
    "inferred_agenda_items": [],
-   "chair": "Sorour"
+   "chair": "Sorour",
+   "online": true,
+   "part": "evening"
   },
   {
    "id": "Mon 17:00-17:40 Yeongju B Hall",
@@ -301,7 +353,9 @@
    "name": "10.5.4.4",
    "agenda_item": "10.5.4.4",
    "inferred_agenda_items": [],
-   "chair": "Hiroki"
+   "chair": "Hiroki",
+   "online": true,
+   "part": "evening"
   },
   {
    "id": "Mon 17:00-17:40 201",
@@ -312,7 +366,9 @@
    "name": "10.5.1.1",
    "agenda_item": "10.5.1.1",
    "inferred_agenda_items": [],
-   "chair": "Xiaodong"
+   "chair": "Xiaodong",
+   "online": false,
+   "part": "evening"
   },
   {
    "id": "Mon 17:00-17:40 203",
@@ -323,7 +379,9 @@
    "name": "10.5.2.1",
    "agenda_item": "10.5.2.1",
    "inferred_agenda_items": [],
-   "chair": "Sorour"
+   "chair": "Sorour",
+   "online": false,
+   "part": "evening"
   },
   {
    "id": "Mon 17:40-18:10 Yeongju A Hall",
@@ -334,7 +392,9 @@
    "name": "AI 10.3.2 Modulation",
    "agenda_item": "10.3.2",
    "inferred_agenda_items": [],
-   "chair": "Sorour"
+   "chair": "Sorour",
+   "online": true,
+   "part": "evening"
   },
   {
    "id": "Mon 17:40-18:20 Yeongju B Hall",
@@ -345,7 +405,9 @@
    "name": "10.5.4.1",
    "agenda_item": "10.5.4.1",
    "inferred_agenda_items": [],
-   "chair": "Hiroki"
+   "chair": "Hiroki",
+   "online": true,
+   "part": "evening"
   },
   {
    "id": "Mon 17:40-18:10 201",
@@ -356,7 +418,9 @@
    "name": "10.5.1.3",
    "agenda_item": "10.5.1.3",
    "inferred_agenda_items": [],
-   "chair": "Xiaodong"
+   "chair": "Xiaodong",
+   "online": false,
+   "part": "evening"
   },
   {
    "id": "Mon 17:40-18:20 203",
@@ -367,7 +431,9 @@
    "name": "10.7.1 NTN",
    "agenda_item": "10.7.1",
    "inferred_agenda_items": [],
-   "chair": "Sorour"
+   "chair": "Sorour",
+   "online": false,
+   "part": "evening"
   },
   {
    "id": "Mon 18:00-18:30 Tamna BC Hall",
@@ -378,7 +444,9 @@
    "name": "10.5.3.2",
    "agenda_item": "10.5.3.2",
    "inferred_agenda_items": [],
-   "chair": null
+   "chair": null,
+   "online": true,
+   "part": "evening"
   },
   {
    "id": "Mon 18:10-19:00 Yeongju A Hall",
@@ -389,7 +457,9 @@
    "name": "AI 10.3.1 Coding",
    "agenda_item": "10.3.1",
    "inferred_agenda_items": [],
-   "chair": "Sorour"
+   "chair": "Sorour",
+   "online": true,
+   "part": "evening"
   },
   {
    "id": "Mon 18:10-18:50 201",
@@ -400,7 +470,9 @@
    "name": "10.5.1.2",
    "agenda_item": "10.5.1.2",
    "inferred_agenda_items": [],
-   "chair": "Xiaodong"
+   "chair": "Xiaodong",
+   "online": false,
+   "part": "evening"
   },
   {
    "id": "Mon 18:20-19:00 Yeongju B Hall",
@@ -411,7 +483,9 @@
    "name": "10.5.4.3",
    "agenda_item": "10.5.4.3",
    "inferred_agenda_items": [],
-   "chair": "Hiroki"
+   "chair": "Hiroki",
+   "online": true,
+   "part": "evening"
   },
   {
    "id": "Mon 18:20-18:50 203",
@@ -422,7 +496,9 @@
    "name": "9.5 NTN",
    "agenda_item": "9.5",
    "inferred_agenda_items": [],
-   "chair": "Sorour"
+   "chair": "Sorour",
+   "online": false,
+   "part": "evening"
   },
   {
    "id": "Mon 18:30-19:00 Tamna BC Hall",
@@ -433,7 +509,9 @@
    "name": "10.5.3.3",
    "agenda_item": "10.5.3.3",
    "inferred_agenda_items": [],
-   "chair": null
+   "chair": null,
+   "online": true,
+   "part": "evening"
   },
   {
    "id": "Mon 18:50-19:30 201",
@@ -444,7 +522,9 @@
    "name": "10.4.1",
    "agenda_item": "10.4.1",
    "inferred_agenda_items": [],
-   "chair": null
+   "chair": null,
+   "online": false,
+   "part": "evening"
   },
   {
    "id": "Mon 18:50-19:30 203",
@@ -455,7 +535,9 @@
    "name": "9.4 NTN-NR",
    "agenda_item": "9.4",
    "inferred_agenda_items": [],
-   "chair": "Sorour"
+   "chair": "Sorour",
+   "online": false,
+   "part": "evening"
   },
   {
    "id": "Mon 19:00-19:30 Tamna BC Hall",
@@ -466,7 +548,9 @@
    "name": "10.5.3.4",
    "agenda_item": "10.5.3.4",
    "inferred_agenda_items": [],
-   "chair": null
+   "chair": null,
+   "online": true,
+   "part": "evening"
   },
   {
    "id": "Mon 19:00-19:30 Yeongju A Hall",
@@ -477,7 +561,9 @@
    "name": "AI 10.5.2.1 PDCCH",
    "agenda_item": "10.5.2.1",
    "inferred_agenda_items": [],
-   "chair": "Sorour"
+   "chair": "Sorour",
+   "online": true,
+   "part": "evening"
   },
   {
    "id": "Mon 19:00-19:30 Yeongju B Hall",
@@ -488,7 +574,9 @@
    "name": "10.2.1 Waveform",
    "agenda_item": "10.2.1",
    "inferred_agenda_items": [],
-   "chair": "Hiroki"
+   "chair": "Hiroki",
+   "online": true,
+   "part": "evening"
   },
   {
    "id": "Tue 08:30-09:10 Tamna BC Hall",
@@ -499,7 +587,9 @@
    "name": "10.5.1.3",
    "agenda_item": "10.5.1.3",
    "inferred_agenda_items": [],
-   "chair": null
+   "chair": null,
+   "online": true,
+   "part": "morning"
   },
   {
    "id": "Tue 08:30-09:20 Yeongju A Hall",
@@ -510,7 +600,9 @@
    "name": "AI 10.7.1 NTN",
    "agenda_item": "10.7.1",
    "inferred_agenda_items": [],
-   "chair": "Sorour"
+   "chair": "Sorour",
+   "online": true,
+   "part": "morning"
   },
   {
    "id": "Tue 08:30-09:10 Yeongju B Hall",
@@ -521,7 +613,9 @@
    "name": "10.5.4.1",
    "agenda_item": "10.5.4.1",
    "inferred_agenda_items": [],
-   "chair": "Hiroki"
+   "chair": "Hiroki",
+   "online": true,
+   "part": "morning"
   },
   {
    "id": "Tue 08:30-09:10 201",
@@ -532,7 +626,9 @@
    "name": "10.4.2",
    "agenda_item": "10.4.2",
    "inferred_agenda_items": [],
-   "chair": "Xiaodong"
+   "chair": "Xiaodong",
+   "online": false,
+   "part": "morning"
   },
   {
    "id": "Tue 08:30-10:00 203",
@@ -543,7 +639,9 @@
    "name": "6G ISAC",
    "agenda_item": "10.8.3, 10.8.1",
    "inferred_agenda_items": [],
-   "chair": "Hiroki"
+   "chair": "Hiroki",
+   "online": false,
+   "part": "morning"
   },
   {
    "id": "Tue 09:10-10:00 Tamna BC Hall",
@@ -554,7 +652,9 @@
    "name": "10.5.1.2",
    "agenda_item": "10.5.1.2",
    "inferred_agenda_items": [],
-   "chair": null
+   "chair": null,
+   "online": true,
+   "part": "morning"
   },
   {
    "id": "Tue 09:10-09:50 Yeongju B Hall",
@@ -565,7 +665,9 @@
    "name": "10.5.4.2",
    "agenda_item": "10.5.4.2",
    "inferred_agenda_items": [],
-   "chair": "Hiroki"
+   "chair": "Hiroki",
+   "online": true,
+   "part": "morning"
   },
   {
    "id": "Tue 09:10-09:50 201",
@@ -576,7 +678,9 @@
    "name": "10.6.1.1",
    "agenda_item": "10.6.1.1",
    "inferred_agenda_items": [],
-   "chair": "Xiaodong"
+   "chair": "Xiaodong",
+   "online": false,
+   "part": "morning"
   },
   {
    "id": "Tue 09:20-09:50 Yeongju A Hall",
@@ -587,7 +691,9 @@
    "name": "AI 9.5 NTN",
    "agenda_item": "9.5",
    "inferred_agenda_items": [],
-   "chair": "Sorour"
+   "chair": "Sorour",
+   "online": true,
+   "part": "morning"
   },
   {
    "id": "Tue 09:50-10:30 Yeongju A Hall",
@@ -598,7 +704,9 @@
    "name": "AI 9.4 NR-NTN",
    "agenda_item": "9.4",
    "inferred_agenda_items": [],
-   "chair": "Sorour"
+   "chair": "Sorour",
+   "online": true,
+   "part": "morning"
   },
   {
    "id": "Tue 09:50-10:30 Yeongju B Hall",
@@ -609,7 +717,9 @@
    "name": "10.5.4.3",
    "agenda_item": "10.5.4.3",
    "inferred_agenda_items": [],
-   "chair": "Hiroki"
+   "chair": "Hiroki",
+   "online": true,
+   "part": "morning"
   },
   {
    "id": "Tue 09:50-10:30 201",
@@ -622,7 +732,9 @@
    "inferred_agenda_items": [
     "9.1"
    ],
-   "chair": "Sorour"
+   "chair": "Sorour",
+   "online": false,
+   "part": "morning"
   },
   {
    "id": "Tue 10:00-10:30 Tamna BC Hall",
@@ -633,7 +745,9 @@
    "name": "10.5.1.1",
    "agenda_item": "10.5.1.1",
    "inferred_agenda_items": [],
-   "chair": null
+   "chair": null,
+   "online": true,
+   "part": "morning"
   },
   {
    "id": "Tue 10:00-10:30 203",
@@ -644,7 +758,9 @@
    "name": "6G waveform",
    "agenda_item": "10.2.1",
    "inferred_agenda_items": [],
-   "chair": "Hiroki"
+   "chair": "Hiroki",
+   "online": false,
+   "part": "morning"
   },
   {
    "id": "Tue 11:00-11:40 Tamna BC Hall",
@@ -655,7 +771,9 @@
    "name": "10.5.5",
    "agenda_item": "10.5.5",
    "inferred_agenda_items": [],
-   "chair": null
+   "chair": null,
+   "online": true,
+   "part": "morning"
   },
   {
    "id": "Tue 11:00-11:40 Yeongju A Hall",
@@ -666,7 +784,9 @@
    "name": "AI 9.1 AIML",
    "agenda_item": "9.1",
    "inferred_agenda_items": [],
-   "chair": "Sorour"
+   "chair": "Sorour",
+   "online": true,
+   "part": "morning"
   },
   {
    "id": "Tue 11:00-11:40 Yeongju B Hall",
@@ -677,7 +797,9 @@
    "name": "10.8.3",
    "agenda_item": "10.8.3",
    "inferred_agenda_items": [],
-   "chair": "Hiroki"
+   "chair": "Hiroki",
+   "online": true,
+   "part": "morning"
   },
   {
    "id": "Tue 11:00-11:30 201",
@@ -688,7 +810,9 @@
    "name": "10.6.1.2",
    "agenda_item": "10.6.1.2",
    "inferred_agenda_items": [],
-   "chair": "Xiaodong"
+   "chair": "Xiaodong",
+   "online": false,
+   "part": "morning"
   },
   {
    "id": "Tue 11:00-12:00 203",
@@ -699,7 +823,9 @@
    "name": "10.5.2.3",
    "agenda_item": "10.5.2.3",
    "inferred_agenda_items": [],
-   "chair": "Sorour"
+   "chair": "Sorour",
+   "online": false,
+   "part": "morning"
   },
   {
    "id": "Tue 11:30-12:00 201",
@@ -710,7 +836,9 @@
    "name": "10.6.2",
    "agenda_item": "10.6.2",
    "inferred_agenda_items": [],
-   "chair": "Xiaodong"
+   "chair": "Xiaodong",
+   "online": false,
+   "part": "morning"
   },
   {
    "id": "Tue 11:40-12:20 Tamna BC Hall",
@@ -721,7 +849,9 @@
    "name": "10.4.2",
    "agenda_item": "10.4.2",
    "inferred_agenda_items": [],
-   "chair": null
+   "chair": null,
+   "online": true,
+   "part": "morning"
   },
   {
    "id": "Tue 11:40-12:20 Yeongju A Hall",
@@ -732,7 +862,9 @@
    "name": "AI 9.2 MIMO",
    "agenda_item": "9.2",
    "inferred_agenda_items": [],
-   "chair": "Sorour"
+   "chair": "Sorour",
+   "online": true,
+   "part": "morning"
   },
   {
    "id": "Tue 11:40-12:20 Yeongju B Hall",
@@ -743,7 +875,9 @@
    "name": "10.8.1",
    "agenda_item": "10.8.1",
    "inferred_agenda_items": [],
-   "chair": "Hiroki"
+   "chair": "Hiroki",
+   "online": true,
+   "part": "morning"
   },
   {
    "id": "Tue 12:00-12:20 201",
@@ -754,7 +888,9 @@
    "name": "10.6.3",
    "agenda_item": "10.6.3",
    "inferred_agenda_items": [],
-   "chair": "Xiaodong"
+   "chair": "Xiaodong",
+   "online": false,
+   "part": "morning"
   },
   {
    "id": "Tue 12:00-13:00 203",
@@ -765,7 +901,9 @@
    "name": "10.5.2.2",
    "agenda_item": "10.5.2.2",
    "inferred_agenda_items": [],
-   "chair": "Sorour"
+   "chair": "Sorour",
+   "online": false,
+   "part": "morning"
   },
   {
    "id": "Tue 12:20-13:00 Tamna BC Hall",
@@ -776,7 +914,9 @@
    "name": "10.4.1",
    "agenda_item": "10.4.1",
    "inferred_agenda_items": [],
-   "chair": null
+   "chair": null,
+   "online": true,
+   "part": "morning"
   },
   {
    "id": "Tue 12:20-13:00 Yeongju A Hall",
@@ -787,7 +927,9 @@
    "name": "AI 8.1",
    "agenda_item": "8.1",
    "inferred_agenda_items": [],
-   "chair": "Sorour"
+   "chair": "Sorour",
+   "online": true,
+   "part": "morning"
   },
   {
    "id": "Tue 12:20-13:00 Yeongju B Hall",
@@ -798,7 +940,9 @@
    "name": "A-IoT Phase2",
    "agenda_item": "9.3.2",
    "inferred_agenda_items": [],
-   "chair": "Hiroki"
+   "chair": "Hiroki",
+   "online": true,
+   "part": "morning"
   },
   {
    "id": "Tue 12:20-13:00 201",
@@ -809,7 +953,9 @@
    "name": "10.5.1.2",
    "agenda_item": "10.5.1.2",
    "inferred_agenda_items": [],
-   "chair": "Xiaodong"
+   "chair": "Xiaodong",
+   "online": false,
+   "part": "morning"
   },
   {
    "id": "Tue 14:30-15:30 Tamna BC Hall",
@@ -820,7 +966,9 @@
    "name": "10.6.x",
    "agenda_item": "10.6.x",
    "inferred_agenda_items": [],
-   "chair": null
+   "chair": null,
+   "online": true,
+   "part": "afternoon"
   },
   {
    "id": "Tue 14:30-15:00 Yeongju A Hall",
@@ -831,7 +979,9 @@
    "name": "AI 10.5.2.1 PDCCH",
    "agenda_item": "10.5.2.1",
    "inferred_agenda_items": [],
-   "chair": "Sorour"
+   "chair": "Sorour",
+   "online": true,
+   "part": "afternoon"
   },
   {
    "id": "Tue 14:30-14:40 Yeongju B Hall",
@@ -842,7 +992,9 @@
    "name": "11 TEI20",
    "agenda_item": "11",
    "inferred_agenda_items": [],
-   "chair": "Hiroki"
+   "chair": "Hiroki",
+   "online": true,
+   "part": "afternoon"
   },
   {
    "id": "Tue 14:30-15:15 201",
@@ -853,7 +1005,9 @@
    "name": "10.5.3.1",
    "agenda_item": "10.5.3.1",
    "inferred_agenda_items": [],
-   "chair": "Xiaodong"
+   "chair": "Xiaodong",
+   "online": false,
+   "part": "afternoon"
   },
   {
    "id": "Tue 14:30-16:00 203",
@@ -864,7 +1018,9 @@
    "name": "R20 A-IoT",
    "agenda_item": "9.3.1, 9.3.3",
    "inferred_agenda_items": [],
-   "chair": "Hiroki"
+   "chair": "Hiroki",
+   "online": false,
+   "part": "afternoon"
   },
   {
    "id": "Tue 14:40-15:05 Yeongju B Hall",
@@ -875,7 +1031,9 @@
    "name": "8.2 R19 Duplex, R19 ISAC CM, R19 XR",
    "agenda_item": "8.2",
    "inferred_agenda_items": [],
-   "chair": "Hiroki"
+   "chair": "Hiroki",
+   "online": true,
+   "part": "afternoon"
   },
   {
    "id": "Tue 15:00-15:45 Yeongju A Hall",
@@ -886,7 +1044,9 @@
    "name": "AI 10.5.2.2 PDSCH",
    "agenda_item": "10.5.2.2",
    "inferred_agenda_items": [],
-   "chair": "Sorour"
+   "chair": "Sorour",
+   "online": true,
+   "part": "afternoon"
   },
   {
    "id": "Tue 15:05-15:30 Yeongju B Hall",
@@ -897,7 +1057,9 @@
    "name": "8.3 UE features",
    "agenda_item": "8.3",
    "inferred_agenda_items": [],
-   "chair": "Hiroki"
+   "chair": "Hiroki",
+   "online": true,
+   "part": "afternoon"
   },
   {
    "id": "Tue 15:15-15:40 201",
@@ -908,7 +1070,9 @@
    "name": "10.5.3.2",
    "agenda_item": "10.5.3.2",
    "inferred_agenda_items": [],
-   "chair": "Xiaodong"
+   "chair": "Xiaodong",
+   "online": false,
+   "part": "afternoon"
   },
   {
    "id": "Tue 15:30-16:30 Tamna BC Hall",
@@ -919,7 +1083,9 @@
    "name": "10.5.1.1",
    "agenda_item": "10.5.1.1",
    "inferred_agenda_items": [],
-   "chair": null
+   "chair": null,
+   "online": true,
+   "part": "afternoon"
   },
   {
    "id": "Tue 15:30-15:50 Yeongju B Hall",
@@ -930,7 +1096,9 @@
    "name": "8.2 R19 LP-WUS",
    "agenda_item": "8.2",
    "inferred_agenda_items": [],
-   "chair": "Hiroki"
+   "chair": "Hiroki",
+   "online": true,
+   "part": "afternoon"
   },
   {
    "id": "Tue 15:40-16:00 201",
@@ -941,7 +1109,9 @@
    "name": "10.5.3.3",
    "agenda_item": "10.5.3.3",
    "inferred_agenda_items": [],
-   "chair": "Xiaodong"
+   "chair": "Xiaodong",
+   "online": false,
+   "part": "afternoon"
   },
   {
    "id": "Tue 15:45-16:30 Yeongju A Hall",
@@ -952,7 +1122,9 @@
    "name": "AI 10.5.2.3 PUxCH",
    "agenda_item": "10.5.2.3",
    "inferred_agenda_items": [],
-   "chair": "Sorour"
+   "chair": "Sorour",
+   "online": true,
+   "part": "afternoon"
   },
   {
    "id": "Tue 15:50-16:30 Yeongju B Hall",
@@ -963,7 +1135,9 @@
    "name": "6G waveform",
    "agenda_item": "10.2.1",
    "inferred_agenda_items": [],
-   "chair": "Hiroki"
+   "chair": "Hiroki",
+   "online": true,
+   "part": "afternoon"
   },
   {
    "id": "Tue 16:00-16:30 201",
@@ -974,7 +1148,9 @@
    "name": "10.5.3.4",
    "agenda_item": "10.5.3.4",
    "inferred_agenda_items": [],
-   "chair": "Xiaodong"
+   "chair": "Xiaodong",
+   "online": false,
+   "part": "afternoon"
   },
   {
    "id": "Tue 16:00-16:30 203",
@@ -985,7 +1161,9 @@
    "name": "10.3.2",
    "agenda_item": "10.3.2",
    "inferred_agenda_items": [],
-   "chair": "Sorouri"
+   "chair": "Sorouri",
+   "online": false,
+   "part": "afternoon"
   },
   {
    "id": "Tue 17:00-17:30 Tamna BC Hall",
@@ -996,7 +1174,9 @@
    "name": "10.5.3.2",
    "agenda_item": "10.5.3.2",
    "inferred_agenda_items": [],
-   "chair": null
+   "chair": null,
+   "online": true,
+   "part": "evening"
   },
   {
    "id": "Tue 17:00-18:00 Yeongju A Hall",
@@ -1007,7 +1187,9 @@
    "name": "AI 10.3.1 Coding",
    "agenda_item": "10.3.1",
    "inferred_agenda_items": [],
-   "chair": "Sorour"
+   "chair": "Sorour",
+   "online": true,
+   "part": "evening"
   },
   {
    "id": "Tue 17:00-17:30 Yeongju B Hall",
@@ -1018,7 +1200,9 @@
    "name": "9.3.1",
    "agenda_item": "9.3.1",
    "inferred_agenda_items": [],
-   "chair": "Hiroki"
+   "chair": "Hiroki",
+   "online": true,
+   "part": "evening"
   },
   {
    "id": "Tue 17:00-17:30 201",
@@ -1029,7 +1213,9 @@
    "name": "10.5.1.3",
    "agenda_item": "10.5.1.3",
    "inferred_agenda_items": [],
-   "chair": "Xiaodong"
+   "chair": "Xiaodong",
+   "online": false,
+   "part": "evening"
   },
   {
    "id": "Tue 17:00-17:30 203",
@@ -1040,7 +1226,9 @@
    "name": "10.5.5",
    "agenda_item": "10.5.5",
    "inferred_agenda_items": [],
-   "chair": "Xiaodong"
+   "chair": "Xiaodong",
+   "online": false,
+   "part": "evening"
   },
   {
    "id": "Tue 17:30-18:00 Tamna BC Hall",
@@ -1051,7 +1239,9 @@
    "name": "10.5.3.3",
    "agenda_item": "10.5.3.3",
    "inferred_agenda_items": [],
-   "chair": null
+   "chair": null,
+   "online": true,
+   "part": "evening"
   },
   {
    "id": "Tue 17:30-18:30 Yeongju B Hall",
@@ -1062,7 +1252,9 @@
    "name": "9.3.3",
    "agenda_item": "9.3.3",
    "inferred_agenda_items": [],
-   "chair": "Hiroki"
+   "chair": "Hiroki",
+   "online": true,
+   "part": "evening"
   },
   {
    "id": "Tue 17:30-18:30 201",
@@ -1073,7 +1265,9 @@
    "name": "10.5.1.1",
    "agenda_item": "10.5.1.1",
    "inferred_agenda_items": [],
-   "chair": "Xiaodong"
+   "chair": "Xiaodong",
+   "online": false,
+   "part": "evening"
   },
   {
    "id": "Tue 17:30-18:00 203",
@@ -1084,7 +1278,9 @@
    "name": "10.7.1 NTN",
    "agenda_item": "10.7.1",
    "inferred_agenda_items": [],
-   "chair": "Sorour"
+   "chair": "Sorour",
+   "online": false,
+   "part": "evening"
   },
   {
    "id": "Tue 18:00-18:30 Tamna BC Hall",
@@ -1095,7 +1291,9 @@
    "name": "10.5.3.4",
    "agenda_item": "10.5.3.4",
    "inferred_agenda_items": [],
-   "chair": null
+   "chair": null,
+   "online": true,
+   "part": "evening"
   },
   {
    "id": "Tue 18:00-18:30 Yeongju A Hall",
@@ -1106,7 +1304,9 @@
    "name": "AI 10.3.2 Modulation",
    "agenda_item": "10.3.2",
    "inferred_agenda_items": [],
-   "chair": "Sorour"
+   "chair": "Sorour",
+   "online": true,
+   "part": "evening"
   },
   {
    "id": "Tue 18:00-18:30 203",
@@ -1117,7 +1317,9 @@
    "name": "9.4 NTN-NR",
    "agenda_item": "9.4",
    "inferred_agenda_items": [],
-   "chair": "Sorour"
+   "chair": "Sorour",
+   "online": false,
+   "part": "evening"
   },
   {
    "id": "Tue 18:30-19:30 Tamna BC Hall + Yeongju A Hall + Yeongju B Hall + 201 + 203",
@@ -1128,7 +1330,9 @@
    "name": "Early dinner",
    "agenda_item": null,
    "inferred_agenda_items": [],
-   "chair": null
+   "chair": null,
+   "online": false,
+   "part": "evening"
   },
   {
    "id": "Wed 08:30-09:20 Tamna BC Hall",
@@ -1139,7 +1343,9 @@
    "name": "10.5.1.1",
    "agenda_item": "10.5.1.1",
    "inferred_agenda_items": [],
-   "chair": null
+   "chair": null,
+   "online": true,
+   "part": "morning"
   },
   {
    "id": "Wed 08:30-09:10 Yeongju A Hall",
@@ -1150,7 +1356,9 @@
    "name": "AI 10.7.1 NTN",
    "agenda_item": "10.7.1",
    "inferred_agenda_items": [],
-   "chair": "Sorour"
+   "chair": "Sorour",
+   "online": true,
+   "part": "morning"
   },
   {
    "id": "Wed 08:30-09:10 Yeongju B Hall",
@@ -1161,7 +1369,9 @@
    "name": "9.3.2",
    "agenda_item": "9.3.2",
    "inferred_agenda_items": [],
-   "chair": "Hiroki"
+   "chair": "Hiroki",
+   "online": true,
+   "part": "morning"
   },
   {
    "id": "Wed 08:30-09:00 201",
@@ -1172,7 +1382,9 @@
    "name": "10.5.5",
    "agenda_item": "10.5.5",
    "inferred_agenda_items": [],
-   "chair": "Xiaodong"
+   "chair": "Xiaodong",
+   "online": false,
+   "part": "morning"
   },
   {
    "id": "Wed 08:30-09:10 203",
@@ -1185,7 +1397,9 @@
    "inferred_agenda_items": [
     "9.2"
    ],
-   "chair": "Sorour"
+   "chair": "Sorour",
+   "online": false,
+   "part": "morning"
   },
   {
    "id": "Wed 09:00-09:30 201",
@@ -1196,7 +1410,9 @@
    "name": "10.2.1 Waveform",
    "agenda_item": "10.2.1",
    "inferred_agenda_items": [],
-   "chair": "Hiroki"
+   "chair": "Hiroki",
+   "online": false,
+   "part": "morning"
   },
   {
    "id": "Wed 09:10-09:50 Yeongju A Hall",
@@ -1207,7 +1423,9 @@
    "name": "AI 9.4 NR-NTN",
    "agenda_item": "9.4",
    "inferred_agenda_items": [],
-   "chair": "Sorour"
+   "chair": "Sorour",
+   "online": true,
+   "part": "morning"
   },
   {
    "id": "Wed 09:10-09:50 Yeongju B Hall",
@@ -1218,7 +1436,9 @@
    "name": "9.3.3",
    "agenda_item": "9.3.3",
    "inferred_agenda_items": [],
-   "chair": "Hiroki"
+   "chair": "Hiroki",
+   "online": true,
+   "part": "morning"
   },
   {
    "id": "Wed 09:10-09:50 203",
@@ -1231,7 +1451,9 @@
    "inferred_agenda_items": [
     "9.1"
    ],
-   "chair": "Sorour"
+   "chair": "Sorour",
+   "online": false,
+   "part": "morning"
   },
   {
    "id": "Wed 09:20-10:00 Tamna BC Hall",
@@ -1242,7 +1464,9 @@
    "name": "10.5.1.3",
    "agenda_item": "10.5.1.3",
    "inferred_agenda_items": [],
-   "chair": null
+   "chair": null,
+   "online": true,
+   "part": "morning"
   },
   {
    "id": "Wed 09:30-10:30 201",
@@ -1253,7 +1477,9 @@
    "name": "6G ISAC",
    "agenda_item": "10.8.2, 10.8.3",
    "inferred_agenda_items": [],
-   "chair": "Hiroki"
+   "chair": "Hiroki",
+   "online": false,
+   "part": "morning"
   },
   {
    "id": "Wed 09:50-10:30 Yeongju A Hall",
@@ -1264,7 +1490,9 @@
    "name": "AI 9.2 MIMO",
    "agenda_item": "9.2",
    "inferred_agenda_items": [],
-   "chair": "Sorour"
+   "chair": "Sorour",
+   "online": true,
+   "part": "morning"
   },
   {
    "id": "Wed 09:50-10:30 Yeongju B Hall",
@@ -1275,7 +1503,9 @@
    "name": "9.3.1",
    "agenda_item": "9.3.1",
    "inferred_agenda_items": [],
-   "chair": "Hiroki"
+   "chair": "Hiroki",
+   "online": true,
+   "part": "morning"
   },
   {
    "id": "Wed 09:50-10:30 203",
@@ -1286,7 +1516,9 @@
    "name": "10.5.2.1",
    "agenda_item": "10.5.2.1",
    "inferred_agenda_items": [],
-   "chair": "Sorour"
+   "chair": "Sorour",
+   "online": false,
+   "part": "morning"
   },
   {
    "id": "Wed 10:00-10:30 Tamna BC Hall",
@@ -1297,7 +1529,9 @@
    "name": "10.5.1.2",
    "agenda_item": "10.5.1.2",
    "inferred_agenda_items": [],
-   "chair": null
+   "chair": null,
+   "online": true,
+   "part": "morning"
   },
   {
    "id": "Wed 11:00-12:00 Tamna BC Hall",
@@ -1308,7 +1542,9 @@
    "name": "10.5.3.1",
    "agenda_item": "10.5.3.1",
    "inferred_agenda_items": [],
-   "chair": null
+   "chair": null,
+   "online": true,
+   "part": "morning"
   },
   {
    "id": "Wed 11:00-12:00 Yeongju A Hall",
@@ -1319,7 +1555,9 @@
    "name": "AI 9.1 AIML",
    "agenda_item": "9.1",
    "inferred_agenda_items": [],
-   "chair": "Sorour"
+   "chair": "Sorour",
+   "online": true,
+   "part": "morning"
   },
   {
    "id": "Wed 11:00-11:40 Yeongju B Hall",
@@ -1330,7 +1568,9 @@
    "name": "10.8.2",
    "agenda_item": "10.8.2",
    "inferred_agenda_items": [],
-   "chair": "Hiroki"
+   "chair": "Hiroki",
+   "online": true,
+   "part": "morning"
   },
   {
    "id": "Wed 11:00-12:30 201",
@@ -1341,7 +1581,9 @@
    "name": "10.6.x",
    "agenda_item": "10.6.x",
    "inferred_agenda_items": [],
-   "chair": "Xiaodong"
+   "chair": "Xiaodong",
+   "online": false,
+   "part": "morning"
   },
   {
    "id": "Wed 11:00-11:30 203",
@@ -1352,7 +1594,9 @@
    "name": "10.5.2.1",
    "agenda_item": "10.5.2.1",
    "inferred_agenda_items": [],
-   "chair": "Sorour"
+   "chair": "Sorour",
+   "online": false,
+   "part": "morning"
   },
   {
    "id": "Wed 11:30-12:30 203",
@@ -1363,7 +1607,9 @@
    "name": "10.5.2.3",
    "agenda_item": "10.5.2.3",
    "inferred_agenda_items": [],
-   "chair": "Sorour"
+   "chair": "Sorour",
+   "online": false,
+   "part": "morning"
   },
   {
    "id": "Wed 11:40-12:20 Yeongju B Hall",
@@ -1374,7 +1620,9 @@
    "name": "10.8.1",
    "agenda_item": "10.8.1",
    "inferred_agenda_items": [],
-   "chair": "Hiroki"
+   "chair": "Hiroki",
+   "online": true,
+   "part": "morning"
   },
   {
    "id": "Wed 12:00-12:30 Tamna BC Hall",
@@ -1385,7 +1633,9 @@
    "name": "10.5.3.2",
    "agenda_item": "10.5.3.2",
    "inferred_agenda_items": [],
-   "chair": null
+   "chair": null,
+   "online": true,
+   "part": "morning"
   },
   {
    "id": "Wed 12:00-12:30 Yeongju A Hall",
@@ -1396,7 +1646,9 @@
    "name": "AI 8.1",
    "agenda_item": "8.1",
    "inferred_agenda_items": [],
-   "chair": "Sorour"
+   "chair": "Sorour",
+   "online": true,
+   "part": "morning"
   },
   {
    "id": "Wed 12:20-13:00 Yeongju B Hall",
@@ -1407,7 +1659,9 @@
    "name": "10.8.3",
    "agenda_item": "10.8.3",
    "inferred_agenda_items": [],
-   "chair": "Hiroki"
+   "chair": "Hiroki",
+   "online": true,
+   "part": "morning"
   },
   {
    "id": "Wed 12:30-13:00 Tamna BC Hall",
@@ -1418,7 +1672,9 @@
    "name": "10.5.3.3",
    "agenda_item": "10.5.3.3",
    "inferred_agenda_items": [],
-   "chair": null
+   "chair": null,
+   "online": true,
+   "part": "morning"
   },
   {
    "id": "Wed 12:30-13:00 Yeongju A Hall",
@@ -1429,7 +1685,9 @@
    "name": "AI 10.5.2.2 PDSCH",
    "agenda_item": "10.5.2.2",
    "inferred_agenda_items": [],
-   "chair": "Sorour"
+   "chair": "Sorour",
+   "online": true,
+   "part": "morning"
   },
   {
    "id": "Wed 12:30-13:00 201",
@@ -1440,7 +1698,9 @@
    "name": "10.5.4.1",
    "agenda_item": "10.5.4.1",
    "inferred_agenda_items": [],
-   "chair": "Hiroki"
+   "chair": "Hiroki",
+   "online": false,
+   "part": "morning"
   },
   {
    "id": "Wed 12:30-13:00 203",
@@ -1453,7 +1713,9 @@
    "inferred_agenda_items": [
     "9.2"
    ],
-   "chair": "Sorour"
+   "chair": "Sorour",
+   "online": false,
+   "part": "morning"
   },
   {
    "id": "Wed 14:30-15:00 Tamna BC Hall",
@@ -1464,7 +1726,9 @@
    "name": "10.5.3.4",
    "agenda_item": "10.5.3.4",
    "inferred_agenda_items": [],
-   "chair": null
+   "chair": null,
+   "online": true,
+   "part": "afternoon"
   },
   {
    "id": "Wed 14:30-15:10 Yeongju A Hall",
@@ -1475,7 +1739,9 @@
    "name": "AI 10.5.2.1 PDCCH",
    "agenda_item": "10.5.2.1",
    "inferred_agenda_items": [],
-   "chair": "Sorour"
+   "chair": "Sorour",
+   "online": true,
+   "part": "afternoon"
   },
   {
    "id": "Wed 14:30-15:00 Yeongju B Hall",
@@ -1486,7 +1752,9 @@
    "name": "8.2 R19 LP-WUS, R19/20 Mobility",
    "agenda_item": "8.2",
    "inferred_agenda_items": [],
-   "chair": "Hiroki"
+   "chair": "Hiroki",
+   "online": true,
+   "part": "afternoon"
   },
   {
    "id": "Wed 14:30-15:30 201",
@@ -1497,7 +1765,9 @@
    "name": "6G 10.5.4.x",
    "agenda_item": "10.5.4.2, 10.5.4.3, 10.5.4.4",
    "inferred_agenda_items": [],
-   "chair": "Hiroki"
+   "chair": "Hiroki",
+   "online": false,
+   "part": "afternoon"
   },
   {
    "id": "Wed 14:30-15:10 203",
@@ -1508,7 +1778,9 @@
    "name": "10.3.1",
    "agenda_item": "10.3.1",
    "inferred_agenda_items": [],
-   "chair": "Sorour"
+   "chair": "Sorour",
+   "online": false,
+   "part": "afternoon"
   },
   {
    "id": "Wed 15:00-16:30 Tamna BC Hall",
@@ -1519,7 +1791,9 @@
    "name": "10.6.x",
    "agenda_item": "10.6.x",
    "inferred_agenda_items": [],
-   "chair": null
+   "chair": null,
+   "online": true,
+   "part": "afternoon"
   },
   {
    "id": "Wed 15:00-15:50 Yeongju B Hall",
@@ -1530,7 +1804,9 @@
    "name": "7 pre-Rel-19 CRs, 8.2 R19 Duplex",
    "agenda_item": "7, 8.2",
    "inferred_agenda_items": [],
-   "chair": "Hiroki"
+   "chair": "Hiroki",
+   "online": true,
+   "part": "afternoon"
   },
   {
    "id": "Wed 15:10-16:30 Yeongju A Hall",
@@ -1541,7 +1817,9 @@
    "name": "AI 10.5.2.3 PUxCH",
    "agenda_item": "10.5.2.3",
    "inferred_agenda_items": [],
-   "chair": "Sorour"
+   "chair": "Sorour",
+   "online": true,
+   "part": "afternoon"
   },
   {
    "id": "Wed 15:10-16:30 203",
@@ -1552,7 +1830,9 @@
    "name": "R20 A-IoT",
    "agenda_item": "9.3.2, 9.3.3, 9.3.1",
    "inferred_agenda_items": [],
-   "chair": "Hiroki"
+   "chair": "Hiroki",
+   "online": false,
+   "part": "afternoon"
   },
   {
    "id": "Wed 15:30-16:00 201",
@@ -1563,7 +1843,9 @@
    "name": "10.4.2",
    "agenda_item": "10.4.2",
    "inferred_agenda_items": [],
-   "chair": "Xiaodong"
+   "chair": "Xiaodong",
+   "online": false,
+   "part": "afternoon"
   },
   {
    "id": "Wed 15:50-16:00 Yeongju B Hall",
@@ -1574,7 +1856,9 @@
    "name": "11 TEI20",
    "agenda_item": "11",
    "inferred_agenda_items": [],
-   "chair": "Hiroki"
+   "chair": "Hiroki",
+   "online": true,
+   "part": "afternoon"
   },
   {
    "id": "Wed 16:00-16:30 Yeongju B Hall",
@@ -1585,7 +1869,9 @@
    "name": "R20 Coverage RRC",
    "agenda_item": null,
    "inferred_agenda_items": [],
-   "chair": "Hiroki"
+   "chair": "Hiroki",
+   "online": true,
+   "part": "afternoon"
   },
   {
    "id": "Wed 16:00-16:30 201",
@@ -1596,7 +1882,9 @@
    "name": "10.4.1",
    "agenda_item": "10.4.1",
    "inferred_agenda_items": [],
-   "chair": "Xiaodong"
+   "chair": "Xiaodong",
+   "online": false,
+   "part": "afternoon"
   },
   {
    "id": "Wed 17:00-17:40 Tamna BC Hall",
@@ -1607,7 +1895,9 @@
    "name": "10.4.1",
    "agenda_item": "10.4.1",
    "inferred_agenda_items": [],
-   "chair": null
+   "chair": null,
+   "online": true,
+   "part": "evening"
   },
   {
    "id": "Wed 17:00-18:00 Yeongju A Hall",
@@ -1618,7 +1908,9 @@
    "name": "10.3.1 Channel coding",
    "agenda_item": "10.3.1",
    "inferred_agenda_items": [],
-   "chair": null
+   "chair": null,
+   "online": true,
+   "part": "evening"
   },
   {
    "id": "Wed 17:00-17:30 Yeongju B Hall",
@@ -1629,7 +1921,9 @@
    "name": "10.2.1 Waveform",
    "agenda_item": "10.2.1",
    "inferred_agenda_items": [],
-   "chair": "Hiroki"
+   "chair": "Hiroki",
+   "online": true,
+   "part": "evening"
   },
   {
    "id": "Wed 17:00-17:30 201",
@@ -1640,7 +1934,9 @@
    "name": "10.5.1.3",
    "agenda_item": "10.5.1.3",
    "inferred_agenda_items": [],
-   "chair": "Xiaodong"
+   "chair": "Xiaodong",
+   "online": false,
+   "part": "evening"
   },
   {
    "id": "Wed 17:00-18:00 203",
@@ -1651,7 +1947,9 @@
    "name": "10.5.2.2",
    "agenda_item": "10.5.2.2",
    "inferred_agenda_items": [],
-   "chair": "Sorour"
+   "chair": "Sorour",
+   "online": false,
+   "part": "evening"
   },
   {
    "id": "Wed 17:30-17:50 Yeongju B Hall",
@@ -1662,7 +1960,9 @@
    "name": "10.5.4.2",
    "agenda_item": "10.5.4.2",
    "inferred_agenda_items": [],
-   "chair": "Hiroki"
+   "chair": "Hiroki",
+   "online": true,
+   "part": "evening"
   },
   {
    "id": "Wed 17:30-18:10 201",
@@ -1673,7 +1973,9 @@
    "name": "10.5.1.2",
    "agenda_item": "10.5.1.2",
    "inferred_agenda_items": [],
-   "chair": "Xiaodong"
+   "chair": "Xiaodong",
+   "online": false,
+   "part": "evening"
   },
   {
    "id": "Wed 17:40-18:20 Tamna BC Hall",
@@ -1684,7 +1986,9 @@
    "name": "10.4.2",
    "agenda_item": "10.4.2",
    "inferred_agenda_items": [],
-   "chair": null
+   "chair": null,
+   "online": true,
+   "part": "evening"
   },
   {
    "id": "Wed 17:50-18:20 Yeongju B Hall",
@@ -1695,7 +1999,9 @@
    "name": "10.5.4.1",
    "agenda_item": "10.5.4.1",
    "inferred_agenda_items": [],
-   "chair": "Hiroki"
+   "chair": "Hiroki",
+   "online": true,
+   "part": "evening"
   },
   {
    "id": "Wed 18:00-18:30 Yeongju A Hall",
@@ -1706,7 +2012,9 @@
    "name": "10.3.2 Modulation",
    "agenda_item": "10.3.2",
    "inferred_agenda_items": [],
-   "chair": null
+   "chair": null,
+   "online": true,
+   "part": "evening"
   },
   {
    "id": "Wed 18:00-18:30 203",
@@ -1717,7 +2025,9 @@
    "name": "10.7.1 NTN",
    "agenda_item": "10.7.1",
    "inferred_agenda_items": [],
-   "chair": "Sorour"
+   "chair": "Sorour",
+   "online": false,
+   "part": "evening"
   },
   {
    "id": "Wed 18:10-19:00 201",
@@ -1728,7 +2038,9 @@
    "name": "10.5.1.1",
    "agenda_item": "10.5.1.1",
    "inferred_agenda_items": [],
-   "chair": "Xiaodong"
+   "chair": "Xiaodong",
+   "online": false,
+   "part": "evening"
   },
   {
    "id": "Wed 18:20-19:00 Tamna BC Hall",
@@ -1739,7 +2051,9 @@
    "name": "10.5.5",
    "agenda_item": "10.5.5",
    "inferred_agenda_items": [],
-   "chair": null
+   "chair": null,
+   "online": true,
+   "part": "evening"
   },
   {
    "id": "Wed 18:20-18:50 Yeongju B Hall",
@@ -1750,7 +2064,9 @@
    "name": "10.5.4.4",
    "agenda_item": "10.5.4.4",
    "inferred_agenda_items": [],
-   "chair": "Hiroki"
+   "chair": "Hiroki",
+   "online": true,
+   "part": "evening"
   },
   {
    "id": "Wed 18:30-19:30 Yeongju A Hall",
@@ -1761,7 +2077,9 @@
    "name": "10.5.2.2 PDSCH",
    "agenda_item": "10.5.2.2",
    "inferred_agenda_items": [],
-   "chair": null
+   "chair": null,
+   "online": true,
+   "part": "evening"
   },
   {
    "id": "Wed 18:30-19:00 203",
@@ -1772,7 +2090,9 @@
    "name": "9.5 NTN",
    "agenda_item": "9.5",
    "inferred_agenda_items": [],
-   "chair": "Sorour"
+   "chair": "Sorour",
+   "online": false,
+   "part": "evening"
   },
   {
    "id": "Wed 18:50-19:30 Yeongju B Hall",
@@ -1783,7 +2103,9 @@
    "name": "10.5.4.3",
    "agenda_item": "10.5.4.3",
    "inferred_agenda_items": [],
-   "chair": "Hiroki"
+   "chair": "Hiroki",
+   "online": true,
+   "part": "evening"
   },
   {
    "id": "Wed 19:00-19:30 Tamna BC Hall",
@@ -1794,7 +2116,9 @@
    "name": "10.5.3.1",
    "agenda_item": "10.5.3.1",
    "inferred_agenda_items": [],
-   "chair": null
+   "chair": null,
+   "online": true,
+   "part": "evening"
   },
   {
    "id": "Wed 19:00-19:30 201",
@@ -1805,7 +2129,9 @@
    "name": "10.4.1",
    "agenda_item": "10.4.1",
    "inferred_agenda_items": [],
-   "chair": "Xiaodong"
+   "chair": "Xiaodong",
+   "online": false,
+   "part": "evening"
   },
   {
    "id": "Wed 19:00-19:30 203",
@@ -1816,7 +2142,9 @@
    "name": "9.4 NTN-NR",
    "agenda_item": "9.4",
    "inferred_agenda_items": [],
-   "chair": "Sorour"
+   "chair": "Sorour",
+   "online": false,
+   "part": "evening"
   },
   {
    "id": "Thu 08:30-09:20 Tamna BC Hall",
@@ -1827,7 +2155,9 @@
    "name": "10.5.1.1",
    "agenda_item": "10.5.1.1",
    "inferred_agenda_items": [],
-   "chair": null
+   "chair": null,
+   "online": true,
+   "part": "morning"
   },
   {
    "id": "Thu 08:30-09:20 Yeongju A Hall",
@@ -1838,7 +2168,9 @@
    "name": "AI 10.7.1 NTN",
    "agenda_item": "10.7.1",
    "inferred_agenda_items": [],
-   "chair": null
+   "chair": null,
+   "online": true,
+   "part": "morning"
   },
   {
    "id": "Thu 08:30-09:10 Yeongju B Hall",
@@ -1849,7 +2181,9 @@
    "name": "10.2.1 6G waveform",
    "agenda_item": "10.2.1",
    "inferred_agenda_items": [],
-   "chair": "Hiroki"
+   "chair": "Hiroki",
+   "online": true,
+   "part": "morning"
   },
   {
    "id": "Thu 08:30-09:00 201",
@@ -1860,7 +2194,9 @@
    "name": "10.4.2",
    "agenda_item": "10.4.2",
    "inferred_agenda_items": [],
-   "chair": "Xiaodong"
+   "chair": "Xiaodong",
+   "online": false,
+   "part": "morning"
   },
   {
    "id": "Thu 08:30-09:10 203",
@@ -1873,7 +2209,9 @@
    "inferred_agenda_items": [
     "9.1"
    ],
-   "chair": "Sorour"
+   "chair": "Sorour",
+   "online": false,
+   "part": "morning"
   },
   {
    "id": "Thu 09:00-09:30 201",
@@ -1884,7 +2222,9 @@
    "name": "10.5.5",
    "agenda_item": "10.5.5",
    "inferred_agenda_items": [],
-   "chair": "Xiaodong"
+   "chair": "Xiaodong",
+   "online": false,
+   "part": "morning"
   },
   {
    "id": "Thu 09:10-10:30 Yeongju B Hall",
@@ -1895,7 +2235,9 @@
    "name": "Maintenance",
    "agenda_item": "8.2, 7",
    "inferred_agenda_items": [],
-   "chair": "Hiroki"
+   "chair": "Hiroki",
+   "online": true,
+   "part": "morning"
   },
   {
    "id": "Thu 09:10-10:30 203",
@@ -1906,7 +2248,9 @@
    "name": "10.6.2/10.6.1.1/106.1.2",
    "agenda_item": "10.6.2, 10.6.1.1, 106.1.2",
    "inferred_agenda_items": [],
-   "chair": "Xiaodong"
+   "chair": "Xiaodong",
+   "online": false,
+   "part": "morning"
   },
   {
    "id": "Thu 09:20-10:00 Tamna BC Hall",
@@ -1917,7 +2261,9 @@
    "name": "10.5.1.2",
    "agenda_item": "10.5.1.2",
    "inferred_agenda_items": [],
-   "chair": null
+   "chair": null,
+   "online": true,
+   "part": "morning"
   },
   {
    "id": "Thu 09:20-09:50 Yeongju A Hall",
@@ -1928,7 +2274,9 @@
    "name": "AI 9.5 NTN",
    "agenda_item": "9.5",
    "inferred_agenda_items": [],
-   "chair": null
+   "chair": null,
+   "online": true,
+   "part": "morning"
   },
   {
    "id": "Thu 09:30-10:30 201",
@@ -1939,7 +2287,9 @@
    "name": "10.5.3.1",
    "agenda_item": "10.5.3.1",
    "inferred_agenda_items": [],
-   "chair": "Xiaodong"
+   "chair": "Xiaodong",
+   "online": false,
+   "part": "morning"
   },
   {
    "id": "Thu 09:50-10:30 Yeongju A Hall",
@@ -1950,7 +2300,9 @@
    "name": "AI 9.4 NR-NTN",
    "agenda_item": "9.4",
    "inferred_agenda_items": [],
-   "chair": null
+   "chair": null,
+   "online": true,
+   "part": "morning"
   },
   {
    "id": "Thu 10:00-10:30 Tamna BC Hall",
@@ -1961,7 +2313,9 @@
    "name": "10.5.1.3",
    "agenda_item": "10.5.1.3",
    "inferred_agenda_items": [],
-   "chair": null
+   "chair": null,
+   "online": true,
+   "part": "morning"
   },
   {
    "id": "Thu 11:00-11:40 Tamna BC Hall",
@@ -1972,7 +2326,9 @@
    "name": "10.5.5",
    "agenda_item": "10.5.5",
    "inferred_agenda_items": [],
-   "chair": null
+   "chair": null,
+   "online": true,
+   "part": "morning"
   },
   {
    "id": "Thu 11:00-11:30 Yeongju A Hall",
@@ -1983,7 +2339,9 @@
    "name": "AI 8.1",
    "agenda_item": "8.1",
    "inferred_agenda_items": [],
-   "chair": "Sorour"
+   "chair": "Sorour",
+   "online": true,
+   "part": "morning"
   },
   {
    "id": "Thu 11:00-11:40 Yeongju B Hall",
@@ -1994,7 +2352,9 @@
    "name": "9.3.3",
    "agenda_item": "9.3.3",
    "inferred_agenda_items": [],
-   "chair": "Hiroki"
+   "chair": "Hiroki",
+   "online": true,
+   "part": "morning"
   },
   {
    "id": "Thu 11:00-12:30 201",
@@ -2005,7 +2365,9 @@
    "name": "10.8.x Sensing",
    "agenda_item": "10.8.1, 10.8.2, 10.8.3",
    "inferred_agenda_items": [],
-   "chair": "Hiroki"
+   "chair": "Hiroki",
+   "online": false,
+   "part": "morning"
   },
   {
    "id": "Thu 11:00-11:45 203",
@@ -2016,7 +2378,9 @@
    "name": "10.5.2.3",
    "agenda_item": "10.5.2.3",
    "inferred_agenda_items": [],
-   "chair": "Sorouri"
+   "chair": "Sorouri",
+   "online": false,
+   "part": "morning"
   },
   {
    "id": "Thu 11:30-12:20 Yeongju A Hall",
@@ -2027,7 +2391,9 @@
    "name": "AI 9.1 AIML",
    "agenda_item": "9.1",
    "inferred_agenda_items": [],
-   "chair": "Sorour"
+   "chair": "Sorour",
+   "online": true,
+   "part": "morning"
   },
   {
    "id": "Thu 11:40-12:20 Tamna BC Hall",
@@ -2038,7 +2404,9 @@
    "name": "10.4.1",
    "agenda_item": "10.4.1",
    "inferred_agenda_items": [],
-   "chair": null
+   "chair": null,
+   "online": true,
+   "part": "morning"
   },
   {
    "id": "Thu 11:40-12:20 Yeongju B Hall",
@@ -2049,7 +2417,9 @@
    "name": "9.3.1",
    "agenda_item": "9.3.1",
    "inferred_agenda_items": [],
-   "chair": "Hiroki"
+   "chair": "Hiroki",
+   "online": true,
+   "part": "morning"
   },
   {
    "id": "Thu 11:45-12:15 203",
@@ -2060,7 +2430,9 @@
    "name": "10.5.2.1",
    "agenda_item": "10.5.2.1",
    "inferred_agenda_items": [],
-   "chair": "Sorouri"
+   "chair": "Sorouri",
+   "online": false,
+   "part": "morning"
   },
   {
    "id": "Thu 12:15-13:00 203",
@@ -2071,7 +2443,9 @@
    "name": "10.5.2.2",
    "agenda_item": "10.5.2.2",
    "inferred_agenda_items": [],
-   "chair": "Sorouri"
+   "chair": "Sorouri",
+   "online": false,
+   "part": "morning"
   },
   {
    "id": "Thu 12:20-13:00 Tamna BC Hall",
@@ -2082,7 +2456,9 @@
    "name": "10.4.2",
    "agenda_item": "10.4.2",
    "inferred_agenda_items": [],
-   "chair": null
+   "chair": null,
+   "online": true,
+   "part": "morning"
   },
   {
    "id": "Thu 12:20-13:00 Yeongju A Hall",
@@ -2093,7 +2469,9 @@
    "name": "AI 9.2 MIMO",
    "agenda_item": "9.2",
    "inferred_agenda_items": [],
-   "chair": "Sorour"
+   "chair": "Sorour",
+   "online": true,
+   "part": "morning"
   },
   {
    "id": "Thu 12:20-13:00 Yeongju B Hall",
@@ -2104,7 +2482,9 @@
    "name": "9.3.2",
    "agenda_item": "9.3.2",
    "inferred_agenda_items": [],
-   "chair": "Hiroki"
+   "chair": "Hiroki",
+   "online": true,
+   "part": "morning"
   },
   {
    "id": "Thu 12:30-13:00 201",
@@ -2115,7 +2495,9 @@
    "name": "10.5.3.2",
    "agenda_item": "10.5.3.2",
    "inferred_agenda_items": [],
-   "chair": "Xiaodong"
+   "chair": "Xiaodong",
+   "online": false,
+   "part": "morning"
   },
   {
    "id": "Thu 14:30-16:00 Tamna BC Hall",
@@ -2126,7 +2508,9 @@
    "name": "10.6.x",
    "agenda_item": "10.6.x",
    "inferred_agenda_items": [],
-   "chair": null
+   "chair": null,
+   "online": true,
+   "part": "afternoon"
   },
   {
    "id": "Thu 14:30-15:00 Yeongju A Hall",
@@ -2137,7 +2521,9 @@
    "name": "AI 10.5.2.1 PDCCH",
    "agenda_item": "10.5.2.1",
    "inferred_agenda_items": [],
-   "chair": "Sorour"
+   "chair": "Sorour",
+   "online": true,
+   "part": "afternoon"
   },
   {
    "id": "Thu 14:30-15:10 Yeongju B Hall",
@@ -2148,7 +2534,9 @@
    "name": "10.8.1",
    "agenda_item": "10.8.1",
    "inferred_agenda_items": [],
-   "chair": "Hiroki"
+   "chair": "Hiroki",
+   "online": true,
+   "part": "afternoon"
   },
   {
    "id": "Thu 14:30-15:00 201",
@@ -2159,7 +2547,9 @@
    "name": "10.5.3.2",
    "agenda_item": "10.5.3.2",
    "inferred_agenda_items": [],
-   "chair": "Xiaodong"
+   "chair": "Xiaodong",
+   "online": false,
+   "part": "afternoon"
   },
   {
    "id": "Thu 14:30-16:30 203",
@@ -2170,7 +2560,9 @@
    "name": "10.5.4.x",
    "agenda_item": "10.5.4.4, 10.5.4.3, 10.5.4.2, 10.5.4.1",
    "inferred_agenda_items": [],
-   "chair": "Hiroki"
+   "chair": "Hiroki",
+   "online": false,
+   "part": "afternoon"
   },
   {
    "id": "Thu 15:00-15:45 Yeongju A Hall",
@@ -2181,7 +2573,9 @@
    "name": "AI 10.5.2.2 PDSCH",
    "agenda_item": "10.5.2.2",
    "inferred_agenda_items": [],
-   "chair": "Sorour"
+   "chair": "Sorour",
+   "online": true,
+   "part": "afternoon"
   },
   {
    "id": "Thu 15:00-15:30 201",
@@ -2192,7 +2586,9 @@
    "name": "10.5.3.3",
    "agenda_item": "10.5.3.3",
    "inferred_agenda_items": [],
-   "chair": "Xiaodong"
+   "chair": "Xiaodong",
+   "online": false,
+   "part": "afternoon"
   },
   {
    "id": "Thu 15:10-15:50 Yeongju B Hall",
@@ -2203,7 +2599,9 @@
    "name": "10.8.2",
    "agenda_item": "10.8.2",
    "inferred_agenda_items": [],
-   "chair": "Hiroki"
+   "chair": "Hiroki",
+   "online": true,
+   "part": "afternoon"
   },
   {
    "id": "Thu 15:30-16:10 201",
@@ -2214,7 +2612,9 @@
    "name": "10.3.1",
    "agenda_item": "10.3.1",
    "inferred_agenda_items": [],
-   "chair": "Sorour"
+   "chair": "Sorour",
+   "online": false,
+   "part": "afternoon"
   },
   {
    "id": "Thu 15:45-16:30 Yeongju A Hall",
@@ -2225,7 +2625,9 @@
    "name": "AI 10.5.2.3 PUxCH",
    "agenda_item": "10.5.2.3",
    "inferred_agenda_items": [],
-   "chair": "Sorour"
+   "chair": "Sorour",
+   "online": true,
+   "part": "afternoon"
   },
   {
    "id": "Thu 15:50-16:30 Yeongju B Hall",
@@ -2236,7 +2638,9 @@
    "name": "10.8.3",
    "agenda_item": "10.8.3",
    "inferred_agenda_items": [],
-   "chair": "Hiroki"
+   "chair": "Hiroki",
+   "online": true,
+   "part": "afternoon"
   },
   {
    "id": "Thu 16:00-16:30 Tamna BC Hall",
@@ -2247,7 +2651,9 @@
    "name": "10.5.3.1",
    "agenda_item": "10.5.3.1",
    "inferred_agenda_items": [],
-   "chair": null
+   "chair": null,
+   "online": true,
+   "part": "afternoon"
   },
   {
    "id": "Thu 16:10-16:30 201",
@@ -2258,7 +2664,9 @@
    "name": "10.3.2",
    "agenda_item": "10.3.2",
    "inferred_agenda_items": [],
-   "chair": "Sorour"
+   "chair": "Sorour",
+   "online": false,
+   "part": "afternoon"
   },
   {
    "id": "Thu 17:00-17:50 Tamna BC Hall",
@@ -2269,7 +2677,9 @@
    "name": "10.5.3.1",
    "agenda_item": "10.5.3.1",
    "inferred_agenda_items": [],
-   "chair": null
+   "chair": null,
+   "online": true,
+   "part": "evening"
   },
   {
    "id": "Thu 17:00-18:00 Yeongju A Hall",
@@ -2280,7 +2690,9 @@
    "name": "AI 10.3.1 Coding",
    "agenda_item": "10.3.1",
    "inferred_agenda_items": [],
-   "chair": "Sorour"
+   "chair": "Sorour",
+   "online": true,
+   "part": "evening"
   },
   {
    "id": "Thu 17:00-17:30 Yeongju B Hall",
@@ -2291,7 +2703,9 @@
    "name": "10.5.4.4",
    "agenda_item": "10.5.4.4",
    "inferred_agenda_items": [],
-   "chair": "Hiroki"
+   "chair": "Hiroki",
+   "online": true,
+   "part": "evening"
   },
   {
    "id": "Thu 17:00-17:50 201",
@@ -2302,7 +2716,9 @@
    "name": "10.5.1.1",
    "agenda_item": "10.5.1.1",
    "inferred_agenda_items": [],
-   "chair": "Xiaodong"
+   "chair": "Xiaodong",
+   "online": false,
+   "part": "evening"
   },
   {
    "id": "Thu 17:00-17:40 203",
@@ -2315,7 +2731,9 @@
    "inferred_agenda_items": [
     "9.1"
    ],
-   "chair": "Sorour"
+   "chair": "Sorour",
+   "online": false,
+   "part": "evening"
   },
   {
    "id": "Thu 17:30-18:10 Yeongju B Hall",
@@ -2326,7 +2744,9 @@
    "name": "10.5.4.3",
    "agenda_item": "10.5.4.3",
    "inferred_agenda_items": [],
-   "chair": "Hiroki"
+   "chair": "Hiroki",
+   "online": true,
+   "part": "evening"
   },
   {
    "id": "Thu 17:40-19:30 203",
@@ -2337,7 +2757,9 @@
    "name": "R20 A-IoT",
    "agenda_item": "9.3.1, 9.3.2, 9.3.3",
    "inferred_agenda_items": [],
-   "chair": "Hiroki"
+   "chair": "Hiroki",
+   "online": false,
+   "part": "evening"
   },
   {
    "id": "Thu 17:50-18:30 Tamna BC Hall",
@@ -2348,7 +2770,9 @@
    "name": "10.5.3.2",
    "agenda_item": "10.5.3.2",
    "inferred_agenda_items": [],
-   "chair": null
+   "chair": null,
+   "online": true,
+   "part": "evening"
   },
   {
    "id": "Thu 17:50-18:30 201",
@@ -2359,7 +2783,9 @@
    "name": "10.5.1.2",
    "agenda_item": "10.5.1.2",
    "inferred_agenda_items": [],
-   "chair": "Xiaodong"
+   "chair": "Xiaodong",
+   "online": false,
+   "part": "evening"
   },
   {
    "id": "Thu 18:00-18:30 Yeongju A Hall",
@@ -2370,7 +2796,9 @@
    "name": "AI 10.3.2 Modulation",
    "agenda_item": "10.3.2",
    "inferred_agenda_items": [],
-   "chair": "Sorour"
+   "chair": "Sorour",
+   "online": true,
+   "part": "evening"
   },
   {
    "id": "Thu 18:10-19:00 Yeongju B Hall",
@@ -2381,7 +2809,9 @@
    "name": "10.5.4.1",
    "agenda_item": "10.5.4.1",
    "inferred_agenda_items": [],
-   "chair": "Hiroki"
+   "chair": "Hiroki",
+   "online": true,
+   "part": "evening"
   },
   {
    "id": "Thu 18:30-19:00 Tamna BC Hall",
@@ -2392,7 +2822,9 @@
    "name": "10.5.3.3",
    "agenda_item": "10.5.3.3",
    "inferred_agenda_items": [],
-   "chair": null
+   "chair": null,
+   "online": true,
+   "part": "evening"
   },
   {
    "id": "Thu 18:30-19:30 Yeongju A Hall",
@@ -2403,7 +2835,9 @@
    "name": "AI 9.1 AIML",
    "agenda_item": "9.1",
    "inferred_agenda_items": [],
-   "chair": "Sorour"
+   "chair": "Sorour",
+   "online": true,
+   "part": "evening"
   },
   {
    "id": "Thu 18:30-19:00 201",
@@ -2414,7 +2848,9 @@
    "name": "10.5.1.3",
    "agenda_item": "10.5.1.3",
    "inferred_agenda_items": [],
-   "chair": "Xiaodong"
+   "chair": "Xiaodong",
+   "online": false,
+   "part": "evening"
   },
   {
    "id": "Thu 19:00-19:30 Tamna BC Hall",
@@ -2425,7 +2861,9 @@
    "name": "10.5.3.4",
    "agenda_item": "10.5.3.4",
    "inferred_agenda_items": [],
-   "chair": null
+   "chair": null,
+   "online": true,
+   "part": "evening"
   },
   {
    "id": "Thu 19:00-19:30 Yeongju B Hall",
@@ -2436,7 +2874,9 @@
    "name": "10.5.4.2",
    "agenda_item": "10.5.4.2",
    "inferred_agenda_items": [],
-   "chair": "Hiroki"
+   "chair": "Hiroki",
+   "online": true,
+   "part": "evening"
   },
   {
    "id": "Thu 19:00-19:30 201",
@@ -2447,7 +2887,9 @@
    "name": "10.7.1 NTN",
    "agenda_item": "10.7.1",
    "inferred_agenda_items": [],
-   "chair": "Sorour"
+   "chair": "Sorour",
+   "online": false,
+   "part": "evening"
   },
   {
    "id": "Fri 08:30-09:20 Tamna BC Hall",
@@ -2458,7 +2900,9 @@
    "name": "10.5.1.1",
    "agenda_item": "10.5.1.1",
    "inferred_agenda_items": [],
-   "chair": null
+   "chair": null,
+   "online": true,
+   "part": "morning"
   },
   {
    "id": "Fri 08:30-09:30 Yeongju A Hall",
@@ -2469,7 +2913,9 @@
    "name": "10.7.1 NTN",
    "agenda_item": "10.7.1",
    "inferred_agenda_items": [],
-   "chair": "Sorour"
+   "chair": "Sorour",
+   "online": true,
+   "part": "morning"
   },
   {
    "id": "Fri 08:30-09:10 Yeongju B Hall",
@@ -2480,7 +2926,9 @@
    "name": "9.3.1",
    "agenda_item": "9.3.1",
    "inferred_agenda_items": [],
-   "chair": "Hiroki"
+   "chair": "Hiroki",
+   "online": true,
+   "part": "morning"
   },
   {
    "id": "Fri 09:10-09:50 Yeongju B Hall",
@@ -2491,7 +2939,9 @@
    "name": "9.3.2",
    "agenda_item": "9.3.2",
    "inferred_agenda_items": [],
-   "chair": "Hiroki"
+   "chair": "Hiroki",
+   "online": true,
+   "part": "morning"
   },
   {
    "id": "Fri 09:20-10:00 Tamna BC Hall",
@@ -2502,7 +2952,9 @@
    "name": "10.5.1.2",
    "agenda_item": "10.5.1.2",
    "inferred_agenda_items": [],
-   "chair": null
+   "chair": null,
+   "online": true,
+   "part": "morning"
   },
   {
    "id": "Fri 09:30-10:30 Yeongju A Hall",
@@ -2513,7 +2965,9 @@
    "name": "10.5.2.x",
    "agenda_item": "10.5.2.x",
    "inferred_agenda_items": [],
-   "chair": "Sorour"
+   "chair": "Sorour",
+   "online": true,
+   "part": "morning"
   },
   {
    "id": "Fri 09:50-10:30 Yeongju B Hall",
@@ -2524,7 +2978,9 @@
    "name": "9.3.3",
    "agenda_item": "9.3.3",
    "inferred_agenda_items": [],
-   "chair": "Hiroki"
+   "chair": "Hiroki",
+   "online": true,
+   "part": "morning"
   },
   {
    "id": "Fri 10:00-10:30 Tamna BC Hall",
@@ -2535,7 +2991,9 @@
    "name": "10.5.1.3",
    "agenda_item": "10.5.1.3",
    "inferred_agenda_items": [],
-   "chair": null
+   "chair": null,
+   "online": true,
+   "part": "morning"
   },
   {
    "id": "Fri 11:00-13:00 Tamna BC Hall",
@@ -2546,7 +3004,9 @@
    "name": "Sweep",
    "agenda_item": null,
    "inferred_agenda_items": [],
-   "chair": null
+   "chair": null,
+   "online": true,
+   "part": "morning"
   },
   {
    "id": "Fri 11:00-13:00 Yeongju A Hall",
@@ -2557,7 +3017,9 @@
    "name": "TBD",
    "agenda_item": null,
    "inferred_agenda_items": [],
-   "chair": null
+   "chair": null,
+   "online": true,
+   "part": "morning"
   },
   {
    "id": "Fri 11:00-13:00 Yeongju B Hall",
@@ -2568,7 +3030,9 @@
    "name": "TBD",
    "agenda_item": null,
    "inferred_agenda_items": [],
-   "chair": null
+   "chair": null,
+   "online": true,
+   "part": "morning"
   },
   {
    "id": "Fri 14:30-17:00 Tamna BC Hall + Yeongju A Hall + Yeongju B Hall",
@@ -2579,7 +3043,9 @@
    "name": "Any other open issues. Session reports",
    "agenda_item": null,
    "inferred_agenda_items": [],
-   "chair": null
+   "chair": null,
+   "online": true,
+   "part": "afternoon"
   },
   {
    "id": "Fri 14:30-16:30 201",
@@ -2590,7 +3056,9 @@
    "name": "To be assigned by Sorour",
    "agenda_item": null,
    "inferred_agenda_items": [],
-   "chair": "Sorour"
+   "chair": "Sorour",
+   "online": false,
+   "part": "afternoon"
   },
   {
    "id": "Fri 14:30-16:30 203",
@@ -2601,7 +3069,9 @@
    "name": "To be assigned by Hiroki",
    "agenda_item": null,
    "inferred_agenda_items": [],
-   "chair": "Hiroki"
+   "chair": "Hiroki",
+   "online": false,
+   "part": "afternoon"
   }
  ]
 }

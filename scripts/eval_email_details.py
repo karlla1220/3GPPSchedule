@@ -33,13 +33,15 @@ from working_groups.ran1.email_sessions import (  # noqa: E402
 FIXTURE = Path(__file__).resolve().parent.parent / "tests/fixtures/ran1/listserv_126bis"
 TZ = ZoneInfo("Asia/Seoul")
 FIRST_DAY = date(2026, 10, 12)
+# Every day of RAN1#126bis: lunch 13:00-14:30, the last break ends at 17:00.
+PARTS = {day: (13 * 60, 14 * 60 + 30, 17 * 60) for day in ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]}
 
 
 def load():
     read = lambda name: json.loads((FIXTURE / name).read_text(encoding="utf-8"))
     cells = [
         Cell(g["id"], g["day"], g["start"], g["end"], g["room"], g["name"], g["agenda_item"],
-             tuple(g["inferred_agenda_items"]))
+             tuple(g["inferred_agenda_items"]), online=g["online"], part=g["part"])
         for g in read("grid.json")["sessions"]
     ]
     agenda = {i["agenda_item"]: i["description"] for i in read("agenda_items.json")["agenda_items"]}
@@ -77,7 +79,7 @@ def run(out: Path) -> dict:
         allowed = times_in(reply) | times_in(" ".join(f'{i.get("start", "")} {i.get("end", "")}' for i in earlier))
         results[mail["n"]] = resolve(cache[key]["answer"], offered=offered, cells=cells,
                                      agenda_items=found["agenda_items"], sent=sent, tdocs=tdocs,
-                                     allowed_times=allowed)
+                                     allowed_times=allowed, day_parts=PARTS)
         if found["thread"]:
             threads.setdefault(found["thread"], []).extend(results[mail["n"]])
     return {"results": results, "labels": labels["mails"]}

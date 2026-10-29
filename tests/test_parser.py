@@ -489,3 +489,32 @@ class AgendaExtractionTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+def _schedule_table(document, rooms):
+    times = ["08:30 ~ 10:30 (120 min)", "11:00 ~ 13:00 (120 min)", "14:30 ~ 16:30 (120 min)", "17:00 ~ 19:30 (150 min)"]
+    table = document.add_table(rows=len(times) + 1, cols=len(rooms) + 1)
+    table.cell(0, 1).merge(table.cell(0, len(rooms))).text = "Monday"
+    for row, time in enumerate(times, start=1):
+        table.cell(row, 0).text = time
+        for i, room in enumerate(rooms, start=1):
+            table.cell(row, i).text = f"{room} {row}"
+
+
+def test_each_table_is_online_or_offline_as_its_heading_says(tmp_path):
+    from working_groups.ran1.parser import build_room_list
+    from working_groups.ran1.rooms import online_rooms
+
+    path = tmp_path / "online-offline.docx"
+    document = Document()
+    document.add_paragraph("RAN1#126b Online Session Schedule")
+    _schedule_table(document, ["Main", "Brk1", "Brk2"])
+    document.add_paragraph("RAN1#126b Offline Session Schedule")
+    _schedule_table(document, ["Off1", "Off2"])
+    document.save(path)
+
+    _, meta = parse_docx(path)
+    assert [m["kind"] for m in meta] == ["online", "offline"]
+    rooms = build_room_list(meta)["Monday"]
+    assert [room.kind for room in rooms] == ["online"] * 3 + ["offline"] * 2
+    assert online_rooms(rooms) == [room.name for room in rooms[:3]]

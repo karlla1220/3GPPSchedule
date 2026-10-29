@@ -64,7 +64,7 @@
       "duration_minutes": 60,
       "specified_start_time": null,
       "chair": null,
-      "group_header": "6GR",
+      "group_header": "",
       "agenda_item": "10.5.1.1",
       "description": "Synchronization acquisition and beam measurement",
       "agenda_descriptions": [
@@ -216,7 +216,7 @@
     },
     {
       "room_name": "RAN1_brk2",
-      "name": "11 TEI20",
+      "name": "TEI20",
       "duration_minutes": 10,
       "specified_start_time": null,
       "chair": "Hiroki",
@@ -240,7 +240,7 @@
     },
     {
       "room_name": "RAN1_brk2",
-      "name": "8.2 R19 Duplex, R19 ISAC CM, R19 XR",
+      "name": "R19 Duplex, R19 ISAC CM, R19 XR",
       "duration_minutes": 25,
       "specified_start_time": null,
       "chair": "Hiroki",
@@ -269,7 +269,7 @@
     },
     {
       "room_name": "RAN1_brk2",
-      "name": "8.3 UE features",
+      "name": "UE features",
       "duration_minutes": 25,
       "specified_start_time": null,
       "chair": "Hiroki",
@@ -298,7 +298,7 @@
     },
     {
       "room_name": "RAN1_brk2",
-      "name": "8.2 R19 LP-WUS",
+      "name": "R19 LP-WUS",
       "duration_minutes": 20,
       "specified_start_time": null,
       "chair": "Hiroki",
@@ -327,11 +327,11 @@
     },
     {
       "room_name": "RAN1_brk2",
-      "name": "6G waveform",
+      "name": "10.2.1 Waveform",
       "duration_minutes": 40,
       "specified_start_time": null,
       "chair": "Hiroki",
-      "group_header": "6GR",
+      "group_header": "6GR / 6G waveform",
       "agenda_item": "10.2.1",
       "description": "Waveform",
       "agenda_descriptions": [
@@ -606,7 +606,7 @@
       ]
     }
   ],
-  "merged_at": "2026-10-15T01:01:21.899271+00:00",
+  "merged_at": "2026-10-28T06:01:17.579899+00:00",
   "meeting_id": "ran1#126bis",
   "schema_version": 2
 }

@@ -3,7 +3,8 @@
   "archive_url": "https://www.3gpp.org/ftp/tsg_ran/WG2_RL2/",
   "meeting_specific": [
     "https://www.3gpp.org/ftp/tsg_ran/WG2_RL2/TSGR2_135bis/",
-    "https://www.3gpp.org/ftp/tsg_ran/WG2_RL2/TSGR2_136/"
+    "https://www.3gpp.org/ftp/tsg_ran/WG2_RL2/TSGR2_136/",
+    "https://www.3gpp.org/ftp/tsg_ran/WG2_RL2/TSGR2_137/"
   ],
   "meeting_specific_override": [],
   "llm_fallback": true,

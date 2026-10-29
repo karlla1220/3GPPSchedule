@@ -39,6 +39,8 @@ def to_mathml(element):
                 c in node.attrib[key] for c in ("<", ">", '"', "'", "\\")
             ):
                 del node.attrib[key]
+    # The TeX source goes with the formula: copying it as Markdown uses it.
+    root.set("alttext", latex.strip())
     return ET.tostring(root, encoding="unicode")
 
 

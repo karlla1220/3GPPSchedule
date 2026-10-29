@@ -129,7 +129,7 @@
       "name": "AI 9.1 AIML",
       "duration_minutes": 60,
       "specified_start_time": null,
-      "chair": "Sorour",
+      "chair": null,
       "group_header": "R20 / R20 NR",
       "agenda_item": "9.1",
       "description": "Artificial Intelligence (AI)/Machine Learning (ML) for NR air interface enhancements",
@@ -155,10 +155,10 @@
     },
     {
       "room_name": "RAN1_brk1",
-      "name": "AI 10.3.1 Coding",
+      "name": "AI 10.3.1 Channel coding",
       "duration_minutes": 30,
       "specified_start_time": null,
-      "chair": "Sorour",
+      "chair": null,
       "group_header": "6GR",
       "agenda_item": "10.3.1",
       "description": "Channel coding",
@@ -192,7 +192,7 @@
       "name": "AI 10.5.2.2 PDSCH",
       "duration_minutes": 30,
       "specified_start_time": null,
-      "chair": "Sorour",
+      "chair": null,
       "group_header": "6GR",
       "agenda_item": "10.5.2.2",
       "description": "Downlink transmission scheme(s) for downlink shared channels",
@@ -506,7 +506,7 @@
       "agenda_item": null
     }
   ],
-  "merged_at": "2026-10-15T01:01:21.903744+00:00",
+  "merged_at": "2026-10-28T06:01:17.584190+00:00",
   "meeting_id": "ran1#126bis",
   "schema_version": 2
 }
