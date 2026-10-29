@@ -81,25 +81,141 @@ header .meta {
     color: var(--text-muted);
 }
 
-/* WG selection keeps the active meeting at the center of the page. */
-.wg-navigation {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
-    align-items: baseline;
-    gap: 24px;
+/* Switching meetings cross-fades instead of flashing a blank page: both
+   pages opt in. index.html does not, so arriving there shows the schedule
+   at once instead of fading it in. A reload (auto refresh) never animates. */
+@view-transition { navigation: auto; }
+::view-transition-old(root),
+::view-transition-new(root) { animation-duration: .18s; }
+@media (prefers-reduced-motion: reduce) {
+    ::view-transition-old(root),
+    ::view-transition-new(root) { animation: none; }
+}
+
+/* The meeting title is the WG switcher. It looks like a control at rest
+   (white face, hairline, round chevron) so visitors see it can be opened. */
+.wg-title {
+    position: relative;
     margin: 8px auto 18px;
 }
-.wg-side { display: flex; gap: 20px; align-items: baseline; flex-wrap: wrap; }
-.wg-left { justify-content: flex-end; }
-.wg-right { justify-content: flex-start; }
-.wg-link { color: var(--ink-3); font-size: 13px; font-weight: 500; line-height: 1.2; text-decoration: none; }
-/* A zero-width strut the size of the current title: a sibling's first line
-   gets the title's height and baseline, so names and statuses line up. */
-.wg-link::before { content: "\200B"; font-size: var(--title-size); line-height: var(--title-line); }
-.wg-link:hover { color: var(--ink); text-decoration: underline; }
-.wg-current h1 { margin: 0; }
-.wg-current a { color: var(--ink); text-decoration: none; }
-.wg-navigation a:focus-visible { outline: 2px solid #2563EB; outline-offset: 5px; border-radius: 2px; }
+.wg-switch { display: inline-block; position: relative; }
+.wg-switch summary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 3px 8px 3px 12px;
+    border-radius: 10px;
+    background: var(--surface);
+    box-shadow: 0 0 0 1px var(--hairline), 0 1px 2px rgba(15,23,42,.05);
+    list-style: none;
+    cursor: pointer;
+}
+.wg-switch summary::-webkit-details-marker { display: none; }
+.wg-switch summary:hover,
+.wg-switch[open] summary { box-shadow: 0 0 0 1px #D3D7DE, 0 2px 6px rgba(15,23,42,.08); }
+.wg-switch summary:focus-visible { outline: 2px solid #2563EB; outline-offset: 3px; }
+.wg-title h1 { margin: 0; }
+.wg-switch-chevron {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #ECEEF2;
+    color: var(--ink-2);
+    font-size: 9px;
+    line-height: 1;
+}
+.wg-switch[open] .wg-switch-chevron { transform: rotate(180deg); }
+/* Every WG's meeting: in progress, upcoming, then ended, each in 3GPP order. */
+.wg-switch-menu {
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 50%;
+    z-index: 60;
+    min-width: 270px;
+    max-width: calc(100vw - 32px);
+    padding: 6px;
+    transform: translateX(-50%);
+    background: var(--surface);
+    border-radius: var(--radius-lg);
+    box-shadow: 0 0 0 1px var(--hairline), 0 8px 24px rgba(15,23,42,.12);
+    text-align: left;
+}
+.wg-switch-group {
+    padding: 8px 10px 3px;
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    color: var(--ink-4);
+}
+.wg-switch-item {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 6px 10px;
+    border-radius: 7px;
+    color: var(--ink);
+    font-size: 13.5px;
+    font-weight: 500;
+    line-height: 20px;
+    text-decoration: none;
+    white-space: nowrap;
+}
+.wg-switch-item:hover { background: var(--page-bg); }
+.wg-switch-item[aria-current] { background: #ECEEF2; }
+.wg-switch-item:focus-visible { outline: 2px solid #2563EB; outline-offset: -2px; }
+.wg-switch-past { color: var(--ink-3); }
+.wg-switch-dates { color: var(--ink-4); font-size: 12px; font-weight: 400; }
+/* Shown once (and again when a WG is added), under the title it points at. */
+.wg-switch-hint {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 50%;
+    z-index: 55;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: max-content;
+    max-width: min(360px, calc(100vw - 32px));
+    padding: 8px 8px 8px 12px;
+    transform: translateX(-50%);
+    border-radius: 10px;
+    background: var(--ink);
+    color: #fff;
+    font-size: 12.5px;
+    line-height: 17px;
+    text-align: left;
+    box-shadow: 0 6px 18px rgba(15,23,42,.18);
+}
+.wg-switch-hint[hidden] { display: none; }
+.wg-switch-hint::before {
+    content: "";
+    position: absolute;
+    top: -5px;
+    left: 50%;
+    width: 10px;
+    height: 10px;
+    background: var(--ink);
+    transform: translateX(-50%) rotate(45deg);
+}
+.wg-switch-hint strong { font-weight: 600; }
+.wg-switch-hint button {
+    flex: none;
+    padding: 3px 9px;
+    border: 0;
+    border-radius: 6px;
+    background: rgba(255,255,255,.14);
+    color: #fff;
+    font: inherit;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+}
+.wg-switch-hint button:hover { background: rgba(255,255,255,.24); }
+.wg-switch-hint button:focus-visible { outline: 2px solid #93C5FD; outline-offset: 2px; }
 .meeting-status {
     display: block;
     margin-top: 2px;
@@ -122,8 +238,8 @@ header .meta a:focus-visible,
    the centred titles and the grid below stay where they are. */
 .support-links {
     position: absolute;
-    /* Centred on the title and its status line (46px); the block is 32px. */
-    top: 7px;
+    /* Centred on the title switcher and its status line (51px); the block is 32px. */
+    top: 9px;
     right: 0;
     display: flex;
     align-items: center;
@@ -188,9 +304,6 @@ header .meta a:focus-visible,
 .support-note-close:hover { color: var(--ink); background: var(--page-bg); }
 @media (max-width: 600px) {
     header { --title-size: 18px; --title-line: 24px; }
-    .wg-navigation { gap: 10px; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); }
-    .wg-link { font-size: 12px; overflow-wrap: anywhere; }
-    .wg-side { gap: 8px; }
 }
 
 /* Tabs */
@@ -1383,7 +1496,93 @@ header .meta a:focus-visible,
 <body>
 <div class="container">
     <header>
-<nav class="wg-navigation" aria-label="Working group meetings"><div class="wg-side wg-left"><a class="wg-link" href="../ran1/"><span class="wg-emoji" aria-hidden="true">📅</span>RAN1#126bis<span class="meeting-status">Ended</span></a></div><div class="wg-current"><h1><a href="../ran2/" aria-current="page"><span class="wg-emoji" aria-hidden="true">📅</span>RAN2#135bis</a></h1><span class="meeting-status">Ended</span></div><div class="wg-side wg-right"><a class="wg-link" href="../ran-plenary/"><span class="wg-emoji" aria-hidden="true">📅</span>RAN#113<span class="meeting-status">Ended</span></a></div></nav>
+<div class="wg-title"><details class="wg-switch" id="wg-switch"><summary title="Switch meeting"><h1><span class="wg-emoji" aria-hidden="true">📅</span>RAN2#135bis</h1><span class="wg-switch-chevron" aria-hidden="true">▼</span></summary><nav class="wg-switch-menu" aria-label="Working group meetings"><p class="wg-switch-group">Ended</p><a class="wg-switch-item wg-switch-past" href="../ran-plenary/"><span>RAN#113</span><span class="wg-switch-dates">14–17 Sep</span></a><a class="wg-switch-item wg-switch-past" href="../ran1/"><span>RAN1#126bis</span><span class="wg-switch-dates">12–16 Oct</span></a><a class="wg-switch-item wg-switch-past" href="../ran2/" aria-current="page"><span>RAN2#135bis</span><span class="wg-switch-dates">12–16 Oct</span></a></nav></details><span class="meeting-status">Ended</span><p class="wg-switch-hint" id="wg-switch-hint" hidden><span><strong>Switch meetings here</strong> — RAN#113, RAN1#126bis</span><button type="button">Got it</button></p></div>
+<script>// Runs right after the meeting title, before the grid below is laid out.
+// The title opens a menu of every WG's meeting; a one-time hint says so.
+(function() {
+    const menu = document.getElementById('wg-switch');
+    const hint = document.getElementById('wg-switch-hint');
+    const WG_IDS = ["ran-plenary", "ran1", "ran2"];
+    // The WGs a visitor has been told about. A WG added later brings the hint back.
+    const SEEN_KEY = '3gpp_schedule_wg_switch_seen';
+
+    function unseen() {
+        try {
+            const seen = JSON.parse(localStorage.getItem(SEEN_KEY) || '[]');
+            return WG_IDS.some(function(id) { return seen.indexOf(id) < 0; });
+        } catch (e) {
+            // Without storage the hint could never be dismissed for good; leave it out.
+            return false;
+        }
+    }
+
+    function dismiss() {
+        if (hint.hidden) return;
+        hint.hidden = true;
+        try {
+            localStorage.setItem(SEEN_KEY, JSON.stringify(WG_IDS));
+        } catch (e) {
+            // localStorage may be unavailable
+        }
+    }
+
+    // Fetch the other meetings while the visitor is still choosing, so the
+    // switch needs no network. Browsers with speculation rules (Chrome, Edge,
+    // Samsung Internet) also render the active ones in the background and swap
+    // them in at once; ended meetings are only fetched, a full page each costs memory.
+    let warmed = false;
+    function warm() {
+        if (warmed) return;
+        warmed = true;
+        const others = Array.from(menu.querySelectorAll('.wg-switch-item:not([aria-current])'));
+        const active = others.filter(a => !a.classList.contains('wg-switch-past')).map(a => a.href);
+        const past = others.filter(a => a.classList.contains('wg-switch-past')).map(a => a.href);
+        if (HTMLScriptElement.supports && HTMLScriptElement.supports('speculationrules')) {
+            const rules = document.createElement('script');
+            rules.type = 'speculationrules';
+            rules.textContent = JSON.stringify({
+                prerender: active.length ? [{ urls: active, eagerness: 'immediate' }] : [],
+                prefetch: past.length ? [{ urls: past, eagerness: 'immediate' }] : [],
+            });
+            document.head.appendChild(rules);
+        } else {
+            active.concat(past).forEach(function(href) {
+                const link = document.createElement('link');
+                link.rel = 'prefetch';
+                link.href = href;
+                document.head.appendChild(link);
+            });
+        }
+    }
+
+    if (unseen()) hint.hidden = false;
+    // A page rendered ahead (see warm) read the storage before the visitor
+    // opened the menu on the page they came from; read it again when shown.
+    document.addEventListener('prerenderingchange', function() {
+        if (!unseen()) hint.hidden = true;
+    });
+    hint.querySelector('button').addEventListener('click', dismiss);
+    // A pointer resting on the title is the earliest sign; opening it is the sure one.
+    menu.querySelector('summary').addEventListener('pointerenter', warm);
+    menu.addEventListener('toggle', function() {
+        if (menu.open) {
+            dismiss();
+            warm();
+        }
+    });
+
+    // Capture: session cells stop their clicks from bubbling.
+    document.addEventListener('click', function(event) {
+        if (menu.open && !menu.contains(event.target)) menu.open = false;
+    }, true);
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape' && menu.open) {
+            menu.open = false;
+            menu.querySelector('summary').focus();
+        }
+    });
+})();
+</script>
 <p class="support-links"><span class="support-icon" aria-hidden="true">☕</span><span class="support-text"><strong>Proposal 1: Buy a coffee for Duckhyun</strong> <span>on <a href="https://www.patreon.com/duckhyunbae" target="_blank" rel="noopener">Patreon</a> or <a href="https://github.com/sponsors/karlla1220" target="_blank" rel="noopener">GitHub Sponsors</a></span></span></p>
 <p class="meta">Sources: <span title="R2_135b_Schedule_v10.docx">Schedule&nbsp;v10</span> · <span title="agenda.csv">Agenda</span> &nbsp;|&nbsp; Generated: 2026-10-23 16:26 (Asia/Seoul) &nbsp;|&nbsp; Now: <span id="tz-now">...</span> (Asia/Seoul)</p>
 <p class="meta">ℹ️ This page is automatically generated from uploaded documents. Some details may not be fully accurate — your feedback helps improve it.</p>
@@ -1437,6 +1636,37 @@ header .meta a:focus-visible,
         </div>
         <button class="now-toggle" id="now-toggle" type="button" aria-pressed="false" disabled title="NOW is available during the meeting">NOW</button>
     </div>
+    <script>// Runs right after the day tabs, before the day panels are parsed: the chosen
+// day's grid is drawn in place as it arrives, so the sections below never
+// appear in its spot first and get pushed down. schedule.js takes over at
+// DOMContentLoaded by clicking the tab marked here.
+(function() {
+    const STATE_KEY = '3gpp_schedule_state:' + "ran2:ran2#135bis";
+    const MEETING_TZ = "Asia/Seoul";
+    const tab = day => day ? document.querySelector('.tab[data-day="' + day + '"]') : null;
+    let saved = null;
+    try {
+        saved = JSON.parse(sessionStorage.getItem(STATE_KEY) || 'null');
+    } catch (e) {
+        // sessionStorage may be unavailable
+    }
+    // The tab the visitor left (this tab session), else today at the venue, else the first.
+    let chosen;
+    if (saved && saved.activeDay) {
+        chosen = tab(saved.activeDay);
+    } else {
+        const today = new Intl.DateTimeFormat('en-US', { timeZone: MEETING_TZ, weekday: 'long' }).format(new Date());
+        chosen = tab(today.toLowerCase());
+    }
+    chosen = chosen || document.querySelector('.tab');
+    if (!chosen) return;
+    chosen.classList.add('active');
+    const style = document.createElement('style');
+    style.id = 'initial-day';
+    style.textContent = '#' + CSS.escape(chosen.dataset.day) + '.day-panel { display: block; }';
+    document.head.appendChild(style);
+})();
+</script>
     <div class="day-panel" id="monday" data-date="2026-10-12">
         <div class="grid-wrapper">
             <div class="schedule-grid" data-start="540" data-end="1140" data-slot="5" style="grid-template-columns: var(--axis-col-width) repeat(4, 1fr);--time-rows:120;--slot-scale:1">
@@ -1892,6 +2122,9 @@ UE capability framework">
             const day = this.dataset.day;
             const panel = document.getElementById(day);
             if (panel) panel.classList.add('active');
+            // day-select.js showed the first day by a rule; .active holds it from here.
+            const initialDay = document.getElementById('initial-day');
+            if (initialDay) initialDay.remove();
             saveUserState();
         });
     });
@@ -2122,26 +2355,15 @@ UE capability framework">
         updatePinchTarget();
     }
 
-    // Restore saved state or auto-select today's tab
+    // day-select.js already marked the day (saved, else today, else the first);
+    // its saved zoom and scroll come back only with the day they were left on.
     const saved = loadUserState();
-    if (saved && saved.activeDay) {
-        const savedTab = document.querySelector('[data-day="' + saved.activeDay + '"]');
-        if (savedTab) {
-            savedTab.click();
+    const initialTab = document.querySelector('.tab.active') || document.querySelector('.tab');
+    if (initialTab) {
+        initialTab.click();
+        if (saved && saved.activeDay === initialTab.dataset.day) {
             if (gridZoomSupported && saved.gridZoom) setGridZoom(saved.gridZoom);
             window.scrollTo(saved.scrollX || 0, saved.scrollY || 0);
-        } else {
-            const firstTab = document.querySelector('.tab');
-            if (firstTab) firstTab.click();
-        }
-    } else {
-        const { weekday: today } = nowInMeetingTZ();
-        const todayTab = document.querySelector(`[data-day="${today}"]`);
-        if (todayTab) {
-            todayTab.click();
-        } else {
-            const firstTab = document.querySelector('.tab');
-            if (firstTab) firstTab.click();
         }
     }
 
