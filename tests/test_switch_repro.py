@@ -74,6 +74,17 @@ def test_the_fix_never_scales_the_page_or_the_cells(served):
     assert out['boxes']['::view-transition-old(probe-fixed)']['objectFit'] == 'none'
 
 
+@pytest.mark.parametrize('mode', ['same', 'cross'])
+def test_without_a_page_snapshot_the_parts_still_move(served, mode):
+    # What the site does (:root { view-transition-name: none }): no root group,
+    # the live page shows under the frame, cells, tabs and axis as they move.
+    out = hold(served, mode, 'noroot', at=0.3)
+    assert out['state'] == 'paused' and out['rootNote'] == 'no page snapshot'
+    assert out['boxes']['::view-transition-group(root)']['width'] == 'auto'
+    for name in ('grid-cells', 'day-tabs', 'time-540', 'probe-default'):
+        assert px(out['boxes'][f'::view-transition-group({name})']['width']) > 0, name
+
+
 def test_plain_leaves_only_the_root_and_the_probes(served):
     out = hold(served, 'cross', 'plain')
     assert px(out['boxes']['::view-transition-group(root)']['width']) > 0

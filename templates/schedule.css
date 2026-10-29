@@ -75,8 +75,14 @@ header .meta {
    pages opt in. index.html does not, so arriving there shows the schedule
    at once instead of fading it in. A reload (auto refresh) never animates. */
 @view-transition { navigation: auto; }
-::view-transition-old(root),
-::view-transition-new(root) { animation-duration: .18s; }
+/* The page itself takes no snapshot: the header, the legend and the sections
+   below the grid switch at once, under the parts that animate. Samsung
+   Internet sizes the page's snapshot box to the viewport plus its bottom
+   address bar (820.9px for a 725px viewport, tests/fixtures/switch_repro),
+   so a page snapshot would be drawn 13% too tall and everything in it
+   distorts during the cross-fade; parts with their own name are fine there
+   (as in Chrome for Android, which keeps the sizes right). */
+:root { view-transition-name: none; }
 /* The grid changes in three steps: its cells leave, its frame (an empty
    surface, nothing to distort) moves to the new size, the new cells arrive.
    Cross-fading the cells would show two grids at different zooms at once.
@@ -92,16 +98,6 @@ header .meta {
 ::view-transition-group(*.grid-move) { animation-duration: .22s; animation-delay: .06s; animation-timing-function: ease-in-out; }
 ::view-transition-old(*.grid-move),
 ::view-transition-new(*.grid-move) { animation-duration: .22s; animation-delay: .06s; }
-/* The page's own snapshot (the header, the sections below the grid) and the
-   cells are drawn at their captured size, anchored at the top, never scaled
-   to their box. Samsung Internet sizes the old page's snapshot to the new
-   page's area, so the header and the meeting title squash vertically during
-   the cross-fade (Chrome for Android keeps the aspect). A different height
-   now crops the bottom or leaves it blank, where nothing is read mid-switch. */
-::view-transition-old(root),
-::view-transition-new(root),
-::view-transition-old(grid-cells),
-::view-transition-new(grid-cells) { height: 100%; object-fit: none; object-position: top left; }
 /* Empty surfaces: stretched to the moving box, they show no distortion.
    The tab bar is only as wide as its days (four or five), and a snapshot
    keeps its aspect ratio by default, so a narrower bar would shrink whole. */

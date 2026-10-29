@@ -9,7 +9,7 @@
   (schedule.css, @view-transition) so a browser can be checked by opening
   this file alone. See the notes at the top of the page.
 
-  Query / controls:  v=plain|move|fix  variant (default move)
+  Query / controls:  v=plain|move|fix|noroot  variant (default move)
                      slow=1            every duration x10
                      hold=0.5          pause the switch at that fraction (tests)
                      page=a|b          the meeting shown (cross-document mode)
@@ -21,7 +21,7 @@
     (function () {
         var q = new URLSearchParams(location.search);
         var v = q.get('v');
-        document.documentElement.className = (v === 'plain' || v === 'fix' ? v : 'move') + (q.get('slow') ? ' slow' : '');
+        document.documentElement.className = (v === 'plain' || v === 'fix' || v === 'noroot' ? v : 'move') + (q.get('slow') ? ' slow' : '');
     })();
 </script>
 <style>
@@ -86,6 +86,11 @@ html.fix::view-transition-old(root),
 html.fix::view-transition-new(root),
 html.fix::view-transition-old(grid-cells),
 html.fix::view-transition-new(grid-cells) { height: 100%; object-fit: none; object-position: top left; }
+/* noroot: the page itself takes no snapshot. The header switches at once
+   under the animating groups; a browser that draws the page snapshot at the
+   wrong size (Samsung Internet: a 96px taller box than the viewport, its
+   bottom address bar) has nothing to distort. */
+html.noroot { view-transition-name: none; }
 
 /* --- Probes: a box whose height halves. The left one is the engine's
    default; the right one carries the fix. An engine that stretches old
@@ -104,6 +109,7 @@ html.fix::view-transition-new(grid-cells) { height: 100%; object-fit: none; obje
 <div class="container">
 <div class="notes">
     <b>Meeting switch reproduction.</b> Tap <b>Switch (same page)</b>: this works from a downloaded file.
+    Try the <b>noroot</b> variant if the header distorts while the probes do not.
     <b>Switch (new page)</b> is the real cross-document switch and needs the file served over HTTP.
     The two probe boxes halve in height on every switch: if the left text squashes vertically while the
     right one does not, this browser stretches old snapshots to their box (the site's fix is the right one).
@@ -112,7 +118,7 @@ html.fix::view-transition-new(grid-cells) { height: 100%; object-fit: none; obje
 <div class="controls">
     <button id="switch-same" type="button">Switch (same page)</button>
     <button id="switch-page" type="button">Switch (new page)</button>
-    <label>variant <select id="variant"><option value="plain">plain: root fade only</option><option value="move">move: as the site</option><option value="fix">fix: with the snapshot fix</option></select></label>
+    <label>variant <select id="variant"><option value="plain">plain: root fade only</option><option value="move">move: as the site</option><option value="fix">fix: with the snapshot fix</option><option value="noroot">noroot: no page snapshot</option></select></label>
     <label><input type="checkbox" id="slow"> slow motion (×10)</label>
     <label><input type="checkbox" id="hold"> hold half-way</label>
     <button id="resume" type="button" hidden>Resume</button>
@@ -205,9 +211,13 @@ html.fix::view-transition-new(grid-cells) { height: 100%; object-fit: none; obje
                 : Math.abs(oldH - groupH) < 1 ? 'OLD SNAPSHOTS ARE STRETCHED TO THEIR BOX (the squash)'
                 : `old snapshot ${oldH}px for a ${groupH}px box, captured ${captured.probe}px`;
         }
-        const out = { mode, variant: html.className, captured, viewport: [innerWidth, innerHeight], verdict, boxes };
+        const rootGroupH = px(boxes['::view-transition-group(root)'].height);
+        const rootNote = !rootGroupH ? 'no page snapshot'
+            : Math.abs(rootGroupH - captured.root[1]) < 1 ? 'page snapshot box = viewport'
+            : `PAGE SNAPSHOT BOX ${rootGroupH}px != VIEWPORT ${captured.root[1]}px (differ by ${Math.round(rootGroupH - captured.root[1])}px)`;
+        const out = { mode, variant: html.className, captured, viewport: [innerWidth, innerHeight], verdict, rootNote, boxes };
         window.__sample = out;
-        document.getElementById('readout').textContent = `${mode} switch · ${html.className}\n${verdict}\n`
+        document.getElementById('readout').textContent = `${mode} switch · ${html.className}\n${verdict}\n${rootNote}\n`
             + `root: group ${boxes['::view-transition-group(root)'].height}, old image ${boxes['::view-transition-old(root)'].height} (captured ${captured.root[1]}px), object-fit ${boxes['::view-transition-old(root)'].objectFit}\n`
             + `probe: group ${boxes['::view-transition-group(probe-default)'].height}, old image ${boxes['::view-transition-old(probe-default)'].height} (captured ${captured.probe}px)\n`
             + navigator.userAgent;
