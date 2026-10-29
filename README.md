@@ -158,6 +158,11 @@ ref_in_manual/ran1/            # RAN1 수동 참조 문서
 WG의 내부 단계는 자유입니다. 공통 실행기는 각 `build_schedule(options)`에서
 `shared.schedule.Schedule`을 받으며, WG끼리는 서로의 내부 모듈을 import하지 않습니다.
 새 WG는 독립 폴더와 pipeline을 만든 뒤 `registry.py`와 `site.json`에 등록합니다.
+
+LLM을 어디에 쓸지는 원본의 계보로 정합니다. RAN1은 의장과 부의장들이 따로 만든 불규칙한 문서 여러 개를
+한 시간표로 합쳐야 해서 LLM이 주 해석기입니다. 시간표가 파일 하나의 판으로 이어지는 WG(RAN2, SA1, SA2, RAN3, RAN4)는
+규칙이 기본이고, 규칙이 불확실하다고 표시한 칸이나 알아보지 못한 양식만 LLM에 묻는 RAN2 방식(아래 "LLM 폴백")을 씁니다.
+셀 안 정보를 다시 가공하는 것(RAN1 AI 없는 셀의 AI 추정, 이메일 토론)은 이 기준과 따로 정합니다.
 공통 모델의 `DaySchedule.timeline`으로 날짜마다 시작/종료, 슬롯 간격, 눈금 간격,
 휴식과 시간 블록을 전달합니다. 새 WG는 방 ID(`RoomInfo.id`, `Session.room_ids`)를
 사용하며, RAN1의 기존 열 번호도 호환됩니다. 한 세션이 여러 방에 걸치면 방은 인접해야 합니다.
