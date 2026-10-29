@@ -41,20 +41,33 @@ ROOT_EVERY = timedelta(hours=6)
 CONFIG_PATHS = {
     'ran1': Path('working_groups/ran1/config.json'),
     'ran2': Path('working_groups/ran2/config.json'),
+    'ran3': Path('working_groups/ran3/config.json'),
+    'ran4': Path('working_groups/ran4/config.json'),
     'ran-plenary': Path('working_groups/ran_plenary/config.json'),
+    'sa1': Path('working_groups/sa1/config.json'),
+    'sa2': Path('working_groups/sa2/config.json'),
 }
 # This run's folders by WG and meeting (overrides excluded), and the lists
 # it wrote to meeting_specific. The CI check reports a written list as a
 # reason to build and hands it to the build job, which commits it.
 _FOUND = {}
 _WRITTEN = {}
-# Archive root, folder prefix and the spellings of "bis" in folder names, in
-# the order they are tried. RAN2 used both (TSGR2_133b, TSGR2_135bis).
+# Archive root, folder prefix, the spellings of "bis" in folder names in the
+# order they are tried, and whether names go on past the meeting. RAN2 used
+# both b and bis (TSGR2_133b, TSGR2_135bis); RAN3 writes TSGR3_133-bis.
+# SA names add the venue (TSGS1_116_Calgary, TSGS2_177_Prague_2026-10), so a
+# name cannot be built from the meeting id: Portal, the record or the root
+# listing finds it.
 WGS = {
-    'ran1': ('https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/', 'TSGR1_', ('b', 'bis')),
-    'ran2': ('https://www.3gpp.org/ftp/tsg_ran/WG2_RL2/', 'TSGR2_', ('bis', 'b')),
-    'ran-plenary': ('https://www.3gpp.org/ftp/tsg_ran/TSG_RAN/', 'TSGR_', ('bis', 'b')),
+    'ran1': ('https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/', 'TSGR1_', ('b', 'bis'), False),
+    'ran2': ('https://www.3gpp.org/ftp/tsg_ran/WG2_RL2/', 'TSGR2_', ('bis', 'b'), False),
+    'ran3': ('https://www.3gpp.org/ftp/tsg_ran/WG3_Iu/', 'TSGR3_', ('-bis', 'bis'), False),
+    'ran4': ('https://www.3gpp.org/ftp/tsg_ran/WG4_Radio/', 'TSGR4_', ('bis', 'b'), False),
+    'ran-plenary': ('https://www.3gpp.org/ftp/tsg_ran/TSG_RAN/', 'TSGR_', ('bis', 'b'), False),
+    'sa1': ('https://www.3gpp.org/ftp/tsg_sa/WG1_Serv/', 'TSGS1_', (), True),
+    'sa2': ('https://www.3gpp.org/ftp/tsg_sa/WG2_Arch/', 'TSGS2_', (), True),
 }
+_TSG = {'TSGR': 'ran', 'TSGS': 'sa'}
 
 
 def root_url(wg_id):
@@ -64,22 +77,24 @@ def root_url(wg_id):
 def folder_key(wg_id, name):
     """The meeting id a folder name stands for: TSGR2_133b -> ran2#133bis.
 
-    E-meeting folders carry a suffix (TSGR1_104-e, TSGR_88e) and still name
-    the meeting.
+    E-meeting folders carry a suffix (TSGR1_104-e, TSGR_88e, TSGR3_107_e,
+    TSGR4_101-bis-e) and still name the meeting. SA names go on with the
+    venue (TSGS2_177_Prague_2026-10 -> sa2#177); an ad hoc folder
+    (TSGS2_175-AH-e_Electronic, TSGS1_112-Ad_Hoc-e) is no regular meeting.
     """
-    prefix = WGS[wg_id][1]
-    match = re.fullmatch(re.escape(prefix) + r'(\d+)(bis|b)?(?:-?e)?/?', name, re.I)
+    prefix, named = WGS[wg_id][1], WGS[wg_id][3]
+    venue = r'(?:_[^/]*)?' if named else ''
+    match = re.fullmatch(re.escape(prefix) + r'(\d+)(?:-?(bis|b))?(?:[-_]?e)?' + venue + '/?', name, re.I)
     if not match:
         return None
-    wg = prefix[4:-1]
-    return f'ran{wg}#{match[1]}{"bis" if match[2] else ""}'
+    return f'{_TSG[prefix[:4]]}{prefix[4:-1]}#{match[1]}{"bis" if match[2] else ""}'
 
 
 def candidate_names(wg_id, meeting):
-    match = re.fullmatch(r'ran\d?#(\d+)(bis)?', meeting or '')
-    if not match:
+    match = re.fullmatch(r'(?:ran|sa)\d?#(\d+)(bis)?', meeting or '')
+    _, prefix, spellings, named = WGS[wg_id]
+    if not match or named:
         return []
-    prefix, spellings = WGS[wg_id][1], WGS[wg_id][2]
     if not match[2]:
         return [f'{prefix}{match[1]}']
     return [f'{prefix}{match[1]}{suffix}' for suffix in spellings]
@@ -90,11 +105,15 @@ def _folder(url):
 
 
 def _archive_url(url):
-    """Portal writes ftp.3gpp.org; the rest of the site reads www.3gpp.org/ftp."""
+    """Portal writes ftp.3gpp.org; the rest of the site reads www.3gpp.org/ftp.
+
+    SA rows double a slash (https://www.3gpp.org/ftp//tsg_sa/WG1_Serv/...).
+    """
     parts = urlsplit(url)
+    path = re.sub(r'/{2,}', '/', parts.path)
     if parts.hostname == 'ftp.3gpp.org':
-        return 'https://www.3gpp.org/ftp' + parts.path
-    return url
+        return 'https://www.3gpp.org/ftp' + path
+    return parts._replace(path=path).geturl()
 
 
 def _in_archive(wg_id, url, root):

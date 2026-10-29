@@ -254,8 +254,7 @@ def test_metadata_fallback_cannot_cross_meetings(metadata):
         pipeline.meeting_metadata(114,cfg,previous,None,None)
 
 
-def test_timezone_uses_location_and_reuses_validated_cache(tmp_path, monkeypatch):
-    monkeypatch.setattr(interp, 'CACHE', tmp_path)
+def test_timezone_uses_location_and_reuses_the_venue_list(tmp_path, monkeypatch):
     calls = []
     def request(payload, *_, **__):
         calls.append(payload)

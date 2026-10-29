@@ -13,6 +13,9 @@ def load_site_config(path=Path('site.json')):
         raise ValueError('Site WG ids must be unique registered pipelines')
     if any(not isinstance(g.get('enabled', True), bool) for g in groups):
         raise ValueError('WG enabled must be a boolean')
+    # Every WG except RAN plenary, RAN1 and RAN2 is marked experimental on its pages.
+    if any(not isinstance(g.get('experimental', False), bool) for g in groups):
+        raise ValueError('WG experimental must be a boolean')
     config['working_groups'] = [g for g in groups if g.get('enabled', True)]
     if config['default_wg'] not in [g['id'] for g in config['working_groups']]:
         raise ValueError('default_wg must be an enabled WG')
