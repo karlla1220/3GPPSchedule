@@ -433,6 +433,9 @@ def generate_html(schedule: Schedule, *, schedules=None, groups=None, presentati
                     row_end = row_start + 1
                 else:
                     continue  # Skip zero/negative duration
+            if session.part:
+                # Equal heights: the schedule gives the order, not the times.
+                row_start, row_end = _part_rows(session.part, row_start, row_end)
 
             # Map session room columns to this day's room layout.
             # session.room_col_start/end are global (with col 1=time),
@@ -487,7 +490,8 @@ def generate_html(schedule: Schedule, *, schedules=None, groups=None, presentati
                 # one line tall, so a narrow column drops the clock range whole.
                 dur_html = (
                     f'<div class="session-duration">'
-                    f'<span class="session-minutes">{session.duration_minutes} <span class="session-unit">min</span></span>'
+                    f'<span class="session-minutes">{_part_prefix(session.part)}'
+                    f'{session.duration_minutes} <span class="session-unit">min</span></span>'
                     f'<span class="session-range">\u00b7 {session.start_time}\u2013{session.end_time}</span>'
                     f"</div>"
                 )
@@ -521,7 +525,8 @@ def generate_html(schedule: Schedule, *, schedules=None, groups=None, presentati
             if session.agenda_item:
                 popup_lines.append(f"AI: {_esc(session.agenda_item)}")
             popup_lines.append(
-                f"Time: {session.start_time} - {session.end_time} ({session.duration_minutes} min)"
+                f"Time: {session.start_time} - {session.end_time} "
+                f"({_part_text(session.part)}{session.duration_minutes} min)"
             )
             room_names_in_span = []
             for ri in range(col_start - 2, min(col_end - 2, num_rooms)):
@@ -942,6 +947,22 @@ def _notes_html(notes: list[str], slots: float, ai_html: str, scope_label: str |
         f'<div class="{classes}" style="--note-lines:{lines};--note-lines-full:{lines_full}">'
         f"{items}</div>"
     )
+
+
+def _part_rows(part, row_start: int, row_end: int) -> tuple[int, int]:
+    """Grid rows of piece k of n: equal shares of the block, whole rows."""
+    k, n = part
+    rows = row_end - row_start
+    return row_start + rows * (k - 1) // n, row_start + rows * k // n
+
+
+def _part_prefix(part) -> str:
+    """"1/2 of " before the block minutes; "of" is sized like the unit."""
+    return f'{part[0]}/{part[1]} <span class="session-unit">of</span> ' if part else ""
+
+
+def _part_text(part) -> str:
+    return f"{part[0]}/{part[1]} of " if part else ""
 
 
 def _crosses_time_block(start_time: str, end_time: str, timeline: Timeline) -> bool:

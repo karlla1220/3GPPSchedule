@@ -142,6 +142,7 @@ shared/
   navigation.py                # WG 링크와 개최 상태(개최지 날짜로 판정)
   portal_meetings.py           # Portal 회의 목록, 회의 ID(RAN·SA), TB ID
   timezones.py                 # 개최지 시간대: Portal 표기 → 개최지 목록 → Gemini
+  officials.py                 # 의장·부의장 이력(3GPP officials), 회의 날짜의 임기, 원본 표기 → 전체 이름
   meeting_folders.py           # 아카이브의 미팅 폴더 찾기
 # WG별 결과/상태는 아래 폴더에 격리
 docs/ran1/                     # index.html, schedule.json, slot_state/, 상태 JSON
@@ -160,6 +161,20 @@ WG의 내부 단계는 자유입니다. 공통 실행기는 각 `build_schedule(
 공통 모델의 `DaySchedule.timeline`으로 날짜마다 시작/종료, 슬롯 간격, 눈금 간격,
 휴식과 시간 블록을 전달합니다. 새 WG는 방 ID(`RoomInfo.id`, `Session.room_ids`)를
 사용하며, RAN1의 기존 열 번호도 호환됩니다. 한 세션이 여러 방에 걸치면 방은 인접해야 합니다.
+
+`Session.name`은 cell title(셀의 주 정보)입니다. RAN1·RAN2·RAN Plenary는 AI를 title로 쓰고,
+다른 WG는 셀 원문의 표기를 줄이거나 고치지 않고 씁니다(SA1 `7.3.3 AI`, SA2 `KI#18 (AI for Network)`).
+AI 번호는 어느 WG든 `agenda_item`에 따로 두고, 셀의 AI 줄과 필터가 그것을 씁니다.
+
+원본이 한 블록에 시각 없이 차례로 적은 주제는 `Session.part = [k, n]`으로 나눕니다.
+조각마다 Session 하나이고 `start_time`/`end_time`/`duration_minutes`는 블록의 값입니다.
+렌더러가 블록을 같은 높이로 나눠 그리고 시간 줄에 `2/3 of 90 min · 13:00–14:30`으로 적습니다.
+조각이 30분(`MIN_PART_MINUTES`)보다 짧아지면 나누지 않고 한 셀에 목록으로 둡니다(모델이 거부합니다).
+나열 순서가 진행 순서라는 근거가 있을 때만 나눕니다. 병렬인 방, 한 세션으로 묶인 주제, 후보 목록은 나누지 않습니다.
+
+`Session.chair`는 원본이 그 셀이나 열에 적은 사람만입니다. 이니셜이나 이름만 적혀 있으면
+`shared/officials.py`가 회의 날짜의 officials로 전체 이름을 찾습니다. WG 설정에는 officials 코드(`R3`, `S2`)와
+원본 표기의 별칭 표(RAN3 `L` → `XU, Lixiang`)를 둡니다. 표시가 없는 칸에 의장을 추론해 넣지 않습니다.
 
 `Schedule.starts_on`/`ends_on`은 ISO 날짜, `timezone`은 개최지의 IANA 시간대입니다.
 `starts_at`/`ends_at`에는 실제 시작·종료 시각을 UTC 오프셋 포함 ISO 형식으로 저장합니다
