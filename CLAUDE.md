@@ -1,6 +1,6 @@
 # CLAUDE.md
 
-프로젝트 구조와 실행 방법은 `README.md`, 파싱 설계는 `PARSING_ARCHITECTURE.md`를 본다.
+프로젝트 구조와 실행 방법은 `README.md`, 파싱 설계는 `PARSING_ARCHITECTURE.md`, WG 전환과 첫 화면의 설계는 `WG_SWITCH_DESIGN.md`를 본다.
 
 ## 세션 블록 디자인
 
@@ -199,7 +199,7 @@ python3 -m http.server 8765 -d /tmp/out   # http://localhost:8765/ran1/
 
 ## 헤더의 미팅 전환
 
-HTML은 `shared/navigation.py`(`render_navigation`), 동작은 `templates/wg-switch.js`, 스타일은 `templates/schedule.css`의 `.wg-switch` 구획이다.
+HTML은 `shared/navigation.py`(`render_navigation`), 동작은 `templates/wg-switch.js`, 스타일은 `templates/schedule.css`의 `.wg-switch` 구획이다. 비교한 시안과 결정 과정은 `WG_SWITCH_DESIGN.md`에 있다.
 
 - **미팅 제목이 곧 전환 버튼이다.** 누르면 모든 WG의 미팅 목록이 열린다(`<details class="wg-switch">`). WG가 5개 이상이 되면
   제목 좌우에 형제 미팅을 늘어놓는 방식은 모바일에서 세로로 쌓이고(WG 8개에 187px), 데스크톱 1100px에서 커피 블록과 겹쳤다.
