@@ -51,12 +51,25 @@ def test_matches_exact_meeting_and_tb_including_bis_and_duplicate_rows(rows):
     assert portal.find_meeting(rows + [conflict], 'ran1', 'ran1#126') is None
 
 
+def test_meeting_keys_cover_ran_and_sa_regular_meetings_only():
+    assert portal.meeting_key('3GPPRAN3#133-bis') == 'ran3#133bis'
+    assert portal.meeting_key('3GPPRAN#113') == 'ran#113'
+    assert portal.meeting_key('3GPPSA2#177') == 'sa2#177'
+    assert portal.meeting_key('3GPPSA1#107-bis') == 'sa1#107bis'
+    # Ad hoc e-meetings, social events and training rows are no regular meeting.
+    for title in ('3GPPSA2#178-AH-e', '3GPPSA1#112-Ad Hoc-e', '3GPPSA2#175-AH-e Progress the 6G study (FS_6G_ARC)',
+                  '3GPPSA2-Social event', '3GPPRAN1#126-Social event', '3GPP Antritrust Compliance Training', 'RAN5#1'):
+        assert portal.meeting_key(title) is None
+    sa2 = {'Id': 7, 'TBId': 385, 'Title': '3GPPSA2#177'}
+    assert portal.find_meeting([sa2], 'sa2', 'SA2#177') is sa2
+    assert portal.find_meeting([sa2], 'sa1', 'SA2#177') is None
+
+
 def test_unknown_labels_are_not_guessed_from_offset(rows):
     row = rows[0]
     assert portal.timezone_reference({**row, 'StartTimeZone': '(GMT+02:00) Unknown'}) is None
     assert portal.timezone_reference({**row, 'EndTimeZone': '(GMT+09:00) Seoul'}) is None
     assert portal.timezone_reference({**row, 'EndDate': 'bad'}) is None
-    assert portal.timezone_from_label('Asia/Seoul') == 'Asia/Seoul'
 
 
 def test_fetch_batches_wgs_and_follows_pages_without_dropping_null_ftp(monkeypatch, rows):
@@ -71,7 +84,7 @@ def test_fetch_batches_wgs_and_follows_pages_without_dropping_null_ftp(monkeypat
     assert any(r['MtgDocURL'] is None for r in result)
     first, second = [json.loads(r.content)['getMeetingsInput'] for r in requests]
     assert requests[0].method == 'POST' and str(requests[0].url) == portal.URL
-    assert first['Tbs'] == [373, 379, 380, 381, 382]
+    assert first['Tbs'] == [373, 379, 380, 381, 382, 384, 385]
     assert first['StartRow'] == 0 and second['StartRow'] == 100
     assert first['StartDate'] < '2026-09-15' < first['EndDate']
     assert portal._fetch_meetings(date(2026, 9, 15)) == result

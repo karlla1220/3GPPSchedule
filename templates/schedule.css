@@ -231,6 +231,15 @@ header .meta {
     text-transform: uppercase;
     color: var(--ink-4);
 }
+/* A WG read from a new source: same line as the status, in amber. */
+.wg-experimental { color: #B45309; cursor: help; }
+.wg-switch-item .wg-experimental {
+    margin-left: 6px;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+}
 .demo-notice { margin: 8px auto; color: #92400E; font-size: 13px; }
 /* Header links keep the meta grey; only the underline marks them. */
 header .meta a { color: inherit; text-underline-offset: 2px; }

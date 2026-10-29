@@ -254,8 +254,7 @@ def test_metadata_fallback_cannot_cross_meetings(metadata):
         pipeline.meeting_metadata(114,cfg,previous,None,None)
 
 
-def test_timezone_uses_location_and_reuses_validated_cache(tmp_path, monkeypatch):
-    monkeypatch.setattr(interp, 'CACHE', tmp_path)
+def test_timezone_uses_location_and_reuses_the_venue_list(tmp_path, monkeypatch):
     calls = []
     def request(payload, *_, **__):
         calls.append(payload)
@@ -635,3 +634,23 @@ def test_without_portal_the_meeting_folder_is_found_by_name(built, tmp_path):
     with server({**files, other + 'Agenda/agenda.csv': b'moved'}) as http:
         assert sources.fetch_bundle(cfg, built, http, tmp_path / 'inputs').agenda == b'moved'
     assert sources.config_hash(cfg) == sources.config_hash(sources.DEFAULTS)
+
+
+def test_venue_list_wins_over_last_build_zone_which_is_only_a_fallback(metadata):
+    import json
+    from shared import timezones
+    cfg = {**sources.DEFAULTS}
+    live = {'starts_on': '2026-09-14', 'ends_on': '2026-09-17', 'location': 'Madrid', 'country': 'ES',
+            'portal_timezone': '(GMT+02:00) Somewhere new'}
+    previous = {'meeting_number': 113, 'metadata': {**live, 'timezone': 'Europe/Paris'}}
+    def broken(*_, **__):
+        raise ValueError('no key')
+    # Nothing resolves the venue: the last build's zone for the same venue is kept.
+    assert pipeline.meeting_metadata(113, cfg, previous, None, broken, live)['timezone'] == 'Europe/Paris'
+    # A line in the venue list (e.g. a correction) is used instead.
+    timezones.MAP_PATH.write_text(json.dumps({'label': live['portal_timezone'], 'country': 'ES',
+                                              'location': 'Madrid', 'timezone': 'Europe/Madrid'}) + '\n')
+    assert pipeline.meeting_metadata(113, cfg, previous, None, broken, live)['timezone'] == 'Europe/Madrid'
+    # Another venue never borrows the old zone.
+    with pytest.raises(ValueError):
+        pipeline.meeting_metadata(113, cfg, previous, None, broken, {**live, 'location': 'Lyon', 'country': 'FR'})

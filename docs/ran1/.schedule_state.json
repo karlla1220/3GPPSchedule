@@ -135,6 +135,7 @@
     "uploaded_at": "2026-10-29T05:42:00",
     "url": "https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_126b/Agenda/agenda.csv",
     "source_url": "https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_126b/Agenda/",
+    "sha256": "2c81bc6350ab22d9c80c7f7cd21962609821954662da0996618bb370f4e2beae",
     "document_file": "agenda.csv",
     "local_path": "downloads/ran1/Agenda/ran1_126bis/agenda.csv",
     "description_json": "docs/ran1/agenda_item_description.json",

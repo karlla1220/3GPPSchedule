@@ -93,3 +93,25 @@ def test_outside_click_and_escape_close_the_menu():
     assert inside['open'] and not outside['open']
     _, _, escaped = run_menu(steps=['open', 'escape'])
     assert not escaped['open'] and escaped['focused']
+
+
+def test_experimental_wgs_say_so_in_the_status_line_and_the_menu():
+    from bs4 import BeautifulSoup
+    ids = ['ran1', 'sa2']
+    meetings = {wg: replace(build_schedule(), wg_id=wg, meeting_id=wg, meeting_name=wg.upper(), is_demo=False,
+                            starts_on='2000-01-01', ends_on='2000-01-02') for wg in ids}
+    groups = [{'id': 'ran1'}, {'id': 'sa2', 'experimental': True}]
+    page = BeautifulSoup(render_navigation(meetings['sa2'], meetings, groups), 'html.parser')
+    assert page.select_one('.meeting-status').get_text() == 'Ended · Experimental'
+    marked = [a['href'] for a in page.select('.wg-switch-item') if a.select_one('.wg-experimental')]
+    assert marked == ['../sa2/']
+    stable = BeautifulSoup(render_navigation(meetings['ran1'], meetings, groups), 'html.parser')
+    assert stable.select_one('.meeting-status').get_text() == 'Ended'
+
+
+def test_experimental_must_be_a_boolean(tmp_path):
+    from shared.site_config import load_site_config
+    path = tmp_path / 'site.json'
+    path.write_text(json.dumps({'default_wg': 'ran1', 'working_groups': [{'id': 'ran1', 'experimental': 'yes'}]}))
+    with pytest.raises(ValueError, match='experimental'):
+        load_site_config(path)

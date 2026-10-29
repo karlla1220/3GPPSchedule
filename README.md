@@ -12,7 +12,7 @@ RAN1은 3GPP FTP 서버에서 최신 회의 스케줄 DOCX 파일을 다운로�
 - `python-docx`로 테이블 구조 추출 및 병합 셀 처리 (TextBox 색상 기반 방 매칭)
 - Gemini API를 사용한 비정형 텍스트 → 구조화 세션 데이터 변환 (결과 캐싱)
 - **다중 소스 크로스레퍼런스**: 같은 시간대의 여러 스케줄 테이블을 하나의 LLM 호출로 통합하여 가장 상세한 세션 정보(AI 번호 등) 도출
-- **회의 시간대 자동 감지**: Agenda DOCX 또는 Chair notes DOCX/DOCM의 OOXML에서 개최지 정보를 추출하여 IANA 타임존 자동 설정
+- **회의 시간대 자동 감지**: Portal 시간대 라벨, 개최지 목록(`docs/timezone_map.jsonl`), 그래도 모르면 Gemini 순으로 모든 WG가 같은 방식으로 IANA 타임존을 정함(`shared/timezones.py`). RAN1은 Agenda·Chair notes의 개최지 줄도 씀
 - 요일별 탭 전환, 오늘 날짜 자동 선택되는 단일 HTML 간트차트 생성 (그룹별 색상, 자동 새로고침)
 - GitHub Actions를 통한 활성 WG별 주기적 변경 감지·빌드 및 GitHub Pages 배포
 
@@ -139,11 +139,15 @@ shared/
   site_config.py               # 활성 WG와 기본 WG 검증
   schedule.py                  # 공통 결과 모델과 JSON 저장/읽기
   renderer.py                  # 기존 간트차트 HTML·CSS·JS
-  navigation.py                # WG 링크와 개최 상태
+  navigation.py                # WG 링크와 개최 상태(개최지 날짜로 판정)
+  portal_meetings.py           # Portal 회의 목록, 회의 ID(RAN·SA), TB ID
+  timezones.py                 # 개최지 시간대: Portal 표기 → 개최지 목록 → Gemini
+  meeting_folders.py           # 아카이브의 미팅 폴더 찾기
 # WG별 결과/상태는 아래 폴더에 격리
 docs/ran1/                     # index.html, schedule.json, slot_state/, 상태 JSON
 docs/ran2/                     # index.html, schedule.json, .schedule_state.json
 docs/ran-plenary/              # index.html, schedule.json
+docs/timezone_map.jsonl        # Gemini로 정한 개최지 시간대 목록(모든 WG 공통)
 downloads/ran1/                # 기존 다운로드와 extra_files
 .cache/ran1/                   # 기존 LLM 캐시
 .cache/ran2/                   # RAN2 LLM 폴백 결과 (입력 해시별)
@@ -189,8 +193,10 @@ uv run pytest -q
 회귀 테스트는 머지 전에 직접 돌립니다. 20분마다 도는 Build and Deploy는 테스트를 돌리지 않습니다.
 CI에서 테스트가 도는 곳은 `network-check.yml`뿐이고, 3GPP 전송 코드(`shared/ftp_transport.py`, `shared/remote_files.py` 등)가 바뀌어 push될 때만 돕니다.
 
-루트는 활성 WG 중 실제 저장된 스케줄의 미팅 번호와 Portal `ONGOING` 항목이
-일치하는 WG로 이동합니다. 동시에 개최 중이면 `site.json`의 `default_wg`를 우선하고,
+루트는 활성 WG 중 실제 저장된 스케줄의 미팅 번호와 일치하는 Portal 항목이
+개최 중인 WG로 이동합니다. 개최 중은 개최지 시간대의 오늘이 Portal `StartDate`~`EndDate`
+날짜 안이라는 뜻입니다. Portal의 `MeetingPeriod`는 아직 열리지 않은 회의를 `ONGOING`으로
+주기도 해서 쓰지 않습니다. 동시에 개최 중이면 `site.json`의 `default_wg`를 우선하고,
 그 WG가 개최 중이 아니면 `working_groups` 순서를 따릅니다. 일치하는 개최 중 미팅이
 없으면 `default_wg`(기본 `ran1`)로 이동합니다. 데모와 다른 미팅 번호의 오래된
 스케줄은 자동 선택 후보가 아닙니다. 실제 RAN Plenary 스케줄은 동일 미팅이
@@ -268,8 +274,9 @@ RAN#113 v04의 주요 표현:
 
 Portal 조회는 진행 중 여부가 아니라 선택한 RAN 회의번호로 일치시킵니다.
 조회 범위는 현재 연도 전후 1년이며 과거 회의는 아래 설정으로 보완할 수 있습니다.
-알려진 Portal 시간대는 공통 매핑으로 IANA 시간대로 변환하고, 미등록 표기는
-장소·국가를 LLM에 전달해 해석한 뒤 `ZoneInfo`로 검증합니다. Portal 시작·종료 시각은
+시간대는 모든 WG가 쓰는 `shared/timezones.py`가 정합니다. 알려진 Portal 표기는 공통 매핑으로
+IANA 시간대로 바꾸고, 미등록 표기는 개최지 목록(`docs/timezone_map.jsonl`)을 본 뒤 없으면
+장소·국가를 Gemini에 물어 IANA 이름과 표기의 GMT 값을 확인하고 목록에 남깁니다. Portal 시작·종료 시각은
 UTC 오프셋을 포함한 `starts_at`/`ends_at`으로 저장해 NOW 기간 제어에 사용합니다. 명시 설정이 우선이고, 조회 장애 시 같은 회의의 성공 메타데이터만 재사용합니다.
 새 회의의 날짜·시간대를 확보하지 못하면 UTC로 추측하지 않고 빌드에 실패합니다.
 
@@ -349,7 +356,8 @@ Gemini가 다시 읽되, 원문으로 확인되는 답만 씁니다(아래 "LLM 
 - `agenda.csv`는 같은 미팅의 아카이브 폴더에서 받아 AI 설명과 범례 그룹에 씁니다. 없으면 생략합니다.
 - 날짜·시간대·시작/종료 시각은 Portal(TB 380)에서 가져옵니다. 순서는
   `config.json`의 `meetings` 지정 > Portal > 같은 미팅의 마지막 성공 상태입니다.
-  셋 다 없으면 UTC로 추측하지 않고 빌드에 실패합니다.
+  Portal 시간대 표기를 모르면 `shared/timezones.py`가 개최지 목록과 Gemini로 정합니다.
+  그래도 날짜나 시간대가 없으면 UTC로 추측하지 않고 빌드에 실패합니다.
 
 ### 표 읽기 (`working_groups/ran2/document.py`)
 
@@ -604,6 +612,12 @@ ETSI 등의 `extra_files`는 Git 저장소에 커밋된 파일과 SHA-256 상태
 - `timezone`: 해당 미팅에서 감지한 IANA 타임존
 - `timezone_status`: `resolved`, `pending_timezone_ref`, `detection_failed` 중 하나
 - `timezone_ref`: 우선 `type: "portal"`인 API 미팅 ID·시간대·개최 날짜·장소. 문서 대체 경로에서는 Agenda/Chair notes 식별자이며, 미해결 시 `null`
+- `agenda`: AI 설명에 쓴 Agenda 파일의 이름·URL·업로드 시각·SHA-256.
+  3GPP는 회의 폴더의 `agenda.csv`를 내용 그대로 매일 05:42에 다시 씁니다. 그래서 업로드 시각은 지금 내용이 처음 올라온 시각으로 두고,
+  check는 시각만 다르면 파일을 받아 SHA-256으로 비교합니다. 내용이 같으면 빌드하지 않습니다.
+
+빌드가 커밋하는 시각(`slot_state/*.json`의 `merged_at`, `agenda_item_description.json`의 `generated_at`)은 내용이 바뀔 때만 바뀝니다.
+변경 없는 재빌드가 시각만 바뀐 커밋을 만들지 않게 합니다.
 
 이 상태는 다음 용도로 사용됩니다.
 
@@ -613,10 +627,11 @@ ETSI 등의 `extra_files`는 Git 저장소에 커밋된 파일과 SHA-256 상태
 
 시간대는 `GetMeetings`에서 **해당 RAN1 미팅 번호와 TB ID가 모두 일치하는 행**을 우선
 사용합니다. `StartTimeZone`/`EndTimeZone`은 IANA 이름이 아닌 표시 문자열이므로,
-확인된 문자열과 `Country`를 코드로 매핑합니다. 예를 들어 유럽 표시 문자열과 `NL`은
+확인된 문자열과 `Country`를 코드로 매핑합니다(`shared/timezones.py`). 예를 들어 유럽 표시 문자열과 `NL`은
 `Europe/Amsterdam`이 되며 서머타임은 `ZoneInfo`가 처리합니다. GMT 숫자만 보고 고정
-오프셋으로 추측하지 않습니다. 이 경로에서는 시간대용 문서 다운로드·장소 추출·LLM
-호출이 없고 `schedule.json`에 `starts_on`/`ends_on` 및 시각을 보존한
+오프셋으로 추측하지 않습니다. 매핑에 없는 문자열은 개최지 목록(`docs/timezone_map.jsonl`)을 보고,
+없으면 빌드에서 Portal의 장소·국가를 Gemini에 한 번 묻습니다. 이 경로에서는 시간대용 문서 다운로드·장소 추출이 없고
+`schedule.json`에 `starts_on`/`ends_on` 및 시각을 보존한
 `starts_at`/`ends_at`도 저장합니다. Agenda는 항목 설명
 생성에 계속 사용하며 변경 여부도 별도로 추적합니다.
 
@@ -626,10 +641,10 @@ Portal 목록은 한국 날짜 기준 과거 366일~미래 183일 범위를 복�
 찾는 기능은 아닙니다. `MtgDocURL`은 조회 결과에 보존하지만 FTP 소스 설정을 자동으로
 바꾸지는 않습니다.
 
-API 장애·미등록 시간대·조회 범위 밖 미팅에서는 같은 미팅의 저장된 Portal 시간대를
+API 장애, 목록과 Gemini로도 정하지 못한 시간대, 조회 범위 밖 미팅에서는 같은 미팅의 저장된 Portal 시간대를
 우선 재사용합니다. 사용할 Portal 참조가 없으면 기존 문서 대체 경로를 사용합니다.
 이 경로는 사용 가능한 직접 Agenda DOCX를 우선하고, 없으면 현재 미팅의 Chair notes
-DOCX/DOCM에서 개최지를 추출해 Gemini로 시간대를 판정합니다. 새 미팅의 스케줄이 시간대 참조보다 먼저 올라오면 우선 `UTC`, `timezone_status: "pending_timezone_ref"`, `timezone_ref: null`로 저장합니다. 이후 Agenda DOCX 또는 Chair notes가 나타나면 `check_update.py`가 `timezone_ref`의 변화를 별도로 감지해 빌드를 다시 실행하고, 성공한 빌드가 실제 IANA timezone과 참조 식별자를 저장합니다. 같은 파일명이 갱신된 경우에도 업로드 시각 변화로 재다운로드합니다. 로컬 참조는 파일 내용 SHA-256으로 추적합니다. Agenda ZIP/CSV는 agenda description 입력으로만 사용하며 timezone 참조로 승격하지 않습니다.
+DOCX/DOCM에서 개최지를 추출해 같은 `shared/timezones.py`로 시간대를 판정합니다(목록, 없으면 Gemini). 새 미팅의 스케줄이 시간대 참조보다 먼저 올라오면 우선 `UTC`, `timezone_status: "pending_timezone_ref"`, `timezone_ref: null`로 저장합니다. 이후 Agenda DOCX 또는 Chair notes가 나타나면 `check_update.py`가 `timezone_ref`의 변화를 별도로 감지해 빌드를 다시 실행하고, 성공한 빌드가 실제 IANA timezone과 참조 식별자를 저장합니다. 같은 파일명이 갱신된 경우에도 업로드 시각 변화로 재다운로드합니다. 로컬 참조는 파일 내용 SHA-256으로 추적합니다. Agenda ZIP/CSV는 agenda description 입력으로만 사용하며 timezone 참조로 승격하지 않습니다.
 
 ## GitHub Actions 자동 배포
 
@@ -814,10 +829,11 @@ WG는 파일 선택과 문서 해석만 담당합니다. 새로운 WG도 `get_li
 미팅 폴더는 미팅이 바뀌어도 설정을 고치지 않도록 미팅 ID로 찾습니다. 한 미팅의 폴더는 다음 순서로 정합니다.
 
 1. WG `config.json`의 `meeting_specific_override` (직접 지정, 그 미팅에만 적용)
-2. Portal의 `MtgDocURL` (실행마다 한 번 받는 Portal 목록에 이미 있어 요청이 없습니다. `ftp.3gpp.org`는 `www.3gpp.org/ftp`로 바꾸고, `Docs/` 같은 하위 폴더는 미팅 폴더로 올립니다. 다른 미팅 이름을 가리키면 쓰지 않습니다.)
+2. Portal의 `MtgDocURL` (실행마다 한 번 받는 Portal 목록에 이미 있어 요청이 없습니다. `ftp.3gpp.org`는 `www.3gpp.org/ftp`로 바꾸고, SA 회의 주소의 겹친 슬래시(`ftp//tsg_sa/`)를 하나로 줄이고, `Docs/` 같은 하위 폴더는 미팅 폴더로 올립니다. 다른 미팅 이름을 가리키면 쓰지 않습니다.)
 3. 이전 실행이 찾아 기록한 폴더 (`config.json`의 `meeting_specific`)
-4. 미팅 ID로 만든 폴더 이름을 바로 조회: RAN1 `TSGR1_126b`·`TSGR1_126bis`, RAN2 `TSGR2_135bis`·`TSGR2_135b`, RAN P `TSGR_113`
-5. WG 루트 목록에서 이름으로 찾기 (`-e` 같은 전자회의 접미사도 인정). 수백 항목이라 미팅마다 6시간에 한 번만 받습니다.
+4. 미팅 ID로 만든 폴더 이름을 바로 조회: RAN1 `TSGR1_126b`·`TSGR1_126bis`, RAN2 `TSGR2_135bis`·`TSGR2_135b`, RAN3 `TSGR3_133-bis`·`TSGR3_133bis`, RAN4 `TSGR4_120bis`·`TSGR4_120b`, RAN P `TSGR_113`.
+   SA는 이름에 개최지가 붙어서(`TSGS1_116_Calgary`, `TSGS2_177_Prague_2026-10`) 만들 수 없으므로 이 단계를 건너뜁니다.
+5. WG 루트 목록에서 이름으로 찾기 (`-e`, `_e`, `-bis-e` 같은 전자회의 접미사도 인정). 수백 항목이라 미팅마다 6시간에 한 번만 받습니다. ad hoc 폴더(`TSGS2_175-AH-e_…`, `TSGS1_112-Ad_Hoc-e`)는 정규 미팅으로 보지 않습니다.
 
 - **찾은 폴더는 `config.json`의 `meeting_specific`에 기록되어 저장소에 남습니다.** CI가 확인할 때마다 그 실행에서 찾은 폴더(다음 미팅, 빌드한 미팅)로 목록을 다시 쓰고, 바뀌면 그 WG를 빌드해 빌드 결과와 함께 커밋합니다(`meeting folders now …`가 check의 변경 사유로 보입니다). 목록에 없는 미팅은 아직 찾지 못한 것입니다. 손으로 고치지 않습니다. 고정하려면 `meeting_specific_override`에 적습니다.
   - override가 있는 미팅도 다른 미팅과 똑같이 찾아서 기록합니다. 사용하는 것은 override뿐입니다. 관리자는 `meeting_specific`에 기록된 폴더를 보고 override를 유지할지 지울지 정합니다.

@@ -582,6 +582,19 @@ def save_agenda_description_json(
     if conflicts:
         payload["conflicts"] = conflicts
 
+    # The file is committed: unchanged descriptions keep their time.
+    payload = json.loads(json.dumps(payload))
+    try:
+        previous = json.loads(output_path.read_text())
+    except (OSError, ValueError):
+        previous = None
+    if (
+        isinstance(previous, dict)
+        and previous.get("generated_at")
+        and {**previous, "generated_at": None} == {**payload, "generated_at": None}
+    ):
+        payload["generated_at"] = previous["generated_at"]
+
     output_path.parent.mkdir(parents=True, exist_ok=True)
     with open(output_path, "w") as f:
         json.dump(payload, f, ensure_ascii=False, indent=2)

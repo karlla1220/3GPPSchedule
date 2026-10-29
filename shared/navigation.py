@@ -6,18 +6,27 @@ from pathlib import Path
 import re
 from zoneinfo import ZoneInfo
 
-from shared.portal_meetings import find_meeting
+from shared.portal_meetings import find_meeting, timezone_reference
 
 # Marks every meeting name, the page's own title and its sibling links alike,
 # so the other WGs read as meetings to switch to rather than meta text.
 TITLE_EMOJI = '<span class="wg-emoji" aria-hidden="true">📅</span>'
+# WGs outside RAN plenary, RAN1 and RAN2 are new sources (site.json "experimental").
+EXPERIMENTAL = ('<span class="wg-experimental" title="New source for this site: '
+                'the schedule may be read wrongly. Check the chair\'s file.">Experimental</span>')
+
+
+def is_experimental(wg_id, groups):
+    return any(group["id"] == wg_id and group.get("experimental") for group in groups or [])
 
 
 def select_default_wg(config, schedules, meetings=None, now=None):
     """Prefer an ongoing, available meeting; keep configured order for ties.
 
-    Live Portal classifications are authoritative when supplied. Offline
-    rendering uses saved venue dates. Demo/undated pages cannot claim priority.
+    Ongoing means today, in the venue's timezone, is within the meeting's days.
+    Live Portal rows supply the dates when given (Portal's MeetingPeriod is not
+    used: it calls meetings months away ONGOING). Without rows the saved venue
+    dates decide. A meeting Portal does not list, and demo pages, never claim it.
     """
     ongoing = []
     for group in config['working_groups']:
@@ -29,24 +38,43 @@ def select_default_wg(config, schedules, meetings=None, now=None):
             active = meeting_status(schedule, now) == 'In progress'
         else:
             row = find_meeting(meetings, wg, schedule.meeting_id)
-            active = row is not None and row.get('MeetingPeriod') == 'ONGOING'
+            active = row is not None and portal_phase(row, schedule.timezone, now) == 'In progress'
         if active:
             ongoing.append(wg)
     default = config['default_wg']
     return default if not ongoing or default in ongoing else ongoing[0]
 
 
+def meeting_phase(starts_on, ends_on, zone, now=None):
+    """"Upcoming", "In progress" or "Ended" by the venue's calendar day; None without dates."""
+    if not starts_on or not ends_on:
+        return None
+    tz = ZoneInfo(zone)
+    today = (now or datetime.now(tz)).astimezone(tz).date().isoformat()
+    if today < starts_on:
+        return "Upcoming"
+    if today > ends_on:
+        return "Ended"
+    return "In progress"
+
+
+def portal_phase(row, fallback_zone, now=None):
+    """The phase of a Portal row: its own dates, in its venue zone (else the saved page's)."""
+    ref = timezone_reference(row)
+    if ref is not None:
+        return meeting_phase(ref['starts_on'], ref['ends_on'], ref['timezone'], now)
+    start, end = str(row.get('StartDate') or '')[:10], str(row.get('EndDate') or '')[:10]
+    try:
+        date.fromisoformat(start), date.fromisoformat(end)
+    except ValueError:
+        return None
+    return meeting_phase(start, end, fallback_zone, now)
+
+
 def meeting_status(schedule, now=None):
     if schedule.is_demo:
         return "Demo"
-    if not schedule.starts_on or not schedule.ends_on:
-        return "Latest schedule"
-    today = (now or datetime.now(ZoneInfo(schedule.timezone))).astimezone(ZoneInfo(schedule.timezone)).date().isoformat()
-    if today < schedule.starts_on:
-        return "Upcoming"
-    if today > schedule.ends_on:
-        return "Ended"
-    return "In progress"
+    return meeting_phase(schedule.starts_on, schedule.ends_on, schedule.timezone, now) or "Latest schedule"
 
 
 # Menu sections, top to bottom: meetings that are on or coming first, ended ones last.
@@ -80,7 +108,7 @@ def _date_range(starts_on, ends_on):
     return f"{first} \u2013 {last}"
 
 
-def _menu(selected, entries):
+def _menu(selected, entries, groups):
     sections = []
     for status in STATUS_ORDER:
         rows = []
@@ -90,8 +118,9 @@ def _menu(selected, entries):
             classes = "wg-switch-item" + (" wg-switch-past" if status in ("Ended", "Demo") else "")
             current = ' aria-current="page"' if group["id"] == selected.wg_id else ""
             dates = _date_range(schedule.starts_on, schedule.ends_on)
+            mark = EXPERIMENTAL if is_experimental(group["id"], groups) else ""
             rows.append(f'<a class="{classes}" href="../{escape(group["id"])}/"{current}>'
-                        f'<span>{escape(schedule.meeting_name)}</span>'
+                        f'<span>{escape(schedule.meeting_name)}{mark}</span>'
                         + (f'<span class="wg-switch-dates">{dates}</span>' if dates else "") + '</a>')
         if rows:
             sections.append(f'<p class="wg-switch-group">{status}</p>' + "".join(rows))
@@ -105,7 +134,8 @@ def render_navigation(selected, schedules, groups):
     entries = sorted(configured, key=lambda entry: (
         STATUS_ORDER.index(meeting_status(entry[1])), tsg_rank(entry[0]["id"]), order[entry[0]["id"]]))
     title = f"<h1>{TITLE_EMOJI}{escape(selected.meeting_name)}</h1>"
-    status = f'<span class="meeting-status">{meeting_status(selected)}</span>'
+    mark = " \u00b7 " + EXPERIMENTAL if is_experimental(selected.wg_id, groups) else ""
+    status = f'<span class="meeting-status">{meeting_status(selected)}{mark}</span>'
     if len(entries) < 2:
         return f'<div class="wg-title">{title}{status}</div>'
     others = ", ".join(escape(schedule.meeting_name) for group, schedule in entries if group["id"] != selected.wg_id)
@@ -115,7 +145,7 @@ def render_navigation(selected, schedules, groups):
     return (
         '<div class="wg-title"><details class="wg-switch" id="wg-switch">'
         f'<summary title="Switch meeting">{title}<span class="wg-switch-chevron" aria-hidden="true">\u25BC</span></summary>'
-        f'{_menu(selected, entries)}</details>{status}'
+        f'{_menu(selected, entries, groups)}</details>{status}'
         '<p class="wg-switch-hint" id="wg-switch-hint" hidden>'
         f'<span><strong>Switch meetings here</strong> \u2014 {others}</span>'
         '<button type="button">Got it</button></p></div>\n'

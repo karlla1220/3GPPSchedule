@@ -228,6 +228,22 @@ def test_save_agenda_description_json_records_source_metadata(tmp_path):
     assert data["source_agenda_file"] == "R1-2601750.zip"
 
 
+def test_unchanged_descriptions_keep_their_time(tmp_path):
+    path = tmp_path / "agenda_item_description.json"
+    pairs = [{"agenda_item": "1", "description": "Opening"}]
+
+    save_agenda_description_json(pairs, path, source_uploaded_at="2026-10-20T05:42:00")
+    first = json.loads(path.read_text())["generated_at"]
+    save_agenda_description_json(pairs, path, source_uploaded_at="2026-10-20T05:42:00")
+    assert json.loads(path.read_text())["generated_at"] == first
+
+    save_agenda_description_json(
+        [{"agenda_item": "1", "description": "Opening of the meeting"}], path,
+        source_uploaded_at="2026-10-20T05:42:00",
+    )
+    assert json.loads(path.read_text())["generated_at"] != first
+
+
 def _save_descriptions(path, **source):
     save_agenda_description_json(
         [{"agenda_item": "10.1", "description": "Overview"}], path, **source

@@ -31,16 +31,6 @@ SLOT_CONCURRENCY = 20
 
 # ── JSON Schemas for structured output ───────────────────────────
 
-TIMEZONE_SCHEMA = {
-    "type": "object",
-    "properties": {
-        "timezone": {"type": "string"},
-        "city": {"type": "string"},
-        "country": {"type": "string"},
-    },
-    "required": ["timezone", "city", "country"],
-}
-
 ROOM_DETECT_SCHEMA = {
     "type": "object",
     "properties": {
@@ -121,67 +111,6 @@ def _save_cache(key: str, data: list[dict]):
     cache_file = CACHE_DIR / f"{key}.json"
     with open(cache_file, "w") as f:
         json.dump(data, f, ensure_ascii=False, indent=2)
-
-
-def get_timezone_from_location(location_text: str) -> str | None:
-    """Use Gemini to determine the IANA timezone from a meeting location string.
-
-    Args:
-        location_text: e.g. "Gothenburg, SE, Feb. 9th ~ 13th, 2026"
-
-    Returns:
-        IANA timezone string (e.g. "Europe/Stockholm") or None on failure.
-    """
-    from google import genai
-    from google.genai import types
-
-    api_key = os.environ.get("GEMINI_API_KEY")
-    if not api_key:
-        print("Warning: GEMINI_API_KEY not set, cannot determine timezone")
-        return None
-
-    # Check cache
-    cache_key = hashlib.sha256(f"tz:{location_text}".encode()).hexdigest()[:16]
-    cached = _load_cache(f"tz_{cache_key}")
-    if cached is not None:
-        tz = cached.get("timezone")
-        if tz:
-            print(f"Using cached timezone: {tz}")
-            return tz
-
-    client = genai.Client(
-        api_key=api_key,
-        http_options={"timeout": 60_000},
-    )
-
-    prompt = f"""Given this 3GPP meeting location line, return the IANA timezone identifier for the city.
-
-Location: "{location_text}"
-
-Return ONLY valid JSON: {{"timezone": "IANA/Timezone", "city": "CityName", "country": "CountryName"}}"""
-
-    try:
-        response = client.models.generate_content(
-            model=GEMINI_MODEL,
-            contents=prompt,
-            config=types.GenerateContentConfig(
-                response_mime_type="application/json",
-                response_json_schema=TIMEZONE_SCHEMA,
-                thinking_config=types.ThinkingConfig(thinking_level="low"),
-            ),
-        )
-        result = json.loads(response.text.strip())
-        tz = result.get("timezone")
-        city = result.get("city", "")
-        country = result.get("country", "")
-        if tz:
-            print(f"Meeting location: {city}, {country} → timezone: {tz}")
-            _save_cache(f"tz_{cache_key}", result)
-            return tz
-    except Exception as e:
-        print(f"Warning: Failed to determine timezone from location: {e}")
-
-    return None
 
 
 def detect_room_from_context(

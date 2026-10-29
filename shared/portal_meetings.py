@@ -1,74 +1,42 @@
 """Public Portal metadata shared by schedule builds and site selection.
 
-Portal timezone labels are display names, not IANA identifiers. Known labels
-map to regional rules (including DST); an unknown label stays unresolved.
+Portal timezone labels are display names, not IANA identifiers; shared.timezones
+resolves them. By default a row resolves without asking (labels and the venue
+list); builds pass ``timezones.resolve`` to let an unknown venue be asked once.
 """
 from datetime import datetime, timedelta
 from functools import lru_cache
 import re
-from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
+from zoneinfo import ZoneInfo
 
 import httpx
 
-from shared import remote_files
+from shared import remote_files, timezones
 
 URL = 'https://portal.3gpp.org/webservices/Rest/Meetings.svc/GetMeetings'
-TB_IDS = {'ran-plenary': 373, 'ran1': 379, 'ran2': 380, 'ran3': 381, 'ran4': 382}
+TB_IDS = {'ran-plenary': 373, 'ran1': 379, 'ran2': 380, 'ran3': 381, 'ran4': 382, 'sa1': 384, 'sa2': 385}
 HEADERS = {
     'Accept': 'application/json, text/plain, */*',
     'Origin': 'https://portal.3gpp.org', 'Referer': 'https://portal.3gpp.org/',
     'User-Agent': 'Mozilla/5.0 (3gppschedule) PortalMeetingsClient/1.0',
 }
-# Labels observed on Portal, plus the corresponding standard-time variants
-# (the GMT prefix can change seasonally). Country selects a regional alias.
-ZONES = {
-    'Seoul': ('Asia/Seoul', {}),
-    'Beijing, Chongqing, Hong Kong, Urumqi': ('Asia/Shanghai', {'HK': 'Asia/Hong_Kong'}),
-    'Kuala Lumpur, Singapore': ('Asia/Singapore', {'MY': 'Asia/Kuala_Lumpur'}),
-    'Osaka, Sapporo, Tokyo': ('Asia/Tokyo', {}),
-    'Taipei': ('Asia/Taipei', {}),
-    'Brussels, Copenhagen, Madrid, Paris': ('Europe/Paris', {
-        'BE': 'Europe/Brussels', 'DK': 'Europe/Copenhagen', 'ES': 'Europe/Madrid',
-        'NL': 'Europe/Amsterdam', 'FR': 'Europe/Paris', 'MT': 'Europe/Malta'}),
-    'Amsterdam, Berlin, Bern, Rome, Stockholm, Vienna': ('Europe/Berlin', {
-        'NL': 'Europe/Amsterdam', 'DE': 'Europe/Berlin', 'CH': 'Europe/Zurich',
-        'IT': 'Europe/Rome', 'SE': 'Europe/Stockholm', 'AT': 'Europe/Vienna',
-        'MT': 'Europe/Malta'}),
-    'Eastern Time (US & Canada)': ('America/New_York', {'CA': 'America/Toronto'}),
-    'Central Time (US & Canada)': ('America/Chicago', {'CA': 'America/Winnipeg'}),
-    'Mountain Time (US & Canada)': ('America/Denver', {'CA': 'America/Edmonton'}),
-    'Pacific Time (US & Canada)': ('America/Los_Angeles', {'CA': 'America/Vancouver'}),
-    'Greenwich Mean Time': ('UTC', {}),
-    'Greenwich Mean Time : Dublin, Edinburgh, Lisbon, London': ('Europe/London', {
-        'IE': 'Europe/Dublin', 'PT': 'Europe/Lisbon'}),
-    'UTC': ('UTC', {}),
-}
-
-
-def timezone_from_label(label, country=None):
-    if not isinstance(label, str) or not label.strip():
-        return None
-    label = label.strip()
-    try:
-        return ZoneInfo(label).key
-    except (ZoneInfoNotFoundError, ValueError):
-        pass
-    name = re.sub(r'^\((?:GMT|UTC)(?:[+-]\d{2}[:.]\d{2})?\)\s*', '', label)
-    name = ' '.join(name.split())
-    entry = ZONES.get(name)
-    return entry[1].get(country, entry[0]) if entry else None
-
-
 def meeting_key(value):
-    """Match complete regular meeting identities, never social-event titles."""
+    """Match complete regular meeting identities, never social-event titles.
+
+    RAN and SA alike: "3GPPRAN2#135-bis" -> ran2#135bis, "3GPPSA2#177" -> sa2#177.
+    Ad hoc and e-meeting titles ("3GPPSA2#178-AH-e", "3GPPSA1#112-Ad Hoc-e")
+    are not regular meetings and give None, as RAN e-meetings always have.
+    """
     if not isinstance(value, str):
         return None
-    match = re.fullmatch(r'(?:3GPP)?RAN([1-4]?)#(\d+)(?:[ -]?(bis|b|ter))?', value.strip(), re.I)
+    match = re.fullmatch(r'(?:3GPP)?(RAN|SA)([1-6]?)#(\d+)(?:[ -]?(bis|b|ter))?', value.strip(), re.I)
     if not match:
         return None
-    wg, number, suffix = match.groups()
+    tsg, wg, number, suffix = match.groups()
+    if tsg.upper() == 'RAN' and wg not in ('', '1', '2', '3', '4'):
+        return None
     suffix = (suffix or '').lower()
-    return f'ran{wg}#{number}{"bis" if suffix == "b" else suffix}'
+    return f'{tsg.lower()}{wg}#{number}{"bis" if suffix == "b" else suffix}'
 
 
 def fetch_meeting_rows(client, payload, *, max_pages=20):
@@ -143,12 +111,17 @@ def get_meeting(wg_id, identity):
     return find_meeting(get_meetings(), wg_id, identity)
 
 
-def timezone_reference(row):
+def timezone_reference(row, resolve=timezones.known):
     if row is None:
         return None
-    start = timezone_from_label(row.get('StartTimeZone'), row.get('Country'))
-    end = timezone_from_label(row.get('EndTimeZone'), row.get('Country'))
-    if not start or (row.get('EndTimeZone') and start != end):
+    try:
+        on = datetime.fromisoformat(row['StartDate']).date()
+    except (KeyError, TypeError, ValueError):
+        return None
+    venue = {'country': row.get('Country'), 'location': row.get('Location')}
+    start = resolve(row.get('StartTimeZone'), on=on, **venue)
+    end = resolve(row.get('EndTimeZone'), on=on, **venue) if row.get('EndTimeZone') else start
+    if not start or start != end:
         return None
     try:
         starts = datetime.fromisoformat(row['StartDate'])
@@ -167,10 +140,10 @@ def timezone_reference(row):
             'location': row.get('Location'), 'country': row.get('Country')}
 
 
-def lookup_timezone_reference(wg_id, identity):
+def lookup_timezone_reference(wg_id, identity, resolve=timezones.known):
     try:
         row = get_meeting(wg_id, identity)
-        ref = timezone_reference(row)
+        ref = timezone_reference(row, resolve)
         if row is not None and ref is None:
             print(f'Warning: Portal timezone unresolved for {identity}: {row.get("StartTimeZone")!r}')
         return ref

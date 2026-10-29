@@ -221,14 +221,39 @@ def test_default_prefers_matching_ongoing_meeting_with_stable_ties():
         'ran1': replace(plenary_schedule(), wg_id='ran1', meeting_id='ran1#126', is_demo=False),
         'ran-plenary': replace(plenary_schedule(), meeting_id='ran#113', is_demo=False),
     }
-    rows = [{'Id': 1, 'TBId': 379, 'Title': '3GPPRAN1#126', 'MeetingPeriod': 'ENDED'},
-            {'Id': 2, 'TBId': 373, 'Title': '3GPPRAN#113', 'MeetingPeriod': 'ONGOING'}]
-    assert select_default_wg(cfg, schedules, rows) == 'ran-plenary'
-    rows[0]['MeetingPeriod'] = 'ONGOING'
-    assert select_default_wg(cfg, schedules, rows) == 'ran1'
-    rows[0]['MeetingPeriod'] = 'NOT_STARTED'
+    seoul = '(GMT+09:00) Seoul'
+    rows = [{'Id': 1, 'TBId': 379, 'Title': '3GPPRAN1#126', 'StartTimeZone': seoul,
+             'StartDate': '2026-08-24 09:00:00', 'EndDate': '2026-08-28 17:30:00'},
+            {'Id': 2, 'TBId': 373, 'Title': '3GPPRAN#113', 'StartTimeZone': seoul,
+             'StartDate': '2026-09-14 09:00:00', 'EndDate': '2026-09-17 17:00:00'}]
+    now = datetime(2026, 9, 15, 3, tzinfo=timezone.utc)
+    assert select_default_wg(cfg, schedules, rows, now=now) == 'ran-plenary'
+    rows[0].update(StartDate='2026-09-14 09:00:00', EndDate='2026-09-18 17:00:00')
+    assert select_default_wg(cfg, schedules, rows, now=now) == 'ran1'
+    # Portal's MeetingPeriod is not trusted: it calls meetings months away ONGOING.
+    rows[0].update(StartDate='2027-01-25 09:00:00', EndDate='2027-01-29 17:00:00', MeetingPeriod='ONGOING')
     rows[1]['MeetingPeriod'] = 'UNKNOWN'
-    assert select_default_wg(cfg, schedules, rows) == 'ran1'
+    assert select_default_wg(cfg, schedules, rows, now=now) == 'ran-plenary'
+
+
+def test_ongoing_is_the_venue_calendar_day():
+    from shared.navigation import select_default_wg
+    cfg = {'default_wg': 'ran1', 'working_groups': [{'id': 'ran1'}, {'id': 'ran-plenary'}]}
+    schedules = {'ran1': replace(plenary_schedule(), wg_id='ran1', meeting_id='ran1#126', is_demo=False),
+                 'ran-plenary': replace(plenary_schedule(), meeting_id='ran#113', is_demo=False,
+                                        timezone='America/Edmonton')}
+    rows = [{'Id': 2, 'TBId': 373, 'Title': '3GPPRAN#113', 'Country': 'CA',
+             'StartTimeZone': '(GMT-07:00) Mountain Time (US & Canada)',
+             'StartDate': '2026-11-16 08:30:00', 'EndDate': '2026-11-20 17:00:00'}]
+    # Monday 16 Nov already in Seoul but still Sunday in Calgary: not yet.
+    assert select_default_wg(cfg, schedules, rows, now=datetime(2026, 11, 16, 2, tzinfo=timezone.utc)) == 'ran1'
+    # Monday early morning in Calgary, before the opening: the meeting's first day counts.
+    assert select_default_wg(cfg, schedules, rows, now=datetime(2026, 11, 16, 13, tzinfo=timezone.utc)) == 'ran-plenary'
+    # Friday evening in Calgary is Saturday in UTC: still the last day there.
+    assert select_default_wg(cfg, schedules, rows, now=datetime(2026, 11, 21, 4, tzinfo=timezone.utc)) == 'ran-plenary'
+    # A label the resolver does not know falls back to the saved page's zone.
+    rows[0]['StartTimeZone'] = '(GMT-07:00) Somewhere'
+    assert select_default_wg(cfg, schedules, rows, now=datetime(2026, 11, 16, 13, tzinfo=timezone.utc)) == 'ran-plenary'
 
 
 def test_default_cannot_promote_demo_missing_or_different_meeting():
