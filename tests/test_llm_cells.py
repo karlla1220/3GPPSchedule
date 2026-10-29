@@ -113,3 +113,4 @@ def test_group_label_is_the_top_agenda_item():
     assert group_label('8.2.1', descriptions) == 'NR Rel-20'
     assert group_label('9.1', descriptions) == 'AI 9'
     assert group_label(None, descriptions) == ''
+    assert group_label('6.1', {'6': 'New Work Items -'}) == 'New Work Items'
