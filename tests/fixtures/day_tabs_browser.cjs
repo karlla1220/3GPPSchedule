@@ -43,6 +43,9 @@ const panels = input.days.map(day => {
 for (const id of ['popup-backdrop', 'popup-close-btn', 'popup-floating', 'popup-content', 'now-toggle']) {
     byId.set(id, Object.assign(element('div'), {id}));
 }
+// The tab bar is as wide as the grid's box; day-select.js sizes the zoomed grid by it.
+const toolbar = Object.assign(element('div'), {clientWidth: input.toolbarWidth ?? 396});
+const rootVars = {};
 function matchTab(selector) {
     const day = /\[data-day="([^"]*)"\]/.exec(selector);
     return tabs.filter(tab => (!day || tab.dataset.day === day[1])
@@ -50,12 +53,14 @@ function matchTab(selector) {
 }
 const document = {
     getElementById: id => byId.get(id) ?? null,
-    querySelector: selector => (/^(\.tab|\[data-day)/.test(selector) ? matchTab(selector)[0] : null) ?? null,
+    querySelector: selector => selector === '.schedule-toolbar' ? toolbar
+        : (/^(\.tab|\[data-day)/.test(selector) ? matchTab(selector)[0] : null) ?? null,
     querySelectorAll: selector => selector === '.tab' ? tabs : selector === '.day-panel' ? panels : [],
     createElement: element,
     addEventListener(event, fn) { listeners[event] = fn; },
     head: {appendChild(el) { byId.set(el.id, el); }},
-    documentElement: {clientWidth: 1440, clientHeight: 900, style: {setProperty() {}}},
+    documentElement: {clientWidth: 1440, clientHeight: 900, style: {
+        setProperty(k, v) { rootVars[k] = v; }, removeProperty(k) { delete rootVars[k]; }}},
 };
 function storage(map) {
     const guard = fn => (...args) => { if (input.storageError) throw Error('disabled'); return fn(...args); };
@@ -63,7 +68,9 @@ function storage(map) {
 }
 const context = {
     Date: ClockDate, Intl, Number, Math, JSON, Set, String, isFinite, encodeURIComponent, decodeURIComponent,
-    CSS: {escape: value => value.replace(/[^\w-]/g, ch => '\\' + ch)},
+    CSS: {escape: value => value.replace(/[^\w-]/g, ch => '\\' + ch),
+          supports: prop => input.zoomSupported !== false && prop === 'zoom'},
+    getComputedStyle: () => ({getPropertyValue: k => k === '--grid-min-width' ? '600px' : ''}),
     document,
     location: {pathname: '/ran1/', search: '', hash: ''},
     history: {replaceState() {}},
@@ -79,6 +86,7 @@ function state() {
         activePanels: panels.filter(panel => panel.classList.contains('active')).map(panel => panel.id),
         rule: rule ? rule.textContent : null,
         scrolls: [...scrolls],
+        vars: {...rootVars},
     };
 }
 vm.runInNewContext(input.daySelect, context);
