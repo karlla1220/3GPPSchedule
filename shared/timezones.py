@@ -207,8 +207,12 @@ def resolve(label=None, country=None, location=None, *, on: date | None = None,
     record = {'label': venue['portal_timezone'], 'country': venue['country'], 'location': venue['location'],
               'timezone': zone, 'model': f'{MODEL} ({THINKING})', 'raw': answer,
               'resolved_at': datetime.now(timezone.utc).isoformat(timespec='seconds')}
-    path.parent.mkdir(parents=True, exist_ok=True)
-    with path.open('a', encoding='utf-8') as stream:
-        stream.write(json.dumps(record, ensure_ascii=False) + '\n')
+    try:
+        path.parent.mkdir(parents=True, exist_ok=True)
+        with path.open('a', encoding='utf-8') as stream:
+            stream.write(json.dumps(record, ensure_ascii=False) + '\n')
+    except OSError as exc:  # the answer is still good for this build; the next one asks again
+        print(f'Warning: could not record venue timezone in {path}: {exc}')
+        return zone
     print(f'Resolved venue timezone {zone} for {venue} (recorded in {path})')
     return zone

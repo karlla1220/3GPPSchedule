@@ -95,3 +95,11 @@ def test_portal_rows_resolve_from_the_list_and_builds_may_ask():
     assert len(calls) == 1
     # The default (check) lookup now answers from the list.
     assert portal.timezone_reference(row)['timezone'] == 'Europe/Prague'
+
+
+def test_an_unwritable_list_does_not_lose_the_answer(monkeypatch, tmp_path):
+    blocked = tmp_path / 'file'
+    blocked.write_text('')
+    request, _ = asker({'timezone': 'Europe/Prague'})
+    assert timezones.resolve('(GMT+02:00) Somewhere', 'CZ', 'Prague', request=request,
+                             path=blocked / 'timezone_map.jsonl') == 'Europe/Prague'
