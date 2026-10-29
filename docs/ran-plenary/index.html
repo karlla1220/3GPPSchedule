@@ -1590,9 +1590,9 @@ header .meta a:focus-visible,
     border-radius: 12px;
     box-shadow: 0 0 0 2px rgba(255,255,255,.95), 0 0 0 9999px rgba(15,23,42,.5);
     pointer-events: none;
-    transition: transform .35s ease, width .35s ease, height .35s ease;
 }
-.help-spot-jump,
+/* Gliding between targets already on screen; while the page scrolls it rides along. */
+.help-spot-glide { transition: transform .35s ease, width .35s ease, height .35s ease, border-radius .35s ease; }
 .help-still .help-spot { transition: none; }
 
 /* The words for a step: the page's surface, docked at the bottom of the
@@ -1612,6 +1612,10 @@ header .meta a:focus-visible,
     transform: translateX(-50%);
 }
 .help-card.help-card-top { top: 16px; bottom: auto; }
+/* Beside a narrow target at the screen's edge; the script sets its left and width. */
+.help-card.help-card-side { transform: none; }
+/* Compact there: the card is narrower, so its scene is shorter. */
+.help-card.help-card-side .help-stage { height: 170px; }
 .help-card-head { display: flex; align-items: center; justify-content: space-between; margin: -4px -8px 2px 0; }
 .help-count { color: var(--ink-3); font-size: 12px; font-variant-numeric: tabular-nums; }
 .help-close {
@@ -1798,6 +1802,8 @@ header .meta a:focus-visible,
     const PAD = 6;
     const EDGE = 8;
     const GAP = 12;
+    // The narrowest card beside a target: the buttons and two short lines still fit.
+    const SIDE_MIN = 260;
     let tour = null;
 
     function el(tag, cls) {
@@ -2177,9 +2183,16 @@ header .meta a:focus-visible,
         return false;
     }
 
+    function undock() {
+        card.classList.remove('help-card-top', 'help-card-side');
+        card.style.left = card.style.width = '';
+    }
+
     // The card sits at the bottom of the screen, or at the top when it hides
     // less of the target there (a fixed target, the end of the page). Never
     // over the target's start: a tall section is read from its heading.
+    // A narrow target it would cover either way (the Filter tab on a phone)
+    // keeps its side of the screen free: the card narrows to the other side.
     function dock(rect) {
         const hidden = () => {
             const c = card.getBoundingClientRect();
@@ -2187,12 +2200,23 @@ header .meta a:focus-visible,
             const h = Math.min(rect.bottom + PAD, c.bottom) - Math.max(rect.top - PAD, c.top);
             return Math.max(0, w) * Math.max(0, h);
         };
-        card.classList.remove('help-card-top');
         const bottom = hidden();
         if (!bottom) return;
         card.classList.add('help-card-top');
         const top = hidden();
-        const start = card.getBoundingClientRect().bottom > rect.top - PAD && top > 0 && rect.bottom - rect.top > card.offsetHeight;
+        if (!top) return;
+        card.classList.remove('help-card-top');
+        const v = viewport();
+        const right = rect.left + rect.right > v.width;
+        const room = right ? rect.left - PAD - GAP - EDGE : v.width - rect.right - PAD - GAP - EDGE;
+        if (rect.right - rect.left < v.width * 0.4 && room >= SIDE_MIN) {
+            card.classList.add('help-card-side');
+            card.style.width = Math.min(room, card.offsetWidth) + 'px';
+            card.style.left = (right ? EDGE : rect.right + PAD + GAP) + 'px';
+            return;
+        }
+        card.classList.add('help-card-top');
+        const start = card.getBoundingClientRect().bottom > rect.top - PAD && rect.bottom - rect.top > card.offsetHeight;
         if (top >= bottom || start) card.classList.remove('help-card-top');
     }
 
@@ -2206,8 +2230,9 @@ header .meta a:focus-visible,
         const top = rect.height + 2 * PAD > free - EDGE ? EDGE + PAD + Math.min(120, free / 4) : (free - rect.height) / 2;
         const max = document.documentElement.scrollHeight - v.height;
         const y = Math.max(0, Math.min(max, window.scrollY + rect.top - top));
-        window.scrollTo({ top: y, behavior: smooth ? 'smooth' : 'auto' });
-        return rect.top - (y - window.scrollY);
+        const moves = Math.abs(y - window.scrollY) >= 1;
+        if (moves) window.scrollTo({ top: y, behavior: smooth ? 'smooth' : 'auto' });
+        return { top: rect.top - (y - window.scrollY), moves: moves };
     }
 
     // The spotlight follows its target on every frame the page moves.
@@ -2215,10 +2240,12 @@ header .meta a:focus-visible,
         if (!tour || !tour.current) return;
         const v = viewport();
         const r = tour.current.el.getBoundingClientRect();
-        const top = Math.max(EDGE, r.top - PAD);
-        const left = Math.max(EDGE, r.left - PAD);
-        const bottom = Math.min(v.height - EDGE, r.bottom + PAD);
-        const right = Math.min(v.width - EDGE, r.right + PAD);
+        // Cut at the screen's edge only: a ring pulled in to a margin would
+        // cross a target that sits at the edge (the "?" button, the Filter tab).
+        const top = Math.max(0, r.top - PAD);
+        const left = Math.max(0, r.left - PAD);
+        const bottom = Math.min(v.height, r.bottom + PAD);
+        const right = Math.min(v.width, r.right + PAD);
         spot.style.transform = 'translate(' + left + 'px, ' + top + 'px)';
         spot.style.width = Math.max(0, right - left) + 'px';
         spot.style.height = Math.max(0, bottom - top) + 'px';
@@ -2227,6 +2254,8 @@ header .meta a:focus-visible,
     let frame = 0;
     function follow() {
         if (frame) return;
+        // A gliding spotlight would trail behind the page: it rides along instead.
+        spot.classList.remove('help-spot-glide');
         frame = requestAnimationFrame(() => {
             frame = 0;
             placeSpot();
@@ -2288,12 +2317,17 @@ header .meta a:focus-visible,
         // The spotlight keeps the target's own corners, PAD further out: round for the "?" button.
         spot.style.borderRadius = Math.max(8, (parseFloat(getComputedStyle(node).borderTopLeftRadius) || 0) + PAD) + 'px';
         let rect = node.getBoundingClientRect();
+        let moves = false;
+        undock();
         if (!fixedPosition(node)) {
-            card.classList.remove('help-card-top');
-            const top = scrollTo(node, smooth);
-            rect = { top: top, bottom: top + rect.height, left: rect.left, right: rect.right };
+            const to = scrollTo(node, smooth);
+            moves = to.moves;
+            rect = { top: to.top, bottom: to.top + rect.height, left: rect.left, right: rect.right };
         }
         dock(rect);
+        // The spotlight glides to a target already in place, and rides along
+        // with the page to one it scrolls to (placed on every scroll frame).
+        spot.classList.toggle('help-spot-glide', smooth && !moves);
         placeSpot();
         next.focus({ preventScroll: true });
     }
@@ -2305,10 +2339,7 @@ header .meta a:focus-visible,
                  scrollX: window.scrollX, scrollY: window.scrollY };
         guide.classList.toggle('help-still', stillMotion());
         guide.showModal();
-        spot.classList.add('help-spot-jump');
         show(0, false);
-        // The first spotlight appears where it is; later ones glide.
-        requestAnimationFrame(() => spot.classList.remove('help-spot-jump'));
         window.addEventListener('scroll', follow, true);
         window.addEventListener('resize', relayout);
         if (window.visualViewport) window.visualViewport.addEventListener('resize', relayout);
