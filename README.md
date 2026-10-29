@@ -170,7 +170,8 @@ LLM을 어디에 쓸지는 원본의 계보로 정합니다. RAN1은 의장과 �
 `Session.name`은 cell title(셀의 주 정보)이고, 원본 셀의 모양을 옮깁니다. 셀 머리 줄이 title이고
 나머지 원문 줄은 `Session.notes`에 둡니다. RAN1은 셀 글이 대개 AI 번호라 title이 AI이고, RAN2는 셀 머리 줄(`NR20 MIMO`),
 RAN Plenary는 셀 원문입니다. 머리 없이 주제가 여럿이면 앞 셋을 ` / `로 잇습니다(RAN2 `title_and_chair`).
-원문 낱말은 바꾸지 않고, 다른 줄이 보이는 괄호(AI 번호, 의장·회사, 조건)만 뗍니다.
+원문 낱말은 바꾸지 않고, 제목에서는 괄호를 뗍니다(RAN2 `clean`: AI 번호는 AI 줄로, 의장은 Chair로, 둥근 괄호는 모두. 원문은 Note에 남습니다).
+셀 색(`group_header`)은 agenda 최상위 항목입니다(RAN2 `group_label`). RAN1은 일정의 그룹 머리를 씁니다.
 AI 번호는 어느 WG든 `agenda_item`에 따로 두고, 셀의 AI 줄과 필터가 그것을 씁니다.
 
 원본이 시각 없이 블록을 몇 조각으로 나눠 놓았으면 `Session.part = [k, n]`으로 나눕니다.
