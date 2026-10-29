@@ -483,6 +483,79 @@ uv run python main.py --wg ran2 --local "tests/fixtures/ran2/R2_135_Schedule_v11
 다른 작성자의 양식(Main 열 없음, 시간 없는 행, 잘못된 시각, 제목 없음)이 실패 대신 메모로 남는지,
 LLM 폴백이 검증을 통과한 답만 쓰고 실패 시 규칙 결과를 유지하는지도 가짜 Gemini 응답으로 확인합니다.
 
+## SA2 Session Plan
+
+SA2 의장은 회의마다 `S2-<TDoc>_SA2-<미팅>-Session Plan - r<N>.docx` 하나를 판을 올려 가며 고칩니다
+(`S2-2610195_SA2-177-Session Plan - r7.docx`, `-r14 - Friday plan.docx`, 회의 전 판은 ZIP).
+#172부터 같은 양식이라 **규칙으로 읽고**, 양식이 다르거나 규칙이 확신하지 못한 칸만 RAN2처럼 Gemini가 다시 읽습니다.
+SA2#172·#174·#175·#176·#177의 실제 문서로 확인했습니다. `site.json`에서 `experimental`입니다.
+
+### 원본 선택 (`working_groups/sa2/sources.py`)
+
+- 회의 중의 판은 `Meetings_3GPP_SYNC/SA2/Inbox/Drafts/_Session_Plan_Updates/`에만 올라옵니다.
+  회의 전 판(ZIP)은 미팅 폴더의 `INBOX/DRAFTS/_Session_Plan_Updates/`(#176부터)나 `Agenda/`(#172~#175)에 있고,
+  `agenda.csv`는 미팅 폴더의 `Agenda/`에 있습니다. sync 폴더가 없는 것(403)은 정상입니다.
+- **미팅 폴더 이름에 개최지가 붙어(`TSGS2_177_Prague_2026-10`) 이름을 만들 수 없습니다.** Portal(TB 385)의 `MtgDocURL`,
+  `meeting_specific` 기록, 아카이브 루트 목록 순으로 찾습니다(아래 "미팅 폴더 자동 등록"). `-AH-e` 회의는 Session Plan이 없어 쓰지 않습니다.
+- **판은 파일 이름의 `r<N>`(없으면 r0), 같은 번호면 업로드 시각으로 고릅니다.** `-r14.docx`(목 12:34) 다음에 `-r14 - Friday plan.docx`(금 07:48)가 왔고,
+  #176의 r15는 r14보다 먼저 올라왔습니다. 이름에 `SA2-<번호>`가 없는 파일(`Draft Feb 2026 session plan -r9.zip`)은 건너뜁니다.
+- 미팅은 파일 이름으로 정합니다. 첫 판의 머리 문단은 이전 회의 것이 복사되어 있습니다(#177 첫 판이 #176 날짜).
+- 현재 미팅, 버전을 되돌리지 않기(`built_copy`), 날짜·시간대(Portal > `meetings` 지정 > 마지막 성공 상태)는 RAN2와 같습니다.
+- 헤더의 `Sources:`는 `Session Plan r14 16 Oct 07:48`처럼 판과 업로드 시각(개최지 시간)입니다.
+
+### 표 읽기 (`working_groups/sa2/document.py`)
+
+- 행은 쿼터(Q0 `0800 - 0850` ~ Q5 `1800 - 1930`) × Stream(방) 1~3이고, 사이에 Break·Coffee·Lunch 행이 있습니다.
+  열은 요일 다섯 개 × 두 칸입니다. 이 틀이 아니면 `LayoutError`입니다(아래 LLM 폴백).
+- 휴식 행에는 시각이 없어 앞뒤 쿼터에서 정합니다(Coffee 10:30–11:00, Lunch 12:30–14:00 등).
+- 방 이름은 방 표의 순서(`Main Room | B2 … | Breakout 1 | …`)로 Stream에 붙입니다: `Main`, `Breakout 1`, `Breakout 2`.
+- 병합 칸은 XML 요소로 식별합니다(`gridSpan`, `vMerge`). 변경 추적은 수락한 상태로 읽습니다(r7·r11·r13·r14에 있습니다).
+- 표 밖의 문단과 방 표는 "Additional information"에 그대로 둡니다. 머리 문단(회의 이름, 장소·날짜)은 첫 판에서 틀리므로 뺍니다.
+
+### 셀 해석 (`working_groups/sa2/sessions.py`)
+
+- **나눔 표시는 표 칸입니다.** 한 쿼터의 두 칸에 다른 글이 있으면 `part`로 `1/2`, `2/2 of 90 min`이고, 한 칸만 있으면 그 조각 하나입니다.
+  두 칸의 글이 같으면(공백·문단 경계 무시) 쿼터 하나입니다. Q0(50분)은 조각이 30분이 안 되어 두 칸을 왼쪽부터 한 셀에 둡니다.
+  한 칸 안의 여러 주제(문단)와 빈 줄은 나누지 않고 한 셀 + Note입니다.
+- 여러 Stream에 걸친 병합 칸(개회, 수 Q5 `Work planning`, 금 plenary)은 세 방 공유(`room_scope="shared"`)입니다.
+  칸에 시각이 적혀 있으면 그 시각을 씁니다: `Plenary session (1330 - 1630)` 안의 `14:00 …`, `15:00 …`에서 나눕니다.
+- 휴식 행의 글은 휴식 시각의 별도 셀입니다. `13:00 (Main room) Drafting …`은 13:00부터 행 끝까지 Main 열,
+  방이 적혀 있지 않으면(`SA2 VC Election`) 방 미지정입니다. `Opening of meeting at 0900`, `Close of meeting by 1630`은 셀이 아니라 하단 메모입니다.
+- `-`(그 Stream은 쉰다)와 빈 칸은 셀이 아닙니다. `Revisions`, `Drafting:` 같은 자리표시는 원문 그대로 셀입니다.
+- 제목은 칸의 문단을 앞 셋까지 ` / `로 잇고(더 있으면 ` …`), 괄호는 RAN2처럼 모두 뗍니다: `KI#18 (AI for Network) (20.6.18) [5+15]` → `KI#18`.
+  원문 문단은 모두 Note입니다. AI 없는 다음 문단(`Architecture`)은 앞 주제의 Note입니다.
+- AI는 원문 줄의 괄호에서 읽습니다: `(20.6.18)`, 범위 `(20.6.12 - 16)`, 형제 `19.48/49/50`·`(20.6.14, 12, 13)`, `(5.x, 6.x, 7.x )`,
+  닫히지 않은 `(19.8.2 [4]`, `(including 30.1)`, 대괄호 안의 `[19.2.2]`, 숫자만 있는 줄 `20.48, 20.49, 20.50 [15]`.
+  `[5+15]`(개수로 추정)와 `(Option 1, 2, 3)`, `(1330 - 1630)`은 AI가 아닙니다. `agenda.csv`에 없는 번호는 넣지 않습니다(하위 항목이 있는 `1`, `5.x`는 넣습니다).
+- Chair는 `Convener 1: Mike, Convenor 2: Wanqiang` 줄에서만 옵니다. 이름의 형광펜 색이 Stream 행 머리글의 색과 같은 Stream입니다
+  (green → Stream 2, cyan → Stream 3; Q0 행 머리글에는 색이 없지만 같은 Stream입니다). Stream 1과 공유 셀은 이름이 적혀 있지 않아 비웁니다.
+  이름은 officials 이력(`S2`)에서 회의 첫날 임기 중인 사람으로 풉니다(`Mike` → `Michael STARSINIC`, 별칭은 `chair_aliases`).
+  이력을 받지 못하면 마지막 빌드의 이름, 그것도 없으면 적힌 그대로 씁니다.
+- 범례 그룹은 `agenda.csv` 최상위 항목입니다(`shared/agenda_groups.py`).
+
+### LLM 폴백 (`working_groups/sa2/llm.py`, 공용 `shared/llm_cells.py`)
+
+규칙이 기본이고, `GEMINI_API_KEY`가 없거나 `llm_fallback`이 `false`이면 규칙 결과를 그대로 씁니다.
+
+- **불확실한 칸**: 표가 자리(방, 시각, 조각)를 정하므로, 묻는 것은 제목, AI와 칸 안에 적힌 시각입니다.
+  - 한 문단에 두 주제가 붙은 줄(#174 `TEI20_DAMP [1]TEI20_UDCE-ARC [2]`)
+  - 괄호 밖이나 `agenda.csv`에 없는 AI 번호(#172 `5.x [0], 6.7 [3], 7.x [0], eNA_Ph2 (8.1)`)
+  - 규칙이 읽는 꼴(줄 첫머리 `13:00`, `(1330 - 1630)`, `at 0900`·`by 1630`, `Drafting: (1300)`) 밖의 시각.
+    그 밖의 네 자리 숫자는 TDoc 번호입니다(`LS’s, 9779, 10337`).
+  #177 r7~r14 Friday plan에서는 0칸, #172 r12·#174 r9·#176 r20에서는 1칸씩입니다.
+- **양식이 다른 문서**: 표가 위 틀이 아니면 문서 전체(문단, 표 칸마다 행·열 범위와 글)를 묻습니다.
+  답의 조각(`part`)은 블록의 n조각이 각자 표 칸 하나씩을 인용할 때만 받습니다.
+- 검사: 시각은 칸 경계이거나 원문에 적힌 시각(SA2 표기 `0900 - 1030`도 읽습니다), 조각은 블록 시각 그대로, 제목 낱말은 인용한 줄에,
+  AI는 인용한 줄에 적혔거나 의장의 줄임 표기(`(20.6.12 - 16)`, `19.48/49/50`)로 적힌 번호여야 합니다. Chair는 LLM에 묻지 않습니다.
+- 칸 답이 실패하면 그 칸은 규칙 결과이고, 문서 전체 해석이 실패하면 빌드가 실패해 마지막 정상 결과가 남습니다.
+  답은 `.cache/sa2/`에 입력 해시별로 남고, 요약은 `docs/sa2/.schedule_state.json`의 `llm`에 있습니다.
+
+```bash
+uv run python main.py --wg sa2
+uv run python main.py --wg sa2 --no-download
+uv run python main.py --wg sa2 --local "tests/fixtures/sa2/S2-2608833_SA2-176-Session Plan - r20.docx"
+```
+
 ## SA1 chair file (Experimental)
 
 SA1 의장은 아젠다, 일정표, TDoc 결론 표를 **한 파일**(chair file, Readme의 "Chair's Notes")로 관리합니다.

@@ -17,6 +17,12 @@
       "enabled": true
     },
     {
+      "id": "sa2",
+      "label": "SA2",
+      "enabled": true,
+      "experimental": true
+    },
+    {
       "id": "sa1",
       "label": "SA1",
       "enabled": true,
