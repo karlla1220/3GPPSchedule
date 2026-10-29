@@ -206,7 +206,7 @@ def test_cells_the_rules_are_unsure_about_say_why():
     run_together = find(read(R9), 'Monday', '18:00', 'stream1', [1, 2])[0]
     assert run_together['reasons'] == ["two topics run together: 'TEI20_DAMP [1]TEI20_UDCE-ARC [2]'"]
     loose = find(read(R12), 'Monday', '11:00', 'stream1', [1, 2])[0]
-    assert loose['reasons'] == ["agenda numbers not in agenda.csv: ['5.x', '6.7', '7.x']"]
+    assert loose['reasons'] == ["agenda numbers outside parentheses or not in agenda.csv: ['5.x', '6.7', '7.x']"]
     assert sessions.uncertainty(['Start 10:45 in front of the Main room'], []) == [
         "time written in a form the rules do not read: 'Start 10:45 in front of the Main room'"]
     # Times in the forms the rules read, and TDoc numbers, are no doubt.

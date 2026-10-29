@@ -21,7 +21,7 @@ from pydantic import BaseModel
 from shared import llm_cells
 from shared.llm_cells import check_times, gemini_request, title_errors, written_errors
 from shared.schedule import MIN_PART_MINUTES, time_to_minutes
-from .document import DAYS, LayoutError, W, _grid, _text, cell_lines, identify, paragraph_text, squash, supplements
+from .document import DAYS, LayoutError, W, _grid, cell_lines, identify, paragraph_text, squash, supplements
 from .sessions import known, line_items
 from .sources import CACHE, digest, read_json, write_json
 

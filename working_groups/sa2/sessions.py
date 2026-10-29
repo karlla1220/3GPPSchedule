@@ -131,7 +131,7 @@ def uncertainty(lines: list[str], unknown: list[str]) -> list[str]:
     """Why the rules may have misread a cell; empty when they are on firm ground."""
     reasons = []
     if unknown:
-        reasons.append(f'agenda numbers not in agenda.csv: {unknown}')
+        reasons.append(f'agenda numbers outside parentheses or not in agenda.csv: {unknown}')
     for raw in lines:
         if re.search(r'\][^\s\[\],;/)]', raw):
             reasons.append(f'two topics run together: {raw!r}')   # "TEI20_DAMP [1]TEI20_UDCE-ARC [2]"
