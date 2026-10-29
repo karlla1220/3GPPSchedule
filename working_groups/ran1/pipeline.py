@@ -103,6 +103,7 @@ def _agenda_state_from_info(
                 "uploaded_at": _iso_value(agenda_info.get("uploaded_at")),
                 "url": agenda_info.get("url"),
                 "source_url": agenda_info.get("source_url"),
+                "sha256": agenda_info.get("sha256"),
             }
         )
     if agenda_path is not None:
@@ -110,6 +111,28 @@ def _agenda_state_from_info(
         state["local_path"] = str(agenda_path)
 
     return {k: v for k, v in state.items() if v is not None}
+
+
+def _settled_agenda_info(
+    agenda_info: dict,
+    downloaded: Path,
+    previous: object,
+) -> dict:
+    """Agenda metadata whose upload time moves only with the content.
+
+    3GPP rewrites agenda.csv every morning without changing it. Keeping the
+    first upload time of the current content leaves the committed state and
+    descriptions as they were; check compares the same ``sha256``.
+    """
+    settled = {**agenda_info, "sha256": hashlib.sha256(downloaded.read_bytes()).hexdigest()}
+    if (
+        isinstance(previous, dict)
+        and previous.get("sha256") == settled["sha256"]
+        and previous.get("uploaded_at")
+        and all(previous.get(key) == settled.get(key) for key in ("name", "url", "source_url"))
+    ):
+        settled["uploaded_at"] = previous["uploaded_at"]
+    return settled
 
 
 def _agenda_state_from_description_json(json_path: Path) -> dict | None:
@@ -512,6 +535,8 @@ def build_schedule(args) -> Schedule:
     # Agenda folder of that same meeting may describe its agenda items.
     agenda_path: Path | None = None
     agenda_info: dict | None = None
+    # What descriptions and the saved state record; see _settled_agenda_info.
+    agenda_record: dict | None = None
     agenda_urls = agenda_urls_for_meeting(
         cfg.get("agenda_urls") or [],
         current_meeting_id,
@@ -536,6 +561,12 @@ def build_schedule(args) -> Schedule:
                             for k, v in agenda_candidate_ref.items())
                 ),
             )
+            agenda_record = agenda_info
+            downloaded = agenda_dir / agenda_info["name"]
+            if agenda_path is not None and downloaded.is_file():
+                agenda_record = _settled_agenda_info(
+                    agenda_info, downloaded, prev_state.get("agenda")
+                )
         else:
             print("No agenda file found on FTP")
     if agenda_path is None:
@@ -554,7 +585,7 @@ def build_schedule(args) -> Schedule:
             update_agenda_description_json(
                 output_path=DEFAULT_JSON_PATH,
                 agenda_docx_path=agenda_path,
-                agenda_source_info=agenda_info,
+                agenda_source_info=agenda_record,
                 use_local_agenda=False,
             )
             print(f"  Wrote {DEFAULT_JSON_PATH}")
@@ -753,7 +784,7 @@ def build_schedule(args) -> Schedule:
             timezone=meeting_tz,
             timezone_status=timezone_status,
             timezone_ref=timezone_ref,
-            agenda=_agenda_state_for_save(agenda_info, agenda_path),
+            agenda=_agenda_state_for_save(agenda_record, agenda_path),
             agreements_ref=agreements_ref,
             local_refs=local_reference_hashes(),
         )

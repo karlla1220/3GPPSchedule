@@ -419,6 +419,28 @@ def test_agenda_description_updates_still_detected_after_portal_migration(update
     assert outputs == [('changed', 'true' if updated else 'false')]
 
 
+@pytest.mark.parametrize('remote_sha, recorded_sha, changed', [
+    ('same', 'same', 'false'),      # rewritten by 3GPP without changes
+    ('edited', 'same', 'true'),
+    ('same', None, 'true'),         # state saved before hashes were recorded
+])
+def test_agenda_upload_time_alone_is_settled_by_content(remote_sha, recorded_sha, changed):
+    ref = {'type': 'portal', 'id': 60713, 'timezone': 'Europe/Amsterdam'}
+    url = 'https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_126b/Agenda/agenda.csv'
+    agenda = {'name': 'agenda.csv', 'uploaded_at': '2026-10-20T05:42:00', 'url': url}
+    state = {'files': [], 'meeting_id': 'ran1#126bis', 'local_refs': {},
+             'timezone_status': 'resolved', 'timezone_ref': ref,
+             'agenda': {**agenda, **({'sha256': recorded_sha} if recorded_sha else {})}}
+    with (patch.object(check_update, 'lookup_timezone_reference', return_value=ref),
+          patch.object(check_update.remote_files, 'fetch_file',
+                       return_value=(b'', {'sha256': remote_sha})) as fetch):
+        outputs, _ = _run_check(state=state, local_refs={}, remote=[],
+                                agenda_info={**agenda, 'uploaded_at': '2026-10-29T05:42:00'},
+                                agenda_urls=['https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_126b/Agenda/'])
+    assert outputs == [('changed', changed)]
+    assert fetch.called == bool(recorded_sha)
+
+
 @pytest.mark.parametrize('folder, changed', [('TSGR1_126', 'true'), ('TSGR1_126b', 'false')])
 def test_agenda_of_another_meeting_is_not_a_change(folder, changed):
     ref = {'type': 'portal', 'id': 60713, 'timezone': 'Europe/Amsterdam'}
