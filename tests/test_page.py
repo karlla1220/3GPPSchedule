@@ -17,7 +17,7 @@ def test_header_escapes_site_metadata_and_keeps_demo_disclosure():
     html = render_header(schedule, presentation={
         'creator': '<script>bad()</script>', 'contact_name': '<Support>',
         'contact_email': 'new@example.com', 'notice': 'Official'})
-    assert '<script>' not in html and '&lt;Support&gt;' in html
+    assert '<script>bad()' not in html and '&lt;Support&gt;' in html
     assert 'mailto:new@example.com' in html and 'old@example.com' not in html
     assert 'Demo schedule' in html and 'Official' not in html
     assert 'id="tz-now"' in html
@@ -160,7 +160,8 @@ def test_support_links_are_joined_as_a_sentence():
 
 def support_note(schedule, **site):
     header = BeautifulSoup(render_header(schedule, presentation=SITE | site), 'html.parser')
-    return header.select_one('#support-note'), header.find('script')
+    note = header.select_one('#support-note')
+    return note, note and note.find_next_sibling('script')
 
 
 def run_note(schedule, now, **options):

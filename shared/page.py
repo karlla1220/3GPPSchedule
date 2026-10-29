@@ -110,6 +110,50 @@ def render_support_note(schedule, support_links):
     )
 
 
+# Each scene: (key, heading, text). The script plays it on copies of this
+# page's own cells and hides a scene the page has nothing for (no agreement
+# panel outside RAN1, no menu with one WG).
+HELP_SCENES = (
+    ("details", "Tap a session for its details",
+     "Group, chair, room, notes and the agenda item names. Tap again, or anywhere else, to close it."),
+    ("agreements", "Read its agreements below the grid",
+     "The same tap opens the chair notes for the session\u2019s agenda item under the grid. "
+     "Parts added in the latest notes have a green bar."),
+    ("filter", "Follow only your agenda items",
+     "Open Filter on the right edge and tick what you follow; other sessions fade. "
+     "The filter is kept for this meeting and is part of the link, so you can share what you see."),
+    ("pinch", "Pinch to see the whole day",
+     "On a phone, pinch the grid itself to see every room at once. "
+     "Spreading back, it stops at 100% for a moment."),
+    ("switch", "Switch meetings from the title",
+     "The meeting name opens every WG\u2019s meeting, ongoing ones first."),
+)
+HELP_TIPS = (
+    "<strong>NOW</strong> marks the current time on today\u2019s grid during the meeting.",
+    "The page reloads itself every few minutes and comes back to the day and spot you were looking at.",
+)
+
+
+def render_help():
+    """The Help button at the top left and the guide it opens."""
+    script = (Path(__file__).resolve().parent.parent / "templates" / "help-guide.js").read_text(encoding="utf-8")
+    scenes = "".join(
+        f'<section class="help-scene" data-scene="{key}"><div class="help-scene-text">'
+        f'<h3>{escape(heading)}</h3><p>{escape(text)}</p></div>'
+        '<div class="help-stage" aria-hidden="true" inert></div></section>'
+        for key, heading, text in HELP_SCENES)
+    tips = "".join(f"<li>{tip}</li>" for tip in HELP_TIPS)
+    return (
+        '<button type="button" class="help-button" id="help-button" aria-haspopup="dialog" aria-controls="help-guide">'
+        '<span class="help-icon" aria-hidden="true">?</span>Help</button>\n'
+        '<dialog class="help-guide" id="help-guide" aria-labelledby="help-guide-title">'
+        '<div class="help-guide-head"><h2 id="help-guide-title">How to use this page</h2>'
+        '<button type="button" class="help-guide-close" aria-label="Close">&times;</button></div>'
+        f'<div class="help-guide-body">{scenes}<ul class="help-tips">{tips}</ul></div></dialog>\n'
+        f'<script>{script}</script>'
+    )
+
+
 def _source(name, label):
     """One source as "Main v03": readers check the version, the meeting is in the title above.
 
@@ -139,7 +183,7 @@ def render_header(schedule, *, presentation=None, schedules=None, groups=None):
     metadata = normalize_presentation(presentation)
     heading = (render_navigation(schedule, schedules, groups) if schedules is not None
                else f"<h1>{TITLE_EMOJI}{escape(schedule.meeting_name)}</h1>")
-    parts = ["<header>", heading, render_support_links(metadata["support_links"], metadata["support_title"]),
+    parts = ["<header>", render_help(), heading, render_support_links(metadata["support_links"], metadata["support_title"]),
              f'<p class="meta">Sources: {render_sources(schedule)} &nbsp;|&nbsp; Generated: {escape(schedule.generated_at)} ({escape(schedule.timezone)}) &nbsp;|&nbsp; Now: <span id="tz-now">...</span> ({escape(schedule.timezone)})</p>']
     if schedule.is_demo:
         parts.append(f'<p class="demo-notice">{DEMO_NOTICE}</p>')
