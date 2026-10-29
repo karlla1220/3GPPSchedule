@@ -92,9 +92,13 @@ header .meta {
 ::view-transition-group(*.grid-move) { animation-duration: .22s; animation-delay: .06s; animation-timing-function: ease-in-out; }
 ::view-transition-old(*.grid-move),
 ::view-transition-new(*.grid-move) { animation-duration: .22s; animation-delay: .06s; }
-/* An empty surface: stretched to the moving box, it shows no distortion. */
+/* Empty surfaces: stretched to the moving box, they show no distortion.
+   The tab bar is only as wide as its days (four or five), and a snapshot
+   keeps its aspect ratio by default, so a narrower bar would shrink whole. */
 ::view-transition-old(grid-frame),
-::view-transition-new(grid-frame) { height: 100%; }
+::view-transition-new(grid-frame),
+::view-transition-old(day-tabs),
+::view-transition-new(day-tabs) { height: 100%; }
 ::view-transition-old(grid-cells) { animation: grid-cells-leave .1s ease-in both; }
 ::view-transition-new(grid-cells) { animation: grid-cells-arrive .12s .26s ease-out both; }
 /* Without a partner on the other page (a time one grid lacks), it leaves and
