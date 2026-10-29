@@ -1,0 +1,1340 @@
+{
+  "schema_version": 1,
+  "meeting_name": "RAN3#134",
+  "days": [
+    {
+      "day_name": "Monday",
+      "rooms": [
+        {
+          "name": "Main session",
+          "table_index": 0,
+          "room_index_in_table": 0,
+          "id": "main",
+          "kind": ""
+        }
+      ],
+      "sessions": [
+        {
+          "name": "Org",
+          "duration_minutes": 90,
+          "start_time": "09:00",
+          "end_time": "10:30",
+          "day": "Monday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": "1, 2, 3, 4, 5, 6, 7, 8",
+          "group_header": "Opening of the meeting (9:00am)",
+          "description": "Opening of the meeting (9:00am)\nReminders\nApproval of the Agenda\nApproval of the minutes from previous meetings\nDocuments for immediate consideration\nOrganizational topics",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "1",
+              "matched_agenda_item": "1",
+              "description": "Opening of the meeting (9:00am)",
+              "hierarchy": [
+                {
+                  "agenda_item": "1",
+                  "description": "Opening of the meeting (9:00am)"
+                }
+              ]
+            },
+            {
+              "agenda_item": "2",
+              "matched_agenda_item": "2",
+              "description": "Reminders",
+              "hierarchy": [
+                {
+                  "agenda_item": "2",
+                  "description": "Reminders"
+                }
+              ]
+            },
+            {
+              "agenda_item": "3",
+              "matched_agenda_item": "3",
+              "description": "Approval of the Agenda",
+              "hierarchy": [
+                {
+                  "agenda_item": "3",
+                  "description": "Approval of the Agenda"
+                }
+              ]
+            },
+            {
+              "agenda_item": "4",
+              "matched_agenda_item": "4",
+              "description": "Approval of the minutes from previous meetings",
+              "hierarchy": [
+                {
+                  "agenda_item": "4",
+                  "description": "Approval of the minutes from previous meetings"
+                }
+              ]
+            },
+            {
+              "agenda_item": "5",
+              "matched_agenda_item": "5",
+              "description": "Documents for immediate consideration",
+              "hierarchy": [
+                {
+                  "agenda_item": "5",
+                  "description": "Documents for immediate consideration"
+                }
+              ]
+            },
+            {
+              "agenda_item": "6",
+              "matched_agenda_item": "6",
+              "description": "Organizational topics",
+              "hierarchy": [
+                {
+                  "agenda_item": "6",
+                  "description": "Organizational topics"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "main"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "Org: AI 1-8"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": null
+        },
+        {
+          "name": "Corrections",
+          "duration_minutes": 120,
+          "start_time": "11:00",
+          "end_time": "13:00",
+          "day": "Monday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": "9",
+          "group_header": "Corrections to Rel-19 or earlier releases",
+          "description": "Corrections to Rel-19 or earlier releases",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "9",
+              "matched_agenda_item": "9",
+              "description": "Corrections to Rel-19 or earlier releases",
+              "hierarchy": [
+                {
+                  "agenda_item": "9",
+                  "description": "Corrections to Rel-19 or earlier releases"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "main"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "Corrections: AI 9"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": null
+        },
+        {
+          "name": "6G SI",
+          "duration_minutes": 120,
+          "start_time": "14:30",
+          "end_time": "16:30",
+          "day": "Monday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": "10",
+          "group_header": "Study on 6G Radio",
+          "description": "Study on 6G Radio",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "10",
+              "matched_agenda_item": "10",
+              "description": "Study on 6G Radio",
+              "hierarchy": [
+                {
+                  "agenda_item": "10",
+                  "description": "Study on 6G Radio"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "main"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "6G SI: AI 10"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": null
+        },
+        {
+          "name": "6G SI",
+          "duration_minutes": 120,
+          "start_time": "17:00",
+          "end_time": "19:00",
+          "day": "Monday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": "10",
+          "group_header": "Study on 6G Radio",
+          "description": "Study on 6G Radio",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "10",
+              "matched_agenda_item": "10",
+              "description": "Study on 6G Radio",
+              "hierarchy": [
+                {
+                  "agenda_item": "10",
+                  "description": "Study on 6G Radio"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "main"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "6G SI: AI 10"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": null
+        }
+      ],
+      "date": "2026-11-16",
+      "timeline": {
+        "start": "09:00",
+        "end": "19:00",
+        "slot_minutes": 5,
+        "label_minutes": 30,
+        "breaks": [
+          {
+            "name": "Coffee Break",
+            "start": "10:30",
+            "end": "11:00",
+            "label_position": "time-axis"
+          },
+          {
+            "name": "Lunch Break",
+            "start": "13:00",
+            "end": "14:30",
+            "label_position": "time-axis"
+          },
+          {
+            "name": "Coffee Break",
+            "start": "16:30",
+            "end": "17:00",
+            "label_position": "time-axis"
+          }
+        ],
+        "blocks": []
+      }
+    },
+    {
+      "day_name": "Tuesday",
+      "rooms": [
+        {
+          "name": "Main session",
+          "table_index": 0,
+          "room_index_in_table": 0,
+          "id": "main",
+          "kind": ""
+        }
+      ],
+      "sessions": [
+        {
+          "name": "Offline*",
+          "duration_minutes": 30,
+          "start_time": "08:00",
+          "end_time": "08:30",
+          "day": "Tuesday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": null,
+          "group_header": "",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [
+            "main"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "Offline*"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": null
+        },
+        {
+          "name": "Offline*",
+          "duration_minutes": 30,
+          "start_time": "08:30",
+          "end_time": "09:00",
+          "day": "Tuesday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": null,
+          "group_header": "",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [
+            "main"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "Offline*"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": null
+        },
+        {
+          "name": "6G SI",
+          "duration_minutes": 90,
+          "start_time": "09:00",
+          "end_time": "10:30",
+          "day": "Tuesday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": "10",
+          "group_header": "Study on 6G Radio",
+          "description": "Study on 6G Radio",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "10",
+              "matched_agenda_item": "10",
+              "description": "Study on 6G Radio",
+              "hierarchy": [
+                {
+                  "agenda_item": "10",
+                  "description": "Study on 6G Radio"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "main"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "6G SI: AI 10"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": null
+        },
+        {
+          "name": "6G SI",
+          "duration_minutes": 120,
+          "start_time": "11:00",
+          "end_time": "13:00",
+          "day": "Tuesday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": "10",
+          "group_header": "Study on 6G Radio",
+          "description": "Study on 6G Radio",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "10",
+              "matched_agenda_item": "10",
+              "description": "Study on 6G Radio",
+              "hierarchy": [
+                {
+                  "agenda_item": "10",
+                  "description": "Study on 6G Radio"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "main"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "6G SI: AI 10"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": null
+        },
+        {
+          "name": "6G SI",
+          "duration_minutes": 120,
+          "start_time": "14:30",
+          "end_time": "16:30",
+          "day": "Tuesday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": "10",
+          "group_header": "Study on 6G Radio",
+          "description": "Study on 6G Radio",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "10",
+              "matched_agenda_item": "10",
+              "description": "Study on 6G Radio",
+              "hierarchy": [
+                {
+                  "agenda_item": "10",
+                  "description": "Study on 6G Radio"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "main"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "6G SI: AI 10"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": null
+        },
+        {
+          "name": "6G SI",
+          "duration_minutes": 120,
+          "start_time": "17:00",
+          "end_time": "19:00",
+          "day": "Tuesday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": "10",
+          "group_header": "Study on 6G Radio",
+          "description": "Study on 6G Radio",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "10",
+              "matched_agenda_item": "10",
+              "description": "Study on 6G Radio",
+              "hierarchy": [
+                {
+                  "agenda_item": "10",
+                  "description": "Study on 6G Radio"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "main"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "6G SI: AI 10"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": [
+            1,
+            2
+          ]
+        },
+        {
+          "name": "6G Offline*",
+          "duration_minutes": 120,
+          "start_time": "17:00",
+          "end_time": "19:00",
+          "day": "Tuesday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": null,
+          "group_header": "",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [
+            "main"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "6G Offline*"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": [
+            2,
+            2
+          ]
+        }
+      ],
+      "date": "2026-11-17",
+      "timeline": {
+        "start": "08:00",
+        "end": "19:00",
+        "slot_minutes": 5,
+        "label_minutes": 30,
+        "breaks": [
+          {
+            "name": "Coffee Break",
+            "start": "10:30",
+            "end": "11:00",
+            "label_position": "time-axis"
+          },
+          {
+            "name": "Lunch Break",
+            "start": "13:00",
+            "end": "14:30",
+            "label_position": "time-axis"
+          },
+          {
+            "name": "Coffee Break",
+            "start": "16:30",
+            "end": "17:00",
+            "label_position": "time-axis"
+          }
+        ],
+        "blocks": []
+      }
+    },
+    {
+      "day_name": "Wednesday",
+      "rooms": [
+        {
+          "name": "Main session",
+          "table_index": 0,
+          "room_index_in_table": 0,
+          "id": "main",
+          "kind": ""
+        }
+      ],
+      "sessions": [
+        {
+          "name": "6G Offline*",
+          "duration_minutes": 60,
+          "start_time": "08:00",
+          "end_time": "09:00",
+          "day": "Wednesday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": null,
+          "group_header": "",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [
+            "main"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "6G Offline*"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": null
+        },
+        {
+          "name": "AIML RAN",
+          "duration_minutes": 90,
+          "start_time": "09:00",
+          "end_time": "10:30",
+          "day": "Wednesday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "Lixiang XU",
+          "agenda_item": "12",
+          "group_header": "AI/ML for NG-RAN Phase 3 (RAN3-led)",
+          "description": "AI/ML for NG-RAN Phase 3 (RAN3-led)",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "12",
+              "matched_agenda_item": "12",
+              "description": "AI/ML for NG-RAN Phase 3 (RAN3-led)",
+              "hierarchy": [
+                {
+                  "agenda_item": "12",
+                  "description": "AI/ML for NG-RAN Phase 3 (RAN3-led)"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "main"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "AIML RAN: AI 12",
+            "L"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": null
+        },
+        {
+          "name": "6G Offline*",
+          "duration_minutes": 30,
+          "start_time": "10:30",
+          "end_time": "11:00",
+          "day": "Wednesday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": null,
+          "group_header": "",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [
+            "main"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "6G Offline*"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": null
+        },
+        {
+          "name": "ISAC SI",
+          "duration_minutes": 120,
+          "start_time": "11:00",
+          "end_time": "13:00",
+          "day": "Wednesday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": "13",
+          "group_header": "Integrated Sensing And Communication for NR (RAN3-led)",
+          "description": "Integrated Sensing And Communication for NR (RAN3-led)",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "13",
+              "matched_agenda_item": "13",
+              "description": "Integrated Sensing And Communication for NR (RAN3-led)",
+              "hierarchy": [
+                {
+                  "agenda_item": "13",
+                  "description": "Integrated Sensing And Communication for NR (RAN3-led)"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "main"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "ISAC SI: AI 13"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": null
+        },
+        {
+          "name": "6G SI",
+          "duration_minutes": 120,
+          "start_time": "14:30",
+          "end_time": "16:30",
+          "day": "Wednesday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "Lixiang XU",
+          "agenda_item": "10.5",
+          "group_header": "Study on 6G Radio",
+          "description": "AI/ML for RAN",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "10.5",
+              "matched_agenda_item": "10.5",
+              "description": "AI/ML for RAN",
+              "hierarchy": [
+                {
+                  "agenda_item": "10",
+                  "description": "Study on 6G Radio"
+                },
+                {
+                  "agenda_item": "10.5",
+                  "description": "AI/ML for RAN"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "main"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "6G SI: AI 10.5",
+            "L"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": null
+        },
+        {
+          "name": "6G Offline*",
+          "duration_minutes": 30,
+          "start_time": "16:30",
+          "end_time": "17:00",
+          "day": "Wednesday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": null,
+          "group_header": "",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [
+            "main"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "6G Offline*"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": null
+        },
+        {
+          "name": "MobEnh",
+          "duration_minutes": 120,
+          "start_time": "17:00",
+          "end_time": "19:00",
+          "day": "Wednesday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": "15",
+          "group_header": "NR mobility enhancements Phase 5",
+          "description": "NR mobility enhancements Phase 5",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "15",
+              "matched_agenda_item": "15",
+              "description": "NR mobility enhancements Phase 5",
+              "hierarchy": [
+                {
+                  "agenda_item": "15",
+                  "description": "NR mobility enhancements Phase 5"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "main"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "MobEnh: AI 15"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": [
+            1,
+            2
+          ]
+        },
+        {
+          "name": "6G Offline*",
+          "duration_minutes": 120,
+          "start_time": "17:00",
+          "end_time": "19:00",
+          "day": "Wednesday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": null,
+          "group_header": "",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [
+            "main"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "6G Offline*"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": [
+            2,
+            2
+          ]
+        }
+      ],
+      "date": "2026-11-18",
+      "timeline": {
+        "start": "08:00",
+        "end": "19:00",
+        "slot_minutes": 5,
+        "label_minutes": 30,
+        "breaks": [
+          {
+            "name": "Coffee Break",
+            "start": "10:30",
+            "end": "11:00",
+            "label_position": "time-axis"
+          },
+          {
+            "name": "Lunch Break",
+            "start": "13:00",
+            "end": "14:30",
+            "label_position": "time-axis"
+          },
+          {
+            "name": "Coffee Break",
+            "start": "16:30",
+            "end": "17:00",
+            "label_position": "time-axis"
+          }
+        ],
+        "blocks": []
+      }
+    },
+    {
+      "day_name": "Thursday",
+      "rooms": [
+        {
+          "name": "Main session",
+          "table_index": 0,
+          "room_index_in_table": 0,
+          "id": "main",
+          "kind": ""
+        }
+      ],
+      "sessions": [
+        {
+          "name": "6G Offline*",
+          "duration_minutes": 60,
+          "start_time": "08:00",
+          "end_time": "09:00",
+          "day": "Thursday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": null,
+          "group_header": "",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [
+            "main"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "6G Offline*"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": null
+        },
+        {
+          "name": "Ambient IoT",
+          "duration_minutes": 90,
+          "start_time": "09:00",
+          "end_time": "10:30",
+          "day": "Thursday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "Xudong YANG",
+          "agenda_item": "14",
+          "group_header": "Solutions for Ambient IoT in NR Phase 2",
+          "description": "Solutions for Ambient IoT in NR Phase 2",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "14",
+              "matched_agenda_item": "14",
+              "description": "Solutions for Ambient IoT in NR Phase 2",
+              "hierarchy": [
+                {
+                  "agenda_item": "14",
+                  "description": "Solutions for Ambient IoT in NR Phase 2"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "main"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "Ambient IoT: AI 14",
+            "X"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": null
+        },
+        {
+          "name": "6G Offline*",
+          "duration_minutes": 30,
+          "start_time": "10:30",
+          "end_time": "11:00",
+          "day": "Thursday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": null,
+          "group_header": "",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [
+            "main"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "6G Offline*"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": null
+        },
+        {
+          "name": "SON/MDT",
+          "duration_minutes": 120,
+          "start_time": "11:00",
+          "end_time": "13:00",
+          "day": "Thursday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "Xudong YANG",
+          "agenda_item": "11",
+          "group_header": "Data Collection for SON/MDT in NR Phase 5 (RAN3-led)",
+          "description": "Data Collection for SON/MDT in NR Phase 5 (RAN3-led)",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "11",
+              "matched_agenda_item": "11",
+              "description": "Data Collection for SON/MDT in NR Phase 5 (RAN3-led)",
+              "hierarchy": [
+                {
+                  "agenda_item": "11",
+                  "description": "Data Collection for SON/MDT in NR Phase 5 (RAN3-led)"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "main"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "SON/MDT: AI 11",
+            "X"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": null
+        },
+        {
+          "name": "TEI20",
+          "duration_minutes": 120,
+          "start_time": "14:30",
+          "end_time": "16:30",
+          "day": "Thursday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": "31",
+          "group_header": "Corrections and Enhancements to Rel-20",
+          "description": "Corrections and Enhancements to Rel-20",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "31",
+              "matched_agenda_item": "31",
+              "description": "Corrections and Enhancements to Rel-20",
+              "hierarchy": [
+                {
+                  "agenda_item": "31",
+                  "description": "Corrections and Enhancements to Rel-20"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "main"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "TEI20: AI 31"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": [
+            1,
+            2
+          ]
+        },
+        {
+          "name": "6G SI",
+          "duration_minutes": 120,
+          "start_time": "14:30",
+          "end_time": "16:30",
+          "day": "Thursday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": "10",
+          "group_header": "Study on 6G Radio",
+          "description": "Study on 6G Radio",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "10",
+              "matched_agenda_item": "10",
+              "description": "Study on 6G Radio",
+              "hierarchy": [
+                {
+                  "agenda_item": "10",
+                  "description": "Study on 6G Radio"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "main"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "6G SI: AI 10"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": [
+            2,
+            2
+          ]
+        },
+        {
+          "name": "6G Offline*",
+          "duration_minutes": 30,
+          "start_time": "16:30",
+          "end_time": "17:00",
+          "day": "Thursday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": null,
+          "group_header": "",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [
+            "main"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "6G Offline*"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": null
+        },
+        {
+          "name": "Early CBs",
+          "duration_minutes": 120,
+          "start_time": "17:00",
+          "end_time": "19:00",
+          "day": "Thursday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": null,
+          "group_header": "",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [
+            "main"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "Early CBs"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": [
+            1,
+            2
+          ]
+        },
+        {
+          "name": "6G Offline*",
+          "duration_minutes": 120,
+          "start_time": "17:00",
+          "end_time": "19:00",
+          "day": "Thursday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": null,
+          "group_header": "",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [
+            "main"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "6G Offline*"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": [
+            2,
+            2
+          ]
+        }
+      ],
+      "date": "2026-11-19",
+      "timeline": {
+        "start": "08:00",
+        "end": "19:00",
+        "slot_minutes": 5,
+        "label_minutes": 30,
+        "breaks": [
+          {
+            "name": "Coffee Break",
+            "start": "10:30",
+            "end": "11:00",
+            "label_position": "time-axis"
+          },
+          {
+            "name": "Lunch Break",
+            "start": "13:00",
+            "end": "14:30",
+            "label_position": "time-axis"
+          },
+          {
+            "name": "Coffee Break",
+            "start": "16:30",
+            "end": "17:00",
+            "label_position": "time-axis"
+          }
+        ],
+        "blocks": []
+      }
+    },
+    {
+      "day_name": "Friday",
+      "rooms": [
+        {
+          "name": "Main session",
+          "table_index": 0,
+          "room_index_in_table": 0,
+          "id": "main",
+          "kind": ""
+        }
+      ],
+      "sessions": [
+        {
+          "name": "Offline*",
+          "duration_minutes": 30,
+          "start_time": "08:00",
+          "end_time": "08:30",
+          "day": "Friday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": null,
+          "group_header": "",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [
+            "main"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "Offline*"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": null
+        },
+        {
+          "name": "Offline*",
+          "duration_minutes": 30,
+          "start_time": "08:30",
+          "end_time": "09:00",
+          "day": "Friday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": null,
+          "group_header": "",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [
+            "main"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "Offline*"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": null
+        },
+        {
+          "name": "CBs",
+          "duration_minutes": 90,
+          "start_time": "09:00",
+          "end_time": "10:30",
+          "day": "Friday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": null,
+          "group_header": "",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [
+            "main"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "CBs"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": null
+        },
+        {
+          "name": "CBs",
+          "duration_minutes": 120,
+          "start_time": "11:00",
+          "end_time": "13:00",
+          "day": "Friday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": null,
+          "group_header": "",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [
+            "main"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "CBs"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": null
+        },
+        {
+          "name": "CBs*",
+          "duration_minutes": 120,
+          "start_time": "14:30",
+          "end_time": "16:30",
+          "day": "Friday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": null,
+          "group_header": "",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [
+            "main"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "CBs*",
+            "END OF MEETING",
+            "End of Year Social",
+            "🍷 Event 🎉"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": null
+        }
+      ],
+      "date": "2026-11-20",
+      "timeline": {
+        "start": "08:00",
+        "end": "16:30",
+        "slot_minutes": 5,
+        "label_minutes": 30,
+        "breaks": [
+          {
+            "name": "Coffee Break",
+            "start": "10:30",
+            "end": "11:00",
+            "label_position": "time-axis"
+          },
+          {
+            "name": "Lunch Break*",
+            "start": "13:00",
+            "end": "14:30",
+            "label_position": "time-axis"
+          }
+        ],
+        "blocks": []
+      }
+    }
+  ],
+  "source_file": "RAN3_134_agenda_20261023.docx",
+  "generated_at": "2026-10-29 17:51",
+  "contact_name": "",
+  "contact_email": "",
+  "source_files": [
+    "RAN3_134_agenda_20261023.docx",
+    "agenda.csv"
+  ],
+  "source_labels": {
+    "RAN3_134_agenda_20261023.docx": "Agenda 23 Oct",
+    "agenda.csv": "agenda.csv"
+  },
+  "timezone": "America/Edmonton",
+  "wg_id": "ran3",
+  "meeting_id": "ran3#134",
+  "starts_on": "2026-11-16",
+  "ends_on": "2026-11-20",
+  "starts_at": "2026-11-16T09:00:00-06:00",
+  "ends_at": "2026-11-20T17:30:00-06:00",
+  "is_demo": false,
+  "topic_references": [],
+  "topic_preamble": [],
+  "supplements": [
+    {
+      "type": "heading",
+      "text": "Key to the time plan"
+    },
+    {
+      "type": "table",
+      "rows": [
+        [
+          "blue",
+          "6G"
+        ],
+        [
+          "L, X",
+          "chaired by Vice-Chairs"
+        ],
+        [
+          "highlighted",
+          "changed"
+        ],
+        [
+          "strikethrough",
+          "not treated"
+        ],
+        [
+          "*",
+          "if needed"
+        ]
+      ],
+      "header": false
+    }
+  ],
+  "chairman_agreements": {},
+  "email_informal": {}
+}

@@ -1,0 +1,2111 @@
+{
+  "schema_version": 1,
+  "meeting_name": "SA1#115",
+  "days": [
+    {
+      "day_name": "Monday",
+      "rooms": [
+        {
+          "name": "Plenary/ Breakout 1",
+          "table_index": 0,
+          "room_index_in_table": 0,
+          "id": "plenary",
+          "kind": ""
+        },
+        {
+          "name": "Breakout 2",
+          "table_index": 0,
+          "room_index_in_table": 0,
+          "id": "breakout-2",
+          "kind": ""
+        }
+      ],
+      "sessions": [
+        {
+          "name": "Plenary",
+          "duration_minutes": 90,
+          "start_time": "09:00",
+          "end_time": "10:30",
+          "day": "Monday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": "1, 2, 3",
+          "group_header": "Opening of the meeting",
+          "description": "Opening of the meeting\nReports and action items\nLiaison Statements (including related contributions)",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "1",
+              "matched_agenda_item": "1",
+              "description": "Opening of the meeting",
+              "hierarchy": [
+                {
+                  "agenda_item": "1",
+                  "description": "Opening of the meeting"
+                }
+              ]
+            },
+            {
+              "agenda_item": "2",
+              "matched_agenda_item": "2",
+              "description": "Reports and action items",
+              "hierarchy": [
+                {
+                  "agenda_item": "2",
+                  "description": "Reports and action items"
+                }
+              ]
+            },
+            {
+              "agenda_item": "3",
+              "matched_agenda_item": "3",
+              "description": "Liaison Statements (including related contributions)",
+              "hierarchy": [
+                {
+                  "agenda_item": "3",
+                  "description": "Liaison Statements (including related contributions)"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "plenary"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "1. Opening",
+            "2. Reports",
+            "3. LSs"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": null
+        },
+        {
+          "name": "Plenary",
+          "duration_minutes": 90,
+          "start_time": "11:00",
+          "end_time": "12:30",
+          "day": "Monday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": "3, 4",
+          "group_header": "Liaison Statements (including related contributions)",
+          "description": "Liaison Statements (including related contributions)\nNew Work Items -",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "3",
+              "matched_agenda_item": "3",
+              "description": "Liaison Statements (including related contributions)",
+              "hierarchy": [
+                {
+                  "agenda_item": "3",
+                  "description": "Liaison Statements (including related contributions)"
+                }
+              ]
+            },
+            {
+              "agenda_item": "4",
+              "matched_agenda_item": "4",
+              "description": "New Work Items -",
+              "hierarchy": [
+                {
+                  "agenda_item": "4",
+                  "description": "New Work Items -"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "plenary"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "3. LSs",
+            "4. WIDs"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": null
+        },
+        {
+          "name": "Plenary",
+          "duration_minutes": 90,
+          "start_time": "14:00",
+          "end_time": "15:30",
+          "day": "Monday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": "4, 5, 6, 7.3.1",
+          "group_header": "New Work Items",
+          "description": "New Work Items -\nQuality improvement contributions\nRel-20 and earlier contributions\nGeneral",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "4",
+              "matched_agenda_item": "4",
+              "description": "New Work Items -",
+              "hierarchy": [
+                {
+                  "agenda_item": "4",
+                  "description": "New Work Items -"
+                }
+              ]
+            },
+            {
+              "agenda_item": "5",
+              "matched_agenda_item": "5",
+              "description": "Quality improvement contributions",
+              "hierarchy": [
+                {
+                  "agenda_item": "5",
+                  "description": "Quality improvement contributions"
+                }
+              ]
+            },
+            {
+              "agenda_item": "6",
+              "matched_agenda_item": "6",
+              "description": "Rel-20 and earlier contributions",
+              "hierarchy": [
+                {
+                  "agenda_item": "6",
+                  "description": "Rel-20 and earlier contributions"
+                }
+              ]
+            },
+            {
+              "agenda_item": "7.3.1",
+              "matched_agenda_item": "7.3.1",
+              "description": "General",
+              "hierarchy": [
+                {
+                  "agenda_item": "7",
+                  "description": "Rel-21 contributions"
+                },
+                {
+                  "agenda_item": "7.3",
+                  "description": "6G-REQ [SP-260323]"
+                },
+                {
+                  "agenda_item": "7.3.1",
+                  "description": "General"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "plenary"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "4. WIDs",
+            "5. Quality improvement contributions",
+            "6. Rel20 and earlier",
+            "7.3.1 General"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": null
+        },
+        {
+          "name": "Plenary",
+          "duration_minutes": 120,
+          "start_time": "16:00",
+          "end_time": "18:00",
+          "day": "Monday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": "7.3.1",
+          "group_header": "Rel-21 contributions",
+          "description": "General",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "7.3.1",
+              "matched_agenda_item": "7.3.1",
+              "description": "General",
+              "hierarchy": [
+                {
+                  "agenda_item": "7",
+                  "description": "Rel-21 contributions"
+                },
+                {
+                  "agenda_item": "7.3",
+                  "description": "6G-REQ [SP-260323]"
+                },
+                {
+                  "agenda_item": "7.3.1",
+                  "description": "General"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "plenary"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "7.3.1 General"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": null
+        },
+        {
+          "name": "Plenary",
+          "duration_minutes": 80,
+          "start_time": "18:10",
+          "end_time": "19:30",
+          "day": "Monday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": "7.1, 7.2, 9",
+          "group_header": "Rel-21 contributions",
+          "description": "FS_SIMP [SP-251655]\nFS_ AddCapEm_REQ [SP-260654]\nOther non-technical contributions",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "7.1",
+              "matched_agenda_item": "7.1",
+              "description": "FS_SIMP [SP-251655]",
+              "hierarchy": [
+                {
+                  "agenda_item": "7",
+                  "description": "Rel-21 contributions"
+                },
+                {
+                  "agenda_item": "7.1",
+                  "description": "FS_SIMP [SP-251655]"
+                }
+              ]
+            },
+            {
+              "agenda_item": "7.2",
+              "matched_agenda_item": "7.2",
+              "description": "FS_ AddCapEm_REQ [SP-260654]",
+              "hierarchy": [
+                {
+                  "agenda_item": "7",
+                  "description": "Rel-21 contributions"
+                },
+                {
+                  "agenda_item": "7.2",
+                  "description": "FS_ AddCapEm_REQ [SP-260654]"
+                }
+              ]
+            },
+            {
+              "agenda_item": "9",
+              "matched_agenda_item": "9",
+              "description": "Other non-technical contributions",
+              "hierarchy": [
+                {
+                  "agenda_item": "9",
+                  "description": "Other non-technical contributions"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "plenary"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "7.1 FS_SIMP",
+            "7.2 FS_AddCapEm_REQ",
+            "9. Other non-technical contributions"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": null
+        }
+      ],
+      "date": "2026-08-24",
+      "timeline": {
+        "start": "09:00",
+        "end": "19:30",
+        "slot_minutes": 5,
+        "label_minutes": 30,
+        "breaks": [
+          {
+            "name": "Coffee",
+            "start": "10:30",
+            "end": "11:00"
+          },
+          {
+            "name": "Lunch",
+            "start": "12:30",
+            "end": "14:00"
+          },
+          {
+            "name": "Coffee",
+            "start": "15:30",
+            "end": "16:00"
+          }
+        ],
+        "blocks": []
+      }
+    },
+    {
+      "day_name": "Tuesday",
+      "rooms": [
+        {
+          "name": "Plenary/ Breakout 1",
+          "table_index": 0,
+          "room_index_in_table": 0,
+          "id": "plenary",
+          "kind": ""
+        },
+        {
+          "name": "Breakout 2",
+          "table_index": 0,
+          "room_index_in_table": 0,
+          "id": "breakout-2",
+          "kind": ""
+        }
+      ],
+      "sessions": [
+        {
+          "name": "7.2 FS_AddCapEm_REQ / 7.1 FS_SIMP",
+          "duration_minutes": 60,
+          "start_time": "08:00",
+          "end_time": "09:00",
+          "day": "Tuesday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": "7.2, 7.1",
+          "group_header": "Rel-21 contributions",
+          "description": "FS_ AddCapEm_REQ [SP-260654]\nFS_SIMP [SP-251655]",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "7.2",
+              "matched_agenda_item": "7.2",
+              "description": "FS_ AddCapEm_REQ [SP-260654]",
+              "hierarchy": [
+                {
+                  "agenda_item": "7",
+                  "description": "Rel-21 contributions"
+                },
+                {
+                  "agenda_item": "7.2",
+                  "description": "FS_ AddCapEm_REQ [SP-260654]"
+                }
+              ]
+            },
+            {
+              "agenda_item": "7.1",
+              "matched_agenda_item": "7.1",
+              "description": "FS_SIMP [SP-251655]",
+              "hierarchy": [
+                {
+                  "agenda_item": "7",
+                  "description": "Rel-21 contributions"
+                },
+                {
+                  "agenda_item": "7.1",
+                  "description": "FS_SIMP [SP-251655]"
+                }
+              ]
+            }
+          ],
+          "room_ids": [],
+          "room_scope": "unassigned",
+          "notes": [
+            "7.2 FS_AddCapEm_REQ",
+            "7.1 FS_SIMP"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": null
+        },
+        {
+          "name": "7.3.5 Ubiquitous",
+          "duration_minutes": 90,
+          "start_time": "09:00",
+          "end_time": "10:30",
+          "day": "Tuesday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "QUN WEI",
+          "agenda_item": "7.3.5",
+          "group_header": "Rel-21 contributions",
+          "description": "Ubiquitous Connectivity",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "7.3.5",
+              "matched_agenda_item": "7.3.5",
+              "description": "Ubiquitous Connectivity",
+              "hierarchy": [
+                {
+                  "agenda_item": "7",
+                  "description": "Rel-21 contributions"
+                },
+                {
+                  "agenda_item": "7.3",
+                  "description": "6G-REQ [SP-260323]"
+                },
+                {
+                  "agenda_item": "7.3.5",
+                  "description": "Ubiquitous Connectivity"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "breakout-2"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "7.3.5 Ubiquitous"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": null
+        },
+        {
+          "name": "7.3.3 AI",
+          "duration_minutes": 90,
+          "start_time": "09:00",
+          "end_time": "10:30",
+          "day": "Tuesday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "Vasil ALEKSIEV",
+          "agenda_item": "7.3.3",
+          "group_header": "Rel-21 contributions",
+          "description": "Artificial Intelligence capabilities and services without IMS aspects",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "7.3.3",
+              "matched_agenda_item": "7.3.3",
+              "description": "Artificial Intelligence capabilities and services without IMS aspects",
+              "hierarchy": [
+                {
+                  "agenda_item": "7",
+                  "description": "Rel-21 contributions"
+                },
+                {
+                  "agenda_item": "7.3",
+                  "description": "6G-REQ [SP-260323]"
+                },
+                {
+                  "agenda_item": "7.3.3",
+                  "description": "Artificial Intelligence capabilities and services without IMS aspects"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "plenary"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "7.3.3 AI"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": null
+        },
+        {
+          "name": "7.3.9 Computing",
+          "duration_minutes": 90,
+          "start_time": "11:00",
+          "end_time": "12:30",
+          "day": "Tuesday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "Vasil ALEKSIEV",
+          "agenda_item": "7.3.9",
+          "group_header": "Rel-21 contributions",
+          "description": "Computing",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "7.3.9",
+              "matched_agenda_item": "7.3.9",
+              "description": "Computing",
+              "hierarchy": [
+                {
+                  "agenda_item": "7",
+                  "description": "Rel-21 contributions"
+                },
+                {
+                  "agenda_item": "7.3",
+                  "description": "6G-REQ [SP-260323]"
+                },
+                {
+                  "agenda_item": "7.3.9",
+                  "description": "Computing"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "breakout-2"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "7.3.9 Computing"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": null
+        },
+        {
+          "name": "7.3.2 System and Operation",
+          "duration_minutes": 90,
+          "start_time": "11:00",
+          "end_time": "12:30",
+          "day": "Tuesday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "Feifei LOU",
+          "agenda_item": "7.3.2",
+          "group_header": "Rel-21 contributions",
+          "description": "System and Operation without IMS aspects",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "7.3.2",
+              "matched_agenda_item": "7.3.2",
+              "description": "System and Operation without IMS aspects",
+              "hierarchy": [
+                {
+                  "agenda_item": "7",
+                  "description": "Rel-21 contributions"
+                },
+                {
+                  "agenda_item": "7.3",
+                  "description": "6G-REQ [SP-260323]"
+                },
+                {
+                  "agenda_item": "7.3.2",
+                  "description": "System and Operation without IMS aspects"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "plenary"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "7.3.2 System and Operation"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": null
+        },
+        {
+          "name": "7.3.6 Immersive+7.3.10 IMS",
+          "duration_minutes": 90,
+          "start_time": "14:00",
+          "end_time": "15:30",
+          "day": "Tuesday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "Erik Guttman",
+          "agenda_item": "7.3.6, 7.3.10",
+          "group_header": "Rel-21 contributions",
+          "description": "Immersive Communication\nIMS without immersive aspects",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "7.3.6",
+              "matched_agenda_item": "7.3.6",
+              "description": "Immersive Communication",
+              "hierarchy": [
+                {
+                  "agenda_item": "7",
+                  "description": "Rel-21 contributions"
+                },
+                {
+                  "agenda_item": "7.3",
+                  "description": "6G-REQ [SP-260323]"
+                },
+                {
+                  "agenda_item": "7.3.6",
+                  "description": "Immersive Communication"
+                }
+              ]
+            },
+            {
+              "agenda_item": "7.3.10",
+              "matched_agenda_item": "7.3.10",
+              "description": "IMS without immersive aspects",
+              "hierarchy": [
+                {
+                  "agenda_item": "7",
+                  "description": "Rel-21 contributions"
+                },
+                {
+                  "agenda_item": "7.3",
+                  "description": "6G-REQ [SP-260323]"
+                },
+                {
+                  "agenda_item": "7.3.10",
+                  "description": "IMS without immersive aspects"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "breakout-2"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "7.3.6 Immersive+7.3.10 IMS"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": null
+        },
+        {
+          "name": "7.3.2 System and Operation",
+          "duration_minutes": 90,
+          "start_time": "14:00",
+          "end_time": "15:30",
+          "day": "Tuesday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "Feifei LOU",
+          "agenda_item": "7.3.2",
+          "group_header": "Rel-21 contributions",
+          "description": "System and Operation without IMS aspects",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "7.3.2",
+              "matched_agenda_item": "7.3.2",
+              "description": "System and Operation without IMS aspects",
+              "hierarchy": [
+                {
+                  "agenda_item": "7",
+                  "description": "Rel-21 contributions"
+                },
+                {
+                  "agenda_item": "7.3",
+                  "description": "6G-REQ [SP-260323]"
+                },
+                {
+                  "agenda_item": "7.3.2",
+                  "description": "System and Operation without IMS aspects"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "plenary"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "7.3.2 System and Operation"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": null
+        },
+        {
+          "name": "7.3.8 Verticals+7.3.7 Massive",
+          "duration_minutes": 120,
+          "start_time": "16:00",
+          "end_time": "18:00",
+          "day": "Tuesday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "QUN WEI",
+          "agenda_item": "7.3.8, 7.3.7",
+          "group_header": "Rel-21 contributions",
+          "description": "Support for Industry and Verticals\nMassive Communication",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "7.3.8",
+              "matched_agenda_item": "7.3.8",
+              "description": "Support for Industry and Verticals",
+              "hierarchy": [
+                {
+                  "agenda_item": "7",
+                  "description": "Rel-21 contributions"
+                },
+                {
+                  "agenda_item": "7.3",
+                  "description": "6G-REQ [SP-260323]"
+                },
+                {
+                  "agenda_item": "7.3.8",
+                  "description": "Support for Industry and Verticals"
+                }
+              ]
+            },
+            {
+              "agenda_item": "7.3.7",
+              "matched_agenda_item": "7.3.7",
+              "description": "Massive Communication",
+              "hierarchy": [
+                {
+                  "agenda_item": "7",
+                  "description": "Rel-21 contributions"
+                },
+                {
+                  "agenda_item": "7.3",
+                  "description": "6G-REQ [SP-260323]"
+                },
+                {
+                  "agenda_item": "7.3.7",
+                  "description": "Massive Communication"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "breakout-2"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "7.3.8 Verticals+7.3.7 Massive"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": null
+        },
+        {
+          "name": "7.3.4 ISAC",
+          "duration_minutes": 120,
+          "start_time": "16:00",
+          "end_time": "18:00",
+          "day": "Tuesday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "Lola Awoniyi-Oteri",
+          "agenda_item": "7.3.4",
+          "group_header": "Rel-21 contributions",
+          "description": "Integrated Sensing and Communications",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "7.3.4",
+              "matched_agenda_item": "7.3.4",
+              "description": "Integrated Sensing and Communications",
+              "hierarchy": [
+                {
+                  "agenda_item": "7",
+                  "description": "Rel-21 contributions"
+                },
+                {
+                  "agenda_item": "7.3",
+                  "description": "6G-REQ [SP-260323]"
+                },
+                {
+                  "agenda_item": "7.3.4",
+                  "description": "Integrated Sensing and Communications"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "plenary"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "7.3.4 ISAC"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": null
+        },
+        {
+          "name": "MMS",
+          "duration_minutes": 90,
+          "start_time": "18:30",
+          "end_time": "20:00",
+          "day": "Tuesday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": null,
+          "group_header": "",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [],
+          "room_scope": "unassigned",
+          "notes": [
+            "MMS"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": null
+        }
+      ],
+      "date": "2026-08-25",
+      "timeline": {
+        "start": "08:00",
+        "end": "20:00",
+        "slot_minutes": 5,
+        "label_minutes": 30,
+        "breaks": [
+          {
+            "name": "Coffee",
+            "start": "10:30",
+            "end": "11:00"
+          },
+          {
+            "name": "Lunch",
+            "start": "12:30",
+            "end": "14:00"
+          },
+          {
+            "name": "Coffee",
+            "start": "15:30",
+            "end": "16:00"
+          }
+        ],
+        "blocks": []
+      }
+    },
+    {
+      "day_name": "Wednesday",
+      "rooms": [
+        {
+          "name": "Plenary/ Breakout 1",
+          "table_index": 0,
+          "room_index_in_table": 0,
+          "id": "plenary",
+          "kind": ""
+        },
+        {
+          "name": "Breakout 2",
+          "table_index": 0,
+          "room_index_in_table": 0,
+          "id": "breakout-2",
+          "kind": ""
+        }
+      ],
+      "sessions": [
+        {
+          "name": "6G Computing service definition drafting",
+          "duration_minutes": 60,
+          "start_time": "08:00",
+          "end_time": "09:00",
+          "day": "Wednesday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": null,
+          "group_header": "",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [],
+          "room_scope": "unassigned",
+          "notes": [
+            "6G Computing service definition drafting"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": null
+        },
+        {
+          "name": "7.3.5 Ubiquitous",
+          "duration_minutes": 90,
+          "start_time": "09:00",
+          "end_time": "10:30",
+          "day": "Wednesday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "QUN WEI",
+          "agenda_item": "7.3.5",
+          "group_header": "Rel-21 contributions",
+          "description": "Ubiquitous Connectivity",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "7.3.5",
+              "matched_agenda_item": "7.3.5",
+              "description": "Ubiquitous Connectivity",
+              "hierarchy": [
+                {
+                  "agenda_item": "7",
+                  "description": "Rel-21 contributions"
+                },
+                {
+                  "agenda_item": "7.3",
+                  "description": "6G-REQ [SP-260323]"
+                },
+                {
+                  "agenda_item": "7.3.5",
+                  "description": "Ubiquitous Connectivity"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "breakout-2"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "7.3.5 Ubiquitous"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": null
+        },
+        {
+          "name": "7.3.3 AI",
+          "duration_minutes": 90,
+          "start_time": "09:00",
+          "end_time": "10:30",
+          "day": "Wednesday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "Vasil ALEKSIEV",
+          "agenda_item": "7.3.3",
+          "group_header": "Rel-21 contributions",
+          "description": "Artificial Intelligence capabilities and services without IMS aspects",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "7.3.3",
+              "matched_agenda_item": "7.3.3",
+              "description": "Artificial Intelligence capabilities and services without IMS aspects",
+              "hierarchy": [
+                {
+                  "agenda_item": "7",
+                  "description": "Rel-21 contributions"
+                },
+                {
+                  "agenda_item": "7.3",
+                  "description": "6G-REQ [SP-260323]"
+                },
+                {
+                  "agenda_item": "7.3.3",
+                  "description": "Artificial Intelligence capabilities and services without IMS aspects"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "plenary"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "7.3.3 AI"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": null
+        },
+        {
+          "name": "7.3.9 Computing",
+          "duration_minutes": 90,
+          "start_time": "11:00",
+          "end_time": "12:30",
+          "day": "Wednesday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "Vasil ALEKSIEV",
+          "agenda_item": "7.3.9",
+          "group_header": "Rel-21 contributions",
+          "description": "Computing",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "7.3.9",
+              "matched_agenda_item": "7.3.9",
+              "description": "Computing",
+              "hierarchy": [
+                {
+                  "agenda_item": "7",
+                  "description": "Rel-21 contributions"
+                },
+                {
+                  "agenda_item": "7.3",
+                  "description": "6G-REQ [SP-260323]"
+                },
+                {
+                  "agenda_item": "7.3.9",
+                  "description": "Computing"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "breakout-2"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "7.3.9 Computing"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": null
+        },
+        {
+          "name": "7.3.2 System and Operation",
+          "duration_minutes": 90,
+          "start_time": "11:00",
+          "end_time": "12:30",
+          "day": "Wednesday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "Feifei LOU",
+          "agenda_item": "7.3.2",
+          "group_header": "Rel-21 contributions",
+          "description": "System and Operation without IMS aspects",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "7.3.2",
+              "matched_agenda_item": "7.3.2",
+              "description": "System and Operation without IMS aspects",
+              "hierarchy": [
+                {
+                  "agenda_item": "7",
+                  "description": "Rel-21 contributions"
+                },
+                {
+                  "agenda_item": "7.3",
+                  "description": "6G-REQ [SP-260323]"
+                },
+                {
+                  "agenda_item": "7.3.2",
+                  "description": "System and Operation without IMS aspects"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "plenary"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "7.3.2 System and Operation"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": null
+        },
+        {
+          "name": "Drafting on UE sensing profile",
+          "duration_minutes": 60,
+          "start_time": "13:00",
+          "end_time": "14:00",
+          "day": "Wednesday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": null,
+          "group_header": "",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [],
+          "room_scope": "unassigned",
+          "notes": [
+            "Drafting on UE sensing profile"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": null
+        },
+        {
+          "name": "7.3.10 IMS+7.3.6 Immersive",
+          "duration_minutes": 90,
+          "start_time": "14:00",
+          "end_time": "15:30",
+          "day": "Wednesday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "Erik Guttman",
+          "agenda_item": "7.3.10, 7.3.6",
+          "group_header": "Rel-21 contributions",
+          "description": "IMS without immersive aspects\nImmersive Communication",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "7.3.10",
+              "matched_agenda_item": "7.3.10",
+              "description": "IMS without immersive aspects",
+              "hierarchy": [
+                {
+                  "agenda_item": "7",
+                  "description": "Rel-21 contributions"
+                },
+                {
+                  "agenda_item": "7.3",
+                  "description": "6G-REQ [SP-260323]"
+                },
+                {
+                  "agenda_item": "7.3.10",
+                  "description": "IMS without immersive aspects"
+                }
+              ]
+            },
+            {
+              "agenda_item": "7.3.6",
+              "matched_agenda_item": "7.3.6",
+              "description": "Immersive Communication",
+              "hierarchy": [
+                {
+                  "agenda_item": "7",
+                  "description": "Rel-21 contributions"
+                },
+                {
+                  "agenda_item": "7.3",
+                  "description": "6G-REQ [SP-260323]"
+                },
+                {
+                  "agenda_item": "7.3.6",
+                  "description": "Immersive Communication"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "breakout-2"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "7.3.10 IMS+7.3.6 Immersive"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": null
+        },
+        {
+          "name": "7.3.2 System and Operation",
+          "duration_minutes": 90,
+          "start_time": "14:00",
+          "end_time": "15:30",
+          "day": "Wednesday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "Feifei LOU",
+          "agenda_item": "7.3.2",
+          "group_header": "Rel-21 contributions",
+          "description": "System and Operation without IMS aspects",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "7.3.2",
+              "matched_agenda_item": "7.3.2",
+              "description": "System and Operation without IMS aspects",
+              "hierarchy": [
+                {
+                  "agenda_item": "7",
+                  "description": "Rel-21 contributions"
+                },
+                {
+                  "agenda_item": "7.3",
+                  "description": "6G-REQ [SP-260323]"
+                },
+                {
+                  "agenda_item": "7.3.2",
+                  "description": "System and Operation without IMS aspects"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "plenary"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "7.3.2 System and Operation"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": null
+        },
+        {
+          "name": "7.3.7 Massive+7.3.8 Verticals",
+          "duration_minutes": 120,
+          "start_time": "16:00",
+          "end_time": "18:00",
+          "day": "Wednesday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "QUN WEI",
+          "agenda_item": "7.3.7, 7.3.8",
+          "group_header": "Rel-21 contributions",
+          "description": "Massive Communication\nSupport for Industry and Verticals",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "7.3.7",
+              "matched_agenda_item": "7.3.7",
+              "description": "Massive Communication",
+              "hierarchy": [
+                {
+                  "agenda_item": "7",
+                  "description": "Rel-21 contributions"
+                },
+                {
+                  "agenda_item": "7.3",
+                  "description": "6G-REQ [SP-260323]"
+                },
+                {
+                  "agenda_item": "7.3.7",
+                  "description": "Massive Communication"
+                }
+              ]
+            },
+            {
+              "agenda_item": "7.3.8",
+              "matched_agenda_item": "7.3.8",
+              "description": "Support for Industry and Verticals",
+              "hierarchy": [
+                {
+                  "agenda_item": "7",
+                  "description": "Rel-21 contributions"
+                },
+                {
+                  "agenda_item": "7.3",
+                  "description": "6G-REQ [SP-260323]"
+                },
+                {
+                  "agenda_item": "7.3.8",
+                  "description": "Support for Industry and Verticals"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "breakout-2"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "7.3.7 Massive+7.3.8 Verticals"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": null
+        },
+        {
+          "name": "7.3.4 ISAC",
+          "duration_minutes": 120,
+          "start_time": "16:00",
+          "end_time": "18:00",
+          "day": "Wednesday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "Lola Awoniyi-Oteri",
+          "agenda_item": "7.3.4",
+          "group_header": "Rel-21 contributions",
+          "description": "Integrated Sensing and Communications",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "7.3.4",
+              "matched_agenda_item": "7.3.4",
+              "description": "Integrated Sensing and Communications",
+              "hierarchy": [
+                {
+                  "agenda_item": "7",
+                  "description": "Rel-21 contributions"
+                },
+                {
+                  "agenda_item": "7.3",
+                  "description": "6G-REQ [SP-260323]"
+                },
+                {
+                  "agenda_item": "7.3.4",
+                  "description": "Integrated Sensing and Communications"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "plenary"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "7.3.4 ISAC"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": null
+        },
+        {
+          "name": "7.3.9 Computing",
+          "duration_minutes": 80,
+          "start_time": "18:10",
+          "end_time": "19:30",
+          "day": "Wednesday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "Vasil ALEKSIEV",
+          "agenda_item": "7.3.9",
+          "group_header": "Rel-21 contributions",
+          "description": "Computing",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "7.3.9",
+              "matched_agenda_item": "7.3.9",
+              "description": "Computing",
+              "hierarchy": [
+                {
+                  "agenda_item": "7",
+                  "description": "Rel-21 contributions"
+                },
+                {
+                  "agenda_item": "7.3",
+                  "description": "6G-REQ [SP-260323]"
+                },
+                {
+                  "agenda_item": "7.3.9",
+                  "description": "Computing"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "breakout-2"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "7.3.9 Computing"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": null
+        }
+      ],
+      "date": "2026-08-26",
+      "timeline": {
+        "start": "08:00",
+        "end": "19:30",
+        "slot_minutes": 5,
+        "label_minutes": 30,
+        "breaks": [
+          {
+            "name": "Coffee",
+            "start": "10:30",
+            "end": "11:00"
+          },
+          {
+            "name": "Lunch",
+            "start": "12:30",
+            "end": "14:00",
+            "label_position": "time-axis"
+          },
+          {
+            "name": "Coffee",
+            "start": "15:30",
+            "end": "16:00"
+          }
+        ],
+        "blocks": []
+      }
+    },
+    {
+      "day_name": "Thursday",
+      "rooms": [
+        {
+          "name": "Plenary/ Breakout 1",
+          "table_index": 0,
+          "room_index_in_table": 0,
+          "id": "plenary",
+          "kind": ""
+        },
+        {
+          "name": "Breakout 2",
+          "table_index": 0,
+          "room_index_in_table": 0,
+          "id": "breakout-2",
+          "kind": ""
+        }
+      ],
+      "sessions": [
+        {
+          "name": "Plenary",
+          "duration_minutes": 60,
+          "start_time": "08:00",
+          "end_time": "09:00",
+          "day": "Thursday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": "7.1, 2, 3",
+          "group_header": "Rel-21 contributions",
+          "description": "FS_SIMP [SP-251655]\nReports and action items\nLiaison Statements (including related contributions)",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "7.1",
+              "matched_agenda_item": "7.1",
+              "description": "FS_SIMP [SP-251655]",
+              "hierarchy": [
+                {
+                  "agenda_item": "7",
+                  "description": "Rel-21 contributions"
+                },
+                {
+                  "agenda_item": "7.1",
+                  "description": "FS_SIMP [SP-251655]"
+                }
+              ]
+            },
+            {
+              "agenda_item": "2",
+              "matched_agenda_item": "2",
+              "description": "Reports and action items",
+              "hierarchy": [
+                {
+                  "agenda_item": "2",
+                  "description": "Reports and action items"
+                }
+              ]
+            },
+            {
+              "agenda_item": "3",
+              "matched_agenda_item": "3",
+              "description": "Liaison Statements (including related contributions)",
+              "hierarchy": [
+                {
+                  "agenda_item": "3",
+                  "description": "Liaison Statements (including related contributions)"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "plenary"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "7.1 FS_SIMP",
+            "2. Reports",
+            "3. LSs"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": null
+        },
+        {
+          "name": "Plenary",
+          "duration_minutes": 90,
+          "start_time": "09:00",
+          "end_time": "10:30",
+          "day": "Thursday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": "4, 5, 6",
+          "group_header": "New Work Items",
+          "description": "New Work Items -\nQuality improvement contributions\nRel-20 and earlier contributions",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "4",
+              "matched_agenda_item": "4",
+              "description": "New Work Items -",
+              "hierarchy": [
+                {
+                  "agenda_item": "4",
+                  "description": "New Work Items -"
+                }
+              ]
+            },
+            {
+              "agenda_item": "5",
+              "matched_agenda_item": "5",
+              "description": "Quality improvement contributions",
+              "hierarchy": [
+                {
+                  "agenda_item": "5",
+                  "description": "Quality improvement contributions"
+                }
+              ]
+            },
+            {
+              "agenda_item": "6",
+              "matched_agenda_item": "6",
+              "description": "Rel-20 and earlier contributions",
+              "hierarchy": [
+                {
+                  "agenda_item": "6",
+                  "description": "Rel-20 and earlier contributions"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "plenary"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "4. WIDs",
+            "5. Quality improvement contributions",
+            "6. Rel20 and earlier"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": null
+        },
+        {
+          "name": "Plenary",
+          "duration_minutes": 90,
+          "start_time": "11:00",
+          "end_time": "12:30",
+          "day": "Thursday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": "7.3.1, 7.3.2, 7.3.3",
+          "group_header": "Rel-21 contributions",
+          "description": "General\nSystem and Operation without IMS aspects\nArtificial Intelligence capabilities and services without IMS aspects",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "7.3.1",
+              "matched_agenda_item": "7.3.1",
+              "description": "General",
+              "hierarchy": [
+                {
+                  "agenda_item": "7",
+                  "description": "Rel-21 contributions"
+                },
+                {
+                  "agenda_item": "7.3",
+                  "description": "6G-REQ [SP-260323]"
+                },
+                {
+                  "agenda_item": "7.3.1",
+                  "description": "General"
+                }
+              ]
+            },
+            {
+              "agenda_item": "7.3.2",
+              "matched_agenda_item": "7.3.2",
+              "description": "System and Operation without IMS aspects",
+              "hierarchy": [
+                {
+                  "agenda_item": "7",
+                  "description": "Rel-21 contributions"
+                },
+                {
+                  "agenda_item": "7.3",
+                  "description": "6G-REQ [SP-260323]"
+                },
+                {
+                  "agenda_item": "7.3.2",
+                  "description": "System and Operation without IMS aspects"
+                }
+              ]
+            },
+            {
+              "agenda_item": "7.3.3",
+              "matched_agenda_item": "7.3.3",
+              "description": "Artificial Intelligence capabilities and services without IMS aspects",
+              "hierarchy": [
+                {
+                  "agenda_item": "7",
+                  "description": "Rel-21 contributions"
+                },
+                {
+                  "agenda_item": "7.3",
+                  "description": "6G-REQ [SP-260323]"
+                },
+                {
+                  "agenda_item": "7.3.3",
+                  "description": "Artificial Intelligence capabilities and services without IMS aspects"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "plenary"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "7.3.1 General",
+            "7.3.2 System and Operation",
+            "7.3.3 AI"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": null
+        },
+        {
+          "name": "Plenary",
+          "duration_minutes": 90,
+          "start_time": "14:00",
+          "end_time": "15:30",
+          "day": "Thursday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": "7.2, 7.3.2, 7.3.3",
+          "group_header": "Rel-21 contributions",
+          "description": "FS_ AddCapEm_REQ [SP-260654]\nSystem and Operation without IMS aspects\nArtificial Intelligence capabilities and services without IMS aspects",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "7.2",
+              "matched_agenda_item": "7.2",
+              "description": "FS_ AddCapEm_REQ [SP-260654]",
+              "hierarchy": [
+                {
+                  "agenda_item": "7",
+                  "description": "Rel-21 contributions"
+                },
+                {
+                  "agenda_item": "7.2",
+                  "description": "FS_ AddCapEm_REQ [SP-260654]"
+                }
+              ]
+            },
+            {
+              "agenda_item": "7.3.2",
+              "matched_agenda_item": "7.3.2",
+              "description": "System and Operation without IMS aspects",
+              "hierarchy": [
+                {
+                  "agenda_item": "7",
+                  "description": "Rel-21 contributions"
+                },
+                {
+                  "agenda_item": "7.3",
+                  "description": "6G-REQ [SP-260323]"
+                },
+                {
+                  "agenda_item": "7.3.2",
+                  "description": "System and Operation without IMS aspects"
+                }
+              ]
+            },
+            {
+              "agenda_item": "7.3.3",
+              "matched_agenda_item": "7.3.3",
+              "description": "Artificial Intelligence capabilities and services without IMS aspects",
+              "hierarchy": [
+                {
+                  "agenda_item": "7",
+                  "description": "Rel-21 contributions"
+                },
+                {
+                  "agenda_item": "7.3",
+                  "description": "6G-REQ [SP-260323]"
+                },
+                {
+                  "agenda_item": "7.3.3",
+                  "description": "Artificial Intelligence capabilities and services without IMS aspects"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "plenary"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "7.2 FS_AddCapEm_REQ",
+            "7.3.2 System and Operation",
+            "7.3.3 AI"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": null
+        },
+        {
+          "name": "Plenary",
+          "duration_minutes": 120,
+          "start_time": "16:00",
+          "end_time": "18:00",
+          "day": "Thursday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": "7.3.3, 7.3.4, 7.3.6, 7.3.10, 7.3.9",
+          "group_header": "Rel-21 contributions",
+          "description": "Artificial Intelligence capabilities and services without IMS aspects\nIntegrated Sensing and Communications\nImmersive Communication\nIMS without immersive aspects\nComputing",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "7.3.3",
+              "matched_agenda_item": "7.3.3",
+              "description": "Artificial Intelligence capabilities and services without IMS aspects",
+              "hierarchy": [
+                {
+                  "agenda_item": "7",
+                  "description": "Rel-21 contributions"
+                },
+                {
+                  "agenda_item": "7.3",
+                  "description": "6G-REQ [SP-260323]"
+                },
+                {
+                  "agenda_item": "7.3.3",
+                  "description": "Artificial Intelligence capabilities and services without IMS aspects"
+                }
+              ]
+            },
+            {
+              "agenda_item": "7.3.4",
+              "matched_agenda_item": "7.3.4",
+              "description": "Integrated Sensing and Communications",
+              "hierarchy": [
+                {
+                  "agenda_item": "7",
+                  "description": "Rel-21 contributions"
+                },
+                {
+                  "agenda_item": "7.3",
+                  "description": "6G-REQ [SP-260323]"
+                },
+                {
+                  "agenda_item": "7.3.4",
+                  "description": "Integrated Sensing and Communications"
+                }
+              ]
+            },
+            {
+              "agenda_item": "7.3.6",
+              "matched_agenda_item": "7.3.6",
+              "description": "Immersive Communication",
+              "hierarchy": [
+                {
+                  "agenda_item": "7",
+                  "description": "Rel-21 contributions"
+                },
+                {
+                  "agenda_item": "7.3",
+                  "description": "6G-REQ [SP-260323]"
+                },
+                {
+                  "agenda_item": "7.3.6",
+                  "description": "Immersive Communication"
+                }
+              ]
+            },
+            {
+              "agenda_item": "7.3.10",
+              "matched_agenda_item": "7.3.10",
+              "description": "IMS without immersive aspects",
+              "hierarchy": [
+                {
+                  "agenda_item": "7",
+                  "description": "Rel-21 contributions"
+                },
+                {
+                  "agenda_item": "7.3",
+                  "description": "6G-REQ [SP-260323]"
+                },
+                {
+                  "agenda_item": "7.3.10",
+                  "description": "IMS without immersive aspects"
+                }
+              ]
+            },
+            {
+              "agenda_item": "7.3.9",
+              "matched_agenda_item": "7.3.9",
+              "description": "Computing",
+              "hierarchy": [
+                {
+                  "agenda_item": "7",
+                  "description": "Rel-21 contributions"
+                },
+                {
+                  "agenda_item": "7.3",
+                  "description": "6G-REQ [SP-260323]"
+                },
+                {
+                  "agenda_item": "7.3.9",
+                  "description": "Computing"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "plenary"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "7.3.3 AI",
+            "7.3.4 ISAC",
+            "7.3.6 Immersive",
+            "7.3.10 IMS",
+            "7.3.9 Computing"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": null
+        },
+        {
+          "name": "Plenary",
+          "duration_minutes": 80,
+          "start_time": "18:10",
+          "end_time": "19:30",
+          "day": "Thursday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": "7.3.5, 7.3.7, 7.3.8",
+          "group_header": "Rel-21 contributions",
+          "description": "Ubiquitous Connectivity\nMassive Communication\nSupport for Industry and Verticals",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "7.3.5",
+              "matched_agenda_item": "7.3.5",
+              "description": "Ubiquitous Connectivity",
+              "hierarchy": [
+                {
+                  "agenda_item": "7",
+                  "description": "Rel-21 contributions"
+                },
+                {
+                  "agenda_item": "7.3",
+                  "description": "6G-REQ [SP-260323]"
+                },
+                {
+                  "agenda_item": "7.3.5",
+                  "description": "Ubiquitous Connectivity"
+                }
+              ]
+            },
+            {
+              "agenda_item": "7.3.7",
+              "matched_agenda_item": "7.3.7",
+              "description": "Massive Communication",
+              "hierarchy": [
+                {
+                  "agenda_item": "7",
+                  "description": "Rel-21 contributions"
+                },
+                {
+                  "agenda_item": "7.3",
+                  "description": "6G-REQ [SP-260323]"
+                },
+                {
+                  "agenda_item": "7.3.7",
+                  "description": "Massive Communication"
+                }
+              ]
+            },
+            {
+              "agenda_item": "7.3.8",
+              "matched_agenda_item": "7.3.8",
+              "description": "Support for Industry and Verticals",
+              "hierarchy": [
+                {
+                  "agenda_item": "7",
+                  "description": "Rel-21 contributions"
+                },
+                {
+                  "agenda_item": "7.3",
+                  "description": "6G-REQ [SP-260323]"
+                },
+                {
+                  "agenda_item": "7.3.8",
+                  "description": "Support for Industry and Verticals"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "plenary"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "7.3.5 Ubiquitous",
+            "7.3.7 Massive",
+            "7.3.8 Verticals"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": null
+        }
+      ],
+      "date": "2026-08-27",
+      "timeline": {
+        "start": "08:00",
+        "end": "19:30",
+        "slot_minutes": 5,
+        "label_minutes": 30,
+        "breaks": [
+          {
+            "name": "Coffee",
+            "start": "10:30",
+            "end": "11:00"
+          },
+          {
+            "name": "Lunch",
+            "start": "12:30",
+            "end": "14:00"
+          },
+          {
+            "name": "Coffee",
+            "start": "15:30",
+            "end": "16:00"
+          }
+        ],
+        "blocks": []
+      }
+    },
+    {
+      "day_name": "Friday",
+      "rooms": [
+        {
+          "name": "Plenary/ Breakout 1",
+          "table_index": 0,
+          "room_index_in_table": 0,
+          "id": "plenary",
+          "kind": ""
+        },
+        {
+          "name": "Breakout 2",
+          "table_index": 0,
+          "room_index_in_table": 0,
+          "id": "breakout-2",
+          "kind": ""
+        }
+      ],
+      "sessions": [
+        {
+          "name": "Plenary",
+          "duration_minutes": 60,
+          "start_time": "08:00",
+          "end_time": "09:00",
+          "day": "Friday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": null,
+          "group_header": "",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [
+            "plenary"
+          ],
+          "room_scope": "assigned",
+          "notes": [],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": null
+        },
+        {
+          "name": "Plenary",
+          "duration_minutes": 90,
+          "start_time": "09:00",
+          "end_time": "10:30",
+          "day": "Friday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": null,
+          "group_header": "",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [
+            "plenary"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "Revisions"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": null
+        },
+        {
+          "name": "Plenary",
+          "duration_minutes": 90,
+          "start_time": "11:00",
+          "end_time": "12:30",
+          "day": "Friday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": null,
+          "group_header": "",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [
+            "plenary"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "Revisions"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": null
+        },
+        {
+          "name": "Plenary",
+          "duration_minutes": 120,
+          "start_time": "14:00",
+          "end_time": "16:00",
+          "day": "Friday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": null,
+          "group_header": "",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [
+            "plenary"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "Revisions"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": null
+        }
+      ],
+      "date": "2026-08-28",
+      "timeline": {
+        "start": "08:00",
+        "end": "16:00",
+        "slot_minutes": 5,
+        "label_minutes": 30,
+        "breaks": [
+          {
+            "name": "Coffee",
+            "start": "10:30",
+            "end": "11:00"
+          },
+          {
+            "name": "Lunch",
+            "start": "12:30",
+            "end": "14:00"
+          },
+          {
+            "name": "Coffee",
+            "start": "15:30",
+            "end": "16:00",
+            "label_position": "time-axis"
+          }
+        ],
+        "blocks": []
+      }
+    }
+  ],
+  "source_file": "Agenda for SA1#115_Friday_1550_END_OF_MEETING.docx",
+  "generated_at": "2026-10-30 00:52",
+  "contact_name": "",
+  "contact_email": "",
+  "source_files": [
+    "Agenda for SA1#115_Friday_1550_END_OF_MEETING.docx"
+  ],
+  "source_labels": {
+    "Agenda for SA1#115_Friday_1550_END_OF_MEETING.docx": "Chair's Notes EOM"
+  },
+  "timezone": "Europe/Prague",
+  "wg_id": "sa1",
+  "meeting_id": "sa1#115",
+  "starts_on": "2026-08-24",
+  "ends_on": "2026-08-28",
+  "starts_at": "2026-08-24T09:00:00+02:00",
+  "ends_at": "2026-08-28T17:30:00+02:00",
+  "is_demo": false,
+  "topic_references": [],
+  "topic_preamble": [],
+  "supplements": [
+    {
+      "type": "paragraph",
+      "text": "MEETING ROOMS:\nPlenary/ Breakout 1: D3/D4, Floor 3\nBreakout 2: D9, Floor 3",
+      "bold": false
+    },
+    {
+      "type": "paragraph",
+      "text": "NOTE: Slots scheduled based on contributions submitted. Slot allocation is a rough guideline and can be changed during the meeting week. Breakout sessions (including drafting/work item):",
+      "bold": false
+    },
+    {
+      "type": "paragraph",
+      "text": "6G System and Operation Aspects – chaired by Feifei Lou\nAI, Computing – chaired by Vasil Aleksiev\nUbiquitous, Verticals + Massive – chaired by Qun Wei\nISAC - chaired by Lola Awoniyi-Oteri\nImmersive + IMS – chaired by Erik Guttman",
+      "bold": false
+    }
+  ],
+  "chairman_agreements": {},
+  "email_informal": {}
+}
