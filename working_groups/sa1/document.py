@@ -258,10 +258,10 @@ def _direct_numbering(paragraph) -> str | None:
     return node.get(W + 'val') if node is not None else None
 
 
-def agenda_items(doc) -> dict[str, str]:
-    """Agenda number -> title from the heading tree of the file's TDoc table."""
-    counters, result = [], {}
-    for paragraph in doc.element.body.iter(W + 'p'):
+def headings(body) -> list[tuple[object, str, str]]:
+    """(paragraph element, agenda number, title) for each heading of the file's TDoc table."""
+    counters, result = [], []
+    for paragraph in body.iter(W + 'p'):
         level = _style_level(paragraph)
         if not level:
             continue
@@ -274,13 +274,21 @@ def agenda_items(doc) -> dict[str, str]:
             if match:
                 number, text = match[1], match[2]
                 counters = [int(p) for p in number.split('.')]
-                result.setdefault(number, text)
+                result.append((paragraph, number, text))
             continue
         if numbering is not None:
             level += 1   # a list of its own under the style's level (#112)
         counters = (counters + [0] * level)[:level]
         counters[-1] += 1
-        result.setdefault('.'.join(map(str, counters)), text)
+        result.append((paragraph, '.'.join(map(str, counters)), text))
+    return result
+
+
+def agenda_items(doc) -> dict[str, str]:
+    """Agenda number -> title from the heading tree of the file's TDoc table."""
+    result = {}
+    for _, number, text in headings(doc.element.body):
+        result.setdefault(number, text)
     return result
 
 

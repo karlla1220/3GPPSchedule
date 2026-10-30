@@ -505,7 +505,7 @@ RAN1에서 시작해 모든 WG가 쓴다. 코드는 `shared/agenda_labels.py`이
 
 ## Agreement 패널 (RAN1)
 
-셀을 누르면 그리드 아래 패널에 그 셀 AI의 chair notes 본문이 나온다. HTML은 `shared/docx_html.py`, 패널은 `templates/agreements-panel.js`, 스타일은 `templates/schedule.css`의 agreement 구획이다.
+셀을 누르면 그리드 아래 패널에 그 셀 AI의 chair notes 본문이 나온다. SA1은 같은 패널에 TDoc 결론을 보인다(아래 "SA1 TDoc 결론"). HTML은 `shared/docx_html.py`, 패널은 `templates/agreements-panel.js`, 스타일은 `templates/schedule.css`의 agreement 구획이다.
 
 - **페이지와 같은 문법을 쓴다.** 패널은 그리드와 같은 표면(흰 바탕, 헤어라인 그림자, `--radius-lg`)이고, AI 탭은 요일 탭의 세그먼트 컨트롤을 선택자만 더해 함께 쓴다. 따로 버튼 스타일을 만들지 않는다.
 - **본문 서체는 Times New Roman이다(`DOCUMENT_CSS`의 `.docx-document`).** 3GPP 문서의 서체라 참석자가 Word에서 보던 모습 그대로 읽힌다. 패널 머리줄, AI 제목, 변경 줄은 페이지 서체(Source Sans 3) 그대로다.
@@ -597,6 +597,18 @@ RAN1에서 시작해 모든 WG가 쓴다. 코드는 `shared/agenda_labels.py`이
 - **체어맨 노트는 이름의 `Chair notes`·`Chairman notes`·`Chair's notes`로 찾는다(`_is_chair_notes_name`).** `Chair's Notes`는 #115까지 쓰던 표기이고, Final을 쓰던 회의도 이 표기였다. 낱말 사이는 공백이나 `_`다.
   - 회의 번호의 `#` 자리에 `_`를 쓴 이름(`RAN1_111 v03`)도 같은 회의다(`_MEETING_ID_PATTERN`). #110bis와 #111은 회의 도중 `RAN1#111`에서 `RAN1_111`로 바뀌어서, 읽지 못하면 `#111` 묶음의 `v02`가 마지막 버전이 된다.
 - 문서 형식이나 출력이 바뀌면 `working_groups/ran1/agreements.py`의 `PARSER_VERSION`을 올려 캐시를 무효화한다.
+
+### SA1 TDoc 결론
+
+SA1은 같은 패널에 의장 파일 끝의 TDoc 표를 보인다(`working_groups/sa1/conclusions.py`). 패널과 문법은 RAN1 그대로이고 따로 UI를 만들지 않는다.
+
+- **패널은 WG의 데이터가 자기 WG라고 밝힐 때만 생긴다(`agreement_assets.has_panel`).** RAN1은 늘 있고, 다른 WG는 `chairman_agreements.wg_id`가 그 WG일 때다. RAN1 데이터가 다른 페이지에 붙어도 보이지 않는다.
+- **글은 데이터의 `text`가 바꾼다.** 머리줄(`TDoc conclusions for`), 빈 항목 안내, 불러오기 문구다. 없으면 RAN1 문구다(`agreements-panel.js`의 `TEXT`). Help 투어는 패널 클래스(`tdoc-conclusions`)로 단계를 가른다.
+- **AI 하나가 표 하나다.** 제목 행(agenda와 같은 번호 세기, `document.headings`) 사이의 TDoc 행을 Word 열 너비 그대로 한 표로 만들고(`DocxHTML.table`, `fitTables`), 첫 행에 범례 표의 열 이름을 둔다.
+- **결론 색은 원문 칸 바탕을 옅게 옮긴다.** Word 형광펜과 같은 값(초록 `#c6f0bd`, 청록 `#bdeef3`, 노랑 `#fff0a0`)이고, 다른 진한 색은 흰색과 섞는다. 이미 옅은 색(`CCFFCC`)은 그대로다.
+- **TDoc 번호는 3GPP 아카이브 링크다.** 의장 파일은 의장 PC의 경로(`file:///C:\TSGS1_115_Prague\Docs\S1-….zip`)로 걸어 두었으므로 같은 파일의 회의 폴더 주소로 바꾼다.
+- **바뀐 행은 초록 막대다.** 이전 빌드와 행(글과 바탕)을 비교해 새로 생기거나 바뀐 행의 첫 칸 왼쪽에 3px 막대를 둔다. 표 칸 밖으로는 그릴 수 없어서 문단 막대와 달리 칸 안쪽 테두리다(`td.agreement-added`).
+- 이름으로 찾은 필터 전용 AI(`inferred_agenda_items`)로도 패널이 열린다(RAN1 추정과 같다).
 
 ### 세션 노트
 

@@ -14,7 +14,9 @@ from zoneinfo import ZoneInfo
 
 from shared import llm_cells, officials, timezones
 from shared.agenda_labels import infer_for_schedule
+from shared.agreement_assets import package_agreements
 from shared.renderer import generate_html
+from . import conclusions
 from .document import UnreadTable, extract_agenda, extract_document
 from .llm import CellRefiner, read_document
 from .sessions import make_schedule
@@ -74,6 +76,30 @@ def chair_resolver(cfg, starts_on: str, history=None):
         return None
     present = officials.in_office(history, date.fromisoformat(starts_on))
     return lambda name: officials.resolve(name, present)
+
+
+def previous_conclusions(snapshot: Path, meeting: str) -> dict | None:
+    """The TDoc conclusions last published for this meeting, or None."""
+    data = read_json(snapshot).get('chairman_agreements')
+    if isinstance(data, dict) and data.get('status') == 'ready' and data.get('meeting_id') == meeting:
+        return data
+    return None
+
+
+def attach_conclusions(schedule, data: bytes, file: dict, snapshot: Path, archive: str) -> None:
+    """The TDoc table's conclusions by agenda item, for the panel below the grid.
+
+    Optional like RAN1's agreements: when the table cannot be read, what was
+    last published for the meeting stays, and the schedule is published anyway.
+    """
+    previous = previous_conclusions(snapshot, schedule.meeting_id)
+    try:
+        data = conclusions.build(data, file, schedule.meeting_id, previous, archive)
+    except Exception as exc:
+        print(f'[sa1] TDoc conclusions unavailable: {exc}')
+        data = previous or {}
+    if data:
+        schedule.chairman_agreements, schedule.agreement_fragments = package_agreements(data, previous)
 
 
 def build_schedule(options=None, *, request=None, history=None):
@@ -137,6 +163,8 @@ def build_schedule(options=None, *, request=None, history=None):
     schedule = make_schedule(document, metadata, [f['name'] for f in files],
                              {f['name']: source_label(f['name']) for f in files}, generated,
                              refine=refine, resolve_chair=resolve, read=read)
+    attach_conclusions(schedule, chair_doc or schedule_doc, manifest.get('chair') or manifest['schedule'],
+                       root / 'schedule.json', cfg['archive_url'])
     # Cells the schedule gives no AI: an LLM reads their label for the filter (shared/agenda_labels.py).
     infer_for_schedule(schedule, 'sa1', 'SA1', document['agenda'], enabled=not offline and request is not None)
     # No checkpoint before parsing and rendering both succeed.

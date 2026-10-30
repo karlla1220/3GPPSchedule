@@ -83,6 +83,14 @@ def test_the_tour_has_a_step_for_each_part_the_page_shows_in_page_order():
     assert states[-1]['next'] == 'Done' and states[0]['next'] == 'Next'
 
 
+def test_the_sa1_tdoc_panel_has_its_own_step_and_not_the_agreements_one():
+    # The fake page answers selectors as written: SA1's panel matches only its own step's selector.
+    targets = RAN2 | {'#agreement-panel.tdoc-conclusions': 'shown'}
+    states = run_tour(['start', 'next', 'next', 'next'], targets=targets)['states']
+    assert states[3]['title'] == TITLES['#agreement-panel.tdoc-conclusions'] == 'TDoc conclusions below the grid'
+    assert states[0]['count'] == '1 / 6'
+
+
 def test_back_and_the_arrow_keys_move_between_steps():
     states = run_tour(['start', 'right', 'right', 'back'], targets=RAN2)['states']
     assert [s['count'] for s in states] == ['1 / 5', '2 / 5', '3 / 5', '2 / 5']

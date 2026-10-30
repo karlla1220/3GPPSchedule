@@ -21,6 +21,7 @@ from shared.page import render_header
 from shared.agreement_assets import (
     agenda_section_ids,
     current_agreements,
+    has_panel,
     render_agreement_panel,
     write_agreement_assets,
 )
@@ -324,9 +325,9 @@ def generate_html(schedule: Schedule, *, schedules=None, groups=None, presentati
 
     color_map = _assign_group_colors(all_sessions)
     filter_data_json = _build_filter_data(all_sessions)
-    # None outside RAN1: cells there have no agreement panel to control.
+    # None without the agreement panel (RAN1, or a WG that gives its data): cells have nothing to control.
     agreement_sections = (
-        current_agreements(schedule).get("sections", {}) if schedule.wg_id == "ran1" else None
+        current_agreements(schedule).get("sections", {}) if has_panel(schedule) else None
     )
     page_header = render_header(schedule, presentation=presentation, schedules=schedules, groups=groups)
 

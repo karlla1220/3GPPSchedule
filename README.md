@@ -816,6 +816,17 @@ SA1#112·#113·#115의 실제 문서로 확인했습니다. `site.json`에서 `e
 - 그리드 아래 맨 위에 "표가 늘 쓰던 양식이 아니어서 LLM이 읽었다"는 안내를 두고, 빌드는 공용 알림(GitHub 이슈 댓글)을 남깁니다.
   `.schedule_state.json`의 `llm`은 `{"model": …, "document": true}`입니다. 키가 없으면 지금처럼 빌드가 실패합니다.
 
+### TDoc 결론 패널 (`working_groups/sa1/conclusions.py`)
+
+셀을 누르면 그리드 아래 패널에 그 셀 AI의 TDoc과 결론이 나옵니다. 원본은 같은 의장 파일 끝의 TDoc 표이고(시간표만 뽑은 파일을 쓸 때는 의장 파일),
+패널은 RAN1 Agreement 패널(`shared/agreement_assets.py`, `templates/agreements-panel.js`)을 그대로 씁니다.
+
+- AI마다 제목 행 아래 TDoc 행(Doc Type, Tdoc number, Source, Title, Conclusion, Comments)을 Word 열 너비 그대로 한 표로 보입니다. 결론 색은 원문 칸 바탕을 옅게 옮깁니다.
+- TDoc 번호는 3GPP 아카이브의 회의 폴더 `Docs/` 링크입니다(의장 PC 경로를 바꿉니다).
+- 이전 빌드와 행을 비교해 새로 생기거나 바뀐 행에 초록 막대를 두고, 탭과 변경 줄(`Updated …`)도 RAN1처럼 붙입니다. 같은 미팅의 첫 빌드는 기준선입니다.
+- 이름으로 찾은 필터 전용 AI(`inferred_agenda_items`)로도 패널이 열립니다.
+- 표를 읽지 못하면 그 미팅에 마지막으로 게시한 결론을 두고 시간표는 그대로 게시합니다. 데이터는 `schedule.json`의 `chairman_agreements`(`wg_id: "sa1"`), 표 HTML은 `docs/sa1/agreements/`입니다.
+
 ### 상태와 로컬 확인
 
 - `docs/sa1/.schedule_state.json`: 성공한 판의 이름·URL·SHA-256, 판 순서(`order`), 시간표만 뽑은 파일을 쓸 때의 의장 파일, Portal 메타데이터.
