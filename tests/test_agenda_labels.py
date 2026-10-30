@@ -151,7 +151,18 @@ def test_inferred_items_feed_the_filter_scope_and_agreements_only():
     assert "9.2" not in block["data-popup"]
 
 
-def test_a_written_agenda_item_wins_over_an_inferred_one():
+def test_a_written_agenda_item_wins_over_an_inferred_one(tmp_path):
+    # The LLM is not asked about a cell that writes its AI.
     session = _session("MIMO", "10.5.2")
-    session.inferred_agenda_items = ["9.2"]
+    apply_inferred_agenda_items([session], "ran1#126bis", agenda_path=tmp_path / "none.json",
+                                directory=tmp_path / "map", judge=lambda labels, agenda: {"MIMO": {"items": [{"agenda_item": "9.2"}]}})
+    assert session.inferred_agenda_items == []
     assert _block(session)["data-ai-scope"] == "10.5.2.*"
+
+
+def test_items_a_wg_found_next_to_written_ones_also_match_the_filter():
+    # SA1 "7.3.3 AI ⏎ Immersive": the written 7.3.3 keeps covering its sub-items.
+    session = _session("Plenary", "7.3.3")
+    session.inferred_agenda_items = ["7.3.6"]
+    assert _block(session)["data-ai-scope"] == "7.3.3.*|7.3.6.*"
+    assert _block(session)["data-ai"] == "7.3.3"

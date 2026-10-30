@@ -577,12 +577,18 @@ def generate_html(schedule: Schedule, *, schedules=None, groups=None, presentati
             else:
                 data_ai = ""
             data_ai_attr = _esc(data_ai).replace('"', '&quot;')
-            # A cell without an AI is matched and opened by the items its label
-            # was read as (inferred_agenda_items); data-ai stays as written.
-            scope_ai = session.agenda_item or ", ".join(session.inferred_agenda_items)
+            # A cell is also matched and opened by items it does not write
+            # (inferred_agenda_items: its label read by an LLM, or a WG's rules
+            # such as RAN4 candidate lists); data-ai stays as written.
+            found_ai = ", ".join(session.inferred_agenda_items)
+            scope_ai = ", ".join(filter(None, [session.agenda_item, found_ai]))
             # A "maybe" item is filtered like the cell's own: the slot may be its session.
-            filter_ai = ", ".join(filter(None, [scope_ai, *maybe]))
-            data_ai_scope_attr = _esc(_ai_filter_scope(filter_ai)).replace('"', '&quot;')
+            # Written and found items are scoped apart, so a found sub-item does
+            # not narrow a written "8.1" to 8.1's own part.
+            filter_ai = "|".join(filter(None, [
+                _ai_filter_scope(", ".join(filter(None, [session.agenda_item, *maybe]))),
+                _ai_filter_scope(found_ai)]))
+            data_ai_scope_attr = _esc("|".join(dict.fromkeys(filter_ai.split("|"))) if filter_ai else "").replace('"', '&quot;')
             # The panel opens the chair-note sections an AI covers (10.6.x →
             # 10.6.1, 10.6.2). The filter keeps matching the AI as written.
             agreement_attrs = ""
