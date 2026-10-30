@@ -16,7 +16,6 @@ The file is a zip of XML parts, read without python-pptx.
 """
 from __future__ import annotations
 
-import csv
 import io
 import re
 import zipfile
@@ -274,13 +273,3 @@ def extract_document(data: bytes, name: str) -> dict:
             **properties, 'days': days, 'supplements': supplements}
 
 
-def agenda_map(data: bytes) -> dict[str, str]:
-    """agenda.csv published in each meeting's Agenda folder: "item","description"."""
-    result = {}
-    for row in csv.reader(io.StringIO(data.decode('utf-8-sig', errors='replace'))):
-        if len(row) < 2:
-            continue
-        item, description = row[0].strip().rstrip('.'), squash(row[1])
-        if re.fullmatch(r'\d+(?:\.\d+)*', item) and description:
-            result.setdefault(item, description)
-    return result

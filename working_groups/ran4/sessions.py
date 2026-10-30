@@ -27,9 +27,10 @@ from dataclasses import dataclass, field
 from datetime import date, timedelta
 import re
 
-from shared.agenda_groups import group_label
+from shared.agenda import describe, group_label, is_descendant
 from shared.schedule import (MIN_PART_MINUTES, DaySchedule, RoomInfo, Schedule, Session, Timeline,
                              minutes_to_time, time_to_minutes)
+from shared.titles import clean
 from . import topics as topicmod
 from .document import clock
 
@@ -64,18 +65,6 @@ WRITTEN_AI = re.compile(r'\bAI\s+(\d+(?:\.\d+)+)')
 
 
 # ------------------------------------------------------------------- lines
-
-def clean(text: str) -> str:
-    """A title as RAN2 shows one: round brackets go whatever they say, except
-    those glued to a word ("(e)RedCap"); the source line stays in the notes."""
-    previous = None
-    while previous != text:
-        previous = text
-        text = re.sub(r'\s*\([^()]*\)(?![A-Za-z])', ' ', text)
-    text = re.sub(r'\s*\([^()]*$', ' ', text)
-    text = re.sub(r'\[\s*\]', ' ', text)
-    return ' '.join(text.split()).strip(' ,;:/-–—&.')
-
 
 def written_chairs(line: str) -> tuple[list[str], str]:
     """(chairs, line without them): "…, Chaired by Leo (Huawei)/Jinqiang (OPPO)"."""
@@ -433,20 +422,6 @@ def interpret(document: dict, context: dict, refine=None) -> tuple[list[dict], l
 
 
 # ---------------------------------------------------------------- schedule
-
-def describe(item: str, agenda: dict) -> dict | None:
-    match = item if item in agenda else None
-    if match is None:
-        return None
-    parts = match.split('.')
-    path = ['.'.join(parts[:i]) for i in range(1, len(parts) + 1)]
-    return {'agenda_item': item, 'matched_agenda_item': match, 'description': agenda[match],
-            'hierarchy': [{'agenda_item': p, 'description': agenda.get(p)} for p in path]}
-
-
-def is_descendant(item: str, ancestor: str) -> bool:
-    return item != ancestor and item.startswith(ancestor + '.')
-
 
 def round5(value: str) -> str:
     return minutes_to_time(5 * round(time_to_minutes(value) / 5))

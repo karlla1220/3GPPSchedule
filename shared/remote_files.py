@@ -10,8 +10,9 @@ import hashlib
 import json
 from pathlib import Path
 import re
-from urllib.parse import unquote, urlsplit
+from urllib.parse import unquote, urljoin, urlparse, urlsplit
 
+from bs4 import BeautifulSoup
 import httpx
 
 from shared import ftp_transport
@@ -21,6 +22,7 @@ MAX_BYTES = 30_000_000
 # Folder listings already fetched in this run: url -> (content type, body).
 # RAN1 reads the same Inbox and Chair_notes listings from several places, and
 # build reads what check listed a minute earlier (save_listings/load_listings).
+TIMESTAMP = re.compile(r'(\d{4})[/-](\d{2})[/-](\d{2})\s+(\d{1,2}):(\d{2})')
 _LISTINGS = {}
 # Folders this run found absent: url -> HTTP status (403 or 404). Sync folders
 # come and go with a meeting, so the same missing folder is asked for once.
@@ -104,6 +106,25 @@ def get_listing(url, *, http=None, **kwargs):
         # Content-Encoding would make httpx decode it a second time.
         _LISTINGS[url] = (response.headers.get('content-type', 'text/html'), response.content)
     return response
+
+
+def listing_entries(html: str, url: str, *, children_only=False) -> list[dict]:
+    """A folder listing's links with their upload time ('' when the row has none).
+
+    children_only leaves out links that are not inside the folder (parent, sort links).
+    """
+    entries = []
+    for anchor in BeautifulSoup(html, 'html.parser').find_all('a', href=True):
+        href = urljoin(url, anchor['href'])
+        if children_only and (not href.startswith(url) or href.rstrip('/') == url.rstrip('/')):
+            continue
+        name = unquote(urlparse(href).path.rstrip('/').rsplit('/', 1)[-1])
+        row = anchor.find_parent('tr')
+        text = row.get_text(' ', strip=True) if row else ''
+        stamp = TIMESTAMP.search(text)
+        uploaded = (f'{stamp[1]}-{stamp[2]}-{stamp[3]} {int(stamp[4]):02d}:{stamp[5]}' if stamp else '')
+        entries.append({'url': href, 'name': name, 'uploaded_at': uploaded, 'listing': url})
+    return entries
 
 
 def _listing_response(url, content_type, body):

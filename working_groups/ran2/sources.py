@@ -20,16 +20,16 @@ import hashlib
 import json
 from pathlib import Path
 import re
-from urllib.parse import unquote, urljoin, urlparse
+from urllib.parse import urlparse
 from zoneinfo import ZoneInfo
 
-from bs4 import BeautifulSoup
 import httpx
 
 from shared import meeting_folders, remote_files
-from shared.meeting_folders import portal_key
-from shared.portal_meetings import TB_IDS, get_meetings, meeting_key, timezone_reference
-from shared.remote_files import client, fetch_file
+from shared.json_files import read_json, write_json
+from shared.meeting_folders import portal_key, portal_metadata
+from shared.portal_meetings import TB_IDS, get_meetings, meeting_key
+from shared.remote_files import client, fetch_file, listing_entries
 
 from .document import file_info
 
@@ -56,26 +56,10 @@ DEFAULTS = {
 METADATA_KEYS = {'starts_on', 'ends_on', 'starts_at', 'ends_at', 'location', 'country', 'timezone'}
 FOLDER = re.compile(r'TSGR2_(\d+)(bis|b)?(?:-?e)?/?', re.I)
 FOLDER_KEYS = ('meeting_specific', 'meeting_specific_override')
-TIMESTAMP = re.compile(r'(\d{4})[/-](\d{2})[/-](\d{2})\s+(\d{1,2}):(\d{2})')
 
 
 def digest(data: bytes) -> str:
     return hashlib.sha256(data).hexdigest()
-
-
-def read_json(path: Path) -> dict:
-    try:
-        value = json.loads(path.read_text(encoding='utf-8'))
-        return value if isinstance(value, dict) else {}
-    except (OSError, ValueError):
-        return {}
-
-
-def write_json(path: Path, value) -> None:
-    path.parent.mkdir(parents=True, exist_ok=True)
-    temporary = path.with_suffix('.tmp')
-    temporary.write_text(json.dumps(value, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
-    temporary.replace(path)
 
 
 def load_config() -> dict:
@@ -148,19 +132,6 @@ class Bundle:
 
 # ------------------------------------------------------------------- listings
 
-def listing_entries(html: str, url: str) -> list[dict]:
-    entries = []
-    for anchor in BeautifulSoup(html, 'html.parser').find_all('a', href=True):
-        href = urljoin(url, anchor['href'])
-        name = unquote(urlparse(href).path.rstrip('/').rsplit('/', 1)[-1])
-        row = anchor.find_parent('tr')
-        text = row.get_text(' ', strip=True) if row else ''
-        stamp = TIMESTAMP.search(text)
-        uploaded = (f'{stamp[1]}-{stamp[2]}-{stamp[3]} {int(stamp[4]):02d}:{stamp[5]}' if stamp else '')
-        entries.append({'url': href, 'name': name, 'uploaded_at': uploaded, 'listing': url})
-    return entries
-
-
 def fetch_listing(url: str, http) -> list[dict]:
     return listing_entries(remote_files.get_listing(url, http=http).text, url)
 
@@ -208,21 +179,6 @@ def portal_rows() -> list[dict] | None:
     except (httpx.HTTPError, ValueError) as exc:
         print(f'[ran2] Portal unavailable ({exc}); using saved or configured meeting dates')
         return None
-
-
-def portal_metadata(rows: list[dict], meeting: str) -> dict | None:
-    matches = [row for row in rows if portal_key(row) == meeting]
-    if len(matches) != 1:
-        return None
-    row = matches[0]
-    reference = timezone_reference(row) or {}
-    metadata = {'starts_on': row['StartDate'][:10], 'ends_on': row['EndDate'][:10],
-                'location': row.get('Location') or '', 'country': row.get('Country') or '',
-                'portal_timezone': row.get('StartTimeZone') or '', 'portal_id': row.get('Id')}
-    for key in ('timezone', 'starts_at', 'ends_at', 'starts_on', 'ends_on'):
-        if reference.get(key):
-            metadata[key] = reference[key]
-    return metadata
 
 
 def meeting_dates(cfg, rows, previous) -> dict[str, tuple[str, str]]:

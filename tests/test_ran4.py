@@ -3,6 +3,7 @@ from pathlib import Path
 
 import pytest
 
+from shared.agenda import agenda_map
 from working_groups.ran4 import document as docmod, topics as topicmod
 
 FIXTURES = Path(__file__).parent / 'fixtures/ran4'
@@ -16,7 +17,7 @@ def extract(name):
 
 
 def agenda():
-    return docmod.agenda_map((FIXTURES / 'agenda_120bis.csv').read_bytes())
+    return agenda_map((FIXTURES / 'agenda_120bis.csv').read_bytes())
 
 
 def day_of(document, name):

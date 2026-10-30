@@ -19,9 +19,9 @@ import re
 
 from docx import Document
 
+from shared.docx_text import paragraph_text, W
 from shared.portal_meetings import meeting_key
 
-W = '{http://schemas.openxmlformats.org/wordprocessingml/2006/main}'
 DAYS = ('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday')
 CLOCK = r'(\d{1,2})[:.](\d{2})'
 SLOT = re.compile(CLOCK + r'\s*[-–—~/|]?\s*' + CLOCK)
@@ -44,35 +44,6 @@ def clock(hour, minute) -> str:
     if not (0 <= hour < 24 and 0 <= minute < 60):
         raise ValueError(f'Invalid time {hour}:{minute}')
     return f'{hour:02d}:{minute:02d}'
-
-
-def _deleted(run) -> bool:
-    if any(a.tag in (W + 'del', W + 'moveFrom') for a in run.iterancestors()):
-        return True
-    props = run.find(W + 'rPr')
-    if props is None:
-        return False
-    for tag in ('strike', 'dstrike'):
-        node = props.find(W + tag)
-        if node is not None and node.get(W + 'val', 'true') not in ('0', 'false', 'off'):
-            return True
-    return False
-
-
-def paragraph_text(element) -> str:
-    """Accepted text: insertions kept, deletions and struck runs dropped."""
-    parts = []
-    for run in element.iter(W + 'r'):
-        if _deleted(run):
-            continue
-        for node in run:
-            if node.tag == W + 't':
-                parts.append(node.text or '')
-            elif node.tag in (W + 'br', W + 'cr'):
-                parts.append('\n')
-            elif node.tag == W + 'tab':
-                parts.append('\t')
-    return ''.join(parts)
 
 
 def squash(text: str) -> str:

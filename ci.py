@@ -22,7 +22,7 @@ PLAN_PATH = Path('.ci/plan.json')
 # Folder listings check fetched; build reads the same view instead of listing again.
 LISTINGS_PATH = Path('.ci/listings.json')
 COMMON_INPUTS = tuple(map(Path, ('shared/schedule.py', 'shared/lifecycle.py',
-    'shared/portal_meetings.py', 'shared/timezones.py', 'shared/officials.py', 'shared/llm_cells.py', 'shared/agenda_groups.py', 'shared/meeting_folders.py', 'shared/docx_html.py', 'shared/docx_math.py', 'shared/metafile_images.py', 'shared/wmf2svg.py', 'shared/vendor', 'shared/ftp_transport.py', 'shared/remote_files.py', 'working_groups/registry.py', 'pyproject.toml', 'uv.lock')))
+    'shared/portal_meetings.py', 'shared/timezones.py', 'shared/officials.py', 'shared/llm_cells.py', 'shared/agenda.py', 'shared/titles.py', 'shared/docx_text.py', 'shared/json_files.py', 'shared/meeting_folders.py', 'shared/docx_html.py', 'shared/docx_math.py', 'shared/metafile_images.py', 'shared/wmf2svg.py', 'shared/vendor', 'shared/ftp_transport.py', 'shared/remote_files.py', 'working_groups/registry.py', 'pyproject.toml', 'uv.lock')))
 SITE_INPUTS = tuple(map(Path, ('shared/renderer.py', 'shared/agreement_assets.py', 'shared/topic_references.py', 'shared/navigation.py',
     'shared/site_config.py', 'shared/page.py', 'templates', 'build.py', 'ci.py')))
 

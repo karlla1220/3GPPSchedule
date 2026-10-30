@@ -12,6 +12,7 @@ import pytest
 from pathlib import Path
 from urllib.parse import unquote
 
+from shared.agenda import agenda_map
 from shared.renderer import generate_html
 from shared.schedule import load_schedule, save_schedule
 from working_groups.ran3 import document as docmod, lifecycle, llm, pipeline, sessions, sources
@@ -32,7 +33,7 @@ def extract(name):
 
 
 def agenda(name):
-    return docmod.agenda_map((FIXTURES / name).read_bytes())
+    return agenda_map((FIXTURES / name).read_bytes())
 
 
 def slots(name):

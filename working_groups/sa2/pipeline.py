@@ -13,9 +13,10 @@ from zoneinfo import ZoneInfo
 import httpx
 
 from shared import officials, timezones
+from shared.agenda import agenda_map
 from shared.llm_cells import gemini_request, has_key
 from shared.renderer import generate_html
-from .document import LayoutError, agenda_map, extract_document, source_label
+from .document import LayoutError, extract_document, source_label
 from .llm import CellRefiner, read_document
 from .sessions import make_schedule
 from .sources import (CACHE, DOWNLOADS, Bundle, client, config_hash, fetch_bundle, load_config, local_bundle,

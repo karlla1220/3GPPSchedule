@@ -47,9 +47,10 @@
     새 WG도 같다: SA1 `7.3.3 AI`, SA1 Plenary 칸은 머리 줄 `Plenary`, RAN3 라벨 `AIML RAN`, RAN4 범주 `NTN` 또는 토픽 `[101-A] System Parameter`.
   - 머리 없이 주제가 여럿이면 앞 셋을 ` / `로 잇고 더 있으면 ` …`를 붙인다(RAN2 `title_and_chair`). 원문 줄을 이은 것이라 원문 표기다.
   - 원문의 낱말을 바꿔 쓰거나 지어내지 않는다. SA1 `7.3.3 AI`의 `AI`는 인공지능이라는 주제 이름이라 떼면 뜻이 바뀐다. 원본 표기가 WG마다 다르므로 모양을 맞추지 않는다.
-  - 제목에서는 괄호를 뗀다(RAN2 `analyze`·`clean`). AI 번호 괄호(`[8.10]`)는 AI 줄로, 의장 괄호는 Chair로 가고, 둥근 괄호는 내용과 상관없이 모두 빠진다
+  - 제목에서는 괄호를 뗀다(`shared/titles.py`의 `clean`, 모든 WG). AI 번호 괄호(`[8.10]`)는 AI 줄로, 의장 괄호는 Chair로 가고, 둥근 괄호는 내용과 상관없이 모두 빠진다
     (`(if time allows)`, `(cont)`, `(40)`, `(Reply to RAN1 LS …)`). 낱말에 붙은 괄호(`(e)RedCap`)만 남는다. 뗀 원문은 Note에 그대로 있다.
-- **셀 색(`group_header`)은 agenda 최상위 항목이다(RAN2 `group_label`, 범례는 그 항목 이름).** 새 WG도 같다. RAN1은 일정의 그룹 머리를 쓴다.
+    괄호를 뗀 자리에 남는 쉼표·세미콜론 앞 공백도 지운다(`Opening (1), Agenda (2)` → `Opening, Agenda`).
+- **셀 색(`group_header`)은 agenda 최상위 항목이다(`shared/agenda.py`의 `group_label`, 범례는 그 항목 이름).** 새 WG도 같다. RAN1은 일정의 그룹 머리를 쓴다.
   - AI 번호는 title과 따로 `agenda_item`에 두고, 셀의 AI 줄은 어느 WG든 `AI 7.3.3` 같은 형태다. 필터는 그 번호로 맞춘다.
 - **주 정보는 제목 하나뿐이다.** 13.5px(768px 이하 12.5px), 굵기 600, 줄 높이 1.2, 자간 0, `var(--ink)`.
   - Barlow는 좁은 서체라 Pretendard 12.5px와 같은 무게감을 내려면 13.5px가 필요하다. 14px부터는 부 정보와 차이가 커져 위계가 과해 보인다.

@@ -152,7 +152,10 @@ shared/
   timezones.py                 # 개최지 시간대: Portal 표기 → 개최지 목록 → Gemini
   officials.py                 # 의장·부의장 이력(3GPP officials), 회의 날짜의 임기, 원본 표기 → 전체 이름
   llm_cells.py                 # 규칙이 불확실한 항목만 Gemini에 묻는 폴백: 요청, 캐시, 검증·재시도, 공통 검사
-  agenda_groups.py             # 셀 색 그룹 = agenda 최상위 항목(RAN1 제외)
+  agenda.py                    # agenda.csv 읽기, 팝업 AI 트리, 셀 색 그룹 = agenda 최상위 항목(RAN1 제외)
+  titles.py                    # 셀 제목의 괄호 떼기(RAN2 규칙, 모든 WG)
+  docx_text.py                 # DOCX 문단의 받아들인 글자(변경 추적·취소선)
+  json_files.py                # 상태 JSON 읽기·쓰기
   meeting_folders.py           # 아카이브의 미팅 폴더 찾기
 # WG별 결과/상태는 아래 폴더에 격리
 docs/ran1/                     # index.html, schedule.json, slot_state/, 상태 JSON
@@ -167,6 +170,8 @@ ref_in_manual/ran1/            # RAN1 수동 참조 문서
 
 WG의 내부 단계는 자유입니다. 공통 실행기는 각 `build_schedule(options)`에서
 `shared.schedule.Schedule`을 받으며, WG끼리는 서로의 내부 모듈을 import하지 않습니다.
+두 WG 이상이 같은 처리를 쓰게 되면 WG에 복사하지 않고 `shared/`로 옮깁니다(agenda.csv, 제목 괄호, DOCX 글자, 폴더 목록, Portal 메타데이터).
+복사본은 고치는 사이에 갈라져서 같은 규칙이 WG마다 다르게 보입니다.
 새 WG는 독립 폴더와 pipeline을 만든 뒤 `registry.py`와 `site.json`에 등록합니다.
 
 Office 문서는 python-docx · python-pptx · openpyxl로 읽습니다. 외부 CLI(OfficeCLI, docx-cli)를 시험한 결과와 다시 볼 때의 조건은 `ref_docs/office-document-readers.md`에 있습니다(추후 고려).
@@ -182,8 +187,8 @@ LLM을 어디에 쓸지는 원본의 계보로 정합니다. RAN1은 의장과 �
 `Session.name`은 cell title(셀의 주 정보)이고, 원본 셀의 모양을 옮깁니다. 셀 머리 줄이 title이고
 나머지 원문 줄은 `Session.notes`에 둡니다. RAN1은 셀 글이 대개 AI 번호라 title이 AI이고, RAN2는 셀 머리 줄(`NR20 MIMO`),
 RAN Plenary는 셀 원문입니다. 머리 없이 주제가 여럿이면 앞 셋을 ` / `로 잇습니다(RAN2 `title_and_chair`).
-원문 낱말은 바꾸지 않고, 제목에서는 괄호를 뗍니다(RAN2 `clean`: AI 번호는 AI 줄로, 의장은 Chair로, 둥근 괄호는 모두. 원문은 Note에 남습니다).
-셀 색(`group_header`)은 agenda 최상위 항목입니다(RAN2 `group_label`). RAN1은 일정의 그룹 머리를 씁니다.
+원문 낱말은 바꾸지 않고, 제목에서는 괄호를 뗍니다(`shared/titles.py`의 `clean`: AI 번호는 AI 줄로, 의장은 Chair로, 둥근 괄호는 모두. 원문은 Note에 남습니다).
+셀 색(`group_header`)은 agenda 최상위 항목입니다(`shared/agenda.py`의 `group_label`). RAN1은 일정의 그룹 머리를 씁니다.
 AI 번호는 어느 WG든 `agenda_item`에 따로 두고, 셀의 AI 줄과 필터가 그것을 씁니다.
 
 원본이 시각 없이 블록을 몇 조각으로 나눠 놓았으면 `Session.part = [k, n]`으로 나눕니다.
@@ -562,7 +567,7 @@ Gemini가 다시 읽고, 원문으로 확인되는 답만 씁니다(아래 "LLM 
   - 예약 금지 표시: `No parallel offlines with main session`, `No offlines`
   - 주 세션 표에 같은 세션이 있는 줄: `6G offline in Main Room`, `Reserved (6G offline)`
   - `Social Event`
-- 색은 첫 AI의 agenda 최상위 항목입니다(`shared/agenda_groups.py`). AI가 없는 칸은 기본색입니다.
+- 색은 첫 AI의 agenda 최상위 항목입니다(`shared/agenda.py`). AI가 없는 칸은 기본색입니다.
 
 ### LLM 폴백 (`working_groups/ran3/llm.py`)
 
@@ -658,7 +663,7 @@ RAN4 의장단은 미팅마다 `Inbox/Meeting_Arrangements/`에 PPTX 시간표
   둥근 괄호는 RAN2처럼 내용과 상관없이 떼고(`NTN (cont)` → `NTN`), `Chaired by …`도 뗍니다. 괄호에 기대는 판단(`(cont)`, 시각, 토픽 번호)은 떼기 전의 원문 줄로 합니다.
 - **AI는 토픽 번호에서 찾습니다**: `[346]`, `[214] [215]`, `105-B`, `(346, 347)` → 토픽 목록의 AI 칸 → `agenda.csv`에 있는 번호만.
   접미사 없는 `[105]`는 105-A·105-B, `[102-A/B]`는 둘 다입니다. 셀의 이름이 다른 번호의 토픽 이름이면(`[206] NR_Mob_Ph5_RRM`은 207) AI를 비우고 경고합니다.
-  셀에 직접 적힌 `(AI 8.11.4)`도 씁니다. 그룹(범례 색)은 첫 AI의 최상위 항목입니다(`shared/agenda_groups.py`).
+  셀에 직접 적힌 `(AI 8.11.4)`도 씁니다. 그룹(범례 색)은 첫 AI의 최상위 항목입니다(`shared/agenda.py`).
 - **Chair**: 셀의 `Chaired by Jerry (Apple)`·`by Aijun (CATT)`는 이름만(`Jerry`) 씁니다. 그런 표기가 없는 Main·BR1·BR2 열의 칸은
   ad hoc 표기가 없을 때만 열 머리의 의장이고, officials 이력(`R4`, 회의 첫날의 임원)으로 전체 이름(`Yang TANG`)으로 풉니다.
   `Yang`은 TANG Yang과 YANG Shan 둘에 맞아서 `chair_aliases`가 정합니다. 이력을 받지 못하면 적힌 이름 그대로 두고 경고합니다. 표기 없는 ad hoc·offline 칸은 비웁니다.
@@ -755,7 +760,7 @@ SA1#112·#113·#115의 실제 문서로 확인했습니다. `site.json`에서 `e
 - Chair는 원본이 그 칸에 적은 사람만입니다. 브레이크아웃 칸은 NOTE 주제(`,`·`+`로 나눔)가 칸 이름을 가리키는 줄이 하나뿐일 때
   그 의장이고, Plenary 칸과 방 없는 칸은 비웁니다. 이름은 officials 이력(코드 `S1`, `officials_code`)으로 3GPP 표기로 풉니다
   (`Qun Wei` → `QUN WEI`). officials에 없는 사람(`Erik Guttman`)과 페이지를 못 읽은 빌드는 NOTE 표기 그대로입니다.
-- 색(범례)은 셀 첫 AI의 agenda 최상위 항목입니다(`shared/agenda_groups.py`, #115에서는 대부분 `Rel-21 contributions`).
+- 색(범례)은 셀 첫 AI의 agenda 최상위 항목입니다(`shared/agenda.py`, #115에서는 대부분 `Rel-21 contributions`).
 
 ### LLM 폴백 (`working_groups/sa1/llm.py`, 공용 `shared/llm_cells.py`)
 
@@ -834,7 +839,7 @@ SA2#172·#174·#175·#176·#177의 실제 문서로 확인했습니다. `site.js
   (green → Stream 2, cyan → Stream 3; Q0 행 머리글에는 색이 없지만 같은 Stream입니다). Stream 1과 공유 셀은 이름이 적혀 있지 않아 비웁니다.
   이름은 officials 이력(`S2`)에서 회의 첫날 임기 중인 사람으로 풉니다(`Mike` → `Michael STARSINIC`, 별칭은 `chair_aliases`).
   이력을 받지 못하면 마지막 빌드의 이름, 그것도 없으면 적힌 그대로 씁니다.
-- 범례 그룹은 `agenda.csv` 최상위 항목입니다(`shared/agenda_groups.py`).
+- 범례 그룹은 `agenda.csv` 최상위 항목입니다(`shared/agenda.py`).
 
 ### LLM 폴백 (`working_groups/sa2/llm.py`, 공용 `shared/llm_cells.py`)
 

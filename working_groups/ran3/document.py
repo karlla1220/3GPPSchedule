@@ -18,15 +18,14 @@ a sheet per day (``Oct14 Wed``), 30-minute slots, a topic and a moderator.
 """
 from __future__ import annotations
 
-import csv
 import io
 import re
 
 from docx import Document
 
+from shared.docx_text import paragraph_text, W
 from shared.portal_meetings import meeting_key
 
-W = '{http://schemas.openxmlformats.org/wordprocessingml/2006/main}'
 DAYS = ('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday')
 ROWS, COLUMNS = 13, 7
 # RAN3_133bis_agenda_20261014_1825.docx, RAN3_134_agenda_20261023.docx,
@@ -91,44 +90,6 @@ def clock(hour, minute) -> str:
     if not (0 <= hour < 24 and 0 <= minute < 60):
         raise ValueError(f'Invalid time {hour}:{minute}')
     return f'{hour:02d}:{minute:02d}'
-
-
-def _struck(run) -> bool:
-    props = run.find(W + 'rPr')
-    if props is None:
-        return False
-    for tag in ('strike', 'dstrike'):
-        node = props.find(W + tag)
-        if node is not None and node.get(W + 'val', 'true') not in ('0', 'false', 'off'):
-            return True
-    return False
-
-
-def _deleted(run) -> bool:
-    return any(a.tag in (W + 'del', W + 'moveFrom') for a in run.iterancestors())
-
-
-def paragraph_text(element, struck: list[str] | None = None, *, keep_struck=False) -> str:
-    """Accepted text: tracked insertions kept, deletions dropped.
-
-    Struck runs mean "not treated" in RAN3's legend. They are left out of the
-    text and collected in struck, so the session can say what was dropped.
-    """
-    parts, dropped = [], []
-    for run in element.iter(W + 'r'):
-        if _deleted(run):
-            continue
-        target = dropped if _struck(run) and not keep_struck else parts
-        for node in run:
-            if node.tag == W + 't':
-                target.append(node.text or '')
-            elif node.tag in (W + 'br', W + 'cr'):
-                target.append('\n')
-            elif node.tag == W + 'tab':
-                target.append('\t')
-    if struck is not None and squash(''.join(dropped)):
-        struck.append(squash(''.join(dropped)))
-    return ''.join(parts)
 
 
 def squash(text: str) -> str:
@@ -365,18 +326,6 @@ def extract_document(data: bytes, name: str) -> dict:
     table, head = schedule_table(doc)
     return {'meeting_id': meeting, 'days': read_days(table, head), 'legend': legend(doc, table),
             'cbs': cb_blocks(doc, table)}
-
-
-def agenda_map(data: bytes) -> dict[str, str]:
-    """agenda.csv in each meeting's Agenda folder: "item","description"."""
-    result = {}
-    for row in csv.reader(io.StringIO(data.decode('utf-8-sig', errors='replace'))):
-        if len(row) < 2:
-            continue
-        item, description = row[0].strip().rstrip('.'), squash(row[1])
-        if re.fullmatch(r'\d+(?:\.\d+)*', item) and description:
-            result.setdefault(item, description)
-    return result
 
 
 # ------------------------------------------------------------ offline room

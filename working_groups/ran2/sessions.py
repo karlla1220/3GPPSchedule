@@ -20,9 +20,10 @@ from dataclasses import dataclass, field
 from datetime import date, timedelta
 import re
 
-from shared.agenda_groups import group_label
+from shared.agenda import describe, group_label, is_descendant
 from shared.schedule import (DaySchedule, RoomInfo, Schedule, Session, Timeline,
                              minutes_to_time, time_to_minutes)
+from shared.titles import clean
 from .document import clock
 
 # A bare clock needs a colon, so "8.10 NR20 MIMO" is never read as 08:10.
@@ -100,17 +101,6 @@ def expand_range(first: str, last: str) -> list[str]:
     return [f'{prefix}.{n}' if prefix else str(n) for n in range(int(a[-1]), int(b[-1]) + 1)]
 
 
-def clean(text: str) -> str:
-    """Display label: drop qualifiers such as "(if time allows)", keep "(e)RedCap"."""
-    previous = None
-    while previous != text:
-        previous = text
-        text = re.sub(r'\s*\([^()]*\)(?![A-Za-z])', ' ', text)
-    text = re.sub(r'\s*\([^()]*$', ' ', text)
-    text = re.sub(r'\[\s*\]', ' ', text)
-    return ' '.join(text.split()).strip(' ,;:/-–—&.')
-
-
 def analyze(raw: str, chairs: set[str], agenda: dict | None = None) -> Line:
     line = Line(raw)
     text = raw
@@ -158,10 +148,6 @@ def analyze(raw: str, chairs: set[str], agenda: dict | None = None) -> Line:
     line.text = clean(re.sub(r'\(([^()]*)\)', parenthetical, text))
     line.chairs = list(dict.fromkeys(line.chairs))
     return line
-
-
-def is_descendant(item: str, ancestor: str) -> bool:
-    return item != ancestor and item.startswith(ancestor + '.')
 
 
 # ------------------------------------------------------------------- parts
@@ -391,18 +377,6 @@ def interpret(document: dict, agenda: dict | None = None, refine=None) -> list[d
 
 
 # --------------------------------------------------------------- schedule
-
-def describe(item: str, agenda: dict) -> dict | None:
-    match = item
-    while match not in agenda and '.' in match:
-        match = match.rsplit('.', 1)[0]
-    if match not in agenda:
-        return None
-    parts = match.split('.')
-    path = ['.'.join(parts[:i]) for i in range(1, len(parts) + 1)]
-    return {'agenda_item': item, 'matched_agenda_item': match, 'description': agenda[match],
-            'hierarchy': [{'agenda_item': p, 'description': agenda.get(p)} for p in path]}
-
 
 def break_name(start: int, end: int, named: list[dict]) -> str:
     best, overlap = 'Break', 0

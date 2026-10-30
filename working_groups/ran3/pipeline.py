@@ -11,8 +11,9 @@ import shutil
 from zoneinfo import ZoneInfo
 
 from shared import officials, timezones
+from shared.agenda import agenda_map
 from shared.renderer import generate_html
-from .document import agenda_map, extract_document, file_stem, offline_sheets, source_label
+from .document import extract_document, file_stem, offline_sheets, source_label
 from .llm import CellRefiner, gemini_request, has_key
 from .sessions import make_schedule
 from .sources import (DOWNLOADS, Bundle, client, config_hash, fetch_bundle, load_config, local_bundle,

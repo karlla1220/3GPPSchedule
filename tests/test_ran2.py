@@ -12,6 +12,7 @@ from docx import Document
 import httpx
 import pytest
 
+from shared.agenda import agenda_map
 from shared.renderer import generate_html
 from shared.schedule import load_schedule, save_schedule, time_to_minutes
 from working_groups.ran2 import document as docmod, lifecycle, pipeline, sessions, sources
@@ -30,7 +31,7 @@ def extract(name):
 
 
 def agenda(name):
-    return docmod.agenda_map((FIXTURES / name).read_bytes())
+    return agenda_map((FIXTURES / name).read_bytes())
 
 
 @pytest.fixture(scope='module')
@@ -204,7 +205,7 @@ def test_the_filename_decides_the_meeting_when_the_title_was_not_updated():
 
 def test_agenda_csv_skips_rows_it_cannot_read():
     data = '"1","Opening"\n"x","junk"\n"7.4","LP-WUS"\n"7.4"\n'.encode()
-    assert docmod.agenda_map(data) == {'1': 'Opening', '7.4': 'LP-WUS'}
+    assert agenda_map(data) == {'1': 'Opening', '7.4': 'LP-WUS'}
 
 
 # ---------------------------------------------------------------- cell rules

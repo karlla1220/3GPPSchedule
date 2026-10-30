@@ -110,16 +110,17 @@ def title_errors(prefix, title, source: str) -> list[str]:
 def written_errors(prefix, values, source: str, kind: str) -> list[str]:
     """Chairs and agenda items must be written in source, not inferred.
 
-    ``kind`` is "chair" (a whole name: "Erlin", not "Erl") or "agenda item"
-    (a whole number: "8.1" is not written in "8.10" or "18.1").
+    ``kind`` is "chair" (a whole name: "Erlin", not "Erl"), "agenda item"
+    (a whole number: "8.1" is not written in "8.10" or "18.1"), or another
+    name a WG checks the same way as a chair ("topic number" in RAN4).
     """
     errors = []
     for value in values:
         pattern = (rf'(?<![\d.]){re.escape(value)}(?!\d)' if kind == 'agenda item'
                    else rf'(?<!\w){re.escape(value)}(?!\w)')
         if not re.search(pattern, source):
-            errors.append(f'{prefix}: {kind} {value!r} is not written in its cited text'
-                          if kind == 'agenda item' else f'{prefix}: {kind} {value!r} is not a name written in the text')
+            errors.append(f'{prefix}: chair {value!r} is not a name written in the text' if kind == 'chair'
+                          else f'{prefix}: {kind} {value!r} is not written in its cited text')
     return errors
 
 
