@@ -8,7 +8,9 @@ against the text: every line is cited once, titles use the cited lines' own
 words, the chair is an initial written in the cell, agenda items are written
 there (a range "1-8" covers 2 to 7) and listed in agenda.csv, and the pieces
 are at least 30 minutes. The times are always the cell's: the time plan writes
-no others. Calls, retries and the cache are shared (``shared/llm_cells.py``).
+no others. A title is made from the cited lines by the rules, so a sign
+("Offline*") stays; the answer's title is used only when no line names the
+piece. Calls, retries and the cache are shared (``shared/llm_cells.py``).
 
 Two layouts can break instead of a cell. When the time plan table is not in
 its form, the table and the paragraphs around it are read whole
@@ -221,7 +223,7 @@ def check_document(result: DocResult, texts: dict[str, str], agenda: dict | None
             errors.append(f'{prefix}: refs must cite block ids')
             continue
         written = [line for ref in session.refs for line in block_lines(texts[ref])]
-        lines = [squash(line) for line in session.lines]
+        lines = block_lines('\n'.join(session.lines))
         if not lines or any(line not in written for line in lines):
             errors.append(f'{prefix}: lines must be lines of its cited blocks, copied exactly')
             continue
@@ -301,7 +303,7 @@ def read_document(data: bytes, name: str, model: str, agenda: dict | None = None
     for n, s in enumerate(result.sessions):
         first = not s.part or s.part[0] == 1
         cell = {'id': f'doc{n}', 'day': s.day, 'start': s.start, 'end': s.end, 'part': None,
-                'lines': [squash(line) for line in s.lines], 'struck': [], 'in_break': False, 'evening': False}
+                'lines': block_lines('\n'.join(s.lines)), 'struck': [], 'in_break': False, 'evening': False}
         pieces.append({'cell': cell, 'lines': cell['lines'], 'chair': s.chair, 'part': s.part,
                        'struck': [struck[r] for r in s.refs if r in struck] if first else [],
                        'title': clean(s.title) or ' '.join(s.title.split()),

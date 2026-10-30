@@ -399,7 +399,8 @@ def test_a_time_plan_out_of_its_form_is_read_whole_and_takes_the_rules_path(tmp_
     schedule = sessions.make_schedule(document, agenda('agenda_133bis.csv'), META_133BIS, [MID], {}, 'now',
                                       cbs=document['cbs'], chair=lambda label: NAMES.get(label, label))
     assert cells(schedule, 'Wednesday') == [
-        ('08:00', '09:00', None, '6G Offline', None, None, ['6G Offline*', '* if needed']),
+        # The title comes from the cited line, so the "*" the answer's title left out stays.
+        ('08:00', '09:00', None, '6G Offline*', None, None, ['6G Offline*', '* if needed']),
         ('09:00', '10:30', None, 'AIML RAN', '12', 'Lixiang XU', ['AIML RAN: AI 12', 'L']),
         # The CB block in the agenda's notes still gives the item, as for a cell the rules read.
         ('10:30', '11:00', None, '6G Offline', '10.3.1.3', None,
@@ -428,6 +429,37 @@ def test_a_document_answer_that_does_not_check_fails_the_build_as_before(tmp_pat
     with pytest.raises(docmod.LayoutError, match='could not read the time plan'):
         llm.read_document(broken_table(), MID, 'test-model', agenda('agenda_133bis.csv'), gemini, tmp_path)
     assert len(gemini.calls) == 2 and problem in gemini.calls[1]
+
+
+def test_a_title_comes_from_the_lines_and_the_answers_title_only_when_they_name_nothing():
+    cell = {'id': 'c', 'day': 'Friday', 'start': '08:00', 'end': '08:30', 'part': None, 'lines': []}
+    def name(lines, title):
+        return sessions.session_of(cell, lines, None, None, None, {}, title=title)['name']
+    assert name(['Offline*'], 'Offline') == 'Offline*'
+    assert name(['CBs*'], 'CBs') == 'CBs*'
+    assert name(['6G SI: AI 10.2'], '6G SI') == '6G SI'
+    assert name(['(self-funded dinner)'], 'self-funded dinner') == 'self-funded dinner'
+
+
+def test_two_rows_of_one_text_are_two_sessions(tmp_path):
+    # Friday's 08:00 and 08:30 rows both say "Offline*" in cells of their own: the chair set them apart.
+    rows = [{**doc_session('08:00', '08:30', 'Offline', ['t1:r1c5'], ['Offline*']), 'day': 'Friday'},
+            {**doc_session('08:30', '09:00', 'Offline', ['t1:r2c5'], ['Offline*']), 'day': 'Friday'}]
+    answer = {'days': ['Friday'], 'breaks': [], 'sessions': rows}
+    gemini = FakeGemini(answer)
+    document = llm.read_document(broken_table(), MID, 'test-model', agenda('agenda_133bis.csv'), gemini, tmp_path)
+    assert 'Only a merged cell' in gemini.calls[0]
+    schedule = sessions.make_schedule(document, agenda('agenda_133bis.csv'), META_133BIS, [MID], {}, 'now')
+    assert [row[:4] for row in cells(schedule, 'Friday')] == [('08:00', '08:30', None, 'Offline*'),
+                                                              ('08:30', '09:00', None, 'Offline*')]
+
+
+@pytest.mark.parametrize('lines', [['CBs*', '', 'END OF MEETING'], ['CBs*\n\nEND OF MEETING']])
+def test_a_blank_line_copied_from_a_cell_is_left_out(lines):
+    texts = {'t1:r6c0': '14:30', 't1:r8c0': '16:30', 't1:r7c5': 'CBs*\n\nEND OF MEETING'}
+    session = {**doc_session('14:30', '16:30', 'CBs', ['t1:r7c5'], lines), 'day': 'Friday'}
+    result = llm.DocResult.model_validate({'days': ['Friday'], 'breaks': [], 'sessions': [session]})
+    assert llm.check_document(result, texts, None) == []
 
 
 def double_citations(sessions):
@@ -632,7 +664,7 @@ def test_a_build_reads_new_layouts_with_the_llm_and_says_so_under_the_grid(offli
     schedule = pipeline.build_schedule(options, request=FakeGemini(WEDNESDAY, WEDNESDAY_SHEET))
     wednesday = schedule.days[0]
     assert [(s.room_ids, s.start_time, s.name) for s in wednesday.sessions][:3] == [
-        (['main'], '08:00', '6G Offline'), (['main'], '09:00', 'AIML RAN'),
+        (['main'], '08:00', '6G Offline*'), (['main'], '09:00', 'AIML RAN'),
         (['offline'], '09:00', 'Rel-20 Ambient IoT offline')]
     said = [b['text'] for b in schedule.supplements if b['type'] == 'paragraph']
     assert said == [llm.FALLBACK_NOTICE, llm.SHEET_NOTICE.format(sheets='Oct14 Wed')]
