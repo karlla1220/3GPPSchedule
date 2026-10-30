@@ -60,7 +60,7 @@ Examples (by item title; numbers change between meetings)
 - "6G waveform" -> the 6GR waveform item. Not A-IoT "R2D signals, channels, waveform and procedures", not ISAC "Waveform and frame structure".
 - "TBD" -> none.
 
-A label is a cell's title, followed by the cell's other lines after " ⏎ " when it has any; read the whole cell. Echo each label exactly as given.
+A label is a cell's title, followed by the cell's other lines after " ⏎ " when it has any; read the whole cell. Answer each label under its id.
 
 Use agenda item numbers exactly as listed. When both a parent and its children apply, you may give the parent alone. For each item give a one-line reason. When nothing applies, return an empty list and say why in one line."""
 

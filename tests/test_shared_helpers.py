@@ -160,3 +160,15 @@ def test_a_common_title_is_read_with_the_cells_own_lines(tmp_path):
     # Two cells with the same title but different lines get their own answers.
     assert [main.inferred_agenda_items, shan.inferred_agenda_items, bare.inferred_agenda_items] == [['8.2'], ['7.1'], []]
     assert len(asked) == 3
+
+
+def test_answers_match_their_labels_by_id_or_loosely_by_text():
+    from shared.agenda_labels import match_answers
+    labels = ['Return to ⏎ 6G system parameter ⏎ 6G spectrum', 'Return to ⏎ 5G RRM', 'MIMO']
+    answers = [{'id': 'L2', 'label': 'Return to / 5G RRM', 'items': []},
+               {'label': 'return to ⏎  6G system parameter  6G spectrum', 'items': [{'agenda_item': '8.2'}]},
+               {'id': 'L9', 'label': 'nothing like it', 'items': []}]
+    matched = match_answers(labels, answers)
+    # The id wins over a changed echo; a loose echo still finds its label; an unknown answer is dropped.
+    assert set(matched) == {labels[0], labels[1]}
+    assert matched[labels[0]]['items'] == [{'agenda_item': '8.2'}]
