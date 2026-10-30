@@ -122,7 +122,7 @@ def check_cell(answer: CellAnswer, item: dict) -> list[str]:
         errors += title_errors(label, session.title, source)
         if session.chair:
             errors += written_errors(label, split_chairs(session.chair), text, 'chair')
-        errors += written_errors(label, session.topics, source, 'topic number')
+        errors += written_errors(label, session.topics, spelled_topics(source), 'topic number')
         if session.part:
             k, n_parts = (session.part + [0, 0])[:2]
             if n_parts < 2 or not 1 <= k <= n_parts:
@@ -235,11 +235,22 @@ def squash(text: str) -> str:
     return ' '.join(text.split())
 
 
+def written_numbers(session: DocSession, texts: dict[str, str]) -> list[int]:
+    """A session's line numbers without blank lines: a blank between its lines says nothing."""
+    lines = texts[session.refs[0]].split('\n')
+    return sorted(i for i in session.line_numbers if 0 <= i < len(lines) and lines[i])
+
+
+def spelled_topics(text: str) -> str:
+    """The text with "102-A/B" also written as 102-A and 102-B, the numbers it stands for."""
+    return re.sub(r'\b(\d{3})-([A-Z])/([A-Z])\b', r'\g<0> \1-\2 \1-\3', text)
+
+
 def cited_lines(session: DocSession, texts: dict[str, str]) -> list[str]:
     """The lines a session cites: chosen lines of one cell, or whole cells."""
     if session.line_numbers is not None:
         lines = texts[session.refs[0]].split('\n')
-        return [lines[i] for i in sorted(session.line_numbers)]
+        return [lines[i] for i in written_numbers(session, texts)]
     return [line for ref in session.refs for line in texts[ref].split('\n')]
 
 
@@ -292,8 +303,8 @@ def check_document(result: DocResult, texts: dict[str, str]) -> list[str]:
             lines = texts[s.refs[0]].split('\n')
             if len(s.refs) != 1:
                 own.append(f'{prefix}: line_numbers need exactly one ref')
-            elif not s.line_numbers or any(not 0 <= i < len(lines) or not lines[i] for i in s.line_numbers):
-                own.append(f'{prefix}: line_numbers must be non-blank lines of {s.refs[0]}')
+            elif any(not 0 <= i < len(lines) for i in s.line_numbers) or not written_numbers(s, texts):
+                own.append(f'{prefix}: line_numbers must be lines of {s.refs[0]}, not only blank ones')
         if own:
             errors += own
             continue
@@ -301,7 +312,7 @@ def check_document(result: DocResult, texts: dict[str, str]) -> list[str]:
             cited_by.setdefault(ref, []).append(n)
         text = '\n'.join(cited_lines(s, texts))
         errors += title_errors(prefix, s.title, text)
-        errors += written_errors(prefix, s.topics, text, 'topic number')
+        errors += written_errors(prefix, s.topics, spelled_topics(text), 'topic number')
         errors += written_errors(prefix, split_chairs(s.chair), text, 'chair')
         if s.in_break and not any((b.start, b.end) == (s.start, s.end) for b in day.breaks):
             errors.append(f'{prefix}: a session held in a break takes that break\'s times')
@@ -315,7 +326,8 @@ def check_document(result: DocResult, texts: dict[str, str]) -> list[str]:
         else:
             placed.append((key, [n]))
     for ref, numbers in cited_by.items():
-        chosen = [result.sessions[i].line_numbers for i in numbers]
+        chosen = [None if result.sessions[i].line_numbers is None else written_numbers(result.sessions[i], texts)
+                  for i in numbers]
         if len(numbers) > 1 and (None in chosen or len(sum(chosen, [])) != len(set(sum(chosen, [])))):
             errors.append(f'sessions {numbers} share {ref}: each must give its own line_numbers')
     for key, numbers in blocks.items():
@@ -332,7 +344,7 @@ def check_document(result: DocResult, texts: dict[str, str]) -> list[str]:
         else:
             lines = texts[pieces[0].refs[0]].split('\n')
             for a, b in zip(pieces, pieces[1:]):
-                gap = range(max(a.line_numbers) + 1, min(b.line_numbers))
+                gap = range(max(written_numbers(a, texts)) + 1, min(written_numbers(b, texts)))
                 if not any(not lines[j] for j in gap):
                     errors.append(f'{label}: the source does not split pieces {a.part[0]} and {b.part[0]} '
                                   'with a blank line')

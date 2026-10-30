@@ -703,6 +703,24 @@ def test_document_answers_are_checked_against_the_slides(change, problem):
     assert any(problem in e for e in errors), errors
 
 
+def test_a_blank_line_among_a_sessions_lines_is_left_out():
+    data = without_monday_title()
+    texts = {k: v for k, v in outline_texts(data).items() if v.strip()}
+    answer = document_answer(texts)
+    session = next(s for s in answer['sessions'] if s.get('part') and '' in texts[s['refs'][0]].split('\n'))
+    blanks = [i for i, line in enumerate(texts[session['refs'][0]].split('\n')) if not line]
+    session['line_numbers'] = sorted(session['line_numbers'] + blanks)
+    assert llm.check_document(llm.DocResult.model_validate(answer), texts) == []
+    session['line_numbers'] = blanks
+    assert any('not only blank ones' in e for e in llm.check_document(llm.DocResult.model_validate(answer), texts))
+
+
+def test_a_shortened_topic_number_stands_for_both_numbers():
+    source = llm.spelled_topics('[102-A/B] System Parameter')
+    assert llm.written_errors('s', ['102-A', '102-B', '102-A/B'], source, 'topic number') == []
+    assert llm.written_errors('s', ['102-C'], source, 'topic number')
+
+
 def test_an_unchecked_document_answer_fails_the_build(tmp_path):
     data = without_monday_title()
     invented = document_answer(outline_texts(data))
