@@ -131,9 +131,12 @@ HELP_STEPS = (
              "The filter is kept for this meeting and is part of the link, so you can share what you see."},
     {"key": "pinch", "target": "grid", "scene": "pinch", "touch": True, "title": "Pinch to see the whole day",
      "text": "Pinch the grid itself to see every room at once. Spreading back, it stops at 100% for a moment."},
-    {"key": "agreements", "target": "#agreement-panel", "title": "Agreements below the grid",
+    {"key": "agreements", "target": "#agreement-panel:not(.tdoc-conclusions)", "title": "Agreements below the grid",
      "text": "Tapping a session shows the chair notes for its agenda item here. "
              "Parts added in the latest notes have a green bar."},
+    {"key": "conclusions", "target": "#agreement-panel.tdoc-conclusions", "title": "TDoc conclusions below the grid",
+     "text": "Tapping a session shows the TDocs of its agenda item and their conclusions here. "
+             "Rows changed in the latest chair file have a green bar."},
     {"key": "informal", "target": ".email-informal", "title": "Off-offline and FL whereabouts",
      "text": "Informal meetings announced on the email threads for the chosen day. "
              "They are not on the schedule; tapping a session marks its own."},
