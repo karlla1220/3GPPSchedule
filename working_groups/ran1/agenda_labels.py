@@ -23,6 +23,7 @@ from pathlib import Path
 
 from shared.agenda_labels import (  # noqa: F401 - the RAN1 names tests and callers use
     Judge,
+    cell_label,
     LABEL_JUDGE_MODEL,
     LABEL_JUDGE_THINKING,
     label_key,
@@ -59,6 +60,8 @@ Examples (by item title; numbers change between meetings)
 - "6G waveform" -> the 6GR waveform item. Not A-IoT "R2D signals, channels, waveform and procedures", not ISAC "Waveform and frame structure".
 - "TBD" -> none.
 
+A label is a cell's title, followed by the cell's other lines after " ⏎ " when it has any; read the whole cell. Echo each label exactly as given.
+
 Use agenda item numbers exactly as listed. When both a parent and its children apply, you may give the parent alone. For each item give a one-line reason. When nothing applies, return an empty list and say why in one line."""
 
 
@@ -78,7 +81,7 @@ def apply_inferred_agenda_items(
     judge: Judge | None = None,
 ) -> list:
     """Set ``inferred_agenda_items`` on sessions without an agenda item."""
-    if not meeting_id or not any(not s.agenda_item and label_key(s.name) for s in sessions):
+    if not meeting_id or not any(not s.agenda_item and cell_label(s) for s in sessions):
         return sessions
     return agenda_labels.apply_inferred_agenda_items(
         sessions, meeting_id, _agenda_for_meeting(meeting_id, agenda_path),

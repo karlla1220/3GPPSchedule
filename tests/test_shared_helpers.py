@@ -134,3 +134,29 @@ def test_every_wg_infers_agenda_items_for_cells_without_one(tmp_path, monkeypatc
     sessions[0].inferred_agenda_items = []
     agenda_labels.infer_for_schedule(schedule, 'ran4', 'RAN4', agenda, enabled=False)
     assert sessions[0].inferred_agenda_items == ['8.2'] and len(asked) == 1
+
+
+def test_a_common_title_is_read_with_the_cells_own_lines(tmp_path):
+    from shared import agenda_labels
+    from shared.schedule import Session
+
+    def cell(name, notes):
+        return Session(name=name, duration_minutes=60, start_time='09:00', end_time='10:00', day='Friday', notes=notes)
+
+    main = cell('Return to', ['Return to', '6G system parameter', '6G spectrum'])
+    shan = cell('Return to', ['Return to', '5G RRM', 'Demod'])
+    bare = cell('MIMO', [])
+    assert agenda_labels.cell_label(main) == 'Return to ⏎ 6G system parameter ⏎ 6G spectrum'
+    assert agenda_labels.cell_label(bare) == 'MIMO'
+    asked = []
+
+    def judge(labels, agenda):
+        asked.extend(labels)
+        return {labels[0]: {'items': [{'agenda_item': '8.2'}]}, labels[1]: {'items': [{'agenda_item': '7.1'}]},
+                labels[2]: {'items': []}}
+
+    agenda_labels.apply_inferred_agenda_items([main, shan, bare], 'ran4#121', {'7.1': 'RRM', '8.2': '6G'},
+                                              directory=tmp_path, wg_name='RAN4', judge=judge)
+    # Two cells with the same title but different lines get their own answers.
+    assert [main.inferred_agenda_items, shan.inferred_agenda_items, bare.inferred_agenda_items] == [['8.2'], ['7.1'], []]
+    assert len(asked) == 3
