@@ -23,6 +23,11 @@ def fresh_listings(tmp_path, monkeypatch):
     from shared import timezones
     monkeypatch.setattr(timezones, 'MAP_PATH', tmp_path / 'timezone_map.jsonl')
     monkeypatch.setattr(timezones, 'gemini_request', lambda *a, **k: None)
+    # Office outlines come from python-docx in tests, whether or not docx-cli is installed.
+    monkeypatch.setenv('DOCX_CLI', '')
+    # Notices for the build's report go to the test's own folder.
+    from shared import notices
+    monkeypatch.setattr(notices, 'PATH', tmp_path / 'notices.json')
     # Agenda labels of cells without an AI: never a live LLM call, never the repository's lists.
     from shared import agenda_labels
     monkeypatch.setattr(agenda_labels, 'LABEL_MAP_ROOT', tmp_path / 'agenda_label_map')

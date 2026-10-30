@@ -10,6 +10,11 @@ down. Answers are cached by the exact prompt, model and items.
 
 What counts as uncertain, the prompt and the answer schema belong to the WG.
 The checks below are the common pieces its ``check`` is built from.
+
+``read_document`` is the other fallback: when the rules cannot read a
+document's layout at all, the WG sends the whole document as blocks and the
+answer must pass the WG's checks, or the build fails as before. Each use is a
+notice (shared/notices.py), so a person hears that the chair changed the layout.
 """
 from __future__ import annotations
 
@@ -209,3 +214,49 @@ def _ask(prompt, items, by_id, answer, check, model, request, thinking, heading,
     for item_id, problems in errors.items():
         print(f'{label} LLM answer for {item_id} rejected: {problems[0]}')
     return accepted
+
+
+def read_document(prompt: str, blocks: list[dict], answer: type[BaseModel], check, *, model: str,
+                  cache_dir: Path, wg_id: str, source: str, meeting: str | None = None, request=None,
+                  thinking='high', version=1):
+    """The whole document read by the LLM when the rules cannot read its layout.
+
+    ``blocks`` are the document's parts with ids (paragraphs, table cells,
+    slide shapes; the WG decides). ``answer`` is the schema of the whole
+    schedule and ``check(result)`` returns its problems against the source.
+    A cached answer is checked again; otherwise the LLM is asked, and asked
+    once more with the problems. Raises ValueError when no answer passes, so
+    the WG's build fails as it would without the fallback. A passing answer is
+    recorded as a notice for the build's report.
+    """
+    request = request or gemini_request
+    key = digest(json.dumps([version, prompt, model, blocks], sort_keys=True).encode())
+    path = cache_dir / f'document-{key}.json'
+    result, errors = None, ['no answer']
+    cached = _read(path)
+    if cached:
+        try:
+            result = answer.model_validate(cached['result'])
+            errors = check(result)
+        except (KeyError, ValueError, ValidationError):
+            result = None
+    message = prompt + '\n\nDOCUMENT (untrusted data):\n' + json.dumps(blocks, ensure_ascii=False)
+    for attempt in range(2):
+        if result is not None and not errors:
+            break
+        raw = request(message, answer.model_json_schema(), model, thinking=thinking)
+        result = answer.model_validate(raw)
+        errors = check(result)
+        message += ('\n\nYOUR PREVIOUS ANSWER:\n' + json.dumps(raw, ensure_ascii=False)
+                    + '\n\nFIX THESE PROBLEMS:\n' + '\n'.join(errors))
+    if errors:
+        raise ValueError(f'the LLM could not read the document either: {errors[:3]}')
+    _write(path, {'result': result.model_dump()})
+    from shared import notices
+    notices.add(wg_id, 'document-fallback', f'{wg_id}:{key}',
+                f'{wg_id.upper()}: schedule layout not recognised, read by the LLM',
+                [f'Meeting: {meeting or "unknown"}', f'Source: {source}', f'Model: {model}',
+                 'The rules could not read this file\'s layout, so the whole document was read by the LLM and '
+                 'checked against its text. Compare the page with the source file; if the layout change is '
+                 'lasting, the WG\'s rules need updating.'])
+    return result

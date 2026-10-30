@@ -11,7 +11,6 @@ the rules' reading stands (cells) or the build fails and the last page stays
 from __future__ import annotations
 
 import io
-import json
 from pathlib import Path
 import re
 
@@ -23,7 +22,7 @@ from shared.llm_cells import check_times, gemini_request, title_errors, written_
 from shared.schedule import MIN_PART_MINUTES, time_to_minutes
 from .document import DAYS, LayoutError, W, _grid, cell_lines, identify, paragraph_text, squash, supplements
 from .sessions import known, line_items
-from .sources import CACHE, digest, read_json, write_json
+from .sources import CACHE
 
 PROMPTS = Path(__file__).parent / 'prompts'
 VERSION = 1
@@ -241,28 +240,12 @@ def read_document(data: bytes, name: str, model: str, agenda: dict | None = None
     texts = {b['id']: b['text'] for b in blocks if 'text' in b}
     texts.update({c['id']: c['text'] for b in blocks for c in b.get('cells', []) if c['text']})
     prompt = (PROMPTS / 'document.md').read_text(encoding='utf-8')
-    key = digest(json.dumps([VERSION, prompt, model, blocks], sort_keys=True).encode())
-    path = cache_dir / f'document-{key}.json'
-    result, errors = None, ['no answer']
-    cached = read_json(path)
-    if cached:
-        try:
-            result = DocResult.model_validate(cached['result'])
-            errors = check_document(result, texts, agenda)
-        except (KeyError, ValueError):
-            result = None
-    message = prompt + '\n\nDOCUMENT (untrusted data):\n' + json.dumps(blocks, ensure_ascii=False)
-    for attempt in range(2):
-        if result is not None and not errors:
-            break
-        raw = request(message, DocResult.model_json_schema(), model, thinking='high')
-        result = DocResult.model_validate(raw)
-        errors = check_document(result, texts, agenda)
-        message += ('\n\nYOUR PREVIOUS ANSWER:\n' + json.dumps(raw, ensure_ascii=False)
-                    + '\n\nFIX THESE PROBLEMS:\n' + '\n'.join(errors))
-    if errors:
-        raise LayoutError(f'The LLM could not read the Session Plan either: {errors[:3]}')
-    write_json(path, {'result': result.model_dump()})
+    try:
+        result = llm_cells.read_document(prompt, blocks, DocResult, lambda r: check_document(r, texts, agenda), model=model,
+                                         cache_dir=cache_dir, wg_id='sa2', source=name, meeting=meeting,
+                                         request=request, version=VERSION)
+    except ValueError as exc:
+        raise LayoutError(f'The LLM could not read the Session Plan either: {exc}') from exc
     print(f'[sa2] Table not the template; {len(result.sessions)} sessions read by {model}')
 
     every = [r.id for r in result.rooms]
