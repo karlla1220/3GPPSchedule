@@ -311,6 +311,8 @@ def read_document(prompt: str, blocks: list[dict], answer: type[BaseModel], chec
             raw = request(message, answer.model_json_schema(), model, thinking=thinking)
             result = answer.model_validate(raw)
             errors = check(result)
+            if errors:
+                print(f'[{wg_id}] Round {attempt + 1}: {len(errors)} problems, first: {errors[0]}', flush=True)
             message += ('\n\nYOUR PREVIOUS ANSWER:\n' + json.dumps(raw, ensure_ascii=False)
                         + '\n\nFIX THESE PROBLEMS:\n' + '\n'.join(errors))
     except (CostlyFailure, ValidationError) as exc:
