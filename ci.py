@@ -22,7 +22,7 @@ PLAN_PATH = Path('.ci/plan.json')
 # Folder listings check fetched; build reads the same view instead of listing again.
 LISTINGS_PATH = Path('.ci/listings.json')
 COMMON_INPUTS = tuple(map(Path, ('shared/schedule.py', 'shared/lifecycle.py',
-    'shared/portal_meetings.py', 'shared/timezones.py', 'shared/officials.py', 'shared/llm_cells.py', 'shared/agenda.py', 'shared/agenda_labels.py', 'shared/titles.py', 'shared/docx_text.py', 'shared/json_files.py', 'shared/meeting_folders.py', 'shared/docx_html.py', 'shared/docx_math.py', 'shared/metafile_images.py', 'shared/wmf2svg.py', 'shared/vendor', 'shared/ftp_transport.py', 'shared/remote_files.py', 'working_groups/registry.py', 'pyproject.toml', 'uv.lock')))
+    'shared/portal_meetings.py', 'shared/timezones.py', 'shared/officials.py', 'shared/llm_cells.py', 'shared/agenda.py', 'shared/agenda_labels.py', 'shared/titles.py', 'shared/docx_text.py', 'shared/json_files.py', 'shared/office_outline.py', 'shared/notices.py', 'shared/meeting_folders.py', 'shared/docx_html.py', 'shared/docx_math.py', 'shared/metafile_images.py', 'shared/wmf2svg.py', 'shared/vendor', 'shared/ftp_transport.py', 'shared/remote_files.py', 'working_groups/registry.py', 'pyproject.toml', 'uv.lock')))
 SITE_INPUTS = tuple(map(Path, ('shared/renderer.py', 'shared/agreement_assets.py', 'shared/topic_references.py', 'shared/navigation.py',
     'shared/site_config.py', 'shared/page.py', 'templates', 'build.py', 'ci.py')))
 
@@ -283,7 +283,7 @@ def outputs(values):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('command', choices=['check', 'build', 'stage'])
+    parser.add_argument('command', choices=['check', 'build', 'stage', 'notify'])
     parser.add_argument('--action', choices=['check-build-deploy', 'build-deploy', 'force-deploy'], default='check-build-deploy')
     parser.add_argument('--site-config', type=Path, default=Path('site.json'))
     args = parser.parse_args()
@@ -293,6 +293,12 @@ def main():
     elif args.command == 'build':
         result = build_site(args.action, args.site_config)
         outputs({key: result[key] for key in ['site_changed', 'has_errors']})
+    elif args.command == 'notify':
+        # Things a person should look at though the build passed (shared/notices.py).
+        from shared import notices
+        server, repository, run_id = (os.environ.get(k) for k in ('GITHUB_SERVER_URL', 'GITHUB_REPOSITORY', 'GITHUB_RUN_ID'))
+        run_url = f'{server}/{repository}/actions/runs/{run_id}' if server and repository and run_id else None
+        print(f'Posted {notices.report(run_url, os.environ.get("GITHUB_REPOSITORY_OWNER"))} notice(s)')
     else:
         import subprocess
         # Only paths owned by the build are staged; deletions are included.

@@ -11,18 +11,17 @@ but never takes it down. Answers are cached by their exact input.
 from __future__ import annotations
 
 import io
-import json
 from pathlib import Path
 
 from docx import Document
 from pydantic import BaseModel
 
 from shared import llm_cells
-from shared.llm_cells import check_times, citation_errors, gemini_request, has_key, title_errors, written_errors
+from shared.llm_cells import check_times, citation_errors, gemini_request, has_key, title_errors, written_errors  # noqa: F401 - pipeline imports has_key from here
 from shared.officials import join_chairs, split_chairs
 from .document import DAYS, LayoutError, clock, extract_breaks, identify, outline, supplements
 from .sessions import CLOCK_TEXT, COMPANIES, is_agenda, meaningful, parse_marker, written_times
-from .sources import CACHE, digest, read_json, write_json
+from .sources import CACHE
 
 PROMPTS = Path(__file__).parent / 'prompts'
 VERSION = 1
@@ -207,28 +206,12 @@ def read_document(data: bytes, name: str, model: str, request=None, cache_dir: P
     texts = {b['id']: b['text'] for b in blocks if 'text' in b}
     texts.update({c['id']: c['text'] for b in blocks for row in b.get('rows', []) for c in row})
     prompt = (PROMPTS / 'document.md').read_text(encoding='utf-8')
-    key = digest(json.dumps([VERSION, prompt, model, blocks], sort_keys=True).encode())
-    path = cache_dir / f'document-{key}.json'
-    result, errors = None, ['no answer']
-    cached = read_json(path)
-    if cached:
-        try:
-            result = DocResult.model_validate(cached['result'])
-            errors = check_document(result, texts)
-        except (KeyError, ValueError):
-            result = None
-    message = prompt + '\n\nDOCUMENT (untrusted data):\n' + json.dumps(blocks, ensure_ascii=False)
-    for attempt in range(2):
-        if result is not None and not errors:
-            break
-        raw = request(message, DocResult.model_json_schema(), model, thinking='high')
-        result = DocResult.model_validate(raw)
-        errors = check_document(result, texts)
-        message += ('\n\nYOUR PREVIOUS ANSWER:\n' + json.dumps(raw, ensure_ascii=False)
-                    + '\n\nFIX THESE PROBLEMS:\n' + '\n'.join(errors))
-    if errors:
-        raise LayoutError(f'The LLM could not read the schedule either: {errors[:3]}')
-    write_json(path, {'result': result.model_dump()})
+    try:
+        result = llm_cells.read_document(prompt, blocks, DocResult, lambda r: check_document(r, texts), model=model,
+                                         cache_dir=cache_dir, wg_id='ran2', source=name, meeting=meeting,
+                                         request=request, version=VERSION)
+    except ValueError as exc:
+        raise LayoutError(f'The LLM could not read the schedule either: {exc}') from exc
     print(f'[ran2] Table layout not recognised; {len(result.sessions)} sessions read by {model}')
 
     rooms = [{'id': r.id, 'name': r.name, 'label': r.name} for r in result.rooms]

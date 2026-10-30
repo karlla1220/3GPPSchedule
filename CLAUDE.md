@@ -253,6 +253,12 @@ WG가 원본에서 옮긴 표 밖 글(`Schedule.supplements`, `topic_references.
 
 - **거르지 않는다.** 원본이 적은 회의 접속 정보(Teams 링크, meeting ID, passcode)도 그대로 둔다. 3GPP FTP와 list.etsi.org에 이미 공개된 원문이고, 참석자에게는 시간표 바로 아래에서 찾는 편이 오히려 편하다(2026-10-30 결정).
 
+## 양식을 알아보지 못한 문서와 빌드 알림
+
+- **규칙이 양식을 읽지 못하면 문서 전체를 LLM이 읽는다(`llm_cells.read_document`).** 답은 WG의 검사(시각은 원문에 있음, 인용한 id의 글, 겹침 없음)를 통과할 때만 쓰고, 아니면 빌드가 실패해 직전 페이지가 남는다.
+- **LLM에 넘기는 문서는 `shared/office_outline.py`의 블록이다.** DOCX는 docx-cli AST(CI가 고정 판을 받는다, 없으면 python-docx), PPTX·XLSX는 직접 걷는다. 양식이 깨진 경우를 위해 글자 순서, 병합, 취소선·색·바탕을 모두 담는다(README "LLM 폴백").
+- **이 폴백이 쓰이면 사람에게 알린다.** 의장이 양식을 바꿨다는 신호다. 빌드가 알림을 남기고(`shared/notices.py`), 워크플로가 WG별 GitHub 이슈 댓글로 올려 저장소 주인에게 이메일이 간다. 같은 답을 다시 쓰는 빌드는 다시 알리지 않는다. 빌드 실패는 워크플로 실패 메일 그대로다.
+
 ## 헤더의 미팅 전환
 
 HTML은 `shared/navigation.py`(`render_navigation`), 동작은 `templates/wg-switch.js`, 스타일은 `templates/schedule.css`의 `.wg-switch` 구획이다. 비교한 시안과 결정 과정은 `WG_SWITCH_DESIGN.md`에 있다.

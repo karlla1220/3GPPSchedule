@@ -157,6 +157,8 @@ shared/
   titles.py                    # 셀 제목의 괄호 떼기(RAN2 규칙, 모든 WG)
   docx_text.py                 # DOCX 문단의 받아들인 글자(변경 추적·취소선)
   json_files.py                # 상태 JSON 읽기·쓰기
+  office_outline.py            # 문서 전체 LLM 폴백에 넘길 DOCX(docx-cli)·PPTX·XLSX 블록
+  notices.py                   # 빌드가 사람에게 알릴 것 → ci.py notify가 GitHub 이슈 댓글로
   meeting_folders.py           # 아카이브의 미팅 폴더 찾기
 # WG별 결과/상태는 아래 폴더에 격리
 docs/ran1/                     # index.html, schedule.json, slot_state/, 상태 JSON
@@ -442,6 +444,21 @@ Gemini가 다시 읽되, 원문으로 확인되는 답만 씁니다(아래 "LLM 
 시각 · 제목 낱말 · 원문에 적힌 의장과 AI · 인용 줄 검사도 공용(`check_times`, `title_errors`, `written_errors`, `citation_errors`)입니다.
 무엇을 불확실한 항목으로 볼지, 프롬프트, 답의 모양(pydantic 모델, `id` 필드 필수)과 그 검사는 WG가 정합니다.
 캐시 파일은 `<WG 캐시>/<이름>-<프롬프트·모델·항목 해시>.json`이고, 요청이 실패하면 아무 답도 쓰지 않고 캐시도 남기지 않습니다.
+
+양식을 알아보지 못한 문서 전체를 읽는 것은 `shared/llm_cells.read_document`입니다(요청, 캐시, 검사 → 오류를 붙여 한 번 더 묻기).
+WG는 문서를 블록으로 넘기고(`shared/office_outline.py`), 답의 모양과 검사, 결과를 세션으로 바꾸는 일을 맡습니다.
+
+- **블록**: 양식이 깨진 문서라서 어떤 배치에서도 필요한 것을 다 담습니다. 순서대로의 글자, 병합·폭이 있는 표 칸,
+  의장이 뜻을 싣는 표시(취소선 글은 `struck`에 따로, 글자색, 칸 바탕, 형광펜)이고, 조각마다 답이 인용할 id가 있습니다.
+  - DOCX는 docx-cli AST(`docx read --ast`)로 읽습니다. 글상자를 읽는 순서, 변경 추적, 병합, 기호 문자가 한 트리에 있습니다.
+    CI는 v0.28.0을 SHA-256으로 고정해 받아 캐시하고(`DOCX_CLI`), 없으면(로컬, 테스트) python-docx로 같은 블록을 만듭니다.
+    id는 docx-cli 위치 표지(`p12`, `t1:r3c2`)입니다.
+  - PPTX는 슬라이드마다 모든 도형·그룹·표를 그리는 순서대로, 슬라이드 안 위치(%)와 표 칸 안 run 서식까지 읽습니다(`s2:sh5:r3c2`).
+  - XLSX는 모든 시트의 비지 않은 칸과 병합 범위, 칸의 취소선·글자색·바탕입니다(`Sheet1!B4`).
+  - 도구를 고른 근거는 `ref_docs/office-document-readers.md`입니다(PPTX·XLSX는 외부 도구가 더 주는 것이 없었습니다).
+- **알림**: 문서 전체 해석이 쓰인 빌드는 알림을 남기고(`shared/notices.py`), 워크플로의 `ci.py notify`가
+  WG별 GitHub 이슈(`RAN4: schedule layout not recognised, read by the LLM`)에 댓글로 올립니다. 저장소 주인에게 이메일이 갑니다.
+  같은 답(캐시)을 다시 쓰는 다음 빌드는 다시 알리지 않습니다. 빌드 실패는 지금처럼 워크플로 실패 메일로 갑니다.
 
 
 규칙이 기본이고, Gemini(`config.json`의 `model`, 기본 `gemini-3.8-flash`)는 두 경우에만 씁니다.

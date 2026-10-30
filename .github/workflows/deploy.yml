@@ -19,6 +19,7 @@ permissions:
   contents: write
   pages: write
   id-token: write
+  issues: write   # build notices (ci.py notify) reach the owner by email
 
 # Share this lock with pages.yml. Do not cancel a parser or a deployment
 # when the next periodic check arrives.
@@ -105,6 +106,24 @@ jobs:
           distribution: temurin
           java-version: '21'
       - run: uv run python scripts/setup_wmf2svg.py
+      # docx-cli reads a DOCX whose layout the rules do not know for the LLM
+      # fallback (shared/office_outline.py). Pinned by version and SHA-256.
+      - name: Restore docx-cli
+        id: docx-cli
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/docx-cli
+          key: docx-cli-0.28.0-linux-x64
+      - name: Install docx-cli
+        run: |
+          bin="$HOME/.cache/docx-cli/docx"
+          if [ ! -x "$bin" ]; then
+            mkdir -p "$(dirname "$bin")"
+            curl -sSfL -o "$bin" https://github.com/kklimuk/docx-cli/releases/download/v0.28.0/docx-linux-x64
+          fi
+          echo "e540eacc28dff30a61d502d1a24b7ebde53586295fd5c6a213e74458c4a0ad92  $bin" | sha256sum -c -
+          chmod +x "$bin"
+          echo "DOCX_CLI=$bin" >> "$GITHUB_ENV"
       - name: Receive build plan and staged documents
         if: needs.check.outputs.build_required == 'true'
         uses: actions/download-artifact@v4
@@ -149,6 +168,12 @@ jobs:
             git commit -m "Update WG schedules [skip ci]"
             git push
           fi
+      - name: Post build notices
+        if: always() && !cancelled() && steps.build.outcome != 'skipped'
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: uv run python ci.py notify
       - name: Report failed WG builds
         if: steps.build.outputs.has_errors == 'true'
         run: |

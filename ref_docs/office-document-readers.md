@@ -1,6 +1,8 @@
 # Office 문서 읽기 도구 평가 (추후 고려, 2026-10-30)
 
-새 WG(SA1·SA2·RAN3 DOCX, RAN4 PPTX, RAN3·RAN4 XLSX)를 붙이면서 외부 CLI로 Office 문서를 읽을지 시험했다. **지금은 쓰지 않는다.** DOCX는 python-docx, PPTX는 python-pptx/lxml, XLSX는 openpyxl로 읽는다. 아래는 다시 볼 때의 출발점이다.
+새 WG(SA1·SA2·RAN3 DOCX, RAN4 PPTX, RAN3·RAN4 XLSX)를 붙이면서 외부 CLI로 Office 문서를 읽을지 시험했다. 규칙이 읽는 경로는 그대로 python-docx, zipfile/lxml(PPTX), openpyxl이다.
+
+**2026-10-30 결정: 문서 전체 LLM 폴백의 DOCX 입력에는 docx-cli `read --ast`를 쓴다**(`shared/office_outline.py`, CI는 v0.28.0을 SHA-256으로 고정). PPTX·XLSX는 아래 결과대로 외부 도구 없이 직접 걷는다. 아래는 그 근거다.
 
 ## 시험한 것
 
