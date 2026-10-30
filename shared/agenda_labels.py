@@ -1,7 +1,7 @@
 """Agenda items for cells whose schedule gives no agenda number (CLAUDE.md "AI 없는 셀의 AI 추정").
 
 A cell such as "MIMO" or "6G system parameter" names its topic but not its
-agenda item. An LLM reads the label against this meeting's agenda and names the
+agenda item. An LLM reads the cell (its title and notes) against this meeting's agenda and names the
 items a delegate would read it as. The answers are kept per WG and meeting in
 ``docs/<wg>/agenda_label_map/<meeting>.jsonl``, one line per label, including
 labels that name no item ("TBD"), so a label is asked once and keeps its answer
@@ -39,6 +39,8 @@ Exclude
 - Items where the label's word appears only as one aspect of a different subject.
 - Maintenance items, unless the label says maint/maintenance, names an earlier release than the current one, or names the maintenance item's own subject.
 - Labels that name no agenda subject: placeholders (TBD, To be assigned by <name>), running order (Sweep, Revisions, Session reports, Any other open issues), breaks and meals. These get no items.
+
+A label is a cell's title, followed by the cell's other lines after " ⏎ ". Read the whole cell: a common title such as "Plenary" or "Return to" takes its subjects from the lines after it. Echo each label exactly as given.
 
 Use agenda item numbers exactly as listed. When both a parent and its children apply, you may give the parent alone. For each item give a one-line reason. When nothing applies, return an empty list and say why in one line."""
 
@@ -78,6 +80,22 @@ Judge = Callable[[list[str], dict[str, str]], dict[str, dict]]
 def label_key(name: str | None) -> str:
     """The label as written, with runs of whitespace collapsed."""
     return " ".join((name or "").split())
+
+
+LINE_BREAK = " ⏎ "
+
+
+def cell_label(session) -> str:
+    """What the LLM reads for a cell: its title, then its other source lines.
+
+    A title alone is often a common word shared by cells that hold different
+    things (SA1 "Plenary", RAN4 "Return to"); the cell's notes say what it
+    holds. A cell without notes (most RAN1 cells) is its title, as before.
+    """
+    title = label_key(session.name)
+    lines = [label_key(n) for n in getattr(session, "notes", None) or []]
+    lines = [n for n in dict.fromkeys(lines) if n and n.casefold() != title.casefold()]
+    return LINE_BREAK.join([title, *lines]) if title else ""
 
 
 def label_map_dir(wg_id: str) -> Path:
@@ -181,7 +199,7 @@ def apply_inferred_agenda_items(
     # A WG's own rules may already have found items for a cell the schedule
     # numbers nowhere (RAN4 candidate lists, SA1 topic names); those stand.
     unnumbered = [s for s in sessions
-                  if not s.agenda_item and not s.inferred_agenda_items and label_key(s.name)]
+                  if not s.agenda_item and not s.inferred_agenda_items and cell_label(s)]
     if not meeting_id or not unnumbered:
         return sessions
     if not agenda:
@@ -194,7 +212,7 @@ def apply_inferred_agenda_items(
     path = label_map_path(meeting_id, directory)
     mapping = load_label_map(path)
     new_labels = list(dict.fromkeys(
-        label_key(s.name) for s in unnumbered if label_key(s.name) not in mapping
+        cell_label(s) for s in unnumbered if cell_label(s) not in mapping
     ))
     if new_labels and ask:
         print(f"  Mapping {len(new_labels)} new label(s) to agenda items (Gemini)...")
@@ -233,7 +251,7 @@ def apply_inferred_agenda_items(
             print(f"  Recorded {len(lines)} label(s) in {path}")
 
     for session in unnumbered:
-        session.inferred_agenda_items = list(mapping.get(label_key(session.name), []))
+        session.inferred_agenda_items = list(mapping.get(cell_label(session), []))
     return sessions
 
 
