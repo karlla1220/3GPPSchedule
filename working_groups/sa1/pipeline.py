@@ -11,6 +11,7 @@ import shutil
 from zoneinfo import ZoneInfo
 
 from shared import llm_cells, officials, timezones
+from shared.agenda_labels import infer_for_schedule
 from shared.renderer import generate_html
 from .document import extract_agenda, extract_document
 from .llm import CellRefiner
@@ -124,6 +125,8 @@ def build_schedule(options=None, *, request=None, history=None):
     schedule = make_schedule(document, metadata, [f['name'] for f in files],
                              {f['name']: source_label(f['name']) for f in files}, generated,
                              refine=refine, resolve_chair=resolve)
+    # Cells the schedule gives no AI: an LLM reads their label for the filter (shared/agenda_labels.py).
+    infer_for_schedule(schedule, 'sa1', 'SA1', document['agenda'], enabled=not offline and request is not None)
     # No checkpoint before parsing and rendering both succeed.
     generate_html(schedule)
     state = {k: v for k, v in manifest.items() if k != 'portal_metadata'}

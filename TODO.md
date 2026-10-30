@@ -68,3 +68,15 @@
 - 캐시 miss/불일치 시에만 check job이 헤더가 아닌 전 본체를 streaming GET한다 (수백 KB 범위).
 - Error (404/삭제/transport) URL → warning + ignore; changed에도 state에도 영향 없음. ETSI wa.exe URL은 메시지마다 새로 생성되므로 config 갱신 = 새 URL = state 미존재 → changed(정상).
 - 동일 URL의 원격 본문이 URL 변경 없이 바뀌는 경우에는 커밋된 캐시만으로 감지할 수 없다. ETSI `wa.exe`는 메시지마다 새 URL을 생성하므로 URL 변경을 주된 변경 신호로 사용한다.
+
+
+## 조사할 것: 제목 괄호 규칙 (2026-10-30)
+
+`shared/titles.py`의 `clean`은 둥근 괄호를 내용과 상관없이 모두 뗀다(CLAUDE.md "정보 위계"). 새 WG에서 이 규칙이 제목을 망가뜨리는 예가 나왔다.
+안쪽 괄호(괄호 안의 괄호, 낱말을 감싼 짝 없는 괄호)는 지우면 안 되는 것으로 보인다. 원본 예를 모아 규칙을 다시 정한다.
+
+- RAN4 #120bis 월 Gene 17:00 `[NTN (cont)` → `[NTN`: `(cont)`만 빠지고 짝 없는 `[`가 남는다.
+- RAN4 #120bis 목 Main 14:30 2/2 `6G AI (…): LS` → `6G AI : LS`: 콜론 앞 공백이 남는다.
+- RAN3 `6G Offline (CB#8)` → `6G Offline`, SA2 #177 r11 `Drafting for (Option 1, 2, 3)` → `Drafting for`: 칸을 가르던 것이 사라진다(지금은 예외 없이 뗀다).
+- RAN2에서도 제목이 잘못 떼진 셀이 있었다. Note가 원문을 지키므로 Note에서 머리 줄을 빼지 않는다(CLAUDE.md "Note").
+- 원본 대조 자료: 각 survey worktree의 `research/<wg>/report/decisions/`(RAN4 R4).

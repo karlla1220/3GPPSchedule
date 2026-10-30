@@ -51,6 +51,17 @@ def full_name(given: str, family: str) -> str:
     return f'{given} {family}'.strip()
 
 
+def join_chairs(names) -> str | None:
+    """Several chairs of one session: "Leo / Jinqiang". A comma would read as
+    "FAMILY, Given", one person, the way officials write names."""
+    return ' / '.join(dict.fromkeys(n.strip() for n in names if n and n.strip())) or None
+
+
+def split_chairs(text: str | None) -> list[str]:
+    """The names in a chair field, whether joined by "/" or by "," (an LLM answer)."""
+    return [n.strip() for n in re.split(r'\s*[/,]\s*', text or '') if n.strip()]
+
+
 def _date(text: str) -> date | None:
     return date.fromisoformat(text) if re.fullmatch(r'\d{4}-\d{2}-\d{2}', text) else None
 

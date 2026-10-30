@@ -86,6 +86,8 @@
     색과 크기가 같은 두 정보가 붙어 있으면 AI 목록이 어디서 끝나는지 보이지 않는다.
     노트가 Chair 줄밖에 쓸 수 없는 셀은 노트와 가로줄을 함께 숨긴다(`.beside-chair`). 줄만 남지 않게 한다.
   - 제목과 똑같은 줄은 뺀다(`_cell_notes`). 셀과 팝업이 같은 목록을 쓴다.
+  - AI 번호만 있는 줄도 그 번호가 모두 AI 줄에 있으면 뺀다(RAN3 `AI32, AI6`, `[7.8.1], [7.8.2]`). 같은 번호를 두 번 보일 뿐이다.
+    머리 줄(`AIML RAN: AI 12`)은 제목과 겹쳐 보여도 남긴다. 제목은 괄호를 떼며 낱말을 잃었을 수 있어서, 원문은 Note가 지킨다. 낱말이 하나라도 붙은 줄(`10.3.1.1 (cont.)`)도 남긴다.
   - 노트가 있으면 AI 줄은 한 줄로 줄이고 말줄임한다(`.has-notes`). 긴 AI 목록이 노트 자리를 먹지 않게 한다.
   - 줄 수는 `renderer.py`의 `_notes_html`이 높이 예산으로 센다(제목·시간·AI·가로줄을 뺀 나머지 ÷ 14.175px).
     `max-height`가 줄 상자의 정수배라서 노트가 줄 중간에서 잘리지 않는다. 남는 줄이 1 미만이면 넣지 않는다.
@@ -242,6 +244,12 @@ python3 -m http.server 8765 -d /tmp/out   # http://localhost:8765/ran1/
 ```
 
 데스크톱 폭과 모바일 폭(약 420px)을 모두 확인한다.
+
+## 그리드 아래 원문 구획
+
+WG가 원본에서 옮긴 표 밖 글(`Schedule.supplements`, `topic_references.render_supplements`)이다. "Additional information"으로 보인다.
+
+- **거르지 않는다.** 원본이 적은 회의 접속 정보(Teams 링크, meeting ID, passcode)도 그대로 둔다. 3GPP FTP와 list.etsi.org에 이미 공개된 원문이고, 참석자에게는 시간표 바로 아래에서 찾는 편이 오히려 편하다(2026-10-30 결정).
 
 ## 헤더의 미팅 전환
 
@@ -426,6 +434,7 @@ HTML과 단계 문구는 `shared/page.py`(`render_help`, `HELP_STEPS`), 동작�
 - **`resolve`는 적힌 것만 푼다.** 이름이 어느 순서든(`XU Lixiang`, `Lixiang XU`, `XU, Lixiang`) 맞으면 그 사람이다.
   한 낱말(`Sean`, `Fong`)은 그 낱말을 이름이나 성으로 가진 사람이 하나뿐일 때만이다. RAN4 `Yang`은 TANG Yang과 YANG Shan 둘 다라서 별칭 표가 정한다.
   별칭은 officials가 아닌 세션 의장도 가리킬 수 있다(RAN3 `G` → `CAO, Gen`). 모르는 표기는 `None`이고, WG는 적힌 그대로 보인다.
+- 한 세션의 의장이 여럿이면 ` / `로 잇는다(`Leo / Jinqiang`, `officials.join_chairs`). 쉼표는 `FAMILY, Given` 한 사람으로 읽힌다. LLM 답의 쉼표도 읽을 때 같은 모양으로 바꾼다(`split_chairs`).
 - 이름은 `Given FAMILY`(`Lixiang XU`)이고 성은 3GPP의 대문자를 따른다. 3GPP가 이름까지 대문자로 적은 사람(`WEI, QUN`)은 이름을 첫 글자만 대문자로 둔다(`Qun WEI`, `full_name`). 그래야 성이 어느 낱말인지 보이고, 셀은 이름만 보인다(위 "Chair").
 
 ## Experimental WG
@@ -460,10 +469,13 @@ RAN Plenary, RAN1, RAN2 밖의 WG는 `site.json`의 WG 항목에 `"experimental"
   - 저장된 필터를 되살리면 URL에도 다시 적는다. 주소를 복사하면 보이는 화면 그대로 공유된다.
   - Clear는 저장된 필터도 지운다.
 
-## AI 없는 셀의 AI 추정 (RAN1)
+## AI 없는 셀의 AI 추정 (모든 WG)
 
-`MIMO`, `AI/ML`처럼 일정에 AI 번호 없이 주제만 적힌 셀이 있다. 이 셀도 필터에 걸리고 Agreement 패널이 열리도록, 셀 이름이 가리키는 agenda 항목을 `Session.inferred_agenda_items`에 둔다. 코드는 `working_groups/ran1/agenda_labels.py`다.
+`MIMO`, `AI/ML`, RAN4 `6G system parameter`처럼 일정에 AI 번호 없이 주제만 적힌 셀이 있다. 이 셀도 필터에 걸리도록(RAN1은 Agreement 패널도 열리도록), 셀 이름이 가리키는 agenda 항목을 `Session.inferred_agenda_items`에 둔다.
+RAN1에서 시작해 모든 WG가 쓴다. 코드는 `shared/agenda_labels.py`이고, WG 파이프라인은 schedule을 만든 뒤 `infer_for_schedule`을 부른다. RAN1(`working_groups/ran1/agenda_labels.py`)은 아래 예시를 담은 자기 지시문을 넘긴다.
 
+- **새 이름을 묻는 것은 그 WG의 LLM 폴백이 켜져 있고 온라인일 때뿐이다.** 오프라인 빌드와 키 없는 빌드는 목록에 이미 있는 답만 쓴다.
+- agenda는 WG마다 그 회의 것이다: RAN1 `agenda_item_description.json`, RAN2·RAN3·RAN4·SA2·RAN P agenda.csv, SA1 의장 파일의 TDoc 표 제목.
 - **용도는 필터와 Agreement 패널뿐이다.** `data-ai-scope`와 `data-agreement-ai`에만 들어가고, 셀의 AI 줄·팝업·`data-ai`·필터 항목 목록에는 나오지 않는다. 일정에 적힌 AI가 있으면 그것만 쓰고 추정은 보지 않는다.
 - **근거는 셀 이름과 이 회의의 agenda뿐이다.** 그룹 헤더, 다른 셀, 시간·방은 쓰지 않는다. 그룹은 LLM이 실행마다 다르게 정리할 수 있다.
   agenda(`agenda_item_description.json`)가 없거나 다른 회의 것이면 아무것도 추정하지 않는다.
@@ -475,7 +487,7 @@ RAN Plenary, RAN1, RAN2 밖의 WG는 `site.json`의 WG 항목에 `"experimental"
   - 예시는 번호가 아니라 항목 제목으로 적는다. 번호는 회의마다 바뀐다.
   - `high`는 230초쯤 걸리고 504가 났다. `low`는 10초 안팎이고 결과가 같았다.
 - **답은 코드가 정리한다.** agenda에 없는 번호는 버리고, 상위 항목이 있으면 하위 항목은 뺀다(`9.1`이 있으면 `9.1.2`는 뺀다). 필터와 패널 모두 상위 항목이 하위를 덮는다.
-- **회의별 목록에 남긴다(`docs/ran1/agenda_label_map/<meeting>.jsonl`).** 한 줄이 이름 하나이고 대상 없음(`[]`)도 기록한다. LLM의 원래 답(`raw`, 항목별 이유)과 정리한 값(`agenda_items`)을 함께 둔다.
+- **회의별 목록에 남긴다(`docs/<wg>/agenda_label_map/<meeting>.jsonl`).** 한 줄이 이름 하나이고 대상 없음(`[]`)도 기록한다. LLM의 원래 답(`raw`, 항목별 이유)과 정리한 값(`agenda_items`)을 함께 둔다.
   - 목록에 있는 이름은 다시 묻지 않는다. LLM 판단이 흔들려도 화면은 실행마다 같다. 판정을 고치려면 같은 이름으로 줄을 덧붙인다(뒤의 줄이 이긴다).
   - 회의가 바뀌면 새 파일이다. 목록에 없는 이름이 AI 없는 셀로 나오면 그 이름만 묻고 덧붙인다. 이름은 공백만 정리한 원문 그대로 비교한다.
   - 호출이 실패하거나 답에서 빠진 이름은 적지 않는다. 다음 실행에서 다시 묻는다. 빈 목록은 "대상 없음으로 판정함"이라는 뜻이라 실패와 섞으면 안 된다.

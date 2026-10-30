@@ -28,6 +28,7 @@ from datetime import date, timedelta
 import re
 
 from shared.agenda import describe, group_label, is_descendant
+from shared.officials import join_chairs
 from shared.schedule import (MIN_PART_MINUTES, DaySchedule, RoomInfo, Schedule, Session, Timeline,
                              minutes_to_time, time_to_minutes)
 from shared.titles import clean
@@ -322,7 +323,7 @@ def build_session(cell, part: Part, lines: list[str], context: dict, piece=None,
         for line in lines:
             items += [ai for ai in WRITTEN_AI.findall(line) if ai in agenda]
     return {'rooms': cell['rooms'], 'start': part.start, 'end': part.end, 'fixed': part.fixed,
-            'name': title, 'named': named, 'chair': ', '.join(chairs) or None,
+            'name': title, 'named': named, 'chair': join_chairs(chairs),
             'agenda_items': list(dict.fromkeys(items)), 'topics': numbers, 'part': piece,
             'lines': [l for l in lines if l], 'warnings': warnings}
 

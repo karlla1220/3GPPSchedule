@@ -22,6 +22,7 @@ from pydantic import BaseModel
 
 from shared import llm_cells
 from shared.llm_cells import check_times, citation_errors, title_errors, written_errors
+from shared.officials import join_chairs, split_chairs
 from shared.schedule import MIN_PART_MINUTES, time_to_minutes
 from .document import clock
 from .sessions import (DASH_MARK, PROSE_TIME, RANGE_LINE, RANGE_PAREN, START_AT, UNTIL, Part,
@@ -113,7 +114,7 @@ def check_cell(answer: CellAnswer, item: dict) -> list[str]:
         source = '\n'.join(lines[i] for i in cited)
         errors += title_errors(label, session.title, source)
         if session.chair:
-            errors += written_errors(label, [c.strip() for c in session.chair.split(',') if c.strip()], text, 'chair')
+            errors += written_errors(label, split_chairs(session.chair), text, 'chair')
         errors += written_errors(label, session.topics, source, 'topic number')
         if session.part:
             k, n_parts = (session.part + [0, 0])[:2]
@@ -157,7 +158,7 @@ def to_sessions(answer: CellAnswer, item: dict, context: dict) -> list[dict]:
                          session.part, in_break=session.in_break)
         built['name'] = ' '.join(session.title.split())
         if session.chair:
-            built['chair'] = session.chair.strip()
+            built['chair'] = join_chairs(split_chairs(session.chair))
         result.append(built)
     return result
 

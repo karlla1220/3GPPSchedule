@@ -922,10 +922,27 @@ _CHAIR_ROW = _SECONDARY_LINE + 1  # pinned 3px above the border, 1px into the co
 _NOTES_RULE = 7            # 3px gap, the short rule, 4px gap above the first note
 
 
+_AI_ONLY_NOTE = re.compile(r'(?:\bAI(?![A-Za-z])|\band\b|\d+(?:\.\d+)*(?:\.x)?|[\s,;/\[\]()–-])*', re.I)
+
+
+def _repeats_ai_line(note: str, ai_ids: set[str]) -> bool:
+    """A note of nothing but agenda numbers the AI line already shows ("AI32, AI6")."""
+    if not _AI_ONLY_NOTE.fullmatch(note) or not re.search(r'\d', note):
+        return False
+    text = re.sub(r'\bAI(?![A-Za-z])|\band\b|[\[\]()]', ' ', note, flags=re.I)
+    fields = [f.strip() for f in re.split(r'[,;]', text) if f.strip()]
+    ids = {i for f in fields for i in agenda_section_ids(re.sub(r'\s+', ' ', f), ())}
+    return bool(ids) and ids <= ai_ids
+
+
 def _cell_notes(session) -> list[str]:
-    """Notes worth showing; a line that only repeats the title adds nothing."""
+    """Notes worth showing: a line that only repeats the title, or only lists
+    agenda numbers the AI line shows, adds nothing. Head lines stay even when
+    the title is made from them: the title may have lost words in the cleaning."""
     name = session.name.strip().casefold()
-    return [n for n in session.notes if n.strip() and n.strip().casefold() != name]
+    ai_ids = set(agenda_section_ids(session.agenda_item or "", ()))
+    return [n for n in session.notes
+            if n.strip() and n.strip().casefold() != name and not _repeats_ai_line(n, ai_ids)]
 
 
 def _notes_html(notes: list[str], slots: float, ai_html: str, scope_label: str | None,
@@ -974,7 +991,7 @@ def _cell_chair(chair: str) -> str:
     it carries the name people call the chair by ("Lixiang XU" -> "Lixiang");
     the popup keeps the full name. A name without a capitalised family part is
     shown as written ("Hiroki", "Ruixin Wang"). Several chairs keep their
-    commas ("Yang TANG, Shan YANG" -> "Yang, Shan").
+    separator ("Yang TANG / Shan YANG" -> "Yang / Shan", shared/officials.py).
     """
     def given(name: str) -> str:
         words = name.split()
@@ -984,7 +1001,7 @@ def _cell_chair(chair: str) -> str:
                 return ' '.join(words[:i])
         return name
 
-    return ', '.join(given(part) for part in chair.split(', '))
+    return ' / '.join(given(part) for part in chair.split(' / '))
 
 
 def _room_name_html(name: str) -> str:

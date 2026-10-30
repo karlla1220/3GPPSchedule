@@ -12,6 +12,7 @@ from zoneinfo import ZoneInfo
 
 from shared import timezones
 from shared.agenda import agenda_map
+from shared.agenda_labels import infer_for_schedule
 from shared.renderer import generate_html
 from .document import LayoutError, extract_document
 from .llm import CellRefiner, gemini_request, has_key, read_document
@@ -113,6 +114,8 @@ def build_schedule(options=None, *, request=None):
     generated = datetime.now(ZoneInfo(metadata['timezone'])).strftime('%Y-%m-%d %H:%M')
     sources = [name] + (['agenda.csv'] if bundle.agenda else [])
     schedule = make_schedule(document, agenda, metadata, sources, generated, refine=refine, sessions=prebuilt)
+    # Cells the schedule gives no AI: an LLM reads their label for the filter (shared/agenda_labels.py).
+    infer_for_schedule(schedule, 'ran2', 'RAN2', agenda, enabled=not offline and request is not None)
     # No checkpoint before parsing and rendering both succeed.
     generate_html(schedule)
     state = {k: v for k, v in bundle.manifest.items() if k != 'portal_metadata'}

@@ -21,6 +21,7 @@ from datetime import date, timedelta
 import re
 
 from shared.agenda import describe, group_label, is_descendant
+from shared.officials import join_chairs
 from shared.schedule import (DaySchedule, RoomInfo, Schedule, Session, Timeline,
                              minutes_to_time, time_to_minutes)
 from shared.titles import clean
@@ -233,7 +234,7 @@ def title_and_chair(infos: list[Line]):
         title = next((i.text for i in infos if i.text), '')
     chairs = [c for h in heads for c in h.chairs] or [c for i in infos for c in i.chairs]
     group_item = next((h.ais[0] for h in heads if h.ais), None)
-    return title, ', '.join(dict.fromkeys(chairs)) or None, group_item, bool(heads)
+    return title, join_chairs(chairs), group_item, bool(heads)
 
 
 # Times inside prose use a colon; "[7.10]" is an agenda item, not 07:10.
