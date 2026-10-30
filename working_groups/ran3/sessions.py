@@ -198,10 +198,11 @@ def session_of(cell, group, chair, part, agenda, cbs, struck=(), title=None, ite
             start = written
     head = next((x for x in group if kind(x) not in ('initial', 'marker', 'blank')), '')
     ranges = []
-    if items is None:
-        items = [i for x in group for i in line_items(x, agenda, ranges)]
-        if kind(head) == 'offline' or (kind(head) == 'clock' and OFFLINE.match(clock['rest'])):
-            items += [cbs[c]['agenda_item'] for x in group for c in cb_refs(x) if c in cbs]
+    written = [i for x in group for i in line_items(x, agenda, ranges)]
+    # An LLM answer brings its own items (written ones only); a CB's item comes from the agenda's notes.
+    items = written if items is None else list(items)
+    if kind(head) == 'offline' or (kind(head) == 'clock' and OFFLINE.match(clock['rest'])):
+        items += [cbs[c]['agenda_item'] for x in group for c in cb_refs(x) if c in cbs]
     notes = list(group) + [f'Not treated: {text}' for text in struck]
     for ref in dict.fromkeys(c for x in group for c in cb_refs(x)):
         if ref in cbs and kind(head) in ('offline', 'clock'):
@@ -213,8 +214,15 @@ def session_of(cell, group, chair, part, agenda, cbs, struck=(), title=None, ite
 
 
 def interpret(document: dict, agenda: dict | None = None, cbs: dict | None = None, refine=None) -> list[dict]:
-    """Main session sessions per cell; ``refine`` (LLM) rereads the cells the rules flag."""
+    """Main session sessions per cell; ``refine`` (LLM) rereads the cells the rules flag.
+
+    A document the LLM read whole (llm.read_document) brings its pieces instead
+    of cells; they become sessions the same way, so CB blocks still give items.
+    """
     cbs = cbs or {}
+    if document.get('pieces') is not None:
+        return [session_of(p['cell'], p['lines'], p['chair'], p['part'], agenda, cbs, struck=p['struck'],
+                           title=p['title'], items=p['items']) for p in document['pieces']]
     readings, doubtful = [], []
     for day in document['days']:
         for cell in day['cells']:
@@ -347,8 +355,11 @@ def make_schedule(document: dict, agenda: dict | None, metadata: dict, source_fi
         warnings.append(f'agenda items not in agenda.csv: {", ".join(sorted(missing))}')
     if not days:
         raise ValueError('The RAN3 time plan produced no sessions')
-    supplements = [{'type': 'heading', 'text': 'Key to the time plan'},
-                   {'type': 'table', 'rows': document['legend'], 'header': False}] if document.get('legend') else []
+    # Said under the grid when a part of the page was read by the LLM because its layout was new.
+    supplements = [{'type': 'paragraph', 'bold': True, 'text': text} for text in document.get('notices', [])]
+    if document.get('legend'):
+        supplements += [{'type': 'heading', 'text': 'Key to the time plan'},
+                        {'type': 'table', 'rows': document['legend'], 'header': False}]
     number = document['meeting_id'].split('#', 1)[1]
     return Schedule(
         wg_id='ran3', meeting_id=document['meeting_id'], meeting_name=f'RAN3#{number}', days=days,

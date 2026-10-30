@@ -1,7 +1,9 @@
 """Build the RAN3 schedule from the chair's living agenda and the offline room sheet.
 
-Rules read the time plan; Gemini is the fallback for the cells they flag
-(see llm.py). Without GEMINI_API_KEY the rules' reading is published as is.
+Rules read the time plan; Gemini is the fallback for the cells they flag,
+and for a time plan table or an offline room sheet whose layout the rules do
+not know (see llm.py). Without GEMINI_API_KEY the rules' reading is published
+as is, and a layout the rules do not know fails the build as before.
 """
 from __future__ import annotations
 
@@ -14,8 +16,8 @@ from shared import officials, timezones
 from shared.agenda import agenda_map
 from shared.agenda_labels import infer_for_schedule
 from shared.renderer import generate_html
-from .document import extract_document, file_stem, offline_sheets, source_label
-from .llm import CellRefiner, gemini_request, has_key
+from .document import LayoutError, extract_document, file_stem, offline_sheets, source_label
+from .llm import SHEET_NOTICE, CellRefiner, gemini_request, has_key, read_document, read_sheets
 from .sessions import make_schedule
 from .sources import (DOWNLOADS, Bundle, client, config_hash, fetch_bundle, load_config, local_bundle,
                       override_for, portal_metadata, portal_rows, source_names, write_json,
@@ -122,11 +124,21 @@ def build_schedule(options=None, *, request=None):
     bundle.save(DOWNLOADS / 'inputs')
 
     name = bundle.manifest['schedule']['name']
-    document = extract_document(bundle.schedule, name)
+    agenda = agenda_map(bundle.agenda) if bundle.agenda else None
+    request = llm_request(cfg, request)
+    if getattr(options, 'rebuild_slots', False):
+        for path in Path('.cache/ran3').glob('*.json'):
+            path.unlink()
+    try:
+        document = extract_document(bundle.schedule, name)
+    except LayoutError as exc:
+        if request is None:
+            raise
+        print(f'[ran3] {exc}; reading the time plan with {cfg["model"]}')
+        document = read_document(bundle.schedule, name, cfg['model'], agenda, request)
     meeting = document['meeting_id']
     if meeting != bundle.manifest['meeting_id']:
         raise ValueError('Input bundle meeting identity mismatch')
-    agenda = agenda_map(bundle.agenda) if bundle.agenda else None
     live = bundle.manifest.get('portal_metadata')
     cached = previous.get('meeting_id') == meeting and previous.get('metadata')
     if live is None and (not offline or not (override_for(cfg, meeting) or cached)):
@@ -139,12 +151,16 @@ def build_schedule(options=None, *, request=None):
     slots = []
     if bundle.offline:
         slots, unread = offline_sheets(bundle.offline)
+        if unread and request:
+            try:
+                slots += read_sheets(bundle.offline, unread, bundle.manifest['offline']['name'], cfg['model'],
+                                     meeting, request)
+                document.setdefault('notices', []).append(SHEET_NOTICE.format(sheets=', '.join(unread)))
+                unread = []
+            except ValueError as exc:
+                print(f'[ran3] The LLM could not read the offline sheets either: {exc}')
         if unread:
             warnings.append(f'offline sheets not in the expected form: {", ".join(unread)}')
-    request = llm_request(cfg, request)
-    if getattr(options, 'rebuild_slots', False):
-        for path in Path('.cache/ran3').glob('*.json'):
-            path.unlink()
     refine = CellRefiner(cfg['model'], request, agenda=agenda, cbs=cbs) if request else None
     generated = datetime.now(ZoneInfo(metadata['timezone'])).strftime('%Y-%m-%d %H:%M')
     names = source_names(bundle.manifest)
