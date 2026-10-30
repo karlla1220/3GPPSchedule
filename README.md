@@ -718,7 +718,10 @@ SA1#112·#113·#115의 실제 문서로 확인했습니다. `site.json`에서 `e
 - 일정표가 없는 판(1st draft `S1-xx3000`, #114 사후본)은 건너뛰고 그 앞 판을 씁니다. 같은 미팅 안에서 판이 뒤로 가지 않습니다.
 - 현재 미팅은 Portal 날짜로 정합니다(TB 384). 끝나지 않은 가장 이른 미팅에 의장 파일이 아직 없으면 지난 미팅을 보입니다(Ended).
   sync `Inbox/`의 agenda TDoc zip은 이름에 미팅이 없어서, 다음 미팅에 다른 파일이 아직 없을 때만 열어 봅니다.
-- 머리줄 Sources는 `Chair's Notes Thu 10:30`, `Chair's Notes EOM`, `Breakout schedule Wed 17:30`, `Chair's Notes S1-264001`입니다.
+- 머리줄 Sources는 파일 이름에서 미팅 표기(`SA1#115`), TDoc 번호, 확장자만 뺀 이름입니다(`sources.source_label`):
+  `Agenda for Friday_1550_END_OF_MEETING`, `Agenda_16_00_friday`, `Breakout sessions schedule_Prague_WED_1730`.
+  번호만 있는 agenda TDoc zip은 `S1-264001` 그대로입니다. `page.py`가 붙이는 `vNN`, `draft`, `EOM`·`Final`은 이름에서 빼서
+  두 번 나오지 않게 합니다(`Agenda for SA1#116_Friday_EOM.docx` → `Agenda for Friday EOM`). `END_OF_MEETING`은 `page.py`가 읽지 않으므로 이름에 남습니다.
 
 ### 표 읽기 (`working_groups/sa1/document.py`)
 
