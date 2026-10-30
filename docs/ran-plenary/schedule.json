@@ -43,7 +43,11 @@
           "notes": [
             "Opening at 09:00"
           ],
-          "inferred_agenda_items": [],
+          "inferred_agenda_items": [
+            "1",
+            "5",
+            "7"
+          ],
           "email_details": [],
           "part": null
         },
@@ -1654,7 +1658,9 @@
           "notes": [
             "Closing by 17:00"
           ],
-          "inferred_agenda_items": [],
+          "inferred_agenda_items": [
+            "17"
+          ],
           "email_details": [],
           "part": null
         }
@@ -1690,7 +1696,7 @@
     }
   ],
   "source_file": "RAN#113 time plan v09.zip",
-  "generated_at": "2026-10-30 10:21",
+  "generated_at": "2026-10-30 11:41",
   "contact_name": "",
   "contact_email": "",
   "source_files": [

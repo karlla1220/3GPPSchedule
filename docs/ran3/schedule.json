@@ -1289,9 +1289,7 @@
             "🍷 Event 🎉",
             "* if needed"
           ],
-          "inferred_agenda_items": [
-            "33"
-          ],
+          "inferred_agenda_items": [],
           "email_details": [],
           "part": null
         }
@@ -1321,7 +1319,7 @@
     }
   ],
   "source_file": "RAN3_134_agenda_20261023.docx",
-  "generated_at": "2026-10-30 03:21",
+  "generated_at": "2026-10-30 04:41",
   "contact_name": "",
   "contact_email": "",
   "source_files": [

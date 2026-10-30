@@ -4273,7 +4273,9 @@
           "notes": [
             "6G SI BSRF (cont)"
           ],
-          "inferred_agenda_items": [],
+          "inferred_agenda_items": [
+            "8.4"
+          ],
           "email_details": [],
           "part": null
         },
@@ -6980,7 +6982,9 @@
           "notes": [
             "6G SI: Sensing (cont)"
           ],
-          "inferred_agenda_items": [],
+          "inferred_agenda_items": [
+            "8.10"
+          ],
           "email_details": [],
           "part": null
         },
@@ -7364,7 +7368,9 @@
           "notes": [
             "-TN and NTN coexistence chaired by Shubham"
           ],
-          "inferred_agenda_items": [],
+          "inferred_agenda_items": [
+            "8.4.4"
+          ],
           "email_details": [],
           "part": null
         },
@@ -7986,7 +7992,10 @@
           "notes": [
             "Coffee break offline discussion on 1900 MHz TN bands, chaired by Toliy"
           ],
-          "inferred_agenda_items": [],
+          "inferred_agenda_items": [
+            "5.12",
+            "5.13"
+          ],
           "email_details": [],
           "part": null
         },
@@ -8080,7 +8089,19 @@
             "6G sensing",
             "Ambient IoT"
           ],
-          "inferred_agenda_items": [],
+          "inferred_agenda_items": [
+            "5.5",
+            "7.6",
+            "7.12",
+            "7.13",
+            "7.18",
+            "7.19",
+            "7.20",
+            "7.21",
+            "8.4.3.1",
+            "8.4.4",
+            "8.10"
+          ],
           "email_details": [],
           "part": null
         },
@@ -8104,7 +8125,9 @@
           "notes": [
             "~7GHz TN co-ex topic., chaired by Michal (Huawei)"
           ],
-          "inferred_agenda_items": [],
+          "inferred_agenda_items": [
+            "8.4.3.1"
+          ],
           "email_details": [],
           "part": null
         },
@@ -8220,7 +8243,9 @@
           "notes": [
             "[206] NR_Mob_Ph5_RRM, Chaired by Hua Li (Apple)"
           ],
-          "inferred_agenda_items": [],
+          "inferred_agenda_items": [
+            "7.17"
+          ],
           "email_details": [],
           "part": null
         },
@@ -8665,7 +8690,10 @@
             "6G spectrum",
             "6G spectrum sharing"
           ],
-          "inferred_agenda_items": [],
+          "inferred_agenda_items": [
+            "8.5",
+            "8.9"
+          ],
           "email_details": [],
           "part": [
             1,
@@ -9307,7 +9335,9 @@
             "Main Ad hoc:",
             "[102-A/B] System Parameter, Chaired by Leo (Huawei)/Jinqiang (OPPO)"
           ],
-          "inferred_agenda_items": [],
+          "inferred_agenda_items": [
+            "8.2"
+          ],
           "email_details": [],
           "part": null
         },
@@ -9332,7 +9362,9 @@
             "BR2 Ad-hoc: Ambient-IoT",
             "Chaired by Ling (Huawei) and/or Huiping (Xiaomi)"
           ],
-          "inferred_agenda_items": [],
+          "inferred_agenda_items": [
+            "7.21"
+          ],
           "email_details": [],
           "part": null
         },
@@ -9627,7 +9659,14 @@
             "5G RRM",
             "Demod"
           ],
-          "inferred_agenda_items": [],
+          "inferred_agenda_items": [
+            "7.4",
+            "7.5",
+            "7.9",
+            "7.14",
+            "7.16",
+            "8.7"
+          ],
           "email_details": [],
           "part": null
         },
@@ -9656,7 +9695,13 @@
             "6G spectrum",
             "6G spectrum sharing"
           ],
-          "inferred_agenda_items": [],
+          "inferred_agenda_items": [
+            "8.2",
+            "8.3",
+            "8.5",
+            "8.8",
+            "8.9"
+          ],
           "email_details": [],
           "part": null
         },
@@ -9784,7 +9829,9 @@
             "Coffee break ad-hoc: 6G Sensing feasibility",
             "Finalize the WF, chaired by Pierpaolo (Qualcomm)"
           ],
-          "inferred_agenda_items": [],
+          "inferred_agenda_items": [
+            "8.10.2"
+          ],
           "email_details": [],
           "part": null
         },
@@ -9865,7 +9912,10 @@
             "Return to",
             "OTA"
           ],
-          "inferred_agenda_items": [],
+          "inferred_agenda_items": [
+            "7.3",
+            "8.11"
+          ],
           "email_details": [],
           "part": null
         },
@@ -9920,7 +9970,11 @@
             "13 Any other business",
             "14 Close of the meeting (main session)"
           ],
-          "inferred_agenda_items": [],
+          "inferred_agenda_items": [
+            "8.6",
+            "14",
+            "15"
+          ],
           "email_details": [],
           "part": [
             2,
@@ -10024,7 +10078,7 @@
     }
   ],
   "source_file": "RAN4_120bis_meeting_schedule_THU_afternoon.pptx",
-  "generated_at": "2026-10-30 18:21",
+  "generated_at": "2026-10-30 19:41",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
