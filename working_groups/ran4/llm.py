@@ -375,7 +375,8 @@ class DocumentReading:
             cell = {'id': f'doc{n}', 'rooms': [self.ids[s.day][r] for r in s.room_ids]}
             built = build_session(cell, Part(s.start, end, fixed=True), cited_lines(s, self.texts), context,
                                   s.part, in_break=s.in_break)
-            built['name'] = ' '.join(s.title.split())
+            if not built['named']:
+                built['name'] = ' '.join(s.title.split())
             if s.chair:
                 built['chair'] = join_chairs(split_chairs(s.chair))
             warnings += built['warnings']

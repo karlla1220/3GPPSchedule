@@ -721,6 +721,17 @@ def test_a_shortened_topic_number_stands_for_both_numbers():
     assert llm.written_errors('s', ['102-C'], source, 'topic number')
 
 
+def test_a_document_session_takes_the_rules_title():
+    result = llm.DocResult.model_validate({
+        'days': [{'day': 'Tuesday', 'rooms': [{'id': 'r1', 'name': 'Ad hoc room'}], 'breaks': []}],
+        'sessions': [{'day': 'Tuesday', 'start': '17:00', 'end': '18:00', 'room_ids': ['r1'], 'part': None,
+                      'title': 'Main Ad-hoc: / [108] Spectrum sharing', 'topics': ['108'], 'chair': None,
+                      'in_break': False, 'refs': ['c'], 'line_numbers': None}]})
+    reading = llm.DocumentReading(result, {'c': 'Main Ad-hoc: \n[108] Spectrum sharing'}, {'Tuesday': {'r1': 'ad-hoc'}})
+    found, _ = reading({'topics': {}, 'agenda': {}, 'column_chairs': {}}, {})
+    assert found[0]['name'] == 'Main Ad-hoc / [108] Spectrum sharing'
+
+
 def test_an_unchecked_document_answer_fails_the_build(tmp_path):
     data = without_monday_title()
     invented = document_answer(outline_texts(data))
