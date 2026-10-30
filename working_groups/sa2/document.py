@@ -54,6 +54,22 @@ def file_info(name: str):
     return meeting_id(match[1]), int(match[2] or 0), match[3].strip(' -')
 
 
+def source_label(name: str) -> str:
+    """The header name of a Session Plan: its file name without the TDoc number,
+    the meeting and the extension.
+
+    "S2-2610195_SA2-177-Session Plan -r14 - Friday plan.docx" is
+    "Session Plan -r14 - Friday plan", so the file can be found from it, and
+    the suffix tells it from the earlier "-r14". page.py appends "draft",
+    "Final" and "EOM" from the file name itself, so they are left out here.
+    """
+    stem = name.strip().rsplit('.', 1)[0]
+    match = re.search(r'(?<![A-Za-z])SA2-\d+-\s*', stem)
+    label = re.sub(r'\s*(?<![A-Za-z0-9])(?:draft|final|eom)(?:_?\d+)?(?![A-Za-z0-9])', '',
+                   stem[match.end():] if match else stem, flags=re.I).strip(' -_')
+    return label or stem
+
+
 def _deleted(run) -> bool:
     if any(a.tag in (W + 'del', W + 'moveFrom') for a in run.iterancestors()):
         return True
