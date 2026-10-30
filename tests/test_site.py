@@ -61,6 +61,8 @@ def test_plenary_uses_daily_rooms_and_timeline_without_ran1_breaks():
     assert '--time-rows:22' in tuesday['style']
     assert len(monday.select('.room-header')) == 3  # time + 2 rooms
     assert len(tuesday.select('.room-header')) == 2
+    # A room without a place keeps the one-line header.
+    assert not monday.select('.room-header.has-place, .room-place')
     reports = monday.select_one('[data-name="Working group reports"]')
     assert 'grid-row:5/8;' in reports['style']
     discussion = monday.select_one('[data-name="Rapporteur discussion"]')

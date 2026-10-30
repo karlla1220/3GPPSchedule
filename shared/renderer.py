@@ -393,10 +393,18 @@ def generate_html(schedule: Schedule, *, schedules=None, groups=None, presentati
         )
         for ri, room in enumerate(day_schedule.rooms):
             col = ri + 2
-            html_parts.append(
-                f'                <div class="room-header" '
-                f'style="grid-column:{col};grid-row:1">{_esc(room.name)}</div>\n'
-            )
+            if room.detail:
+                # Where the room is, under its name; the whole line stays on hover.
+                html_parts.append(
+                    f'                <div class="room-header has-place" title="{_esc(_room_text([room]))}" '
+                    f'style="grid-column:{col};grid-row:1"><span class="room-name">{_esc(room.name)}</span>'
+                    f'<span class="room-place">{_esc(room.detail)}</span></div>\n'
+                )
+            else:
+                html_parts.append(
+                    f'                <div class="room-header" '
+                    f'style="grid-column:{col};grid-row:1">{_esc(room.name)}</div>\n'
+                )
 
         # Each day supplies its own range, precision and label spacing.
         base_min = time_to_minutes(timeline.start)
