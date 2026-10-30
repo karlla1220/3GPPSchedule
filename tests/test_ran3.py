@@ -346,6 +346,143 @@ def test_an_llm_outage_never_breaks_the_build(tmp_path):
     assert refine.summary['kept_rules'] == 1 and 'quota' in refine.summary['error']
 
 
+# A time plan table one row longer than the RAN3 form, and a sheet whose header is renamed.
+
+def broken_table(name=MID) -> bytes:
+    doc = Document(FIXTURES / name)
+    table, _ = docmod.weekday_table(doc)
+    table.add_row()
+    out = io.BytesIO()
+    doc.save(out)
+    return out.getvalue()
+
+
+def renamed_header(sheet='Oct14 Wed') -> bytes:
+    from openpyxl import load_workbook
+    book = load_workbook(FIXTURES / 'offline_133bis_ver_03.xlsx')
+    book[sheet]['A2'] = 'Slot'
+    out = io.BytesIO()
+    book.save(out)
+    return out.getvalue()
+
+
+def doc_session(start, end, title, refs, lines, part=None, chair=None, items=()):
+    return {'day': 'Wednesday', 'start': start, 'end': end, 'part': part, 'title': title, 'chair': chair,
+            'agenda_items': list(items), 'refs': refs, 'lines': lines}
+
+
+# Cell ids are python-docx's (tests run without docx-cli): t1 is the time plan, r4 the 10:30 coffee row.
+WEDNESDAY = {'days': ['Wednesday'],
+             'breaks': [{'day': 'Wednesday', 'name': 'Coffee Break', 'start': '10:30', 'end': '11:00',
+                         'ref': 't1:r4c3'}],
+             'sessions': [doc_session('08:00', '09:00', '6G Offline', ['t1:r1c3'], ['6G Offline*']),
+                          doc_session('09:00', '10:30', 'AIML RAN', ['t1:r3c3'], ['AIML RAN: AI 12', 'L'],
+                                      chair='L', items=['12']),
+                          doc_session('10:30', '11:00', '6G Offline', ['t1:r4c3'], ['6G Offline (CB#8)']),
+                          doc_session('17:00', '19:00', 'MobEnh', ['t1:r9c3'], ['MobEnh: AI 15'], [1, 2],
+                                      items=['15']),
+                          doc_session('17:00', '19:00', 'XR', ['t1:r10c3'], ['XR: AI 20', '6G Offline (CB#12)'],
+                                      [2, 2], items=['20'])]}
+WEDNESDAY_SHEET = {'sheets': [{'sheet': 'Oct14 Wed', 'day': 'Wednesday', 'month': 10, 'date': 14, 'slots': [
+    {'start': '09:00', 'end': '09:30', 'topic': 'Rel-20 Ambient IoT offline', 'moderator': 'Yan Wang (Huawei)',
+     'refs': ['Oct14 Wed!A5', 'Oct14 Wed!B5', 'Oct14 Wed!C5']}]}]}
+
+
+def test_a_time_plan_out_of_its_form_is_read_whole_and_takes_the_rules_path(tmp_path):
+    from shared import notices
+    data = broken_table()
+    with pytest.raises(docmod.LayoutError):
+        docmod.extract_document(data, MID)
+    gemini = FakeGemini(WEDNESDAY)
+    document = llm.read_document(data, MID, 'test-model', agenda('agenda_133bis.csv'), gemini, tmp_path)
+    assert len(gemini.calls) == 1 and '"t1:r3c3"' in gemini.calls[0] and 'TDoc' not in gemini.calls[0]
+    schedule = sessions.make_schedule(document, agenda('agenda_133bis.csv'), META_133BIS, [MID], {}, 'now',
+                                      cbs=document['cbs'], chair=lambda label: NAMES.get(label, label))
+    assert cells(schedule, 'Wednesday') == [
+        ('08:00', '09:00', None, '6G Offline', None, None, ['6G Offline*', '* if needed']),
+        ('09:00', '10:30', None, 'AIML RAN', '12', 'Lixiang XU', ['AIML RAN: AI 12', 'L']),
+        # The CB block in the agenda's notes still gives the item, as for a cell the rules read.
+        ('10:30', '11:00', None, '6G Offline', '10.3.1.3', None,
+         ['6G Offline (CB#8)', 'CB: # 8_6GSBI (moderator - CATT)']),
+        ('17:00', '19:00', [1, 2], 'MobEnh', '15', None, ['MobEnh: AI 15']),
+        ('17:00', '19:00', [2, 2], 'XR', '20', None, ['XR: AI 20', '6G Offline (CB#12)'])]
+    wednesday = schedule.days[0]
+    assert [b['name'] for b in wednesday.timeline.breaks] == ['Coffee Break']
+    assert schedule.supplements[0] == {'type': 'paragraph', 'bold': True, 'text': llm.FALLBACK_NOTICE}
+    assert schedule.supplements[1] == {'type': 'heading', 'text': 'Key to the time plan'}
+    assert [n['kind'] for n in notices.read()] == ['document-fallback']
+    # The answer is cached: the next build asks nothing.
+    assert llm.read_document(data, MID, 'test-model', agenda('agenda_133bis.csv'), FakeGemini(), tmp_path) == document
+
+
+@pytest.mark.parametrize('change, problem', [
+    ({'start': '09:15'}, 'not written in the source'),
+    ({'title': 'AI/ML for NG-RAN'}, 'title words'),
+    ({'lines': ['AIML RAN: AI 12', 'Lixiang']}, 'copied exactly'),
+    ({'chair': 'X'}, 'not an initial written'),
+    ({'agenda_items': ['12.2']}, 'agenda item'),
+])
+def test_a_document_answer_that_does_not_check_fails_the_build_as_before(tmp_path, change, problem):
+    bad = {**WEDNESDAY, 'sessions': [{**WEDNESDAY['sessions'][1], **change}, *WEDNESDAY['sessions'][2:]]}
+    gemini = FakeGemini(bad, bad)
+    with pytest.raises(docmod.LayoutError, match='could not read the time plan'):
+        llm.read_document(broken_table(), MID, 'test-model', agenda('agenda_133bis.csv'), gemini, tmp_path)
+    assert len(gemini.calls) == 2 and problem in gemini.calls[1]
+
+
+def double_citations(sessions):
+    texts = {'t1:r0c1': '08:00 - 09:00', 't1:r1c2': 'Offline*', 't1:r2c2': 'Offline*'}
+    result = llm.DocResult.model_validate({**WEDNESDAY, 'days': ['Wednesday'], 'breaks': [], 'sessions': sessions})
+    return [e for e in llm.check_document(result, texts, None) if 'more than one session' in e]
+
+
+def test_a_line_may_repeat_within_a_session_over_two_rows():
+    both = ['t1:r1c2', 't1:r2c2']
+    assert double_citations([doc_session('08:00', '09:00', 'Offline*', both, ['Offline*', 'Offline*'])]) == []
+    assert double_citations([doc_session('08:00', '09:00', 'Offline*', both[:1], ['Offline*'], [1, 2]),
+                             doc_session('08:00', '09:00', 'Offline*', both[:1], ['Offline*'], [2, 2])])
+
+
+def test_pieces_of_a_block_must_be_complete_and_start_with_their_label(tmp_path):
+    split = {**WEDNESDAY, 'sessions': WEDNESDAY['sessions'][:3] + [
+        doc_session('17:00', '19:00', 'MobEnh', ['t1:r9c3'], ['MobEnh: AI 15'], [1, 2], items=['15']),
+        doc_session('17:00', '19:00', 'XR', ['t1:r10c3'], ['XR: AI 20'], [2, 2], items=['20']),
+        doc_session('17:00', '19:00', '6G Offline', ['t1:r10c3'], ['6G Offline (CB#12)'], [2, 2])]}
+    gemini = FakeGemini(split, split)
+    with pytest.raises(docmod.LayoutError):
+        llm.read_document(broken_table(), MID, 'test-model', None, gemini, tmp_path)
+    assert 'must be parts [1, 3] to [3, 3]' in gemini.calls[1]
+
+
+def test_an_offline_sheet_out_of_its_form_is_read_alone(tmp_path):
+    data = renamed_header()
+    slots, unread = docmod.offline_sheets(data)
+    assert unread == ['Oct14 Wed'] and not any(s['day'] == 'Wednesday' for s in slots)
+    gemini = FakeGemini(WEDNESDAY_SHEET)
+    read = llm.read_sheets(data, unread, 'offline_133bis_ver_03.xlsx', 'test-model', 'ran3#133bis', gemini,
+                           tmp_path)
+    assert '"Oct14 Wed!B5"' in gemini.calls[0] and '"Oct15 Thu' not in gemini.calls[0]
+    assert read == [{'day': 'Wednesday', 'month': 10, 'date': 14, 'start': '09:00', 'end': '09:30',
+                     'topic': 'Rel-20 Ambient IoT offline', 'moderator': 'Yan Wang (Huawei)'}]
+    found, dropped = sessions.offline_sessions(slots + read, {}, None, sessions.meeting_dates(META_133BIS))
+    assert not dropped and [(s['start'], s['name'], s['chair']) for s in found if s['day'] == 'Wednesday'] == [
+        ('09:00', 'Rel-20 Ambient IoT offline', 'Yan Wang')]
+
+
+@pytest.mark.parametrize('change, problem', [
+    ({'topic': 'Ambient IoT offline session'}, 'topic must be the text of a cited cell'),
+    ({'start': '09:10'}, 'not written in the source'),
+    ({'refs': ['Oct15 Thu!B5']}, 'cells of this sheet'),
+])
+def test_a_sheet_answer_that_does_not_check_leaves_the_sheet_out(tmp_path, change, problem):
+    slot = {**WEDNESDAY_SHEET['sheets'][0]['slots'][0], **change}
+    bad = {'sheets': [{**WEDNESDAY_SHEET['sheets'][0], 'slots': [slot]}]}
+    gemini = FakeGemini(bad, bad)
+    with pytest.raises(ValueError):
+        llm.read_sheets(renamed_header(), ['Oct14 Wed'], 'offline.xlsx', 'test-model', None, gemini, tmp_path)
+    assert problem in gemini.calls[1]
+
+
 # ------------------------------------------------------------------ render
 
 def test_render_roundtrip_and_split_pieces(eom, tmp_path):
@@ -483,6 +620,26 @@ def test_local_builds_need_no_network_and_keep_the_cb_blocks_past_the_eom(offlin
     assert coffee.agenda_item == '10.3.1.3'        # the EOM has no CB blocks; the state remembers them
     again = pipeline.build_schedule(SimpleNamespace(no_download=True, output_dir=out))
     assert again.days == closing.days
+
+
+def test_a_build_reads_new_layouts_with_the_llm_and_says_so_under_the_grid(offline_config, tmp_path):
+    (tmp_path / MID).write_bytes(broken_table())
+    (tmp_path / 'offline.xlsx').write_bytes(renamed_header())
+    offline_config['local_offline'] = str(tmp_path / 'offline.xlsx')
+    options = SimpleNamespace(local=str(tmp_path / MID), output_dir=tmp_path / 'out')
+    with pytest.raises(docmod.LayoutError):           # no key: the build fails as before
+        pipeline.build_schedule(options)
+    schedule = pipeline.build_schedule(options, request=FakeGemini(WEDNESDAY, WEDNESDAY_SHEET))
+    wednesday = schedule.days[0]
+    assert [(s.room_ids, s.start_time, s.name) for s in wednesday.sessions][:3] == [
+        (['main'], '08:00', '6G Offline'), (['main'], '09:00', 'AIML RAN'),
+        (['offline'], '09:00', 'Rel-20 Ambient IoT offline')]
+    said = [b['text'] for b in schedule.supplements if b['type'] == 'paragraph']
+    assert said == [llm.FALLBACK_NOTICE, llm.SHEET_NOTICE.format(sheets='Oct14 Wed')]
+    state = sources.read_json(tmp_path / 'out/ran3/.schedule_state.json')
+    assert state['warnings'] == [] and state['cbs']['8']['agenda_item'] == '10.3.1.3'
+    page = BeautifulSoup(generate_html(schedule), 'html.parser')
+    assert 'not in its usual layout' in page.select_one('.supplements').get_text()
 
 
 def test_a_new_meeting_without_dates_fails_clearly(offline_config, tmp_path, monkeypatch):

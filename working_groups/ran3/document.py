@@ -114,16 +114,24 @@ def _grid(table):
     return [[cell._tc for cell in row.cells] for row in table.rows]
 
 
-def schedule_table(doc):
-    """The table whose first row names the weekdays, checked against RAN3's form."""
+def weekday_table(doc):
+    """(table, head) for the table whose first row names the weekdays, in any shape; else (None, None)."""
     for table in doc.tables:
         head = [squash(c.text) for c in table.rows[0].cells] if table.rows else []
         if all(day in head for day in DAYS):
-            if len(table.rows) != ROWS or len(table.columns) != COLUMNS:
-                raise LayoutError(f'Schedule table is {len(table.rows)}x{len(table.columns)}, '
-                                  f'not the {ROWS}x{COLUMNS} RAN3 form')
             return table, head
-    raise LayoutError('No table with Monday to Friday in its first row')
+    return None, None
+
+
+def schedule_table(doc):
+    """The table whose first row names the weekdays, checked against RAN3's form."""
+    table, head = weekday_table(doc)
+    if table is None:
+        raise LayoutError('No table with Monday to Friday in its first row')
+    if len(table.rows) != ROWS or len(table.columns) != COLUMNS:
+        raise LayoutError(f'Schedule table is {len(table.rows)}x{len(table.columns)}, '
+                          f'not the {ROWS}x{COLUMNS} RAN3 form')
+    return table, head
 
 
 # ------------------------------------------------------------------ blocks
@@ -257,6 +265,8 @@ def read_days(table, head) -> list[dict]:
 
 def legend(doc, table) -> list[list[str]]:
     """The key printed under the table: "L, X" -> "chaired by Vice-Chairs", "*" -> "if needed"."""
+    if table is None:
+        return []
     body = list(doc.element.body.iterchildren())
     index = body.index(table._tbl)
     rows = []
@@ -282,7 +292,7 @@ def cb_blocks(doc, schedule) -> dict[str, dict]:
     """
     found = {}
     for table in doc.tables:
-        if table._tbl is schedule._tbl:
+        if schedule is not None and table._tbl is schedule._tbl:
             continue
         item = None
         for row in table.rows:
@@ -326,6 +336,18 @@ def extract_document(data: bytes, name: str) -> dict:
     table, head = schedule_table(doc)
     return {'meeting_id': meeting, 'days': read_days(table, head), 'legend': legend(doc, table),
             'cbs': cb_blocks(doc, table)}
+
+
+def surroundings(data: bytes, name: str) -> dict:
+    """What the rules still read when the time plan table is not in its form.
+
+    The key under the table and the CB blocks in the agenda's notes do not
+    depend on the table's shape, so the LLM fallback (llm.read_document) gets
+    them from the rules as usual; a table that cannot be found has no key.
+    """
+    doc = Document(io.BytesIO(data))
+    table, _ = weekday_table(doc)
+    return {'meeting_id': identify(doc, name), 'legend': legend(doc, table), 'cbs': cb_blocks(doc, table)}
 
 
 # ------------------------------------------------------------ offline room
