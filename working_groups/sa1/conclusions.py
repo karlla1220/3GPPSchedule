@@ -42,6 +42,7 @@ TEXT = {
 # Word's strong fills as the panel softens Word highlights (shared/docx_html.py); others are mixed with white.
 SOFT = {'00FF00': 'c6f0bd', '00FFFF': 'bdeef3', 'FFFF00': 'fff0a0', 'FF00FF': 'f5c8ee'}
 FILL = re.compile(r'background:#([0-9a-fA-F]{6})')
+TDOC = re.compile(r'\bS1-\d{6}\b')
 # The chair links each TDoc to the copy on their own disk ("file:///C:\\TSGS1_115_Prague\\Docs\\S1-263194.zip");
 # the same file is in the meeting folder of the 3GPP archive.
 LOCAL_TDOC = re.compile(r'(TSGS1_[^\\/]+)[\\/]Docs[\\/](S1-\d+\.zip)$', re.I)
@@ -87,11 +88,16 @@ def _table_html(renderer: DocxHTML, table, rows, header) -> str:
         part.append(copy.deepcopy(row))
     html = renderer.table(part)
     html = FILL.sub(lambda m: f'background:#{soften(m[1])}', html)
+    # A TDoc number does not break at its hyphen ("S1-" / "263194"), in text only (not in a link's address).
+    html = re.sub(r'>([^<]+)<', lambda m: '>' + TDOC.sub(r'<span class="tdoc">\g<0></span>', m[1]) + '<', html)
     # Each TDoc row is one unit the change marks; the bar sits on its first cell.
     count = iter(range(len(rows)))
     html = re.sub(r'<tr><td ', lambda m: f'<tr><td data-unit="{next(count)}" ', html)
     if header and len(header) == len(part.findall(f'{W}tblGrid/{W}gridCol')):
-        head = '<tr>' + ''.join(f'<th>{text}</th>' for text in map(_escape, header)) + '</tr>'
+        # The size of the table's own text (the default paragraph style's: 9pt in the chair file).
+        size = renderer.props(etree.Element(W + 'r'), 'rPr', etree.Element(W + 'p')).get('sz', {}).get('val', '')
+        style = f' style="font-size:{int(size) / 22:.3g}em"' if size.isdigit() else ''
+        head = '<tr>' + ''.join(f'<th{style}>{text}</th>' for text in map(_escape, header)) + '</tr>'
         html = html.replace('</colgroup>', '</colgroup>' + head, 1)
     return html
 
