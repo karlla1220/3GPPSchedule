@@ -17,7 +17,8 @@ from pydantic import BaseModel
 from shared import llm_cells
 from shared.llm_cells import check_times, citation_errors, title_errors, written_errors
 from .document import clock
-from .sessions import CLOCK_TEXT, HEAD, SEPARATOR, SLASH, START_AT, chair_of, checked_item, is_agenda
+from .sessions import (CLOCK_TEXT, HEAD, SEPARATOR, SLASH, START_AT, agenda_of, chair_of, checked_item, is_agenda,
+                       known_names)
 
 PROMPTS = Path(__file__).parent / 'prompts'
 CACHE = Path('.cache/sa1')
@@ -106,13 +107,17 @@ def check_cell(answer: CellAnswer, item: dict) -> list[str]:
 def to_sessions(answer: CellAnswer, item: dict) -> list[dict]:
     cell, document = item['cell'], item['document']
     plenary = {room['id'] for room in document['rooms'] if 'plenary' in room['aliases']}
+    names = known_names(document)
     result = []
     for session in answer.sessions:
         lines = [content(cell['lines'][i]) for i in sorted(session.lines) if meaningful(cell['lines'][i])]
         is_plenary = session.room in plenary and session.title == 'Plenary'
-        items = [checked_item(i, '', document['agenda']) for i in dict.fromkeys(session.agenda_items)]
+        written = (checked_item(i, '', document['agenda']) for i in dict.fromkeys(session.agenda_items))
+        items = [i for i in written if i]
+        # Topics the cited lines name without a number match the filter as the rules find them.
+        inferred = [i for i in agenda_of(lines, document['agenda'], names)[1] if i not in items]
         result.append({'room': session.room, 'start': session.start, 'end': session.end,
-                       'name': ' '.join(session.title.split()), 'agenda_items': [i for i in items if i],
+                       'name': ' '.join(session.title.split()), 'agenda_items': items, 'inferred_items': inferred,
                        'chair': None if is_plenary or session.room is None else chair_of(lines, document['chairs']),
                        'lines': lines})
     return result

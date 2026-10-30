@@ -189,8 +189,14 @@ def checked_item(number: str, name: str, agenda: dict) -> str | None:
     return matches[0] if len(matches) == 1 else None
 
 
-def agenda_of(lines: list[str], agenda: dict, names: dict) -> list[str]:
-    items = []
+def agenda_of(lines: list[str], agenda: dict, names: dict) -> tuple[list[str], list[str]]:
+    """(numbers the cell writes, numbers found for topics it names without one).
+
+    The first are the cell's agenda items. The second only match the cell in
+    the filter (``Session.inferred_agenda_items``): the cell does not write
+    them, so they are not shown as its AI (CLAUDE.md "AI 없는 셀의 AI 추정").
+    """
+    written, inferred = [], []
     for line in lines:
         pieces = line.split('+')
         for piece in pieces:
@@ -202,14 +208,15 @@ def agenda_of(lines: list[str], agenda: dict, names: dict) -> list[str]:
                 known = names.get(piece.casefold(), set())
                 numbers_known = [checked_item(n, piece, agenda) for n in known]
                 if len(known) == 1 and numbers_known[0]:
-                    items.append(numbers_known[0])
+                    inferred.append(numbers_known[0])
                 continue
             for i, match in enumerate(numbers):
                 tail = piece[match.end():numbers[i + 1].start() if i + 1 < len(numbers) else None]
                 item = checked_item(match[1], tail.strip(), agenda)
                 if item:
-                    items.append(item)
-    return list(dict.fromkeys(items))
+                    written.append(item)
+    written = list(dict.fromkeys(written))
+    return written, [i for i in dict.fromkeys(inferred) if i not in written]
 
 
 def chair_of(lines: list[str], chairs: list[dict]) -> str | None:
@@ -237,9 +244,10 @@ def rule_based(cell: dict, document: dict, names: dict) -> tuple[list[dict], lis
                 # A start with no end ("MMS (18:30)"): no time is made up (DECISIONS.md #8).
                 unplaced.append(' '.join(part['lines']) + f' ({part["start_only"]})')
                 continue
-            items = agenda_of(part['lines'], agenda, names)
+            items, inferred = agenda_of(part['lines'], agenda, names)
             found.append({'room': segment['room'], 'start': part['start'], 'end': part['end'],
                           'name': title_of(segment, part['lines']), 'agenda_items': items,
+                          'inferred_items': inferred,
                           'chair': None if segment['plenary'] or segment['room'] is None
                           else chair_of(part['lines'], document['chairs']),
                           'lines': list(part['lines'])})
@@ -329,7 +337,8 @@ def make_schedule(document: dict, metadata: dict, source_files: list[str], sourc
                 chair=chair, agenda_item=', '.join(s['agenda_items']) or None,
                 group_header=group_label(s['agenda_items'][0] if s['agenda_items'] else None, agenda),
                 description='\n'.join(d['description'] for d in descriptions) or None,
-                agenda_descriptions=descriptions, notes=list(s['lines'])))
+                agenda_descriptions=descriptions, notes=list(s['lines']),
+                inferred_agenda_items=list(s.get('inferred_items', []))))
         days.append(DaySchedule(day_name=day['day'], date=dates.get(day['day']), rooms=list(rooms),
                                 sessions=sorted(built, key=lambda s: (s.start_time, s.room_ids)),
                                 timeline=Timeline(start=minutes_to_time(start), end=minutes_to_time(end),
