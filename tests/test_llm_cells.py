@@ -3,7 +3,7 @@ from pydantic import BaseModel
 import pytest
 
 from shared import llm_cells
-from shared.agenda_groups import group_label
+from shared.agenda import group_label
 
 
 class Part(BaseModel):

@@ -13,16 +13,15 @@ supplements, which the page shows below the grid.
 """
 from __future__ import annotations
 
-import csv
 import io
 import re
 
 from docx import Document
 from docx.text.paragraph import Paragraph
 
+from shared.docx_text import deleted, paragraph_text, W
 from shared.portal_meetings import meeting_key
 
-W = '{http://schemas.openxmlformats.org/wordprocessingml/2006/main}'
 DAYS = ('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday')
 # S2-2610195_SA2-177-Session Plan - r7.docx, S2-2610195_SA2-177-Session Plan -r14 - Friday plan.docx,
 # S2-260nnnn_SA2-177-Session Plan.zip (the first upload has no r), Draft S2-2606837_SA2-176-Session Plan - r1.docx
@@ -70,39 +69,6 @@ def source_label(name: str) -> str:
     return label or stem
 
 
-def _deleted(run) -> bool:
-    if any(a.tag in (W + 'del', W + 'moveFrom') for a in run.iterancestors()):
-        return True
-    props = run.find(W + 'rPr')
-    if props is None:
-        return False
-    for tag in ('strike', 'dstrike'):
-        node = props.find(W + tag)
-        if node is not None and node.get(W + 'val', 'true') not in ('0', 'false', 'off'):
-            return True
-    return False
-
-
-def paragraph_text(element) -> str:
-    """Accepted text: insertions kept, deletions and struck runs dropped.
-
-    python-docx's .text skips runs inside <w:ins>; r7, r11, r13 and r14 of
-    SA2#177 carry the chair's tracked insertions (r11's Wednesday lunch row).
-    """
-    parts = []
-    for run in element.iter(W + 'r'):
-        if _deleted(run):
-            continue
-        for node in run:
-            if node.tag == W + 't':
-                parts.append(node.text or '')
-            elif node.tag in (W + 'br', W + 'cr'):
-                parts.append('\n')
-            elif node.tag == W + 'tab':
-                parts.append('\t')
-    return ''.join(parts)
-
-
 def squash(text: str) -> str:
     return ' '.join(text.replace(' ', ' ').split())
 
@@ -119,7 +85,7 @@ def highlights(element) -> list[tuple[str, str]]:
     """(highlight colour or '', text) per run that is not deleted."""
     result = []
     for run in element.iter(W + 'r'):
-        if _deleted(run):
+        if deleted(run):
             continue
         mark = run.find(f'{W}rPr/{W}highlight')
         result.append((mark.get(W + 'val') if mark is not None else '', paragraph_text(run)))
@@ -330,7 +296,7 @@ def _bold(paragraph: Paragraph) -> bool:
             style_bold = style.font.bold
             break
         style = style.base_style
-    runs = [r for r in paragraph._p.iter(W + 'r') if not _deleted(r) and squash(paragraph_text(r))]
+    runs = [r for r in paragraph._p.iter(W + 'r') if not deleted(r) and squash(paragraph_text(r))]
     if not runs:
         return False
     for run in runs:
@@ -412,16 +378,3 @@ def extract_document(data: bytes, name: str) -> dict:
     return result
 
 
-def agenda_map(data: bytes) -> dict[str, str]:
-    """agenda.csv in each meeting's Agenda folder: "item","description" (RAN's format).
-
-    Malformed rows are skipped; descriptions are only an aid.
-    """
-    result = {}
-    for row in csv.reader(io.StringIO(data.decode('utf-8-sig', errors='replace'))):
-        if len(row) < 2:
-            continue
-        item, description = row[0].strip().rstrip('.'), squash(row[1])
-        if re.fullmatch(r'\d+(?:\.\d+)*', item) and description:
-            result.setdefault(item, description)
-    return result

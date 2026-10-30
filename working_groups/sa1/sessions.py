@@ -19,9 +19,10 @@ from __future__ import annotations
 from datetime import date, timedelta
 import re
 
-from shared.agenda_groups import group_label
+from shared.agenda import describe, group_label, is_descendant
 from shared.schedule import (DaySchedule, RoomInfo, Schedule, Session, Timeline,
                              minutes_to_time, time_to_minutes)
+from shared.titles import clean
 from .document import clock
 
 HEAD = re.compile(r'^(Plenary|(?:Breakout|Drafting)\s*\d)\b\s*:?\s*(.*)$', re.I)
@@ -42,16 +43,6 @@ NUMBERED = re.compile(r'(?:^|(?<=[\s+]))(\d{1,2}(?:\.\d{1,2})*)\.?(?=\s+\S)')
 LEADING_NUMBER = re.compile(r'^\d{1,2}(?:\.\d{1,2})*\.?\s+')
 
 
-def clean(text: str) -> str:
-    """Title text: round brackets dropped whatever they say, "(e)RedCap" kept (RAN2's rule)."""
-    previous = None
-    while previous != text:
-        previous = text
-        text = re.sub(r'\s*\([^()]*\)(?![A-Za-z])', ' ', text)
-    text = re.sub(r'\s*\([^()]*$', ' ', text)
-    return ' '.join(text.split()).strip(' ,;:/-–—&.')
-
-
 def words(text: str) -> list[str]:
     return re.findall(r'[a-z0-9]+', text.casefold())
 
@@ -69,10 +60,6 @@ def topics(line: str) -> list[str]:
 
 def is_agenda(value: str) -> bool:
     return int(value.split('.')[0]) <= 30
-
-
-def is_descendant(item: str, parent: str) -> bool:
-    return item != parent and item.startswith(parent + '.')
 
 
 # ------------------------------------------------------------------- cells
@@ -302,18 +289,6 @@ def interpret(document: dict, refine=None) -> tuple[list[dict], list[dict]]:
 
 
 # --------------------------------------------------------------- schedule
-
-def describe(item: str, agenda: dict) -> dict | None:
-    match = item
-    while match not in agenda and '.' in match:
-        match = match.rsplit('.', 1)[0]
-    if match not in agenda:
-        return None
-    parts_ = match.split('.')
-    path = ['.'.join(parts_[:i]) for i in range(1, len(parts_) + 1)]
-    return {'agenda_item': item, 'matched_agenda_item': match, 'description': agenda[match],
-            'hierarchy': [{'agenda_item': p, 'description': agenda.get(p)} for p in path]}
-
 
 def make_schedule(document: dict, metadata: dict, source_files: list[str], source_labels: dict,
                   generated_at: str, *, refine=None, resolve_chair=None) -> Schedule:

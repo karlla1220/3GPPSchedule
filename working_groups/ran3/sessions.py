@@ -19,9 +19,10 @@ from __future__ import annotations
 from datetime import date, timedelta
 import re
 
-from shared.agenda_groups import group_label
+from shared.agenda import describe, group_label, is_descendant
 from shared.schedule import (DaySchedule, MIN_PART_MINUTES, RoomInfo, Schedule, Session, Timeline,
                              minutes_to_time, time_to_minutes)
+from shared.titles import clean
 
 ROOMS = (('main', 'Main session'), ('offline', 'Offline room'))
 NUMBER = r'\d{1,2}(?:\.\d{1,2})*'
@@ -46,17 +47,6 @@ NOT_OFFLINE = re.compile(r'^(?:No parallel offlines|No offlines|6G offline in ma
                          r'|(?:RAN3\s+)?Social Event)', re.I)
 AI_TAG = re.compile(r'\[\s*AI\s*:\s*([\d.]+)\s*\]', re.I)
 PLACEHOLDERS = {'tbd', 'tba', '-'}
-
-
-def clean(text: str) -> str:
-    """Display label as RAN2 makes it: round brackets go, "(e)RedCap" stays."""
-    previous = None
-    while previous != text:
-        previous = text
-        text = re.sub(r'\s*\([^()]*\)(?![A-Za-z])', ' ', text)
-    text = re.sub(r'\s*\([^()]*$', ' ', text)
-    text = re.sub(r'\[\s*\]', ' ', text)
-    return ' '.join(text.split()).strip(' ,;:/-–—&.')
 
 
 def cb_refs(text: str) -> list[str]:
@@ -273,22 +263,6 @@ def offline_sessions(slots: list[dict], cbs: dict, agenda: dict | None, dates: d
 
 
 # --------------------------------------------------------------- schedule
-
-def describe(item: str, agenda: dict) -> dict | None:
-    match = item
-    while match not in agenda and '.' in match:
-        match = match.rsplit('.', 1)[0]
-    if match not in agenda:
-        return None
-    parts = match.split('.')
-    path = ['.'.join(parts[:i]) for i in range(1, len(parts) + 1)]
-    return {'agenda_item': item, 'matched_agenda_item': match, 'description': agenda[match],
-            'hierarchy': [{'agenda_item': p, 'description': agenda.get(p)} for p in path]}
-
-
-def is_descendant(item: str, ancestor: str) -> bool:
-    return item != ancestor and item.startswith(ancestor + '.')
-
 
 def known_items(items: list[str], agenda: dict, missing: set) -> list[str]:
     """Items this meeting's agenda.csv lists; the others are reported, not shown."""

@@ -7,6 +7,7 @@ from bs4 import BeautifulSoup
 from docx import Document
 import pytest
 
+from shared.agenda import agenda_map
 from shared.renderer import generate_html
 from shared.schedule import load_schedule, save_schedule
 from working_groups.sa2 import document as docmod, sessions
@@ -24,7 +25,7 @@ def extract(name):
 
 
 def agenda():
-    return docmod.agenda_map((FIXTURES / 'agenda_176.csv').read_bytes())
+    return agenda_map((FIXTURES / 'agenda_176.csv').read_bytes())
 
 
 def read(name, items=None):

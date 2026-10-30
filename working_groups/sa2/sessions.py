@@ -17,9 +17,10 @@ from __future__ import annotations
 from datetime import date, timedelta
 import re
 
+from shared.agenda import describe, group_label, is_descendant
 from shared.schedule import (MIN_PART_MINUTES, DaySchedule, RoomInfo, Schedule, Session, Timeline,
                              minutes_to_time, time_to_minutes)
-from shared.agenda_groups import group_label
+from shared.titles import clean
 from .document import clock
 
 AI = r'\d{1,2}(?:\.\d{1,2})*'
@@ -39,21 +40,6 @@ OTHER_TIME = re.compile(r'(?<![\d.:])\d{1,2}:\d{2}(?!\d)|\b\d{1,2}\s*(?:am|pm)\b
 
 
 # ------------------------------------------------------------------- lines
-
-def clean(text: str) -> str:
-    """Display label: drop parentheses as RAN2's clean does, keep "(e)RedCap".
-
-    Removing "(1)" leaves "Opening , Agenda"; the space before the comma goes too.
-    """
-    previous = None
-    while previous != text:
-        previous = text
-        text = re.sub(r'\s*\([^()]*\)(?![A-Za-z])', ' ', text)
-    text = re.sub(r'\s*\([^()]*$', ' ', text)
-    text = re.sub(r'\[\s*\]', ' ', text)
-    text = re.sub(r'\s+([,;])', r'\1', ' '.join(text.split()))
-    return text.strip(' ,;:/-–—&.')
-
 
 def topic(raw: str) -> str:
     """A line's label: no leading clock, no brackets ("[5+15]", "[19.2.2]"), no parentheses."""
@@ -305,22 +291,6 @@ def interpret(document: dict, agenda: dict | None = None, refine=None) -> tuple[
 
 
 # --------------------------------------------------------------- schedule
-
-def describe(item: str, agenda: dict) -> dict | None:
-    match = item[:-2] if item.lower().endswith('.x') else item
-    while match not in agenda and '.' in match:
-        match = match.rsplit('.', 1)[0]
-    if match not in agenda:
-        return None
-    parts = match.split('.')
-    path = ['.'.join(parts[:i]) for i in range(1, len(parts) + 1)]
-    return {'agenda_item': item, 'matched_agenda_item': match, 'description': agenda[match],
-            'hierarchy': [{'agenda_item': p, 'description': agenda.get(p)} for p in path]}
-
-
-def is_descendant(item: str, ancestor: str) -> bool:
-    return item != ancestor and item.startswith(ancestor + '.')
-
 
 def room_detail(room: dict) -> str:
     """The popup Room line after the name: where the room is and the stream the plan calls its row.

@@ -34,7 +34,8 @@ from bs4 import BeautifulSoup
 import httpx
 
 from shared import remote_files
-from shared.portal_meetings import TB_IDS, meeting_key
+from shared.json_files import read_json, write_json
+from shared.portal_meetings import TB_IDS, meeting_key, timezone_reference
 
 # When the root was last listed for a meeting not found (not worth committing).
 CACHE_PATH = Path('.cache/meeting-folders.json')
@@ -144,6 +145,22 @@ def portal_key(row):
     return meeting_key(re.sub(r'^3GPP\s+', '3GPP', str(row.get('Title') or '').strip()))
 
 
+def portal_metadata(rows: list[dict], meeting: str) -> dict | None:
+    """Dates, place and time zone of a meeting from its single Portal row."""
+    matches = [row for row in rows if portal_key(row) == meeting]
+    if len(matches) != 1:
+        return None
+    row = matches[0]
+    reference = timezone_reference(row) or {}
+    metadata = {'starts_on': row['StartDate'][:10], 'ends_on': row['EndDate'][:10],
+                'location': row.get('Location') or '', 'country': row.get('Country') or '',
+                'portal_timezone': row.get('StartTimeZone') or '', 'portal_id': row.get('Id')}
+    for key in ('timezone', 'starts_at', 'ends_at', 'starts_on', 'ends_on'):
+        if reference.get(key):
+            metadata[key] = reference[key]
+    return metadata
+
+
 def wg_rows(wg_id, rows):
     return [row for row in rows or [] if row.get('TBId') == TB_IDS[wg_id]]
 
@@ -186,22 +203,6 @@ def updates(wg_id):
     return [] if folders is None else [f'meeting folders now {", ".join(folders) or "none"}']
 
 
-def _read_json(path):
-    try:
-        value = json.loads(Path(path).read_text(encoding='utf-8'))
-        return value if isinstance(value, dict) else {}
-    except (OSError, ValueError):
-        return {}
-
-
-def _write_json(path, value):
-    path = Path(path)
-    path.parent.mkdir(parents=True, exist_ok=True)
-    temporary = path.with_suffix('.tmp')
-    temporary.write_text(json.dumps(value, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
-    temporary.replace(path)
-
-
 def write(wg_id, folders):
     """Set meeting_specific in the WG's config.json; True if it changed.
 
@@ -216,7 +217,7 @@ def write(wg_id, folders):
     if not isinstance(config, dict) or config.get('meeting_specific') == folders:
         return False
     config['meeting_specific'] = folders
-    _write_json(path, config)
+    write_json(path, config)
     print(f'[{wg_id}] Recorded meeting_specific: {folders}')
     return True
 
@@ -265,7 +266,7 @@ def resolve(wg_id, meetings, *, rows=None, override=(), recorded=(), root=None, 
     manual, portal = overrides(wg_id, override), portal_folders(wg_id, rows, root)
     # A recorded folder under another archive_url is stale.
     known = {k: v for k, v in overrides(wg_id, recorded).items() if v.startswith(root)}
-    cache = _read_json(CACHE_PATH)
+    cache = read_json(CACHE_PATH)
     root_listed = cache.setdefault(wg_id, {}).setdefault('root_listed', {})
     before = json.dumps(cache, sort_keys=True)
     found = _FOUND.setdefault(wg_id, {})
@@ -295,7 +296,7 @@ def resolve(wg_id, meetings, *, rows=None, override=(), recorded=(), root=None, 
         found[meeting] = folder
         result.setdefault(meeting, folder)
     if json.dumps(cache, sort_keys=True) != before:
-        _write_json(CACHE_PATH, cache)
+        write_json(CACHE_PATH, cache)
     if record:
         _record(wg_id)
     return result
