@@ -14,6 +14,7 @@ import pytest
 
 from test_sa1 import EOM, FIXTURES, HISTORY, META_115, M113, TIMETABLE, find
 from working_groups.sa1 import lifecycle, pipeline, sources
+from working_groups.sa1.document import UnreadTable
 
 
 # ----------------------------------------------------------------- sources
@@ -207,6 +208,25 @@ def test_local_build_needs_no_network_and_records_state(offline_config, tmp_path
     assert state['meeting_id'] == 'sa1#115' and state['llm'] == {'used': False}
     again = pipeline.build_schedule(SimpleNamespace(no_download=True, output_dir=tmp_path / 'out'))
     assert again.days == schedule.days
+
+
+def test_an_unreadable_table_is_built_from_the_llm_reading_or_fails(offline_config, tmp_path, monkeypatch):
+    from shared import notices
+    from test_sa1 import FakeGemini, doc_answer, unreadable
+    data = unreadable()
+    path = tmp_path / EOM
+    path.write_bytes(data)
+    options = SimpleNamespace(local=str(path), no_download=True, output_dir=tmp_path / 'out')
+    # Without the LLM the build fails as before, and the last page stays.
+    with pytest.raises(UnreadTable, match='no sessions'):
+        pipeline.build_schedule(options)
+    schedule = pipeline.build_schedule(options, request=FakeGemini(doc_answer(data)))
+    assert [r.id for r in schedule.days[0].rooms] == ['main', 'b2']
+    assert find(schedule, 'Tuesday', '09:00', 'b2').chair == 'Qun Wei'
+    assert 'read by an LLM' in schedule.supplements[0]['text']
+    state = sources.read_json(tmp_path / 'out/sa1/.schedule_state.json')
+    assert state['llm'] == {'model': offline_config['model'], 'document': True}
+    assert [n['kind'] for n in notices.read()] == ['document-fallback']
 
 
 def test_officials_spell_the_note_names_and_their_failure_is_harmless(offline_config, tmp_path, monkeypatch):

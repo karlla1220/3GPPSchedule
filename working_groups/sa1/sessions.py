@@ -299,13 +299,17 @@ def interpret(document: dict, refine=None) -> tuple[list[dict], list[dict]]:
 # --------------------------------------------------------------- schedule
 
 def make_schedule(document: dict, metadata: dict, source_files: list[str], source_labels: dict,
-                  generated_at: str, *, refine=None, resolve_chair=None) -> Schedule:
-    """``resolve_chair`` turns a NOTE name into the officials' spelling (shared/officials.py)."""
+                  generated_at: str, *, refine=None, resolve_chair=None, read=None) -> Schedule:
+    """``resolve_chair`` turns a NOTE name into the officials' spelling (shared/officials.py).
+
+    ``read`` is (sessions, notes) already read from a table the rules could not
+    read (llm.read_document); the cells are not interpreted then.
+    """
     agenda = document['agenda']
     first, last = date.fromisoformat(metadata['starts_on']), date.fromisoformat(metadata['ends_on'])
     dates = {(first + timedelta(days=i)).strftime('%A'): (first + timedelta(days=i)).isoformat()
              for i in range(min((last - first).days, 6) + 1)}
-    sessions, notes = interpret(document, refine)
+    sessions, notes = read or interpret(document, refine)
     rooms = [RoomInfo(id=r['id'], name=r['name'], detail=r.get('place', '')) for r in document['rooms']]
     days = []
     for day in document['days']:
