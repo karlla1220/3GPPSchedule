@@ -474,6 +474,7 @@ RAN Plenary, RAN1, RAN2 밖의 WG는 `site.json`의 WG 항목에 `"experimental"
 `MIMO`, `AI/ML`, RAN4 `6G system parameter`처럼 일정에 AI 번호 없이 주제만 적힌 셀이 있다. 이 셀도 필터에 걸리도록(RAN1은 Agreement 패널도 열리도록), 셀 이름이 가리키는 agenda 항목을 `Session.inferred_agenda_items`에 둔다.
 RAN1에서 시작해 모든 WG가 쓴다. 코드는 `shared/agenda_labels.py`이고, WG 파이프라인은 schedule을 만든 뒤 `infer_for_schedule`을 부른다. RAN1(`working_groups/ran1/agenda_labels.py`)은 아래 예시를 담은 자기 지시문을 넘긴다.
 
+- **WG 규칙이 이미 찾은 항목이 있으면 그것을 쓰고 LLM에 묻지 않는다.** RAN4 후보 목록 칸(`Return to`)의 토픽 번호, SA1 같은 표에서 이름과 함께 적힌 번호가 그렇다. 원본이 그 칸에 적지 않은 번호라서 AI 줄이 아니라 이 자리에 둔다.
 - **새 이름을 묻는 것은 그 WG의 LLM 폴백이 켜져 있고 온라인일 때뿐이다.** 오프라인 빌드와 키 없는 빌드는 목록에 이미 있는 답만 쓴다.
 - agenda는 WG마다 그 회의 것이다: RAN1 `agenda_item_description.json`, RAN2·RAN3·RAN4·SA2·RAN P agenda.csv, SA1 의장 파일의 TDoc 표 제목.
 - **용도는 필터와 Agreement 패널뿐이다.** `data-ai-scope`와 `data-agreement-ai`에만 들어가고, 셀의 AI 줄·팝업·`data-ai`·필터 항목 목록에는 나오지 않는다. 일정에 적힌 AI가 있으면 그것만 쓰고 추정은 보지 않는다.
