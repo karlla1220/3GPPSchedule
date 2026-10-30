@@ -190,6 +190,7 @@ def read_cell(cell: dict, agenda: dict | None, cbs: dict) -> list[dict]:
 
 
 def session_of(cell, group, chair, part, agenda, cbs, struck=(), title=None, items=None) -> dict:
+    """One session from a piece's lines. ``title`` (an LLM's) is used only when no line names the piece."""
     start = cell['start']
     clock = next((CLOCK_LINE.match(x) for x in group[:1] if kind(x) == 'clock'), None)
     if clock and part is None:
@@ -209,7 +210,7 @@ def session_of(cell, group, chair, part, agenda, cbs, struck=(), title=None, ite
             moderator = cbs[ref].get('moderator')
             notes.append(cbs[ref]['name'] + (f' (moderator - {moderator})' if moderator else ''))
     return {'id': cell['id'], 'day': cell['day'], 'room': 'main', 'start': start, 'end': cell['end'],
-            'part': part, 'name': title if title is not None else title_of(group), 'chair_label': chair,
+            'part': part, 'name': title_of(group) or title or '', 'chair_label': chair,
             'agenda_items': list(dict.fromkeys(items)), 'ranges': ranges, 'notes': notes}
 
 

@@ -25,6 +25,9 @@ Return:
   - refs: the ids of the cells the session comes from. lines: the session's lines copied exactly
     from those cells, one string per line, without the break's name. Every label line of a cited
     cell ("6G SI: AI 10.7, 10.4") belongs to exactly one session.
+  - Rows the document writes separately stay separate sessions, even with the same text: "Offline*"
+    in the 08:00 row and again in the 08:30 row is two sessions, 08:00-08:30 and 08:30-09:00, each
+    with part null. Only a merged cell ("merge": "continue") reads on over its rows.
   - A cell with two or more label lines ("Corrections: AI 9" and "XR: AI 20"), or two untimed rows
     of one block, is pieces of the block: give each piece the block's start and end and part
     [k, n] in the order written. Each piece starts with its label line; lines below a label line
