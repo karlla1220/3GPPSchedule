@@ -732,6 +732,11 @@ def test_a_document_session_takes_the_rules_title():
     assert found[0]['name'] == 'Main Ad-hoc / [108] Spectrum sharing'
 
 
+def test_a_document_session_leaves_out_its_time_marks():
+    assert llm.without_times(['---12:00---', '[105-B] 6G RRM', '----9.30----', '8:30 – 10:30', 'Start at 8:00',
+                              'Main Ad-hoc:  (until 11:00) ']) == ['[105-B] 6G RRM', 'Main Ad-hoc: (until 11:00)']
+
+
 def test_an_unchecked_document_answer_fails_the_build(tmp_path):
     data = without_monday_title()
     invented = document_answer(outline_texts(data))

@@ -246,6 +246,13 @@ def spelled_topics(text: str) -> str:
     return re.sub(r'\b(\d{3})-([A-Z])/([A-Z])\b', r'\g<0> \1-\2 \1-\3', text)
 
 
+def without_times(lines: list[str]) -> list[str]:
+    """The lines without those that only mark a time, which the rules take out as they split a cell."""
+    lines = [squash(line) for line in lines]
+    return [line for line in lines
+            if not (DASH_MARK.match(line) or RANGE_LINE.match(line) or not START_AT.sub('', line).strip())]
+
+
 def cited_lines(session: DocSession, texts: dict[str, str]) -> list[str]:
     """The lines a session cites: chosen lines of one cell, or whole cells."""
     if session.line_numbers is not None:
@@ -373,7 +380,7 @@ class DocumentReading:
                 end, warning = end_of_meeting(metadata, s.start)
                 warnings += [warning] if warning else []
             cell = {'id': f'doc{n}', 'rooms': [self.ids[s.day][r] for r in s.room_ids]}
-            built = build_session(cell, Part(s.start, end, fixed=True), cited_lines(s, self.texts), context,
+            built = build_session(cell, Part(s.start, end, fixed=True), without_times(cited_lines(s, self.texts)), context,
                                   s.part, in_break=s.in_break)
             if not built['named']:
                 built['name'] = ' '.join(s.title.split())
