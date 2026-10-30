@@ -5,19 +5,20 @@ from datetime import date, timedelta
 import json
 from pathlib import Path
 import re
-import time
 from typing import Literal
 from zoneinfo import ZoneInfo
 
 from pydantic import BaseModel
 
-from shared import timezones
+from shared import llm_cells, timezones
 from shared.schedule import DaySchedule, RoomInfo, Schedule, Session, Timeline, time_to_minutes
 from .document import TIME_RANGE, describe, time_range
 from .sources import CACHE, digest, read_json, write_json
 
 PROMPT = Path(__file__).parent / 'prompts/timeplan.md'
 PARSER_VERSION = 2
+# The timeplan is read with high thinking, which takes about six minutes, past the shared limit.
+REQUEST_TIMEOUT_MS = 900_000
 
 
 class Availability(BaseModel):
@@ -55,28 +56,7 @@ class Interpretation(BaseModel):
 
 
 def gemini_request(payload, schema, model, thinking='medium'):
-    import os
-    from dotenv import load_dotenv
-    from google import genai
-    from google.genai import types
-    load_dotenv()
-    key = os.environ.get('GEMINI_API_KEY')
-    if not key:
-        raise ValueError('GEMINI_API_KEY is required to interpret a new RAN P timeplan')
-    with genai.Client(api_key=key) as client:
-        for attempt in range(3):
-            try:
-                response = client.models.generate_content(
-                    model=model, contents=payload,
-                    config=types.GenerateContentConfig(
-                        response_mime_type='application/json',
-                        response_json_schema=schema, max_output_tokens=65536,
-                        thinking_config=types.ThinkingConfig(thinking_level=thinking)))
-                return json.loads(response.text)
-            except (genai.errors.APIError, ValueError) as exc:
-                if attempt == 2:
-                    raise RuntimeError('RAN P LLM request failed after three attempts') from exc
-                time.sleep(2 * (attempt + 1))
+    return llm_cells.gemini_request(payload, schema, model, thinking, timeout_ms=REQUEST_TIMEOUT_MS)
 
 
 def resolve_timezone(metadata, model, request=gemini_request):

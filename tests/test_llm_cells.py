@@ -6,7 +6,7 @@ import httpx
 from pydantic import BaseModel
 import pytest
 
-from shared import llm_cells
+from shared import llm_cells, notices
 from shared.agenda import group_label
 
 
@@ -195,15 +195,62 @@ def test_a_document_is_read_with_low_thinking(tmp_path, capsys):
     assert '[ran4] Reading a.pptx whole, round 1/2' in capsys.readouterr().out
 
 
-def test_a_failed_document_request_ends_the_reading(tmp_path):
-    asked = []
-
+def counted(outcome):
     def request(message, schema, model, thinking):
-        asked.append(message)
-        raise RuntimeError('LLM request timed out after 300 s')
+        request.calls += 1
+        if isinstance(outcome, Exception):
+            raise outcome
+        return outcome
+    request.calls = 0
+    return request
+
+
+def test_a_costly_failure_is_not_asked_again_soon_and_is_reported_once(tmp_path):
+    request = counted(llm_cells.CostlyFailure('LLM request timed out after 300 s'))
     with pytest.raises(RuntimeError, match='timed out'):
         read_whole(request, tmp_path)
-    assert len(asked) == 1 and not list(tmp_path.glob('document-*.json'))
+    with pytest.raises(ValueError, match='h ago: LLM request timed out'):
+        read_whole(request, tmp_path)
+    assert request.calls == 1
+    assert [n['title'] for n in notices.read()] == ['RAN4: the LLM could not read the schedule']
+
+
+def test_an_answer_that_fails_its_checks_twice_is_not_asked_again_soon(tmp_path):
+    request = counted({'sessions': []})
+    check = lambda result: ['no sessions']
+    for _ in range(2):
+        with pytest.raises(ValueError):
+            read_whole(request, tmp_path, check)
+    assert request.calls == 2
+    assert 'no sessions' in notices.read()[0]['lines'][3]
+
+
+def test_a_failed_document_is_asked_again_after_the_wait(tmp_path, monkeypatch):
+    request = counted(llm_cells.CostlyFailure('cut'))
+    with pytest.raises(RuntimeError):
+        read_whole(request, tmp_path)
+    now = llm_cells.time.time()
+    monkeypatch.setattr(llm_cells.time, 'time', lambda: now + llm_cells.RETRY_FAILED_SECONDS + 1)
+    with pytest.raises(RuntimeError):
+        read_whole(request, tmp_path)
+    assert request.calls == 2
+
+
+def test_a_new_version_of_a_failed_document_is_asked_at_once(tmp_path):
+    request = counted(llm_cells.CostlyFailure('cut'))
+    for text in 'ab':
+        with pytest.raises(RuntimeError):
+            llm_cells.read_document('prompt', [{'id': 'p0', 'text': text}], Whole, lambda r: [], model='model',
+                                    cache_dir=tmp_path, wg_id='ran4', source='a.pptx', request=request)
+    assert request.calls == 2
+
+
+def test_an_outage_is_not_recorded_as_a_failed_document(tmp_path):
+    request = counted(RuntimeError('LLM request failed after three attempts'))
+    for _ in range(2):
+        with pytest.raises(RuntimeError):
+            read_whole(request, tmp_path)
+    assert request.calls == 2 and not notices.read()
 
 
 def test_chairs_and_agenda_items_must_be_written_whole():
