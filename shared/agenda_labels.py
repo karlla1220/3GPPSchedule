@@ -40,7 +40,7 @@ Exclude
 - Maintenance items, unless the label says maint/maintenance, names an earlier release than the current one, or names the maintenance item's own subject.
 - Labels that name no agenda subject: placeholders (TBD, To be assigned by <name>), running order (Sweep, Revisions, Session reports, Any other open issues), breaks and meals. These get no items.
 
-A label is a cell's title, followed by the cell's other lines after " ⏎ ". Read the whole cell: a common title such as "Plenary" or "Return to" takes its subjects from the lines after it. Echo each label exactly as given.
+A label is a cell's title, followed by the cell's other lines after " ⏎ ". Read the whole cell: a common title such as "Plenary" or "Return to" takes its subjects from the lines after it. Answer each label under its id.
 
 Use agenda item numbers exactly as listed. When both a parent and its children apply, you may give the parent alone. For each item give a one-line reason. When nothing applies, return an empty list and say why in one line."""
 
@@ -52,6 +52,7 @@ LABEL_JUDGE_SCHEMA = {
             "items": {
                 "type": "object",
                 "properties": {
+                    "id": {"type": "string"},
                     "label": {"type": "string"},
                     "items": {
                         "type": "array",
@@ -66,7 +67,7 @@ LABEL_JUDGE_SCHEMA = {
                     },
                     "note": {"type": "string"},
                 },
-                "required": ["label", "items", "note"],
+                "required": ["id", "items", "note"],
             },
         }
     },
@@ -160,7 +161,8 @@ def gemini_judge(labels: list[str], agenda: dict[str, str], *, instruction: str)
         + "\n".join(f"{number}\t{description}" for number, description in
                     sorted(agenda.items(), key=lambda kv: _number_key(kv[0])))
         + "\n\nLabels:\n"
-        + "\n".join(json.dumps(label, ensure_ascii=False) for label in labels)
+        + "\n".join(json.dumps({"id": f"L{n}", "label": label}, ensure_ascii=False)
+                    for n, label in enumerate(labels, 1))
     )
     response = client.models.generate_content(
         model=LABEL_JUDGE_MODEL,
@@ -173,11 +175,31 @@ def gemini_judge(labels: list[str], agenda: dict[str, str], *, instruction: str)
         ),
     )
     answers = json.loads(response.text.strip()).get("labels") or []
-    return {
-        answer["label"]: answer
-        for answer in answers
-        if isinstance(answer, dict) and isinstance(answer.get("label"), str)
-    }
+    return match_answers(labels, answers)
+
+
+def _loose(text: str) -> str:
+    return re.sub(r"[\s⏎]+", " ", text).strip().casefold()
+
+
+def match_answers(labels: list[str], answers: list) -> dict[str, dict]:
+    """Answers by the label they answer: by id ("L3" is the third label), else
+    by the label text, compared loosely. A model may not echo a long label
+    exactly (" ⏎ " lines, spaces), and an unmatched answer is a wasted call."""
+    by_loose = {_loose(label): label for label in labels}
+    result = {}
+    for answer in answers:
+        if not isinstance(answer, dict):
+            continue
+        label = None
+        match = re.fullmatch(r"L(\d+)", str(answer.get("id") or "").strip())
+        if match and 1 <= int(match[1]) <= len(labels):
+            label = labels[int(match[1]) - 1]
+        elif isinstance(answer.get("label"), str):
+            label = by_loose.get(_loose(answer["label"]))
+        if label is not None and label not in result:
+            result[label] = answer
+    return result
 
 
 def apply_inferred_agenda_items(
