@@ -1,7 +1,9 @@
 """Build the SA1 schedule from the chair file (research/sa1/DECISIONS.md).
 
 Rules read the table; Gemini is the fallback for the cells they are unsure
-about (llm.py). Without GEMINI_API_KEY the rules' reading is published as is.
+about, and for the whole table when the rules cannot read its layout (llm.py).
+Without GEMINI_API_KEY the rules' reading is published as is, and a table they
+cannot read fails the build so the last page stays.
 """
 from __future__ import annotations
 
@@ -13,8 +15,8 @@ from zoneinfo import ZoneInfo
 from shared import llm_cells, officials, timezones
 from shared.agenda_labels import infer_for_schedule
 from shared.renderer import generate_html
-from .document import extract_agenda, extract_document
-from .llm import CellRefiner
+from .document import UnreadTable, extract_agenda, extract_document
+from .llm import CellRefiner, read_document
 from .sessions import make_schedule
 from .sources import (CACHE, DOWNLOADS, Bundle, client, config_hash, fetch_bundle, load_config, local_bundle,
                       override_for, portal_metadata, portal_rows, read_json, source_label, write_json)
@@ -100,7 +102,12 @@ def build_schedule(options=None, *, request=None, history=None):
 
     manifest = bundle.manifest
     schedule_doc, chair_doc = bundle.documents()
-    document = extract_document(schedule_doc, manifest['schedule']['name'])
+    unread = None
+    try:
+        document = extract_document(schedule_doc, manifest['schedule']['name'])
+    except UnreadTable as exc:
+        # A weekday table in a layout the rules do not know: the LLM reads it below.
+        unread, document = exc, exc.partial
     meeting = manifest['meeting_id']
     if document['meeting_id'] not in (None, meeting):
         raise ValueError(f"Input bundle meeting identity mismatch: {document['meeting_id']} != {meeting}")
@@ -118,17 +125,23 @@ def build_schedule(options=None, *, request=None, history=None):
     if getattr(options, 'rebuild_slots', False):
         for path in CACHE.glob('*.json'):
             path.unlink()
-    refine = CellRefiner(document, cfg['model'], request) if request else None
+    read = None
+    if unread is not None:
+        if request is None:
+            raise unread
+        document, read = read_document(schedule_doc, manifest['schedule']['name'], document, cfg['model'], request)
+    refine = CellRefiner(document, cfg['model'], request) if request and read is None else None
     resolve = None if offline and history is None else chair_resolver(cfg, metadata['starts_on'], history)
     generated = datetime.now(ZoneInfo(metadata['timezone'])).strftime('%Y-%m-%d %H:%M')
     files = [manifest['schedule']] + ([manifest['chair']] if manifest.get('chair') else [])
     schedule = make_schedule(document, metadata, [f['name'] for f in files],
                              {f['name']: source_label(f['name']) for f in files}, generated,
-                             refine=refine, resolve_chair=resolve)
+                             refine=refine, resolve_chair=resolve, read=read)
     # Cells the schedule gives no AI: an LLM reads their label for the filter (shared/agenda_labels.py).
     infer_for_schedule(schedule, 'sa1', 'SA1', document['agenda'], enabled=not offline and request is not None)
     # No checkpoint before parsing and rendering both succeed.
     generate_html(schedule)
     state = {k: v for k, v in manifest.items() if k != 'portal_metadata'}
-    write_json(state_path, {**state, 'metadata': metadata, 'llm': refine.summary if refine else {'used': False}})
+    summary = ({'model': cfg['model'], 'document': True} if read else refine.summary if refine else {'used': False})
+    write_json(state_path, {**state, 'metadata': metadata, 'llm': summary})
     return schedule

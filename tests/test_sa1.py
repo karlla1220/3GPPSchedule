@@ -315,3 +315,113 @@ def test_an_llm_outage_never_breaks_the_build(tmp_path):
     refine = llm.CellRefiner(unsure_document(), 'test-model', FakeGemini(RuntimeError('down')), tmp_path)
     assert len(sessions.interpret(unsure_document(), refine)[0]) == 3
     assert refine.summary['error'] == 'down' and refine.summary['applied'] == 0
+
+
+# ---------------------------------------------------- whole-document fallback
+
+def unreadable(name=EOM):
+    """The chair file with its time column written "08:00 until 09:00", which the rules do not read.
+
+    Friday Q1 names a topic without its number ("Plenary ⏎ ISAC" for "Plenary ⏎ Revisions").
+    """
+    doc = Document(io.BytesIO((FIXTURES / name).read_bytes()))
+    table = next(t for t in doc.tables if docmod._is_schedule(t))
+    friday = next(p for row in table.rows for p in row.cells[-1].paragraphs if p.text.strip() == 'Revisions')
+    friday.text = 'ISAC'
+    for row in table.rows[1:]:
+        cell = row.cells[1]
+        times = docmod.lines_of(cell._tc)
+        if len(times) == 2:
+            for paragraph in cell.paragraphs[1:]:
+                paragraph._p.getparent().remove(paragraph._p)
+            cell.paragraphs[0].text = f'{times[0]} until {times[1]}'
+    out = io.BytesIO()
+    doc.save(out)
+    return out.getvalue()
+
+
+def cell_ref(data, *words):
+    """The id of the schedule cell whose text has all ``words``."""
+    texts = llm.office_outline.texts(llm.schedule_blocks(data))
+    return next(key for key, text in texts.items() if ':' in key and all(w in text for w in words))
+
+
+def doc_session(day, start, end, room, title, items, refs):
+    return {'day': day, 'start': start, 'end': end, 'room': room, 'title': title, 'agenda_items': items,
+            'refs': refs}
+
+
+def doc_answer(data, *extra):
+    tuesday_q1 = cell_ref(data, '7.3.3 AI', '7.3.5 Ubiquitous')
+    return {'rooms': [{'id': 'main', 'name': 'Plenary/ Breakout 1'}, {'id': 'b2', 'name': 'Breakout 2'}],
+            'days': ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+            'sessions': [doc_session('Monday', '09:00', '10:30', 'main', 'Plenary', ['1', '2', '3'],
+                                     [cell_ref(data, '1. Opening')]),
+                         doc_session('Tuesday', '08:00', '09:00', None, '7.2 FS_AddCapEm_REQ / 7.1 FS_SIMP',
+                                     ['7.2', '7.1'], [cell_ref(data, '7.2 FS_AddCapEm_REQ\n7.1 FS_SIMP')]),
+                         doc_session('Tuesday', '09:00', '10:30', 'main', '7.3.3 AI', ['7.3.3'], [tuesday_q1]),
+                         doc_session('Tuesday', '09:00', '10:30', 'b2', '7.3.5 Ubiquitous', ['7.3.5'], [tuesday_q1]),
+                         *extra]}
+
+
+def test_a_table_the_rules_cannot_read_is_read_whole_by_the_llm(tmp_path):
+    data = unreadable()
+    with pytest.raises(docmod.UnreadTable) as raised:
+        docmod.extract_document(data, EOM)
+    partial = raised.value.partial
+    assert partial['days'] == [] and partial['chairs'] and partial['agenda']['7.3.3']
+    # A topic named without a number finds the number written with it elsewhere, for the filter only.
+    named = doc_session('Friday', '09:00', '10:30', 'main', 'Plenary', [], [cell_ref(data, 'Plenary\nISAC')])
+    gemini = FakeGemini(doc_answer(data, named))
+    document, read = llm.read_document(data, EOM, partial, 'test-model', gemini, tmp_path)
+    schedule = sessions.make_schedule(document, META_115, [EOM], {}, '2026-08-28 16:00', read=read)
+    assert len(gemini.calls) == 1 and 'MEETING ROOMS' in gemini.calls[0] and 'S1-263000' not in gemini.calls[0]
+    # The rooms the MEETING ROOMS lines name keep the rules' ids, whatever ids the answer used.
+    rules = build(EOM)
+    assert [(r.id, r.name, r.detail) for r in schedule.days[0].rooms] == [
+        (r.id, r.name, r.detail) for r in rules.days[0].rooms] == [
+        ('plenary', 'Plenary/ Breakout 1', 'D3/D4, Floor 3'), ('breakout-2', 'Breakout 2', 'D9, Floor 3')]
+    monday = find(schedule, 'Monday', '09:00')
+    assert (monday.name, monday.agenda_item, monday.chair, monday.notes) == (
+        'Plenary', '1, 2, 3', None, ['1. Opening', '2. Reports', '3. LSs'])
+    # Chairs come from the NOTE, as for the rules' reading.
+    assert find(schedule, 'Tuesday', '09:00').chair == 'Vasil Aleksiev'
+    assert find(schedule, 'Tuesday', '09:00', 'breakout-2').chair == 'Qun Wei'
+    assert find(schedule, 'Tuesday', '08:00', None).room_scope == 'unassigned'
+    friday = find(schedule, 'Friday', '09:00')
+    assert (friday.agenda_item, friday.inferred_agenda_items, friday.notes) == (None, ['7.3.4'], ['ISAC'])
+    assert 'read by an LLM' in schedule.supplements[0]['text'] and 'MEETING ROOMS:' in schedule.supplements[1]['text']
+    # The answer is cached: the next build does not ask.
+    llm.read_document(data, EOM, partial, 'test-model', FakeGemini(), tmp_path)
+
+
+@pytest.mark.parametrize('change, problem', [
+    ({'start': '09:15'}, '09:15 is not written'),
+    ({'title': 'Artificial Intelligence'}, 'title words'),
+    ({'agenda_items': ['7.3.4']}, "'7.3.4' is not written"),
+    ({'room': 'b2'}, 'overlaps another session'),
+    ({'room': 'b3'}, "room 'b3' is not one of"),
+    ({'refs': ['p999']}, 'refs must cite'),
+])
+def test_document_answers_that_do_not_match_the_table_are_rejected(tmp_path, change, problem):
+    data = unreadable()
+    partial = pytest.raises(docmod.UnreadTable, docmod.extract_document, data, EOM).value.partial
+    wrong = doc_answer(data)
+    wrong['sessions'][2] = {**wrong['sessions'][2], **change}
+    gemini = FakeGemini(wrong, wrong)
+    with pytest.raises(docmod.LayoutError, match='could not read'):
+        llm.read_document(data, EOM, partial, 'test-model', gemini, tmp_path)
+    assert len(gemini.calls) == 2 and problem in gemini.calls[1]
+
+
+def test_a_room_must_be_written_and_breakout_text_is_not_plenary(tmp_path):
+    data = unreadable()
+    texts = llm.office_outline.texts(llm.schedule_blocks(data))
+    answer = llm.DocResult.model_validate(doc_answer(data))
+    assert llm.check_document(answer, texts) == []
+    renamed = answer.model_copy(update={'rooms': [llm.DocRoom(id='main', name='Main room'), answer.rooms[1]]})
+    assert "room 'Main room' is not written in the document" in llm.check_document(renamed, texts)
+    # "7.3.5 Ubiquitous" follows the Breakout 2 head, so it is not the Plenary room's.
+    swapped = answer.sessions[3].model_copy(update={'room': 'main'})
+    moved = answer.model_copy(update={'sessions': [*answer.sessions[:2], swapped]})
+    assert any('title words' in e for e in llm.check_document(moved, texts))

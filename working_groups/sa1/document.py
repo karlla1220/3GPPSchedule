@@ -39,6 +39,18 @@ class LayoutError(ValueError):
     """The document has no schedule table these rules recognise."""
 
 
+class UnreadTable(LayoutError):
+    """A weekday table whose slots the rules cannot read (time column, cells).
+
+    ``partial`` is the document without its days: meeting, rooms, NOTE chairs,
+    agenda and supplements, which the whole-document fallback builds on.
+    """
+
+    def __init__(self, message: str, partial: dict):
+        super().__init__(message)
+        self.partial = partial
+
+
 def clock(hour, minute) -> str:
     hour, minute = int(hour), int(minute)
     if not (0 <= hour < 24 and 0 <= minute < 60):
@@ -281,8 +293,6 @@ def extract_document(data: bytes, name: str) -> dict:
     if table is None:
         raise LayoutError('No schedule table with weekday columns')
     days = read_table(table)
-    if not any(day['cells'] for day in days):
-        raise LayoutError('The SA1 schedule table has no sessions')
     room_lines, notes, chair_lines = around(doc, table)
     rooms = room_list(room_lines)
     supplements = []
@@ -291,9 +301,12 @@ def extract_document(data: bytes, name: str) -> dict:
     supplements += [{'type': 'paragraph', 'text': text, 'bold': False} for text in notes]
     if chair_lines:
         supplements.append({'type': 'paragraph', 'text': '\n'.join(chair_lines), 'bold': False})
-    return {'meeting_id': meeting, 'title': title, 'rooms': rooms or [dict(r) for r in DEFAULT_ROOMS],
-            'days': days, 'chairs': note_chairs(chair_lines), 'agenda': agenda_items(doc),
-            'supplements': supplements}
+    document = {'meeting_id': meeting, 'title': title, 'rooms': rooms or [dict(r) for r in DEFAULT_ROOMS],
+                'days': days, 'chairs': note_chairs(chair_lines), 'agenda': agenda_items(doc),
+                'supplements': supplements}
+    if not any(day['cells'] for day in days):
+        raise UnreadTable('The SA1 schedule table has no sessions', {**document, 'days': []})
+    return document
 
 
 def extract_agenda(data: bytes) -> dict[str, str]:
