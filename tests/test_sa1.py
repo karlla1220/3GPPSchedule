@@ -173,8 +173,18 @@ def test_agenda_numbers_are_checked_against_the_meeting_agenda():
     assert (massive.name, massive.agenda_item, massive.chair) == ('8.1.7 Massive + 8.8 Verticals', '8.1.7, 8.1.8',
                                                                  'Yusuke NAKANO')
     assert find(m112, 'Wednesday', '11:00').agenda_item is None   # "8.10 Consolidation of KPIs": no item named so
-    # Plenary items named without a number take the number the table writes with that name.
-    assert find(m112, 'Friday', '08:00').agenda_item == '8.1.6, 8.1.7, 8.1.8'
+    # Plenary items named without a number find the number the table writes with that name,
+    # for the filter only: the cell does not write it ("Other" is written "Others" elsewhere).
+    named = find(m112, 'Friday', '08:00')
+    assert (named.agenda_item, named.inferred_agenda_items, named.group_header) == (
+        None, ['8.1.6', '8.1.7', '8.1.8'], '')
+    html = generate_html(m112)
+    assert 'data-ai="" data-ai-scope="8.1.6.*|8.1.7.*|8.1.8.*" data-name="Plenary"' in html
+    # Next to a written number, a named topic is still only found, never shown.
+    agenda = {'7': 'Rel-21', '7.3.3': 'Artificial Intelligence', '7.3.6': 'Immersive Communication'}
+    document = synthetic(['Plenary', '7.3.6 Immersive'], ['Plenary', '7.3.3 AI', 'Immersive'], agenda=agenda)
+    found = sessions.interpret(document)[0]
+    assert [(s['agenda_items'], s['inferred_items']) for s in found] == [(['7.3.6'], []), (['7.3.3'], ['7.3.6'])]
     # Two items run together on one line are both read.
     document = synthetic(['Plenary', '7.2 FS_AddCapEm_REQ 7.3.1 General', '7.3.2 System and Operation'])
     assert read(document)[0][4] == ['7.2', '7.3.1', '7.3.2']
@@ -269,6 +279,16 @@ def test_checked_llm_answers_replace_the_rules_for_uncertain_cells(tmp_path):
                      ('11:00', '12:30', 'plenary', 'Plenary', None)]
     assert refine.summary == {'model': 'test-model', 'uncertain': 1, 'applied': 1, 'kept_rules': 0}
     assert len(gemini.calls) == 1 and '"c0"' in gemini.calls[0] and '"c1"' not in gemini.calls[0]
+
+
+def test_llm_cells_find_named_topics_for_the_filter_as_the_rules_do(tmp_path):
+    agenda = {'7': 'Rel-21', '7.3.6': 'Immersive Communication'}
+    document = synthetic(['Plenary', 'Immersive', 'end by 11:45'], ['Breakout 1:', '7.3.6 Immersive'], agenda=agenda)
+    gemini = FakeGemini({'cells': [{'id': 'c0', 'sessions': [
+        session('plenary', '11:00', '11:45', 'Plenary', [], [0, 1, 2])]}]})
+    found = sessions.interpret(document, llm.CellRefiner(document, 'test-model', gemini, tmp_path))[0]
+    assert [(s['end'], s['agenda_items'], s['inferred_items']) for s in found if s['name'] == 'Plenary'] == [
+        ('11:45', [], ['7.3.6'])]
 
 
 @pytest.mark.parametrize('bad, problem', [

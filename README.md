@@ -756,8 +756,11 @@ SA1#112·#113·#115의 실제 문서로 확인했습니다. `site.json`에서 `e
 - 시작만 적힌 행사(`MMS ⏎ (18:30)`)와, 방 없는 블록이 다른 칸을 덮게 되는 경우(#112 `12:00 – 13:30 1st round VC elections`)는
   시각을 지어내지 않고 그리드 아래 "Not placed on the grid"에 요일과 함께 둡니다.
 - AI는 줄 앞과 `+` 뒤의 번호입니다(`2. Reports` → 2, `7.3.6 Immersive+7.3.10 IMS` → 7.3.6, 7.3.10). 그 미팅 agenda에 없는 번호는
-  그 이름의 항목이 하나뿐일 때 그 번호로 바꾸고(#112 `8.8 Verticals` → 8.1.8), 아니면 AI 줄에서 뺍니다. 번호 없는
-  Plenary 항목(#112 `Immersive`)은 같은 표에서 그 이름에 붙은 번호를 씁니다. 드래프팅 칸에는 AI를 붙이지 않습니다.
+  그 이름의 항목이 하나뿐일 때 그 번호로 바꾸고(#112 `8.8 Verticals` → 8.1.8), 아니면 AI 줄에서 뺍니다.
+- 번호 없이 주제 이름만 적힌 줄(#112 금 Q0 `Plenary ⏎ Immersive ⏎ Massive ⏎ Verticals ⏎ Other`)은 같은 표에서 그 이름과 함께
+  적힌 번호가 하나뿐일 때 그 번호를 찾습니다(`Immersive` → 8.1.6). 원본이 칸에 적은 번호가 아니므로 AI 줄·팝업·색에는 쓰지 않고
+  필터에만 씁니다(`Session.inferred_agenda_items`). 이름은 정확히 같아야 합니다(`Other`는 표에 `Others`로만 있어 찾지 않습니다).
+  이렇게도 찾지 못한, AI 없는 칸은 공용 LLM 추정(`shared/agenda_labels.py`)이 셀 제목으로 필터 항목을 찾습니다.
 - Chair는 원본이 그 칸에 적은 사람만입니다. 브레이크아웃 칸은 NOTE 주제(`,`·`+`로 나눔)가 칸 이름을 가리키는 줄이 하나뿐일 때
   그 의장이고, Plenary 칸과 방 없는 칸은 비웁니다. 이름은 officials 이력(코드 `S1`, `officials_code`)으로 3GPP 표기로 풉니다
   (`Qun Wei` → `Qun WEI`, 셀에는 이름 `Qun`). officials에 없는 사람(`Erik Guttman`)과 페이지를 못 읽은 빌드는 NOTE 표기 그대로입니다.
