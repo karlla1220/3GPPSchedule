@@ -19,6 +19,7 @@ from pydantic import BaseModel
 
 from shared import llm_cells
 from shared.llm_cells import check_times, citation_errors, gemini_request, has_key, title_errors, written_errors
+from shared.officials import join_chairs, split_chairs
 from .document import DAYS, LayoutError, clock, extract_breaks, identify, outline, supplements
 from .sessions import CLOCK_TEXT, COMPANIES, is_agenda, meaningful, parse_marker, written_times
 from .sources import CACHE, digest, read_json, write_json
@@ -78,7 +79,7 @@ class DocResult(BaseModel):
 # ----------------------------------------------------------------- checks
 
 def check_session(prefix, title, chair, agenda_items, source: str, text: str) -> list[str]:
-    names = [n for n in (n.strip() for n in (chair or '').split(',')) if n]
+    names = split_chairs(chair)
     errors = title_errors(prefix, title, source)
     errors += [f'{prefix}: chair {n!r} is not a name written in the text' for n in names if n.lower() in COMPANIES]
     errors += written_errors(prefix, [n for n in names if n.lower() not in COMPANIES], text, 'chair')
@@ -114,7 +115,7 @@ def to_sessions(answer: CellAnswer, item: dict) -> list[dict]:
         items = list(dict.fromkeys(session.agenda_items))
         result.append({'rooms': cell['rooms'], 'start': session.start, 'end': session.end,
                        'fixed': session.start != cell['start'] or session.start in marked,
-                       'name': ' '.join(session.title.split()), 'chair': (session.chair or '').strip() or None,
+                       'name': ' '.join(session.title.split()), 'chair': join_chairs(split_chairs(session.chair)),
                        'agenda_items': items, 'group_item': items[0] if items else None,
                        'offline': session.offline, 'lines': [cell['lines'][i] for i in sorted(session.lines)]})
     return result
@@ -234,7 +235,7 @@ def read_document(data: bytes, name: str, model: str, request=None, cache_dir: P
     days = [{'day': d.day, 'slots': sorted((s.start, s.end) for s in d.slots), 'cells': [], 'notes': []}
             for d in sorted(result.days, key=lambda d: DAYS.index(d.day))]
     sessions = [{'day': s.day, 'rooms': s.room_ids, 'start': s.start, 'end': s.end, 'fixed': True,
-                 'name': ' '.join(s.title.split()), 'chair': (s.chair or '').strip() or None,
+                 'name': ' '.join(s.title.split()), 'chair': join_chairs(split_chairs(s.chair)),
                  'agenda_items': list(dict.fromkeys(s.agenda_items)),
                  'group_item': s.agenda_items[0] if s.agenda_items else None, 'offline': s.offline,
                  'lines': [line for ref in s.refs for line in texts[ref].split('\n')]}

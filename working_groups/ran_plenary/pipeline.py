@@ -8,6 +8,8 @@ from zoneinfo import ZoneInfo
 
 import httpx
 
+from shared.agenda_labels import infer_for_schedule
+from shared.llm_cells import has_key
 from shared.renderer import generate_html
 from .document import agenda_map, extract_document
 from .interpreter import gemini_request, interpret, make_schedule, resolve_timezone
@@ -103,6 +105,8 @@ def build_schedule(options=None, *, request=gemini_request):
         generated = datetime.now(ZoneInfo(metadata['timezone'])).strftime('%Y-%m-%d %H:%M')
         schedule = make_schedule(document, result, descriptions, metadata,
                                  bundle.manifest['timeplan']['name'], generated)
+        # Cells the time plan gives no AI: an LLM reads their label for the filter (shared/agenda_labels.py).
+        infer_for_schedule(schedule, 'ran-plenary', 'RAN Plenary', descriptions, enabled=not offline and has_key())
         # No successful checkpoint before interpretation and rendering both pass.
         generate_html(schedule)
         write_json(state_path, {**bundle.manifest, 'metadata': metadata})

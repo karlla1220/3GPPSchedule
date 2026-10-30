@@ -153,6 +153,7 @@ shared/
   officials.py                 # 의장·부의장 이력(3GPP officials), 회의 날짜의 임기, 원본 표기 → 전체 이름
   llm_cells.py                 # 규칙이 불확실한 항목만 Gemini에 묻는 폴백: 요청, 캐시, 검증·재시도, 공통 검사
   agenda.py                    # agenda.csv 읽기, 팝업 AI 트리, 셀 색 그룹 = agenda 최상위 항목(RAN1 제외)
+  agenda_labels.py             # AI 없는 셀의 이름 → agenda 항목(LLM, 필터 전용, docs/<wg>/agenda_label_map/)
   titles.py                    # 셀 제목의 괄호 떼기(RAN2 규칙, 모든 WG)
   docx_text.py                 # DOCX 문단의 받아들인 글자(변경 추적·취소선)
   json_files.py                # 상태 JSON 읽기·쓰기

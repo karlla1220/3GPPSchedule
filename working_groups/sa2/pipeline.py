@@ -14,6 +14,7 @@ import httpx
 
 from shared import officials, timezones
 from shared.agenda import agenda_map
+from shared.agenda_labels import infer_for_schedule
 from shared.llm_cells import gemini_request, has_key
 from shared.renderer import generate_html
 from .document import LayoutError, extract_document, source_label
@@ -140,6 +141,8 @@ def build_schedule(options=None, *, request=None):
     labels = {plan['name']: source_label(plan['name']), 'agenda.csv': 'agenda.csv'}
     schedule = make_schedule(document, agenda, metadata, sources, labels, generated, chairs=chairs,
                              refine=refine, sessions=prebuilt)
+    # Cells the schedule gives no AI: an LLM reads their label for the filter (shared/agenda_labels.py).
+    infer_for_schedule(schedule, 'sa2', 'SA2', agenda, enabled=not offline and request is not None)
     # No checkpoint before parsing and rendering both succeed.
     generate_html(schedule)
     state = {k: v for k, v in bundle.manifest.items() if k != 'portal_metadata'}

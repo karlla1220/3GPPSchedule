@@ -23,6 +23,10 @@ def fresh_listings(tmp_path, monkeypatch):
     from shared import timezones
     monkeypatch.setattr(timezones, 'MAP_PATH', tmp_path / 'timezone_map.jsonl')
     monkeypatch.setattr(timezones, 'gemini_request', lambda *a, **k: None)
+    # Agenda labels of cells without an AI: never a live LLM call, never the repository's lists.
+    from shared import agenda_labels
+    monkeypatch.setattr(agenda_labels, 'LABEL_MAP_ROOT', tmp_path / 'agenda_label_map')
+    monkeypatch.setattr(agenda_labels, 'gemini_judge', lambda *a, **k: {})
     # RAN1 tests give their own folders; the lookup has its own tests.
     for module in ('check_update', 'pipeline'):
         monkeypatch.setattr(f'working_groups.ran1.{module}.with_meeting_folders', lambda cfg, *a, **k: cfg)

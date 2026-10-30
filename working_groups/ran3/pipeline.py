@@ -12,6 +12,7 @@ from zoneinfo import ZoneInfo
 
 from shared import officials, timezones
 from shared.agenda import agenda_map
+from shared.agenda_labels import infer_for_schedule
 from shared.renderer import generate_html
 from .document import extract_document, file_stem, offline_sheets, source_label
 from .llm import CellRefiner, gemini_request, has_key
@@ -152,6 +153,8 @@ def build_schedule(options=None, *, request=None):
                              refine=refine, warnings=warnings)
     for warning in warnings:
         print(f'[ran3] {warning}')
+    # Cells the schedule gives no AI: an LLM reads their label for the filter (shared/agenda_labels.py).
+    infer_for_schedule(schedule, 'ran3', 'RAN3', agenda, enabled=not offline and request is not None)
     # No checkpoint before parsing and rendering both succeed.
     generate_html(schedule)
     state = {k: v for k, v in bundle.manifest.items() if k != 'portal_metadata'}
