@@ -9,7 +9,8 @@ coloured text ("colours"), highlight, or struck-out text ("struck": not treated)
 The usual time plan is one table: a header row of weekdays, a time column, and one column per day
 for the single main session room. Time cells give a break's range ("10:30~11:00"), or the starts
 of the rows beside them ("08:00 / 08:30", "09:00"). A row without a time runs from the time above
-to the next time written below. Two rows under one empty time cell (17:00 to 19:00) are untimed
+to the next time written below. A cell merged over the rows of "08:00 / 08:30" runs from 08:00 to
+the next time written below, 09:00. Two rows under one empty time cell (17:00 to 19:00) are untimed
 pieces of one block. The last rows ("19:00 / 20:00") are one evening block. The layout may now
 differ (more rows, another order, split or merged columns); find the same information.
 
