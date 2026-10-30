@@ -226,6 +226,7 @@ def test_render_roundtrip_and_supplements(eom, tmp_path):
     assert 'Plenary/ Breakout 1' in html and 'Room unassigned' in html and 'MEETING ROOMS:' in html
     # The room's place from the MEETING ROOMS lines is in the popup Room line.
     assert 'Room: Breakout 2 · D9, Floor 3' in html
+    assert '<span class="room-name">Breakout 2</span><span class="room-place">D9, Floor 3</span>' in html
 
 
 # --------------------------------------------------------------------- LLM

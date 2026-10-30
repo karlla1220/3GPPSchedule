@@ -265,6 +265,10 @@ def test_render_and_snapshot_roundtrip(r20, tmp_path):
     html = BeautifulSoup(generate_html(r20), 'html.parser')
     piece = html.select('#tuesday [data-name="KI#18"]')[0]
     assert re.search(r'Room: (Main|Breakout \d) · [^<]*\(Floor \d\) · Stream \d', piece['data-popup'])
+    # The grid header shows the place under the room name.
+    header = html.select_one('#tuesday .room-header.has-place')
+    assert [span.get_text() for span in header.select('span')] == ['Main', 'B2 (Floor 2) · Stream 1']
+    assert header['title'] == 'Main · B2 (Floor 2) · Stream 1'
     assert '1/2' in piece.get_text() and 'of' in piece.get_text()
     shared = html.select_one('#friday [data-name="List of agreed tdocs for block approval / Revisions"]')
     assert 'Revisions (including 30.1)' in shared['data-popup']

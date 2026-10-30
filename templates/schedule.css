@@ -554,6 +554,25 @@ header .meta a:focus-visible,
     text-overflow: ellipsis;
 }
 
+/* A room with a place shows it as a second line, quieter than the name. */
+.room-header.has-place {
+    flex-direction: column;
+    gap: 1px;
+    line-height: 1.15;
+}
+
+.room-header.has-place > span {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.room-place {
+    font-size: 10px;
+    font-weight: 400;
+    color: var(--ink-3);
+}
+
 .room-header.time-col {
     font-size: 9.5px;
     letter-spacing: .04em;
@@ -1147,6 +1166,7 @@ header .meta a:focus-visible,
     :root { --base-slot-height: 10px; --time-col-width: 36px; }
     .session-name { font-size: 12.5px; }
     .room-header { font-size: 9.5px; padding: 3px 3px; }
+    .room-place { font-size: 9px; }
 }
 
 /* ── Session Filter Panel ── */
