@@ -1,8 +1,10 @@
 """Build the RAN4 schedule from the chairs' meeting schedule PPTX.
 
 Rules read the document; Gemini is the fallback for the cells they are unsure
-about (see llm.py). Without GEMINI_API_KEY the rules' reading is published as
-is. Topic numbers become agenda items through the meeting's topic list.
+about, and for a file whose slide layout they cannot read at all (see llm.py).
+Without GEMINI_API_KEY the rules' reading is published as is, and a layout
+they cannot read fails the build. Topic numbers become agenda items through
+the meeting's topic list.
 """
 from __future__ import annotations
 
@@ -17,8 +19,8 @@ from shared.agenda import agenda_map
 from shared.agenda_labels import infer_for_schedule
 from shared.llm_cells import gemini_request, has_key
 from shared.renderer import generate_html
-from .document import extract_document
-from .llm import CellRefiner
+from .document import LayoutError, extract_document
+from .llm import CellRefiner, read_document
 from .sessions import make_schedule
 from .sources import (CACHE, DOWNLOADS, Bundle, client, config_hash, fetch_bundle, load_config, local_bundle,
                       override_for, portal_metadata, portal_rows, read_json, write_json)
@@ -135,7 +137,19 @@ def build_schedule(options=None, *, request=None, history=None):
     bundle.save(DOWNLOADS / 'inputs')
 
     manifest = bundle.manifest
-    document = extract_document(bundle.schedule, manifest['schedule']['name'])
+    name = manifest['schedule']['name']
+    request = llm_request(cfg, request)
+    if getattr(options, 'rebuild_slots', False):
+        for path in CACHE.glob('*.json'):
+            path.unlink()
+    reader = None
+    try:
+        document = extract_document(bundle.schedule, name)
+    except LayoutError:
+        if request is None:
+            raise
+        # The rules cannot read the slides at all: the LLM reads the whole file.
+        document, reader = read_document(bundle.schedule, name, cfg['model'], request)
     meeting = document['meeting_id']
     if meeting != manifest['meeting_id']:
         raise ValueError('Input bundle meeting identity mismatch')
@@ -148,16 +162,12 @@ def build_schedule(options=None, *, request=None, history=None):
         live = portal_metadata(portal_rows() or [], meeting)
     metadata = meeting_metadata(meeting, cfg, previous, live)
 
-    request = llm_request(cfg, request)
-    if getattr(options, 'rebuild_slots', False):
-        for path in CACHE.glob('*.json'):
-            path.unlink()
-    refine = CellRefiner(cfg['model'], request) if request else None
+    refine = CellRefiner(cfg['model'], request) if request and reader is None else None
     chairs, warnings = column_chairs(document, cfg, metadata, history)
     generated = datetime.now(ZoneInfo(metadata['timezone'])).strftime('%Y-%m-%d %H:%M')
     names, labels = source_labels(manifest)
     schedule, read_warnings = make_schedule(document, agenda, topics, metadata, names, labels, generated,
-                                            column_chairs=chairs, refine=refine)
+                                            column_chairs=chairs, refine=refine, reader=reader)
     warnings = list(bundle.warnings) + warnings + read_warnings
     for warning in warnings:
         print(f'[ran4] {warning}')
@@ -167,5 +177,6 @@ def build_schedule(options=None, *, request=None, history=None):
     generate_html(schedule)
     state = {k: v for k, v in manifest.items() if k != 'portal_metadata'}
     write_json(state_path, {**state, 'metadata': metadata, 'warnings': warnings,
-                            'llm': refine.summary if refine else {'used': False}})
+                            'llm': refine.summary if refine else
+                            {'model': cfg['model'], 'document': True} if reader else {'used': False}})
     return schedule

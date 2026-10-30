@@ -470,7 +470,13 @@ def end_of_meeting(metadata: dict, start: str) -> tuple[str, str | None]:
 
 def make_schedule(document: dict, agenda: dict | None, topics: dict | None, metadata: dict,
                   source_files: list[str], source_labels: dict, generated_at: str, *,
-                  column_chairs: dict | None = None, refine=None) -> tuple[Schedule, list[str]]:
+                  column_chairs: dict | None = None, refine=None, reader=None) -> tuple[Schedule, list[str]]:
+    """The Schedule and its build warnings.
+
+    ``reader(context, metadata)`` replaces the cell rules when the whole
+    document was read by the LLM (llm.DocumentReading); it builds its sessions
+    with ``build_session`` like the rules.
+    """
     agenda, topics = agenda or {}, topics or {}
     first, last = date.fromisoformat(metadata['starts_on']), date.fromisoformat(metadata['ends_on'])
     dates = {(first + timedelta(days=i)).strftime('%A'): (first + timedelta(days=i)).isoformat()
@@ -482,7 +488,7 @@ def make_schedule(document: dict, agenda: dict | None, topics: dict | None, meta
                 cell['end'], warning = end_of_meeting(metadata, cell['start'])
                 eom.update([warning] if warning else [])
     context = {'agenda': agenda, 'topics': topics, 'column_chairs': column_chairs or {}}
-    sessions, warnings = interpret(document, context, refine)
+    sessions, warnings = reader(context, metadata) if reader else interpret(document, context, refine)
     warnings = sorted(eom) + warnings
     days = []
     for day in document['days']:

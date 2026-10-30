@@ -579,6 +579,177 @@ def test_local_build_needs_no_network_and_records_state(offline_config, tmp_path
     assert '1/2' in html and 'R4-2621419 (Reply to RAN1 LS' in html
 
 
+# ---------------------------------------------------------- document fallback
+
+def without_monday_title():
+    """The #120bis file with Monday's weekday title gone: the rules cannot place that table."""
+    data = (FIXTURES / THU).read_bytes()
+    out = io.BytesIO()
+    with zipfile.ZipFile(io.BytesIO(data)) as source, zipfile.ZipFile(out, 'w', zipfile.ZIP_DEFLATED) as target:
+        for item in source.infolist():
+            body = source.read(item.filename)
+            if item.filename == 'ppt/slides/slide2.xml':
+                assert b'<a:t>Monday</a:t>' in body
+                body = body.replace(b'<a:t>Monday</a:t>', b'<a:t>Schedule</a:t>')
+            target.writestr(item, body)
+    return out.getvalue()
+
+
+def outline_texts(data):
+    from shared import office_outline
+    return office_outline.texts(office_outline.blocks(data, THU))
+
+
+def document_answer(texts):
+    """What a correct reading of Monday 9:00–13:00 and Friday looks like."""
+    lines = lambda ref: texts[ref].split('\n')
+    fri_gene = lines('s6:sh2:r1c3')
+    coffee = next(i for i, line in enumerate(fri_gene) if line.startswith('Coffee break'))
+    fri_main = lines('s6:sh2:r3c1')
+    def session(day, start, end, rooms, title, refs, **more):
+        return {'day': day, 'start': start, 'end': end, 'room_ids': rooms, 'title': title, 'refs': refs, **more}
+    rooms = lambda *names: [{'id': f'c{n}', 'name': texts[f'{slide}:sh2:r0c{n}']} for n in names for slide in [rooms.slide]]
+    rooms.slide = 's2'
+    monday = rooms(1, 2, 3, 4, 5)
+    rooms.slide = 's6'
+    friday = rooms(1, 2, 3, 4)
+    return {
+        'days': [{'day': 'Monday', 'rooms': monday, 'breaks': [{'name': '커피 타임', 'start': '10:30', 'end': '11:00'}]},
+                 {'day': 'Friday', 'rooms': friday, 'breaks': [{'name': '커피 타임', 'start': '10:30', 'end': '11:00'},
+                                                               {'name': '점심시간', 'start': '12:45', 'end': '13:45'}]}],
+        'sessions': [
+            session('Monday', '09:00', '09:30', ['c1', 'c2', 'c3', 'c4'], '1. Opening of the meeting', ['s2:sh2:r1c1']),
+            session('Monday', '11:00', '13:00', ['c1'], '[101-A] System Parameter', ['s2:sh2:r4c1'], topics=['101-A']),
+            session('Monday', '11:00', '12:00', ['c4'], 'Main Ad-hoc / [105-A] 6G RRM', ['s2:sh2:r4c4'],
+                    topics=['105-A'], chair='Jerry', line_numbers=[0, 1]),
+            session('Monday', '12:00', '13:00', ['c4'], '[105-B] 6G RRM', ['s2:sh2:r4c4'], topics=['105-B'],
+                    chair='Jin-Yup', line_numbers=[3]),
+            session('Friday', '08:30', '10:30', ['c3'], 'Return to', ['s6:sh2:r1c3'],
+                    line_numbers=[i for i, line in enumerate(fri_gene[:coffee]) if line]),
+            session('Friday', '10:30', '11:00', ['c3'], 'Coffee break ad-hoc: 6G Sensing feasibility / Finalize the WF',
+                    ['s6:sh2:r1c3'], chair='Pierpaolo', in_break=True,
+                    line_numbers=[i for i, line in enumerate(fri_gene) if line and i >= coffee]),
+            session('Friday', '11:00', '12:45', ['c1'], '6G operation efficiency', ['s6:sh2:r3c1'], part=[1, 2],
+                    line_numbers=[0]),
+            session('Friday', '11:00', '12:45', ['c1'], '6G RRM / 13 Any other business / 14 Close of the meeting',
+                    ['s6:sh2:r3c1'], part=[2, 2], line_numbers=[i for i, line in enumerate(fri_main) if line and i > 1]),
+            session('Friday', '14:00', 'EOM', ['c3'], 'Return to', ['s6:sh2:r5c3']),
+        ]}
+
+
+class FakeGemini:
+    def __init__(self, *answers):
+        self.answers, self.calls = list(answers), []
+
+    def __call__(self, message, schema, model, thinking='medium'):
+        self.calls.append(message)
+        return self.answers.pop(0)
+
+
+def test_a_file_the_rules_cannot_read_is_read_whole_by_the_llm(offline_config, tmp_path, monkeypatch):
+    data = without_monday_title()
+    with pytest.raises(docmod.LayoutError, match='no weekday title'):
+        docmod.extract_document(data, THU)
+    local = tmp_path / THU
+    local.write_bytes(data)
+    gemini = FakeGemini(document_answer(outline_texts(data)))
+    schedule = pipeline.build_schedule(SimpleNamespace(local=str(local), output_dir=tmp_path / 'out'), request=gemini)
+    assert len(gemini.calls) == 1 and [d.day_name for d in schedule.days] == ['Monday', 'Friday']
+    monday, friday = schedule.days
+    # Rooms keep the rules' ids, so the column's chair and the topic list apply as they do for the rules.
+    assert [r.id for r in monday.rooms] == ['yang', 'shan', 'gene', 'ad-hoc-room']
+    rows = [(s.start_time, s.end_time, s.room_ids, s.name, s.agenda_item, s.chair) for s in monday.sessions]
+    assert ('11:00', '13:00', ['yang'], '[101-A] System Parameter', '8.2.1, 8.2.2, 8.2.7', 'Yang TANG') in rows
+    assert ('11:00', '12:00', ['ad-hoc-room'], 'Main Ad-hoc / [105-A] 6G RRM', '8.6, 8.6.2.1, 8.6.2.2, 8.6.3', 'Jerry') in rows
+    assert ('12:00', '13:00', ['ad-hoc-room'], '[105-B] 6G RRM', '8.6.1, 8.6.4, 8.6.5', 'Jin-Yup') in rows
+    opening = monday.sessions[0]
+    assert (opening.room_ids, opening.chair, opening.agenda_item) == (['yang', 'shan', 'gene', 'ad-hoc-room'], None, '8.11.4')
+    gene = {s.start_time: s for s in friday.sessions if s.room_ids == ['gene']}
+    # A candidate list stays one for the LLM's reading (R1); "EOM" ends at the meeting's end.
+    assert gene['08:30'].agenda_item is None and '5.2.1' in gene['08:30'].inferred_agenda_items
+    assert (gene['10:30'].chair, gene['14:00'].end_time) == ('Pierpaolo', '17:30')
+    assert [(s.part, s.name) for s in friday.sessions if s.room_ids == ['yang']] == [
+        ([1, 2], '6G operation efficiency'), ([2, 2], '6G RRM / 13 Any other business / 14 Close of the meeting')]
+    assert schedule.supplements[0]['text'].startswith('The schedule slides were not in their usual layout')
+    assert {'type': 'heading', 'text': 'Slide 6'} in schedule.supplements
+    assert sources.read_json(tmp_path / 'out/ran4/.schedule_state.json')['llm'] == {'model': sources.DEFAULTS['model'],
+                                                                                  'document': True}
+    # Without the LLM the layout error stands, and the last page stays.
+    with pytest.raises(docmod.LayoutError):
+        pipeline.build_schedule(SimpleNamespace(local=str(local), output_dir=tmp_path / 'out2'))
+
+
+@pytest.mark.parametrize('change, problem', [
+    (lambda a: a['sessions'][1].update(title='[101-A] System Parameters overview'), 'title words'),
+    (lambda a: a['sessions'][1].update(topics=['101-B']), "topic number '101-B'"),
+    (lambda a: a['sessions'][1].update(start='11:15'), '11:15 is not written'),
+    (lambda a: a['sessions'][2].update(chair='Jerry Smith'), "chair 'Jerry Smith'"),
+    (lambda a: a['sessions'][3].update(line_numbers=None), 'each must give its own line_numbers'),
+    (lambda a: a['sessions'][3].update(start='11:00', line_numbers=[3]), 'overlap in the same room'),
+    (lambda a: (a['sessions'][6].update(line_numbers=[2], title='6G RRM'),
+                a['sessions'][7].update(line_numbers=[3, 4], title='13 Any other business')),
+     'does not split pieces 1 and 2'),
+    (lambda a: a['sessions'][5].update(start='10:00', end='10:30'), "takes that break's times"),
+    (lambda a: a['days'][0]['rooms'][0].update(name='Main room'), "room name 'Main room'"),
+    (lambda a: a['sessions'][0].update(refs=['s2:sh9:r1c1']), 'refs must cite block ids'),
+])
+def test_document_answers_are_checked_against_the_slides(change, problem):
+    data = without_monday_title()
+    texts = {k: v for k, v in outline_texts(data).items() if v.strip()}
+    answer = document_answer(texts)
+    assert llm.check_document(llm.DocResult.model_validate(answer), texts) == []
+    change(answer)
+    errors = llm.check_document(llm.DocResult.model_validate(answer), texts)
+    assert any(problem in e for e in errors), errors
+
+
+def test_a_blank_line_among_a_sessions_lines_is_left_out():
+    data = without_monday_title()
+    texts = {k: v for k, v in outline_texts(data).items() if v.strip()}
+    answer = document_answer(texts)
+    session = next(s for s in answer['sessions'] if s.get('part') and '' in texts[s['refs'][0]].split('\n'))
+    blanks = [i for i, line in enumerate(texts[session['refs'][0]].split('\n')) if not line]
+    session['line_numbers'] = sorted(session['line_numbers'] + blanks)
+    assert llm.check_document(llm.DocResult.model_validate(answer), texts) == []
+    session['line_numbers'] = blanks
+    assert any('not only blank ones' in e for e in llm.check_document(llm.DocResult.model_validate(answer), texts))
+
+
+def test_a_shortened_topic_number_stands_for_both_numbers():
+    source = llm.spelled_topics('[102-A/B] System Parameter')
+    assert llm.written_errors('s', ['102-A', '102-B', '102-A/B'], source, 'topic number') == []
+    assert llm.written_errors('s', ['102-C'], source, 'topic number')
+
+
+def test_a_document_session_takes_the_rules_title():
+    result = llm.DocResult.model_validate({
+        'days': [{'day': 'Tuesday', 'rooms': [{'id': 'r1', 'name': 'Ad hoc room'}], 'breaks': []}],
+        'sessions': [{'day': 'Tuesday', 'start': '17:00', 'end': '18:00', 'room_ids': ['r1'], 'part': None,
+                      'title': 'Main Ad-hoc: / [108] Spectrum sharing', 'topics': ['108'], 'chair': None,
+                      'in_break': False, 'refs': ['c'], 'line_numbers': None}]})
+    reading = llm.DocumentReading(result, {'c': 'Main Ad-hoc: \n[108] Spectrum sharing'}, {'Tuesday': {'r1': 'ad-hoc'}})
+    found, _ = reading({'topics': {}, 'agenda': {}, 'column_chairs': {}}, {})
+    assert found[0]['name'] == 'Main Ad-hoc / [108] Spectrum sharing'
+
+
+def test_a_document_session_leaves_out_its_time_marks():
+    assert llm.without_times(['---12:00---', '[105-B] 6G RRM', '----9.30----', '8:30 – 10:30', 'Start at 8:00',
+                              'Main Ad-hoc:  (until 11:00) ']) == ['[105-B] 6G RRM', 'Main Ad-hoc: (until 11:00)']
+
+
+def test_an_unchecked_document_answer_fails_the_build(tmp_path):
+    data = without_monday_title()
+    invented = document_answer(outline_texts(data))
+    invented['sessions'][1]['title'] = 'Six G system parameters'
+    gemini = FakeGemini(invented, invented)
+    with pytest.raises(docmod.LayoutError, match='could not read the schedule either'):
+        llm.read_document(data, THU, 'test-model', gemini, tmp_path)
+    assert len(gemini.calls) == 2 and 'title words not in its cited text' in gemini.calls[1]
+    # A file that is not a slide deck at all is not sent.
+    with pytest.raises(docmod.LayoutError, match='cannot be outlined'):
+        llm.read_document(b'not a zip', THU, 'test-model', FakeGemini(), tmp_path)
+
+
 def test_lifecycle_check_stages_without_advancing_state(offline_config, tmp_path, monkeypatch):
     bundle = sources.local_bundle(FIXTURES / THU, offline_config)
     monkeypatch.setattr(sources, 'fetch_bundle', lambda *a, **k: bundle)
