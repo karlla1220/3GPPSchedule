@@ -111,7 +111,9 @@ def test_every_wg_infers_agenda_items_for_cells_without_one(tmp_path, monkeypatc
 
     schedule = Schedule(meeting_id='ran4#121', meeting_name='RAN4#121', source_file='', generated_at='', days=[DaySchedule(
         day_name='Monday', rooms=[], timeline=Timeline(start='09:00', end='10:00'),
-        sessions=[cell('6G system parameter'), cell('Return to'), cell('NTN', '7.6')])])
+        sessions=[cell('6G system parameter'), cell('Return to'), cell('NTN', '7.6'), cell('Basket')])])
+    # Items a WG's rules found stand; the LLM is not asked about that cell.
+    schedule.days[0].sessions[3].inferred_agenda_items = ['7.6']
     agenda = {'7.6': 'NTN', '8': '6G', '8.2': 'System parameters', '8.2.1': 'Bandwidth'}
     asked = []
 
@@ -126,7 +128,7 @@ def test_every_wg_infers_agenda_items_for_cells_without_one(tmp_path, monkeypatc
     monkeypatch.setattr(agenda_labels, 'gemini_judge', lambda labels, items, **k: judge(labels, items))
     agenda_labels.infer_for_schedule(schedule, 'ran4', 'RAN4', agenda, enabled=True)
     sessions = schedule.days[0].sessions
-    assert [s.inferred_agenda_items for s in sessions] == [['8.2'], [], []]
+    assert [s.inferred_agenda_items for s in sessions] == [['8.2'], [], [], ['7.6']]
     assert asked == [['6G system parameter', 'Return to']]
     # A recorded label is not asked again, even offline.
     sessions[0].inferred_agenda_items = []

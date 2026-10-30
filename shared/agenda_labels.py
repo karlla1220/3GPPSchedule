@@ -173,12 +173,15 @@ def apply_inferred_agenda_items(
     judge: Judge | None = None,
     ask: bool = True,
 ) -> list:
-    """Set ``inferred_agenda_items`` on sessions without an agenda item.
+    """Set ``inferred_agenda_items`` on sessions without an agenda item or rule-found items.
 
     ``agenda`` is this meeting's {number: description}; without it nothing is
     inferred. With ask false only recorded answers apply (offline, LLM off).
     """
-    unnumbered = [s for s in sessions if not s.agenda_item and label_key(s.name)]
+    # A WG's own rules may already have found items for a cell the schedule
+    # numbers nowhere (RAN4 candidate lists, SA1 topic names); those stand.
+    unnumbered = [s for s in sessions
+                  if not s.agenda_item and not s.inferred_agenda_items and label_key(s.name)]
     if not meeting_id or not unnumbered:
         return sessions
     if not agenda:
