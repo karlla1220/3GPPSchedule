@@ -1,0 +1,63 @@
+{
+  "meeting_id": "ran4#120bis",
+  "version": 4412,
+  "config_hash": "f04fc1d6db7022ddbcced9458ec46e5ab179d607bcdcc815909bda6ed3a4ff7a",
+  "schedule": {
+    "url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN4/Inbox/Meeting_Arrangements/RAN4_120bis_meeting_schedule_THU_afternoon.pptx",
+    "name": "RAN4_120bis_meeting_schedule_THU_afternoon.pptx",
+    "uploaded_at": "2026-10-15 23:14",
+    "label": "THU_afternoon",
+    "size": 149350,
+    "sha256": "273f7c13900a776be2d374508597a9db54846db90324c5a85589d9b2a6ab6f18",
+    "etag": "\"8067c8fafa5cdd1:0\"",
+    "last_modified": "Thu, 15 Oct 2026 23:14:51 GMT",
+    "ftp_modified": null,
+    "content_type": "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+    "content_disposition": null,
+    "revision": 4412,
+    "modified": "2026-10-15T13:14:01Z"
+  },
+  "topics": {
+    "url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN4/Inbox/Meeting_Arrangements/List_Topics_moderators-RAN4_120bis_final.xlsx",
+    "name": "List_Topics_moderators-RAN4_120bis_final.xlsx",
+    "size": 33531,
+    "sha256": "9bf4ee486cb626b518ed57e75c2c69ee1e0e534273270beb03d34a0e70b45957",
+    "etag": "\"809ac0434e59dd1:0\"",
+    "last_modified": "Sun, 11 Oct 2026 07:00:57 GMT",
+    "ftp_modified": null,
+    "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    "content_disposition": null
+  },
+  "agenda": {
+    "url": "https://www.3gpp.org/ftp/tsg_ran/WG4_Radio/TSGR4_120bis/Agenda/agenda.csv",
+    "name": "agenda.csv",
+    "size": 16509,
+    "sha256": "01b3a1ad4721b3631127bf45f5b66e08903dcf1cb7a3a422c034cd414421b7b1",
+    "etag": "\"86dd9c5a6867dd1:0\"",
+    "last_modified": "Thu, 29 Oct 2026 05:42:58 GMT",
+    "ftp_modified": null,
+    "content_type": "application/octet-stream",
+    "content_disposition": null
+  },
+  "metadata": {
+    "starts_on": "2026-10-12",
+    "ends_on": "2026-10-16",
+    "location": "South Korea",
+    "country": "KR",
+    "portal_timezone": "(GMT+09:00) Seoul",
+    "portal_id": 60732,
+    "timezone": "Asia/Seoul",
+    "starts_at": "2026-10-12T09:00:00+09:00",
+    "ends_at": "2026-10-16T17:30:00+09:00"
+  },
+  "warnings": [
+    "thu-r3c4: '[206] NR_Mob_Ph5_RRM, Chaired by Hua Li (Apple)' names topic 207, not its number; agenda items left out",
+    "thu-r8c4: '[102-A/B] System Parameter, Chaired by Leo (Huawei)/Jinqiang (OPPO)' names topic 101-A, not its number; agenda items left out"
+  ],
+  "llm": {
+    "model": "gemini-3.8-flash",
+    "uncertain": 2,
+    "applied": 2,
+    "kept_rules": 0
+  }
+}

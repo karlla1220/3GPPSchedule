@@ -1,0 +1,41 @@
+{
+  "meeting_id": "sa1#115",
+  "version": "Chair's Notes EOM",
+  "order": [
+    3,
+    4,
+    950
+  ],
+  "config_hash": "34ace93968194d48aef98cda62021215205aa3bfe1318816596146787c5e1f0a",
+  "schedule": {
+    "url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/SA1/Inbox/agenda/Agenda%20for%20SA1%23115_Friday_1550_END_OF_MEETING.docx",
+    "name": "Agenda for SA1#115_Friday_1550_END_OF_MEETING.docx",
+    "size": 261046,
+    "sha256": "2bd7e4bff47e5283ddeb991782ca4fdb2d4536e965ca7b8adda2a8fa8ded7b6f",
+    "etag": "\"80459473f436dd1:0\"",
+    "last_modified": "Fri, 28 Aug 2026 13:52:23 GMT",
+    "ftp_modified": null,
+    "content_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    "content_disposition": null,
+    "label": "Chair's Notes EOM",
+    "uploaded_at": "2026-08-28 13:52"
+  },
+  "chair": null,
+  "metadata": {
+    "starts_on": "2026-08-24",
+    "ends_on": "2026-08-28",
+    "location": "Prague",
+    "country": "CZ",
+    "portal_timezone": "(GMT+02.00)  Belgrade, Bratislava, Budapest, Ljubljana, Prague",
+    "portal_id": 60762,
+    "timezone": "Europe/Prague",
+    "starts_at": "2026-08-24T09:00:00+02:00",
+    "ends_at": "2026-08-28T17:30:00+02:00"
+  },
+  "llm": {
+    "model": "gemini-3.8-flash",
+    "uncertain": 0,
+    "applied": 0,
+    "kept_rules": 0
+  }
+}

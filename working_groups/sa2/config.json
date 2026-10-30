@@ -1,0 +1,18 @@
+{
+  "sync_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/SA2/Inbox/Drafts/_Session_Plan_Updates/",
+  "archive_url": "https://www.3gpp.org/ftp/tsg_sa/WG2_Arch/",
+  "meeting_specific": [
+    "https://www.3gpp.org/ftp/tsg_sa/WG2_Arch/TSGS2_177_Prague_2026-10/",
+    "https://www.3gpp.org/ftp/tsg_sa/WG2_Arch/TSGS2_178_Calgary_2026-11/",
+    "https://www.3gpp.org/ftp/tsg_sa/WG2_Arch/TSGS2_179_Incheon_2027-02/"
+  ],
+  "meeting_specific_override": [],
+  "officials_code": "S2",
+  "chair_aliases": {
+    "Mike": "STARSINIC, Michael"
+  },
+  "llm_fallback": true,
+  "model": "gemini-3.8-flash",
+  "local_agenda": null,
+  "meetings": {}
+}

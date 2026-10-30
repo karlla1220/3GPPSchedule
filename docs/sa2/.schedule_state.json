@@ -1,0 +1,49 @@
+{
+  "meeting_id": "sa2#177",
+  "version": 14,
+  "config_hash": "1778aa4f941bc6a0aa73721a4e7b2b5fd004a756bb9aa9eac646ff9541d5d381",
+  "schedule": {
+    "name": "S2-2610195_SA2-177-Session Plan -r14 - Friday plan.docx",
+    "url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/SA2/Inbox/Drafts/_Session_Plan_Updates/S2-2610195_SA2-177-Session%20Plan%20-r14%20-%20Friday%20plan.docx",
+    "uploaded_at": "2026-10-16 05:48",
+    "size": 79840,
+    "sha256": "af3edf66ec44ffea828ae26630ac7a58015fdb53ca5da340b10265bb4f35b3fb",
+    "etag": "\"809cbe1325ddd1:0\"",
+    "last_modified": "Fri, 16 Oct 2026 05:48:45 GMT",
+    "ftp_modified": null,
+    "content_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    "content_disposition": null
+  },
+  "agenda": {
+    "url": "https://www.3gpp.org/ftp/tsg_sa/WG2_Arch/TSGS2_177_Prague_2026-10/Agenda/agenda.csv",
+    "name": "agenda.csv",
+    "size": 15242,
+    "sha256": "7fd05fdbcd35706478382f726226d79ed6af28ffdedff20651551ad93d9273de",
+    "etag": "\"8c3f9f5a6867dd1:0\"",
+    "last_modified": "Thu, 29 Oct 2026 05:42:58 GMT",
+    "ftp_modified": null,
+    "content_type": "application/octet-stream",
+    "content_disposition": null
+  },
+  "metadata": {
+    "starts_on": "2026-10-12",
+    "ends_on": "2026-10-16",
+    "location": "Prague",
+    "country": "CZ",
+    "portal_timezone": "(GMT+02.00)  Belgrade, Bratislava, Budapest, Ljubljana, Prague",
+    "portal_id": 60768,
+    "timezone": "Europe/Prague",
+    "starts_at": "2026-10-12T09:00:00+02:00",
+    "ends_at": "2026-10-16T17:30:00+02:00"
+  },
+  "chairs": {
+    "Mike": "Michael STARSINIC",
+    "Wanqiang": "Wanqiang ZHANG"
+  },
+  "llm": {
+    "model": "gemini-3.8-flash",
+    "uncertain": 0,
+    "applied": 0,
+    "kept_rules": 0
+  }
+}

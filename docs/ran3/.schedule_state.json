@@ -1,0 +1,49 @@
+{
+  "meeting_id": "ran3#134",
+  "version": "20261023.0.0000",
+  "config_hash": "fdf80a0eb29dd64dbe8f8e0dbf1f6320eb2cbdcf53e080038977ac99443fe045",
+  "schedule": {
+    "name": "RAN3_134_agenda_20261023.docx",
+    "url": "https://www.3gpp.org/ftp/tsg_ran/WG3_Iu/TSGR3_134/Inbox/Chairs_Notes/RAN3_134_agenda_20261023.docx",
+    "uploaded_at": "2026-10-23 11:53",
+    "size": 151684,
+    "sha256": "6b06c6359f2e0aff380579a3b754e97c39dde964f6fc10ac251b6f622371993f",
+    "etag": "\"4147cd2be562dd1:0\"",
+    "last_modified": "Fri, 23 Oct 2026 11:53:51 GMT",
+    "ftp_modified": null,
+    "content_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    "content_disposition": null
+  },
+  "offline": null,
+  "agenda": {
+    "name": "agenda.csv",
+    "url": "https://www.3gpp.org/ftp/tsg_ran/WG3_Iu/TSGR3_134/Agenda/agenda.csv",
+    "uploaded_at": "2026-10-29 05:42",
+    "size": 2828,
+    "sha256": "447a91ff8195ef425d9a1c52311d1917b6058ca7eb602f76aae203367014ef0f",
+    "etag": "\"8bb4b45a6867dd1:0\"",
+    "last_modified": "Thu, 29 Oct 2026 05:42:58 GMT",
+    "ftp_modified": null,
+    "content_type": "application/octet-stream",
+    "content_disposition": null
+  },
+  "metadata": {
+    "starts_on": "2026-11-16",
+    "ends_on": "2026-11-20",
+    "location": "Calgary",
+    "country": "CA",
+    "portal_timezone": "(GMT-07:00) Mountain Time (US & Canada)",
+    "portal_id": 60727,
+    "timezone": "America/Edmonton",
+    "starts_at": "2026-11-16T09:00:00-06:00",
+    "ends_at": "2026-11-20T17:30:00-06:00"
+  },
+  "cbs": {},
+  "llm": {
+    "model": "gemini-3.8-flash",
+    "uncertain": 1,
+    "applied": 1,
+    "kept_rules": 0
+  },
+  "warnings": []
+}

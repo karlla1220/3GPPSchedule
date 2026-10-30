@@ -1040,6 +1040,8 @@ document.addEventListener('DOMContentLoaded', function() {
     // --- Auto-refresh: reload page periodically, preserving user state ---
     if (AUTO_REFRESH_MS > 0) {
         setInterval(function() {
+            // Not while the help guide is open; a later tick reloads.
+            if (document.querySelector('.help-guide[open]')) return;
             saveUserState();
             location.reload();
         }, AUTO_REFRESH_MS);

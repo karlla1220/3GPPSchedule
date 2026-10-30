@@ -1,6 +1,6 @@
 # CLAUDE.md
 
-프로젝트 구조와 실행 방법은 `README.md`, 파싱 설계는 `PARSING_ARCHITECTURE.md`, WG 전환과 첫 화면의 설계는 `WG_SWITCH_DESIGN.md`를 본다.
+프로젝트 구조와 실행 방법은 `README.md`, 파싱 설계는 `PARSING_ARCHITECTURE.md`, WG 전환과 첫 화면의 설계는 `WG_SWITCH_DESIGN.md`, Help 투어를 고치고 단계를 더하는 규칙은 `HELP_TOUR.md`를 본다.
 
 ## 세션 블록 디자인
 
@@ -34,7 +34,7 @@
 ### 정보 위계
 
 ```
-┃ 10.5.2.1                     ← 주 정보: 제목
+┃ 10.5.2.1                     ← 주 정보: 제목 (cell title)
 ┃ 30 min · 11:00–11:30         ← 부 정보: 소요 시간 · 시각 범위
 ┃ AI 10.5.2.1                  ← 부 정보: Agenda Item
 ┃ ──                           ← AI와 Note를 가르는 짧은 줄
@@ -42,6 +42,15 @@
 ┃                   Sorouri    ← 가장 약한 정보: Chair (우하단 고정)
 ```
 
+- **제목은 cell title(`Session.name`)이고, 원본 셀의 모양을 옮긴다.** 원본 셀의 머리 줄이 title이고, 나머지 원문 줄은 Note(`session.notes`)에 같은 위계로 둔다.
+  - RAN1은 셀 글이 대개 AI 번호라서 title이 AI다(`10.5.2.1`). RAN2는 셀 머리 줄(`NR20 MIMO`), RAN P는 셀 원문(`Incoming LSs, WG reports, early items`)이다.
+    새 WG도 같다: SA1 `7.3.3 AI`, SA1 Plenary 칸은 머리 줄 `Plenary`, RAN3 라벨 `AIML RAN`, RAN4 범주 `NTN` 또는 토픽 `[101-A] System Parameter`.
+  - 머리 없이 주제가 여럿이면 앞 셋을 ` / `로 잇고 더 있으면 ` …`를 붙인다(RAN2 `title_and_chair`). 원문 줄을 이은 것이라 원문 표기다.
+  - 원문의 낱말을 바꿔 쓰거나 지어내지 않는다. SA1 `7.3.3 AI`의 `AI`는 인공지능이라는 주제 이름이라 떼면 뜻이 바뀐다. 원본 표기가 WG마다 다르므로 모양을 맞추지 않는다.
+  - 제목에서는 괄호를 뗀다(RAN2 `analyze`·`clean`). AI 번호 괄호(`[8.10]`)는 AI 줄로, 의장 괄호는 Chair로 가고, 둥근 괄호는 내용과 상관없이 모두 빠진다
+    (`(if time allows)`, `(cont)`, `(40)`, `(Reply to RAN1 LS …)`). 낱말에 붙은 괄호(`(e)RedCap`)만 남는다. 뗀 원문은 Note에 그대로 있다.
+- **셀 색(`group_header`)은 agenda 최상위 항목이다(RAN2 `group_label`, 범례는 그 항목 이름).** 새 WG도 같다. RAN1은 일정의 그룹 머리를 쓴다.
+  - AI 번호는 title과 따로 `agenda_item`에 두고, 셀의 AI 줄은 어느 WG든 `AI 7.3.3` 같은 형태다. 필터는 그 번호로 맞춘다.
 - **주 정보는 제목 하나뿐이다.** 13.5px(768px 이하 12.5px), 굵기 600, 줄 높이 1.2, 자간 0, `var(--ink)`.
   - Barlow는 좁은 서체라 Pretendard 12.5px와 같은 무게감을 내려면 13.5px가 필요하다. 14px부터는 부 정보와 차이가 커져 위계가 과해 보인다.
   - 자간은 줄이지 않는다. Barlow는 이미 좁다.
@@ -105,6 +114,27 @@
   위아래 margin을 0으로 하고(이웃 블록의 2px이 간격을 만든다), 제목을 9px로 줄여 줄 높이를 테두리 안쪽 높이(`--slot-height` − 2px)에 맞춘다.
   라벨은 다른 셀과 같은 제목이다(AI로 바꾸지 않는다). 막대는 `top/bottom: 1px`로 6px 높이가 남고, radius는 3px로 줄인다.
 - 셀에서 뺀 정보(그룹, 설명, 자리가 없어 빠진 노트, 방 이름 등)는 클릭 팝업에서 볼 수 있다.
+
+### 시각 없이 나뉜 블록
+
+원본이 시각 없이 한 블록을 몇 조각으로 나눠 놓았으면 조각마다 Session 하나를 두고 `part = [k, n]`을 준다.
+시각, 소요 시간은 블록의 값 그대로다.
+
+- **원본이 나눠 놓은 것만 나눈다.** 한 칸에 주제를 줄줄이 적은 것은 나누지 않고 한 셀에 두며 원문 줄은 Note로 보인다.
+  - 나눔 표시는 WG마다 다르고 WG 파이프라인이 정한다: SA2는 블록이 따로 된 표 칸으로 갈린다. RAN4는 칸 안의 빈 줄로 갈린 한두 묶음이다(#120bis 목 Shan 8:30 `Rel-20 RRM … ‖ R4-2621419 …`).
+    RAN3는 `라벨: AI` 줄 하나가 묶음 하나다(`Corrections: AI 9` / `6G SI: AI 10.1, 10.3.1`).
+  - 나누지 않는 예: RAN4 #120bis 목 Gene 8:30 `5G basket and spectrum WI` 아래 `[320]`~`[331]` 목록(한 셀 + Note).
+
+- **블록을 같은 높이로 나눈다(`renderer.py`의 `_part_rows`).** 시각을 모르니 다른 그리는 법이 없다. 가로로 나란히 두면 병렬인 방처럼 읽힌다.
+  행 수가 나누어떨어지지 않으면 조각 경계가 5분 칸 단위로 반올림된다.
+- **경계는 보통 셀 사이 틈(4px) 그대로다.** 조각을 따로 꾸미지 않는다. 세로 위치가 시각이 아니라는 것은 시간 줄이 말한다.
+- **시간 줄은 `2/3 of 90 min · 13:00–14:30`이다.** 조각 번호, 블록 길이, 블록 시각이다. 조각의 시각을 지어내지 않는다.
+  - `2/3`와 `90`은 소요 시간 숫자와 같은 `--minutes` 굵기이고, `of`와 `min`은 단위 크기(9px)다(`.session-unit`). 숫자와 낱말을 크기로만 가르는 소요 시간 규칙 그대로다.
+  - 좁은 열에서는 다른 셀처럼 `· 13:00–14:30`이 통째로 빠지고 `2/3 of 90 min`이 남는다.
+  - 팝업의 Time 줄은 `13:00 - 14:30 (2/3 of 90 min)`이다. NOW 표시는 시간 축에 그려서 조각과 상관없다.
+- **조각은 30분 이상이다(`schedule.py`의 `MIN_PART_MINUTES`).** AI 줄이 보이는 길이다. 더 짧아지면 나누지 않고 한 셀 + Note로 둔다.
+  모델(`Session.__post_init__`)이 더 짧은 조각과 잘못된 `[k, n]`을 거부한다.
+- **조각이 아닌 것:** 병렬인 방, 한 세션으로 묶인 주제, 후보 목록(`EARLY RETURN TO`, basket; 빈 줄로 갈려 있어도), 휴식 중 세션과 안내(`Coffee break offline …`; 휴식 시각의 별도 셀이다), 시각이 적힌 주제(그 시각으로 나눈다).
 
 ### 그리드 핀치 줌
 
@@ -318,6 +348,21 @@ HTML은 `shared/page.py`, 표시 판단은 `templates/support-note.js`, 값은 `
   - 닫으면 회의마다 한 번만 기억한다(`localStorage`, 키에 `wg_id:meeting_id`). 다음 회의에서는 다시 보인다.
   - 더미 미팅, 끝나는 날을 모르는 회의, `support_links`가 없는 사이트에는 넣지 않는다.
 
+## Help 투어
+
+HTML과 단계 문구는 `shared/page.py`(`render_help`, `HELP_STEPS`), 동작은 `templates/help-guide.js`, 스타일은 `templates/schedule.css`의 Help 구획이다.
+문구·장면·배치 규칙, 새 기능을 소개하는 절차, 버린 방식과 확인 방법은 `HELP_TOUR.md`에 있다. 기능을 새로 만들거나 화면을 바꾸면 그 문서를 따라 투어도 고친다.
+
+- **헤더 왼쪽 위의 원형 `?` 버튼(글자 없음)이 투어를 시작한다.** 사용자가 누를 때만이고, 자동으로 띄우지 않는다.
+  미팅 전환 버튼과 같은 문법(흰 바탕, 헤어라인)이고 그 버튼의 가운데 높이에 맞춘다. 이름은 `aria-label`과 `title`에 둔다.
+- **투어는 실제 화면에서 위치를 짚는다.** 단계마다 그 기능으로 스크롤하고, 그 요소만 밝게 두고(스포트라이트) 카드에 설명을 쓴다.
+  스포트라이트는 스크롤 중에도 대상에 붙어 움직이고, 카드는 대상을 가리지 않는다(아래, 위, 좁은 대상이면 그 옆을 비운다).
+  단계는 `HELP_STEPS`에 페이지 위에서 아래 순서로 두고, 페이지에 없거나 숨은 대상의 단계는 건너뛴다. 그래서 WG마다 가진 것만 나온다(그리드 아래 구획 포함).
+- **투어는 짚기만 한다.** 실제 셀을 누르거나, 필터를 체크하거나, 줌하지 않는다. 동작은 카드 안 무대에서 이 페이지의 셀을 복제해 보인다(팝업, 필터, 핀치).
+  필터 장면은 `applyFilter`와 같은 규칙을 쓴다(`dimmedBy`). 필터 규칙을 바꾸면 둘 다 바꾼다.
+- **투어는 저장소에 쓰지 않고, 끝나면 시작할 때의 스크롤 위치로 돌아간다.** 열려 있는 동안은 자동 새로고침을 건너뛴다(`schedule.js`의 `.help-guide[open]`).
+- 테스트는 `tests/test_help_guide.py`다. 배치와 움직임은 브라우저에서 본다(`HELP_TOUR.md`의 "확인 방법").
+
 ## 회의 상태와 기본 WG
 
 `shared/navigation.py`의 `meeting_phase`가 정한다. 상태 줄(`In progress`, `Upcoming`, `Ended`), 미팅 메뉴의 구획, 루트의 기본 WG가 모두 이 판단을 쓴다.
@@ -348,6 +393,21 @@ HTML은 `shared/page.py`, 표시 판단은 `templates/support-note.js`, 값은 `
   지난 빌드의 시간대는 목록과 LLM으로도 정하지 못했을 때의 대체값일 뿐이다(RAN1의 Portal 참조, RAN P의 같은 개최지).
 - 시간대를 끝내 정하지 못하면 WG마다 다르다. RAN2·RAN P는 `config.json`에 적으라는 오류로 빌드가 멈춘다.
   RAN1은 `UTC`로 빌드하고 `timezone_status`를 남긴다(개최지 줄을 읽었지만 정하지 못하면 `detection_failed`, 개최지를 읽을 문서가 없으면 `pending_timezone_ref`).
+
+## 의장 (officials)
+
+셀의 Chair는 원본이 그 셀이나 열에 적은 사람만이다. 표시가 없는 칸을 의장 세션으로 보는 것 같은 추론으로는 넣지 않는다(SA1 Plenary, SA2 Stream 1).
+
+- **WG별 정보는 WG 설정, 공용 정보는 `shared/officials.py`다.**
+  - WG 설정: officials 코드(`S1`, `S2`, `R3`, `R4`, `R1`, `R2`, `RP`)와, 원본 표기를 사람에 잇는 별칭 표(RAN3 `L` → `XU, Lixiang`, RAN4 `Yang` → `TANG, Yang`).
+  - 공용: officials 이력 페이지(`dynareport?code=TSG-WG--R3--officialsHistory.htm`)를 받아 읽고(`fetch_history`), 회의 날짜에 임기 중인 사람을 고르고(`in_office`), 원본 표기를 전체 이름으로 푼다(`resolve`).
+- **이력 페이지 하나로 지금과 지난 회의 모두 답한다.** 임기는 선출일부터이고, 3GPP는 선출일을 선출한 회의의 다음 날로 적는다. 그 회의 동안은 이전 의장단이다.
+  현재 페이지(`…--officials.htm`)는 쓰지 않는다. 이력의 `(current)` 줄과 같다.
+- **코드가 틀려도 200과 빈 표가 온다.** 의장이 한 명도 없는 페이지는 오류다(`ValueError`). Portal GetMeetings에는 의장 필드가 없다(`Contacts`는 MCC 서기).
+- **`resolve`는 적힌 것만 푼다.** 이름이 어느 순서든(`XU Lixiang`, `Lixiang XU`, `XU, Lixiang`) 맞으면 그 사람이다.
+  한 낱말(`Sean`, `Fong`)은 그 낱말을 이름이나 성으로 가진 사람이 하나뿐일 때만이다. RAN4 `Yang`은 TANG Yang과 YANG Shan 둘 다라서 별칭 표가 정한다.
+  별칭은 officials가 아닌 세션 의장도 가리킬 수 있다(RAN3 `G` → `CAO, Gen`). 모르는 표기는 `None`이고, WG는 적힌 그대로 보인다.
+- 이름은 `Given FAMILY`(`Lixiang XU`)이고 3GPP의 대소문자를 따른다.
 
 ## Experimental WG
 

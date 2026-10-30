@@ -20,6 +20,7 @@ from dataclasses import dataclass, field
 from datetime import date, timedelta
 import re
 
+from shared.agenda_groups import group_label
 from shared.schedule import (DaySchedule, RoomInfo, Schedule, Session, Timeline,
                              minutes_to_time, time_to_minutes)
 from .document import clock
@@ -401,14 +402,6 @@ def describe(item: str, agenda: dict) -> dict | None:
     path = ['.'.join(parts[:i]) for i in range(1, len(parts) + 1)]
     return {'agenda_item': item, 'matched_agenda_item': match, 'description': agenda[match],
             'hierarchy': [{'agenda_item': p, 'description': agenda.get(p)} for p in path]}
-
-
-def group_label(item: str | None, agenda: dict) -> str:
-    if not item:
-        return ''
-    top = item.split('.')[0]
-    description = agenda.get(top)
-    return description.split(' - ')[0].strip() if description else f'AI {top}'
 
 
 def break_name(start: int, end: int, named: list[dict]) -> str:

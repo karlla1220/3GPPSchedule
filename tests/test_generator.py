@@ -317,3 +317,44 @@ def test_filter_scope_covers_sub_items_unless_the_cell_lists_one():
     # RAN2 lists a parent beside its sub-items: the parent is its own part.
     assert _ai_filter_scope("8.1, 8.1.2, 8.1.3") == "8.1|8.1.2.*|8.1.3.*"
     assert _ai_filter_scope("") == ""
+
+
+def test_a_block_split_without_times_draws_equal_pieces_with_the_block_time():
+    from dataclasses import replace
+    import pytest
+    from schedule_fixture import build_schedule
+    from shared.schedule import Session
+
+    schedule = build_schedule()
+    monday = schedule.days[0]
+    block = next(s for s in monday.sessions if s.name == "Release planning")  # 13:00-14:30
+    monday.sessions.remove(block)
+    monday.sessions += [replace(block, name=name, part=[k, 3])
+                        for k, name in enumerate(["7.3.3 AI", "7.3.4 NTN", "7.3.5 XR"], 1)]
+    soup = BeautifulSoup(generate_html(schedule), "html.parser")
+    pieces = [b for b in soup.select(".session-block")
+              if b.select_one(".session-name").text in {"7.3.3 AI", "7.3.4 NTN", "7.3.5 XR"}]
+
+    # Monday's axis has 15-minute rows from 09:00 in grid row 2: 13:00 is row 18.
+    rows = [re.search(r"grid-row:(\d+)/(\d+)", b["style"]).groups() for b in pieces[:3]]
+    assert rows == [("18", "20"), ("20", "22"), ("22", "24")]
+    duration = pieces[1].select_one(".session-duration").get_text(" ", strip=True)
+    assert duration == "2/3 of 90 min · 13:00–14:30"
+    assert "Time: 13:00 - 14:30 (2/3 of 90 min)" in pieces[1]["data-popup"]
+    plain = next(b for b in soup.select(".session-block") if b.select_one(".session-name").text == "Rapporteur discussion")
+    assert plain.select_one(".session-duration").get_text(" ", strip=True) == "60 min · 13:00–14:00"
+
+    with pytest.raises(ValueError):  # Two pieces would be 20 min.
+        Session(name="x", duration_minutes=40, start_time="13:00", end_time="13:40", day="Monday", part=[1, 2])
+    with pytest.raises(ValueError):
+        Session(name="x", duration_minutes=90, start_time="13:00", end_time="14:30", day="Monday", part=[3, 2])
+
+
+def test_a_split_piece_survives_the_snapshot(tmp_path):
+    from schedule_fixture import build_schedule
+    from shared.schedule import load_schedule, save_schedule
+
+    schedule = build_schedule()
+    schedule.days[0].sessions[3].part = [1, 2]
+    save_schedule(schedule, tmp_path / "schedule.json")
+    assert load_schedule(tmp_path / "schedule.json").days[0].sessions[3].part == [1, 2]

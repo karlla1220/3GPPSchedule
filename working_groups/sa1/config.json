@@ -1,0 +1,13 @@
+{
+  "sync_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/SA1/Inbox/",
+  "archive_url": "https://www.3gpp.org/ftp/tsg_sa/WG1_Serv/",
+  "meeting_specific": [
+    "https://www.3gpp.org/ftp/tsg_sa/WG1_Serv/TSGS1_115_Prague/",
+    "https://www.3gpp.org/ftp/tsg_sa/WG1_Serv/TSGS1_116_Calgary/"
+  ],
+  "meeting_specific_override": [],
+  "officials_code": "S1",
+  "llm_fallback": true,
+  "model": "gemini-3.8-flash",
+  "meetings": {}
+}
