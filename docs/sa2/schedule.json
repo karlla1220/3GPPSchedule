@@ -10,21 +10,24 @@
           "table_index": 0,
           "room_index_in_table": 0,
           "id": "stream1",
-          "kind": ""
+          "kind": "",
+          "detail": "B2 (Floor 2) · Stream 1"
         },
         {
           "name": "Breakout 1",
           "table_index": 0,
           "room_index_in_table": 0,
           "id": "stream2",
-          "kind": ""
+          "kind": "",
+          "detail": "B3 (Floor 2) · Stream 2"
         },
         {
           "name": "Breakout 2",
           "table_index": 0,
           "room_index_in_table": 0,
           "id": "stream3",
-          "kind": ""
+          "kind": "",
+          "detail": "D11/D12 (Floor 3) · Stream 3"
         }
       ],
       "sessions": [
@@ -997,21 +1000,24 @@
           "table_index": 0,
           "room_index_in_table": 0,
           "id": "stream1",
-          "kind": ""
+          "kind": "",
+          "detail": "B2 (Floor 2) · Stream 1"
         },
         {
           "name": "Breakout 1",
           "table_index": 0,
           "room_index_in_table": 0,
           "id": "stream2",
-          "kind": ""
+          "kind": "",
+          "detail": "B3 (Floor 2) · Stream 2"
         },
         {
           "name": "Breakout 2",
           "table_index": 0,
           "room_index_in_table": 0,
           "id": "stream3",
-          "kind": ""
+          "kind": "",
+          "detail": "D11/D12 (Floor 3) · Stream 3"
         }
       ],
       "sessions": [
@@ -2075,21 +2081,24 @@
           "table_index": 0,
           "room_index_in_table": 0,
           "id": "stream1",
-          "kind": ""
+          "kind": "",
+          "detail": "B2 (Floor 2) · Stream 1"
         },
         {
           "name": "Breakout 1",
           "table_index": 0,
           "room_index_in_table": 0,
           "id": "stream2",
-          "kind": ""
+          "kind": "",
+          "detail": "B3 (Floor 2) · Stream 2"
         },
         {
           "name": "Breakout 2",
           "table_index": 0,
           "room_index_in_table": 0,
           "id": "stream3",
-          "kind": ""
+          "kind": "",
+          "detail": "D11/D12 (Floor 3) · Stream 3"
         }
       ],
       "sessions": [
@@ -2951,21 +2960,24 @@
           "table_index": 0,
           "room_index_in_table": 0,
           "id": "stream1",
-          "kind": ""
+          "kind": "",
+          "detail": "B2 (Floor 2) · Stream 1"
         },
         {
           "name": "Breakout 1",
           "table_index": 0,
           "room_index_in_table": 0,
           "id": "stream2",
-          "kind": ""
+          "kind": "",
+          "detail": "B3 (Floor 2) · Stream 2"
         },
         {
           "name": "Breakout 2",
           "table_index": 0,
           "room_index_in_table": 0,
           "id": "stream3",
-          "kind": ""
+          "kind": "",
+          "detail": "D11/D12 (Floor 3) · Stream 3"
         }
       ],
       "sessions": [
@@ -4935,21 +4947,24 @@
           "table_index": 0,
           "room_index_in_table": 0,
           "id": "stream1",
-          "kind": ""
+          "kind": "",
+          "detail": "B2 (Floor 2) · Stream 1"
         },
         {
           "name": "Breakout 1",
           "table_index": 0,
           "room_index_in_table": 0,
           "id": "stream2",
-          "kind": ""
+          "kind": "",
+          "detail": "B3 (Floor 2) · Stream 2"
         },
         {
           "name": "Breakout 2",
           "table_index": 0,
           "room_index_in_table": 0,
           "id": "stream3",
-          "kind": ""
+          "kind": "",
+          "detail": "D11/D12 (Floor 3) · Stream 3"
         }
       ],
       "sessions": [
@@ -6187,7 +6202,7 @@
     }
   ],
   "source_file": "S2-2610195_SA2-177-Session Plan -r14 - Friday plan.docx",
-  "generated_at": "2026-10-30 00:52",
+  "generated_at": "2026-10-30 07:41",
   "contact_name": "",
   "contact_email": "",
   "source_files": [

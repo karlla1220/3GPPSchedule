@@ -10,14 +10,16 @@
           "table_index": 0,
           "room_index_in_table": 0,
           "id": "plenary",
-          "kind": ""
+          "kind": "",
+          "detail": "D3/D4, Floor 3"
         },
         {
           "name": "Breakout 2",
           "table_index": 0,
           "room_index_in_table": 0,
           "id": "breakout-2",
-          "kind": ""
+          "kind": "",
+          "detail": "D9, Floor 3"
         }
       ],
       "sessions": [
@@ -356,14 +358,16 @@
           "table_index": 0,
           "room_index_in_table": 0,
           "id": "plenary",
-          "kind": ""
+          "kind": "",
+          "detail": "D3/D4, Floor 3"
         },
         {
           "name": "Breakout 2",
           "table_index": 0,
           "room_index_in_table": 0,
           "id": "breakout-2",
-          "kind": ""
+          "kind": "",
+          "detail": "D9, Floor 3"
         }
       ],
       "sessions": [
@@ -868,14 +872,16 @@
           "table_index": 0,
           "room_index_in_table": 0,
           "id": "plenary",
-          "kind": ""
+          "kind": "",
+          "detail": "D3/D4, Floor 3"
         },
         {
           "name": "Breakout 2",
           "table_index": 0,
           "room_index_in_table": 0,
           "id": "breakout-2",
-          "kind": ""
+          "kind": "",
+          "detail": "D9, Floor 3"
         }
       ],
       "sessions": [
@@ -1393,14 +1399,16 @@
           "table_index": 0,
           "room_index_in_table": 0,
           "id": "plenary",
-          "kind": ""
+          "kind": "",
+          "detail": "D3/D4, Floor 3"
         },
         {
           "name": "Breakout 2",
           "table_index": 0,
           "room_index_in_table": 0,
           "id": "breakout-2",
-          "kind": ""
+          "kind": "",
+          "detail": "D9, Floor 3"
         }
       ],
       "sessions": [
@@ -1935,14 +1943,16 @@
           "table_index": 0,
           "room_index_in_table": 0,
           "id": "plenary",
-          "kind": ""
+          "kind": "",
+          "detail": "D3/D4, Floor 3"
         },
         {
           "name": "Breakout 2",
           "table_index": 0,
           "room_index_in_table": 0,
           "id": "breakout-2",
-          "kind": ""
+          "kind": "",
+          "detail": "D9, Floor 3"
         }
       ],
       "sessions": [
@@ -2070,7 +2080,7 @@
     }
   ],
   "source_file": "Agenda for SA1#115_Friday_1550_END_OF_MEETING.docx",
-  "generated_at": "2026-10-30 00:52",
+  "generated_at": "2026-10-30 07:41",
   "contact_name": "",
   "contact_email": "",
   "source_files": [

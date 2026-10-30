@@ -10,7 +10,8 @@
           "table_index": 0,
           "room_index_in_table": 0,
           "id": "main",
-          "kind": ""
+          "kind": "",
+          "detail": ""
         }
       ],
       "sessions": [
@@ -251,7 +252,8 @@
           "table_index": 0,
           "room_index_in_table": 0,
           "id": "main",
-          "kind": ""
+          "kind": "",
+          "detail": ""
         }
       ],
       "sessions": [
@@ -515,7 +517,8 @@
           "table_index": 0,
           "room_index_in_table": 0,
           "id": "main",
-          "kind": ""
+          "kind": "",
+          "detail": ""
         }
       ],
       "sessions": [
@@ -809,7 +812,8 @@
           "table_index": 0,
           "room_index_in_table": 0,
           "id": "main",
-          "kind": ""
+          "kind": "",
+          "detail": ""
         }
       ],
       "sessions": [
@@ -1129,7 +1133,8 @@
           "table_index": 0,
           "room_index_in_table": 0,
           "id": "main",
-          "kind": ""
+          "kind": "",
+          "detail": ""
         }
       ],
       "sessions": [
@@ -1282,7 +1287,7 @@
     }
   ],
   "source_file": "RAN3_134_agenda_20261023.docx",
-  "generated_at": "2026-10-29 17:51",
+  "generated_at": "2026-10-30 00:41",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
@@ -1290,7 +1295,7 @@
     "agenda.csv"
   ],
   "source_labels": {
-    "RAN3_134_agenda_20261023.docx": "Agenda 23 Oct",
+    "RAN3_134_agenda_20261023.docx": "agenda_20261023",
     "agenda.csv": "agenda.csv"
   },
   "timezone": "America/Edmonton",

@@ -10,35 +10,40 @@
           "table_index": 0,
           "room_index_in_table": 0,
           "id": "",
-          "kind": "online"
+          "kind": "online",
+          "detail": ""
         },
         {
           "name": "Yeongju A Hall",
           "table_index": 0,
           "room_index_in_table": 1,
           "id": "",
-          "kind": "online"
+          "kind": "online",
+          "detail": ""
         },
         {
           "name": "Yeongju B Hall",
           "table_index": 0,
           "room_index_in_table": 2,
           "id": "",
-          "kind": "online"
+          "kind": "online",
+          "detail": ""
         },
         {
           "name": "201",
           "table_index": 1,
           "room_index_in_table": 0,
           "id": "",
-          "kind": "offline"
+          "kind": "offline",
+          "detail": ""
         },
         {
           "name": "203",
           "table_index": 1,
           "room_index_in_table": 1,
           "id": "",
-          "kind": "offline"
+          "kind": "offline",
+          "detail": ""
         }
       ],
       "sessions": [
@@ -2189,35 +2194,40 @@
           "table_index": 0,
           "room_index_in_table": 0,
           "id": "",
-          "kind": "online"
+          "kind": "online",
+          "detail": ""
         },
         {
           "name": "Yeongju A Hall",
           "table_index": 0,
           "room_index_in_table": 1,
           "id": "",
-          "kind": "online"
+          "kind": "online",
+          "detail": ""
         },
         {
           "name": "Yeongju B Hall",
           "table_index": 0,
           "room_index_in_table": 2,
           "id": "",
-          "kind": "online"
+          "kind": "online",
+          "detail": ""
         },
         {
           "name": "201",
           "table_index": 1,
           "room_index_in_table": 0,
           "id": "",
-          "kind": "offline"
+          "kind": "offline",
+          "detail": ""
         },
         {
           "name": "203",
           "table_index": 1,
           "room_index_in_table": 1,
           "id": "",
-          "kind": "offline"
+          "kind": "offline",
+          "detail": ""
         }
       ],
       "sessions": [
@@ -5026,35 +5036,40 @@
           "table_index": 0,
           "room_index_in_table": 0,
           "id": "",
-          "kind": "online"
+          "kind": "online",
+          "detail": ""
         },
         {
           "name": "Yeongju A Hall",
           "table_index": 0,
           "room_index_in_table": 1,
           "id": "",
-          "kind": "online"
+          "kind": "online",
+          "detail": ""
         },
         {
           "name": "Yeongju B Hall",
           "table_index": 0,
           "room_index_in_table": 2,
           "id": "",
-          "kind": "online"
+          "kind": "online",
+          "detail": ""
         },
         {
           "name": "201",
           "table_index": 1,
           "room_index_in_table": 0,
           "id": "",
-          "kind": "offline"
+          "kind": "offline",
+          "detail": ""
         },
         {
           "name": "203",
           "table_index": 1,
           "room_index_in_table": 1,
           "id": "",
-          "kind": "offline"
+          "kind": "offline",
+          "detail": ""
         }
       ],
       "sessions": [
@@ -8880,35 +8895,40 @@
           "table_index": 0,
           "room_index_in_table": 0,
           "id": "",
-          "kind": "online"
+          "kind": "online",
+          "detail": ""
         },
         {
           "name": "Yeongju A Hall",
           "table_index": 0,
           "room_index_in_table": 1,
           "id": "",
-          "kind": "online"
+          "kind": "online",
+          "detail": ""
         },
         {
           "name": "Yeongju B Hall",
           "table_index": 0,
           "room_index_in_table": 2,
           "id": "",
-          "kind": "online"
+          "kind": "online",
+          "detail": ""
         },
         {
           "name": "201",
           "table_index": 1,
           "room_index_in_table": 0,
           "id": "",
-          "kind": "offline"
+          "kind": "offline",
+          "detail": ""
         },
         {
           "name": "203",
           "table_index": 1,
           "room_index_in_table": 1,
           "id": "",
-          "kind": "offline"
+          "kind": "offline",
+          "detail": ""
         }
       ],
       "sessions": [
@@ -12837,35 +12857,40 @@
           "table_index": 0,
           "room_index_in_table": 0,
           "id": "",
-          "kind": "online"
+          "kind": "online",
+          "detail": ""
         },
         {
           "name": "Yeongju A Hall",
           "table_index": 0,
           "room_index_in_table": 1,
           "id": "",
-          "kind": "online"
+          "kind": "online",
+          "detail": ""
         },
         {
           "name": "Yeongju B Hall",
           "table_index": 0,
           "room_index_in_table": 2,
           "id": "",
-          "kind": "online"
+          "kind": "online",
+          "detail": ""
         },
         {
           "name": "201",
           "table_index": 1,
           "room_index_in_table": 0,
           "id": "",
-          "kind": "offline"
+          "kind": "offline",
+          "detail": ""
         },
         {
           "name": "203",
           "table_index": 1,
           "room_index_in_table": 1,
           "id": "",
-          "kind": "offline"
+          "kind": "offline",
+          "detail": ""
         }
       ],
       "sessions": [

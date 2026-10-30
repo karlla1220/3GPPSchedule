@@ -18,11 +18,11 @@
   "agenda": {
     "name": "agenda.csv",
     "url": "https://www.3gpp.org/ftp/tsg_ran/WG3_Iu/TSGR3_134/Agenda/agenda.csv",
-    "uploaded_at": "2026-10-29 05:42",
+    "uploaded_at": "2026-10-30 05:43",
     "size": 2828,
     "sha256": "447a91ff8195ef425d9a1c52311d1917b6058ca7eb602f76aae203367014ef0f",
-    "etag": "\"8bb4b45a6867dd1:0\"",
-    "last_modified": "Thu, 29 Oct 2026 05:42:58 GMT",
+    "etag": "\"657914863168dd1:0\"",
+    "last_modified": "Fri, 30 Oct 2026 05:43:00 GMT",
     "ftp_modified": null,
     "content_type": "application/octet-stream",
     "content_disposition": null

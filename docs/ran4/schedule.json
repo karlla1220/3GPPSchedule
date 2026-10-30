@@ -10,35 +10,40 @@
           "table_index": 0,
           "room_index_in_table": 0,
           "id": "yang",
-          "kind": ""
+          "kind": "",
+          "detail": ""
         },
         {
           "name": "RAN4 Breakout 1(BR1) (Shan Session)",
           "table_index": 0,
           "room_index_in_table": 0,
           "id": "shan",
-          "kind": ""
+          "kind": "",
+          "detail": ""
         },
         {
           "name": "RAN4 Breakout 2 (BR2)(Gene Session)",
           "table_index": 0,
           "room_index_in_table": 0,
           "id": "gene",
-          "kind": ""
+          "kind": "",
+          "detail": ""
         },
         {
           "name": "Ad hoc room",
           "table_index": 0,
           "room_index_in_table": 0,
           "id": "ad-hoc-room",
-          "kind": ""
+          "kind": "",
+          "detail": ""
         },
         {
           "name": "Offline Room",
           "table_index": 0,
           "room_index_in_table": 0,
           "id": "offline-room",
-          "kind": ""
+          "kind": "",
+          "detail": ""
         }
       ],
       "sessions": [
@@ -2183,35 +2188,40 @@
           "table_index": 0,
           "room_index_in_table": 0,
           "id": "yang",
-          "kind": ""
+          "kind": "",
+          "detail": ""
         },
         {
           "name": "RAN4 RRM_Demod_OTA (Shan Session)",
           "table_index": 0,
           "room_index_in_table": 0,
           "id": "shan",
-          "kind": ""
+          "kind": "",
+          "detail": ""
         },
         {
           "name": "RAN4 RF,NTN,A-IOT (Gene Session)",
           "table_index": 0,
           "room_index_in_table": 0,
           "id": "gene",
-          "kind": ""
+          "kind": "",
+          "detail": ""
         },
         {
           "name": "Ad hoc room",
           "table_index": 0,
           "room_index_in_table": 0,
           "id": "ad-hoc-room",
-          "kind": ""
+          "kind": "",
+          "detail": ""
         },
         {
           "name": "Offline room",
           "table_index": 0,
           "room_index_in_table": 0,
           "id": "offline-room",
-          "kind": ""
+          "kind": "",
+          "detail": ""
         }
       ],
       "sessions": [
@@ -4790,35 +4800,40 @@
           "table_index": 0,
           "room_index_in_table": 0,
           "id": "yang",
-          "kind": ""
+          "kind": "",
+          "detail": ""
         },
         {
           "name": "RAN4 RRM_Demod_OTA (Shan Session)",
           "table_index": 0,
           "room_index_in_table": 0,
           "id": "shan",
-          "kind": ""
+          "kind": "",
+          "detail": ""
         },
         {
           "name": "RAN4 RF,NTN,A-IOT (Gene Session)",
           "table_index": 0,
           "room_index_in_table": 0,
           "id": "gene",
-          "kind": ""
+          "kind": "",
+          "detail": ""
         },
         {
           "name": "Ad hoc room",
           "table_index": 0,
           "room_index_in_table": 0,
           "id": "ad-hoc-room",
-          "kind": ""
+          "kind": "",
+          "detail": ""
         },
         {
           "name": "Offline room",
           "table_index": 0,
           "room_index_in_table": 0,
           "id": "offline-room",
-          "kind": ""
+          "kind": "",
+          "detail": ""
         }
       ],
       "sessions": [
@@ -7612,35 +7627,40 @@
           "table_index": 0,
           "room_index_in_table": 0,
           "id": "yang",
-          "kind": ""
+          "kind": "",
+          "detail": ""
         },
         {
           "name": "RAN4 RRM_Demod_OTA (Shan Session)",
           "table_index": 0,
           "room_index_in_table": 0,
           "id": "shan",
-          "kind": ""
+          "kind": "",
+          "detail": ""
         },
         {
           "name": "RAN4 RF,NTN,A-IOT (Gene Session)",
           "table_index": 0,
           "room_index_in_table": 0,
           "id": "gene",
-          "kind": ""
+          "kind": "",
+          "detail": ""
         },
         {
           "name": "Ad hoc room",
           "table_index": 0,
           "room_index_in_table": 0,
           "id": "ad-hoc-room",
-          "kind": ""
+          "kind": "",
+          "detail": ""
         },
         {
           "name": "Offline room",
           "table_index": 0,
           "room_index_in_table": 0,
           "id": "offline-room",
-          "kind": ""
+          "kind": "",
+          "detail": ""
         }
       ],
       "sessions": [
@@ -9628,21 +9648,24 @@
           "table_index": 0,
           "room_index_in_table": 0,
           "id": "yang",
-          "kind": ""
+          "kind": "",
+          "detail": ""
         },
         {
           "name": "RAN4 RRM_Demod_OTA (Shan Session)",
           "table_index": 0,
           "room_index_in_table": 0,
           "id": "shan",
-          "kind": ""
+          "kind": "",
+          "detail": ""
         },
         {
           "name": "RAN4 RF,NTN,A-IOT (Gene Session)",
           "table_index": 0,
           "room_index_in_table": 0,
           "id": "gene",
-          "kind": ""
+          "kind": "",
+          "detail": ""
         }
       ],
       "sessions": [
