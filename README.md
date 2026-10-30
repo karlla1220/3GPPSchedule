@@ -759,7 +759,7 @@ SA1#112·#113·#115의 실제 문서로 확인했습니다. `site.json`에서 `e
   Plenary 항목(#112 `Immersive`)은 같은 표에서 그 이름에 붙은 번호를 씁니다. 드래프팅 칸에는 AI를 붙이지 않습니다.
 - Chair는 원본이 그 칸에 적은 사람만입니다. 브레이크아웃 칸은 NOTE 주제(`,`·`+`로 나눔)가 칸 이름을 가리키는 줄이 하나뿐일 때
   그 의장이고, Plenary 칸과 방 없는 칸은 비웁니다. 이름은 officials 이력(코드 `S1`, `officials_code`)으로 3GPP 표기로 풉니다
-  (`Qun Wei` → `QUN WEI`). officials에 없는 사람(`Erik Guttman`)과 페이지를 못 읽은 빌드는 NOTE 표기 그대로입니다.
+  (`Qun Wei` → `Qun WEI`, 셀에는 이름 `Qun`). officials에 없는 사람(`Erik Guttman`)과 페이지를 못 읽은 빌드는 NOTE 표기 그대로입니다.
 - 색(범례)은 셀 첫 AI의 agenda 최상위 항목입니다(`shared/agenda.py`, #115에서는 대부분 `Rel-21 contributions`).
 
 ### LLM 폴백 (`working_groups/sa1/llm.py`, 공용 `shared/llm_cells.py`)

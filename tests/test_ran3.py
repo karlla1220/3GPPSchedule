@@ -12,7 +12,7 @@ import pytest
 from pathlib import Path
 from urllib.parse import unquote
 
-from shared.agenda import agenda_map
+from shared.agenda import agenda_map, written_ranges
 from shared.renderer import generate_html
 from shared.schedule import load_schedule, save_schedule
 from working_groups.ran3 import document as docmod, lifecycle, llm, pipeline, sessions, sources
@@ -515,3 +515,10 @@ assert not any(name.startswith(('working_groups.ran1', 'working_groups.ran2', 'w
                for name in sys.modules)
 """], capture_output=True, text=True)
     assert result.returncode == 0, result.stderr
+
+
+def test_a_written_range_stays_a_range_on_the_ai_line():
+    ranges = []
+    items = sessions.line_items('Org: AI 1-8', None, ranges)
+    assert items == [str(n) for n in range(1, 9)]
+    assert written_ranges(items, ranges) == ['1–8']

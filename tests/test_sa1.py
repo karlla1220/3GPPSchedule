@@ -119,7 +119,7 @@ def test_a_document_without_a_schedule_table_is_a_layout_error():
 def test_breakout_cells_are_split_by_room_and_take_the_note_chair(eom):
     ai, ubiquitous = find(eom, 'Tuesday', '09:00'), find(eom, 'Tuesday', '09:00', 'breakout-2')
     assert (ai.name, ai.agenda_item, ai.chair, ai.part) == ('7.3.3 AI', '7.3.3', 'Vasil ALEKSIEV', None)
-    assert (ubiquitous.name, ubiquitous.chair) == ('7.3.5 Ubiquitous', 'QUN WEI')
+    assert (ubiquitous.name, ubiquitous.chair) == ('7.3.5 Ubiquitous', 'Qun WEI')
     joint = find(eom, 'Wednesday', '14:00', 'breakout-2')
     assert (joint.name, joint.agenda_item, joint.chair) == ('7.3.10 IMS+7.3.6 Immersive', '7.3.10, 7.3.6', 'Erik Guttman')
     # Not on the officials page: as the NOTE writes it.

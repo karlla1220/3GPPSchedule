@@ -37,10 +37,18 @@ class Official:
 
     @property
     def name(self) -> str:
-        return f'{self.given} {self.family}'.strip()
+        return full_name(self.given, self.family)
 
     def serves_on(self, day: date) -> bool:
         return self.elected <= day and (self.ended is None or day <= self.ended)
+
+
+def full_name(given: str, family: str) -> str:
+    """"Given FAMILY". A given name 3GPP wrote in capitals ("WEI, QUN") is
+    capitalised as a name ("Qun WEI"), so the family part stays the one in capitals."""
+    if given.isupper():
+        given = re.sub(r"[A-Z][A-Z']*", lambda m: m[0].capitalize(), given)
+    return f'{given} {family}'.strip()
 
 
 def _date(text: str) -> date | None:
@@ -115,4 +123,4 @@ def resolve(label: str | None, officials: list[Official], aliases: dict[str, str
     if alias is None:
         return None
     family, _, given = alias.partition(',')
-    return resolve(f'{family} {given}', officials) or f'{given.strip()} {family.strip()}'.strip()
+    return resolve(f'{family} {given}', officials) or full_name(given.strip(), family.strip())

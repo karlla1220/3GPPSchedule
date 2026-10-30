@@ -402,8 +402,8 @@ def generate_html(schedule: Schedule, *, schedules=None, groups=None, presentati
                 )
             else:
                 html_parts.append(
-                    f'                <div class="room-header" '
-                    f'style="grid-column:{col};grid-row:1">{_esc(room.name)}</div>\n'
+                    f'                <div class="room-header" title="{_esc(room.name)}" '
+                    f'style="grid-column:{col};grid-row:1">{_room_name_html(room.name)}</div>\n'
                 )
 
         # Each day supplies its own range, precision and label spacing.
@@ -491,7 +491,7 @@ def generate_html(schedule: Schedule, *, schedules=None, groups=None, presentati
             # chair are one quiet secondary tone.
             if slots >= 3 and session.chair:
                 chair_html = (
-                    f'<div class="session-chair">{_esc(session.chair)}</div>'
+                    f'<div class="session-chair">{_esc(_cell_chair(session.chair))}</div>'
                 )
             if slots >= 4:
                 # Duration leads: it is what people look for first. The row is
@@ -965,6 +965,45 @@ def _part_rows(part, row_start: int, row_end: int) -> tuple[int, int]:
 def _part_prefix(part) -> str:
     """"1/2 of " before the block minutes; "of" is sized like the unit."""
     return f'{part[0]}/{part[1]} <span class="session-unit">of</span> ' if part else ""
+
+
+def _cell_chair(chair: str) -> str:
+    """The name the cell shows: the given name of a "Given FAMILY" name.
+
+    The cell's chair is the quietest line and is cut short in narrow columns, so
+    it carries the name people call the chair by ("Lixiang XU" -> "Lixiang");
+    the popup keeps the full name. A name without a capitalised family part is
+    shown as written ("Hiroki", "Ruixin Wang"). Several chairs keep their
+    commas ("Yang TANG, Shan YANG" -> "Yang, Shan").
+    """
+    def given(name: str) -> str:
+        words = name.split()
+        for i, word in enumerate(words[1:], 1):
+            letters = [c for c in word if c.isalpha()]
+            if len(letters) > 1 and all(c.isupper() for c in letters):
+                return ' '.join(words[:i])
+        return name
+
+    return ', '.join(given(part) for part in chair.split(', '))
+
+
+def _room_name_html(name: str) -> str:
+    """A room name that may take two lines, breaking before its last bracket.
+
+    "RAN4 Breakout 2 (BR2)(Gene Session)" is "RAN4 Breakout 2 (BR2)" over
+    "(Gene Session)": the bracket names whose session or hours it is, so it
+    moves down whole. Words with a hyphen or slash ("A-IOT", "3/4/5/6") do
+    not break inside; the browser breaks only at spaces and before the bracket.
+    """
+    def word(text: str) -> str:
+        return f'<span class="room-word">{_esc(text)}</span>' if re.search(r'[-/–]', text) else _esc(text)
+
+    match = re.fullmatch(r'(.*?\S)(\s*)(\([^()]*\))', name.strip())
+    head, gap, tail = (match[1], match[2], match[3]) if match else (name.strip(), '', '')
+    html = ' '.join(word(w) for w in head.split())
+    if tail:
+        html += (' ' if gap else '<wbr>') + f'<span class="room-word">{_esc(tail)}</span>'
+    return f'<span class="room-name-text">{html}</span>'
 
 
 def _room_text(rooms):
