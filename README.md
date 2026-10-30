@@ -666,6 +666,8 @@ RAN4 의장단은 미팅마다 `Inbox/Meeting_Arrangements/`에 PPTX 시간표
 - **AI는 토픽 번호에서 찾습니다**: `[346]`, `[214] [215]`, `105-B`, `(346, 347)` → 토픽 목록의 AI 칸 → `agenda.csv`에 있는 번호만.
   접미사 없는 `[105]`는 105-A·105-B, `[102-A/B]`는 둘 다입니다. 셀의 이름이 다른 번호의 토픽 이름이면(`[206] NR_Mob_Ph5_RRM`은 207) AI를 비우고 경고합니다.
   셀에 직접 적힌 `(AI 8.11.4)`도 씁니다. 그룹(범례 색)은 첫 AI의 최상위 항목입니다(`shared/agenda.py`).
+- **후보 목록과 묶음의 AI는 필터에만 씁니다**(`listed`, `Session.inferred_agenda_items`): `Return to`·`EARLY RETURN TO` 줄부터 끝까지,
+  그리고 토픽 줄 5개 이상을 거느린 범주(`5G basket and spectrum WI`, `Maintenance`). 셀에는 AI 줄·AI 트리·색이 없고 원문 줄은 Note입니다.
 - **Chair**: 셀의 `Chaired by Jerry (Apple)`·`by Aijun (CATT)`는 이름만(`Jerry`) 씁니다. 그런 표기가 없는 Main·BR1·BR2 열의 칸은
   ad hoc 표기가 없을 때만 열 머리의 의장이고, officials 이력(`R4`, 회의 첫날의 임원)으로 전체 이름(`Yang TANG`)으로 풉니다.
   `Yang`은 TANG Yang과 YANG Shan 둘에 맞아서 `chair_aliases`가 정합니다. 이력을 받지 못하면 적힌 이름 그대로 두고 경고합니다. 표기 없는 ad hoc·offline 칸은 비웁니다.

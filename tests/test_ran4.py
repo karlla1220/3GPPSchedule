@@ -314,8 +314,42 @@ def test_older_meeting_pm_markers_and_bracketed_topic_lists():
                                          column_chairs=CHAIRS)
     monday = block(schedule, 'Monday', '14:30', '16:30')
     assert [(r[1], r[2]) for r in monday if r[0] == 'yang'] == [('14:30', '15:30'), ('15:30', '16:30')]
-    friday = block(schedule, 'Friday', '08:00', '10:30')
-    assert next(r for r in friday if r[0] == 'gene')[5]   # "(346, 347, …)" under "Return to" give agenda items
+    friday = next(d for d in schedule.days if d.day_name == 'Friday')
+    listed = next(s for s in friday.sessions if s.room_ids == ['gene'] and s.start_time == '08:30')
+    # "(346, 347, …)" under "Return to" give agenda items, for the filter only.
+    assert listed.agenda_item is None and '7.6.2' in listed.inferred_agenda_items
+    # "Maintenance" over six topics is a bundle; its AIs match the filter only.
+    thursday = next(d for d in schedule.days if d.day_name == 'Thursday')
+    bundle = next(s for s in thursday.sessions if s.room_ids == ['yang'] and s.start_time == '11:00')
+    assert (bundle.name, bundle.agenda_item, bundle.group_header) == ('Maintenance', None, '')
+    assert len(bundle.notes) == 7
+
+
+def test_candidate_lists_match_the_filter_but_show_no_agenda_item(week):
+    def at(day, room, start):
+        return next(s for d in week[0].days if d.day_name == day for s in d.sessions
+                    if s.room_ids == [room] and s.start_time == start)
+    for day, start, count in (('Friday', '08:30', 73), ('Friday', '11:00', 26), ('Thursday', '08:30', 47)):
+        session = at(day, 'gene', start)
+        # No AI line, no AI tree in the popup, no colour; the topic lines stay as notes.
+        assert (session.agenda_item, session.group_header, session.agenda_descriptions) == (None, '', [])
+        assert len(session.inferred_agenda_items) == count and session.notes
+    assert '5.2.1' in at('Friday', 'gene', '08:30').inferred_agenda_items
+    # A list under the cell's own topics leaves their agenda items in place.
+    tei = at('Thursday', 'yang', '08:30')
+    assert (tei.agenda_item, tei.group_header, tei.inferred_agenda_items) == ('4.2, 10.2.1', 'TEI20', [])
+    # A category over a few topics is the session's own.
+    assert at('Monday', 'gene', '11:00').agenda_item.startswith('7.6.2')
+
+
+def test_which_lines_are_a_list():
+    five = ['[320] A', '[321] B', '[322] C', '[323] D', '[324] E']
+    assert sessions.listed(['5G basket and spectrum WI'] + five) == [True] * 6
+    assert sessions.listed(['NTN'] + five[:4]) == [False] * 5
+    assert sessions.listed(['[112] TEI20', 'EARLY RETURN TO', '6G UE RF']) == [False, True, True]
+    assert sessions.listed(['BDaT Early Return To', 'NTN']) == [True, True]
+    # Only the bundle's own lines: a topic after it is the session's.
+    assert sessions.listed(['Maintenance'] + five + ['', 'NTN', '[346] F']) == [True] * 6 + [False] * 3
 
 
 # ----------------------------------------------------------------------- llm

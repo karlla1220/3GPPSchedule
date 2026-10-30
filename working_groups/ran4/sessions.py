@@ -18,7 +18,8 @@ A cell is one session column in one time block. What the chair writes in it:
 The cell title is the part's top lines (a category, a topic, an ad hoc owner),
 up to three joined with " / ", with round brackets removed as RAN2 does. Every
 line stays in the notes. Agenda items come from the topic numbers through the
-topic list. What the rules cannot read with confidence is reported per cell
+topic list; those of a candidate list or bundle (``listed``) match the filter
+only. What the rules cannot read with confidence is reported per cell
 for the LLM fallback; without it, the rules' reading is published.
 """
 from __future__ import annotations
@@ -52,6 +53,10 @@ COFFEE_ONLY = re.compile(r'^co\w{2,5}\s*break(?:\s*(?:AH|ad[- ]?hoc|offline))?\s
 AD_HOC = re.compile(r'^(?:(?:Main|BR\d|RRM|BDaT)\s+)?Ad[- ]?hoc\b\s*:?', re.I)
 AD_HOC_WORD = re.compile(r'\bad[- ]?hoc\b|\bAH\b', re.I)
 LIST_HEAD = re.compile(r'^(?:\w+\s+)?(?:early\s+)?return\s+to\b', re.I)
+# A category over this many topic lines is a bundle, not one session's topics:
+# #118bis–#120bis "5G basket and spectrum WI" (6–10) and "Maintenance" (6–8);
+# no other cell there has more than three topics.
+BUNDLE_TOPICS = 5
 CONT = re.compile(r'\(\s*cont\.?\s*\)|\bcont(?:inued)?\.?\s*$', re.I)
 CHAIRED = re.compile(r'[,\s]*\(?\s*\bchaired\s+by\s+(.+?)\)?\s*$', re.I)
 # "6G operation efficiency by Aijun (CATT)": a capitalised name ending the line.
@@ -265,6 +270,32 @@ def _kind(line: str) -> str:
     return 'text'
 
 
+def listed(lines: list[str]) -> list[bool]:
+    """Which lines are a candidate list rather than what the block holds.
+
+    A list head ("Return to", "EARLY RETURN TO") names what the time left goes
+    to, from that line on. A category over BUNDLE_TOPICS or more topic lines
+    ("5G basket and spectrum WI" over [320] … [331]) is a bundle the block works
+    through as time allows. Their topics' agenda items match the filter only
+    (Session.inferred_agenda_items); the lines stay as notes.
+    """
+    kinds = [_kind(line) for line in lines]
+    flags = [False] * len(lines)
+    for i, kind in enumerate(kinds):
+        if kind == 'list':
+            flags[i:] = [True] * (len(lines) - i)
+            break
+    for i, kind in enumerate(kinds):
+        if kind != 'text' or not lines[i]:
+            continue
+        j = i + 1
+        while j < len(lines) and kinds[j] in ('item', 'note', 'chair'):
+            j += 1
+        if kinds[i + 1:j].count('item') >= BUNDLE_TOPICS:
+            flags[i:j] = [True] * (j - i)
+    return flags
+
+
 def title_of(lines: list[str]) -> tuple[str, bool]:
     """(title, named) from the top units of a part's lines.
 
@@ -311,21 +342,22 @@ def build_session(cell, part: Part, lines: list[str], context: dict, piece=None,
             and not any(AD_HOC_WORD.search(l) for l in lines)):
         chairs = [owner]
     numbers = topic_numbers(lines)
-    items = []
+    items, candidates = [], []
     for line in lines:
         other = misnamed(line, topics)
         if other:
             warnings.append(f'{cell["id"]}: {line!r} names topic {other}, not its number; agenda items left out')
     if not warnings:
-        for number in numbers:
-            for topic in topicmod.expand(number, topics):
-                items += topics[topic]['agenda_items']
-        for line in lines:
-            items += [ai for ai in WRITTEN_AI.findall(line) if ai in agenda]
+        for line, in_list in zip(lines, listed(lines)):
+            found = [ai for number in topic_numbers([line]) for topic in topicmod.expand(number, topics)
+                     for ai in topics[topic]['agenda_items']]
+            found += [ai for ai in WRITTEN_AI.findall(line) if ai in agenda]
+            (candidates if in_list else items).extend(found)
+    items = list(dict.fromkeys(items))
     return {'rooms': cell['rooms'], 'start': part.start, 'end': part.end, 'fixed': part.fixed,
             'name': title, 'named': named, 'chair': join_chairs(chairs),
-            'agenda_items': list(dict.fromkeys(items)), 'topics': numbers, 'part': piece,
-            'lines': [l for l in lines if l], 'warnings': warnings}
+            'agenda_items': items, 'candidate_items': [ai for ai in dict.fromkeys(candidates) if ai not in items],
+            'topics': numbers, 'part': piece, 'lines': [l for l in lines if l], 'warnings': warnings}
 
 
 def uncertainty(cell: dict, reasons: list[str], found: list[dict]) -> list[str]:
@@ -480,7 +512,8 @@ def make_schedule(document: dict, agenda: dict | None, topics: dict | None, meta
                 agenda_item=', '.join(s['agenda_items']) or None,
                 group_header=group_label(s['agenda_items'][0] if s['agenda_items'] else None, agenda),
                 description='\n'.join(d['description'] for d in descriptions) or None,
-                agenda_descriptions=descriptions, notes=list(s['lines']), part=piece))
+                agenda_descriptions=descriptions, notes=list(s['lines']), part=piece,
+                inferred_agenda_items=list(s.get('candidate_items', []))))
         start = min([time_to_minutes(s.start_time) for s in built] + [time_to_minutes(b['start']) for b in day['breaks']])
         start -= start % 30
         end = max(time_to_minutes(s.end_time) for s in built)
