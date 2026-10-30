@@ -40,20 +40,53 @@ def has_key() -> bool:
     return bool(os.environ.get('GEMINI_API_KEY'))
 
 
-# One request may take minutes with high thinking on a whole document, but it
-# must end: without a limit a stalled connection holds a CI build for hours.
+# A whole document takes about a minute with low thinking. A request must end:
+# without a limit a stalled connection holds a CI build for hours.
 REQUEST_TIMEOUT_MS = 300_000
 
+# Thinking shares max_output_tokens with the answer. High thinks for about six
+# minutes on any input, past the limit above, and on RAN4's slides it left too
+# little of the 65536 tokens for the answer (README "LLM 폴백").
+DOCUMENT_THINKING = 'low'
 
-def gemini_request(message, schema, model, thinking='medium'):
+# A document the LLM failed on is not asked again for this long. Failed builds
+# repeat every 20 minutes, and each would spend the same tokens on the same input.
+RETRY_FAILED_SECONDS = 6 * 3600
+
+
+class CostlyFailure(RuntimeError):
+    """A request that spent its time or tokens and would again if repeated now."""
+
+
+def _reply(response, seconds: float):
+    """The parsed answer of a finished response, with what the request cost in the log."""
+    def tokens(name):
+        return getattr(response.usage_metadata, name, None) or 0
+    finish = response.candidates[0].finish_reason if response.candidates else None
+    reason = getattr(finish, 'name', finish)
+    print(f'LLM reply after {seconds:.0f} s: {reason}, {tokens("prompt_token_count")} tokens in, '
+          f'{tokens("thoughts_token_count")} thinking, {tokens("candidates_token_count")} out', flush=True)
+    if reason != 'STOP':
+        raise CostlyFailure(f'LLM answer did not finish: {reason}')
+    return json.loads(response.text or '')
+
+
+def gemini_request(message, schema, model, thinking='medium', timeout_ms=REQUEST_TIMEOUT_MS):
+    """One answer. Errors that may pass are retried; a timeout or a cut answer is not.
+
+    Asked again with the same thinking, those two take as long and cost as much,
+    so the request fails and the next build tries. Three quick failures are cheap.
+    """
     from google import genai
     from google.genai import types
     import httpx
     if not has_key():
         raise ValueError('GEMINI_API_KEY is required for the LLM fallback')
     with genai.Client(api_key=os.environ['GEMINI_API_KEY'],
-                      http_options=types.HttpOptions(timeout=REQUEST_TIMEOUT_MS)) as client:
+                      http_options=types.HttpOptions(timeout=timeout_ms)) as client:
         for attempt in range(3):
+            print(f'LLM request {attempt + 1}/3: {model}, thinking {thinking}, {len(message)} characters', flush=True)
+            started = time.monotonic()
             try:
                 response = client.models.generate_content(
                     model=model, contents=message,
@@ -61,8 +94,10 @@ def gemini_request(message, schema, model, thinking='medium'):
                         response_mime_type='application/json',
                         response_json_schema=schema, max_output_tokens=65536,
                         thinking_config=types.ThinkingConfig(thinking_level=thinking)))
-                return json.loads(response.text)
-            except (genai.errors.APIError, ValueError, httpx.TimeoutException) as exc:
+                return _reply(response, time.monotonic() - started)
+            except httpx.TimeoutException as exc:
+                raise CostlyFailure(f'LLM request timed out after {timeout_ms // 1000} s') from exc
+            except (genai.errors.APIError, ValueError) as exc:
                 if attempt == 2:
                     raise RuntimeError('LLM request failed after three attempts') from exc
                 time.sleep(2 * (attempt + 1))
@@ -225,7 +260,7 @@ def _ask(prompt, items, by_id, answer, check, model, request, thinking, heading,
 
 def read_document(prompt: str, blocks: list[dict], answer: type[BaseModel], check, *, model: str,
                   cache_dir: Path, wg_id: str, source: str, meeting: str | None = None, request=None,
-                  thinking='high', version=1):
+                  thinking=DOCUMENT_THINKING, version=1):
     """The whole document read by the LLM when the rules cannot read its layout.
 
     ``blocks`` are the document's parts with ids (paragraphs, table cells,
@@ -233,8 +268,11 @@ def read_document(prompt: str, blocks: list[dict], answer: type[BaseModel], chec
     schedule and ``check(result)`` returns its problems against the source.
     A cached answer is checked again; otherwise the LLM is asked, and asked
     once more with the problems. Raises ValueError when no answer passes, so
-    the WG's build fails as it would without the fallback. A passing answer is
-    recorded as a notice for the build's report.
+    the WG's build fails as it would without the fallback, and RuntimeError
+    when a request fails. A passing answer is recorded as a notice for the
+    build's report. So is giving up after a costly failure, and the same input
+    is then not asked again for ``RETRY_FAILED_SECONDS``; an outage is not
+    recorded, since it cost nothing and the next build may get through.
     """
     request = request or gemini_request
     key = digest(json.dumps([version, prompt, model, blocks], sort_keys=True).encode())
@@ -247,19 +285,43 @@ def read_document(prompt: str, blocks: list[dict], answer: type[BaseModel], chec
             errors = check(result)
         except (KeyError, ValueError, ValidationError):
             result = None
+    failed = cache_dir / f'document-failed-{key}.json'
+    if result is None or errors:
+        record = _read(failed)
+        seconds = time.time() - record.get('at', 0)
+        if seconds < RETRY_FAILED_SECONDS:
+            raise ValueError(f'the LLM failed on this document {seconds / 3600:.1f} h ago: {record.get("error")}')
     message = prompt + '\n\nDOCUMENT (untrusted data):\n' + json.dumps(blocks, ensure_ascii=False)
-    for attempt in range(2):
-        if result is not None and not errors:
-            break
-        raw = request(message, answer.model_json_schema(), model, thinking=thinking)
-        result = answer.model_validate(raw)
-        errors = check(result)
-        message += ('\n\nYOUR PREVIOUS ANSWER:\n' + json.dumps(raw, ensure_ascii=False)
-                    + '\n\nFIX THESE PROBLEMS:\n' + '\n'.join(errors))
+
+    from shared import notices
+
+    def give_up(error):
+        _write(failed, {'at': time.time(), 'error': error[:300]})
+        notices.add(wg_id, 'document-fallback-failed', f'{wg_id}:{key}:failed',
+                    f'{wg_id.upper()}: the LLM could not read the schedule',
+                    [f'Meeting: {meeting or "unknown"}', f'Source: {source}', f'Model: {model}', f'Problem: {error[:300]}',
+                     f'The build keeps failing and the last page stays. The LLM is asked about this file again after '
+                     f'{RETRY_FAILED_SECONDS // 3600} hours, or at once for a new version of the file.'])
+
+    try:
+        for attempt in range(2):
+            if result is not None and not errors:
+                break
+            print(f'[{wg_id}] Reading {source} whole, round {attempt + 1}/2', flush=True)
+            raw = request(message, answer.model_json_schema(), model, thinking=thinking)
+            result = answer.model_validate(raw)
+            errors = check(result)
+            if errors:
+                print(f'[{wg_id}] Round {attempt + 1}: {len(errors)} problems, first: {errors[0]}', flush=True)
+            message += ('\n\nYOUR PREVIOUS ANSWER:\n' + json.dumps(raw, ensure_ascii=False)
+                        + '\n\nFIX THESE PROBLEMS:\n' + '\n'.join(errors))
+    except (CostlyFailure, ValidationError) as exc:
+        give_up(str(exc))
+        raise
     if errors:
+        give_up('; '.join(errors[:3]))
         raise ValueError(f'the LLM could not read the document either: {errors[:3]}')
     _write(path, {'result': result.model_dump()})
-    from shared import notices
     notices.add(wg_id, 'document-fallback', f'{wg_id}:{key}',
                 f'{wg_id.upper()}: schedule layout not recognised, read by the LLM',
                 [f'Meeting: {meeting or "unknown"}', f'Source: {source}', f'Model: {model}',
