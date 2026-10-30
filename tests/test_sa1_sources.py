@@ -7,6 +7,7 @@ from types import SimpleNamespace
 from urllib.parse import quote, unquote
 import zipfile
 
+from bs4 import BeautifulSoup
 from docx import Document
 import httpx
 import pytest
@@ -18,14 +19,14 @@ from working_groups.sa1 import lifecycle, pipeline, sources
 # ----------------------------------------------------------------- sources
 
 @pytest.mark.parametrize('name, kind, order, label, meeting', [
-    (EOM, 'chair', [3, 4, 950], "Chair's Notes EOM", 'sa1#115'),
-    ('Agenda for SA1#115_Thursday_1030.docx', 'chair', [2, 3, 630], "Chair's Notes Thu 10:30", 'sa1#115'),
-    ('S1-263002_Agenda for SA1#115_Monday_10_30.docx', 'chair', [2, 0, 630], "Chair's Notes Mon 10:30", 'sa1#115'),
-    ('S1-263002_Agenda for SA1#115.docx', 'chair', [2, -1, 0], "Chair's Notes", 'sa1#115'),
-    (M113, 'chair', [2, 4, 960], "Chair's Notes Fri 16:00", 'sa1#113'),
-    ('SA1#116_ChairNotes.docx', 'chair', [2, -1, 0], "Chair's Notes", 'sa1#116'),
-    (TIMETABLE, 'timetable', [2, 2, 1050], 'Breakout schedule Wed 17:30', None),
-    ('S1-264001.zip', 'chair', [0, 0, 0], "Chair's Notes S1-264001", None),
+    (EOM, 'chair', [3, 4, 950], 'Agenda for Friday_1550_END_OF_MEETING', 'sa1#115'),
+    ('Agenda for SA1#115_Thursday_1030.docx', 'chair', [2, 3, 630], 'Agenda for Thursday_1030', 'sa1#115'),
+    ('S1-263002_Agenda for SA1#115_Monday_10_30.docx', 'chair', [2, 0, 630], 'Agenda for Monday_10_30', 'sa1#115'),
+    ('S1-263002_Agenda for SA1#115.docx', 'chair', [2, -1, 0], 'Agenda for', 'sa1#115'),
+    (M113, 'chair', [2, 4, 960], 'Agenda_16_00_friday', 'sa1#113'),
+    ('SA1#116_ChairNotes.docx', 'chair', [2, -1, 0], 'ChairNotes', 'sa1#116'),
+    (TIMETABLE, 'timetable', [2, 2, 1050], 'Breakout sessions schedule_Prague_WED_1730', None),
+    ('S1-264001.zip', 'chair', [0, 0, 0], 'S1-264001', None),
     ('Agenda_AI_SA1#115_WED_10_30.docx', None, None, None, None),
     ('AgendaDrafting_Massive_SA1#115 Wednesday 1800.docx', None, None, None, None),
     ('doc_list_S1_115_Aug_28_at_12_10.docm', None, None, None, None),
@@ -99,6 +100,21 @@ def server_cache(tmp_path, monkeypatch):
     monkeypatch.setattr(sources.remote_files, 'CACHE_DIR', tmp_path / 'cache')
 
 
+@pytest.mark.parametrize('name, shown', [
+    (EOM, 'Agenda for Friday_1550_END_OF_MEETING'),
+    (M113, 'Agenda_16_00_friday'),
+    ('Agenda_of_SA1#112_Friday_1610.docx', 'Agenda_of_Friday_1610'),
+    (TIMETABLE, 'Breakout sessions schedule_Prague_WED_1730'),
+    ('S1-264001.zip', 'S1-264001'),
+    # page.py appends what it reads from the name; the label leaves it out so it is not said twice.
+    ('Agenda for SA1#116_Friday_EOM.docx', 'Agenda for Friday EOM'),
+    ('SA1#116_ChairNotes_v02.docx', 'ChairNotes v02'),
+])
+def test_header_names_keep_the_file_name(name, shown):
+    from shared.page import _source
+    assert BeautifulSoup(_source(name, sources.source_label(name)), 'html.parser').get_text() == shown.replace(' ', '\xa0')
+
+
 def fetch(files, today, previous=None, tmp_path=None):
     with mock_server(files) as http:
         return sources.fetch_bundle(sources.DEFAULTS, previous or {}, http, rows=ROWS, today=today,
@@ -110,14 +126,14 @@ def test_a_newer_timetable_only_file_wins_and_the_chair_file_gives_the_agenda(se
     files = {SYNC + 'agenda/previous_ones/S1-263002_Agenda for SA1#115_Tuesday_09_00.docx': (eom, '2026/08/28 10:18'),
              SYNC + 'agenda/previous_ones/' + TIMETABLE: ((FIXTURES / TIMETABLE).read_bytes(), '2026/08/26 15:22')}
     bundle = fetch(files, '2026-08-26', tmp_path=tmp_path)
-    assert (bundle.manifest['meeting_id'], bundle.manifest['version']) == ('sa1#115', 'Breakout schedule Wed 17:30')
+    assert (bundle.manifest['meeting_id'], bundle.manifest['version']) == ('sa1#115', 'Breakout sessions schedule_Prague_WED_1730')
     assert bundle.manifest['chair']['name'] == 'S1-263002_Agenda for SA1#115_Tuesday_09_00.docx'
     assert bundle.manifest['portal_metadata']['timezone'] == 'Europe/Prague'
     # A later chair file wins again, and needs no second file.
     sources.remote_files.new_run()
     files[SYNC + 'agenda/Agenda for SA1#115_Thursday_0800.docx'] = (eom, '2026/08/27 05:50')
     bundle = fetch(files, '2026-08-27', tmp_path=tmp_path)
-    assert (bundle.manifest['version'], bundle.manifest['chair']) == ("Chair's Notes Thu 08:00", None)
+    assert (bundle.manifest['version'], bundle.manifest['chair']) == ('Agenda for Thursday_0800', None)
 
 
 def test_a_version_without_a_schedule_table_is_skipped(server_cache, tmp_path, capsys):
@@ -127,7 +143,7 @@ def test_a_version_without_a_schedule_table_is_skipped(server_cache, tmp_path, c
                  (blank_docx('3GPP TSG-SA WG1 Meeting #115'), '2026/08/31 13:53')}
     previous = {'meeting_id': 'sa1#115', 'metadata': META_115}
     bundle = fetch(files, '2026-09-01', previous, tmp_path)
-    assert bundle.manifest['version'] == "Chair's Notes Thu 08:00"
+    assert bundle.manifest['version'] == 'Agenda for Thursday_0800'
     assert 'has no schedule table' in capsys.readouterr().out
 
 
@@ -136,12 +152,12 @@ def test_agenda_tdoc_zips_are_opened_for_the_next_meeting_only(server_cache, tmp
     files = {SYNC + 'agenda/' + EOM: (eom, '2026/08/28 13:52'),
              SYNC + 'S1-263001.zip': (zipped('S1-263001_2nd Draft Agenda for SA1#115_v11.docx', eom), '2026/08/23 15:15')}
     # Before #116 has any file, the zips tell which meeting they are; #115 keeps its closing file.
-    assert fetch(files, '2026-11-01', tmp_path=tmp_path).manifest['version'] == "Chair's Notes EOM"
+    assert fetch(files, '2026-11-01', tmp_path=tmp_path).manifest['version'] == 'Agenda for Friday_1550_END_OF_MEETING'
     sources.remote_files.new_run()
     files[SYNC + 'S1-264001.zip'] = (zipped('S1-264001_2nd Draft Agenda for SA1#116.docx', renumbered(eom)),
                                      '2026/11/15 15:15')
     bundle = fetch(files, '2026-11-15', tmp_path=tmp_path)
-    assert (bundle.manifest['meeting_id'], bundle.manifest['version']) == ('sa1#116', "Chair's Notes S1-264001")
+    assert (bundle.manifest['meeting_id'], bundle.manifest['version']) == ('sa1#116', 'S1-264001')
     assert bundle.documents()[0].startswith(b'PK')   # the DOCX inside the zip
 
 
@@ -184,7 +200,7 @@ def test_local_build_needs_no_network_and_records_state(offline_config, tmp_path
     options = SimpleNamespace(local=str(FIXTURES / EOM), no_download=True, output_dir=tmp_path / 'out')
     schedule = pipeline.build_schedule(options)
     assert schedule.wg_id == 'sa1' and schedule.meeting_name == 'SA1#115'
-    assert schedule.source_labels == {EOM: "Chair's Notes EOM"}
+    assert schedule.source_labels == {EOM: 'Agenda for Friday_1550_END_OF_MEETING'}
     # Offline, the NOTE names are shown as written.
     assert find(schedule, 'Tuesday', '09:00', 'breakout-2').chair == 'Qun Wei'
     state = sources.read_json(tmp_path / 'out/sa1/.schedule_state.json')

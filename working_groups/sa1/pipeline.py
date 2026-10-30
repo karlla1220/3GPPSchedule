@@ -16,7 +16,7 @@ from .document import extract_agenda, extract_document
 from .llm import CellRefiner
 from .sessions import make_schedule
 from .sources import (CACHE, DOWNLOADS, Bundle, client, config_hash, fetch_bundle, load_config, local_bundle,
-                      override_for, portal_metadata, portal_rows, read_json, write_json)
+                      override_for, portal_metadata, portal_rows, read_json, source_label, write_json)
 
 
 def meeting_metadata(meeting: str, cfg: dict, previous: dict, live: dict | None) -> dict:
@@ -122,7 +122,7 @@ def build_schedule(options=None, *, request=None, history=None):
     generated = datetime.now(ZoneInfo(metadata['timezone'])).strftime('%Y-%m-%d %H:%M')
     files = [manifest['schedule']] + ([manifest['chair']] if manifest.get('chair') else [])
     schedule = make_schedule(document, metadata, [f['name'] for f in files],
-                             {f['name']: f.get('label') or "Chair's Notes" for f in files}, generated,
+                             {f['name']: source_label(f['name']) for f in files}, generated,
                              refine=refine, resolve_chair=resolve)
     # No checkpoint before parsing and rendering both succeed.
     generate_html(schedule)

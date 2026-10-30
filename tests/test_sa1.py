@@ -9,7 +9,7 @@ import pytest
 from shared import officials
 from shared.renderer import generate_html
 from shared.schedule import load_schedule, save_schedule
-from working_groups.sa1 import document as docmod, llm, sessions
+from working_groups.sa1 import document as docmod, llm, sessions, sources
 
 FIXTURES = Path(__file__).parent / 'fixtures/sa1'
 EOM = 'Agenda for SA1#115_Friday_1550_END_OF_MEETING.docx'
@@ -29,7 +29,7 @@ def extract(name):
 
 def build(name, metadata=META_115, history=HISTORY):
     present = officials.in_office(history, date.fromisoformat(metadata['starts_on']))
-    return sessions.make_schedule(extract(name), metadata, [name], {name: "Chair's Notes"}, '2026-08-28 16:00',
+    return sessions.make_schedule(extract(name), metadata, [name], {name: sources.source_label(name)}, '2026-08-28 16:00',
                                   resolve_chair=lambda n: officials.resolve(n, present))
 
 

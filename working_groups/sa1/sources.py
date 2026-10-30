@@ -71,6 +71,10 @@ REPORT_FOLDERS = re.compile(r'^(?:docs|report|temp_reports|draft_report)$', re.I
 DAY_WORD = re.compile(r'(?<![A-Za-z])(mon|tue|wed|thu|fri)[a-z]*(?![A-Za-z])', re.I)
 TIME_WORD = re.compile(r'(?<!\d)([01]?\d|2[0-3])[_:.]?([0-5]\d)(?!\d)')
 DAY_NAMES = ('Mon', 'Tue', 'Wed', 'Thu', 'Fri')
+# What a header name leaves out of the file name: the meeting and TDoc numbers, and the
+# words page.py appends itself ("v03", "draft", "EOM", "Final"; not "END_OF_MEETING").
+UNLABELLED = re.compile(r'([ _-]*)(?<![A-Za-z0-9])(?:SA1\s*(?:#\s*|_)\d+(?:bis|b)?|S1-\d+|v\d+|draft'
+                        r'|(?:eom|final)(?:_?\d+)?)(?![A-Za-z0-9])([ _-]*)', re.I)
 
 
 def digest(data: bytes) -> str:
@@ -150,6 +154,17 @@ def name_time(name: str) -> tuple[int, int] | None:
     return DAY_NAMES.index(day[1][:3].title()), minutes
 
 
+def source_label(name: str) -> str:
+    """The header name of a source: its file name without the meeting, TDoc number and extension.
+
+    "Agenda for SA1#115_Friday_1550_END_OF_MEETING.docx" is "Agenda for Friday_1550_END_OF_MEETING",
+    so the file can be found from it. A TDoc zip with nothing else in its name keeps the number.
+    """
+    stem = Path(name.strip()).stem
+    label = UNLABELLED.sub(lambda m: '' if m.start() == 0 or m.end() == len(m.string) else m[1] or m[2], stem)
+    return label.strip(' _-') or stem
+
+
 def classify(entry: dict) -> dict | None:
     """A schedule candidate with its order key, or None.
 
@@ -163,7 +178,7 @@ def classify(entry: dict) -> dict | None:
     if tdoc:
         stage = int(tdoc[1]) - 1
         return {**entry, 'kind': 'chair', 'meeting_id': entry.get('folder_meeting'), 'order': [stage, 0, 0],
-                'label': f"Chair's Notes {name[:-4]}"}
+                'label': source_label(name)}
     if not lower.endswith(('.docx', '.zip')):
         return None
     when = name_time(name)
@@ -172,15 +187,14 @@ def classify(entry: dict) -> dict | None:
         from .document import name_meeting
         meeting = name_meeting(name) or entry.get('folder_meeting')
         if closing:
-            order, label = [3, *(when or (9, 0))], "Chair's Notes EOM"
-        elif when:
-            order, label = [2, *when], f"Chair's Notes {DAY_NAMES[when[0]]} {when[1] // 60:02d}:{when[1] % 60:02d}"
+            order = [3, *(when or (9, 0))]
         else:
-            order, label = [2, -1, 0], "Chair's Notes"
-        return {**entry, 'kind': 'chair', 'meeting_id': meeting, 'order': order, 'label': label, 'timed': bool(when)}
+            order = [2, *when] if when else [2, -1, 0]
+        return {**entry, 'kind': 'chair', 'meeting_id': meeting, 'order': order, 'label': source_label(name),
+                'timed': bool(when)}
     if TIMETABLE_FILE.search(name) and lower.endswith('.docx') and when:
         return {**entry, 'kind': 'timetable', 'meeting_id': None, 'order': [2, *when],
-                'label': f'Breakout schedule {DAY_NAMES[when[0]]} {when[1] // 60:02d}:{when[1] % 60:02d}'}
+                'label': source_label(name)}
     return None
 
 
@@ -444,7 +458,7 @@ def local_bundle(path: Path, cfg) -> Bundle:
     if meeting is None:
         raise ValueError(f'Cannot tell the SA1 meeting of {path.name}; use a chair file')
     candidate = classify({'name': path.name, 'url': str(path.resolve()), 'uploaded_at': ''}) or {
-        'label': "Chair's Notes", 'order': [2, -1, 0]}
+        'label': source_label(path.name), 'order': [2, -1, 0]}
     return Bundle({'meeting_id': meeting, 'version': candidate['label'], 'order': candidate['order'],
                    'config_hash': config_hash(cfg),
                    'schedule': {'name': path.name, 'url': str(path.resolve()), 'sha256': digest(data),
