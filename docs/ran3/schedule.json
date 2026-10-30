@@ -24,7 +24,7 @@
           "room_col_start": 2,
           "room_col_end": 3,
           "chair": null,
-          "agenda_item": "1, 2, 3, 4, 5, 6, 7, 8",
+          "agenda_item": "1–8",
           "group_header": "Opening of the meeting (9:00am)",
           "description": "Opening of the meeting (9:00am)\nReminders\nApproval of the Agenda\nApproval of the minutes from previous meetings\nDocuments for immediate consideration\nOrganizational topics",
           "agenda_descriptions": [
@@ -1287,7 +1287,7 @@
     }
   ],
   "source_file": "RAN3_134_agenda_20261023.docx",
-  "generated_at": "2026-10-30 00:41",
+  "generated_at": "2026-10-30 02:01",
   "contact_name": "",
   "contact_email": "",
   "source_files": [

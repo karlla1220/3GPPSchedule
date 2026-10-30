@@ -41,7 +41,7 @@
           "room_col_end": 3,
           "chair": null,
           "agenda_item": "1, 2, 3, 4.1, 20.48, 20.49, 20.50",
-          "group_header": "AI 1",
+          "group_header": "Opening of the meeting",
           "description": "Agenda\nSA2#176 Meeting report\nCommon issues and Incoming LSs\nGeneric Rel-20 CR’s\nGeneric Rel-20 LSs",
           "agenda_descriptions": [
             {
@@ -1149,7 +1149,7 @@
           "room_col_start": 2,
           "room_col_end": 3,
           "chair": "Michael STARSINIC",
-          "agenda_item": "20.6.12, 20.6.13, 20.6.14, 20.6.15, 20.6.16",
+          "agenda_item": "20.6.12–20.6.16",
           "group_header": "Rel-20 SIDs and WIDs",
           "description": "Study on Architecture for 6G System (FS_6G_ARC) - Voice Services for 6G\nStudy on Architecture for 6G System (FS_6G_ARC) - Emergency Voice Services for 6G\nStudy on Architecture for 6G System (FS_6G_ARC) - Location Services for 6G\nStudy on Architecture for 6G System (FS_6G_ARC) - Messaging Services for 6G\nStudy on Architecture for 6G System (FS_6G_ARC) - Other Essential/Regulatory Services for 6G",
           "agenda_descriptions": [
@@ -2430,7 +2430,7 @@
           "room_col_start": 2,
           "room_col_end": 3,
           "chair": "Michael STARSINIC",
-          "agenda_item": "20.6.12, 20.6.13, 20.6.14, 20.6.15, 20.6.16",
+          "agenda_item": "20.6.12–20.6.16",
           "group_header": "Rel-20 SIDs and WIDs",
           "description": "Study on Architecture for 6G System (FS_6G_ARC) - Voice Services for 6G\nStudy on Architecture for 6G System (FS_6G_ARC) - Emergency Voice Services for 6G\nStudy on Architecture for 6G System (FS_6G_ARC) - Location Services for 6G\nStudy on Architecture for 6G System (FS_6G_ARC) - Messaging Services for 6G\nStudy on Architecture for 6G System (FS_6G_ARC) - Other Essential/Regulatory Services for 6G",
           "agenda_descriptions": [
@@ -3711,7 +3711,7 @@
           "room_col_start": 2,
           "room_col_end": 3,
           "chair": "Michael STARSINIC",
-          "agenda_item": "20.6.12, 20.6.13, 20.6.14, 20.6.15, 20.6.16, 20.6.22",
+          "agenda_item": "20.6.12–20.6.16, 20.6.22",
           "group_header": "Rel-20 SIDs and WIDs",
           "description": "Study on Architecture for 6G System (FS_6G_ARC) - Voice Services for 6G\nStudy on Architecture for 6G System (FS_6G_ARC) - Emergency Voice Services for 6G\nStudy on Architecture for 6G System (FS_6G_ARC) - Location Services for 6G\nStudy on Architecture for 6G System (FS_6G_ARC) - Messaging Services for 6G\nStudy on Architecture for 6G System (FS_6G_ARC) - Other Essential/Regulatory Services for 6G\nStudy on Architecture for 6G System (FS_6G_ARC) - 6G Computing Support",
           "agenda_descriptions": [
@@ -4721,7 +4721,7 @@
           "room_col_start": 2,
           "room_col_end": 3,
           "chair": "Michael STARSINIC",
-          "agenda_item": "20.6.12, 20.6.13, 20.6.14, 20.6.15, 20.6.16, 20.6.24",
+          "agenda_item": "20.6.12–20.6.16, 20.6.24",
           "group_header": "Rel-20 SIDs and WIDs",
           "description": "Study on Architecture for 6G System (FS_6G_ARC) - Voice Services for 6G\nStudy on Architecture for 6G System (FS_6G_ARC) - Emergency Voice Services for 6G\nStudy on Architecture for 6G System (FS_6G_ARC) - Location Services for 6G\nStudy on Architecture for 6G System (FS_6G_ARC) - Messaging Services for 6G\nStudy on Architecture for 6G System (FS_6G_ARC) - Other Essential/Regulatory Services for 6G\nStudy on Architecture for 6G System (FS_6G_ARC) - Analyse 5GS IoT features and solutions",
           "agenda_descriptions": [
@@ -5257,7 +5257,7 @@
           "room_col_start": 2,
           "room_col_end": 3,
           "chair": "Michael STARSINIC",
-          "agenda_item": "20.6.23, 20.6.12, 20.6.13, 20.6.14, 20.6.15, 20.6.16, 20.6.22",
+          "agenda_item": "20.6.23, 20.6.12–20.6.16, 20.6.22",
           "group_header": "Rel-20 SIDs and WIDs",
           "description": "Study on Architecture for 6G System (FS_6G_ARC) - Support of 6G NTN\nStudy on Architecture for 6G System (FS_6G_ARC) - Voice Services for 6G\nStudy on Architecture for 6G System (FS_6G_ARC) - Emergency Voice Services for 6G\nStudy on Architecture for 6G System (FS_6G_ARC) - Location Services for 6G\nStudy on Architecture for 6G System (FS_6G_ARC) - Messaging Services for 6G\nStudy on Architecture for 6G System (FS_6G_ARC) - Other Essential/Regulatory Services for 6G",
           "agenda_descriptions": [
@@ -5903,7 +5903,7 @@
           "room_col_start": 2,
           "room_col_end": 3,
           "chair": "Michael STARSINIC",
-          "agenda_item": "5.x, 6.x, 7.x, 20.6.12, 20.6.13, 20.6.14, 20.6.15, 20.6.16, 20.6.24",
+          "agenda_item": "5.x, 6.x, 7.x, 20.6.12–20.6.16, 20.6.24",
           "group_header": "Rel-20 SIDs and WIDs",
           "description": "Pre-Rel-17 Maintenance (excluding all 5G topics)\nRel-15/Rel-16 Maintenance for 5G (only related to 5GS_Ph1 Work Item)\nRel-16 Maintenance for 5G (excluding 5GS_Ph1)\nStudy on Architecture for 6G System (FS_6G_ARC) - Voice Services for 6G\nStudy on Architecture for 6G System (FS_6G_ARC) - Emergency Voice Services for 6G\nStudy on Architecture for 6G System (FS_6G_ARC) - Location Services for 6G",
           "agenda_descriptions": [
@@ -6202,7 +6202,7 @@
     }
   ],
   "source_file": "S2-2610195_SA2-177-Session Plan -r14 - Friday plan.docx",
-  "generated_at": "2026-10-30 08:06",
+  "generated_at": "2026-10-30 09:01",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
