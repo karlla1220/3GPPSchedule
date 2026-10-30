@@ -1,4 +1,5 @@
-"""Gemini fallback for RAN4 cells the rules cannot read with confidence.
+"""Gemini fallback for RAN4 cells the rules cannot read with confidence, and for
+schedules whose slide layout the rules cannot read at all.
 
 The rules stay the default (README "LLM 폴백", research/ran4/DECISIONS.md 15).
 Only the cells they flag are asked, through ``shared.llm_cells``. An answer
@@ -12,21 +13,27 @@ The answer names topic numbers, not agenda items; the topic list turns them
 into agenda items as it does for the rules. The column's chair ("Yang
 Session") is not in the cell, so it is added after the answer, by the same
 rule as for the rules' reading.
+
+A file whose layout breaks the rules (a table slide with no weekday title, no
+time column) is read whole from ``shared.office_outline`` blocks. That answer
+cites block ids and is checked against the slides' text the same way; when it
+fails, the build fails and the last page stays (``read_document``).
 """
 from __future__ import annotations
 
 from pathlib import Path
 import re
+import zipfile
 
 from pydantic import BaseModel
 
-from shared import llm_cells
-from shared.llm_cells import check_times, citation_errors, title_errors, written_errors
+from shared import llm_cells, office_outline
+from shared.llm_cells import check_times, citation_errors, gemini_request, title_errors, written_errors
 from shared.officials import join_chairs, split_chairs
 from shared.schedule import MIN_PART_MINUTES, time_to_minutes
-from .document import clock
+from .document import DAYS, TITLE, LayoutError, clock, file_info, meeting_id, read_core, room_info
 from .sessions import (DASH_MARK, PROSE_TIME, RANGE_LINE, RANGE_PAREN, START_AT, UNTIL, Part,
-                       build_session, coffee_break)
+                       build_session, coffee_break, end_of_meeting, resolve_overlaps)
 from .sources import CACHE
 
 PROMPTS = Path(__file__).parent / 'prompts'
@@ -184,3 +191,231 @@ class CellRefiner:
         self.summary.update(uncertain=len(items), applied=len(answers), kept_rules=len(items) - len(answers))
         print(f'[ran4] LLM fallback: {len(items)} uncertain cells, {len(answers)} read by {self.model}')
         return {cell_id: to_sessions(answer, items[cell_id], context) for cell_id, answer in answers.items()}
+
+
+# --------------------------------------------------------------- document
+
+class DocRoom(BaseModel):
+    id: str
+    name: str
+
+
+class DocBreak(BaseModel):
+    name: str
+    start: str
+    end: str
+
+
+class DocDay(BaseModel):
+    day: str
+    rooms: list[DocRoom]
+    breaks: list[DocBreak] = []
+
+
+class DocSession(BaseModel):
+    day: str
+    start: str
+    end: str
+    room_ids: list[str]
+    part: list[int] | None = None
+    title: str
+    topics: list[str] = []
+    chair: str | None = None
+    in_break: bool = False
+    refs: list[str]
+    line_numbers: list[int] | None = None
+
+
+class DocResult(BaseModel):
+    days: list[DocDay]
+    sessions: list[DocSession]
+
+
+def squash(text: str) -> str:
+    return ' '.join(text.split())
+
+
+def cited_lines(session: DocSession, texts: dict[str, str]) -> list[str]:
+    """The lines a session cites: chosen lines of one cell, or whole cells."""
+    if session.line_numbers is not None:
+        lines = texts[session.refs[0]].split('\n')
+        return [lines[i] for i in sorted(session.line_numbers)]
+    return [line for ref in session.refs for line in texts[ref].split('\n')]
+
+
+def _minutes(value: str) -> int:
+    return 24 * 60 if value == 'EOM' else time_to_minutes(value)
+
+
+def check_document(result: DocResult, texts: dict[str, str]) -> list[str]:
+    """Problems of a whole-document answer against the slides' text.
+
+    Times, room and break names, titles, topic numbers and chairs are written
+    in the source; a session cites the cells it comes from, and cells shared
+    by several sessions are split by line numbers; pieces (part = [k, n]) are
+    blank-line groups of one cell; sessions in one room do not overlap.
+    """
+    errors = []
+    source = '\n'.join(texts.values())
+    written = squash(source).lower()
+    allowed = written_times(source.split('\n'))
+    eom = bool(re.search(r'\bEOM\b', source))
+    days = {d.day: d for d in result.days}
+    if not days or any(d not in DAYS for d in days) or len(days) != len(result.days):
+        errors.append(f'days must be distinct weekdays: {[d.day for d in result.days]}')
+    for day in result.days:
+        ids = [r.id for r in day.rooms]
+        if not ids or len(set(ids)) != len(ids) or any(not i.strip() for i in ids):
+            errors.append(f'{day.day}: rooms need unique, non-empty ids')
+        errors += [f'{day.day}: room name {r.name!r} is not written in the document'
+                   for r in day.rooms if squash(r.name).lower() not in written]
+        for b in day.breaks:
+            errors += check_times(f'{day.day} break {b.name!r}', b.start, b.end, allowed)
+            if not b.name.strip() or squash(b.name).lower() not in written:
+                errors.append(f'{day.day}: break name {b.name!r} is not written in the document')
+    if not result.sessions:
+        errors.append('no sessions found')
+    cited_by, blocks, placed = {}, {}, []
+    for n, s in enumerate(result.sessions):
+        prefix = f'session {n}'
+        own = []
+        day = days.get(s.day)
+        if day is None:
+            own.append(f'{prefix}: day {s.day!r} is not listed in days')
+        end = '23:55' if s.end == 'EOM' and eom else s.end   # "14:00-EOM": the meeting's end
+        own += check_times(prefix, s.start, end, allowed | {'23:55'} if end != s.end else allowed)
+        if day and (not s.room_ids or not set(s.room_ids) <= {r.id for r in day.rooms}):
+            own.append(f'{prefix}: room_ids must name rooms listed for {s.day}')
+        if not s.refs or not set(s.refs) <= texts.keys():
+            own.append(f'{prefix}: refs must cite block ids')
+        elif s.line_numbers is not None:
+            lines = texts[s.refs[0]].split('\n')
+            if len(s.refs) != 1:
+                own.append(f'{prefix}: line_numbers need exactly one ref')
+            elif not s.line_numbers or any(not 0 <= i < len(lines) or not lines[i] for i in s.line_numbers):
+                own.append(f'{prefix}: line_numbers must be non-blank lines of {s.refs[0]}')
+        if own:
+            errors += own
+            continue
+        for ref in s.refs:
+            cited_by.setdefault(ref, []).append(n)
+        text = '\n'.join(cited_lines(s, texts))
+        errors += title_errors(prefix, s.title, text)
+        errors += written_errors(prefix, s.topics, text, 'topic number')
+        errors += written_errors(prefix, split_chairs(s.chair), text, 'chair')
+        if s.in_break and not any((b.start, b.end) == (s.start, s.end) for b in day.breaks):
+            errors.append(f'{prefix}: a session held in a break takes that break\'s times')
+        key = (s.day, s.start, s.end, tuple(sorted(s.room_ids)))
+        if s.part is not None:
+            k, n_parts = (list(s.part) + [0, 0])[:2]
+            if len(s.part) != 2 or not 1 <= k <= n_parts or n_parts < 2:
+                errors.append(f'{prefix}: part must be [k, n] with 1 <= k <= n and n >= 2')
+                continue
+            blocks.setdefault(key, []).append(n)
+        else:
+            placed.append((key, [n]))
+    for ref, numbers in cited_by.items():
+        chosen = [result.sessions[i].line_numbers for i in numbers]
+        if len(numbers) > 1 and (None in chosen or len(sum(chosen, [])) != len(set(sum(chosen, [])))):
+            errors.append(f'sessions {numbers} share {ref}: each must give its own line_numbers')
+    for key, numbers in blocks.items():
+        pieces = sorted((result.sessions[i] for i in numbers), key=lambda s: s.part[0])
+        n_parts = pieces[0].part[1]
+        label = f'pieces of {key[0]} {key[1]}-{key[2]}'
+        if [p.part for p in pieces] != [[k, n_parts] for k in range(1, n_parts + 1)]:
+            errors.append(f'{label} must be numbered 1..{n_parts}')
+        elif _minutes(key[2]) - _minutes(key[1]) < n_parts * MIN_PART_MINUTES:
+            errors.append(f'{label} would be shorter than {MIN_PART_MINUTES} min')
+        elif len({tuple(p.refs) for p in pieces}) != 1 or len(pieces[0].refs) != 1 or \
+                any(p.line_numbers is None for p in pieces):
+            errors.append(f'{label} are blank-line groups of one cell: cite it with line_numbers')
+        else:
+            lines = texts[pieces[0].refs[0]].split('\n')
+            for a, b in zip(pieces, pieces[1:]):
+                gap = range(max(a.line_numbers) + 1, min(b.line_numbers))
+                if not any(not lines[j] for j in gap):
+                    errors.append(f'{label}: the source does not split pieces {a.part[0]} and {b.part[0]} '
+                                  'with a blank line')
+        placed.append((key, numbers))
+    for i, (a, _) in enumerate(placed):
+        for b, _ in placed[i + 1:]:
+            if a[0] == b[0] and set(a[3]) & set(b[3]) and _minutes(a[1]) < _minutes(b[2]) \
+                    and _minutes(b[1]) < _minutes(a[2]):
+                errors.append(f'{a[0]}: sessions at {a[1]} and {b[1]} overlap in the same room')
+    return errors
+
+
+class DocumentReading:
+    """The checked answer as ``make_schedule`` reads sessions: through the same
+    ``build_session`` as the rules, so the column's chair, topic numbers to
+    agenda items and candidate lists follow the same rules."""
+
+    def __init__(self, result: DocResult, texts: dict[str, str], ids: dict[str, dict[str, str]]):
+        self.result, self.texts, self.ids = result, texts, ids
+
+    def __call__(self, context: dict, metadata: dict) -> tuple[list[dict], list[str]]:
+        found, warnings = {}, []
+        for n, s in enumerate(self.result.sessions):
+            end = s.end
+            if end == 'EOM':
+                end, warning = end_of_meeting(metadata, s.start)
+                warnings += [warning] if warning else []
+            cell = {'id': f'doc{n}', 'rooms': [self.ids[s.day][r] for r in s.room_ids]}
+            built = build_session(cell, Part(s.start, end, fixed=True), cited_lines(s, self.texts), context,
+                                  s.part, in_break=s.in_break)
+            built['name'] = ' '.join(s.title.split())
+            if s.chair:
+                built['chair'] = join_chairs(split_chairs(s.chair))
+            warnings += built['warnings']
+            found.setdefault(s.day, []).append({**built, 'day': s.day})
+        sessions = [s for day in DAYS for s in resolve_overlaps(found.get(day, []))]
+        return sessions, list(dict.fromkeys(warnings))
+
+
+def slide_texts(blocks: list[dict]) -> list[dict]:
+    """The text outside tables, slide by slide, for the page's notes."""
+    out = []
+    for slide in blocks:
+        paragraphs = [shape['text'] for shape in slide['shapes'] if 'rows' not in shape and shape.get('text', '').strip()]
+        if paragraphs:
+            out.append({'type': 'heading', 'text': f'Slide {slide["id"][1:]}'})
+            out += [{'type': 'paragraph', 'text': text, 'bold': False} for text in paragraphs]
+    return out
+
+
+def read_document(data: bytes, name: str, model: str, request=None, cache_dir: Path = CACHE):
+    """(document, reader) for ``make_schedule`` when the slides' layout is not the usual one."""
+    try:
+        blocks = office_outline.blocks(data, name)
+    except (zipfile.BadZipFile, KeyError, ValueError) as exc:
+        raise LayoutError(f'{name} cannot be outlined for the LLM: {exc}') from exc
+    texts = {key: text for key, text in office_outline.texts(blocks).items() if text.strip()}
+    info = file_info(name)
+    titled = next((TITLE.search(t) for t in texts.values() if TITLE.search(t)), None)
+    meeting = info[0] if info else meeting_id(titled[1], titled[2]) if titled else None
+    if meeting is None:
+        raise ValueError('Cannot tell the RAN4 meeting from the file name or the slides')
+    prompt = (PROMPTS / 'document.md').read_text(encoding='utf-8')
+    try:
+        result = llm_cells.read_document(prompt, blocks, DocResult, lambda r: check_document(r, texts), model=model,
+                                         cache_dir=cache_dir, wg_id='ran4', source=name, meeting=meeting,
+                                         request=request or gemini_request, version=VERSION)
+    except ValueError as exc:
+        raise LayoutError(f'The LLM could not read the schedule either: {exc}') from exc
+    print(f'[ran4] Slide layout not recognised; {len(result.sessions)} sessions read by {model}')
+    days, ids = [], {}
+    for day in sorted(result.days, key=lambda d: DAYS.index(d.day)):
+        rooms, ids[day.day] = [], {}
+        for index, room in enumerate(day.rooms, 1):
+            info_ = room_info(room.name, index)
+            ident = info_['id'] if info_['id'] not in ids[day.day].values() else room.id
+            ids[day.day][room.id] = ident
+            rooms.append({**info_, 'id': ident})
+        days.append({'day': day.day, 'rooms': rooms, 'cells': [],
+                     'breaks': [{'name': squash(b.name), 'start': b.start, 'end': b.end} for b in day.breaks]})
+    notice = {'type': 'paragraph', 'bold': True,
+              'text': 'The schedule slides were not in their usual layout, so the sessions above were read by an LLM. '
+                      'The text outside the tables follows for reference.'}
+    document = {'meeting_id': meeting, 'title': '', 'cover': [], 'label': info[1] if info else '',
+                **read_core(data), 'days': days, 'supplements': [notice, *slide_texts(blocks)]}
+    return document, DocumentReading(result, texts, ids)
