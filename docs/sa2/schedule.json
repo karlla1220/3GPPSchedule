@@ -6202,7 +6202,7 @@
     }
   ],
   "source_file": "S2-2610195_SA2-177-Session Plan -r14 - Friday plan.docx",
-  "generated_at": "2026-10-30 07:41",
+  "generated_at": "2026-10-30 08:06",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
@@ -6210,8 +6210,8 @@
     "agenda.csv"
   ],
   "source_labels": {
-    "S2-2610195_SA2-177-Session Plan -r14 - Friday plan.docx": "Session Plan r14 16 Oct 07:48",
-    "agenda.csv": "Agenda"
+    "S2-2610195_SA2-177-Session Plan -r14 - Friday plan.docx": "Session Plan -r14 - Friday plan",
+    "agenda.csv": "agenda.csv"
   },
   "timezone": "Europe/Prague",
   "wg_id": "sa2",
