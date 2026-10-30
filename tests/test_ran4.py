@@ -318,11 +318,17 @@ def test_older_meeting_pm_markers_and_bracketed_topic_lists():
     listed = next(s for s in friday.sessions if s.room_ids == ['gene'] and s.start_time == '08:30')
     # "(346, 347, …)" under "Return to" give agenda items, for the filter only.
     assert listed.agenda_item is None and '7.6.2' in listed.inferred_agenda_items
-    # "Maintenance" over six topics is a bundle; its AIs match the filter only.
+    # "Maintenance" over six topics is what the session takes up, not a list.
     thursday = next(d for d in schedule.days if d.day_name == 'Thursday')
-    bundle = next(s for s in thursday.sessions if s.room_ids == ['yang'] and s.start_time == '11:00')
-    assert (bundle.name, bundle.agenda_item, bundle.group_header) == ('Maintenance', None, '')
-    assert len(bundle.notes) == 7
+    maintenance = next(s for s in thursday.sessions if s.room_ids == ['yang'] and s.start_time == '11:00')
+    assert maintenance.name == 'Maintenance' and maintenance.inferred_agenda_items == []
+    assert len(maintenance.notes) == 7
+    # With its topics in the topic list, their AIs are the cell's AI line (the #120bis list lacks them).
+    topics = {f'{n}': {'title': f'T{n}', 'agenda_items': [f'4.{i}']} for i, n in enumerate(range(113, 119))}
+    cell = {'id': 'c', 'rooms': ['yang'], 'start': '11:00', 'end': '13:00', 'lines': maintenance.notes[:7]}
+    day = {'day': 'Thursday', 'rooms': [], 'breaks': [], 'cells': [cell]}
+    found, _ = sessions.read_cell(cell, day, {'agenda': {}, 'topics': topics, 'column_chairs': {}})
+    assert found[0]['agenda_items'] == ['4.0', '4.1', '4.2', '4.3', '4.4'] and found[0]['candidate_items'] == []
 
 
 def test_candidate_lists_match_the_filter_but_show_no_agenda_item(week):
@@ -345,11 +351,14 @@ def test_candidate_lists_match_the_filter_but_show_no_agenda_item(week):
 def test_which_lines_are_a_list():
     five = ['[320] A', '[321] B', '[322] C', '[323] D', '[324] E']
     assert sessions.listed(['5G basket and spectrum WI'] + five) == [True] * 6
-    assert sessions.listed(['NTN'] + five[:4]) == [False] * 5
+    assert sessions.listed(['5G Basket and spectrum (cont)', '[326] F']) == [True, True]
+    # Topics a session takes up, however many, are its own; so is an ad hoc on basket items.
+    assert sessions.listed(['Maintenance'] + five) == [False] * 6
+    assert sessions.listed(['BR2 Ad-hoc: Spectrum basket work items', '[324] X, chaired by Y (Z)']) == [False, False]
     assert sessions.listed(['[112] TEI20', 'EARLY RETURN TO', '6G UE RF']) == [False, True, True]
     assert sessions.listed(['BDaT Early Return To', 'NTN']) == [True, True]
-    # Only the bundle's own lines: a topic after it is the session's.
-    assert sessions.listed(['Maintenance'] + five + ['', 'NTN', '[346] F']) == [True] * 6 + [False] * 3
+    # Only the basket's own lines: a topic after it is the session's.
+    assert sessions.listed(['5G basket'] + five + ['', 'NTN', '[346] F']) == [True] * 6 + [False] * 3
 
 
 # ----------------------------------------------------------------------- llm

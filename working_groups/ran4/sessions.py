@@ -18,7 +18,7 @@ A cell is one session column in one time block. What the chair writes in it:
 The cell title is the part's top lines (a category, a topic, an ad hoc owner),
 up to three joined with " / ", with round brackets removed as RAN2 does. Every
 line stays in the notes. Agenda items come from the topic numbers through the
-topic list; those of a candidate list or bundle (``listed``) match the filter
+topic list; those of a candidate list or basket (``listed``) match the filter
 only. What the rules cannot read with confidence is reported per cell
 for the LLM fallback; without it, the rules' reading is published.
 """
@@ -53,10 +53,9 @@ COFFEE_ONLY = re.compile(r'^co\w{2,5}\s*break(?:\s*(?:AH|ad[- ]?hoc|offline))?\s
 AD_HOC = re.compile(r'^(?:(?:Main|BR\d|RRM|BDaT)\s+)?Ad[- ]?hoc\b\s*:?', re.I)
 AD_HOC_WORD = re.compile(r'\bad[- ]?hoc\b|\bAH\b', re.I)
 LIST_HEAD = re.compile(r'^(?:\w+\s+)?(?:early\s+)?return\s+to\b', re.I)
-# A category over this many topic lines is a bundle, not one session's topics:
-# #118bis–#120bis "5G basket and spectrum WI" (6–10) and "Maintenance" (6–8);
-# no other cell there has more than three topics.
-BUNDLE_TOPICS = 5
+# "5G basket and spectrum WI": the spectrum work items the block takes up as time allows.
+# An ad hoc on basket items ("BR2 Ad-hoc: Spectrum basket work items") is a session.
+BASKET = re.compile(r'\bbaskets?\b', re.I)
 CONT = re.compile(r'\(\s*cont\.?\s*\)|\bcont(?:inued)?\.?\s*$', re.I)
 CHAIRED = re.compile(r'[,\s]*\(?\s*\bchaired\s+by\s+(.+?)\)?\s*$', re.I)
 # "6G operation efficiency by Aijun (CATT)": a capitalised name ending the line.
@@ -274,9 +273,9 @@ def listed(lines: list[str]) -> list[bool]:
     """Which lines are a candidate list rather than what the block holds.
 
     A list head ("Return to", "EARLY RETURN TO") names what the time left goes
-    to, from that line on. A category over BUNDLE_TOPICS or more topic lines
-    ("5G basket and spectrum WI" over [320] … [331]) is a bundle the block works
-    through as time allows. Their topics' agenda items match the filter only
+    to, from that line on. A basket category ("5G basket and spectrum WI" over
+    [320] … [331]) lists the work items the block takes up as time allows.
+    Their topics' agenda items match the filter only
     (Session.inferred_agenda_items); the lines stay as notes.
     """
     kinds = [_kind(line) for line in lines]
@@ -286,13 +285,12 @@ def listed(lines: list[str]) -> list[bool]:
             flags[i:] = [True] * (len(lines) - i)
             break
     for i, kind in enumerate(kinds):
-        if kind != 'text' or not lines[i]:
+        if kind != 'text' or not BASKET.search(lines[i]) or AD_HOC.match(lines[i]):
             continue
         j = i + 1
         while j < len(lines) and kinds[j] in ('item', 'note', 'chair'):
             j += 1
-        if kinds[i + 1:j].count('item') >= BUNDLE_TOPICS:
-            flags[i:j] = [True] * (j - i)
+        flags[i:j] = [True] * (j - i)
     return flags
 
 
