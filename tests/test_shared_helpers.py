@@ -2,9 +2,12 @@
 from lxml import etree
 
 from shared import llm_cells
-from shared.agenda import describe
+from shared.agenda import describe, written_ranges
+from shared.agreement_assets import agenda_section_ids
 from shared.docx_text import W, paragraph_text
+from shared.officials import full_name
 from shared.remote_files import listing_entries
+from shared.renderer import _cell_chair, _room_name_html
 from shared.titles import clean
 
 
@@ -54,3 +57,29 @@ def test_written_errors_names_what_was_not_written():
         "c: topic number '107-B' is not written in its cited text"]
     assert llm_cells.written_errors('c', ['Erl'], 'Erlin', 'chair') == [
         "c: chair 'Erl' is not a name written in the text"]
+
+
+def test_a_range_the_source_wrote_stays_one_range_on_the_ai_line():
+    members = ['20.6.12', '20.6.13', '20.6.14', '20.6.15', '20.6.16']
+    assert written_ranges(['20.6.18'] + members, [('20.6.12–20.6.16', members)]) == ['20.6.18', '20.6.12–20.6.16']
+    # Numbers written one by one are not joined.
+    assert written_ranges(members) == members
+    assert agenda_section_ids('20.6.12–20.6.16, 1–8', ()) == members + [str(n) for n in range(1, 9)]
+
+
+def test_the_cell_shows_the_chairs_given_name():
+    assert _cell_chair('Lixiang XU') == 'Lixiang'
+    assert _cell_chair('Yang TANG, Shan YANG') == 'Yang, Shan'
+    assert _cell_chair('Hiroki') == 'Hiroki'
+    assert _cell_chair('Ruixin Wang') == 'Ruixin Wang'
+    assert full_name('QUN', 'WEI') == 'Qun WEI'
+    assert full_name('JIN-YUP', 'KIM') == 'Jin-Yup KIM'
+
+
+def test_a_room_name_breaks_before_its_last_bracket():
+    assert _room_name_html('RAN4 Breakout 2 (BR2)(Gene Session)') == (
+        '<span class="room-name-text">RAN4 Breakout 2 (BR2)<wbr><span class="room-word">(Gene Session)</span></span>')
+    assert _room_name_html('RAN4 RF,NTN,A-IOT (Gene Session)') == (
+        '<span class="room-name-text">RAN4 <span class="room-word">RF,NTN,A-IOT</span> '
+        '<span class="room-word">(Gene Session)</span></span>')
+    assert _room_name_html('Main') == '<span class="room-name-text">Main</span>'

@@ -114,3 +114,5 @@ def test_group_label_is_the_top_agenda_item():
     assert group_label('9.1', descriptions) == 'AI 9'
     assert group_label(None, descriptions) == ''
     assert group_label('6.1', {'6': 'New Work Items -'}) == 'New Work Items'
+    # SA2's agenda has no "1", only its items.
+    assert group_label('1', {'1.10': 'Later', '1.2': 'Agenda', '1.1': 'Opening of the meeting'}) == 'Opening of the meeting'

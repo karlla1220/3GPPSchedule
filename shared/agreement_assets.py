@@ -16,13 +16,14 @@ def agenda_section_ids(value, sections):
     Keep unknown IDs for the UI's missing-section message. A section brings
     its subsections, since agreements often sit only there; .x brings the
     subsections alone. Slash shorthand denotes siblings (10.3.1/4).
+    A range names the siblings it spans (20.6.12–20.6.16, 1–8).
     Schedule text and popup labels remain unchanged.
     """
     result = []
     for field in (value or '').split(','):
         field = field.strip()
         match = re.fullmatch(r'(\d+(?:\.\d+)*(?:\.x)?)(?:\.)?(?:\s+[^\d].*)?', field, re.I)
-        tokens = [match[1]] if match else []
+        tokens = [match[1]] if match else _range(field)
         if not tokens and '/' in field:
             parts = [part.strip().rstrip('.') for part in field.split('/')]
             if all(re.fullmatch(r'\d+(?:\.\d+)*', part) for part in parts):
@@ -38,6 +39,17 @@ def agenda_section_ids(value, sections):
                 result.append(token)
                 result.extend(ai for ai in sections if ai.startswith(token + '.'))
     return list(dict.fromkeys(result))
+
+
+def _range(field):
+    """"20.6.12–20.6.16" or "1–8": the siblings from the first to the last, else []."""
+    match = re.fullmatch(r'((?:\d+\.)*)(\d+)\s*[–-]\s*((?:\d+\.)*)(\d+)', field)
+    if not match or match[3] not in ('', match[1]):
+        return []
+    first, last = int(match[2]), int(match[4])
+    if not first < last <= first + 40:
+        return []
+    return [f'{match[1]}{n}' for n in range(first, last + 1)]
 
 
 def current_agreements(schedule):

@@ -7,7 +7,7 @@ from bs4 import BeautifulSoup
 from docx import Document
 import pytest
 
-from shared.agenda import agenda_map
+from shared.agenda import agenda_map, written_ranges
 from shared.renderer import generate_html
 from shared.schedule import load_schedule, save_schedule
 from working_groups.sa2 import document as docmod, sessions
@@ -286,3 +286,9 @@ def test_render_and_snapshot_roundtrip(r20, tmp_path):
     assert '1/2' in piece.get_text() and 'of' in piece.get_text()
     shared = html.select_one('#friday [data-name="List of agreed tdocs for block approval / Revisions"]')
     assert 'Revisions (including 30.1)' in shared['data-popup']
+
+
+def test_a_written_range_stays_a_range_on_the_ai_line():
+    read = sessions.reading(['KI#12 – KI#16 (20.6.12 - 16) [5,0,2,0,1]'], {})
+    assert read['agenda_items'] == ['20.6.12', '20.6.13', '20.6.14', '20.6.15', '20.6.16']
+    assert written_ranges(read['agenda_items'], read['ranges']) == ['20.6.12–20.6.16']

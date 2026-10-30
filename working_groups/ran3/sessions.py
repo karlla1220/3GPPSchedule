@@ -19,7 +19,7 @@ from __future__ import annotations
 from datetime import date, timedelta
 import re
 
-from shared.agenda import describe, group_label, is_descendant
+from shared.agenda import describe, group_label, is_descendant, written_ranges
 from shared.schedule import (DaySchedule, MIN_PART_MINUTES, RoomInfo, Schedule, Session, Timeline,
                              minutes_to_time, time_to_minutes)
 from shared.titles import clean
@@ -79,8 +79,11 @@ def kind(line: str) -> str:
 HEADS = {'label', 'number', 'progress', 'offline', 'clock'}
 
 
-def expand(items: str, agenda: dict | None) -> list[str]:
-    """"AI 1-8" -> 1..8 (as the agenda lists them), "9/31" -> 9, 31."""
+def expand(items: str, agenda: dict | None, ranges: list | None = None) -> list[str]:
+    """"AI 1-8" -> 1..8 (as the agenda lists them), "9/31" -> 9, 31.
+
+    A range is noted in ranges, so the AI line can show it as written ("1–8").
+    """
     result = []
     for token in re.split(r'\s*[,/]\s*', items.strip().rstrip(',')):
         token = re.sub(r'^AI\s*', '', token.strip(), flags=re.I)
@@ -88,14 +91,16 @@ def expand(items: str, agenda: dict | None) -> list[str]:
         if span and int(span[1]) < int(span[2]) <= int(span[1]) + 40:
             numbers = [str(n) for n in range(int(span[1]), int(span[2]) + 1)]
             result += [n for n in numbers if not agenda or n in agenda]
+            if ranges is not None:
+                ranges.append((f'{span[1]}–{span[2]}', numbers))
         elif re.fullmatch(NUMBER, token):
             result.append(token)
     return list(dict.fromkeys(result))
 
 
-def line_items(line: str, agenda: dict | None) -> list[str]:
+def line_items(line: str, agenda: dict | None, ranges: list | None = None) -> list[str]:
     match = LABEL.match(line) or NUMBERS.match(line)
-    return expand(match['items'], agenda) if match else []
+    return expand(match['items'], agenda, ranges) if match else []
 
 
 # ------------------------------------------------------------------- pieces
@@ -192,8 +197,9 @@ def session_of(cell, group, chair, part, agenda, cbs, struck=(), title=None, ite
         if cell['start'] <= written < cell['end'] and time_to_minutes(written) % 5 == 0:
             start = written
     head = next((x for x in group if kind(x) not in ('initial', 'marker', 'blank')), '')
+    ranges = []
     if items is None:
-        items = [i for x in group for i in line_items(x, agenda)]
+        items = [i for x in group for i in line_items(x, agenda, ranges)]
         if kind(head) == 'offline' or (kind(head) == 'clock' and OFFLINE.match(clock['rest'])):
             items += [cbs[c]['agenda_item'] for x in group for c in cb_refs(x) if c in cbs]
     notes = list(group) + [f'Not treated: {text}' for text in struck]
@@ -203,7 +209,7 @@ def session_of(cell, group, chair, part, agenda, cbs, struck=(), title=None, ite
             notes.append(cbs[ref]['name'] + (f' (moderator - {moderator})' if moderator else ''))
     return {'id': cell['id'], 'day': cell['day'], 'room': 'main', 'start': start, 'end': cell['end'],
             'part': part, 'name': title if title is not None else title_of(group), 'chair_label': chair,
-            'agenda_items': list(dict.fromkeys(items)), 'notes': notes}
+            'agenda_items': list(dict.fromkeys(items)), 'ranges': ranges, 'notes': notes}
 
 
 def interpret(document: dict, agenda: dict | None = None, cbs: dict | None = None, refine=None) -> list[dict]:
@@ -315,7 +321,8 @@ def make_schedule(document: dict, agenda: dict | None, metadata: dict, source_fi
             built.append(Session(
                 name=s['name'], start_time=s['start'], end_time=s['end'], day=day['day'],
                 duration_minutes=time_to_minutes(s['end']) - time_to_minutes(s['start']),
-                room_ids=[s['room']], chair=s['chair'], agenda_item=', '.join(items) or None,
+                room_ids=[s['room']], chair=s['chair'],
+                agenda_item=', '.join(written_ranges(items, s.get('ranges', ()))) or None,
                 group_header=group_label(items[0] if items else None, agenda),
                 description='\n'.join(d['description'] for d in descriptions) or None,
                 agenda_descriptions=descriptions, notes=s['notes'], part=s['part']))

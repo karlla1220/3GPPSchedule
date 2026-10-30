@@ -40,14 +40,44 @@ def describe(item: str, agenda: dict) -> dict | None:
             'hierarchy': [{'agenda_item': p, 'description': agenda.get(p)} for p in path]}
 
 
+def written_ranges(items: list[str], ranges=()) -> list[str]:
+    """The AI line's items: a range the source wrote stays one range.
+
+    ``ranges`` are (label, members) pairs a WG read ("20.6.12 - 16" ->
+    ("20.6.12–20.6.16", [20.6.12 … 20.6.16])). Where the members still
+    present stand together in items, they show as the label; the filter and the
+    popup's tree use the members (shared/agreement_assets.py reads the label back).
+    """
+    shown = list(items)
+    for label, members in ranges:
+        kept = [m for m in members if m in shown]
+        if len(kept) < 2:
+            continue
+        at = shown.index(kept[0])
+        if shown[at:at + len(kept)] == kept:
+            shown[at:at + len(kept)] = [label]
+    return shown
+
+
 def is_descendant(item: str, ancestor: str) -> bool:
     return item != ancestor and item.startswith(ancestor + '.')
 
 
+def _number_key(item: str) -> tuple[int, ...]:
+    return tuple(int(part) for part in item.split('.'))
+
+
 def group_label(item: str | None, descriptions: dict) -> str:
-    """"NR Rel-20" for 8.2 when the agenda says "8 | NR Rel-20 - ..."; "AI 8" without one."""
+    """"NR Rel-20" for 8.2 when the agenda says "8 | NR Rel-20 - ...".
+
+    An agenda without the top item names it by its first listed item (SA2 has
+    "1.1 Opening of the meeting" but no "1"); "AI 8" when it lists nothing under 8.
+    """
     if not item:
         return ''
     top = item.split('.')[0]
     description = descriptions.get(top)
+    if not description:
+        below = sorted((k for k in descriptions if k.startswith(top + '.')), key=_number_key)
+        description = descriptions[below[0]] if below else None
     return description.split(' - ')[0].strip().rstrip(' -–') if description else f'AI {top}'

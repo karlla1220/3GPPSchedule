@@ -17,7 +17,7 @@ from __future__ import annotations
 from datetime import date, timedelta
 import re
 
-from shared.agenda import describe, group_label, is_descendant
+from shared.agenda import describe, group_label, is_descendant, written_ranges
 from shared.schedule import (MIN_PART_MINUTES, DaySchedule, RoomInfo, Schedule, Session, Timeline,
                              minutes_to_time, time_to_minutes)
 from shared.titles import clean
@@ -46,12 +46,12 @@ def topic(raw: str) -> str:
     return clean(BRACKETS.sub(' ', MARK.sub('', raw)))
 
 
-def _expand(token: str, previous: str | None) -> list[str] | None:
+def _expand(token: str, previous: str | None, ranges: list | None = None) -> list[str] | None:
     """Agenda numbers one comma-separated token names, or None if it names none.
 
     "20.6.12 - 16" is a range, "19.48/49/50" siblings, "5.x" all of 5. A bare
     "12" after "20.6.14" is another sibling ("20.6.14, 12, 13"); alone, "(1)"
-    is item 1.
+    is item 1. A range is noted in ranges, so the AI line can show it as written.
     """
     token = token.strip()
     if re.fullmatch(AI + r'(?:\.x)?', token, re.I):
@@ -60,7 +60,10 @@ def _expand(token: str, previous: str | None) -> list[str] | None:
         return [token]
     match = re.fullmatch(rf'({AI})\.(\d{{1,2}})\s*[-–]\s*(\d{{1,2}})', token)
     if match and int(match[2]) <= int(match[3]):
-        return [f'{match[1]}.{n}' for n in range(int(match[2]), int(match[3]) + 1)]
+        members = [f'{match[1]}.{n}' for n in range(int(match[2]), int(match[3]) + 1)]
+        if ranges is not None:
+            ranges.append((f'{members[0]}–{members[-1]}', members))
+        return members
     parts = [p.strip() for p in token.split('/')]
     if len(parts) > 1 and re.fullmatch(AI, parts[0]) and '.' in parts[0] and all(p.isdigit() for p in parts[1:]):
         parent = parts[0].rsplit('.', 1)[0]
@@ -76,7 +79,7 @@ def known(item: str, agenda: dict) -> bool:
     return stem in agenda or any(key.startswith(stem + '.') for key in agenda)
 
 
-def line_items(raw: str, agenda: dict) -> tuple[list[str], list[str]]:
+def line_items(raw: str, agenda: dict, ranges: list | None = None) -> tuple[list[str], list[str]]:
     """(agenda items, numbers that look like items but were not read as known ones) of one line.
 
     Items are numbers in parentheses, "(20.6.18)", "(5.x, 6.x, 7.x )", an
@@ -91,7 +94,7 @@ def line_items(raw: str, agenda: dict) -> tuple[list[str], list[str]]:
         content = re.sub(r'^(?:incl?(?:uding|\.)?|see)\s+', '', content.strip(), flags=re.I)
         items, previous = [], None
         for token in filter(None, (t.strip() for t in content.split(','))):
-            expanded = _expand(token, previous)
+            expanded = _expand(token, previous, ranges)
             if expanded is None:
                 items = None
                 break
@@ -105,7 +108,7 @@ def line_items(raw: str, agenda: dict) -> tuple[list[str], list[str]]:
         loose = []
         previous = None
         for token in filter(None, (t.strip() for t in rest.replace(';', ',').split(','))):
-            expanded = _expand(token, previous) or []
+            expanded = _expand(token, previous, ranges) or []
             found.extend(expanded)
             previous = expanded[-1] if expanded else previous
     found = list(dict.fromkeys(found))
@@ -135,9 +138,9 @@ def reading(lines: list[str], agenda: dict) -> dict:
     above; other lines ("Architecture", "Then Option 1, 2, 3 drafting") are
     notes on it.
     """
-    heads, items, unknown, group_item = [], [], [], None
+    heads, items, unknown, group_item, ranges = [], [], [], None, []
     for i, raw in enumerate(lines):
-        found, missing = line_items(raw, agenda)
+        found, missing = line_items(raw, agenda, ranges)
         items.extend(found)
         unknown.extend(missing)
         label = topic(raw)
@@ -146,7 +149,7 @@ def reading(lines: list[str], agenda: dict) -> dict:
             group_item = group_item or (found[0] if found else None)
     items = list(dict.fromkeys(items))
     title = ' / '.join(heads[:3]) + (' …' if len(heads) > 3 else '')
-    return {'name': title or lines[0], 'agenda_items': items,
+    return {'name': title or lines[0], 'agenda_items': items, 'ranges': ranges,
             'group_item': group_item or (items[0] if items else None),
             'reasons': uncertainty(lines, unknown)}
 
@@ -350,7 +353,7 @@ def make_schedule(document: dict, agenda: dict | None, metadata: dict, source_fi
                 duration_minutes=time_to_minutes(s['end']) - time_to_minutes(s['start']),
                 room_ids=s['rooms'], room_scope=s['scope'], part=s['part'],
                 chair=chairs.get(label, label) if label else None,
-                agenda_item=', '.join(s['agenda_items']) or None,
+                agenda_item=', '.join(written_ranges(s['agenda_items'], s.get('ranges', ()))) or None,
                 group_header=group_label(s['group_item'], agenda),
                 description='\n'.join(d['description'] for d in descriptions) or None,
                 agenda_descriptions=descriptions, notes=s['lines']))

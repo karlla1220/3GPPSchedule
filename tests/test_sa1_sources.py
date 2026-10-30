@@ -213,7 +213,7 @@ def test_officials_spell_the_note_names_and_their_failure_is_harmless(offline_co
     options = SimpleNamespace(local=str(FIXTURES / EOM), output_dir=tmp_path / 'out')
     monkeypatch.setattr(pipeline, 'portal_rows', lambda: [])
     schedule = pipeline.build_schedule(options, history=HISTORY)
-    assert find(schedule, 'Tuesday', '09:00', 'breakout-2').chair == 'QUN WEI'
+    assert find(schedule, 'Tuesday', '09:00', 'breakout-2').chair == 'Qun WEI'
     monkeypatch.setattr(pipeline.officials, 'fetch_history', lambda code: (_ for _ in ()).throw(ValueError('down')))
     assert pipeline.chair_resolver(offline_config, '2026-08-24') is None
 

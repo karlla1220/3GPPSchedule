@@ -567,6 +567,22 @@ header .meta a:focus-visible,
     text-overflow: ellipsis;
 }
 
+/* A long name takes a second line, breaking before its last bracket
+   ("… (Gene Session)"); renderer.py marks the parts that stay whole. */
+.room-name-text {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    max-width: 100%;
+    overflow: hidden;
+    white-space: normal;
+    line-height: 1.15;
+}
+
+.room-word {
+    white-space: nowrap;
+}
+
 .room-place {
     font-size: 10px;
     font-weight: 400;

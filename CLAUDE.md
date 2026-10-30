@@ -50,8 +50,13 @@
   - 제목에서는 괄호를 뗀다(`shared/titles.py`의 `clean`, 모든 WG). AI 번호 괄호(`[8.10]`)는 AI 줄로, 의장 괄호는 Chair로 가고, 둥근 괄호는 내용과 상관없이 모두 빠진다
     (`(if time allows)`, `(cont)`, `(40)`, `(Reply to RAN1 LS …)`). 낱말에 붙은 괄호(`(e)RedCap`)만 남는다. 뗀 원문은 Note에 그대로 있다.
     괄호를 뗀 자리에 남는 쉼표·세미콜론 앞 공백도 지운다(`Opening (1), Agenda (2)` → `Opening, Agenda`).
+  - 괄호를 떼면 칸끼리를 가르던 것이 사라지는 제목도 예외 없이 뗀다: RAN3 `6G Offline (CB#8)` → `6G Offline`, SA2 r11 `Drafting for (Option 1, 2, 3)` → `Drafting for`.
+    칸은 AI 줄(CB → AI)과 Note가 가른다. 예외를 두면 "떼면 뜻이 사라지는가"를 가리는 목록이 WG마다 생긴다.
 - **셀 색(`group_header`)은 agenda 최상위 항목이다(`shared/agenda.py`의 `group_label`, 범례는 그 항목 이름).** 새 WG도 같다. RAN1은 일정의 그룹 머리를 쓴다.
+  - agenda.csv에 최상위 항목이 없으면 그 아래 가장 앞 항목의 이름을 쓴다(SA2는 `1` 없이 `1.1 Opening of the meeting`). `AI 1` 같은 범례를 만들지 않는다.
   - AI 번호는 title과 따로 `agenda_item`에 두고, 셀의 AI 줄은 어느 WG든 `AI 7.3.3` 같은 형태다. 필터는 그 번호로 맞춘다.
+  - 원본이 범위로 적은 AI는 AI 줄에 범위로 둔다(SA2 `20.6.12 - 16` → `AI 20.6.12–20.6.16`, RAN3 `AI 1-8` → `AI 1–8`; `shared/agenda.py`의 `written_ranges`).
+    번호를 하나씩 풀면 AI 줄이 길어져 말줄임된다. 필터와 팝업 트리는 범위를 풀어 쓴다(`agreement_assets.agenda_section_ids`). 원본이 하나씩 적은 번호는 범위로 묶지 않는다.
 - **주 정보는 제목 하나뿐이다.** 13.5px(768px 이하 12.5px), 굵기 600, 줄 높이 1.2, 자간 0, `var(--ink)`.
   - Barlow는 좁은 서체라 Pretendard 12.5px와 같은 무게감을 내려면 13.5px가 필요하다. 14px부터는 부 정보와 차이가 커져 위계가 과해 보인다.
   - 자간은 줄이지 않는다. Barlow는 이미 좁다.
@@ -88,6 +93,8 @@
   - 노트가 줄바꿈되면 이어지는 줄만 6px 내어 쓴다(hanging indent). 첫 줄은 제목과 같은 왼쪽 선이다.
 - **Chair는 가장 약한 정보다.** 굵기 500, 색은 `#A3ABBA`에 accent를 18% 섞은 `--chair`이고,
   모든 셀의 우하단 모서리에 고정한다(`position: absolute; right: 7px; bottom: 3px`).
+  - 셀에는 이름만 보인다(`Lixiang XU` → `Lixiang`, `renderer.py`의 `_cell_chair`). 회의장에서 부르는 이름이고, RAN1·RAN2 원본이 적는 모양(`Hiroki`, `Erlin`)과 같다.
+    전체 이름은 팝업의 Chair 줄에 있다. officials로 푼 이름만 `Given FAMILY`라서 줄어들고, 성이 대문자가 아닌 이름(`Ruixin Wang`, `Erik Guttman`)은 적힌 그대로다.
   - 위치가 셀마다 바뀌면 안 된다. 시간 줄 옆에 두면 열 폭에 따라 보였다 사라져서 들쭉날쭉해진다.
   - 배경을 깔지 않는다. 배경이 있으면 셀 안에 작은 상자가 하나 더 보인다.
   - 대신 자리가 없는 열에서는 생략한다. 셀 안쪽 폭이 160px 이하이면 숨긴다(`@container (max-width: 160px)`).
@@ -188,7 +195,10 @@
   SA1 `Breakout 2 · D9, Floor 3`, SA2 `Breakout 1 · B3 (Floor 2) · Stream 2`. 위치에 쉼표가 있을 수 있어서 위치가 있는 방 여럿은 `; `로 가른다.
   - 그리드의 방 머리에도 이름 아래 둘째 줄로 늘 보인다(`.room-place`, 10px, 모바일 9px, 굵기 400, `--ink-3`). 방을 찾아갈 때 바로 필요해서 누르지 않아도 보이게 한다.
     헤더는 누르는 곳이 아니다. 그리드 최소 폭(600px)이 열을 지켜서 휴대폰에서도 방 셋인 SA2 열(약 188px)에 가장 긴 위치(약 120px)가 들어간다.
-    넘치면 말줄임하고 전체는 `title`(hover)과 팝업에 있다. 위치가 없는 방은 예전처럼 한 줄이다.
+    넘치면 말줄임하고 전체는 `title`(hover)과 팝업에 있다.
+  - 위치가 없는 방은 이름이 두 줄까지 접힌다(`.room-name-text`, `_room_name_html`). RAN4 `RAN4 Breakout 2 (BR2)(Gene Session)`처럼 원본 그대로인 긴 이름이 휴대폰 열(약 113px)에서 잘리지 않게 한다.
+    줄은 마지막 괄호 앞에서 바뀐다(`RAN4 Breakout 2 (BR2)` / `(Gene Session)`). 괄호는 누구의 세션인지·몇 시까지인지를 말하는 한 덩어리라 통째로 내려간다.
+    하이픈·슬래시가 든 낱말(`A-IOT`, `3/4/5/6`)은 그 안에서 끊지 않는다. 한 줄에 들어가면 한 줄이다. 헤더 높이(36px)에 두 줄(11.5px × 1.15)이 들어간다.
 - **AI 이름은 한 트리다.** 세션의 AI(최하위)는 항상 보이고, 상위 항목은 트리가 길 때만 접힌다.
   - 상위 항목은 공통이면 한 번만 나온다. 번호의 자연 순서로 정렬하면 트리 순서가 된다(`5.1.10`은 `5.1.9` 뒤).
     세션의 AI이면서 다른 AI의 상위인 항목(`15`와 `15.1`)도 AI로 한 번만 나온다.
@@ -416,7 +426,7 @@ HTML과 단계 문구는 `shared/page.py`(`render_help`, `HELP_STEPS`), 동작�
 - **`resolve`는 적힌 것만 푼다.** 이름이 어느 순서든(`XU Lixiang`, `Lixiang XU`, `XU, Lixiang`) 맞으면 그 사람이다.
   한 낱말(`Sean`, `Fong`)은 그 낱말을 이름이나 성으로 가진 사람이 하나뿐일 때만이다. RAN4 `Yang`은 TANG Yang과 YANG Shan 둘 다라서 별칭 표가 정한다.
   별칭은 officials가 아닌 세션 의장도 가리킬 수 있다(RAN3 `G` → `CAO, Gen`). 모르는 표기는 `None`이고, WG는 적힌 그대로 보인다.
-- 이름은 `Given FAMILY`(`Lixiang XU`)이고 3GPP의 대소문자를 따른다.
+- 이름은 `Given FAMILY`(`Lixiang XU`)이고 성은 3GPP의 대문자를 따른다. 3GPP가 이름까지 대문자로 적은 사람(`WEI, QUN`)은 이름을 첫 글자만 대문자로 둔다(`Qun WEI`, `full_name`). 그래야 성이 어느 낱말인지 보이고, 셀은 이름만 보인다(위 "Chair").
 
 ## Experimental WG
 

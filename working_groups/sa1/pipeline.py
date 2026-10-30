@@ -59,7 +59,7 @@ def llm_request(cfg, request=None):
 
 
 def chair_resolver(cfg, starts_on: str, history=None):
-    """NOTE names in the officials' spelling ("Qun Wei" -> "QUN WEI"); others as written.
+    """NOTE names in the officials' spelling ("Qun Wei" -> "Qun WEI"); others as written.
 
     The officials page is only a spelling aid: when it cannot be read the
     names stay as the NOTE writes them.
