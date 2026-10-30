@@ -217,7 +217,7 @@ def test_days_rooms_breaks_and_colours(eom):
     assert groups['6G SI'] == groups['6G Offline'] == 'Study on 6G Radio'
     assert groups['Early CBs'] == '' and groups['TEI20'] == 'Corrections and Enhancements to Rel-20'
     friday = cells(eom, 'Friday', '14:30')[0]
-    assert friday[3] == 'CBs*' and friday[6] == ['CBs*', 'END OF MEETING']
+    assert friday[3] == 'CBs*' and friday[6] == ['CBs*', 'END OF MEETING', '* if needed']
     assert eom.supplements[0] == {'type': 'heading', 'text': 'Key to the time plan'}
 
 
@@ -261,6 +261,18 @@ def test_unknown_lines_flag_the_cell_and_items_not_in_the_agenda_are_reported():
                                       [PRE], {}, 'now', warnings=warnings)
     assert schedule.days[0].sessions[0].agenda_item == '10'
     assert warnings == ['agenda items not in agenda.csv: 10.99']
+
+
+def test_a_cell_marked_with_a_sign_from_the_key_gets_the_keys_line():
+    schedule = build(PRE, META_134, 'agenda_134.csv')
+    assert cells(schedule, 'Tuesday', '08:00')[0][3:] == ('Offline*', None, None, ['Offline*', '* if needed'])
+    assert cells(schedule, 'Friday', '14:30')[0][6] == ['CBs*', 'END OF MEETING', 'End of Year Social',
+                                                         '🍷 Event 🎉', '* if needed']
+    # Words in the key ("L, X") are not signs; the vice-chair cell keeps its own lines.
+    assert cells(schedule, 'Wednesday', '09:00')[0][6] == ['AIML RAN: AI 12', 'L']
+    # A version whose key was not read adds nothing.
+    found = sessions.make_schedule(synthetic(['6G Offline*']), None, META_134, [PRE], {}, 'now')
+    assert found.days[0].sessions[0].notes == ['6G Offline*']
 
 
 def test_offline_room_sessions_join_rows_and_drop_what_is_not_a_session():

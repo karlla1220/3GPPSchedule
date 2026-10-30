@@ -285,6 +285,18 @@ def meeting_dates(metadata: dict) -> dict[str, str]:
             for i in range(min((last - first).days, 6) + 1)}
 
 
+def legend_notes(found: list[dict], legend: list[list[str]]) -> None:
+    """A cell marked with a sign the key explains gets the key's own line: "6G Offline*" -> "* if needed".
+
+    The key sits under the table, far from the cells. Only signs are matched
+    ("*"), not words ("blue", "L, X"); a version whose key was not read adds nothing.
+    """
+    signs = [(key, f'{key} {meaning}') for key, meaning in legend if not any(c.isalnum() for c in key)]
+    for s in found:
+        written = list(s['notes'])
+        s['notes'] += [line for key, line in signs if any(key in x for x in written) and line not in written]
+
+
 def make_schedule(document: dict, agenda: dict | None, metadata: dict, source_files: list[str],
                   source_labels: dict[str, str], generated_at: str, *, slots=None, cbs=None, chair=None,
                   refine=None, warnings: list[str] | None = None) -> Schedule:
@@ -294,6 +306,7 @@ def make_schedule(document: dict, agenda: dict | None, metadata: dict, source_fi
     warnings = warnings if warnings is not None else []
     dates = meeting_dates(metadata)
     found = interpret(document, agenda, cbs, refine)
+    legend_notes(found, document.get('legend') or [])
     for s in found:
         s['chair'] = (chair(s['chair_label']) if chair else None) or s['chair_label']
     offline, dropped = offline_sessions(slots or [], cbs, agenda, dates)
