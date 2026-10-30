@@ -9,7 +9,7 @@
   (schedule.css, @view-transition) so a browser can be checked by opening
   this file alone. See the notes at the top of the page.
 
-  Query / controls:  v=plain|move|fix|noroot  variant (default move)
+  Query / controls:  v=plain|move|fix|noroot  variant (default noroot, the site now)
                      slow=1            every duration x10
                      hold=0.5          pause the switch at that fraction (tests)
                      page=a|b          the meeting shown (cross-document mode)
@@ -21,7 +21,7 @@
     (function () {
         var q = new URLSearchParams(location.search);
         var v = q.get('v');
-        document.documentElement.className = (v === 'plain' || v === 'fix' || v === 'noroot' ? v : 'move') + (q.get('slow') ? ' slow' : '');
+        document.documentElement.className = (v === 'plain' || v === 'fix' || v === 'move' ? v : 'noroot') + (q.get('slow') ? ' slow' : '');
     })();
 </script>
 <style>
@@ -33,7 +33,11 @@ body { margin: 0; font-family: "Source Sans 3", system-ui, sans-serif; color: #1
 .notes code { font-size: 12px; }
 .controls { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; font-size: 13px; margin-bottom: 12px; }
 .controls button { font: inherit; padding: 6px 12px; border: 1px solid #D3D7DE; border-radius: 8px; background: #fff; }
-.readout { font-family: ui-monospace, monospace; font-size: 12px; white-space: pre-wrap; background: #fff; border: 1px solid #E5E7EB; border-radius: 8px; padding: 8px 10px; margin-bottom: 12px; height: 10.5em; overflow: auto; box-sizing: border-box; }
+.controls .main { font-weight: 700; padding: 10px 14px; }
+.controls .main.before { border-color: #FCA5A5; background: #FEF2F2; color: #B91C1C; }
+.controls .main.after { border-color: #86EFAC; background: #F0FDF4; color: #15803D; }
+.readout { font-family: ui-monospace, monospace; font-size: 12px; white-space: pre-wrap; background: #fff; border: 1px solid #E5E7EB; border-radius: 8px; padding: 8px 10px; margin-bottom: 12px; height: 13.5em; overflow: auto; box-sizing: border-box; }
+.readout b { font-size: 13px; }
 .probes { display: flex; gap: 12px; margin-bottom: 14px; }
 .probe { flex: 1; display: flex; align-items: center; justify-content: center; border: 1px solid #D3D7DE; border-radius: 8px; background: #fff; font-weight: 700; font-size: 18px; overflow: hidden; }
 .probe small { font-weight: 400; font-size: 11px; margin-left: 6px; color: #6B7280; }
@@ -108,17 +112,18 @@ html.noroot { view-transition-name: none; }
 <body>
 <div class="container">
 <div class="notes">
-    <b>Meeting switch reproduction.</b> Tap <b>Switch (same page)</b>: this works from a downloaded file.
-    Try the <b>noroot</b> variant if the header distorts while the probes do not.
+    <b>Meeting switch reproduction.</b> Tap <b>Before fix</b>, then <b>After fix</b> (both work from a downloaded file).
+    <b>Before fix</b> is the site as it was: the page is captured as one snapshot, and on Samsung Internet the header distorts.
+    <b>After fix</b> is the site now: no page snapshot, the header switches at once and must not distort.
+    The tabs, the grid frame and the time axis move in both. The read-out below names the variant that ran and measures it.
     <b>Switch (new page)</b> is the real cross-document switch and needs the file served over HTTP.
-    The two probe boxes halve in height on every switch: if the left text squashes vertically while the
-    right one does not, this browser stretches old snapshots to their box (the site's fix is the right one).
-    The read-out below measures the same thing from the pseudo-elements.
 </div>
 <div class="controls">
+    <button id="switch-before" class="main before" type="button">Before fix</button>
+    <button id="switch-after" class="main after" type="button">After fix</button>
     <button id="switch-same" type="button">Switch (same page)</button>
     <button id="switch-page" type="button">Switch (new page)</button>
-    <label>variant <select id="variant"><option value="plain">plain: root fade only</option><option value="move">move: as the site</option><option value="fix">fix: with the snapshot fix</option><option value="noroot">noroot: no page snapshot</option></select></label>
+    <label>variant <select id="variant"><option value="noroot">noroot: the site now (after fix)</option><option value="move">move: the site before the fix</option><option value="fix">fix: snapshot size kept (did not help)</option><option value="plain">plain: page fade only</option></select></label>
     <label><input type="checkbox" id="slow"> slow motion (×10)</label>
     <label><input type="checkbox" id="hold"> hold half-way</label>
     <button id="resume" type="button" hidden>Resume</button>
@@ -185,7 +190,7 @@ html.noroot { view-transition-name: none; }
     }
 
     // --- Measuring the switch's pseudo-elements, held at a fraction of its time.
-    const PSEUDOS = ['::view-transition-group(root)', '::view-transition-old(root)', '::view-transition-new(root)',
+    const PSEUDOS = ['::view-transition', '::view-transition-group(root)', '::view-transition-old(root)', '::view-transition-new(root)',
                      '::view-transition-group(probe-default)', '::view-transition-old(probe-default)',
                      '::view-transition-group(probe-fixed)', '::view-transition-old(probe-fixed)',
                      '::view-transition-group(day-tabs)', '::view-transition-old(day-tabs)',
@@ -217,10 +222,21 @@ html.noroot { view-transition-name: none; }
             : `PAGE SNAPSHOT BOX ${rootGroupH}px != VIEWPORT ${captured.root[1]}px (differ by ${Math.round(rootGroupH - captured.root[1])}px)`;
         const out = { mode, variant: html.className, captured, viewport: [innerWidth, innerHeight], verdict, rootNote, boxes };
         window.__sample = out;
-        document.getElementById('readout').textContent = `${mode} switch · ${html.className}\n${verdict}\n${rootNote}\n`
-            + `root: group ${boxes['::view-transition-group(root)'].height}, old image ${boxes['::view-transition-old(root)'].height} (captured ${captured.root[1]}px), object-fit ${boxes['::view-transition-old(root)'].objectFit}\n`
-            + `probe: group ${boxes['::view-transition-group(probe-default)'].height}, old image ${boxes['::view-transition-old(probe-default)'].height} (captured ${captured.probe}px)\n`
-            + navigator.userAgent;
+        const name = html.classList.contains('noroot') ? 'AFTER FIX (noroot, the site now)'
+            : html.classList.contains('move') ? 'BEFORE FIX (move, the site as it was)' : html.className;
+        const r = n => Math.round(px(n) * 10) / 10, vv = window.visualViewport;
+        const box = p => `${r(boxes[p].width)}×${r(boxes[p].height)}`;
+        const el = document.getElementById('readout');
+        el.textContent = '';
+        const head = document.createElement('b');
+        head.textContent = name;
+        el.append(head, `\n${mode} switch\n`
+            + `named parts: ${verdict}\n`
+            + `page snapshot: ${rootNote}\n`
+            + `overlay ${box('::view-transition')} · page group ${box('::view-transition-group(root)')} · viewport ${captured.root[0]}×${captured.root[1]}\n`
+            + `probe: box ${r(boxes['::view-transition-group(probe-default)'].height)}, old image ${r(boxes['::view-transition-old(probe-default)'].height)}, captured ${r(captured.probe)}\n`
+            + `dpr ${devicePixelRatio} · visual ${vv ? Math.round(vv.width) + '×' + Math.round(vv.height) + ' ×' + vv.scale : '-'} · outer ${outerWidth}×${outerHeight} · screen ${screen.width}×${screen.height}\n`
+            + navigator.userAgent);
         return out;
     }
     const holdAt = () => { const h = parseFloat(q.get('hold')); return h >= 0 && h <= 1 ? h : (document.getElementById('hold').checked ? 0.5 : null); };
@@ -252,6 +268,9 @@ html.noroot { view-transition-name: none; }
         holdAndSample(document.startViewTransition(() => render(page === 'a' ? 'b' : 'a')), 'same-document');
     };
     document.getElementById('switch-page').onclick = () => { location.assign(location.pathname + query()); };
+    const runAs = v => () => { variant.value = v; setClass(); document.getElementById('switch-same').click(); };
+    document.getElementById('switch-before').onclick = runAs('move');
+    document.getElementById('switch-after').onclick = runAs('noroot');
     window.addEventListener('pageswap', () => { try { sessionStorage.setItem('switch-repro-captured', JSON.stringify({ root: [innerWidth, innerHeight], probe: probeHeight() })); } catch (e) {} });
     window.addEventListener('pagereveal', (e) => {
         if (!e.viewTransition) { window.__vt = 'none'; return; }

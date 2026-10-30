@@ -85,6 +85,15 @@ def test_without_a_page_snapshot_the_parts_still_move(served, mode):
         assert px(out['boxes'][f'::view-transition-group({name})']['width']) > 0, name
 
 
+@pytest.mark.parametrize('button, variant, page_group', [('before', 'move', True), ('after', 'noroot', False)])
+def test_the_before_and_after_buttons_run_the_site_rules(served, button, variant, page_group):
+    # The buttons a phone tester taps: the rule the site had, and the rule it has now.
+    out = hold(served, button, 'plain')  # the query's variant is overridden by the button
+    assert out['state'] == 'paused' and out['variant'] == variant
+    assert (out['boxes']['::view-transition-group(root)']['width'] != 'auto') is page_group
+    assert px(out['boxes']['::view-transition-group(day-tabs)']['width']) > 0
+
+
 def test_plain_leaves_only_the_root_and_the_probes(served):
     out = hold(served, 'cross', 'plain')
     assert px(out['boxes']['::view-transition-group(root)']['width']) > 0

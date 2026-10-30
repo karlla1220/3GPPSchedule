@@ -269,7 +269,8 @@ WG 페이지는 따로 된 정적 페이지이고 SPA로 바꾸지 않았다. �
   첫 화면을 기다릴지는 `tests/test_switch_arrival.py`다.
   - 전환 애니메이션 자체는 `tests/test_switch_repro.py`가 번들 Chromium(Playwright)으로 `tests/fixtures/switch_repro/switch-repro.html` 한 파일을 열어 중간에 멈추고 의사 요소의 크기를 잰다.
     파일 하나가 두 미팅(a: 5일 08:30~18:00, b: 4일 08:00~17:00)을 그리고, 같은 문서 안의 전환(`startViewTransition`, 내려받은 파일로도 됨)과 페이지 간 전환(`?page=b`로 자기 자신 이동, HTTP로 띄워야 함)을 모두 한다.
-    `?v=plain|move|fix|noroot`로 루트 겹침만, 예전 사이트 규칙, 스냅숏 크기 고정, 페이지 스냅숏 없음(지금 사이트)을 고르고 `?slow=1`이 10배, `?hold=0.5`가 그 지점에서 멈춘다. 높이가 반으로 주는 프로브 상자 두 개(기본, `object-fit: none`)와 판독 줄이 그 브라우저가 옛 스냅숏을 상자에 맞춰 늘이는지 말해 준다. Playwright가 없으면 건너뛴다.
+    휴대폰에서는 `Before fix`(예전 사이트 규칙 `move`)와 `After fix`(지금 사이트 `noroot`) 두 버튼을 차례로 누른다. 판독 줄 첫 줄이 돌린 변형을 밝힌다.
+    `?v=plain|move|fix|noroot`로 루트 겹침만, 예전 사이트 규칙, 스냅숏 크기 고정, 페이지 스냅숏 없음(지금 사이트, 기본값)을 고르고 `?slow=1`이 10배, `?hold=0.5`가 그 지점에서 멈춘다. 높이가 반으로 주는 프로브 상자 두 개(기본, `object-fit: none`)와 판독 줄이 그 브라우저가 옛 스냅숏을 상자에 맞춰 늘이는지 말해 준다. Playwright가 없으면 건너뛴다.
 
 ## 헤더의 후원 안내, 제작자 줄, 회의 종료 인사
 
