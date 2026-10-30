@@ -681,7 +681,7 @@ RAN2와 같은 방식입니다. 규칙이 다음을 발견한 셀만 이유와 �
 ### 상태와 로컬 확인
 
 - `docs/ran4/.schedule_state.json`: 고른 시간표(URL, SHA-256, `cp:revision`)·토픽 목록·agenda.csv, Portal 메타데이터, 빌드 경고.
-- 헤더의 `Sources:`는 `Schedule THU afternoon · Topics Final · Agenda`처럼 보입니다(판 이름이 `vNN`이면 `Schedule v11`).
+- 헤더의 `Sources:`는 `Schedule THU afternoon · Topics Final`처럼 보입니다(판 이름이 `vNN`이면 `Schedule v11`).
 
 ```bash
 uv run python main.py --wg ran4
@@ -801,7 +801,7 @@ SA2#172·#174·#175·#176·#177의 실제 문서로 확인했습니다. `site.js
   #176의 r15는 r14보다 먼저 올라왔습니다. 이름에 `SA2-<번호>`가 없는 파일(`Draft Feb 2026 session plan -r9.zip`)은 건너뜁니다.
 - 미팅은 파일 이름으로 정합니다. 첫 판의 머리 문단은 이전 회의 것이 복사되어 있습니다(#177 첫 판이 #176 날짜).
 - 현재 미팅, 버전을 되돌리지 않기(`built_copy`), 날짜·시간대(Portal > `meetings` 지정 > 마지막 성공 상태)는 RAN2와 같습니다.
-- 헤더의 `Sources:`는 파일 이름에서 TDoc 번호, 미팅, 확장자만 뺀 것입니다(`Session Plan -r14 - Friday plan · agenda.csv`).
+- 헤더의 `Sources:`는 파일 이름에서 TDoc 번호, 미팅, 확장자만 뺀 것입니다(`Session Plan -r14 - Friday plan`).
   같은 `r14`의 두 판은 이름 뒤의 말(`Friday plan`)로 갈립니다. 업로드 시각은 적지 않습니다.
 
 ### 표 읽기 (`working_groups/sa2/document.py`)

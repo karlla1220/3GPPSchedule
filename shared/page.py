@@ -22,6 +22,8 @@ _DRAFT = re.compile(r"(?<![A-Za-z0-9])draft(?![A-Za-z0-9])", re.IGNORECASE)
 # "eom1", "eom_02"): the closing notes, after the last version.
 _CLOSING = re.compile(r"(?<![A-Za-z0-9])(eom|final)(?:_?(\d+))?(?![A-Za-z0-9])", re.IGNORECASE)
 _CLOSING_LABEL = {"eom": "EOM", "final": "Final"}
+# The agenda table a WG reads beside its schedule: "agenda.csv", "agenda_133bis.csv".
+_AGENDA_CSV = re.compile(r"agenda[^/\\]*\.csv", re.IGNORECASE)
 
 
 def normalize_presentation(value=None):
@@ -186,7 +188,8 @@ def _source(name, label):
 
 
 def render_sources(schedule):
-    names = schedule.source_files or [schedule.source_file]
+    # agenda.csv is read by every WG at every build; the line names the schedule files.
+    names = [name for name in schedule.source_files if not _AGENDA_CSV.fullmatch(name)] or [schedule.source_file]
     return " · ".join(_source(name, schedule.source_labels.get(name)) for name in names)
 
 

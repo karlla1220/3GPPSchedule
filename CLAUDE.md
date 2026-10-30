@@ -336,7 +336,8 @@ HTML은 `shared/page.py`, 표시 판단은 `templates/support-note.js`, 값은 `
 - **원본 파일은 이름 전체가 아니라 짧은 이름과 버전으로 적는다(`Sources: Main v03 · Hiroki v01 · Sorour v00`).**
   이 줄에서 확인하는 것은 최신 버전이 반영됐는지뿐이고, 미팅 이름은 바로 위 제목에 있다. 파일 이름은 `title`(hover)에 남긴다.
   - 짧은 이름은 각 WG 파이프라인이 `Schedule.source_labels`(파일 이름 → 이름)로 넘긴다. RAN1은 `Main`과 부의장 이름,
-    RAN2는 `Schedule`·`Agenda`, RAN P는 `Time plan`·`Agenda`다. 파일 이름에서 사람 이름을 추측하지 않는다.
+    RAN2는 `Schedule`, RAN P는 `Time plan`이다. 파일 이름에서 사람 이름을 추측하지 않는다.
+  - `agenda.csv`(`agenda*.csv`)는 적지 않는다(`page.py`의 `_AGENDA_CSV`). 모든 WG가 빌드마다 읽는 표라서 확인할 것이 없다. 줄에는 일정 원본만 남는다.
   - 판을 가리키는 부분은 파일 이름 표기 그대로 둔다. RAN3 `RAN3_134_agenda_20261023.docx`는 `agenda_20261023`이다.
     날짜를 `23 Oct`처럼 바꿔 적으면 어느 파일인지 찾기 어렵다.
   - 버전은 `page.py`가 파일 이름에서 읽는다(마지막 `v숫자`). 이름이 없는 파일(예전 스냅샷, 데모)은 파일 이름 그대로 보인다.

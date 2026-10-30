@@ -39,8 +39,12 @@ def test_sources_are_short_labels_with_the_version_and_the_file_name_on_hover():
     assert sources(source_files=files, source_labels=dict(zip(files, ['Main', 'Hiroki', 'Sorour']))) == (
         'Sources: Main\xa0draft\xa0v03 · Hiroki\xa0v01 · Sorour\xa0v00 ', files)
     plenary = ['RAN#113 time plan v09.zip', 'agenda.csv']
+    # agenda.csv is read at every build, so the line names only the schedule files.
     assert sources(source_files=plenary, source_labels=dict(zip(plenary, ['Time plan', 'Agenda'])))[0] == (
-        'Sources: Time\xa0plan\xa0v09 · Agenda ')
+        'Sources: Time\xa0plan\xa0v09 ')
+    ran3 = ['RAN3_133bis_agenda_20261014_1825.docx', 'agenda_133bis.csv']
+    assert sources(source_files=ran3, source_labels={ran3[0]: 'agenda_20261014_1825'})[0] == (
+        'Sources: agenda_20261014_1825 ')
 
 
 @pytest.mark.parametrize('name, shown', [
@@ -67,7 +71,7 @@ def test_source_without_a_label_keeps_its_file_name():
     # Snapshots saved before labels existed, and the demo schedule.
     name = 'Draft <RAN1#126b> schedules - v03.docx'
     header = render_header(replace(build_schedule(), source_files=[name, 'agenda.csv']))
-    assert 'Sources: Draft &lt;RAN1#126b&gt; schedules - v03.docx · agenda.csv &nbsp;|' in header
+    assert 'Sources: Draft &lt;RAN1#126b&gt; schedules - v03.docx &nbsp;|' in header
     assert sources(source_files=[])[0] == 'Sources: Fixed demonstration schedule '
     labelled = render_header(replace(build_schedule(), source_files=[name + '"x'], source_labels={name + '"x': '<Main>'}))
     assert 'title="Draft &lt;RAN1#126b&gt; schedules - v03.docx&quot;x">&lt;Main&gt;&nbsp;draft&nbsp;v03</span>' in labelled
