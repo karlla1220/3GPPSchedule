@@ -184,7 +184,7 @@ def test_local_build_needs_no_network_and_records_state(offline_config, tmp_path
     monkeypatch.setattr(httpx.Client, 'send', lambda *a, **k: pytest.fail('Offline network request'))
     schedule = pipeline.build_schedule(SimpleNamespace(local=str(FIXTURES / R20), output_dir=tmp_path / 'out'))
     assert (schedule.wg_id, schedule.meeting_name) == ('sa2', 'SA2#176')
-    assert schedule.source_labels == {R20: 'Session Plan r20', 'agenda.csv': 'Agenda'}
+    assert schedule.source_labels == {R20: 'Session Plan - r20', 'agenda.csv': 'agenda.csv'}
     state = sources.read_json(tmp_path / 'out/sa2/.schedule_state.json')
     assert state['meeting_id'] == 'sa2#176' and state['llm'] == {'used': False}
     # Offline the convener names stay as written; nothing is guessed.
@@ -203,14 +203,14 @@ def test_convener_names_come_from_the_officials_in_office():
     assert officials.resolve('Dario', april, sources.DEFAULTS['chair_aliases']) is None
 
 
-def test_online_build_resolves_conveners_and_labels_the_upload_time(offline_config, tmp_path, monkeypatch):
+def test_online_build_resolves_conveners(offline_config, tmp_path, monkeypatch):
     monkeypatch.setattr(officials, 'fetch_history', lambda code: officials.parse_history(HISTORY))
     bundle = sources.local_bundle(FIXTURES / R20, offline_config)
     bundle.manifest['schedule']['uploaded_at'] = '2026-08-28 05:48'
     bundle.save(sources.DOWNLOADS / 'prepared')
     monkeypatch.setattr(pipeline, 'portal_rows', lambda: [])
     schedule = pipeline.build_schedule(SimpleNamespace(output_dir=tmp_path / 'out'))
-    assert schedule.source_labels[R20] == 'Session Plan r20 28 Aug 07:48'   # UTC listing time, shown in Prague
+    assert schedule.source_labels[R20] == 'Session Plan - r20'   # the file name, not the upload time
     chairs = {s.chair for d in schedule.days for s in d.sessions if s.room_ids == ['stream2']}
     assert chairs == {'Michael STARSINIC'}
 

@@ -50,6 +50,19 @@ def test_session_plan_filenames(name, expected):
     assert docmod.file_info(name) == expected
 
 
+@pytest.mark.parametrize('name, label', [
+    ('S2-2610195_SA2-177-Session Plan -r14 - Friday plan.docx', 'Session Plan -r14 - Friday plan'),
+    ('S2-2610195_SA2-177-Session Plan -r14.docx', 'Session Plan -r14'),
+    ('S2-2608833_SA2-176-Session Plan - r20.docx', 'Session Plan - r20'),
+    ('S2-260nnnn_SA2-177-Session Plan.zip', 'Session Plan'),
+    # page.py adds "draft" and "Final" from the file name; they are not said twice.
+    ('Draft S2-2606837_SA2-176-Session Plan - r1.docx', 'Session Plan - r1'),
+    ('S2-2610195_SA2-177-Session Plan - r15 - Final.docx', 'Session Plan - r15'),
+])
+def test_source_label_is_the_file_name_without_tdoc_meeting_and_extension(name, label):
+    assert docmod.source_label(name) == label
+
+
 def test_template_days_quarters_breaks_rooms_and_conveners():
     doc = extract(R20)
     assert doc['meeting_id'] == 'sa2#176'
@@ -223,7 +236,7 @@ def test_cells_the_rules_are_unsure_about_say_why():
 @pytest.fixture(scope='module')
 def r20():
     return sessions.make_schedule(extract(R20), agenda(), META_176, [R20, 'agenda.csv'],
-                                  {R20: 'Session Plan r20', 'agenda.csv': 'Agenda'}, '2026-08-28 12:00',
+                                  {R20: 'Session Plan - r20', 'agenda.csv': 'agenda.csv'}, '2026-08-28 12:00',
                                   chairs={'Mike': 'Michael STARSINIC', 'Wanqiang': 'Wanqiang ZHANG'})
 
 

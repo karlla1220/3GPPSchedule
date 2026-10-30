@@ -15,7 +15,7 @@ import httpx
 from shared import officials, timezones
 from shared.llm_cells import gemini_request, has_key
 from shared.renderer import generate_html
-from .document import LayoutError, agenda_map, extract_document, file_info
+from .document import LayoutError, agenda_map, extract_document, source_label
 from .llm import CellRefiner, read_document
 from .sessions import make_schedule
 from .sources import (CACHE, DOWNLOADS, Bundle, client, config_hash, fetch_bundle, load_config, local_bundle,
@@ -69,17 +69,6 @@ def chair_names(labels, cfg, meeting: str, starts_on: str, previous: dict, offli
         except (httpx.HTTPError, ValueError) as exc:
             print(f'[sa2] Officials unavailable ({exc}); keeping convener names as last built or written')
     return {label: saved.get(label, label) for label in labels}
-
-
-def source_label(info: dict, zone: str) -> str:
-    """"Session Plan r14 16 Oct 07:48": the revision, and the upload time that orders "-r14 - Friday plan"."""
-    parsed = file_info(info['name'])
-    label = f'Session Plan r{parsed[1]}' if parsed else info['name']
-    if info.get('uploaded_at'):
-        # Listing times are UTC.
-        uploaded = datetime.fromisoformat(info['uploaded_at']).replace(tzinfo=ZoneInfo('UTC')).astimezone(ZoneInfo(zone))
-        label += f' {uploaded.day} {uploaded:%b %H:%M}'
-    return label
 
 
 def llm_request(cfg, request=None):
@@ -147,7 +136,7 @@ def build_schedule(options=None, *, request=None):
     generated = datetime.now(ZoneInfo(metadata['timezone'])).strftime('%Y-%m-%d %H:%M')
     plan = bundle.manifest['schedule']
     sources = [plan['name']] + (['agenda.csv'] if bundle.agenda else [])
-    labels = {plan['name']: source_label(plan, metadata['timezone']), 'agenda.csv': 'Agenda'}
+    labels = {plan['name']: source_label(plan['name']), 'agenda.csv': 'agenda.csv'}
     schedule = make_schedule(document, agenda, metadata, sources, labels, generated, chairs=chairs,
                              refine=refine, sessions=prebuilt)
     # No checkpoint before parsing and rendering both succeed.
