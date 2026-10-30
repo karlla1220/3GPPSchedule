@@ -10,9 +10,20 @@ from shared.renderer import (
     _ai_ids,
     _generate_css,
     _generate_js,
+    _room_text,
     generate_html,
 )
+from shared.schedule import RoomInfo
 from working_groups.ran1.models import Schedule
+
+
+def test_popup_room_line_adds_where_the_room_is():
+    main = RoomInfo(name="Main", detail="B2 (Floor 2) · Stream 1")
+    plenary = RoomInfo(name="Plenary/ Breakout 1", detail="D3/D4, Floor 3")
+    assert _room_text([main]) == "Main · B2 (Floor 2) · Stream 1"
+    # A place can hold a comma, so rooms with one are kept apart by semicolons.
+    assert _room_text([plenary, main]) == "Plenary/ Breakout 1 · D3/D4, Floor 3; Main · B2 (Floor 2) · Stream 1"
+    assert _room_text([RoomInfo(name="A1"), RoomInfo(name="A2")]) == "A1, A2"
 
 
 def test_dimmed_sessions_remain_clickable_for_detail_popup():

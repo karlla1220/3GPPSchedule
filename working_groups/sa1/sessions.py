@@ -323,7 +323,7 @@ def make_schedule(document: dict, metadata: dict, source_files: list[str], sourc
     dates = {(first + timedelta(days=i)).strftime('%A'): (first + timedelta(days=i)).isoformat()
              for i in range(min((last - first).days, 6) + 1)}
     sessions, notes = interpret(document, refine)
-    rooms = [RoomInfo(id=r['id'], name=r['name']) for r in document['rooms']]
+    rooms = [RoomInfo(id=r['id'], name=r['name'], detail=r.get('place', '')) for r in document['rooms']]
     days = []
     for day in document['days']:
         raw = [s for s in sessions if s['day'] == day['day']]

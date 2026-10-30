@@ -46,6 +46,9 @@ class RoomInfo:
     room_index_in_table: int = 0  # legacy RAN1 table position
     id: str = ""
     kind: str = ""  # "online" or "offline" when the schedule says so (RAN1 table headings)
+    # Where the room is, as the source writes it, shown after the name in the
+    # popup Room line: SA1 "D3/D4, Floor 3", SA2 "B3 (Floor 2) · Stream 2".
+    detail: str = ""
 
 
 # The shortest piece of a split block: the length at which a cell shows its AI line.

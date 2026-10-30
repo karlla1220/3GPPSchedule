@@ -224,6 +224,8 @@ def test_render_roundtrip_and_supplements(eom, tmp_path):
     assert load_schedule(path).days == eom.days
     html = generate_html(eom)
     assert 'Plenary/ Breakout 1' in html and 'Room unassigned' in html and 'MEETING ROOMS:' in html
+    # The room's place from the MEETING ROOMS lines is in the popup Room line.
+    assert 'Room: Breakout 2 · D9, Floor 3' in html
 
 
 # --------------------------------------------------------------------- LLM

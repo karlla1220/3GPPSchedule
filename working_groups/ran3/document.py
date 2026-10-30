@@ -69,16 +69,21 @@ def file_info(name: str):
 
 
 def source_label(name: str) -> str:
-    """The header name of a living agenda: "Agenda 14 Oct 18:25".
+    """The header name of a living agenda: its file name without the meeting.
 
-    page.py appends "EOM" itself, so a closing version is just "Agenda".
+    "RAN3_133bis_agenda_20261014_1825.docx" is "agenda_20261014_1825", so the
+    file can be found from it. page.py appends "EOM" itself.
     """
     match = FILE.fullmatch(name.strip())
-    if not match or match[6]:
-        return 'Agenda'
-    month = ('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec')
-    date = f'{int(match[3][6:])} {month[int(match[3][4:6]) - 1]}'
-    return f'Agenda {date} {match[4][:2]}:{match[4][2:]}' if match[4] else f'Agenda {date}'
+    if not match:
+        return file_stem(name)
+    return f'agenda_{match[3]}_{match[4]}' if match[4] else f'agenda_{match[3]}'
+
+
+def file_stem(name: str) -> str:
+    """A file name without its extension and a leading "RAN3"/"RAN3_134bis"."""
+    stem = name.strip().rsplit('.', 1)[0]
+    return re.sub(r'^RAN3[ _](?:\d+(?:-?bis)?_)?', '', stem, flags=re.I) or stem
 
 
 def clock(hour, minute) -> str:

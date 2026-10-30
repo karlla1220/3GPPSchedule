@@ -322,6 +322,17 @@ def is_descendant(item: str, ancestor: str) -> bool:
     return item != ancestor and item.startswith(ancestor + '.')
 
 
+def room_detail(room: dict) -> str:
+    """The popup Room line after the name: where the room is and the stream the plan calls its row.
+
+    "B3 (Floor 2) · Stream 2". A room named by its stream (no room table) or
+    read by the LLM (no stream) gives what it has.
+    """
+    stream = room.get('stream')
+    named = stream and not room['name'].startswith('Stream')
+    return ' · '.join(filter(None, [room.get('place', ''), f'Stream {stream}' if named else '']))
+
+
 def make_schedule(document: dict, agenda: dict | None, metadata: dict, source_files: list[str],
                   source_labels: dict[str, str], generated_at: str, *, chairs: dict[str, str] | None = None,
                   refine=None, sessions: list[dict] | None = None) -> Schedule:
@@ -338,7 +349,7 @@ def make_schedule(document: dict, agenda: dict | None, metadata: dict, source_fi
     # The convener of a stream is linked by colour: the name's highlight in the
     # "Convener" line is the highlight on that stream's row labels.
     convener = {stream: document['conveners'].get(colour) for stream, colour in document['stream_colours'].items()}
-    rooms = [RoomInfo(id=r['id'], name=r['name']) for r in document['rooms']]
+    rooms = [RoomInfo(id=r['id'], name=r['name'], detail=room_detail(r)) for r in document['rooms']]
     days = []
     for day in document['days']:
         raw = [s for s in sessions if s['day'] == day]

@@ -1,6 +1,7 @@
 """SA2 Session Plans: real chair documents plus the rules they rely on."""
 import io
 from pathlib import Path
+import re
 
 from bs4 import BeautifulSoup
 from docx import Document
@@ -60,8 +61,10 @@ def test_template_days_quarters_breaks_rooms_and_conveners():
     assert [(b['name'], b['start'], b['end']) for b in doc['breaks']] == [
         ('Break', '08:50', '09:00'), ('Coffee', '10:30', '11:00'), ('Lunch', '12:30', '14:00'),
         ('Coffee', '15:30', '16:00'), ('Break', '17:30', '18:00')]
-    assert [(r['id'], r['name']) for r in doc['rooms']] == [
-        ('stream1', 'Main'), ('stream2', 'Breakout 1'), ('stream3', 'Breakout 2')]
+    # The place is the room table cell after the name, without the seat count ("[300]").
+    assert [(r['id'], r['name'], r['place']) for r in doc['rooms']] == [
+        ('stream1', 'Main', 'B2 (Floor 2)'), ('stream2', 'Breakout 1', 'B3 (Floor 2)'),
+        ('stream3', 'Breakout 2', 'D11/D12 (Floor 3)')]
     # "Convener 1: Mike, Convenor 2: Wanqiang", linked by highlight to the stream labels.
     assert doc['conveners'] == {'green': 'Mike', 'cyan': 'Wanqiang'}
     assert doc['stream_colours'] == {2: 'green', 3: 'cyan'}
@@ -261,6 +264,7 @@ def test_render_and_snapshot_roundtrip(r20, tmp_path):
     assert load_schedule(tmp_path / 'schedule.json') == r20
     html = BeautifulSoup(generate_html(r20), 'html.parser')
     piece = html.select('#tuesday [data-name="KI#18"]')[0]
+    assert re.search(r'Room: (Main|Breakout \d) · [^<]*\(Floor \d\) · Stream \d', piece['data-popup'])
     assert '1/2' in piece.get_text() and 'of' in piece.get_text()
     shared = html.select_one('#friday [data-name="List of agreed tdocs for block approval / Revisions"]')
     assert 'Revisions (including 30.1)' in shared['data-popup']

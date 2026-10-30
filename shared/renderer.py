@@ -528,14 +528,12 @@ def generate_html(schedule: Schedule, *, schedules=None, groups=None, presentati
                 f"Time: {session.start_time} - {session.end_time} "
                 f"({_part_text(session.part)}{session.duration_minutes} min)"
             )
-            room_names_in_span = []
-            for ri in range(col_start - 2, min(col_end - 2, num_rooms)):
-                if ri < len(day_schedule.rooms):
-                    room_names_in_span.append(day_schedule.rooms[ri].name)
+            rooms_in_span = [day_schedule.rooms[ri] for ri in range(col_start - 2, min(col_end - 2, num_rooms))
+                             if ri < len(day_schedule.rooms)]
             if scope_label:
                 popup_lines.append(f"Room: {scope_label} (merged display, not a booking of every room)")
-            elif room_names_in_span:
-                popup_lines.append(f"Room: {_esc(', '.join(room_names_in_span))}")
+            elif rooms_in_span:
+                popup_lines.append(f"Room: {_esc(_room_text(rooms_in_span))}")
             if notes:
                 # One separated block; a "Note:" label on every line only adds noise.
                 popup_lines.append(
@@ -959,6 +957,16 @@ def _part_rows(part, row_start: int, row_end: int) -> tuple[int, int]:
 def _part_prefix(part) -> str:
     """"1/2 of " before the block minutes; "of" is sized like the unit."""
     return f'{part[0]}/{part[1]} <span class="session-unit">of</span> ' if part else ""
+
+
+def _room_text(rooms):
+    """The popup Room line: "Breakout 1 · B3 (Floor 2) · Stream 2".
+
+    A place may hold a comma ("D3/D4, Floor 3"), so rooms with one are
+    separated by semicolons.
+    """
+    shown = [f"{room.name} · {room.detail}" if room.detail else room.name for room in rooms]
+    return ("; " if any(room.detail for room in rooms) else ", ").join(shown)
 
 
 def _part_text(part) -> str:
