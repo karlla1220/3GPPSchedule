@@ -221,8 +221,8 @@ def test_an_unreadable_table_is_built_from_the_llm_reading_or_fails(offline_conf
     with pytest.raises(UnreadTable, match='no sessions'):
         pipeline.build_schedule(options)
     schedule = pipeline.build_schedule(options, request=FakeGemini(doc_answer(data)))
-    assert [r.id for r in schedule.days[0].rooms] == ['main', 'b2']
-    assert find(schedule, 'Tuesday', '09:00', 'b2').chair == 'Qun Wei'
+    assert [r.id for r in schedule.days[0].rooms] == ['plenary', 'breakout-2']
+    assert find(schedule, 'Tuesday', '09:00', 'breakout-2').chair == 'Qun Wei'
     assert 'read by an LLM' in schedule.supplements[0]['text']
     state = sources.read_json(tmp_path / 'out/sa1/.schedule_state.json')
     assert state['llm'] == {'model': offline_config['model'], 'document': True}

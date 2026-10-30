@@ -376,16 +376,19 @@ def test_a_table_the_rules_cannot_read_is_read_whole_by_the_llm(tmp_path):
     document, read = llm.read_document(data, EOM, partial, 'test-model', gemini, tmp_path)
     schedule = sessions.make_schedule(document, META_115, [EOM], {}, '2026-08-28 16:00', read=read)
     assert len(gemini.calls) == 1 and 'MEETING ROOMS' in gemini.calls[0] and 'S1-263000' not in gemini.calls[0]
+    # The rooms the MEETING ROOMS lines name keep the rules' ids, whatever ids the answer used.
+    rules = build(EOM)
     assert [(r.id, r.name, r.detail) for r in schedule.days[0].rooms] == [
-        ('main', 'Plenary/ Breakout 1', 'D3/D4, Floor 3'), ('b2', 'Breakout 2', 'D9, Floor 3')]
-    monday = find(schedule, 'Monday', '09:00', 'main')
+        (r.id, r.name, r.detail) for r in rules.days[0].rooms] == [
+        ('plenary', 'Plenary/ Breakout 1', 'D3/D4, Floor 3'), ('breakout-2', 'Breakout 2', 'D9, Floor 3')]
+    monday = find(schedule, 'Monday', '09:00')
     assert (monday.name, monday.agenda_item, monday.chair, monday.notes) == (
         'Plenary', '1, 2, 3', None, ['1. Opening', '2. Reports', '3. LSs'])
     # Chairs come from the NOTE, as for the rules' reading.
-    assert find(schedule, 'Tuesday', '09:00', 'main').chair == 'Vasil Aleksiev'
-    assert find(schedule, 'Tuesday', '09:00', 'b2').chair == 'Qun Wei'
+    assert find(schedule, 'Tuesday', '09:00').chair == 'Vasil Aleksiev'
+    assert find(schedule, 'Tuesday', '09:00', 'breakout-2').chair == 'Qun Wei'
     assert find(schedule, 'Tuesday', '08:00', None).room_scope == 'unassigned'
-    friday = find(schedule, 'Friday', '09:00', 'main')
+    friday = find(schedule, 'Friday', '09:00')
     assert (friday.agenda_item, friday.inferred_agenda_items, friday.notes) == (None, ['7.3.4'], ['ISAC'])
     assert 'read by an LLM' in schedule.supplements[0]['text'] and 'MEETING ROOMS:' in schedule.supplements[1]['text']
     # The answer is cached: the next build does not ask.

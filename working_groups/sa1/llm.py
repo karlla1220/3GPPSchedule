@@ -230,20 +230,26 @@ def paragraph_lines(texts: dict[str, str]) -> list[str]:
     return [line for key, text in texts.items() if ':' not in key for line in text.split('\n')]
 
 
-def doc_rooms(result: DocResult, lines: list[str]) -> list[dict]:
-    """The answer's rooms with their heads and place, read as the rules read MEETING ROOMS lines."""
+def doc_rooms(result: DocResult, lines: list[str]) -> tuple[list[dict], dict[str, str]]:
+    """(rooms, answer id -> room id): the answer's rooms read as the rules read MEETING ROOMS lines.
+
+    A room the lines name keeps the rules' id ("plenary", "breakout-2"), so the
+    page is the same as a rule-read build; another room keeps the answer's id.
+    """
     listed = {squash(room['name']).casefold(): room for room in room_list(lines)}
-    rooms = []
+    rooms, ids = [], {}
     for answer in result.rooms:
         known = listed.get(squash(answer.name).casefold())
         if known:
-            rooms.append({**known, 'id': answer.id})
-            continue
-        aliases = {f'{m[1].lower()} {m[2]}' for m in ROOM_ROLE.finditer(answer.name)}
-        if 'plenary' in answer.name.lower():
-            aliases.add('plenary')
-        rooms.append({'id': answer.id, 'name': squash(answer.name), 'place': '', 'aliases': sorted(aliases)})
-    return rooms
+            room = dict(known)
+        else:
+            aliases = {f'{m[1].lower()} {m[2]}' for m in ROOM_ROLE.finditer(answer.name)}
+            if 'plenary' in answer.name.lower():
+                aliases.add('plenary')
+            room = {'id': answer.id, 'name': squash(answer.name), 'place': '', 'aliases': sorted(aliases)}
+        ids[answer.id] = room['id']
+        rooms.append(room)
+    return rooms, ids
 
 
 def owned_lines(text: str, room: str | None, rooms: list[dict]) -> list[str]:
@@ -270,7 +276,7 @@ def check_document(result: DocResult, texts: dict[str, str]) -> list[str]:
         errors.append(f'days must be distinct weekdays written as column heads: {result.days}')
     if not result.sessions:
         errors.append('no sessions found')
-    rooms = doc_rooms(result, paragraph_lines(texts))
+    rooms, room_ids = doc_rooms(result, paragraph_lines(texts))
     busy = {}
     for n, session in enumerate(result.sessions):
         prefix = f'session {n}'
@@ -283,7 +289,8 @@ def check_document(result: DocResult, texts: dict[str, str]) -> list[str]:
         if not session.refs or not set(session.refs) <= texts.keys():
             errors.append(f'{prefix}: refs must cite paragraph or cell ids')
             continue
-        source = '\n'.join(line for ref in session.refs for line in owned_lines(texts[ref], session.room, rooms))
+        room = room_ids.get(session.room) if session.room is not None else None
+        source = '\n'.join(line for ref in session.refs for line in owned_lines(texts[ref], room, rooms))
         if not source:
             errors.append(f'{prefix}: its cited text follows the head of another room')
             continue
@@ -319,18 +326,19 @@ def read_document(data: bytes, name: str, partial: dict, model: str, request=Non
         raise LayoutError(f'The LLM could not read the SA1 schedule table either: {exc}') from exc
     print(f'[sa1] Schedule table not in a known layout; {len(result.sessions)} sessions read by {model}')
 
-    rooms = doc_rooms(result, paragraph_lines(texts))
+    rooms, room_ids = doc_rooms(result, paragraph_lines(texts))
     plenary = {room['id'] for room in rooms if 'plenary' in room['aliases']}
     agenda = partial['agenda']
     found = []
     for s in result.sessions:
-        lines = [content(line) for ref in s.refs for line in owned_lines(texts[ref], s.room, rooms)]
+        room = room_ids[s.room] if s.room is not None else None
+        lines = [content(line) for ref in s.refs for line in owned_lines(texts[ref], room, rooms)]
         lines = [line for line in lines if meaningful(line)]
         written = (checked_item(i, '', agenda) for i in dict.fromkeys(s.agenda_items))
         items = [i for i in written if i]
-        found.append({'day': s.day, 'room': s.room, 'start': s.start, 'end': s.end,
+        found.append({'day': s.day, 'room': room, 'start': s.start, 'end': s.end,
                       'name': ' '.join(s.title.split()), 'agenda_items': items, 'lines': lines,
-                      'chair': None if s.room is None or (s.room in plenary and s.title == 'Plenary')
+                      'chair': None if room is None or (room in plenary and s.title == 'Plenary')
                       else chair_of(lines, partial['chairs'])})
     # Topics named without a number find the numbers the table writes with them, for the filter only (#96).
     cells = [{'lines': text.split('\n')} for key, text in texts.items() if ':' in key]
