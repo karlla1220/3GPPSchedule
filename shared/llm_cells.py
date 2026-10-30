@@ -40,12 +40,19 @@ def has_key() -> bool:
     return bool(os.environ.get('GEMINI_API_KEY'))
 
 
+# One request may take minutes with high thinking on a whole document, but it
+# must end: without a limit a stalled connection holds a CI build for hours.
+REQUEST_TIMEOUT_MS = 300_000
+
+
 def gemini_request(message, schema, model, thinking='medium'):
     from google import genai
     from google.genai import types
+    import httpx
     if not has_key():
         raise ValueError('GEMINI_API_KEY is required for the LLM fallback')
-    with genai.Client(api_key=os.environ['GEMINI_API_KEY']) as client:
+    with genai.Client(api_key=os.environ['GEMINI_API_KEY'],
+                      http_options=types.HttpOptions(timeout=REQUEST_TIMEOUT_MS)) as client:
         for attempt in range(3):
             try:
                 response = client.models.generate_content(
@@ -55,7 +62,7 @@ def gemini_request(message, schema, model, thinking='medium'):
                         response_json_schema=schema, max_output_tokens=65536,
                         thinking_config=types.ThinkingConfig(thinking_level=thinking)))
                 return json.loads(response.text)
-            except (genai.errors.APIError, ValueError) as exc:
+            except (genai.errors.APIError, ValueError, httpx.TimeoutException) as exc:
                 if attempt == 2:
                     raise RuntimeError('LLM request failed after three attempts') from exc
                 time.sleep(2 * (attempt + 1))
