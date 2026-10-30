@@ -12,11 +12,11 @@ from zoneinfo import ZoneInfo
 
 from shared import officials, timezones
 from shared.renderer import generate_html
-from .document import agenda_map, extract_document, offline_sheets, source_label
+from .document import agenda_map, extract_document, file_stem, offline_sheets, source_label
 from .llm import CellRefiner, gemini_request, has_key
 from .sessions import make_schedule
 from .sources import (DOWNLOADS, Bundle, client, config_hash, fetch_bundle, load_config, local_bundle,
-                      offline_version, override_for, portal_metadata, portal_rows, source_names, write_json,
+                      override_for, portal_metadata, portal_rows, source_names, write_json,
                       read_json)
 
 
@@ -89,8 +89,7 @@ def source_labels(manifest: dict) -> dict[str, str]:
     if manifest.get('schedule'):
         labels[manifest['schedule']['name']] = source_label(manifest['schedule']['name'])
     if manifest.get('offline'):
-        version = offline_version(manifest['offline']['name'])
-        labels[manifest['offline']['name']] = f'Offline room v{version:02d}' if version is not None else 'Offline room'
+        labels[manifest['offline']['name']] = file_stem(manifest['offline']['name'])
     if manifest.get('agenda'):
         labels[manifest['agenda']['name']] = 'agenda.csv'
     return labels

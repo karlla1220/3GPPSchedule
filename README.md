@@ -588,7 +588,8 @@ Gemini가 다시 읽고, 원문으로 확인되는 답만 씁니다(아래 "LLM 
   - 성공한 living agenda·offline 시트·`agenda.csv`의 URL, SHA-256, HTTP validator
   - 미팅·판, Portal 메타데이터, CB 표, 경고
 - `downloads/ran3/inputs/`: 마지막 원본(Git 제외).
-- 헤더의 원본 이름은 `Agenda 14 Oct 18:25`, `Agenda EOM`, `Offline room v03`입니다.
+- 헤더의 원본 이름은 파일 이름에서 미팅과 확장자만 뺀 것입니다: `agenda_20261014_1825`, `agenda_20261016 EOM`, `offline discussion_ver_03`.
+  날짜를 `14 Oct`처럼 바꿔 적으면 어느 파일인지 찾기 어렵습니다.
 
 ```bash
 uv run python main.py --wg ran3
@@ -726,6 +727,7 @@ SA1#112·#113·#115의 실제 문서로 확인했습니다. `site.json`에서 `e
   시각 열이 반복돼도 요일 열만 읽습니다. 변경 추적은 수락한 상태로 읽습니다.
 - 방은 표 위 `MEETING ROOMS:` 문단입니다(`Plenary/ Breakout 1: D3/D4, Floor 3`). 콜론 앞이 열 이름이고, 그 안의
   `Plenary`·`Breakout N`·`Drafting N`이 셀 머리말과 방을 잇습니다(#112·#113은 `Drafting 1`/`Drafting 2`).
+  콜론 뒤의 장소는 팝업 Room 줄에 이름 뒤로 붙습니다(`Room: Breakout 2 · D9, Floor 3`, `RoomInfo.detail`).
 - 브레이크아웃 의장은 표 아래 NOTE의 `주제 – chaired by 이름` 줄입니다(#112~#114는 한 행짜리 표).
 - agenda는 같은 파일 TDoc 표의 제목 행(`Überschrift1~3`/`Heading 1~3`)과 Word 번호입니다. 번호는 직접 셉니다.
   제목 스타일에 따로 목록 번호가 붙은 문단은 한 단계 아래이고(#112 `Editor's notes solving` = 8.1.3.1),
@@ -804,6 +806,8 @@ SA2#172·#174·#175·#176·#177의 실제 문서로 확인했습니다. `site.js
   열은 요일 다섯 개 × 두 칸입니다. 이 틀이 아니면 `LayoutError`입니다(아래 LLM 폴백).
 - 휴식 행에는 시각이 없어 앞뒤 쿼터에서 정합니다(Coffee 10:30–11:00, Lunch 12:30–14:00 등).
 - 방 이름은 방 표의 순서(`Main Room | B2 … | Breakout 1 | …`)로 Stream에 붙입니다: `Main`, `Breakout 1`, `Breakout 2`.
+  이름 다음 칸이 장소이고, 좌석 수(`[300]`)는 뺍니다. 팝업 Room 줄은 장소와 Stream 번호를 붙여 `Room: Breakout 1 · B3 (Floor 2) · Stream 2`입니다.
+  Session Plan과 의장 notes는 행을 Stream으로 부르고, 참석자는 방을 `B3`로 찾습니다.
 - 병합 칸은 XML 요소로 식별합니다(`gridSpan`, `vMerge`). 변경 추적은 수락한 상태로 읽습니다(r7·r11·r13·r14에 있습니다).
 - 표 밖의 문단과 방 표는 "Additional information"에 그대로 둡니다. 머리 문단(회의 이름, 장소·날짜)은 첫 판에서 틀리므로 뺍니다.
 

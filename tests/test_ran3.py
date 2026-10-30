@@ -76,12 +76,12 @@ def test_versions_sort_with_the_closing_one_last_and_labels_name_them():
     names = ['RAN3_133bis_agenda_20261016_EOM.docx', 'RAN3_133bis_agenda_20261016_1300.docx',
              'RAN3_133bis_agenda_20261009.docx', 'RAN3_133bis_agenda_20261012_0900.docx']
     assert sorted(names, key=lambda n: docmod.file_info(n)[1])[-2:] == names[1::-1]
-    assert [docmod.source_label(n) for n in names] == ['Agenda', 'Agenda 16 Oct 13:00', 'Agenda 9 Oct',
-                                                       'Agenda 12 Oct 09:00']
+    assert [docmod.source_label(n) for n in names] == ['agenda_20261016', 'agenda_20261016_1300',
+                                                       'agenda_20261009', 'agenda_20261012_0900']
     manifest = {'schedule': {'name': MID}, 'offline': {'name': 'RAN3 offline discussion_ver_03.xlsx'},
                 'agenda': {'name': 'agenda.csv'}}
-    assert pipeline.source_labels(manifest) == {MID: 'Agenda 14 Oct 18:25',
-                                                'RAN3 offline discussion_ver_03.xlsx': 'Offline room v03',
+    assert pipeline.source_labels(manifest) == {MID: 'agenda_20261014_1825',
+                                                'RAN3 offline discussion_ver_03.xlsx': 'offline discussion_ver_03',
                                                 'agenda.csv': 'agenda.csv'}
 
 
@@ -461,7 +461,7 @@ def test_local_builds_need_no_network_and_keep_the_cb_blocks_past_the_eom(offlin
     out = tmp_path / 'out'
     first = pipeline.build_schedule(SimpleNamespace(local=str(FIXTURES / MID), output_dir=out))
     assert first.wg_id == 'ran3' and first.meeting_name == 'RAN3#133bis'
-    assert first.source_labels == {MID: 'Agenda 14 Oct 18:25', 'offline_133bis_ver_03.xlsx': 'Offline room',
+    assert first.source_labels == {MID: 'agenda_20261014_1825', 'offline_133bis_ver_03.xlsx': 'offline_133bis_ver_03',
                                    'agenda_133bis.csv': 'agenda.csv'}
     state = sources.read_json(out / 'ran3/.schedule_state.json')
     assert state['cbs']['8']['agenda_item'] == '10.3.1.3' and state['llm'] == {'used': False}

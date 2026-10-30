@@ -31,6 +31,7 @@ QUARTER = re.compile(r'Q(\d)')
 SPAN = re.compile(r'(\d{2})(\d{2})\s*-\s*(\d{2})(\d{2})')
 STREAM = re.compile(r'Stream\s*(\d)', re.I)
 CONVENER = re.compile(r'Conven[eo]r\s*(\d+)\s*:\s*([^,]+)', re.I)
+ROOM_NAME = re.compile(r'Main(?:\s+Room)?|Break[- ]?out\s*\d+', re.I)
 
 
 class LayoutError(ValueError):
@@ -256,22 +257,28 @@ def _read_table(table) -> dict:
 
 # ------------------------------------------------------------- outside the table
 
-def room_names(doc, schedule_table, count: int) -> list[str]:
-    """Room names by stream, from the room table above the schedule.
+def room_names(doc, schedule_table, count: int) -> list[tuple[str, str]]:
+    """(name, place) by stream, from the room table above the schedule.
 
     "Main Room | B2 (Floor 2) [300] | Breakout 1 | B3 (Floor 2) [100] | ..."
     lists the rooms in stream order: the cell shading of each stream row
     matches its room, and the chair notes call SA2_Brk1 "Parallel Stream 2".
+    The place is the cell after the name, without the seat count ("[300]").
     """
     for table in doc.tables:
         if table._tbl is schedule_table._tbl:
             break
         texts = [_text(c['tc']) for row in _grid(table) for c in row if c['own']]
-        names = [t for t in texts if re.fullmatch(r'Main(?:\s+Room)?|Break[- ]?out\s*\d+', t, re.I)]
-        if len(names) >= count:
-            return ['Main' if t.lower().startswith('main') else f'Breakout {re.search(r"\d+", t)[0]}'
-                    for t in names[:count]]
-    return [f'Stream {n}' for n in range(1, count + 1)]
+        found = []
+        for i, text in enumerate(texts):
+            if not ROOM_NAME.fullmatch(text):
+                continue
+            place = texts[i + 1] if i + 1 < len(texts) and not ROOM_NAME.fullmatch(texts[i + 1]) else ''
+            name = 'Main' if text.lower().startswith('main') else f'Breakout {re.search(r"\d+", text)[0]}'
+            found.append((name, squash(re.sub(r'\[\s*\d+\s*\]', '', place))))
+        if len(found) >= count:
+            return found[:count]
+    return [(f'Stream {n}', '') for n in range(1, count + 1)]
 
 
 def conveners(doc) -> dict[str, str]:
@@ -380,7 +387,8 @@ def extract_document(data: bytes, name: str) -> dict:
     if not result['cells']:
         raise LayoutError('The SA2 schedule table has no sessions')
     names = room_names(doc, table, len(result['streams']))
-    result['rooms'] = [{'id': f'stream{n}', 'name': names[n - 1], 'stream': n} for n in result['streams']]
+    result['rooms'] = [{'id': f'stream{n}', 'name': names[n - 1][0], 'place': names[n - 1][1], 'stream': n}
+                       for n in result['streams']]
     result['conveners'] = conveners(doc)
     result['meeting_id'] = meeting
     # Table notes are added with the rules' own (sessions.py) below the supplements.
