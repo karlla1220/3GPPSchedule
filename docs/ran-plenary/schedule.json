@@ -153,7 +153,9 @@
           ],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": [],
+          "inferred_agenda_items": [
+            "15"
+          ],
           "email_details": [],
           "part": null
         },
@@ -219,7 +221,9 @@
           ],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": [],
+          "inferred_agenda_items": [
+            "15"
+          ],
           "email_details": [],
           "part": null
         },
@@ -422,7 +426,9 @@
           ],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": [],
+          "inferred_agenda_items": [
+            "6.1"
+          ],
           "email_details": [],
           "part": null
         },
@@ -552,7 +558,9 @@
           ],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": [],
+          "inferred_agenda_items": [
+            "6.2.1"
+          ],
           "email_details": [],
           "part": null
         },
@@ -945,7 +953,9 @@
           ],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": [],
+          "inferred_agenda_items": [
+            "8.4"
+          ],
           "email_details": [],
           "part": null
         },
@@ -1680,7 +1690,7 @@
     }
   ],
   "source_file": "RAN#113 time plan v09.zip",
-  "generated_at": "2026-10-16 01:31",
+  "generated_at": "2026-10-30 10:21",
   "contact_name": "",
   "contact_email": "",
   "source_files": [

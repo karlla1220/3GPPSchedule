@@ -903,7 +903,9 @@
           "notes": [
             "6G Computing service definition drafting"
           ],
-          "inferred_agenda_items": [],
+          "inferred_agenda_items": [
+            "7.3.9"
+          ],
           "email_details": [],
           "part": null
         },
@@ -1101,7 +1103,9 @@
           "notes": [
             "Drafting on UE sensing profile"
           ],
-          "inferred_agenda_items": [],
+          "inferred_agenda_items": [
+            "7.3.4"
+          ],
           "email_details": [],
           "part": null
         },
@@ -2080,7 +2084,7 @@
     }
   ],
   "source_file": "Agenda for SA1#115_Friday_1550_END_OF_MEETING.docx",
-  "generated_at": "2026-10-30 09:01",
+  "generated_at": "2026-10-30 10:22",
   "contact_name": "",
   "contact_email": "",
   "source_files": [

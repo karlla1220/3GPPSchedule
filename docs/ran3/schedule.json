@@ -275,7 +275,8 @@
           ],
           "room_scope": "assigned",
           "notes": [
-            "Offline*"
+            "Offline*",
+            "* if needed"
           ],
           "inferred_agenda_items": [],
           "email_details": [],
@@ -299,7 +300,8 @@
           ],
           "room_scope": "assigned",
           "notes": [
-            "Offline*"
+            "Offline*",
+            "* if needed"
           ],
           "inferred_agenda_items": [],
           "email_details": [],
@@ -470,9 +472,12 @@
           ],
           "room_scope": "assigned",
           "notes": [
-            "6G Offline*"
+            "6G Offline*",
+            "* if needed"
           ],
-          "inferred_agenda_items": [],
+          "inferred_agenda_items": [
+            "10"
+          ],
           "email_details": [],
           "part": [
             2,
@@ -540,9 +545,12 @@
           ],
           "room_scope": "assigned",
           "notes": [
-            "6G Offline*"
+            "6G Offline*",
+            "* if needed"
           ],
-          "inferred_agenda_items": [],
+          "inferred_agenda_items": [
+            "10"
+          ],
           "email_details": [],
           "part": null
         },
@@ -601,9 +609,12 @@
           ],
           "room_scope": "assigned",
           "notes": [
-            "6G Offline*"
+            "6G Offline*",
+            "* if needed"
           ],
-          "inferred_agenda_items": [],
+          "inferred_agenda_items": [
+            "10"
+          ],
           "email_details": [],
           "part": null
         },
@@ -702,9 +713,12 @@
           ],
           "room_scope": "assigned",
           "notes": [
-            "6G Offline*"
+            "6G Offline*",
+            "* if needed"
           ],
-          "inferred_agenda_items": [],
+          "inferred_agenda_items": [
+            "10"
+          ],
           "email_details": [],
           "part": null
         },
@@ -765,9 +779,12 @@
           ],
           "room_scope": "assigned",
           "notes": [
-            "6G Offline*"
+            "6G Offline*",
+            "* if needed"
           ],
-          "inferred_agenda_items": [],
+          "inferred_agenda_items": [
+            "10"
+          ],
           "email_details": [],
           "part": [
             2,
@@ -835,9 +852,12 @@
           ],
           "room_scope": "assigned",
           "notes": [
-            "6G Offline*"
+            "6G Offline*",
+            "* if needed"
           ],
-          "inferred_agenda_items": [],
+          "inferred_agenda_items": [
+            "10"
+          ],
           "email_details": [],
           "part": null
         },
@@ -896,9 +916,12 @@
           ],
           "room_scope": "assigned",
           "notes": [
-            "6G Offline*"
+            "6G Offline*",
+            "* if needed"
           ],
-          "inferred_agenda_items": [],
+          "inferred_agenda_items": [
+            "10"
+          ],
           "email_details": [],
           "part": null
         },
@@ -1035,9 +1058,12 @@
           ],
           "room_scope": "assigned",
           "notes": [
-            "6G Offline*"
+            "6G Offline*",
+            "* if needed"
           ],
-          "inferred_agenda_items": [],
+          "inferred_agenda_items": [
+            "10"
+          ],
           "email_details": [],
           "part": null
         },
@@ -1086,9 +1112,12 @@
           ],
           "room_scope": "assigned",
           "notes": [
-            "6G Offline*"
+            "6G Offline*",
+            "* if needed"
           ],
-          "inferred_agenda_items": [],
+          "inferred_agenda_items": [
+            "10"
+          ],
           "email_details": [],
           "part": [
             2,
@@ -1156,7 +1185,8 @@
           ],
           "room_scope": "assigned",
           "notes": [
-            "Offline*"
+            "Offline*",
+            "* if needed"
           ],
           "inferred_agenda_items": [],
           "email_details": [],
@@ -1180,7 +1210,8 @@
           ],
           "room_scope": "assigned",
           "notes": [
-            "Offline*"
+            "Offline*",
+            "* if needed"
           ],
           "inferred_agenda_items": [],
           "email_details": [],
@@ -1255,9 +1286,12 @@
             "CBs*",
             "END OF MEETING",
             "End of Year Social",
-            "🍷 Event 🎉"
+            "🍷 Event 🎉",
+            "* if needed"
           ],
-          "inferred_agenda_items": [],
+          "inferred_agenda_items": [
+            "33"
+          ],
           "email_details": [],
           "part": null
         }
@@ -1287,7 +1321,7 @@
     }
   ],
   "source_file": "RAN3_134_agenda_20261023.docx",
-  "generated_at": "2026-10-30 02:01",
+  "generated_at": "2026-10-30 03:21",
   "contact_name": "",
   "contact_email": "",
   "source_files": [

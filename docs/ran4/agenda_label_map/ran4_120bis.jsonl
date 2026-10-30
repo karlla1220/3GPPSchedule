@@ -1,0 +1,3 @@
+{"label": "6G system parameter", "agenda_items": ["8.2"], "raw": [{"agenda_item": "8.2", "reason": "6G System parameters study item"}], "note": "", "model": "gemini-3.8-flash (low)", "decided_at": "2026-10-30T09:22:12+00:00"}
+{"label": "Ad-hoc", "agenda_items": [], "raw": [], "note": "Label specifies no agenda subject or work item", "model": "gemini-3.8-flash (low)", "decided_at": "2026-10-30T09:22:12+00:00"}
+{"label": "6G operation efficiency", "agenda_items": ["8.12"], "raw": [{"agenda_item": "8.12", "reason": "6G RAN4 operation efficiency"}], "note": "", "model": "gemini-3.8-flash (low)", "decided_at": "2026-10-30T09:22:12+00:00"}

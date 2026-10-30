@@ -7715,125 +7715,10 @@
           "room_col_start": 2,
           "room_col_end": 3,
           "chair": "Gene FONG",
-          "agenda_item": "5.2.1, 5.2.2, 5.2.3, 5.2.4, 5.3.1, 5.3.2, 5.3.3, 5.3.4, 5.3.5, 5.3.6, 5.3.7, 5.4.1, 5.4.2, 5.4.3, 5.4.4, 5.4.5, 5.5.1, 5.5.2, 5.5.3, 5.5.4, 5.5.5, 5.5.6, 5.6.1, 5.6.2, 5.6.3, 5.6.4, 5.6.5, 5.6.6, 5.6.7, 5.6.8, 5.6.9, 5.7.1, 5.7.2, 5.7.3, 5.7.4, 5.7.5, 5.11.1, 5.11.2, 5.12.1, 5.12.2, 5.12.3, 5.12.4, 5.13.1, 5.13.2, 5.13.3, 5.14.1, 5.14.2",
-          "group_header": "Rel-20 on-going spectrum related work items for NR and LTE",
-          "description": "Rapporteur input (WID/TR/big CR) (do not reserve the draft TR prior to the start of the meeting)\nNo DL interruption for NR and EN-DC band combinations at dynamic Tx Switching in Uplink\nSimultaneous Rx/Tx band combinations for NR CA/DC, NR SUL and LTE/NR DC\nLow NR band carrier aggregation via switching\nRapporteur input (WID/TR/big CR) (do not reserve the draft TR prior to the start of the meeting)\nDC_R20_1BLTE_1BNR_2DL2UL",
-          "agenda_descriptions": [
-            {
-              "agenda_item": "5.2.1",
-              "matched_agenda_item": "5.2.1",
-              "description": "Rapporteur input (WID/TR/big CR) (do not reserve the draft TR prior to the start of the meeting)",
-              "hierarchy": [
-                {
-                  "agenda_item": "5",
-                  "description": "Rel-20 on-going spectrum related work items for NR and LTE"
-                },
-                {
-                  "agenda_item": "5.2",
-                  "description": "Rel-20 Additional NR and LTE band combinations for features [NR_LTE_combos_Features_R20]"
-                },
-                {
-                  "agenda_item": "5.2.1",
-                  "description": "Rapporteur input (WID/TR/big CR) (do not reserve the draft TR prior to the start of the meeting)"
-                }
-              ]
-            },
-            {
-              "agenda_item": "5.2.2",
-              "matched_agenda_item": "5.2.2",
-              "description": "No DL interruption for NR and EN-DC band combinations at dynamic Tx Switching in Uplink",
-              "hierarchy": [
-                {
-                  "agenda_item": "5",
-                  "description": "Rel-20 on-going spectrum related work items for NR and LTE"
-                },
-                {
-                  "agenda_item": "5.2",
-                  "description": "Rel-20 Additional NR and LTE band combinations for features [NR_LTE_combos_Features_R20]"
-                },
-                {
-                  "agenda_item": "5.2.2",
-                  "description": "No DL interruption for NR and EN-DC band combinations at dynamic Tx Switching in Uplink"
-                }
-              ]
-            },
-            {
-              "agenda_item": "5.2.3",
-              "matched_agenda_item": "5.2.3",
-              "description": "Simultaneous Rx/Tx band combinations for NR CA/DC, NR SUL and LTE/NR DC",
-              "hierarchy": [
-                {
-                  "agenda_item": "5",
-                  "description": "Rel-20 on-going spectrum related work items for NR and LTE"
-                },
-                {
-                  "agenda_item": "5.2",
-                  "description": "Rel-20 Additional NR and LTE band combinations for features [NR_LTE_combos_Features_R20]"
-                },
-                {
-                  "agenda_item": "5.2.3",
-                  "description": "Simultaneous Rx/Tx band combinations for NR CA/DC, NR SUL and LTE/NR DC"
-                }
-              ]
-            },
-            {
-              "agenda_item": "5.2.4",
-              "matched_agenda_item": "5.2.4",
-              "description": "Low NR band carrier aggregation via switching",
-              "hierarchy": [
-                {
-                  "agenda_item": "5",
-                  "description": "Rel-20 on-going spectrum related work items for NR and LTE"
-                },
-                {
-                  "agenda_item": "5.2",
-                  "description": "Rel-20 Additional NR and LTE band combinations for features [NR_LTE_combos_Features_R20]"
-                },
-                {
-                  "agenda_item": "5.2.4",
-                  "description": "Low NR band carrier aggregation via switching"
-                }
-              ]
-            },
-            {
-              "agenda_item": "5.3.1",
-              "matched_agenda_item": "5.3.1",
-              "description": "Rapporteur input (WID/TR/big CR) (do not reserve the draft TR prior to the start of the meeting)",
-              "hierarchy": [
-                {
-                  "agenda_item": "5",
-                  "description": "Rel-20 on-going spectrum related work items for NR and LTE"
-                },
-                {
-                  "agenda_item": "5.3",
-                  "description": "Rel-20 Dual connectivity (DC) of x LTE band(s), y NR band(s) (1<=x<6, 1<=y<6, x+y<=6) and single or two NR Supplementary Uplink (SUL) bands [DC_xBLTE_yBNR_R20_HPUE]"
-                },
-                {
-                  "agenda_item": "5.3.1",
-                  "description": "Rapporteur input (WID/TR/big CR) (do not reserve the draft TR prior to the start of the meeting)"
-                }
-              ]
-            },
-            {
-              "agenda_item": "5.3.2",
-              "matched_agenda_item": "5.3.2",
-              "description": "DC_R20_1BLTE_1BNR_2DL2UL",
-              "hierarchy": [
-                {
-                  "agenda_item": "5",
-                  "description": "Rel-20 on-going spectrum related work items for NR and LTE"
-                },
-                {
-                  "agenda_item": "5.3",
-                  "description": "Rel-20 Dual connectivity (DC) of x LTE band(s), y NR band(s) (1<=x<6, 1<=y<6, x+y<=6) and single or two NR Supplementary Uplink (SUL) bands [DC_xBLTE_yBNR_R20_HPUE]"
-                },
-                {
-                  "agenda_item": "5.3.2",
-                  "description": "DC_R20_1BLTE_1BNR_2DL2UL"
-                }
-              ]
-            }
-          ],
+          "agenda_item": null,
+          "group_header": "",
+          "description": null,
+          "agenda_descriptions": [],
           "room_ids": [
             "gene"
           ],
@@ -7850,7 +7735,55 @@
             "[330] NR_LTE_1900MHz_TN_bands (17)",
             "[331] NR_HAPS_SUL_combos (4)"
           ],
-          "inferred_agenda_items": [],
+          "inferred_agenda_items": [
+            "5.2.1",
+            "5.2.2",
+            "5.2.3",
+            "5.2.4",
+            "5.3.1",
+            "5.3.2",
+            "5.3.3",
+            "5.3.4",
+            "5.3.5",
+            "5.3.6",
+            "5.3.7",
+            "5.4.1",
+            "5.4.2",
+            "5.4.3",
+            "5.4.4",
+            "5.4.5",
+            "5.5.1",
+            "5.5.2",
+            "5.5.3",
+            "5.5.4",
+            "5.5.5",
+            "5.5.6",
+            "5.6.1",
+            "5.6.2",
+            "5.6.3",
+            "5.6.4",
+            "5.6.5",
+            "5.6.6",
+            "5.6.7",
+            "5.6.8",
+            "5.6.9",
+            "5.7.1",
+            "5.7.2",
+            "5.7.3",
+            "5.7.4",
+            "5.7.5",
+            "5.11.1",
+            "5.11.2",
+            "5.12.1",
+            "5.12.2",
+            "5.12.3",
+            "5.12.4",
+            "5.13.1",
+            "5.13.2",
+            "5.13.3",
+            "5.14.1",
+            "5.14.2"
+          ],
           "email_details": [],
           "part": null
         },
@@ -8261,7 +8194,9 @@
           "notes": [
             "6G system parameter"
           ],
-          "inferred_agenda_items": [],
+          "inferred_agenda_items": [
+            "8.2"
+          ],
           "email_details": [],
           "part": null
         },
@@ -9359,7 +9294,7 @@
           "day": "Thursday",
           "room_col_start": 2,
           "room_col_end": 3,
-          "chair": "Leo, Jinqiang",
+          "chair": "Leo / Jinqiang",
           "agenda_item": null,
           "group_header": "",
           "description": null,
@@ -9384,7 +9319,7 @@
           "day": "Thursday",
           "room_col_start": 2,
           "room_col_end": 3,
-          "chair": "Ling, Huiping",
+          "chair": "Ling / Huiping",
           "agenda_item": null,
           "group_header": "",
           "description": null,
@@ -9734,125 +9669,10 @@
           "room_col_start": 2,
           "room_col_end": 3,
           "chair": "Gene FONG",
-          "agenda_item": "5.2.1, 5.2.2, 5.2.3, 5.2.4, 5.5.1, 5.5.2, 5.5.3, 5.5.4, 5.5.5, 5.5.6, 5.6.1, 5.6.2, 5.6.3, 5.6.4, 5.6.5, 5.6.6, 5.6.7, 5.6.8, 5.6.9, 5.7.1, 5.7.2, 5.7.3, 5.7.4, 5.7.5, 5.12.1, 5.12.2, 5.12.3, 5.12.4, 5.13.1, 5.13.2, 5.13.3, 12.1, 7.7.2, 7.7.3, 7.7.4, 7.11.2, 7.11.3, 7.1.2, 7.1.3.2, 7.1.3.3, 7.1.3.4, 7.1.5, 4.2, 7.8.2, 7.8.3, 7.2.2, 7.2.3, 7.2.4, 4.4, 7.6.2, 7.6.3, 7.6.6.1.1, 7.6.6.1.2, 7.6.6.2.1, 7.6.6.2.2, 7.6.7, 7.6.4, 7.6.5.1, 7.13.1, 4.6.1, 7.6.5.2, 7.6.6.3, 4.6.2, 7.18.3, 7.19.2, 7.19.3, 7.19.4, 7.20.2, 7.20.3.1, 7.20.3.2, 7.12.2, 7.12.3.1, 7.12.3.2",
-          "group_header": "Rel-20 on-going spectrum related work items for NR and LTE",
-          "description": "Rapporteur input (WID/TR/big CR) (do not reserve the draft TR prior to the start of the meeting)\nNo DL interruption for NR and EN-DC band combinations at dynamic Tx Switching in Uplink\nSimultaneous Rx/Tx band combinations for NR CA/DC, NR SUL and LTE/NR DC\nLow NR band carrier aggregation via switching\nRapporteur input (WID/TR/big CR) (do not reserve the draft TR prior to the start of the meeting)\nIntroduce support of the 3MHz channel for the NTN NR bands",
-          "agenda_descriptions": [
-            {
-              "agenda_item": "5.2.1",
-              "matched_agenda_item": "5.2.1",
-              "description": "Rapporteur input (WID/TR/big CR) (do not reserve the draft TR prior to the start of the meeting)",
-              "hierarchy": [
-                {
-                  "agenda_item": "5",
-                  "description": "Rel-20 on-going spectrum related work items for NR and LTE"
-                },
-                {
-                  "agenda_item": "5.2",
-                  "description": "Rel-20 Additional NR and LTE band combinations for features [NR_LTE_combos_Features_R20]"
-                },
-                {
-                  "agenda_item": "5.2.1",
-                  "description": "Rapporteur input (WID/TR/big CR) (do not reserve the draft TR prior to the start of the meeting)"
-                }
-              ]
-            },
-            {
-              "agenda_item": "5.2.2",
-              "matched_agenda_item": "5.2.2",
-              "description": "No DL interruption for NR and EN-DC band combinations at dynamic Tx Switching in Uplink",
-              "hierarchy": [
-                {
-                  "agenda_item": "5",
-                  "description": "Rel-20 on-going spectrum related work items for NR and LTE"
-                },
-                {
-                  "agenda_item": "5.2",
-                  "description": "Rel-20 Additional NR and LTE band combinations for features [NR_LTE_combos_Features_R20]"
-                },
-                {
-                  "agenda_item": "5.2.2",
-                  "description": "No DL interruption for NR and EN-DC band combinations at dynamic Tx Switching in Uplink"
-                }
-              ]
-            },
-            {
-              "agenda_item": "5.2.3",
-              "matched_agenda_item": "5.2.3",
-              "description": "Simultaneous Rx/Tx band combinations for NR CA/DC, NR SUL and LTE/NR DC",
-              "hierarchy": [
-                {
-                  "agenda_item": "5",
-                  "description": "Rel-20 on-going spectrum related work items for NR and LTE"
-                },
-                {
-                  "agenda_item": "5.2",
-                  "description": "Rel-20 Additional NR and LTE band combinations for features [NR_LTE_combos_Features_R20]"
-                },
-                {
-                  "agenda_item": "5.2.3",
-                  "description": "Simultaneous Rx/Tx band combinations for NR CA/DC, NR SUL and LTE/NR DC"
-                }
-              ]
-            },
-            {
-              "agenda_item": "5.2.4",
-              "matched_agenda_item": "5.2.4",
-              "description": "Low NR band carrier aggregation via switching",
-              "hierarchy": [
-                {
-                  "agenda_item": "5",
-                  "description": "Rel-20 on-going spectrum related work items for NR and LTE"
-                },
-                {
-                  "agenda_item": "5.2",
-                  "description": "Rel-20 Additional NR and LTE band combinations for features [NR_LTE_combos_Features_R20]"
-                },
-                {
-                  "agenda_item": "5.2.4",
-                  "description": "Low NR band carrier aggregation via switching"
-                }
-              ]
-            },
-            {
-              "agenda_item": "5.5.1",
-              "matched_agenda_item": "5.5.1",
-              "description": "Rapporteur input (WID/TR/big CR) (do not reserve the draft TR prior to the start of the meeting)",
-              "hierarchy": [
-                {
-                  "agenda_item": "5",
-                  "description": "Rel-20 on-going spectrum related work items for NR and LTE"
-                },
-                {
-                  "agenda_item": "5.5",
-                  "description": "Rel-20 higher power classes, 3MHz channel bandwidth and (e)RedCap for the existing NR/IoT NTN bands [NTN_bands_Features_R20]"
-                },
-                {
-                  "agenda_item": "5.5.1",
-                  "description": "Rapporteur input (WID/TR/big CR) (do not reserve the draft TR prior to the start of the meeting)"
-                }
-              ]
-            },
-            {
-              "agenda_item": "5.5.2",
-              "matched_agenda_item": "5.5.2",
-              "description": "Introduce support of the 3MHz channel for the NTN NR bands",
-              "hierarchy": [
-                {
-                  "agenda_item": "5",
-                  "description": "Rel-20 on-going spectrum related work items for NR and LTE"
-                },
-                {
-                  "agenda_item": "5.5",
-                  "description": "Rel-20 higher power classes, 3MHz channel bandwidth and (e)RedCap for the existing NR/IoT NTN bands [NTN_bands_Features_R20]"
-                },
-                {
-                  "agenda_item": "5.5.2",
-                  "description": "Introduce support of the 3MHz channel for the NTN NR bands"
-                }
-              ]
-            }
-          ],
+          "agenda_item": null,
+          "group_header": "",
+          "description": null,
+          "agenda_descriptions": [],
           "room_ids": [
             "gene"
           ],
@@ -9865,7 +9685,81 @@
             "BSRF [345]",
             "NTN [346], [347], [348], [349], [350], [351], [356]"
           ],
-          "inferred_agenda_items": [],
+          "inferred_agenda_items": [
+            "5.2.1",
+            "5.2.2",
+            "5.2.3",
+            "5.2.4",
+            "5.5.1",
+            "5.5.2",
+            "5.5.3",
+            "5.5.4",
+            "5.5.5",
+            "5.5.6",
+            "5.6.1",
+            "5.6.2",
+            "5.6.3",
+            "5.6.4",
+            "5.6.5",
+            "5.6.6",
+            "5.6.7",
+            "5.6.8",
+            "5.6.9",
+            "5.7.1",
+            "5.7.2",
+            "5.7.3",
+            "5.7.4",
+            "5.7.5",
+            "5.12.1",
+            "5.12.2",
+            "5.12.3",
+            "5.12.4",
+            "5.13.1",
+            "5.13.2",
+            "5.13.3",
+            "12.1",
+            "7.7.2",
+            "7.7.3",
+            "7.7.4",
+            "7.11.2",
+            "7.11.3",
+            "7.1.2",
+            "7.1.3.2",
+            "7.1.3.3",
+            "7.1.3.4",
+            "7.1.5",
+            "4.2",
+            "7.8.2",
+            "7.8.3",
+            "7.2.2",
+            "7.2.3",
+            "7.2.4",
+            "4.4",
+            "7.6.2",
+            "7.6.3",
+            "7.6.6.1.1",
+            "7.6.6.1.2",
+            "7.6.6.2.1",
+            "7.6.6.2.2",
+            "7.6.7",
+            "7.6.4",
+            "7.6.5.1",
+            "7.13.1",
+            "4.6.1",
+            "7.6.5.2",
+            "7.6.6.3",
+            "4.6.2",
+            "7.18.3",
+            "7.19.2",
+            "7.19.3",
+            "7.19.4",
+            "7.20.2",
+            "7.20.3.1",
+            "7.20.3.2",
+            "7.12.2",
+            "7.12.3.1",
+            "7.12.3.2"
+          ],
           "email_details": [],
           "part": null
         },
@@ -9903,145 +9797,10 @@
           "room_col_start": 2,
           "room_col_end": 3,
           "chair": "Gene FONG",
-          "agenda_item": "8.4.1.1, 8.4.1.2, 8.4.1.3, 8.4.2, 8.4.4.1, 8.4.4.2, 8.4.4.3, 7.21.2, 7.21.4, 7.21.5.1, 7.21.5.2, 7.21.5.3, 7.21.6.1, 7.21.6.2, 7.21.6.3, 7.21.6.4, 7.21.7, 8.4.3.1, 8.4.3.2, 8.4.5, 8.4.6, 8.10.3, 8.10.4, 8.10.5, 8.10.1, 8.10.2",
-          "group_header": "6G study item [FS_6G_Radio]",
-          "description": "Type 1-H enhancement\nTx requirements\nRx requirements\nSAN RF requirements: TP to TR 38.760-4\nModeling an NTN aggressor with multiple LEO satellites including parameters (Common for both NTN-NTN and NTN-TN scenarios)\nNTN-TN coexistence aspects",
-          "agenda_descriptions": [
-            {
-              "agenda_item": "8.4.1.1",
-              "matched_agenda_item": "8.4.1.1",
-              "description": "Type 1-H enhancement",
-              "hierarchy": [
-                {
-                  "agenda_item": "8",
-                  "description": "6G study item [FS_6G_Radio]"
-                },
-                {
-                  "agenda_item": "8.4",
-                  "description": "BS RF and coexistence"
-                },
-                {
-                  "agenda_item": "8.4.1",
-                  "description": "BS RF requirements"
-                },
-                {
-                  "agenda_item": "8.4.1.1",
-                  "description": "Type 1-H enhancement"
-                }
-              ]
-            },
-            {
-              "agenda_item": "8.4.1.2",
-              "matched_agenda_item": "8.4.1.2",
-              "description": "Tx requirements",
-              "hierarchy": [
-                {
-                  "agenda_item": "8",
-                  "description": "6G study item [FS_6G_Radio]"
-                },
-                {
-                  "agenda_item": "8.4",
-                  "description": "BS RF and coexistence"
-                },
-                {
-                  "agenda_item": "8.4.1",
-                  "description": "BS RF requirements"
-                },
-                {
-                  "agenda_item": "8.4.1.2",
-                  "description": "Tx requirements"
-                }
-              ]
-            },
-            {
-              "agenda_item": "8.4.1.3",
-              "matched_agenda_item": "8.4.1.3",
-              "description": "Rx requirements",
-              "hierarchy": [
-                {
-                  "agenda_item": "8",
-                  "description": "6G study item [FS_6G_Radio]"
-                },
-                {
-                  "agenda_item": "8.4",
-                  "description": "BS RF and coexistence"
-                },
-                {
-                  "agenda_item": "8.4.1",
-                  "description": "BS RF requirements"
-                },
-                {
-                  "agenda_item": "8.4.1.3",
-                  "description": "Rx requirements"
-                }
-              ]
-            },
-            {
-              "agenda_item": "8.4.2",
-              "matched_agenda_item": "8.4.2",
-              "description": "SAN RF requirements: TP to TR 38.760-4",
-              "hierarchy": [
-                {
-                  "agenda_item": "8",
-                  "description": "6G study item [FS_6G_Radio]"
-                },
-                {
-                  "agenda_item": "8.4",
-                  "description": "BS RF and coexistence"
-                },
-                {
-                  "agenda_item": "8.4.2",
-                  "description": "SAN RF requirements: TP to TR 38.760-4"
-                }
-              ]
-            },
-            {
-              "agenda_item": "8.4.4.1",
-              "matched_agenda_item": "8.4.4.1",
-              "description": "Modeling an NTN aggressor with multiple LEO satellites including parameters (Common for both NTN-NTN and NTN-TN scenarios)",
-              "hierarchy": [
-                {
-                  "agenda_item": "8",
-                  "description": "6G study item [FS_6G_Radio]"
-                },
-                {
-                  "agenda_item": "8.4",
-                  "description": "BS RF and coexistence"
-                },
-                {
-                  "agenda_item": "8.4.4",
-                  "description": "Adjacent channel coexistence for NTN-NTN and NTN-TN DL-DL"
-                },
-                {
-                  "agenda_item": "8.4.4.1",
-                  "description": "Modeling an NTN aggressor with multiple LEO satellites including parameters (Common for both NTN-NTN and NTN-TN scenarios)"
-                }
-              ]
-            },
-            {
-              "agenda_item": "8.4.4.2",
-              "matched_agenda_item": "8.4.4.2",
-              "description": "NTN-TN coexistence aspects",
-              "hierarchy": [
-                {
-                  "agenda_item": "8",
-                  "description": "6G study item [FS_6G_Radio]"
-                },
-                {
-                  "agenda_item": "8.4",
-                  "description": "BS RF and coexistence"
-                },
-                {
-                  "agenda_item": "8.4.4",
-                  "description": "Adjacent channel coexistence for NTN-NTN and NTN-TN DL-DL"
-                },
-                {
-                  "agenda_item": "8.4.4.2",
-                  "description": "NTN-TN coexistence aspects"
-                }
-              ]
-            }
-          ],
+          "agenda_item": null,
+          "group_header": "",
+          "description": null,
+          "agenda_descriptions": [],
           "room_ids": [
             "gene"
           ],
@@ -10054,7 +9813,34 @@
             "6G coex [361]",
             "Sensing [362], [363]"
           ],
-          "inferred_agenda_items": [],
+          "inferred_agenda_items": [
+            "8.4.1.1",
+            "8.4.1.2",
+            "8.4.1.3",
+            "8.4.2",
+            "8.4.4.1",
+            "8.4.4.2",
+            "8.4.4.3",
+            "7.21.2",
+            "7.21.4",
+            "7.21.5.1",
+            "7.21.5.2",
+            "7.21.5.3",
+            "7.21.6.1",
+            "7.21.6.2",
+            "7.21.6.3",
+            "7.21.6.4",
+            "7.21.7",
+            "8.4.3.1",
+            "8.4.3.2",
+            "8.4.5",
+            "8.4.6",
+            "8.10.3",
+            "8.10.4",
+            "8.10.5",
+            "8.10.1",
+            "8.10.2"
+          ],
           "email_details": [],
           "part": null
         },
@@ -10103,7 +9889,9 @@
           "notes": [
             "6G operation efficiency"
           ],
-          "inferred_agenda_items": [],
+          "inferred_agenda_items": [
+            "8.12"
+          ],
           "email_details": [],
           "part": [
             1,
@@ -10236,7 +10024,7 @@
     }
   ],
   "source_file": "RAN4_120bis_meeting_schedule_THU_afternoon.pptx",
-  "generated_at": "2026-10-30 08:51",
+  "generated_at": "2026-10-30 18:21",
   "contact_name": "",
   "contact_email": "",
   "source_files": [

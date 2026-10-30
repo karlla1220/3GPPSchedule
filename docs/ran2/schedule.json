@@ -778,7 +778,10 @@
           "notes": [
             "1630-1700 [401] A-IoT paging configuration (Huawei)"
           ],
-          "inferred_agenda_items": [],
+          "inferred_agenda_items": [
+            "7.2",
+            "8.2"
+          ],
           "email_details": [],
           "part": null
         },
@@ -1255,7 +1258,10 @@
           "notes": [
             "Until 12:00, Offline [103] for RRC details"
           ],
-          "inferred_agenda_items": [],
+          "inferred_agenda_items": [
+            "5.1.3.1",
+            "9.3.2"
+          ],
           "email_details": [],
           "part": null
         },
@@ -1279,7 +1285,9 @@
           "notes": [
             "CP offlines (RRC delta, Ericsson)"
           ],
-          "inferred_agenda_items": [],
+          "inferred_agenda_items": [
+            "9.3.2.2"
+          ],
           "email_details": [],
           "part": null
         },
@@ -1390,7 +1398,9 @@
           "notes": [
             "CP offlines (list handling, Qualcomm)"
           ],
-          "inferred_agenda_items": [],
+          "inferred_agenda_items": [
+            "9.3.2.2"
+          ],
           "email_details": [],
           "part": null
         },
@@ -1414,7 +1424,9 @@
           "notes": [
             "CP offlines (config structure, CMCC)"
           ],
-          "inferred_agenda_items": [],
+          "inferred_agenda_items": [
+            "9.3.2.2"
+          ],
           "email_details": [],
           "part": null
         },
@@ -1480,7 +1492,9 @@
           "notes": [
             "CP offlines [006] [6G UE caps] Dynamic capability update (Xiaomi)"
           ],
-          "inferred_agenda_items": [],
+          "inferred_agenda_items": [
+            "9.2.1"
+          ],
           "email_details": [],
           "part": null
         },
@@ -1712,7 +1726,12 @@
           "notes": [
             "[005] Offline on AI/ML (oppo)"
           ],
-          "inferred_agenda_items": [],
+          "inferred_agenda_items": [
+            "7.1",
+            "8.1",
+            "8.3",
+            "9.3.3.2"
+          ],
           "email_details": [],
           "part": null
         }
@@ -2021,7 +2040,9 @@
           "notes": [
             "10:00-11:00 ISAC UE SE selection (MediaTek) – Revise email discussion report R2-2607154"
           ],
-          "inferred_agenda_items": [],
+          "inferred_agenda_items": [
+            "9.5"
+          ],
           "email_details": [],
           "part": null
         },
@@ -2045,7 +2066,9 @@
           "notes": [
             "[402] MANET offline (vivo)"
           ],
-          "inferred_agenda_items": [],
+          "inferred_agenda_items": [
+            "7.14"
+          ],
           "email_details": [],
           "part": null
         },
@@ -2057,7 +2080,7 @@
           "day": "Wednesday",
           "room_col_start": 2,
           "room_col_end": 3,
-          "chair": "Erlin, Kyeongin",
+          "chair": "Erlin / Kyeongin",
           "agenda_item": null,
           "group_header": "",
           "description": null,
@@ -2069,7 +2092,10 @@
           "notes": [
             "common AI PHY and AI mob issues (Erlin, Kyeongin)"
           ],
-          "inferred_agenda_items": [],
+          "inferred_agenda_items": [
+            "8.1",
+            "8.3"
+          ],
           "email_details": [],
           "part": null
         },
@@ -2093,7 +2119,9 @@
           "notes": [
             "CP offline"
           ],
-          "inferred_agenda_items": [],
+          "inferred_agenda_items": [
+            "9.3.2"
+          ],
           "email_details": [],
           "part": null
         },
@@ -2117,7 +2145,9 @@
           "notes": [
             "[008] [6G UP] RLC (Nokia)"
           ],
-          "inferred_agenda_items": [],
+          "inferred_agenda_items": [
+            "9.3.1.1"
+          ],
           "email_details": [],
           "part": null
         },
@@ -2444,7 +2474,9 @@
           "notes": [
             "[006] [6G UE caps] Dynamic capability update (Xiaomi)"
           ],
-          "inferred_agenda_items": [],
+          "inferred_agenda_items": [
+            "9.2.1"
+          ],
           "email_details": [],
           "part": null
         },
@@ -2774,7 +2806,9 @@
             "UP offline",
             "[009] [6G UP] CB-PUSCH (Oppo, Ericsson)"
           ],
-          "inferred_agenda_items": [],
+          "inferred_agenda_items": [
+            "9.3.1.3.2"
+          ],
           "email_details": [],
           "part": null
         },
@@ -2843,7 +2877,9 @@
           "notes": [
             "[201][LPWUS] How to address the SA2 LS on subgrouping ID (Ericsson)"
           ],
-          "inferred_agenda_items": [],
+          "inferred_agenda_items": [
+            "7.4"
+          ],
           "email_details": [],
           "part": null
         },
@@ -2867,7 +2903,9 @@
           "notes": [
             "[010] 6G UP] LCP (Lenovo)"
           ],
-          "inferred_agenda_items": [],
+          "inferred_agenda_items": [
+            "9.3.1.3"
+          ],
           "email_details": [],
           "part": null
         },
@@ -2891,7 +2929,11 @@
           "notes": [
             "[101][MOB] (Vivo)"
           ],
-          "inferred_agenda_items": [],
+          "inferred_agenda_items": [
+            "7.6",
+            "8.4",
+            "9.4"
+          ],
           "email_details": [],
           "part": null
         },
@@ -2961,7 +3003,9 @@
             "UP offline",
             "[007] [6G UP] Service characteristics awareness (Interdigital)"
           ],
-          "inferred_agenda_items": [],
+          "inferred_agenda_items": [
+            "9.3.1.2"
+          ],
           "email_details": [],
           "part": null
         },
@@ -3025,7 +3069,11 @@
           "notes": [
             "[102][MOB] (Lenovo)"
           ],
-          "inferred_agenda_items": [],
+          "inferred_agenda_items": [
+            "7.6",
+            "8.4",
+            "9.4"
+          ],
           "email_details": [],
           "part": null
         },
@@ -3094,7 +3142,10 @@
           "notes": [
             "[204][AI PHY] WF for L3 signalling based performance monitoring (ZTE)"
           ],
-          "inferred_agenda_items": [],
+          "inferred_agenda_items": [
+            "7.1",
+            "8.1"
+          ],
           "email_details": [],
           "part": null
         },
@@ -3118,7 +3169,9 @@
           "notes": [
             "CB for Rel-19 LPWUS (focus on outcome of offline #201)"
           ],
-          "inferred_agenda_items": [],
+          "inferred_agenda_items": [
+            "7.4"
+          ],
           "email_details": [],
           "part": null
         },
@@ -3629,7 +3682,9 @@
             "CB for NR20 AI/M PHY,",
             "a) NW side data collection, b) report of offline#204, c) other CB points in order"
           ],
-          "inferred_agenda_items": [],
+          "inferred_agenda_items": [
+            "8.1"
+          ],
           "email_details": [],
           "part": null
         },
@@ -3823,7 +3878,7 @@
     }
   ],
   "source_file": "R2_135b_Schedule_v10.docx",
-  "generated_at": "2026-10-23 16:26",
+  "generated_at": "2026-10-30 18:21",
   "contact_name": "",
   "contact_email": "",
   "source_files": [

@@ -678,7 +678,9 @@
           "notes": [
             "enIMS drafting"
           ],
-          "inferred_agenda_items": [],
+          "inferred_agenda_items": [
+            "20.10.1"
+          ],
           "email_details": [],
           "part": [
             1,
@@ -1041,7 +1043,9 @@
           "notes": [
             "Drafting: 6G Architecture drafting (Option 1, 2, 3)"
           ],
-          "inferred_agenda_items": [],
+          "inferred_agenda_items": [
+            "20.6.0"
+          ],
           "email_details": [],
           "part": null
         },
@@ -2122,7 +2126,9 @@
           "notes": [
             "Drafting: 6G Architecture drafting"
           ],
-          "inferred_agenda_items": [],
+          "inferred_agenda_items": [
+            "20.6.0"
+          ],
           "email_details": [],
           "part": null
         },
@@ -6202,7 +6208,7 @@
     }
   ],
   "source_file": "S2-2610195_SA2-177-Session Plan -r14 - Friday plan.docx",
-  "generated_at": "2026-10-30 09:01",
+  "generated_at": "2026-10-30 10:22",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
