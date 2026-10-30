@@ -226,7 +226,9 @@ def check_document(result: DocResult, texts: dict[str, str], agenda: dict | None
             errors.append(f'{prefix}: lines must be lines of its cited blocks, copied exactly')
             continue
         for ref in session.refs:
-            cited.setdefault(ref, []).extend(line for line in lines if line in block_lines(texts[ref]))
+            # A session over two rows may repeat their one line; only other sessions make it a double citation.
+            own = [line for line in lines if line in block_lines(texts[ref])]
+            cited.setdefault(ref, []).extend(dict.fromkeys(own))
         source = '\n'.join(lines)
         errors += title_errors(prefix, session.title, source)
         expanded = {i for line in lines for i in line_items(line, agenda)}

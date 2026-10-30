@@ -430,6 +430,19 @@ def test_a_document_answer_that_does_not_check_fails_the_build_as_before(tmp_pat
     assert len(gemini.calls) == 2 and problem in gemini.calls[1]
 
 
+def double_citations(sessions):
+    texts = {'t1:r0c1': '08:00 - 09:00', 't1:r1c2': 'Offline*', 't1:r2c2': 'Offline*'}
+    result = llm.DocResult.model_validate({**WEDNESDAY, 'days': ['Wednesday'], 'breaks': [], 'sessions': sessions})
+    return [e for e in llm.check_document(result, texts, None) if 'more than one session' in e]
+
+
+def test_a_line_may_repeat_within_a_session_over_two_rows():
+    both = ['t1:r1c2', 't1:r2c2']
+    assert double_citations([doc_session('08:00', '09:00', 'Offline*', both, ['Offline*', 'Offline*'])]) == []
+    assert double_citations([doc_session('08:00', '09:00', 'Offline*', both[:1], ['Offline*'], [1, 2]),
+                             doc_session('08:00', '09:00', 'Offline*', both[:1], ['Offline*'], [2, 2])])
+
+
 def test_pieces_of_a_block_must_be_complete_and_start_with_their_label(tmp_path):
     split = {**WEDNESDAY, 'sessions': WEDNESDAY['sessions'][:3] + [
         doc_session('17:00', '19:00', 'MobEnh', ['t1:r9c3'], ['MobEnh: AI 15'], [1, 2], items=['15']),
