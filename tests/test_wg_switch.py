@@ -109,6 +109,57 @@ def test_experimental_wgs_say_so_in_the_status_line_and_the_menu():
     assert stable.select_one('.meeting-status').get_text() == 'Ended'
 
 
+def experimental_page(note='Made by <someone> who does not know this WG'):
+    from bs4 import BeautifulSoup
+    meetings = {wg: replace(build_schedule(), wg_id=wg, meeting_id=wg, meeting_name=wg.upper(), is_demo=False,
+                            starts_on='2000-01-01', ends_on='2000-01-02') for wg in ('ran1', 'sa2')}
+    groups = [{'id': 'ran1'}, {'id': 'sa2', 'experimental': True}]
+    return BeautifulSoup(render_navigation(meetings['sa2'], meetings, groups, note), 'html.parser')
+
+
+def run_note(*steps):
+    node = shutil.which('node')
+    if not node:
+        pytest.skip('Node.js is required to execute browser logic')
+    script = experimental_page().select('script')[-1].string
+    result = subprocess.run([node, str(Path(__file__).parent / 'fixtures/wg_experimental_browser.cjs')],
+                            input=json.dumps({'script': script, 'steps': list(steps)}),
+                            text=True, capture_output=True, check=True)
+    return json.loads(result.stdout)
+
+
+def test_the_status_line_mark_is_a_button_for_the_note_and_the_menu_mark_stays_a_label():
+    page = experimental_page()
+    toggle = page.select_one('.meeting-status button.wg-experimental')
+    assert toggle['aria-controls'] == 'wg-experimental-note' and toggle['aria-expanded'] == 'false'
+    note = page.select_one('#wg-experimental-note')
+    assert note.has_attr('hidden') and note.text == 'Made by <someone> who does not know this WG'
+    # Inside a link a button would be invalid and a click must still switch meetings.
+    mark = page.select_one('.wg-switch-item .wg-experimental')
+    assert mark.name == 'span' and mark['title'] == note.text
+
+
+def test_a_page_without_the_mark_gets_no_note():
+    from bs4 import BeautifulSoup
+    meetings = {'ran1': replace(build_schedule(), wg_id='ran1', meeting_id='ran1', is_demo=False)}
+    alone = BeautifulSoup(render_navigation(meetings['ran1'], meetings, [{'id': 'ran1'}]), 'html.parser')
+    assert not alone.select('#wg-experimental, #wg-experimental-note, script')
+
+
+def test_a_click_on_experimental_opens_the_note_and_a_second_one_closes_it():
+    closed, opened, again = run_note('click-toggle', 'click-toggle')
+    assert closed['note'] == 'hidden'
+    assert opened['note'] == 'shown' and opened['expanded'] == 'true'
+    assert again['note'] == 'hidden' and again['expanded'] == 'false'
+
+
+def test_the_note_closes_on_an_outside_click_and_escape_but_not_on_itself():
+    *_, inside, outside = run_note('click-toggle', 'click-note', 'click-outside')
+    assert inside['note'] == 'shown' and outside['note'] == 'hidden'
+    *_, escaped = run_note('click-toggle', 'escape')
+    assert escaped['note'] == 'hidden' and escaped['focused']
+
+
 def test_experimental_must_be_a_boolean(tmp_path):
     from shared.site_config import load_site_config
     path = tmp_path / 'site.json'

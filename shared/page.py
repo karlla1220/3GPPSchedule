@@ -6,7 +6,7 @@ from pathlib import Path
 import re
 from zoneinfo import ZoneInfo
 
-from shared.navigation import TITLE_EMOJI, render_navigation
+from shared.navigation import EXPERIMENTAL_NOTE, TITLE_EMOJI, render_navigation
 
 DEFAULT_NOTICE = (
     "ℹ️ This page is automatically generated from uploaded documents. "
@@ -34,7 +34,8 @@ def normalize_presentation(value=None):
         raise ValueError("presentation must be an object")
     defaults = {"creator": "", "creator_url": "", "creator_bio": "", "disclaimer": "",
                 "feedback_url": "", "support_title": "Support this tool", "support_links": [],
-                "contact_name": "", "contact_email": "", "notice": DEFAULT_NOTICE}
+                "contact_name": "", "contact_email": "", "notice": DEFAULT_NOTICE,
+                "experimental_note": EXPERIMENTAL_NOTE}
     unknown = value.keys() - defaults.keys()
     if unknown:
         raise ValueError(f"Unknown presentation fields: {sorted(unknown)}")
@@ -199,7 +200,7 @@ def render_sources(schedule):
 def render_header(schedule, *, presentation=None, schedules=None, groups=None):
     """Reusable across WG layouts; supplies #tz-now for the schedule clock."""
     metadata = normalize_presentation(presentation)
-    heading = (render_navigation(schedule, schedules, groups) if schedules is not None
+    heading = (render_navigation(schedule, schedules, groups, metadata["experimental_note"]) if schedules is not None
                else f"<h1>{TITLE_EMOJI}{escape(schedule.meeting_name)}</h1>")
     parts = ["<header>", render_help(), heading, render_support_links(metadata["support_links"], metadata["support_title"]),
              f'<p class="meta">Sources: {render_sources(schedule)} &nbsp;|&nbsp; Generated: {escape(schedule.generated_at)} ({escape(schedule.timezone)}) &nbsp;|&nbsp; Now: <span id="tz-now">...</span> ({escape(schedule.timezone)})</p>']

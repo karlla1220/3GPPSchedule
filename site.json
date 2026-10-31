@@ -48,6 +48,7 @@
     "contact_email": "duckhyun.bae@lge.com",
     "disclaimer": "Personal side project · Not affiliated with LG Electronics or 3GPP",
     "feedback_url": "https://github.com/karlla1220/3GPPSchedule/issues",
+    "experimental_note": "Duckhyun built this page without any knowledge of how this WG works. It may read the schedule wrongly, so check the chair's file.",
     "support_title": "Proposal 1: Buy a coffee for Duckhyun",
     "support_links": [
       {
