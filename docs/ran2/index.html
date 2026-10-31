@@ -264,7 +264,26 @@ header .meta {
     color: var(--ink-4);
 }
 /* A WG read from a new source: same line as the status, in amber. */
-.wg-experimental { color: #B45309; cursor: help; }
+.wg-experimental { color: #B45309; }
+/* The status line's mark opens its note. The dotted line says so where no hover
+   does; the padding widens a 15px line for a finger without moving anything. */
+.meeting-status .wg-experimental {
+    margin: -2px -4px -8px;
+    padding: 2px 4px 8px;
+    border: 0;
+    background: none;
+    font: inherit;
+    letter-spacing: inherit;
+    text-transform: inherit;
+    text-decoration: underline dotted;
+    text-underline-offset: 2px;
+    cursor: help;
+}
+.meeting-status .wg-experimental:focus-visible { outline: 2px solid #2563EB; outline-offset: -2px; border-radius: 4px; }
+/* Above the one-time switch hint, which sits at the same spot. It is centred on
+   the whole status line, so that hint's arrow would point beside the word. */
+.wg-experimental-note { z-index: 56; padding-right: 12px; }
+.wg-experimental-note::before { display: none; }
 .wg-switch-item .wg-experimental {
     margin-left: 6px;
     font-size: 10px;
@@ -2449,7 +2468,7 @@ header .meta a:focus-visible,
     guide.addEventListener('close', finish);
 })();
 </script>
-<div class="wg-title"><details class="wg-switch" id="wg-switch"><summary title="Switch meeting"><h1><span class="wg-emoji" aria-hidden="true">📅</span>RAN2#135bis</h1><span class="wg-switch-chevron" aria-hidden="true">▼</span></summary><nav class="wg-switch-menu" aria-label="Working group meetings"><p class="wg-switch-group">Upcoming</p><a class="wg-switch-item" href="../ran3/"><span>RAN3#134<span class="wg-experimental" title="New source for this site: the schedule may be read wrongly. Check the chair's file.">Experimental</span></span><span class="wg-switch-dates">16–20 Nov</span></a><p class="wg-switch-group">Ended</p><a class="wg-switch-item wg-switch-past" href="../ran-plenary/"><span>RAN#113</span><span class="wg-switch-dates">14–17 Sep</span></a><a class="wg-switch-item wg-switch-past" href="../ran1/"><span>RAN1#126bis</span><span class="wg-switch-dates">12–16 Oct</span></a><a class="wg-switch-item wg-switch-past" href="../ran2/" aria-current="page"><span>RAN2#135bis</span><span class="wg-switch-dates">12–16 Oct</span></a><a class="wg-switch-item wg-switch-past" href="../ran4/"><span>RAN4#120bis<span class="wg-experimental" title="New source for this site: the schedule may be read wrongly. Check the chair's file.">Experimental</span></span><span class="wg-switch-dates">12–16 Oct</span></a><a class="wg-switch-item wg-switch-past" href="../sa1/"><span>SA1#115<span class="wg-experimental" title="New source for this site: the schedule may be read wrongly. Check the chair's file.">Experimental</span></span><span class="wg-switch-dates">24–28 Aug</span></a><a class="wg-switch-item wg-switch-past" href="../sa2/"><span>SA2#177<span class="wg-experimental" title="New source for this site: the schedule may be read wrongly. Check the chair's file.">Experimental</span></span><span class="wg-switch-dates">12–16 Oct</span></a></nav></details><span class="meeting-status">Ended</span><p class="wg-switch-hint" id="wg-switch-hint" hidden><span><strong>Switch meetings here</strong> — RAN3#134, RAN#113, RAN1#126bis, RAN4#120bis, SA1#115, SA2#177</span><button type="button">Got it</button></p></div>
+<div class="wg-title"><details class="wg-switch" id="wg-switch"><summary title="Switch meeting"><h1><span class="wg-emoji" aria-hidden="true">📅</span>RAN2#135bis</h1><span class="wg-switch-chevron" aria-hidden="true">▼</span></summary><nav class="wg-switch-menu" aria-label="Working group meetings"><p class="wg-switch-group">Upcoming</p><a class="wg-switch-item" href="../ran3/"><span>RAN3#134<span class="wg-experimental" title="Duckhyun built this page without any knowledge of how this WG works. It may read the schedule wrongly, so check the chair&#x27;s file.">Experimental</span></span><span class="wg-switch-dates">16–20 Nov</span></a><p class="wg-switch-group">Ended</p><a class="wg-switch-item wg-switch-past" href="../ran-plenary/"><span>RAN#113</span><span class="wg-switch-dates">14–17 Sep</span></a><a class="wg-switch-item wg-switch-past" href="../ran1/"><span>RAN1#126bis</span><span class="wg-switch-dates">12–16 Oct</span></a><a class="wg-switch-item wg-switch-past" href="../ran2/" aria-current="page"><span>RAN2#135bis</span><span class="wg-switch-dates">12–16 Oct</span></a><a class="wg-switch-item wg-switch-past" href="../ran4/"><span>RAN4#120bis<span class="wg-experimental" title="Duckhyun built this page without any knowledge of how this WG works. It may read the schedule wrongly, so check the chair&#x27;s file.">Experimental</span></span><span class="wg-switch-dates">12–16 Oct</span></a><a class="wg-switch-item wg-switch-past" href="../sa1/"><span>SA1#115<span class="wg-experimental" title="Duckhyun built this page without any knowledge of how this WG works. It may read the schedule wrongly, so check the chair&#x27;s file.">Experimental</span></span><span class="wg-switch-dates">24–28 Aug</span></a><a class="wg-switch-item wg-switch-past" href="../sa2/"><span>SA2#177<span class="wg-experimental" title="Duckhyun built this page without any knowledge of how this WG works. It may read the schedule wrongly, so check the chair&#x27;s file.">Experimental</span></span><span class="wg-switch-dates">12–16 Oct</span></a></nav></details><span class="meeting-status">Ended</span><p class="wg-switch-hint" id="wg-switch-hint" hidden><span><strong>Switch meetings here</strong> — RAN3#134, RAN#113, RAN1#126bis, RAN4#120bis, SA1#115, SA2#177</span><button type="button">Got it</button></p></div>
 <script>// Runs right after the meeting title, before the grid below is laid out.
 // The title opens a menu of every WG's meeting; a one-time hint says so.
 (function() {
