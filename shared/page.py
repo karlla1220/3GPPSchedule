@@ -145,20 +145,20 @@ HELP_STEPS = (
              "Tap the heading to fold it."},
     {"key": "topics", "target": ".topic-references", "title": "Topics",
      "text": "The chair\u2019s topics with their documents, notes and agenda items. Tap the heading to fold it."},
-    {"key": "help", "target": "#help-button", "title": "Help is always here",
-     "text": "Start this tour again any time. The page reloads itself every few minutes "
+    {"key": "help", "target": "#help-button", "title": "This tour is always here",
+     "text": "Press How to use to start it again. The page reloads itself every few minutes "
              "and comes back to the day and spot you were looking at."},
 )
 
 
 def render_help():
-    """The Help button at the top left and the tour it starts."""
+    """The How to use button at the top left and the tour it starts."""
     script = (Path(__file__).resolve().parent.parent / "templates" / "help-guide.js").read_text(encoding="utf-8")
     # "<" is escaped so no step text can close the inline script.
     steps = json.dumps(HELP_STEPS, ensure_ascii=False).replace("<", "\\u003c")
     return (
-        '<button type="button" class="help-button" id="help-button" aria-label="Help" title="How to use this page" '
-        'aria-haspopup="dialog" aria-controls="help-guide"><span aria-hidden="true">?</span></button>\n'
+        '<button type="button" class="help-button" id="help-button" title="How to use this page" '
+        'aria-haspopup="dialog" aria-controls="help-guide">How to use</button>\n'
         '<dialog class="help-guide" id="help-guide" aria-labelledby="help-title" aria-describedby="help-text">'
         '<div class="help-spot" aria-hidden="true"></div>'
         '<section class="help-card"><div class="help-card-head"><span class="help-count"></span>'

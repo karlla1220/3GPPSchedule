@@ -26,9 +26,9 @@ def guide_script():
 def test_the_help_button_comes_first_and_opens_the_tour():
     page = header()
     button = page.header.find(True)
-    # The glyph alone; the name is for screen readers, the title for a pointer resting on it.
-    assert button['id'] == 'help-button' and button.get_text() == '?' and button.span['aria-hidden'] == 'true'
-    assert button['aria-label'] == 'Help' and button['title'] == 'How to use this page'
+    # Its words are its name: screen readers say what the pill says.
+    assert button['id'] == 'help-button' and button.get_text() == 'How to use' and not button.has_attr('aria-label')
+    assert button['title'] == 'How to use this page'
     assert button['aria-controls'] == 'help-guide' and button['aria-haspopup'] == 'dialog'
     guide = page.select_one('dialog#help-guide')
     assert guide['aria-labelledby'] == 'help-title' and guide['aria-describedby'] == 'help-text'

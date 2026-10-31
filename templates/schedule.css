@@ -1566,37 +1566,44 @@ header .meta a:focus-visible,
 
 /* ── Help ── */
 /* The top left of the titles' row, out of the flow like the coffee block at
-   the right. A "?" alone in a round control: white face and hairline like
-   the title switcher, centred on that button (34px tall, the header's top);
-   the coffee block's two lines centre on the button and its status line. */
+   the right. Words that say what it opens, in the title switcher's shape:
+   the same height and corners, level with it at the header's top. The
+   coffee block's two lines centre on the button and its status line. A solid
+   face, not the switcher's white one:
+   white on the near-white page disappears in the corner. --ink-2, the
+   switcher's chevron colour, keeps it quieter than the title in --ink. */
 .help-button {
     position: absolute;
-    top: 1px;
+    top: 0;
     left: 0;
     z-index: 2;
     display: inline-flex;
     align-items: center;
-    justify-content: center;
-    width: 32px;
-    height: 32px;
-    padding: 0;
+    height: 34px;
+    padding: 0 13px;
     border: none;
-    border-radius: 50%;
-    background: var(--surface);
-    box-shadow: 0 0 0 1px var(--hairline), 0 1px 2px rgba(15,23,42,.05);
-    color: var(--ink-2);
+    border-radius: 10px;
+    background: var(--ink-2);
+    box-shadow: 0 1px 2px rgba(15,23,42,.18);
+    color: #fff;
     font: inherit;
-    font-size: 15px;
+    font-size: 14px;
     font-weight: 600;
     line-height: 1;
+    white-space: nowrap;
     cursor: pointer;
 }
 .help-button[hidden] { display: none; }
-.help-button:hover { color: var(--ink); box-shadow: 0 0 0 1px #D3D7DE, 0 2px 6px rgba(15,23,42,.08); }
+.help-button:hover { background: var(--ink); box-shadow: 0 2px 6px rgba(15,23,42,.24); }
 .help-button:focus-visible { outline: 2px solid #2563EB; outline-offset: 3px; }
 @media (max-width: 600px) {
-    /* The switcher is 30px tall here. */
-    .help-button { top: 0; width: 30px; height: 30px; font-size: 14px; }
+    /* The switcher is 30px tall here. The button shares the row with a centred
+       title, so it gives up size and tracking rather than touch it. */
+    .help-button { height: 30px; padding: 0 9px; font-size: 12px; letter-spacing: -.01em; }
+}
+@media (max-width: 340px) {
+    /* The longest title (168px) leaves 68px at 320px. */
+    .help-button { padding: 0 7px; font-size: 11px; }
 }
 
 /* The tour: the page stays, dimmed around the one thing a step points at.
