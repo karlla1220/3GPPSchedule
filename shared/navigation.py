@@ -12,12 +12,20 @@ from shared.portal_meetings import find_meeting, timezone_reference
 # so the other WGs read as meetings to switch to rather than meta text.
 TITLE_EMOJI = '<span class="wg-emoji" aria-hidden="true">📅</span>'
 # WGs outside RAN plenary, RAN1 and RAN2 are new sources (site.json "experimental").
-EXPERIMENTAL = ('<span class="wg-experimental" title="New source for this site: '
-                'the schedule may be read wrongly. Check the chair\'s file.">Experimental</span>')
+EXPERIMENTAL_NOTE = "New source for this site: the schedule may be read wrongly. Check the chair's file."
 
 
 def is_experimental(wg_id, groups):
     return any(group["id"] == wg_id and group.get("experimental") for group in groups or [])
+
+
+def _experimental_status(note):
+    """The status line's mark opens its note on a click; a hover title never shows on a phone."""
+    toggle = ('<button type="button" class="wg-experimental" id="wg-experimental" aria-expanded="false" '
+              'aria-controls="wg-experimental-note">Experimental</button>')
+    bubble = (f'<p class="wg-switch-hint wg-experimental-note" id="wg-experimental-note" hidden>{escape(note)}</p>')
+    script = (Path(__file__).resolve().parent.parent / "templates" / "wg-experimental.js").read_text(encoding="utf-8")
+    return toggle, bubble, f'<script>{script}</script>'
 
 
 def select_default_wg(config, schedules, meetings=None, now=None):
@@ -108,7 +116,7 @@ def _date_range(starts_on, ends_on):
     return f"{first} \u2013 {last}"
 
 
-def _menu(selected, entries, groups):
+def _menu(selected, entries, groups, note):
     sections = []
     for status in STATUS_ORDER:
         rows = []
@@ -118,7 +126,9 @@ def _menu(selected, entries, groups):
             classes = "wg-switch-item" + (" wg-switch-past" if status in ("Ended", "Demo") else "")
             current = ' aria-current="page"' if group["id"] == selected.wg_id else ""
             dates = _date_range(schedule.starts_on, schedule.ends_on)
-            mark = EXPERIMENTAL if is_experimental(group["id"], groups) else ""
+            # Part of the link: a click goes to the meeting, whose status line explains it.
+            mark = (f'<span class="wg-experimental" title="{escape(note, quote=True)}">Experimental</span>'
+                    if is_experimental(group["id"], groups) else "")
             rows.append(f'<a class="{classes}" href="../{escape(group["id"])}/"{current}>'
                         f'<span>{escape(schedule.meeting_name)}{mark}</span>'
                         + (f'<span class="wg-switch-dates">{dates}</span>' if dates else "") + '</a>')
@@ -127,17 +137,20 @@ def _menu(selected, entries, groups):
     return '<nav class="wg-switch-menu" aria-label="Working group meetings">' + "".join(sections) + "</nav>"
 
 
-def render_navigation(selected, schedules, groups):
+def render_navigation(selected, schedules, groups, experimental_note=EXPERIMENTAL_NOTE):
     """The meeting title is the switcher: it opens every WG's meeting, active ones first."""
     configured = [(group, schedules[group["id"]]) for group in groups if group["id"] in schedules]
     order = {group["id"]: index for index, (group, _) in enumerate(configured)}
     entries = sorted(configured, key=lambda entry: (
         STATUS_ORDER.index(meeting_status(entry[1])), tsg_rank(entry[0]["id"]), order[entry[0]["id"]]))
     title = f"<h1>{TITLE_EMOJI}{escape(selected.meeting_name)}</h1>"
-    mark = " \u00b7 " + EXPERIMENTAL if is_experimental(selected.wg_id, groups) else ""
-    status = f'<span class="meeting-status">{meeting_status(selected)}{mark}</span>'
+    toggle, bubble, note_script = "", "", ""
+    if is_experimental(selected.wg_id, groups):
+        toggle, bubble, note_script = _experimental_status(experimental_note)
+        toggle = " \u00b7 " + toggle
+    status = f'<span class="meeting-status">{meeting_status(selected)}{toggle}</span>{bubble}'
     if len(entries) < 2:
-        return f'<div class="wg-title">{title}{status}</div>'
+        return f'<div class="wg-title">{title}{status}</div>{note_script}'
     others = ", ".join(escape(schedule.meeting_name) for group, schedule in entries if group["id"] != selected.wg_id)
     script = (Path(__file__).resolve().parent.parent / "templates" / "wg-switch.js").read_text(encoding="utf-8")
     # "<" is escaped so a WG id can never close the inline script.
@@ -145,9 +158,9 @@ def render_navigation(selected, schedules, groups):
     return (
         '<div class="wg-title"><details class="wg-switch" id="wg-switch">'
         f'<summary title="Switch meeting">{title}<span class="wg-switch-chevron" aria-hidden="true">\u25BC</span></summary>'
-        f'{_menu(selected, entries, groups)}</details>{status}'
+        f'{_menu(selected, entries, groups, experimental_note)}</details>{status}'
         '<p class="wg-switch-hint" id="wg-switch-hint" hidden>'
         f'<span><strong>Switch meetings here</strong> \u2014 {others}</span>'
         '<button type="button">Got it</button></p></div>\n'
-        f'<script>{script.replace("{{WG_IDS_JSON}}", ids)}</script>'
+        f'<script>{script.replace("{{WG_IDS_JSON}}", ids)}</script>{note_script}'
     )

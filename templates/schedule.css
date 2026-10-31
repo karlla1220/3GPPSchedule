@@ -254,7 +254,26 @@ header .meta {
     color: var(--ink-4);
 }
 /* A WG read from a new source: same line as the status, in amber. */
-.wg-experimental { color: #B45309; cursor: help; }
+.wg-experimental { color: #B45309; }
+/* The status line's mark opens its note. The dotted line says so where no hover
+   does; the padding widens a 15px line for a finger without moving anything. */
+.meeting-status .wg-experimental {
+    margin: -2px -4px -8px;
+    padding: 2px 4px 8px;
+    border: 0;
+    background: none;
+    font: inherit;
+    letter-spacing: inherit;
+    text-transform: inherit;
+    text-decoration: underline dotted;
+    text-underline-offset: 2px;
+    cursor: help;
+}
+.meeting-status .wg-experimental:focus-visible { outline: 2px solid #2563EB; outline-offset: -2px; border-radius: 4px; }
+/* Above the one-time switch hint, which sits at the same spot. It is centred on
+   the whole status line, so that hint's arrow would point beside the word. */
+.wg-experimental-note { z-index: 56; padding-right: 12px; }
+.wg-experimental-note::before { display: none; }
 .wg-switch-item .wg-experimental {
     margin-left: 6px;
     font-size: 10px;

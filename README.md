@@ -1273,6 +1273,7 @@ Please send email to duckhyun.bae@lge.com or use issue in repo.
   "contact_email": "duckhyun.bae@lge.com",
   "disclaimer": "Personal side project · Not affiliated with LG Electronics or 3GPP",
   "feedback_url": "https://github.com/karlla1220/3GPPSchedule/issues",
+  "experimental_note": "Duckhyun built this page without any knowledge of how this WG works. ...",
   "support_title": "Proposal 1: Buy a coffee for Duckhyun",
   "support_links": [
     {"label": "Patreon", "url": "https://www.patreon.com/..."},
@@ -1292,6 +1293,7 @@ Personal side project · Not affiliated with LG Electronics or 3GPP · Feedback
 ```
 
 - `creator_url`은 이름에, `feedback_url`은 `Feedback`에 걸립니다. 값을 비우면 그 링크(또는 그 줄)를 숨깁니다.
+- `experimental_note`는 Experimental WG의 상태 줄에서 `Experimental`을 누르면 뜨는 설명입니다.
 - `support_links`는 후원 수단 목록입니다. 적은 순서대로 `label`이 링크 글자가 되어 `A or B`(셋 이상은 `A, B or C`)로 이어집니다.
   첫 줄 문구는 `support_title`이고, 생략하면 `Support this tool`입니다.
   화면 폭 1024px 이하에서는 제목 줄 아래 가운데 한 줄로 내려옵니다.
