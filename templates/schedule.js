@@ -423,12 +423,16 @@ document.addEventListener('DOMContentLoaded', function() {
         const todayPanel = document.getElementById(weekday);
         if (!todayPanel || (todayPanel.dataset.date && todayPanel.dataset.date !== date)) return;
         addNowLine(todayPanel.querySelector('.schedule-grid'), minutes);
-        // In the All view, across today's rooms only.
+        // In the All view the NOW label stays on the time axis, and the red
+        // line runs across today's rooms only (schedule.css).
         const today = document.querySelector('.week-day[data-day="' + weekday + '"]');
-        if (today) addNowLine(today.parentElement, minutes, today.style.gridColumn);
+        if (today) {
+            addNowLine(today.parentElement, minutes, 'now-label');
+            addNowLine(today.parentElement, minutes, 'now-today', today.style.gridColumn);
+        }
     }
 
-    function addNowLine(grid, minutes, column) {
+    function addNowLine(grid, minutes, kind, column) {
         if (!grid) return;
         const base = Number(grid.dataset.start);
         const end = Number(grid.dataset.end);
@@ -436,7 +440,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (minutes >= base && minutes < end) {
             const row = Math.floor((minutes - base) / interval) + Number(grid.dataset.firstRow || 2);
             const nowLine = document.createElement('div');
-            nowLine.className = 'now-line';
+            nowLine.className = kind ? 'now-line ' + kind : 'now-line';
             nowLine.style.gridRow = row + ' / ' + (row + 1);
             if (column) nowLine.style.gridColumn = column;
             grid.appendChild(nowLine);

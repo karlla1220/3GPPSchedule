@@ -31,19 +31,34 @@ elements.set('popup-backdrop', element());
 elements.set('popup-close-btn', element());
 elements.set('popup-floating', element());
 elements.set('popup-content', element());
-for (const day of ['monday', 'tuesday', 'wednesday', 'thursday', 'friday']) {
+const DAYS = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday'];
+for (const day of DAYS) {
     const grid = element();
     grid.dataset = {start: '480', end: '1080', slot: '5'};
-    grid.appendChild = line => lines.push(line);
+    grid.appendChild = line => { line.grid = day; lines.push(line); };
     const panel = element();
     panel.querySelector = () => grid;
     elements.set(day, panel);
+}
+// The All view (input.allDays): one grid under the day names, each day five rooms wide.
+const weekGrid = element();
+weekGrid.dataset = {start: '480', end: '1080', slot: '5', firstRow: '3'};
+weekGrid.appendChild = line => { line.grid = 'all-days'; lines.push(line); };
+const weekDays = new Map(DAYS.map((day, i) => {
+    const name = element();
+    name.style.gridColumn = (2 + i * 6) + ' / ' + (7 + i * 6);
+    name.parentElement = weekGrid;
+    return [day, name];
+}));
+function querySelector(selector) {
+    const day = input.allDays && /^\.week-day\[data-day="(\w+)"\]$/.exec(selector);
+    return (day && weekDays.get(day[1])) || null;
 }
 const context = {
     Date: ClockDate, Intl, Number, Math, JSON,
     document: {
         getElementById: id => elements.get(id) ?? null,
-        querySelector: () => null,
+        querySelector,
         querySelectorAll: selector => selector === '.now-line' ? [...lines] : [],
         createElement: element,
         addEventListener(event, fn) { listeners[event] = fn; },
@@ -63,7 +78,10 @@ vm.runInNewContext(input.script, context);
 listeners.DOMContentLoaded();
 function state() {
     return {pressed: button.attrs['aria-pressed'], disabled: button.disabled,
-            lines: lines.length, stored, nextTimer: Math.min(...[...timers.values()].map(t => t.at))};
+            lines: lines.length, stored,
+            drawn: lines.map(line => ({grid: line.grid, class: line.className,
+                                       row: line.style.gridRow, column: line.style.gridColumn ?? null})),
+            nextTimer: Math.min(...[...timers.values()].map(t => t.at))};
 }
 const states = [state()];
 for (const step of input.steps ?? []) {

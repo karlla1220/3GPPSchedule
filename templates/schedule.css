@@ -1911,6 +1911,12 @@ header .meta a:focus-visible,
     overflow: hidden;
 }
 
+/* NOW: the label on the time axis, the red line across today's rooms only
+   (schedule.js). The label's own line spans the grid as a day's does, so the
+   label sticks to the axis while the grid scrolls, but it draws no red. */
+.now-line.now-label { background: none; }
+.now-line.now-today::before { content: none; }
+
 /* The bar is thin and the margin half the day's: every pixel of a 52px room
    goes to the title. The height budget of a day's cell does not apply here. */
 .session-block.week-cell {
