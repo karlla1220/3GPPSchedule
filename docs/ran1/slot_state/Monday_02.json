@@ -2,7 +2,9 @@
   "day": "Monday",
   "time_block_index": 2,
   "source_hashes": {
-    "Main Schedule": "21aba3558b94a535"
+    "Main Schedule": "21aba3558b94a535",
+    "Hiroki's schedule": "11fadd0620e9c616",
+    "Sorour's schedule": "6a5ee4f3b36bb940"
   },
   "merged_sessions": [
     {
@@ -107,10 +109,11 @@
       "duration_minutes": 40,
       "specified_start_time": null,
       "chair": "Sorour",
-      "group_header": "R20",
+      "group_header": "R20 NR",
       "agenda_item": "9.4",
       "source_cells": [
-        "c2ae44a"
+        "c2ae44a",
+        "c83f2ec"
       ],
       "description": "GNSS resilient NR-NTN operation",
       "agenda_descriptions": [
@@ -139,10 +142,11 @@
       "duration_minutes": 20,
       "specified_start_time": null,
       "chair": "Sorour",
-      "group_header": "R20",
+      "group_header": "R20 NR",
       "agenda_item": "9.5",
       "source_cells": [
-        "c2ae44a"
+        "c2ae44a",
+        "c83f2ec"
       ],
       "description": "NR NTN in systems using downlink compensation",
       "agenda_descriptions": [
@@ -174,7 +178,8 @@
       "group_header": "6GR",
       "agenda_item": "10.7.1",
       "source_cells": [
-        "c2ae44a"
+        "c2ae44a",
+        "c83f2ec"
       ],
       "description": "NTN specific requirements and design",
       "agenda_descriptions": [
@@ -211,7 +216,8 @@
       "group_header": "R20",
       "agenda_item": "9.3.1",
       "source_cells": [
-        "ccd1225"
+        "ccd1225",
+        "c3c8b5e"
       ],
       "description": "R2D signals, channels, waveform and procedures",
       "agenda_descriptions": [
@@ -248,7 +254,8 @@
       "group_header": "6GR",
       "agenda_item": "10.8.2",
       "source_cells": [
-        "ccd1225"
+        "ccd1225",
+        "c3c8b5e"
       ],
       "description": "Aspects of integration with communication",
       "agenda_descriptions": [
@@ -490,7 +497,8 @@
       "group_header": "6GR",
       "agenda_item": "10.5.4.1, 10.5.4.3, 10.5.4.4",
       "source_cells": [
-        "c1b5745"
+        "c1b5745",
+        "c65abf4"
       ],
       "description": "Downlink control channel, scheduling for downlink and uplink transmission",
       "agenda_descriptions": [
@@ -578,7 +586,7 @@
       ]
     }
   ],
-  "merged_at": "2026-11-02T17:22:07.627397+00:00",
+  "merged_at": "2026-11-02T17:42:37.804299+00:00",
   "meeting_id": "ran1#126bis",
   "schema_version": 3
 }

@@ -2,7 +2,8 @@
   "day": "Monday",
   "time_block_index": 1,
   "source_hashes": {
-    "Main Schedule": "d0be89ed91da100d"
+    "Main Schedule": "d0be89ed91da100d",
+    "Hiroki's schedule": "3c7b49951a6fdf2b"
   },
   "merged_sessions": [
     {
@@ -214,7 +215,8 @@
       "group_header": "R20",
       "agenda_item": "9.3.1, 9.3.2",
       "source_cells": [
-        "c9211ee"
+        "c9211ee",
+        "c134759"
       ],
       "description": "R2D signals, channels, waveform and procedures",
       "agenda_descriptions": [
@@ -278,14 +280,15 @@
     },
     {
       "room_name": "RAN1_off2",
-      "name": "10.8.x Sensing",
+      "name": "6G ISAC",
       "duration_minutes": 60,
       "specified_start_time": "11:30",
       "chair": "Hiroki",
       "group_header": "6GR",
       "agenda_item": "10.8.2",
       "source_cells": [
-        "c8010ae"
+        "c8010ae",
+        "c6ad5c9"
       ],
       "description": "Aspects of integration with communication",
       "agenda_descriptions": [
@@ -315,14 +318,15 @@
     },
     {
       "room_name": "RAN1_off2",
-      "name": "10.2.1 Waveform",
+      "name": "6G waveform",
       "duration_minutes": 30,
       "specified_start_time": "12:30",
       "chair": "Hiroki",
       "group_header": "6GR",
       "agenda_item": "10.2.1",
       "source_cells": [
-        "c8010ae"
+        "c8010ae",
+        "c6ad5c9"
       ],
       "description": "Waveform",
       "agenda_descriptions": [
@@ -351,7 +355,7 @@
       ]
     }
   ],
-  "merged_at": "2026-11-02T17:22:07.625730+00:00",
+  "merged_at": "2026-11-02T17:42:37.802738+00:00",
   "meeting_id": "ran1#126bis",
   "schema_version": 3
 }

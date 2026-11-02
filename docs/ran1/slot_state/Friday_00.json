@@ -2,7 +2,9 @@
   "day": "Friday",
   "time_block_index": 0,
   "source_hashes": {
-    "Main Schedule": "20d109d77039e470"
+    "Main Schedule": "20d109d77039e470",
+    "Hiroki's schedule": "60f65f6c7f164039",
+    "Sorour's schedule": "1a99781cecd9bb9d"
   },
   "merged_sessions": [
     {
@@ -133,14 +135,15 @@
     },
     {
       "room_name": "RAN1_brk1",
-      "name": "10.7.1 NTN",
+      "name": "AI 10.7.1 NTN",
       "duration_minutes": 60,
       "specified_start_time": null,
-      "chair": null,
+      "chair": "Sorour",
       "group_header": "6GR",
       "agenda_item": "10.7.1",
       "source_cells": [
-        "cee38c1"
+        "cee38c1",
+        "c102dd1"
       ],
       "description": "NTN specific requirements and design",
       "agenda_descriptions": [
@@ -170,14 +173,15 @@
     },
     {
       "room_name": "RAN1_brk1",
-      "name": "10.5.2.x",
+      "name": "AI 10.5.2.x",
       "duration_minutes": 60,
       "specified_start_time": null,
-      "chair": null,
+      "chair": "Sorour",
       "group_header": "6GR",
       "agenda_item": "10.5.2.x",
       "source_cells": [
-        "cee38c1"
+        "cee38c1",
+        "c102dd1"
       ],
       "description": "MIMO operation",
       "agenda_descriptions": [
@@ -228,7 +232,8 @@
       "group_header": "R20 / A-IoT Phase2",
       "agenda_item": "9.3.3",
       "source_cells": [
-        "cf41f07"
+        "cf41f07",
+        "c37481c"
       ],
       "description": "Other procedures",
       "agenda_descriptions": [
@@ -265,7 +270,8 @@
       "group_header": "R20 / A-IoT Phase2",
       "agenda_item": "9.3.1",
       "source_cells": [
-        "cf41f07"
+        "cf41f07",
+        "c37481c"
       ],
       "description": "R2D signals, channels, waveform and procedures",
       "agenda_descriptions": [
@@ -302,7 +308,8 @@
       "group_header": "R20 / A-IoT Phase2",
       "agenda_item": "9.3.2",
       "source_cells": [
-        "cf41f07"
+        "cf41f07",
+        "c37481c"
       ],
       "description": "D2R signals, channels, waveform and procedures",
       "agenda_descriptions": [
@@ -331,7 +338,7 @@
       ]
     }
   ],
-  "merged_at": "2026-11-02T17:22:07.654548+00:00",
+  "merged_at": "2026-11-02T17:42:37.831671+00:00",
   "meeting_id": "ran1#126bis",
   "schema_version": 3
 }

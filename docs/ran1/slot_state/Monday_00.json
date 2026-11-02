@@ -2,7 +2,8 @@
   "day": "Monday",
   "time_block_index": 0,
   "source_hashes": {
-    "Main Schedule": "ea1ec443d68f679c"
+    "Main Schedule": "ea1ec443d68f679c",
+    "Hiroki's schedule": "7f3337c13251093f"
   },
   "merged_sessions": [
     {
@@ -14,7 +15,8 @@
       "group_header": "",
       "agenda_item": "1, 2, 3, 4, 5",
       "source_cells": [
-        "cd0b357"
+        "cd0b357",
+        "c4c83f0"
       ],
       "description": "Opening of the meeting",
       "agenda_descriptions": [
@@ -123,7 +125,7 @@
       ]
     }
   ],
-  "merged_at": "2026-11-02T17:22:07.624226+00:00",
+  "merged_at": "2026-11-02T17:42:37.801385+00:00",
   "meeting_id": "ran1#126bis",
   "schema_version": 3
 }

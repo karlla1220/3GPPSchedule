@@ -2,7 +2,9 @@
   "day": "Monday",
   "time_block_index": 3,
   "source_hashes": {
-    "Main Schedule": "5041886b252470c4"
+    "Main Schedule": "5041886b252470c4",
+    "Hiroki's schedule": "4b7abe664fe970dc",
+    "Sorour's schedule": "156bb10df6dbda4d"
   },
   "merged_sessions": [
     {
@@ -179,10 +181,11 @@
       "duration_minutes": 40,
       "specified_start_time": null,
       "chair": "Sorour",
-      "group_header": "R20",
+      "group_header": "R20 NR",
       "agenda_item": "9.2",
       "source_cells": [
-        "c268e4f"
+        "c268e4f",
+        "c518b8c"
       ],
       "description": "NR MIMO Phase 6",
       "agenda_descriptions": [
@@ -214,7 +217,8 @@
       "group_header": "6GR",
       "agenda_item": "10.3.2",
       "source_cells": [
-        "c268e4f"
+        "c268e4f",
+        "c518b8c"
       ],
       "description": "Modulation",
       "agenda_descriptions": [
@@ -251,7 +255,8 @@
       "group_header": "6GR",
       "agenda_item": "10.3.1",
       "source_cells": [
-        "c268e4f"
+        "c268e4f",
+        "c518b8c"
       ],
       "description": "Channel coding",
       "agenda_descriptions": [
@@ -288,7 +293,8 @@
       "group_header": "6GR",
       "agenda_item": "10.5.2.1",
       "source_cells": [
-        "c268e4f"
+        "c268e4f",
+        "c518b8c"
       ],
       "description": "Downlink transmission scheme(s) for downlink control channels",
       "agenda_descriptions": [
@@ -327,10 +333,11 @@
       "duration_minutes": 40,
       "specified_start_time": null,
       "chair": "Hiroki",
-      "group_header": "6GR",
+      "group_header": "6G 10.5.4.x",
       "agenda_item": "10.5.4.4",
       "source_cells": [
-        "cec00d8"
+        "cec00d8",
+        "cf140d0"
       ],
       "description": "Handling of potential multiple uplink transmissions",
       "agenda_descriptions": [
@@ -369,10 +376,11 @@
       "duration_minutes": 40,
       "specified_start_time": null,
       "chair": "Hiroki",
-      "group_header": "6GR",
+      "group_header": "6G 10.5.4.x",
       "agenda_item": "10.5.4.1",
       "source_cells": [
-        "cec00d8"
+        "cec00d8",
+        "cf140d0"
       ],
       "description": "Downlink control channel, scheduling for downlink and uplink transmission",
       "agenda_descriptions": [
@@ -411,10 +419,11 @@
       "duration_minutes": 40,
       "specified_start_time": null,
       "chair": "Hiroki",
-      "group_header": "6GR",
+      "group_header": "6G 10.5.4.x",
       "agenda_item": "10.5.4.3",
       "source_cells": [
-        "cec00d8"
+        "cec00d8",
+        "cf140d0"
       ],
       "description": "HARQ related Aspects",
       "agenda_descriptions": [
@@ -453,10 +462,11 @@
       "duration_minutes": 30,
       "specified_start_time": null,
       "chair": "Hiroki",
-      "group_header": "6GR",
+      "group_header": "6G waveform",
       "agenda_item": "10.2.1",
       "source_cells": [
-        "cec00d8"
+        "cec00d8",
+        "cf140d0"
       ],
       "description": "Waveform",
       "agenda_descriptions": [
@@ -656,7 +666,8 @@
       "group_header": "6GR",
       "agenda_item": "10.5.2.1",
       "source_cells": [
-        "c1c9a87"
+        "c1c9a87",
+        "cd5c534"
       ],
       "description": "Downlink transmission scheme(s) for downlink control channels",
       "agenda_descriptions": [
@@ -698,7 +709,8 @@
       "group_header": "6GR",
       "agenda_item": "10.7.1",
       "source_cells": [
-        "c1c9a87"
+        "c1c9a87",
+        "cd5c534"
       ],
       "description": "NTN specific requirements and design",
       "agenda_descriptions": [
@@ -735,7 +747,8 @@
       "group_header": "R20",
       "agenda_item": "9.5",
       "source_cells": [
-        "c1c9a87"
+        "c1c9a87",
+        "cd5c534"
       ],
       "description": "NR NTN in systems using downlink compensation",
       "agenda_descriptions": [
@@ -767,7 +780,8 @@
       "group_header": "R20",
       "agenda_item": "9.4",
       "source_cells": [
-        "c1c9a87"
+        "c1c9a87",
+        "cd5c534"
       ],
       "description": "GNSS resilient NR-NTN operation",
       "agenda_descriptions": [
@@ -791,7 +805,7 @@
       ]
     }
   ],
-  "merged_at": "2026-11-02T17:22:07.629437+00:00",
+  "merged_at": "2026-11-02T17:42:37.806338+00:00",
   "meeting_id": "ran1#126bis",
   "schema_version": 3
 }

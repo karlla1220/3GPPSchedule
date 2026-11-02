@@ -2,7 +2,9 @@
   "day": "Tuesday",
   "time_block_index": 1,
   "source_hashes": {
-    "Main Schedule": "1b1b3d25f7032b05"
+    "Main Schedule": "1b1b3d25f7032b05",
+    "Hiroki's schedule": "d86c28c6415f245a",
+    "Sorour's schedule": "3eed206ec69986f4"
   },
   "merged_sessions": [
     {
@@ -122,10 +124,11 @@
       "duration_minutes": 40,
       "specified_start_time": null,
       "chair": "Sorour",
-      "group_header": "R20",
+      "group_header": "R20 NR",
       "agenda_item": "9.1",
       "source_cells": [
-        "cafbf44"
+        "cafbf44",
+        "cd4cce5"
       ],
       "description": "Artificial Intelligence (AI)/Machine Learning (ML) for NR air interface enhancements",
       "agenda_descriptions": [
@@ -154,10 +157,11 @@
       "duration_minutes": 40,
       "specified_start_time": null,
       "chair": "Sorour",
-      "group_header": "R20",
+      "group_header": "R20 NR",
       "agenda_item": "9.2",
       "source_cells": [
-        "cafbf44"
+        "cafbf44",
+        "cd4cce5"
       ],
       "description": "NR MIMO Phase 6",
       "agenda_descriptions": [
@@ -189,7 +193,8 @@
       "group_header": "",
       "agenda_item": "8.1",
       "source_cells": [
-        "cafbf44"
+        "cafbf44",
+        "cd4cce5"
       ],
       "description": "Maintenance on AI/ML for NR Air interface, NR MIMO Phase 5, NES and NTN for NR and IoT",
       "agenda_descriptions": [
@@ -218,10 +223,11 @@
       "duration_minutes": 40,
       "specified_start_time": null,
       "chair": "Hiroki",
-      "group_header": "6GR / 10.8 Sensing",
+      "group_header": "6G ISAC",
       "agenda_item": "10.8.3",
       "source_cells": [
-        "cf01351"
+        "cf01351",
+        "c8d2cd3"
       ],
       "description": "Waveform and frame structure",
       "agenda_descriptions": [
@@ -255,10 +261,11 @@
       "duration_minutes": 40,
       "specified_start_time": null,
       "chair": "Hiroki",
-      "group_header": "6GR / 10.8 Sensing",
+      "group_header": "6G ISAC",
       "agenda_item": "10.8.1",
       "source_cells": [
-        "cf01351"
+        "cf01351",
+        "c8d2cd3"
       ],
       "description": "Evaluations",
       "agenda_descriptions": [
@@ -288,14 +295,15 @@
     },
     {
       "room_name": "RAN1_brk2",
-      "name": "R20 A-IoT Phase2",
+      "name": "R20 A-IoT",
       "duration_minutes": 40,
       "specified_start_time": null,
       "chair": "Hiroki",
-      "group_header": "R20",
+      "group_header": "R20 A-IoT",
       "agenda_item": "9.3.2",
       "source_cells": [
-        "cf01351"
+        "cf01351",
+        "c8d2cd3"
       ],
       "description": "D2R signals, channels, waveform and procedures",
       "agenda_descriptions": [
@@ -566,7 +574,7 @@
       ]
     }
   ],
-  "merged_at": "2026-11-02T17:22:07.633982+00:00",
+  "merged_at": "2026-11-02T17:42:37.810726+00:00",
   "meeting_id": "ran1#126bis",
   "schema_version": 3
 }

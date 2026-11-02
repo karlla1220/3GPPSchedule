@@ -2,7 +2,8 @@
   "day": "Friday",
   "time_block_index": 1,
   "source_hashes": {
-    "Main Schedule": "8be27fca4c33447d"
+    "Main Schedule": "8be27fca4c33447d",
+    "Hiroki's schedule": "fe71f2163f7417ad"
   },
   "merged_sessions": [
     {
@@ -31,18 +32,118 @@
     },
     {
       "room_name": "RAN1_brk2",
-      "name": "TBD",
-      "duration_minutes": 120,
+      "name": "10.5.4.3",
+      "duration_minutes": 30,
       "specified_start_time": null,
-      "chair": null,
+      "chair": "Hiroki",
+      "group_header": "6G 10.5.4.x",
+      "agenda_item": "10.5.4.3",
+      "source_cells": [
+        "cdc722e",
+        "cfd8297"
+      ],
+      "description": "HARQ related Aspects",
+      "agenda_descriptions": [
+        {
+          "agenda_item": "10.5.4.3",
+          "matched_agenda_item": "10.5.4.3",
+          "description": "HARQ related Aspects",
+          "hierarchy": [
+            {
+              "agenda_item": "10",
+              "description": "Rel-20 Study of 6GR",
+              "has_description": true
+            },
+            {
+              "agenda_item": "10.5",
+              "description": "Multi-antenna system",
+              "has_description": true
+            },
+            {
+              "agenda_item": "10.5.4",
+              "description": "Downlink control channel, scheduling and HARQ operation",
+              "has_description": true
+            },
+            {
+              "agenda_item": "10.5.4.3",
+              "description": "HARQ related Aspects",
+              "has_description": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "room_name": "RAN1_brk2",
+      "name": "10.5.4.1",
+      "duration_minutes": 30,
+      "specified_start_time": null,
+      "chair": "Hiroki",
+      "group_header": "6G 10.5.4.x",
+      "agenda_item": "10.5.4.1",
+      "source_cells": [
+        "cdc722e",
+        "cfd8297"
+      ],
+      "description": "Downlink control channel, scheduling for downlink and uplink transmission",
+      "agenda_descriptions": [
+        {
+          "agenda_item": "10.5.4.1",
+          "matched_agenda_item": "10.5.4.1",
+          "description": "Downlink control channel, scheduling for downlink and uplink transmission",
+          "hierarchy": [
+            {
+              "agenda_item": "10",
+              "description": "Rel-20 Study of 6GR",
+              "has_description": true
+            },
+            {
+              "agenda_item": "10.5",
+              "description": "Multi-antenna system",
+              "has_description": true
+            },
+            {
+              "agenda_item": "10.5.4",
+              "description": "Downlink control channel, scheduling and HARQ operation",
+              "has_description": true
+            },
+            {
+              "agenda_item": "10.5.4.1",
+              "description": "Downlink control channel, scheduling for downlink and uplink transmission",
+              "has_description": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "room_name": "RAN1_brk2",
+      "name": "6G waveform",
+      "duration_minutes": 10,
+      "specified_start_time": null,
+      "chair": "Hiroki",
       "group_header": "",
       "agenda_item": null,
       "source_cells": [
-        "cdc722e"
+        "cdc722e",
+        "cfd8297"
+      ]
+    },
+    {
+      "room_name": "RAN1_brk2",
+      "name": "6G ISAC",
+      "duration_minutes": 50,
+      "specified_start_time": null,
+      "chair": "Hiroki",
+      "group_header": "",
+      "agenda_item": null,
+      "source_cells": [
+        "cdc722e",
+        "cfd8297"
       ]
     }
   ],
-  "merged_at": "2026-11-02T17:22:07.655675+00:00",
+  "merged_at": "2026-11-02T17:42:37.832803+00:00",
   "meeting_id": "ran1#126bis",
   "schema_version": 3
 }
