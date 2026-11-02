@@ -2,9 +2,7 @@
   "day": "Tuesday",
   "time_block_index": 3,
   "source_hashes": {
-    "Main Schedule": "40f16a8b6163495d",
-    "Hiroki's schedule": "05cf61ef993e9ebd",
-    "Sorour's schedule": "b3938e9aa71f2d8c"
+    "Main Schedule": "40f16a8b6163495d"
   },
   "merged_sessions": [
     {
@@ -142,8 +140,7 @@
       "group_header": "6GR",
       "agenda_item": "10.3.1",
       "source_cells": [
-        "c43b806",
-        "cf7cb95"
+        "c43b806"
       ],
       "description": "Channel coding",
       "agenda_descriptions": [
@@ -180,8 +177,7 @@
       "group_header": "6GR",
       "agenda_item": "10.3.2",
       "source_cells": [
-        "c43b806",
-        "cf7cb95"
+        "c43b806"
       ],
       "description": "Modulation",
       "agenda_descriptions": [
@@ -218,8 +214,7 @@
       "group_header": "R20 / A-IoT Phase2",
       "agenda_item": "9.3.1",
       "source_cells": [
-        "ca234fa",
-        "c70b001"
+        "ca234fa"
       ],
       "description": "R2D signals, channels, waveform and procedures",
       "agenda_descriptions": [
@@ -256,8 +251,7 @@
       "group_header": "R20 / A-IoT Phase2",
       "agenda_item": "9.3.3",
       "source_cells": [
-        "ca234fa",
-        "c70b001"
+        "ca234fa"
       ],
       "description": "Other procedures",
       "agenda_descriptions": [
@@ -378,8 +372,7 @@
       "group_header": "6GR",
       "agenda_item": "10.5.5",
       "source_cells": [
-        "ce6c1c0",
-        "c7a6470"
+        "ce6c1c0"
       ],
       "description": "Other physical layer signals, channels and procedure",
       "agenda_descriptions": [
@@ -416,8 +409,7 @@
       "group_header": "6GR",
       "agenda_item": "10.7.1",
       "source_cells": [
-        "ce6c1c0",
-        "c7a6470"
+        "ce6c1c0"
       ],
       "description": "NTN specific requirements and design",
       "agenda_descriptions": [
@@ -454,8 +446,7 @@
       "group_header": "R20",
       "agenda_item": "9.4",
       "source_cells": [
-        "ce6c1c0",
-        "c7a6470"
+        "ce6c1c0"
       ],
       "description": "GNSS resilient NR-NTN operation",
       "agenda_descriptions": [
@@ -488,12 +479,11 @@
       "agenda_item": null,
       "source_cells": [
         "c04351a",
-        "c08c99e",
-        "c70b001"
+        "c08c99e"
       ]
     }
   ],
-  "merged_at": "2026-11-02T07:21:47.196899+00:00",
+  "merged_at": "2026-11-02T17:22:07.637934+00:00",
   "meeting_id": "ran1#126bis",
   "schema_version": 3
 }

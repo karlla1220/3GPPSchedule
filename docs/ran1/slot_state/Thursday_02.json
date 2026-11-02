@@ -2,9 +2,7 @@
   "day": "Thursday",
   "time_block_index": 2,
   "source_hashes": {
-    "Main Schedule": "9aaa8bb7b672fc80",
-    "Hiroki's schedule": "acfbf7bf4054af3d",
-    "Sorour's schedule": "381b6c4dbcbe3c35"
+    "Main Schedule": "9aaa8bb7b672fc80"
   },
   "merged_sessions": [
     {
@@ -112,8 +110,7 @@
       "group_header": "6GR",
       "agenda_item": "10.5.2.1",
       "source_cells": [
-        "ce2ebe2",
-        "c07de1d"
+        "ce2ebe2"
       ],
       "description": "Downlink transmission scheme(s) for downlink control channels",
       "agenda_descriptions": [
@@ -155,8 +152,7 @@
       "group_header": "6GR",
       "agenda_item": "10.5.2.2",
       "source_cells": [
-        "ce2ebe2",
-        "c07de1d"
+        "ce2ebe2"
       ],
       "description": "Downlink transmission scheme(s) for downlink shared channels",
       "agenda_descriptions": [
@@ -198,8 +194,7 @@
       "group_header": "6GR",
       "agenda_item": "10.5.2.3",
       "source_cells": [
-        "ce2ebe2",
-        "c07de1d"
+        "ce2ebe2"
       ],
       "description": "Uplink transmission scheme(s) for uplink channels",
       "agenda_descriptions": [
@@ -241,8 +236,7 @@
       "group_header": "6GR / 10.8 Sensing",
       "agenda_item": "10.8.1",
       "source_cells": [
-        "cfcf5d3",
-        "c04c6f2"
+        "cfcf5d3"
       ],
       "description": "Evaluations",
       "agenda_descriptions": [
@@ -279,8 +273,7 @@
       "group_header": "6GR / 10.8 Sensing",
       "agenda_item": "10.8.2",
       "source_cells": [
-        "cfcf5d3",
-        "c04c6f2"
+        "cfcf5d3"
       ],
       "description": "Aspects of integration with communication",
       "agenda_descriptions": [
@@ -317,8 +310,7 @@
       "group_header": "6GR / 10.8 Sensing",
       "agenda_item": "10.8.3",
       "source_cells": [
-        "cfcf5d3",
-        "c04c6f2"
+        "cfcf5d3"
       ],
       "description": "Waveform and frame structure",
       "agenda_descriptions": [
@@ -513,9 +505,7 @@
       "group_header": "6GR",
       "agenda_item": "10.5.4.4, 10.5.4.3, 10.5.4.2, 10.5.4.1",
       "source_cells": [
-        "cefe22f",
-        "ca9b25b",
-        "c8466d9"
+        "cefe22f"
       ],
       "description": "Handling of potential multiple uplink transmissions",
       "agenda_descriptions": [
@@ -630,7 +620,7 @@
       ]
     }
   ],
-  "merged_at": "2026-11-02T07:21:47.212066+00:00",
+  "merged_at": "2026-11-02T17:22:07.650840+00:00",
   "meeting_id": "ran1#126bis",
   "schema_version": 3
 }

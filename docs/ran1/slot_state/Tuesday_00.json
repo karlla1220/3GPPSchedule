@@ -2,9 +2,7 @@
   "day": "Tuesday",
   "time_block_index": 0,
   "source_hashes": {
-    "Main Schedule": "c698dc2acc35fae6",
-    "Hiroki's schedule": "88eba5436566d1dd",
-    "Sorour's schedule": "8818fd320641f395"
+    "Main Schedule": "c698dc2acc35fae6"
   },
   "merged_sessions": [
     {
@@ -142,8 +140,7 @@
       "group_header": "6GR",
       "agenda_item": "10.7.1",
       "source_cells": [
-        "cc6e4e0",
-        "c9c51cc"
+        "cc6e4e0"
       ],
       "description": "NTN specific requirements and design",
       "agenda_descriptions": [
@@ -180,8 +177,7 @@
       "group_header": "R20",
       "agenda_item": "9.5",
       "source_cells": [
-        "cc6e4e0",
-        "c9c51cc"
+        "cc6e4e0"
       ],
       "description": "NR NTN in systems using downlink compensation",
       "agenda_descriptions": [
@@ -213,8 +209,7 @@
       "group_header": "R20",
       "agenda_item": "9.4",
       "source_cells": [
-        "cc6e4e0",
-        "c9c51cc"
+        "cc6e4e0"
       ],
       "description": "GNSS resilient NR-NTN operation",
       "agenda_descriptions": [
@@ -246,8 +241,7 @@
       "group_header": "6GR",
       "agenda_item": "10.5.4.1",
       "source_cells": [
-        "ce1e8b3",
-        "cc85743"
+        "ce1e8b3"
       ],
       "description": "Downlink control channel, scheduling for downlink and uplink transmission",
       "agenda_descriptions": [
@@ -289,8 +283,7 @@
       "group_header": "6GR",
       "agenda_item": "10.5.4.2",
       "source_cells": [
-        "ce1e8b3",
-        "cc85743"
+        "ce1e8b3"
       ],
       "description": "Downlink and uplink transmission without dynamic scheduling",
       "agenda_descriptions": [
@@ -332,8 +325,7 @@
       "group_header": "6GR",
       "agenda_item": "10.5.4.3",
       "source_cells": [
-        "ce1e8b3",
-        "cc85743"
+        "ce1e8b3"
       ],
       "description": "HARQ related Aspects",
       "agenda_descriptions": [
@@ -466,8 +458,7 @@
       "group_header": "6GR",
       "agenda_item": "10.8.3, 10.8.1",
       "source_cells": [
-        "cd278f8",
-        "c6c7761"
+        "cd278f8"
       ],
       "description": "Waveform and frame structure",
       "agenda_descriptions": [
@@ -526,8 +517,7 @@
       "group_header": "6GR",
       "agenda_item": "10.2.1",
       "source_cells": [
-        "cd278f8",
-        "c6c7761"
+        "cd278f8"
       ],
       "description": "Waveform",
       "agenda_descriptions": [
@@ -556,7 +546,7 @@
       ]
     }
   ],
-  "merged_at": "2026-11-02T07:21:47.190806+00:00",
+  "merged_at": "2026-11-02T17:22:07.632205+00:00",
   "meeting_id": "ran1#126bis",
   "schema_version": 3
 }

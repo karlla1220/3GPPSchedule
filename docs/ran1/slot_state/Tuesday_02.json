@@ -2,9 +2,7 @@
   "day": "Tuesday",
   "time_block_index": 2,
   "source_hashes": {
-    "Main Schedule": "37de9b1c4ba7604a",
-    "Hiroki's schedule": "0d21fd549d402fed",
-    "Sorour's schedule": "4322349e53090df5"
+    "Main Schedule": "37de9b1c4ba7604a"
   },
   "merged_sessions": [
     {
@@ -112,8 +110,7 @@
       "group_header": "6GR",
       "agenda_item": "10.5.2.1",
       "source_cells": [
-        "ce2ebe2",
-        "c07de1d"
+        "ce2ebe2"
       ],
       "description": "Downlink transmission scheme(s) for downlink control channels",
       "agenda_descriptions": [
@@ -155,8 +152,7 @@
       "group_header": "6GR",
       "agenda_item": "10.5.2.2",
       "source_cells": [
-        "ce2ebe2",
-        "c07de1d"
+        "ce2ebe2"
       ],
       "description": "Downlink transmission scheme(s) for downlink shared channels",
       "agenda_descriptions": [
@@ -198,8 +194,7 @@
       "group_header": "6GR",
       "agenda_item": "10.5.2.3",
       "source_cells": [
-        "ce2ebe2",
-        "c07de1d"
+        "ce2ebe2"
       ],
       "description": "Uplink transmission scheme(s) for uplink channels",
       "agenda_descriptions": [
@@ -241,8 +236,7 @@
       "group_header": "TEI, AI 7/8.2",
       "agenda_item": "11",
       "source_cells": [
-        "ccba416",
-        "c9bc456"
+        "ccba416"
       ],
       "description": "TEI",
       "agenda_descriptions": [
@@ -269,8 +263,7 @@
       "group_header": "TEI, AI 7/8.2 / Maintenance",
       "agenda_item": "8.2",
       "source_cells": [
-        "ccba416",
-        "c9bc456"
+        "ccba416"
       ],
       "description": "Maintenance on others",
       "agenda_descriptions": [
@@ -302,8 +295,7 @@
       "group_header": "TEI, AI 7/8.2 / Maintenance",
       "agenda_item": "8.3",
       "source_cells": [
-        "ccba416",
-        "c9bc456"
+        "ccba416"
       ],
       "description": "Maintenance on UE features",
       "agenda_descriptions": [
@@ -335,8 +327,7 @@
       "group_header": "TEI, AI 7/8.2 / Maintenance",
       "agenda_item": "8.2",
       "source_cells": [
-        "ccba416",
-        "c9bc456"
+        "ccba416"
       ],
       "description": "Maintenance on others",
       "agenda_descriptions": [
@@ -368,8 +359,7 @@
       "group_header": "6GR",
       "agenda_item": "10.2.1",
       "source_cells": [
-        "ccba416",
-        "c9bc456"
+        "ccba416"
       ],
       "description": "Waveform",
       "agenda_descriptions": [
@@ -574,8 +564,7 @@
       "group_header": "R20",
       "agenda_item": "9.3.1, 9.3.3",
       "source_cells": [
-        "c1bff24",
-        "c8bff82"
+        "c1bff24"
       ],
       "description": "R2D signals, channels, waveform and procedures",
       "agenda_descriptions": [
@@ -663,7 +652,7 @@
       ]
     }
   ],
-  "merged_at": "2026-11-02T07:21:47.194752+00:00",
+  "merged_at": "2026-11-02T17:22:07.635916+00:00",
   "meeting_id": "ran1#126bis",
   "schema_version": 3
 }

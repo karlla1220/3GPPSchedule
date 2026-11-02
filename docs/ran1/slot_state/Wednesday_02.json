@@ -2,9 +2,7 @@
   "day": "Wednesday",
   "time_block_index": 2,
   "source_hashes": {
-    "Main Schedule": "85497afa9ddfbc1e",
-    "Hiroki's schedule": "43e70ec9e4e54ce8",
-    "Sorour's schedule": "b66eaa831457d2f5"
+    "Main Schedule": "85497afa9ddfbc1e"
   },
   "merged_sessions": [
     {
@@ -112,8 +110,7 @@
       "group_header": "6GR",
       "agenda_item": "10.5.2.1",
       "source_cells": [
-        "c92c6ef",
-        "c6e8e81"
+        "c92c6ef"
       ],
       "description": "Downlink transmission scheme(s) for downlink control channels",
       "agenda_descriptions": [
@@ -155,8 +152,7 @@
       "group_header": "6GR",
       "agenda_item": "10.5.2.3",
       "source_cells": [
-        "c92c6ef",
-        "c6e8e81"
+        "c92c6ef"
       ],
       "description": "Uplink transmission scheme(s) for uplink channels",
       "agenda_descriptions": [
@@ -198,8 +194,7 @@
       "group_header": "Maintenance",
       "agenda_item": "8.2",
       "source_cells": [
-        "cc6e6a7",
-        "c981ea9"
+        "cc6e6a7"
       ],
       "description": "Maintenance on others",
       "agenda_descriptions": [
@@ -231,8 +226,7 @@
       "group_header": "Maintenance",
       "agenda_item": "7, 8.2",
       "source_cells": [
-        "cc6e6a7",
-        "c981ea9"
+        "cc6e6a7"
       ],
       "description": "Pre-Rel-19 NR Maintenance",
       "agenda_descriptions": [
@@ -276,8 +270,7 @@
       "group_header": "Maintenance",
       "agenda_item": "11",
       "source_cells": [
-        "cc6e6a7",
-        "c981ea9"
+        "cc6e6a7"
       ],
       "description": "TEI",
       "agenda_descriptions": [
@@ -304,8 +297,7 @@
       "group_header": "",
       "agenda_item": null,
       "source_cells": [
-        "cc6e6a7",
-        "c981ea9"
+        "cc6e6a7"
       ]
     },
     {
@@ -317,8 +309,7 @@
       "group_header": "6GR",
       "agenda_item": "10.5.4.2, 10.5.4.3, 10.5.4.4",
       "source_cells": [
-        "cd81a2a",
-        "ce80151"
+        "cd81a2a"
       ],
       "description": "Downlink and uplink transmission without dynamic scheduling",
       "agenda_descriptions": [
@@ -525,8 +516,7 @@
       "group_header": "R20",
       "agenda_item": "9.3.2, 9.3.3, 9.3.1",
       "source_cells": [
-        "c78971e",
-        "c4fe89a"
+        "c78971e"
       ],
       "description": "D2R signals, channels, waveform and procedures",
       "agenda_descriptions": [
@@ -599,7 +589,7 @@
       ]
     }
   ],
-  "merged_at": "2026-11-02T07:21:47.202579+00:00",
+  "merged_at": "2026-11-02T17:22:07.643166+00:00",
   "meeting_id": "ran1#126bis",
   "schema_version": 3
 }
