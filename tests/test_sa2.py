@@ -10,14 +10,17 @@ import pytest
 from shared.agenda import agenda_map, written_ranges
 from shared.renderer import generate_html
 from shared.schedule import load_schedule, save_schedule
-from working_groups.sa2 import document as docmod, sessions
+from working_groups.sa2 import conventions, document as docmod, sessions
 
 FIXTURES = Path(__file__).parent / 'fixtures/sa2'
 R20 = 'S2-2608833_SA2-176-Session Plan - r20.docx'
 R12 = 'S2-2509839_SA2-172-Session Plan - r12.docx'
 R9 = 'S2-2601721_SA2-174-Session Plan -r9.docx'
+R0_178 = 'S2-261nnnn_SA2-178-Session Plan.docx'
+R2_172 = 'S2-2509839_SA2-172-Session Plan - r2.docx'
 META_176 = {'starts_on': '2026-08-24', 'ends_on': '2026-08-28', 'timezone': 'Europe/Prague',
             'starts_at': '2026-08-24T09:00:00+02:00', 'ends_at': '2026-08-28T16:30:00+02:00'}
+META_178 = {'starts_on': '2026-11-16', 'ends_on': '2026-11-20', 'timezone': 'America/Edmonton'}
 
 
 def extract(name):
@@ -26,6 +29,10 @@ def extract(name):
 
 def agenda():
     return agenda_map((FIXTURES / 'agenda_176.csv').read_bytes())
+
+
+def agenda_178():
+    return agenda_map((FIXTURES / 'agenda_178.csv').read_bytes())
 
 
 def read(name, items=None):
@@ -83,6 +90,104 @@ def test_template_days_quarters_breaks_rooms_and_conveners():
     assert doc['conveners'] == {'green': 'Mike', 'cyan': 'Wanqiang'}
     assert doc['stream_colours'] == {2: 'green', 3: 'cyan'}
     assert {'day': 'Thursday', 'text': '(Revisions only unless stated)'} in doc['notes']
+
+
+def test_a_quarter_time_with_a_part_missing_takes_the_usual_time_and_says_so():
+    doc = extract(R0_178)
+    # "1100 - 12" (highlighted, #178's first plan): every plan since #161 has Q2 at 11:00-12:30.
+    assert [(q['start'], q['end']) for q in doc['quarters']] == [
+        ('08:00', '08:50'), ('09:00', '10:30'), ('11:00', '12:30'), ('14:00', '15:30'), ('16:00', '17:30'),
+        ('17:45', '19:00')]
+    assert ('Lunch', '12:30', '14:00') in [(b['name'], b['start'], b['end']) for b in doc['breaks']]
+    assert doc['filled'] == ['Q2 is written "1100 - 12" in the Session Plan. This page reads it as 11:00–12:30, '
+                             'Q2 of earlier SA2 Session Plans.']
+    # Plans written in full use no convention.
+    assert all(extract(name)['filled'] == [] for name in (R20, R12, R9))
+    # "Palomino E-H (300)": the seat count goes in parentheses as in brackets.
+    assert [(r['name'], r['place']) for r in doc['rooms']] == [
+        ('Main', 'Palomino E-H'), ('Breakout 1', 'BMO Room 203'), ('Breakout 2', 'Percheron CD')]
+
+
+@pytest.mark.parametrize('q, start, end, times', [
+    (2, ('11', '00'), ('12', None), ('11:00', '12:30')),
+    (2, ('11', None), ('12', '30'), ('11:00', '12:30')),
+    (5, ('17', '45'), ('19', None), ('17:45', '19:00')),   # #166's and #178's Q5
+    (5, ('18', '00'), ('19', None), ('18:00', '19:30')),   # the usual one first
+    (2, ('11', '00'), ('13', None), None),   # no usual Q2 ends in hour 13
+    (6, ('20', '00'), ('21', None), None),   # no usual Q6
+    (3, ('14', '15'), ('15', '45'), ('14:15', '15:45')),   # written in full: as written
+])
+def test_the_quarter_convention_fills_only_what_agrees_with_the_written_parts(q, start, end, times):
+    assert conventions.quarter_times(q, start, end) == times
+
+
+@pytest.mark.parametrize('text', ['1100 - 1000', '1100 - 10', '1100 - 13'])
+def test_a_quarter_that_no_usual_time_fits_or_ends_first_is_a_layout_error(text):
+    doc = Document(io.BytesIO((FIXTURES / R0_178).read_bytes()))
+    cell = docmod._grid(doc.tables[1])[9][1]['tc']
+    run = next(cell.iter(docmod.W + 't'))
+    run.text = text
+    data = io.BytesIO()
+    doc.save(data)
+    with pytest.raises(docmod.LayoutError, match='Q2'):
+        docmod.extract_document(data.getvalue(), R0_178)
+
+
+def _unhighlighted(name, keep):
+    """The #178 plan with every highlight removed but those ``keep`` says to keep."""
+    doc = Document(io.BytesIO((FIXTURES / name).read_bytes()))
+    for mark in list(doc.element.body.iter(docmod.W + 'highlight')):
+        run = mark.getparent().getparent()
+        if not keep(docmod.paragraph_text(run), mark.get(docmod.W + 'val')):
+            mark.getparent().remove(mark)
+    data = io.BytesIO()
+    doc.save(data)
+    return docmod.extract_document(data.getvalue(), name)
+
+
+def test_a_plain_convener_or_stream_label_takes_its_usual_colour():
+    # #161 and #162 highlighted only Convenor 1's name.
+    doc = _unhighlighted(R0_178, lambda text, colour: 'Wanqiang' not in text)
+    assert doc['conveners'] == {'green': 'Mike', 'cyan': 'Wanqiang'}
+    assert 'Wanqiang (Convener 2) is not highlighted in the Session Plan. This page links the name to the cyan ' \
+           'stream, as in earlier SA2 Session Plans.' in doc['filled']
+    # No Stream 3 label highlighted: Stream 3 is cyan, as it has been since #161.
+    doc = _unhighlighted(R0_178, lambda text, colour: colour != 'cyan' or 'Wanqiang' in text)
+    assert doc['stream_colours'] == {2: 'green', 3: 'cyan'}
+    assert any(line.startswith('Stream 3 is not highlighted') for line in doc['filled'])
+    # Both names plain: each takes its number's colour.
+    doc = _unhighlighted(R0_178, lambda text, colour: 'Mike' not in text and 'Wanqiang' not in text)
+    assert doc['conveners'] == {'green': 'Mike', 'cyan': 'Wanqiang'}
+
+
+def test_sliver_columns_between_the_two_cells_of_a_day_belong_to_neither():
+    # #172 r2's Wednesday is three grid columns, 1843, 1 and 1701 twips, and its
+    # tracked table change keeps an older grid inside w:tblGridChange.
+    doc = extract(R2_172)
+    assert doc['days'] == ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
+    found = sessions.interpret(doc, {})[0]
+    wednesday = [(s['start'], s['rooms'], s['part'], s['name']) for s in found
+                 if s['day'] == 'Wednesday' and s['start'] == '09:00']
+    # Same text left and right of the sliver is one session; one side alone is its piece.
+    assert sorted(wednesday) == [('09:00', ['stream1'], None, 'Common Issues / Rel-19'),
+                                 ('09:00', ['stream2'], [1, 2], 'NG_RTC_Ph2'),
+                                 ('09:00', ['stream3'], None, 'FS_Sensing_ARC')]
+
+
+@pytest.mark.parametrize('widths, halves', [
+    ([1843, 1, 1701], {0: 1, 2: 2}),
+    ([1772, 71, 1, 1700], {0: 1, 3: 2}),
+    ([1984, 1984], {0: 1, 1: 2}),
+    (None, {0: 1, 1: 2}),
+])
+def test_a_day_is_two_real_columns(widths, halves):
+    columns = list(range(len(widths))) if widths else [0, 1]
+    assert docmod._halves('Wednesday', columns, widths) == halves
+
+
+def test_a_day_of_three_real_columns_is_a_layout_error():
+    with pytest.raises(docmod.LayoutError, match='Wednesday'):
+        docmod._halves('Wednesday', [0, 1, 2], [1200, 1200, 1200])
 
 
 def test_tracked_changes_are_read_in_accepted_form():
@@ -219,6 +324,41 @@ def test_break_rows_hold_sessions_of_their_own():
     assert [(s['end'], s['name'], s['rooms']) for s in election] == [('14:00', 'SA2 VC Election', [])]
 
 
+def test_a_cell_that_names_another_room_sits_there():
+    found = read(R0_178, agenda_178())
+    # Tuesday 09:00: Stream 1 is "In breakout 1" and Stream 2 "In main room"; Stream 3 stays.
+    tuesday = {(s['rooms'][0], s['part'][0]): s for s in find(found, 'Tuesday', '09:00')}
+    assert {key: (s['stream'], s['name']) for key, s in tuesday.items()} == {
+        ('stream1', 1): (2, 'AIML_CN_Ph2 / KI#23'), ('stream1', 2): (2, 'KI#22'),
+        ('stream2', 1): (1, 'FS_enIMS_ARC'), ('stream2', 2): (1, 'In breakout 1'),   # nothing but the room
+        ('stream3', 1): (3, 'AmbientIoT_Ph2-ARC'), ('stream3', 2): (3, 'KI#17')}
+    # The notes keep the room line; the agenda items are the cell's.
+    moved = tuesday[('stream2', 1)]
+    assert moved['lines'] == ['In breakout 1', 'FS_enIMS_ARC (20.10.1)'] and moved['agenda_items'] == ['20.10.1']
+    # "In Breakout 2" from Stream 1 while Stream 3 is "In main room"; Breakout 1 keeps Stream 2.
+    wednesday = {(s['rooms'][0], s['part'][0]): (s['stream'], s['name']) for s in find(found, 'Wednesday', '11:00')}
+    assert wednesday == {('stream1', 1): (3, 'In main room'), ('stream1', 2): (3, 'KI#19'),
+                         ('stream2', 1): (2, 'KI#12 – KI#16'), ('stream2', 2): (2, 'KI#24'),
+                         ('stream3', 1): (1, 'KI#3'), ('stream3', 2): (1, 'KI#2')}
+    # No two sessions share a room at once.
+    for day in ('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'):
+        taken = [(r, sessions._pieces(s)) for s in found if s['day'] == day for r in s['rooms']]
+        for i, (room, (a, b)) in enumerate(taken):
+            assert not any(room == other and a < y and x < b for other, (x, y) in taken[i + 1:])
+
+
+def test_a_room_already_taken_keeps_the_cell_in_its_row():
+    doc = extract(R0_178)
+    # Stream 3 also "In main room" while Stream 2 is moving there: the plan says two things.
+    cell = next(c for c in doc['cells'] if c['day'] == 'Tuesday' and c['quarters'] == [1] and c['streams'] == [3]
+                and c['halves'] == [1])
+    cell['lines'] = ['In main room'] + cell['lines']
+    found = sessions.interpret(doc, agenda_178())[0]
+    stuck = find(found, 'Tuesday', '09:00', 'stream3', [1, 2])
+    assert [(s['stream'], s['name']) for s in stuck] == [(3, 'In main room / AmbientIoT_Ph2-ARC')]
+    assert [s['stream'] for s in find(found, 'Tuesday', '09:00', 'stream2', [1, 2])] == [2]
+
+
 def test_cells_the_rules_are_unsure_about_say_why():
     run_together = find(read(R9), 'Monday', '18:00', 'stream1', [1, 2])[0]
     assert run_together['reasons'] == ["two topics run together: 'TEI20_DAMP [1]TEI20_UDCE-ARC [2]'"]
@@ -286,6 +426,26 @@ def test_render_and_snapshot_roundtrip(r20, tmp_path):
     assert '1/2' in piece.get_text() and 'of' in piece.get_text()
     shared = html.select_one('#friday [data-name="List of agreed tdocs for block approval / Revisions"]')
     assert 'Revisions (including 30.1)' in shared['data-popup']
+
+
+def test_a_room_is_named_by_its_stream_only_on_days_it_holds_no_other():
+    schedule = sessions.make_schedule(extract(R0_178), agenda_178(), META_178, [R0_178, 'agenda.csv'],
+                                      {R0_178: 'Session Plan', 'agenda.csv': 'agenda.csv'}, '2026-11-02 12:00',
+                                      chairs={'Mike': 'Michael STARSINIC', 'Wanqiang': 'Wanqiang ZHANG'})
+    # What the conventions filled in is said below the grid.
+    heading = next(i for i, b in enumerate(schedule.supplements) if b.get('text') == 'Filled in from earlier Session Plans')
+    assert schedule.supplements[heading + 1]['text'].startswith('Q2 is written "1100 - 12"')
+    details = {d.day_name: [r.detail for r in d.rooms] for d in schedule.days}
+    assert details['Monday'] == ['Palomino E-H · Stream 1', 'BMO Room 203 · Stream 2', 'Percheron CD · Stream 3']
+    assert details['Tuesday'] == ['Palomino E-H', 'BMO Room 203', 'Percheron CD']
+    assert details['Wednesday'] == ['Palomino E-H', 'BMO Room 203 · Stream 2', 'Percheron CD']
+    # A moved session keeps its stream's convener.
+    tuesday = schedule.days[1]
+    main = [s for s in tuesday.sessions if s.start_time == '09:00' and s.room_ids == ['stream1']]
+    assert {s.chair for s in main} == {'Michael STARSINIC'}   # Stream 2 (green) in the main room
+    html = BeautifulSoup(generate_html(schedule), 'html.parser')
+    moved = html.select('#tuesday [data-name="FS_enIMS_ARC"]')[0]   # Stream 1's, in Breakout 1
+    assert 'Room: Breakout 1 · BMO Room 203<div class="popup-notes">In breakout 1<br>' in moved['data-popup']
 
 
 def test_a_written_range_stays_a_range_on_the_ai_line():

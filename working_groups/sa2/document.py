@@ -5,7 +5,8 @@ and one schedule table whose rows are quarters (Q0 to Q5) times streams (one
 row per room), with Break/Coffee/Lunch rows between quarters, and whose columns
 are five weekdays of two cells each. A cell may be merged across both cells of
 a day (gridSpan) or down several rows (vMerge), so cells are identified by
-their XML element. Tracked changes are read in accepted form.
+their XML element. Tracked changes are read in accepted form. Sliver grid
+columns that Word leaves between a day's two cells belong to neither half.
 
 The table is checked against that template; another layout raises LayoutError
 rather than being guessed at. Paragraphs outside the table are kept as
@@ -21,16 +22,22 @@ from docx.text.paragraph import Paragraph
 
 from shared.docx_text import deleted, paragraph_text, W
 from shared.portal_meetings import meeting_key
+from . import conventions
 
 DAYS = ('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday')
 # S2-2610195_SA2-177-Session Plan - r7.docx, S2-2610195_SA2-177-Session Plan -r14 - Friday plan.docx,
 # S2-260nnnn_SA2-177-Session Plan.zip (the first upload has no r), Draft S2-2606837_SA2-176-Session Plan - r1.docx
 FILE = re.compile(r'.*?(?<![A-Za-z])SA2-(\d+)-Session Plan(?:\s*-\s*r(\d+))?(.*)\.(docx|zip)', re.I)
 QUARTER = re.compile(r'Q(\d)')
-SPAN = re.compile(r'(\d{2})(\d{2})\s*-\s*(\d{2})(\d{2})')
+# A quarter's range, "0900 - 1030". A part may lack its minutes (#178's first plan: "1100 - 12");
+# conventions.py completes it.
+SPAN = re.compile(r'(\d{2})(\d{2})?\s*-\s*(\d{2})(\d{2})?(?!\d)')
 STREAM = re.compile(r'Stream\s*(\d)', re.I)
 CONVENER = re.compile(r'Conven[eo]r\s*(\d+)\s*:\s*([^,]+)', re.I)
 ROOM_NAME = re.compile(r'Main(?:\s+Room)?|Break[- ]?out\s*\d+', re.I)
+# The seat count after a place: "B2 (Floor 2) [300]" (#176, #177), "Palomino E-H (300)" (#178),
+# "1.3 Vercors - 105 pax" (#164).
+SEATS = re.compile(r'[\[(]\s*\d+\s*[\])]|\s-\s*\d+\s*pax\b', re.I)
 
 
 class LayoutError(ValueError):
@@ -128,6 +135,32 @@ def _grid(table) -> list[list[dict]]:
     return rows
 
 
+def _grid_widths(table, count: int) -> list[int] | None:
+    """The table's grid column widths (w:tblGrid, twips), or None if it does not give one per column."""
+    grid = table._tbl.find(W + 'tblGrid')
+    # Direct children only: a tracked table change keeps the old grid inside (w:tblGridChange).
+    widths = [] if grid is None else [int(c.get(W + 'w') or 0) for c in grid.findall(W + 'gridCol')]
+    return widths if len(widths) == count and all(w > 0 for w in widths) else None
+
+
+def _halves(day: str, columns: list[int], widths: list[int] | None) -> dict[int, int]:
+    """Which half of the day (1, 2) each grid column is; a sliver column is none.
+
+    A day is two cells, but Word may cut rows at slightly different places and
+    leave sliver grid columns between them: #172 r1's Wednesday is 1843, 1 and
+    1701 twips, #171 r8's 1772, 71, 1 and 1700. A column narrower than an
+    eighth of the day is such a sliver; the rest must be exactly two.
+    """
+    if widths is None:
+        real = list(columns)
+    else:
+        span = sum(widths[c] for c in columns)
+        real = [c for c in columns if widths[c] * 8 >= span]
+    if len(real) != 2:
+        raise LayoutError(f'The SA2 schedule header is not five weekdays of two cells each ({day})')
+    return {real[0]: 1, real[1]: 2}
+
+
 def _text(tc) -> str:
     return squash(' '.join(cell_lines(tc)))
 
@@ -160,11 +193,14 @@ def _read_table(table) -> dict:
         rest = squash(text[len(word):])
         if rest:
             notes.append({'day': day, 'text': rest})   # "(Revisions only unless stated)"
-    if len(days) < 5 or any(len(d['columns']) != 2 for d in days):
+    if len(days) < 5:
         raise LayoutError('The SA2 schedule header is not five weekdays of two cells each')
+    widths = _grid_widths(table, len(header))
+    for day in days:
+        day['halves'] = _halves(day['day'], day['columns'], widths)
     first_day = days[0]['columns'][0]
 
-    quarters, breaks, rows = [], [], []
+    quarters, breaks, rows, filled = [], [], [], []
     for index, row in enumerate(grid[1:], 1):
         label = _text(row[first_day - 1]['tc']) if first_day >= 1 else ''
         quarter = QUARTER.fullmatch(_text(row[0]['tc']))
@@ -179,8 +215,17 @@ def _read_table(table) -> dict:
                              if SPAN.search(_text(row[c]['tc']))), None)
                 if span is None:
                     raise LayoutError(f'Q{number} has no time range')
-                quarters.append({'q': number, 'start': clock(span[1], span[2]), 'end': clock(span[3], span[4]),
-                                 'streams': {}})
+                written = squash(span[0])
+                times = conventions.quarter_times(number, (span[1], span[2]), (span[3], span[4]))
+                if times is None:
+                    raise LayoutError(f'Q{number} is written "{written}", and no usual Q{number} time fits it')
+                start, end = clock(*times[0].split(':')), clock(*times[1].split(':'))
+                if end <= start or (quarters and start < quarters[-1]['end']):
+                    raise LayoutError(f'Q{number} {start}-{end} is not after the quarter before it')
+                if None in (span[2], span[4]):
+                    filled.append(f'Q{number} is written "{written}" in the Session Plan. This page reads it as '
+                                  f'{start}–{end}, Q{number} of earlier SA2 Session Plans.')
+                quarters.append({'q': number, 'start': start, 'end': end, 'streams': {}})
             rows.append({'index': index, 'kind': 'stream', 'quarter': len(quarters) - 1,
                          'stream': int(stream[1]), 'label': row[first_day - 1]['tc']})
         elif label:
@@ -202,9 +247,10 @@ def _read_table(table) -> dict:
     for info in rows:
         row = grid[info['index']]
         for day in days:
-            for half, column in enumerate(day['columns'], 1):
+            for column in day['columns']:
                 if column >= len(row):
                     continue
+                half = day['halves'].get(column)
                 tc = row[column]['tc']
                 block = blocks.get(id(tc))
                 if block is None:
@@ -214,7 +260,8 @@ def _read_table(table) -> dict:
                     raise LayoutError(f'A cell spans {block["day"]} and {day["day"]}')
                 if info not in block['rows']:
                     block['rows'].append(info)
-                block['halves'].add(half)
+                if half:
+                    block['halves'].add(half)
     labels = {}   # stream -> highlight colour of its row label (Q0's label has none)
     for info in rows:
         if info['kind'] == 'stream':
@@ -222,10 +269,19 @@ def _read_table(table) -> dict:
             if colour:
                 labels.setdefault(info['stream'], colour)
         info.pop('label', None)
+    for stream in streams:
+        # A stream whose labels carry no highlight takes its usual one (Stream 2 green, Stream 3 cyan).
+        colour = conventions.stream_colour(stream)
+        if stream not in labels and colour and colour not in labels.values():
+            labels[stream] = colour
+            filled.append(f'Stream {stream} is not highlighted in the Session Plan. This page links it to the '
+                          f'{colour} convener, as in earlier SA2 Session Plans.')
     cells = []
     for block in blocks.values():
         if not block['lines']:
             continue
+        if not block['halves']:
+            raise LayoutError(f'Cell {block["id"]} ({block["day"]}) lies only in a sliver between the two cells of the day')
         kinds = [r for r in block['rows'] if r['kind'] == 'stream']
         block['streams'] = sorted({r['stream'] for r in kinds})
         block['quarters'] = sorted({r['quarter'] for r in kinds})
@@ -234,7 +290,7 @@ def _read_table(table) -> dict:
         del block['rows']
         cells.append(block)
     return {'days': [d['day'] for d in days], 'quarters': quarters, 'breaks': breaks,
-            'streams': streams, 'stream_colours': labels, 'cells': cells, 'notes': notes}
+            'streams': streams, 'stream_colours': labels, 'cells': cells, 'notes': notes, 'filled': filled}
 
 
 # ------------------------------------------------------------- outside the table
@@ -245,7 +301,8 @@ def room_names(doc, schedule_table, count: int) -> list[tuple[str, str]]:
     "Main Room | B2 (Floor 2) [300] | Breakout 1 | B3 (Floor 2) [100] | ..."
     lists the rooms in stream order: the cell shading of each stream row
     matches its room, and the chair notes call SA2_Brk1 "Parallel Stream 2".
-    The place is the cell after the name, without the seat count ("[300]").
+    The place is the cell after the name, without the seat count ("[300]",
+    "(300)"; "(Floor 2)" stays).
     """
     for table in doc.tables:
         if table._tbl is schedule_table._tbl:
@@ -257,20 +314,22 @@ def room_names(doc, schedule_table, count: int) -> list[tuple[str, str]]:
                 continue
             place = texts[i + 1] if i + 1 < len(texts) and not ROOM_NAME.fullmatch(texts[i + 1]) else ''
             name = 'Main' if text.lower().startswith('main') else f'Breakout {re.search(r"\d+", text)[0]}'
-            found.append((name, squash(re.sub(r'\[\s*\d+\s*\]', '', place))))
+            found.append((name, squash(SEATS.sub('', place))))
         if len(found) >= count:
             return found[:count]
     return [(f'Stream {n}', '') for n in range(1, count + 1)]
 
 
-def conveners(doc) -> dict[str, str]:
+def conveners(doc, filled: list[str] | None = None) -> dict[str, str]:
     """Convener names by highlight colour: "Convener 1: Mike, Convenor 2: Wanqiang".
 
     Each name carries the colour of the stream rows it convenes (green on
-    Stream 2's labels, cyan on Stream 3's). A name without a colour is linked
-    to nothing.
+    Stream 2's labels, cyan on Stream 3's). A name without a colour takes its
+    number's usual colour (Convener 1 green, 2 cyan; #161 and #162 left
+    Convenor 2 plain), unless another name has it; that use is added to
+    ``filled``.
     """
-    found = {}
+    found, plain = {}, []
     for paragraph in doc.paragraphs:
         runs = highlights(paragraph._p)
         text = ''.join(t for _, t in runs)
@@ -285,6 +344,15 @@ def conveners(doc) -> dict[str, str]:
             colours = {c for a, b, c in spans if c and a < match.end(2) and b > match.start(2)}
             if len(colours) == 1:
                 found.setdefault(colours.pop(), squash(match[2]))
+            elif not colours:
+                plain.append((match[1], squash(match[2])))
+    for number, name in plain:
+        colour = conventions.convener_colour(number)
+        if colour and colour not in found and name not in found.values():
+            found[colour] = name
+            if filled is not None:
+                filled.append(f'{name} (Convener {int(number)}) is not highlighted in the Session Plan. This page links '
+                              f'the name to the {colour} stream, as in earlier SA2 Session Plans.')
     return found
 
 
@@ -371,7 +439,7 @@ def extract_document(data: bytes, name: str) -> dict:
     names = room_names(doc, table, len(result['streams']))
     result['rooms'] = [{'id': f'stream{n}', 'name': names[n - 1][0], 'place': names[n - 1][1], 'stream': n}
                        for n in result['streams']]
-    result['conveners'] = conveners(doc)
+    result['conveners'] = conveners(doc, result['filled'])
     result['meeting_id'] = meeting
     # Table notes are added with the rules' own (sessions.py) below the supplements.
     result['supplements'] = supplements(doc, table)
