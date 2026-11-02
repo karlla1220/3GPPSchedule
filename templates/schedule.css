@@ -1938,6 +1938,11 @@ header .meta a:focus-visible,
     bottom: 2px;
     width: 2px;
 }
+/* A filter's cells: the bar doubles, into the padding, so the title does not move. */
+.filtering .session-block.week-cell:not(.dimmed)::before {
+    left: 1px;
+    width: 4px;
+}
 /* Whole lines only, as many as the cell's height holds (--cell-rows, renderer.py). */
 .week-cell .session-name {
     --title-line: 12px;
@@ -1956,18 +1961,6 @@ header .meta a:focus-visible,
         max-height: round(down, calc(var(--slot-height) * var(--cell-rows) - 5px), var(--title-line));
     }
 }
-/* A filter's cells stand out from the whole week: their tint alone is lost at
-   the zoom that fits a phone. Darkened so white text reads on every category colour. */
-.filtering .week-cell:not(.dimmed) {
-    --filled: var(--session-border);
-    background: var(--filled);
-    border-color: var(--filled);
-}
-@supports (color: color-mix(in oklch, red, blue)) {
-    .filtering .week-cell:not(.dimmed) { --filled: color-mix(in oklch, var(--accent) 72%, #0F172A); }
-}
-.filtering .week-cell:not(.dimmed)::before { display: none; }
-.filtering .week-cell:not(.dimmed) .session-name { color: #FFFFFF; }
 
 /* Ten minutes: one small line, edge to edge. Five leave a coloured mark only. */
 .session-block.week-cell.short-session { padding: 0 2px 0 6px; justify-content: center; }
