@@ -216,13 +216,8 @@ def _heading_alone(group: list[str], following: list[str] | None) -> bool:
     return _kind(line) == 'owner' or (_kind(line) == 'text' and _kind(following[0]) == 'item')
 
 
-def groups_of(lines: list[str]) -> list[list[str]]:
-    """The parts the chair split a block into with blank lines.
-
-    Annotations join the group before them, a heading alone joins the group
-    after it ("Maintenance" over "[113] …"). A candidate list keeps the
-    whole block together: "EARLY RETURN TO" names fallbacks, not an order.
-    """
+def _written_groups(lines: list[str]) -> list[list[str]]:
+    """The lines as the chair spaced them, blank lines left out."""
     groups, current = [], []
     for line in lines + ['']:
         if line:
@@ -230,8 +225,11 @@ def groups_of(lines: list[str]) -> list[list[str]]:
         elif current:
             groups.append(current)
             current = []
-    if any(LIST_HEAD.match(g[0]) for g in groups):
-        return [[line for line in lines if line]]
+    return groups
+
+
+def _joined(groups: list[list[str]]) -> list[list[str]]:
+    """Annotations join the group before them, a heading alone the group after it."""
     merged = []
     for group in groups:
         if _annotation(group) and merged:
@@ -251,6 +249,18 @@ def groups_of(lines: list[str]) -> list[list[str]]:
         else:
             result.append(carry)
     return result
+
+
+def groups_of(lines: list[str]) -> list[list[str]]:
+    """The parts the chair split a block into with blank lines.
+
+    A candidate list keeps the whole block together: "EARLY RETURN TO" names
+    fallbacks, not an order.
+    """
+    groups = _written_groups(lines)
+    if any(LIST_HEAD.match(g[0]) for g in groups):
+        return [[line for line in lines if line]]
+    return _joined(groups)
 
 
 # -------------------------------------------------------------------- title
@@ -300,26 +310,32 @@ def title_of(lines: list[str]) -> tuple[str, bool]:
     A text line over items ("NTN" over "[346] …") is a category and stands for
     them; an item or text line under no category is a unit itself; an owner
     line ("Main Ad-hoc") is a unit; a list head stands for its whole list.
+
+    Lines are read in the groups ``groups_of`` draws as parts, whether or not
+    this block was split: a category ends with its group (DECISIONS.md 3), and
+    a heading alone on its line heads the next group (2). Only a list runs on.
     """
-    kinds = [_kind(line) for line in lines]
     units, scope = [], None
-    for i, (line, kind) in enumerate(zip(lines, kinds)):
-        if kind in ('note', 'chair'):
-            continue
-        if scope == 'list':
-            continue
-        if kind == 'item' and scope == 'category':
-            continue
-        following = next((k for k in kinds[i + 1:] if k not in ('note', 'chair')), None)
-        if kind == 'list':
-            scope = 'list'
-        elif kind == 'text':
-            scope = 'category' if following == 'item' else None
-        elif kind == 'owner':
-            scope = None
-        text = clean(written_chairs(line)[1])
-        if text:
-            units.append(text)
+    for group in _joined(_written_groups(lines)):
+        scope = scope if scope == 'list' else None
+        kinds = [_kind(line) for line in group]
+        for i, (line, kind) in enumerate(zip(group, kinds)):
+            if kind in ('note', 'chair'):
+                continue
+            if scope == 'list':
+                continue
+            if kind == 'item' and scope == 'category':
+                continue
+            following = next((k for k in kinds[i + 1:] if k not in ('note', 'chair')), None)
+            if kind == 'list':
+                scope = 'list'
+            elif kind == 'text':
+                scope = 'category' if following == 'item' else None
+            elif kind == 'owner':
+                scope = None
+            text = clean(written_chairs(line)[1])
+            if text:
+                units.append(text)
     if not units:
         return clean(next((l for l in lines if l), '')), False
     return ' / '.join(units[:3]) + (' …' if len(units) > 3 else ''), True

@@ -201,6 +201,9 @@ def test_thursday_blank_lines_split_but_lists_do_not(week):
     assert len(gene[0][7]) == 10
     adhoc = next(r for r in rows if r[0] == 'ad-hoc-room')
     assert (adhoc[4], adhoc[6]) == ('BR1 Ad-hoc / Demod', None)   # no chair written: none shown
+    # The same shape as Monday 11:00's "Main Ad-hoc / [105-A] 6G RRM", with a blank line under the owner.
+    late = next(r for r in block(week[0], 'Thursday', '17:00', '18:00') if r[0] == 'yang')
+    assert (late[3], late[4], late[6]) == (None, 'Main Ad-hoc / [101-A] System Parameter', 'Leo')
 
 
 def test_the_seven_blocks_the_source_splits(week):
@@ -274,6 +277,21 @@ def test_a_session_written_for_the_break_is_held_in_the_break():
     assert rows[-1] == ('10:30', '11:00', None, 'COEFEE BREAK AH[102-B] 6G RF', 'Haijie') and not reasons
     rows, reasons = synthetic(['[340] A', 'Coffee break AH: 105-B'], end='12:00', breaks=[])
     assert len(rows) == 1 and reasons == ["no break after the block for 'Coffee break AH: 105-B'"]
+
+
+def test_titles_read_the_groups_the_parts_are_drawn_from():
+    def title(lines, start='17:00', end='18:00'):
+        return synthetic(lines, start, end, room='ad-hoc-room')[0]
+    # A heading alone on its line heads the next group, split or not (the page's #120bis Thu 17:00).
+    assert title(['Main Ad-hoc:', '', '[101-A] System Parameter, Chaired by Leo (Huawei)']) == [
+        ('17:00', '18:00', None, 'Main Ad-hoc / [101-A] System Parameter', 'Leo')]
+    assert title(['Main Ad-hoc:', '[101-A] System Parameter']) == title(['Main Ad-hoc:', '', '[101-A] System Parameter'])
+    assert title(['Maintenance', '', '[301] A', '[302] B'])[0][3] == 'Maintenance'
+    # A category ends with its group, also in a block too short to split (DECISIONS.md 3).
+    assert title(['Rel-20 RRM', '[203] A', '', '[208] B'], end='17:30')[0][2:4] == (None, 'Rel-20 RRM / [208] B')
+    assert title(['Rel-20 RRM', '[203] A', '', '[208] B'])[1][3] == '[208] B'
+    # A list head stands for its list across blank lines.
+    assert title(['[112] A', '', 'Return to', '[113] B', '', '[114] C'])[0][3] == '[112] A / Return to'
 
 
 def test_cells_the_rules_are_unsure_about_say_why():
@@ -600,6 +618,11 @@ def outline_texts(data):
     return office_outline.texts(office_outline.blocks(data, THU))
 
 
+def outline_rows(data):
+    from shared import office_outline
+    return llm.row_times(office_outline.blocks(data, THU))
+
+
 def document_answer(texts):
     """What a correct reading of Monday 9:00–13:00 and Friday looks like."""
     lines = lambda ref: texts[ref].split('\n')
@@ -696,11 +719,187 @@ def test_a_file_the_rules_cannot_read_is_read_whole_by_the_llm(offline_config, t
 def test_document_answers_are_checked_against_the_slides(change, problem):
     data = without_monday_title()
     texts = {k: v for k, v in outline_texts(data).items() if v.strip()}
+    rows = outline_rows(data)
     answer = document_answer(texts)
-    assert llm.check_document(llm.DocResult.model_validate(answer), texts) == []
+    assert llm.check_document(llm.DocResult.model_validate(answer), texts, rows) == []
     change(answer)
-    errors = llm.check_document(llm.DocResult.model_validate(answer), texts)
+    errors = llm.check_document(llm.DocResult.model_validate(answer), texts, rows)
     assert any(problem in e for e in errors), errors
+
+
+def extended_answer(texts):
+    """``document_answer`` with Thursday 8:30 Main and Friday 8:00 Main and BR1 read correctly."""
+    answer = document_answer(texts)
+    answer['days'].insert(1, {'day': 'Thursday', 'rooms': [{'id': 'c1', 'name': texts['s5:sh1:r0c1']}], 'breaks': []})
+    yang = texts['s5:sh1:r1c1'].split('\n')
+    answer['sessions'] += [
+        {'day': 'Thursday', 'start': '08:30', 'end': '10:30', 'room_ids': ['c1'], 'refs': ['s5:sh1:r1c1'],
+         'title': '[112] TEI20 / EARLY RETURN TO', 'line_numbers': [i for i, line in enumerate(yang) if line]},
+        {'day': 'Friday', 'start': '08:00', 'end': '10:30', 'room_ids': ['c1'], 'title': 'Return to', 'refs': ['s6:sh2:r1c1']},
+        {'day': 'Friday', 'start': '08:00', 'end': '10:30', 'room_ids': ['c2'], 'title': 'Return to', 'refs': ['s6:sh2:r1c2']}]
+    return answer
+
+
+def checked(answer, data):
+    texts = {k: v for k, v in outline_texts(data).items() if v.strip()}
+    return llm.check_document(llm.DocResult.model_validate(answer), texts, outline_rows(data))
+
+
+def split_the_list(answer, texts):
+    """Thursday Main's candidate list as a piece of its own (a real Flash answer)."""
+    whole = next(s for s in answer['sessions'] if s['refs'] == ['s5:sh1:r1c1'])
+    lines = texts['s5:sh1:r1c1'].split('\n')
+    head = next(i for i, line in enumerate(lines) if sessions.LIST_HEAD.match(line))
+    answer['sessions'].remove(whole)
+    answer['sessions'] += [
+        {**whole, 'part': [1, 2], 'title': '[112] TEI20', 'line_numbers': [i for i in whole['line_numbers'] if i < head]},
+        {**whole, 'part': [2, 2], 'title': 'EARLY RETURN TO', 'line_numbers': [i for i in whole['line_numbers'] if i >= head]}]
+
+
+def test_a_candidate_list_is_not_a_piece():
+    data = without_monday_title()
+    texts = {k: v for k, v in outline_texts(data).items() if v.strip()}
+    answer = extended_answer(texts)
+    assert checked(answer, data) == []   # one session across the blank line
+    split_the_list(answer, texts)
+    errors = checked(answer, data)
+    assert len(errors) == 1 and "'EARLY RETURN TO (in the following order)' heads a candidate list" in errors[0]
+    assert 'part null' in errors[0]
+
+
+def test_a_piece_with_a_time_line_before_a_list_head_is_refused():
+    text = '[112] A\n\n8:30 – 10:30\nReturn to\nNTN'
+    result = llm.DocResult.model_validate({
+        'days': [{'day': 'Monday', 'rooms': [{'id': 'r', 'name': 'x'}], 'breaks': []}],
+        'sessions': [{'day': 'Monday', 'start': '08:30', 'end': '10:30', 'room_ids': ['r'], 'title': t, 'refs': ['c'],
+                      'part': [k, 2], 'line_numbers': n} for k, t, n in ((1, '[112] A', [0]), (2, 'Return to', [2, 3, 4]))]})
+    errors = llm.check_document(result, {'c': text, 'x': 'x'}, {})
+    assert any("'Return to' heads a candidate list" in e for e in errors), errors
+
+
+def test_a_miscounted_line_number_is_answered_with_the_cells_lines():
+    """Two blank lines before "----12:00----": a real Flash answer cited line 3 for line 4's session."""
+    text = '~7GHz TN co-ex topic.\n\n\n----12:00----\n[216] NR_UE_OTA_Enh part, Chaired by Ruixin Wang (vivo)'
+    result = llm.DocResult.model_validate({
+        'days': [{'day': 'Thursday', 'rooms': [{'id': 'r', 'name': 'x'}], 'breaks': []}],
+        'sessions': [{'day': 'Thursday', 'start': '12:00', 'end': '13:00', 'room_ids': ['r'], 'title': '[216] NR_UE_OTA_Enh part',
+                      'topics': ['216'], 'chair': 'Ruixin Wang', 'refs': ['c'], 'line_numbers': [3]}]})
+    texts = {'c': text, 'x': 'x 13:00'}
+    errors = llm.check_document(result, texts, {})
+    assert any('title words' in e for e in errors)
+    assert any('1: (blank) | 2: (blank) | 3: ----12:00---- | 4: [216]' in e and 'may be miscounted' in e for e in errors), errors
+    result.sessions[0].line_numbers = [4]
+    assert llm.check_document(result, texts, {}) == []
+
+
+def test_a_time_from_the_cell_beside_is_refused():
+    data = without_monday_title()
+    texts = {k: v for k, v in outline_texts(data).items() if v.strip()}
+    # BR2's cell says "Return to (start at 8:30)"; Main and BR1 start with their row at 8:00 (a real Flash answer).
+    assert 'start at 8:30' in texts['s6:sh2:r1c3'].lower() and texts['s6:sh2:r1c1'].lower().count('start at') == 0
+    answer = extended_answer(texts)
+    assert checked(answer, data) == []
+    for session in answer['sessions'][-2:]:
+        session['start'] = '08:30'
+    errors = checked(answer, data)
+    assert len(errors) == 2 and all('08:30 is neither the time of its row (08:00 10:30)' in e for e in errors)
+    assert 'applies to that cell only' in errors[0] and 's6:sh2:r1c1' in errors[0]
+
+
+def test_times_written_in_the_cited_cell_are_its_own():
+    data = without_monday_title()
+    texts = {k: v for k, v in outline_texts(data).items() if v.strip()}
+    answer = extended_answer(texts)
+    # "---12:00---" sits on a line the 12:00 session does not cite: the cell's time all the same.
+    assert next(s for s in answer['sessions'] if s['start'] == '12:00')['line_numbers'] == [3]
+    # A session in a break keeps the break's times, not its row's; left out of the break, it is told so.
+    coffee = next(s for s in answer['sessions'] if s.get('in_break'))
+    assert checked(answer, data) == []
+    coffee['in_break'] = False
+    assert any('set in_break' in e for e in checked(answer, data))
+
+
+def table(*rows):
+    return [{'id': 's2', 'shapes': [{'id': 's2:sh2', 'rows': [
+        [{'id': f's2:sh2:r{r}c{c}', **({'text': cell} if isinstance(cell, str) else cell)} for c, cell in enumerate(row)]
+        for r, row in enumerate(rows)]}]}]
+
+
+def test_row_times_cover_spanned_rows_and_only_the_time_column():
+    rows = llm.row_times(table(
+        ['Time', 'Main'],
+        ['8:30-10:30', {'text': 'NTN', 'rowspan': 3}],
+        ['10:30-11:00', {'text': '', 'merged': True}],
+        ['11:00-13:00', {'text': '', 'merged': True}],
+        ['14:00-EOM', 'Return to'],
+        ['no time here', '15:00-16:00'],
+        ['', '[101] A\n15:00-16:00\n[102] B']))
+    assert rows['s2:sh2:r1c1'] == {'08:30', '10:30', '11:00', '13:00'}   # the block runs over the break
+    assert 's2:sh2:r2c1' not in rows   # covered by the cell above
+    assert rows['s2:sh2:r4c1'] == {'14:00', 'EOM'}
+    assert rows['s2:sh2:r5c0'] == {'15:00', '16:00'}   # a row's leftmost time, wherever the column went
+    assert 's2:sh2:r6c1' not in rows   # a time among a cell's lines is no row time
+    assert 's2:sh2:r0c1' not in rows   # the header has none
+
+
+def test_a_session_with_no_readable_row_time_is_not_held_to_one():
+    """The layout broke, so the row's time may be anywhere: the document-wide check stands alone."""
+    text = {'t': '8:30-10:30', 'c': 'NTN'}
+    result = llm.DocResult.model_validate({
+        'days': [{'day': 'Monday', 'rooms': [{'id': 'r', 'name': 'NTN'}], 'breaks': []}],
+        'sessions': [{'day': 'Monday', 'start': '08:30', 'end': '10:30', 'room_ids': ['r'], 'title': 'NTN', 'refs': ['c']}]})
+    assert llm.check_document(result, text, {}) == []
+
+
+def test_eom_is_the_row_s_or_written_in_the_cell():
+    blocks = table(['8:30-10:30', 'NTN'], ['14:00-EOM', 'Return to'])
+    rows = llm.row_times(blocks)
+    from shared import office_outline
+    texts = office_outline.texts(blocks)
+
+    def session(ref):
+        return llm.DocSession(day='Friday', start='14:00', end='EOM', room_ids=['r'], title='x', refs=[ref])
+    assert llm.row_errors('s', session('s2:sh2:r1c1'), texts, rows) == []
+    assert any('14:00 is neither' in e or 'EOM is neither' in e for e in llm.row_errors('s', session('s2:sh2:r0c1'), texts, rows))
+
+
+@pytest.mark.parametrize('name', [THU, V11_119])
+def test_the_rules_reading_passes_the_row_checks(name):
+    """No false alarm: every session the rules read from a real schedule keeps to its row and cells."""
+    from shared import office_outline
+    data = (FIXTURES / name).read_bytes()
+    blocks = office_outline.blocks(data, name)
+    texts, rows = {k: v for k, v in office_outline.texts(blocks).items() if v.strip()}, llm.row_times(blocks)
+    tables = [shape['id'] for slide in blocks for shape in slide['shapes'] if 'rows' in shape]
+    document = docmod.extract_document(data, name)
+    empty = {'agenda': {}, 'topics': {}, 'column_chairs': {}}
+    count = 0
+    for table_id, day in zip(tables, document['days']):
+        for cell in day['cells']:
+            where = re.search(r'r\d+c\d+$', cell['id'])[0]
+            eom = cell['end'] is None
+            read = {**cell, 'end': '23:55'} if eom else cell
+            for found in sessions.read_cell(read, day, empty)[0]:
+                in_break = found['start'] in {b['start'] for b in day['breaks']} and found['start'] >= read['end']
+                session = llm.DocSession(day=day['day'], start=found['start'], end='EOM' if found['end'] == '23:55' else found['end'],
+                                         room_ids=['r'], title='x', in_break=in_break, refs=[f'{table_id}:{where}'])
+                assert llm.row_errors('s', session, texts, rows) == [], (cell['id'], found['lines'])
+                assert not (found['part'] and sessions.LIST_HEAD.match(found['lines'][0]))
+                count += 1
+    assert count > 100
+
+
+def test_a_failed_check_is_asked_again_with_the_reason(tmp_path):
+    data = without_monday_title()
+    texts = {k: v for k, v in outline_texts(data).items() if v.strip()}
+    right = extended_answer(texts)
+    wrong = extended_answer(texts)
+    split_the_list(wrong, texts)
+    next(s for s in wrong['sessions'] if s['refs'] == ['s6:sh2:r1c1'] and s['title'] == 'Return to')['start'] = '08:30'
+    gemini = FakeGemini(wrong, right)
+    llm.read_document(data, THU, 'test-model', gemini, tmp_path)
+    assert len(gemini.calls) == 2
+    assert 'heads a candidate list' in gemini.calls[1] and 'applies to that cell only' in gemini.calls[1]
 
 
 def test_a_blank_line_among_a_sessions_lines_is_left_out():
@@ -710,9 +909,10 @@ def test_a_blank_line_among_a_sessions_lines_is_left_out():
     session = next(s for s in answer['sessions'] if s.get('part') and '' in texts[s['refs'][0]].split('\n'))
     blanks = [i for i, line in enumerate(texts[session['refs'][0]].split('\n')) if not line]
     session['line_numbers'] = sorted(session['line_numbers'] + blanks)
-    assert llm.check_document(llm.DocResult.model_validate(answer), texts) == []
+    rows = outline_rows(data)
+    assert llm.check_document(llm.DocResult.model_validate(answer), texts, rows) == []
     session['line_numbers'] = blanks
-    assert any('not only blank ones' in e for e in llm.check_document(llm.DocResult.model_validate(answer), texts))
+    assert any('not only blank ones' in e for e in llm.check_document(llm.DocResult.model_validate(answer), texts, rows))
 
 
 def test_a_shortened_topic_number_stands_for_both_numbers():
