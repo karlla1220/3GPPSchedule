@@ -1566,6 +1566,9 @@ header .meta a:focus-visible,
     line-height: 1.5;
     color: var(--ink-2);
 }
+/* Which day a row is, only where several days are listed (the All tab). */
+.email-informal-day { display: none; font-weight: 600; white-space: nowrap; }
+.email-informal.every-day .email-informal-day { display: inline; }
 .email-informal-when { font-weight: 600; white-space: nowrap; }
 .email-informal-ai, .email-informal-from { color: var(--ink-3); }
 .email-informal-ai { white-space: nowrap; }
@@ -1812,6 +1815,179 @@ header .meta a:focus-visible,
 .help-still .help-stage *,
 .help-still .help-stage *::before,
 .help-still .help-stage *::after { transition: none !important; animation: none !important; }
+
+/* All tab: every day on one time axis (renderer.py, _render_all_days). The
+   page takes the screen's width and the rows its height, so the week shows
+   whole once the grid is scrolled to the top; --week-fit (schedule.js) keeps
+   that height where the grid is zoomed to fit a phone's width, so its cells
+   stay tall enough to tap. Cells carry their titles only; the popup holds the rest. */
+.all-days-view .container { max-width: none; }
+
+.tab-all { margin-left: 6px; }
+
+/* The rooms of the All tab, beside it and only under it (room-picks.js). */
+.room-picks { display: none; }
+.all-days-view .room-picks {
+    display: flex;
+    flex-wrap: wrap;
+    flex: 0 1 auto;
+    gap: 2px 10px;
+    min-width: 0;
+    font-size: 12.5px;
+    font-weight: 500;
+    color: var(--ink-2);
+}
+.room-pick {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    min-height: 24px;
+    max-width: 200px;
+    cursor: pointer;
+}
+.room-pick span {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.room-pick input {
+    flex: none;
+    width: 14px;
+    height: 14px;
+    margin: 0;
+    accent-color: var(--ink-2);
+}
+/* A phone has no room beside the tabs: its own line, under them. */
+@media (max-width: 768px) {
+    .all-days-view .schedule-toolbar:has(.room-picks) { flex-wrap: wrap; }
+    .all-days-view .room-picks { order: 1; flex-basis: 100%; }
+    .room-pick { max-width: 150px; min-height: 28px; }
+}
+@media (max-width: 400px) {
+    .tab { padding: 6px 9px; }
+    /* Six tabs and NOW on one line at 320px. */
+    .tab-all { margin-left: 1px; }
+}
+
+.week-grid {
+    --base-slot-height: calc(clamp(5px, calc((100vh - 92px) / var(--week-slots)), 10px) / var(--week-fit, 1));
+    grid-template-rows: calc(22px * var(--axis-unzoom, 1)) var(--header-height) repeat(var(--time-rows), var(--slot-height));
+}
+
+.week-grid .room-header {
+    padding: 2px;
+    font-size: 9.5px;
+    font-weight: 500;
+    grid-row: 2;
+}
+.week-grid .room-header.time-col { grid-row: 1 / 3; }
+
+/* Readable at any zoom, like the time axis. */
+.week-day {
+    zoom: var(--axis-unzoom, 1);
+    position: relative;
+    z-index: 20;
+    border: 0;
+    border-bottom: 1px solid var(--hairline);
+    background: var(--surface);
+    color: var(--ink);
+    font-family: inherit;
+    font-size: 12.5px;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    cursor: pointer;
+    /* A narrow day keeps its name and drops its date. */
+    container-type: inline-size;
+}
+.week-day:hover { background: var(--page-bg); }
+/* While a pinch scales the grid, the names shrink back to their size into the
+   bottom of their row, which keeps its height (schedule.js, --day-sx, --day-sy). */
+.week-day > span { display: inline-block; }
+.pinching .week-day { scale: 1 var(--day-sy, 1); transform-origin: 50% 100%; }
+.pinching .week-day > span { scale: var(--day-sx, 1) 1; }
+.pinching .room-header.time-col > span { translate: 0 var(--head-ty, 0px); }
+.week-date {
+    color: var(--ink-3);
+    font-weight: 400;
+}
+@container (max-width: 76px) {
+    .week-date { display: none; }
+}
+
+/* Between two days; the time lines run on behind it. */
+.week-gutter {
+    grid-row: 1 / -1;
+    background: var(--page-bg);
+    box-shadow: inset 1px 0 0 var(--hairline), inset -1px 0 0 var(--hairline);
+    z-index: 22;
+}
+
+.week-grid .break-bar {
+    font-size: 10px;
+    overflow: hidden;
+}
+
+/* NOW: the label on the time axis, the red line across today's rooms only
+   (schedule.js). The label's own line spans the grid as a day's does, so the
+   label sticks to the axis while the grid scrolls, but it draws no red. */
+.now-line.now-label { background: none; }
+.now-line.now-today::before { content: none; }
+
+/* The bar is thin and the margin half the day's: every pixel of a 52px room
+   goes to the title. The height budget of a day's cell does not apply here. */
+.session-block.week-cell {
+    padding: 1px 2px 0 6px;
+    margin: 1px;
+    border-radius: 4px;
+    container-type: normal;
+}
+.session-block.week-cell::before {
+    left: 2px;
+    top: 2px;
+    bottom: 2px;
+    width: 2px;
+}
+/* Whole lines only, as many as the cell's height holds (--cell-rows, renderer.py). */
+.week-cell .session-name {
+    --title-line: 12px;
+    font-size: 10.5px;
+    line-height: var(--title-line);
+    white-space: normal;
+    overflow-wrap: anywhere;
+    hyphens: auto;
+    text-overflow: clip;
+    flex-shrink: 1;
+    min-height: 0;
+    max-height: calc(var(--slot-height) * var(--cell-rows) - 5px);
+}
+@supports (height: round(down, 13px, 12px)) {
+    .week-cell .session-name {
+        max-height: round(down, calc(var(--slot-height) * var(--cell-rows) - 5px), var(--title-line));
+    }
+}
+/* A filter's cells stand out from the whole week: their tint alone is lost at
+   the zoom that fits a phone. Darkened so white text reads on every category colour. */
+.filtering .week-cell:not(.dimmed) {
+    --filled: var(--session-border);
+    background: var(--filled);
+    border-color: var(--filled);
+}
+@supports (color: color-mix(in oklch, red, blue)) {
+    .filtering .week-cell:not(.dimmed) { --filled: color-mix(in oklch, var(--accent) 72%, #0F172A); }
+}
+.filtering .week-cell:not(.dimmed)::before { display: none; }
+.filtering .week-cell:not(.dimmed) .session-name { color: #FFFFFF; }
+
+/* Ten minutes: one small line, edge to edge. Five leave a coloured mark only. */
+.session-block.week-cell.short-session { padding: 0 2px 0 6px; justify-content: center; }
+.week-cell.short-session .session-name {
+    --title-line: 9px;
+    font-size: 9px;
+    white-space: nowrap;
+    max-height: none;
+}
+.week-cell.tiny-session .session-name { display: none; }
 </style>
     <script>// Runs in <head>. Arriving from another WG's page (the meeting switch, or back
 // and forward between them), the first frame waits until the day grids are
@@ -1858,7 +2034,7 @@ header .meta a:focus-visible,
         button.hidden = true;
         return;
     }
-    const STEPS = [{"key": "switch", "target": "#wg-switch summary", "title": "Switch meetings from the title", "text": "The meeting name opens every WG’s meeting, ongoing ones first."}, {"key": "days", "target": ".schedule-toolbar", "title": "Pick a day", "text": "Each day of the meeting has its own grid. During the meeting, NOW marks the current time on today’s."}, {"key": "details", "target": "cell", "scene": "details", "title": "Tap a session for its details", "text": "Group, chair, room, notes and the agenda item names. Tap again, or anywhere else, to close it."}, {"key": "filter", "target": ".filter-toggle", "scene": "filter", "title": "Follow only your agenda items", "text": "Open Filter here and tick what you follow; other sessions fade. The filter is kept for this meeting and is part of the link, so you can share what you see."}, {"key": "pinch", "target": "grid", "scene": "pinch", "touch": true, "title": "Pinch to see the whole day", "text": "Pinch the grid itself to see every room at once. Spreading back, it stops at 100% for a moment."}, {"key": "agreements", "target": "#agreement-panel:not(.tdoc-conclusions)", "title": "Agreements below the grid", "text": "Tapping a session shows the chair notes for its agenda item here. Parts added in the latest notes have a green bar."}, {"key": "conclusions", "target": "#agreement-panel.tdoc-conclusions", "title": "TDoc conclusions below the grid", "text": "Tapping a session shows the TDocs of its agenda item and their conclusions here. Rows changed in the latest chair file have a green bar."}, {"key": "informal", "target": ".email-informal", "title": "Off-offline and FL whereabouts", "text": "Informal meetings announced on the email threads for the chosen day. They are not on the schedule; tapping a session marks its own."}, {"key": "supplements", "target": ".supplements", "title": "Additional information", "text": "What the chair’s schedule says besides the grid, such as deadlines, breaks and offline discussions. Tap the heading to fold it."}, {"key": "topics", "target": ".topic-references", "title": "Topics", "text": "The chair’s topics with their documents, notes and agenda items. Tap the heading to fold it."}, {"key": "help", "target": "#help-button", "title": "This tour is always here", "text": "Press How to use to start it again. The page reloads itself every few minutes and comes back to the day and spot you were looking at."}];
+    const STEPS = [{"key": "switch", "target": "#wg-switch summary", "title": "Switch meetings from the title", "text": "The meeting name opens every WG’s meeting, ongoing ones first."}, {"key": "days", "target": ".schedule-toolbar", "title": "Pick a day", "text": "Each day has its own grid, and All shows them together. During the meeting, NOW marks the current time on today’s."}, {"key": "rooms", "target": ".room-picks", "title": "Tick the rooms you follow", "text": "Under All, the rooms you untick leave the grid. With fewer rooms the titles fit, even on a phone."}, {"key": "details", "target": "cell", "scene": "details", "title": "Tap a session for its details", "text": "Group, chair, room, notes and the agenda item names. Tap again, or anywhere else, to close it."}, {"key": "filter", "target": ".filter-toggle", "scene": "filter", "title": "Follow only your agenda items", "text": "Open Filter here and tick what you follow; other sessions fade. The filter is kept for this meeting and is part of the link, so you can share what you see."}, {"key": "pinch", "target": "grid", "scene": "pinch", "touch": true, "title": "Pinch to see the whole grid", "text": "Pinch the grid itself to see every room at once. Spreading back, it stops at 100% for a moment."}, {"key": "agreements", "target": "#agreement-panel:not(.tdoc-conclusions)", "title": "Agreements below the grid", "text": "Tapping a session shows the chair notes for its agenda item here. Parts added in the latest notes have a green bar."}, {"key": "conclusions", "target": "#agreement-panel.tdoc-conclusions", "title": "TDoc conclusions below the grid", "text": "Tapping a session shows the TDocs of its agenda item and their conclusions here. Rows changed in the latest chair file have a green bar."}, {"key": "informal", "target": ".email-informal", "title": "Off-offline and FL whereabouts", "text": "Informal meetings announced on the email threads for the chosen day. They are not on the schedule; tapping a session marks its own."}, {"key": "supplements", "target": ".supplements", "title": "Additional information", "text": "What the chair’s schedule says besides the grid, such as deadlines, breaks and offline discussions. Tap the heading to fold it."}, {"key": "topics", "target": ".topic-references", "title": "Topics", "text": "The chair’s topics with their documents, notes and agenda items. Tap the heading to fold it."}, {"key": "help", "target": "#help-button", "title": "This tour is always here", "text": "Press How to use to start it again. The page reloads itself every few minutes and comes back to the day and spot you were looking at."}];
     const spot = guide.querySelector('.help-spot');
     const card = guide.querySelector('.help-card');
     const count = guide.querySelector('.help-count');
@@ -1936,9 +2112,17 @@ header .meta a:focus-visible,
     }
 
     // ── This page's grid, as it is laid out on a phone ──
+    // A scene needs a day's whole cells, so under the All tab it plays on the first day.
     function sourceGrid() {
-        const grid = document.querySelector('.day-panel.active .schedule-grid') || document.querySelector('.schedule-grid');
+        const grid = document.querySelector('.day-panel.active:not(.all-days) .schedule-grid')
+            || document.querySelector('.day-panel:not(.all-days) .schedule-grid');
         return grid && grid.querySelector('.session-block') ? grid : null;
+    }
+
+    // The grid on screen, for what the tour points at.
+    function pageGrid() {
+        const grid = document.querySelector('.day-panel.active .schedule-grid');
+        return grid && grid.querySelector('.session-block') ? grid : sourceGrid();
     }
 
     function gridView(stage) {
@@ -1968,7 +2152,7 @@ header .meta a:focus-visible,
         let best = null;
         let bestScore = -Infinity;
         grid.querySelectorAll('.session-block').forEach(block => {
-            if (!block.dataset.popup || block.classList.contains('short-session') || block.classList.contains('tiny-session')) return;
+            if (!(block.dataset.popup || block.dataset.popupOf) || block.classList.contains('short-session') || block.classList.contains('tiny-session')) return;
             if (accept && !accept(block)) return;
             const col = columns(block);
             const score = (block.dataset.ai ? 4 : 0) + (block.querySelector('.session-note') ? 2 : 0) +
@@ -2227,21 +2411,22 @@ header .meta a:focus-visible,
     // A session in view to point at: the grid scrolls sideways in its own box,
     // and moving it would leave the visitor somewhere else.
     function visibleCell() {
-        const grid = sourceGrid();
+        const grid = pageGrid();
         if (!grid) return null;
         const box = grid.parentElement.getBoundingClientRect();
         const cell = pickBlock(grid, block => {
             const r = block.getBoundingClientRect();
             return r.left >= box.left && r.right <= box.right;
         });
-        return cell && { el: cell, index: Array.from(grid.querySelectorAll('.session-block')).indexOf(cell) };
+        // An All view cell has no twin at this index in the scene's grid; the scene picks its own.
+        return cell && { el: cell, index: cell.dataset.popupOf ? -1 : Array.from(grid.querySelectorAll('.session-block')).indexOf(cell) };
     }
 
     function target(step) {
         if (step.touch && !touchScreen()) return null;
         if (step.target === 'cell') return visibleCell();
         if (step.target === 'grid') {
-            const grid = sourceGrid();
+            const grid = pageGrid();
             return grid && { el: grid.parentElement };
         }
         const node = document.querySelector(step.target);
@@ -2625,9 +2810,99 @@ header .meta a:focus-visible,
             <button class="tab" data-day="wednesday" style="view-transition-name:day-tab-wednesday;view-transition-class:grid-move">Wed</button>
             <button class="tab" data-day="thursday" style="view-transition-name:day-tab-thursday;view-transition-class:grid-move">Thu</button>
             <button class="tab" data-day="friday" style="view-transition-name:day-tab-friday;view-transition-class:grid-move">Fri</button>
+            <button class="tab tab-all" data-day="all-days" data-grid-min-width="1256" title="Every day of the meeting at a glance" style="view-transition-name:day-tab-all-days;view-transition-class:grid-move">All</button>
         </div>
+        <div class="room-picks" role="group" aria-label="Rooms shown in All" data-week='{"days":[[0,1,2,3,4],[0,1,2,3,4],[0,1,2,3,4],[0,1,2,3,4],[0,1,2]],"room":52,"gutter":6,"axis":36}'><label class="room-pick" title="RAN4 Main (Yang Session)"><input type="checkbox" checked data-room="0" data-key="yang"><span>RAN4 Main (Yang Session)</span></label><label class="room-pick" title="RAN4 RRM_Demod_OTA (Shan Session)
+RAN4 Breakout 1(BR1) (Shan Session)"><input type="checkbox" checked data-room="1" data-key="shan"><span>RAN4 RRM_Demod_OTA (Shan Session)</span></label><label class="room-pick" title="RAN4 RF,NTN,A-IOT (Gene Session)
+RAN4 Breakout 2 (BR2)(Gene Session)"><input type="checkbox" checked data-room="2" data-key="gene"><span>RAN4 RF,NTN,A-IOT (Gene Session)</span></label><label class="room-pick" title="Ad hoc room"><input type="checkbox" checked data-room="3" data-key="ad-hoc-room"><span>Ad hoc room</span></label><label class="room-pick" title="Offline Room"><input type="checkbox" checked data-room="4" data-key="offline-room"><span>Offline Room</span></label></div>
         <button class="now-toggle" id="now-toggle" type="button" style="view-transition-name:now-toggle;view-transition-class:grid-move" aria-pressed="false" disabled title="NOW is available during the meeting">NOW</button>
     </div>
+    <script>// The room checkboxes of the All tab. Runs right after them, before the grid is
+// parsed, so a saved choice draws from the first frame and day-select.js fits
+// the zoom to the width of the rooms left. One rule does the work: renderer.py
+// marks each All view element with its rooms (wr-N) and days (wd-N), and the
+// grid keeps its column numbers, with a hidden room's track at no width.
+(function() {
+    const KEY = '3gpp_schedule_rooms:' + "ran4:ran4#120bis";
+    const box = document.querySelector('.room-picks');
+    if (!box) return;
+    const boxes = [...box.querySelectorAll('input[data-room]')];
+    const week = JSON.parse(box.dataset.week);
+    const tab = document.querySelector('.tab[data-day="all-days"]');
+    const style = document.createElement('style');
+    style.id = 'week-rooms';
+    document.head.appendChild(style);
+
+    // Hidden rooms are kept, not shown ones: a room added later starts ticked.
+    // A room is its key (renderer.py _room_key), not its name, which may change by the day.
+    function load() {
+        try {
+            const hidden = JSON.parse(localStorage.getItem(KEY) || '[]');
+            return Array.isArray(hidden) ? hidden : [];
+        } catch (e) {
+            return [];
+        }
+    }
+
+    function save() {
+        const hidden = boxes.filter(b => !b.checked).map(b => b.dataset.key);
+        try {
+            if (hidden.length) localStorage.setItem(KEY, JSON.stringify(hidden));
+            else localStorage.removeItem(KEY);
+        } catch (e) {
+            // localStorage may be unavailable; the choice lasts until the page reloads
+        }
+    }
+
+    function draw() {
+        const shown = new Set(boxes.filter(b => b.checked).map(b => Number(b.dataset.room)));
+        // Only a last unticked box left would empty the grid: it stays ticked.
+        boxes.forEach(b => { b.disabled = b.checked && shown.size === 1; });
+        const showsDay = week.days.map(rooms => rooms.some(room => shown.has(room)));
+        const lastDay = showsDay.lastIndexOf(true);
+        const tracks = ['var(--axis-col-width)'];
+        const hide = [];
+        let rooms = 0;
+        week.days.forEach((dayRooms, i) => {
+            dayRooms.forEach(room => {
+                const on = shown.has(room);
+                rooms += on ? 1 : 0;
+                tracks.push(on ? 'minmax(0, 1fr)' : '0px');
+            });
+            if (!showsDay[i]) hide.push('.wd-' + i);
+            if (i < week.days.length - 1) {
+                const gutter = showsDay[i] && i < lastDay;
+                tracks.push(gutter ? week.gutter + 'px' : '0px');
+                if (!gutter) hide.push('.wg-' + i);
+            }
+        });
+        const days = showsDay.filter(Boolean).length;
+        const width = week.axis + rooms * week.room + (days - 1) * week.gutter;
+        if (tab) tab.dataset.gridMinWidth = String(width);
+        if (shown.size === boxes.length) {
+            style.textContent = '';
+            return;
+        }
+        const left = [...shown].map(room => '.wr-' + room).join(',');
+        style.textContent = '#all-days .week-grid { grid-template-columns: ' + tracks.join(' ') + ' !important;'
+            + ' --grid-min-width: ' + width + 'px !important; }'
+            + ' #all-days :is(.week-cell, .room-header:not(.time-col)):not(' + left + ') { display: none; }'
+            + (hide.length ? ' #all-days :is(' + hide.join(',') + ') { display: none; }' : '');
+    }
+
+    const hidden = new Set(load());
+    boxes.forEach(b => { b.checked = !hidden.has(b.dataset.key); });
+    // A saved choice of rooms this meeting no longer has shows every room.
+    if (!boxes.some(b => b.checked)) boxes.forEach(b => { b.checked = true; });
+    draw();
+    box.addEventListener('change', function() {
+        save();
+        draw();
+        // schedule.js fits the zoom to the new width.
+        document.dispatchEvent(new CustomEvent('room-picks-change'));
+    });
+})();
+</script>
     <script>// Runs right after the day tabs, before the day panels are parsed: the chosen
 // day's grid is drawn in place as it arrives, so the sections below never
 // appear in its spot first and get pushed down. schedule.js takes over at
@@ -2661,22 +2936,30 @@ header .meta a:focus-visible,
         + ' ' + panel + ' .grid-wrapper { view-transition-name: grid-frame; view-transition-class: grid-move; }'
         + ' ' + panel + ' .schedule-grid { view-transition-name: grid-cells; }';
     document.head.appendChild(style);
+    const allDays = chosen.dataset.day === 'all-days';
+    if (allDays) document.documentElement.classList.add('all-days-view');
 
     // The grid zoom it was left at comes back with the day, as in schedule.js's
     // setGridZoom. Left to DOMContentLoaded, a phone draws the grid at 100% while
     // the page arrives (and in the switch's cross-fade), then shrinks it.
     // The tab bar above is as wide as the grid's box, which is not parsed yet.
-    const zoom = saved && saved.activeDay === chosen.dataset.day ? Number(saved.gridZoom) : 1;
-    if (!(zoom > 0) || zoom === 1 || !(CSS.supports && CSS.supports('zoom', '1'))) return;
+    // The All view fits the width until it is pinched; its grid is wider than a day's.
+    if (!(CSS.supports && CSS.supports('zoom', '1'))) return;
     const root = document.documentElement;
     const toolbar = document.querySelector('.schedule-toolbar');
     const width = toolbar ? toolbar.clientWidth : 0;
-    const minWidth = parseFloat(getComputedStyle(root).getPropertyValue('--grid-min-width')) || 600;
+    const minWidth = Number(chosen.dataset.gridMinWidth)
+        || parseFloat(getComputedStyle(root).getPropertyValue('--grid-min-width')) || 600;
+    const fits = width ? Math.min(1, width / minWidth) : 1;
+    if (allDays) root.style.setProperty('--week-fit', String(fits));
+    const left = saved && saved.activeDay === chosen.dataset.day ? saved.gridZoom : undefined;
+    const zoom = allDays && (left === undefined || left === 'fit') ? fits : left === undefined ? 1 : Number(left);
+    if (!(zoom > 0)) return;
     // Never below the zoom that fits the day (the screen may have turned since).
-    const z = width ? Math.max(zoom, Math.min(1, width / minWidth)) : zoom;
+    const z = width ? Math.max(zoom, fits) : zoom;
     if (z === 1) return;
     root.style.setProperty('--grid-zoom', String(z));
-    if (z > 1) root.style.setProperty('--axis-unzoom', String(1 / z));
+    if (z > 1 || allDays) root.style.setProperty('--axis-unzoom', String(1 / z));
     root.style.setProperty('--grid-width', Math.max(width, minWidth) + 'px');
 })();
 </script>
@@ -3342,6 +3625,182 @@ Others based on LS">
             </div>
         </div>
     </div>
+    <div class="day-panel all-days" id="all-days" data-date="">
+        <div class="grid-wrapper">
+            <div class="schedule-grid week-grid" data-start="480" data-end="1170" data-slot="5" data-first-row="3" style="grid-template-columns:var(--axis-col-width) repeat(5, minmax(0, 1fr)) 6px repeat(5, minmax(0, 1fr)) 6px repeat(5, minmax(0, 1fr)) 6px repeat(5, minmax(0, 1fr)) 6px repeat(3, minmax(0, 1fr));--time-rows:138;--slot-scale:1;--week-slots:138;--grid-min-width:1256px">
+                <div class="room-header time-col" style="grid-column:1;grid-row:1/3;view-transition-name:time-head;view-transition-class:grid-move"><span>Time</span></div>
+<div class="time-label" style="grid-row:3/9;view-transition-name:time-480;view-transition-class:grid-move"><span>08:00</span></div><div class="grid-line major" style="grid-row:3"></div><div class="time-label" style="grid-row:9/15;view-transition-name:time-510;view-transition-class:grid-move"><span>08:30</span></div><div class="grid-line" style="grid-row:9"></div><div class="time-label" style="grid-row:15/21;view-transition-name:time-540;view-transition-class:grid-move"><span>09:00</span></div><div class="grid-line major" style="grid-row:15"></div><div class="time-label" style="grid-row:21/27;view-transition-name:time-570;view-transition-class:grid-move"><span>09:30</span></div><div class="grid-line" style="grid-row:21"></div><div class="time-label" style="grid-row:27/33;view-transition-name:time-600;view-transition-class:grid-move"><span>10:00</span></div><div class="grid-line major" style="grid-row:27"></div><div class="time-label" style="grid-row:33/39;view-transition-name:time-630;view-transition-class:grid-move"><span>10:30</span></div><div class="grid-line" style="grid-row:33"></div><div class="time-label" style="grid-row:39/45;view-transition-name:time-660;view-transition-class:grid-move"><span>11:00</span></div><div class="grid-line major" style="grid-row:39"></div><div class="time-label" style="grid-row:45/51;view-transition-name:time-690;view-transition-class:grid-move"><span>11:30</span></div><div class="grid-line" style="grid-row:45"></div><div class="time-label" style="grid-row:51/57;view-transition-name:time-720;view-transition-class:grid-move"><span>12:00</span></div><div class="grid-line major" style="grid-row:51"></div><div class="time-label" style="grid-row:57/63;view-transition-name:time-750;view-transition-class:grid-move"><span>12:30</span></div><div class="grid-line" style="grid-row:57"></div><div class="time-label" style="grid-row:63/69;view-transition-name:time-780;view-transition-class:grid-move"><span>13:00</span></div><div class="grid-line major" style="grid-row:63"></div><div class="time-label" style="grid-row:69/75;view-transition-name:time-810;view-transition-class:grid-move"><span>13:30</span></div><div class="grid-line" style="grid-row:69"></div><div class="time-label" style="grid-row:75/81;view-transition-name:time-840;view-transition-class:grid-move"><span>14:00</span></div><div class="grid-line major" style="grid-row:75"></div><div class="time-label" style="grid-row:81/87;view-transition-name:time-870;view-transition-class:grid-move"><span>14:30</span></div><div class="grid-line" style="grid-row:81"></div><div class="time-label" style="grid-row:87/93;view-transition-name:time-900;view-transition-class:grid-move"><span>15:00</span></div><div class="grid-line major" style="grid-row:87"></div><div class="time-label" style="grid-row:93/99;view-transition-name:time-930;view-transition-class:grid-move"><span>15:30</span></div><div class="grid-line" style="grid-row:93"></div><div class="time-label" style="grid-row:99/105;view-transition-name:time-960;view-transition-class:grid-move"><span>16:00</span></div><div class="grid-line major" style="grid-row:99"></div><div class="time-label" style="grid-row:105/111;view-transition-name:time-990;view-transition-class:grid-move"><span>16:30</span></div><div class="grid-line" style="grid-row:105"></div><div class="time-label" style="grid-row:111/117;view-transition-name:time-1020;view-transition-class:grid-move"><span>17:00</span></div><div class="grid-line major" style="grid-row:111"></div><div class="time-label" style="grid-row:117/123;view-transition-name:time-1050;view-transition-class:grid-move"><span>17:30</span></div><div class="grid-line" style="grid-row:117"></div><div class="time-label" style="grid-row:123/129;view-transition-name:time-1080;view-transition-class:grid-move"><span>18:00</span></div><div class="grid-line major" style="grid-row:123"></div><div class="time-label" style="grid-row:129/135;view-transition-name:time-1110;view-transition-class:grid-move"><span>18:30</span></div><div class="grid-line" style="grid-row:129"></div><div class="time-label" style="grid-row:135/141;view-transition-name:time-1140;view-transition-class:grid-move"><span>19:00</span></div><div class="grid-line major" style="grid-row:135"></div><button type="button" class="week-day wd-0" data-day="monday" style="grid-column:2/7;grid-row:1"><span>Mon <span class="week-date">12 Oct</span></span></button>
+<div class="week-gutter wg-0" style="grid-column:7"></div>
+<div class="room-header wr-0" title="RAN4 Main (Yang Session)" style="grid-column:2;grid-row:2"><span class="room-name-text">RAN4 Main <span class="room-word">(Yang Session)</span></span></div>
+<div class="room-header wr-1" title="RAN4 Breakout 1(BR1) (Shan Session)" style="grid-column:3;grid-row:2"><span class="room-name-text">RAN4 Breakout 1(BR1) <span class="room-word">(Shan Session)</span></span></div>
+<div class="room-header wr-2" title="RAN4 Breakout 2 (BR2)(Gene Session)" style="grid-column:4;grid-row:2"><span class="room-name-text">RAN4 Breakout 2 (BR2)<wbr><span class="room-word">(Gene Session)</span></span></div>
+<div class="room-header wr-3" title="Ad hoc room" style="grid-column:5;grid-row:2"><span class="room-name-text">Ad hoc room</span></div>
+<div class="room-header wr-4" title="Offline Room" style="grid-column:6;grid-row:2"><span class="room-name-text">Offline Room</span></div>
+<div class="break-bar wd-0" title="커피 타임" style="grid-column:2/7;grid-row:33/39"></div><div class="break-bar wd-0" title="점심시간" style="grid-column:2/7;grid-row:63/81">점심시간</div><div class="break-bar wd-0" title="커피 타임" style="grid-column:2/7;grid-row:105/111">커피 타임</div><button type="button" class="week-day wd-1" data-day="tuesday" style="grid-column:8/13;grid-row:1"><span>Tue <span class="week-date">13 Oct</span></span></button>
+<div class="week-gutter wg-1" style="grid-column:13"></div>
+<div class="room-header wr-0" title="RAN4 Main (Yang Session)" style="grid-column:8;grid-row:2"><span class="room-name-text">RAN4 Main <span class="room-word">(Yang Session)</span></span></div>
+<div class="room-header wr-1" title="RAN4 RRM_Demod_OTA (Shan Session)" style="grid-column:9;grid-row:2"><span class="room-name-text">RAN4 RRM_Demod_OTA <span class="room-word">(Shan Session)</span></span></div>
+<div class="room-header wr-2" title="RAN4 RF,NTN,A-IOT (Gene Session)" style="grid-column:10;grid-row:2"><span class="room-name-text">RAN4 <span class="room-word">RF,NTN,A-IOT</span> <span class="room-word">(Gene Session)</span></span></div>
+<div class="room-header wr-3" title="Ad hoc room" style="grid-column:11;grid-row:2"><span class="room-name-text">Ad hoc room</span></div>
+<div class="room-header wr-4" title="Offline room" style="grid-column:12;grid-row:2"><span class="room-name-text">Offline room</span></div>
+<div class="break-bar wd-1" title="커피 타임" style="grid-column:8/13;grid-row:33/39"></div><div class="break-bar wd-1" title="점심시간" style="grid-column:8/13;grid-row:63/81">점심시간</div><div class="break-bar wd-1" title="커피 타임" style="grid-column:8/13;grid-row:105/111"></div><button type="button" class="week-day wd-2" data-day="wednesday" style="grid-column:14/19;grid-row:1"><span>Wed <span class="week-date">14 Oct</span></span></button>
+<div class="week-gutter wg-2" style="grid-column:19"></div>
+<div class="room-header wr-0" title="RAN4 Main (Yang Session)" style="grid-column:14;grid-row:2"><span class="room-name-text">RAN4 Main <span class="room-word">(Yang Session)</span></span></div>
+<div class="room-header wr-1" title="RAN4 RRM_Demod_OTA (Shan Session)" style="grid-column:15;grid-row:2"><span class="room-name-text">RAN4 RRM_Demod_OTA <span class="room-word">(Shan Session)</span></span></div>
+<div class="room-header wr-2" title="RAN4 RF,NTN,A-IOT (Gene Session)" style="grid-column:16;grid-row:2"><span class="room-name-text">RAN4 <span class="room-word">RF,NTN,A-IOT</span> <span class="room-word">(Gene Session)</span></span></div>
+<div class="room-header wr-3" title="Ad hoc room" style="grid-column:17;grid-row:2"><span class="room-name-text">Ad hoc room</span></div>
+<div class="room-header wr-4" title="Offline room" style="grid-column:18;grid-row:2"><span class="room-name-text">Offline room</span></div>
+<div class="break-bar wd-2" title="커피 타임" style="grid-column:14/19;grid-row:33/39"></div><div class="break-bar wd-2" title="점심시간" style="grid-column:14/19;grid-row:63/81">점심시간</div><div class="break-bar wd-2" title="커피 타임" style="grid-column:14/19;grid-row:105/111"></div><button type="button" class="week-day wd-3" data-day="thursday" style="grid-column:20/25;grid-row:1"><span>Thu <span class="week-date">15 Oct</span></span></button>
+<div class="week-gutter wg-3" style="grid-column:25"></div>
+<div class="room-header wr-0" title="RAN4 Main (Yang Session)" style="grid-column:20;grid-row:2"><span class="room-name-text">RAN4 Main <span class="room-word">(Yang Session)</span></span></div>
+<div class="room-header wr-1" title="RAN4 RRM_Demod_OTA (Shan Session)" style="grid-column:21;grid-row:2"><span class="room-name-text">RAN4 RRM_Demod_OTA <span class="room-word">(Shan Session)</span></span></div>
+<div class="room-header wr-2" title="RAN4 RF,NTN,A-IOT (Gene Session)" style="grid-column:22;grid-row:2"><span class="room-name-text">RAN4 <span class="room-word">RF,NTN,A-IOT</span> <span class="room-word">(Gene Session)</span></span></div>
+<div class="room-header wr-3" title="Ad hoc room" style="grid-column:23;grid-row:2"><span class="room-name-text">Ad hoc room</span></div>
+<div class="room-header wr-4" title="Offline room" style="grid-column:24;grid-row:2"><span class="room-name-text">Offline room</span></div>
+<div class="break-bar wd-3" title="커피 타임" style="grid-column:20/25;grid-row:33/39"></div><div class="break-bar wd-3" title="점심시간" style="grid-column:20/25;grid-row:63/81">점심시간</div><div class="break-bar wd-3" title="커피 타임" style="grid-column:20/25;grid-row:105/111"></div><button type="button" class="week-day wd-4" data-day="friday" style="grid-column:26/29;grid-row:1"><span>Fri <span class="week-date">16 Oct</span></span></button>
+<div class="room-header wr-0" title="RAN4 Main (Yang Session)" style="grid-column:26;grid-row:2"><span class="room-name-text">RAN4 Main <span class="room-word">(Yang Session)</span></span></div>
+<div class="room-header wr-1" title="RAN4 RRM_Demod_OTA (Shan Session)" style="grid-column:27;grid-row:2"><span class="room-name-text">RAN4 RRM_Demod_OTA <span class="room-word">(Shan Session)</span></span></div>
+<div class="room-header wr-2" title="RAN4 RF,NTN,A-IOT (Gene Session)" style="grid-column:28;grid-row:2"><span class="room-name-text">RAN4 <span class="room-word">RF,NTN,A-IOT</span> <span class="room-word">(Gene Session)</span></span></div>
+<div class="break-bar wd-4" title="커피 타임" style="grid-column:26/29;grid-row:33/39"></div><div class="break-bar wd-4" title="점심시간" style="grid-column:26/29;grid-row:60/72">점심시간</div><div class="session-block week-cell wr-0 wr-1 wr-2 wr-3" style="grid-row:15/21;--cell-rows:6;grid-column:2/6;--session-border:#2563EB" title="1. Opening of the meeting / 2. Approval of the agenda / 3. Letters / reports from other groups / meetings … · 09:00–09:30" data-popup-of="monday:0" data-room-scope="assigned" data-ai="8.11.4" data-ai-scope="8.11.4.*" data-name="1. Opening of the meeting / 2. Approval of the agenda / 3. Letters / reports from other groups / meetings …" data-group="6G study item [FS_6G_Radio]"><div class="session-name">1. Opening of the meeting / 2. Approval of the agenda / 3. Letters / reports from other groups / meetings …</div></div>
+<div class="session-block week-cell wr-3" style="grid-row:21/39;--cell-rows:18;grid-column:5/6;--session-border:#2563EB" title="Main Ad-hoc / [111] 6G operation efficiency · 09:30–11:00" data-popup-of="monday:1" data-room-scope="assigned" data-ai="8.12" data-ai-scope="8.12.*" data-name="Main Ad-hoc / [111] 6G operation efficiency" data-group="6G study item [FS_6G_Radio]"><div class="session-name">Main Ad-hoc / [111] 6G operation efficiency</div></div>
+<div class="session-block week-cell wr-2" style="grid-row:21/33;--cell-rows:12;grid-column:4/5;--session-border:#059669" title="5G UE RF · 09:30–10:30" data-popup-of="monday:2" data-room-scope="assigned" data-ai="7.1.2|7.1.3.2|7.1.3.3|7.1.3.4|7.1.5|4.2|7.8.2|7.8.3" data-ai-scope="7.1.2.*|7.1.3.2.*|7.1.3.3.*|7.1.3.4.*|7.1.5.*|4.2.*|7.8.2.*|7.8.3.*" data-name="5G UE RF" data-group="Rel-20 on-going non-spectrum related work/study items"><div class="session-name">5G UE RF</div></div>
+<div class="session-block week-cell wr-1" style="grid-row:21/33;--cell-rows:12;grid-column:3/4;--session-border:#059669" title="Rel-20 RRM · 09:30–10:30" data-popup-of="monday:3" data-room-scope="assigned" data-ai="7.4.2|7.4.3.2|7.4.3.3|7.4.4" data-ai-scope="7.4.2.*|7.4.3.2.*|7.4.3.3.*|7.4.4.*" data-name="Rel-20 RRM" data-group="Rel-20 on-going non-spectrum related work/study items"><div class="session-name">Rel-20 RRM</div></div>
+<div class="session-block week-cell wr-0" style="grid-row:21/33;--cell-rows:12;grid-column:2/3;--session-border:#2563EB" title="Rel-20 6G SI · 09:30–10:30" data-popup-of="monday:4" data-room-scope="assigned" data-ai="8.2.3|8.2.4|8.2.5|8.2.6" data-ai-scope="8.2.3.*|8.2.4.*|8.2.5.*|8.2.6.*" data-name="Rel-20 6G SI" data-group="6G study item [FS_6G_Radio]"><div class="session-name">Rel-20 6G SI</div></div>
+<div class="session-block week-cell wr-3" style="grid-row:39/51;--cell-rows:12;grid-column:5/6;--session-border:#2563EB" title="Main Ad-hoc / [105-A] 6G RRM · 11:00–12:00" data-popup-of="monday:5" data-room-scope="assigned" data-ai="8.6|8.6.2.1|8.6.2.2|8.6.3" data-ai-scope="8.6|8.6.2.1.*|8.6.2.2.*|8.6.3.*" data-name="Main Ad-hoc / [105-A] 6G RRM" data-group="6G study item [FS_6G_Radio]"><div class="session-name">Main Ad-hoc / [105-A] 6G RRM</div></div>
+<div class="session-block week-cell wr-2" style="grid-row:39/63;--cell-rows:24;grid-column:4/5;--session-border:#059669" title="NTN · 11:00–13:00" data-popup-of="monday:6" data-room-scope="assigned" data-ai="7.6.2|7.6.3|7.6.6.1.1|7.6.6.1.2|7.6.6.2.1|7.6.6.2.2|7.6.7|7.6.4|7.6.5.1|7.13.1|4.6.1" data-ai-scope="7.6.2.*|7.6.3.*|7.6.6.1.1.*|7.6.6.1.2.*|7.6.6.2.1.*|7.6.6.2.2.*|7.6.7.*|7.6.4.*|7.6.5.1.*|7.13.1.*|4.6.1.*" data-name="NTN" data-group="Rel-20 on-going non-spectrum related work/study items"><div class="session-name">NTN</div></div>
+<div class="session-block week-cell wr-1" style="grid-row:39/63;--cell-rows:24;grid-column:3/4;--session-border:#059669" title="Rel-20 Demod · 11:00–13:00" data-popup-of="monday:7" data-room-scope="assigned" data-ai="7.9" data-ai-scope="7.9.*" data-name="Rel-20 Demod" data-group="Rel-20 on-going non-spectrum related work/study items"><div class="session-name">Rel-20 Demod</div></div>
+<div class="session-block week-cell wr-0" style="grid-row:39/63;--cell-rows:24;grid-column:2/3;--session-border:#2563EB" title="[101-A] System Parameter · 11:00–13:00" data-popup-of="monday:8" data-room-scope="assigned" data-ai="8.2.1|8.2.2|8.2.7" data-ai-scope="8.2.1.*|8.2.2.*|8.2.7.*" data-name="[101-A] System Parameter" data-group="6G study item [FS_6G_Radio]"><div class="session-name">[101-A] System Parameter</div></div>
+<div class="session-block week-cell wr-3" style="grid-row:51/63;--cell-rows:12;grid-column:5/6;--session-border:#2563EB" title="[105-B] 6G RRM · 12:00–13:00" data-popup-of="monday:9" data-room-scope="assigned" data-ai="8.6.1|8.6.4|8.6.5" data-ai-scope="8.6.1.*|8.6.4.*|8.6.5.*" data-name="[105-B] 6G RRM" data-group="6G study item [FS_6G_Radio]"><div class="session-name">[105-B] 6G RRM</div></div>
+<div class="session-block week-cell wr-3" style="grid-row:81/93;--cell-rows:12;grid-column:5/6;--session-border:#059669" title="BR2 Ad-hoc: 5G BSRF · 14:30–15:30" data-popup-of="monday:10" data-room-scope="assigned" data-ai="7.2.2|7.2.3|7.2.4|4.4" data-ai-scope="7.2.2.*|7.2.3.*|7.2.4.*|4.4.*" data-name="BR2 Ad-hoc: 5G BSRF" data-group="Rel-20 on-going non-spectrum related work/study items"><div class="session-name">BR2 Ad-hoc: 5G BSRF</div></div>
+<div class="session-block week-cell wr-2" style="grid-row:81/105;--cell-rows:24;grid-column:4/5;--session-border:#059669" title="NTN · 14:30–16:30" data-popup-of="monday:11" data-room-scope="assigned" data-ai="7.19.2|7.19.3|7.19.4|7.6.5.2|7.6.6.3|4.6.2|7.18.3" data-ai-scope="7.19.2.*|7.19.3.*|7.19.4.*|7.6.5.2.*|7.6.6.3.*|4.6.2.*|7.18.3.*" data-name="NTN" data-group="Rel-20 on-going non-spectrum related work/study items"><div class="session-name">NTN</div></div>
+<div class="session-block week-cell wr-1" style="grid-row:81/105;--cell-rows:24;grid-column:3/4;--session-border:#059669" title="Rel-20 AI · 14:30–16:30" data-popup-of="monday:12" data-room-scope="assigned" data-ai="7.14" data-ai-scope="7.14.*" data-name="Rel-20 AI" data-group="Rel-20 on-going non-spectrum related work/study items"><div class="session-name">Rel-20 AI</div></div>
+<div class="session-block week-cell wr-0" style="grid-row:81/105;--cell-rows:24;grid-column:2/3;--session-border:#2563EB" title="[102] General RF and UE RF · 14:30–16:30" data-popup-of="monday:13" data-room-scope="assigned" data-ai="8.3.1|8.3.2|8.3.3|8.3.6|8.3.4|8.3.5|8.3.7" data-ai-scope="8.3.1.*|8.3.2.*|8.3.3.*|8.3.6.*|8.3.4.*|8.3.5.*|8.3.7.*" data-name="[102] General RF and UE RF" data-group="6G study item [FS_6G_Radio]"><div class="session-name">[102] General RF and UE RF</div></div>
+<div class="session-block week-cell wr-3" style="grid-row:93/105;--cell-rows:12;grid-column:5/6;--session-border:#2563EB" title="BR1 Ad-hoc: 6G testability/OTA · 15:30–16:30" data-popup-of="monday:14" data-room-scope="assigned" data-ai="8.11" data-ai-scope="8.11.*" data-name="BR1 Ad-hoc: 6G testability/OTA" data-group="6G study item [FS_6G_Radio]"><div class="session-name">BR1 Ad-hoc: 6G testability/OTA</div></div>
+<div class="session-block week-cell wr-3" style="grid-row:111/123;--cell-rows:12;grid-column:5/6;--session-border:#059669" title="BR1 Ad-hoc / Rel-20 OTA · 17:00–18:00" data-popup-of="monday:15" data-room-scope="assigned" data-ai="7.3" data-ai-scope="7.3.*" data-name="BR1 Ad-hoc / Rel-20 OTA" data-group="Rel-20 on-going non-spectrum related work/study items"><div class="session-name">BR1 Ad-hoc / Rel-20 OTA</div></div>
+<div class="session-block week-cell wr-2" style="grid-row:111/123;--cell-rows:12;grid-column:4/5;--session-border:#059669" title="[NTN · 17:00–18:00" data-popup-of="monday:16" data-room-scope="assigned" data-ai="7.20.2|7.20.3.1|7.20.3.2|7.12.2|7.12.3.1|7.12.3.2" data-ai-scope="7.20.2.*|7.20.3.1.*|7.20.3.2.*|7.12.2.*|7.12.3.1.*|7.12.3.2.*" data-name="[NTN" data-group="Rel-20 on-going non-spectrum related work/study items"><div class="session-name">[NTN</div></div>
+<div class="session-block week-cell wr-4" style="grid-row:111/123;--cell-rows:12;grid-column:6/7;--session-border:#2563EB" title="[107-A] 6G AI · 17:00–18:00" data-popup-of="monday:17" data-room-scope="assigned" data-ai="8.8.1|8.8.2|8.8.3|8.8.5.1" data-ai-scope="8.8.1.*|8.8.2.*|8.8.3.*|8.8.5.1.*" data-name="[107-A] 6G AI" data-group="6G study item [FS_6G_Radio]"><div class="session-name">[107-A] 6G AI</div></div>
+<div class="session-block week-cell wr-1" style="grid-row:111/123;--cell-rows:12;grid-column:3/4;--session-border:#059669" title="Rel-20 RRM · 17:00–18:00" data-popup-of="monday:18" data-room-scope="assigned" data-ai="7.15" data-ai-scope="7.15.*" data-name="Rel-20 RRM" data-group="Rel-20 on-going non-spectrum related work/study items"><div class="session-name">Rel-20 RRM</div></div>
+<div class="session-block week-cell wr-0" style="grid-row:111/123;--cell-rows:12;grid-column:2/3;--session-border:#2563EB" title="[108] Spectrum sharing · 17:00–18:00" data-popup-of="monday:19" data-room-scope="assigned" data-ai="8.9" data-ai-scope="8.9.*" data-name="[108] Spectrum sharing" data-group="6G study item [FS_6G_Radio]"><div class="session-name">[108] Spectrum sharing</div></div>
+<div class="session-block week-cell wr-3" style="grid-row:123/141;--cell-rows:18;grid-column:5/6;--session-border:#059669" title="BR1 Ad-hoc / R20 RRM · 18:00–19:30" data-popup-of="monday:20" data-room-scope="assigned" data-ai="7.4.2|7.4.3.2|7.4.3.3|7.4.4" data-ai-scope="7.4.2.*|7.4.3.2.*|7.4.3.3.*|7.4.4.*" data-name="BR1 Ad-hoc / R20 RRM" data-group="Rel-20 on-going non-spectrum related work/study items"><div class="session-name">BR1 Ad-hoc / R20 RRM</div></div>
+<div class="session-block week-cell wr-2" style="grid-row:123/141;--cell-rows:18;grid-column:4/5;--session-border:#2563EB" title="BR2 Ad-hoc: Sensing coexistence · 18:00–19:30" data-popup-of="monday:21" data-room-scope="assigned" data-ai="8.10.3|8.10.4|8.10.5" data-ai-scope="8.10.3.*|8.10.4.*|8.10.5.*" data-name="BR2 Ad-hoc: Sensing coexistence" data-group="6G study item [FS_6G_Radio]"><div class="session-name">BR2 Ad-hoc: Sensing coexistence</div></div>
+<div class="session-block week-cell wr-4" style="grid-row:123/135;--cell-rows:12;grid-column:6/7;--session-border:#059669" title="[206] NR_AIML_Mob_RRM · 18:00–19:00" data-popup-of="monday:22" data-room-scope="assigned" data-ai="7.16" data-ai-scope="7.16.*" data-name="[206] NR_AIML_Mob_RRM" data-group="Rel-20 on-going non-spectrum related work/study items"><div class="session-name">[206] NR_AIML_Mob_RRM</div></div>
+<div class="session-block week-cell wr-1" style="grid-row:123/141;--cell-rows:18;grid-column:3/4;--session-border:#059669" title="BR1 Ad-hoc / [218] NR_AIML_air_Ph2 · 18:00–19:30" data-popup-of="monday:23" data-room-scope="assigned" data-ai="7.14" data-ai-scope="7.14.*" data-name="BR1 Ad-hoc / [218] NR_AIML_air_Ph2" data-group="Rel-20 on-going non-spectrum related work/study items"><div class="session-name">BR1 Ad-hoc / [218] NR_AIML_air_Ph2</div></div>
+<div class="session-block week-cell wr-0" style="grid-row:123/141;--cell-rows:18;grid-column:2/3;--session-border:#2563EB" title="Main Ad-hoc / [102-A] 6G General RF and UE RF · 18:00–19:30" data-popup-of="monday:24" data-room-scope="assigned" data-ai="8.3.1|8.3.2|8.3.3|8.3.6" data-ai-scope="8.3.1.*|8.3.2.*|8.3.3.*|8.3.6.*" data-name="Main Ad-hoc / [102-A] 6G General RF and UE RF" data-group="6G study item [FS_6G_Radio]"><div class="session-name">Main Ad-hoc / [102-A] 6G General RF and UE RF</div></div>
+<div class="session-block week-cell wr-3" style="grid-row:9/21;--cell-rows:12;grid-column:11/12;--session-border:#EA580C" title="BR2 Ad-hoc: Spectrum basket work items · 08:30–09:30" data-popup-of="tuesday:0" data-room-scope="assigned" data-ai="5.6.1|5.6.2|5.6.3|5.6.4|5.6.5|5.6.6|5.6.7|5.6.8|5.6.9" data-ai-scope="5.6.1.*|5.6.2.*|5.6.3.*|5.6.4.*|5.6.5.*|5.6.6.*|5.6.7.*|5.6.8.*|5.6.9.*" data-name="BR2 Ad-hoc: Spectrum basket work items" data-group="Rel-20 on-going spectrum related work items for NR and LTE"><div class="session-name">BR2 Ad-hoc: Spectrum basket work items</div></div>
+<div class="session-block week-cell wr-2" style="grid-row:9/21;--cell-rows:12;grid-column:10/11;--session-border:#2563EB" title="6G SI/RAN task: NTN Coexistence · 08:30–10:30" data-popup-of="tuesday:1" data-room-scope="assigned" data-ai="8.4.4.1|8.4.4.2|8.4.4.3" data-ai-scope="8.4.4.1.*|8.4.4.2.*|8.4.4.3.*" data-name="6G SI/RAN task: NTN Coexistence" data-group="6G study item [FS_6G_Radio]"><div class="session-name">6G SI/RAN task: NTN Coexistence</div></div>
+<div class="session-block week-cell wr-2" style="grid-row:21/33;--cell-rows:12;grid-column:10/11;--session-border:#059669" title="Rel-20 UAV · 08:30–10:30" data-popup-of="tuesday:2" data-room-scope="assigned" data-ai="7.7.2|7.7.3|7.7.4" data-ai-scope="7.7.2.*|7.7.3.*|7.7.4.*" data-name="Rel-20 UAV" data-group="Rel-20 on-going non-spectrum related work/study items"><div class="session-name">Rel-20 UAV</div></div>
+<div class="session-block week-cell wr-1" style="grid-row:9/33;--cell-rows:24;grid-column:9/10;--session-border:#059669" title="Rel-20 RRM · 08:30–10:30" data-popup-of="tuesday:3" data-room-scope="assigned" data-ai="7.17|7.21.3|7.21.8" data-ai-scope="7.17.*|7.21.3.*|7.21.8.*" data-name="Rel-20 RRM" data-group="Rel-20 on-going non-spectrum related work/study items"><div class="session-name">Rel-20 RRM</div></div>
+<div class="session-block week-cell wr-0" style="grid-row:9/21;--cell-rows:12;grid-column:8/9;--session-border:#2563EB" title="[107-A] 6G AI · 08:30–09:30" data-popup-of="tuesday:4" data-room-scope="assigned" data-ai="8.8.1|8.8.2|8.8.3|8.8.5.1" data-ai-scope="8.8.1.*|8.8.2.*|8.8.3.*|8.8.5.1.*" data-name="[107-A] 6G AI" data-group="6G study item [FS_6G_Radio]"><div class="session-name">[107-A] 6G AI</div></div>
+<div class="session-block week-cell wr-3" style="grid-row:21/33;--cell-rows:12;grid-column:11/12;--session-border:#059669" title="BR2 Ad-hoc: NR_UE_RF · 09:30–10:30" data-popup-of="tuesday:5" data-room-scope="assigned" data-ai="7.1.2|7.1.3.2|7.1.3.3|7.1.3.4|7.1.5|4.2" data-ai-scope="7.1.2.*|7.1.3.2.*|7.1.3.3.*|7.1.3.4.*|7.1.5.*|4.2.*" data-name="BR2 Ad-hoc: NR_UE_RF" data-group="Rel-20 on-going non-spectrum related work/study items"><div class="session-name">BR2 Ad-hoc: NR_UE_RF</div></div>
+<div class="session-block week-cell wr-0" style="grid-row:21/33;--cell-rows:12;grid-column:8/9;--session-border:#2563EB" title="[107-B] 6G AI · 09:30–10:30" data-popup-of="tuesday:6" data-room-scope="assigned" data-ai="8.8.4" data-ai-scope="8.8.4.*" data-name="[107-B] 6G AI" data-group="6G study item [FS_6G_Radio]"><div class="session-name">[107-B] 6G AI</div></div>
+<div class="session-block week-cell wr-4" style="grid-row:27/39;--cell-rows:12;grid-column:12/13;--session-border:#2563EB" title="Main Ad-hoc / [101-B] System Parameter · 10:00–11:00" data-popup-of="tuesday:7" data-room-scope="assigned" data-ai="8.2.3|8.2.4|8.2.5|8.2.6" data-ai-scope="8.2.3.*|8.2.4.*|8.2.5.*|8.2.6.*" data-name="Main Ad-hoc / [101-B] System Parameter" data-group="6G study item [FS_6G_Radio]"><div class="session-name">Main Ad-hoc / [101-B] System Parameter</div></div>
+<div class="session-block week-cell wr-3" style="grid-row:39/63;--cell-rows:24;grid-column:11/12;--session-border:#059669" title="BR1 Ad-hoc / 5G-A &amp; 6G OTA · 11:00–13:00" data-popup-of="tuesday:8" data-room-scope="assigned" data-ai="7.3|8.11" data-ai-scope="7.3.*|8.11.*" data-name="BR1 Ad-hoc / 5G-A &amp; 6G OTA" data-group="Rel-20 on-going non-spectrum related work/study items"><div class="session-name">BR1 Ad-hoc / 5G-A &amp; 6G OTA</div></div>
+<div class="session-block week-cell wr-2" style="grid-row:39/51;--cell-rows:12;grid-column:10/11;--session-border:#059669" title="5G BSRF · 11:00–13:00" data-popup-of="tuesday:9" data-room-scope="assigned" data-ai="7.2.2|7.2.3|7.2.4|4.4" data-ai-scope="7.2.2.*|7.2.3.*|7.2.4.*|4.4.*" data-name="5G BSRF" data-group="Rel-20 on-going non-spectrum related work/study items"><div class="session-name">5G BSRF</div></div>
+<div class="session-block week-cell wr-2" style="grid-row:51/63;--cell-rows:12;grid-column:10/11;--session-border:#2563EB" title="6G SI: BSRF · 11:00–13:00" data-popup-of="tuesday:10" data-room-scope="assigned" data-ai="8.4.1.1|8.4.1.2|8.4.1.3|8.4.2" data-ai-scope="8.4.1.1.*|8.4.1.2.*|8.4.1.3.*|8.4.2.*" data-name="6G SI: BSRF" data-group="6G study item [FS_6G_Radio]"><div class="session-name">6G SI: BSRF</div></div>
+<div class="session-block week-cell wr-4" style="grid-row:39/63;--cell-rows:24;grid-column:12/13;--session-border:#2563EB" title="[102-A] 6G General RF and UE RF · 11:00–13:00" data-popup-of="tuesday:11" data-room-scope="assigned" data-ai="8.3.1|8.3.2|8.3.3|8.3.6" data-ai-scope="8.3.1.*|8.3.2.*|8.3.3.*|8.3.6.*" data-name="[102-A] 6G General RF and UE RF" data-group="6G study item [FS_6G_Radio]"><div class="session-name">[102-A] 6G General RF and UE RF</div></div>
+<div class="session-block week-cell wr-1" style="grid-row:39/63;--cell-rows:24;grid-column:9/10;--session-border:#059669" title="Rel-20 Demod · 11:00–13:00" data-popup-of="tuesday:12" data-room-scope="assigned" data-ai="7.5|7.22" data-ai-scope="7.5.*|7.22.*" data-name="Rel-20 Demod" data-group="Rel-20 on-going non-spectrum related work/study items"><div class="session-name">Rel-20 Demod</div></div>
+<div class="session-block week-cell wr-0" style="grid-row:39/63;--cell-rows:24;grid-column:8/9;--session-border:#2563EB" title="[105] 6G RRM · 11:00–13:00" data-popup-of="tuesday:13" data-room-scope="assigned" data-ai="8.6|8.6.2.1|8.6.2.2|8.6.3|8.6.1|8.6.4|8.6.5" data-ai-scope="8.6|8.6.2.1.*|8.6.2.2.*|8.6.3.*|8.6.1.*|8.6.4.*|8.6.5.*" data-name="[105] 6G RRM" data-group="6G study item [FS_6G_Radio]"><div class="session-name">[105] 6G RRM</div></div>
+<div class="session-block week-cell wr-3" style="grid-row:81/93;--cell-rows:12;grid-column:11/12;--session-border:#059669" title="BR2 Ad-hoc: Ambient IoT D2T2 · 14:30–15:30" data-popup-of="tuesday:14" data-room-scope="assigned" data-ai="7.21.6.1|7.21.6.2|7.21.6.3|7.21.6.4|7.21.7" data-ai-scope="7.21.6.1.*|7.21.6.2.*|7.21.6.3.*|7.21.6.4.*|7.21.7.*" data-name="BR2 Ad-hoc: Ambient IoT D2T2" data-group="Rel-20 on-going non-spectrum related work/study items"><div class="session-name">BR2 Ad-hoc: Ambient IoT D2T2</div></div>
+<div class="session-block week-cell wr-2" style="grid-row:81/105;--cell-rows:24;grid-column:10/11;--session-border:#2563EB" title="6G SI: BSRF · 14:30–16:30" data-popup-of="tuesday:15" data-room-scope="assigned" data-ai="8.4.3.1|8.4.3.2|8.4.5|8.4.6" data-ai-scope="8.4.3.1.*|8.4.3.2.*|8.4.5.*|8.4.6.*" data-name="6G SI: BSRF" data-group="6G study item [FS_6G_Radio]"><div class="session-name">6G SI: BSRF</div></div>
+<div class="session-block week-cell wr-4" style="grid-row:81/93;--cell-rows:12;grid-column:12/13;--session-border:#059669" title="[211] FS_NR_demod_SCM · 14:30–15:30" data-popup-of="tuesday:16" data-room-scope="assigned" data-ai="7.9" data-ai-scope="7.9.*" data-name="[211] FS_NR_demod_SCM" data-group="Rel-20 on-going non-spectrum related work/study items"><div class="session-name">[211] FS_NR_demod_SCM</div></div>
+<div class="session-block week-cell wr-1" style="grid-row:81/93;--cell-rows:12;grid-column:9/10;--session-border:#059669" title="Rel-20 RRM · 14:30–15:30" data-popup-of="tuesday:17" data-room-scope="assigned" data-ai="7.16" data-ai-scope="7.16.*" data-name="Rel-20 RRM" data-group="Rel-20 on-going non-spectrum related work/study items"><div class="session-name">Rel-20 RRM</div></div>
+<div class="session-block week-cell wr-0" style="grid-row:81/99;--cell-rows:18;grid-column:8/9;--session-border:#2563EB" title="[104] Spectrum · 14:30–16:00" data-popup-of="tuesday:18" data-room-scope="assigned" data-ai="8.5.1|8.5.2|8.5.3" data-ai-scope="8.5.1.*|8.5.2.*|8.5.3.*" data-name="[104] Spectrum" data-group="6G study item [FS_6G_Radio]"><div class="session-name">[104] Spectrum</div></div>
+<div class="session-block week-cell wr-3" style="grid-row:93/105;--cell-rows:12;grid-column:11/12;--session-border:#059669" title="BR2 Ad-hoc: NTN HD-FDD and DL CA RRM · 15:30–16:30" data-popup-of="tuesday:19" data-room-scope="assigned" data-ai="7.6.5.2|7.6.6.3|4.6.2" data-ai-scope="7.6.5.2.*|7.6.6.3.*|4.6.2.*" data-name="BR2 Ad-hoc: NTN HD-FDD and DL CA RRM" data-group="Rel-20 on-going non-spectrum related work/study items"><div class="session-name">BR2 Ad-hoc: NTN HD-FDD and DL CA RRM</div></div>
+<div class="session-block week-cell wr-4" style="grid-row:93/105;--cell-rows:12;grid-column:12/13;--session-border:#2563EB" title="[107-B] 6G AI · 15:30–16:30" data-popup-of="tuesday:20" data-room-scope="assigned" data-ai="8.8.4" data-ai-scope="8.8.4.*" data-name="[107-B] 6G AI" data-group="6G study item [FS_6G_Radio]"><div class="session-name">[107-B] 6G AI</div></div>
+<div class="session-block week-cell wr-1" style="grid-row:93/105;--cell-rows:12;grid-column:9/10;--session-border:#059669" title="[202] NR_UAV_req_RRM · 15:30–16:30" data-popup-of="tuesday:21" data-room-scope="assigned" data-ai="7.7.5" data-ai-scope="7.7.5.*" data-name="[202] NR_UAV_req_RRM" data-group="Rel-20 on-going non-spectrum related work/study items"><div class="session-name">[202] NR_UAV_req_RRM</div></div>
+<div class="session-block week-cell wr-0" style="grid-row:99/105;--cell-rows:6;grid-column:8/9;--session-border:#2563EB" title="[111] 6G RAN4 operation efficiency · 16:00–16:30" data-popup-of="tuesday:22" data-room-scope="assigned" data-ai="8.12" data-ai-scope="8.12.*" data-name="[111] 6G RAN4 operation efficiency" data-group="6G study item [FS_6G_Radio]"><div class="session-name">[111] 6G RAN4 operation efficiency</div></div>
+<div class="session-block week-cell wr-0" style="grid-row:105/111;--cell-rows:6;grid-column:8/9;--session-border:#2563EB" title="Coffee break AH: 105-B 6G RRM · 16:30–17:00" data-popup-of="tuesday:23" data-room-scope="assigned" data-ai="8.6.1|8.6.4|8.6.5" data-ai-scope="8.6.1.*|8.6.4.*|8.6.5.*" data-name="Coffee break AH: 105-B 6G RRM" data-group="6G study item [FS_6G_Radio]"><div class="session-name">Coffee break AH: 105-B 6G RRM</div></div>
+<div class="session-block week-cell wr-3" style="grid-row:111/123;--cell-rows:12;grid-column:11/12;--session-border:#2563EB" title="Main Ad-hoc / [108] Spectrum sharing · 17:00–18:00" data-popup-of="tuesday:24" data-room-scope="assigned" data-ai="8.9" data-ai-scope="8.9.*" data-name="Main Ad-hoc / [108] Spectrum sharing" data-group="6G study item [FS_6G_Radio]"><div class="session-name">Main Ad-hoc / [108] Spectrum sharing</div></div>
+<div class="session-block week-cell wr-2" style="grid-row:111/123;--cell-rows:12;grid-column:10/11;--session-border:#9CA3AF" title="6G SI BSRF · 17:00–18:00" data-popup-of="tuesday:25" data-room-scope="assigned" data-ai="" data-ai-scope="8.4.*" data-name="6G SI BSRF" data-group=""><div class="session-name">6G SI BSRF</div></div>
+<div class="session-block week-cell wr-4" style="grid-row:111/123;--cell-rows:12;grid-column:12/13;--session-border:#059669" title="[208] NR_NTN_GNSS_resilient_RRM · 17:00–18:00" data-popup-of="tuesday:26" data-room-scope="assigned" data-ai="7.18.2|7.18.4" data-ai-scope="7.18.2.*|7.18.4.*" data-name="[208] NR_NTN_GNSS_resilient_RRM" data-group="Rel-20 on-going non-spectrum related work/study items"><div class="session-name">[208] NR_NTN_GNSS_resilient_RRM</div></div>
+<div class="session-block week-cell wr-1" style="grid-row:111/123;--cell-rows:12;grid-column:9/10;--session-border:#059669" title="Rel-20 RRM Cont · 17:00–18:00" data-popup-of="tuesday:27" data-room-scope="assigned" data-ai="7.16" data-ai-scope="7.16.*" data-name="Rel-20 RRM Cont" data-group="Rel-20 on-going non-spectrum related work/study items"><div class="session-name">Rel-20 RRM Cont</div></div>
+<div class="session-block week-cell wr-0" style="grid-row:111/123;--cell-rows:12;grid-column:8/9;--session-border:#2563EB" title="[111] 6G RAN4 operation efficiency · 17:00–18:00" data-popup-of="tuesday:28" data-room-scope="assigned" data-ai="8.12" data-ai-scope="8.12.*" data-name="[111] 6G RAN4 operation efficiency" data-group="6G study item [FS_6G_Radio]"><div class="session-name">[111] 6G RAN4 operation efficiency</div></div>
+<div class="session-block week-cell wr-3" style="grid-row:123/141;--cell-rows:18;grid-column:11/12;--session-border:#2563EB" title="Main Ad hoc / [101-A] System Parameter · 18:00–19:30" data-popup-of="tuesday:29" data-room-scope="assigned" data-ai="8.2.1|8.2.2|8.2.7" data-ai-scope="8.2.1.*|8.2.2.*|8.2.7.*" data-name="Main Ad hoc / [101-A] System Parameter" data-group="6G study item [FS_6G_Radio]"><div class="session-name">Main Ad hoc / [101-A] System Parameter</div></div>
+<div class="session-block week-cell wr-2" style="grid-row:123/141;--cell-rows:18;grid-column:10/11;--session-border:#2563EB" title="BR2 Ad-hoc: 6G coexistence · 18:00–19:30" data-popup-of="tuesday:30" data-room-scope="assigned" data-ai="8.4.3.1|8.4.3.2|8.4.5|8.4.6" data-ai-scope="8.4.3.1.*|8.4.3.2.*|8.4.5.*|8.4.6.*" data-name="BR2 Ad-hoc: 6G coexistence" data-group="6G study item [FS_6G_Radio]"><div class="session-name">BR2 Ad-hoc: 6G coexistence</div></div>
+<div class="session-block week-cell wr-4" style="grid-row:123/141;--cell-rows:18;grid-column:12/13;--session-border:#059669" title="[349] NR_NTN_GNSS_resilient · 18:00–19:30" data-popup-of="tuesday:31" data-room-scope="assigned" data-ai="7.18.3" data-ai-scope="7.18.3.*" data-name="[349] NR_NTN_GNSS_resilient" data-group="Rel-20 on-going non-spectrum related work/study items"><div class="session-name">[349] NR_NTN_GNSS_resilient</div></div>
+<div class="session-block week-cell wr-1" style="grid-row:123/141;--cell-rows:18;grid-column:9/10;--session-border:#059669" title="RRM Ad-hoc / [206] NR_AIML_Mob_RRM · 18:00–19:30" data-popup-of="tuesday:32" data-room-scope="assigned" data-ai="7.16" data-ai-scope="7.16.*" data-name="RRM Ad-hoc / [206] NR_AIML_Mob_RRM" data-group="Rel-20 on-going non-spectrum related work/study items"><div class="session-name">RRM Ad-hoc / [206] NR_AIML_Mob_RRM</div></div>
+<div class="session-block week-cell wr-0" style="grid-row:123/141;--cell-rows:18;grid-column:8/9;--session-border:#2563EB" title="Main Ad hoc / [104-A] Spectrum · 18:00–19:30" data-popup-of="tuesday:33" data-room-scope="assigned" data-ai="8.5.1|8.5.2" data-ai-scope="8.5.1.*|8.5.2.*" data-name="Main Ad hoc / [104-A] Spectrum" data-group="6G study item [FS_6G_Radio]"><div class="session-name">Main Ad hoc / [104-A] Spectrum</div></div>
+<div class="session-block week-cell wr-2" style="grid-row:3/9;--cell-rows:6;grid-column:16/17;--session-border:#059669" title="[356] NR_IoT_extended_guardband · 08:00–08:30" data-popup-of="wednesday:0" data-room-scope="assigned" data-ai="7.12.2|7.12.3.1|7.12.3.2" data-ai-scope="7.12.2.*|7.12.3.1.*|7.12.3.2.*" data-name="[356] NR_IoT_extended_guardband" data-group="Rel-20 on-going non-spectrum related work/study items"><div class="session-name">[356] NR_IoT_extended_guardband</div></div>
+<div class="session-block week-cell wr-3" style="grid-row:9/21;--cell-rows:12;grid-column:17/18;--session-border:#059669" title="BR1 Ad-hoc / [211] FS_NR_demod_SCM · 08:30–09:30" data-popup-of="wednesday:1" data-room-scope="assigned" data-ai="7.9" data-ai-scope="7.9.*" data-name="BR1 Ad-hoc / [211] FS_NR_demod_SCM" data-group="Rel-20 on-going non-spectrum related work/study items"><div class="session-name">BR1 Ad-hoc / [211] FS_NR_demod_SCM</div></div>
+<div class="session-block week-cell wr-2" style="grid-row:9/21;--cell-rows:12;grid-column:16/17;--session-border:#DB2777" title="[371] A-MPR_JSON / [355] NR_PC1_UL_MIMO_n100_n101 · 08:30–10:30" data-popup-of="wednesday:2" data-room-scope="assigned" data-ai="12.1|7.11.2|7.11.3" data-ai-scope="12.1.*|7.11.2.*|7.11.3.*" data-name="[371] A-MPR_JSON / [355] NR_PC1_UL_MIMO_n100_n101" data-group="RAN task and other topics (not including the RAN task on NTN-TN coexistence)"><div class="session-name">[371] A-MPR_JSON / [355] NR_PC1_UL_MIMO_n100_n101</div></div>
+<div class="session-block week-cell wr-2" style="grid-row:21/33;--cell-rows:12;grid-column:16/17;--session-border:#059669" title="Ambient IoT · 08:30–10:30" data-popup-of="wednesday:3" data-room-scope="assigned" data-ai="7.21.2|7.21.4|7.21.5.1|7.21.5.2|7.21.5.3" data-ai-scope="7.21.2.*|7.21.4.*|7.21.5.1.*|7.21.5.2.*|7.21.5.3.*" data-name="Ambient IoT" data-group="Rel-20 on-going non-spectrum related work/study items"><div class="session-name">Ambient IoT</div></div>
+<div class="session-block week-cell wr-1" style="grid-row:9/33;--cell-rows:24;grid-column:15/16;--session-border:#2563EB" title="OTA · 08:30–10:30" data-popup-of="wednesday:4" data-room-scope="assigned" data-ai="8.11|7.3" data-ai-scope="8.11.*|7.3.*" data-name="OTA" data-group="6G study item [FS_6G_Radio]"><div class="session-name">OTA</div></div>
+<div class="session-block week-cell wr-0" style="grid-row:9/33;--cell-rows:24;grid-column:14/15;--session-border:#2563EB" title="[107-A] 6G AI / [107-B] 6G AI · 08:30–10:30" data-popup-of="wednesday:5" data-room-scope="assigned" data-ai="8.8.1|8.8.2|8.8.3|8.8.5.1|8.8.4" data-ai-scope="8.8.1.*|8.8.2.*|8.8.3.*|8.8.5.1.*|8.8.4.*" data-name="[107-A] 6G AI / [107-B] 6G AI" data-group="6G study item [FS_6G_Radio]"><div class="session-name">[107-A] 6G AI / [107-B] 6G AI</div></div>
+<div class="session-block week-cell wr-3" style="grid-row:21/33;--cell-rows:12;grid-column:17/18;--session-border:#EA580C" title="BR2 Ad-hoc: NTN features R20 · 09:30–10:30" data-popup-of="wednesday:6" data-room-scope="assigned" data-ai="5.5.1|5.5.2|5.5.3|5.5.4|5.5.5|5.5.6" data-ai-scope="5.5.1.*|5.5.2.*|5.5.3.*|5.5.4.*|5.5.5.*|5.5.6.*" data-name="BR2 Ad-hoc: NTN features R20" data-group="Rel-20 on-going spectrum related work items for NR and LTE"><div class="session-name">BR2 Ad-hoc: NTN features R20</div></div>
+<div class="session-block week-cell wr-4" style="grid-row:21/33;--cell-rows:12;grid-column:18/19;--session-border:#2563EB" title="[102-B] 6G General RF and UE RF · 09:30–10:30" data-popup-of="wednesday:7" data-room-scope="assigned" data-ai="8.3.4|8.3.5|8.3.7" data-ai-scope="8.3.4.*|8.3.5.*|8.3.7.*" data-name="[102-B] 6G General RF and UE RF" data-group="6G study item [FS_6G_Radio]"><div class="session-name">[102-B] 6G General RF and UE RF</div></div>
+<div class="session-block week-cell wr-4" style="grid-row:33/39;--cell-rows:6;grid-column:18/19;--session-border:#059669" title="Coffee break AH: [346] PC1.5 NR-NTN · 10:30–11:00" data-popup-of="wednesday:8" data-room-scope="assigned" data-ai="7.6.2|7.6.3|7.6.6.1.1|7.6.6.1.2|7.6.6.2.1|7.6.6.2.2|7.6.7" data-ai-scope="7.6.2.*|7.6.3.*|7.6.6.1.1.*|7.6.6.1.2.*|7.6.6.2.1.*|7.6.6.2.2.*|7.6.7.*" data-name="Coffee break AH: [346] PC1.5 NR-NTN" data-group="Rel-20 on-going non-spectrum related work/study items"><div class="session-name">Coffee break AH: [346] PC1.5 NR-NTN</div></div>
+<div class="session-block week-cell wr-3" style="grid-row:39/63;--cell-rows:24;grid-column:17/18;--session-border:#059669" title="BR1 Ad-hoc / R20 AI · 11:00–13:00" data-popup-of="wednesday:9" data-room-scope="assigned" data-ai="7.14" data-ai-scope="7.14.*" data-name="BR1 Ad-hoc / R20 AI" data-group="Rel-20 on-going non-spectrum related work/study items"><div class="session-name">BR1 Ad-hoc / R20 AI</div></div>
+<div class="session-block week-cell wr-2" style="grid-row:39/51;--cell-rows:12;grid-column:16/17;--session-border:#059669" title="Ambient IoT · 11:00–13:00" data-popup-of="wednesday:10" data-room-scope="assigned" data-ai="7.21.2|7.21.4|7.21.5.1|7.21.5.2|7.21.5.3|7.21.6.1|7.21.6.2|7.21.6.3|7.21.6.4|7.21.7" data-ai-scope="7.21.2.*|7.21.4.*|7.21.5.1.*|7.21.5.2.*|7.21.5.3.*|7.21.6.1.*|7.21.6.2.*|7.21.6.3.*|7.21.6.4.*|7.21.7.*" data-name="Ambient IoT" data-group="Rel-20 on-going non-spectrum related work/study items"><div class="session-name">Ambient IoT</div></div>
+<div class="session-block week-cell wr-2" style="grid-row:51/63;--cell-rows:12;grid-column:16/17;--session-border:#2563EB" title="6G SI: Sensing · 11:00–13:00" data-popup-of="wednesday:11" data-room-scope="assigned" data-ai="8.10.1|8.10.2" data-ai-scope="8.10.1.*|8.10.2.*" data-name="6G SI: Sensing" data-group="6G study item [FS_6G_Radio]"><div class="session-name">6G SI: Sensing</div></div>
+<div class="session-block week-cell wr-4" style="grid-row:39/51;--cell-rows:12;grid-column:18/19;--session-border:#2563EB" title="[105] 6G RRM · 11:00–12:00" data-popup-of="wednesday:12" data-room-scope="assigned" data-ai="8.6|8.6.2.1|8.6.2.2|8.6.3|8.6.1|8.6.4|8.6.5" data-ai-scope="8.6|8.6.2.1.*|8.6.2.2.*|8.6.3.*|8.6.1.*|8.6.4.*|8.6.5.*" data-name="[105] 6G RRM" data-group="6G study item [FS_6G_Radio]"><div class="session-name">[105] 6G RRM</div></div>
+<div class="session-block week-cell wr-1" style="grid-row:39/51;--cell-rows:12;grid-column:15/16;--session-border:#059669" title="OTA · 11:00–12:00" data-popup-of="wednesday:13" data-room-scope="assigned" data-ai="7.3" data-ai-scope="7.3.*" data-name="OTA" data-group="Rel-20 on-going non-spectrum related work/study items"><div class="session-name">OTA</div></div>
+<div class="session-block week-cell wr-0" style="grid-row:39/63;--cell-rows:24;grid-column:14/15;--session-border:#2563EB" title="[101] System Parameter · 11:00–13:00" data-popup-of="wednesday:14" data-room-scope="assigned" data-ai="8.2.1|8.2.2|8.2.7|8.2.3|8.2.4|8.2.5|8.2.6" data-ai-scope="8.2.1.*|8.2.2.*|8.2.7.*|8.2.3.*|8.2.4.*|8.2.5.*|8.2.6.*" data-name="[101] System Parameter" data-group="6G study item [FS_6G_Radio]"><div class="session-name">[101] System Parameter</div></div>
+<div class="session-block week-cell wr-4" style="grid-row:51/63;--cell-rows:12;grid-column:18/19;--session-border:#2563EB" title="[217] RAN4/RAN5 responsibility split for RRM performance test · 12:00–13:00" data-popup-of="wednesday:15" data-room-scope="assigned" data-ai="8.11" data-ai-scope="8.11.*" data-name="[217] RAN4/RAN5 responsibility split for RRM performance test" data-group="6G study item [FS_6G_Radio]"><div class="session-name">[217] RAN4/RAN5 responsibility split for RRM performance test</div></div>
+<div class="session-block week-cell wr-1" style="grid-row:51/63;--cell-rows:12;grid-column:15/16;--session-border:#2563EB" title="6G demod · 12:00–13:00" data-popup-of="wednesday:16" data-room-scope="assigned" data-ai="8.7" data-ai-scope="8.7.*" data-name="6G demod" data-group="6G study item [FS_6G_Radio]"><div class="session-name">6G demod</div></div>
+<div class="session-block week-cell wr-3" style="grid-row:81/93;--cell-rows:12;grid-column:17/18;--session-border:#2563EB" title="Main Ad-hoc / [101-B] System Parameter · 14:30–15:30" data-popup-of="wednesday:17" data-room-scope="assigned" data-ai="8.2.3|8.2.4|8.2.5|8.2.6" data-ai-scope="8.2.3.*|8.2.4.*|8.2.5.*|8.2.6.*" data-name="Main Ad-hoc / [101-B] System Parameter" data-group="6G study item [FS_6G_Radio]"><div class="session-name">Main Ad-hoc / [101-B] System Parameter</div></div>
+<div class="session-block week-cell wr-2" style="grid-row:81/105;--cell-rows:24;grid-column:16/17;--session-border:#2563EB" title="6G SI: Sensing · 14:30–16:30" data-popup-of="wednesday:18" data-room-scope="assigned" data-ai="8.10.3|8.10.4|8.10.5|8.10.1|8.10.2" data-ai-scope="8.10.3.*|8.10.4.*|8.10.5.*|8.10.1.*|8.10.2.*" data-name="6G SI: Sensing" data-group="6G study item [FS_6G_Radio]"><div class="session-name">6G SI: Sensing</div></div>
+<div class="session-block week-cell wr-4" style="grid-row:81/105;--cell-rows:24;grid-column:18/19;--session-border:#2563EB" title="[107-A] 6G AI · 14:30–16:30" data-popup-of="wednesday:19" data-room-scope="assigned" data-ai="8.8.1|8.8.2|8.8.3|8.8.5.1" data-ai-scope="8.8.1.*|8.8.2.*|8.8.3.*|8.8.5.1.*" data-name="[107-A] 6G AI" data-group="6G study item [FS_6G_Radio]"><div class="session-name">[107-A] 6G AI</div></div>
+<div class="session-block week-cell wr-1" style="grid-row:81/105;--cell-rows:24;grid-column:15/16;--session-border:#2563EB" title="6G demod · 14:30–16:30" data-popup-of="wednesday:20" data-room-scope="assigned" data-ai="8.7" data-ai-scope="8.7.*" data-name="6G demod" data-group="6G study item [FS_6G_Radio]"><div class="session-name">6G demod</div></div>
+<div class="session-block week-cell wr-0" style="grid-row:81/105;--cell-rows:24;grid-column:14/15;--session-border:#2563EB" title="[105] 6G RRM · 14:30–16:30" data-popup-of="wednesday:21" data-room-scope="assigned" data-ai="8.6|8.6.2.1|8.6.2.2|8.6.3|8.6.1|8.6.4|8.6.5" data-ai-scope="8.6|8.6.2.1.*|8.6.2.2.*|8.6.3.*|8.6.1.*|8.6.4.*|8.6.5.*" data-name="[105] 6G RRM" data-group="6G study item [FS_6G_Radio]"><div class="session-name">[105] 6G RRM</div></div>
+<div class="session-block week-cell wr-3" style="grid-row:93/105;--cell-rows:12;grid-column:17/18;--session-border:#059669" title="BR2 Ad-Hoc: Ambient IoT sys param and D4T1 · 15:30–16:30" data-popup-of="wednesday:22" data-room-scope="assigned" data-ai="7.21.2|7.21.4|7.21.5.1|7.21.5.2|7.21.5.3" data-ai-scope="7.21.2.*|7.21.4.*|7.21.5.1.*|7.21.5.2.*|7.21.5.3.*" data-name="BR2 Ad-Hoc: Ambient IoT sys param and D4T1" data-group="Rel-20 on-going non-spectrum related work/study items"><div class="session-name">BR2 Ad-Hoc: Ambient IoT sys param and D4T1</div></div>
+<div class="session-block week-cell wr-0" style="grid-row:105/111;--cell-rows:6;grid-column:14/15;--session-border:#2563EB" title="Coffee break AH: [105-A] 6G RRM · 16:30–17:00" data-popup-of="wednesday:23" data-room-scope="assigned" data-ai="8.6|8.6.2.1|8.6.2.2|8.6.3" data-ai-scope="8.6|8.6.2.1.*|8.6.2.2.*|8.6.3.*" data-name="Coffee break AH: [105-A] 6G RRM" data-group="6G study item [FS_6G_Radio]"><div class="session-name">Coffee break AH: [105-A] 6G RRM</div></div>
+<div class="session-block week-cell wr-3" style="grid-row:111/123;--cell-rows:12;grid-column:17/18;--session-border:#2563EB" title="Main Ad-hoc / [107-B] 6G AI · 17:00–18:00" data-popup-of="wednesday:24" data-room-scope="assigned" data-ai="8.8.4" data-ai-scope="8.8.4.*" data-name="Main Ad-hoc / [107-B] 6G AI" data-group="6G study item [FS_6G_Radio]"><div class="session-name">Main Ad-hoc / [107-B] 6G AI</div></div>
+<div class="session-block week-cell wr-2" style="grid-row:111/123;--cell-rows:12;grid-column:16/17;--session-border:#9CA3AF" title="6G SI: Sensing · 17:00–18:00" data-popup-of="wednesday:25" data-room-scope="assigned" data-ai="" data-ai-scope="8.10.*" data-name="6G SI: Sensing" data-group=""><div class="session-name">6G SI: Sensing</div></div>
+<div class="session-block week-cell wr-4" style="grid-row:111/123;--cell-rows:12;grid-column:18/19;--session-border:#059669" title="[208] NR_NTN_GNSS_resilient_RRM · 17:00–18:00" data-popup-of="wednesday:26" data-room-scope="assigned" data-ai="7.18.2|7.18.4" data-ai-scope="7.18.2.*|7.18.4.*" data-name="[208] NR_NTN_GNSS_resilient_RRM" data-group="Rel-20 on-going non-spectrum related work/study items"><div class="session-name">[208] NR_NTN_GNSS_resilient_RRM</div></div>
+<div class="session-block week-cell wr-1" style="grid-row:111/123;--cell-rows:12;grid-column:15/16;--session-border:#2563EB" title="6G demod · 17:00–18:00" data-popup-of="wednesday:27" data-room-scope="assigned" data-ai="8.7" data-ai-scope="8.7.*" data-name="6G demod" data-group="6G study item [FS_6G_Radio]"><div class="session-name">6G demod</div></div>
+<div class="session-block week-cell wr-0" style="grid-row:111/123;--cell-rows:12;grid-column:14/15;--session-border:#2563EB" title="[102-A] General RF and UE RF · 17:00–18:00" data-popup-of="wednesday:28" data-room-scope="assigned" data-ai="8.3.1|8.3.2|8.3.3|8.3.6" data-ai-scope="8.3.1.*|8.3.2.*|8.3.3.*|8.3.6.*" data-name="[102-A] General RF and UE RF" data-group="6G study item [FS_6G_Radio]"><div class="session-name">[102-A] General RF and UE RF</div></div>
+<div class="session-block week-cell wr-3" style="grid-row:123/132;--cell-rows:9;grid-column:17/18;--session-border:#2563EB" title="Main Ad hoc / [105-A] 6G RRM · 18:00–18:45" data-popup-of="wednesday:29" data-room-scope="assigned" data-ai="8.6|8.6.2.1|8.6.2.2|8.6.3" data-ai-scope="8.6|8.6.2.1.*|8.6.2.2.*|8.6.3.*" data-name="Main Ad hoc / [105-A] 6G RRM" data-group="6G study item [FS_6G_Radio]"><div class="session-name">Main Ad hoc / [105-A] 6G RRM</div></div>
+<div class="session-block week-cell wr-2" style="grid-row:123/141;--cell-rows:18;grid-column:16/17;--session-border:#2563EB" title="BBR2 Adhoc: 6G BSRF requirements · 18:00–19:30" data-popup-of="wednesday:30" data-room-scope="assigned" data-ai="8.4.1.1|8.4.1.2|8.4.1.3|8.4.2" data-ai-scope="8.4.1.1.*|8.4.1.2.*|8.4.1.3.*|8.4.2.*" data-name="BBR2 Adhoc: 6G BSRF requirements" data-group="6G study item [FS_6G_Radio]"><div class="session-name">BBR2 Adhoc: 6G BSRF requirements</div></div>
+<div class="session-block week-cell wr-4" style="grid-row:123/141;--cell-rows:18;grid-column:18/19;--session-border:#9CA3AF" title="TN and NTN coexistence · 18:00–19:30" data-popup-of="wednesday:31" data-room-scope="assigned" data-ai="" data-ai-scope="8.4.4.*" data-name="TN and NTN coexistence" data-group=""><div class="session-name">TN and NTN coexistence</div></div>
+<div class="session-block week-cell wr-1" style="grid-row:123/141;--cell-rows:18;grid-column:15/16;--session-border:#059669" title="BR1 Ad hoc / 5G-A &amp; 6G OTA · 18:00–19:30" data-popup-of="wednesday:32" data-room-scope="assigned" data-ai="7.3|8.11" data-ai-scope="7.3.*|8.11.*" data-name="BR1 Ad hoc / 5G-A &amp; 6G OTA" data-group="Rel-20 on-going non-spectrum related work/study items"><div class="session-name">BR1 Ad hoc / 5G-A &amp; 6G OTA</div></div>
+<div class="session-block week-cell wr-0" style="grid-row:123/141;--cell-rows:18;grid-column:14/15;--session-border:#2563EB" title="Main Ad-hoc / [102-B] 6G General RF and UE RF · 18:00–19:30" data-popup-of="wednesday:33" data-room-scope="assigned" data-ai="8.3.4|8.3.5|8.3.7" data-ai-scope="8.3.4.*|8.3.5.*|8.3.7.*" data-name="Main Ad-hoc / [102-B] 6G General RF and UE RF" data-group="6G study item [FS_6G_Radio]"><div class="session-name">Main Ad-hoc / [102-B] 6G General RF and UE RF</div></div>
+<div class="session-block week-cell wr-3" style="grid-row:132/141;--cell-rows:9;grid-column:17/18;--session-border:#2563EB" title="[105-B] 6G RRM · 18:45–19:30" data-popup-of="wednesday:34" data-room-scope="assigned" data-ai="8.6.1|8.6.4|8.6.5" data-ai-scope="8.6.1.*|8.6.4.*|8.6.5.*" data-name="[105-B] 6G RRM" data-group="6G study item [FS_6G_Radio]"><div class="session-name">[105-B] 6G RRM</div></div>
+<div class="session-block week-cell wr-3" style="grid-row:9/33;--cell-rows:24;grid-column:23/24;--session-border:#2563EB" title="BR1 Ad-hoc / Demod · 08:30–10:30" data-popup-of="thursday:0" data-room-scope="assigned" data-ai="8.7" data-ai-scope="8.7.*" data-name="BR1 Ad-hoc / Demod" data-group="6G study item [FS_6G_Radio]"><div class="session-name">BR1 Ad-hoc / Demod</div></div>
+<div class="session-block week-cell wr-2" style="grid-row:9/33;--cell-rows:24;grid-column:22/23;--session-border:#9CA3AF" title="5G basket and spectrum WI · 08:30–10:30" data-popup-of="thursday:1" data-room-scope="assigned" data-ai="" data-ai-scope="5.2.1.*|5.2.2.*|5.2.3.*|5.2.4.*|5.3.1.*|5.3.2.*|5.3.3.*|5.3.4.*|5.3.5.*|5.3.6.*|5.3.7.*|5.4.1.*|5.4.2.*|5.4.3.*|5.4.4.*|5.4.5.*|5.5.1.*|5.5.2.*|5.5.3.*|5.5.4.*|5.5.5.*|5.5.6.*|5.6.1.*|5.6.2.*|5.6.3.*|5.6.4.*|5.6.5.*|5.6.6.*|5.6.7.*|5.6.8.*|5.6.9.*|5.7.1.*|5.7.2.*|5.7.3.*|5.7.4.*|5.7.5.*|5.11.1.*|5.11.2.*|5.12.1.*|5.12.2.*|5.12.3.*|5.12.4.*|5.13.1.*|5.13.2.*|5.13.3.*|5.14.1.*|5.14.2.*" data-name="5G basket and spectrum WI" data-group=""><div class="session-name">5G basket and spectrum WI</div></div>
+<div class="session-block week-cell wr-1" style="grid-row:9/21;--cell-rows:12;grid-column:21/22;--session-border:#059669" title="Rel-20 RRM · 08:30–10:30" data-popup-of="thursday:2" data-room-scope="assigned" data-ai="7.8.4" data-ai-scope="7.8.4.*" data-name="Rel-20 RRM" data-group="Rel-20 on-going non-spectrum related work/study items"><div class="session-name">Rel-20 RRM</div></div>
+<div class="session-block week-cell wr-1" style="grid-row:21/33;--cell-rows:12;grid-column:21/22;--session-border:#059669" title="R4-2621419 / [208] NR_NTN_GNSS_resilient_RRM · 08:30–10:30" data-popup-of="thursday:3" data-room-scope="assigned" data-ai="7.18.2|7.18.4" data-ai-scope="7.18.2.*|7.18.4.*" data-name="R4-2621419 / [208] NR_NTN_GNSS_resilient_RRM" data-group="Rel-20 on-going non-spectrum related work/study items"><div class="session-name">R4-2621419 / [208] NR_NTN_GNSS_resilient_RRM</div></div>
+<div class="session-block week-cell wr-0" style="grid-row:9/33;--cell-rows:24;grid-column:20/21;--session-border:#7C3AED" title="[112] TEI20 / [113] R18 maintenance: PC2 FDD HPUE duty cycle / EARLY RETURN TO · 08:30–10:30" data-popup-of="thursday:4" data-room-scope="assigned" data-ai="4.2|10.2.1" data-ai-scope="4.2.*|10.2.1.*" data-name="[112] TEI20 / [113] R18 maintenance: PC2 FDD HPUE duty cycle / EARLY RETURN TO" data-group="TEI20"><div class="session-name">[112] TEI20 / [113] R18 maintenance: PC2 FDD HPUE duty cycle / EARLY RETURN TO</div></div>
+<div class="session-block week-cell wr-2" style="grid-row:33/39;--cell-rows:6;grid-column:22/23;--session-border:#9CA3AF" title="Coffee break offline discussion on 1900 MHz TN bands · 10:30–11:00" data-popup-of="thursday:5" data-room-scope="assigned" data-ai="" data-ai-scope="5.12.*|5.13.*" data-name="Coffee break offline discussion on 1900 MHz TN bands" data-group=""><div class="session-name">Coffee break offline discussion on 1900 MHz TN bands</div></div>
+<div class="session-block week-cell wr-3" style="grid-row:39/51;--cell-rows:12;grid-column:23/24;--session-border:#059669" title="BR1 Ad-hoc / R20 RRM · 11:00–12:00" data-popup-of="thursday:6" data-room-scope="assigned" data-ai="7.18.2|7.18.4" data-ai-scope="7.18.2.*|7.18.4.*" data-name="BR1 Ad-hoc / R20 RRM" data-group="Rel-20 on-going non-spectrum related work/study items"><div class="session-name">BR1 Ad-hoc / R20 RRM</div></div>
+<div class="session-block week-cell wr-2" style="grid-row:39/63;--cell-rows:24;grid-column:22/23;--session-border:#9CA3AF" title="BDaT Early Return To · 11:00–13:00" data-popup-of="thursday:7" data-room-scope="assigned" data-ai="" data-ai-scope="5.5.*|7.6.*|7.12.*|7.13.*|7.18.*|7.19.*|7.20.*|7.21.*|8.4.3.1.*|8.4.4.*|8.10.*" data-name="BDaT Early Return To" data-group=""><div class="session-name">BDaT Early Return To</div></div>
+<div class="session-block week-cell wr-4" style="grid-row:39/51;--cell-rows:12;grid-column:24/25;--session-border:#9CA3AF" title="~7GHz TN co-ex topic · 11:00–12:00" data-popup-of="thursday:8" data-room-scope="assigned" data-ai="" data-ai-scope="8.4.3.1.*" data-name="~7GHz TN co-ex topic" data-group=""><div class="session-name">~7GHz TN co-ex topic</div></div>
+<div class="session-block week-cell wr-1" style="grid-row:39/63;--cell-rows:24;grid-column:21/22;--session-border:#059669" title="Rel-20 Demod / Rel-20 RRM · 11:00–13:00" data-popup-of="thursday:9" data-room-scope="assigned" data-ai="7.4.3.4|7.10" data-ai-scope="7.4.3.4.*|7.10.*" data-name="Rel-20 Demod / Rel-20 RRM" data-group="Rel-20 on-going non-spectrum related work/study items"><div class="session-name">Rel-20 Demod / Rel-20 RRM</div></div>
+<div class="session-block week-cell wr-0" style="grid-row:41/63;--cell-rows:22;grid-column:20/21;--session-border:#9CA3AF" title="6G system parameter · 11:10–13:00" data-popup-of="thursday:10" data-room-scope="assigned" data-ai="" data-ai-scope="8.2.*" data-name="6G system parameter" data-group=""><div class="session-name">6G system parameter</div></div>
+<div class="session-block week-cell wr-3" style="grid-row:51/63;--cell-rows:12;grid-column:23/24;--session-border:#9CA3AF" title="[206] NR_Mob_Ph5_RRM · 12:00–13:00" data-popup-of="thursday:11" data-room-scope="assigned" data-ai="" data-ai-scope="7.17.*" data-name="[206] NR_Mob_Ph5_RRM" data-group=""><div class="session-name">[206] NR_Mob_Ph5_RRM</div></div>
+<div class="session-block week-cell wr-4" style="grid-row:51/63;--cell-rows:12;grid-column:24/25;--session-border:#059669" title="[216] NR_UE_OTA_Enh performance part · 12:00–13:00" data-popup-of="thursday:12" data-room-scope="assigned" data-ai="7.3" data-ai-scope="7.3.*" data-name="[216] NR_UE_OTA_Enh performance part" data-group="Rel-20 on-going non-spectrum related work/study items"><div class="session-name">[216] NR_UE_OTA_Enh performance part</div></div>
+<div class="session-block week-cell wr-3" style="grid-row:81/105;--cell-rows:24;grid-column:23/24;--session-border:#059669" title="BR2 Ad-hoc: NTN Rel-20 PC1.5 NR NTN &amp; RF DL CA · 14:30–16:30" data-popup-of="thursday:13" data-room-scope="assigned" data-ai="7.6.2|7.6.3|7.6.6.1.1|7.6.6.1.2|7.6.6.2.1|7.6.6.2.2|7.6.7" data-ai-scope="7.6.2.*|7.6.3.*|7.6.6.1.1.*|7.6.6.1.2.*|7.6.6.2.1.*|7.6.6.2.2.*|7.6.7.*" data-name="BR2 Ad-hoc: NTN Rel-20 PC1.5 NR NTN &amp; RF DL CA" data-group="Rel-20 on-going non-spectrum related work/study items"><div class="session-name">BR2 Ad-hoc: NTN Rel-20 PC1.5 NR NTN &amp; RF DL CA</div></div>
+<div class="session-block week-cell wr-2" style="grid-row:81/93;--cell-rows:12;grid-column:22/23;--session-border:#2563EB" title="BR2 Ad-hoc: 6G Sensing feasibility · 14:30–15:30" data-popup-of="thursday:14" data-room-scope="assigned" data-ai="8.10.1|8.10.2" data-ai-scope="8.10.1.*|8.10.2.*" data-name="BR2 Ad-hoc: 6G Sensing feasibility" data-group="6G study item [FS_6G_Radio]"><div class="session-name">BR2 Ad-hoc: 6G Sensing feasibility</div></div>
+<div class="session-block week-cell wr-4" style="grid-row:81/93;--cell-rows:12;grid-column:24/25;--session-border:#2563EB" title="Main Ad-hoc / [101-B] System Parameter · 14:30–15:30" data-popup-of="thursday:15" data-room-scope="assigned" data-ai="8.2.3|8.2.4|8.2.5|8.2.6" data-ai-scope="8.2.3.*|8.2.4.*|8.2.5.*|8.2.6.*" data-name="Main Ad-hoc / [101-B] System Parameter" data-group="6G study item [FS_6G_Radio]"><div class="session-name">Main Ad-hoc / [101-B] System Parameter</div></div>
+<div class="session-block week-cell wr-1" style="grid-row:81/105;--cell-rows:24;grid-column:21/22;--session-border:#059669" title="Ad-hoc / [206] NR_AIML_Mob_RRM · 14:30–16:30" data-popup-of="thursday:16" data-room-scope="assigned" data-ai="7.16" data-ai-scope="7.16.*" data-name="Ad-hoc / [206] NR_AIML_Mob_RRM" data-group="Rel-20 on-going non-spectrum related work/study items"><div class="session-name">Ad-hoc / [206] NR_AIML_Mob_RRM</div></div>
+<div class="session-block week-cell wr-0" style="grid-row:81/93;--cell-rows:12;grid-column:20/21;--session-border:#9CA3AF" title="6G spectrum / 6G spectrum sharing · 14:30–16:30" data-popup-of="thursday:17" data-room-scope="assigned" data-ai="" data-ai-scope="8.5.*|8.9.*" data-name="6G spectrum / 6G spectrum sharing" data-group=""><div class="session-name">6G spectrum / 6G spectrum sharing</div></div>
+<div class="session-block week-cell wr-0" style="grid-row:93/105;--cell-rows:12;grid-column:20/21;--session-border:#2563EB" title="6G RRM / 6G AI : LS / 6G operation efficiency · 14:30–16:30" data-popup-of="thursday:18" data-room-scope="assigned" data-ai="8.8.4" data-ai-scope="8.8.4.*" data-name="6G RRM / 6G AI : LS / 6G operation efficiency" data-group="6G study item [FS_6G_Radio]"><div class="session-name">6G RRM / 6G AI : LS / 6G operation efficiency</div></div>
+<div class="session-block week-cell wr-2" style="grid-row:93/105;--cell-rows:12;grid-column:22/23;--session-border:#2563EB" title="BR2 Ad-hoc: 6G Sensing coexistence · 15:30–16:30" data-popup-of="thursday:19" data-room-scope="assigned" data-ai="8.10.3|8.10.4|8.10.5" data-ai-scope="8.10.3.*|8.10.4.*|8.10.5.*" data-name="BR2 Ad-hoc: 6G Sensing coexistence" data-group="6G study item [FS_6G_Radio]"><div class="session-name">BR2 Ad-hoc: 6G Sensing coexistence</div></div>
+<div class="session-block week-cell wr-4" style="grid-row:93/105;--cell-rows:12;grid-column:24/25;--session-border:#2563EB" title="Main Ad-hoc / [102-B] 6G General RF and UE RF · 15:30–16:30" data-popup-of="thursday:20" data-room-scope="assigned" data-ai="8.3.4|8.3.5|8.3.7" data-ai-scope="8.3.4.*|8.3.5.*|8.3.7.*" data-name="Main Ad-hoc / [102-B] 6G General RF and UE RF" data-group="6G study item [FS_6G_Radio]"><div class="session-name">Main Ad-hoc / [102-B] 6G General RF and UE RF</div></div>
+<div class="session-block week-cell wr-4" style="grid-row:105/111;--cell-rows:6;grid-column:24/25;--session-border:#2563EB" title="Coffee break AH: [102-A] 6G General RF and UE RF · 16:30–17:00" data-popup-of="thursday:21" data-room-scope="assigned" data-ai="8.3.1|8.3.2|8.3.3|8.3.6" data-ai-scope="8.3.1.*|8.3.2.*|8.3.3.*|8.3.6.*" data-name="Coffee break AH: [102-A] 6G General RF and UE RF" data-group="6G study item [FS_6G_Radio]"><div class="session-name">Coffee break AH: [102-A] 6G General RF and UE RF</div></div>
+<div class="session-block week-cell wr-3" style="grid-row:111/123;--cell-rows:12;grid-column:23/24;--session-border:#2563EB" title="Main Ad hoc / [104-B] Spectrum · 17:00–18:00" data-popup-of="thursday:22" data-room-scope="assigned" data-ai="8.5.3" data-ai-scope="8.5.3.*" data-name="Main Ad hoc / [104-B] Spectrum" data-group="6G study item [FS_6G_Radio]"><div class="session-name">Main Ad hoc / [104-B] Spectrum</div></div>
+<div class="session-block week-cell wr-2" style="grid-row:111/123;--cell-rows:12;grid-column:22/23;--session-border:#059669" title="BR2 Ad-hoc: NTN Rel-20 HD-FDD · 17:00–18:00" data-popup-of="thursday:23" data-room-scope="assigned" data-ai="7.6.4|7.6.5.1|7.13.1|4.6.1" data-ai-scope="7.6.4.*|7.6.5.1.*|7.13.1.*|4.6.1.*" data-name="BR2 Ad-hoc: NTN Rel-20 HD-FDD" data-group="Rel-20 on-going non-spectrum related work/study items"><div class="session-name">BR2 Ad-hoc: NTN Rel-20 HD-FDD</div></div>
+<div class="session-block week-cell wr-4" style="grid-row:111/123;--cell-rows:12;grid-column:24/25;--session-border:#059669" title="[211] FS_NR_demod_SCM · 17:00–18:00" data-popup-of="thursday:24" data-room-scope="assigned" data-ai="7.9" data-ai-scope="7.9.*" data-name="[211] FS_NR_demod_SCM" data-group="Rel-20 on-going non-spectrum related work/study items"><div class="session-name">[211] FS_NR_demod_SCM</div></div>
+<div class="session-block week-cell wr-1" style="grid-row:111/123;--cell-rows:12;grid-column:21/22;--session-border:#9CA3AF" title="Ad-hoc · 17:00–18:00" data-popup-of="thursday:25" data-room-scope="assigned" data-ai="" data-ai-scope="" data-name="Ad-hoc" data-group=""><div class="session-name">Ad-hoc</div></div>
+<div class="session-block week-cell wr-0" style="grid-row:111/123;--cell-rows:12;grid-column:20/21;--session-border:#2563EB" title="Main Ad-hoc / [101-A] System Parameter · 17:00–18:00" data-popup-of="thursday:26" data-room-scope="assigned" data-ai="8.2.1|8.2.2|8.2.7" data-ai-scope="8.2.1.*|8.2.2.*|8.2.7.*" data-name="Main Ad-hoc / [101-A] System Parameter" data-group="6G study item [FS_6G_Radio]"><div class="session-name">Main Ad-hoc / [101-A] System Parameter</div></div>
+<div class="session-block week-cell wr-3" style="grid-row:123/141;--cell-rows:18;grid-column:23/24;--session-border:#9CA3AF" title="Main Ad hoc / [102-A/B] System Parameter · 18:00–19:30" data-popup-of="thursday:27" data-room-scope="assigned" data-ai="" data-ai-scope="8.2.*" data-name="Main Ad hoc / [102-A/B] System Parameter" data-group=""><div class="session-name">Main Ad hoc / [102-A/B] System Parameter</div></div>
+<div class="session-block week-cell wr-2" style="grid-row:123/141;--cell-rows:18;grid-column:22/23;--session-border:#9CA3AF" title="BR2 Ad-hoc: Ambient-IoT · 18:00–19:30" data-popup-of="thursday:28" data-room-scope="assigned" data-ai="" data-ai-scope="7.21.*" data-name="BR2 Ad-hoc: Ambient-IoT" data-group=""><div class="session-name">BR2 Ad-hoc: Ambient-IoT</div></div>
+<div class="session-block week-cell wr-4" style="grid-row:123/141;--cell-rows:18;grid-column:24/25;--session-border:#2563EB" title="[111] 6G operation efficiency · 18:00–19:30" data-popup-of="thursday:29" data-room-scope="assigned" data-ai="8.12" data-ai-scope="8.12.*" data-name="[111] 6G operation efficiency" data-group="6G study item [FS_6G_Radio]"><div class="session-name">[111] 6G operation efficiency</div></div>
+<div class="session-block week-cell wr-1" style="grid-row:123/141;--cell-rows:18;grid-column:21/22;--session-border:#059669" title="Ad-hoc / [208] NR_NTN_GNSS_resilient_RRM · 18:00–19:30" data-popup-of="thursday:30" data-room-scope="assigned" data-ai="7.18.2|7.18.4" data-ai-scope="7.18.2.*|7.18.4.*" data-name="Ad-hoc / [208] NR_NTN_GNSS_resilient_RRM" data-group="Rel-20 on-going non-spectrum related work/study items"><div class="session-name">Ad-hoc / [208] NR_NTN_GNSS_resilient_RRM</div></div>
+<div class="session-block week-cell wr-0" style="grid-row:123/141;--cell-rows:18;grid-column:20/21;--session-border:#2563EB" title="Main Ad-hoc / [107-A] 6G AI · 18:00–19:30" data-popup-of="thursday:31" data-room-scope="assigned" data-ai="8.8.1|8.8.2|8.8.3|8.8.5.1" data-ai-scope="8.8.1.*|8.8.2.*|8.8.3.*|8.8.5.1.*" data-name="Main Ad-hoc / [107-A] 6G AI" data-group="6G study item [FS_6G_Radio]"><div class="session-name">Main Ad-hoc / [107-A] 6G AI</div></div>
+<div class="session-block week-cell wr-1" style="grid-row:3/33;--cell-rows:30;grid-column:27/28;--session-border:#9CA3AF" title="Return to · 08:00–10:30" data-popup-of="friday:0" data-room-scope="assigned" data-ai="" data-ai-scope="7.4.*|7.5.*|7.9.*|7.14.*|7.16.*|8.7.*" data-name="Return to" data-group=""><div class="session-name">Return to</div></div>
+<div class="session-block week-cell wr-0" style="grid-row:3/33;--cell-rows:30;grid-column:26/27;--session-border:#9CA3AF" title="Return to · 08:00–10:30" data-popup-of="friday:1" data-room-scope="assigned" data-ai="" data-ai-scope="8.2.*|8.3.*|8.5.*|8.8.*|8.9.*" data-name="Return to" data-group=""><div class="session-name">Return to</div></div>
+<div class="session-block week-cell wr-2" style="grid-row:9/33;--cell-rows:24;grid-column:28/29;--session-border:#9CA3AF" title="Return to · 08:30–10:30" data-popup-of="friday:2" data-room-scope="assigned" data-ai="" data-ai-scope="5.2.1.*|5.2.2.*|5.2.3.*|5.2.4.*|5.5.1.*|5.5.2.*|5.5.3.*|5.5.4.*|5.5.5.*|5.5.6.*|5.6.1.*|5.6.2.*|5.6.3.*|5.6.4.*|5.6.5.*|5.6.6.*|5.6.7.*|5.6.8.*|5.6.9.*|5.7.1.*|5.7.2.*|5.7.3.*|5.7.4.*|5.7.5.*|5.12.1.*|5.12.2.*|5.12.3.*|5.12.4.*|5.13.1.*|5.13.2.*|5.13.3.*|12.1.*|7.7.2.*|7.7.3.*|7.7.4.*|7.11.2.*|7.11.3.*|7.1.2.*|7.1.3.2.*|7.1.3.3.*|7.1.3.4.*|7.1.5.*|4.2.*|7.8.2.*|7.8.3.*|7.2.2.*|7.2.3.*|7.2.4.*|4.4.*|7.6.2.*|7.6.3.*|7.6.6.1.1.*|7.6.6.1.2.*|7.6.6.2.1.*|7.6.6.2.2.*|7.6.7.*|7.6.4.*|7.6.5.1.*|7.13.1.*|4.6.1.*|7.6.5.2.*|7.6.6.3.*|4.6.2.*|7.18.3.*|7.19.2.*|7.19.3.*|7.19.4.*|7.20.2.*|7.20.3.1.*|7.20.3.2.*|7.12.2.*|7.12.3.1.*|7.12.3.2.*" data-name="Return to" data-group=""><div class="session-name">Return to</div></div>
+<div class="session-block week-cell wr-2" style="grid-row:33/39;--cell-rows:6;grid-column:28/29;--session-border:#9CA3AF" title="Coffee break ad-hoc: 6G Sensing feasibility / Finalize the WF · 10:30–11:00" data-popup-of="friday:3" data-room-scope="assigned" data-ai="" data-ai-scope="8.10.2.*" data-name="Coffee break ad-hoc: 6G Sensing feasibility / Finalize the WF" data-group=""><div class="session-name">Coffee break ad-hoc: 6G Sensing feasibility / Finalize the WF</div></div>
+<div class="session-block week-cell wr-2" style="grid-row:39/60;--cell-rows:21;grid-column:28/29;--session-border:#9CA3AF" title="Return to · 11:00–12:45" data-popup-of="friday:4" data-room-scope="assigned" data-ai="" data-ai-scope="8.4.1.1.*|8.4.1.2.*|8.4.1.3.*|8.4.2.*|8.4.4.1.*|8.4.4.2.*|8.4.4.3.*|7.21.2.*|7.21.4.*|7.21.5.1.*|7.21.5.2.*|7.21.5.3.*|7.21.6.1.*|7.21.6.2.*|7.21.6.3.*|7.21.6.4.*|7.21.7.*|8.4.3.1.*|8.4.3.2.*|8.4.5.*|8.4.6.*|8.10.3.*|8.10.4.*|8.10.5.*|8.10.1.*|8.10.2.*" data-name="Return to" data-group=""><div class="session-name">Return to</div></div>
+<div class="session-block week-cell wr-1" style="grid-row:39/60;--cell-rows:21;grid-column:27/28;--session-border:#9CA3AF" title="Return to · 11:00–12:45" data-popup-of="friday:5" data-room-scope="assigned" data-ai="" data-ai-scope="7.3.*|8.11.*" data-name="Return to" data-group=""><div class="session-name">Return to</div></div>
+<div class="session-block week-cell wr-0" style="grid-row:39/49;--cell-rows:10;grid-column:26/27;--session-border:#9CA3AF" title="6G operation efficiency · 11:00–12:45" data-popup-of="friday:6" data-room-scope="assigned" data-ai="" data-ai-scope="8.12.*" data-name="6G operation efficiency" data-group=""><div class="session-name">6G operation efficiency</div></div>
+<div class="session-block week-cell wr-0" style="grid-row:49/60;--cell-rows:11;grid-column:26/27;--session-border:#9CA3AF" title="6G RRM / 13 Any other business / 14 Close of the meeting · 11:00–12:45" data-popup-of="friday:7" data-room-scope="assigned" data-ai="" data-ai-scope="8.6.*|14.*|15.*" data-name="6G RRM / 13 Any other business / 14 Close of the meeting" data-group=""><div class="session-name">6G RRM / 13 Any other business / 14 Close of the meeting</div></div>
+<div class="session-block week-cell wr-2" style="grid-row:75/117;--cell-rows:42;grid-column:28/29;--session-border:#9CA3AF" title="Return to · 14:00–17:30" data-popup-of="friday:8" data-room-scope="assigned" data-ai="" data-ai-scope="" data-name="Return to" data-group=""><div class="session-name">Return to</div></div>
+<div class="session-block week-cell wr-1" style="grid-row:75/117;--cell-rows:42;grid-column:27/28;--session-border:#9CA3AF" title="Return to · 14:00–17:30" data-popup-of="friday:9" data-room-scope="assigned" data-ai="" data-ai-scope="" data-name="Return to" data-group=""><div class="session-name">Return to</div></div>
+<div class="session-block week-cell wr-0" style="grid-row:75/117;--cell-rows:42;grid-column:26/27;--session-border:#9CA3AF" title="Return to · 14:00–17:30" data-popup-of="friday:10" data-room-scope="assigned" data-ai="" data-ai-scope="" data-name="Return to" data-group=""><div class="session-name">Return to</div></div>
+            </div>
+        </div>
+    </div>
     <div id="grid-end" hidden></div>
 <details class="supplements" open><summary>Additional information</summary><h3>Friday</h3><p>Note: Depending on the progress and the need, the session chair(s) may introduce additional morning AH sessions, starting no earlier than 8 am.</p></details>    <div class="popup-backdrop" id="popup-backdrop"></div>
     <div class="popup-floating" id="popup-floating"><div id="popup-content"></div><button class="popup-close" id="popup-close-btn">&times;</button></div>
@@ -3370,7 +3829,7 @@ Others based on LS">
         const activeTab = document.querySelector('.tab.active');
         const state = {
             activeDay: activeTab ? activeTab.dataset.day : null,
-            gridZoom: gridZoom,
+            gridZoom: isAllDays() && weekZoom === null ? 'fit' : gridZoom,
             scrollX: window.scrollX,
             scrollY: window.scrollY
         };
@@ -3476,6 +3935,7 @@ Others based on LS">
 
     tabs.forEach(tab => {
         tab.addEventListener('click', function() {
+            rememberViewZoom();
             tabs.forEach(t => t.classList.remove('active'));
             panels.forEach(p => p.classList.remove('active'));
             this.classList.add('active');
@@ -3485,7 +3945,25 @@ Others based on LS">
             // day-select.js showed the first day by a rule; .active holds it from here.
             const initialDay = document.getElementById('initial-day');
             if (initialDay) initialDay.remove();
+            document.documentElement.classList.toggle('all-days-view', day === ALL_DAYS);
+            if (gridZoomSupported) setGridZoom(viewZoom());
             saveUserState();
+        });
+    });
+
+    // Fewer rooms need less width (room-picks.js): fit the grid to them again.
+    document.addEventListener('room-picks-change', function() {
+        if (!isAllDays() || !gridZoomSupported) return;
+        weekZoom = null;
+        setGridZoom(viewZoom());
+        saveUserState();
+    });
+
+    // A day's name in the All view opens that day.
+    document.querySelectorAll('.week-day').forEach(button => {
+        button.addEventListener('click', function() {
+            const tab = document.querySelector('.tab[data-day="' + this.dataset.day + '"]');
+            if (tab) tab.click();
         });
     });
 
@@ -3512,12 +3990,26 @@ Others based on LS">
     const gridZoomSupported = window.CSS && CSS.supports && CSS.supports('zoom', '1');
     let gridZoom = 1;
 
+    // The All view and the days keep a zoom each: what fits a day is not what
+    // fits the week. The All view fits the width until it is pinched (null).
+    const ALL_DAYS = 'all-days';
+    let dayZoom = 1;
+    let weekZoom = null;
+    const isAllDays = () => !!document.querySelector('.tab.active[data-day="' + ALL_DAYS + '"]');
+    const viewZoom = () => !isAllDays() ? dayZoom : (weekZoom === null ? minGridZoom() : weekZoom);
+
+    function rememberViewZoom() {
+        if (!isAllDays()) dayZoom = gridZoom;
+    }
+
     function activeGridWrapper() {
         return document.querySelector('.day-panel.active .grid-wrapper');
     }
 
+    // The All view's grid sets its own, wide enough for every room of the week.
     function gridMinWidth() {
-        return parseFloat(getComputedStyle(document.documentElement)
+        const grid = document.querySelector('.day-panel.active .schedule-grid');
+        return parseFloat(getComputedStyle(grid || document.documentElement)
             .getPropertyValue('--grid-min-width')) || 600;
     }
 
@@ -3549,8 +4041,9 @@ Others based on LS">
 
     // Above 100% the time axis keeps its 100% width and text, and only its
     // rows follow the zoom: the width goes to the rooms. Below, it shrinks
-    // with the grid. This is its size on screen relative to 100%.
-    const axisScale = z => Math.min(z, 1);
+    // with the grid, except in the All view, where a week fitted to a phone
+    // is read by its times and day names. This is its size on screen relative to 100%.
+    const axisScale = z => isAllDays() ? 1 : Math.min(z, 1);
 
     // Zoom magnifies the grid as it is laid out at 100%, so --grid-width holds
     // that width. Left to fit the box at each zoom (box width / zoom), the
@@ -3560,8 +4053,10 @@ Others based on LS">
         const root = document.documentElement;
         const wrapper = activeGridWrapper();
         root.style.setProperty('--grid-zoom', String(gridZoom));
-        if (gridZoom > 1) root.style.setProperty('--axis-unzoom', String(1 / gridZoom));
+        if (axisScale(gridZoom) !== gridZoom) root.style.setProperty('--axis-unzoom', String(1 / gridZoom));
         else root.style.removeProperty('--axis-unzoom');
+        // The week's rows fill the screen's height at the zoom that fits its width.
+        if (isAllDays()) root.style.setProperty('--week-fit', String(minGridZoom()));
         if (gridZoom === 1 || !wrapper) root.style.removeProperty('--grid-width');
         else root.style.setProperty('--grid-width', Math.max(wrapper.clientWidth, gridMinWidth()) + 'px');
         updatePinchTarget();
@@ -3599,8 +4094,14 @@ Others based on LS">
                 el.style.removeProperty('--axis-sx');
                 el.style.removeProperty('--axis-sy');
             });
+            p.dayNames.forEach(el => {
+                el.style.removeProperty('--day-sx');
+                el.style.removeProperty('--day-sy');
+            });
+            if (p.axisHead) p.axisHead.style.removeProperty('--head-ty');
             const moved = p.zoom !== gridZoom;
             setGridZoom(p.zoom);
+            if (moved && isAllDays()) weekZoom = gridZoom;
             if (moved) {
                 p.wrapper.scrollLeft = p.scrollLeft;
                 window.scrollTo(window.scrollX, p.scrollTop);
@@ -3616,6 +4117,10 @@ Others based on LS">
                 const mid = touchMid(e.touches);
                 const rect = grid.getBoundingClientRect();
                 const box = wrapper.getBoundingClientRect();
+                const axisHead = grid.querySelector('.room-header.time-col');
+                // The All view's day names keep their size at any zoom, and so does their row.
+                const dayNames = grid.querySelectorAll('.week-day');
+                const dayName = Array.from(dayNames).find(el => el.offsetParent);
                 pinch = {
                     wrapper: wrapper,
                     grid: grid,
@@ -3638,7 +4143,14 @@ Others based on LS">
                     axisWidth: parseFloat(getComputedStyle(document.documentElement)
                         .getPropertyValue('--time-col-width')) || 36,
                     // The sticky time axis (.now-line carries its NOW label).
-                    axis: grid.querySelectorAll('.time-label, .room-header.time-col, .break-axis, .now-line')
+                    axis: grid.querySelectorAll('.time-label, .room-header.time-col, .break-axis, .now-line'),
+                    // A sticky axis stays inside the grid's box: it goes no further
+                    // right than this, however far the scaled grid lets the box scroll.
+                    axisMax: rect.width - (axisHead ? axisHead.getBoundingClientRect().width : 0),
+                    axisHead: axisHead,
+                    dayNames: dayNames,
+                    // Screen height of the day names' row (none on a day's grid).
+                    fixedTop: dayName ? dayName.getBoundingClientRect().height : 0
                 };
             }, { passive: true });
             wrapper.addEventListener('touchmove', function(e) {
@@ -3674,21 +4186,27 @@ Others based on LS">
                 const sx = (W * zoom - A * axisScale(zoom)) / (W * g - A * axisScale(g));
                 const sy = zoom / g;
                 const tx = W * zoom - W * g * sx;
-                grid.style.transform = 'translateX(' + tx / g + 'px) scale(' + sx + ',' + sy + ')';
-                wrapper.style.height = pinch.boxExtra + pinch.gridHeight * zoom + 'px';
+                // The day names' row will not grow with the zoom, so what lies
+                // under it is lifted by what the scale adds to that row; the row's
+                // top goes above the box, and the names shrink back into its bottom.
+                const lift = pinch.fixedTop * (sy - 1);
+                grid.style.transform = 'translate(' + tx / g + 'px,' + -lift / g + 'px) scale(' + sx + ',' + sy + ')';
+                wrapper.style.height = pinch.boxExtra + pinch.gridHeight * zoom - lift + 'px';
                 // Keep that grid point under the fingers as they move. A grid
                 // scaled down still scrolls as far as its unscaled width, so
                 // the end of the scaled grid is held here.
                 const mid = touchMid(e.touches);
                 pinch.scrollLeft = Math.max(0, Math.min(pinch.boxLeft + tx + pinch.x * g * sx - mid.x,
                     W * zoom - pinch.boxWidth));
-                pinch.scrollTop = pinch.gridTop + pinch.y * zoom - mid.y;
+                pinch.scrollTop = pinch.gridTop + pinch.y * zoom - lift - mid.y;
                 wrapper.scrollLeft = pinch.scrollLeft;
                 window.scrollTo(window.scrollX, pinch.scrollTop);
                 // Sticky offsets are worked out before the transform: an axis
-                // held at scrollLeft inside the grid lands at tx + scrollLeft * sx.
+                // held at scrollLeft inside the grid lands at tx + scrollLeft * sx,
+                // or at tx + axisMax * sx once it reaches the grid's end.
                 // The axis is in its own units (--axis-unzoom above 100%).
-                const shift = (wrapper.scrollLeft * (1 - sx) - tx) / (g * sx) * Math.max(g, 1) + 'px';
+                const held = Math.min(wrapper.scrollLeft, pinch.axisMax);
+                const shift = (wrapper.scrollLeft - tx - held * sx) / (axisScale(g) * sx) + 'px';
                 // Its width and text go from their size at this zoom to their
                 // size at the fingers' zoom, the same way across and down.
                 const axisSx = String(axisScale(zoom) / axisScale(g) / sx);
@@ -3697,6 +4215,13 @@ Others based on LS">
                     el.style.setProperty('--pinch-shift', shift);
                     el.style.setProperty('--axis-sx', axisSx);
                     el.style.setProperty('--axis-sy', axisSy);
+                });
+                // The Time head spans the day names' row too: its middle drops by half the lift.
+                if (pinch.axisHead) pinch.axisHead.style.setProperty('--head-ty', lift / 2 / sy + 'px');
+                const daySx = String(1 / sx), daySy = String(1 / sy);
+                pinch.dayNames.forEach(el => {
+                    el.style.setProperty('--day-sx', daySx);
+                    el.style.setProperty('--day-sy', daySy);
                 });
             }, { passive: false });
             const endPinch = function(e) {
@@ -3709,7 +4234,7 @@ Others based on LS">
         // The 100% layout follows the box (rotation): keep the zoom, magnify
         // the new layout. A wider box can also fit the day at a larger zoom.
         window.addEventListener('resize', function() {
-            if (!pinch) setGridZoom(gridZoom);
+            if (!pinch) setGridZoom(isAllDays() ? viewZoom() : gridZoom);
         });
         if (window.visualViewport) window.visualViewport.addEventListener('resize', updatePinchTarget);
         updatePinchTarget();
@@ -3722,7 +4247,11 @@ Others based on LS">
     if (initialTab) {
         initialTab.click();
         if (saved && saved.activeDay === initialTab.dataset.day) {
-            if (gridZoomSupported && saved.gridZoom) setGridZoom(saved.gridZoom);
+            if (gridZoomSupported && saved.gridZoom) {
+                if (isAllDays()) weekZoom = saved.gridZoom === 'fit' ? null : saved.gridZoom;
+                else dayZoom = saved.gridZoom;
+                setGridZoom(viewZoom());
+            }
             window.scrollTo(saved.scrollX || 0, saved.scrollY || 0);
         }
     }
@@ -3736,16 +4265,27 @@ Others based on LS">
         if (!showNowLine) return;
         const todayPanel = document.getElementById(weekday);
         if (!todayPanel || (todayPanel.dataset.date && todayPanel.dataset.date !== date)) return;
-        const grid = todayPanel.querySelector('.schedule-grid');
+        addNowLine(todayPanel.querySelector('.schedule-grid'), minutes);
+        // In the All view the NOW label stays on the time axis, and the red
+        // line runs across today's rooms only (schedule.css).
+        const today = document.querySelector('.week-day[data-day="' + weekday + '"]');
+        if (today) {
+            addNowLine(today.parentElement, minutes, 'now-label');
+            addNowLine(today.parentElement, minutes, 'now-today', today.style.gridColumn);
+        }
+    }
+
+    function addNowLine(grid, minutes, kind, column) {
         if (!grid) return;
         const base = Number(grid.dataset.start);
         const end = Number(grid.dataset.end);
         const interval = Number(grid.dataset.slot);
         if (minutes >= base && minutes < end) {
-            const row = Math.floor((minutes - base) / interval) + 2;
+            const row = Math.floor((minutes - base) / interval) + Number(grid.dataset.firstRow || 2);
             const nowLine = document.createElement('div');
-            nowLine.className = 'now-line';
+            nowLine.className = kind ? 'now-line ' + kind : 'now-line';
             nowLine.style.gridRow = row + ' / ' + (row + 1);
+            if (column) nowLine.style.gridColumn = column;
             grid.appendChild(nowLine);
         }
     }
@@ -3916,6 +4456,16 @@ Others based on LS">
             window.dispatchEvent(new CustomEvent('agreement-select', { detail: null }));
         }));
     }
+    // An All view cell shows the popup of its day's cell.
+    function popupOf(block) {
+        const of = block.dataset.popupOf;
+        if (!of) return block.getAttribute('data-popup');
+        const [day, index] = of.split(':');
+        const panel = document.getElementById(day);
+        const cell = panel && panel.querySelectorAll('.session-block')[Number(index)];
+        return cell ? cell.getAttribute('data-popup') : null;
+    }
+
     document.querySelectorAll('.session-block').forEach(block => {
         if (agreementPanel) block.addEventListener('keydown', e => {
             if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); block.click(); }
@@ -3923,7 +4473,7 @@ Others based on LS">
         block.addEventListener('click', function(e) {
             e.stopPropagation();
             // Opening one popup over another keeps the height already held.
-            const html = this.getAttribute('data-popup');
+            const html = popupOf(this);
             const opens = html && (!isPopupOpen() || popupContent.innerHTML !== html);
             if (opens) holdPanelHeight();
             else closePopup();
@@ -4241,6 +4791,7 @@ Others based on LS">
 
         function applyFilter() {
             var hasFilter = activeAIs.size > 0 || activeSessions.size > 0 || activeNoAISessions.size > 0;
+            document.documentElement.classList.toggle('filtering', hasFilter);
             // Derive session keys for sessions whose ALL AIs (+ noAI) are active.
             // This ensures blocks without data-ai still match when the
             // session (or parent group) checkbox is fully checked.
