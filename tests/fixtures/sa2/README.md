@@ -17,6 +17,9 @@ Retrieved 2026-10-29 (Asia/Seoul) from the 3GPP archive (`tsg_sa/WG2_Arch/`):
   of that name in `TSGS2_178_Calgary_2026-11/INBOX/DRAFTS/_Session_Plan_Updates/` (retrieved 2026-11-02).
   Q2's range written `1100 - 12`, seat counts in parentheses (`Palomino E-H (300)`), and cells that
   move a stream to another room (`In breakout 1`, `In main room`).
+- `S2-2509839_SA2-172-Session Plan - r2.docx`: SA2#172, from the ZIP of that name in the meeting's
+  `Agenda/OLDER/` folder. Wednesday's two cells are three grid columns (1843, 1 and 1701 twips) because
+  Word cut the rows at slightly different places, and a tracked table change keeps an older grid.
 - `agenda_178.csv`: `agenda.csv` from `TSGS2_178_Calgary_2026-11/Agenda/` (retrieved 2026-11-02; a snapshot).
 
 SA2#177's plans are not used: their `word/people.xml` carries an author's e-mail address.

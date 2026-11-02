@@ -5,7 +5,8 @@ and one schedule table whose rows are quarters (Q0 to Q5) times streams (one
 row per room), with Break/Coffee/Lunch rows between quarters, and whose columns
 are five weekdays of two cells each. A cell may be merged across both cells of
 a day (gridSpan) or down several rows (vMerge), so cells are identified by
-their XML element. Tracked changes are read in accepted form.
+their XML element. Tracked changes are read in accepted form. Sliver grid
+columns that Word leaves between a day's two cells belong to neither half.
 
 The table is checked against that template; another layout raises LayoutError
 rather than being guessed at. Paragraphs outside the table are kept as
@@ -134,6 +135,32 @@ def _grid(table) -> list[list[dict]]:
     return rows
 
 
+def _grid_widths(table, count: int) -> list[int] | None:
+    """The table's grid column widths (w:tblGrid, twips), or None if it does not give one per column."""
+    grid = table._tbl.find(W + 'tblGrid')
+    # Direct children only: a tracked table change keeps the old grid inside (w:tblGridChange).
+    widths = [] if grid is None else [int(c.get(W + 'w') or 0) for c in grid.findall(W + 'gridCol')]
+    return widths if len(widths) == count and all(w > 0 for w in widths) else None
+
+
+def _halves(day: str, columns: list[int], widths: list[int] | None) -> dict[int, int]:
+    """Which half of the day (1, 2) each grid column is; a sliver column is none.
+
+    A day is two cells, but Word may cut rows at slightly different places and
+    leave sliver grid columns between them: #172 r1's Wednesday is 1843, 1 and
+    1701 twips, #171 r8's 1772, 71, 1 and 1700. A column narrower than an
+    eighth of the day is such a sliver; the rest must be exactly two.
+    """
+    if widths is None:
+        real = list(columns)
+    else:
+        span = sum(widths[c] for c in columns)
+        real = [c for c in columns if widths[c] * 8 >= span]
+    if len(real) != 2:
+        raise LayoutError(f'The SA2 schedule header is not five weekdays of two cells each ({day})')
+    return {real[0]: 1, real[1]: 2}
+
+
 def _text(tc) -> str:
     return squash(' '.join(cell_lines(tc)))
 
@@ -166,8 +193,11 @@ def _read_table(table) -> dict:
         rest = squash(text[len(word):])
         if rest:
             notes.append({'day': day, 'text': rest})   # "(Revisions only unless stated)"
-    if len(days) < 5 or any(len(d['columns']) != 2 for d in days):
+    if len(days) < 5:
         raise LayoutError('The SA2 schedule header is not five weekdays of two cells each')
+    widths = _grid_widths(table, len(header))
+    for day in days:
+        day['halves'] = _halves(day['day'], day['columns'], widths)
     first_day = days[0]['columns'][0]
 
     quarters, breaks, rows, filled = [], [], [], []
@@ -217,9 +247,10 @@ def _read_table(table) -> dict:
     for info in rows:
         row = grid[info['index']]
         for day in days:
-            for half, column in enumerate(day['columns'], 1):
+            for column in day['columns']:
                 if column >= len(row):
                     continue
+                half = day['halves'].get(column)
                 tc = row[column]['tc']
                 block = blocks.get(id(tc))
                 if block is None:
@@ -229,7 +260,8 @@ def _read_table(table) -> dict:
                     raise LayoutError(f'A cell spans {block["day"]} and {day["day"]}')
                 if info not in block['rows']:
                     block['rows'].append(info)
-                block['halves'].add(half)
+                if half:
+                    block['halves'].add(half)
     labels = {}   # stream -> highlight colour of its row label (Q0's label has none)
     for info in rows:
         if info['kind'] == 'stream':
@@ -248,6 +280,8 @@ def _read_table(table) -> dict:
     for block in blocks.values():
         if not block['lines']:
             continue
+        if not block['halves']:
+            raise LayoutError(f'Cell {block["id"]} ({block["day"]}) lies only in a sliver between the two cells of the day')
         kinds = [r for r in block['rows'] if r['kind'] == 'stream']
         block['streams'] = sorted({r['stream'] for r in kinds})
         block['quarters'] = sorted({r['quarter'] for r in kinds})

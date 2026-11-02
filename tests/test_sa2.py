@@ -17,6 +17,7 @@ R20 = 'S2-2608833_SA2-176-Session Plan - r20.docx'
 R12 = 'S2-2509839_SA2-172-Session Plan - r12.docx'
 R9 = 'S2-2601721_SA2-174-Session Plan -r9.docx'
 R0_178 = 'S2-261nnnn_SA2-178-Session Plan.docx'
+R2_172 = 'S2-2509839_SA2-172-Session Plan - r2.docx'
 META_176 = {'starts_on': '2026-08-24', 'ends_on': '2026-08-28', 'timezone': 'Europe/Prague',
             'starts_at': '2026-08-24T09:00:00+02:00', 'ends_at': '2026-08-28T16:30:00+02:00'}
 META_178 = {'starts_on': '2026-11-16', 'ends_on': '2026-11-20', 'timezone': 'America/Edmonton'}
@@ -157,6 +158,36 @@ def test_a_plain_convener_or_stream_label_takes_its_usual_colour():
     # Both names plain: each takes its number's colour.
     doc = _unhighlighted(R0_178, lambda text, colour: 'Mike' not in text and 'Wanqiang' not in text)
     assert doc['conveners'] == {'green': 'Mike', 'cyan': 'Wanqiang'}
+
+
+def test_sliver_columns_between_the_two_cells_of_a_day_belong_to_neither():
+    # #172 r2's Wednesday is three grid columns, 1843, 1 and 1701 twips, and its
+    # tracked table change keeps an older grid inside w:tblGridChange.
+    doc = extract(R2_172)
+    assert doc['days'] == ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
+    found = sessions.interpret(doc, {})[0]
+    wednesday = [(s['start'], s['rooms'], s['part'], s['name']) for s in found
+                 if s['day'] == 'Wednesday' and s['start'] == '09:00']
+    # Same text left and right of the sliver is one session; one side alone is its piece.
+    assert sorted(wednesday) == [('09:00', ['stream1'], None, 'Common Issues / Rel-19'),
+                                 ('09:00', ['stream2'], [1, 2], 'NG_RTC_Ph2'),
+                                 ('09:00', ['stream3'], None, 'FS_Sensing_ARC')]
+
+
+@pytest.mark.parametrize('widths, halves', [
+    ([1843, 1, 1701], {0: 1, 2: 2}),
+    ([1772, 71, 1, 1700], {0: 1, 3: 2}),
+    ([1984, 1984], {0: 1, 1: 2}),
+    (None, {0: 1, 1: 2}),
+])
+def test_a_day_is_two_real_columns(widths, halves):
+    columns = list(range(len(widths))) if widths else [0, 1]
+    assert docmod._halves('Wednesday', columns, widths) == halves
+
+
+def test_a_day_of_three_real_columns_is_a_layout_error():
+    with pytest.raises(docmod.LayoutError, match='Wednesday'):
+        docmod._halves('Wednesday', [0, 1, 2], [1200, 1200, 1200])
 
 
 def test_tracked_changes_are_read_in_accepted_form():
