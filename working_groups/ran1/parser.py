@@ -759,33 +759,28 @@ def parse_docx(
         # physical rows and vertically merge the time-label cell.  Keep the
         # last explicit block so continuation rows can retain their own
         # horizontally merged (gridSpan) schedule cells.
-        active_tb_index: int | None = None
-        for row_idx in range(1, len(rows)):
-            row = rows[row_idx]
-            row_cells = _dedupe_row_cells(row)
-
-            if _is_break_row(row_cells) or _is_footer_row(row_cells) or _is_metadata_row(row_cells):
-                active_tb_index = None
-                continue
-
-            # First cell should be the time label
-            if not row_cells:
-                active_tb_index = None
-                continue
-
-            time_cell_text = row_cells[0][0]
-            tb_index = _determine_time_block_index(time_cell_text)
-
-            if tb_index is None:
-                if _is_vmerge_continuation_at_col(row, 0):
-                    tb_index = active_tb_index
-                else:
-                    active_tb_index = None
-
-                if tb_index is None:
+        time_rows = list(_time_rows(rows))
+        # Consecutive physical rows of one block form that block's rows.
+        block_groups: list[list[int]] = []
+        for position, (row_idx, _, tb_index, _) in enumerate(time_rows):
+            if block_groups:
+                previous_idx, _, previous_tb, _ = time_rows[block_groups[-1][-1]]
+                if previous_tb == tb_index and previous_idx == row_idx - 1:
+                    block_groups[-1].append(position)
                     continue
-            else:
-                active_tb_index = tb_index
+            block_groups.append([position])
+        label_start_of = {row_idx: start for row_idx, _, _, start in time_rows}
+        row_place: dict[int, tuple[int, list[int]]] = {}
+        for group in block_groups:
+            group_rows = [time_rows[position][0] for position in group]
+            for block_row, row_idx in enumerate(group_rows):
+                row_place[row_idx] = (block_row, group_rows)
+
+        for row_idx, row_cells, tb_index, _ in time_rows:
+            row = rows[row_idx]
+            block_row, group_rows = row_place[row_idx]
+            row_starts = tuple(label_start_of[r] for r in group_rows)
+            later_rows = group_rows[block_row + 1:]
 
             time_block = TIME_BLOCKS[tb_index]
 
@@ -870,10 +865,70 @@ def parse_docx(
                         time_block_duration=time_block["duration"],
                         table_index=table_idx,
                         fallback_start_time=fallback_start_time,
+                        block_row=block_row,
+                        row_span=1 + _continued_rows(rows, later_rows, col_start),
+                        row_starts=row_starts,
                     )
                     all_cells.append(cell_data)
 
     return all_cells, tables_meta
+
+
+def _time_rows(rows):
+    """``(row_idx, row_cells, tb_index, label_start)`` for each schedule row.
+
+    ``label_start`` is the start written in the row's own time label, or None
+    for a row that continues the label above (vertical merge).
+    """
+    active_tb_index: int | None = None
+    for row_idx in range(1, len(rows)):
+        row = rows[row_idx]
+        row_cells = _dedupe_row_cells(row)
+
+        if _is_break_row(row_cells) or _is_footer_row(row_cells) or _is_metadata_row(row_cells):
+            active_tb_index = None
+            continue
+
+        # First cell should be the time label
+        if not row_cells:
+            active_tb_index = None
+            continue
+
+        time_cell_text = row_cells[0][0]
+        tb_index = _determine_time_block_index(time_cell_text)
+        label_start = None
+
+        if tb_index is None:
+            if _is_vmerge_continuation_at_col(row, 0):
+                tb_index = active_tb_index
+            else:
+                active_tb_index = None
+
+            if tb_index is None:
+                continue
+        else:
+            active_tb_index = tb_index
+            label_start = _label_start(time_cell_text)
+
+        yield row_idx, row_cells, tb_index, label_start
+
+
+def _label_start(time_text: str) -> str | None:
+    """The first ``HH:MM`` of a time label, zero-padded."""
+    match = re.search(r"(\d{1,2}):(\d{2})", time_text)
+    if not match:
+        return None
+    return f"{int(match.group(1)):02d}:{match.group(2)}"
+
+
+def _continued_rows(rows, later_rows: list[int], grid_col: int) -> int:
+    """How many of the block's next rows continue the cell at ``grid_col``."""
+    count = 0
+    for row_idx in later_rows:
+        if not _is_vmerge_continuation_at_col(rows[row_idx], grid_col):
+            break
+        count += 1
+    return count
 
 
 def build_room_list(tables_meta: list[dict]) -> dict[str, list[RoomInfo]]:

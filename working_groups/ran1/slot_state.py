@@ -28,7 +28,7 @@ SLOT_STATE_DIR = Path("docs/ran1/slot_state")
 # semantics used to produce ``merged_sessions``.  Bump it whenever an old
 # merge result is unsafe as an incremental baseline; a mismatch forces a cold
 # rebuild instead of carrying poisoned semantic fields forward.
-SCHEMA_VERSION = 2
+SCHEMA_VERSION = 3
 
 
 @dataclass

@@ -21,7 +21,11 @@ Your job: produce the new session list for this time slot.
   the same room/topic and rebuild from the fresh raw text.
 - For areas NO fresh source covers, COPY THE BASELINE entry verbatim
   (same name, duration, chair, group_header, agenda_item,
-  specified_start_time, room_name).
+  specified_start_time, room_name, source_cells).
+- source_cells name cells by id. A fresh source's cells are headed by their
+  ids; cells of unchanged sources are listed by id without their text. An
+  id that appears in neither list belongs to a cell that no longer exists:
+  rebuild that session from the fresh cells.
 - If a fresh source COARSENS a previously-detailed area (e.g. baseline
   had three 40-min sub-items, fresh source shows one 120-min item),
   that is an INTENTIONAL CONSOLIDATION. Output the consolidated form.

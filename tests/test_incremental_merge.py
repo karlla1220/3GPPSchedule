@@ -11,7 +11,7 @@ from pathlib import Path
 from unittest.mock import MagicMock, patch
 
 import working_groups.ran1.slot_state as slot_state
-from working_groups.ran1.merger import SlotSource, SourceEntry, TimeSlotData, _annotate_freshness
+from working_groups.ran1.merger import SlotSource, SourceEntry, TimeSlotData, _annotate_freshness, _assign_cell_ids
 from working_groups.ran1.models import RoomInfo
 from working_groups.ran1.session_parser import _build_time_slot_prompt, _enforce_main_room_chair_evidence
 from working_groups.ran1.slot_state import (
@@ -42,12 +42,12 @@ def _build_slot(
         ],
     )
     for label, entries in sources.items():
-        slot.sources.append(
-            SlotSource(
-                label=label,
-                entries=[SourceEntry(room_label=r, cell_text=t) for r, t in entries],
-            )
+        source = SlotSource(
+            label=label,
+            entries=[SourceEntry(room_label=r, cell_text=t) for r, t in entries],
         )
+        _assign_cell_ids(source)
+        slot.sources.append(source)
     return slot
 
 
@@ -392,7 +392,14 @@ class FakeGeminiClient:
                 "system_instruction": config.system_instruction,
             }
         )
-        return FakeGeminiResponse(self.scripted_response)
+        # Sessions cite the first cell headed in the prompt unless scripted.
+        import copy
+        import re as _re
+        response = copy.deepcopy(self.scripted_response)
+        cited = _re.findall(r"\[cell (c[0-9a-f]{6}) — ", contents)
+        for session in response.get("sessions", []):
+            session.setdefault("source_cells", cited[:1])
+        return FakeGeminiResponse(response)
 
 
 class ParseTimeSlotsIntegrationTests(unittest.TestCase):
@@ -644,6 +651,66 @@ class ParseTimeSlotsIntegrationTests(unittest.TestCase):
         instructions = [c["system_instruction"] for c in fake_client.calls]
         self.assertIn(MULTI_SOURCE_SYSTEM_INSTRUCTION_COLD, instructions)
         self.assertIn(MULTI_SOURCE_SYSTEM_INSTRUCTION_INCREMENTAL, instructions)
+
+
+class SourceCellRetryTests(unittest.TestCase):
+    """An answer whose source_cells are unusable is asked again, then fails."""
+
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(self.tmp.cleanup)
+        self._orig_dir = slot_state.SLOT_STATE_DIR
+        slot_state.SLOT_STATE_DIR = Path(self.tmp.name) / "slot_state"
+        os.environ["GEMINI_API_KEY"] = "fake-key"
+        from shared import notices
+        self._orig_notices = notices.PATH
+        notices.PATH = Path(self.tmp.name) / "notices.json"
+
+    def tearDown(self):
+        from shared import notices
+        slot_state.SLOT_STATE_DIR = self._orig_dir
+        notices.PATH = self._orig_notices
+
+    def _run(self, answers):
+        from working_groups.ran1.merger import _annotate_freshness
+        from working_groups.ran1.session_parser import parse_time_slots
+
+        slot = _build_slot({"Main": [("F1+F2+F3", "AI/ML (120)")]})
+        _annotate_freshness(slot)
+        client = FakeGeminiClient({})
+        replies = iter(answers)
+        client.generate_content = lambda **kw: (
+            client.calls.append(kw["contents"]) or FakeGeminiResponse(next(replies))
+        )
+        with patch("google.genai.Client", return_value=client):
+            with patch("time.sleep"):
+                sessions = parse_time_slots([slot], {"Monday": slot.main_rooms})
+        return slot, sessions, client.calls
+
+    @staticmethod
+    def _answer(cells):
+        return {"sessions": [{
+            "room_name": "RAN1_main", "name": "AI/ML", "duration_minutes": 120,
+            "specified_start_time": None, "chair": None, "group_header": "",
+            "agenda_item": None, "source_cells": cells,
+        }]}
+
+    def test_asks_again_with_the_problems(self):
+        good = _build_slot({"Main": [("F1+F2+F3", "AI/ML (120)")]}).sources[0].entries[0].cell_id
+        _, sessions, calls = self._run([self._answer(["cdead00"]), self._answer([good])])
+        self.assertEqual(len(calls), 2)
+        self.assertIn("Fix these problems with source_cells", calls[1])
+        self.assertIn("no cell cdead00", calls[1])
+        self.assertEqual((sessions[0].start_time, sessions[0].end_time), ("11:00", "13:00"))
+
+    def test_gives_up_with_a_notice(self):
+        from shared import notices
+
+        with self.assertRaises(RuntimeError):
+            self._run([self._answer([])] * 3)
+        recorded = json.loads(notices.PATH.read_text())
+        self.assertEqual(recorded[0]["kind"], "source-cells")
+        self.assertTrue(any("source_cells is empty" in line for line in recorded[0]["lines"]))
 
 
 if __name__ == "__main__":

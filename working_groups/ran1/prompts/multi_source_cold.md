@@ -211,6 +211,19 @@ For these cases:
        specified_start_time:"09:00", agenda_item:"1, 2, 3, 4, 5"}
       {name:"10.5.0", dur:30, specified_start_time:null, group_header:"6GR"}
 
+## Source cells
+
+Every cell in the input is headed by its id, e.g. `[cell c1a2b3 — RAN1_main]`.
+For each session, set source_cells to the ids of ALL cells it comes from: the
+Main Schedule cell that holds it and every vice-chair cell whose text you used
+for it. Never leave source_cells empty and never invent an id.
+
+- A session from a Main Schedule cell stays in that cell's rooms.
+- A multi-room session written in several cells (e.g. "Early dinner (60)" in
+  the online table and again in the offline table) lists every one of them.
+- Session times are worked out in code from where these cells sit in the
+  tables, so a wrong id puts a session at a wrong time.
+
 ## Output format
 
 ```json
@@ -223,7 +236,8 @@ For these cases:
       "specified_start_time": "HH:MM or null (only when cell text has explicit time range or explicit start time)",
       "chair": "person or null",
       "group_header": "category labels joined by ' / ', or empty string",
-      "agenda_item": "9.3.2.3, 9.3, 9.3.1, 9.3.2.1, 9.3.2.2 or null (preserve ALL items)"
+      "agenda_item": "9.3.2.3, 9.3, 9.3.1, 9.3.2.1, 9.3.2.2 or null (preserve ALL items)",
+      "source_cells": ["c1a2b3", "c4d5e6"]
     }
   ]
 }
@@ -235,4 +249,5 @@ For these cases:
 - Every target room should have at least one entry (if nothing scheduled, omit it).
 - group_header is a single string (join multiple labels with " / "), not an array.
 - agenda_item: comma-separated list of ALL agenda items from vice-chair detail. Never drop items.
+- source_cells: ids of every cell the session comes from (at least one).
 - Return ONLY valid JSON.

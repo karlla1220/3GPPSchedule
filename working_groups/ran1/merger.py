@@ -9,6 +9,7 @@ produce the most detailed session list possible.
 
 from __future__ import annotations
 
+import hashlib
 import re
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -19,7 +20,7 @@ from .rooms import online_rooms as _online_rooms
 from .slot_state import hash_source_text, load_slot_state
 
 
-MERGE_PROMPT_VERSION = 4
+MERGE_PROMPT_VERSION = 5
 
 
 # ── Room name resolution ────────────────────────────────────
@@ -153,6 +154,16 @@ class SourceEntry:
     room_label: str
     cell_text: str
     fallback_start_time: str | None = None
+    # The id the LLM cites in ``source_cells``; derived from the source, room
+    # and text so an unchanged cell keeps its id from run to run.
+    cell_id: str = ""
+    # Where the cell sits in its table's time block (see ``CellData``).
+    table_index: int = 0
+    block_row: int = 0
+    row_span: int = 1
+    row_starts: tuple[str | None, ...] = (None,)
+    # Physical rooms the cell covers; empty when they are not target rooms.
+    room_names: tuple[str, ...] = ()
 
 
 @dataclass
@@ -214,6 +225,47 @@ def _room_label_for_cell(
     # Fallback
     indices = ", ".join(str(i) for i in cell.room_indices)
     return f"Table {cell.table_index} Room [{indices}]"
+
+
+def _cell_rooms(cell: CellData, rooms_for_day: list[RoomInfo]) -> tuple[str, ...]:
+    """Physical names of the target rooms a main-schedule cell covers."""
+    return tuple(
+        r.name for r in rooms_for_day
+        if r.table_index == cell.table_index
+        and r.room_index_in_table in cell.room_indices
+    )
+
+
+def _source_entry(
+    cell: CellData, room_label: str, room_names: tuple[str, ...] = (),
+) -> SourceEntry:
+    return SourceEntry(
+        room_label=room_label,
+        cell_text=cell.text,
+        fallback_start_time=cell.fallback_start_time,
+        table_index=cell.table_index,
+        block_row=cell.block_row,
+        row_span=cell.row_span,
+        row_starts=tuple(cell.row_starts),
+        room_names=room_names,
+    )
+
+
+def _assign_cell_ids(source: SlotSource) -> None:
+    """Give each entry a short id that stays the same while its cell does.
+
+    The id hashes the source, room and text, so the baseline of an
+    incremental merge (and a reused slot state) still names the same cells.
+    The same text twice in one room gets a running number.
+    """
+    seen: dict[str, int] = {}
+    for entry in source.entries:
+        text = re.sub(r"\s+", " ", entry.cell_text).strip()
+        basis = f"{source.label}\0{entry.room_label}\0{text}"
+        n = seen.get(basis, 0)
+        seen[basis] = n + 1
+        digest = hashlib.sha256(f"{basis}\0{n}".encode()).hexdigest()
+        entry.cell_id = "c" + digest[:6]
 
 
 def _group_cells_by_slot(
@@ -291,12 +343,9 @@ def collect_time_slot_data(
         for cell in m_cells:
             room_label = _room_label_for_cell(cell, main_rooms)
             main_source.entries.append(
-                SourceEntry(
-                    room_label=room_label,
-                    cell_text=cell.text,
-                    fallback_start_time=cell.fallback_start_time,
-                )
+                _source_entry(cell, room_label, _cell_rooms(cell, main_rooms))
             )
+        _assign_cell_ids(main_source)
         slot.sources.append(main_source)
 
         # Add vice-chair sources
@@ -322,15 +371,10 @@ def collect_time_slot_data(
                 # Content-based matching in the LLM handles correct placement.
                 if room_label in main_room_names:
                     room_label = f"{person}: {room_label}"
-                vc_source.entries.append(
-                    SourceEntry(
-                        room_label=room_label,
-                        cell_text=cell.text,
-                        fallback_start_time=cell.fallback_start_time,
-                    )
-                )
+                vc_source.entries.append(_source_entry(cell, room_label))
 
             if vc_source.entries:
+                _assign_cell_ids(vc_source)
                 slot.sources.append(vc_source)
 
         time_slots.append(slot)
