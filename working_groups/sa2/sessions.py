@@ -31,6 +31,8 @@ WRITTEN_SPAN = re.compile(r'\((\d{2})(\d{2})\s*-\s*(\d{2})(\d{2})\)')
 # "Drafting: (1300) FS_ARCH_enIMS (main room)" (#172's lunch row).
 DRAFTING_TIME = re.compile(r'^Drafting:\s*\((\d{2})(\d{2})\)', re.I)
 ROOM_WORD = re.compile(r'\((main\s*room|break[- ]?out\s*(\d))\)', re.I)
+# A stream's cell held in another room says so on its first line (#178): "In breakout 1", "In main room".
+PLACE = re.compile(r'In\s+(?:the\s+)?(main(?:\s*room)?|break[- ]?out\s*(\d))', re.I)
 ANNOUNCEMENT = re.compile(r'(?:Opening|Close) of (?:the )?meeting\b.*', re.I)
 PAREN = re.compile(r'\(([^()]*)(?:\)|$)')
 BRACKET_AI = re.compile(r'\[\s*(\d{1,2}(?:\.\d{1,2})+)\s*\]')
@@ -253,6 +255,60 @@ def _break_row(day, b, cells, document, agenda) -> list[dict]:
             for p in parts]
 
 
+def _pieces(session: dict) -> tuple[int, int]:
+    """The minutes a session takes in its column: a piece k of n is the k-th of n rows."""
+    start, end = time_to_minutes(session['start']), time_to_minutes(session['end'])
+    if session['part']:
+        k, n = session['part']
+        return start + (end - start) * (k - 1) // n, start + (end - start) * k // n
+    return start, end
+
+
+def _place(found: list[dict], document: dict, agenda: dict) -> None:
+    """Move a stream's session whose cell opens with "In breakout 1" or "In main room" to that room.
+
+    #178 swaps rooms this way: on Tuesday 09:00 Stream 1's FS_enIMS_ARC is
+    "In breakout 1" while Stream 2 is "In main room". The column is where
+    delegates go, so the session sits in the room it names. It stays its
+    stream's session (the stream's convener chairs it), the notes keep the
+    room line and the title is read from the lines after it; a cell with
+    nothing else keeps the room line as its title. A move into a room taken
+    by a session that stays there is not made: the plan then says two things,
+    and the cell stays in its stream's row as written.
+    """
+    rooms = {r['name'].lower(): r['id'] for r in document['rooms']}
+    moves = {}
+    for s in found:
+        match = PLACE.fullmatch(s['lines'][0]) if s['lines'] and s['scope'] == 'assigned' and s['stream'] else None
+        if not match:
+            continue
+        target = rooms.get('main') if match[1].lower().startswith('main') else rooms.get(f'breakout {match[2]}')
+        if target and s['rooms'] != [target]:
+            moves[id(s)] = target
+
+    def clash(s, room):
+        a, b = _pieces(s)
+        for other in found:
+            where = [moves[id(other)]] if id(other) in moves else other['rooms']
+            if other is not s and other['day'] == s['day'] and (not where or room in where):
+                x, y = _pieces(other)
+                if a < y and x < b:
+                    return True
+        return False
+
+    while True:
+        stuck = [s for s in found if id(s) in moves and clash(s, moves[id(s)])]
+        if not stuck:
+            break
+        for s in stuck:
+            del moves[id(s)]
+    for s in found:
+        if id(s) in moves:
+            s['rooms'] = [moves[id(s)]]
+            if s['lines'][1:]:
+                s.update(reading(s['lines'][1:], agenda))
+
+
 def interpret(document: dict, agenda: dict | None = None, refine=None) -> tuple[list[dict], list[dict]]:
     """(sessions, notes): session dicts, and cell text that is no session.
 
@@ -282,6 +338,7 @@ def interpret(document: dict, agenda: dict | None = None, refine=None) -> tuple[
         found.extend(_quarter(day, q, stream, halves, document, agenda))
     for (day, b), cells in break_cells.items():
         found.extend(_break_row(day, b, cells, document, agenda))
+    _place(found, document, agenda)
     for n, session in enumerate(found):
         session['id'] = f"{session['cell']}.{n}"
         session['block'] = (session['start'], session['end'])
@@ -295,14 +352,16 @@ def interpret(document: dict, agenda: dict | None = None, refine=None) -> tuple[
 
 # --------------------------------------------------------------- schedule
 
-def room_detail(room: dict) -> str:
+def room_detail(room: dict, streams=()) -> str:
     """The popup Room line after the name: where the room is and the stream the plan calls its row.
 
     "B3 (Floor 2) · Stream 2". A room named by its stream (no room table) or
-    read by the LLM (no stream) gives what it has.
+    read by the LLM (no stream) gives what it has. ``streams`` are the
+    streams whose sessions the room holds that day: a room that holds another
+    stream's ("In main room", #178) is not that day named by its own.
     """
     stream = room.get('stream')
-    named = stream and not room['name'].startswith('Stream')
+    named = stream and not room['name'].startswith('Stream') and set(streams) <= {stream}
     return ' · '.join(filter(None, [room.get('place', ''), f'Stream {stream}' if named else '']))
 
 
@@ -322,12 +381,18 @@ def make_schedule(document: dict, agenda: dict | None, metadata: dict, source_fi
     # The convener of a stream is linked by colour: the name's highlight in the
     # "Convener" line is the highlight on that stream's row labels.
     convener = {stream: document['conveners'].get(colour) for stream, colour in document['stream_colours'].items()}
-    rooms = [RoomInfo(id=r['id'], name=r['name'], detail=room_detail(r)) for r in document['rooms']]
     days = []
     for day in document['days']:
         raw = [s for s in sessions if s['day'] == day]
         if not raw:
             continue
+        held = {}
+        for s in raw:
+            if s['scope'] == 'assigned' and s['stream']:
+                for room in s['rooms']:
+                    held.setdefault(room, set()).add(s['stream'])
+        rooms = [RoomInfo(id=r['id'], name=r['name'], detail=room_detail(r, held.get(r['id'], ())))
+                 for r in document['rooms']]
         if day not in dates:
             print(f'[sa2] {day} is outside the meeting dates {first}..{last}; shown without a date')
         start = min(time_to_minutes(s['start']) for s in raw)

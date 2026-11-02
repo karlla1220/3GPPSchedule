@@ -13,8 +13,13 @@ Retrieved 2026-10-29 (Asia/Seoul) from the 3GPP archive (`tsg_sa/WG2_Arch/`):
   meeting's `Agenda/` folder. The vice-chair election in the lunch row, two topics run together
   (`TEI20_DAMP [1]TEI20_UDCE-ARC [2]`), three conveners.
 - `agenda_176.csv`: `agenda.csv` from `TSGS2_176_Prague_2026-08/Agenda/` (regenerated in place; a snapshot).
+- `S2-261nnnn_SA2-178-Session Plan.docx`: the first plan of SA2#178 (Calgary, 2026-11-16..20), from the ZIP
+  of that name in `TSGS2_178_Calgary_2026-11/INBOX/DRAFTS/_Session_Plan_Updates/` (retrieved 2026-11-02).
+  Q2's range written `1100 - 12`, seat counts in parentheses (`Palomino E-H (300)`), and cells that
+  move a stream to another room (`In breakout 1`, `In main room`).
+- `agenda_178.csv`: `agenda.csv` from `TSGS2_178_Calgary_2026-11/Agenda/` (retrieved 2026-11-02; a snapshot).
 
 SA2#177's plans are not used: their `word/people.xml` carries an author's e-mail address.
-These three were checked for e-mail addresses, meeting links, IDs and passcodes; they have none.
+These plans were checked for e-mail addresses, meeting links, IDs and passcodes; they have none.
 
 Tests read these files without network access.

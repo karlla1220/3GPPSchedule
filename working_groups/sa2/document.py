@@ -27,10 +27,13 @@ DAYS = ('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sun
 # S2-260nnnn_SA2-177-Session Plan.zip (the first upload has no r), Draft S2-2606837_SA2-176-Session Plan - r1.docx
 FILE = re.compile(r'.*?(?<![A-Za-z])SA2-(\d+)-Session Plan(?:\s*-\s*r(\d+))?(.*)\.(docx|zip)', re.I)
 QUARTER = re.compile(r'Q(\d)')
-SPAN = re.compile(r'(\d{2})(\d{2})\s*-\s*(\d{2})(\d{2})')
+# A quarter's range, "0900 - 1030". The end may be written as an hour alone (#178's first plan: "1100 - 12").
+SPAN = re.compile(r'(\d{2})(\d{2})\s*-\s*(\d{2})(\d{2})?(?!\d)')
 STREAM = re.compile(r'Stream\s*(\d)', re.I)
 CONVENER = re.compile(r'Conven[eo]r\s*(\d+)\s*:\s*([^,]+)', re.I)
 ROOM_NAME = re.compile(r'Main(?:\s+Room)?|Break[- ]?out\s*\d+', re.I)
+# The seat count after a place: "B2 (Floor 2) [300]" (#172-#177), "Palomino E-H (300)" (#178).
+SEATS = re.compile(r'[\[(]\s*\d+\s*[\])]')
 
 
 class LayoutError(ValueError):
@@ -179,8 +182,10 @@ def _read_table(table) -> dict:
                              if SPAN.search(_text(row[c]['tc']))), None)
                 if span is None:
                     raise LayoutError(f'Q{number} has no time range')
-                quarters.append({'q': number, 'start': clock(span[1], span[2]), 'end': clock(span[3], span[4]),
-                                 'streams': {}})
+                start, end = clock(span[1], span[2]), clock(span[3], span[4] or 0)
+                if end <= start or (quarters and start < quarters[-1]['end']):
+                    raise LayoutError(f'Q{number} {start}-{end} is not after the quarter before it')
+                quarters.append({'q': number, 'start': start, 'end': end, 'streams': {}})
             rows.append({'index': index, 'kind': 'stream', 'quarter': len(quarters) - 1,
                          'stream': int(stream[1]), 'label': row[first_day - 1]['tc']})
         elif label:
@@ -245,7 +250,8 @@ def room_names(doc, schedule_table, count: int) -> list[tuple[str, str]]:
     "Main Room | B2 (Floor 2) [300] | Breakout 1 | B3 (Floor 2) [100] | ..."
     lists the rooms in stream order: the cell shading of each stream row
     matches its room, and the chair notes call SA2_Brk1 "Parallel Stream 2".
-    The place is the cell after the name, without the seat count ("[300]").
+    The place is the cell after the name, without the seat count ("[300]",
+    "(300)"; "(Floor 2)" stays).
     """
     for table in doc.tables:
         if table._tbl is schedule_table._tbl:
@@ -257,7 +263,7 @@ def room_names(doc, schedule_table, count: int) -> list[tuple[str, str]]:
                 continue
             place = texts[i + 1] if i + 1 < len(texts) and not ROOM_NAME.fullmatch(texts[i + 1]) else ''
             name = 'Main' if text.lower().startswith('main') else f'Breakout {re.search(r"\d+", text)[0]}'
-            found.append((name, squash(re.sub(r'\[\s*\d+\s*\]', '', place))))
+            found.append((name, squash(SEATS.sub('', place))))
         if len(found) >= count:
             return found[:count]
     return [(f'Stream {n}', '') for n in range(1, count + 1)]

@@ -14,7 +14,9 @@ rows between quarters, and whose columns are weekdays of two cells each. Find th
   give both the quarter's start and end and part [1, 2] and [2, 2], each citing its own cell. Same
   text in both cells, or a cell spanning both, is one session with part null. A quarter shorter
   than 60 minutes is never split. A cell spanning several rooms has all of them in room_ids.
-  "-" means the room has no session. Sessions in one room must not overlap.
+  "-" means the room has no session. Sessions in one room must not overlap. Every timetable cell
+  that names an agenda item is (part of) a session: leave none out. A quarter's end written as an
+  hour alone ("1100 - 12") ends on that hour (12:00).
 - refs cites the ids of the cells or paragraphs the session comes from; title uses their own words
   with parentheses and brackets dropped ("KI#18 (AI for Network) (20.6.18) [5+15]" -> "KI#18").
 - agenda_items are agenda numbers written there, such as "20.6.18"; "(20.6.12 - 16)" names

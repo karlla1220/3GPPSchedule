@@ -27,7 +27,7 @@ from .sources import CACHE
 PROMPTS = Path(__file__).parent / 'prompts'
 VERSION = 1
 CLOCK = re.compile(r'(?<![\d.:])(\d{1,2}):(\d{2})(?!\d)')
-RANGE = re.compile(r'(?<![\d.])(\d{2})(\d{2})\s*-\s*(\d{2})(\d{2})(?![\d.])')
+RANGE = re.compile(r'(?<![\d.])(\d{2})(\d{2})\s*-\s*(\d{2})(\d{2})?(?![\d.])')
 SINGLE = re.compile(r'(?:\(|\b(?:at|by)\s+)(\d{2})(\d{2})(?![\d.])', re.I)
 
 
@@ -35,9 +35,11 @@ def written_times(text: str) -> set[str]:
     """Clock times in the forms SA2 writes: "13:00", "0900 - 1030", "(1300)", "by 1630".
 
     Four digits count only in a range, in parentheses or after at/by, so a
-    TDoc number ("LS's, 9779, 10337") is not a time.
+    TDoc number ("LS's, 9779, 10337") is not a time. A range may end on an
+    hour alone, as the rules read it: "1100 - 12" is 11:00 to 12:00.
     """
-    pairs = CLOCK.findall(text) + [p for m in RANGE.findall(text) for p in (m[:2], m[2:])] + SINGLE.findall(text)
+    pairs = (CLOCK.findall(text) + [p for m in RANGE.findall(text) for p in (m[:2], (m[2], m[3] or '00'))]
+             + SINGLE.findall(text))
     return {f'{int(h):02d}:{m}' for h, m in pairs if int(h) < 24 and int(m) < 60}
 
 
@@ -182,6 +184,26 @@ def _pieces(session: DocSession) -> tuple[int, int]:
     return start, end
 
 
+def left_out(result: DocResult, texts: dict[str, str], agenda: dict) -> list[str]:
+    """Timetable cells that name agenda items but no session cites.
+
+    The timetable is the tables the sessions cite. A cell there that names an
+    agenda item is a session (#178's first plan came back without its 11:00
+    quarter, whose end was written "1100 - 12"); headers, labels and
+    announcements name none.
+    """
+    cited = {ref for s in result.sessions for ref in s.refs}
+    tables = {ref.split('.', 1)[0] for ref in cited if '.' in ref}
+    errors = []
+    for ref, text in texts.items():
+        if '.' not in ref or ref in cited or ref.split('.', 1)[0] not in tables:
+            continue
+        items = list(dict.fromkeys(i for line in text.split('\n') for i in line_items(line, agenda)[0]))
+        if items:
+            errors.append(f'cell {ref} names agenda items {items} but no session cites it')
+    return errors
+
+
 def check_document(result: DocResult, texts: dict[str, str], agenda: dict) -> list[str]:
     errors = []
     allowed = written_times('\n'.join(texts.values()))
@@ -226,7 +248,7 @@ def check_document(result: DocResult, texts: dict[str, str], agenda: dict) -> li
                 if other_day == session.day and set(other_rooms) & set(session.room_ids) and a < y and x < b:
                     errors.append(f'{prefix}: overlaps another session in the same room')
             used.append((session.day, a, b, session.room_ids))
-    return errors
+    return errors + left_out(result, texts, agenda)
 
 
 def read_document(data: bytes, name: str, model: str, agenda: dict | None = None, request=None,
