@@ -184,9 +184,12 @@ def _source(name, label):
         return escape(name)
     versions = _VERSION.findall(name)
     closing = _CLOSING.search(name)
+    version = versions[-1].lower() if versions else ""
+    # A label taken from the file name may already carry it ("Schedule after Monday v3").
+    in_label = version in map(str.lower, _VERSION.findall(label))
     shown = [label, "draft" if _DRAFT.search(name) else "",
              f"{_CLOSING_LABEL[closing[1].lower()]}{int(closing[2]) if closing[2] else ''}" if closing else "",
-             versions[-1].lower() if versions else ""]
+             "" if in_label else version]
     text = escape(" ".join(filter(None, shown))).replace(" ", "&nbsp;")
     return f'<span title="{escape(name, quote=True)}">{text}</span>'
 

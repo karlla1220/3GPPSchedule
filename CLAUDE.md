@@ -367,7 +367,7 @@ HTML은 `shared/page.py`, 표시 판단은 `templates/support-note.js`, 값은 `
   - `agenda.csv`(`agenda*.csv`)는 적지 않는다(`page.py`의 `_AGENDA_CSV`). 모든 WG가 빌드마다 읽는 표라서 확인할 것이 없다. 줄에는 일정 원본만 남는다.
   - 판을 가리키는 부분은 파일 이름 표기 그대로 둔다. RAN3 `RAN3_134_agenda_20261023.docx`는 `agenda_20261023`이다.
     날짜를 `23 Oct`처럼 바꿔 적으면 어느 파일인지 찾기 어렵다.
-  - 버전은 `page.py`가 파일 이름에서 읽는다(마지막 `v숫자`). 이름이 없는 파일(예전 스냅샷, 데모)은 파일 이름 그대로 보인다.
+  - 버전은 `page.py`가 파일 이름에서 읽는다(마지막 `v숫자`). 이름에 이미 있으면 다시 적지 않는다(RAN4 `Schedule after Monday v3`). 이름이 없는 파일(예전 스냅샷, 데모)은 파일 이름 그대로 보인다.
   - Draft 파일은 버전 앞에 `draft`를 적는다(`Main draft v03`). 의장이 `Draft`를 떼면서 `v00`부터 다시 매기므로,
     숫자만 보면 `v03` 다음에 `v00`이 나와 뒤로 간 것처럼 보인다. Agreement 패널의 변경 줄(`· Chair notes draft v01`)도 같다.
   - Final·EOM 파일은 그 낱말과 번호를 적는다(`Chair notes Final`, `Chair notes EOM`, `Chair notes EOM2`). 버전 번호가 없다.
