@@ -1,0 +1,13 @@
+{
+  "about": "What SA2 Session Plans have always written, for what one plan leaves unclear. Evidence and rules: CONVENTIONS.md. Each list is in order of preference: the first value that agrees with what a plan writes is used.",
+  "quarters": {
+    "0": [["08:00", "08:50"]],
+    "1": [["09:00", "10:30"]],
+    "2": [["11:00", "12:30"]],
+    "3": [["14:00", "15:30"]],
+    "4": [["16:00", "17:30"]],
+    "5": [["18:00", "19:30"], ["17:45", "19:00"], ["18:00", "19:00"]]
+  },
+  "stream_colours": {"2": "green", "3": "cyan"},
+  "convener_colours": {"1": "green", "2": "cyan"}
+}

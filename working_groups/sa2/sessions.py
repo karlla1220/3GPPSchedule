@@ -433,6 +433,10 @@ def make_schedule(document: dict, agenda: dict | None, metadata: dict, source_fi
         supplements.append({'type': 'heading', 'text': 'Notes in the schedule table'})
         supplements.append({'type': 'table', 'header': True,
                             'rows': [['Day', 'Note']] + [[n['day'], n['text']] for n in notes]})
+    if document.get('filled'):
+        # What the plan left unclear and earlier plans settled (conventions.py): said, not hidden.
+        supplements.append({'type': 'heading', 'text': 'Filled in from earlier Session Plans'})
+        supplements.extend({'type': 'paragraph', 'text': text, 'bold': False} for text in document['filled'])
     number = document['meeting_id'].split('#', 1)[1]
     return Schedule(
         wg_id='sa2', meeting_id=document['meeting_id'], meeting_name=f'SA2#{number}', days=days,

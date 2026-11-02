@@ -278,7 +278,9 @@ def run_together():
 def test_written_times_and_shorthand_agenda_items():
     assert llm.written_times('Plenary session (1330 - 1630)\n14:00 List\nLS’s, 9779, 10337\nDrafting: (1300)') == \
         {'13:30', '16:30', '14:00', '13:00'}
-    assert llm.written_times('1100 - 12') == {'11:00', '12:00'}   # #178's first plan, as the rules read it
+    assert llm.written_times('1100 - 12') == {'11:00', '12:30'}   # #178's first plan, as the rules read it
+    # Without its quarter, "1800 - 19" fits Q5 18:00-19:30 and 18:00-19:00: neither is allowed.
+    assert llm.written_times('1800 - 19') == set()
     assert llm.item_errors('c', ['20.6.13', '19.49'], 'KI#12 – KI#16 (20.6.12 - 16)\nRel-19 (19.48/49/50)', {}) == []
     assert llm.item_errors('c', ['20.6.25'], 'KI#12 – KI#16 (20.6.12 - 16)', {}) == [
         "c: agenda item '20.6.25' is not written in its cited text"]
@@ -397,3 +399,15 @@ def test_a_document_answer_that_leaves_out_a_session_fails_the_build(tmp_path):
         llm.read_document(data, 'S2-2611111_SA2-179-Session Plan - r1.docx', 'test-model', None, gemini, tmp_path)
     missing = next(key for key, text in texts.items() if text == 'KI#1.1 (NAS) (20.6.1)')
     assert f"cell {missing} names agenda items ['20.6.1'] but no session cites it" in gemini.calls[1]
+
+
+def test_what_the_conventions_filled_in_is_reported_once_per_meeting(tmp_path):
+    from shared import notices
+    document = {'filled': ['Q2 is written "1100 - 12" in the Session Plan. This page reads it as 11:00–12:30, '
+                           'Q2 of earlier SA2 Session Plans.']}
+    pipeline.report_filled(document, 'sa2#178', 'S2-261nnnn_SA2-178-Session Plan.zip')
+    pipeline.report_filled(document, 'sa2#178', 'S2-2611111_SA2-178-Session Plan - r1.docx')
+    [notice] = notices.read()
+    assert notice['title'] == 'SA2: Session Plan read by convention' and notice['kind'] == 'convention'
+    assert notice['lines'][:3] == ['Meeting: sa2#178', 'Source: S2-261nnnn_SA2-178-Session Plan.zip',
+                                   document['filled'][0]]

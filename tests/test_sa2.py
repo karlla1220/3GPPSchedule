@@ -10,7 +10,7 @@ import pytest
 from shared.agenda import agenda_map, written_ranges
 from shared.renderer import generate_html
 from shared.schedule import load_schedule, save_schedule
-from working_groups.sa2 import document as docmod, sessions
+from working_groups.sa2 import conventions, document as docmod, sessions
 
 FIXTURES = Path(__file__).parent / 'fixtures/sa2'
 R20 = 'S2-2608833_SA2-176-Session Plan - r20.docx'
@@ -91,19 +91,37 @@ def test_template_days_quarters_breaks_rooms_and_conveners():
     assert {'day': 'Thursday', 'text': '(Revisions only unless stated)'} in doc['notes']
 
 
-def test_a_quarter_end_written_as_an_hour_and_seats_in_parentheses():
+def test_a_quarter_time_with_a_part_missing_takes_the_usual_time_and_says_so():
     doc = extract(R0_178)
-    # "1100 - 12" (highlighted, #178's first plan): the hour alone is 12:00, and lunch starts there.
-    assert [(q['start'], q['end']) for q in doc['quarters']][1:4] == [('09:00', '10:30'), ('11:00', '12:00'),
-                                                                     ('14:00', '15:30')]
-    assert ('Lunch', '12:00', '14:00') in [(b['name'], b['start'], b['end']) for b in doc['breaks']]
+    # "1100 - 12" (highlighted, #178's first plan): every plan since #161 has Q2 at 11:00-12:30.
+    assert [(q['start'], q['end']) for q in doc['quarters']] == [
+        ('08:00', '08:50'), ('09:00', '10:30'), ('11:00', '12:30'), ('14:00', '15:30'), ('16:00', '17:30'),
+        ('17:45', '19:00')]
+    assert ('Lunch', '12:30', '14:00') in [(b['name'], b['start'], b['end']) for b in doc['breaks']]
+    assert doc['filled'] == ['Q2 is written "1100 - 12" in the Session Plan. This page reads it as 11:00–12:30, '
+                             'Q2 of earlier SA2 Session Plans.']
+    # Plans written in full use no convention.
+    assert all(extract(name)['filled'] == [] for name in (R20, R12, R9))
     # "Palomino E-H (300)": the seat count goes in parentheses as in brackets.
     assert [(r['name'], r['place']) for r in doc['rooms']] == [
         ('Main', 'Palomino E-H'), ('Breakout 1', 'BMO Room 203'), ('Breakout 2', 'Percheron CD')]
 
 
-@pytest.mark.parametrize('text', ['1100 - 1000', '1100 - 10'])
-def test_a_quarter_that_ends_before_it_starts_is_a_layout_error(text):
+@pytest.mark.parametrize('q, start, end, times', [
+    (2, ('11', '00'), ('12', None), ('11:00', '12:30')),
+    (2, ('11', None), ('12', '30'), ('11:00', '12:30')),
+    (5, ('17', '45'), ('19', None), ('17:45', '19:00')),   # #166's and #178's Q5
+    (5, ('18', '00'), ('19', None), ('18:00', '19:30')),   # the usual one first
+    (2, ('11', '00'), ('13', None), None),   # no usual Q2 ends in hour 13
+    (6, ('20', '00'), ('21', None), None),   # no usual Q6
+    (3, ('14', '15'), ('15', '45'), ('14:15', '15:45')),   # written in full: as written
+])
+def test_the_quarter_convention_fills_only_what_agrees_with_the_written_parts(q, start, end, times):
+    assert conventions.quarter_times(q, start, end) == times
+
+
+@pytest.mark.parametrize('text', ['1100 - 1000', '1100 - 10', '1100 - 13'])
+def test_a_quarter_that_no_usual_time_fits_or_ends_first_is_a_layout_error(text):
     doc = Document(io.BytesIO((FIXTURES / R0_178).read_bytes()))
     cell = docmod._grid(doc.tables[1])[9][1]['tc']
     run = next(cell.iter(docmod.W + 't'))
@@ -112,6 +130,33 @@ def test_a_quarter_that_ends_before_it_starts_is_a_layout_error(text):
     doc.save(data)
     with pytest.raises(docmod.LayoutError, match='Q2'):
         docmod.extract_document(data.getvalue(), R0_178)
+
+
+def _unhighlighted(name, keep):
+    """The #178 plan with every highlight removed but those ``keep`` says to keep."""
+    doc = Document(io.BytesIO((FIXTURES / name).read_bytes()))
+    for mark in list(doc.element.body.iter(docmod.W + 'highlight')):
+        run = mark.getparent().getparent()
+        if not keep(docmod.paragraph_text(run), mark.get(docmod.W + 'val')):
+            mark.getparent().remove(mark)
+    data = io.BytesIO()
+    doc.save(data)
+    return docmod.extract_document(data.getvalue(), name)
+
+
+def test_a_plain_convener_or_stream_label_takes_its_usual_colour():
+    # #161 and #162 highlighted only Convenor 1's name.
+    doc = _unhighlighted(R0_178, lambda text, colour: 'Wanqiang' not in text)
+    assert doc['conveners'] == {'green': 'Mike', 'cyan': 'Wanqiang'}
+    assert 'Wanqiang (Convener 2) is not highlighted in the Session Plan. This page links the name to the cyan ' \
+           'stream, as in earlier SA2 Session Plans.' in doc['filled']
+    # No Stream 3 label highlighted: Stream 3 is cyan, as it has been since #161.
+    doc = _unhighlighted(R0_178, lambda text, colour: colour != 'cyan' or 'Wanqiang' in text)
+    assert doc['stream_colours'] == {2: 'green', 3: 'cyan'}
+    assert any(line.startswith('Stream 3 is not highlighted') for line in doc['filled'])
+    # Both names plain: each takes its number's colour.
+    doc = _unhighlighted(R0_178, lambda text, colour: 'Mike' not in text and 'Wanqiang' not in text)
+    assert doc['conveners'] == {'green': 'Mike', 'cyan': 'Wanqiang'}
 
 
 def test_tracked_changes_are_read_in_accepted_form():
@@ -356,6 +401,9 @@ def test_a_room_is_named_by_its_stream_only_on_days_it_holds_no_other():
     schedule = sessions.make_schedule(extract(R0_178), agenda_178(), META_178, [R0_178, 'agenda.csv'],
                                       {R0_178: 'Session Plan', 'agenda.csv': 'agenda.csv'}, '2026-11-02 12:00',
                                       chairs={'Mike': 'Michael STARSINIC', 'Wanqiang': 'Wanqiang ZHANG'})
+    # What the conventions filled in is said below the grid.
+    heading = next(i for i, b in enumerate(schedule.supplements) if b.get('text') == 'Filled in from earlier Session Plans')
+    assert schedule.supplements[heading + 1]['text'].startswith('Q2 is written "1100 - 12"')
     details = {d.day_name: [r.detail for r in d.rooms] for d in schedule.days}
     assert details['Monday'] == ['Palomino E-H · Stream 1', 'BMO Room 203 · Stream 2', 'Percheron CD · Stream 3']
     assert details['Tuesday'] == ['Palomino E-H', 'BMO Room 203', 'Percheron CD']

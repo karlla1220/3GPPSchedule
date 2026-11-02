@@ -20,6 +20,7 @@ from pydantic import BaseModel
 from shared import llm_cells
 from shared.llm_cells import check_times, gemini_request, title_errors, written_errors
 from shared.schedule import MIN_PART_MINUTES, time_to_minutes
+from . import conventions
 from .document import DAYS, LayoutError, W, _grid, cell_lines, identify, paragraph_text, squash, supplements
 from .sessions import known, line_items
 from .sources import CACHE
@@ -27,7 +28,7 @@ from .sources import CACHE
 PROMPTS = Path(__file__).parent / 'prompts'
 VERSION = 1
 CLOCK = re.compile(r'(?<![\d.:])(\d{1,2}):(\d{2})(?!\d)')
-RANGE = re.compile(r'(?<![\d.])(\d{2})(\d{2})\s*-\s*(\d{2})(\d{2})?(?![\d.])')
+RANGE = re.compile(r'(?<![\d.])(\d{2})(\d{2})\s*-\s*(\d{2})(\d{2})(?![\d.])')
 SINGLE = re.compile(r'(?:\(|\b(?:at|by)\s+)(\d{2})(\d{2})(?![\d.])', re.I)
 
 
@@ -35,12 +36,12 @@ def written_times(text: str) -> set[str]:
     """Clock times in the forms SA2 writes: "13:00", "0900 - 1030", "(1300)", "by 1630".
 
     Four digits count only in a range, in parentheses or after at/by, so a
-    TDoc number ("LS's, 9779, 10337") is not a time. A range may end on an
-    hour alone, as the rules read it: "1100 - 12" is 11:00 to 12:00.
+    TDoc number ("LS's, 9779, 10337") is not a time. A quarter range written
+    with a part missing ("1100 - 12") gives the usual quarter times that fit it,
+    as the rules read it (conventions.py: 11:00, 12:30).
     """
-    pairs = (CLOCK.findall(text) + [p for m in RANGE.findall(text) for p in (m[:2], (m[2], m[3] or '00'))]
-             + SINGLE.findall(text))
-    return {f'{int(h):02d}:{m}' for h, m in pairs if int(h) < 24 and int(m) < 60}
+    pairs = CLOCK.findall(text) + [p for m in RANGE.findall(text) for p in (m[:2], m[2:])] + SINGLE.findall(text)
+    return {f'{int(h):02d}:{m}' for h, m in pairs if int(h) < 24 and int(m) < 60} | conventions.completed_times(text)
 
 
 def item_errors(prefix, items, source: str, agenda: dict) -> list[str]:
@@ -189,7 +190,7 @@ def left_out(result: DocResult, texts: dict[str, str], agenda: dict) -> list[str
 
     The timetable is the tables the sessions cite. A cell there that names an
     agenda item is a session (#178's first plan came back without its 11:00
-    quarter, whose end was written "1100 - 12"); headers, labels and
+    quarter, whose time was written "1100 - 12"); headers, labels and
     announcements name none.
     """
     cited = {ref for s in result.sessions for ref in s.refs}
@@ -261,7 +262,7 @@ def read_document(data: bytes, name: str, model: str, agenda: dict | None = None
     blocks = outline(doc)
     texts = {b['id']: b['text'] for b in blocks if 'text' in b}
     texts.update({c['id']: c['text'] for b in blocks for c in b.get('cells', []) if c['text']})
-    prompt = (PROMPTS / 'document.md').read_text(encoding='utf-8')
+    prompt = (PROMPTS / 'document.md').read_text(encoding='utf-8') + conventions.prompt_note()
     try:
         result = llm_cells.read_document(prompt, blocks, DocResult, lambda r: check_document(r, texts, agenda), model=model,
                                          cache_dir=cache_dir, wg_id='sa2', source=name, meeting=meeting,
