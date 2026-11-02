@@ -1,10 +1,15 @@
 """RAN4 meeting schedules: real chair PPTX files plus the rules they rely on."""
+from datetime import datetime
 from pathlib import Path
 
 import pytest
 
 from shared.agenda import agenda_map
 from working_groups.ran4 import document as docmod, topics as topicmod
+
+
+def noon(day):
+    return datetime.fromisoformat(f'{day}T12:00:00+00:00')
 
 FIXTURES = Path(__file__).parent / 'fixtures/ran4'
 THU = 'RAN4_120bis_meeting_schedule_THU_afternoon.pptx'
@@ -488,7 +493,7 @@ def test_versions_are_ordered_by_revision_not_by_name(tmp_path, monkeypatch):
              ARCHIVE + 'TSGR4_120bis/Agenda/agenda.csv': (FIXTURES / 'agenda_120bis.csv').read_bytes(),
              ARCHIVE + 'TSGR4_121/Invitation/x.doc': b'invitation'}
     with mock_server(files) as http:
-        bundle = sources.fetch_bundle(sources.DEFAULTS, {}, http, rows=ROWS, today='2026-10-30',
+        bundle = sources.fetch_bundle(sources.DEFAULTS, {}, http, rows=ROWS, now=noon('2026-10-30'),
                                       cache_dir=tmp_path / 'inputs')
     manifest = bundle.manifest
     assert (manifest['meeting_id'], manifest['version']) == ('ran4#120bis', 4412)
@@ -499,7 +504,7 @@ def test_versions_are_ordered_by_revision_not_by_name(tmp_path, monkeypatch):
     sources.remote_files.new_run()
     files[SYNC + 'RAN4_120bis_meeting_schedule_FRI.pptx'] = with_revision(data, 4420)
     with mock_server(files) as http:
-        bundle = sources.fetch_bundle(sources.DEFAULTS, {}, http, rows=ROWS, today='2026-10-16',
+        bundle = sources.fetch_bundle(sources.DEFAULTS, {}, http, rows=ROWS, now=noon('2026-10-16'),
                                       cache_dir=tmp_path / 'inputs')
     assert bundle.manifest['schedule']['url'] == SYNC + 'RAN4_120bis_meeting_schedule_FRI.pptx'
     assert bundle.manifest['version'] == 4420
@@ -509,7 +514,7 @@ def test_nothing_to_build_from_is_said_clearly(tmp_path, monkeypatch):
     monkeypatch.setattr(sources.remote_files, 'CACHE_DIR', tmp_path / 'cache')
     with mock_server({ARCHIVE + 'TSGR4_121/Invitation/x.doc': b'x'}) as http, \
             pytest.raises(ValueError, match='No RAN4 meeting schedule'):
-        sources.fetch_bundle(sources.DEFAULTS, {}, http, rows=ROWS, today='2026-10-30', cache_dir=tmp_path / 'inputs')
+        sources.fetch_bundle(sources.DEFAULTS, {}, http, rows=ROWS, now=noon('2026-10-30'), cache_dir=tmp_path / 'inputs')
 
 
 def test_topic_list_names_and_ranks():
@@ -778,3 +783,17 @@ assert not any(name.startswith(('working_groups.ran1', 'working_groups.ran2', 'g
                for name in sys.modules)
 """], capture_output=True, text=True)
     assert result.returncode == 0, result.stderr
+
+
+def test_a_next_meeting_does_not_take_the_agenda_left_in_the_sync_folder(tmp_path, monkeypatch):
+    monkeypatch.setattr(sources.remote_files, 'CACHE_DIR', tmp_path / 'cache')
+    data = (FIXTURES / THU).read_bytes()
+    stale = sources.DEFAULTS['sync_agenda_url'] + 'agenda.csv'
+    files = {ARCHIVE + 'TSGR4_120bis/Inbox/Meeting_Arrangements/RAN4_120bis_meeting_schedule_v04.pptx': data, stale: b'"1","Last"'}
+    with mock_server(files) as http:
+        bundle = sources.fetch_bundle(sources.DEFAULTS, {}, http, rows=ROWS, now=noon('2026-10-05'), cache_dir=tmp_path / 'inputs')
+    assert bundle.manifest['meeting_id'] == 'ran4#120bis' and bundle.agenda == b''
+    sources.remote_files.new_run()
+    with mock_server(files) as http:
+        bundle = sources.fetch_bundle(sources.DEFAULTS, {}, http, rows=ROWS, now=noon('2026-10-12'), cache_dir=tmp_path / 'inputs2')
+    assert bundle.agenda == b'"1","Last"'

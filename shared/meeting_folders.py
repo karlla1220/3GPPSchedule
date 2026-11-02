@@ -178,16 +178,6 @@ def portal_folders(wg_id, rows, root=None):
     return found
 
 
-def upcoming(wg_id, rows, today):
-    """Meetings that have not ended (by Portal EndDate), earliest first."""
-    dated = []
-    for row in wg_rows(wg_id, rows):
-        key = portal_key(row)
-        if key and str(row.get('StartDate') or '') and str(row.get('EndDate') or '')[:10] >= today:
-            dated.append((row['StartDate'][:10], key))
-    return [key for _, key in sorted(set(dated))]
-
-
 def new_run():
     _FOUND.clear()
     _WRITTEN.clear()

@@ -8,6 +8,10 @@ import pytest
 from shared import meeting_folders, remote_files
 from working_groups.ran1 import config as ran1_config
 
+
+def noon(day):
+    return datetime.fromisoformat(f'{day}T12:00:00+00:00')
+
 WG1 = 'https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/'
 WG2 = 'https://www.3gpp.org/ftp/tsg_ran/WG2_RL2/'
 NOW = datetime(2026, 10, 11, 12, tzinfo=timezone.utc)
@@ -185,18 +189,18 @@ def test_ran1_lists_the_next_meeting_and_the_built_one(tmp_path, monkeypatch):
             row('3GPPRAN1#128', '2027-02-08', '2027-02-12', tb=379)]
     seen = []
     with server({WG1 + 'TSGR1_127/': ['Inbox/'], WG1 + 'TSGR1_126b/': ['Inbox/']}, seen) as http:
-        found = ran1_config.with_meeting_folders(cfg, 'ran1#126bis', rows=rows, today='2026-10-20', http=http)
-    # The next meeting (by name; Portal has no URL yet) and the built one; not RAN1#128.
-    assert found['agenda_urls'] == [WG1 + 'TSGR1_127/Agenda/', WG1 + 'TSGR1_126b/Agenda/']
+        found = ran1_config.with_meeting_folders(cfg, 'ran1#126bis', rows=rows, now=noon('2026-10-20'), http=http)
+    # The built one and the next (by name; Portal has no URL yet); not RAN1#128.
+    assert found['agenda_urls'] == [WG1 + 'TSGR1_126b/Agenda/', WG1 + 'TSGR1_127/Agenda/']
     assert found['inbox_urls'] == [ran1_config.DEFAULT_MEETING_SYNC + 'Inbox/',
-                                   WG1 + 'TSGR1_127/Inbox/', WG1 + 'TSGR1_126b/Inbox/']
+                                   WG1 + 'TSGR1_126b/Inbox/', WG1 + 'TSGR1_127/Inbox/']
     assert WG1 not in seen
-    assert found['meeting_specific'] == [WG1 + 'TSGR1_127/', WG1 + 'TSGR1_126b/']
+    assert found['meeting_specific'] == [WG1 + 'TSGR1_126b/', WG1 + 'TSGR1_127/']
     # An override wins for its meeting and is not recorded as found.
     path.write_text('{"meeting_specific_override": ["https://example.org/TSGR1_127/"]}')
     found = ran1_config.with_meeting_folders(ran1_config.load_config(path), None, rows=rows,
-                                             today='2026-10-20', http=None)
-    assert found['agenda_urls'] == ['https://example.org/TSGR1_127/Agenda/']
+                                             now=noon('2026-10-20'), http=None)
+    assert found['agenda_urls'] == ['https://example.org/TSGR1_127/Agenda/', WG1 + 'TSGR1_126/Agenda/']
     # Offline: the recorded folder of the overridden meeting is not read either.
     path.write_text(json.dumps({'meeting_specific': [WG1 + 'TSGR1_127/', WG1 + 'TSGR1_126b/'],
                                 'meeting_specific_override': ['https://example.org/TSGR1_127/']}))
@@ -215,7 +219,7 @@ def test_ran1_keeps_the_sync_folder_when_the_lookup_fails(tmp_path, monkeypatch)
     cfg = ran1_config.load_config(path)
     remote_files.new_run()
     with server({}, [], status=500) as http:
-        found = ran1_config.with_meeting_folders(cfg, 'ran1#126bis', rows=[], today='2026-10-20', http=http)
+        found = ran1_config.with_meeting_folders(cfg, 'ran1#126bis', rows=[], now=noon('2026-10-20'), http=http)
     assert found['inbox_urls'] == cfg['inbox_urls'] and found['agenda_urls'] == []
 
 

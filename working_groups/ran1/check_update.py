@@ -9,8 +9,9 @@ When an external-file cache miss is downloaded, also outputs
 State is persisted in docs/ran1/.schedule_state.json (committed to the repo
 by the build-and-deploy job). The cached ``meeting_id`` is fed back into
 remote selection as a stability hint: older meetings do not displace the
-current state, but a later regular meeting (e.g., ``124bis`` → ``125``)
-does advance automatically. When ``ref_in_manual/`` contains a regular
+current state, and a later regular meeting (e.g., ``124bis`` → ``125``)
+takes over once the built meeting has ended (``shared/meeting_turn.py``,
+``held_meeting`` in the config). When ``ref_in_manual/`` contains a regular
 meeting, that local meeting is authoritative and remote selection is locked
 to it so check and build cannot disagree. Irregular meetings continue to
 rely on upload timestamps.
@@ -143,7 +144,8 @@ def check_updates(*, staging_dir=None) -> CheckResult:
 
     # 1. Fetch current remote state (lightweight — directory listing only)
     state = load_schedule_state()
-    cfg = with_meeting_folders(load_config(), state.get("meeting_id"))
+    cfg = with_meeting_folders(load_config(), state.get("meeting_id"),
+                               saved_dates=state.get("timezone_ref"))
     print(
         "Checking FTP for schedule updates "
         f"({len(cfg['inbox_urls'])} inbox URL(s), "
@@ -177,6 +179,7 @@ def check_updates(*, staging_dir=None) -> CheckResult:
             preferred_meeting_id = locked_meeting_id or preferred_meeting_id
     if local_meeting_hint:
         print(f"Using local reference meeting hint: {local_meeting_hint}")
+    locked_meeting_id = locked_meeting_id or cfg.get("held_meeting")
 
     try:
         remote_all = get_all_remote_schedule_info(

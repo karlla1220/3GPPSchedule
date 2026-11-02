@@ -284,7 +284,7 @@ RAN P는 Chair 폴더의 `RAN#<번호> time plan v<버전>.zip`/`.docx`를
 기본 주소는 `working_groups/ran_plenary/config.json`에 있습니다.
 
 - **sync의 Chair 폴더는 회의에 따라 생기고 사라집니다.** 폴더가 없거나(403), timeplan이 없거나, 빌드한 판보다 낮은 판만 있으면 오류 없이 마지막 빌드 입력을 `.cache/3gpp/`에서 꺼내 그대로 둡니다(`sources.built_bundle`). 빌드한 적이 없을 때만 오류입니다.
-- **`agenda.csv`는 미팅 폴더(`tsg_ran/TSG_RAN/TSGR_<번호>/Agenda/`)를 먼저 보고**, 없으면 sync(`agenda_url`), 그것도 없으면 같은 회의에서 빌드한 것을 씁니다. 다른 회의의 agenda는 물려받지 않습니다.
+- **`agenda.csv`는 미팅 폴더(`tsg_ran/TSG_RAN/TSGR_<번호>/Agenda/`)를 먼저 보고**, 없으면 회의 첫날부터 sync(`agenda_url`), 그것도 없으면 같은 회의에서 빌드한 것을 씁니다. 그래도 없으면 AI 이름 없이 빌드합니다. 다른 회의의 agenda는 물려받지 않습니다.
   - 미팅 폴더는 timeplan의 회의 번호로 자동으로 찾습니다(아래 "미팅 폴더 자동 등록"). Portal의 `MtgDocURL`은 `.../TSGR_113/Docs/`처럼 하위 폴더를 가리키므로 그 위 폴더를 씁니다.
   - 찾지 못하면(회의 전이라 아직 없는 폴더) sync로 넘어가고 다음 실행에서 다시 찾습니다.
   - 찾은 폴더는 `config.json`의 `meeting_specific`에 기록됩니다. 직접 지정하려면 `meeting_specific_override`에 `https://www.3gpp.org/ftp/tsg_ran/TSG_RAN/TSGR_113/`처럼 적습니다. 그 회의에서는 자동으로 찾은 폴더보다 우선합니다. 둘 다 폴더 위치만 바꾸므로 `config_hash`에 넣지 않습니다.
@@ -381,7 +381,7 @@ Gemini가 다시 읽되, 원문으로 확인되는 답만 씁니다(아래 "LLM 
 
 - 목록은 `Meetings_3GPP_SYNC/RAN2/Agenda/`(회의 중 실시간 사본)와
   `tsg_ran/WG2_RL2/TSGR2_<미팅>/Agenda/`(회의 전 v00과 `agenda.csv`)를 함께 봅니다.
-  아카이브 폴더는 Portal에서 끝나지 않은 다음 두 미팅과 마지막으로 빌드한 미팅만 조회합니다.
+  아카이브 폴더는 빌드한 미팅과 다음 미팅만 조회합니다(`shared/meeting_turn.py`).
   3GPP는 없는 폴더에 404가 아니라 403을 주므로, 미팅 폴더 목록에 `Agenda`가 있을 때만 엽니다.
   미팅 폴더 자체가 아직 없으면(403) 빈 폴더로 봅니다.
 - **미팅 폴더는 미팅 ID로 자동으로 찾습니다(아래 "미팅 폴더 자동 등록").** Portal의 `MtgDocURL`,
@@ -395,11 +395,9 @@ Gemini가 다시 읽되, 원문으로 확인되는 답만 씁니다(아래 "LLM 
   - 없는 폴더(403·404)는 정상입니다(`sources.sync_listing`). 오류도, FTP 재시도도 없이 미팅 폴더로 계속합니다.
   - 5xx·연결 실패처럼 "있는데 못 읽은" 경우만 실패입니다. 그때도 미팅 폴더로 페이지를 만들고, **회의 기간(Portal 날짜)이면 RAN2 오류로 보고합니다.**
 - **같은 미팅 안에서는 버전이 내려가지 않습니다(`sources.built_copy`).** 빌드한 판의 파일이 목록에서 사라지고(교체 중, sync 정리) 보이는 판이 같거나 낮으면, 빌드한 판을 `.cache/3gpp/`에서 꺼내 그대로 둡니다. 더 높은 판이 보이면 바로 그 판으로 바꿉니다. 원본이 캐시에 없으면 오류로 보고합니다.
-- **현재 미팅은 Portal 날짜로 정합니다.** 아직 끝나지 않은 미팅 중 가장 이른 미팅의 schedule을
-  씁니다. 진행 중인 RAN2#135bis가 있으면 일찍 올라온 RAN2#136 v00으로 넘어가지 않습니다.
-  끝나지 않은 미팅에 schedule이 없으면 가장 높은 미팅(`#135 < #135bis < #136`)을 유지합니다.
+- **현재 미팅은 Portal 날짜로 정합니다.** 빌드한 미팅이 끝나기 전에는 그 미팅이고, 끝나면 schedule이 있는 가장 이른 다음 미팅입니다. 없으면 빌드한 미팅을 유지합니다(`shared/meeting_turn.py`, CLAUDE.md "회의 전환").
 - 같은 미팅에서는 가장 높은 버전을 쓰고, 같은 버전이면 sync 폴더 사본을 우선합니다.
-- `agenda.csv`는 같은 미팅의 아카이브 폴더에서 받아 AI 설명과 범례 그룹에 씁니다. 없으면 생략합니다.
+- `agenda.csv`는 같은 미팅의 아카이브 폴더에서 받아 AI 설명과 범례 그룹에 씁니다. 일정이 sync에서 왔으면 회의 첫날부터 sync의 파일도 씁니다. 없으면 생략합니다.
 - 날짜·시간대·시작/종료 시각은 Portal(TB 380)에서 가져옵니다. 순서는
   `config.json`의 `meetings` 지정 > Portal > 같은 미팅의 마지막 성공 상태입니다.
   Portal 시간대 표기를 모르면 `shared/timezones.py`가 개최지 목록과 Gemini로 정합니다.
@@ -687,14 +685,14 @@ RAN4 의장단은 미팅마다 `Inbox/Meeting_Arrangements/`에 PPTX 시간표
 - 목록은 `Meetings_3GPP_SYNC/RAN4/Inbox/Meeting_Arrangements/`(회의 중 실시간 사본, 루트에 최신 판 하나)와
   `Meetings_3GPP_SYNC/RAN4/Agenda/`, 그리고 `tsg_ran/WG4_Radio/TSGR4_<미팅>/`의 `Inbox/Meeting_Arrangements/`와
   `Agenda/`(회의 전·후)입니다. 미팅 폴더는 RAN2처럼 미팅 ID로 찾아 `meeting_specific`에 기록합니다
-  (`meeting_specific_override`가 우선). 끝나지 않은 다음 두 미팅, 마지막으로 끝난 미팅, 마지막으로 빌드한 미팅의 폴더를 봅니다.
-- **현재 미팅은 Portal(TB 382) 날짜로 정합니다.** 끝나지 않은 미팅 중 시간표가 있는 가장 이른 미팅, 없으면 시간표가 있는 가장 높은 미팅입니다.
+  (`meeting_specific_override`가 우선). 빌드한 미팅과 다음 미팅의 폴더를 봅니다.
+- **현재 미팅은 Portal(TB 382) 날짜로 정합니다.** 규칙은 모든 WG가 같습니다(`shared/meeting_turn.py`, CLAUDE.md "회의 전환").
 - **같은 미팅의 판은 PPTX의 `cp:revision`(`docProps/core.xml`)으로 고릅니다.** 파일 이름은 순서가 없고
   (`v04` → `THU` → `THU_morning` → `THU_afternoon`), 목록 시각은 회의 뒤 다시 복사되어 믿을 수 없습니다.
   같은 미팅의 후보를 모두 받아 읽습니다(두 번째부터는 조건부 요청). 같으면 `dcterms:modified`, 그다음 sync 사본입니다.
   PowerPoint 잠금 파일(`~$…`)은 뺍니다. 빌드한 판이 목록에서 사라지고 보이는 판이 더 낮으면 빌드한 판을 유지합니다.
 - 토픽 목록은 같은 미팅의 `List_Topics…`·`… list of topics …` XLSX 중 `final`, 그다음 가장 높은 `vNN`입니다.
-  없으면 AI 없이 빌드하고 경고합니다. `agenda.csv`는 미팅 폴더의 `Agenda/`, 없으면 sync `Agenda/`에서 받습니다.
+  없으면 AI 없이 빌드하고 경고합니다. `agenda.csv`는 미팅 폴더의 `Agenda/`에서, 없으면 회의 첫날부터 sync `Agenda/`에서 받습니다. 그전의 sync 파일은 지난 회의 것일 수 있습니다.
 - 날짜·시간대·시작/종료 시각은 `config.json`의 `meetings` 지정 > Portal > 같은 미팅의 마지막 성공 상태입니다.
 
 ### 표 읽기 (`working_groups/ran4/document.py`)
@@ -787,7 +785,7 @@ SA1#112·#113·#115의 실제 문서로 확인했습니다. `site.json`에서 `e
   최신 의장 파일보다 늦을 때 씁니다. #115에서 이 파일이 목요일 계획을 의장 파일보다 14시간쯤 먼저 담았습니다.
   agenda와 의장은 그때도 최신 의장 파일에서 읽고, 머리줄 Sources에 두 파일이 함께 보입니다.
 - 일정표가 없는 판(1st draft `S1-xx3000`, #114 사후본)은 건너뛰고 그 앞 판을 씁니다. 같은 미팅 안에서 판이 뒤로 가지 않습니다.
-- 현재 미팅은 Portal 날짜로 정합니다(TB 384). 끝나지 않은 가장 이른 미팅에 의장 파일이 아직 없으면 지난 미팅을 보입니다(Ended).
+- 현재 미팅은 Portal 날짜로 정합니다(TB 384). 끝나지 않은 가장 이른 미팅에 시간표가 든 의장 파일이 아직 없으면 지난 미팅을 보입니다(Ended).
   sync `Inbox/`의 agenda TDoc zip은 이름에 미팅이 없어서, 다음 미팅에 다른 파일이 아직 없을 때만 열어 봅니다.
 - 머리줄 Sources는 파일 이름에서 미팅 표기(`SA1#115`), TDoc 번호, 확장자만 뺀 이름입니다(`sources.source_label`):
   `Agenda for Friday_1550_END_OF_MEETING`, `Agenda_16_00_friday`, `Breakout sessions schedule_Prague_WED_1730`.
@@ -1009,7 +1007,7 @@ FTP Inbox/
      - 화면의 미팅 이름도 이 ID에서 만들므로 파일명이 `RAN1#126b`여도 `RAN1#126bis`로 표시합니다.
 - 이전 실행의 `meeting_id`는 `docs/ran1/.schedule_state.json`에 저장되며, 다음 실행에서 **현재 미팅 힌트**로 사용됩니다.
 - 다만 이 힌트는 고정값이 아닙니다.
-     - 캐시에 `ran1#124bis`가 있어도 FTP에서 `ran1#125`가 나타나면, 새 실행은 `125`로 자동 전환하고 state도 갱신합니다.
+     - 캐시에 `ran1#124bis`가 있어도 그 미팅이 끝난 뒤 FTP에서 `ran1#125`가 나타나면, 새 실행은 `125`로 자동 전환하고 state도 갱신합니다.
 - `AH`, `adhoc`, `e` 등 **비정규 미팅**은 이름만으로 전체 순서를 확정할 수 없으므로 업로드 시각을 기준으로 선택합니다.
 - 같은 미팅 안에서는 **Draft가 아닌 파일 → 버전 → 업로드 시각** 순으로 고릅니다.
      - 의장은 `Draft`를 떼면서 버전을 `v00`부터 다시 매깁니다. `Draft … v03`과 `… v00`이 함께 있으면 `v00`이 최신입니다.
@@ -1021,7 +1019,7 @@ FTP Inbox/
 
 미팅 번호는 선택된 메인 스케줄 파일 이름에서 정해지고, 나머지 참조 파일은 그 번호와 일치할 때만 사용합니다. LLM 판단 없이 이름과 경로만으로 결정합니다.
 
-- **미팅 폴더**: Portal에서 끝나지 않은 가장 이른 미팅과 마지막으로 빌드한 미팅의 폴더(`tsg_ran/WG1_RL1/TSGR1_126b/`)를 자동으로 찾아 `Inbox/`와 `Agenda/`를 봅니다(아래 "미팅 폴더 자동 등록"). 빌드한 미팅은 다음 미팅의 파일로 바뀔 때까지 남습니다. 찾은 폴더는 `config.json`의 `meeting_specific`에 기록되고, `meeting_specific_override`(환경 변수 `SCHEDULE_MEETING_SPECIFIC_OVERRIDE`)에 적은 폴더는 그 미팅에서 자동으로 찾은 폴더보다 우선합니다. 자동으로 찾지 못하거나 조회에 실패하면 sync 폴더만으로 계속합니다. `--no-download` 빌드는 기록된 폴더를 그대로 씁니다.
+- **미팅 폴더**: 빌드한 미팅과 다음 미팅의 폴더(`tsg_ran/WG1_RL1/TSGR1_126b/`)를 자동으로 찾아 `Inbox/`와 `Agenda/`를 봅니다(아래 "미팅 폴더 자동 등록"). 읽는다고 넘어가지는 않습니다. 빌드한 미팅이 끝나기 전에는 그 미팅으로 잠급니다(`held_meeting`, CLAUDE.md "회의 전환"). 찾은 폴더는 `config.json`의 `meeting_specific`에 기록되고, `meeting_specific_override`(환경 변수 `SCHEDULE_MEETING_SPECIFIC_OVERRIDE`)에 적은 폴더는 그 미팅에서 자동으로 찾은 폴더보다 우선합니다. 자동으로 찾지 못하거나 조회에 실패하면 sync 폴더만으로 계속합니다. `--no-download` 빌드는 기록된 폴더를 그대로 씁니다.
 - **Agenda**: 미팅 폴더 이름(`TSGR1_126b` → `ran1#126bis`)이 현재 미팅과 다르면 그 폴더의 Agenda는 읽지 않습니다. 다음 미팅 폴더가 먼저 잡히는 기간에도 다른 미팅의 Agenda가 섞이지 않습니다. 미팅을 알 수 없는 URL은 그대로 사용합니다.
 - **Agenda 설명**: `docs/ran1/agenda_item_description.json`의 출처(`source_url` 등)가 다른 미팅을 가리키면 세션에 붙이지 않고, 다운로드가 가능한 빌드에서 다시 생성합니다.
 - **로컬 Agenda 캐시**: `downloads/ran1/Agenda/<미팅>/`(예: `ran1_126bis/`)에 미팅별로 저장합니다. `agenda.csv`처럼 이름에 미팅이 없는 파일이 다음 미팅에 재사용되지 않습니다.
@@ -1349,7 +1347,7 @@ WG는 파일 선택과 문서 해석만 담당합니다. 새로운 WG도 `get_li
    SA는 이름에 개최지가 붙어서(`TSGS1_116_Calgary`, `TSGS2_177_Prague_2026-10`) 만들 수 없으므로 이 단계를 건너뜁니다.
 5. WG 루트 목록에서 이름으로 찾기 (`-e`, `_e`, `-bis-e` 같은 전자회의 접미사도 인정). 수백 항목이라 미팅마다 6시간에 한 번만 받습니다. ad hoc 폴더(`TSGS2_175-AH-e_…`, `TSGS1_112-Ad_Hoc-e`)는 정규 미팅으로 보지 않습니다.
 
-- **찾은 폴더는 `config.json`의 `meeting_specific`에 기록되어 저장소에 남습니다.** CI가 확인할 때마다 그 실행에서 찾은 폴더(다음 미팅, 빌드한 미팅)로 목록을 다시 쓰고, 바뀌면 그 WG를 빌드해 빌드 결과와 함께 커밋합니다(`meeting folders now …`가 check의 변경 사유로 보입니다). 목록에 없는 미팅은 아직 찾지 못한 것입니다. 손으로 고치지 않습니다. 고정하려면 `meeting_specific_override`에 적습니다.
+- **찾은 폴더는 `config.json`의 `meeting_specific`에 기록되어 저장소에 남습니다.** CI가 확인할 때마다 그 실행에서 찾은 폴더(빌드한 미팅, 다음 미팅)로 목록을 다시 쓰고, 바뀌면 그 WG를 빌드해 빌드 결과와 함께 커밋합니다(`meeting folders now …`가 check의 변경 사유로 보입니다). 목록에 없는 미팅은 아직 찾지 못한 것입니다. 손으로 고치지 않습니다. 고정하려면 `meeting_specific_override`에 적습니다.
   - override가 있는 미팅도 다른 미팅과 똑같이 찾아서 기록합니다. 사용하는 것은 override뿐입니다. 관리자는 `meeting_specific`에 기록된 폴더를 보고 override를 유지할지 지울지 정합니다.
   - RAN2와 RAN P의 build는 check가 준비한 입력을 쓰고 폴더를 다시 찾지 않으므로, check가 쓴 목록을 CI 계획(`.ci/plan.json`)으로 build job에 넘겨 다시 씁니다.
   - 이 목록은 WG 입력 지문(`ci.py`의 `fingerprint`)에서 빠집니다. 기록했다는 이유로 "설정 변경"이 되거나 check의 계획이 무효가 되지 않습니다.

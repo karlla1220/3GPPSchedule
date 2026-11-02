@@ -1,4 +1,5 @@
 """RAN3 time plans: the chair's living agenda, the offline room sheets and the rules they rely on."""
+from datetime import datetime
 import io
 import subprocess
 import sys
@@ -16,6 +17,10 @@ from shared.agenda import agenda_map, written_ranges
 from shared.renderer import generate_html
 from shared.schedule import load_schedule, save_schedule
 from working_groups.ran3 import document as docmod, lifecycle, llm, pipeline, sessions, sources
+
+
+def noon(day):
+    return datetime.fromisoformat(f'{day}T12:00:00+00:00')
 
 FIXTURES = Path(__file__).parent / 'fixtures/ran3'
 EOM = 'RAN3_133bis_agenda_20261016_EOM.docx'
@@ -577,7 +582,7 @@ def test_fetch_bundle_takes_the_live_version_and_its_offline_sheet(tmp_path, mon
     monkeypatch.setattr(sources.remote_files, 'CACHE_DIR', tmp_path / 'cache')
     monkeypatch.setattr(sources.meeting_folders, 'CACHE_PATH', tmp_path / 'folders.json')
     with mock_server(server_files) as http:
-        bundle = sources.fetch_bundle(sources.DEFAULTS, {}, http, rows=ROWS, today='2026-10-14',
+        bundle = sources.fetch_bundle(sources.DEFAULTS, {}, http, rows=ROWS, now=noon('2026-10-14'),
                                       cache_dir=tmp_path / 'inputs')
     manifest = bundle.manifest
     assert (manifest['meeting_id'], manifest['version']) == ('ran3#133bis', '20261014.0.1825')
@@ -590,7 +595,7 @@ def test_before_a_meeting_the_sync_folders_last_sheet_is_not_taken(tmp_path, mon
     monkeypatch.setattr(sources.remote_files, 'CACHE_DIR', tmp_path / 'cache')
     monkeypatch.setattr(sources.meeting_folders, 'CACHE_PATH', tmp_path / 'folders.json')
     with mock_server(server_files) as http:
-        bundle = sources.fetch_bundle(sources.DEFAULTS, {}, http, rows=ROWS, today='2026-10-30',
+        bundle = sources.fetch_bundle(sources.DEFAULTS, {}, http, rows=ROWS, now=noon('2026-10-30'),
                                       cache_dir=tmp_path / 'inputs')
     assert (bundle.manifest['meeting_id'], bundle.manifest['schedule']['name']) == ('ran3#134', PRE)
     assert bundle.manifest['offline'] is None and bundle.offline == b''
@@ -601,12 +606,12 @@ def test_a_vanished_live_version_is_kept_instead_of_stepping_back(tmp_path, monk
     monkeypatch.setattr(sources.remote_files, 'CACHE_DIR', tmp_path / 'cache')
     monkeypatch.setattr(sources.meeting_folders, 'CACHE_PATH', tmp_path / 'folders.json')
     with mock_server(server_files) as http:
-        built = sources.fetch_bundle(sources.DEFAULTS, {}, http, rows=ROWS, today='2026-10-14',
+        built = sources.fetch_bundle(sources.DEFAULTS, {}, http, rows=ROWS, now=noon('2026-10-14'),
                                      cache_dir=tmp_path / 'inputs')
     del server_files[SYNC + sources.CHAIRS + MID]
     sources.remote_files.new_run()
     with mock_server(server_files) as http:
-        kept = sources.fetch_bundle(sources.DEFAULTS, built.manifest, http, rows=ROWS, today='2026-10-14',
+        kept = sources.fetch_bundle(sources.DEFAULTS, built.manifest, http, rows=ROWS, now=noon('2026-10-14'),
                                     cache_dir=tmp_path / 'inputs')
     assert kept.manifest['schedule']['name'] == MID and kept.schedule == built.schedule
 

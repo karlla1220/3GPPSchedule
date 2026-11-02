@@ -20,7 +20,6 @@ closing file) is skipped, so the page keeps the last schedule.
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from datetime import datetime
 import hashlib
 import io
 import json
@@ -28,13 +27,12 @@ from pathlib import Path
 import re
 from urllib.parse import unquote, urlparse
 import zipfile
-from zoneinfo import ZoneInfo
 
 import httpx
 
-from shared import meeting_folders, remote_files
+from shared import meeting_folders, meeting_turn, remote_files
 from shared.json_files import read_json, write_json
-from shared.meeting_folders import portal_key, portal_metadata
+from shared.meeting_folders import portal_metadata
 from shared.portal_meetings import TB_IDS, get_meetings, meeting_key
 from shared.remote_files import client, fetch_file
 
@@ -280,30 +278,19 @@ def portal_rows() -> list[dict] | None:
         return None
 
 
-def meeting_dates(cfg, rows, previous) -> dict[str, tuple[str, str]]:
-    """Known (starts_on, ends_on) per meeting: overrides, Portal, last build."""
-    dates = {}
-    if previous.get('meeting_id') and previous.get('metadata', {}).get('ends_on'):
-        dates[previous['meeting_id']] = (previous['metadata']['starts_on'], previous['metadata']['ends_on'])
-    for row in rows or []:
-        key = portal_key(row)
-        if key and row.get('StartDate') and row.get('EndDate'):
-            dates[key] = (row['StartDate'][:10], row['EndDate'][:10])
-    for key, value in cfg['meetings'].items():
-        if value.get('starts_on') and value.get('ends_on'):
-            dates[meeting_key(f'SA1#{key}')] = (value['starts_on'], value['ends_on'])
-    return dates
+def meeting_dates(cfg, rows, previous) -> dict[str, meeting_turn.Dates]:
+    return meeting_turn.known_dates(rows, previous,
+                                    {meeting_key(f'SA1#{key}'): value for key, value in cfg['meetings'].items()})
 
 
 # ------------------------------------------------------------------- choosing
 
-def choose_meeting(candidates: list[dict], dates: dict, today: str) -> str:
-    """The earliest meeting, by Portal dates, that has not ended and has a chair file; else the highest."""
+def choose_meeting(candidates: list[dict], dates: dict, now, built=None) -> str:
+    """The meeting ``shared/meeting_turn.py`` picks among those with a chair file."""
     meetings = {c['meeting_id'] for c in candidates if c['meeting_id']}
     if not meetings:
         raise ValueError('No SA1 chair file (Agenda for SA1#<meeting>_<day>_<time>.docx) found')
-    current = sorted((dates[m][0], m) for m in meetings if m in dates and dates[m][1] >= today)
-    return current[0][1] if current else max(meetings, key=rank)
+    return meeting_turn.current_meeting(built, meetings, dates, now, rank)
 
 
 def ordered(candidates: list[dict], meeting: str, dates: dict) -> list[dict]:
@@ -315,7 +302,7 @@ def ordered(candidates: list[dict], meeting: str, dates: dict) -> list[dict]:
     """
     own = [c for c in candidates if c['meeting_id'] == meeting]
     timed = any(c.get('timed') for c in own)
-    start, end = dates.get(meeting, ('', ''))
+    start, end, *_ = dates.get(meeting, ('', ''))
     for c in candidates:
         if c['kind'] == 'timetable' and start and start <= c['uploaded_at'][:10] <= end:
             own.append({**c, 'meeting_id': meeting})
@@ -327,17 +314,14 @@ def ordered(candidates: list[dict], meeting: str, dates: dict) -> list[dict]:
                                       c['uploaded_at'], c['name']), reverse=True)
 
 
-def fetch_bundle(cfg, previous, http, *, rows=None, today=None, cache_dir=DOWNLOADS / 'inputs') -> Bundle:
+def fetch_bundle(cfg, previous, http, *, rows=None, now=None, cache_dir=DOWNLOADS / 'inputs') -> Bundle:
     from .document import has_schedule, identify
     from docx import Document
-    today = today or datetime.now(ZoneInfo('Asia/Seoul')).date().isoformat()
+    now = now or meeting_turn.right_now()
     dates = meeting_dates(cfg, rows, previous)
     entries = sync_entries(cfg, http)
-    upcoming = sorted((start, m) for m, (start, end) in dates.items() if end >= today)
-    wanted = [m for _, m in upcoming[:2]]
-    if previous.get('meeting_id') and previous['meeting_id'] not in wanted:
-        wanted.append(previous['meeting_id'])
-    for meeting, folder in find_folders(cfg, wanted, rows, http).items():
+    built = previous.get('meeting_id')
+    for meeting, folder in find_folders(cfg, meeting_turn.to_read(built, dates, now), rows, http).items():
         entries.extend(archive_entries(folder, meeting, http))
     candidates = [c for c in map(classify, entries) if c]
 
@@ -356,23 +340,27 @@ def fetch_bundle(cfg, previous, http, *, rows=None, today=None, cache_dir=DOWNLO
     # TDoc zips in the sync Inbox do not name their meeting: open them only
     # while the next meeting has no other file yet (they are revalidated, not refetched).
     named = {c['meeting_id'] for c in candidates if c['meeting_id']}
-    following = next((m for _, m in upcoming), None)
+    following = next(iter(meeting_turn.going(dates, now)), None)
     if following and following not in named:
         for candidate in sorted((c for c in candidates if not c['meeting_id'] and c['kind'] == 'chair'),
                                 key=lambda c: c['name'], reverse=True):
             data, _ = fetch(candidate)
             if identify(Document(io.BytesIO(docx_of(data, candidate['name']))), candidate['name'])[0] == following:
                 candidate['meeting_id'] = following
-    meeting = choose_meeting(candidates, dates, today)
-    chosen = None
-    for candidate in ordered(candidates, meeting, dates):
-        data, info = fetch(candidate)
-        if has_schedule(docx_of(data, candidate['name'])):
-            chosen = (candidate, data, info)
-            break
-        print(f"[sa1] {candidate['name']} has no schedule table; trying the version before it")
-    if chosen is None:
-        raise ValueError(f'No version of {meeting} has a schedule table yet')
+    # A meeting counts as having a schedule once a version has the table: a
+    # next meeting's agenda without one leaves the page on the built meeting.
+    left, chosen = candidates, None
+    while chosen is None:
+        meeting = choose_meeting(left, dates, now, built)
+        for candidate in ordered(candidates, meeting, dates):
+            data, info = fetch(candidate)
+            if has_schedule(docx_of(data, candidate['name'])):
+                chosen = (candidate, data, info)
+                break
+            print(f"[sa1] {candidate['name']} has no schedule table; trying the version before it")
+        if chosen is None and meeting == built:
+            raise ValueError(f'No version of {meeting} has a schedule table yet')
+        left = [c for c in left if c['meeting_id'] != meeting]
     candidate, data, info = chosen
     kept = kept_copy(previous, meeting, candidate)
     if kept is not None:

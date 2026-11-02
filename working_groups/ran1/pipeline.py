@@ -330,7 +330,7 @@ def build_schedule(args) -> Schedule:
     if not isinstance(cached_meeting_id, str) or not cached_meeting_id:
         cached_meeting_id = None
     if not args.no_download:
-        cfg = with_meeting_folders(cfg, cached_meeting_id)
+        cfg = with_meeting_folders(cfg, cached_meeting_id, saved_dates=prev_state.get("timezone_ref"))
     local_meeting_hint = local_reference_meeting_id()
     preferred_meeting_id = local_meeting_hint or cached_meeting_id
     locked_meeting_id = local_meeting_hint
@@ -454,6 +454,7 @@ def build_schedule(args) -> Schedule:
             # single explicit local meeting is still safe to pin exactly.
             locked_meeting_id = next(iter(local_main_ids))
             preferred_meeting_id = locked_meeting_id
+        locked_meeting_id = locked_meeting_id or cfg.get("held_meeting")
         def discover_and_download():
             nonlocal sources
             # Set before downloading: a download failure must still raise below.
@@ -490,7 +491,7 @@ def build_schedule(args) -> Schedule:
             # Fallback: try legacy single-download
             print("Falling back to Chair_notes only...")
             try:
-                docx_path = download_latest_schedule()
+                docx_path = download_latest_schedule(locked_meeting_id=locked_meeting_id)
             except Exception as e:
                 print(f"Download failed: {e}")
                 print("Trying local files...")

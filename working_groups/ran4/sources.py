@@ -21,19 +21,17 @@ the meeting id (``shared/meeting_folders.py``) and recorded in
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from datetime import date, datetime
 import hashlib
 import json
 from pathlib import Path
 import re
 from urllib.parse import urlparse
-from zoneinfo import ZoneInfo
 
 import httpx
 
-from shared import meeting_folders, remote_files
+from shared import meeting_folders, meeting_turn, remote_files
 from shared.json_files import read_json, write_json
-from shared.meeting_folders import portal_key, portal_metadata
+from shared.meeting_folders import portal_metadata
 from shared.portal_meetings import TB_IDS, get_meetings, meeting_key
 from shared.remote_files import client, fetch_file, listing_entries
 
@@ -230,29 +228,16 @@ def portal_rows() -> list[dict] | None:
         return None
 
 
-def meeting_dates(cfg, rows, previous) -> dict[str, tuple[str, str]]:
-    """Known (starts_on, ends_on) per meeting: overrides, Portal, last build."""
-    dates = {}
-    if previous.get('meeting_id') and previous.get('metadata', {}).get('ends_on'):
-        dates[previous['meeting_id']] = (previous['metadata']['starts_on'], previous['metadata']['ends_on'])
-    for row in rows or []:
-        key = portal_key(row)
-        if key and row.get('StartDate') and row.get('EndDate'):
-            dates[key] = (row['StartDate'][:10], row['EndDate'][:10])
-    for key, value in cfg['meetings'].items():
-        if value.get('starts_on') and value.get('ends_on'):
-            dates[meeting_key(f'RAN4#{key}')] = (value['starts_on'], value['ends_on'])
-    return dates
+def meeting_dates(cfg, rows, previous) -> dict[str, meeting_turn.Dates]:
+    return meeting_turn.known_dates(rows, previous,
+                                    {meeting_key(f'RAN4#{key}'): value for key, value in cfg['meetings'].items()})
 
 
-def choose_meeting(candidates: list[dict], dates: dict, today: str) -> str:
-    """The earliest meeting, by Portal dates, that has not ended and already
-    has a schedule. Without one, the highest meeting that has a schedule."""
+def choose_meeting(candidates: list[dict], dates: dict, now, built=None) -> str:
+    """The meeting ``shared/meeting_turn.py`` picks among those with a schedule."""
     if not candidates:
         raise ValueError('No RAN4 meeting schedule (RAN4_<meeting>_meeting_schedule*.pptx) found')
-    meetings = {c['meeting_id'] for c in candidates}
-    current = sorted((dates[m][0], m) for m in meetings if m in dates and dates[m][1] >= today)
-    return current[0][1] if current else max(meetings, key=rank)
+    return meeting_turn.current_meeting(built, {c['meeting_id'] for c in candidates}, dates, now, rank)
 
 
 def version_key(entry: dict) -> tuple:
@@ -263,8 +248,8 @@ def version_key(entry: dict) -> tuple:
 
 # -------------------------------------------------------------------- bundles
 
-def fetch_bundle(cfg, previous, http, *, rows=None, today=None, cache_dir=DOWNLOADS / 'inputs') -> Bundle:
-    today = today or datetime.now(ZoneInfo('Asia/Seoul')).date().isoformat()
+def fetch_bundle(cfg, previous, http, *, rows=None, now=None, cache_dir=DOWNLOADS / 'inputs') -> Bundle:
+    now = now or meeting_turn.right_now()
     warnings = []
     try:
         entries, sync_error = optional_listing(cfg['sync_url'], http, 'Sync folder'), None
@@ -275,15 +260,8 @@ def fetch_bundle(cfg, previous, http, *, rows=None, today=None, cache_dir=DOWNLO
         print(f'[ran4] Sync folder unreadable ({exc}); reading the meeting folder')
         entries, sync_error = [], exc
     dates = meeting_dates(cfg, rows, previous)
-    # Archive folders worth listing: the next two meetings that have not
-    # ended, the last one that has (a page between meetings), and the last
-    # built one.
-    upcoming = sorted((start, m) for m, (start, end) in dates.items() if end >= today)
-    ended = sorted((end, m) for m, (start, end) in dates.items() if end < today)
-    wanted = [m for _, m in upcoming[:2]] + [m for _, m in ended[-1:]]
-    if previous.get('meeting_id'):
-        wanted.append(previous['meeting_id'])
-    wanted = list(dict.fromkeys(wanted))
+    # Archive folders worth listing: the built meeting and the next one.
+    wanted = meeting_turn.to_read(previous.get('meeting_id'), dates, now)
     archive = find_folders(cfg, wanted, rows, http)
     listed = {m: meeting_folder(archive[m], http) for m in wanted if m in archive}
     for found in listed.values():
@@ -291,8 +269,8 @@ def fetch_bundle(cfg, previous, http, *, rows=None, today=None, cache_dir=DOWNLO
     candidates = schedule_candidates(entries)
     if sync_error is not None and not candidates:
         raise sync_error
-    meeting = choose_meeting(candidates, dates, today)
-    if sync_error is not None and meeting in dates and dates[meeting][0] <= today <= dates[meeting][1]:
+    meeting = choose_meeting(candidates, dates, now, previous.get('meeting_id'))
+    if sync_error is not None and meeting_turn.in_progress(meeting, dates, now):
         warnings.append(f'RAN4 sync folder unreadable during {meeting} ({sync_error}); '
                         'the page may miss newer versions')
 
@@ -307,6 +285,8 @@ def fetch_bundle(cfg, previous, http, *, rows=None, today=None, cache_dir=DOWNLO
         known = old if old.get('url') == entry['url'] else {}
         body, info = fetch_file(http, entry['url'], known, cached.schedule if cached and known else None)
         versions.append({**entry, **info, **read_core(body), 'body': body})
+    if not versions:
+        raise ValueError(f'No RAN4 meeting schedule of {meeting} listed')
     chosen = max(versions, key=version_key)
     if (previous.get('meeting_id') == meeting and old.get('revision', -1) > chosen['revision']
             and not any(v['url'] == old.get('url') for v in versions)):
@@ -326,7 +306,7 @@ def fetch_bundle(cfg, previous, http, *, rows=None, today=None, cache_dir=DOWNLO
     else:
         warnings.append(f'No RAN4 topic list for {meeting}; cells show no agenda items')
     agenda_entry = next((e for e in listed.get(meeting, []) if e['name'].lower() == 'agenda.csv'), None)
-    if agenda_entry is None:
+    if agenda_entry is None and meeting_turn.has_started(meeting, dates, now):
         agenda_entry = next((e for e in entries if e['listing'] == cfg['sync_agenda_url']
                              and e['name'].lower() == 'agenda.csv'), None)
     agenda, agenda_info = b'', None

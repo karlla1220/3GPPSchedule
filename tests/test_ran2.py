@@ -1,4 +1,5 @@
 """RAN2 session schedules: real chair documents plus the rules they rely on."""
+from datetime import datetime
 import io
 import json
 from pathlib import Path
@@ -16,6 +17,10 @@ from shared.agenda import agenda_map
 from shared.renderer import generate_html
 from shared.schedule import load_schedule, save_schedule, time_to_minutes
 from working_groups.ran2 import document as docmod, lifecycle, pipeline, sessions, sources
+
+
+def noon(day):
+    return datetime.fromisoformat(f'{day}T12:00:00+00:00')
 
 FIXTURES = Path(__file__).parent / 'fixtures/ran2'
 V11 = 'R2_135_Schedule_v11.docx'
@@ -396,21 +401,21 @@ def test_the_current_meeting_wins_over_an_early_next_one():
     dates = {'ran2#135': ('2026-08-24', '2026-08-28'), 'ran2#135bis': ('2026-10-12', '2026-10-16'),
              'ran2#136': ('2026-11-16', '2026-11-20')}
     found = [candidate('ran2#135', 11), candidate('ran2#135bis', 0), candidate('ran2#136', 0)]
-    assert sources.choose_schedule(found, dates, '2026-10-05')['meeting_id'] == 'ran2#135bis'
-    assert sources.choose_schedule(found, dates, '2026-10-14')['meeting_id'] == 'ran2#135bis'
-    assert sources.choose_schedule(found, dates, '2026-10-17')['meeting_id'] == 'ran2#136'
+    assert sources.choose_schedule(found, dates, noon('2026-10-05'))['meeting_id'] == 'ran2#135bis'
+    assert sources.choose_schedule(found, dates, noon('2026-10-14'))['meeting_id'] == 'ran2#135bis'
+    assert sources.choose_schedule(found, dates, noon('2026-10-17'))['meeting_id'] == 'ran2#136'
     # Nothing current yet: keep the latest meeting rather than an undated one.
-    assert sources.choose_schedule(found[:2], dates, '2026-10-17')['meeting_id'] == 'ran2#135bis'
-    assert sources.choose_schedule(found[:2], {}, '2026-10-17')['meeting_id'] == 'ran2#135bis'
+    assert sources.choose_schedule(found[:2], dates, noon('2026-10-17'))['meeting_id'] == 'ran2#135bis'
+    assert sources.choose_schedule(found[:2], {}, noon('2026-10-17'))['meeting_id'] == 'ran2#135bis'
 
 
 def test_newest_version_wins_and_the_live_copy_breaks_a_tie():
     sync = 'https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN2/Agenda/R2_135_Schedule_v11.docx'
     found = [candidate('ran2#135', 10), candidate('ran2#135', 11, uploaded='2026-08-29 21:10'),
              candidate('ran2#135', 11, url=sync, uploaded='2026-08-27 20:49')]
-    assert sources.choose_schedule(found, {}, '2026-08-27')['url'] == sync
+    assert sources.choose_schedule(found, {}, noon('2026-08-27'))['url'] == sync
     with pytest.raises(ValueError, match='No RAN2 session schedule'):
-        sources.choose_schedule([], {}, '2026-08-27')
+        sources.choose_schedule([], {}, noon('2026-08-27'))
 
 
 def test_portal_titles_with_and_without_space():
@@ -463,7 +468,7 @@ def test_fetch_bundle_reads_the_upcoming_archive_folder_and_its_agenda(tmp_path,
              'EndDate': '2026-11-20 17:30:00', 'StartTimeZone': '(GMT-07:00) Mountain Time (US & Canada)',
              'Country': 'CA'}]
     with mock_server(files) as http:
-        bundle = sources.fetch_bundle(sources.DEFAULTS, {}, http, rows=rows, today='2026-10-05',
+        bundle = sources.fetch_bundle(sources.DEFAULTS, {}, http, rows=rows, now=noon('2026-10-05'),
                                       cache_dir=tmp_path / 'inputs')
     assert (bundle.manifest['meeting_id'], bundle.manifest['version']) == ('ran2#135bis', 0)
     assert bundle.schedule == files[archive + 'TSGR2_135bis/Agenda/' + BIS]
@@ -472,13 +477,13 @@ def test_fetch_bundle_reads_the_upcoming_archive_folder_and_its_agenda(tmp_path,
     # An absent meeting folder is not an error, but with nothing to build from the check says so.
     sources.remote_files.new_run()
     with mock_server({}) as http, pytest.raises(ValueError, match='No RAN2 session schedule'):
-        sources.fetch_bundle(sources.DEFAULTS, {}, http, rows=rows, today='2026-10-05', cache_dir=tmp_path / 'inputs')
+        sources.fetch_bundle(sources.DEFAULTS, {}, http, rows=rows, now=noon('2026-10-05'), cache_dir=tmp_path / 'inputs')
     # A real failure of the meeting folder still is.
     sources.remote_files.new_run()
     monkeypatch.setattr(sources.remote_files.ftp_transport, 'ftp_response', lambda url, **k: (_ for _ in ()).throw(
         httpx.ConnectError('FTP fallback failed: timed out', request=httpx.Request('GET', url))))
     with mock_server({sync: b''}, blocked={archive + 'TSGR2_135bis/'}) as http, pytest.raises(httpx.ConnectError):
-        sources.fetch_bundle(sources.DEFAULTS, {}, http, rows=rows, today='2026-10-05', cache_dir=tmp_path / 'inputs')
+        sources.fetch_bundle(sources.DEFAULTS, {}, http, rows=rows, now=noon('2026-10-05'), cache_dir=tmp_path / 'inputs')
 
 
 SYNC = 'https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN2/Agenda/'
@@ -504,7 +509,7 @@ def test_blocked_sync_folder_falls_back_to_the_configured_meeting_folder(blocked
              ARCHIVE + 'TSGR2_136/Invitation/x.doc': b'invitation'}
     seen = []
     with mock_server(files, blocked={SYNC}, seen=seen) as http:
-        bundle = sources.fetch_bundle(blocked_sync, {}, http, rows=ROWS_135BIS, today='2026-10-11',
+        bundle = sources.fetch_bundle(blocked_sync, {}, http, rows=ROWS_135BIS, now=noon('2026-10-11'),
                                       cache_dir=tmp_path / 'inputs')
     assert (bundle.manifest['meeting_id'], bundle.manifest['version']) == ('ran2#135bis', 0)
     assert bundle.manifest['agenda']['url'] == FOLDER_135BIS + 'Agenda/agenda.csv'
@@ -523,7 +528,7 @@ def test_an_absent_sync_folder_is_normal(tmp_path, monkeypatch):
     seen = []
     cfg = {**sources.DEFAULTS, 'meeting_specific_override': [FOLDER_135BIS]}
     with mock_server(files, seen=seen) as http:
-        bundle = sources.fetch_bundle(cfg, {}, http, rows=ROWS_135BIS, today='2026-10-13',
+        bundle = sources.fetch_bundle(cfg, {}, http, rows=ROWS_135BIS, now=noon('2026-10-13'),
                                       cache_dir=tmp_path / 'inputs')
     # During the meeting too: the folder may simply not be made yet.
     assert bundle.manifest['version'] == 0 and bundle.warnings == []
@@ -542,14 +547,14 @@ def test_a_vanished_sync_version_is_kept_instead_of_stepping_back(tmp_path, monk
     for files in ({SYNC + 'other.txt': b'x', **folder}, folder):
         sources.remote_files.new_run()  # each pass is a separate run
         with mock_server(files) as http:
-            bundle = sources.fetch_bundle(cfg, previous, http, rows=ROWS_135BIS, today='2026-10-14',
+            bundle = sources.fetch_bundle(cfg, previous, http, rows=ROWS_135BIS, now=noon('2026-10-14'),
                                           cache_dir=tmp_path / 'inputs')
         assert (bundle.manifest['version'], bundle.schedule) == (3, b'live v03') and bundle.warnings == []
     # A newer version replaces it as soon as it is listed.
     v04 = SYNC + 'R2_135b_Schedule_v04.docx'
     sources.remote_files.new_run()
     with mock_server({v04: b'live v04', **folder}) as http:
-        bundle = sources.fetch_bundle(cfg, previous, http, rows=ROWS_135BIS, today='2026-10-14',
+        bundle = sources.fetch_bundle(cfg, previous, http, rows=ROWS_135BIS, now=noon('2026-10-14'),
                                       cache_dir=tmp_path / 'inputs')
     assert (bundle.manifest['version'], bundle.schedule) == (4, b'live v04')
 
@@ -557,7 +562,7 @@ def test_a_vanished_sync_version_is_kept_instead_of_stepping_back(tmp_path, monk
 def test_an_unreadable_sync_folder_during_the_meeting_is_reported(blocked_sync, tmp_path, monkeypatch):
     files = {FOLDER_135BIS + 'Agenda/' + BIS: (FIXTURES / BIS).read_bytes()}
     with mock_server(files, blocked={SYNC}) as http:
-        bundle = sources.fetch_bundle(blocked_sync, {}, http, rows=ROWS_135BIS, today='2026-10-13',
+        bundle = sources.fetch_bundle(blocked_sync, {}, http, rows=ROWS_135BIS, now=noon('2026-10-13'),
                                       cache_dir=tmp_path / 'inputs')
     # The page still builds from the meeting folder, and the check says what it misses.
     assert bundle.manifest['version'] == 0
@@ -578,7 +583,7 @@ def test_configured_folder_for_an_ended_meeting_still_finds_the_next_one(blocked
                            'EndDate': '2026-11-20 17:30:00'}]
     seen = []
     with mock_server(files, blocked={SYNC}, seen=seen) as http:
-        bundle = sources.fetch_bundle(blocked_sync, {}, http, rows=rows, today='2026-10-20',
+        bundle = sources.fetch_bundle(blocked_sync, {}, http, rows=rows, now=noon('2026-10-20'),
                                       cache_dir=tmp_path / 'inputs')
     # Found by its name; the archive root (several hundred entries) is not listed.
     assert bundle.manifest['meeting_id'] == 'ran2#136' and ARCHIVE not in seen
@@ -594,7 +599,7 @@ def test_blocked_sync_folder_keeps_a_newer_built_sync_copy(blocked_sync, tmp_pat
     files = {FOLDER_135BIS + 'Agenda/' + BIS: (FIXTURES / BIS).read_bytes()}
     seen = []
     with mock_server(files, blocked={SYNC}, seen=seen) as http:
-        bundle = sources.fetch_bundle(blocked_sync, previous, http, rows=ROWS_135BIS, today='2026-10-12',
+        bundle = sources.fetch_bundle(blocked_sync, previous, http, rows=ROWS_135BIS, now=noon('2026-10-12'),
                                       cache_dir=tmp_path / 'inputs')
     # The archive's v00 does not replace the built v01, and v01 is not requested again.
     assert bundle.schedule == b'live v01' and bundle.manifest['schedule'] == previous['schedule']
@@ -602,7 +607,7 @@ def test_blocked_sync_folder_keeps_a_newer_built_sync_copy(blocked_sync, tmp_pat
     # Without the stored body the sync error is reported instead of stepping back.
     shutil.rmtree(tmp_path / 'cache')
     with mock_server(files, blocked={SYNC}) as http, pytest.raises(httpx.ConnectError, match='firewall'):
-        sources.fetch_bundle(blocked_sync, previous, http, rows=ROWS_135BIS, today='2026-10-12',
+        sources.fetch_bundle(blocked_sync, previous, http, rows=ROWS_135BIS, now=noon('2026-10-12'),
                              cache_dir=tmp_path / 'inputs')
 
 
@@ -908,3 +913,48 @@ def test_without_a_key_an_unrecognised_layout_still_fails(offline_config, tmp_pa
     local.write_bytes(plain_document())
     with pytest.raises(docmod.LayoutError):
         pipeline.build_schedule(SimpleNamespace(local=str(local), output_dir=tmp_path / 'out'))
+
+
+def test_a_next_schedule_in_sync_does_not_take_the_agenda_left_there(tmp_path, monkeypatch):
+    monkeypatch.setattr(sources.remote_files, 'CACHE_DIR', tmp_path / 'cache')
+    rows = [{'Title': '3GPPRAN2#136', 'TBId': 380, 'Id': 2, 'StartDate': '2026-11-16 09:00:00',
+             'EndDate': '2026-11-20 17:30:00', 'StartTimeZone': '(GMT-07:00) Mountain Time (US & Canada)',
+             'Country': 'CA'}]
+    files = {SYNC + 'R2_136_Schedule_v00.docx': (FIXTURES / V11).read_bytes(), SYNC + 'agenda.csv': b'"1","Last meeting"'}
+    previous = {'meeting_id': 'ran2#135bis', 'metadata': {'starts_on': '2026-10-12', 'ends_on': '2026-10-16',
+                                                          'timezone': 'Asia/Seoul'}}
+    with mock_server(files) as http:
+        bundle = sources.fetch_bundle(sources.DEFAULTS, previous, http, rows=rows, now=noon('2026-11-02'),
+                                      cache_dir=tmp_path / 'inputs')
+    assert bundle.manifest['meeting_id'] == 'ran2#136' and bundle.agenda == b'' and bundle.manifest['agenda'] is None
+    sources.remote_files.new_run()
+    with mock_server(files) as http:
+        bundle = sources.fetch_bundle(sources.DEFAULTS, previous, http, rows=rows, now=noon('2026-11-16'),
+                                      cache_dir=tmp_path / 'inputs2')
+    assert bundle.agenda == b'"1","Last meeting"'
+
+
+def test_a_next_schedule_waits_for_the_last_day_at_the_venue(tmp_path, monkeypatch):
+    monkeypatch.setattr(sources.remote_files, 'CACHE_DIR', tmp_path / 'cache')
+    data = (FIXTURES / V11).read_bytes()
+    files = {ARCHIVE + 'TSGR2_136/Agenda/R2_136_Schedule_v05.docx': data,
+             ARCHIVE + 'TSGR2_137/Agenda/R2_137_Schedule_v00.docx': data}
+    rows = [{'Title': f'3GPPRAN2#{n}', 'TBId': 380, 'Id': n, 'StartDate': f'{start} 09:00:00', 'EndDate': f'{end} 17:30:00',
+             'StartTimeZone': zone, 'Country': country}
+            for n, start, end, zone, country in (
+                (136, '2026-11-16', '2026-11-20', '(GMT-07:00) Mountain Time (US & Canada)', 'CA'),
+                (137, '2027-01-25', '2027-01-29', '(GMT+09:00) Osaka, Sapporo, Tokyo', 'JP'))]
+    previous = {'meeting_id': 'ran2#136'}
+    seen = []
+    with mock_server(files, seen=seen) as http:
+        # Saturday in Seoul, the last morning in Calgary.
+        bundle = sources.fetch_bundle(sources.DEFAULTS, previous, http, rows=rows,
+                                      now=datetime.fromisoformat('2026-11-21T00:30+09:00'), cache_dir=tmp_path / 'inputs')
+    assert bundle.manifest['meeting_id'] == 'ran2#136'
+    # The next meeting's folder is read all the same.
+    assert ARCHIVE + 'TSGR2_137/Agenda/' in seen
+    sources.remote_files.new_run()
+    with mock_server(files) as http:
+        bundle = sources.fetch_bundle(sources.DEFAULTS, previous, http, rows=rows,
+                                      now=datetime.fromisoformat('2026-11-21T00:30-06:00'), cache_dir=tmp_path / 'inputs2')
+    assert bundle.manifest['meeting_id'] == 'ran2#137'
