@@ -1938,6 +1938,11 @@ header .meta a:focus-visible,
     bottom: 2px;
     width: 2px;
 }
+/* A filter's cells: the bar doubles, into the padding, so the title does not move. */
+.filtering .session-block.week-cell:not(.dimmed)::before {
+    left: 1px;
+    width: 4px;
+}
 /* Whole lines only, as many as the cell's height holds (--cell-rows, renderer.py). */
 .week-cell .session-name {
     --title-line: 12px;
