@@ -6073,7 +6073,7 @@
           "part": null
         },
         {
-          "name": "AI 8.1",
+          "name": "AI 10.3.1 Channel coding",
           "duration_minutes": 30,
           "start_time": "12:00",
           "end_time": "12:30",
@@ -6081,23 +6081,28 @@
           "room_col_start": 3,
           "room_col_end": 4,
           "chair": "Sorour",
-          "agenda_item": "8.1",
-          "group_header": "",
-          "description": "Maintenance on AI/ML for NR Air interface, NR MIMO Phase 5, NES and NTN for NR and IoT",
+          "agenda_item": "10.3.1",
+          "group_header": "6GR",
+          "description": "Channel coding",
           "agenda_descriptions": [
             {
-              "agenda_item": "8.1",
-              "matched_agenda_item": "8.1",
-              "description": "Maintenance on AI/ML for NR Air interface, NR MIMO Phase 5, NES and NTN for NR and IoT",
+              "agenda_item": "10.3.1",
+              "matched_agenda_item": "10.3.1",
+              "description": "Channel coding",
               "hierarchy": [
                 {
-                  "agenda_item": "8",
-                  "description": "Maintenance on Rel-19 NR and E-UTRA",
+                  "agenda_item": "10",
+                  "description": "Rel-20 Study of 6GR",
                   "has_description": true
                 },
                 {
-                  "agenda_item": "8.1",
-                  "description": "Maintenance on AI/ML for NR Air interface, NR MIMO Phase 5, NES and NTN for NR and IoT",
+                  "agenda_item": "10.3",
+                  "description": "Channel coding and modulation for 6GR interface",
+                  "has_description": true
+                },
+                {
+                  "agenda_item": "10.3.1",
+                  "description": "Channel coding",
                   "has_description": true
                 }
               ]
@@ -6109,9 +6114,8 @@
           "inferred_agenda_items": [],
           "email_details": [
             {
-              "kind": "tentative",
+              "kind": "session",
               "session": "Wed 12:00-12:30 Yeongju A Hall",
-              "agenda_item": "10.3.1",
               "quote": "The FL propsal for online has been uploaded in http://10.10.10.10/ftp/RAN/RAN1/Inbox/R1-2608628.zip",
               "mode": "online",
               "summary": "FL proposal for online session uploaded",
@@ -9279,9 +9283,9 @@
         },
         {
           "name": "10.2.1 Waveform",
-          "duration_minutes": 40,
+          "duration_minutes": 80,
           "start_time": "08:30",
-          "end_time": "09:10",
+          "end_time": "09:50",
           "day": "Thursday",
           "room_col_start": 4,
           "room_col_end": 5,
@@ -9322,8 +9326,8 @@
         },
         {
           "name": "AI 7/8.2",
-          "duration_minutes": 80,
-          "start_time": "09:10",
+          "duration_minutes": 40,
+          "start_time": "09:50",
           "end_time": "10:30",
           "day": "Thursday",
           "room_col_start": 4,
@@ -9370,7 +9374,7 @@
           "email_details": [
             {
               "kind": "session",
-              "session": "Thu 09:10-10:30 Yeongju B Hall",
+              "session": "Thu 09:50-10:30 Yeongju B Hall",
               "quote": "After check with Mr. Chair Hiroki, we can quick check it in tomorrow’s online meeting.",
               "mode": "online",
               "summary": "Quick check on Timing issue on Type-1 PHR (Section 4)",
@@ -9936,7 +9940,7 @@
           "part": null
         },
         {
-          "name": "AI 8.1",
+          "name": "AI 10.3.1 Channel coding",
           "duration_minutes": 30,
           "start_time": "11:00",
           "end_time": "11:30",
@@ -9944,23 +9948,28 @@
           "room_col_start": 3,
           "room_col_end": 4,
           "chair": "Sorour",
-          "agenda_item": "8.1",
-          "group_header": "",
-          "description": "Maintenance on AI/ML for NR Air interface, NR MIMO Phase 5, NES and NTN for NR and IoT",
+          "agenda_item": "10.3.1",
+          "group_header": "6GR",
+          "description": "Channel coding",
           "agenda_descriptions": [
             {
-              "agenda_item": "8.1",
-              "matched_agenda_item": "8.1",
-              "description": "Maintenance on AI/ML for NR Air interface, NR MIMO Phase 5, NES and NTN for NR and IoT",
+              "agenda_item": "10.3.1",
+              "matched_agenda_item": "10.3.1",
+              "description": "Channel coding",
               "hierarchy": [
                 {
-                  "agenda_item": "8",
-                  "description": "Maintenance on Rel-19 NR and E-UTRA",
+                  "agenda_item": "10",
+                  "description": "Rel-20 Study of 6GR",
                   "has_description": true
                 },
                 {
-                  "agenda_item": "8.1",
-                  "description": "Maintenance on AI/ML for NR Air interface, NR MIMO Phase 5, NES and NTN for NR and IoT",
+                  "agenda_item": "10.3",
+                  "description": "Channel coding and modulation for 6GR interface",
+                  "has_description": true
+                },
+                {
+                  "agenda_item": "10.3.1",
+                  "description": "Channel coding",
                   "has_description": true
                 }
               ]
@@ -9970,7 +9979,24 @@
           "room_scope": "assigned",
           "notes": [],
           "inferred_agenda_items": [],
-          "email_details": [],
+          "email_details": [
+            {
+              "kind": "session",
+              "session": "Thu 11:00-11:30 Yeongju A Hall",
+              "quote": "For the online discussion this morning, I plan to discuss proposal 4.2-1.",
+              "mode": "online",
+              "summary": "Online session to discuss Proposal 4.2-1",
+              "topics": [
+                "proposal 4.2-1"
+              ],
+              "day": "Thursday",
+              "split": [],
+              "mail": "e4c7e008.2610c",
+              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;e4c7e008.2610c",
+              "author": "<>",
+              "sent": "2026-10-15T09:39:48+09:00"
+            }
+          ],
           "part": null
         },
         {
@@ -10358,7 +10384,7 @@
           "part": null
         },
         {
-          "name": "10.5.3.2",
+          "name": "10.5.3.4",
           "duration_minutes": 30,
           "start_time": "12:30",
           "end_time": "13:00",
@@ -10366,14 +10392,14 @@
           "room_col_start": 5,
           "room_col_end": 6,
           "chair": "Xiaodong",
-          "agenda_item": "10.5.3.2",
+          "agenda_item": "10.5.3.4",
           "group_header": "6GR",
-          "description": "Aspects of uplink-based CSI acquisition",
+          "description": "Beam management for downlink and uplink",
           "agenda_descriptions": [
             {
-              "agenda_item": "10.5.3.2",
-              "matched_agenda_item": "10.5.3.2",
-              "description": "Aspects of uplink-based CSI acquisition",
+              "agenda_item": "10.5.3.4",
+              "matched_agenda_item": "10.5.3.4",
+              "description": "Beam management for downlink and uplink",
               "hierarchy": [
                 {
                   "agenda_item": "10",
@@ -10391,8 +10417,8 @@
                   "has_description": true
                 },
                 {
-                  "agenda_item": "10.5.3.2",
-                  "description": "Aspects of uplink-based CSI acquisition",
+                  "agenda_item": "10.5.3.4",
+                  "description": "Beam management for downlink and uplink",
                   "has_description": true
                 }
               ]
@@ -10402,7 +10428,24 @@
           "room_scope": "assigned",
           "notes": [],
           "inferred_agenda_items": [],
-          "email_details": [],
+          "email_details": [
+            {
+              "kind": "session",
+              "session": "Thu 12:30-13:00 201",
+              "quote": "we will have a new offical offline from 12:30 ~ 13:00, Thursday",
+              "mode": "offline",
+              "summary": "Offline session on Thursday 12:30-13:00",
+              "topics": [],
+              "start": "12:30",
+              "end": "13:00",
+              "day": "Thursday",
+              "split": [],
+              "mail": "8fc4fa24.2610b",
+              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;8fc4fa24.2610b",
+              "author": "Bo Gao",
+              "sent": "2026-10-14T17:55:28+09:00"
+            }
+          ],
           "part": null
         },
         {
@@ -12053,24 +12096,7 @@
           "room_scope": "assigned",
           "notes": [],
           "inferred_agenda_items": [],
-          "email_details": [
-            {
-              "kind": "session",
-              "session": "Thu 17:00-18:00 Yeongju A Hall",
-              "quote": "For the online discussion this morning, I plan to discuss proposal 4.2-1.",
-              "mode": "online",
-              "summary": "Online session to discuss Proposal 4.2-1",
-              "topics": [
-                "proposal 4.2-1"
-              ],
-              "day": "Thursday",
-              "split": [],
-              "mail": "e4c7e008.2610c",
-              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;e4c7e008.2610c",
-              "author": "<>",
-              "sent": "2026-10-15T09:39:48+09:00"
-            }
-          ],
+          "email_details": [],
           "part": null
         },
         {
@@ -12869,123 +12895,10 @@
       ],
       "sessions": [
         {
-          "name": "10.5.1.1",
-          "duration_minutes": 50,
-          "start_time": "08:30",
-          "end_time": "09:20",
-          "day": "Friday",
-          "room_col_start": 2,
-          "room_col_end": 3,
-          "chair": null,
-          "agenda_item": "10.5.1.1",
-          "group_header": "6GR",
-          "description": "Synchronization acquisition and beam measurement",
-          "agenda_descriptions": [
-            {
-              "agenda_item": "10.5.1.1",
-              "matched_agenda_item": "10.5.1.1",
-              "description": "Synchronization acquisition and beam measurement",
-              "hierarchy": [
-                {
-                  "agenda_item": "10",
-                  "description": "Rel-20 Study of 6GR",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "10.5",
-                  "description": "Multi-antenna system",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "10.5.1",
-                  "description": "Initial access and mobility",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "10.5.1.1",
-                  "description": "Synchronization acquisition and beam measurement",
-                  "has_description": true
-                }
-              ]
-            }
-          ],
-          "room_ids": [],
-          "room_scope": "assigned",
-          "notes": [],
-          "inferred_agenda_items": [],
-          "email_details": [],
-          "part": null
-        },
-        {
-          "name": "10.5.1.2",
-          "duration_minutes": 40,
-          "start_time": "09:20",
-          "end_time": "10:00",
-          "day": "Friday",
-          "room_col_start": 2,
-          "room_col_end": 3,
-          "chair": null,
-          "agenda_item": "10.5.1.2",
-          "group_header": "6GR",
-          "description": "PRACH and RACH procedure",
-          "agenda_descriptions": [
-            {
-              "agenda_item": "10.5.1.2",
-              "matched_agenda_item": "10.5.1.2",
-              "description": "PRACH and RACH procedure",
-              "hierarchy": [
-                {
-                  "agenda_item": "10",
-                  "description": "Rel-20 Study of 6GR",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "10.5",
-                  "description": "Multi-antenna system",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "10.5.1",
-                  "description": "Initial access and mobility",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "10.5.1.2",
-                  "description": "PRACH and RACH procedure",
-                  "has_description": true
-                }
-              ]
-            }
-          ],
-          "room_ids": [],
-          "room_scope": "assigned",
-          "notes": [],
-          "inferred_agenda_items": [],
-          "email_details": [
-            {
-              "kind": "session",
-              "session": "Fri 09:20-10:00 Tamna BC Hall",
-              "quote": "The order of the discussion for proposal discussion for Friday (last) session is in Section 2.",
-              "mode": "online",
-              "summary": "Discussion order for proposals is in Section 2",
-              "topics": [
-                "Section 2"
-              ],
-              "day": "Friday",
-              "split": [],
-              "mail": "f8b4839a.2610c",
-              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;f8b4839a.2610c",
-              "author": "Daewon Lee",
-              "sent": "2026-10-16T05:06:20+09:00"
-            }
-          ],
-          "part": null
-        },
-        {
           "name": "10.5.1.3",
           "duration_minutes": 30,
-          "start_time": "10:00",
-          "end_time": "10:30",
+          "start_time": "08:30",
+          "end_time": "09:00",
           "day": "Friday",
           "room_col_start": 2,
           "room_col_end": 3,
@@ -13030,9 +12943,180 @@
           "part": null
         },
         {
-          "name": "10.7.1 NTN",
-          "duration_minutes": 60,
+          "name": "10.5.1.1",
+          "duration_minutes": 50,
+          "start_time": "09:00",
+          "end_time": "09:50",
+          "day": "Friday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": "10.5.1.1",
+          "group_header": "6GR",
+          "description": "Synchronization acquisition and beam measurement",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "10.5.1.1",
+              "matched_agenda_item": "10.5.1.1",
+              "description": "Synchronization acquisition and beam measurement",
+              "hierarchy": [
+                {
+                  "agenda_item": "10",
+                  "description": "Rel-20 Study of 6GR",
+                  "has_description": true
+                },
+                {
+                  "agenda_item": "10.5",
+                  "description": "Multi-antenna system",
+                  "has_description": true
+                },
+                {
+                  "agenda_item": "10.5.1",
+                  "description": "Initial access and mobility",
+                  "has_description": true
+                },
+                {
+                  "agenda_item": "10.5.1.1",
+                  "description": "Synchronization acquisition and beam measurement",
+                  "has_description": true
+                }
+              ]
+            }
+          ],
+          "room_ids": [],
+          "room_scope": "assigned",
+          "notes": [],
+          "inferred_agenda_items": [],
+          "email_details": [
+            {
+              "kind": "session",
+              "session": "Fri 09:00-09:50 Tamna BC Hall",
+              "quote": "The FL summary #6 have been uploaded in R1-2608450. You can find the proposals for online discussion in the beginning of the tdoc.",
+              "mode": "online",
+              "summary": "Proposals for online discussion are in beginning of FL summary #6 (R1-2608450)",
+              "topics": [],
+              "day": "Friday",
+              "tdocs": [
+                "R1-2608450"
+              ],
+              "split": [],
+              "mail": "62549a1b.2610c",
+              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;62549a1b.2610c",
+              "author": "songxinghua",
+              "sent": "2026-10-16T08:38:03+09:00"
+            }
+          ],
+          "part": null
+        },
+        {
+          "name": "10.5.1.2",
+          "duration_minutes": 40,
+          "start_time": "09:50",
+          "end_time": "10:30",
+          "day": "Friday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": "10.5.1.2",
+          "group_header": "6GR",
+          "description": "PRACH and RACH procedure",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "10.5.1.2",
+              "matched_agenda_item": "10.5.1.2",
+              "description": "PRACH and RACH procedure",
+              "hierarchy": [
+                {
+                  "agenda_item": "10",
+                  "description": "Rel-20 Study of 6GR",
+                  "has_description": true
+                },
+                {
+                  "agenda_item": "10.5",
+                  "description": "Multi-antenna system",
+                  "has_description": true
+                },
+                {
+                  "agenda_item": "10.5.1",
+                  "description": "Initial access and mobility",
+                  "has_description": true
+                },
+                {
+                  "agenda_item": "10.5.1.2",
+                  "description": "PRACH and RACH procedure",
+                  "has_description": true
+                }
+              ]
+            }
+          ],
+          "room_ids": [],
+          "room_scope": "assigned",
+          "notes": [],
+          "inferred_agenda_items": [],
+          "email_details": [
+            {
+              "kind": "session",
+              "session": "Fri 09:50-10:30 Tamna BC Hall",
+              "quote": "The order of the discussion for proposal discussion for Friday (last) session is in Section 2.",
+              "mode": "online",
+              "summary": "Discussion order for proposals is in Section 2",
+              "topics": [
+                "Section 2"
+              ],
+              "day": "Friday",
+              "split": [],
+              "mail": "f8b4839a.2610c",
+              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;f8b4839a.2610c",
+              "author": "Daewon Lee",
+              "sent": "2026-10-16T05:06:20+09:00"
+            }
+          ],
+          "part": null
+        },
+        {
+          "name": "NR-NTN",
+          "duration_minutes": 20,
           "start_time": "08:30",
+          "end_time": "08:50",
+          "day": "Friday",
+          "room_col_start": 3,
+          "room_col_end": 4,
+          "chair": null,
+          "agenda_item": null,
+          "group_header": "R20",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [],
+          "room_scope": "assigned",
+          "notes": [],
+          "inferred_agenda_items": [
+            "9.4",
+            "9.5"
+          ],
+          "email_details": [
+            {
+              "kind": "session",
+              "session": "Fri 08:30-08:50 Yeongju A Hall",
+              "quote": "Please provide your comments on the proposals for the upcoming online (refer to section 7).",
+              "mode": "online",
+              "summary": "Upcoming online session covering proposals in section 7",
+              "topics": [
+                "section 7"
+              ],
+              "day": "Friday",
+              "split": [],
+              "mail": "4890e344.2610c",
+              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;4890e344.2610c",
+              "author": "EL JAAFARI Mohamed",
+              "sent": "2026-10-15T19:04:13+09:00"
+            }
+          ],
+          "part": null
+        },
+        {
+          "name": "10.7.1 NTN",
+          "duration_minutes": 40,
+          "start_time": "08:50",
           "end_time": "09:30",
           "day": "Friday",
           "room_col_start": 3,
@@ -13073,7 +13157,7 @@
           "part": null
         },
         {
-          "name": "10.5.2.x",
+          "name": "10.5.2.1",
           "duration_minutes": 60,
           "start_time": "09:30",
           "end_time": "10:30",
@@ -13081,14 +13165,14 @@
           "room_col_start": 3,
           "room_col_end": 4,
           "chair": null,
-          "agenda_item": "10.5.2.x",
+          "agenda_item": "10.5.2.1",
           "group_header": "6GR",
-          "description": "MIMO operation",
+          "description": "Downlink transmission scheme(s) for downlink control channels",
           "agenda_descriptions": [
             {
-              "agenda_item": "10.5.2.x",
-              "matched_agenda_item": "10.5.2",
-              "description": "MIMO operation",
+              "agenda_item": "10.5.2.1",
+              "matched_agenda_item": "10.5.2.1",
+              "description": "Downlink transmission scheme(s) for downlink control channels",
               "hierarchy": [
                 {
                   "agenda_item": "10",
@@ -13104,20 +13188,11 @@
                   "agenda_item": "10.5.2",
                   "description": "MIMO operation",
                   "has_description": true
-                }
-              ],
-              "children": [
+                },
                 {
                   "agenda_item": "10.5.2.1",
-                  "description": "Downlink transmission scheme(s) for downlink control channels"
-                },
-                {
-                  "agenda_item": "10.5.2.2",
-                  "description": "Downlink transmission scheme(s) for downlink shared channels"
-                },
-                {
-                  "agenda_item": "10.5.2.3",
-                  "description": "Uplink transmission scheme(s) for uplink channels"
+                  "description": "Downlink transmission scheme(s) for downlink control channels",
+                  "has_description": true
                 }
               ]
             }
@@ -13127,23 +13202,6 @@
           "notes": [],
           "inferred_agenda_items": [],
           "email_details": [
-            {
-              "kind": "session",
-              "session": "Fri 09:30-10:30 Yeongju A Hall",
-              "quote": "We will treat Observation 4-7-4 on Friday morning online session.\nWe will also treat TB mapping within a PDSCH on Friday morning online session.",
-              "mode": "online",
-              "summary": "Observation 4-7-4 and TB mapping within a PDSCH",
-              "topics": [
-                "Observation 4-7-4",
-                "TB mapping within a PDSCH"
-              ],
-              "day": "Friday",
-              "split": [],
-              "mail": "8baf41ac.2610b",
-              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;8baf41ac.2610b",
-              "author": "Sven Jacobsson",
-              "sent": "2026-10-15T01:04:48+09:00"
-            },
             {
               "kind": "session",
               "session": "Fri 09:30-10:30 Yeongju A Hall",
@@ -13167,27 +13225,6 @@
               "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;507fefde.2610c",
               "author": "Dimitri Gold (Nokia)",
               "sent": "2026-10-15T18:17:22+09:00"
-            },
-            {
-              "kind": "session",
-              "session": "Fri 09:30-10:30 Yeongju A Hall",
-              "quote": "Today online plan is as follows:\n* Proposal 6.1-2: PUCCH format\n* Proposal 6.1-1: additional EVM for PUCCH\n* Proposal 6.1-3: PUCCH repetition\n* Proposal 3.7.1-1: multi-TRP",
-              "mode": "online",
-              "summary": "Online session plan covering Proposals 6.1-2, 6.1-1, 6.1-3, 3.7.1-1, 3.1.1-1, 5.1.1-4",
-              "topics": [
-                "Proposal 6.1-2: PUCCH format",
-                "Proposal 6.1-1: additional EVM for PUCCH",
-                "Proposal 6.1-3: PUCCH repetition",
-                "Proposal 3.7.1-1: multi-TRP",
-                "Proposal 3.1.1-1: coherency of PUSCH precoder",
-                "Proposal 5.1.1-4: TDRA for PUSCH (across-slot)"
-              ],
-              "day": "Friday",
-              "split": [],
-              "mail": "bf8cc345.2610c",
-              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;bf8cc345.2610c",
-              "author": "Youngrok Jang",
-              "sent": "2026-10-16T09:10:33+09:00"
             }
           ],
           "part": null
@@ -13386,6 +13423,202 @@
           "part": null
         },
         {
+          "name": "10.5.2.2",
+          "duration_minutes": 45,
+          "start_time": "08:30",
+          "end_time": "09:15",
+          "day": "Friday",
+          "room_col_start": 5,
+          "room_col_end": 6,
+          "chair": "Sorour",
+          "agenda_item": "10.5.2.2",
+          "group_header": "6GR",
+          "description": "Downlink transmission scheme(s) for downlink shared channels",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "10.5.2.2",
+              "matched_agenda_item": "10.5.2.2",
+              "description": "Downlink transmission scheme(s) for downlink shared channels",
+              "hierarchy": [
+                {
+                  "agenda_item": "10",
+                  "description": "Rel-20 Study of 6GR",
+                  "has_description": true
+                },
+                {
+                  "agenda_item": "10.5",
+                  "description": "Multi-antenna system",
+                  "has_description": true
+                },
+                {
+                  "agenda_item": "10.5.2",
+                  "description": "MIMO operation",
+                  "has_description": true
+                },
+                {
+                  "agenda_item": "10.5.2.2",
+                  "description": "Downlink transmission scheme(s) for downlink shared channels",
+                  "has_description": true
+                }
+              ]
+            }
+          ],
+          "room_ids": [],
+          "room_scope": "assigned",
+          "notes": [],
+          "inferred_agenda_items": [],
+          "email_details": [
+            {
+              "kind": "session",
+              "session": "Fri 08:30-09:15 201",
+              "quote": "Please note that we will discuss observation for frequency interleaving in today’s 8:30 offline session.\nPlease consider the following update to the observation after coffee break discussions and early-morning clean up.\nIf there is any time left, we will discuss semi-open loop transmission.",
+              "mode": "offline",
+              "summary": "Discuss frequency interleaving (Observation 4-7-4); semi-open loop if time permits",
+              "topics": [
+                "observation for frequency interleaving",
+                "Observation 4-7-4",
+                "semi-open loop transmission"
+              ],
+              "start": "08:30",
+              "day": "Friday",
+              "split": [],
+              "mail": "a2bbd3c9.2610c",
+              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;a2bbd3c9.2610c",
+              "author": "Sven Jacobsson",
+              "sent": "2026-10-16T08:12:40+09:00"
+            }
+          ],
+          "part": null
+        },
+        {
+          "name": "10.5.2.3",
+          "duration_minutes": 45,
+          "start_time": "09:15",
+          "end_time": "10:00",
+          "day": "Friday",
+          "room_col_start": 5,
+          "room_col_end": 6,
+          "chair": "Sorour",
+          "agenda_item": "10.5.2.3",
+          "group_header": "6GR",
+          "description": "Uplink transmission scheme(s) for uplink channels",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "10.5.2.3",
+              "matched_agenda_item": "10.5.2.3",
+              "description": "Uplink transmission scheme(s) for uplink channels",
+              "hierarchy": [
+                {
+                  "agenda_item": "10",
+                  "description": "Rel-20 Study of 6GR",
+                  "has_description": true
+                },
+                {
+                  "agenda_item": "10.5",
+                  "description": "Multi-antenna system",
+                  "has_description": true
+                },
+                {
+                  "agenda_item": "10.5.2",
+                  "description": "MIMO operation",
+                  "has_description": true
+                },
+                {
+                  "agenda_item": "10.5.2.3",
+                  "description": "Uplink transmission scheme(s) for uplink channels",
+                  "has_description": true
+                }
+              ]
+            }
+          ],
+          "room_ids": [],
+          "room_scope": "assigned",
+          "notes": [],
+          "inferred_agenda_items": [],
+          "email_details": [
+            {
+              "kind": "session",
+              "session": "Fri 09:15-10:00 201",
+              "quote": "Today offline plan is as follows (sorry for late notice)\n* CW2L template (excel sheet)\n* TDRA for PUSCH (across-slot): if time allows",
+              "mode": "offline",
+              "summary": "Offline plan: CW2L template and TDRA for PUSCH (across-slot) if time allows",
+              "topics": [
+                "CW2L template (excel sheet)",
+                "TDRA for PUSCH (across-slot)"
+              ],
+              "day": "Friday",
+              "split": [],
+              "mail": "58982388.2610c",
+              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;58982388.2610c",
+              "author": "Youngrok Jang",
+              "sent": "2026-10-16T08:31:31+09:00"
+            }
+          ],
+          "part": null
+        },
+        {
+          "name": "10.4.2",
+          "duration_minutes": 30,
+          "start_time": "10:00",
+          "end_time": "10:30",
+          "day": "Friday",
+          "room_col_start": 5,
+          "room_col_end": 6,
+          "chair": "Xiaodong",
+          "agenda_item": "10.4.2",
+          "group_header": "6GR",
+          "description": "Operation in connected mode",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "10.4.2",
+              "matched_agenda_item": "10.4.2",
+              "description": "Operation in connected mode",
+              "hierarchy": [
+                {
+                  "agenda_item": "10",
+                  "description": "Rel-20 Study of 6GR",
+                  "has_description": true
+                },
+                {
+                  "agenda_item": "10.4",
+                  "description": "Multiple carrier operation",
+                  "has_description": true
+                },
+                {
+                  "agenda_item": "10.4.2",
+                  "description": "Operation in connected mode",
+                  "has_description": true
+                }
+              ]
+            }
+          ],
+          "room_ids": [],
+          "room_scope": "assigned",
+          "notes": [],
+          "inferred_agenda_items": [],
+          "email_details": [
+            {
+              "kind": "session",
+              "session": "Fri 10:00-10:30 201",
+              "quote": "we will have 30min offline and then online tomorrow. Detailed slots to be updated.",
+              "mode": "offline",
+              "summary": "30-min offline session tomorrow; detailed slot to be updated",
+              "topics": [],
+              "day": "Friday",
+              "split": [
+                {
+                  "minutes": 30
+                }
+              ],
+              "mail": "1e72da93.2610c",
+              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;1e72da93.2610c",
+              "author": "Naoya Shibaike",
+              "sent": "2026-10-15T14:10:06+09:00"
+            }
+          ],
+          "part": null
+        },
+        {
           "name": "10.5.4.1",
           "duration_minutes": 30,
           "start_time": "08:30",
@@ -13500,7 +13733,7 @@
           "part": null
         },
         {
-          "name": "ISAC",
+          "name": "10.8.x Sensing",
           "duration_minutes": 60,
           "start_time": "09:30",
           "end_time": "10:30",
@@ -13613,23 +13846,175 @@
           "part": null
         },
         {
-          "name": "TBD",
-          "duration_minutes": 120,
+          "name": "10.5.2.2",
+          "duration_minutes": 60,
           "start_time": "11:00",
+          "end_time": "12:00",
+          "day": "Friday",
+          "room_col_start": 3,
+          "room_col_end": 4,
+          "chair": null,
+          "agenda_item": "10.5.2.2",
+          "group_header": "6GR",
+          "description": "Downlink transmission scheme(s) for downlink shared channels",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "10.5.2.2",
+              "matched_agenda_item": "10.5.2.2",
+              "description": "Downlink transmission scheme(s) for downlink shared channels",
+              "hierarchy": [
+                {
+                  "agenda_item": "10",
+                  "description": "Rel-20 Study of 6GR",
+                  "has_description": true
+                },
+                {
+                  "agenda_item": "10.5",
+                  "description": "Multi-antenna system",
+                  "has_description": true
+                },
+                {
+                  "agenda_item": "10.5.2",
+                  "description": "MIMO operation",
+                  "has_description": true
+                },
+                {
+                  "agenda_item": "10.5.2.2",
+                  "description": "Downlink transmission scheme(s) for downlink shared channels",
+                  "has_description": true
+                }
+              ]
+            }
+          ],
+          "room_ids": [],
+          "room_scope": "assigned",
+          "notes": [],
+          "inferred_agenda_items": [],
+          "email_details": [
+            {
+              "kind": "session",
+              "session": "Fri 11:00-12:00 Yeongju A Hall",
+              "quote": "We will treat Observation 4-7-4 on Friday morning online session.\nWe will also treat TB mapping within a PDSCH on Friday morning online session.",
+              "mode": "online",
+              "summary": "Observation 4-7-4 and TB mapping within a PDSCH",
+              "topics": [
+                "Observation 4-7-4",
+                "TB mapping within a PDSCH"
+              ],
+              "day": "Friday",
+              "split": [],
+              "mail": "8baf41ac.2610b",
+              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;8baf41ac.2610b",
+              "author": "Sven Jacobsson",
+              "sent": "2026-10-15T01:04:48+09:00"
+            },
+            {
+              "kind": "session",
+              "session": "Fri 11:00-12:00 Yeongju A Hall",
+              "quote": "Please find proposals for today’s online session in Section 4.12.4 of R1-2607735.zip.",
+              "mode": "online",
+              "summary": "Proposals for online session in Section 4.12.4 of R1-2607735.zip",
+              "topics": [
+                "Section 4.12.4"
+              ],
+              "day": "Friday",
+              "tdocs": [
+                "R1-2607735"
+              ],
+              "split": [],
+              "mail": "d1f3ae1b.2610c",
+              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;d1f3ae1b.2610c",
+              "author": "Sven Jacobsson",
+              "sent": "2026-10-16T10:50:06+09:00"
+            }
+          ],
+          "part": null
+        },
+        {
+          "name": "10.5.2.3",
+          "duration_minutes": 60,
+          "start_time": "12:00",
           "end_time": "13:00",
           "day": "Friday",
           "room_col_start": 3,
           "room_col_end": 4,
           "chair": null,
-          "agenda_item": null,
-          "group_header": "",
-          "description": null,
-          "agenda_descriptions": [],
+          "agenda_item": "10.5.2.3",
+          "group_header": "6GR",
+          "description": "Uplink transmission scheme(s) for uplink channels",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "10.5.2.3",
+              "matched_agenda_item": "10.5.2.3",
+              "description": "Uplink transmission scheme(s) for uplink channels",
+              "hierarchy": [
+                {
+                  "agenda_item": "10",
+                  "description": "Rel-20 Study of 6GR",
+                  "has_description": true
+                },
+                {
+                  "agenda_item": "10.5",
+                  "description": "Multi-antenna system",
+                  "has_description": true
+                },
+                {
+                  "agenda_item": "10.5.2",
+                  "description": "MIMO operation",
+                  "has_description": true
+                },
+                {
+                  "agenda_item": "10.5.2.3",
+                  "description": "Uplink transmission scheme(s) for uplink channels",
+                  "has_description": true
+                }
+              ]
+            }
+          ],
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
           "inferred_agenda_items": [],
-          "email_details": [],
+          "email_details": [
+            {
+              "kind": "session",
+              "session": "Fri 12:00-13:00 Yeongju A Hall",
+              "quote": "Today online plan is as follows:\n* Proposal 6.1-2: PUCCH format\n* Proposal 6.1-1: additional EVM for PUCCH\n* Proposal 6.1-3: PUCCH repetition\n* Proposal 3.7.1-1: multi-TRP",
+              "mode": "online",
+              "summary": "Online session plan covering Proposals 6.1-2, 6.1-1, 6.1-3, 3.7.1-1, 3.1.1-1, 5.1.1-4",
+              "topics": [
+                "Proposal 6.1-2: PUCCH format",
+                "Proposal 6.1-1: additional EVM for PUCCH",
+                "Proposal 6.1-3: PUCCH repetition",
+                "Proposal 3.7.1-1: multi-TRP",
+                "Proposal 3.1.1-1: coherency of PUSCH precoder",
+                "Proposal 5.1.1-4: TDRA for PUSCH (across-slot)"
+              ],
+              "day": "Friday",
+              "split": [],
+              "mail": "bf8cc345.2610c",
+              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;bf8cc345.2610c",
+              "author": "Youngrok Jang",
+              "sent": "2026-10-16T09:10:33+09:00"
+            },
+            {
+              "kind": "session",
+              "session": "Fri 12:00-13:00 Yeongju A Hall",
+              "quote": "In the zip file, you can see a separate document which only includes proposals which will be treated in today’s online.",
+              "mode": "online",
+              "summary": "Proposals treated in today's online uploaded in R1-2607569",
+              "topics": [],
+              "day": "Friday",
+              "tdocs": [
+                "R1-2607569"
+              ],
+              "split": [],
+              "mail": "e5e128ca.2610c",
+              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;e5e128ca.2610c",
+              "author": "Youngrok Jang",
+              "sent": "2026-10-16T11:35:53+09:00"
+            }
+          ],
           "part": null
         },
         {
@@ -14073,19 +14458,19 @@
       }
     }
   ],
-  "source_file": "RAN1#126b online and offline schedules - v00.docx",
-  "generated_at": "2026-11-03 03:24",
+  "source_file": "RAN1#126b online and offline schedules - v05.docx",
+  "generated_at": "2026-11-03 03:42",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
-    "RAN1#126b online and offline schedules - v00.docx",
+    "RAN1#126b online and offline schedules - v05.docx",
     "RAN1#126bis schedule for Hiroki Adhoc2 sessions_v08.docx",
-    "RAN1#126b Sorour sessions online and offline schedules - v00.docx"
+    "RAN1#126b Sorour sessions online and offline schedules - v01.docx"
   ],
   "source_labels": {
-    "RAN1#126b online and offline schedules - v00.docx": "Main",
+    "RAN1#126b online and offline schedules - v05.docx": "Main",
     "RAN1#126bis schedule for Hiroki Adhoc2 sessions_v08.docx": "Hiroki",
-    "RAN1#126b Sorour sessions online and offline schedules - v00.docx": "Sorour"
+    "RAN1#126b Sorour sessions online and offline schedules - v01.docx": "Sorour"
   },
   "timezone": "Asia/Seoul",
   "wg_id": "ran1",
@@ -14685,67 +15070,67 @@
         "source_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Hiroki_notes/draft_R1-2607290_Session%20Notes%20of%20AI%2011_v01.docx"
       },
       "R1-2607307": {
-        "name": "Draft R1-2607307 Session Notes of AI 8.1 - v00.docx",
+        "name": "Draft R1-2607307 Session Notes of AI 8.1 - final.docx",
         "agenda_item": "8.1",
-        "changed_at": "2026-10-09T15:33:27+00:00",
-        "sha256": "7e7f79d0b207c41f008b909beb646139ccc19f81f69b027b9197261d4cd53c05",
-        "source_url": "https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_126b/Inbox/Sorour_notes/Draft%20R1-2607307%20Session%20Notes%20of%20AI%208.1%20-%20v00.docx"
+        "changed_at": "2026-10-15T23:09:15+00:00",
+        "sha256": "ff5634b409bc55bf8c3cf19a785b087048f28f9e1512850b9cd7f13a82e63eed",
+        "source_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Sorour_notes/Draft%20R1-2607307%20Session%20Notes%20of%20AI%208.1%20-%20final.docx"
       },
       "R1-2607308": {
-        "name": "Draft R1-2607308 Session Notes of AI 9.1 - v00.docx",
+        "name": "Draft R1-2607308 Session Notes of AI 9.1 - final.docx",
         "agenda_item": "9.1",
-        "changed_at": "2026-10-09T15:33:27+00:00",
-        "sha256": "e0ea98c031010a9298aa9c30a9dd0356f43b69673a8b3c028316957450a846aa",
-        "source_url": "https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_126b/Inbox/Sorour_notes/Draft%20R1-2607308%20Session%20Notes%20of%20AI%209.1%20-%20v00.docx"
+        "changed_at": "2026-10-15T23:09:09+00:00",
+        "sha256": "de994854753bef30a7ea26293c92396dcf3b43b124f89ee7fe5bfd862fd35daa",
+        "source_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Sorour_notes/Draft%20R1-2607308%20Session%20Notes%20of%20AI%209.1%20-%20final.docx"
       },
       "R1-2607309": {
-        "name": "Draft R1-2607309 Session Notes of AI 9.2 - v00.docx",
+        "name": "Draft R1-2607309 Session Notes of AI 9.2 - final.docx",
         "agenda_item": "9.2",
-        "changed_at": "2026-10-09T15:33:27+00:00",
-        "sha256": "26c9791cfdd8d4723ed8f63b09708580ff403901ace68f94be922a0c5c144250",
-        "source_url": "https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_126b/Inbox/Sorour_notes/Draft%20R1-2607309%20Session%20Notes%20of%20AI%209.2%20-%20v00.docx"
+        "changed_at": "2026-10-15T23:09:00+00:00",
+        "sha256": "437b009e79e36d5ac2369862d3eebef44b2c433bbd070c4eb7fb09ef48083fa2",
+        "source_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Sorour_notes/Draft%20R1-2607309%20Session%20Notes%20of%20AI%209.2%20-%20final.docx"
       },
       "R1-2607310": {
-        "name": "Draft R1-2607310 Session Notes of AI 9.4 - v00.docx",
+        "name": "Draft R1-2607310 Session Notes of AI 9.4 - final.docx",
         "agenda_item": "9.4",
-        "changed_at": "2026-10-09T15:33:27+00:00",
-        "sha256": "c7823c2f43a031849754955aefc4087df30605a3228fd14c3a7905051a68a0e9",
-        "source_url": "https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_126b/Inbox/Sorour_notes/Draft%20R1-2607310%20Session%20Notes%20of%20AI%209.4%20-%20v00.docx"
+        "changed_at": "2026-10-16T04:56:10+00:00",
+        "sha256": "d6d8dedba9412fa2c26ac0e0146c343c7981c27dbfb23c41da32cfeb95b835e9",
+        "source_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Sorour_notes/Draft%20R1-2607310%20Session%20Notes%20of%20AI%209.4%20-%20final.docx"
       },
       "R1-2607311": {
-        "name": "Draft R1-2607311 Session Notes of AI 9.5 - v00.docx",
+        "name": "Draft R1-2607311 Session Notes of AI 9.5 - final.docx",
         "agenda_item": "9.5",
-        "changed_at": "2026-10-09T15:33:27+00:00",
-        "sha256": "fa414de65746c696199e1a736244057e0c479e1ed67d862effb67f19134aef9e",
-        "source_url": "https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_126b/Inbox/Sorour_notes/Draft%20R1-2607311%20Session%20Notes%20of%20AI%209.5%20-%20v00.docx"
+        "changed_at": "2026-10-15T23:08:48+00:00",
+        "sha256": "0c6ec15337671b35f60a81b2ef0102134ed8196f7d9a37c09e42c232502d10df",
+        "source_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Sorour_notes/Draft%20R1-2607311%20Session%20Notes%20of%20AI%209.5%20-%20final.docx"
       },
       "R1-2607312": {
-        "name": "Draft R1-2607312 Session Notes of AI 10.3.1 (Channel Coding) - v00.docx",
+        "name": "Draft R1-2607312 Session Notes of AI 10.3.1 (Channel Coding) - final.docx",
         "agenda_item": "10.3.1",
-        "changed_at": "2026-10-09T15:33:27+00:00",
-        "sha256": "28a1174604a2bf277c0f61ed5b6e6eca94b446ade50da344cd655d1e94a9f91b",
-        "source_url": "https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_126b/Inbox/Sorour_notes/Draft%20R1-2607312%20Session%20Notes%20of%20AI%2010.3.1%20(Channel%20Coding)%20-%20v00.docx"
+        "changed_at": "2026-10-15T23:08:40+00:00",
+        "sha256": "dd1106a7c78ef0127f732f076d97d54c3cdadc0089a96299d51d439c12f797a3",
+        "source_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Sorour_notes/Draft%20R1-2607312%20Session%20Notes%20of%20AI%2010.3.1%20(Channel%20Coding)%20-%20final.docx"
       },
       "R1-2607313": {
-        "name": "Draft R1-2607313 Session Notes of AI 10.3.2 (Modulation) - v00.docx",
+        "name": "Draft R1-2607313 Session Notes of AI 10.3.2 (Modulation) - final.docx",
         "agenda_item": "10.3.2",
-        "changed_at": "2026-10-09T15:33:27+00:00",
-        "sha256": "92d77ffcda77441c4abdf6b44abc5ede21698f43e3e63e4ac8e1c7302a00bc82",
-        "source_url": "https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_126b/Inbox/Sorour_notes/Draft%20R1-2607313%20Session%20Notes%20of%20AI%2010.3.2%20(Modulation)%20-%20v00.docx"
+        "changed_at": "2026-10-15T23:08:31+00:00",
+        "sha256": "54d5fe636f53b85f4ade706f0a8974d83c033d0962f529d82fa9784209349426",
+        "source_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Sorour_notes/Draft%20R1-2607313%20Session%20Notes%20of%20AI%2010.3.2%20(Modulation)%20-%20final.docx"
       },
       "R1-2607314": {
-        "name": "Draft R1-2607314 Session Notes of AI 10.5.2 (MIMO Operation) - v00.docx",
+        "name": "Draft R1-2607314 Session Notes of AI 10.5.2 (MIMO Operation) - final.docx",
         "agenda_item": "10.5.2",
-        "changed_at": "2026-10-09T15:33:27+00:00",
-        "sha256": "3a9b89b3fde18e40ea634674b77a8803dcc096f03f38fd65ffb9269d3a530721",
-        "source_url": "https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_126b/Inbox/Sorour_notes/Draft%20R1-2607314%20Session%20Notes%20of%20AI%2010.5.2%20(MIMO%20Operation)%20-%20v00.docx"
+        "changed_at": "2026-10-16T04:54:30+00:00",
+        "sha256": "5635cb96f9596b7f1f1aec0d7ef8d3f42a472b9c1f392b0480227c0cd2e975f1",
+        "source_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Sorour_notes/Draft%20R1-2607314%20Session%20Notes%20of%20AI%2010.5.2%20(MIMO%20Operation)%20-%20final.docx"
       },
       "R1-2607315": {
-        "name": "Draft R1-2607315 Session Notes of AI 10.7 (NTN specific) - v00.docx",
+        "name": "Draft R1-2607315 Session Notes of AI 10.7 (NTN specific) - v05.docx",
         "agenda_item": "10.7",
-        "changed_at": "2026-10-09T15:33:27+00:00",
-        "sha256": "934cdb9cf1f205f813f75c26924b4e0ca5fa22d1411cb614332b5514bc307cc6",
-        "source_url": "https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_126b/Inbox/Sorour_notes/Draft%20R1-2607315%20Session%20Notes%20of%20AI%2010.7%20(NTN%20specific)%20-%20v00.docx"
+        "changed_at": "2026-10-16T00:34:48+00:00",
+        "sha256": "0110cd7404d7f61fa8509297b7c6fc785d34b7d5e55287a54ea7312d989effbf",
+        "source_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Sorour_notes/Draft%20R1-2607315%20Session%20Notes%20of%20AI%2010.7%20(NTN%20specific)%20-%20v05.docx"
       },
       "R1-2608614": {
         "name": "draft_R1-2608614_Session Notes of AI 8.3_v02.docx",
@@ -15059,7 +15444,7 @@
       },
       "8.1": {
         "title": "Maintenance on AI/ML for NR Air interface, NR MIMO Phase 5,  NES and NTN for NR and IoT",
-        "excluded_tdoc_rows": 5,
+        "excluded_tdoc_rows": 0,
         "blocks": [
           "9bbd9af5888d",
           "e017ac1d8d44",
@@ -15127,7 +15512,7 @@
         ],
         "sources": {
           "chair": "d9a9c52316c1",
-          "R1-2607307": "320d395e3f3d"
+          "R1-2607307": "1d1f8b8f4194"
         },
         "change": "updated",
         "added": [
@@ -15343,11 +15728,13 @@
         "excluded_tdoc_rows": 39,
         "blocks": [
           "4990068f3b1a",
+          "06a8a5fd91fd",
+          "db471e78015c",
+          "34e56aa3dd1b",
           "e39262defe80",
           "fc43d84a9a77",
           "47237e7a7695",
           "6f55c4c98c12",
-          "06a8a5fd91fd",
           "668544acaa68",
           "4d6ca7a6f07e",
           "a6cbf08c86af",
@@ -15358,7 +15745,6 @@
           "4c2ea2d10dc0",
           "725c6c631d0d",
           "8466609f8486",
-          "34e56aa3dd1b",
           "20280ee67271",
           "668544acaa68",
           "4d182399d41c",
@@ -15377,31 +15763,31 @@
           "f5adf2f8699a",
           "981cb454c60b",
           "569cc7b442e8",
-          "4b7768b63d06",
-          "db471e78015c"
+          "4b7768b63d06"
         ],
         "sources": {
           "chair": "6613894892ce",
-          "R1-2607308": "942cfe4cf223"
+          "R1-2607308": "36469c3ba913"
         },
         "change": "updated",
         "added": [
-          5,
-          16,
-          36
+          1,
+          2,
+          3
         ],
-        "changed_at": "2026-10-09T15:33:27+00:00",
-        "changed_in": "Draft R1-2607308 Session Notes of AI 9.1 - v00.docx",
-        "file": "agreements/e59eda9af30e1986d434.html"
+        "changed_at": "2026-10-15T23:09:09+00:00",
+        "changed_in": "Draft R1-2607308 Session Notes of AI 9.1 - final.docx",
+        "file": "agreements/985cc7ed3893747f59bd.html"
       },
       "9.1.2": {
         "title": "Inter-vendor training collaboration for two-sided AI/ML models",
         "excluded_tdoc_rows": 32,
         "blocks": [
           "934fcbb8e3ec",
+          "c26be97355f7",
+          "0d9df1b535ff",
           "d0b35f2e80cf",
           "b629114132dd",
-          "0d9df1b535ff",
           "2f410905bf93",
           "668544acaa68",
           "d2c93791b559",
@@ -15409,21 +15795,20 @@
           "141b78c16ede",
           "668544acaa68",
           "d214862dbd3b",
-          "3042ee23f0c0",
-          "c26be97355f7"
+          "3042ee23f0c0"
         ],
         "sources": {
           "chair": "88d05a9f5b8a",
-          "R1-2607308": "1607c645a908"
+          "R1-2607308": "d668026dd5fc"
         },
         "change": "updated",
         "added": [
-          3,
-          12
+          1,
+          2
         ],
-        "changed_at": "2026-10-09T15:33:27+00:00",
-        "changed_in": "Draft R1-2607308 Session Notes of AI 9.1 - v00.docx",
-        "file": "agreements/dc3ce853feb605ea1e92.html"
+        "changed_at": "2026-10-15T23:09:09+00:00",
+        "changed_in": "Draft R1-2607308 Session Notes of AI 9.1 - final.docx",
+        "file": "agreements/075846e2747075a74a93.html"
       },
       "9.2": {
         "title": "NR MIMO Phase 6",
@@ -15473,8 +15858,6 @@
           "7b0a3c09687d",
           "d0b35f2e80cf",
           "5d4dc5aa5bae",
-          "1185f7d740cd",
-          "bf14ddd7840c",
           "2051705dd8de",
           "a5585f468698",
           "668544acaa68",
@@ -15502,16 +15885,13 @@
         ],
         "sources": {
           "chair": "c6ac925e3dca",
-          "R1-2607309": "ddc336963158"
+          "R1-2607309": "ca1e628c1a78"
         },
         "change": "updated",
-        "added": [
-          44,
-          45
-        ],
-        "changed_at": "2026-10-09T15:33:27+00:00",
-        "changed_in": "Draft R1-2607309 Session Notes of AI 9.2 - v00.docx",
-        "file": "agreements/7f769686001f4b052c1b.html"
+        "added": [],
+        "changed_at": "2026-10-15T23:09:00+00:00",
+        "changed_in": "Draft R1-2607309 Session Notes of AI 9.2 - final.docx",
+        "file": "agreements/a0bbbb28a35d3cdd9941.html"
       },
       "9.3": {
         "title": "Solutions for Ambient IoT (Internet of Things) in NR Phase 2",
@@ -16029,6 +16409,7 @@
         "title": "NR-NTN GNSS resilience",
         "excluded_tdoc_rows": 46,
         "blocks": [
+          "fc784a6cefba",
           "668544acaa68",
           "cd80d9f685e6",
           "9dbc62c1a361",
@@ -16157,13 +16538,16 @@
           "242e893e3e82"
         ],
         "sources": {
-          "chair": "a80d367093aa"
+          "chair": "a80d367093aa",
+          "R1-2607310": "28525c719ccd"
         },
         "change": "updated",
-        "added": [],
-        "changed_at": "2026-10-09T15:33:27+00:00",
-        "changed_in": "Draft R1-2607310 Session Notes of AI 9.4 - v00.docx",
-        "file": "agreements/6b14f052da973be68104.html"
+        "added": [
+          0
+        ],
+        "changed_at": "2026-10-16T04:56:10+00:00",
+        "changed_in": "Draft R1-2607310 Session Notes of AI 9.4 - final.docx",
+        "file": "agreements/de0d0ed6fe96bba3b199.html"
       },
       "9.5": {
         "title": "NR NTN in systems using downlink compensation",
@@ -16193,6 +16577,12 @@
         "excluded_tdoc_rows": 43,
         "blocks": [
           "09d55af1ba0a",
+          "7d756352b9e9",
+          "92661a0ac23c",
+          "3029ef4122f8",
+          "21d112b2de7c",
+          "293e2c21b44c",
+          "b40e64ba2e77",
           "d18c870dbfd8",
           "08621c1990cc",
           "da4b20fcdbd5",
@@ -16230,9 +16620,6 @@
           "0376a6fab7fb",
           "826ea1fd8e2a",
           "c6073ab5f1b4",
-          "7d756352b9e9",
-          "92661a0ac23c",
-          "0b03b11bcaae",
           "6be5f065d153",
           "853ea4c6d9db",
           "255de9c38ffd",
@@ -16242,29 +16629,24 @@
           "8f074f0d3f07",
           "a267208b7113",
           "824f6497a73c",
-          "8100d6dcf2fb",
-          "293e2c21b44c",
-          "b40e64ba2e77",
-          "ebaa71d5341a",
-          "21d112b2de7c"
+          "8100d6dcf2fb"
         ],
         "sources": {
           "chair": "e35379eac410",
-          "R1-2607311": "004d79f6a8d5"
+          "R1-2607311": "cf8a93144689"
         },
         "change": "updated",
         "added": [
-          38,
-          39,
-          40,
-          51,
-          52,
-          53,
-          54
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
         ],
-        "changed_at": "2026-10-09T15:33:27+00:00",
-        "changed_in": "Draft R1-2607311 Session Notes of AI 9.5 - v00.docx",
-        "file": "agreements/bb445d3c1ff8d41218aa.html"
+        "changed_at": "2026-10-15T23:08:48+00:00",
+        "changed_in": "Draft R1-2607311 Session Notes of AI 9.5 - final.docx",
+        "file": "agreements/3a0a3181bbcd2219b904.html"
       },
       "10": {
         "title": "Rel-20 Study of 6GR",
@@ -16401,12 +16783,15 @@
       },
       "10.3.1": {
         "title": "Channel coding",
-        "excluded_tdoc_rows": 40,
+        "excluded_tdoc_rows": 35,
         "blocks": [
           "f59e3c5e1364",
           "334907737e61",
           "802f6e09c397",
           "eb6153926189",
+          "d76a99cb3338",
+          "de61a0dcd033",
+          "c8a59cd6c49e",
           "668544acaa68",
           "af5f5aecd075",
           "967b6f9e07ff",
@@ -16463,13 +16848,17 @@
         ],
         "sources": {
           "chair": "43c561e364bd",
-          "R1-2607312": "1e68dcd9da9e"
+          "R1-2607312": "d83cfabb304b"
         },
         "change": "updated",
-        "added": [],
-        "changed_at": "2026-10-09T15:33:27+00:00",
-        "changed_in": "Draft R1-2607312 Session Notes of AI 10.3.1 (Channel Coding) - v00.docx",
-        "file": "agreements/1116a11dfd0090c053c1.html"
+        "added": [
+          4,
+          5,
+          6
+        ],
+        "changed_at": "2026-10-15T23:08:40+00:00",
+        "changed_in": "Draft R1-2607312 Session Notes of AI 10.3.1 (Channel Coding) - final.docx",
+        "file": "agreements/cf76790cebb5dd59c05b.html"
       },
       "10.3.2": {
         "title": "Modulation",
@@ -16480,6 +16869,7 @@
           "334907737e61",
           "94cb927e170e",
           "eb6153926189",
+          "c19238a78b40",
           "668544acaa68",
           "cb6523a25f7d",
           "dd43adc9900d",
@@ -16528,13 +16918,15 @@
         ],
         "sources": {
           "chair": "dccde63f7bbc",
-          "R1-2607313": "1ba19f48c329"
+          "R1-2607313": "c2303ccab73e"
         },
         "change": "updated",
-        "added": [],
-        "changed_at": "2026-10-09T15:33:27+00:00",
-        "changed_in": "Draft R1-2607313 Session Notes of AI 10.3.2 (Modulation) - v00.docx",
-        "file": "agreements/4b00fa3cff9a627f505c.html"
+        "added": [
+          5
+        ],
+        "changed_at": "2026-10-15T23:08:31+00:00",
+        "changed_in": "Draft R1-2607313 Session Notes of AI 10.3.2 (Modulation) - final.docx",
+        "file": "agreements/8b7ebdf92db57fc06f80.html"
       },
       "10.4": {
         "title": "Multiple carrier operation",
@@ -17425,6 +17817,8 @@
           "d5400d2235ef",
           "214433cb768a",
           "334907737e61",
+          "6d529748f6f3",
+          "504baf65008b",
           "668544acaa68",
           "4118ad6b6a2d",
           "1b0bfee4ea75",
@@ -17473,6 +17867,15 @@
           "201ef1e697f9",
           "aef8c0ef2a6a",
           "d54d9eeda12a",
+          "d0b35f2e80cf",
+          "66f7f1827eb1",
+          "4b4c868b5c99",
+          "7979a48e0d3f",
+          "717a33aa42cb",
+          "b4ea4446a397",
+          "9034529407a4",
+          "edc0c3f72979",
+          "aa3a881b1fa4",
           "668544acaa68",
           "3f2b7e284f97",
           "185b13c75fc9",
@@ -17510,21 +17913,35 @@
         ],
         "sources": {
           "chair": "a0c2e6d241eb",
-          "R1-2607314": "e9e2a8443454"
+          "R1-2607314": "3d54bc4dab38"
         },
         "change": "updated",
-        "added": [],
-        "changed_at": "2026-10-09T15:33:27+00:00",
-        "changed_in": "Draft R1-2607314 Session Notes of AI 10.5.2 (MIMO Operation) - v00.docx",
-        "file": "agreements/3516df16b3f6c2c5ba8a.html"
+        "added": [
+          3,
+          4,
+          53,
+          54,
+          55,
+          56,
+          57,
+          58,
+          59,
+          60,
+          61
+        ],
+        "changed_at": "2026-10-16T04:54:30+00:00",
+        "changed_in": "Draft R1-2607314 Session Notes of AI 10.5.2 (MIMO Operation) - final.docx",
+        "file": "agreements/66f7e99fa579238a2b04.html"
       },
       "10.5.2.2": {
         "title": "Downlink transmission scheme(s) for downlink shared channels",
-        "excluded_tdoc_rows": 56,
+        "excluded_tdoc_rows": 55,
         "blocks": [
           "53d66e56a274",
           "e11337955c4c",
           "334907737e61",
+          "cb888bfad2e9",
+          "de19b6e8dbd8",
           "668544acaa68",
           "221ced023329",
           "fbd3f2165037",
@@ -17715,25 +18132,50 @@
           "ea3e8d06311d",
           "15a8eb7a97d0",
           "2bc3e917e75c",
-          "51fd20308023"
+          "51fd20308023",
+          "d0b35f2e80cf",
+          "bd44dc5b6507",
+          "3e8bbd61b7b0",
+          "c0eb2017dd7d",
+          "a2fd81c66441",
+          "d84dbc202bc2",
+          "6d142455a130",
+          "836e5af66adc",
+          "0b42c8b1b351",
+          "6d8b2c9076cc"
         ],
         "sources": {
           "chair": "543284e0df39",
-          "R1-2607314": "a6d85210f66a"
+          "R1-2607314": "4d8a92e9341e"
         },
         "change": "updated",
-        "added": [],
-        "changed_at": "2026-10-09T15:33:27+00:00",
-        "changed_in": "Draft R1-2607314 Session Notes of AI 10.5.2 (MIMO Operation) - v00.docx",
-        "file": "agreements/74106d0fb39d5af48b3a.html"
+        "added": [
+          3,
+          4,
+          196,
+          197,
+          198,
+          199,
+          200,
+          201,
+          202,
+          203,
+          204,
+          205
+        ],
+        "changed_at": "2026-10-16T04:54:30+00:00",
+        "changed_in": "Draft R1-2607314 Session Notes of AI 10.5.2 (MIMO Operation) - final.docx",
+        "file": "agreements/32aa1e19e8a419499ca9.html"
       },
       "10.5.2.3": {
         "title": "Uplink transmission scheme(s) for uplink channels",
-        "excluded_tdoc_rows": 57,
+        "excluded_tdoc_rows": 56,
         "blocks": [
           "cf89236b5acf",
           "04c9da6a893c",
           "334907737e61",
+          "83cc1c9e2804",
+          "e83212fb348f",
           "668544acaa68",
           "8ef4ac35cce5",
           "bcf2e08fe980",
@@ -17882,17 +18324,40 @@
           "f1d6cdd1f083",
           "242bbffcccfd",
           "24b5f66feaa4",
-          "140c2e5be9e7"
+          "140c2e5be9e7",
+          "d0b35f2e80cf",
+          "bd44dc5b6507",
+          "72b8294c4e48",
+          "c0eb2017dd7d",
+          "15c091c0f29f",
+          "3f5e99ef2dd1",
+          "e1c1f52b514c",
+          "836e5af66adc",
+          "34d7009d2e59",
+          "6d8b2c9076cc"
         ],
         "sources": {
           "chair": "e360d1971ac7",
-          "R1-2607314": "471fc6e5acc0"
+          "R1-2607314": "c3899bb7a879"
         },
         "change": "updated",
-        "added": [],
-        "changed_at": "2026-10-09T15:33:27+00:00",
-        "changed_in": "Draft R1-2607314 Session Notes of AI 10.5.2 (MIMO Operation) - v00.docx",
-        "file": "agreements/9744935bfb8948574ec6.html"
+        "added": [
+          3,
+          4,
+          154,
+          155,
+          156,
+          157,
+          158,
+          159,
+          160,
+          161,
+          162,
+          163
+        ],
+        "changed_at": "2026-10-16T04:54:30+00:00",
+        "changed_in": "Draft R1-2607314 Session Notes of AI 10.5.2 (MIMO Operation) - final.docx",
+        "file": "agreements/fced8051d0c9d811238d.html"
       },
       "10.5.3": {
         "title": "CSI acquisition and report",
@@ -19200,6 +19665,7 @@
           "2f1cd2531320",
           "ed5bb7752bbe",
           "334907737e61",
+          "f73b0c347009",
           "668544acaa68",
           "9e5fa8de3875",
           "667d4849cfd1",
@@ -19229,9 +19695,6 @@
           "ee32275f91eb",
           "71bea5dba948",
           "55ceb7aa5841",
-          "8d18d0d4c872",
-          "f73b0c347009",
-          "56ee7a37f3c5",
           "8d18d0d4c872",
           "b1804989e147",
           "668544acaa68",
@@ -19299,17 +19762,15 @@
         ],
         "sources": {
           "chair": "39b4084c2457",
-          "R1-2607315": "7808ee073ec3"
+          "R1-2607315": "0aef5386ed1b"
         },
         "change": "updated",
         "added": [
-          32,
-          33,
-          34
+          3
         ],
-        "changed_at": "2026-10-09T15:33:27+00:00",
-        "changed_in": "Draft R1-2607315 Session Notes of AI 10.7 (NTN specific) - v00.docx",
-        "file": "agreements/01c7ed843743bcd4a63c.html"
+        "changed_at": "2026-10-16T00:34:48+00:00",
+        "changed_in": "Draft R1-2607315 Session Notes of AI 10.7 (NTN specific) - v05.docx",
+        "file": "agreements/f59e8270a217a1de185f.html"
       },
       "10.8": {
         "title": "ISAC",
@@ -19791,17 +20252,17 @@
       }
     },
     "retained_files": [
-      "agreements/075846e2747075a74a93.html",
-      "agreements/32aa1e19e8a419499ca9.html",
-      "agreements/3a0a3181bbcd2219b904.html",
-      "agreements/66f7e99fa579238a2b04.html",
-      "agreements/8b7ebdf92db57fc06f80.html",
-      "agreements/985cc7ed3893747f59bd.html",
-      "agreements/c4627d5e346aed9dc481.html",
-      "agreements/cf76790cebb5dd59c05b.html",
-      "agreements/de0d0ed6fe96bba3b199.html",
-      "agreements/f59e8270a217a1de185f.html",
-      "agreements/fced8051d0c9d811238d.html"
+      "agreements/01c7ed843743bcd4a63c.html",
+      "agreements/1116a11dfd0090c053c1.html",
+      "agreements/3516df16b3f6c2c5ba8a.html",
+      "agreements/4b00fa3cff9a627f505c.html",
+      "agreements/6b14f052da973be68104.html",
+      "agreements/74106d0fb39d5af48b3a.html",
+      "agreements/7f769686001f4b052c1b.html",
+      "agreements/9744935bfb8948574ec6.html",
+      "agreements/bb445d3c1ff8d41218aa.html",
+      "agreements/dc3ce853feb605ea1e92.html",
+      "agreements/e59eda9af30e1986d434.html"
     ]
   },
   "email_informal": {
@@ -20147,23 +20608,6 @@
         "date": "2026-10-14"
       }
     ],
-    "10.5.3.4": [
-      {
-        "kind": "informal",
-        "quote": "we will have a new offical offline from 12:30 ~ 13:00, Thursday",
-        "mode": "offline",
-        "summary": "Offline session on Thursday 12:30-13:00",
-        "topics": [],
-        "start": "12:30",
-        "end": "13:00",
-        "day": "Thursday",
-        "mail": "8fc4fa24.2610b",
-        "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;8fc4fa24.2610b",
-        "author": "Bo Gao",
-        "sent": "2026-10-14T17:55:28+09:00",
-        "date": "2026-10-15"
-      }
-    ],
     "10.4.1": [
       {
         "kind": "informal",
@@ -20251,26 +20695,6 @@
         "author": "Sigen Ye",
         "sent": "2026-10-15T14:35:13+09:00",
         "date": "2026-10-15"
-      }
-    ],
-    "10.5.2.2": [
-      {
-        "kind": "informal",
-        "quote": "Please note that we will discuss observation for frequency interleaving in today’s 8:30 offline session.\nPlease consider the following update to the observation after coffee break discussions and early-morning clean up.\nIf there is any time left, we will discuss semi-open loop transmission.",
-        "mode": "offline",
-        "summary": "Discuss frequency interleaving (Observation 4-7-4); semi-open loop if time permits",
-        "topics": [
-          "observation for frequency interleaving",
-          "Observation 4-7-4",
-          "semi-open loop transmission"
-        ],
-        "start": "08:30",
-        "day": "Friday",
-        "mail": "a2bbd3c9.2610c",
-        "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;a2bbd3c9.2610c",
-        "author": "Sven Jacobsson",
-        "sent": "2026-10-16T08:12:40+09:00",
-        "date": "2026-10-16"
       }
     ]
   }
