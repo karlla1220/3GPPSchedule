@@ -4,8 +4,7 @@
   "archive_url": "https://www.3gpp.org/ftp/tsg_ran/WG4_Radio/",
   "meeting_specific": [
     "https://www.3gpp.org/ftp/tsg_ran/WG4_Radio/TSGR4_120bis/",
-    "https://www.3gpp.org/ftp/tsg_ran/WG4_Radio/TSGR4_121/",
-    "https://www.3gpp.org/ftp/tsg_ran/WG4_Radio/TSGR4_122/"
+    "https://www.3gpp.org/ftp/tsg_ran/WG4_Radio/TSGR4_121/"
   ],
   "meeting_specific_override": [],
   "local_topics": null,

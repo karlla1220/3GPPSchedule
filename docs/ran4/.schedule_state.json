@@ -9,10 +9,10 @@
     "label": "THU_afternoon",
     "size": 149350,
     "sha256": "273f7c13900a776be2d374508597a9db54846db90324c5a85589d9b2a6ab6f18",
-    "etag": "\"8067c8fafa5cdd1:0\"",
+    "etag": null,
     "last_modified": "Thu, 15 Oct 2026 23:14:51 GMT",
-    "ftp_modified": null,
-    "content_type": "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+    "ftp_modified": "213 20261015231451",
+    "content_type": "application/octet-stream",
     "content_disposition": null,
     "revision": 4412,
     "modified": "2026-10-15T13:14:01Z"
@@ -22,10 +22,10 @@
     "name": "List_Topics_moderators-RAN4_120bis_final.xlsx",
     "size": 33531,
     "sha256": "9bf4ee486cb626b518ed57e75c2c69ee1e0e534273270beb03d34a0e70b45957",
-    "etag": "\"809ac0434e59dd1:0\"",
+    "etag": null,
     "last_modified": "Sun, 11 Oct 2026 07:00:57 GMT",
-    "ftp_modified": null,
-    "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    "ftp_modified": "213 20261011070057",
+    "content_type": "application/octet-stream",
     "content_disposition": null
   },
   "agenda": {
@@ -33,8 +33,8 @@
     "name": "agenda.csv",
     "size": 16509,
     "sha256": "01b3a1ad4721b3631127bf45f5b66e08903dcf1cb7a3a422c034cd414421b7b1",
-    "etag": "\"5cd0f3853168dd1:0\"",
-    "last_modified": "Fri, 30 Oct 2026 05:43:00 GMT",
+    "etag": "\"dd9ad1dbc369dd1:0\"",
+    "last_modified": "Sun, 01 Nov 2026 05:43:01 GMT",
     "ftp_modified": null,
     "content_type": "application/octet-stream",
     "content_disposition": null
