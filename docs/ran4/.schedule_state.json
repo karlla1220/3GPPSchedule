@@ -51,6 +51,7 @@
     "ends_at": "2026-10-16T17:30:00+09:00"
   },
   "warnings": [
+    "RAN4 officials history unavailable (The read operation timed out); chairs shown as written",
     "thu-r3c4: '[206] NR_Mob_Ph5_RRM, Chaired by Hua Li (Apple)' names topic 207, not its number; agenda items left out",
     "thu-r8c4: '[102-A/B] System Parameter, Chaired by Leo (Huawei)/Jinqiang (OPPO)' names topic 101-A, not its number; agenda items left out"
   ],

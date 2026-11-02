@@ -2,9 +2,9 @@
   "day": "Thursday",
   "time_block_index": 3,
   "source_hashes": {
-    "Main Schedule": "56c7476827a77320",
-    "Hiroki's schedule": "fc3fda6764a86e92",
-    "Sorour's schedule": "b63e6c159120d051"
+    "Main Schedule": "d672b6eebbfd5e64",
+    "Hiroki's schedule": "eed5f761ba8eb0d7",
+    "Sorour's schedule": "25b60253ac8dae77"
   },
   "merged_sessions": [
     {
@@ -16,8 +16,8 @@
       "group_header": "6GR",
       "agenda_item": "10.5.3.1",
       "source_cells": [
-        "c5b2bde",
-        "c9b9289"
+        "cc3e759",
+        "c98644d"
       ],
       "description": "Aspects of downlink-based CSI acquisition",
       "agenda_descriptions": [
@@ -59,8 +59,8 @@
       "group_header": "6GR",
       "agenda_item": "10.5.3.2",
       "source_cells": [
-        "c5b2bde",
-        "c9b9289"
+        "cc3e759",
+        "c98644d"
       ],
       "description": "Aspects of uplink-based CSI acquisition",
       "agenda_descriptions": [
@@ -102,8 +102,8 @@
       "group_header": "6GR",
       "agenda_item": "10.5.3.3",
       "source_cells": [
-        "c5b2bde",
-        "c9b9289"
+        "cc3e759",
+        "c98644d"
       ],
       "description": "Other aspects",
       "agenda_descriptions": [
@@ -145,8 +145,8 @@
       "group_header": "6GR",
       "agenda_item": "10.5.3.4",
       "source_cells": [
-        "c5b2bde",
-        "c9b9289"
+        "cc3e759",
+        "c98644d"
       ],
       "description": "Beam management for downlink and uplink",
       "agenda_descriptions": [
@@ -718,7 +718,7 @@
       ]
     }
   ],
-  "merged_at": "2026-11-02T18:02:16.799727+00:00",
+  "merged_at": "2026-11-02T18:23:11.936611+00:00",
   "meeting_id": "ran1#126bis",
   "schema_version": 3
 }

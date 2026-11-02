@@ -2,11 +2,6 @@
   "files": [
     {
       "folder": "Chair_notes",
-      "name": "RAN1#126b online and offline schedules - v05.docx",
-      "uploaded_at": "2026-10-15T10:47:00"
-    },
-    {
-      "folder": "Chair_notes",
       "name": "RAN1#126b online and offline schedules - v00.docx",
       "uploaded_at": "2026-10-10T06:54:00"
     },
@@ -17,8 +12,8 @@
     },
     {
       "folder": "Sorour_notes",
-      "name": "RAN1#126b Sorour sessions online and offline schedules - v01.docx",
-      "uploaded_at": "2026-10-14T04:18:00"
+      "name": "RAN1#126b Sorour sessions online and offline schedules - v00.docx",
+      "uploaded_at": "2026-10-09T15:33:00"
     }
   ],
   "agreements_ref": {
@@ -62,49 +57,49 @@
         "uploaded_at": "2026-10-13T06:24:00"
       },
       {
-        "name": "Draft R1-2607307 Session Notes of AI 8.1 - final.docx",
-        "url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Sorour_notes/Draft%20R1-2607307%20Session%20Notes%20of%20AI%208.1%20-%20final.docx",
-        "uploaded_at": "2026-10-15T23:09:00"
+        "name": "Draft R1-2607307 Session Notes of AI 8.1 - v00.docx",
+        "url": "https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_126b/Inbox/Sorour_notes/Draft%20R1-2607307%20Session%20Notes%20of%20AI%208.1%20-%20v00.docx",
+        "uploaded_at": "2026-10-09T15:33:00"
       },
       {
-        "name": "Draft R1-2607308 Session Notes of AI 9.1 - final.docx",
-        "url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Sorour_notes/Draft%20R1-2607308%20Session%20Notes%20of%20AI%209.1%20-%20final.docx",
-        "uploaded_at": "2026-10-15T23:09:00"
+        "name": "Draft R1-2607308 Session Notes of AI 9.1 - v00.docx",
+        "url": "https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_126b/Inbox/Sorour_notes/Draft%20R1-2607308%20Session%20Notes%20of%20AI%209.1%20-%20v00.docx",
+        "uploaded_at": "2026-10-09T15:33:00"
       },
       {
-        "name": "Draft R1-2607309 Session Notes of AI 9.2 - final.docx",
-        "url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Sorour_notes/Draft%20R1-2607309%20Session%20Notes%20of%20AI%209.2%20-%20final.docx",
-        "uploaded_at": "2026-10-15T23:09:00"
+        "name": "Draft R1-2607309 Session Notes of AI 9.2 - v00.docx",
+        "url": "https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_126b/Inbox/Sorour_notes/Draft%20R1-2607309%20Session%20Notes%20of%20AI%209.2%20-%20v00.docx",
+        "uploaded_at": "2026-10-09T15:33:00"
       },
       {
-        "name": "Draft R1-2607310 Session Notes of AI 9.4 - final.docx",
-        "url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Sorour_notes/Draft%20R1-2607310%20Session%20Notes%20of%20AI%209.4%20-%20final.docx",
-        "uploaded_at": "2026-10-16T04:56:00"
+        "name": "Draft R1-2607310 Session Notes of AI 9.4 - v00.docx",
+        "url": "https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_126b/Inbox/Sorour_notes/Draft%20R1-2607310%20Session%20Notes%20of%20AI%209.4%20-%20v00.docx",
+        "uploaded_at": "2026-10-09T15:33:00"
       },
       {
-        "name": "Draft R1-2607311 Session Notes of AI 9.5 - final.docx",
-        "url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Sorour_notes/Draft%20R1-2607311%20Session%20Notes%20of%20AI%209.5%20-%20final.docx",
-        "uploaded_at": "2026-10-15T23:08:00"
+        "name": "Draft R1-2607311 Session Notes of AI 9.5 - v00.docx",
+        "url": "https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_126b/Inbox/Sorour_notes/Draft%20R1-2607311%20Session%20Notes%20of%20AI%209.5%20-%20v00.docx",
+        "uploaded_at": "2026-10-09T15:33:00"
       },
       {
-        "name": "Draft R1-2607312 Session Notes of AI 10.3.1 (Channel Coding) - final.docx",
-        "url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Sorour_notes/Draft%20R1-2607312%20Session%20Notes%20of%20AI%2010.3.1%20(Channel%20Coding)%20-%20final.docx",
-        "uploaded_at": "2026-10-15T23:08:00"
+        "name": "Draft R1-2607312 Session Notes of AI 10.3.1 (Channel Coding) - v00.docx",
+        "url": "https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_126b/Inbox/Sorour_notes/Draft%20R1-2607312%20Session%20Notes%20of%20AI%2010.3.1%20(Channel%20Coding)%20-%20v00.docx",
+        "uploaded_at": "2026-10-09T15:33:00"
       },
       {
-        "name": "Draft R1-2607313 Session Notes of AI 10.3.2 (Modulation) - final.docx",
-        "url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Sorour_notes/Draft%20R1-2607313%20Session%20Notes%20of%20AI%2010.3.2%20(Modulation)%20-%20final.docx",
-        "uploaded_at": "2026-10-15T23:08:00"
+        "name": "Draft R1-2607313 Session Notes of AI 10.3.2 (Modulation) - v00.docx",
+        "url": "https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_126b/Inbox/Sorour_notes/Draft%20R1-2607313%20Session%20Notes%20of%20AI%2010.3.2%20(Modulation)%20-%20v00.docx",
+        "uploaded_at": "2026-10-09T15:33:00"
       },
       {
-        "name": "Draft R1-2607314 Session Notes of AI 10.5.2 (MIMO Operation) - final.docx",
-        "url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Sorour_notes/Draft%20R1-2607314%20Session%20Notes%20of%20AI%2010.5.2%20(MIMO%20Operation)%20-%20final.docx",
-        "uploaded_at": "2026-10-16T04:54:00"
+        "name": "Draft R1-2607314 Session Notes of AI 10.5.2 (MIMO Operation) - v00.docx",
+        "url": "https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_126b/Inbox/Sorour_notes/Draft%20R1-2607314%20Session%20Notes%20of%20AI%2010.5.2%20(MIMO%20Operation)%20-%20v00.docx",
+        "uploaded_at": "2026-10-09T15:33:00"
       },
       {
-        "name": "Draft R1-2607315 Session Notes of AI 10.7 (NTN specific) - v05.docx",
-        "url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Sorour_notes/Draft%20R1-2607315%20Session%20Notes%20of%20AI%2010.7%20(NTN%20specific)%20-%20v05.docx",
-        "uploaded_at": "2026-10-16T00:34:00"
+        "name": "Draft R1-2607315 Session Notes of AI 10.7 (NTN specific) - v00.docx",
+        "url": "https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_126b/Inbox/Sorour_notes/Draft%20R1-2607315%20Session%20Notes%20of%20AI%2010.7%20(NTN%20specific)%20-%20v00.docx",
+        "uploaded_at": "2026-10-09T15:33:00"
       },
       {
         "name": "draft_R1-2608614_Session Notes of AI 8.3_v02.docx",
