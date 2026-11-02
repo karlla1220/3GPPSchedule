@@ -13,6 +13,7 @@ import logging
 import re
 import threading
 import time
+import zlib
 from urllib.parse import quote, unquote, urlsplit
 
 import httpx
@@ -27,6 +28,7 @@ _RETRY_STATUS = {500, 502, 503, 504, 520, 521, 522, 523, 524, 525, 526}
 _FIREWALL_PAGE = b'web application firewall'
 _FIREWALL_PAGE_BYTES = 256 * 1024
 _MAX_BYTES = 64 * 1024 * 1024
+_GZIP = b'\x1f\x8b'
 # One anonymous FTP login serves every fallback in a run, instead of a new
 # connection and login per file or folder.
 _session = None
@@ -147,10 +149,9 @@ def ftp_missing(error):
 def _answer_403(url, response, **kwargs):
     """The answer to a plain 403: IIS means a missing path, a block means nothing.
 
-    Both look the same over HTTPS, and on 2026-11-02 runners got a passing
-    "absent" for folders that were there. FTP tells them apart: 550 keeps the
-    403, anything it can read is what HTTPS would not give. FTP failing any
-    other way leaves the question open, which is an error and not "absent".
+    Both look the same over HTTPS. FTP tells them apart: 550 keeps the 403,
+    anything it can read is what HTTPS would not give. FTP failing any other
+    way leaves the question open, which is an error and not "absent".
     """
     try:
         confirmed = ftp_response(url, **kwargs)
@@ -163,6 +164,30 @@ def _answer_403(url, response, **kwargs):
     response.close()
     _https_failed[_folder(url)] = _BLOCKED
     return confirmed
+
+
+def _unpacked(response, url):
+    """The response with its gzip undone when 3GPP did not say it was gzip.
+
+    Since 2026-11-02 some 200 answers carry a gzip body without Content-Encoding,
+    so httpx leaves it packed and a listing reads as an empty folder. Hence a
+    run seeing no files, or only the older copies in another folder. A file
+    that is gzip by name stays as it is.
+    """
+    if (response.status_code != 200 or not response.content.startswith(_GZIP)
+            or urlsplit(url).path.lower().endswith(('.gz', '.tgz'))):
+        return response
+    unpack = zlib.decompressobj(zlib.MAX_WBITS | 16)
+    try:
+        body = unpack.decompress(response.content, _MAX_BYTES)
+    except zlib.error:
+        return response
+    if not unpack.eof:
+        return response
+    logging.getLogger(__name__).warning('3GPP sent gzip without saying so: %s', url)
+    headers = [(name, value) for name, value in response.headers.items()
+               if name.lower() not in ('content-length', 'content-encoding')]
+    return httpx.Response(200, headers=headers, content=body, request=response.request)
 
 
 def _identified(kwargs):
@@ -358,7 +383,7 @@ def get(url, *, listing=False, http=None, cached=None, **kwargs):
             return _blocked_ftp(url, listing=listing, cached=cached)
         if response.status_code == 403:
             return _answer_403(url, response, listing=listing, cached=cached)
-        return response
+        return _unpacked(response, url)
     return ftp_response(url, listing=listing, cached=cached)
 
 
