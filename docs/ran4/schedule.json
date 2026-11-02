@@ -9232,7 +9232,7 @@
           "part": null
         },
         {
-          "name": "Main Ad-hoc",
+          "name": "Main Ad-hoc / [101-A] System Parameter",
           "duration_minutes": 60,
           "start_time": "17:00",
           "end_time": "18:00",
@@ -10078,7 +10078,7 @@
     }
   ],
   "source_file": "RAN4_120bis_meeting_schedule_THU_afternoon.pptx",
-  "generated_at": "2026-10-30 19:41",
+  "generated_at": "2026-11-02 13:21",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
