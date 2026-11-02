@@ -17,7 +17,8 @@ START = '2026-08-24T09:00:00+02:00'
 END = '2026-08-28T17:30:00+02:00'
 
 
-def run_page(*, now, starts_at=START, ends_at=END, stored=None, steps=(), storage_error=False, script=None):
+def run_page(*, now, starts_at=START, ends_at=END, stored=None, steps=(), storage_error=False, script=None,
+             all_days=False):
     node = shutil.which('node')
     if not node:
         pytest.skip('Node.js is required to execute browser logic')
@@ -25,7 +26,8 @@ def run_page(*, now, starts_at=START, ends_at=END, stored=None, steps=(), storag
         'Europe/Amsterdam', auto_refresh_minutes=0, starts_at=starts_at, ends_at=ends_at)
     result = subprocess.run([node, str(Path(__file__).parent / 'fixtures/now_line_browser.cjs')],
                             input=json.dumps({'script': source, 'now': now, 'stored': stored,
-                                              'steps': steps, 'storageError': storage_error}),
+                                              'steps': steps, 'storageError': storage_error,
+                                              'allDays': all_days}),
                             text=True, capture_output=True, check=True,
                             env={**os.environ, 'TZ': 'America/Los_Angeles'})
     return json.loads(result.stdout)
@@ -72,6 +74,21 @@ def test_manual_preference_only_applies_inside_the_meeting():
 def test_unknown_or_invalid_bounds_keep_now_off(start, end):
     state, = run_page(now='2026-08-24T08:00:00Z', starts_at=start, ends_at=end, stored='true')
     assert state['pressed'] == 'false' and state['disabled'] and not state['lines']
+
+
+def test_the_all_view_keeps_now_on_the_time_axis_and_the_red_line_on_todays_rooms():
+    # Monday 10:00 in Amsterdam: row 26 of the day's grid, row 27 of the All grid (day names above).
+    state, = run_page(now='2026-08-24T08:00:00Z', stored='true', all_days=True)
+    assert state['drawn'] == [
+        {'grid': 'monday', 'class': 'now-line', 'row': '26 / 27', 'column': None},
+        # The label's line spans the grid (schedule.css draws no red on it), so it sticks to the axis.
+        {'grid': 'all-days', 'class': 'now-line now-label', 'row': '27 / 28', 'column': None},
+        {'grid': 'all-days', 'class': 'now-line now-today', 'row': '27 / 28', 'column': '2 / 7'},
+    ]
+    # Another day: the red line moves to that day's rooms; the label stays on the axis.
+    state, = run_page(now='2026-08-26T08:00:00Z', stored='true', all_days=True)
+    assert [(d['class'], d['column']) for d in state['drawn'] if d['grid'] == 'all-days'] == [
+        ('now-line now-label', None), ('now-line now-today', '14 / 19')]
 
 
 def test_storage_unavailable_still_enables_now_during_meeting():

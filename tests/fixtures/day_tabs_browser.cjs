@@ -34,7 +34,8 @@ function element(tag) {
     };
     return el;
 }
-const tabs = input.days.map(day => Object.assign(element('button'), {dataset: {day}}));
+const tabs = input.days.map(day => Object.assign(element('button'), {dataset: {
+    day, ...(day === 'all-days' ? {gridMinWidth: '1360'} : {})}}));
 const panels = input.days.map(day => {
     const panel = Object.assign(element('div'), {id: day});
     byId.set(day, panel);
@@ -59,7 +60,7 @@ const document = {
     createElement: element,
     addEventListener(event, fn) { listeners[event] = fn; },
     head: {appendChild(el) { byId.set(el.id, el); }},
-    documentElement: {clientWidth: 1440, clientHeight: 900, style: {
+    documentElement: {clientWidth: 1440, clientHeight: 900, classList: element('html').classList, style: {
         setProperty(k, v) { rootVars[k] = v; }, removeProperty(k) { delete rootVars[k]; }}},
 };
 function storage(map) {
@@ -87,6 +88,7 @@ function state() {
         rule: rule ? rule.textContent : null,
         scrolls: [...scrolls],
         vars: {...rootVars},
+        allDays: document.documentElement.classList.contains('all-days-view'),
     };
 }
 vm.runInNewContext(input.daySelect, context);

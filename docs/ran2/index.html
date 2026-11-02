@@ -1566,6 +1566,9 @@ header .meta a:focus-visible,
     line-height: 1.5;
     color: var(--ink-2);
 }
+/* Which day a row is, only where several days are listed (the All tab). */
+.email-informal-day { display: none; font-weight: 600; white-space: nowrap; }
+.email-informal.every-day .email-informal-day { display: inline; }
 .email-informal-when { font-weight: 600; white-space: nowrap; }
 .email-informal-ai, .email-informal-from { color: var(--ink-3); }
 .email-informal-ai { white-space: nowrap; }
@@ -1812,6 +1815,179 @@ header .meta a:focus-visible,
 .help-still .help-stage *,
 .help-still .help-stage *::before,
 .help-still .help-stage *::after { transition: none !important; animation: none !important; }
+
+/* All tab: every day on one time axis (renderer.py, _render_all_days). The
+   page takes the screen's width and the rows its height, so the week shows
+   whole once the grid is scrolled to the top; --week-fit (schedule.js) keeps
+   that height where the grid is zoomed to fit a phone's width, so its cells
+   stay tall enough to tap. Cells carry their titles only; the popup holds the rest. */
+.all-days-view .container { max-width: none; }
+
+.tab-all { margin-left: 6px; }
+
+/* The rooms of the All tab, beside it and only under it (room-picks.js). */
+.room-picks { display: none; }
+.all-days-view .room-picks {
+    display: flex;
+    flex-wrap: wrap;
+    flex: 0 1 auto;
+    gap: 2px 10px;
+    min-width: 0;
+    font-size: 12.5px;
+    font-weight: 500;
+    color: var(--ink-2);
+}
+.room-pick {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    min-height: 24px;
+    max-width: 200px;
+    cursor: pointer;
+}
+.room-pick span {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.room-pick input {
+    flex: none;
+    width: 14px;
+    height: 14px;
+    margin: 0;
+    accent-color: var(--ink-2);
+}
+/* A phone has no room beside the tabs: its own line, under them. */
+@media (max-width: 768px) {
+    .all-days-view .schedule-toolbar:has(.room-picks) { flex-wrap: wrap; }
+    .all-days-view .room-picks { order: 1; flex-basis: 100%; }
+    .room-pick { max-width: 150px; min-height: 28px; }
+}
+@media (max-width: 400px) {
+    .tab { padding: 6px 9px; }
+    /* Six tabs and NOW on one line at 320px. */
+    .tab-all { margin-left: 1px; }
+}
+
+.week-grid {
+    --base-slot-height: calc(clamp(5px, calc((100vh - 92px) / var(--week-slots)), 10px) / var(--week-fit, 1));
+    grid-template-rows: calc(22px * var(--axis-unzoom, 1)) var(--header-height) repeat(var(--time-rows), var(--slot-height));
+}
+
+.week-grid .room-header {
+    padding: 2px;
+    font-size: 9.5px;
+    font-weight: 500;
+    grid-row: 2;
+}
+.week-grid .room-header.time-col { grid-row: 1 / 3; }
+
+/* Readable at any zoom, like the time axis. */
+.week-day {
+    zoom: var(--axis-unzoom, 1);
+    position: relative;
+    z-index: 20;
+    border: 0;
+    border-bottom: 1px solid var(--hairline);
+    background: var(--surface);
+    color: var(--ink);
+    font-family: inherit;
+    font-size: 12.5px;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    cursor: pointer;
+    /* A narrow day keeps its name and drops its date. */
+    container-type: inline-size;
+}
+.week-day:hover { background: var(--page-bg); }
+/* While a pinch scales the grid, the names shrink back to their size into the
+   bottom of their row, which keeps its height (schedule.js, --day-sx, --day-sy). */
+.week-day > span { display: inline-block; }
+.pinching .week-day { scale: 1 var(--day-sy, 1); transform-origin: 50% 100%; }
+.pinching .week-day > span { scale: var(--day-sx, 1) 1; }
+.pinching .room-header.time-col > span { translate: 0 var(--head-ty, 0px); }
+.week-date {
+    color: var(--ink-3);
+    font-weight: 400;
+}
+@container (max-width: 76px) {
+    .week-date { display: none; }
+}
+
+/* Between two days; the time lines run on behind it. */
+.week-gutter {
+    grid-row: 1 / -1;
+    background: var(--page-bg);
+    box-shadow: inset 1px 0 0 var(--hairline), inset -1px 0 0 var(--hairline);
+    z-index: 22;
+}
+
+.week-grid .break-bar {
+    font-size: 10px;
+    overflow: hidden;
+}
+
+/* NOW: the label on the time axis, the red line across today's rooms only
+   (schedule.js). The label's own line spans the grid as a day's does, so the
+   label sticks to the axis while the grid scrolls, but it draws no red. */
+.now-line.now-label { background: none; }
+.now-line.now-today::before { content: none; }
+
+/* The bar is thin and the margin half the day's: every pixel of a 52px room
+   goes to the title. The height budget of a day's cell does not apply here. */
+.session-block.week-cell {
+    padding: 1px 2px 0 6px;
+    margin: 1px;
+    border-radius: 4px;
+    container-type: normal;
+}
+.session-block.week-cell::before {
+    left: 2px;
+    top: 2px;
+    bottom: 2px;
+    width: 2px;
+}
+/* Whole lines only, as many as the cell's height holds (--cell-rows, renderer.py). */
+.week-cell .session-name {
+    --title-line: 12px;
+    font-size: 10.5px;
+    line-height: var(--title-line);
+    white-space: normal;
+    overflow-wrap: anywhere;
+    hyphens: auto;
+    text-overflow: clip;
+    flex-shrink: 1;
+    min-height: 0;
+    max-height: calc(var(--slot-height) * var(--cell-rows) - 5px);
+}
+@supports (height: round(down, 13px, 12px)) {
+    .week-cell .session-name {
+        max-height: round(down, calc(var(--slot-height) * var(--cell-rows) - 5px), var(--title-line));
+    }
+}
+/* A filter's cells stand out from the whole week: their tint alone is lost at
+   the zoom that fits a phone. Darkened so white text reads on every category colour. */
+.filtering .week-cell:not(.dimmed) {
+    --filled: var(--session-border);
+    background: var(--filled);
+    border-color: var(--filled);
+}
+@supports (color: color-mix(in oklch, red, blue)) {
+    .filtering .week-cell:not(.dimmed) { --filled: color-mix(in oklch, var(--accent) 72%, #0F172A); }
+}
+.filtering .week-cell:not(.dimmed)::before { display: none; }
+.filtering .week-cell:not(.dimmed) .session-name { color: #FFFFFF; }
+
+/* Ten minutes: one small line, edge to edge. Five leave a coloured mark only. */
+.session-block.week-cell.short-session { padding: 0 2px 0 6px; justify-content: center; }
+.week-cell.short-session .session-name {
+    --title-line: 9px;
+    font-size: 9px;
+    white-space: nowrap;
+    max-height: none;
+}
+.week-cell.tiny-session .session-name { display: none; }
 </style>
     <script>// Runs in <head>. Arriving from another WG's page (the meeting switch, or back
 // and forward between them), the first frame waits until the day grids are
@@ -1858,7 +2034,7 @@ header .meta a:focus-visible,
         button.hidden = true;
         return;
     }
-    const STEPS = [{"key": "switch", "target": "#wg-switch summary", "title": "Switch meetings from the title", "text": "The meeting name opens every WG’s meeting, ongoing ones first."}, {"key": "days", "target": ".schedule-toolbar", "title": "Pick a day", "text": "Each day of the meeting has its own grid. During the meeting, NOW marks the current time on today’s."}, {"key": "details", "target": "cell", "scene": "details", "title": "Tap a session for its details", "text": "Group, chair, room, notes and the agenda item names. Tap again, or anywhere else, to close it."}, {"key": "filter", "target": ".filter-toggle", "scene": "filter", "title": "Follow only your agenda items", "text": "Open Filter here and tick what you follow; other sessions fade. The filter is kept for this meeting and is part of the link, so you can share what you see."}, {"key": "pinch", "target": "grid", "scene": "pinch", "touch": true, "title": "Pinch to see the whole day", "text": "Pinch the grid itself to see every room at once. Spreading back, it stops at 100% for a moment."}, {"key": "agreements", "target": "#agreement-panel:not(.tdoc-conclusions)", "title": "Agreements below the grid", "text": "Tapping a session shows the chair notes for its agenda item here. Parts added in the latest notes have a green bar."}, {"key": "conclusions", "target": "#agreement-panel.tdoc-conclusions", "title": "TDoc conclusions below the grid", "text": "Tapping a session shows the TDocs of its agenda item and their conclusions here. Rows changed in the latest chair file have a green bar."}, {"key": "informal", "target": ".email-informal", "title": "Off-offline and FL whereabouts", "text": "Informal meetings announced on the email threads for the chosen day. They are not on the schedule; tapping a session marks its own."}, {"key": "supplements", "target": ".supplements", "title": "Additional information", "text": "What the chair’s schedule says besides the grid, such as deadlines, breaks and offline discussions. Tap the heading to fold it."}, {"key": "topics", "target": ".topic-references", "title": "Topics", "text": "The chair’s topics with their documents, notes and agenda items. Tap the heading to fold it."}, {"key": "help", "target": "#help-button", "title": "This tour is always here", "text": "Press How to use to start it again. The page reloads itself every few minutes and comes back to the day and spot you were looking at."}];
+    const STEPS = [{"key": "switch", "target": "#wg-switch summary", "title": "Switch meetings from the title", "text": "The meeting name opens every WG’s meeting, ongoing ones first."}, {"key": "days", "target": ".schedule-toolbar", "title": "Pick a day", "text": "Each day has its own grid, and All shows them together. During the meeting, NOW marks the current time on today’s."}, {"key": "rooms", "target": ".room-picks", "title": "Tick the rooms you follow", "text": "Under All, the rooms you untick leave the grid. With fewer rooms the titles fit, even on a phone."}, {"key": "details", "target": "cell", "scene": "details", "title": "Tap a session for its details", "text": "Group, chair, room, notes and the agenda item names. Tap again, or anywhere else, to close it."}, {"key": "filter", "target": ".filter-toggle", "scene": "filter", "title": "Follow only your agenda items", "text": "Open Filter here and tick what you follow; other sessions fade. The filter is kept for this meeting and is part of the link, so you can share what you see."}, {"key": "pinch", "target": "grid", "scene": "pinch", "touch": true, "title": "Pinch to see the whole grid", "text": "Pinch the grid itself to see every room at once. Spreading back, it stops at 100% for a moment."}, {"key": "agreements", "target": "#agreement-panel:not(.tdoc-conclusions)", "title": "Agreements below the grid", "text": "Tapping a session shows the chair notes for its agenda item here. Parts added in the latest notes have a green bar."}, {"key": "conclusions", "target": "#agreement-panel.tdoc-conclusions", "title": "TDoc conclusions below the grid", "text": "Tapping a session shows the TDocs of its agenda item and their conclusions here. Rows changed in the latest chair file have a green bar."}, {"key": "informal", "target": ".email-informal", "title": "Off-offline and FL whereabouts", "text": "Informal meetings announced on the email threads for the chosen day. They are not on the schedule; tapping a session marks its own."}, {"key": "supplements", "target": ".supplements", "title": "Additional information", "text": "What the chair’s schedule says besides the grid, such as deadlines, breaks and offline discussions. Tap the heading to fold it."}, {"key": "topics", "target": ".topic-references", "title": "Topics", "text": "The chair’s topics with their documents, notes and agenda items. Tap the heading to fold it."}, {"key": "help", "target": "#help-button", "title": "This tour is always here", "text": "Press How to use to start it again. The page reloads itself every few minutes and comes back to the day and spot you were looking at."}];
     const spot = guide.querySelector('.help-spot');
     const card = guide.querySelector('.help-card');
     const count = guide.querySelector('.help-count');
@@ -1936,9 +2112,17 @@ header .meta a:focus-visible,
     }
 
     // ── This page's grid, as it is laid out on a phone ──
+    // A scene needs a day's whole cells, so under the All tab it plays on the first day.
     function sourceGrid() {
-        const grid = document.querySelector('.day-panel.active .schedule-grid') || document.querySelector('.schedule-grid');
+        const grid = document.querySelector('.day-panel.active:not(.all-days) .schedule-grid')
+            || document.querySelector('.day-panel:not(.all-days) .schedule-grid');
         return grid && grid.querySelector('.session-block') ? grid : null;
+    }
+
+    // The grid on screen, for what the tour points at.
+    function pageGrid() {
+        const grid = document.querySelector('.day-panel.active .schedule-grid');
+        return grid && grid.querySelector('.session-block') ? grid : sourceGrid();
     }
 
     function gridView(stage) {
@@ -1968,7 +2152,7 @@ header .meta a:focus-visible,
         let best = null;
         let bestScore = -Infinity;
         grid.querySelectorAll('.session-block').forEach(block => {
-            if (!block.dataset.popup || block.classList.contains('short-session') || block.classList.contains('tiny-session')) return;
+            if (!(block.dataset.popup || block.dataset.popupOf) || block.classList.contains('short-session') || block.classList.contains('tiny-session')) return;
             if (accept && !accept(block)) return;
             const col = columns(block);
             const score = (block.dataset.ai ? 4 : 0) + (block.querySelector('.session-note') ? 2 : 0) +
@@ -2227,21 +2411,22 @@ header .meta a:focus-visible,
     // A session in view to point at: the grid scrolls sideways in its own box,
     // and moving it would leave the visitor somewhere else.
     function visibleCell() {
-        const grid = sourceGrid();
+        const grid = pageGrid();
         if (!grid) return null;
         const box = grid.parentElement.getBoundingClientRect();
         const cell = pickBlock(grid, block => {
             const r = block.getBoundingClientRect();
             return r.left >= box.left && r.right <= box.right;
         });
-        return cell && { el: cell, index: Array.from(grid.querySelectorAll('.session-block')).indexOf(cell) };
+        // An All view cell has no twin at this index in the scene's grid; the scene picks its own.
+        return cell && { el: cell, index: cell.dataset.popupOf ? -1 : Array.from(grid.querySelectorAll('.session-block')).indexOf(cell) };
     }
 
     function target(step) {
         if (step.touch && !touchScreen()) return null;
         if (step.target === 'cell') return visibleCell();
         if (step.target === 'grid') {
-            const grid = sourceGrid();
+            const grid = pageGrid();
             return grid && { el: grid.parentElement };
         }
         const node = document.querySelector(step.target);
@@ -2468,7 +2653,7 @@ header .meta a:focus-visible,
     guide.addEventListener('close', finish);
 })();
 </script>
-<div class="wg-title"><details class="wg-switch" id="wg-switch"><summary title="Switch meeting"><h1><span class="wg-emoji" aria-hidden="true">📅</span>RAN2#135bis</h1><span class="wg-switch-chevron" aria-hidden="true">▼</span></summary><nav class="wg-switch-menu" aria-label="Working group meetings"><p class="wg-switch-group">Upcoming</p><a class="wg-switch-item" href="../ran3/"><span>RAN3#134<span class="wg-experimental" title="Duckhyun built this page without any knowledge of how this WG works. It may read the schedule wrongly, so check the chair&#x27;s file.">Experimental</span></span><span class="wg-switch-dates">16–20 Nov</span></a><p class="wg-switch-group">Ended</p><a class="wg-switch-item wg-switch-past" href="../ran-plenary/"><span>RAN#113</span><span class="wg-switch-dates">14–17 Sep</span></a><a class="wg-switch-item wg-switch-past" href="../ran1/"><span>RAN1#126bis</span><span class="wg-switch-dates">12–16 Oct</span></a><a class="wg-switch-item wg-switch-past" href="../ran2/" aria-current="page"><span>RAN2#135bis</span><span class="wg-switch-dates">12–16 Oct</span></a><a class="wg-switch-item wg-switch-past" href="../ran4/"><span>RAN4#120bis<span class="wg-experimental" title="Duckhyun built this page without any knowledge of how this WG works. It may read the schedule wrongly, so check the chair&#x27;s file.">Experimental</span></span><span class="wg-switch-dates">12–16 Oct</span></a><a class="wg-switch-item wg-switch-past" href="../sa1/"><span>SA1#115<span class="wg-experimental" title="Duckhyun built this page without any knowledge of how this WG works. It may read the schedule wrongly, so check the chair&#x27;s file.">Experimental</span></span><span class="wg-switch-dates">24–28 Aug</span></a><a class="wg-switch-item wg-switch-past" href="../sa2/"><span>SA2#177<span class="wg-experimental" title="Duckhyun built this page without any knowledge of how this WG works. It may read the schedule wrongly, so check the chair&#x27;s file.">Experimental</span></span><span class="wg-switch-dates">12–16 Oct</span></a></nav></details><span class="meeting-status">Ended</span><p class="wg-switch-hint" id="wg-switch-hint" hidden><span><strong>Switch meetings here</strong> — RAN3#134, RAN#113, RAN1#126bis, RAN4#120bis, SA1#115, SA2#177</span><button type="button">Got it</button></p></div>
+<div class="wg-title"><details class="wg-switch" id="wg-switch"><summary title="Switch meeting"><h1><span class="wg-emoji" aria-hidden="true">📅</span>RAN2#135bis</h1><span class="wg-switch-chevron" aria-hidden="true">▼</span></summary><nav class="wg-switch-menu" aria-label="Working group meetings"><p class="wg-switch-group">Upcoming</p><a class="wg-switch-item" href="../ran3/"><span>RAN3#134<span class="wg-experimental" title="Duckhyun built this page without any knowledge of how this WG works. It may read the schedule wrongly, so check the chair&#x27;s file.">Experimental</span></span><span class="wg-switch-dates">16–20 Nov</span></a><a class="wg-switch-item" href="../sa2/"><span>SA2#178<span class="wg-experimental" title="Duckhyun built this page without any knowledge of how this WG works. It may read the schedule wrongly, so check the chair&#x27;s file.">Experimental</span></span><span class="wg-switch-dates">16–20 Nov</span></a><p class="wg-switch-group">Ended</p><a class="wg-switch-item wg-switch-past" href="../ran-plenary/"><span>RAN#113</span><span class="wg-switch-dates">14–17 Sep</span></a><a class="wg-switch-item wg-switch-past" href="../ran1/"><span>RAN1#126bis</span><span class="wg-switch-dates">12–16 Oct</span></a><a class="wg-switch-item wg-switch-past" href="../ran2/" aria-current="page"><span>RAN2#135bis</span><span class="wg-switch-dates">12–16 Oct</span></a><a class="wg-switch-item wg-switch-past" href="../ran4/"><span>RAN4#120bis<span class="wg-experimental" title="Duckhyun built this page without any knowledge of how this WG works. It may read the schedule wrongly, so check the chair&#x27;s file.">Experimental</span></span><span class="wg-switch-dates">12–16 Oct</span></a><a class="wg-switch-item wg-switch-past" href="../sa1/"><span>SA1#115<span class="wg-experimental" title="Duckhyun built this page without any knowledge of how this WG works. It may read the schedule wrongly, so check the chair&#x27;s file.">Experimental</span></span><span class="wg-switch-dates">24–28 Aug</span></a></nav></details><span class="meeting-status">Ended</span><p class="wg-switch-hint" id="wg-switch-hint" hidden><span><strong>Switch meetings here</strong> — RAN3#134, SA2#178, RAN#113, RAN1#126bis, RAN4#120bis, SA1#115</span><button type="button">Got it</button></p></div>
 <script>// Runs right after the meeting title, before the grid below is laid out.
 // The title opens a menu of every WG's meeting; a one-time hint says so.
 (function() {
@@ -2605,9 +2790,97 @@ header .meta a:focus-visible,
             <button class="tab" data-day="wednesday" style="view-transition-name:day-tab-wednesday;view-transition-class:grid-move">Wed</button>
             <button class="tab" data-day="thursday" style="view-transition-name:day-tab-thursday;view-transition-class:grid-move">Thu</button>
             <button class="tab" data-day="friday" style="view-transition-name:day-tab-friday;view-transition-class:grid-move">Fri</button>
+            <button class="tab tab-all" data-day="all-days" data-grid-min-width="996" title="Every day of the meeting at a glance" style="view-transition-name:day-tab-all-days;view-transition-class:grid-move">All</button>
         </div>
+        <div class="room-picks" role="group" aria-label="Rooms shown in All" data-week='{"days":[[0,1,2,3],[0,1,2],[0,1,2,3],[0,1,2,3],[0,1,2]],"room":52,"gutter":6,"axis":36}'><label class="room-pick" title="Main"><input type="checkbox" checked data-room="0" data-key="main"><span>Main</span></label><label class="room-pick" title="Breakout 1"><input type="checkbox" checked data-room="1" data-key="brk1"><span>Breakout 1</span></label><label class="room-pick" title="Breakout 2"><input type="checkbox" checked data-room="2" data-key="brk2"><span>Breakout 2</span></label><label class="room-pick" title="Breakout 3"><input type="checkbox" checked data-room="3" data-key="brk3"><span>Breakout 3</span></label></div>
         <button class="now-toggle" id="now-toggle" type="button" style="view-transition-name:now-toggle;view-transition-class:grid-move" aria-pressed="false" disabled title="NOW is available during the meeting">NOW</button>
     </div>
+    <script>// The room checkboxes of the All tab. Runs right after them, before the grid is
+// parsed, so a saved choice draws from the first frame and day-select.js fits
+// the zoom to the width of the rooms left. One rule does the work: renderer.py
+// marks each All view element with its rooms (wr-N) and days (wd-N), and the
+// grid keeps its column numbers, with a hidden room's track at no width.
+(function() {
+    const KEY = '3gpp_schedule_rooms:' + "ran2:ran2#135bis";
+    const box = document.querySelector('.room-picks');
+    if (!box) return;
+    const boxes = [...box.querySelectorAll('input[data-room]')];
+    const week = JSON.parse(box.dataset.week);
+    const tab = document.querySelector('.tab[data-day="all-days"]');
+    const style = document.createElement('style');
+    style.id = 'week-rooms';
+    document.head.appendChild(style);
+
+    // Hidden rooms are kept, not shown ones: a room added later starts ticked.
+    // A room is its key (renderer.py _room_key), not its name, which may change by the day.
+    function load() {
+        try {
+            const hidden = JSON.parse(localStorage.getItem(KEY) || '[]');
+            return Array.isArray(hidden) ? hidden : [];
+        } catch (e) {
+            return [];
+        }
+    }
+
+    function save() {
+        const hidden = boxes.filter(b => !b.checked).map(b => b.dataset.key);
+        try {
+            if (hidden.length) localStorage.setItem(KEY, JSON.stringify(hidden));
+            else localStorage.removeItem(KEY);
+        } catch (e) {
+            // localStorage may be unavailable; the choice lasts until the page reloads
+        }
+    }
+
+    function draw() {
+        const shown = new Set(boxes.filter(b => b.checked).map(b => Number(b.dataset.room)));
+        // Only a last unticked box left would empty the grid: it stays ticked.
+        boxes.forEach(b => { b.disabled = b.checked && shown.size === 1; });
+        const showsDay = week.days.map(rooms => rooms.some(room => shown.has(room)));
+        const lastDay = showsDay.lastIndexOf(true);
+        const tracks = ['var(--axis-col-width)'];
+        const hide = [];
+        let rooms = 0;
+        week.days.forEach((dayRooms, i) => {
+            dayRooms.forEach(room => {
+                const on = shown.has(room);
+                rooms += on ? 1 : 0;
+                tracks.push(on ? 'minmax(0, 1fr)' : '0px');
+            });
+            if (!showsDay[i]) hide.push('.wd-' + i);
+            if (i < week.days.length - 1) {
+                const gutter = showsDay[i] && i < lastDay;
+                tracks.push(gutter ? week.gutter + 'px' : '0px');
+                if (!gutter) hide.push('.wg-' + i);
+            }
+        });
+        const days = showsDay.filter(Boolean).length;
+        const width = week.axis + rooms * week.room + (days - 1) * week.gutter;
+        if (tab) tab.dataset.gridMinWidth = String(width);
+        if (shown.size === boxes.length) {
+            style.textContent = '';
+            return;
+        }
+        const left = [...shown].map(room => '.wr-' + room).join(',');
+        style.textContent = '#all-days .week-grid { grid-template-columns: ' + tracks.join(' ') + ' !important;'
+            + ' --grid-min-width: ' + width + 'px !important; }'
+            + ' #all-days :is(.week-cell, .room-header:not(.time-col)):not(' + left + ') { display: none; }'
+            + (hide.length ? ' #all-days :is(' + hide.join(',') + ') { display: none; }' : '');
+    }
+
+    const hidden = new Set(load());
+    boxes.forEach(b => { b.checked = !hidden.has(b.dataset.key); });
+    // A saved choice of rooms this meeting no longer has shows every room.
+    if (!boxes.some(b => b.checked)) boxes.forEach(b => { b.checked = true; });
+    draw();
+    box.addEventListener('change', function() {
+        save();
+        draw();
+        // schedule.js fits the zoom to the new width.
+        document.dispatchEvent(new CustomEvent('room-picks-change'));
+    });
+})();
+</script>
     <script>// Runs right after the day tabs, before the day panels are parsed: the chosen
 // day's grid is drawn in place as it arrives, so the sections below never
 // appear in its spot first and get pushed down. schedule.js takes over at
@@ -2641,22 +2914,30 @@ header .meta a:focus-visible,
         + ' ' + panel + ' .grid-wrapper { view-transition-name: grid-frame; view-transition-class: grid-move; }'
         + ' ' + panel + ' .schedule-grid { view-transition-name: grid-cells; }';
     document.head.appendChild(style);
+    const allDays = chosen.dataset.day === 'all-days';
+    if (allDays) document.documentElement.classList.add('all-days-view');
 
     // The grid zoom it was left at comes back with the day, as in schedule.js's
     // setGridZoom. Left to DOMContentLoaded, a phone draws the grid at 100% while
     // the page arrives (and in the switch's cross-fade), then shrinks it.
     // The tab bar above is as wide as the grid's box, which is not parsed yet.
-    const zoom = saved && saved.activeDay === chosen.dataset.day ? Number(saved.gridZoom) : 1;
-    if (!(zoom > 0) || zoom === 1 || !(CSS.supports && CSS.supports('zoom', '1'))) return;
+    // The All view fits the width until it is pinched; its grid is wider than a day's.
+    if (!(CSS.supports && CSS.supports('zoom', '1'))) return;
     const root = document.documentElement;
     const toolbar = document.querySelector('.schedule-toolbar');
     const width = toolbar ? toolbar.clientWidth : 0;
-    const minWidth = parseFloat(getComputedStyle(root).getPropertyValue('--grid-min-width')) || 600;
+    const minWidth = Number(chosen.dataset.gridMinWidth)
+        || parseFloat(getComputedStyle(root).getPropertyValue('--grid-min-width')) || 600;
+    const fits = width ? Math.min(1, width / minWidth) : 1;
+    if (allDays) root.style.setProperty('--week-fit', String(fits));
+    const left = saved && saved.activeDay === chosen.dataset.day ? saved.gridZoom : undefined;
+    const zoom = allDays && (left === undefined || left === 'fit') ? fits : left === undefined ? 1 : Number(left);
+    if (!(zoom > 0)) return;
     // Never below the zoom that fits the day (the screen may have turned since).
-    const z = width ? Math.max(zoom, Math.min(1, width / minWidth)) : zoom;
+    const z = width ? Math.max(zoom, fits) : zoom;
     if (z === 1) return;
     root.style.setProperty('--grid-zoom', String(z));
-    if (z > 1) root.style.setProperty('--axis-unzoom', String(1 / z));
+    if (z > 1 || allDays) root.style.setProperty('--axis-unzoom', String(1 / z));
     root.style.setProperty('--grid-width', Math.max(width, minWidth) + 'px');
 })();
 </script>
@@ -2976,6 +3257,115 @@ UE capability framework">
             </div>
         </div>
     </div>
+    <div class="day-panel all-days" id="all-days" data-date="">
+        <div class="grid-wrapper">
+            <div class="schedule-grid week-grid" data-start="510" data-end="1140" data-slot="5" data-first-row="3" style="grid-template-columns:var(--axis-col-width) repeat(4, minmax(0, 1fr)) 6px repeat(3, minmax(0, 1fr)) 6px repeat(4, minmax(0, 1fr)) 6px repeat(4, minmax(0, 1fr)) 6px repeat(3, minmax(0, 1fr));--time-rows:126;--slot-scale:1;--week-slots:126;--grid-min-width:996px">
+                <div class="room-header time-col" style="grid-column:1;grid-row:1/3;view-transition-name:time-head;view-transition-class:grid-move"><span>Time</span></div>
+<div class="time-label" style="grid-row:3/9;view-transition-name:time-510;view-transition-class:grid-move"><span>08:30</span></div><div class="grid-line" style="grid-row:3"></div><div class="time-label" style="grid-row:9/15;view-transition-name:time-540;view-transition-class:grid-move"><span>09:00</span></div><div class="grid-line major" style="grid-row:9"></div><div class="time-label" style="grid-row:15/21;view-transition-name:time-570;view-transition-class:grid-move"><span>09:30</span></div><div class="grid-line" style="grid-row:15"></div><div class="time-label" style="grid-row:21/27;view-transition-name:time-600;view-transition-class:grid-move"><span>10:00</span></div><div class="grid-line major" style="grid-row:21"></div><div class="time-label" style="grid-row:27/33;view-transition-name:time-630;view-transition-class:grid-move"><span>10:30</span></div><div class="grid-line" style="grid-row:27"></div><div class="time-label" style="grid-row:33/39;view-transition-name:time-660;view-transition-class:grid-move"><span>11:00</span></div><div class="grid-line major" style="grid-row:33"></div><div class="time-label" style="grid-row:39/45;view-transition-name:time-690;view-transition-class:grid-move"><span>11:30</span></div><div class="grid-line" style="grid-row:39"></div><div class="time-label" style="grid-row:45/51;view-transition-name:time-720;view-transition-class:grid-move"><span>12:00</span></div><div class="grid-line major" style="grid-row:45"></div><div class="time-label" style="grid-row:51/57;view-transition-name:time-750;view-transition-class:grid-move"><span>12:30</span></div><div class="grid-line" style="grid-row:51"></div><div class="time-label" style="grid-row:57/63;view-transition-name:time-780;view-transition-class:grid-move"><span>13:00</span></div><div class="grid-line major" style="grid-row:57"></div><div class="time-label" style="grid-row:63/69;view-transition-name:time-810;view-transition-class:grid-move"><span>13:30</span></div><div class="grid-line" style="grid-row:63"></div><div class="time-label" style="grid-row:69/75;view-transition-name:time-840;view-transition-class:grid-move"><span>14:00</span></div><div class="grid-line major" style="grid-row:69"></div><div class="time-label" style="grid-row:75/81;view-transition-name:time-870;view-transition-class:grid-move"><span>14:30</span></div><div class="grid-line" style="grid-row:75"></div><div class="time-label" style="grid-row:81/87;view-transition-name:time-900;view-transition-class:grid-move"><span>15:00</span></div><div class="grid-line major" style="grid-row:81"></div><div class="time-label" style="grid-row:87/93;view-transition-name:time-930;view-transition-class:grid-move"><span>15:30</span></div><div class="grid-line" style="grid-row:87"></div><div class="time-label" style="grid-row:93/99;view-transition-name:time-960;view-transition-class:grid-move"><span>16:00</span></div><div class="grid-line major" style="grid-row:93"></div><div class="time-label" style="grid-row:99/105;view-transition-name:time-990;view-transition-class:grid-move"><span>16:30</span></div><div class="grid-line" style="grid-row:99"></div><div class="time-label" style="grid-row:105/111;view-transition-name:time-1020;view-transition-class:grid-move"><span>17:00</span></div><div class="grid-line major" style="grid-row:105"></div><div class="time-label" style="grid-row:111/117;view-transition-name:time-1050;view-transition-class:grid-move"><span>17:30</span></div><div class="grid-line" style="grid-row:111"></div><div class="time-label" style="grid-row:117/123;view-transition-name:time-1080;view-transition-class:grid-move"><span>18:00</span></div><div class="grid-line major" style="grid-row:117"></div><div class="time-label" style="grid-row:123/129;view-transition-name:time-1110;view-transition-class:grid-move"><span>18:30</span></div><div class="grid-line" style="grid-row:123"></div><button type="button" class="week-day wd-0" data-day="monday" style="grid-column:2/6;grid-row:1"><span>Mon <span class="week-date">12 Oct</span></span></button>
+<div class="week-gutter wg-0" style="grid-column:6"></div>
+<div class="room-header wr-0" title="Main" style="grid-column:2;grid-row:2"><span class="room-name-text">Main</span></div>
+<div class="room-header wr-1" title="Breakout 1" style="grid-column:3;grid-row:2"><span class="room-name-text">Breakout 1</span></div>
+<div class="room-header wr-2" title="Breakout 2" style="grid-column:4;grid-row:2"><span class="room-name-text">Breakout 2</span></div>
+<div class="room-header wr-3" title="Breakout 3" style="grid-column:5;grid-row:2"><span class="room-name-text">Breakout 3</span></div>
+<div class="break-bar wd-0" title="Morning coffee" style="grid-column:2/6;grid-row:27/33">Morning coffee</div><div class="break-bar wd-0" title="Lunch" style="grid-column:2/6;grid-row:57/75">Lunch</div><div class="break-bar wd-0" title="Afternoon coffee" style="grid-column:2/6;grid-row:99/105">Afternoon coffee</div><button type="button" class="week-day wd-1" data-day="tuesday" style="grid-column:7/10;grid-row:1"><span>Tue <span class="week-date">13 Oct</span></span></button>
+<div class="week-gutter wg-1" style="grid-column:10"></div>
+<div class="room-header wr-0" title="Main" style="grid-column:7;grid-row:2"><span class="room-name-text">Main</span></div>
+<div class="room-header wr-1" title="Breakout 1" style="grid-column:8;grid-row:2"><span class="room-name-text">Breakout 1</span></div>
+<div class="room-header wr-2" title="Breakout 2" style="grid-column:9;grid-row:2"><span class="room-name-text">Breakout 2</span></div>
+<div class="break-bar wd-1" title="Morning coffee" style="grid-column:7/10;grid-row:27/33">Morning coffee</div><div class="break-bar wd-1" title="Lunch" style="grid-column:7/10;grid-row:57/75">Lunch</div><div class="break-bar wd-1" title="Afternoon coffee" style="grid-column:7/10;grid-row:98/103">Afternoon coffee</div><button type="button" class="week-day wd-2" data-day="wednesday" style="grid-column:11/15;grid-row:1"><span>Wed <span class="week-date">14 Oct</span></span></button>
+<div class="week-gutter wg-2" style="grid-column:15"></div>
+<div class="room-header wr-0" title="Main" style="grid-column:11;grid-row:2"><span class="room-name-text">Main</span></div>
+<div class="room-header wr-1" title="Breakout 1" style="grid-column:12;grid-row:2"><span class="room-name-text">Breakout 1</span></div>
+<div class="room-header wr-2" title="Breakout 2" style="grid-column:13;grid-row:2"><span class="room-name-text">Breakout 2</span></div>
+<div class="room-header wr-3" title="Breakout 3" style="grid-column:14;grid-row:2"><span class="room-name-text">Breakout 3</span></div>
+<div class="break-bar wd-2" title="Morning coffee" style="grid-column:11/15;grid-row:27/33">Morning coffee</div><div class="break-bar wd-2" title="Lunch" style="grid-column:11/15;grid-row:57/75">Lunch</div><div class="break-bar wd-2" title="Afternoon coffee" style="grid-column:11/15;grid-row:99/105">Afternoon coffee</div><button type="button" class="week-day wd-3" data-day="thursday" style="grid-column:16/20;grid-row:1"><span>Thu <span class="week-date">15 Oct</span></span></button>
+<div class="week-gutter wg-3" style="grid-column:20"></div>
+<div class="room-header wr-0" title="Main" style="grid-column:16;grid-row:2"><span class="room-name-text">Main</span></div>
+<div class="room-header wr-1" title="Breakout 1" style="grid-column:17;grid-row:2"><span class="room-name-text">Breakout 1</span></div>
+<div class="room-header wr-2" title="Breakout 2" style="grid-column:18;grid-row:2"><span class="room-name-text">Breakout 2</span></div>
+<div class="room-header wr-3" title="Breakout 3" style="grid-column:19;grid-row:2"><span class="room-name-text">Breakout 3</span></div>
+<div class="break-bar wd-3" title="Morning coffee" style="grid-column:16/20;grid-row:27/33">Morning coffee</div><div class="break-bar wd-3" title="Lunch" style="grid-column:16/20;grid-row:57/75">Lunch</div><div class="break-bar wd-3" title="Afternoon coffee" style="grid-column:16/20;grid-row:99/105">Afternoon coffee</div><button type="button" class="week-day wd-4" data-day="friday" style="grid-column:21/24;grid-row:1"><span>Fri <span class="week-date">16 Oct</span></span></button>
+<div class="room-header wr-0" title="Main" style="grid-column:21;grid-row:2"><span class="room-name-text">Main</span></div>
+<div class="room-header wr-1" title="Breakout 1" style="grid-column:22;grid-row:2"><span class="room-name-text">Breakout 1</span></div>
+<div class="room-header wr-2" title="Breakout 2" style="grid-column:23;grid-row:2"><span class="room-name-text">Breakout 2</span></div>
+<div class="break-bar wd-4" title="Morning coffee" style="grid-column:21/24;grid-row:27/33">Morning coffee</div><div class="session-block week-cell wr-1" style="grid-row:9/27;--cell-rows:18;grid-column:3/4;--session-border:#DB2777" title="Breakout after 9.1 / EUTRA&amp;NR15161718 · 09:00–10:30" data-popup-of="monday:0" data-room-scope="assigned" data-ai="4.1|5.1.1|5.1.2|5.1.3.1|5.1.3.2|5.1.3.3|6.0.2.1|6.0.2.2|6.0.2.3|6.0.2.4|6.0.2.5|6.0.2.6|6.0.2.7|6.0.2.8|6.0.2.9|6.0.2.10|6.0.2.11|6.0.2.12|6.0.2.14|6.0.2.15|6.0.2.20|6.0.2.23|6.0.2.24" data-ai-scope="4.1.*|5.1.1.*|5.1.2.*|5.1.3.1.*|5.1.3.2.*|5.1.3.3.*|6.0.2.1.*|6.0.2.2.*|6.0.2.3.*|6.0.2.4.*|6.0.2.5.*|6.0.2.6.*|6.0.2.7.*|6.0.2.8.*|6.0.2.9.*|6.0.2.10.*|6.0.2.11.*|6.0.2.12.*|6.0.2.14.*|6.0.2.15.*|6.0.2.20.*|6.0.2.23.*|6.0.2.24.*" data-name="Breakout after 9.1 / EUTRA&amp;NR15161718" data-group="EUTRA"><div class="session-name">Breakout after 9.1 / EUTRA&amp;NR15161718</div></div>
+<div class="session-block week-cell wr-2" style="grid-row:9/27;--cell-rows:18;grid-column:4/5;--session-border:#EA580C" title="Breakout after 9.1 / NR18 Mob / NR19 Mob · 09:00–10:30" data-popup-of="monday:1" data-room-scope="assigned" data-ai="6.0.2.22|7.6|7.6.1|7.6.2" data-ai-scope="6.0.2.22.*|7.6|7.6.1.*|7.6.2.*" data-name="Breakout after 9.1 / NR18 Mob / NR19 Mob" data-group="NR Rel-18"><div class="session-name">Breakout after 9.1 / NR18 Mob / NR19 Mob</div></div>
+<div class="session-block week-cell wr-0" style="grid-row:9/27;--cell-rows:18;grid-column:2/3;--session-border:#EA580C" title="R18 common / NR19/20 general / 6GR organizational … · 09:00–10:30" data-popup-of="monday:2" data-room-scope="assigned" data-ai="1|2|3|6.0|6.0.1|7.0|8.0|9.1|9.3.2.5" data-ai-scope="1.*|2.*|3.*|6.0|6.0.1.*|7.0.*|8.0.*|9.1.*|9.3.2.5.*" data-name="R18 common / NR19/20 general / 6GR organizational …" data-group="NR Rel-18"><div class="session-name">R18 common / NR19/20 general / 6GR organizational …</div></div>
+<div class="session-block week-cell wr-1" style="grid-row:33/57;--cell-rows:24;grid-column:3/4;--session-border:#7C3AED" title="EUTRA&amp;NR15161718 con’t / NR19 SONMDT / NR20 SONMDT · 11:00–13:00" data-popup-of="monday:3" data-room-scope="assigned" data-ai="7.10|8.6" data-ai-scope="7.10.*|8.6.*" data-name="EUTRA&amp;NR15161718 con’t / NR19 SONMDT / NR20 SONMDT" data-group="NR Rel-19"><div class="session-name">EUTRA&amp;NR15161718 con’t / NR19 SONMDT / NR20 SONMDT</div></div>
+<div class="session-block week-cell wr-2" style="grid-row:33/45;--cell-rows:12;grid-column:4/5;--session-border:#7C3AED" title="NR19 Mob · 11:00–12:00" data-popup-of="monday:4" data-room-scope="assigned" data-ai="7.6|7.6.2" data-ai-scope="7.6|7.6.2.*" data-name="NR19 Mob" data-group="NR Rel-19"><div class="session-name">NR19 Mob</div></div>
+<div class="session-block week-cell wr-0" style="grid-row:33/57;--cell-rows:24;grid-column:2/3;--session-border:#2563EB" title="Spectrum aggregation / 6GR Control Plane · 11:00–13:00" data-popup-of="monday:5" data-room-scope="assigned" data-ai="9.3.2.5|9.3.2|9.3.2.1" data-ai-scope="9.3.2.5.*|9.3.2|9.3.2.1.*" data-name="Spectrum aggregation / 6GR Control Plane" data-group="6GR Rel-20"><div class="session-name">Spectrum aggregation / 6GR Control Plane</div></div>
+<div class="session-block week-cell wr-2" style="grid-row:45/57;--cell-rows:12;grid-column:4/5;--session-border:#0D9488" title="NR20 MIMO · 12:00–13:00" data-popup-of="monday:6" data-room-scope="assigned" data-ai="8.10|8.10.1|8.10.2" data-ai-scope="8.10|8.10.1.*|8.10.2.*" data-name="NR20 MIMO" data-group="NR Rel-20"><div class="session-name">NR20 MIMO</div></div>
+<div class="session-block week-cell wr-1" style="grid-row:75/99;--cell-rows:24;grid-column:3/4;--session-border:#059669" title="R17/18 NR / IoT NTN / R17 NR NTN corrections / R18 NR NTN corrections … · 14:30–16:30" data-popup-of="monday:7" data-room-scope="assigned" data-ai="5.3|6.0.2.17|6.0.2.18|7.8|7.8.2|7.9|7.9.2|8.7|8.7.1|8.7.2" data-ai-scope="5.3.*|6.0.2.17.*|6.0.2.18.*|7.8|7.8.2.*|7.9|7.9.2.*|8.7|8.7.1.*|8.7.2.*" data-name="R17/18 NR / IoT NTN / R17 NR NTN corrections / R18 NR NTN corrections …" data-group="NR Rel-17 and earlier"><div class="session-name">R17/18 NR / IoT NTN / R17 NR NTN corrections / R18 NR NTN corrections …</div></div>
+<div class="session-block week-cell wr-2" style="grid-row:75/99;--cell-rows:24;grid-column:4/5;--session-border:#7C3AED" title="Rel-19 corrections / MIMO / NR LPWUS … · 14:30–16:30" data-popup-of="monday:8" data-room-scope="assigned" data-ai="7.12|7.4|7.11" data-ai-scope="7.12.*|7.4.*|7.11.*" data-name="Rel-19 corrections / MIMO / NR LPWUS …" data-group="NR Rel-19"><div class="session-name">Rel-19 corrections / MIMO / NR LPWUS …</div></div>
+<div class="session-block week-cell wr-3" style="grid-row:75/99;--cell-rows:24;grid-column:5/6;--session-border:#CA8A04" title="1630-1700 A-IoT paging configuration · 14:30–16:30" data-popup-of="monday:9" data-room-scope="assigned" data-ai="" data-ai-scope="7.2.*|8.2.*" data-name="1630-1700 A-IoT paging configuration" data-group="Offline"><div class="session-name">1630-1700 A-IoT paging configuration</div></div>
+<div class="session-block week-cell wr-0" style="grid-row:75/99;--cell-rows:24;grid-column:2/3;--session-border:#2563EB" title="Common CP/UP · 14:30–16:30" data-popup-of="monday:10" data-room-scope="assigned" data-ai="9.3.3|9.3.3.1|9.3.3.2" data-ai-scope="9.3.3|9.3.3.1.*|9.3.3.2.*" data-name="Common CP/UP" data-group="6GR Rel-20"><div class="session-name">Common CP/UP</div></div>
+<div class="session-block week-cell wr-1" style="grid-row:105/123;--cell-rows:18;grid-column:3/4;--session-border:#CA8A04" title="NTN pre-meeting offline · 17:00–18:30" data-popup-of="monday:11" data-room-scope="assigned" data-ai="9.6" data-ai-scope="9.6.*" data-name="NTN pre-meeting offline" data-group="Offline"><div class="session-name">NTN pre-meeting offline</div></div>
+<div class="session-block week-cell wr-0" style="grid-row:105/129;--cell-rows:24;grid-column:2/3;--session-border:#2563EB" title="6GR Control Plane · 17:00–19:00" data-popup-of="monday:12" data-room-scope="assigned" data-ai="9.3.2|9.3.2.1|9.2.1" data-ai-scope="9.3.2|9.3.2.1.*|9.2.1.*" data-name="6GR Control Plane" data-group="6GR Rel-20"><div class="session-name">6GR Control Plane</div></div>
+<div class="session-block week-cell wr-1" style="grid-row:123/129;--cell-rows:6;grid-column:3/4;--session-border:#0D9488" title="NTN R20 GNSS resilient · 18:30–19:00" data-popup-of="monday:13" data-room-scope="assigned" data-ai="8.11|8.11.1|8.11.2" data-ai-scope="8.11|8.11.1.*|8.11.2.*" data-name="NTN R20 GNSS resilient" data-group="NR Rel-20"><div class="session-name">NTN R20 GNSS resilient</div></div>
+<div class="session-block week-cell wr-1" style="grid-row:3/29;--cell-rows:26;grid-column:8/9;--session-border:#0D9488" title="NR20 AI mobility · 08:30–10:40" data-popup-of="tuesday:0" data-room-scope="assigned" data-ai="8.3|8.3.1|8.3.2" data-ai-scope="8.3|8.3.1.*|8.3.2.*" data-name="NR20 AI mobility" data-group="NR Rel-20"><div class="session-name">NR20 AI mobility</div></div>
+<div class="session-block week-cell wr-2" style="grid-row:3/27;--cell-rows:24;grid-column:9/10;--session-border:#059669" title="NR1718 Pos / NR19 Ambient IoT / NR20 Others … · 08:30–10:30" data-popup-of="tuesday:1" data-room-scope="assigned" data-ai="5.2|6.0.2.21|7.2|8.13.2|8.14" data-ai-scope="5.2.*|6.0.2.21.*|7.2.*|8.13.2.*|8.14.*" data-name="NR1718 Pos / NR19 Ambient IoT / NR20 Others …" data-group="NR Rel-17 and earlier"><div class="session-name">NR1718 Pos / NR19 Ambient IoT / NR20 Others …</div></div>
+<div class="session-block week-cell wr-0" style="grid-row:3/27;--cell-rows:24;grid-column:7/8;--session-border:#2563EB" title="User Plane · 08:30–10:30" data-popup-of="tuesday:2" data-room-scope="assigned" data-ai="9.3.1|9.3.1.2" data-ai-scope="9.3.1|9.3.1.2.*" data-name="User Plane" data-group="6GR Rel-20"><div class="session-name">User Plane</div></div>
+<div class="session-block week-cell wr-1" style="grid-row:33/45;--cell-rows:12;grid-column:8/9;--session-border:#CA8A04" title="Offline for RRC details · 11:00–12:00" data-popup-of="tuesday:3" data-room-scope="assigned" data-ai="" data-ai-scope="5.1.3.1.*|9.3.2.*" data-name="Offline for RRC details" data-group="Offline"><div class="session-name">Offline for RRC details</div></div>
+<div class="session-block week-cell wr-2" style="grid-row:33/45;--cell-rows:12;grid-column:9/10;--session-border:#CA8A04" title="CP offlines · 11:00–12:00" data-popup-of="tuesday:4" data-room-scope="assigned" data-ai="" data-ai-scope="9.3.2.2.*" data-name="CP offlines" data-group="Offline"><div class="session-name">CP offlines</div></div>
+<div class="session-block week-cell wr-0" style="grid-row:33/57;--cell-rows:24;grid-column:7/8;--session-border:#2563EB" title="User Plane · 11:00–13:00" data-popup-of="tuesday:5" data-room-scope="assigned" data-ai="9.3.1|9.3.1.1" data-ai-scope="9.3.1|9.3.1.1.*" data-name="User Plane" data-group="6GR Rel-20"><div class="session-name">User Plane</div></div>
+<div class="session-block week-cell wr-1" style="grid-row:45/57;--cell-rows:12;grid-column:8/9;--session-border:#0D9488" title="NR20 AI mobility · 12:00–13:00" data-popup-of="tuesday:6" data-room-scope="assigned" data-ai="8.3|8.3.2|8.3.3" data-ai-scope="8.3|8.3.2.*|8.3.3.*" data-name="NR20 AI mobility" data-group="NR Rel-20"><div class="session-name">NR20 AI mobility</div></div>
+<div class="session-block week-cell wr-2" style="grid-row:45/51;--cell-rows:6;grid-column:9/10;--session-border:#CA8A04" title="CP offlines · 12:00–12:30" data-popup-of="tuesday:7" data-room-scope="assigned" data-ai="" data-ai-scope="9.3.2.2.*" data-name="CP offlines" data-group="Offline"><div class="session-name">CP offlines</div></div>
+<div class="session-block week-cell wr-2" style="grid-row:51/57;--cell-rows:6;grid-column:9/10;--session-border:#CA8A04" title="CP offlines · 12:30–13:00" data-popup-of="tuesday:8" data-room-scope="assigned" data-ai="" data-ai-scope="9.3.2.2.*" data-name="CP offlines" data-group="Offline"><div class="session-name">CP offlines</div></div>
+<div class="session-block week-cell wr-1" style="grid-row:75/98;--cell-rows:23;grid-column:8/9;--session-border:#0D9488" title="NR20 AIoT · 14:30–16:25" data-popup-of="tuesday:9" data-room-scope="assigned" data-ai="8.2|8.2.1|8.2.2" data-ai-scope="8.2|8.2.1.*|8.2.2.*" data-name="NR20 AIoT" data-group="NR Rel-20"><div class="session-name">NR20 AIoT</div></div>
+<div class="session-block week-cell wr-2" style="grid-row:75/87;--cell-rows:12;grid-column:9/10;--session-border:#CA8A04" title="CP offlines [6G UE caps] Dynamic capability update · 14:30–15:30" data-popup-of="tuesday:10" data-room-scope="assigned" data-ai="" data-ai-scope="9.2.1.*" data-name="CP offlines [6G UE caps] Dynamic capability update" data-group="Offline"><div class="session-name">CP offlines [6G UE caps] Dynamic capability update</div></div>
+<div class="session-block week-cell wr-0" style="grid-row:75/98;--cell-rows:23;grid-column:7/8;--session-border:#2563EB" title="User Plane / Common CP/UP · 14:30–16:25" data-popup-of="tuesday:11" data-room-scope="assigned" data-ai="9.3.1|9.3.1.3.1|9.3.3" data-ai-scope="9.3.1|9.3.1.3.1.*|9.3.3.*" data-name="User Plane / Common CP/UP" data-group="6GR Rel-20"><div class="session-name">User Plane / Common CP/UP</div></div>
+<div class="session-block week-cell wr-2" style="grid-row:87/98;--cell-rows:11;grid-column:9/10;--session-border:#0D9488" title="E-UTRA TN to NR NTN HO / R20 IoT NTN · 15:30–16:25" data-popup-of="tuesday:12" data-room-scope="assigned" data-ai="8.8|8.8.1|8.7|8.7.2|8.7.3" data-ai-scope="8.8|8.8.1.*|8.7|8.7.2.*|8.7.3.*" data-name="E-UTRA TN to NR NTN HO / R20 IoT NTN" data-group="NR Rel-20"><div class="session-name">E-UTRA TN to NR NTN HO / R20 IoT NTN</div></div>
+<div class="session-block week-cell wr-2" style="grid-row:103/117;--cell-rows:14;grid-column:9/10;--session-border:#0D9488" title="R20 NR NTN DL compensation · 16:50–18:00" data-popup-of="tuesday:13" data-room-scope="assigned" data-ai="8.12" data-ai-scope="8.12.*" data-name="R20 NR NTN DL compensation" data-group="NR Rel-20"><div class="session-name">R20 NR NTN DL compensation</div></div>
+<div class="session-block week-cell wr-0" style="grid-row:103/126;--cell-rows:23;grid-column:7/8;--session-border:#2563EB" title="6GR Control Plane · 16:50–18:45" data-popup-of="tuesday:14" data-room-scope="assigned" data-ai="9.3.2|9.3.2.6|9.3.2.3" data-ai-scope="9.3.2|9.3.2.6.*|9.3.2.3.*" data-name="6GR Control Plane" data-group="6GR Rel-20"><div class="session-name">6GR Control Plane</div></div>
+<div class="session-block week-cell wr-2" style="grid-row:117/129;--cell-rows:12;grid-column:9/10;--session-border:#CA8A04" title="Offline on AI/ML · 18:00–19:00" data-popup-of="tuesday:15" data-room-scope="assigned" data-ai="" data-ai-scope="7.1.*|8.1.*|8.3.*|9.3.3.2.*" data-name="Offline on AI/ML" data-group="Offline"><div class="session-name">Offline on AI/ML</div></div>
+<div class="session-block week-cell wr-1" style="grid-row:3/15;--cell-rows:12;grid-column:12/13;--session-border:#7C3AED" title="NR19 AI/ML PHY · 08:30–09:30" data-popup-of="wednesday:0" data-room-scope="assigned" data-ai="7.1" data-ai-scope="7.1.*" data-name="NR19 AI/ML PHY" data-group="NR Rel-19"><div class="session-name">NR19 AI/ML PHY</div></div>
+<div class="session-block week-cell wr-2" style="grid-row:3/21;--cell-rows:18;grid-column:13/14;--session-border:#CA8A04" title="Mobility pre-meeting offline – Early DL/UL synch, resource reservation · 08:30–10:00" data-popup-of="wednesday:1" data-room-scope="assigned" data-ai="9.4.1" data-ai-scope="9.4.1.*" data-name="Mobility pre-meeting offline – Early DL/UL synch, resource reservation" data-group="Offline"><div class="session-name">Mobility pre-meeting offline – Early DL/UL synch, resource reservation</div></div>
+<div class="session-block week-cell wr-0" style="grid-row:3/27;--cell-rows:24;grid-column:11/12;--session-border:#2563EB" title="6GR User Plane · 08:30–10:30" data-popup-of="wednesday:2" data-room-scope="assigned" data-ai="9.3.1|9.3.1.3.3" data-ai-scope="9.3.1|9.3.1.3.3.*" data-name="6GR User Plane" data-group="6GR Rel-20"><div class="session-name">6GR User Plane</div></div>
+<div class="session-block week-cell wr-1" style="grid-row:15/27;--cell-rows:12;grid-column:12/13;--session-border:#0D9488" title="NR20 AI/M PHY · 09:30–10:30" data-popup-of="wednesday:3" data-room-scope="assigned" data-ai="8.1|8.1.1|8.1.2|8.1.3" data-ai-scope="8.1|8.1.1.*|8.1.2.*|8.1.3.*" data-name="NR20 AI/M PHY" data-group="NR Rel-20"><div class="session-name">NR20 AI/M PHY</div></div>
+<div class="session-block week-cell wr-3" style="grid-row:15/27;--cell-rows:12;grid-column:14/15;--session-border:#2563EB" title="RRC structure · 09:30–10:30" data-popup-of="wednesday:4" data-room-scope="assigned" data-ai="9.3.2.2" data-ai-scope="9.3.2.2.*" data-name="RRC structure" data-group="6GR Rel-20"><div class="session-name">RRC structure</div></div>
+<div class="session-block week-cell wr-2" style="grid-row:21/33;--cell-rows:12;grid-column:13/14;--session-border:#9CA3AF" title="ISAC UE SE selection – Revise email discussion report R2-2607154 · 10:00–11:00" data-popup-of="wednesday:5" data-room-scope="assigned" data-ai="" data-ai-scope="9.5.*" data-name="ISAC UE SE selection – Revise email discussion report R2-2607154" data-group=""><div class="session-name">ISAC UE SE selection – Revise email discussion report R2-2607154</div></div>
+<div class="session-block week-cell wr-3" style="grid-row:27/33;--cell-rows:6;grid-column:14/15;--session-border:#CA8A04" title="MANET offline · 10:30–11:00" data-popup-of="wednesday:6" data-room-scope="assigned" data-ai="" data-ai-scope="7.14.*" data-name="MANET offline" data-group="Offline"><div class="session-name">MANET offline</div></div>
+<div class="session-block week-cell wr-1" style="grid-row:33/45;--cell-rows:12;grid-column:12/13;--session-border:#9CA3AF" title="common AI PHY and AI mob issues · 11:00–12:00" data-popup-of="wednesday:7" data-room-scope="assigned" data-ai="" data-ai-scope="8.1.*|8.3.*" data-name="common AI PHY and AI mob issues" data-group=""><div class="session-name">common AI PHY and AI mob issues</div></div>
+<div class="session-block week-cell wr-2" style="grid-row:33/39;--cell-rows:6;grid-column:13/14;--session-border:#CA8A04" title="CP offline · 11:00–11:30" data-popup-of="wednesday:8" data-room-scope="assigned" data-ai="" data-ai-scope="9.3.2.*" data-name="CP offline" data-group="Offline"><div class="session-name">CP offline</div></div>
+<div class="session-block week-cell wr-3" style="grid-row:33/45;--cell-rows:12;grid-column:14/15;--session-border:#CA8A04" title="[6G UP] RLC · 11:00–12:00" data-popup-of="wednesday:9" data-room-scope="assigned" data-ai="" data-ai-scope="9.3.1.1.*" data-name="[6G UP] RLC" data-group="Offline"><div class="session-name">[6G UP] RLC</div></div>
+<div class="session-block week-cell wr-0" style="grid-row:33/39;--cell-rows:6;grid-column:11/12;--session-border:#0D9488" title="TEI20 · 11:00–11:30" data-popup-of="wednesday:10" data-room-scope="assigned" data-ai="8.14" data-ai-scope="8.14.*" data-name="TEI20" data-group="NR Rel-20"><div class="session-name">TEI20</div></div>
+<div class="session-block week-cell wr-2" style="grid-row:39/57;--cell-rows:18;grid-column:13/14;--session-border:#CA8A04" title="CA pre-meeting offline · 11:30–13:00" data-popup-of="wednesday:11" data-room-scope="assigned" data-ai="9.3.2.5" data-ai-scope="9.3.2.5.*" data-name="CA pre-meeting offline" data-group="Offline"><div class="session-name">CA pre-meeting offline</div></div>
+<div class="session-block week-cell wr-0" style="grid-row:39/57;--cell-rows:18;grid-column:11/12;--session-border:#2563EB" title="measurements · 11:30–13:00" data-popup-of="wednesday:12" data-room-scope="assigned" data-ai="9.4.2" data-ai-scope="9.4.2.*" data-name="measurements" data-group="6GR Rel-20"><div class="session-name">measurements</div></div>
+<div class="session-block week-cell wr-1" style="grid-row:45/57;--cell-rows:12;grid-column:12/13;--session-border:#0D9488" title="NR20 AI/M PHY · 12:00–13:00" data-popup-of="wednesday:13" data-room-scope="assigned" data-ai="8.1|8.1.2|8.1.3" data-ai-scope="8.1|8.1.2.*|8.1.3.*" data-name="NR20 AI/M PHY" data-group="NR Rel-20"><div class="session-name">NR20 AI/M PHY</div></div>
+<div class="session-block week-cell wr-1" style="grid-row:75/99;--cell-rows:24;grid-column:12/13;--session-border:#0D9488" title="NR20 Mobility · 14:30–16:30" data-popup-of="wednesday:14" data-room-scope="assigned" data-ai="8.4|8.4.1|8.4.2|8.4.3" data-ai-scope="8.4|8.4.1.*|8.4.2.*|8.4.3.*" data-name="NR20 Mobility" data-group="NR Rel-20"><div class="session-name">NR20 Mobility</div></div>
+<div class="session-block week-cell wr-2" style="grid-row:75/99;--cell-rows:24;grid-column:13/14;--session-border:#0D9488" title="NR20 AIoT · 14:30–16:30" data-popup-of="wednesday:15" data-room-scope="assigned" data-ai="8.2|8.2.3|8.2.4" data-ai-scope="8.2|8.2.3.*|8.2.4.*" data-name="NR20 AIoT" data-group="NR Rel-20"><div class="session-name">NR20 AIoT</div></div>
+<div class="session-block week-cell wr-0" style="grid-row:75/99;--cell-rows:24;grid-column:11/12;--session-border:#2563EB" title="Common UP/CP · 14:30–16:30" data-popup-of="wednesday:16" data-room-scope="assigned" data-ai="9.3.3|9.3.3.3" data-ai-scope="9.3.3|9.3.3.3.*" data-name="Common UP/CP" data-group="6GR Rel-20"><div class="session-name">Common UP/CP</div></div>
+<div class="session-block week-cell wr-3" style="grid-row:99/105;--cell-rows:6;grid-column:14/15;--session-border:#CA8A04" title="[6G UE caps] Dynamic capability update · 16:30–17:00" data-popup-of="wednesday:17" data-room-scope="assigned" data-ai="" data-ai-scope="9.2.1.*" data-name="[6G UE caps] Dynamic capability update" data-group="Offline"><div class="session-name">[6G UE caps] Dynamic capability update</div></div>
+<div class="session-block week-cell wr-1" style="grid-row:105/129;--cell-rows:24;grid-column:12/13;--session-border:#EA580C" title="NR18/19/20 XR / NR18 XR / NR19 XR … · 17:00–19:00" data-popup-of="wednesday:18" data-room-scope="assigned" data-ai="6.0.2.16|7.7|8.5" data-ai-scope="6.0.2.16.*|7.7.*|8.5.*" data-name="NR18/19/20 XR / NR18 XR / NR19 XR …" data-group="NR Rel-18"><div class="session-name">NR18/19/20 XR / NR18 XR / NR19 XR …</div></div>
+<div class="session-block week-cell wr-2" style="grid-row:105/129;--cell-rows:24;grid-column:13/14;--session-border:#0D9488" title="NR20 AIoT · 17:00–19:00" data-popup-of="wednesday:19" data-room-scope="assigned" data-ai="8.2" data-ai-scope="8.2.*" data-name="NR20 AIoT" data-group="NR Rel-20"><div class="session-name">NR20 AIoT</div></div>
+<div class="session-block week-cell wr-0" style="grid-row:105/129;--cell-rows:24;grid-column:11/12;--session-border:#2563EB" title="NTN · 17:00–19:00" data-popup-of="wednesday:20" data-room-scope="assigned" data-ai="9.6" data-ai-scope="9.6.*" data-name="NTN" data-group="6GR Rel-20"><div class="session-name">NTN</div></div>
+<div class="session-block week-cell wr-1" style="grid-row:3/27;--cell-rows:24;grid-column:17/18;--session-border:#0D9488" title="R20 IoT NTN / RAN4 - NTN related / TEI20 – NTN related · 08:30–10:30" data-popup-of="thursday:0" data-room-scope="assigned" data-ai="8.7|8.7.2|8.7.3|8.13.1|8.14" data-ai-scope="8.7|8.7.2.*|8.7.3.*|8.13.1.*|8.14.*" data-name="R20 IoT NTN / RAN4 - NTN related / TEI20 – NTN related" data-group="NR Rel-20"><div class="session-name">R20 IoT NTN / RAN4 - NTN related / TEI20 – NTN related</div></div>
+<div class="session-block week-cell wr-2" style="grid-row:3/15;--cell-rows:12;grid-column:18/19;--session-border:#CA8A04" title="UP offline · 08:30–09:30" data-popup-of="thursday:1" data-room-scope="assigned" data-ai="" data-ai-scope="9.3.1.3.2.*" data-name="UP offline" data-group="Offline"><div class="session-name">UP offline</div></div>
+<div class="session-block week-cell wr-0" style="grid-row:3/27;--cell-rows:24;grid-column:16/17;--session-border:#2563EB" title="6GR Control Plane · 08:30–10:30" data-popup-of="thursday:2" data-room-scope="assigned" data-ai="9.3.2|9.3.2.2" data-ai-scope="9.3.2|9.3.2.2.*" data-name="6GR Control Plane" data-group="6GR Rel-20"><div class="session-name">6GR Control Plane</div></div>
+<div class="session-block week-cell wr-3" style="grid-row:9/15;--cell-rows:6;grid-column:19/20;--session-border:#CA8A04" title="[LPWUS] How to address the SA2 LS on subgrouping ID · 09:00–09:30" data-popup-of="thursday:3" data-room-scope="assigned" data-ai="" data-ai-scope="7.4.*" data-name="[LPWUS] How to address the SA2 LS on subgrouping ID" data-group="Offline"><div class="session-name">[LPWUS] How to address the SA2 LS on subgrouping ID</div></div>
+<div class="session-block week-cell wr-2" style="grid-row:15/21;--cell-rows:6;grid-column:18/19;--session-border:#CA8A04" title="6G UP] LCP · 09:30–10:00" data-popup-of="thursday:4" data-room-scope="assigned" data-ai="" data-ai-scope="9.3.1.3.*" data-name="6G UP] LCP" data-group="Offline"><div class="session-name">6G UP] LCP</div></div>
+<div class="session-block week-cell wr-3" style="grid-row:27/39;--cell-rows:12;grid-column:19/20;--session-border:#CA8A04" title="[MOB] · 10:30–11:30" data-popup-of="thursday:5" data-room-scope="assigned" data-ai="" data-ai-scope="7.6.*|8.4.*|9.4.*" data-name="[MOB]" data-group="Offline"><div class="session-name">[MOB]</div></div>
+<div class="session-block week-cell wr-1" style="grid-row:33/43;--cell-rows:10;grid-column:17/18;--session-border:#0D9488" title="Cont. NTN R20 GNSS · 11:00–11:50" data-popup-of="thursday:6" data-room-scope="assigned" data-ai="8.11.2" data-ai-scope="8.11.2.*" data-name="Cont. NTN R20 GNSS" data-group="NR Rel-20"><div class="session-name">Cont. NTN R20 GNSS</div></div>
+<div class="session-block week-cell wr-2" style="grid-row:33/45;--cell-rows:12;grid-column:18/19;--session-border:#CA8A04" title="UP offline · 11:00–12:00" data-popup-of="thursday:7" data-room-scope="assigned" data-ai="" data-ai-scope="9.3.1.2.*" data-name="UP offline" data-group="Offline"><div class="session-name">UP offline</div></div>
+<div class="session-block week-cell wr-0" style="grid-row:33/57;--cell-rows:24;grid-column:16/17;--session-border:#2563EB" title="ISAC · 11:00–13:00" data-popup-of="thursday:8" data-room-scope="assigned" data-ai="9.5" data-ai-scope="9.5.*" data-name="ISAC" data-group="6GR Rel-20"><div class="session-name">ISAC</div></div>
+<div class="session-block week-cell wr-3" style="grid-row:39/45;--cell-rows:6;grid-column:19/20;--session-border:#CA8A04" title="[MOB] · 11:30–12:00" data-popup-of="thursday:9" data-room-scope="assigned" data-ai="" data-ai-scope="7.6.*|8.4.*|9.4.*" data-name="[MOB]" data-group="Offline"><div class="session-name">[MOB]</div></div>
+<div class="session-block week-cell wr-1" style="grid-row:43/55;--cell-rows:12;grid-column:17/18;--session-border:#0D9488" title="NR20 CovEnh · 11:50–12:50" data-popup-of="thursday:10" data-room-scope="assigned" data-ai="8.9.1" data-ai-scope="8.9.1.*" data-name="NR20 CovEnh" data-group="NR Rel-20"><div class="session-name">NR20 CovEnh</div></div>
+<div class="session-block week-cell wr-3" style="grid-row:45/57;--cell-rows:12;grid-column:19/20;--session-border:#CA8A04" title="[AI PHY] WF for L3 signalling based performance monitoring · 12:00–13:00" data-popup-of="thursday:11" data-room-scope="assigned" data-ai="" data-ai-scope="7.1.*|8.1.*" data-name="[AI PHY] WF for L3 signalling based performance monitoring" data-group="Offline"><div class="session-name">[AI PHY] WF for L3 signalling based performance monitoring</div></div>
+<div class="session-block week-cell short-session wr-1" style="grid-row:55/57;--cell-rows:2;grid-column:17/18;--session-border:#9CA3AF" title="CB for Rel-19 LPWUS · 12:50–13:00" data-popup-of="thursday:12" data-room-scope="assigned" data-ai="" data-ai-scope="7.4.*" data-name="CB for Rel-19 LPWUS" data-group=""><div class="session-name">CB for Rel-19 LPWUS</div></div>
+<div class="session-block week-cell wr-1" style="grid-row:75/99;--cell-rows:24;grid-column:17/18;--session-border:#0D9488" title="CB Kyeongin · 14:30–16:30" data-popup-of="thursday:13" data-room-scope="assigned" data-ai="8.4.3" data-ai-scope="8.4.3.*" data-name="CB Kyeongin" data-group="NR Rel-20"><div class="session-name">CB Kyeongin</div></div>
+<div class="session-block week-cell wr-2" style="grid-row:75/99;--cell-rows:24;grid-column:18/19;--session-border:#0D9488" title="CB Nathan / TEI20 positioning / NR20 AIoT · 14:30–16:30" data-popup-of="thursday:14" data-room-scope="assigned" data-ai="8.14|8.2" data-ai-scope="8.14.*|8.2.*" data-name="CB Nathan / TEI20 positioning / NR20 AIoT" data-group="NR Rel-20"><div class="session-name">CB Nathan / TEI20 positioning / NR20 AIoT</div></div>
+<div class="session-block week-cell wr-0" style="grid-row:75/99;--cell-rows:24;grid-column:16/17;--session-border:#2563EB" title="Common CP/UP · 14:30–16:30" data-popup-of="thursday:15" data-room-scope="assigned" data-ai="9.3.3|9.3.3.4|9.3.3.2" data-ai-scope="9.3.3|9.3.3.4.*|9.3.3.2.*" data-name="Common CP/UP" data-group="6GR Rel-20"><div class="session-name">Common CP/UP</div></div>
+<div class="session-block week-cell wr-3" style="grid-row:99/105;--cell-rows:6;grid-column:19/20;--session-border:#2563EB" title="Follow Up meeting of 6G Mobility – Early DL/UL synch, resource reservation · 16:30–17:00" data-popup-of="thursday:16" data-room-scope="assigned" data-ai="9.4.1" data-ai-scope="9.4.1.*" data-name="Follow Up meeting of 6G Mobility – Early DL/UL synch, resource reservation" data-group="6GR Rel-20"><div class="session-name">Follow Up meeting of 6G Mobility – Early DL/UL synch, resource reservation</div></div>
+<div class="session-block week-cell wr-1" style="grid-row:105/129;--cell-rows:24;grid-column:17/18;--session-border:#EA580C" title="CB Sergio / R18 NR NTN corrections / R18 IoT NTN corrections / NR19 NR NTN · 17:00–19:00" data-popup-of="thursday:17" data-room-scope="assigned" data-ai="6.0.2.17|6.0.2.18|7.8|8.7|8.7.3|8.12" data-ai-scope="6.0.2.17.*|6.0.2.18.*|7.8.*|8.7|8.7.3.*|8.12.*" data-name="CB Sergio / R18 NR NTN corrections / R18 IoT NTN corrections / NR19 NR NTN" data-group="NR Rel-18"><div class="session-name">CB Sergio / R18 NR NTN corrections / R18 IoT NTN corrections / NR19 NR NTN</div></div>
+<div class="session-block week-cell wr-0" style="grid-row:105/129;--cell-rows:24;grid-column:16/17;--session-border:#2563EB" title="Mobility · 17:00–19:00" data-popup-of="thursday:18" data-room-scope="assigned" data-ai="9.4.1|9.4.2" data-ai-scope="9.4.1.*|9.4.2.*" data-name="Mobility" data-group="6GR Rel-20"><div class="session-name">Mobility</div></div>
+<div class="session-block week-cell wr-1" style="grid-row:3/15;--cell-rows:12;grid-column:22/23;--session-border:#0D9488" title="CB Kyeongin / R20 AI Mob comebacks/continue · 08:30–09:30" data-popup-of="friday:0" data-room-scope="assigned" data-ai="8.3" data-ai-scope="8.3.*" data-name="CB Kyeongin / R20 AI Mob comebacks/continue" data-group="NR Rel-20"><div class="session-name">CB Kyeongin / R20 AI Mob comebacks/continue</div></div>
+<div class="session-block week-cell wr-1" style="grid-row:15/27;--cell-rows:12;grid-column:22/23;--session-border:#9CA3AF" title="CB Erlin / CB for NR20 AI/M PHY · 09:30–10:30" data-popup-of="friday:1" data-room-scope="assigned" data-ai="" data-ai-scope="8.1.*" data-name="CB Erlin / CB for NR20 AI/M PHY" data-group=""><div class="session-name">CB Erlin / CB for NR20 AI/M PHY</div></div>
+<div class="session-block week-cell wr-2" style="grid-row:15/27;--cell-rows:12;grid-column:23/24;--session-border:#0D9488" title="CB Sergio / R20 IoT NTN / E-UTRA TN to NR NTN HO · 09:30–10:30" data-popup-of="friday:2" data-room-scope="assigned" data-ai="8.7|8.8" data-ai-scope="8.7.*|8.8.*" data-name="CB Sergio / R20 IoT NTN / E-UTRA TN to NR NTN HO" data-group="NR Rel-20"><div class="session-name">CB Sergio / R20 IoT NTN / E-UTRA TN to NR NTN HO</div></div>
+<div class="session-block week-cell wr-0" style="grid-row:15/27;--cell-rows:12;grid-column:21/22;--session-border:#2563EB" title="CB Diana TBD / 6GR User Plane · 09:30–10:30" data-popup-of="friday:3" data-room-scope="assigned" data-ai="9.3.1" data-ai-scope="9.3.1.*" data-name="CB Diana TBD / 6GR User Plane" data-group="6GR Rel-20"><div class="session-name">CB Diana TBD / 6GR User Plane</div></div>
+<div class="session-block week-cell wr-0" style="grid-row:33/57;--cell-rows:24;grid-column:21/22;--session-border:#2563EB" title="6GR Control Plane · 11:00–13:00" data-popup-of="friday:4" data-room-scope="assigned" data-ai="9.3.2|9.2.1" data-ai-scope="9.3.2.*|9.2.1.*" data-name="6GR Control Plane" data-group="6GR Rel-20"><div class="session-name">6GR Control Plane</div></div>
+            </div>
+        </div>
+    </div>
     <div id="grid-end" hidden></div>
 <details class="supplements" open><summary>Additional information</summary><h3>Dates and deadlines</h3><div class="supplement-scroll"><table><tbody><tr><td>Oct. 2nd 10:00 UTC</td><td>Tdoc Submission Deadline.</td></tr></tbody></table></div><p>NOTE that this schedule may be modified on short notice.<br>Some Expectations: Details may be added every day. The Schedule for CBs on Thursday (and Friday) will be updated on Wednesday, and the schedule for CBs on Friday will be further updated on Thursday.</p><p>* Offline discussions should be well scoped and only 30mins in duration.</p><h3>Breaks</h3><div class="supplement-scroll"><table><tbody><tr><td>Morning coffee:</td><td>10:30 to 11:00</td></tr><tr><td>Lunch:</td><td>13:00 to 14:30</td></tr><tr><td>Afternoon coffee:</td><td>16:30 to 17:00</td></tr></tbody></table></div><h3>List of Offline Face to Face discussions</h3><div class="supplement-scroll"><table><thead><tr><th>Number</th><th>Title</th><th>Day/Time</th><th>Place</th><th>Coordinator</th></tr></thead><tbody><tr><td>[401]</td><td>Dedicated paging monitoring configuration Spectrum aggregation (cont)</td><td>Mon 16:30-17:00</td><td>BO3</td><td>Huawei</td></tr><tr><td>[005]</td><td>AI/ML</td><td>Tue 18:00-19:00</td><td>BO2</td><td>Zhongda Du (OPPO)</td></tr><tr><td>[006]</td><td>Dynamic capability update</td><td>Tue 14:30-15:30</td><td>BO2</td><td>Ziyi (Xiaomi)</td></tr><tr><td>[002]</td><td>6G Mobility</td><td>Wed 08:30-10:00</td><td>BO2</td><td>Jedrzej (Nokoia)</td></tr><tr><td>[9.3.2.2]</td><td>RRC structure</td><td>Wed 09:30-10:30</td><td>BO3</td><td>Henning (Ericsson)</td></tr><tr><td>[402]</td><td>MANET</td><td>Wed 10:30-11:00</td><td>BO3</td><td>Qian Zheng (vivo)</td></tr><tr><td>[008]</td><td>[6G UP] RLC</td><td>Wed 11:00-12:00</td><td>BO3</td><td>Nokia</td></tr><tr><td>[006]</td><td>[6G UE caps] Dynamic capability update</td><td>Wed 16:30-17:00</td><td>BO3</td><td>Ziyi (Xiaomi)</td></tr><tr><td>[009]</td><td>[6G UP] CB-PUSCH</td><td>Thr 08:30-09:30</td><td>BO2</td><td>Oppo, Ericsson</td></tr><tr><td>[010]</td><td>[6G UP] LCP</td><td>Thr 09:30-10:00</td><td>BO2</td><td>Joachim (Lenovo)</td></tr><tr><td>[201]</td><td>LPWUS (How to address the SA2 LS on subgrouping ID)</td><td>Thr 09:00-09:30</td><td>BO3</td><td>Ericsson</td></tr><tr><td>[101]</td><td>MOB</td><td>Thr 10:30-11:30</td><td>BO3</td><td>Chenli (Vivo)</td></tr><tr><td>[007]</td><td>[6G UP] Service characteristics awareness</td><td>Thr 11:00-11:00</td><td>BO2</td><td>Interdigital</td></tr><tr><td>[102]</td><td>MOB</td><td>Thr 11:30-12:00</td><td>BO3</td><td>Lianhai (Lenovo)</td></tr><tr><td>[204]</td><td>[AI PHY] WF for L3 signalling based performance monitoring</td><td>Thr 12:00-13:00</td><td>BO3</td><td>Fei Dong (ZTE)</td></tr></tbody></table></div><h3>Notes in the schedule table</h3><div class="supplement-scroll"><table><thead><tr><th>Day</th><th>Note</th></tr></thead><tbody><tr><td>Tuesday</td><td>End at 6:45pm – social topic/feature dinners</td></tr><tr><td>Thursday</td><td>Colorful Polo Day</td></tr></tbody></table></div></details>    <div class="popup-backdrop" id="popup-backdrop"></div>
     <div class="popup-floating" id="popup-floating"><div id="popup-content"></div><button class="popup-close" id="popup-close-btn">&times;</button></div>
@@ -3004,7 +3394,7 @@ UE capability framework">
         const activeTab = document.querySelector('.tab.active');
         const state = {
             activeDay: activeTab ? activeTab.dataset.day : null,
-            gridZoom: gridZoom,
+            gridZoom: isAllDays() && weekZoom === null ? 'fit' : gridZoom,
             scrollX: window.scrollX,
             scrollY: window.scrollY
         };
@@ -3110,6 +3500,7 @@ UE capability framework">
 
     tabs.forEach(tab => {
         tab.addEventListener('click', function() {
+            rememberViewZoom();
             tabs.forEach(t => t.classList.remove('active'));
             panels.forEach(p => p.classList.remove('active'));
             this.classList.add('active');
@@ -3119,7 +3510,25 @@ UE capability framework">
             // day-select.js showed the first day by a rule; .active holds it from here.
             const initialDay = document.getElementById('initial-day');
             if (initialDay) initialDay.remove();
+            document.documentElement.classList.toggle('all-days-view', day === ALL_DAYS);
+            if (gridZoomSupported) setGridZoom(viewZoom());
             saveUserState();
+        });
+    });
+
+    // Fewer rooms need less width (room-picks.js): fit the grid to them again.
+    document.addEventListener('room-picks-change', function() {
+        if (!isAllDays() || !gridZoomSupported) return;
+        weekZoom = null;
+        setGridZoom(viewZoom());
+        saveUserState();
+    });
+
+    // A day's name in the All view opens that day.
+    document.querySelectorAll('.week-day').forEach(button => {
+        button.addEventListener('click', function() {
+            const tab = document.querySelector('.tab[data-day="' + this.dataset.day + '"]');
+            if (tab) tab.click();
         });
     });
 
@@ -3146,12 +3555,26 @@ UE capability framework">
     const gridZoomSupported = window.CSS && CSS.supports && CSS.supports('zoom', '1');
     let gridZoom = 1;
 
+    // The All view and the days keep a zoom each: what fits a day is not what
+    // fits the week. The All view fits the width until it is pinched (null).
+    const ALL_DAYS = 'all-days';
+    let dayZoom = 1;
+    let weekZoom = null;
+    const isAllDays = () => !!document.querySelector('.tab.active[data-day="' + ALL_DAYS + '"]');
+    const viewZoom = () => !isAllDays() ? dayZoom : (weekZoom === null ? minGridZoom() : weekZoom);
+
+    function rememberViewZoom() {
+        if (!isAllDays()) dayZoom = gridZoom;
+    }
+
     function activeGridWrapper() {
         return document.querySelector('.day-panel.active .grid-wrapper');
     }
 
+    // The All view's grid sets its own, wide enough for every room of the week.
     function gridMinWidth() {
-        return parseFloat(getComputedStyle(document.documentElement)
+        const grid = document.querySelector('.day-panel.active .schedule-grid');
+        return parseFloat(getComputedStyle(grid || document.documentElement)
             .getPropertyValue('--grid-min-width')) || 600;
     }
 
@@ -3183,8 +3606,9 @@ UE capability framework">
 
     // Above 100% the time axis keeps its 100% width and text, and only its
     // rows follow the zoom: the width goes to the rooms. Below, it shrinks
-    // with the grid. This is its size on screen relative to 100%.
-    const axisScale = z => Math.min(z, 1);
+    // with the grid, except in the All view, where a week fitted to a phone
+    // is read by its times and day names. This is its size on screen relative to 100%.
+    const axisScale = z => isAllDays() ? 1 : Math.min(z, 1);
 
     // Zoom magnifies the grid as it is laid out at 100%, so --grid-width holds
     // that width. Left to fit the box at each zoom (box width / zoom), the
@@ -3194,8 +3618,10 @@ UE capability framework">
         const root = document.documentElement;
         const wrapper = activeGridWrapper();
         root.style.setProperty('--grid-zoom', String(gridZoom));
-        if (gridZoom > 1) root.style.setProperty('--axis-unzoom', String(1 / gridZoom));
+        if (axisScale(gridZoom) !== gridZoom) root.style.setProperty('--axis-unzoom', String(1 / gridZoom));
         else root.style.removeProperty('--axis-unzoom');
+        // The week's rows fill the screen's height at the zoom that fits its width.
+        if (isAllDays()) root.style.setProperty('--week-fit', String(minGridZoom()));
         if (gridZoom === 1 || !wrapper) root.style.removeProperty('--grid-width');
         else root.style.setProperty('--grid-width', Math.max(wrapper.clientWidth, gridMinWidth()) + 'px');
         updatePinchTarget();
@@ -3233,8 +3659,14 @@ UE capability framework">
                 el.style.removeProperty('--axis-sx');
                 el.style.removeProperty('--axis-sy');
             });
+            p.dayNames.forEach(el => {
+                el.style.removeProperty('--day-sx');
+                el.style.removeProperty('--day-sy');
+            });
+            if (p.axisHead) p.axisHead.style.removeProperty('--head-ty');
             const moved = p.zoom !== gridZoom;
             setGridZoom(p.zoom);
+            if (moved && isAllDays()) weekZoom = gridZoom;
             if (moved) {
                 p.wrapper.scrollLeft = p.scrollLeft;
                 window.scrollTo(window.scrollX, p.scrollTop);
@@ -3250,6 +3682,10 @@ UE capability framework">
                 const mid = touchMid(e.touches);
                 const rect = grid.getBoundingClientRect();
                 const box = wrapper.getBoundingClientRect();
+                const axisHead = grid.querySelector('.room-header.time-col');
+                // The All view's day names keep their size at any zoom, and so does their row.
+                const dayNames = grid.querySelectorAll('.week-day');
+                const dayName = Array.from(dayNames).find(el => el.offsetParent);
                 pinch = {
                     wrapper: wrapper,
                     grid: grid,
@@ -3272,7 +3708,14 @@ UE capability framework">
                     axisWidth: parseFloat(getComputedStyle(document.documentElement)
                         .getPropertyValue('--time-col-width')) || 36,
                     // The sticky time axis (.now-line carries its NOW label).
-                    axis: grid.querySelectorAll('.time-label, .room-header.time-col, .break-axis, .now-line')
+                    axis: grid.querySelectorAll('.time-label, .room-header.time-col, .break-axis, .now-line'),
+                    // A sticky axis stays inside the grid's box: it goes no further
+                    // right than this, however far the scaled grid lets the box scroll.
+                    axisMax: rect.width - (axisHead ? axisHead.getBoundingClientRect().width : 0),
+                    axisHead: axisHead,
+                    dayNames: dayNames,
+                    // Screen height of the day names' row (none on a day's grid).
+                    fixedTop: dayName ? dayName.getBoundingClientRect().height : 0
                 };
             }, { passive: true });
             wrapper.addEventListener('touchmove', function(e) {
@@ -3308,21 +3751,27 @@ UE capability framework">
                 const sx = (W * zoom - A * axisScale(zoom)) / (W * g - A * axisScale(g));
                 const sy = zoom / g;
                 const tx = W * zoom - W * g * sx;
-                grid.style.transform = 'translateX(' + tx / g + 'px) scale(' + sx + ',' + sy + ')';
-                wrapper.style.height = pinch.boxExtra + pinch.gridHeight * zoom + 'px';
+                // The day names' row will not grow with the zoom, so what lies
+                // under it is lifted by what the scale adds to that row; the row's
+                // top goes above the box, and the names shrink back into its bottom.
+                const lift = pinch.fixedTop * (sy - 1);
+                grid.style.transform = 'translate(' + tx / g + 'px,' + -lift / g + 'px) scale(' + sx + ',' + sy + ')';
+                wrapper.style.height = pinch.boxExtra + pinch.gridHeight * zoom - lift + 'px';
                 // Keep that grid point under the fingers as they move. A grid
                 // scaled down still scrolls as far as its unscaled width, so
                 // the end of the scaled grid is held here.
                 const mid = touchMid(e.touches);
                 pinch.scrollLeft = Math.max(0, Math.min(pinch.boxLeft + tx + pinch.x * g * sx - mid.x,
                     W * zoom - pinch.boxWidth));
-                pinch.scrollTop = pinch.gridTop + pinch.y * zoom - mid.y;
+                pinch.scrollTop = pinch.gridTop + pinch.y * zoom - lift - mid.y;
                 wrapper.scrollLeft = pinch.scrollLeft;
                 window.scrollTo(window.scrollX, pinch.scrollTop);
                 // Sticky offsets are worked out before the transform: an axis
-                // held at scrollLeft inside the grid lands at tx + scrollLeft * sx.
+                // held at scrollLeft inside the grid lands at tx + scrollLeft * sx,
+                // or at tx + axisMax * sx once it reaches the grid's end.
                 // The axis is in its own units (--axis-unzoom above 100%).
-                const shift = (wrapper.scrollLeft * (1 - sx) - tx) / (g * sx) * Math.max(g, 1) + 'px';
+                const held = Math.min(wrapper.scrollLeft, pinch.axisMax);
+                const shift = (wrapper.scrollLeft - tx - held * sx) / (axisScale(g) * sx) + 'px';
                 // Its width and text go from their size at this zoom to their
                 // size at the fingers' zoom, the same way across and down.
                 const axisSx = String(axisScale(zoom) / axisScale(g) / sx);
@@ -3331,6 +3780,13 @@ UE capability framework">
                     el.style.setProperty('--pinch-shift', shift);
                     el.style.setProperty('--axis-sx', axisSx);
                     el.style.setProperty('--axis-sy', axisSy);
+                });
+                // The Time head spans the day names' row too: its middle drops by half the lift.
+                if (pinch.axisHead) pinch.axisHead.style.setProperty('--head-ty', lift / 2 / sy + 'px');
+                const daySx = String(1 / sx), daySy = String(1 / sy);
+                pinch.dayNames.forEach(el => {
+                    el.style.setProperty('--day-sx', daySx);
+                    el.style.setProperty('--day-sy', daySy);
                 });
             }, { passive: false });
             const endPinch = function(e) {
@@ -3343,7 +3799,7 @@ UE capability framework">
         // The 100% layout follows the box (rotation): keep the zoom, magnify
         // the new layout. A wider box can also fit the day at a larger zoom.
         window.addEventListener('resize', function() {
-            if (!pinch) setGridZoom(gridZoom);
+            if (!pinch) setGridZoom(isAllDays() ? viewZoom() : gridZoom);
         });
         if (window.visualViewport) window.visualViewport.addEventListener('resize', updatePinchTarget);
         updatePinchTarget();
@@ -3356,7 +3812,11 @@ UE capability framework">
     if (initialTab) {
         initialTab.click();
         if (saved && saved.activeDay === initialTab.dataset.day) {
-            if (gridZoomSupported && saved.gridZoom) setGridZoom(saved.gridZoom);
+            if (gridZoomSupported && saved.gridZoom) {
+                if (isAllDays()) weekZoom = saved.gridZoom === 'fit' ? null : saved.gridZoom;
+                else dayZoom = saved.gridZoom;
+                setGridZoom(viewZoom());
+            }
             window.scrollTo(saved.scrollX || 0, saved.scrollY || 0);
         }
     }
@@ -3370,16 +3830,27 @@ UE capability framework">
         if (!showNowLine) return;
         const todayPanel = document.getElementById(weekday);
         if (!todayPanel || (todayPanel.dataset.date && todayPanel.dataset.date !== date)) return;
-        const grid = todayPanel.querySelector('.schedule-grid');
+        addNowLine(todayPanel.querySelector('.schedule-grid'), minutes);
+        // In the All view the NOW label stays on the time axis, and the red
+        // line runs across today's rooms only (schedule.css).
+        const today = document.querySelector('.week-day[data-day="' + weekday + '"]');
+        if (today) {
+            addNowLine(today.parentElement, minutes, 'now-label');
+            addNowLine(today.parentElement, minutes, 'now-today', today.style.gridColumn);
+        }
+    }
+
+    function addNowLine(grid, minutes, kind, column) {
         if (!grid) return;
         const base = Number(grid.dataset.start);
         const end = Number(grid.dataset.end);
         const interval = Number(grid.dataset.slot);
         if (minutes >= base && minutes < end) {
-            const row = Math.floor((minutes - base) / interval) + 2;
+            const row = Math.floor((minutes - base) / interval) + Number(grid.dataset.firstRow || 2);
             const nowLine = document.createElement('div');
-            nowLine.className = 'now-line';
+            nowLine.className = kind ? 'now-line ' + kind : 'now-line';
             nowLine.style.gridRow = row + ' / ' + (row + 1);
+            if (column) nowLine.style.gridColumn = column;
             grid.appendChild(nowLine);
         }
     }
@@ -3550,6 +4021,16 @@ UE capability framework">
             window.dispatchEvent(new CustomEvent('agreement-select', { detail: null }));
         }));
     }
+    // An All view cell shows the popup of its day's cell.
+    function popupOf(block) {
+        const of = block.dataset.popupOf;
+        if (!of) return block.getAttribute('data-popup');
+        const [day, index] = of.split(':');
+        const panel = document.getElementById(day);
+        const cell = panel && panel.querySelectorAll('.session-block')[Number(index)];
+        return cell ? cell.getAttribute('data-popup') : null;
+    }
+
     document.querySelectorAll('.session-block').forEach(block => {
         if (agreementPanel) block.addEventListener('keydown', e => {
             if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); block.click(); }
@@ -3557,7 +4038,7 @@ UE capability framework">
         block.addEventListener('click', function(e) {
             e.stopPropagation();
             // Opening one popup over another keeps the height already held.
-            const html = this.getAttribute('data-popup');
+            const html = popupOf(this);
             const opens = html && (!isPopupOpen() || popupContent.innerHTML !== html);
             if (opens) holdPanelHeight();
             else closePopup();
@@ -3875,6 +4356,7 @@ UE capability framework">
 
         function applyFilter() {
             var hasFilter = activeAIs.size > 0 || activeSessions.size > 0 || activeNoAISessions.size > 0;
+            document.documentElement.classList.toggle('filtering', hasFilter);
             // Derive session keys for sessions whose ALL AIs (+ noAI) are active.
             // This ensures blocks without data-ai still match when the
             // session (or parent group) checkbox is fully checked.

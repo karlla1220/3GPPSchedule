@@ -45,6 +45,14 @@ def test_sources_are_short_labels_with_the_version_and_the_file_name_on_hover():
     ran3 = ['RAN3_133bis_agenda_20261014_1825.docx', 'agenda_133bis.csv']
     assert sources(source_files=ran3, source_labels={ran3[0]: 'agenda_20261014_1825'})[0] == (
         'Sources: agenda_20261014_1825 ')
+    # A label that already carries the version does not repeat it.
+    for label, name, shown in (
+            ('Schedule after Monday v3', 'RAN4_120bis_meeting_schedule_after_Monday v3.pptx',
+             'Schedule\xa0after\xa0Monday\xa0v3'),
+            ('Schedule v06 morning Monday', 'RAN4_120bis_meeting_schedule_v06_morning_Monday.pptx',
+             'Schedule\xa0v06\xa0morning\xa0Monday'),
+            ('Schedule V9 Friday', 'RAN4_117_meeting_schedule_V9_Friday.pptx', 'Schedule\xa0V9\xa0Friday')):
+        assert sources(source_files=[name], source_labels={name: label})[0] == f'Sources: {shown} '
 
 
 @pytest.mark.parametrize('name, shown', [
