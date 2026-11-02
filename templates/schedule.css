@@ -1849,13 +1849,14 @@ header .meta a:focus-visible,
 }
 /* A phone has no room beside the tabs: its own line, under them. */
 @media (max-width: 768px) {
-    .schedule-toolbar:has(.room-picks) { flex-wrap: wrap; }
+    .all-days-view .schedule-toolbar:has(.room-picks) { flex-wrap: wrap; }
     .all-days-view .room-picks { order: 1; flex-basis: 100%; }
     .room-pick { max-width: 150px; min-height: 28px; }
 }
 @media (max-width: 400px) {
     .tab { padding: 6px 9px; }
-    .tab-all { margin-left: 2px; }
+    /* Six tabs and NOW on one line at 320px. */
+    .tab-all { margin-left: 1px; }
 }
 
 .week-grid {
@@ -1890,6 +1891,12 @@ header .meta a:focus-visible,
     container-type: inline-size;
 }
 .week-day:hover { background: var(--page-bg); }
+/* While a pinch scales the grid, the names shrink back to their size into the
+   bottom of their row, which keeps its height (schedule.js, --day-sx, --day-sy). */
+.week-day > span { display: inline-block; }
+.pinching .week-day { scale: 1 var(--day-sy, 1); transform-origin: 50% 100%; }
+.pinching .week-day > span { scale: var(--day-sx, 1) 1; }
+.pinching .room-header.time-col > span { translate: 0 var(--head-ty, 0px); }
 .week-date {
     color: var(--ink-3);
     font-weight: 400;

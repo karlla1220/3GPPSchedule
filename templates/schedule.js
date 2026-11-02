@@ -280,6 +280,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 el.style.removeProperty('--axis-sx');
                 el.style.removeProperty('--axis-sy');
             });
+            p.dayNames.forEach(el => {
+                el.style.removeProperty('--day-sx');
+                el.style.removeProperty('--day-sy');
+            });
+            if (p.axisHead) p.axisHead.style.removeProperty('--head-ty');
             const moved = p.zoom !== gridZoom;
             setGridZoom(p.zoom);
             if (moved && isAllDays()) weekZoom = gridZoom;
@@ -298,6 +303,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 const mid = touchMid(e.touches);
                 const rect = grid.getBoundingClientRect();
                 const box = wrapper.getBoundingClientRect();
+                const axisHead = grid.querySelector('.room-header.time-col');
+                // The All view's day names keep their size at any zoom, and so does their row.
+                const dayNames = grid.querySelectorAll('.week-day');
+                const dayName = Array.from(dayNames).find(el => el.offsetParent);
                 pinch = {
                     wrapper: wrapper,
                     grid: grid,
@@ -320,7 +329,14 @@ document.addEventListener('DOMContentLoaded', function() {
                     axisWidth: parseFloat(getComputedStyle(document.documentElement)
                         .getPropertyValue('--time-col-width')) || 36,
                     // The sticky time axis (.now-line carries its NOW label).
-                    axis: grid.querySelectorAll('.time-label, .room-header.time-col, .break-axis, .now-line')
+                    axis: grid.querySelectorAll('.time-label, .room-header.time-col, .break-axis, .now-line'),
+                    // A sticky axis stays inside the grid's box: it goes no further
+                    // right than this, however far the scaled grid lets the box scroll.
+                    axisMax: rect.width - (axisHead ? axisHead.getBoundingClientRect().width : 0),
+                    axisHead: axisHead,
+                    dayNames: dayNames,
+                    // Screen height of the day names' row (none on a day's grid).
+                    fixedTop: dayName ? dayName.getBoundingClientRect().height : 0
                 };
             }, { passive: true });
             wrapper.addEventListener('touchmove', function(e) {
@@ -356,21 +372,27 @@ document.addEventListener('DOMContentLoaded', function() {
                 const sx = (W * zoom - A * axisScale(zoom)) / (W * g - A * axisScale(g));
                 const sy = zoom / g;
                 const tx = W * zoom - W * g * sx;
-                grid.style.transform = 'translateX(' + tx / g + 'px) scale(' + sx + ',' + sy + ')';
-                wrapper.style.height = pinch.boxExtra + pinch.gridHeight * zoom + 'px';
+                // The day names' row will not grow with the zoom, so what lies
+                // under it is lifted by what the scale adds to that row; the row's
+                // top goes above the box, and the names shrink back into its bottom.
+                const lift = pinch.fixedTop * (sy - 1);
+                grid.style.transform = 'translate(' + tx / g + 'px,' + -lift / g + 'px) scale(' + sx + ',' + sy + ')';
+                wrapper.style.height = pinch.boxExtra + pinch.gridHeight * zoom - lift + 'px';
                 // Keep that grid point under the fingers as they move. A grid
                 // scaled down still scrolls as far as its unscaled width, so
                 // the end of the scaled grid is held here.
                 const mid = touchMid(e.touches);
                 pinch.scrollLeft = Math.max(0, Math.min(pinch.boxLeft + tx + pinch.x * g * sx - mid.x,
                     W * zoom - pinch.boxWidth));
-                pinch.scrollTop = pinch.gridTop + pinch.y * zoom - mid.y;
+                pinch.scrollTop = pinch.gridTop + pinch.y * zoom - lift - mid.y;
                 wrapper.scrollLeft = pinch.scrollLeft;
                 window.scrollTo(window.scrollX, pinch.scrollTop);
                 // Sticky offsets are worked out before the transform: an axis
-                // held at scrollLeft inside the grid lands at tx + scrollLeft * sx.
+                // held at scrollLeft inside the grid lands at tx + scrollLeft * sx,
+                // or at tx + axisMax * sx once it reaches the grid's end.
                 // The axis is in its own units (--axis-unzoom above 100%).
-                const shift = (wrapper.scrollLeft * (1 - sx) - tx) / (axisScale(g) * sx) + 'px';
+                const held = Math.min(wrapper.scrollLeft, pinch.axisMax);
+                const shift = (wrapper.scrollLeft - tx - held * sx) / (axisScale(g) * sx) + 'px';
                 // Its width and text go from their size at this zoom to their
                 // size at the fingers' zoom, the same way across and down.
                 const axisSx = String(axisScale(zoom) / axisScale(g) / sx);
@@ -379,6 +401,13 @@ document.addEventListener('DOMContentLoaded', function() {
                     el.style.setProperty('--pinch-shift', shift);
                     el.style.setProperty('--axis-sx', axisSx);
                     el.style.setProperty('--axis-sy', axisSy);
+                });
+                // The Time head spans the day names' row too: its middle drops by half the lift.
+                if (pinch.axisHead) pinch.axisHead.style.setProperty('--head-ty', lift / 2 / sy + 'px');
+                const daySx = String(1 / sx), daySy = String(1 / sy);
+                pinch.dayNames.forEach(el => {
+                    el.style.setProperty('--day-sx', daySx);
+                    el.style.setProperty('--day-sy', daySy);
                 });
             }, { passive: false });
             const endPinch = function(e) {

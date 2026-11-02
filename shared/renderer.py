@@ -851,8 +851,8 @@ def _render_all_days(schedule: Schedule, week: _WeekLayout, cells: list[str]) ->
         # The day's name opens its own grid.
         parts.append(
             f'<button type="button" class="week-day wd-{index}" data-day="{day_lower}" '
-            f'style="grid-column:{first}/{after};grid-row:1">{_esc(day.day_name[:3])}'
-            + (f' <span class="week-date">{date}</span>' if date else "") + "</button>\n"
+            f'style="grid-column:{first}/{after};grid-row:1"><span>{_esc(day.day_name[:3])}'
+            + (f' <span class="week-date">{date}</span>' if date else "") + "</span></button>\n"
         )
         if after <= week.last_column:
             parts.append(f'<div class="week-gutter wg-{index}" style="grid-column:{after}"></div>\n')

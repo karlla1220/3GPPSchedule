@@ -132,7 +132,7 @@ HELP_STEPS = (
     {"key": "filter", "target": ".filter-toggle", "scene": "filter", "title": "Follow only your agenda items",
      "text": "Open Filter here and tick what you follow; other sessions fade. "
              "The filter is kept for this meeting and is part of the link, so you can share what you see."},
-    {"key": "pinch", "target": "grid", "scene": "pinch", "touch": True, "title": "Pinch to see the whole day",
+    {"key": "pinch", "target": "grid", "scene": "pinch", "touch": True, "title": "Pinch to see the whole grid",
      "text": "Pinch the grid itself to see every room at once. Spreading back, it stops at 100% for a moment."},
     {"key": "agreements", "target": "#agreement-panel:not(.tdoc-conclusions)", "title": "Agreements below the grid",
      "text": "Tapping a session shows the chair notes for its agenda item here. "
