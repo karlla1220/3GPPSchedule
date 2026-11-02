@@ -33,11 +33,12 @@ def is_absent(error):
     """True when error means the folder or file does not exist (now).
 
     3GPP's IIS answers 403, not 404, for a missing path; FTP answers 550.
+    A 403 reaches here only after FTP agreed (ftp_transport._answer_403).
     Anything else (5xx, connection, TLS) is a real failure.
     """
     if isinstance(error, httpx.HTTPStatusError):
         return error.response.status_code in (403, 404)
-    return isinstance(error, httpx.ConnectError) and re.search(r'\b550\b', str(error)) is not None
+    return ftp_transport.ftp_missing(error)
 
 
 def client(**kwargs):

@@ -36,6 +36,7 @@ _session_lock = threading.Lock()
 # under them go straight to FTP instead of repeating what failed.
 _https_failed = {}  # prefix -> why HTTPS failed
 _FIREWALL = '3GPP firewall blocked HTTPS (403)'
+_BLOCKED = '3GPP answered 403 for a path FTP can read'
 _MAX_SECONDS = 180
 # The live Microsoft FTP server advertises SIZE/MDTM, but not MLSD.
 _IIS_ROW = re.compile(r'^(\d{2}-\d{2}-\d{2,4})\s+(\d{2}:\d{2}[AP]M)\s+(<DIR>|\d+)\s+(.+)$')
@@ -69,9 +70,9 @@ def _retryable(error):
 def _firewall_blocked(response, url):
     """True for the firewall's 403 page only.
 
-    An ordinary 403 stays an HTTP error: 3GPP also answers 403 for a folder
-    that does not exist, and callers rely on that. Any other 403 is logged
-    at debug level with its headers and text.
+    Any other 403 is usually a path that does not exist, but not always, so
+    get() asks FTP (_answer_403). It is logged at debug level with its headers
+    and text.
     """
     if response.status_code != 403:
         return False
@@ -85,8 +86,7 @@ def _firewall_blocked(response, url):
             body = b''
     if _FIREWALL_PAGE in body.lower():
         return True
-    # Usually a path that does not exist (IIS answers 403); debug level, since
-    # sync folders come and go with every meeting.
+    # Debug level, since sync folders come and go with every meeting.
     logging.getLogger(__name__).debug('3GPP answered 403 without the firewall page: %s %s',
                                       url, _describe(response, body))
     return False
@@ -137,6 +137,32 @@ def _blocked_ftp(url, **kwargs):
     logging.getLogger(__name__).warning('%s: %s; trying FTP', _FIREWALL, url)
     _https_failed[_folder(url)] = _FIREWALL
     return _ftp_because(url, _FIREWALL, **kwargs)
+
+
+def ftp_missing(error):
+    """True when an FTP failure says the path does not exist (550)."""
+    return isinstance(error, httpx.ConnectError) and re.search(r'\b550\b', str(error)) is not None
+
+
+def _answer_403(url, response, **kwargs):
+    """The answer to a plain 403: IIS means a missing path, a block means nothing.
+
+    Both look the same over HTTPS, and on 2026-11-02 runners got a passing
+    "absent" for folders that were there. FTP tells them apart: 550 keeps the
+    403, anything it can read is what HTTPS would not give. FTP failing any
+    other way leaves the question open, which is an error and not "absent".
+    """
+    try:
+        confirmed = ftp_response(url, **kwargs)
+    except httpx.ConnectError as exc:
+        if ftp_missing(exc):
+            return response
+        raise httpx.ConnectError(f'HTTPS answered 403 and {exc}', request=exc.request) from exc
+    logging.getLogger(__name__).warning('%s: %s %s; using FTP', _BLOCKED, url,
+                                        _describe(response, response.content[:_FIREWALL_PAGE_BYTES]))
+    response.close()
+    _https_failed[_folder(url)] = _BLOCKED
+    return confirmed
 
 
 def _identified(kwargs):
@@ -264,6 +290,10 @@ def _over_ftp(read):
             _drop()
             if not reused:
                 raise
+        except ftplib.error_perm:
+            # The server answered (550 for a missing path): the session is
+            # fine, and a run asks this about several folders.
+            raise
         except BaseException:
             # Unknown state after a partial command: never reuse it.
             _drop()
@@ -296,7 +326,8 @@ def ftp_response(url, *, listing=False, cached=None):
 def get(url, *, listing=False, http=None, cached=None, **kwargs):
     """Retry eligible HTTPS once, then use FTP; preserve normal HTTP semantics.
 
-    A firewall 403 goes to FTP at once, without a second HTTPS request.
+    A firewall 403 goes to FTP at once, without a second HTTPS request. Any
+    other 403 is returned only once FTP has said the path is missing.
     """
     request = http.get if http is not None else httpx.get
     if ftp_path(url) is None:
@@ -322,10 +353,12 @@ def get(url, *, listing=False, http=None, cached=None, **kwargs):
             else:
                 _remember_failure(url, exc)
             continue
-        if not _firewall_blocked(response, url):
-            return response
-        response.close()
-        return _blocked_ftp(url, listing=listing, cached=cached)
+        if _firewall_blocked(response, url):
+            response.close()
+            return _blocked_ftp(url, listing=listing, cached=cached)
+        if response.status_code == 403:
+            return _answer_403(url, response, listing=listing, cached=cached)
+        return response
     return ftp_response(url, listing=listing, cached=cached)
 
 

@@ -498,7 +498,8 @@ def blocked_sync(tmp_path, monkeypatch):
     """The sync folder answers with the firewall page and FTP is unreachable."""
     monkeypatch.setattr(sources.remote_files, 'CACHE_DIR', tmp_path / 'cache')
     def no_ftp(url, **kwargs):
-        raise httpx.ConnectError(f'FTP fallback failed for {url}: timed out', request=httpx.Request('GET', url))
+        answer = 'timed out' if url == SYNC else '550 The system cannot find the file specified.'
+        raise httpx.ConnectError(f'FTP fallback failed for {url}: {answer}', request=httpx.Request('GET', url))
     monkeypatch.setattr(sources.remote_files.ftp_transport, 'ftp_response', no_ftp)
     return {**sources.DEFAULTS, 'meeting_specific_override': [FOLDER_135BIS]}
 
@@ -522,8 +523,6 @@ def test_blocked_sync_folder_falls_back_to_the_configured_meeting_folder(blocked
 def test_an_absent_sync_folder_is_normal(tmp_path, monkeypatch):
     """The sync area follows the meeting; a missing folder (IIS 403) is not an error."""
     monkeypatch.setattr(sources.remote_files, 'CACHE_DIR', tmp_path / 'cache')
-    monkeypatch.setattr(sources.remote_files.ftp_transport, 'ftp_response',
-                        lambda *a, **k: pytest.fail('an absent folder is not read over FTP'))
     files = {FOLDER_135BIS + 'Agenda/' + BIS: (FIXTURES / BIS).read_bytes()}
     seen = []
     cfg = {**sources.DEFAULTS, 'meeting_specific_override': [FOLDER_135BIS]}

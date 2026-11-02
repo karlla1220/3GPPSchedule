@@ -98,7 +98,7 @@ def test_unrelated_or_unsafe_urls_never_fallback(ftp, url):
     assert ftp.calls == []
 
 
-@pytest.mark.parametrize('status', [200, 304, 401, 403, 404, 429])
+@pytest.mark.parametrize('status', [200, 304, 401, 404, 429])
 def test_ordinary_http_responses_do_not_use_ftp(ftp, status):
     from shared import ftp_transport
     with httpx.Client(transport=httpx.MockTransport(lambda _: httpx.Response(status))) as http:
@@ -281,9 +281,8 @@ def test_a_run_without_failures_never_opens_ftp(ftp, monkeypatch, tmp_path):
         remote_files.get_listing(CHAIR, http=http)
         remote_files.fetch_file(http, CHAIR + 'a.zip')
         remote_files.fetch_file(http, CHAIR + 'a.zip')  # revalidated: 304
-        for status in (403, 404):  # an ordinary 403 is an answer, not a failure to route around
-            with httpx.Client(transport=httpx.MockTransport(lambda _: httpx.Response(status))) as other:
-                assert ftp_transport.get(CHAIR + 'missing/', http=other).status_code == status
+        with httpx.Client(transport=httpx.MockTransport(lambda _: httpx.Response(404))) as other:
+            assert ftp_transport.get(CHAIR + 'missing/', http=other).status_code == 404
     with ftp_transport.stream('GET', CHAIR + 'b.zip') as response:
         assert response.read() == b'body'
     remote_files.new_run()
@@ -291,17 +290,77 @@ def test_a_run_without_failures_never_opens_ftp(ftp, monkeypatch, tmp_path):
     assert ftp.calls == []
 
 
-def test_an_unrecognised_403_is_described_in_the_log(ftp, caplog):
+PAGE = (b'<html><head><style>body { color: red }</style><script>var x = 1;</script></head>'
+        b'<body><h1>Access denied</h1><p>Ray ID: 1234</p></body></html>')
+PLAIN_403 = httpx.Response(403, content=PAGE, headers={'server': 'cloudflare', 'cf-ray': 'a48d-IAD'})
+
+
+def said_403(url, *, seen=None):
+    def handler(request):
+        if seen is not None:
+            seen.append(str(request.url))
+        return PLAIN_403
+    return httpx.Client(transport=httpx.MockTransport(handler))
+
+
+class MissingOverFtp(FakeFTP):
+    """550 for a folder or file, as the live server answers one that is not there."""
+    def cwd(self, path):
+        self.calls.append(('cwd', path))
+        raise ftplib.error_perm('550 The system cannot find the file specified.')
+    size = cwd
+
+
+class DownOverFtp(FakeFTP):
+    def login(self):
+        raise OSError('timed out')
+
+
+def test_a_403_means_missing_only_when_ftp_says_550(ftp, monkeypatch, caplog):
     import logging
-    from shared import ftp_transport
+    from shared import ftp_transport, remote_files
+    monkeypatch.setattr(ftplib, 'FTP', MissingOverFtp)
     caplog.set_level(logging.DEBUG, logger='shared.ftp_transport')
-    page = (b'<html><head><style>body { color: red }</style><script>var x = 1;</script></head>'
-            b'<body><h1>Access denied</h1><p>Ray ID: 1234</p></body></html>')
-    answer = httpx.Response(403, content=page, headers={'server': 'cloudflare', 'cf-ray': 'a48d-IAD'})
-    with httpx.Client(transport=httpx.MockTransport(lambda _: answer)) as http:
-        assert ftp_transport.get(CHAIR, http=http, listing=True).status_code == 403
-    assert ftp.calls == []
+    with said_403(CHAIR) as http, pytest.raises(httpx.HTTPStatusError) as caught:
+        remote_files.get_listing(CHAIR, http=http)
+    assert remote_files.is_absent(caught.value)
     [record] = [r for r in caplog.records if '403 without the firewall page' in r.getMessage()]
+    assert 'Access denied Ray ID: 1234' in record.getMessage()
+    assert 'color' not in record.getMessage() and 'var x' not in record.getMessage()
+    with said_403(CHAIR) as http:  # sync folders are often missing: one login serves them all
+        assert ftp_transport.get(CHAIR + 'other/', http=http, listing=True).status_code == 403
+        assert ftp_transport.get(CHAIR + 'a.zip', http=http).status_code == 403
+    assert [c[0] for c in ftp.calls].count('login') == 1
+
+
+def test_a_403_for_a_folder_ftp_can_read_is_not_absence(ftp, caplog):
+    """2026-11-02: runners got a plain 403 for folders that were there, and five WGs saw "no schedule"."""
+    from shared import remote_files
+    seen = []
+    with said_403(CHAIR, seen=seen) as http:
+        listing = remote_files.get_listing(CHAIR, http=http)
+        assert NAME in listing.text
+        assert remote_files.get_listing(CHAIR, http=http).text == listing.text
+        # The rest of this folder does not ask HTTPS again.
+        body, _ = remote_files.fetch_file(http, CHAIR + 'a.zip')
+    assert body == PLAN and seen == [CHAIR]
+    [record] = [r for r in caplog.records if 'FTP can read' in r.getMessage()]
     message = record.getMessage()
-    assert CHAIR in message and "'server': 'cloudflare'" in message and "'cf-ray': 'a48d-IAD'" in message
-    assert 'Access denied Ray ID: 1234' in message and 'color' not in message and 'var x' not in message
+    assert CHAIR in message and "'cf-ray': 'a48d-IAD'" in message and 'Access denied Ray ID: 1234' in message
+
+
+def test_a_403_for_a_file_ftp_can_read_returns_the_file(ftp, tmp_path):
+    from shared import remote_files
+    with said_403(CHAIR) as http:
+        body, info = remote_files.fetch_file(http, CHAIR + 'a.zip')
+    assert body == PLAN and info['ftp_modified'] == '213 20260915155750'
+
+
+def test_a_403_ftp_cannot_settle_is_a_failure_not_absence(ftp, monkeypatch, tmp_path):
+    from shared import remote_files
+    monkeypatch.setattr(ftplib, 'FTP', DownOverFtp)
+    with said_403(CHAIR) as http, pytest.raises(httpx.ConnectError, match='HTTPS answered 403 and FTP') as caught:
+        remote_files.get_listing(CHAIR, http=http)
+    assert not remote_files.is_absent(caught.value)
+    remote_files.save_listings(tmp_path / 'listings.json')
+    assert remote_files.load_listings(tmp_path / 'listings.json') == 0

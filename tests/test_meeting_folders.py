@@ -17,7 +17,7 @@ WG2 = 'https://www.3gpp.org/ftp/tsg_ran/WG2_RL2/'
 NOW = datetime(2026, 10, 11, 12, tzinfo=timezone.utc)
 
 
-@pytest.fixture(autouse=True)
+@pytest.fixture
 def no_ftp(monkeypatch):
     """A real failure goes to FTP, which is unreachable here."""
     def fail(url, **kwargs):
@@ -171,6 +171,7 @@ def test_override_wins_over_portal_and_cache():
     assert seen == []
 
 
+@pytest.mark.usefixtures('no_ftp')
 def test_a_real_failure_is_not_absence():
     remote_files.new_run()
     with server({}, [], status=500) as http, pytest.raises(httpx.HTTPError):
@@ -211,6 +212,7 @@ def test_ran1_lists_the_next_meeting_and_the_built_one(tmp_path, monkeypatch):
     assert ran1_config.load_config(path)['agenda_urls'] == [WG1 + 'TSGR1_126b/Agenda/']
 
 
+@pytest.mark.usefixtures('no_ftp')
 def test_ran1_keeps_the_sync_folder_when_the_lookup_fails(tmp_path, monkeypatch):
     monkeypatch.delenv('SCHEDULE_MEETING_SPECIFIC', raising=False)
     monkeypatch.delenv('SCHEDULE_MEETING_SPECIFIC_OVERRIDE', raising=False)

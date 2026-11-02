@@ -119,8 +119,6 @@ def test_fetch_bundle_reads_the_sync_folder_and_the_archive_agenda(tmp_path, mon
 
 def test_before_the_meeting_the_archive_zip_is_read_and_an_absent_sync_folder_is_normal(tmp_path, monkeypatch):
     monkeypatch.setattr(sources.remote_files, 'CACHE_DIR', tmp_path / 'cache')
-    monkeypatch.setattr(sources.remote_files.ftp_transport, 'ftp_response',
-                        lambda *a, **k: pytest.fail('an absent folder is not read over FTP'))
     early = zipped(R20, (FIXTURES / R20).read_bytes())
     name = 'S2-2610195_SA2-177-Session Plan - r6.zip'
     files = {FOLDER_177 + 'INBOX/DRAFTS/_Session_Plan_Updates/' + name: early,
