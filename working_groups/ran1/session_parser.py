@@ -967,6 +967,14 @@ def _slot_result_to_sessions(
     Handles the flat schema format where sessions is a flat array with
     ``room_name`` on each entry.  Time cursors are tracked per physical room,
     so a merged-room session starts after the latest occupied member room.
+
+    The prompt orders sessions only within a room group.  Where a merged-room
+    group (``ALL_ROOMS``) sits among the room groups is the model's choice, so
+    a room group listed after it may belong before it: the early dinner listed
+    between the online and offline rooms pushed the offline rooms' 17:00
+    sessions past the block, to 19:30-21:00.  A group that appending would
+    push past the block end therefore fills the room's free time from the
+    block start instead, when that keeps it inside the block.
     """
     sessions: list[Session] = []
     day_rooms = day_rooms_map.get(slot.day, [])
@@ -975,6 +983,10 @@ def _slot_result_to_sessions(
     block_end_min = time_to_minutes(slot.time_block_end)
     room_cursors = {
         room_index: block_start_min for room_index in range(len(day_rooms))
+    }
+    # Every interval placed so far, per physical room.
+    occupied: dict[int, list[tuple[int, int]]] = {
+        room_index: [] for room_index in range(len(day_rooms))
     }
 
     # Preserve parser-derived fallback timing independently of the LLM output.
@@ -1009,6 +1021,92 @@ def _slot_result_to_sessions(
             rooms_ordered[rn] = []
         rooms_ordered[rn].append(sd)
 
+    def _fallback_start(sd: dict, col_start: int, col_end: int) -> int | None:
+        """Parser-derived start of the document's trailing sub-row, if any."""
+        normalized_name = re.sub(r"[^a-z0-9]+", "", sd.get("name", "").lower())
+        fallback = next(
+            (
+                start
+                for fc_start, fc_end, cell_text, start in fallback_cells
+                if fc_start == col_start
+                and fc_end == col_end
+                and normalized_name
+                and normalized_name in cell_text
+            ),
+            None,
+        )
+        if fallback:
+            try:
+                return time_to_minutes(fallback)
+            except (ValueError, IndexError):
+                pass
+        return None
+
+    def _first_free(start: int, duration: int, room_indices: list[int]) -> int:
+        """Earliest start from ``start`` that overlaps nothing in these rooms."""
+        intervals = sorted(
+            interval
+            for room_index in room_indices
+            for interval in occupied.get(room_index, [])
+        )
+        moved = True
+        while moved:
+            moved = False
+            for busy_start, busy_end in intervals:
+                if start < busy_end and busy_start < start + duration:
+                    start = busy_end
+                    moved = True
+        return start
+
+    def _place(
+        entries: list[dict],
+        room_indices: list[int],
+        col_start: int,
+        col_end: int,
+        fill: bool,
+    ) -> list[tuple[dict, int, int, bool]]:
+        """(entry, start, end, sequential) for one room group, in order.
+
+        Appending starts after the latest occupied member room.  Filling
+        starts at the block start and skips the time other groups already
+        hold in these rooms.  Explicit source times override both.  For a
+        merged-room session that would otherwise run past the block end, a
+        parser-derived fallback can pin it to the document's trailing sub-row.
+        """
+        cursor = block_start_min if fill else max(
+            room_cursors.get(room_index, block_start_min)
+            for room_index in room_indices
+        )
+        placed = []
+        for sd in entries:
+            duration = sd["duration_minutes"]
+            start = None
+            specified = sd.get("specified_start_time")
+            if specified:
+                try:
+                    start = time_to_minutes(specified)
+                except (ValueError, IndexError):
+                    pass  # fall back to sequential
+            sequential = start is None
+            if sequential:
+                start = (
+                    _first_free(cursor, duration, room_indices) if fill else cursor
+                )
+                if len(room_indices) > 1 and start + duration > block_end_min:
+                    fallback = _fallback_start(sd, col_start, col_end)
+                    if fallback is not None:
+                        start, sequential = fallback, False
+            placed.append((sd, start, start + duration, sequential))
+            cursor = max(cursor, start + duration)
+        return placed
+
+    def _overruns(placed: list[tuple[dict, int, int, bool]]) -> bool:
+        """A session without its own time ends after the time block."""
+        return any(
+            sequential and end > block_end_min
+            for _, _, end, sequential in placed
+        )
+
     for room_name, room_sessions in rooms_ordered.items():
         # Find grid columns for this room (supports aliases and multi-room)
         col_start, col_end = _find_room_columns(room_name, day_rooms, alias_to_name)
@@ -1016,11 +1114,15 @@ def _slot_result_to_sessions(
         if not room_indices:
             room_indices = [0]
 
-        for sd in room_sessions:
-            duration = sd.get("duration_minutes") or 0
-            if duration <= 0:
-                continue
+        entries = [sd for sd in room_sessions if (sd.get("duration_minutes") or 0) > 0]
+        placed = _place(entries, room_indices, col_start, col_end, fill=False)
+        if _overruns(placed):
+            filled = _place(entries, room_indices, col_start, col_end, fill=True)
+            if not _overruns(filled):
+                placed = filled
 
+        for sd, current_min, session_end_min, _ in placed:
+            duration = sd["duration_minutes"]
             name = sd.get("name", "Unknown")
             group_header = sd.get("group_header", "")
             agenda_item = sd.get("agenda_item")
@@ -1038,43 +1140,8 @@ def _slot_result_to_sessions(
                     if m:
                         agenda_item = m.group(1).strip(".")
 
-            # Start after the latest occupied room in this session's room set.
-            # Explicit source times override that cursor.  For a merged-room
-            # session that would otherwise run past the block end, a parser-
-            # derived fallback can pin it to the document's trailing sub-row.
-            current_min = max(
-                room_cursors.get(room_index, block_start_min)
-                for room_index in room_indices
-            )
-            specified = sd.get("specified_start_time")
-            if specified:
-                try:
-                    current_min = time_to_minutes(specified)
-                except (ValueError, IndexError):
-                    pass  # fall back to sequential
-            elif len(room_indices) > 1 and current_min + duration > block_end_min:
-                normalized_name = re.sub(
-                    r"[^a-z0-9]+", "", sd.get("name", "").lower()
-                )
-                fallback = next(
-                    (
-                        start
-                        for fc_start, fc_end, cell_text, start in fallback_cells
-                        if fc_start == col_start
-                        and fc_end == col_end
-                        and normalized_name
-                        and normalized_name in cell_text
-                    ),
-                    None,
-                )
-                if fallback:
-                    try:
-                        current_min = time_to_minutes(fallback)
-                    except (ValueError, IndexError):
-                        pass
-
             start_time = minutes_to_time(current_min)
-            end_time = minutes_to_time(current_min + duration)
+            end_time = minutes_to_time(session_end_min)
 
             session = Session(
                 name=name,
@@ -1091,11 +1158,13 @@ def _slot_result_to_sessions(
                 agenda_descriptions=agenda_descriptions,
             )
             sessions.append(session)
-            session_end_min = current_min + duration
             for room_index in room_indices:
                 room_cursors[room_index] = max(
                     room_cursors.get(room_index, block_start_min),
                     session_end_min,
+                )
+                occupied.setdefault(room_index, []).append(
+                    (current_min, session_end_min)
                 )
 
     return sessions

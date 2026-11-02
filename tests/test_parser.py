@@ -486,6 +486,87 @@ class AgendaExtractionTests(unittest.TestCase):
         dinner = next(s for s in sessions if s.name == "Early dinner")
         self.assertEqual((dinner.start_time, dinner.end_time), ("18:30", "19:30"))
 
+    @staticmethod
+    def _online_offline_rooms():
+        day_rooms_map = {
+            "Tuesday": [
+                RoomInfo(name="Main room", table_index=0, room_index_in_table=0, kind="online"),
+                RoomInfo(name="Breakout room", table_index=0, room_index_in_table=1, kind="online"),
+                RoomInfo(name="Offline room", table_index=1, room_index_in_table=0, kind="offline"),
+            ]
+        }
+        alias_to_name = {
+            "RAN1_main": "Main room",
+            "RAN1_brk1": "Breakout room",
+            "RAN1_off1": "Offline room",
+            "ALL_ONLINE": "Main room + Breakout room",
+            "ALL_ROOMS": "Main room + Breakout room + Offline room",
+        }
+        return day_rooms_map, alias_to_name
+
+    def test_room_listed_after_merged_dinner_stays_inside_its_block(self):
+        # RAN1#126bis Tuesday 17:00-19:30: the model listed the early dinner
+        # between the online and the offline rooms, which pushed the offline
+        # sessions to 19:30-21:00, past the block and the grid.
+        slot = MagicMock(day="Tuesday", time_block_start="17:00", time_block_end="19:30")
+        slot.sources = []
+        parsed = {
+            "sessions": [
+                {"room_name": "RAN1_main", "name": "10.5.3.2", "duration_minutes": 90},
+                {"room_name": "RAN1_brk1", "name": "10.3.1", "duration_minutes": 90},
+                {"room_name": "ALL_ROOMS", "name": "Early dinner", "duration_minutes": 60},
+                {"room_name": "RAN1_off1", "name": "10.5.1.3", "duration_minutes": 30},
+                {"room_name": "RAN1_off1", "name": "10.5.1.1", "duration_minutes": 60},
+            ]
+        }
+        day_rooms_map, alias_to_name = self._online_offline_rooms()
+
+        sessions = _slot_result_to_sessions(parsed, slot, day_rooms_map, alias_to_name)
+
+        times = {s.name: (s.start_time, s.end_time) for s in sessions}
+        self.assertEqual(times["Early dinner"], ("18:30", "19:30"))
+        self.assertEqual(times["10.5.1.3"], ("17:00", "17:30"))
+        self.assertEqual(times["10.5.1.1"], ("17:30", "18:30"))
+
+    def test_room_listed_after_merged_opening_still_follows_it(self):
+        # Appending fits the block, so the listed order stands.
+        slot = MagicMock(day="Tuesday", time_block_start="08:30", time_block_end="10:30")
+        slot.sources = []
+        parsed = {
+            "sessions": [
+                {"room_name": "ALL_ROOMS", "name": "Opening", "duration_minutes": 30},
+                {"room_name": "RAN1_main", "name": "10.5.1", "duration_minutes": 90},
+                {"room_name": "RAN1_off1", "name": "9.4", "duration_minutes": 60},
+            ]
+        }
+        day_rooms_map, alias_to_name = self._online_offline_rooms()
+
+        sessions = _slot_result_to_sessions(parsed, slot, day_rooms_map, alias_to_name)
+
+        times = {s.name: (s.start_time, s.end_time) for s in sessions}
+        self.assertEqual(times["Opening"], ("08:30", "09:00"))
+        self.assertEqual(times["10.5.1"], ("09:00", "10:30"))
+        self.assertEqual(times["9.4"], ("09:00", "10:00"))
+
+    def test_room_that_fits_neither_way_keeps_the_listed_order(self):
+        # Too long for the block either way: filling would only move the
+        # problem, so the listed order stands.
+        slot = MagicMock(day="Tuesday", time_block_start="17:00", time_block_end="19:30")
+        slot.sources = []
+        parsed = {
+            "sessions": [
+                {"room_name": "RAN1_main", "name": "10.5.3.2", "duration_minutes": 90},
+                {"room_name": "ALL_ROOMS", "name": "Early dinner", "duration_minutes": 60},
+                {"room_name": "RAN1_off1", "name": "10.5.1.1", "duration_minutes": 120},
+            ]
+        }
+        day_rooms_map, alias_to_name = self._online_offline_rooms()
+
+        sessions = _slot_result_to_sessions(parsed, slot, day_rooms_map, alias_to_name)
+
+        times = {s.name: (s.start_time, s.end_time) for s in sessions}
+        self.assertEqual(times["10.5.1.1"], ("19:30", "21:30"))
+
 
 if __name__ == "__main__":
     unittest.main()
