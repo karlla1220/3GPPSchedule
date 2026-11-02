@@ -4,6 +4,7 @@ from pathlib import Path
 import re
 import shutil
 import subprocess
+from types import SimpleNamespace
 
 from bs4 import BeautifulSoup
 import pytest
@@ -116,12 +117,44 @@ def test_each_day_name_opens_that_day():
 
 
 def test_a_room_box_stands_for_a_room_across_the_days():
+    # Rooms without an id (RAN1) are their names, without the hours and case.
     schedule = build_schedule()
     schedule.days[0].rooms = [RoomInfo(name='Breakout: Madrid 1-2'), RoomInfo(name='Offline Room')]
     schedule.days[1].rooms = [RoomInfo(name='Breakout: Madrid 1-2 (08:00–12:30)'), RoomInfo(name='Offline room'),
                               RoomInfo(name='Neptuno')]
     assert _room_label('Breakout: Madrid 1-2 (08:00–12:30)') == 'Breakout: Madrid 1-2'
-    assert _week_rooms(schedule.days[:2]) == ['Breakout: Madrid 1-2', 'Offline Room', 'Neptuno']
+    rooms = _week_rooms(schedule.days[:2])
+    assert [r.name for r in rooms] == ['Breakout: Madrid 1-2', 'Offline Room', 'Neptuno']
+    assert [r.key for r in rooms] == ['breakout: madrid 1-2', 'offline room', 'neptuno']
+
+
+def test_a_room_renamed_by_the_day_is_one_box():
+    # RAN4 #120bis: Shan's column is BR1 on Monday, RRM_Demod_OTA from Tuesday, "shan" all week.
+    monday = [RoomInfo(id='yang', name='RAN4 Main (Yang Session)'),
+              RoomInfo(id='shan', name='RAN4 Breakout 1(BR1) (Shan Session)'),
+              RoomInfo(id='offline-room', name='Offline Room')]
+    later = [RoomInfo(id='yang', name='RAN4 Main (Yang Session)'),
+             RoomInfo(id='shan', name='RAN4 RRM_Demod_OTA (Shan Session)'),
+             RoomInfo(id='offline-room', name='Offline room')]
+    rooms = _week_rooms([SimpleNamespace(rooms=monday)] + [SimpleNamespace(rooms=later)] * 4)
+    assert [r.key for r in rooms] == ['yang', 'shan', 'offline-room']
+    # The box shows the name most days use; its title gives the others.
+    assert rooms[1].names == ['RAN4 RRM_Demod_OTA (Shan Session)', 'RAN4 Breakout 1(BR1) (Shan Session)']
+    assert rooms[2].names == ['Offline Room']
+
+    schedule = build_schedule()
+    schedule.days[0].rooms, schedule.days[1].rooms = monday, later
+    for day in schedule.days:
+        for session in day.sessions:
+            session.room_ids, session.room_col_start, session.room_col_end = [], 2, 3
+    html = page(schedule)
+    boxes = html.select('.room-picks input')
+    assert [b['data-key'] for b in boxes] == ['yang', 'shan', 'offline-room']
+    # Two days, one name each: the first day's name, the other in the title.
+    assert boxes[1].find_next('span').text == 'RAN4 Breakout 1(BR1) (Shan Session)'
+    assert boxes[1].parent['title'] == 'RAN4 Breakout 1(BR1) (Shan Session)\nRAN4 RRM_Demod_OTA (Shan Session)'
+    # Both days' Shan columns answer to the one box.
+    assert len(html.select('#all-days .room-header.wr-1')) == 2
 
 
 def test_a_meeting_of_one_room_has_no_room_boxes():
@@ -139,7 +172,7 @@ def test_room_boxes_follow_the_all_tab_and_mark_the_grid():
     boxes = html.select_one('.room-picks')
     assert boxes.find_previous_sibling(class_='tabs') and boxes.find_next_sibling(class_='now-toggle')
     data = json.loads(boxes['data-week'])
-    names = [b['data-name'] for b in boxes.select('input')]
+    names = [b['data-key'] for b in boxes.select('input')]
     grid = html.select_one('#all-days .schedule-grid')
     days = grid.select('.week-day')
     assert len(data['days']) == len(days)
@@ -162,7 +195,7 @@ def run_picks(hidden=(), uncheck=(), stored=True):
             'script': _render_template('room-picks.js', {'STATE_ID_JSON': json.dumps('ran1:M')}),
             'saved': json.dumps(list(hidden)) if stored else None, 'uncheck': list(uncheck),
             # Two rooms on Monday; on Tuesday the second and a third.
-            'names': ['A', 'B', 'C'], 'week': {'days': [[0, 1], [1, 2]], 'room': 52, 'gutter': 6, 'axis': 36},
+            'keys': ['A', 'B', 'C'], 'week': {'days': [[0, 1], [1, 2]], 'room': 52, 'gutter': 6, 'axis': 36},
         }), text=True, capture_output=True, check=True).stdout)
 
 

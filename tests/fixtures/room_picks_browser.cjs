@@ -4,7 +4,7 @@ const fs = require('node:fs');
 const vm = require('node:vm');
 const input = JSON.parse(fs.readFileSync(0, 'utf8'));
 const stored = new Map(input.saved === null ? [] : [['3gpp_schedule_rooms:ran1:M', input.saved]]);
-const boxes = input.names.map((name, room) => ({checked: true, disabled: false, dataset: {room: String(room), name}}));
+const boxes = input.keys.map((key, room) => ({checked: true, disabled: false, dataset: {room: String(room), key}}));
 const handlers = {};
 const box = {
     dataset: {week: JSON.stringify(input.week)},
@@ -29,8 +29,8 @@ vm.runInNewContext(input.script, {
         removeItem: key => stored.delete(key),
     },
 });
-for (const name of input.uncheck) {
-    boxes.find(b => b.dataset.name === name).checked = false;
+for (const key of input.uncheck) {
+    boxes.find(b => b.dataset.key === key).checked = false;
     handlers.change();
 }
 process.stdout.write(JSON.stringify({

@@ -711,7 +711,7 @@ class _WeekLayout:
     label: int          # minutes between time labels
     columns: dict       # day name -> grid column of its first room
     last_column: int
-    rooms: list         # the rooms of the meeting, in order of first use
+    rooms: list         # _WeekRoom: the rooms of the meeting, in order of first use
 
     @property
     def rows(self) -> int:
@@ -723,8 +723,8 @@ class _WeekLayout:
         return _WEEK_AXIS + rooms * _WEEK_ROOM_WIDTH + (len(self.days) - 1) * _WEEK_GUTTER
 
     def room_index(self, room) -> int:
-        label = _room_label(room.name).casefold()
-        return next(i for i, name in enumerate(self.rooms) if name.casefold() == label)
+        key = _room_key(room)
+        return next(i for i, known in enumerate(self.rooms) if known.key == key)
 
     def room_classes(self, rooms) -> str:
         return " ".join(f"wr-{self.room_index(room)}" for room in rooms)
@@ -759,27 +759,47 @@ def _week_layout(schedule: Schedule) -> _WeekLayout | None:
     )
 
 
+@dataclass
+class _WeekRoom:
+    """A room box of the All view: one room across the days."""
+
+    key: str            # _room_key, the same every day
+    names: list         # every name the days give it, the most used first
+
+    @property
+    def name(self) -> str:
+        return self.names[0]
+
+
 def _room_label(name: str) -> str:
-    """A room's name across the days: without the hours one day gives it.
+    """A room's name without the hours one day gives it.
 
     RAN Plenary writes "Breakout: Madrid 1-2 (08:00–12:30)" for the room that is
-    "Breakout: Madrid 1-2" on Monday. Spelling that differs by case alone is
-    the same room too (RAN4 "Offline Room", "Offline room"); see _week_rooms.
+    "Breakout: Madrid 1-2" on Monday.
     """
     return re.sub(r"\s*\(\d{1,2}:\d{2}\s*[–-]\s*\d{1,2}:\d{2}\)\s*$", "", name).strip()
 
 
-def _week_rooms(days) -> list[str]:
-    rooms: list[str] = []
+def _room_key(room) -> str:
+    """What makes a room the same on every day: the id its WG gives it.
+
+    The name is not: RAN4 heads Shan's column "RAN4 Breakout 1(BR1) (Shan Session)"
+    on Monday and "RAN4 RRM_Demod_OTA (Shan Session)" from Tuesday, both "shan".
+    A room without an id (RAN1) is its name, without the hours and case.
+    """
+    return room.id or _room_label(room.name).casefold()
+
+
+def _week_rooms(days) -> list[_WeekRoom]:
+    spellings: dict[str, dict[str, list]] = {}   # key -> casefolded name -> [name, days]
     for day in days:
         for room in day.rooms:
             label = _room_label(room.name)
-            for known in rooms:
-                if known.casefold() == label.casefold():
-                    break
-            else:
-                rooms.append(label)
-    return rooms
+            seen = spellings.setdefault(_room_key(room), {}).setdefault(label.casefold(), [label, 0])
+            seen[1] += 1
+    # The box shows the name most days use; a tie keeps the first.
+    return [_WeekRoom(key, [name for name, _ in sorted(names.values(), key=lambda n: -n[1])])
+            for key, names in spellings.items()]
 
 
 def _render_room_picks(week: "_WeekLayout") -> str:
@@ -788,10 +808,11 @@ def _render_room_picks(week: "_WeekLayout") -> str:
         "days": [[week.room_index(room) for room in day.rooms] for day in week.days],
         "room": _WEEK_ROOM_WIDTH, "gutter": _WEEK_GUTTER, "axis": _WEEK_AXIS,
     }, separators=(",", ":"))
+    # The title names the room the way every day does.
     picks = "".join(
-        f'<label class="room-pick" title="{_esc(name)}"><input type="checkbox" checked '
-        f'data-room="{i}" data-name="{_esc(name)}"><span>{_esc(name)}</span></label>'
-        for i, name in enumerate(week.rooms)
+        f'<label class="room-pick" title="{_esc(chr(10).join(room.names))}"><input type="checkbox" checked '
+        f'data-room="{i}" data-key="{_esc(room.key)}"><span>{_esc(room.name)}</span></label>'
+        for i, room in enumerate(week.rooms)
     )
     return (f'        <div class="room-picks" role="group" aria-label="Rooms shown in All" '
             f"data-week='{data}'>{picks}</div>\n")

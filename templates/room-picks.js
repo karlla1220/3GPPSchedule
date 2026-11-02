@@ -15,6 +15,7 @@
     document.head.appendChild(style);
 
     // Hidden rooms are kept, not shown ones: a room added later starts ticked.
+    // A room is its key (renderer.py _room_key), not its name, which may change by the day.
     function load() {
         try {
             const hidden = JSON.parse(localStorage.getItem(KEY) || '[]');
@@ -25,7 +26,7 @@
     }
 
     function save() {
-        const hidden = boxes.filter(b => !b.checked).map(b => b.dataset.name);
+        const hidden = boxes.filter(b => !b.checked).map(b => b.dataset.key);
         try {
             if (hidden.length) localStorage.setItem(KEY, JSON.stringify(hidden));
             else localStorage.removeItem(KEY);
@@ -71,7 +72,7 @@
     }
 
     const hidden = new Set(load());
-    boxes.forEach(b => { b.checked = !hidden.has(b.dataset.name); });
+    boxes.forEach(b => { b.checked = !hidden.has(b.dataset.key); });
     // A saved choice of rooms this meeting no longer has shows every room.
     if (!boxes.some(b => b.checked)) boxes.forEach(b => { b.checked = true; });
     draw();
