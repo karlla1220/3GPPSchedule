@@ -28,7 +28,7 @@ Return:
     cell names no room. Sessions of one room must not overlap.
   - title: "Plenary" for a Plenary head; otherwise the session's topic line as written
     ("7.3.3 AI", "7.3.6 Immersive+7.3.10 IMS"), or up to three topic lines joined with " / ".
-    Drop round brackets and times. Do not paraphrase, translate or add words.
+    Drop times and round brackets of only numbers; keep other round brackets. Do not paraphrase, translate or add words.
   - agenda_items: agenda numbers written at the start of the session's topic lines or after "+",
     such as "7.3.3" from "7.3.3 AI" and "2" from "2. Reports". Leave out numbers not written.
   - refs: the id of the table cell that holds the session (one id, or more when it runs across

@@ -240,7 +240,7 @@ def test_agenda_items_are_read_from_the_original_line(raw, items, unread):
 
 
 @pytest.mark.parametrize('raw, label', [
-    ('KI#18 (AI for Network) (20.6.18) [5+15]', 'KI#18'),
+    ('KI#18 (AI for Network) (20.6.18) [5+15]', 'KI#18 (AI for Network)'),
     ('UIA_ARC (19.8.2 [4]', 'UIA_ARC'),
     ('Opening (1), Agenda (2), Reports (3)', 'Opening, Agenda, Reports'),
     ('13:00 (Main room) Drafting for SoH questions based on rapporteur input',
@@ -248,7 +248,7 @@ def test_agenda_items_are_read_from_the_original_line(raw, items, unread):
     ('Drafting:', 'Drafting'),
     ('K#1.2 (20.6.1) [3]', 'K#1.2'),   # the chair's typo stays
 ])
-def test_titles_drop_every_bracket_and_keep_the_words(raw, label):
+def test_titles_drop_numbers_and_rooms_and_keep_the_words(raw, label):
     assert sessions.topic(raw) == label
 
 
@@ -257,21 +257,21 @@ def test_titles_drop_every_bracket_and_keep_the_words(raw, label):
 def test_the_two_cells_of_a_quarter_are_pieces_and_the_same_text_twice_is_one():
     found = read(R20, agenda())
     left, right = find(found, 'Tuesday', '09:00', 'stream1', [1, 2]), find(found, 'Tuesday', '09:00', 'stream1', [2, 2])
-    assert [s['name'] for s in left + right] == ['KI#18', 'Rel-20 LS’s and CAT B/C alignment']
+    assert [s['name'] for s in left + right] == ['KI#18 (AI for Network)', 'Rel-20 LS’s and CAT B/C alignment']
     assert left[0]['end'] == '10:30'   # a piece keeps the block's times
     # The same text in both cells is the whole quarter.
     whole = find(found, 'Monday', '14:00', 'stream1')
-    assert [(s['name'], s['part'], s['end']) for s in whole] == [('KI#18', None, '15:30')]
+    assert [(s['name'], s['part'], s['end']) for s in whole] == [('KI#18 (AI for Network)', None, '15:30')]
     # Spaces and paragraph breaks do not make the text different.
     assert [s['part'] for s in find(found, 'Wednesday', '09:00', 'stream2')] == [None]
     # Only one cell filled: that piece alone.
-    assert [(s['name'], s['part']) for s in find(found, 'Tuesday', '09:00', 'stream3')] == [('KI#17', [2, 2])]
+    assert [(s['name'], s['part']) for s in find(found, 'Tuesday', '09:00', 'stream3')] == [('KI#17 (IWK)', [2, 2])]
 
 
 def test_q0_is_one_session_with_the_left_cell_first():
     found = read(R20, agenda())
     q0 = find(found, 'Thursday', '08:00', 'stream1')
-    assert [(s['name'], s['end'], s['part']) for s in q0] == [('KI#1.1 / KI#1.2', '08:50', None)]
+    assert [(s['name'], s['end'], s['part']) for s in q0] == [('KI#1.1 (NAS) / KI#1.2', '08:50', None)]
     assert q0[0]['lines'] == ['KI#1.1 (NAS) (20.6.1) [9]', 'KI#1.2 (20.6.1) [8]']
 
 
@@ -309,7 +309,7 @@ def test_the_plenary_is_split_at_its_written_times():
     plenary = [s for s in found if s['day'] == 'Friday' and s['scope'] == 'shared']
     assert [(s['start'], s['end'], s['name'], s['agenda_items']) for s in plenary] == [
         ('13:30', '14:00', 'Plenary session', []),
-        ('14:00', '15:00', 'List of agreed tdocs for block approval / Revisions', ['30.1']),
+        ('14:00', '15:00', 'List of agreed tdocs for block approval / Revisions (including 30.1)', ['30.1']),
         ('15:00', '16:30', 'block approval of agreed tdocs', [])]
     assert plenary[1]['lines'] == ['14:00 List of agreed tdocs for block approval', 'Revisions (including 30.1)']
 
@@ -321,7 +321,7 @@ def test_break_rows_hold_sessions_of_their_own():
         (['stream1'], '14:00', 'Drafting: FS_ARCH_enIMS'), (['stream2'], '14:00', 'Drafting: FS_AIML_CN_Ph2')]
     # No room written: across the rooms, unassigned.
     election = find(read(R9), 'Monday', '12:30', scope='unassigned')
-    assert [(s['end'], s['name'], s['rooms']) for s in election] == [('14:00', 'SA2 VC Election', [])]
+    assert [(s['end'], s['name'], s['rooms']) for s in election] == [('14:00', 'SA2 VC Election (See NOTE 1)', [])]
 
 
 def test_a_cell_that_names_another_room_sits_there():
@@ -329,17 +329,17 @@ def test_a_cell_that_names_another_room_sits_there():
     # Tuesday 09:00: Stream 1 is "In breakout 1" and Stream 2 "In main room"; Stream 3 stays.
     tuesday = {(s['rooms'][0], s['part'][0]): s for s in find(found, 'Tuesday', '09:00')}
     assert {key: (s['stream'], s['name']) for key, s in tuesday.items()} == {
-        ('stream1', 1): (2, 'AIML_CN_Ph2 / KI#23'), ('stream1', 2): (2, 'KI#22'),
+        ('stream1', 1): (2, 'AIML_CN_Ph2 / KI#23 (NTN)'), ('stream1', 2): (2, 'KI#22 (Computing)'),
         ('stream2', 1): (1, 'FS_enIMS_ARC'), ('stream2', 2): (1, 'In breakout 1'),   # nothing but the room
-        ('stream3', 1): (3, 'AmbientIoT_Ph2-ARC'), ('stream3', 2): (3, 'KI#17')}
+        ('stream3', 1): (3, 'AmbientIoT_Ph2-ARC'), ('stream3', 2): (3, 'KI#17 (IWK)')}
     # The notes keep the room line; the agenda items are the cell's.
     moved = tuesday[('stream2', 1)]
     assert moved['lines'] == ['In breakout 1', 'FS_enIMS_ARC (20.10.1)'] and moved['agenda_items'] == ['20.10.1']
     # "In Breakout 2" from Stream 1 while Stream 3 is "In main room"; Breakout 1 keeps Stream 2.
     wednesday = {(s['rooms'][0], s['part'][0]): (s['stream'], s['name']) for s in find(found, 'Wednesday', '11:00')}
-    assert wednesday == {('stream1', 1): (3, 'In main room'), ('stream1', 2): (3, 'KI#19'),
-                         ('stream2', 1): (2, 'KI#12 – KI#16'), ('stream2', 2): (2, 'KI#24'),
-                         ('stream3', 1): (1, 'KI#3'), ('stream3', 2): (1, 'KI#2')}
+    assert wednesday == {('stream1', 1): (3, 'In main room'), ('stream1', 2): (3, 'KI#19 (Network for AI)'),
+                         ('stream2', 1): (2, 'KI#12 – KI#16'), ('stream2', 2): (2, 'KI#24 (IoT)'),
+                         ('stream3', 1): (1, 'KI#3 (Slicing)'), ('stream3', 2): (1, 'KI#2 (SBA)')}
     # No two sessions share a room at once.
     for day in ('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'):
         taken = [(r, sessions._pieces(s)) for s in found if s['day'] == day for r in s['rooms']]
@@ -417,14 +417,14 @@ def test_render_and_snapshot_roundtrip(r20, tmp_path):
     save_schedule(r20, tmp_path / 'schedule.json')
     assert load_schedule(tmp_path / 'schedule.json') == r20
     html = BeautifulSoup(generate_html(r20), 'html.parser')
-    piece = html.select('#tuesday [data-name="KI#18"]')[0]
+    piece = html.select('#tuesday [data-name="KI#18 (AI for Network)"]')[0]
     assert re.search(r'Room: (Main|Breakout \d) · [^<]*\(Floor \d\) · Stream \d', piece['data-popup'])
     # The grid header shows the place under the room name.
     header = html.select_one('#tuesday .room-header.has-place')
     assert [span.get_text() for span in header.select('span')] == ['Main', 'B2 (Floor 2) · Stream 1']
     assert header['title'] == 'Main · B2 (Floor 2) · Stream 1'
     assert '1/2' in piece.get_text() and 'of' in piece.get_text()
-    shared = html.select_one('#friday [data-name="List of agreed tdocs for block approval / Revisions"]')
+    shared = html.select_one('#friday [data-name="List of agreed tdocs for block approval / Revisions (including 30.1)"]')
     assert 'Revisions (including 30.1)' in shared['data-popup']
 
 
@@ -445,7 +445,7 @@ def test_a_room_is_named_by_its_stream_only_on_days_it_holds_no_other():
     assert {s.chair for s in main} == {'Michael STARSINIC'}   # Stream 2 (green) in the main room
     html = BeautifulSoup(generate_html(schedule), 'html.parser')
     moved = html.select('#tuesday [data-name="FS_enIMS_ARC"]')[0]   # Stream 1's, in Breakout 1
-    assert 'Room: Breakout 1 · BMO Room 203<div class="popup-notes">In breakout 1<br>' in moved['data-popup']
+    assert 'Room: Breakout 1 · BMO Room 203<div class="popup-notes">In breakout 1</div>' in moved['data-popup']
 
 
 def test_a_written_range_stays_a_range_on_the_ai_line():

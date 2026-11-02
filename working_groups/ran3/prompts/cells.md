@@ -16,7 +16,7 @@ For every cell in the input, return its pieces in the order written:
 - lines cites the numbers of the lines that belong to the piece. Every non-blank line of the cell
   is cited by exactly one piece.
 - title uses words of the piece's own lines: the label before ":" ("6G SI"), or the first line
-  without its brackets ("6G Offline (CB#8)" -> "6G Offline"). Join two or three labels with " / ".
+  with its words in brackets ("6G Offline (CB#8)"). Join two or three labels with " / ".
   Do not paraphrase, translate or add words.
 - chair is the initial written in the cell ("L") for the pieces it chairs, else null. Give the
   initial as written, not a name.

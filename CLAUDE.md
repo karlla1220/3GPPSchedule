@@ -47,11 +47,17 @@
     새 WG도 같다: SA1 `7.3.3 AI`, SA1 Plenary 칸은 머리 줄 `Plenary`, RAN3 라벨 `AIML RAN`, RAN4 범주 `NTN` 또는 토픽 `[101-A] System Parameter`.
   - 머리 없이 주제가 여럿이면 앞 셋을 ` / `로 잇고 더 있으면 ` …`를 붙인다(RAN2 `title_and_chair`). 원문 줄을 이은 것이라 원문 표기다.
   - 원문의 낱말을 바꿔 쓰거나 지어내지 않는다. SA1 `7.3.3 AI`의 `AI`는 인공지능이라는 주제 이름이라 떼면 뜻이 바뀐다. 원본 표기가 WG마다 다르므로 모양을 맞추지 않는다.
-  - 제목에서는 괄호를 뗀다(`shared/titles.py`의 `clean`, 모든 WG). AI 번호 괄호(`[8.10]`)는 AI 줄로, 의장 괄호는 Chair로 가고, 둥근 괄호는 내용과 상관없이 모두 빠진다
-    (`(if time allows)`, `(cont)`, `(40)`, `(Reply to RAN1 LS …)`). 낱말에 붙은 괄호(`(e)RedCap`)만 남는다. 뗀 원문은 Note에 그대로 있다.
-    괄호를 뗀 자리에 남는 쉼표·세미콜론 앞 공백도 지운다(`Opening (1), Agenda (2)` → `Opening, Agenda`).
-  - 괄호를 떼면 칸끼리를 가르던 것이 사라지는 제목도 예외 없이 뗀다: RAN3 `6G Offline (CB#8)` → `6G Offline`, SA2 r11 `Drafting for (Option 1, 2, 3)` → `Drafting for`.
-    칸은 AI 줄(CB → AI)과 Note가 가른다. 예외를 두면 "떼면 뜻이 사라지는가"를 가리는 목록이 WG마다 생긴다.
+  - 제목에서는 다른 곳에 보이는 괄호만 뗀다(`shared/titles.py`의 `clean`). 나머지 괄호는 그 칸을 가르는 낱말이라 남는다(2026-11-02 결정, SA1 전문가 요청):
+    SA2 `KI#18 (AI for Network) (20.6.18)` → `KI#18 (AI for Network)`. `KI#18`만 보이면 주제를 외워야 읽힌다.
+    - 번호와 시각뿐인 괄호는 뗀다(`(40)`, `(20.6.18)`, `(AI 8.1)`, `(5.x, 6.x)`, `(1330 - 1630)`, `(until 11:00)`). AI 줄과 시간 줄에 있다. 낱말 목록 없이 모양으로 가른다.
+    - 의장이 된 이름은 뗀다. 이름을 아는 WG 코드가 `clean` 전에 뺀다(RAN2 `(Erlin)`, RAN4 `Chaired by …`). 방 이름 괄호도 같다(SA2 `(main room)`).
+    - 24자를 넘는 괄호는 뗀다(`LONGEST_BRACKET`, `(Reply to RAN1 LS on scheduling …)`). 문장이지 라벨이 아니고, 제목은 줄바꿈 없이 말줄임된다.
+    - 그 밖에는 남는다: 주제와 범위(`(CB#8)`, `(Option 1, 2, 3)`), 회사(`(Ericsson)`), 진행과 조건(`(cont)`, `(final round)`, `(if time allows)`, `(tbd)`). 진행만 낱말 목록으로 가려 떼지 않는다. 규칙을 모양 하나로 둔다.
+    - 낱말에 붙은 괄호(`(e)RedCap`)는 낱말의 일부다. 뗀 원문은 Note에 그대로 있다.
+    - 괄호를 뗀 자리에 남는 쉼표·세미콜론 앞 공백도 지운다(`Opening (1), Agenda (2)` → `Opening, Agenda`). 닫히지 않은 `[`도 뺀다(RAN4 `[NTN (cont)` → `NTN (cont)`).
+    - RAN1과 RAN P는 `clean`을 쓰지 않고 원문 그대로다. RAN1은 AI 번호가 제목이고, RAN P는 셀 원문이 제목이다.
+    - 머리 줄인지 가리는 판단과 이름 읽기는 `unbracketed`(괄호 밖 낱말)로 한다. 괄호만 있는 줄은 머리 줄이 아니다(RAN3 `(self-funded dinner)`).
+    - LLM 폴백의 지시문(`working_groups/<wg>/prompts/`)도 같은 규칙이다. 규칙을 바꾸면 함께 바꾼다.
 - **셀 색(`group_header`)은 agenda 최상위 항목이다(`shared/agenda.py`의 `group_label`, 범례는 그 항목 이름).** 새 WG도 같다. RAN1은 일정의 그룹 머리를 쓴다.
   - agenda.csv에 최상위 항목이 없으면 그 아래 가장 앞 항목의 이름을 쓴다(SA2는 `1` 없이 `1.1 Opening of the meeting`). `AI 1` 같은 범례를 만들지 않는다.
   - AI 번호는 title과 따로 `agenda_item`에 두고, 셀의 AI 줄은 어느 WG든 `AI 7.3.3` 같은 형태다. 필터는 그 번호로 맞춘다.
@@ -87,7 +93,8 @@
     노트가 Chair 줄밖에 쓸 수 없는 셀은 노트와 가로줄을 함께 숨긴다(`.beside-chair`). 줄만 남지 않게 한다.
   - Note는 그 칸의 원문 줄이다. 칸 밖 원문은 하나만 더한다: 범례가 설명하는 기호가 붙은 칸에 그 판 범례의 원문 줄(RAN3 `6G Offline*` → `* if needed`).
     범례는 표 아래에만 있어서, 기호의 뜻을 칸에서 바로 보이려는 것이다. 제목의 기호는 그대로 둔다.
-  - 제목과 똑같은 줄은 뺀다(`_cell_notes`). 셀과 팝업이 같은 목록을 쓴다.
+  - 제목과 똑같은 줄은 뺀다(`_cell_notes`). 셀과 팝업이 같은 목록을 쓴다. AI 줄에 있는 번호의 괄호는 없는 것으로 보고 비교한다(SA2 `KI#18 (AI for Network) (20.6.18)`).
+    제목 전체와 같은 줄만이다. 주제가 여럿인 칸(`KI#5 (QoS) / KI#6 (Policy)`)의 줄은 남고, 시간 예산이 붙은 줄(`… [5+15]`)도 남는다.
   - AI 번호만 있는 줄도 그 번호가 모두 AI 줄에 있으면 뺀다(RAN3 `AI32, AI6`, `[7.8.1], [7.8.2]`). 같은 번호를 두 번 보일 뿐이다.
     머리 줄(`AIML RAN: AI 12`)은 제목과 겹쳐 보여도 남긴다. 제목은 괄호를 떼며 낱말을 잃었을 수 있어서, 원문은 Note가 지킨다. 낱말이 하나라도 붙은 줄(`10.3.1.1 (cont.)`)도 남긴다.
   - 노트가 있으면 AI 줄은 한 줄로 줄이고 말줄임한다(`.has-notes`). 긴 AI 목록이 노트 자리를 먹지 않게 한다.

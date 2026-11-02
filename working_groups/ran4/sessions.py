@@ -32,7 +32,7 @@ from shared.agenda import describe, group_label, is_descendant
 from shared.officials import join_chairs
 from shared.schedule import (MIN_PART_MINUTES, DaySchedule, RoomInfo, Schedule, Session, Timeline,
                              minutes_to_time, time_to_minutes)
-from shared.titles import clean
+from shared.titles import clean, unbracketed
 from . import topics as topicmod
 from .document import clock
 
@@ -81,7 +81,7 @@ def written_chairs(line: str) -> tuple[list[str], str]:
         if not match:
             return [], line
         names = [match[1]]
-    chairs = [clean(re.sub(r'\([^()]*\)?', ' ', n)) for n in names]
+    chairs = [unbracketed(re.sub(r'\([^()]*\)?', ' ', n)) for n in names]
     return [c for c in chairs if c and not c[0].isdigit()], line[:match.start()]
 
 
@@ -108,7 +108,7 @@ def misnamed(line: str, topics: dict) -> str | None:
     match = re.match(r'^\[\s*(\d{3}(?:-[A-Z](?:/[A-Z])?)?)\s*\]\s*(.+)$', line)
     if not match or not topics:
         return None
-    name = _norm(clean(written_chairs(match[2])[1]))
+    name = _norm(unbracketed(written_chairs(match[2])[1]))
     if len(name) < 6:
         return None
     own = topicmod.expand(match[1], topics)
@@ -270,7 +270,7 @@ def _kind(line: str) -> str:
         return 'note'
     if re.match(r'^\(?\s*chaired\s+by\b', line, re.I):
         return 'chair'
-    if COFFEE_ONLY.match(line) or (AD_HOC.match(line) and not clean(AD_HOC.sub('', line))):
+    if COFFEE_ONLY.match(line) or (AD_HOC.match(line) and not unbracketed(AD_HOC.sub('', line))):
         return 'owner'
     if TOPIC_LINE.match(line) or TDOC.match(line):
         return 'item'

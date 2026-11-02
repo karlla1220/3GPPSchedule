@@ -17,7 +17,7 @@ rows between quarters, and whose columns are weekdays of two cells each. Find th
   "-" means the room has no session. Sessions in one room must not overlap. Every timetable cell
   that names an agenda item is (part of) a session: leave none out.
 - refs cites the ids of the cells or paragraphs the session comes from; title uses their own words
-  with parentheses and brackets dropped ("KI#18 (AI for Network) (20.6.18) [5+15]" -> "KI#18").
+  with square brackets and parentheses of only numbers dropped ("KI#18 (AI for Network) (20.6.18) [5+15]" -> "KI#18 (AI for Network)").
 - agenda_items are agenda numbers written there, such as "20.6.18"; "(20.6.12 - 16)" names
   20.6.12 to 20.6.16. Counts in brackets such as "[5+15]" are not agenda items.
 - Announcements ("Opening of meeting at 0900") and the room table are not sessions.

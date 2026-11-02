@@ -35,7 +35,7 @@ table. The first column is the time ("8:30-10:30", "14:00-EOM"); the header row 
     Pieces always give line_numbers.
   - title uses the session's top lines in their own words: a category over topics ("NTN" over
     "[346] ..."), a topic line ("[101-A] System Parameter"), an ad hoc owner ("Main Ad-hoc"). Join up
-    to three with " / ". Leave out round brackets and "Chaired by ...". Do not paraphrase.
+    to three with " / ". Leave out "Chaired by ..." and round brackets of only numbers or times; keep other round brackets ("NTN (cont)"). Do not paraphrase.
   - topics lists the topic numbers written in the session's lines, such as "101-A" from "[101-A]",
     "105-B" from "AH: 105-B", or "346" from "(346, 347)". Counts such as "(19)" are not topics.
   - chair is a person's name written in the session's lines ("Chaired by Jerry (Apple)" gives

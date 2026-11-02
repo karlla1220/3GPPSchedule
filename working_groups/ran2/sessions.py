@@ -24,7 +24,7 @@ from shared.agenda import describe, group_label, is_descendant
 from shared.officials import join_chairs
 from shared.schedule import (DaySchedule, RoomInfo, Schedule, Session, Timeline,
                              minutes_to_time, time_to_minutes)
-from shared.titles import clean
+from shared.titles import clean, unbracketed
 from .document import clock
 
 # A bare clock needs a colon, so "8.10 NR20 MIMO" is never read as 08:10.
@@ -54,7 +54,8 @@ NOT_NAMES = {'Note', 'Notes', 'Main', 'Continue', 'Continued', 'Cont', 'Optional
 @dataclass
 class Line:
     raw: str
-    text: str = ''
+    text: str = ''             # the words, to tell heads from the rest
+    label: str = ''            # the same line as a title shows it
     ais: list[str] = field(default_factory=list)
     lead: bool = False          # starts with an agenda item
     offline: list[str] = field(default_factory=list)
@@ -143,10 +144,9 @@ def analyze(raw: str, chairs: set[str], agenda: dict | None = None) -> Line:
         if parts and all(p in chairs for p in parts):
             line.chairs.extend(parts)
             return ' '
-        if parts and all(p.lower() in COMPANIES for p in parts):
-            return ' '
         return match[0]
-    line.text = clean(re.sub(r'\(([^()]*)\)', parenthetical, text))
+    text = re.sub(r'\(([^()]*)\)', parenthetical, text)
+    line.text, line.label = unbracketed(text), clean(text)
     line.chairs = list(dict.fromkeys(line.chairs))
     return line
 
@@ -229,9 +229,9 @@ def title_and_chair(infos: list[Line]):
         heads.append(info)
         seen.extend(info.ais)
     if heads:
-        title = ' / '.join(h.text for h in heads[:3]) + (' …' if len(heads) > 3 else '')
+        title = ' / '.join(h.label for h in heads[:3]) + (' …' if len(heads) > 3 else '')
     else:
-        title = next((i.text for i in infos if i.text), '')
+        title = next((i.label for i in infos if i.text), '')
     chairs = [c for h in heads for c in h.chairs] or [c for i in infos for c in i.chairs]
     group_item = next((h.ais[0] for h in heads if h.ais), None)
     return title, join_chairs(chairs), group_item, bool(heads)

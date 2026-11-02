@@ -19,7 +19,7 @@ For every cell in the input, return its sessions:
   line with text is cited by exactly one session.
 - title copies the session's lines: "Plenary" for a Plenary room; otherwise the topic line as
   written ("7.3.3 AI", "7.3.6 Immersive+7.3.10 IMS"), or up to three topic lines joined with " / ".
-  Drop round brackets and times. Do not paraphrase, translate or add words.
+  Drop times and round brackets of only numbers; keep other round brackets. Do not paraphrase, translate or add words.
 - agenda_items lists agenda item numbers written at the start of the session's topic lines or
   after "+", such as "7.3.3" from "7.3.3 AI" and "2" from "2. Reports".
 When the rules were right, return the same sessions.

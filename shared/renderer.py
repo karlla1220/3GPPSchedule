@@ -1184,14 +1184,22 @@ def _repeats_ai_line(note: str, ai_ids: set[str]) -> bool:
     return bool(ids) and ids <= ai_ids
 
 
+def _without_ai_brackets(note: str, ai_ids: set[str]) -> str:
+    """The note less brackets of AI-line numbers: "KI#18 (AI for Network) (20.6.18)"."""
+    text = re.sub(r'[\[(]([^\[\]()]*)[\])]',
+                  lambda m: ' ' if _repeats_ai_line(m[1], ai_ids) else m[0], note)
+    return ' '.join(text.split())
+
+
 def _cell_notes(session) -> list[str]:
-    """Notes worth showing: a line that only repeats the title, or only lists
-    agenda numbers the AI line shows, adds nothing. Head lines stay even when
-    the title is made from them: the title may have lost words in the cleaning."""
+    """Notes worth showing: a line that is the whole title, but for numbers the AI
+    line shows, or that only lists such numbers, adds nothing. Other head lines
+    stay: the title may have lost words in the cleaning, or be one of several."""
     name = session.name.strip().casefold()
     ai_ids = set(agenda_section_ids(session.agenda_item or "", ()))
     return [n for n in session.notes
-            if n.strip() and n.strip().casefold() != name and not _repeats_ai_line(n, ai_ids)]
+            if n.strip() and _without_ai_brackets(n, ai_ids).casefold() != name
+            and not _repeats_ai_line(n, ai_ids)]
 
 
 def _notes_html(notes: list[str], slots: float, ai_html: str, scope_label: str | None,

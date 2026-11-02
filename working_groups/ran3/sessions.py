@@ -22,7 +22,7 @@ import re
 from shared.agenda import describe, group_label, is_descendant, written_ranges
 from shared.schedule import (DaySchedule, MIN_PART_MINUTES, RoomInfo, Schedule, Session, Timeline,
                              minutes_to_time, time_to_minutes)
-from shared.titles import clean
+from shared.titles import clean, unbracketed
 
 ROOMS = (('main', 'Main session'), ('offline', 'Offline room'))
 NUMBER = r'\d{1,2}(?:\.\d{1,2})*'
@@ -142,9 +142,9 @@ def title_of(piece: list[str]) -> str:
         if kind(line) in ('marker', 'initial', 'blank'):
             continue
         clock = CLOCK_LINE.match(line)
-        text = clean(clock['rest'] if clock else line)
-        if text:
-            return text
+        text = clock['rest'] if clock else line
+        if unbracketed(text):        # a line all in brackets is a remark, not a head
+            return clean(text)
     return ''
 
 
@@ -268,7 +268,7 @@ def offline_sessions(slots: list[dict], cbs: dict, agenda: dict | None, dates: d
         if agenda:
             items = [i for i in items if i in agenda or i.rsplit('.', 1)[0] in agenda]
         name = clean(AI_TAG.sub(' ', topic))
-        chair = clean(moderator) if moderator and moderator.lower() not in PLACEHOLDERS else None
+        chair = unbracketed(moderator) if moderator and moderator.lower() not in PLACEHOLDERS else None
         result.append({'id': f'offline.{n}', 'day': slot['day'], 'room': 'offline', 'start': slot['start'],
                        'end': slot['end'], 'part': None, 'name': name, 'chair': chair,
                        'agenda_items': list(dict.fromkeys(items)),

@@ -196,10 +196,10 @@ def test_cell_colour_is_the_top_agenda_item(eom):
     assert find(eom, 'Wednesday', '08:00', None).group_header == ''
 
 
-def test_titles_drop_round_brackets_and_the_notes_keep_them():
+def test_a_title_keeps_a_bracket_shown_nowhere_else():
     document = synthetic(['Breakout 2:', '7.3.9 Computing (cont)'],
                          chairs=[{'topic': 'AI, Computing', 'chair': 'Vasil Aleksiev'}])
-    assert read(document) == [('11:00', '12:30', 'breakout-2', '7.3.9 Computing', ['7.3.9'], 'Vasil Aleksiev',
+    assert read(document) == [('11:00', '12:30', 'breakout-2', '7.3.9 Computing (cont)', ['7.3.9'], 'Vasil Aleksiev',
                                ['7.3.9 Computing (cont)'])]
 
 
