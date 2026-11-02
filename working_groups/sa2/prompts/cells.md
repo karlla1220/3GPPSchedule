@@ -9,8 +9,8 @@ parentheses and a count in brackets, such as "KI#18 (AI for Network) (20.6.18) [
 without an agenda item ("Architecture", "Then Option 1, 2, 3 drafting") describes the topic above.
 
 For every item return one answer with the same id:
-- title: the topics' own words joined with " / " (three at most, then " …"). Drop what is in
-  parentheses or brackets, as in "KI#18 (AI for Network) (20.6.18) [5+15]" -> "KI#18". Do not
+- title: the topics' own words joined with " / " (three at most, then " …"). Drop square
+  brackets and parentheses of only numbers, as in "KI#18 (AI for Network) (20.6.18) [5+15]" -> "KI#18 (AI for Network)". Do not
   paraphrase, translate, correct typos or add words. Two topics run together ("TEI20_DAMP
   [1]TEI20_UDCE-ARC [2]") are two topics.
 - agenda_items: agenda item numbers the lines name, such as "20.6.18". A range "(20.6.12 - 16)"

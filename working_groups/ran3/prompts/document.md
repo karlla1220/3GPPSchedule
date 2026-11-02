@@ -34,7 +34,7 @@ Return:
     ("10.3.1.1 (cont.)", "(1hr until 19:30 at latest)", "6G Offline (CB#12)") stay in its piece.
     Pieces are at least 30 minutes each, so a block too short for them is one session with part
     null. Otherwise part is null.
-  - title: the label before ":" ("6G SI"), or the first line without its brackets
+  - title: the label before ":" ("6G SI"), or the first line with its words in brackets
     ("6G Offline (CB#8)" -> "6G Offline"). Use only words of the session's lines.
   - chair: a vice chair's initial written on a line of its own in the cell ("L", "X", "G"),
     for the piece it chairs; else null. Give the initial as written.

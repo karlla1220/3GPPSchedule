@@ -11,11 +11,24 @@ from shared.renderer import _cell_chair, _room_name_html
 from shared.titles import clean
 
 
-def test_clean_drops_round_brackets_and_the_space_they_leave():
+def test_clean_keeps_brackets_only_this_title_shows():
     assert clean('Opening (1), Agenda (2), Reports (3)') == 'Opening, Agenda, Reports'
-    assert clean('NR20 MIMO (if time allows)') == 'NR20 MIMO'
+    assert clean('NR20 MIMO (if time allows)') == 'NR20 MIMO (if time allows)'
     assert clean('(e)RedCap') == '(e)RedCap'
-    assert clean('6G Offline (CB#8)') == '6G Offline'
+    assert clean('6G Offline (CB#8)') == '6G Offline (CB#8)'
+    assert clean('KI#18 (AI for Network) (20.6.18)') == 'KI#18 (AI for Network)'
+    assert clean('[351] LTE_IoT_NTN_high_power (11)') == '[351] LTE_IoT_NTN_high_power'
+    assert clean('Rel-19 (19.48/49/50)') == 'Rel-19'
+    assert clean('Drafting (5.x, 6.x, 7.x )') == 'Drafting'
+    assert clean('X (AI 8.1 and 8.2) (18:30-20:00)') == 'X'
+    assert clean('Main Ad-hoc: (until 11:00)') == 'Main Ad-hoc'
+    assert clean('A (Option 1, 2, 3)') == 'A (Option 1, 2, 3)'
+    assert clean('A (exactly 24 characters ok)') == 'A (exactly 24 characters ok)'
+    assert clean('A (one character past the cap)') == 'A'
+    assert clean('[NTN (cont)') == 'NTN (cont)'
+    assert clean('Topic (cont') == 'Topic (cont)'
+    assert clean('Topic ((if time allows))') == 'Topic (if time allows)'
+    assert clean('Topic (outer (inner) words)') == 'Topic (outer (inner) words)'
     assert clean('Topic [ ]') == 'Topic'
 
 
@@ -99,6 +112,22 @@ def test_a_note_listing_only_the_ai_lines_numbers_is_left_out():
                       agenda_item='12, 32, 6', notes=['AIML RAN: AI 12', 'AI32, AI6', 'AI 33', 'L'])
     # The head line stays: the title may have lost words in the cleaning.
     assert _cell_notes(session) == ['AIML RAN: AI 12', 'AI 33', 'L']
+
+
+def test_a_note_that_is_the_whole_title_but_for_ai_numbers_is_left_out():
+    from shared.renderer import _cell_notes
+    from shared.schedule import Session
+    def notes(name, ai, *lines):
+        return _cell_notes(Session(name=name, duration_minutes=60, start_time='09:00', end_time='10:00',
+                                   day='Monday', agenda_item=ai, notes=list(lines)))
+    assert notes('KI#18 (AI for Network)', '20.6.18', 'KI#18 (AI for Network) (20.6.18)') == []
+    # Another number, a budget, or one topic of several is news.
+    assert notes('KI#18 (AI for Network)', '20.6.18', 'KI#18 (AI for Network) (20.6.19)') == [
+        'KI#18 (AI for Network) (20.6.19)']
+    assert notes('KI#18 (AI for Network)', '20.6.18', 'KI#18 (AI for Network) (20.6.18) [5+15]') == [
+        'KI#18 (AI for Network) (20.6.18) [5+15]']
+    assert notes('KI#5 (QoS) / KI#6 (Policy)', '20.6.5, 20.6.6', 'KI#5 (QoS) (20.6.5)', 'KI#6 (Policy) (20.6.6)') == [
+        'KI#5 (QoS) (20.6.5)', 'KI#6 (Policy) (20.6.6)']
 
 
 def test_every_wg_infers_agenda_items_for_cells_without_one(tmp_path, monkeypatch):

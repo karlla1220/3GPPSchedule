@@ -193,7 +193,7 @@ def test_the_eom_grid_matches_the_report(eom):
     # research/ran3/report/section.json, "예시: 수요일 09:00–13:00".
     assert cells(eom, 'Wednesday', '09:00') == [('09:00', '10:30', None, 'AIML RAN', '12', 'Lixiang XU',
                                                  ['AIML RAN: AI 12', 'L'])]
-    assert cells(eom, 'Wednesday', '10:30') == [('10:30', '11:00', None, '6G Offline', '10.3.1.3', None,
+    assert cells(eom, 'Wednesday', '10:30') == [('10:30', '11:00', None, '6G Offline (CB#8)', '10.3.1.3', None,
                                                  ['6G Offline (CB#8)', 'CB: # 8_6GSBI (moderator - CATT)'])]
     assert cells(eom, 'Wednesday', '11:00')[0][3:6] == ('ISAC SI', '13', None)
     assert cells(eom, 'Wednesday', '09:00', 'offline') == [('09:00', '10:30', None, 'Rel-20 Ambient IoT offline', None,
@@ -203,7 +203,7 @@ def test_the_eom_grid_matches_the_report(eom):
     thursday = [c[:5] for c in cells(eom, 'Thursday') if c[0] >= '14:30']
     assert thursday == [('14:30', '16:30', [1, 2], '6G SI', '10.2.2'), ('14:30', '16:30', [2, 2], 'TEI20', '31'),
                         ('16:30', '17:00', None, '6G Offline*', None), ('17:00', '19:00', [1, 2], 'Early CBs', None),
-                        ('17:00', '19:00', [2, 2], '6G Offline', '10.8.1')]
+                        ('17:00', '19:00', [2, 2], '6G Offline (CB#14)', '10.8.1')]
     # "예시: 수요일 16:30–19:00": the offline in XR's row is a note, not a piece.
     assert cells(eom, 'Wednesday', '17:00')[1][2:6] == ([2, 2], 'XR', '20', None)
     assert cells(eom, 'Wednesday', '17:00')[1][6] == ['XR: AI 20', '6G Offline (CB#12)']
@@ -219,7 +219,7 @@ def test_days_rooms_breaks_and_colours(eom):
     assert monday.timeline.start == '09:00'            # "0900 START OF MEETING" is no session
     assert all(b['label_position'] == 'time-axis' for d in eom.days for b in d.timeline.breaks)
     groups = {s.name: s.group_header for d in eom.days for s in d.sessions}
-    assert groups['6G SI'] == groups['6G Offline'] == 'Study on 6G Radio'
+    assert groups['6G SI'] == groups['6G Offline (CB#8)'] == 'Study on 6G Radio'
     assert groups['Early CBs'] == '' and groups['TEI20'] == 'Corrections and Enhancements to Rel-20'
     friday = cells(eom, 'Friday', '14:30')[0]
     assert friday[3] == 'CBs*' and friday[6] == ['CBs*', 'END OF MEETING', '* if needed']
@@ -408,7 +408,7 @@ def test_a_time_plan_out_of_its_form_is_read_whole_and_takes_the_rules_path(tmp_
         ('08:00', '09:00', None, '6G Offline*', None, None, ['6G Offline*', '* if needed']),
         ('09:00', '10:30', None, 'AIML RAN', '12', 'Lixiang XU', ['AIML RAN: AI 12', 'L']),
         # The CB block in the agenda's notes still gives the item, as for a cell the rules read.
-        ('10:30', '11:00', None, '6G Offline', '10.3.1.3', None,
+        ('10:30', '11:00', None, '6G Offline (CB#8)', '10.3.1.3', None,
          ['6G Offline (CB#8)', 'CB: # 8_6GSBI (moderator - CATT)']),
         ('17:00', '19:00', [1, 2], 'MobEnh', '15', None, ['MobEnh: AI 15']),
         ('17:00', '19:00', [2, 2], 'XR', '20', None, ['XR: AI 20', '6G Offline (CB#12)'])]

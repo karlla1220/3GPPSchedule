@@ -20,7 +20,7 @@ import re
 from shared.agenda import describe, group_label, is_descendant, written_ranges
 from shared.schedule import (MIN_PART_MINUTES, DaySchedule, RoomInfo, Schedule, Session, Timeline,
                              minutes_to_time, time_to_minutes)
-from shared.titles import clean
+from shared.titles import clean, unbracketed
 from .document import clock
 
 AI = r'\d{1,2}(?:\.\d{1,2})*'
@@ -44,8 +44,8 @@ OTHER_TIME = re.compile(r'(?<![\d.:])\d{1,2}:\d{2}(?!\d)|\b\d{1,2}\s*(?:am|pm)\b
 # ------------------------------------------------------------------- lines
 
 def topic(raw: str) -> str:
-    """A line's label: no leading clock, no brackets ("[5+15]", "[19.2.2]"), no parentheses."""
-    return clean(BRACKETS.sub(' ', MARK.sub('', raw)))
+    """A line's label: no leading clock, no brackets ("[5+15]", "[19.2.2]"), no room word."""
+    return clean(ROOM_WORD.sub(' ', BRACKETS.sub(' ', MARK.sub('', raw))))
 
 
 def _expand(token: str, previous: str | None, ranges: list | None = None) -> list[str] | None:
@@ -146,7 +146,7 @@ def reading(lines: list[str], agenda: dict) -> dict:
         items.extend(found)
         unknown.extend(missing)
         label = topic(raw)
-        if label and (found or i == 0) and label not in heads:
+        if unbracketed(label) and (found or i == 0) and label not in heads:
             heads.append(label)
             group_item = group_item or (found[0] if found else None)
     items = list(dict.fromkeys(items))

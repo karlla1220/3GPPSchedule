@@ -199,7 +199,7 @@ def test_thursday_blank_lines_split_but_lists_do_not(week):
         ([1, 2], 'Rel-20 RRM', '7.8.4'),
         ([2, 2], 'R4-2621419 / [208] NR_NTN_GNSS_resilient_RRM', '7.18.2, 7.18.4')]
     yang = next(r for r in rows if r[0] == 'yang')
-    assert yang[3:5] == (None, '[112] TEI20 / [113] R18 maintenance: PC2 FDD HPUE duty cycle / EARLY RETURN TO')
+    assert yang[3:5] == (None, '[112] TEI20 / [113] R18 maintenance: PC2 FDD HPUE duty cycle / EARLY RETURN TO (in the following order)')
     gene = [r for r in rows if r[0] == 'gene']
     assert [(r[1], r[4]) for r in gene] == [('08:30', '5G basket and spectrum WI'),
                                             ('10:30', 'Coffee break offline discussion on 1900 MHz TN bands')]
@@ -218,7 +218,7 @@ def test_the_seven_blocks_the_source_splits(week):
                      ('Wednesday', 'gene', '11:00')]
     friday = block(week[0], 'Friday', '11:00', '12:45')
     assert [(r[3], r[4]) for r in friday if r[0] == 'yang'] == [
-        ([1, 2], '6G operation efficiency'), ([2, 2], '6G RRM / 13 Any other business / 14 Close of the meeting')]
+        ([1, 2], '6G operation efficiency'), ([2, 2], '6G RRM / 13 Any other business / 14 Close of the meeting (main session)')]
 
 
 def test_typos_in_topic_numbers_leave_the_agenda_items_out(week):
@@ -258,7 +258,7 @@ def test_written_times_split_a_cell():
     assert synthetic(['Main Ad-hoc: (until 11:00)', '[111] Z by Aijun (CATT)'], '09:30', '10:30',
                      room='ad-hoc-room')[0] == [('09:30', '11:00', None, 'Main Ad-hoc / [111] Z', 'Aijun')]
     assert synthetic(['Return to (start at 8:30)', 'NTN [346], [347]'], '08:00')[0] == [
-        ('08:30', '10:30', None, 'Return to', 'Gene FONG')]
+        ('08:30', '10:30', None, 'Return to (start at 8:30)', 'Gene FONG')]
 
 
 def test_blank_line_groups_and_what_keeps_them_together():
@@ -267,7 +267,7 @@ def test_blank_line_groups_and_what_keeps_them_together():
     assert [(r[2], r[3]) for r in rows] == [([1, 2], 'Maintenance'), ([2, 2], 'NTN')]
     # "(cont)" is a part of its own; its title loses the bracket as RAN2's does.
     rows, _ = synthetic(['5G UE RF (cont)', '', 'NTN', '[346] C'], '11:00', '13:00')
-    assert [(r[2], r[3]) for r in rows] == [([1, 2], '5G UE RF'), ([2, 2], 'NTN')]
+    assert [(r[2], r[3]) for r in rows] == [([1, 2], '5G UE RF (cont)'), ([2, 2], 'NTN')]
     # A list of fallbacks is one cell across blank lines.
     rows, _ = synthetic(['Return to', '6G system parameter', '', '6G UE RF'])
     assert [(r[2], r[3]) for r in rows] == [(None, 'Return to')]
@@ -316,8 +316,8 @@ def test_cells_the_rules_are_unsure_about_say_why():
                    start='14:30', end='16:30') == ["no break after the block for 'Coffee break offline'"]
 
 
-def test_titles_drop_round_brackets_and_chairs_as_ran2_does():
-    assert sessions.clean('NTN (cont)') == 'NTN'
+def test_titles_drop_numbers_and_long_brackets_and_chairs_as_ran2_does():
+    assert sessions.clean('NTN (cont)') == 'NTN (cont)'
     assert sessions.clean('R4-2621419 (Reply to RAN1 LS on scheduling)') == 'R4-2621419'
     assert sessions.clean('[346] NR_IoT_NTN_Ph2 (40)') == '[346] NR_IoT_NTN_Ph2'
     assert sessions.clean('(e)RedCap bands') == '(e)RedCap bands'
@@ -697,7 +697,7 @@ def test_a_file_the_rules_cannot_read_is_read_whole_by_the_llm(offline_config, t
     assert gene['08:30'].agenda_item is None and '5.2.1' in gene['08:30'].inferred_agenda_items
     assert (gene['10:30'].chair, gene['14:00'].end_time) == ('Pierpaolo', '17:30')
     assert [(s.part, s.name) for s in friday.sessions if s.room_ids == ['yang']] == [
-        ([1, 2], '6G operation efficiency'), ([2, 2], '6G RRM / 13 Any other business / 14 Close of the meeting')]
+        ([1, 2], '6G operation efficiency'), ([2, 2], '6G RRM / 13 Any other business / 14 Close of the meeting (main session)')]
     assert schedule.supplements[0]['text'].startswith('The schedule slides were not in their usual layout')
     assert {'type': 'heading', 'text': 'Slide 6'} in schedule.supplements
     assert sources.read_json(tmp_path / 'out/ran4/.schedule_state.json')['llm'] == {'model': sources.DEFAULTS['model'],

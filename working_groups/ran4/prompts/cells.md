@@ -23,7 +23,7 @@ For every cell in the input, return its sessions in time order:
   is cited by exactly one session; a heading line belongs to the session it introduces.
 - title uses the session's top lines in their own words: a category over topics ("NTN" over
   "[346] ..."), a topic line ("[101-A] System Parameter"), an ad hoc owner ("Main Ad-hoc"). Join up
-  to three with " / ". Leave out round brackets and "Chaired by ...". Do not paraphrase or add words.
+  to three with " / ". Leave out "Chaired by ..." and round brackets of only numbers or times; keep other round brackets ("NTN (cont)"). Do not paraphrase or add words.
 - chair is a person's name written in the cell for this session ("Chaired by Jerry (Apple)" gives
   "Jerry"), else null. A company is not a chair. Do not use the column's session name.
 - topics lists the topic numbers written in the session's lines, such as "101-A" from "[101-A]",
