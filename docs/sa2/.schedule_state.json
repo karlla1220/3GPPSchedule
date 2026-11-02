@@ -36,9 +36,14 @@
     "starts_at": "2026-11-16T09:00:00-06:00",
     "ends_at": "2026-11-20T17:30:00-06:00"
   },
-  "chairs": {},
+  "chairs": {
+    "Mike": "Michael STARSINIC",
+    "Wanqiang": "Wanqiang ZHANG"
+  },
   "llm": {
     "model": "gemini-3.8-flash",
-    "document": true
+    "uncertain": 0,
+    "applied": 0,
+    "kept_rules": 0
   }
 }
