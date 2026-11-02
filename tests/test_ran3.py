@@ -526,7 +526,7 @@ def test_render_roundtrip_and_split_pieces(eom, tmp_path):
     save_schedule(eom, tmp_path / 'schedule.json')
     assert load_schedule(tmp_path / 'schedule.json') == eom
     html = BeautifulSoup(generate_html(eom), 'html.parser')
-    assert len(html.select('.session-block')) == sum(len(d.sessions) for d in eom.days)
+    assert len(html.select('.session-block:not(.week-cell)')) == sum(len(d.sessions) for d in eom.days)
     piece = html.select_one('#thursday [data-name="TEI20"]')
     assert '2/2 of 120 min' in piece['data-popup']
     assert 'Key to the time plan' in html.get_text()
