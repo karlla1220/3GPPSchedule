@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const activeTab = document.querySelector('.tab.active');
         const state = {
             activeDay: activeTab ? activeTab.dataset.day : null,
-            gridZoom: gridZoom,
+            gridZoom: isAllDays() && weekZoom === null ? 'fit' : gridZoom,
             scrollX: window.scrollX,
             scrollY: window.scrollY
         };
@@ -121,6 +121,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     tabs.forEach(tab => {
         tab.addEventListener('click', function() {
+            rememberViewZoom();
             tabs.forEach(t => t.classList.remove('active'));
             panels.forEach(p => p.classList.remove('active'));
             this.classList.add('active');
@@ -130,7 +131,25 @@ document.addEventListener('DOMContentLoaded', function() {
             // day-select.js showed the first day by a rule; .active holds it from here.
             const initialDay = document.getElementById('initial-day');
             if (initialDay) initialDay.remove();
+            document.documentElement.classList.toggle('all-days-view', day === ALL_DAYS);
+            if (gridZoomSupported) setGridZoom(viewZoom());
             saveUserState();
+        });
+    });
+
+    // Fewer rooms need less width (room-picks.js): fit the grid to them again.
+    document.addEventListener('room-picks-change', function() {
+        if (!isAllDays() || !gridZoomSupported) return;
+        weekZoom = null;
+        setGridZoom(viewZoom());
+        saveUserState();
+    });
+
+    // A day's name in the All view opens that day.
+    document.querySelectorAll('.week-day').forEach(button => {
+        button.addEventListener('click', function() {
+            const tab = document.querySelector('.tab[data-day="' + this.dataset.day + '"]');
+            if (tab) tab.click();
         });
     });
 
@@ -157,12 +176,26 @@ document.addEventListener('DOMContentLoaded', function() {
     const gridZoomSupported = window.CSS && CSS.supports && CSS.supports('zoom', '1');
     let gridZoom = 1;
 
+    // The All view and the days keep a zoom each: what fits a day is not what
+    // fits the week. The All view fits the width until it is pinched (null).
+    const ALL_DAYS = 'all-days';
+    let dayZoom = 1;
+    let weekZoom = null;
+    const isAllDays = () => !!document.querySelector('.tab.active[data-day="' + ALL_DAYS + '"]');
+    const viewZoom = () => !isAllDays() ? dayZoom : (weekZoom === null ? minGridZoom() : weekZoom);
+
+    function rememberViewZoom() {
+        if (!isAllDays()) dayZoom = gridZoom;
+    }
+
     function activeGridWrapper() {
         return document.querySelector('.day-panel.active .grid-wrapper');
     }
 
+    // The All view's grid sets its own, wide enough for every room of the week.
     function gridMinWidth() {
-        return parseFloat(getComputedStyle(document.documentElement)
+        const grid = document.querySelector('.day-panel.active .schedule-grid');
+        return parseFloat(getComputedStyle(grid || document.documentElement)
             .getPropertyValue('--grid-min-width')) || 600;
     }
 
@@ -194,8 +227,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Above 100% the time axis keeps its 100% width and text, and only its
     // rows follow the zoom: the width goes to the rooms. Below, it shrinks
-    // with the grid. This is its size on screen relative to 100%.
-    const axisScale = z => Math.min(z, 1);
+    // with the grid, except in the All view, where a week fitted to a phone
+    // is read by its times and day names. This is its size on screen relative to 100%.
+    const axisScale = z => isAllDays() ? 1 : Math.min(z, 1);
 
     // Zoom magnifies the grid as it is laid out at 100%, so --grid-width holds
     // that width. Left to fit the box at each zoom (box width / zoom), the
@@ -205,8 +239,10 @@ document.addEventListener('DOMContentLoaded', function() {
         const root = document.documentElement;
         const wrapper = activeGridWrapper();
         root.style.setProperty('--grid-zoom', String(gridZoom));
-        if (gridZoom > 1) root.style.setProperty('--axis-unzoom', String(1 / gridZoom));
+        if (axisScale(gridZoom) !== gridZoom) root.style.setProperty('--axis-unzoom', String(1 / gridZoom));
         else root.style.removeProperty('--axis-unzoom');
+        // The week's rows fill the screen's height at the zoom that fits its width.
+        if (isAllDays()) root.style.setProperty('--week-fit', String(minGridZoom()));
         if (gridZoom === 1 || !wrapper) root.style.removeProperty('--grid-width');
         else root.style.setProperty('--grid-width', Math.max(wrapper.clientWidth, gridMinWidth()) + 'px');
         updatePinchTarget();
@@ -244,8 +280,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 el.style.removeProperty('--axis-sx');
                 el.style.removeProperty('--axis-sy');
             });
+            p.dayNames.forEach(el => {
+                el.style.removeProperty('--day-sx');
+                el.style.removeProperty('--day-sy');
+            });
+            if (p.axisHead) p.axisHead.style.removeProperty('--head-ty');
             const moved = p.zoom !== gridZoom;
             setGridZoom(p.zoom);
+            if (moved && isAllDays()) weekZoom = gridZoom;
             if (moved) {
                 p.wrapper.scrollLeft = p.scrollLeft;
                 window.scrollTo(window.scrollX, p.scrollTop);
@@ -261,6 +303,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 const mid = touchMid(e.touches);
                 const rect = grid.getBoundingClientRect();
                 const box = wrapper.getBoundingClientRect();
+                const axisHead = grid.querySelector('.room-header.time-col');
+                // The All view's day names keep their size at any zoom, and so does their row.
+                const dayNames = grid.querySelectorAll('.week-day');
+                const dayName = Array.from(dayNames).find(el => el.offsetParent);
                 pinch = {
                     wrapper: wrapper,
                     grid: grid,
@@ -283,7 +329,14 @@ document.addEventListener('DOMContentLoaded', function() {
                     axisWidth: parseFloat(getComputedStyle(document.documentElement)
                         .getPropertyValue('--time-col-width')) || 36,
                     // The sticky time axis (.now-line carries its NOW label).
-                    axis: grid.querySelectorAll('.time-label, .room-header.time-col, .break-axis, .now-line')
+                    axis: grid.querySelectorAll('.time-label, .room-header.time-col, .break-axis, .now-line'),
+                    // A sticky axis stays inside the grid's box: it goes no further
+                    // right than this, however far the scaled grid lets the box scroll.
+                    axisMax: rect.width - (axisHead ? axisHead.getBoundingClientRect().width : 0),
+                    axisHead: axisHead,
+                    dayNames: dayNames,
+                    // Screen height of the day names' row (none on a day's grid).
+                    fixedTop: dayName ? dayName.getBoundingClientRect().height : 0
                 };
             }, { passive: true });
             wrapper.addEventListener('touchmove', function(e) {
@@ -319,21 +372,27 @@ document.addEventListener('DOMContentLoaded', function() {
                 const sx = (W * zoom - A * axisScale(zoom)) / (W * g - A * axisScale(g));
                 const sy = zoom / g;
                 const tx = W * zoom - W * g * sx;
-                grid.style.transform = 'translateX(' + tx / g + 'px) scale(' + sx + ',' + sy + ')';
-                wrapper.style.height = pinch.boxExtra + pinch.gridHeight * zoom + 'px';
+                // The day names' row will not grow with the zoom, so what lies
+                // under it is lifted by what the scale adds to that row; the row's
+                // top goes above the box, and the names shrink back into its bottom.
+                const lift = pinch.fixedTop * (sy - 1);
+                grid.style.transform = 'translate(' + tx / g + 'px,' + -lift / g + 'px) scale(' + sx + ',' + sy + ')';
+                wrapper.style.height = pinch.boxExtra + pinch.gridHeight * zoom - lift + 'px';
                 // Keep that grid point under the fingers as they move. A grid
                 // scaled down still scrolls as far as its unscaled width, so
                 // the end of the scaled grid is held here.
                 const mid = touchMid(e.touches);
                 pinch.scrollLeft = Math.max(0, Math.min(pinch.boxLeft + tx + pinch.x * g * sx - mid.x,
                     W * zoom - pinch.boxWidth));
-                pinch.scrollTop = pinch.gridTop + pinch.y * zoom - mid.y;
+                pinch.scrollTop = pinch.gridTop + pinch.y * zoom - lift - mid.y;
                 wrapper.scrollLeft = pinch.scrollLeft;
                 window.scrollTo(window.scrollX, pinch.scrollTop);
                 // Sticky offsets are worked out before the transform: an axis
-                // held at scrollLeft inside the grid lands at tx + scrollLeft * sx.
+                // held at scrollLeft inside the grid lands at tx + scrollLeft * sx,
+                // or at tx + axisMax * sx once it reaches the grid's end.
                 // The axis is in its own units (--axis-unzoom above 100%).
-                const shift = (wrapper.scrollLeft * (1 - sx) - tx) / (g * sx) * Math.max(g, 1) + 'px';
+                const held = Math.min(wrapper.scrollLeft, pinch.axisMax);
+                const shift = (wrapper.scrollLeft - tx - held * sx) / (axisScale(g) * sx) + 'px';
                 // Its width and text go from their size at this zoom to their
                 // size at the fingers' zoom, the same way across and down.
                 const axisSx = String(axisScale(zoom) / axisScale(g) / sx);
@@ -342,6 +401,13 @@ document.addEventListener('DOMContentLoaded', function() {
                     el.style.setProperty('--pinch-shift', shift);
                     el.style.setProperty('--axis-sx', axisSx);
                     el.style.setProperty('--axis-sy', axisSy);
+                });
+                // The Time head spans the day names' row too: its middle drops by half the lift.
+                if (pinch.axisHead) pinch.axisHead.style.setProperty('--head-ty', lift / 2 / sy + 'px');
+                const daySx = String(1 / sx), daySy = String(1 / sy);
+                pinch.dayNames.forEach(el => {
+                    el.style.setProperty('--day-sx', daySx);
+                    el.style.setProperty('--day-sy', daySy);
                 });
             }, { passive: false });
             const endPinch = function(e) {
@@ -354,7 +420,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // The 100% layout follows the box (rotation): keep the zoom, magnify
         // the new layout. A wider box can also fit the day at a larger zoom.
         window.addEventListener('resize', function() {
-            if (!pinch) setGridZoom(gridZoom);
+            if (!pinch) setGridZoom(isAllDays() ? viewZoom() : gridZoom);
         });
         if (window.visualViewport) window.visualViewport.addEventListener('resize', updatePinchTarget);
         updatePinchTarget();
@@ -367,7 +433,11 @@ document.addEventListener('DOMContentLoaded', function() {
     if (initialTab) {
         initialTab.click();
         if (saved && saved.activeDay === initialTab.dataset.day) {
-            if (gridZoomSupported && saved.gridZoom) setGridZoom(saved.gridZoom);
+            if (gridZoomSupported && saved.gridZoom) {
+                if (isAllDays()) weekZoom = saved.gridZoom === 'fit' ? null : saved.gridZoom;
+                else dayZoom = saved.gridZoom;
+                setGridZoom(viewZoom());
+            }
             window.scrollTo(saved.scrollX || 0, saved.scrollY || 0);
         }
     }
@@ -381,16 +451,27 @@ document.addEventListener('DOMContentLoaded', function() {
         if (!showNowLine) return;
         const todayPanel = document.getElementById(weekday);
         if (!todayPanel || (todayPanel.dataset.date && todayPanel.dataset.date !== date)) return;
-        const grid = todayPanel.querySelector('.schedule-grid');
+        addNowLine(todayPanel.querySelector('.schedule-grid'), minutes);
+        // In the All view the NOW label stays on the time axis, and the red
+        // line runs across today's rooms only (schedule.css).
+        const today = document.querySelector('.week-day[data-day="' + weekday + '"]');
+        if (today) {
+            addNowLine(today.parentElement, minutes, 'now-label');
+            addNowLine(today.parentElement, minutes, 'now-today', today.style.gridColumn);
+        }
+    }
+
+    function addNowLine(grid, minutes, kind, column) {
         if (!grid) return;
         const base = Number(grid.dataset.start);
         const end = Number(grid.dataset.end);
         const interval = Number(grid.dataset.slot);
         if (minutes >= base && minutes < end) {
-            const row = Math.floor((minutes - base) / interval) + 2;
+            const row = Math.floor((minutes - base) / interval) + Number(grid.dataset.firstRow || 2);
             const nowLine = document.createElement('div');
-            nowLine.className = 'now-line';
+            nowLine.className = kind ? 'now-line ' + kind : 'now-line';
             nowLine.style.gridRow = row + ' / ' + (row + 1);
+            if (column) nowLine.style.gridColumn = column;
             grid.appendChild(nowLine);
         }
     }
@@ -561,6 +642,16 @@ document.addEventListener('DOMContentLoaded', function() {
             window.dispatchEvent(new CustomEvent('agreement-select', { detail: null }));
         }));
     }
+    // An All view cell shows the popup of its day's cell.
+    function popupOf(block) {
+        const of = block.dataset.popupOf;
+        if (!of) return block.getAttribute('data-popup');
+        const [day, index] = of.split(':');
+        const panel = document.getElementById(day);
+        const cell = panel && panel.querySelectorAll('.session-block')[Number(index)];
+        return cell ? cell.getAttribute('data-popup') : null;
+    }
+
     document.querySelectorAll('.session-block').forEach(block => {
         if (agreementPanel) block.addEventListener('keydown', e => {
             if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); block.click(); }
@@ -568,7 +659,7 @@ document.addEventListener('DOMContentLoaded', function() {
         block.addEventListener('click', function(e) {
             e.stopPropagation();
             // Opening one popup over another keeps the height already held.
-            const html = this.getAttribute('data-popup');
+            const html = popupOf(this);
             const opens = html && (!isPopupOpen() || popupContent.innerHTML !== html);
             if (opens) holdPanelHeight();
             else closePopup();
@@ -886,6 +977,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         function applyFilter() {
             var hasFilter = activeAIs.size > 0 || activeSessions.size > 0 || activeNoAISessions.size > 0;
+            document.documentElement.classList.toggle('filtering', hasFilter);
             // Derive session keys for sessions whose ALL AIs (+ noAI) are active.
             // This ensures blocks without data-ai still match when the
             // session (or parent group) checkbox is fully checked.

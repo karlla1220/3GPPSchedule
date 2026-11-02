@@ -16,7 +16,7 @@ WED_NIGHT_UTC = '2026-10-14T23:30:00Z'
 
 
 def run_page(*, now=WED_NIGHT_UTC, saved=None, storage_error=False, page=False, clicks=(),
-             toolbar_width=396, zoom_supported=True):
+             toolbar_width=396, zoom_supported=True, days=DAYS):
     node = shutil.which('node')
     if not node:
         pytest.skip('Node.js is required to execute browser logic')
@@ -24,7 +24,7 @@ def run_page(*, now=WED_NIGHT_UTC, saved=None, storage_error=False, page=False, 
         'STATE_ID_JSON': json.dumps(STATE_ID), 'MEETING_TIMEZONE_JSON': json.dumps('Asia/Seoul')})
     script = _generate_js('Asia/Seoul', auto_refresh_minutes=0, state_id=STATE_ID) if page else None
     result = subprocess.run([node, str(Path(__file__).parent / 'fixtures/day_tabs_browser.cjs')],
-                            input=json.dumps({'daySelect': day_select, 'page': script, 'now': now, 'days': DAYS,
+                            input=json.dumps({'daySelect': day_select, 'page': script, 'now': now, 'days': days,
                                               'session': {STATE_KEY: json.dumps(saved)} if saved else {},
                                               'storageError': storage_error, 'clicks': list(clicks),
                                               'toolbarWidth': toolbar_width, 'zoomSupported': zoom_supported}),
@@ -60,6 +60,31 @@ def test_a_day_without_sessions_falls_back_to_the_first():
 def test_without_session_storage_today_is_shown():
     state, = run_page(storage_error=True)
     assert state['activeTabs'] == ['thursday']
+
+
+def test_the_all_view_left_in_this_tab_comes_back_fitted_to_the_width():
+    state, = run_page(saved={'activeDay': 'all-days', 'gridZoom': 'fit'}, days=DAYS + ['all-days'])
+    assert state['activeTabs'] == ['all-days'] and state['allDays']
+    assert state['rule'].startswith('#all-days.day-panel { display: block; }')
+    # Before the grid is parsed: the whole week fits, from its own width, not a day's.
+    assert float(state['vars']['--grid-zoom']) == pytest.approx(396 / 1360)
+    assert state['vars']['--grid-width'] == '1360px'
+
+
+def test_a_pinched_all_view_keeps_its_zoom():
+    state, = run_page(saved={'activeDay': 'all-days', 'gridZoom': 0.6}, days=DAYS + ['all-days'])
+    assert state['vars']['--grid-zoom'] == '0.6'
+
+
+def test_the_all_view_is_not_chosen_for_a_first_visit():
+    state, = run_page(days=DAYS + ['all-days'])
+    assert state['activeTabs'] == ['thursday'] and not state['allDays']
+
+
+def test_leaving_the_all_view_ends_its_page_width():
+    _, _, all_days, friday = run_page(page=True, clicks=['all-days', 'friday'], days=DAYS + ['all-days'])
+    assert all_days['allDays'] and all_days['activePanels'] == ['all-days']
+    assert not friday['allDays']
 
 
 def test_schedule_js_takes_over_the_day_and_drops_the_rule():

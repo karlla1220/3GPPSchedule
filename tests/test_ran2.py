@@ -345,7 +345,7 @@ def test_every_room_shows_one_block_at_a_time(name, agenda_name, metadata):
             assert all(a_end <= b_start for (_, a_end), (b_start, _) in zip(spans, spans[1:])), (day.day_name, room.id)
             assert all(start <= a < b <= end and a % 5 == 0 and b % 5 == 0 for a, b in spans)
     html = BeautifulSoup(generate_html(schedule), 'html.parser')
-    assert len(html.select('.session-block')) == sum(len(d.sessions) for d in schedule.days)
+    assert len(html.select('.session-block:not(.week-cell)')) == sum(len(d.sessions) for d in schedule.days)
 
 
 def test_render_roundtrip_popup_and_additional_information(v11, tmp_path):

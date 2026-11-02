@@ -49,7 +49,7 @@
 ## 3. 문구
 
 - **영어로 쓴다.** 페이지 전체가 영어다.
-- **제목은 사용자가 할 일이다.** 동사로 시작하는 짧은 말(`Tap a session for its details`, `Pick a day`, `Pinch to see the whole day`)이다.
+- **제목은 사용자가 할 일이다.** 동사로 시작하는 짧은 말(`Tap a session for its details`, `Pick a day`, `Pinch to see the whole grid`)이다.
   그 자리에 있는 것을 소개하는 단계(그리드 아래 구획)는 화면에 적힌 이름 그대로 쓴다(`Additional information`, `Topics`, `Off-offline and FL whereabouts`).
 - **설명은 두 문장까지다.** 첫 문장은 누르거나 보면 무엇이 되는지, 둘째 문장은 놓치기 쉬운 것 하나(필터가 링크에 남는다, 100%에서 멈춘다, 제목을 누르면 접힌다).
   모바일 카드에서 세 줄을 넘기면 무대가 화면 밖으로 밀린다. 한 단계에 140자 안팎이 넘으면 나눈다.

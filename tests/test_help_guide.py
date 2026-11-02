@@ -91,6 +91,15 @@ def test_the_sa1_tdoc_panel_has_its_own_step_and_not_the_agreements_one():
     assert states[0]['count'] == '1 / 6'
 
 
+def test_the_room_boxes_have_a_step_under_the_all_tab_only():
+    # Under All the boxes sit in the toolbar's row; on a day's tab they are hidden.
+    states = run_tour(['start', 'next', 'next'], targets=RAN2 | {'.room-picks': 'shown'})['states']
+    assert [s['title'] for s in states] == [TITLES[t] for t in ('#wg-switch summary', '.schedule-toolbar', '.room-picks')]
+    assert states[0]['count'] == '1 / 6'
+    states = run_tour(['start', 'next', 'next'], targets=RAN2 | {'.room-picks': 'hidden'})['states']
+    assert states[2]['title'] == TITLES['.filter-toggle'] and states[0]['count'] == '1 / 5'
+
+
 def test_back_and_the_arrow_keys_move_between_steps():
     states = run_tour(['start', 'right', 'right', 'back'], targets=RAN2)['states']
     assert [s['count'] for s in states] == ['1 / 5', '2 / 5', '3 / 5', '2 / 5']

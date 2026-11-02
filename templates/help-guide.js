@@ -90,9 +90,17 @@
     }
 
     // ── This page's grid, as it is laid out on a phone ──
+    // A scene needs a day's whole cells, so under the All tab it plays on the first day.
     function sourceGrid() {
-        const grid = document.querySelector('.day-panel.active .schedule-grid') || document.querySelector('.schedule-grid');
+        const grid = document.querySelector('.day-panel.active:not(.all-days) .schedule-grid')
+            || document.querySelector('.day-panel:not(.all-days) .schedule-grid');
         return grid && grid.querySelector('.session-block') ? grid : null;
+    }
+
+    // The grid on screen, for what the tour points at.
+    function pageGrid() {
+        const grid = document.querySelector('.day-panel.active .schedule-grid');
+        return grid && grid.querySelector('.session-block') ? grid : sourceGrid();
     }
 
     function gridView(stage) {
@@ -122,7 +130,7 @@
         let best = null;
         let bestScore = -Infinity;
         grid.querySelectorAll('.session-block').forEach(block => {
-            if (!block.dataset.popup || block.classList.contains('short-session') || block.classList.contains('tiny-session')) return;
+            if (!(block.dataset.popup || block.dataset.popupOf) || block.classList.contains('short-session') || block.classList.contains('tiny-session')) return;
             if (accept && !accept(block)) return;
             const col = columns(block);
             const score = (block.dataset.ai ? 4 : 0) + (block.querySelector('.session-note') ? 2 : 0) +
@@ -381,21 +389,22 @@
     // A session in view to point at: the grid scrolls sideways in its own box,
     // and moving it would leave the visitor somewhere else.
     function visibleCell() {
-        const grid = sourceGrid();
+        const grid = pageGrid();
         if (!grid) return null;
         const box = grid.parentElement.getBoundingClientRect();
         const cell = pickBlock(grid, block => {
             const r = block.getBoundingClientRect();
             return r.left >= box.left && r.right <= box.right;
         });
-        return cell && { el: cell, index: Array.from(grid.querySelectorAll('.session-block')).indexOf(cell) };
+        // An All view cell has no twin at this index in the scene's grid; the scene picks its own.
+        return cell && { el: cell, index: cell.dataset.popupOf ? -1 : Array.from(grid.querySelectorAll('.session-block')).indexOf(cell) };
     }
 
     function target(step) {
         if (step.touch && !touchScreen()) return null;
         if (step.target === 'cell') return visibleCell();
         if (step.target === 'grid') {
-            const grid = sourceGrid();
+            const grid = pageGrid();
             return grid && { el: grid.parentElement };
         }
         const node = document.querySelector(step.target);

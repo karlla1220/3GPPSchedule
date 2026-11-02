@@ -124,13 +124,15 @@ HELP_STEPS = (
     {"key": "switch", "target": "#wg-switch summary", "title": "Switch meetings from the title",
      "text": "The meeting name opens every WG\u2019s meeting, ongoing ones first."},
     {"key": "days", "target": ".schedule-toolbar", "title": "Pick a day",
-     "text": "Each day of the meeting has its own grid. During the meeting, NOW marks the current time on today\u2019s."},
+     "text": "Each day has its own grid, and All shows them together. During the meeting, NOW marks the current time on today\u2019s."},
+    {"key": "rooms", "target": ".room-picks", "title": "Tick the rooms you follow",
+     "text": "Under All, the rooms you untick leave the grid. With fewer rooms the titles fit, even on a phone."},
     {"key": "details", "target": "cell", "scene": "details", "title": "Tap a session for its details",
      "text": "Group, chair, room, notes and the agenda item names. Tap again, or anywhere else, to close it."},
     {"key": "filter", "target": ".filter-toggle", "scene": "filter", "title": "Follow only your agenda items",
      "text": "Open Filter here and tick what you follow; other sessions fade. "
              "The filter is kept for this meeting and is part of the link, so you can share what you see."},
-    {"key": "pinch", "target": "grid", "scene": "pinch", "touch": True, "title": "Pinch to see the whole day",
+    {"key": "pinch", "target": "grid", "scene": "pinch", "touch": True, "title": "Pinch to see the whole grid",
      "text": "Pinch the grid itself to see every room at once. Spreading back, it stops at 100% for a moment."},
     {"key": "agreements", "target": "#agreement-panel:not(.tdoc-conclusions)", "title": "Agreements below the grid",
      "text": "Tapping a session shows the chair notes for its agenda item here. "

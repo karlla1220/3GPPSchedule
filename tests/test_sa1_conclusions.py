@@ -75,7 +75,7 @@ def test_the_panel_opens_from_written_and_found_agenda_items(tmp_path):
     page = BeautifulSoup(generate_html(schedule), 'html.parser')
     panel = page.find(id='agreement-panel')
     assert 'tdoc-conclusions' in panel['class'] and panel.h2.text == 'TDoc conclusions for'
-    blocks = page.select('.session-block')
+    blocks = page.select('.session-block:not(.week-cell)')
     written = next(b for b in blocks if (b['data-name'], b['data-ai']) == ('8.1.3 AI', '8.1.3'))
     assert written['data-agreement-ai'].split('|')[0] == '8.1.3'
     # "Plenary ⏎ Immersive ⏎ Massive ⏎ Verticals": numbers found by name, filter and panel only.
