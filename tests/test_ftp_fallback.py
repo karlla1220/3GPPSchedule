@@ -1,5 +1,6 @@
 """Exercise fallback through the actual WG listing and download entry points."""
 import ftplib
+import gzip
 from contextlib import contextmanager
 
 import httpx
@@ -334,7 +335,6 @@ def test_a_403_means_missing_only_when_ftp_says_550(ftp, monkeypatch, caplog):
 
 
 def test_a_403_for_a_folder_ftp_can_read_is_not_absence(ftp, caplog):
-    """2026-11-02: runners got a plain 403 for folders that were there, and five WGs saw "no schedule"."""
     from shared import remote_files
     seen = []
     with said_403(CHAIR, seen=seen) as http:
@@ -364,3 +364,45 @@ def test_a_403_ftp_cannot_settle_is_a_failure_not_absence(ftp, monkeypatch, tmp_
     assert not remote_files.is_absent(caught.value)
     remote_files.save_listings(tmp_path / 'listings.json')
     assert remote_files.load_listings(tmp_path / 'listings.json') == 0
+
+
+LISTING = f'<table><tr><td><a href="{CHAIR}a.zip">a.zip</a></td><td>2026/10/15 10:47</td></tr></table>'
+
+
+def packed_without_saying(url, body):
+    """2026-11-02: 200 with a gzip body and no Content-Encoding."""
+    return httpx.Client(transport=httpx.MockTransport(
+        lambda _: httpx.Response(200, content=gzip.compress(body), headers={'content-type': 'text/html'})))
+
+
+def test_a_listing_sent_as_unlabelled_gzip_is_still_a_listing(ftp, caplog):
+    """Read as is, it has no links: WGs saw "no schedule", and RAN1 only the older folder's v00."""
+    from shared import remote_files
+    with packed_without_saying(CHAIR, LISTING.encode()) as http:
+        html = remote_files.get_listing(CHAIR, http=http).text
+    assert [e['name'] for e in remote_files.listing_entries(html, CHAIR, children_only=True)] == ['a.zip']
+    assert 'gzip without saying so' in caplog.text and ftp.calls == []
+
+
+def test_a_file_sent_as_unlabelled_gzip_is_stored_unpacked(ftp, tmp_path):
+    from shared import remote_files
+    with packed_without_saying(CHAIR, AGENDA) as http:
+        body, info = remote_files.fetch_file(http, CHAIR + 'agenda.csv')
+    assert body == AGENDA and info['size'] == len(AGENDA)
+
+
+def test_a_gzip_file_by_name_or_a_broken_stream_stays_as_sent():
+    from shared import ftp_transport
+    packed = gzip.compress(b'data')
+    with packed_without_saying(CHAIR, b'data') as http:
+        assert ftp_transport.get(CHAIR + 'logs.tar.gz', http=http).content == packed
+    truncated = httpx.Response(200, content=packed[:8])
+    with httpx.Client(transport=httpx.MockTransport(lambda _: truncated)) as http:
+        assert ftp_transport.get(CHAIR + 'a.bin', http=http).content == packed[:8]
+
+
+def test_gzip_httpx_already_undid_is_not_touched(ftp):
+    from shared import ftp_transport
+    answer = httpx.Response(200, content=gzip.compress(b'data'), headers={'content-encoding': 'gzip'})
+    with httpx.Client(transport=httpx.MockTransport(lambda _: answer)) as http:
+        assert ftp_transport.get(CHAIR + 'a.bin', http=http).content == b'data'
