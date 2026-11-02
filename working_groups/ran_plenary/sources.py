@@ -11,7 +11,7 @@ from urllib.parse import unquote, urljoin, urlparse
 from bs4 import BeautifulSoup
 import httpx
 
-from shared import meeting_folders, remote_files
+from shared import meeting_folders, meeting_turn, remote_files
 from shared.remote_files import client, fetch_file
 from shared.portal_meetings import TB_IDS, get_meetings, timezone_reference
 
@@ -123,7 +123,21 @@ class NothingNewer(ValueError):
     """The Chair listing has no timeplan at least as new as the built one."""
 
 
-def select_timeplan(html: str, listing_url: str, previous: dict) -> dict:
+def meeting_id(number: int) -> str:
+    return f'ran#{number}'
+
+
+def rank(meeting: str) -> int:
+    return int(meeting.split('#')[1])
+
+
+def meeting_dates(cfg, rows, previous) -> dict[str, meeting_turn.Dates]:
+    built = {**previous, 'meeting_id': meeting_id(previous['meeting_number'])} if previous.get('meeting_number') else {}
+    return meeting_turn.known_dates(meeting_folders.wg_rows('ran-plenary', rows), built,
+                                    {meeting_id(key): value for key, value in cfg['meetings'].items()})
+
+
+def select_timeplan(html: str, listing_url: str, previous: dict, dates: dict | None = None, now=None) -> dict:
     candidates = []
     for anchor in BeautifulSoup(html, 'html.parser').find_all('a', href=True):
         url = urljoin(listing_url, anchor['href'])
@@ -139,6 +153,12 @@ def select_timeplan(html: str, listing_url: str, previous: dict) -> dict:
                            'uploaded_at': timestamp.group().replace('/', '-') if timestamp else ''})
     if not candidates:
         raise NothingNewer('No RAN timeplan found in Chair listing')
+    built = meeting_id(previous['meeting_number']) if previous.get('meeting_number') else None
+    meeting = meeting_turn.current_meeting(built, {meeting_id(c['meeting_number']) for c in candidates}, dates or {},
+                                           now or meeting_turn.right_now(), rank)
+    candidates = [c for c in candidates if meeting_id(c['meeting_number']) == meeting]
+    if not candidates:
+        raise NothingNewer(f'No timeplan of {meeting} listed')
     chosen = max(candidates, key=lambda c: (c['meeting_number'], c['version'], c['uploaded_at'], c['name']))
     old_rank = (previous.get('meeting_number', 0), previous.get('version', 0))
     if (chosen['meeting_number'], chosen['version']) < old_rank:
@@ -154,7 +174,7 @@ def built_bundle(cfg, previous, reason) -> Bundle:
     """
     plan_info, agenda_info = previous.get('timeplan') or {}, previous.get('agenda') or {}
     plan = remote_files.cached(plan_info['url'], plan_info.get('sha256')) if plan_info.get('url') else None
-    agenda = remote_files.cached(agenda_info['url'], agenda_info.get('sha256')) if agenda_info.get('url') else None
+    agenda = remote_files.cached(agenda_info['url'], agenda_info.get('sha256')) if agenda_info.get('url') else b''
     if plan is None or agenda is None:
         raise ValueError(f'{reason}, and the last built inputs are not cached')
     print(f"[ran-plenary] {reason}; keeping {plan_info.get('name')}")
@@ -162,14 +182,21 @@ def built_bundle(cfg, previous, reason) -> Bundle:
                    'config_hash': config_hash(cfg), 'timeplan': plan_info, 'agenda': agenda_info}, plan, agenda)
 
 
-def fetch_agenda(cfg, number, previous, http, cached, rows=None):
-    """agenda.csv from the meeting folder, else the sync folder, else as built."""
-    meeting = f'ran#{number}'
+def fetch_agenda(cfg, number, previous, http, cached, rows=None, dates=None, now=None):
+    """agenda.csv from the meeting folder, else the sync folder, else as built, else none.
+
+    The sync copy does not name its meeting and stays until the folder is
+    copied afresh, so it counts from the meeting's first day only. Before that
+    a page without AI names is better than one with the last meeting's.
+    """
+    meeting = meeting_id(number)
     folder = meeting_folders.resolve('ran-plenary', [meeting], rows=rows,
                                      override=cfg['meeting_specific_override'],
                                      recorded=cfg['meeting_specific'], root=cfg['archive_url'],
                                      http=http).get(meeting)
-    urls = ([folder + 'Agenda/agenda.csv'] if folder else []) + [cfg['agenda_url']]
+    urls = [folder + 'Agenda/agenda.csv'] if folder else []
+    if meeting_turn.has_started(meeting, dates or {}, now or meeting_turn.right_now()):
+        urls.append(cfg['agenda_url'])
     for url in urls:
         try:
             return fetch_file(http, url, previous.get('agenda', {}), cached.agenda if cached else None)
@@ -182,14 +209,17 @@ def fetch_agenda(cfg, number, previous, http, cached, rows=None):
         if body is not None:
             print(f'[ran-plenary] No agenda.csv listed for RAN#{number}; keeping the built one')
             return body, old
-    raise ValueError(f'No agenda.csv for RAN#{number} at {" or ".join(urls)}')
+    print(f'[ran-plenary] No agenda.csv for RAN#{number} yet')
+    return b'', {'url': '', 'sha256': digest(b'')}
 
 
 
-def fetch_bundle(cfg, previous, http, cache_dir=DOWNLOADS / 'inputs', *, rows=None) -> Bundle:
+def fetch_bundle(cfg, previous, http, cache_dir=DOWNLOADS / 'inputs', *, rows=None, now=None) -> Bundle:
+    now = now or meeting_turn.right_now()
+    dates = meeting_dates(cfg, rows, previous)
     try:
         listing = remote_files.get_listing(cfg['chair_url'], http=http)
-        chosen = select_timeplan(listing.text, cfg['chair_url'], previous)
+        chosen = select_timeplan(listing.text, cfg['chair_url'], previous, dates, now)
     except (httpx.HTTPError, NothingNewer) as exc:
         absent = isinstance(exc, NothingNewer) or remote_files.is_absent(exc)
         if not (absent and previous.get('timeplan')):
@@ -202,7 +232,7 @@ def fetch_bundle(cfg, previous, http, cache_dir=DOWNLOADS / 'inputs', *, rows=No
         pass
     plan, plan_info = fetch_file(http, chosen['url'], previous.get('timeplan', {}),
                                 cached.timeplan if cached else None)
-    agenda, agenda_info = fetch_agenda(cfg, chosen['meeting_number'], previous, http, cached, rows)
+    agenda, agenda_info = fetch_agenda(cfg, chosen['meeting_number'], previous, http, cached, rows, dates, now)
     manifest = {'meeting_number': chosen['meeting_number'], 'version': chosen['version'],
                 'config_hash': config_hash(cfg), 'timeplan': {**chosen, **plan_info}, 'agenda': agenda_info}
     return Bundle(manifest, plan, agenda)

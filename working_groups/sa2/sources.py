@@ -15,7 +15,6 @@ is set by hand and wins for its meeting.
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from datetime import datetime
 import hashlib
 import io
 import json
@@ -23,13 +22,12 @@ from pathlib import Path
 import re
 from urllib.parse import unquote, urlparse
 import zipfile
-from zoneinfo import ZoneInfo
 
 import httpx
 
-from shared import meeting_folders, remote_files
+from shared import meeting_folders, meeting_turn, remote_files
 from shared.json_files import read_json, write_json
-from shared.meeting_folders import portal_key, portal_metadata
+from shared.meeting_folders import portal_metadata
 from shared.portal_meetings import TB_IDS, get_meetings, meeting_key
 from shared.remote_files import client, fetch_file, listing_entries
 
@@ -212,33 +210,23 @@ def portal_rows() -> list[dict] | None:
         return None
 
 
-def meeting_dates(cfg, rows, previous) -> dict[str, tuple[str, str]]:
-    """Known (starts_on, ends_on) per meeting: overrides, Portal, last build."""
-    dates = {}
-    if previous.get('meeting_id') and previous.get('metadata', {}).get('ends_on'):
-        dates[previous['meeting_id']] = (previous['metadata']['starts_on'], previous['metadata']['ends_on'])
-    for row in rows or []:
-        key = portal_key(row)
-        if key and row.get('StartDate') and row.get('EndDate'):
-            dates[key] = (row['StartDate'][:10], row['EndDate'][:10])
-    for key, value in cfg['meetings'].items():
-        if value.get('starts_on') and value.get('ends_on'):
-            dates[meeting_key(f'SA2#{key}')] = (value['starts_on'], value['ends_on'])
-    return dates
+def meeting_dates(cfg, rows, previous) -> dict[str, meeting_turn.Dates]:
+    return meeting_turn.known_dates(rows, previous,
+                                    {meeting_key(f'SA2#{key}'): value for key, value in cfg['meetings'].items()})
 
 
-def choose_schedule(candidates: list[dict], dates: dict, today: str) -> dict:
+def choose_schedule(candidates: list[dict], dates: dict, now, built=None) -> dict:
     """The current meeting's newest plan.
 
-    The current meeting is the earliest one, by Portal dates, that has not
-    ended and already has a plan. Without one, keep the highest meeting.
+    The meeting is the one ``shared/meeting_turn.py`` picks among those with a plan.
     """
     if not candidates:
         raise ValueError('No SA2 Session Plan (S2-<TDoc>_SA2-<meeting>-Session Plan - r<N>.docx) found')
-    meetings = {c['meeting_id'] for c in candidates}
-    current = sorted((dates[m][0], m) for m in meetings if m in dates and dates[m][1] >= today)
-    meeting = current[0][1] if current else max(meetings, key=rank)
-    return max((c for c in candidates if c['meeting_id'] == meeting), key=order)
+    meeting = meeting_turn.current_meeting(built, {c['meeting_id'] for c in candidates}, dates, now, rank)
+    same = [c for c in candidates if c['meeting_id'] == meeting]
+    if not same:
+        raise ValueError(f'No SA2 Session Plan of {meeting} listed')
+    return max(same, key=order)
 
 
 # -------------------------------------------------------------------- bundles
@@ -254,10 +242,10 @@ def sync_listing(cfg, http) -> list[dict]:
     return []
 
 
-def sync_warnings(bundle, error, dates, today) -> Bundle:
+def sync_warnings(bundle, error, dates, now) -> Bundle:
     """During the meeting only the sync folder carries new plans; say when it cannot be read."""
     meeting = bundle.manifest['meeting_id']
-    if error is not None and meeting in dates and dates[meeting][0] <= today <= dates[meeting][1]:
+    if error is not None and meeting_turn.in_progress(meeting, dates, now):
         bundle.warnings.append(f'SA2 sync folder unreadable during {meeting} ({error}); '
                                f"the page keeps {bundle.manifest['schedule']['name']} and misses newer plans")
     return bundle
@@ -288,20 +276,17 @@ def built_copy(cfg, previous, chosen, candidates, rows, error) -> Bundle | None:
     return Bundle(manifest, schedule, agenda)
 
 
-def fetch_bundle(cfg, previous, http, *, rows=None, today=None, cache_dir=DOWNLOADS / 'inputs') -> Bundle:
-    today = today or datetime.now(ZoneInfo('Asia/Seoul')).date().isoformat()
+def fetch_bundle(cfg, previous, http, *, rows=None, now=None, cache_dir=DOWNLOADS / 'inputs') -> Bundle:
+    now = now or meeting_turn.right_now()
     try:
         entries, sync_error = sync_listing(cfg, http), None
     except httpx.HTTPError as exc:
         print(f'[sa2] Sync folder unreadable ({exc}); reading the meeting folder')
         entries, sync_error = [], exc
     dates = meeting_dates(cfg, rows, previous)
-    # Archive folders worth listing: the next two meetings that have not
-    # ended, plus the last built one (its Agenda folder holds agenda.csv).
-    upcoming = sorted((start, m) for m, (start, end) in dates.items() if end >= today)
-    wanted = [m for _, m in upcoming[:2]]
-    if previous.get('meeting_id') and previous['meeting_id'] not in wanted:
-        wanted.append(previous['meeting_id'])
+    # Archive folders worth listing: the built meeting (its Agenda folder
+    # holds agenda.csv) and the next one.
+    wanted = meeting_turn.to_read(previous.get('meeting_id'), dates, now)
     archive = find_folders(cfg, wanted, rows, http)
     agendas = {}
     for meeting in [m for m in wanted if m in archive]:
@@ -310,12 +295,12 @@ def fetch_bundle(cfg, previous, http, *, rows=None, today=None, cache_dir=DOWNLO
     candidates = schedule_candidates(entries)
     if sync_error is not None and not candidates:
         raise sync_error
-    chosen = choose_schedule(candidates, dates, today)
+    chosen = choose_schedule(candidates, dates, now, previous.get('meeting_id'))
     kept = built_copy(cfg, previous, chosen, candidates, rows, sync_error)
     if kept is not None:
         print(f"[sa2] Keeping {kept.manifest['schedule']['name']}: it is no longer listed, "
               f"and {chosen['name']} is not newer")
-        return sync_warnings(kept, sync_error, dates, today)
+        return sync_warnings(kept, sync_error, dates, now)
     meeting = chosen['meeting_id']
     if meeting not in agendas:
         # A meeting known only from the sync folder (Portal unavailable).
@@ -341,7 +326,7 @@ def fetch_bundle(cfg, previous, http, *, rows=None, today=None, cache_dir=DOWNLO
     metadata = portal_metadata(rows or [], meeting)
     if metadata:
         manifest['portal_metadata'] = metadata
-    return sync_warnings(Bundle(manifest, schedule, agenda), sync_error, dates, today)
+    return sync_warnings(Bundle(manifest, schedule, agenda), sync_error, dates, now)
 
 
 def local_bundle(path: Path, cfg) -> Bundle:

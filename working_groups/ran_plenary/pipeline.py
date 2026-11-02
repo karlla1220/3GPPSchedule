@@ -94,7 +94,7 @@ def build_schedule(options=None, *, request=gemini_request):
         document = extract_document(bundle.timeplan, bundle.manifest['timeplan']['name'])
         if document['meeting_number'] != bundle.manifest['meeting_number']:
             raise ValueError('Input bundle meeting identity mismatch')
-        descriptions = agenda_map(bundle.agenda)
+        descriptions = agenda_map(bundle.agenda) if bundle.agenda else {}
         metadata = meeting_metadata(document['meeting_number'], cfg, previous,
                                     None if offline else http, request,
                                     supplied=bundle.manifest.get('portal_metadata'))

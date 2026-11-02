@@ -1,4 +1,5 @@
 """SA2: finding the Session Plan, building the page, and the LLM fallback."""
+from datetime import datetime
 import io
 import json
 from pathlib import Path
@@ -14,6 +15,10 @@ import pytest
 
 from shared import officials
 from working_groups.sa2 import document as docmod, lifecycle, llm, pipeline, sessions, sources
+
+
+def noon(day):
+    return datetime.fromisoformat(f'{day}T12:00:00+00:00')
 
 FIXTURES = Path(__file__).parent / 'fixtures/sa2'
 HISTORY = (Path(__file__).parent / 'fixtures/officials/S2_officialsHistory.htm').read_text(encoding='utf-8')
@@ -76,13 +81,13 @@ def test_a_repeated_revision_is_ordered_by_upload_time():
     # "-r14.docx" (Thu 12:34) then "-r14 - Friday plan.docx" (Fri 07:48); #176's r15 was uploaded before r14.
     found = [candidate('sa2#177', 14, '2026-10-15 10:34'), candidate('sa2#177', 14, '2026-10-16 05:48'),
              candidate('sa2#177', 13, '2026-10-15 06:01')]
-    assert sources.choose_schedule(found, {}, '2026-10-16')['uploaded_at'] == '2026-10-16 05:48'
+    assert sources.choose_schedule(found, {}, noon('2026-10-16'))['uploaded_at'] == '2026-10-16 05:48'
     dates = {'sa2#177': ('2026-10-12', '2026-10-16'), 'sa2#178': ('2026-11-16', '2026-11-20')}
     early = found + [candidate('sa2#178', 0, '2026-11-01 09:00')]
-    assert sources.choose_schedule(early, dates, '2026-10-14')['meeting_id'] == 'sa2#177'
-    assert sources.choose_schedule(early, dates, '2026-10-17')['meeting_id'] == 'sa2#178'
+    assert sources.choose_schedule(early, dates, noon('2026-10-14'))['meeting_id'] == 'sa2#177'
+    assert sources.choose_schedule(early, dates, noon('2026-10-17'))['meeting_id'] == 'sa2#178'
     with pytest.raises(ValueError, match='No SA2 Session Plan'):
-        sources.choose_schedule([], {}, '2026-10-17')
+        sources.choose_schedule([], {}, noon('2026-10-17'))
 
 
 def test_a_pre_meeting_zip_holds_the_plan():
@@ -103,7 +108,7 @@ def test_fetch_bundle_reads_the_sync_folder_and_the_archive_agenda(tmp_path, mon
              FOLDER_176 + 'Agenda/agenda.csv': (FIXTURES / 'agenda_176.csv').read_bytes()}
     seen = []
     with mock_server(files, seen=seen) as http:
-        bundle = sources.fetch_bundle(sources.DEFAULTS, {}, http, rows=ROWS[:1], today='2026-08-27',
+        bundle = sources.fetch_bundle(sources.DEFAULTS, {}, http, rows=ROWS[:1], now=noon('2026-08-27'),
                                       cache_dir=tmp_path / 'inputs')
     assert (bundle.manifest['meeting_id'], bundle.manifest['version']) == ('sa2#176', 20)
     assert bundle.schedule == plan and bundle.manifest['agenda']['url'] == FOLDER_176 + 'Agenda/agenda.csv'
@@ -123,14 +128,14 @@ def test_before_the_meeting_the_archive_zip_is_read_and_an_absent_sync_folder_is
              FOLDER_177 + 'Agenda/S2-2609298_SA2#177 Meeting Agenda.zip': b'agenda docx',
              FOLDER_177 + 'Agenda/agenda.csv': b'"1.1","Opening of the meeting"\n'}
     with mock_server(files) as http:
-        bundle = sources.fetch_bundle(sources.DEFAULTS, {}, http, rows=ROWS[1:], today='2026-10-05',
+        bundle = sources.fetch_bundle(sources.DEFAULTS, {}, http, rows=ROWS[1:], now=noon('2026-10-05'),
                                       cache_dir=tmp_path / 'inputs')
     assert (bundle.manifest['meeting_id'], bundle.manifest['version'], bundle.warnings) == ('sa2#177', 6, [])
     assert bundle.document()[1] == 'S2-2610195_SA2-177-Session Plan - r6.docx'
     # Nothing at all: the check says so.
     sources.remote_files.new_run()
     with mock_server({}) as http, pytest.raises(ValueError, match='No SA2 Session Plan'):
-        sources.fetch_bundle(sources.DEFAULTS, {}, http, rows=ROWS[1:], today='2026-10-05', cache_dir=tmp_path / 'inputs')
+        sources.fetch_bundle(sources.DEFAULTS, {}, http, rows=ROWS[1:], now=noon('2026-10-05'), cache_dir=tmp_path / 'inputs')
 
 
 def test_a_vanished_plan_is_kept_instead_of_stepping_back(tmp_path, monkeypatch):
@@ -139,13 +144,13 @@ def test_a_vanished_plan_is_kept_instead_of_stepping_back(tmp_path, monkeypatch)
     thursday = SYNC + 'S2-2610195_SA2-177-Session Plan -r14.docx'
     stamps = {friday: '2026/10/16 5:48', thursday: '2026/10/15 10:34'}
     with mock_server({friday: b'friday', thursday: b'thursday'}, stamps) as http:
-        first = sources.fetch_bundle(sources.DEFAULTS, {}, http, rows=ROWS[1:2], today='2026-10-16',
+        first = sources.fetch_bundle(sources.DEFAULTS, {}, http, rows=ROWS[1:2], now=noon('2026-10-16'),
                                      cache_dir=tmp_path / 'inputs')
     assert first.schedule == b'friday'
     previous = {**first.manifest, 'metadata': {'starts_on': '2026-10-12', 'ends_on': '2026-10-16'}}
     sources.remote_files.new_run()
     with mock_server({thursday: b'thursday'}, stamps) as http:
-        kept = sources.fetch_bundle(sources.DEFAULTS, previous, http, rows=ROWS[1:2], today='2026-10-16',
+        kept = sources.fetch_bundle(sources.DEFAULTS, previous, http, rows=ROWS[1:2], now=noon('2026-10-16'),
                                     cache_dir=tmp_path / 'inputs')
     assert kept.schedule == b'friday'
 

@@ -1,4 +1,5 @@
 """SA1 sources, pipeline and CI: choosing the chair file version to build from."""
+from datetime import datetime
 import io
 import json
 import subprocess
@@ -15,6 +16,10 @@ import pytest
 from test_sa1 import EOM, FIXTURES, HISTORY, META_115, M113, TIMETABLE, find
 from working_groups.sa1 import lifecycle, pipeline, sources
 from working_groups.sa1.document import UnreadTable
+
+
+def noon(day):
+    return datetime.fromisoformat(f'{day}T12:00:00+00:00')
 
 
 # ----------------------------------------------------------------- sources
@@ -118,7 +123,7 @@ def test_header_names_keep_the_file_name(name, shown):
 
 def fetch(files, today, previous=None, tmp_path=None):
     with mock_server(files) as http:
-        return sources.fetch_bundle(sources.DEFAULTS, previous or {}, http, rows=ROWS, today=today,
+        return sources.fetch_bundle(sources.DEFAULTS, previous or {}, http, rows=ROWS, now=noon(today),
                                     cache_dir=tmp_path / 'inputs')
 
 
@@ -146,6 +151,22 @@ def test_a_version_without_a_schedule_table_is_skipped(server_cache, tmp_path, c
     bundle = fetch(files, '2026-09-01', previous, tmp_path)
     assert bundle.manifest['version'] == 'Agenda for Thursday_0800'
     assert 'has no schedule table' in capsys.readouterr().out
+
+
+def test_a_next_agenda_without_a_table_leaves_the_page_on_the_built_meeting(server_cache, tmp_path):
+    eom = (FIXTURES / EOM).read_bytes()
+    files = {SYNC + 'agenda/' + EOM: (eom, '2026/08/28 13:52'),
+             SYNC + 'agenda/Agenda for SA1#116_Monday_0900.docx': (blank_docx('3GPP TSG-SA WG1 Meeting #116'), '2026/11/02 09:00')}
+    previous = {'meeting_id': 'sa1#115', 'metadata': META_115}
+    assert fetch(files, '2026-11-02', previous, tmp_path).manifest['meeting_id'] == 'sa1#115'
+
+
+def test_a_held_meeting_without_a_table_is_an_error_not_a_move(server_cache, tmp_path):
+    files = {SYNC + 'agenda/Agenda for SA1#115_Monday_0900.docx': (blank_docx('3GPP TSG-SA WG1 Meeting #115'), '2026/08/24 09:00'),
+             SYNC + 'agenda/' + EOM.replace('115', '116'): ((FIXTURES / EOM).read_bytes(), '2026/08/25 09:00')}
+    previous = {'meeting_id': 'sa1#115', 'metadata': META_115}
+    with pytest.raises(ValueError, match='No version of sa1#115'):
+        fetch(files, '2026-08-26', previous, tmp_path)
 
 
 def test_agenda_tdoc_zips_are_opened_for_the_next_meeting_only(server_cache, tmp_path):

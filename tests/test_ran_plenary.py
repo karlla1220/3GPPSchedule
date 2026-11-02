@@ -1,4 +1,5 @@
 """Real v04 source regression plus deterministic remote/LLM failure scenarios."""
+from datetime import datetime
 import io
 import json
 from pathlib import Path
@@ -13,6 +14,7 @@ from docx.shared import RGBColor
 import httpx
 import pytest
 
+from shared.meeting_turn import Dates
 from shared.renderer import generate_html
 from shared.schedule import load_schedule, save_schedule
 from working_groups.ran_plenary import document as docmod, interpreter as interp, pipeline, sources, lifecycle
@@ -204,8 +206,20 @@ def test_listing_uses_numeric_meeting_and_version_and_refuses_rollback():
     html = ''.join(f'<a href="RAN%23{n}%20time%20plan%20v{v}.zip">file</a>' for n,v in [(112,99),(113,4),(113,10),(113,9)])
     chosen = sources.select_timeplan(html, 'https://example.org/Chair/', {})
     assert (chosen['meeting_number'], chosen['version']) == (113,10)
-    with pytest.raises(ValueError, match='roll back'):
+    with pytest.raises(ValueError, match='ran#114'):
         sources.select_timeplan(html, 'https://example.org/', {'meeting_number':114, 'version':0})
+    with pytest.raises(ValueError, match='roll back'):
+        sources.select_timeplan(html, 'https://example.org/', {'meeting_number':113, 'version':11})
+
+
+def test_the_next_timeplan_waits_until_the_meeting_has_ended():
+    html = ''.join(f'<a href="RAN%23{n}%20time%20plan%20v{v}.zip">file</a>' for n,v in [(113,9),(114,0)])
+    dates = {'ran#113': Dates('2026-09-14', '2026-09-17', 'Europe/Paris'), 'ran#114': Dates('2026-12-07', '2026-12-10')}
+    built = {'meeting_number':113, 'version':9}
+    during = datetime.fromisoformat('2026-09-16T12:00+00:00')
+    assert sources.select_timeplan(html, 'https://example.org/', built, dates, during)['meeting_number'] == 113
+    after = datetime.fromisoformat('2026-09-18T12:00+00:00')
+    assert sources.select_timeplan(html, 'https://example.org/', built, dates, after)['meeting_number'] == 114
 
 
 def test_http_conditional_get_recovers_missing_body_and_detects_same_url_changes():
@@ -273,6 +287,18 @@ def local_config(metadata, tmp_path, monkeypatch):
     monkeypatch.setattr(sources, 'load_config', lambda:cfg)
     monkeypatch.setattr(sources, 'portal_rows', lambda: [])
     return cfg
+
+
+def test_a_page_is_built_before_the_meeting_has_an_agenda(local_config, parsed, tmp_path, monkeypatch):
+    read = sources.local_bundle
+    def without_agenda(path, cfg, previous):
+        bundle = read(path, cfg, previous)
+        return sources.Bundle({**bundle.manifest, 'agenda': {'url': '', 'sha256': sources.digest(b'')}}, bundle.timeplan, b'')
+    monkeypatch.setattr(pipeline, 'local_bundle', without_agenda)
+    opts = SimpleNamespace(local=str(FIXTURES/FILENAME), no_download=True, output_dir=tmp_path/'out')
+    schedule = pipeline.build_schedule(opts, request=lambda *args, **_:parsed.model_dump())
+    sessions = [s for day in schedule.days for s in day.sessions]
+    assert sessions and not any(entry.get('description') for s in sessions for entry in s.agenda_descriptions)
 
 
 def test_offline_pipeline_uses_real_inputs_and_retains_state_on_failure(local_config, parsed, tmp_path, monkeypatch):
@@ -610,13 +636,30 @@ def test_agenda_comes_from_the_meeting_folder_then_sync_then_the_build(built, tm
         bundle = sources.fetch_bundle(sources.DEFAULTS, built, http, tmp_path / 'inputs')
     assert bundle.timeplan == b'PK-v10' and bundle.agenda == b'"1","Opening"\n'
     sources.remote_files.new_run()
+    during = datetime.fromisoformat('2026-09-15T12:00+00:00')
     with server({**base, SYNC_AGENDA: b'sync'}) as http:
-        assert sources.fetch_bundle(sources.DEFAULTS, built, http, tmp_path / 'inputs').agenda == b'sync'
-    # A new meeting does not inherit the last meeting's agenda.
-    sources.remote_files.new_run()
+        assert sources.fetch_bundle(sources.DEFAULTS, built, http, tmp_path / 'inputs', rows=ROWS_113,
+                                    now=during).agenda == b'sync'
+
+
+def test_a_new_meeting_does_not_take_the_agenda_left_in_the_sync_folder(built, tmp_path):
     v01 = 'RAN%23114%20time%20plan%20v01.zip'
-    with server({CHAIR: chair_listing(v01), CHAIR + v01: b'PK-114'}) as http, pytest.raises(ValueError, match='RAN#114'):
-        sources.fetch_bundle(sources.DEFAULTS, built, http, tmp_path / 'inputs')
+    rows = ROWS_113 + [{'Title': '3GPPRAN#114', 'TBId': 373, 'Id': 2, 'StartDate': '2026-12-07 09:00:00',
+                        'EndDate': '2026-12-10 17:00:00'}]
+    files = {CHAIR: chair_listing(v01), CHAIR + v01: b'PK-114', SYNC_AGENDA: b'"1","Last meeting"\n'}
+    seen = []
+    with server(files, seen) as http:
+        bundle = sources.fetch_bundle(sources.DEFAULTS, built, http, tmp_path / 'inputs', rows=rows,
+                                      now=datetime.fromisoformat('2026-11-02T12:00+00:00'))
+    assert bundle.manifest['meeting_number'] == 114 and bundle.agenda == b'' and SYNC_AGENDA not in seen
+    # What a later run reads back and compares.
+    bundle.save(tmp_path / 'saved')
+    assert sources.Bundle.load(tmp_path / 'saved').agenda == b''
+    sources.remote_files.new_run()
+    with server(files) as http:
+        bundle = sources.fetch_bundle(sources.DEFAULTS, built, http, tmp_path / 'inputs', rows=rows,
+                                      now=datetime.fromisoformat('2026-12-07T23:59+00:00'))
+    assert bundle.agenda == b'"1","Last meeting"\n'
 
 
 def test_without_portal_the_meeting_folder_is_found_by_name(built, tmp_path):
