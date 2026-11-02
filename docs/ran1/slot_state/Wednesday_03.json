@@ -2,9 +2,9 @@
   "day": "Wednesday",
   "time_block_index": 3,
   "source_hashes": {
-    "Main Schedule": "6df30c99ced2130a",
-    "Hiroki's schedule": "913f7d504799f71e",
-    "Sorour's schedule": "5dc270a343dfbeaf"
+    "Main Schedule": "31e848005005d2ee",
+    "Hiroki's schedule": "5205069a3c9668f3",
+    "Sorour's schedule": "eecd32135be95532"
   },
   "merged_sessions": [
     {
@@ -15,6 +15,10 @@
       "chair": null,
       "group_header": "6GR",
       "agenda_item": "10.4.1",
+      "source_cells": [
+        "c41cee8",
+        "c0bf929"
+      ],
       "description": "Operation in idle mode",
       "agenda_descriptions": [
         {
@@ -49,6 +53,10 @@
       "chair": null,
       "group_header": "6GR",
       "agenda_item": "10.4.2",
+      "source_cells": [
+        "c41cee8",
+        "c0bf929"
+      ],
       "description": "Operation in connected mode",
       "agenda_descriptions": [
         {
@@ -83,6 +91,10 @@
       "chair": null,
       "group_header": "6GR",
       "agenda_item": "10.5.5",
+      "source_cells": [
+        "c41cee8",
+        "c0bf929"
+      ],
       "description": "Other physical layer signals, channels and procedure",
       "agenda_descriptions": [
         {
@@ -117,6 +129,10 @@
       "chair": null,
       "group_header": "6GR",
       "agenda_item": "10.5.3.1",
+      "source_cells": [
+        "c41cee8",
+        "c0bf929"
+      ],
       "description": "Aspects of downlink-based CSI acquisition",
       "agenda_descriptions": [
         {
@@ -156,6 +172,10 @@
       "chair": null,
       "group_header": "6GR",
       "agenda_item": "10.3.1",
+      "source_cells": [
+        "c9fbf49",
+        "c01c916"
+      ],
       "description": "Channel coding",
       "agenda_descriptions": [
         {
@@ -190,6 +210,10 @@
       "chair": null,
       "group_header": "6GR",
       "agenda_item": "10.3.2",
+      "source_cells": [
+        "c9fbf49",
+        "c01c916"
+      ],
       "description": "Modulation",
       "agenda_descriptions": [
         {
@@ -224,6 +248,10 @@
       "chair": null,
       "group_header": "6GR",
       "agenda_item": "10.5.2.2",
+      "source_cells": [
+        "c9fbf49",
+        "c01c916"
+      ],
       "description": "Downlink transmission scheme(s) for downlink shared channels",
       "agenda_descriptions": [
         {
@@ -257,12 +285,16 @@
     },
     {
       "room_name": "RAN1_brk2",
-      "name": "6G waveform",
+      "name": "10.2.1 Waveform",
       "duration_minutes": 30,
       "specified_start_time": null,
       "chair": "Hiroki",
       "group_header": "6GR",
       "agenda_item": "10.2.1",
+      "source_cells": [
+        "c8563c6",
+        "c8410d8"
+      ],
       "description": "Waveform",
       "agenda_descriptions": [
         {
@@ -297,6 +329,10 @@
       "chair": "Hiroki",
       "group_header": "6GR / 10.5.4.x",
       "agenda_item": "10.5.4.2",
+      "source_cells": [
+        "c8563c6",
+        "c8410d8"
+      ],
       "description": "Downlink and uplink transmission without dynamic scheduling",
       "agenda_descriptions": [
         {
@@ -336,6 +372,10 @@
       "chair": "Hiroki",
       "group_header": "6GR / 10.5.4.x",
       "agenda_item": "10.5.4.1",
+      "source_cells": [
+        "c8563c6",
+        "c8410d8"
+      ],
       "description": "Downlink control channel, scheduling for downlink and uplink transmission",
       "agenda_descriptions": [
         {
@@ -375,6 +415,10 @@
       "chair": "Hiroki",
       "group_header": "6GR / 10.5.4.x",
       "agenda_item": "10.5.4.4",
+      "source_cells": [
+        "c8563c6",
+        "c8410d8"
+      ],
       "description": "Handling of potential multiple uplink transmissions",
       "agenda_descriptions": [
         {
@@ -414,6 +458,10 @@
       "chair": "Hiroki",
       "group_header": "6GR / 10.5.4.x",
       "agenda_item": "10.5.4.3",
+      "source_cells": [
+        "c8563c6",
+        "c8410d8"
+      ],
       "description": "HARQ related Aspects",
       "agenda_descriptions": [
         {
@@ -453,6 +501,9 @@
       "chair": "Xiaodong",
       "group_header": "6GR",
       "agenda_item": "10.5.1.3",
+      "source_cells": [
+        "c54562d"
+      ],
       "description": "Bandwidth operation",
       "agenda_descriptions": [
         {
@@ -492,6 +543,9 @@
       "chair": "Xiaodong",
       "group_header": "6GR",
       "agenda_item": "10.5.1.2",
+      "source_cells": [
+        "c54562d"
+      ],
       "description": "PRACH and RACH procedure",
       "agenda_descriptions": [
         {
@@ -531,6 +585,9 @@
       "chair": "Xiaodong",
       "group_header": "6GR",
       "agenda_item": "10.5.1.1",
+      "source_cells": [
+        "c54562d"
+      ],
       "description": "Synchronization acquisition and beam measurement",
       "agenda_descriptions": [
         {
@@ -570,6 +627,9 @@
       "chair": "Xiaodong",
       "group_header": "6GR",
       "agenda_item": "10.4.1",
+      "source_cells": [
+        "c54562d"
+      ],
       "description": "Operation in idle mode",
       "agenda_descriptions": [
         {
@@ -604,6 +664,10 @@
       "chair": "Sorour",
       "group_header": "6GR",
       "agenda_item": "10.5.2.2",
+      "source_cells": [
+        "c85cefc",
+        "c81fd56"
+      ],
       "description": "Downlink transmission scheme(s) for downlink shared channels",
       "agenda_descriptions": [
         {
@@ -643,6 +707,10 @@
       "chair": "Sorour",
       "group_header": "6GR",
       "agenda_item": "10.7.1",
+      "source_cells": [
+        "c85cefc",
+        "c81fd56"
+      ],
       "description": "NTN specific requirements and design",
       "agenda_descriptions": [
         {
@@ -677,6 +745,10 @@
       "chair": "Sorour",
       "group_header": "R20",
       "agenda_item": "9.5",
+      "source_cells": [
+        "c85cefc",
+        "c81fd56"
+      ],
       "description": "NR NTN in systems using downlink compensation",
       "agenda_descriptions": [
         {
@@ -706,6 +778,10 @@
       "chair": "Sorour",
       "group_header": "R20",
       "agenda_item": "9.4",
+      "source_cells": [
+        "c85cefc",
+        "c81fd56"
+      ],
       "description": "GNSS resilient NR-NTN operation",
       "agenda_descriptions": [
         {
@@ -728,7 +804,7 @@
       ]
     }
   ],
-  "merged_at": "2026-10-29T06:01:30.756723+00:00",
+  "merged_at": "2026-11-02T07:21:47.205867+00:00",
   "meeting_id": "ran1#126bis",
-  "schema_version": 2
+  "schema_version": 3
 }

@@ -2,8 +2,8 @@
   "day": "Monday",
   "time_block_index": 0,
   "source_hashes": {
-    "Main Schedule": "ac8e2e616f5e0334",
-    "Hiroki's schedule": "d4aa3f1081f42b68"
+    "Main Schedule": "ea1ec443d68f679c",
+    "Hiroki's schedule": "7f3337c13251093f"
   },
   "merged_sessions": [
     {
@@ -14,6 +14,10 @@
       "chair": null,
       "group_header": "",
       "agenda_item": "1, 2, 3, 4, 5",
+      "source_cells": [
+        "cd0b357",
+        "c4c83f0"
+      ],
       "description": "Opening of the meeting",
       "agenda_descriptions": [
         {
@@ -86,6 +90,9 @@
       "chair": null,
       "group_header": "6GR",
       "agenda_item": "10.5.1.1",
+      "source_cells": [
+        "cd0b357"
+      ],
       "description": "Synchronization acquisition and beam measurement",
       "agenda_descriptions": [
         {
@@ -118,7 +125,7 @@
       ]
     }
   ],
-  "merged_at": "2026-10-29T06:01:30.740871+00:00",
+  "merged_at": "2026-11-02T07:21:47.182253+00:00",
   "meeting_id": "ran1#126bis",
-  "schema_version": 2
+  "schema_version": 3
 }

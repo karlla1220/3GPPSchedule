@@ -494,7 +494,7 @@
           "part": null
         },
         {
-          "name": "10.8.2 6G ISAC",
+          "name": "10.8.x Sensing",
           "duration_minutes": 60,
           "start_time": "11:30",
           "end_time": "12:30",
@@ -537,7 +537,7 @@
           "part": null
         },
         {
-          "name": "10.2.1 6G waveform",
+          "name": "10.2.1 Waveform",
           "duration_minutes": 30,
           "start_time": "12:30",
           "end_time": "13:00",
@@ -807,7 +807,7 @@
           "part": null
         },
         {
-          "name": "R20 A-IoT Phase2",
+          "name": "R20 A-IoT",
           "duration_minutes": 60,
           "start_time": "14:30",
           "end_time": "15:30",
@@ -850,7 +850,7 @@
           "part": null
         },
         {
-          "name": "10.8 Sensing",
+          "name": "6G ISAC",
           "duration_minutes": 60,
           "start_time": "15:30",
           "end_time": "16:30",
@@ -1932,7 +1932,7 @@
           "day": "Monday",
           "room_col_start": 5,
           "room_col_end": 6,
-          "chair": null,
+          "chair": "Xiaodong",
           "agenda_item": "10.4.1",
           "group_header": "6GR",
           "description": "Operation in idle mode",
@@ -1975,7 +1975,7 @@
           "day": "Monday",
           "room_col_start": 6,
           "room_col_end": 7,
-          "chair": "Sorour",
+          "chair": "Sorouri",
           "agenda_item": "10.5.2.1",
           "group_header": "6GR",
           "description": "Downlink transmission scheme(s) for downlink control channels",
@@ -2023,7 +2023,7 @@
           "day": "Monday",
           "room_col_start": 6,
           "room_col_end": 7,
-          "chair": "Sorour",
+          "chair": "Sorouri",
           "agenda_item": "10.7.1",
           "group_header": "6GR",
           "description": "NTN specific requirements and design",
@@ -2066,7 +2066,7 @@
           "day": "Monday",
           "room_col_start": 6,
           "room_col_end": 7,
-          "chair": "Sorour",
+          "chair": "Sorouri",
           "agenda_item": "9.5",
           "group_header": "R20",
           "description": "NR NTN in systems using downlink compensation",
@@ -2104,7 +2104,7 @@
           "day": "Monday",
           "room_col_start": 6,
           "room_col_end": 7,
-          "chair": "Sorour",
+          "chair": "Sorouri",
           "agenda_item": "9.4",
           "group_header": "R20",
           "description": "GNSS resilient NR-NTN operation",
@@ -2502,7 +2502,7 @@
           "day": "Tuesday",
           "room_col_start": 4,
           "room_col_end": 5,
-          "chair": null,
+          "chair": "Hiroki",
           "agenda_item": "10.5.4.1",
           "group_header": "6GR",
           "description": "Downlink control channel, scheduling for downlink and uplink transmission",
@@ -2550,7 +2550,7 @@
           "day": "Tuesday",
           "room_col_start": 4,
           "room_col_end": 5,
-          "chair": null,
+          "chair": "Hiroki",
           "agenda_item": "10.5.4.2",
           "group_header": "6GR",
           "description": "Downlink and uplink transmission without dynamic scheduling",
@@ -2598,7 +2598,7 @@
           "day": "Tuesday",
           "room_col_start": 4,
           "room_col_end": 5,
-          "chair": null,
+          "chair": "Hiroki",
           "agenda_item": "10.5.4.3",
           "group_header": "6GR",
           "description": "HARQ related Aspects",
@@ -3822,7 +3822,7 @@
           "part": null
         },
         {
-          "name": "TEI20",
+          "name": "11 TEI20",
           "duration_minutes": 10,
           "start_time": "14:30",
           "end_time": "14:40",
@@ -3831,7 +3831,7 @@
           "room_col_end": 5,
           "chair": "Hiroki",
           "agenda_item": "11",
-          "group_header": "TEI",
+          "group_header": "Maintenance",
           "description": "TEI",
           "agenda_descriptions": [
             {
@@ -3855,7 +3855,7 @@
           "part": null
         },
         {
-          "name": "R19 Duplex, R19 ISAC CM, R19 XR",
+          "name": "8.2 R19 Duplex, R19 ISAC CM, R19 XR",
           "duration_minutes": 25,
           "start_time": "14:40",
           "end_time": "15:05",
@@ -3864,7 +3864,7 @@
           "room_col_end": 5,
           "chair": "Hiroki",
           "agenda_item": "8.2",
-          "group_header": "TEI",
+          "group_header": "Maintenance",
           "description": "Maintenance on others",
           "agenda_descriptions": [
             {
@@ -3893,7 +3893,7 @@
           "part": null
         },
         {
-          "name": "UE features",
+          "name": "8.3 UE features",
           "duration_minutes": 25,
           "start_time": "15:05",
           "end_time": "15:30",
@@ -3902,7 +3902,7 @@
           "room_col_end": 5,
           "chair": "Hiroki",
           "agenda_item": "8.3",
-          "group_header": "TEI",
+          "group_header": "Maintenance",
           "description": "Maintenance on UE features",
           "agenda_descriptions": [
             {
@@ -3931,7 +3931,7 @@
           "part": null
         },
         {
-          "name": "R19 LP-WUS",
+          "name": "8.2 R19 LP-WUS",
           "duration_minutes": 20,
           "start_time": "15:30",
           "end_time": "15:50",
@@ -3940,7 +3940,7 @@
           "room_col_end": 5,
           "chair": "Hiroki",
           "agenda_item": "8.2",
-          "group_header": "TEI",
+          "group_header": "Maintenance",
           "description": "Maintenance on others",
           "agenda_descriptions": [
             {
@@ -3990,7 +3990,7 @@
           "part": null
         },
         {
-          "name": "10.2.1 Waveform",
+          "name": "6G waveform",
           "duration_minutes": 40,
           "start_time": "15:50",
           "end_time": "16:30",
@@ -4512,14 +4512,14 @@
           "part": null
         },
         {
-          "name": "AI 10.3.1 Coding",
+          "name": "10.3.1 Channel coding",
           "duration_minutes": 60,
           "start_time": "17:00",
           "end_time": "18:00",
           "day": "Tuesday",
           "room_col_start": 3,
           "room_col_end": 4,
-          "chair": "Sorour",
+          "chair": null,
           "agenda_item": "10.3.1",
           "group_header": "6GR",
           "description": "Channel coding",
@@ -4573,14 +4573,14 @@
           "part": null
         },
         {
-          "name": "AI 10.3.2 Modulation",
+          "name": "10.3.2 Modulation",
           "duration_minutes": 30,
           "start_time": "18:00",
           "end_time": "18:30",
           "day": "Tuesday",
           "room_col_start": 3,
           "room_col_end": 4,
-          "chair": "Sorour",
+          "chair": null,
           "agenda_item": "10.3.2",
           "group_header": "6GR",
           "description": "Modulation",
@@ -4737,30 +4737,10 @@
           "part": null
         },
         {
-          "name": "Early dinner",
-          "duration_minutes": 60,
-          "start_time": "18:30",
-          "end_time": "19:30",
-          "day": "Tuesday",
-          "room_col_start": 2,
-          "room_col_end": 7,
-          "chair": null,
-          "agenda_item": null,
-          "group_header": "",
-          "description": null,
-          "agenda_descriptions": [],
-          "room_ids": [],
-          "room_scope": "assigned",
-          "notes": [],
-          "inferred_agenda_items": [],
-          "email_details": [],
-          "part": null
-        },
-        {
           "name": "10.5.1.3",
           "duration_minutes": 30,
-          "start_time": "19:30",
-          "end_time": "20:00",
+          "start_time": "17:00",
+          "end_time": "17:30",
           "day": "Tuesday",
           "room_col_start": 5,
           "room_col_end": 6,
@@ -4807,8 +4787,8 @@
         {
           "name": "10.5.1.1",
           "duration_minutes": 60,
-          "start_time": "20:00",
-          "end_time": "21:00",
+          "start_time": "17:30",
+          "end_time": "18:30",
           "day": "Tuesday",
           "room_col_start": 5,
           "room_col_end": 6,
@@ -4855,8 +4835,8 @@
         {
           "name": "10.5.5",
           "duration_minutes": 30,
-          "start_time": "19:30",
-          "end_time": "20:00",
+          "start_time": "17:00",
+          "end_time": "17:30",
           "day": "Tuesday",
           "room_col_start": 6,
           "room_col_end": 7,
@@ -4898,8 +4878,8 @@
         {
           "name": "10.7.1 NTN",
           "duration_minutes": 30,
-          "start_time": "20:00",
-          "end_time": "20:30",
+          "start_time": "17:30",
+          "end_time": "18:00",
           "day": "Tuesday",
           "room_col_start": 6,
           "room_col_end": 7,
@@ -4941,8 +4921,8 @@
         {
           "name": "9.4 NTN-NR",
           "duration_minutes": 30,
-          "start_time": "20:30",
-          "end_time": "21:00",
+          "start_time": "18:00",
+          "end_time": "18:30",
           "day": "Tuesday",
           "room_col_start": 6,
           "room_col_end": 7,
@@ -4969,6 +4949,26 @@
               ]
             }
           ],
+          "room_ids": [],
+          "room_scope": "assigned",
+          "notes": [],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": null
+        },
+        {
+          "name": "Early dinner",
+          "duration_minutes": 60,
+          "start_time": "18:30",
+          "end_time": "19:30",
+          "day": "Tuesday",
+          "room_col_start": 2,
+          "room_col_end": 7,
+          "chair": null,
+          "agenda_item": null,
+          "group_header": "",
+          "description": null,
+          "agenda_descriptions": [],
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
@@ -5637,7 +5637,7 @@
           "part": null
         },
         {
-          "name": "6G waveform",
+          "name": "10.2.1 Waveform",
           "duration_minutes": 30,
           "start_time": "09:00",
           "end_time": "09:30",
@@ -5680,7 +5680,7 @@
           "part": null
         },
         {
-          "name": "6G ISAC",
+          "name": "10.8.x Sensing",
           "duration_minutes": 60,
           "start_time": "09:30",
           "end_time": "10:30",
@@ -6042,7 +6042,7 @@
           "day": "Wednesday",
           "room_col_start": 3,
           "room_col_end": 4,
-          "chair": null,
+          "chair": "Sorour",
           "agenda_item": "9.1",
           "group_header": "R20",
           "description": "Artificial Intelligence (AI)/Machine Learning (ML) for NR air interface enhancements",
@@ -6073,14 +6073,14 @@
           "part": null
         },
         {
-          "name": "AI 10.3.1 Channel coding",
+          "name": "AI 10.3.1 Coding",
           "duration_minutes": 30,
           "start_time": "12:00",
           "end_time": "12:30",
           "day": "Wednesday",
           "room_col_start": 3,
           "room_col_end": 4,
-          "chair": null,
+          "chair": "Sorour",
           "agenda_item": "10.3.1",
           "group_header": "6GR",
           "description": "Channel coding",
@@ -6142,7 +6142,7 @@
           "day": "Wednesday",
           "room_col_start": 3,
           "room_col_end": 4,
-          "chair": null,
+          "chair": "Sorour",
           "agenda_item": "10.5.2.2",
           "group_header": "6GR",
           "description": "Downlink transmission scheme(s) for downlink shared channels",
@@ -7067,7 +7067,7 @@
           "room_col_end": 5,
           "chair": "Hiroki",
           "agenda_item": "8.2",
-          "group_header": "TEI",
+          "group_header": "Maintenance",
           "description": "Maintenance on others",
           "agenda_descriptions": [
             {
@@ -7160,7 +7160,7 @@
           "room_col_end": 5,
           "chair": "Hiroki",
           "agenda_item": "7, 8.2",
-          "group_header": "TEI",
+          "group_header": "Maintenance",
           "description": "Pre-Rel-19 NR Maintenance",
           "agenda_descriptions": [
             {
@@ -7231,7 +7231,7 @@
           "room_col_end": 5,
           "chair": "Hiroki",
           "agenda_item": "11",
-          "group_header": "TEI",
+          "group_header": "Maintenance",
           "description": "TEI",
           "agenda_descriptions": [
             {
@@ -8120,7 +8120,7 @@
           "part": null
         },
         {
-          "name": "6G waveform",
+          "name": "10.2.1 Waveform",
           "duration_minutes": 30,
           "start_time": "17:00",
           "end_time": "17:30",
@@ -9135,7 +9135,7 @@
           "day": "Thursday",
           "room_col_start": 3,
           "room_col_end": 4,
-          "chair": null,
+          "chair": "Sorour",
           "agenda_item": "10.7.1",
           "group_header": "6GR",
           "description": "NTN specific requirements and design",
@@ -9195,7 +9195,7 @@
           "day": "Thursday",
           "room_col_start": 3,
           "room_col_end": 4,
-          "chair": null,
+          "chair": "Sorour",
           "agenda_item": "9.5",
           "group_header": "R20",
           "description": "NR NTN in systems using downlink compensation",
@@ -9251,7 +9251,7 @@
           "day": "Thursday",
           "room_col_start": 3,
           "room_col_end": 4,
-          "chair": null,
+          "chair": "Sorour",
           "agenda_item": "9.4",
           "group_header": "R20",
           "description": "GNSS resilient NR-NTN operation",
@@ -13430,7 +13430,7 @@
           "day": "Friday",
           "room_col_start": 5,
           "room_col_end": 6,
-          "chair": "Sorour",
+          "chair": "Sorouri",
           "agenda_item": "10.5.2.2",
           "group_header": "6GR",
           "description": "Downlink transmission scheme(s) for downlink shared channels",
@@ -13498,7 +13498,7 @@
           "day": "Friday",
           "room_col_start": 5,
           "room_col_end": 6,
-          "chair": "Sorour",
+          "chair": "Sorouri",
           "agenda_item": "10.5.2.3",
           "group_header": "6GR",
           "description": "Uplink transmission scheme(s) for uplink channels",
@@ -14304,14 +14304,96 @@
           "part": null
         },
         {
-          "name": "Any other open issues. Session reports",
-          "duration_minutes": 150,
+          "name": "Any other open issues. Session reports / RAN1#126b expected to close at 17:00",
+          "duration_minutes": 120,
           "start_time": "14:30",
-          "end_time": "17:00",
+          "end_time": "16:30",
           "day": "Friday",
           "room_col_start": 2,
           "room_col_end": 5,
           "chair": null,
+          "agenda_item": null,
+          "group_header": "",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [],
+          "room_scope": "assigned",
+          "notes": [],
+          "inferred_agenda_items": [
+            "12"
+          ],
+          "email_details": [],
+          "part": null
+        },
+        {
+          "name": "To be assigned by Sorour",
+          "duration_minutes": 60,
+          "start_time": "14:30",
+          "end_time": "15:30",
+          "day": "Friday",
+          "room_col_start": 5,
+          "room_col_end": 6,
+          "chair": "Sorour",
+          "agenda_item": null,
+          "group_header": "",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [],
+          "room_scope": "assigned",
+          "notes": [],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": null
+        },
+        {
+          "name": "To be assigned by Hiroki",
+          "duration_minutes": 60,
+          "start_time": "15:30",
+          "end_time": "16:30",
+          "day": "Friday",
+          "room_col_start": 5,
+          "room_col_end": 6,
+          "chair": "Hiroki",
+          "agenda_item": null,
+          "group_header": "",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [],
+          "room_scope": "assigned",
+          "notes": [],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": null
+        },
+        {
+          "name": "To be assigned by Sorour",
+          "duration_minutes": 60,
+          "start_time": "14:30",
+          "end_time": "15:30",
+          "day": "Friday",
+          "room_col_start": 6,
+          "room_col_end": 7,
+          "chair": "Sorour",
+          "agenda_item": null,
+          "group_header": "",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [],
+          "room_scope": "assigned",
+          "notes": [],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": null
+        },
+        {
+          "name": "To be assigned by Hiroki",
+          "duration_minutes": 60,
+          "start_time": "15:30",
+          "end_time": "16:30",
+          "day": "Friday",
+          "room_col_start": 6,
+          "room_col_end": 7,
+          "chair": "Hiroki",
           "agenda_item": null,
           "group_header": "",
           "description": null,
@@ -14377,7 +14459,7 @@
     }
   ],
   "source_file": "RAN1#126b online and offline schedules - v05.docx",
-  "generated_at": "2026-10-21 15:01",
+  "generated_at": "2026-11-02 16:22",
   "contact_name": "",
   "contact_email": "",
   "source_files": [

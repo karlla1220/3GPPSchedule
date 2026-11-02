@@ -2,9 +2,9 @@
   "day": "Wednesday",
   "time_block_index": 2,
   "source_hashes": {
-    "Main Schedule": "cca031fd4d068dcd",
-    "Hiroki's schedule": "87dddfe40d1ebae8",
-    "Sorour's schedule": "75a4ab9e29db4311"
+    "Main Schedule": "85497afa9ddfbc1e",
+    "Hiroki's schedule": "43e70ec9e4e54ce8",
+    "Sorour's schedule": "b66eaa831457d2f5"
   },
   "merged_sessions": [
     {
@@ -15,6 +15,9 @@
       "chair": null,
       "group_header": "6GR",
       "agenda_item": "10.5.3.4",
+      "source_cells": [
+        "cedd475"
+      ],
       "description": "Beam management for downlink and uplink",
       "agenda_descriptions": [
         {
@@ -54,6 +57,9 @@
       "chair": null,
       "group_header": "6GR",
       "agenda_item": "10.6.x",
+      "source_cells": [
+        "cedd475"
+      ],
       "description": "WUS and operation",
       "agenda_descriptions": [
         {
@@ -105,6 +111,10 @@
       "chair": "Sorour",
       "group_header": "6GR",
       "agenda_item": "10.5.2.1",
+      "source_cells": [
+        "c92c6ef",
+        "c6e8e81"
+      ],
       "description": "Downlink transmission scheme(s) for downlink control channels",
       "agenda_descriptions": [
         {
@@ -144,6 +154,10 @@
       "chair": "Sorour",
       "group_header": "6GR",
       "agenda_item": "10.5.2.3",
+      "source_cells": [
+        "c92c6ef",
+        "c6e8e81"
+      ],
       "description": "Uplink transmission scheme(s) for uplink channels",
       "agenda_descriptions": [
         {
@@ -181,8 +195,12 @@
       "duration_minutes": 30,
       "specified_start_time": null,
       "chair": "Hiroki",
-      "group_header": "TEI, AI 7/8.2 / Maintenance",
+      "group_header": "Maintenance",
       "agenda_item": "8.2",
+      "source_cells": [
+        "cc6e6a7",
+        "c981ea9"
+      ],
       "description": "Maintenance on others",
       "agenda_descriptions": [
         {
@@ -210,8 +228,12 @@
       "duration_minutes": 50,
       "specified_start_time": null,
       "chair": "Hiroki",
-      "group_header": "TEI, AI 7/8.2 / Maintenance",
+      "group_header": "Maintenance",
       "agenda_item": "7, 8.2",
+      "source_cells": [
+        "cc6e6a7",
+        "c981ea9"
+      ],
       "description": "Pre-Rel-19 NR Maintenance",
       "agenda_descriptions": [
         {
@@ -251,8 +273,12 @@
       "duration_minutes": 10,
       "specified_start_time": null,
       "chair": "Hiroki",
-      "group_header": "TEI, AI 7/8.2 / Maintenance",
+      "group_header": "Maintenance",
       "agenda_item": "11",
+      "source_cells": [
+        "cc6e6a7",
+        "c981ea9"
+      ],
       "description": "TEI",
       "agenda_descriptions": [
         {
@@ -276,7 +302,11 @@
       "specified_start_time": null,
       "chair": "Hiroki",
       "group_header": "",
-      "agenda_item": null
+      "agenda_item": null,
+      "source_cells": [
+        "cc6e6a7",
+        "c981ea9"
+      ]
     },
     {
       "room_name": "RAN1_off1",
@@ -286,6 +316,10 @@
       "chair": "Hiroki",
       "group_header": "6GR",
       "agenda_item": "10.5.4.2, 10.5.4.3, 10.5.4.4",
+      "source_cells": [
+        "cd81a2a",
+        "ce80151"
+      ],
       "description": "Downlink and uplink transmission without dynamic scheduling",
       "agenda_descriptions": [
         {
@@ -379,6 +413,9 @@
       "chair": "Xiaodong",
       "group_header": "6GR",
       "agenda_item": "10.4.2",
+      "source_cells": [
+        "cd81a2a"
+      ],
       "description": "Operation in connected mode",
       "agenda_descriptions": [
         {
@@ -413,6 +450,9 @@
       "chair": "Xiaodong",
       "group_header": "6GR",
       "agenda_item": "10.4.1",
+      "source_cells": [
+        "cd81a2a"
+      ],
       "description": "Operation in idle mode",
       "agenda_descriptions": [
         {
@@ -447,6 +487,9 @@
       "chair": "Sorour",
       "group_header": "6GR",
       "agenda_item": "10.3.1",
+      "source_cells": [
+        "c78971e"
+      ],
       "description": "Channel coding",
       "agenda_descriptions": [
         {
@@ -481,6 +524,10 @@
       "chair": "Hiroki",
       "group_header": "R20",
       "agenda_item": "9.3.2, 9.3.3, 9.3.1",
+      "source_cells": [
+        "c78971e",
+        "c4fe89a"
+      ],
       "description": "D2R signals, channels, waveform and procedures",
       "agenda_descriptions": [
         {
@@ -552,7 +599,7 @@
       ]
     }
   ],
-  "merged_at": "2026-10-29T06:01:30.755307+00:00",
+  "merged_at": "2026-11-02T07:21:47.202579+00:00",
   "meeting_id": "ran1#126bis",
-  "schema_version": 2
+  "schema_version": 3
 }
