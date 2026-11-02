@@ -58,8 +58,9 @@ MULTI_SOURCE_SESSION_SCHEMA = {
                     "chair": {"type": "string", "nullable": True},
                     "group_header": {"type": "string"},
                     "agenda_item": {"type": "string", "nullable": True},
+                    "source_cells": {"type": "array", "items": {"type": "string"}},
                 },
-                "required": ["room_name", "name", "duration_minutes", "specified_start_time", "chair", "group_header", "agenda_item"],
+                "required": ["room_name", "name", "duration_minutes", "specified_start_time", "chair", "group_header", "agenda_item", "source_cells"],
             },
         }
     },
@@ -438,7 +439,7 @@ Return JSON only with schema: {{"room_names": ["..."], "reasoning": "..."}}"""
 # ── Multi-source time-slot parsing ───────────────────────────────
 
 
-_PROMPT_VERSION = 9  # Bump to invalidate time-slot caches on prompt changes
+_PROMPT_VERSION = 10  # Bump to invalidate time-slot caches on prompt changes
 
 
 def build_room_aliases(
@@ -536,6 +537,12 @@ MULTI_SOURCE_SYSTEM_INSTRUCTION_INCREMENTAL = (
 )
 
 
+def _cell_tag(entry) -> str:
+    """``cell c1a2b3 — `` before a cell's room label, for ``source_cells``."""
+    cell_id = getattr(entry, "cell_id", "")
+    return f"cell {cell_id} — " if cell_id else ""
+
+
 def _build_time_slot_prompt(
     slot,
     name_to_alias: dict[str, str] | None = None,
@@ -583,6 +590,20 @@ def _build_time_slot_prompt(
             summary_lines.append(f"- {label}: {status}{note}")
         parts.append("\n## Source freshness summary\n" + "\n".join(summary_lines))
 
+        # Unchanged cells are still cited by id, so list them without text.
+        stale_cells = [
+            f"- cell {entry.cell_id} — {source.label} — {_alias_label(entry.room_label)}"
+            for source in slot.sources
+            if slot.source_freshness.get(source.label) == "STALE"
+            for entry in source.entries
+            if getattr(entry, "cell_id", "")
+        ]
+        if stale_cells:
+            parts.append(
+                "\n## Cells of unchanged sources (for source_cells)\n"
+                + "\n".join(stale_cells)
+            )
+
         baseline = strip_derived_description_fields(slot.previous_merge or [])
         for session in baseline:
             session.pop("fallback_start_time", None)
@@ -604,7 +625,7 @@ def _build_time_slot_prompt(
                 status = slot.source_freshness.get(source.label, "FRESH")
                 parts.append(f"\n### {source.label} ({status})")
                 for entry in source.entries:
-                    parts.append(f"\n[{_alias_label(entry.room_label)}]")
+                    parts.append(f"\n[{_cell_tag(entry)}{_alias_label(entry.room_label)}]")
                     parts.append(entry.cell_text)
         else:
             # No fresh raw input — REMOVED-only case. The LLM still
@@ -625,14 +646,14 @@ def _build_time_slot_prompt(
     if main_source:
         parts.append("\n## Main Schedule (defines what goes in each room)")
         for entry in main_source.entries:
-            parts.append(f'\n[{_alias_label(entry.room_label)}]')
+            parts.append(f'\n[{_cell_tag(entry)}{_alias_label(entry.room_label)}]')
             parts.append(entry.cell_text)
 
     if vc_sources:
         parts.append("\n## Vice-chair detail (match by CONTENT to target rooms, ignore room labels)")
         for source in vc_sources:
             for entry in source.entries:
-                parts.append(f'\n[{source.label} — {_alias_label(entry.room_label)}]')
+                parts.append(f'\n[{_cell_tag(entry)}{source.label} — {_alias_label(entry.room_label)}]')
                 parts.append(entry.cell_text)
 
     return "\n".join(parts)
@@ -866,11 +887,15 @@ def parse_time_slots(
     def _call(job) -> tuple[dict, float]:
         slot_idx, slot, mode, system_instruction, user_prompt, _ = job
         started = _time.monotonic()
+        day_rooms = day_rooms_map.get(slot.day, [])
+        _, alias_to_name = build_room_aliases(day_rooms)
+        contents = user_prompt
+        problems: list[str] = []
         for attempt in range(MAX_RETRIES):
             try:
                 response = client.models.generate_content(
                     model=GEMINI_MODEL,
-                    contents=user_prompt,
+                    contents=contents,
                     config=types.GenerateContentConfig(
                         system_instruction=system_instruction,
                         response_mime_type="application/json",
@@ -878,7 +903,8 @@ def parse_time_slots(
                         thinking_config=types.ThinkingConfig(thinking_level="low"),
                     ),
                 )
-                return json.loads(response.text.strip()), _time.monotonic() - started
+                text = response.text.strip()
+                parsed = json.loads(text)
             except Exception as e:
                 if attempt < MAX_RETRIES - 1:
                     wait = 5 * (attempt + 1)
@@ -893,6 +919,34 @@ def parse_time_slots(
                     raise RuntimeError(
                         f"Could not parse {_slot_label(slot)} after {MAX_RETRIES} attempts"
                     ) from e
+                continue
+            # The answer must say which cells each session comes from; the
+            # times are placed from those cells.  Ask again with the problems.
+            problems = source_cell_problems(parsed, slot, day_rooms, alias_to_name)
+            if not problems:
+                return parsed, _time.monotonic() - started
+            print(
+                f"  [{slot_idx+1}/{total}] {_slot_label(slot)} "
+                f"source_cells round {attempt+1}: {len(problems)} problem(s), "
+                f"first: {problems[0]}",
+                flush=True,
+            )
+            contents = (
+                user_prompt
+                + "\n\n## Your previous answer\n" + text
+                + "\n\n## Fix these problems with source_cells\n- "
+                + "\n- ".join(problems)
+            )
+        _report_slot_problem(
+            meeting_id, "source-cells", _slot_label(slot),
+            "RAN1: the LLM could not name the cells of its sessions",
+            problems,
+            "The build fails and the last page stays. The slot is asked again on the next build.",
+        )
+        raise RuntimeError(
+            f"{_slot_label(slot)}: no answer with valid source_cells after "
+            f"{MAX_RETRIES} attempts: {problems[:3]}"
+        )
 
     # ── Ask Gemini for every changed slot at once. Slots are independent, so
     # a cold rebuild costs about as long as its slowest slot, not their sum.
@@ -913,6 +967,7 @@ def parse_time_slots(
 
     # ── Assemble in slot order.
     jobs_by_slot = {job[0]: job for job in jobs}
+    misplaced: list[tuple] = []  # (slot, problems)
     all_sessions: list[Session] = []
     n_skipped = 0
     for slot_idx, slot in enumerate(time_slots):
@@ -922,7 +977,13 @@ def parse_time_slots(
         else:
             parsed_result = {"sessions": slot.previous_merge}
             n_skipped += 1
-        sessions = _finish(slot, parsed_result, alias_to_name)
+        try:
+            sessions = _finish(slot, parsed_result, alias_to_name)
+        except SlotPlacementError as e:
+            print(f"  [{slot_idx+1}/{total}] {_slot_label(slot)} does not fit "
+                  f"the document: {e.problems[0]}", flush=True)
+            misplaced.append((slot, e.problems))
+            sessions = []
         all_sessions.extend(sessions)
         if slot_idx in results:
             _, _, mode, _, _, freshness_str = jobs_by_slot[slot_idx]
@@ -952,8 +1013,200 @@ def parse_time_slots(
         f"Multi-source parsing complete: {len(all_sessions)} sessions from "
         f"{total} time slots"
     )
+    if misplaced:
+        _reject_misplaced(misplaced, meeting_id)
 
     return all_sessions
+
+
+def _report_slot_problem(
+    meeting_id: str | None, kind: str, where: str, title: str,
+    problems: list[str], outcome: str,
+) -> None:
+    """Leave a notice for ``ci.py notify`` (a GitHub issue comment)."""
+    from shared import notices
+
+    digest = hashlib.sha256("\n".join(problems).encode()).hexdigest()[:12]
+    notices.add(
+        "ran1", kind, f"ran1:{meeting_id}:{kind}:{where}:{digest}", title,
+        [f"Meeting: {meeting_id or 'unknown'}", f"Time slot: {where}",
+         *problems[:10], outcome],
+    )
+
+
+def _reject_misplaced(misplaced: list[tuple], meeting_id: str | None) -> None:
+    """Fail the build for slots whose sessions do not fit the document's rows.
+
+    Their slot states are discarded so the next build asks those slots again
+    from scratch; if the answer still does not fit, the build fails again.
+    """
+    from shared.lifecycle import RejectedState
+    from .slot_state import slot_state_path
+
+    lines = []
+    for slot, problems in misplaced:
+        where = f"{slot.day} {slot.time_block_start}-{slot.time_block_end}"
+        _report_slot_problem(
+            meeting_id, "slot-placement", where,
+            "RAN1: session times do not fit the schedule document",
+            problems,
+            "The build fails and the last page stays. This slot is asked again "
+            "from scratch on the next build; if it still does not fit, check the "
+            "source cells against the answer in docs/ran1/slot_state.",
+        )
+        lines.extend(problems)
+    raise RejectedState(
+        "Sessions do not fit the rows of the schedule document; discarded slot state "
+        + ", ".join(sorted(slot_state_path(slot.day, slot.time_block_index).stem
+                           for slot, _ in misplaced))
+        + " for a cold retry:\n  " + "\n  ".join(lines),
+        discard=sorted(slot_state_path(slot.day, slot.time_block_index)
+                       for slot, _ in misplaced),
+    )
+
+
+class SlotPlacementError(ValueError):
+    """The merged sessions do not fit the rows of the schedule document."""
+
+    def __init__(self, problems: list[str]):
+        super().__init__("; ".join(problems))
+        self.problems = problems
+
+
+def _slot_entries(slot) -> dict[str, tuple[str, object]]:
+    """cell_id → (source label, entry) for every cell of the slot."""
+    entries = {}
+    for source in getattr(slot, "sources", []) or []:
+        for entry in source.entries:
+            cell_id = getattr(entry, "cell_id", "")
+            if cell_id:
+                entries[cell_id] = (source.label, entry)
+    return entries
+
+
+def _session_rooms(
+    room_name: str,
+    day_rooms: list[RoomInfo],
+    alias_to_name: dict[str, str] | None,
+) -> tuple[int, int, list[int]]:
+    col_start, col_end = _find_room_columns(room_name, day_rooms, alias_to_name)
+    room_indices = list(range(col_start - 2, col_end - 2)) or [0]
+    return col_start, col_end, room_indices
+
+
+def source_cell_problems(
+    parsed: dict,
+    slot,
+    day_rooms: list[RoomInfo],
+    alias_to_name: dict[str, str] | None,
+) -> list[str]:
+    """What is wrong with the ``source_cells`` of a merge, if anything.
+
+    Every session names the cells it comes from, the ids exist in this
+    slot, and a session drawn from Main Schedule cells stays in their rooms
+    (the Main Schedule decides what goes in each room).
+    """
+    entries = _slot_entries(slot)
+    main_covered = {
+        name
+        for label, entry in entries.values()
+        if label == "Main Schedule"
+        for name in getattr(entry, "room_names", ())
+    }
+    problems = []
+    for index, sd in enumerate(parsed.get("sessions") or []):
+        label = f"session {index + 1} '{sd.get('name', '')}' in {sd.get('room_name', '')}"
+        cited = sd.get("source_cells") or []
+        if not cited:
+            problems.append(f"{label}: source_cells is empty")
+            continue
+        unknown = [cell_id for cell_id in cited if cell_id not in entries]
+        if unknown:
+            problems.append(f"{label}: no cell {', '.join(unknown)} in this time slot")
+            continue
+        main_rooms = {
+            name
+            for cell_id in cited
+            if entries[cell_id][0] == "Main Schedule"
+            for name in getattr(entries[cell_id][1], "room_names", ())
+        }
+        _, _, room_indices = _session_rooms(sd.get("room_name", ""), day_rooms, alias_to_name)
+        names = {day_rooms[i].name for i in room_indices if i < len(day_rooms)}
+        if not main_rooms:
+            # Vice-chair tables are placed by content and their rows need not
+            # match the Main Schedule; where the Main Schedule has a cell for
+            # the room, the session is placed by that cell.
+            covering = sorted(names & main_covered)
+            if covering:
+                problems.append(
+                    f"{label}: name the Main Schedule cell of {', '.join(covering)} as well"
+                )
+        if main_rooms:
+            outside = sorted(names - main_rooms)
+            if outside:
+                problems.append(
+                    f"{label}: its Main Schedule cells do not cover {', '.join(outside)}"
+                )
+    return problems
+
+
+def _row_bounds(cells: dict, positioned: dict, block_start: int, block_end: int) -> dict:
+    """Start of every row of every table, as far as the document tells.
+
+    ``cells`` maps cell_id → entry; ``positioned`` maps cell_id → the
+    sessions placed by that cell.  A row starts where its time label says;
+    the first row at the block start and the last row ends at the block end.
+    A parser-derived start (a single duration in the block's last row) comes
+    next.  Otherwise a row starts where the longest cell of the rows above
+    ends, and failing that where the cells starting in it must start to end
+    in time.  No row height is read: that is presentation.
+    """
+    tables: dict[tuple, list] = {}
+    for cell_id, (label, entry) in cells.items():
+        key = (label, entry.table_index)
+        tables.setdefault(key, []).append((cell_id, entry))
+
+    bounds: dict[tuple, list[int | None]] = {}
+    for key, table_cells in tables.items():
+        rows = max(len(entry.row_starts) for _, entry in table_cells)
+        b: list[int | None] = [None] * (rows + 1)
+        starts = next(entry.row_starts for _, entry in table_cells
+                      if len(entry.row_starts) == rows)
+        for k, start in enumerate(starts):
+            if start is not None:
+                b[k] = max(block_start, time_to_minutes(start))
+        if b[0] is None:
+            b[0] = block_start
+        b[rows] = block_end
+        for _, entry in table_cells:
+            if entry.fallback_start_time and b[entry.block_row] is None:
+                b[entry.block_row] = time_to_minutes(entry.fallback_start_time)
+
+        # Cells that only hold sessions without their own time constrain rows.
+        spans = []
+        for cell_id, entry in table_cells:
+            placed = positioned.get(cell_id) or []
+            if not placed or any(sd.get("specified_start_time") for sd in placed):
+                continue
+            total = sum(sd["duration_minutes"] for sd in placed)
+            spans.append((entry.block_row, entry.block_row + entry.row_span, total))
+        changed = True
+        while changed:
+            changed = False
+            for k in range(1, rows):
+                if b[k] is not None:
+                    continue
+                lower = [b[r] + total for r, end, total in spans if end == k and b[r] is not None]
+                upper = [b[end] - total for r, end, total in spans if r == k and b[end] is not None]
+                if lower:
+                    b[k] = max(lower)
+                elif upper:
+                    b[k] = min(upper)
+                else:
+                    continue
+                changed = True
+        bounds[key] = b
+    return bounds
 
 
 def _slot_result_to_sessions(
@@ -964,140 +1217,126 @@ def _slot_result_to_sessions(
 ) -> list[Session]:
     """Convert a Gemini time-slot result into Session objects.
 
-    Handles the flat schema format where sessions is a flat array with
-    ``room_name`` on each entry.  Time cursors are tracked per physical room,
-    so a merged-room session starts after the latest occupied member room.
+    Times come from where each session's cell sits in the document, not from
+    the order of the answer.  The prompt orders sessions only within a room
+    group, and the model put the early dinner (``ALL_ROOMS``) of RAN1#126bis
+    Tuesday between the online and offline rooms in one merge and after them
+    in another; the old room cursors then pushed the offline rooms' 17:00
+    sessions to 19:30-21:00.
+
+    Each session names its source cells.  It starts at its cell's row (a
+    Main Schedule cell when it names one), after the sessions before it in
+    the same rooms; explicit source times override.  A session that does not
+    fit its cell's rows, or whose row cannot be told, raises
+    ``SlotPlacementError``: the build fails rather than publish a guess.
     """
-    sessions: list[Session] = []
     day_rooms = day_rooms_map.get(slot.day, [])
-    flat_sessions = parsed.get("sessions", [])
     block_start_min = time_to_minutes(slot.time_block_start)
     block_end_min = time_to_minutes(slot.time_block_end)
-    room_cursors = {
-        room_index: block_start_min for room_index in range(len(day_rooms))
-    }
+    entries = _slot_entries(slot)
+    slot_label = f"{slot.day} {slot.time_block_start}-{slot.time_block_end}"
 
-    # Preserve parser-derived fallback timing independently of the LLM output.
-    # Matching uses the physical room span plus the normalized session name.
-    fallback_cells: list[tuple[int, int, str, str]] = []
-    for source in getattr(slot, "sources", []):
-        for entry in source.entries:
-            fallback_start = getattr(entry, "fallback_start_time", None)
-            if not fallback_start:
-                continue
-            entry_col_start, entry_col_end = _find_room_columns(
-                entry.room_label, day_rooms, alias_to_name
+    problems: list[str] = []
+    items = []  # (index, sd, position cell ids, col_start, col_end, room_indices)
+    positioned: dict[str, list[dict]] = {}
+    for index, sd in enumerate(parsed.get("sessions", []) or []):
+        if (sd.get("duration_minutes") or 0) <= 0:
+            continue
+        cited = [c for c in (sd.get("source_cells") or []) if c in entries]
+        main = [c for c in cited if entries[c][0] == "Main Schedule"]
+        position = main or cited
+        col_start, col_end, room_indices = _session_rooms(
+            sd.get("room_name", ""), day_rooms, alias_to_name
+        )
+        if not position:
+            problems.append(
+                f"{slot_label}: '{sd.get('name', '')}' names no cell of this time slot"
             )
-            normalized_text = re.sub(
-                r"[^a-z0-9]+", "", entry.cell_text.lower()
+            continue
+        for cell_id in position:
+            positioned.setdefault(cell_id, []).append(sd)
+        items.append((index, sd, position, col_start, col_end, room_indices))
+
+    bounds = _row_bounds(entries, positioned, block_start_min, block_end_min)
+
+    def _limits(position: list[str]) -> tuple[int | None, int | None]:
+        starts, ends = [], []
+        for cell_id in position:
+            label, entry = entries[cell_id]
+            b = bounds[(label, entry.table_index)]
+            starts.append(b[entry.block_row])
+            ends.append(b[min(entry.block_row + entry.row_span, len(b) - 1)])
+        if any(v is None for v in starts + ends):
+            return None, None
+        return max(starts), min(ends)
+
+    placed = []  # (row start, index, sd, start, end, cols, room_indices)
+    for index, sd, position, col_start, col_end, room_indices in items:
+        row_start, row_end = _limits(position)
+        if row_start is None:
+            problems.append(
+                f"{slot_label}: cannot tell when the row of '{sd.get('name', '')}' starts"
             )
-            fallback_cells.append(
-                (
-                    entry_col_start,
-                    entry_col_end,
-                    normalized_text,
-                    fallback_start,
-                )
+            continue
+        placed.append([row_start, index, sd, row_end, col_start, col_end, room_indices])
+
+    # Rows in document order; within a row, the answer's order per room.
+    placed.sort(key=lambda item: (item[0], item[1]))
+    cursors: dict[int, int] = {}
+    sessions: list[Session] = []
+    for row_start, _, sd, row_end, col_start, col_end, room_indices in placed:
+        duration = sd["duration_minutes"]
+        start = None
+        specified = sd.get("specified_start_time")
+        if specified:
+            try:
+                start = time_to_minutes(specified)
+            except (ValueError, IndexError):
+                pass  # fall back to the row
+        sequential = start is None
+        if sequential:
+            start = max([row_start] + [cursors.get(i, row_start) for i in room_indices])
+        end = start + duration
+        if sequential and end > row_end:
+            problems.append(
+                f"{slot_label}: '{sd.get('name', '')}' runs {minutes_to_time(start)}-"
+                f"{minutes_to_time(end)}, past the end of its cell at {minutes_to_time(row_end)}"
             )
+        for i in room_indices:
+            cursors[i] = max(cursors.get(i, block_start_min), end)
 
-    # Group sessions by room_name to assign sequential times
-    from collections import OrderedDict
-    rooms_ordered: OrderedDict[str, list[dict]] = OrderedDict()
-    for sd in flat_sessions:
-        rn = sd.get("room_name", "")
-        if rn not in rooms_ordered:
-            rooms_ordered[rn] = []
-        rooms_ordered[rn].append(sd)
+        name = sd.get("name", "Unknown")
+        group_header = sd.get("group_header", "")
+        agenda_item = sd.get("agenda_item")
 
-    for room_name, room_sessions in rooms_ordered.items():
-        # Find grid columns for this room (supports aliases and multi-room)
-        col_start, col_end = _find_room_columns(room_name, day_rooms, alias_to_name)
-        room_indices = list(range(col_start - 2, col_end - 2))
-        if not room_indices:
-            room_indices = [0]
+        # Post-process: extract agenda_item from name if not provided
+        if not agenda_item:
+            name, extracted_agenda_item = _extract_agenda_item_from_name(name)
+            if extracted_agenda_item:
+                agenda_item = extracted_agenda_item
+            # Check group_header for agenda context
+            if not agenda_item and group_header:
+                m = re.match(r"AI\s+(\d[\d.]*)", group_header)
+                if m:
+                    agenda_item = m.group(1).strip(".")
 
-        for sd in room_sessions:
-            duration = sd.get("duration_minutes") or 0
-            if duration <= 0:
-                continue
+        sessions.append(Session(
+            name=name,
+            duration_minutes=duration,
+            start_time=minutes_to_time(start),
+            end_time=minutes_to_time(end),
+            day=slot.day,
+            room_col_start=col_start,
+            room_col_end=col_end,
+            chair=sd.get("chair"),
+            agenda_item=agenda_item,
+            group_header=group_header,
+            description=sd.get("description"),
+            agenda_descriptions=sd.get("agenda_descriptions") or [],
+        ))
 
-            name = sd.get("name", "Unknown")
-            group_header = sd.get("group_header", "")
-            agenda_item = sd.get("agenda_item")
-            description = sd.get("description")
-            agenda_descriptions = sd.get("agenda_descriptions") or []
-
-            # Post-process: extract agenda_item from name if not provided
-            if not agenda_item:
-                name, extracted_agenda_item = _extract_agenda_item_from_name(name)
-                if extracted_agenda_item:
-                    agenda_item = extracted_agenda_item
-                # Check group_header for agenda context
-                if not agenda_item and group_header:
-                    m = re.match(r"AI\s+(\d[\d.]*)", group_header)
-                    if m:
-                        agenda_item = m.group(1).strip(".")
-
-            # Start after the latest occupied room in this session's room set.
-            # Explicit source times override that cursor.  For a merged-room
-            # session that would otherwise run past the block end, a parser-
-            # derived fallback can pin it to the document's trailing sub-row.
-            current_min = max(
-                room_cursors.get(room_index, block_start_min)
-                for room_index in room_indices
-            )
-            specified = sd.get("specified_start_time")
-            if specified:
-                try:
-                    current_min = time_to_minutes(specified)
-                except (ValueError, IndexError):
-                    pass  # fall back to sequential
-            elif len(room_indices) > 1 and current_min + duration > block_end_min:
-                normalized_name = re.sub(
-                    r"[^a-z0-9]+", "", sd.get("name", "").lower()
-                )
-                fallback = next(
-                    (
-                        start
-                        for fc_start, fc_end, cell_text, start in fallback_cells
-                        if fc_start == col_start
-                        and fc_end == col_end
-                        and normalized_name
-                        and normalized_name in cell_text
-                    ),
-                    None,
-                )
-                if fallback:
-                    try:
-                        current_min = time_to_minutes(fallback)
-                    except (ValueError, IndexError):
-                        pass
-
-            start_time = minutes_to_time(current_min)
-            end_time = minutes_to_time(current_min + duration)
-
-            session = Session(
-                name=name,
-                duration_minutes=duration,
-                start_time=start_time,
-                end_time=end_time,
-                day=slot.day,
-                room_col_start=col_start,
-                room_col_end=col_end,
-                chair=sd.get("chair"),
-                agenda_item=agenda_item,
-                group_header=group_header,
-                description=description,
-                agenda_descriptions=agenda_descriptions,
-            )
-            sessions.append(session)
-            session_end_min = current_min + duration
-            for room_index in room_indices:
-                room_cursors[room_index] = max(
-                    room_cursors.get(room_index, block_start_min),
-                    session_end_min,
-                )
-
+    if problems:
+        raise SlotPlacementError(problems)
     return sessions
 
 

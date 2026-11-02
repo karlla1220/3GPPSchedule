@@ -39,6 +39,14 @@ class CellData:
     time_block_duration: int
     table_index: int
     fallback_start_time: str | None = None
+    # Where the cell sits in its time block.  A table may split a block into
+    # physical rows (a vertically merged time label, or rows labelled with a
+    # later start such as "09:00 ~ 10:30").  ``block_row`` is the cell's first
+    # row, ``row_span`` how many rows it covers, and ``row_starts`` the start
+    # written in each row's time label (None when the row has no label).
+    block_row: int = 0
+    row_span: int = 1
+    row_starts: tuple[str | None, ...] = (None,)
 
 
 @dataclass
