@@ -1020,7 +1020,7 @@
           "part": null
         },
         {
-          "name": "NTN",
+          "name": "NTN (cont)",
           "duration_minutes": 120,
           "start_time": "14:30",
           "end_time": "16:30",
@@ -1433,7 +1433,7 @@
           "part": null
         },
         {
-          "name": "[NTN",
+          "name": "NTN (cont)",
           "duration_minutes": 60,
           "start_time": "17:00",
           "end_time": "18:00",
@@ -4254,7 +4254,7 @@
           "part": null
         },
         {
-          "name": "6G SI BSRF",
+          "name": "6G SI BSRF (cont)",
           "duration_minutes": 60,
           "start_time": "17:00",
           "end_time": "18:00",
@@ -4840,7 +4840,7 @@
       ],
       "sessions": [
         {
-          "name": "[356] NR_IoT_extended_guardband",
+          "name": "[356] NR_IoT_extended_guardband (Cont)",
           "duration_minutes": 30,
           "start_time": "08:00",
           "end_time": "08:30",
@@ -5806,7 +5806,7 @@
           "part": null
         },
         {
-          "name": "Ambient IoT",
+          "name": "Ambient IoT (cont)",
           "duration_minutes": 120,
           "start_time": "11:00",
           "end_time": "13:00",
@@ -6963,7 +6963,7 @@
           "part": null
         },
         {
-          "name": "6G SI: Sensing",
+          "name": "6G SI: Sensing (cont)",
           "duration_minutes": 60,
           "start_time": "17:00",
           "end_time": "18:00",
@@ -7909,7 +7909,7 @@
           ]
         },
         {
-          "name": "[112] TEI20 / [113] R18 maintenance: PC2 FDD HPUE duty cycle / EARLY RETURN TO",
+          "name": "[112] TEI20 / [113] R18 maintenance: PC2 FDD HPUE duty cycle / EARLY RETURN TO (in the following order)",
           "duration_minutes": 120,
           "start_time": "08:30",
           "end_time": "10:30",
@@ -8701,7 +8701,7 @@
           ]
         },
         {
-          "name": "6G RRM / 6G AI : LS / 6G operation efficiency",
+          "name": "6G RRM (not earlier than 3pm) / 6G AI (107-B): LS / 6G operation efficiency",
           "duration_minutes": 120,
           "start_time": "14:30",
           "end_time": "16:30",
@@ -9706,7 +9706,7 @@
           "part": null
         },
         {
-          "name": "Return to",
+          "name": "Return to (start at 8:30)",
           "duration_minutes": 120,
           "start_time": "08:30",
           "end_time": "10:30",
@@ -9949,7 +9949,7 @@
           ]
         },
         {
-          "name": "6G RRM / 13 Any other business / 14 Close of the meeting",
+          "name": "6G RRM / 13 Any other business / 14 Close of the meeting (main session)",
           "duration_minutes": 105,
           "start_time": "11:00",
           "end_time": "12:45",
@@ -9982,7 +9982,7 @@
           ]
         },
         {
-          "name": "Return to",
+          "name": "Return to (final round)",
           "duration_minutes": 210,
           "start_time": "14:00",
           "end_time": "17:30",
@@ -10006,7 +10006,7 @@
           "part": null
         },
         {
-          "name": "Return to",
+          "name": "Return to (final round)",
           "duration_minutes": 210,
           "start_time": "14:00",
           "end_time": "17:30",
@@ -10030,7 +10030,7 @@
           "part": null
         },
         {
-          "name": "Return to",
+          "name": "Return to (final round)",
           "duration_minutes": 210,
           "start_time": "14:00",
           "end_time": "17:30",
@@ -10078,7 +10078,7 @@
     }
   ],
   "source_file": "RAN4_120bis_meeting_schedule_THU_afternoon.pptx",
-  "generated_at": "2026-11-02 13:21",
+  "generated_at": "2026-11-03 02:00",
   "contact_name": "",
   "contact_email": "",
   "source_files": [

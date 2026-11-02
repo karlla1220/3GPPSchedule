@@ -460,7 +460,7 @@
           "part": null
         },
         {
-          "name": "Spectrum aggregation / 6GR Control Plane",
+          "name": "Spectrum aggregation / 6GR Control Plane (if time allows)",
           "duration_minutes": 120,
           "start_time": "11:00",
           "end_time": "13:00",
@@ -759,7 +759,7 @@
           "part": null
         },
         {
-          "name": "1630-1700 A-IoT paging configuration",
+          "name": "1630-1700 A-IoT paging configuration (Huawei)",
           "duration_minutes": 120,
           "start_time": "14:30",
           "end_time": "16:30",
@@ -1266,7 +1266,7 @@
           "part": null
         },
         {
-          "name": "CP offlines",
+          "name": "CP offlines (RRC delta, Ericsson)",
           "duration_minutes": 60,
           "start_time": "11:00",
           "end_time": "12:00",
@@ -1379,7 +1379,7 @@
           "part": null
         },
         {
-          "name": "CP offlines",
+          "name": "CP offlines (list handling, Qualcomm)",
           "duration_minutes": 30,
           "start_time": "12:00",
           "end_time": "12:30",
@@ -1405,7 +1405,7 @@
           "part": null
         },
         {
-          "name": "CP offlines",
+          "name": "CP offlines (config structure, CMCC)",
           "duration_minutes": 30,
           "start_time": "12:30",
           "end_time": "13:00",
@@ -1473,7 +1473,7 @@
           "part": null
         },
         {
-          "name": "CP offlines [6G UE caps] Dynamic capability update",
+          "name": "CP offlines [6G UE caps] Dynamic capability update (Xiaomi)",
           "duration_minutes": 60,
           "start_time": "14:30",
           "end_time": "15:30",
@@ -1707,7 +1707,7 @@
           "part": null
         },
         {
-          "name": "Offline on AI/ML",
+          "name": "Offline on AI/ML (oppo)",
           "duration_minutes": 60,
           "start_time": "18:00",
           "end_time": "19:00",
@@ -1973,7 +1973,7 @@
           "part": null
         },
         {
-          "name": "RRC structure",
+          "name": "RRC structure (Ericsson)",
           "duration_minutes": 60,
           "start_time": "09:30",
           "end_time": "10:30",
@@ -2021,7 +2021,7 @@
           "part": null
         },
         {
-          "name": "ISAC UE SE selection – Revise email discussion report R2-2607154",
+          "name": "ISAC UE SE selection (MediaTek) – Revise email discussion report R2-2607154",
           "duration_minutes": 60,
           "start_time": "10:00",
           "end_time": "11:00",
@@ -2047,7 +2047,7 @@
           "part": null
         },
         {
-          "name": "MANET offline",
+          "name": "MANET offline (vivo)",
           "duration_minutes": 30,
           "start_time": "10:30",
           "end_time": "11:00",
@@ -2126,7 +2126,7 @@
           "part": null
         },
         {
-          "name": "[6G UP] RLC",
+          "name": "[6G UP] RLC (Nokia)",
           "duration_minutes": 60,
           "start_time": "11:00",
           "end_time": "12:00",
@@ -2455,7 +2455,7 @@
           "part": null
         },
         {
-          "name": "[6G UE caps] Dynamic capability update",
+          "name": "[6G UE caps] Dynamic capability update (Xiaomi)",
           "duration_minutes": 30,
           "start_time": "16:30",
           "end_time": "17:00",
@@ -2858,7 +2858,7 @@
           "part": null
         },
         {
-          "name": "[LPWUS] How to address the SA2 LS on subgrouping ID",
+          "name": "[LPWUS] How to address the SA2 LS on subgrouping ID (Ericsson)",
           "duration_minutes": 30,
           "start_time": "09:00",
           "end_time": "09:30",
@@ -2884,7 +2884,7 @@
           "part": null
         },
         {
-          "name": "6G UP] LCP",
+          "name": "6G UP] LCP (Lenovo)",
           "duration_minutes": 30,
           "start_time": "09:30",
           "end_time": "10:00",
@@ -2904,13 +2904,13 @@
             "[010] 6G UP] LCP (Lenovo)"
           ],
           "inferred_agenda_items": [
-            "9.3.1.3"
+            "9.3.1.3.2"
           ],
           "email_details": [],
           "part": null
         },
         {
-          "name": "[MOB]",
+          "name": "[MOB] (Vivo)",
           "duration_minutes": 60,
           "start_time": "10:30",
           "end_time": "11:30",
@@ -3050,7 +3050,7 @@
           "part": null
         },
         {
-          "name": "[MOB]",
+          "name": "[MOB] (Lenovo)",
           "duration_minutes": 30,
           "start_time": "11:30",
           "end_time": "12:00",
@@ -3123,7 +3123,7 @@
           "part": null
         },
         {
-          "name": "[AI PHY] WF for L3 signalling based performance monitoring",
+          "name": "[AI PHY] WF for L3 signalling based performance monitoring (ZTE)",
           "duration_minutes": 60,
           "start_time": "12:00",
           "end_time": "13:00",
@@ -3369,17 +3369,17 @@
           "part": null
         },
         {
-          "name": "CB Sergio / R18 NR NTN corrections / R18 IoT NTN corrections / NR19 NR NTN",
-          "duration_minutes": 120,
+          "name": "R18 NR NTN corrections / R18 IoT NTN corrections / NR19 NR NTN",
+          "duration_minutes": 90,
           "start_time": "17:00",
-          "end_time": "19:00",
+          "end_time": "18:30",
           "day": "Thursday",
           "room_col_start": 2,
           "room_col_end": 3,
           "chair": "Sergio",
-          "agenda_item": "6.0.2.17, 6.0.2.18, 7.8, 8.7, 8.7.3, 8.12",
+          "agenda_item": "6.0.2.17, 6.0.2.18, 7.8, 8.7, 8.7.3",
           "group_header": "NR Rel-18",
-          "description": "NR NTN enhancements\nIoT NTN enhancements\nNTN for NR Ph3\nIoT NTN Ph4\nNR NTN using DL compensation",
+          "description": "NR NTN enhancements\nIoT NTN enhancements\nNTN for NR Ph3\nIoT NTN Ph4",
           "agenda_descriptions": [
             {
               "agenda_item": "6.0.2.17",
@@ -3456,21 +3456,6 @@
                   "description": "IoT NTN Ph4"
                 }
               ]
-            },
-            {
-              "agenda_item": "8.12",
-              "matched_agenda_item": "8.12",
-              "description": "NR NTN using DL compensation",
-              "hierarchy": [
-                {
-                  "agenda_item": "8",
-                  "description": "NR Rel-20"
-                },
-                {
-                  "agenda_item": "8.12",
-                  "description": "NR NTN using DL compensation"
-                }
-              ]
             }
           ],
           "room_ids": [
@@ -3486,10 +3471,7 @@
             "[7.8] NR19 NR NTN [0]",
             "- issue marked CB Thursday",
             "[8.7] R20 IoT NTN [1]",
-            "[8.7.3] report of [301]",
-            "[8.12] R20 NR NTN DL compensation [0.5]",
-            "(not before 18:30)",
-            "- issues marked CB Thursday"
+            "[8.7.3] report of [301]"
           ],
           "inferred_agenda_items": [],
           "email_details": [],
@@ -3560,6 +3542,48 @@
           "inferred_agenda_items": [],
           "email_details": [],
           "part": null
+        },
+        {
+          "name": "R20 NR NTN DL compensation",
+          "duration_minutes": 30,
+          "start_time": "18:30",
+          "end_time": "19:00",
+          "day": "Thursday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": "8.12",
+          "group_header": "NR Rel-20",
+          "description": "NR NTN using DL compensation",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "8.12",
+              "matched_agenda_item": "8.12",
+              "description": "NR NTN using DL compensation",
+              "hierarchy": [
+                {
+                  "agenda_item": "8",
+                  "description": "NR Rel-20"
+                },
+                {
+                  "agenda_item": "8.12",
+                  "description": "NR NTN using DL compensation"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "brk1"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "[8.12] R20 NR NTN DL compensation [0.5]",
+            "(not before 18:30)",
+            "- issues marked CB Thursday"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": null
         }
       ],
       "date": "2026-10-15",
@@ -3618,7 +3642,7 @@
       ],
       "sessions": [
         {
-          "name": "CB Kyeongin / R20 AI Mob comebacks/continue",
+          "name": "R20 AI Mob comebacks/continue",
           "duration_minutes": 60,
           "start_time": "08:30",
           "end_time": "09:30",
@@ -3660,7 +3684,7 @@
           "part": null
         },
         {
-          "name": "CB Erlin / CB for NR20 AI/M PHY",
+          "name": "CB for NR20 AI/M PHY",
           "duration_minutes": 60,
           "start_time": "09:30",
           "end_time": "10:30",
@@ -3878,7 +3902,7 @@
     }
   ],
   "source_file": "R2_135b_Schedule_v10.docx",
-  "generated_at": "2026-10-30 18:21",
+  "generated_at": "2026-11-03 01:55",
   "contact_name": "",
   "contact_email": "",
   "source_files": [

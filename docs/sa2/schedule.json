@@ -160,7 +160,7 @@
           "part": null
         },
         {
-          "name": "KI#1.1",
+          "name": "KI#1.1 (NAS)",
           "duration_minutes": 90,
           "start_time": "11:00",
           "end_time": "12:30",
@@ -269,7 +269,7 @@
           ]
         },
         {
-          "name": "KI#1.1 / KI#1.2",
+          "name": "KI#1.1 (NAS) / KI#1.2",
           "duration_minutes": 90,
           "start_time": "11:00",
           "end_time": "12:30",
@@ -317,7 +317,7 @@
           ]
         },
         {
-          "name": "KI#18",
+          "name": "KI#18 (AI for Network)",
           "duration_minutes": 90,
           "start_time": "14:00",
           "end_time": "15:30",
@@ -423,7 +423,7 @@
           ]
         },
         {
-          "name": "KI#7",
+          "name": "KI#7 (Net Exposure)",
           "duration_minutes": 90,
           "start_time": "14:00",
           "end_time": "15:30",
@@ -470,7 +470,7 @@
           ]
         },
         {
-          "name": "KI#9",
+          "name": "KI#9 (Localized Net)",
           "duration_minutes": 90,
           "start_time": "14:00",
           "end_time": "15:30",
@@ -592,7 +592,7 @@
           "part": null
         },
         {
-          "name": "KI#5",
+          "name": "KI#5 (QoS)",
           "duration_minutes": 75,
           "start_time": "17:45",
           "end_time": "19:00",
@@ -748,7 +748,7 @@
           ]
         },
         {
-          "name": "KI#4",
+          "name": "KI#4 (UP Arch)",
           "duration_minutes": 75,
           "start_time": "17:45",
           "end_time": "19:00",
@@ -795,7 +795,7 @@
           ]
         },
         {
-          "name": "KI#20",
+          "name": "KI#20 (Sensing)",
           "duration_minutes": 75,
           "start_time": "17:45",
           "end_time": "19:00",
@@ -977,7 +977,7 @@
           "part": null
         },
         {
-          "name": "AIML_CN_Ph2 / KI#23",
+          "name": "AIML_CN_Ph2 / KI#23 (NTN)",
           "duration_minutes": 90,
           "start_time": "09:00",
           "end_time": "10:30",
@@ -1140,7 +1140,7 @@
           ]
         },
         {
-          "name": "KI#22",
+          "name": "KI#22 (Computing)",
           "duration_minutes": 90,
           "start_time": "09:00",
           "end_time": "10:30",
@@ -1215,7 +1215,7 @@
           ]
         },
         {
-          "name": "KI#17",
+          "name": "KI#17 (IWK)",
           "duration_minutes": 90,
           "start_time": "09:00",
           "end_time": "10:30",
@@ -1262,7 +1262,7 @@
           ]
         },
         {
-          "name": "KI#19",
+          "name": "KI#19 (Network for AI)",
           "duration_minutes": 90,
           "start_time": "11:00",
           "end_time": "12:30",
@@ -1310,7 +1310,7 @@
           ]
         },
         {
-          "name": "KI#10 / KI#12 – KI#16",
+          "name": "KI#10 (FWA) / KI#12 – KI#16",
           "duration_minutes": 90,
           "start_time": "11:00",
           "end_time": "12:30",
@@ -1453,7 +1453,7 @@
           ]
         },
         {
-          "name": "KI#20",
+          "name": "KI#20 (Sensing)",
           "duration_minutes": 90,
           "start_time": "11:00",
           "end_time": "12:30",
@@ -1655,7 +1655,7 @@
           ]
         },
         {
-          "name": "KI#8 / KI#22",
+          "name": "KI#8 (Net Sharing) / KI#22 (Computing)",
           "duration_minutes": 90,
           "start_time": "14:00",
           "end_time": "15:30",
@@ -1723,7 +1723,7 @@
           ]
         },
         {
-          "name": "KI#6",
+          "name": "KI#6 (Policy)",
           "duration_minutes": 90,
           "start_time": "14:00",
           "end_time": "15:30",
@@ -2078,7 +2078,7 @@
           "part": null
         },
         {
-          "name": "KI#21",
+          "name": "KI#21 (Data Framework)",
           "duration_minutes": 90,
           "start_time": "09:00",
           "end_time": "10:30",
@@ -2184,7 +2184,7 @@
           ]
         },
         {
-          "name": "KI#11",
+          "name": "KI#11 (Non-3GPP)",
           "duration_minutes": 90,
           "start_time": "09:00",
           "end_time": "10:30",
@@ -2381,7 +2381,7 @@
           ]
         },
         {
-          "name": "KI#3",
+          "name": "KI#3 (Slicing)",
           "duration_minutes": 90,
           "start_time": "11:00",
           "end_time": "12:30",
@@ -2429,7 +2429,7 @@
           ]
         },
         {
-          "name": "KI#19",
+          "name": "KI#19 (Network for AI)",
           "duration_minutes": 90,
           "start_time": "11:00",
           "end_time": "12:30",
@@ -2477,7 +2477,7 @@
           ]
         },
         {
-          "name": "KI#24",
+          "name": "KI#24 (IoT)",
           "duration_minutes": 90,
           "start_time": "11:00",
           "end_time": "12:30",
@@ -2524,7 +2524,7 @@
           ]
         },
         {
-          "name": "KI#2",
+          "name": "KI#2 (SBA)",
           "duration_minutes": 90,
           "start_time": "11:00",
           "end_time": "12:30",
@@ -2805,7 +2805,7 @@
       ],
       "sessions": [
         {
-          "name": "Revisions",
+          "name": "Revisions (tbd)",
           "duration_minutes": 50,
           "start_time": "08:00",
           "end_time": "08:50",
@@ -2829,7 +2829,7 @@
           "part": null
         },
         {
-          "name": "Revisions",
+          "name": "Revisions (tbd)",
           "duration_minutes": 50,
           "start_time": "08:00",
           "end_time": "08:50",
@@ -2853,7 +2853,7 @@
           "part": null
         },
         {
-          "name": "Revisions",
+          "name": "Revisions (tbd)",
           "duration_minutes": 50,
           "start_time": "08:00",
           "end_time": "08:50",
@@ -2877,7 +2877,7 @@
           "part": null
         },
         {
-          "name": "KI#1.1 / KI#1.2",
+          "name": "KI#1.1 (NAS) / KI#1.2",
           "duration_minutes": 90,
           "start_time": "09:00",
           "end_time": "10:30",
@@ -3026,7 +3026,7 @@
           ]
         },
         {
-          "name": "KI#18",
+          "name": "KI#18 (AI for Network)",
           "duration_minutes": 90,
           "start_time": "09:00",
           "end_time": "10:30",
@@ -3073,7 +3073,7 @@
           ]
         },
         {
-          "name": "Pre-Rel-19 maintenance / KI#9",
+          "name": "Pre-Rel-19 maintenance / KI#9 (Localized Net)",
           "duration_minutes": 90,
           "start_time": "09:00",
           "end_time": "10:30",
@@ -3155,7 +3155,7 @@
           ]
         },
         {
-          "name": "KI#7 / Rel-19 maintenance",
+          "name": "KI#7 (Net Exposure) / Rel-19 maintenance",
           "duration_minutes": 90,
           "start_time": "09:00",
           "end_time": "10:30",
@@ -3259,7 +3259,7 @@
           "part": null
         },
         {
-          "name": "KI#22 / KI#4",
+          "name": "KI#22 (Computing) / KI#4 (UP Arch)",
           "duration_minutes": 90,
           "start_time": "11:00",
           "end_time": "12:30",
@@ -3327,7 +3327,7 @@
           ]
         },
         {
-          "name": "Rel-19 maintenance / KI#20",
+          "name": "Rel-19 maintenance / KI#20 (Sensing)",
           "duration_minutes": 90,
           "start_time": "11:00",
           "end_time": "12:30",
@@ -3386,7 +3386,7 @@
           ]
         },
         {
-          "name": "AIML_CN_Ph2 / KI#23 / KI#22",
+          "name": "AIML_CN_Ph2 / KI#23 (NTN) / KI#22 (Computing)",
           "duration_minutes": 90,
           "start_time": "11:00",
           "end_time": "12:30",
@@ -3474,7 +3474,7 @@
           ]
         },
         {
-          "name": "AmbientIoT_Ph2-ARC / KI#17",
+          "name": "AmbientIoT_Ph2-ARC / KI#17 (IWK)",
           "duration_minutes": 90,
           "start_time": "11:00",
           "end_time": "12:30",
@@ -3541,7 +3541,7 @@
           ]
         },
         {
-          "name": "Revisions",
+          "name": "Revisions (tbd)",
           "duration_minutes": 90,
           "start_time": "14:00",
           "end_time": "15:30",
@@ -3568,7 +3568,7 @@
           ]
         },
         {
-          "name": "5GSAT_Ph4-ARC / KI#10 / KI#8 …",
+          "name": "5GSAT_Ph4-ARC / KI#10 (FWA) / KI#8 (Net Sharing) …",
           "duration_minutes": 90,
           "start_time": "14:00",
           "end_time": "15:30",
@@ -3713,7 +3713,7 @@
           ]
         },
         {
-          "name": "EnergySys_Ph2-ARC / KI#20 / Sensing-ARC",
+          "name": "EnergySys_Ph2-ARC / KI#20 (Sensing) / Sensing-ARC",
           "duration_minutes": 90,
           "start_time": "14:00",
           "end_time": "15:30",
@@ -3800,7 +3800,7 @@
           ]
         },
         {
-          "name": "KI#5 / KI#6",
+          "name": "KI#5 (QoS) / KI#6 (Policy)",
           "duration_minutes": 90,
           "start_time": "14:00",
           "end_time": "15:30",
@@ -4008,7 +4008,7 @@
           ]
         },
         {
-          "name": "6G revisions",
+          "name": "6G revisions (single stream)",
           "duration_minutes": 90,
           "start_time": "16:00",
           "end_time": "17:30",
@@ -4026,13 +4026,37 @@
             "6G revisions (single stream)"
           ],
           "inferred_agenda_items": [
-            "20.6.0"
+            "20.6.0",
+            "20.6.1",
+            "20.6.2",
+            "20.6.3",
+            "20.6.4",
+            "20.6.5",
+            "20.6.6",
+            "20.6.7",
+            "20.6.8",
+            "20.6.9",
+            "20.6.10",
+            "20.6.11",
+            "20.6.12",
+            "20.6.13",
+            "20.6.14",
+            "20.6.15",
+            "20.6.16",
+            "20.6.17",
+            "20.6.18",
+            "20.6.19",
+            "20.6.20",
+            "20.6.21",
+            "20.6.22",
+            "20.6.23",
+            "20.6.24"
           ],
           "email_details": [],
           "part": null
         },
         {
-          "name": "KI#21",
+          "name": "KI#21 (Data Framework)",
           "duration_minutes": 75,
           "start_time": "17:45",
           "end_time": "19:00",
@@ -4061,7 +4085,7 @@
           ]
         },
         {
-          "name": "Pre-Rel-19 maintenance / KI#11",
+          "name": "Pre-Rel-19 maintenance / KI#11 (Non-3GPP)",
           "duration_minutes": 75,
           "start_time": "17:45",
           "end_time": "19:00",
@@ -4143,7 +4167,7 @@
           ]
         },
         {
-          "name": "Revisions",
+          "name": "Revisions (tbd)",
           "duration_minutes": 75,
           "start_time": "17:45",
           "end_time": "19:00",
@@ -4170,7 +4194,7 @@
           ]
         },
         {
-          "name": "KI#3 / KI#2",
+          "name": "KI#3 (Slicing) / KI#2 (SBA)",
           "duration_minutes": 75,
           "start_time": "17:45",
           "end_time": "19:00",
@@ -4237,7 +4261,7 @@
           ]
         },
         {
-          "name": "KI#12 – KI#16 / KI#24",
+          "name": "KI#12 – KI#16 / KI#24 (IoT)",
           "duration_minutes": 75,
           "start_time": "17:45",
           "end_time": "19:00",
@@ -4380,7 +4404,7 @@
           ]
         },
         {
-          "name": "KI#19",
+          "name": "KI#19 (Network for AI)",
           "duration_minutes": 75,
           "start_time": "17:45",
           "end_time": "19:00",
@@ -4731,7 +4755,7 @@
           "part": null
         },
         {
-          "name": "List of agreed tdocs for block approval / Revisions",
+          "name": "List of agreed tdocs for block approval / Revisions (including 30.1)",
           "duration_minutes": 60,
           "start_time": "14:00",
           "end_time": "15:00",
@@ -4828,7 +4852,7 @@
     }
   ],
   "source_file": "S2-261nnnn_SA2-178-Session Plan.zip",
-  "generated_at": "2026-11-02 01:51",
+  "generated_at": "2026-11-02 11:00",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
