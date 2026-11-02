@@ -917,7 +917,7 @@ SA2#172·#174·#175·#176·#177·#178(첫 판)의 실제 문서로 확인했습�
 - **원본이 모호하게 적은 것은 SA2 관례로 채웁니다(`working_groups/sa2/CONVENTIONS.md`, 값은 `conventions.json`).** #160~#178 Session Plan 189개에서 정했습니다.
   시나 분이 빠진 쿼터 시각은 그 쿼터의 관례 중 적힌 것과 모두 맞는 첫 값입니다. #178 첫 판의 Q2 `1100 - 12`(노란 형광펜)는 #161~#177 모든 판의 Q2인 11:00–12:30이고, Lunch는 12:30–14:00입니다.
   맞는 관례가 없거나(`1100 - 13`) 끝이 시작보다 앞서거나 앞 쿼터와 겹치면 `LayoutError`입니다. 형광펜이 없는 convener 이름과 Stream 머리글은 관례 색(Convener 1·Stream 2 green, Convener 2·Stream 3 cyan)입니다.
-  채운 것은 "Additional information"의 `Filled in from earlier Session Plans`에 한 문장씩 적고, 빌드 알림(`SA2: Session Plan read by convention`)으로 회의·문장마다 한 번 알립니다.
+  채운 것은 "Additional information"의 `Filled in from earlier Session Plans`에 한 문장씩 적습니다. 적어 둔 관례를 따른 것이라 빌드 알림(이슈)은 만들지 않습니다.
   #178 첫 판은 이 한 칸 때문에 규칙이 양식을 알아보지 못해 문서 전체가 LLM으로 갔고, LLM은 11:00 쿼터를 모두 빼고 답했습니다(아래 LLM 폴백).
 - 방 이름은 방 표의 순서(`Main Room | B2 … | Breakout 1 | …`)로 Stream에 붙입니다: `Main`, `Breakout 1`, `Breakout 2`.
   이름 다음 칸이 장소이고, 좌석 수(`[300]`, #178 `Palomino E-H (300)`, #164 `- 105 pax`)는 뺍니다(`(Floor 2)`는 남습니다). 팝업 Room 줄은 장소와 Stream 번호를 붙여 `Room: Breakout 1 · B3 (Floor 2) · Stream 2`입니다.

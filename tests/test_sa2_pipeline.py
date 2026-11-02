@@ -401,13 +401,15 @@ def test_a_document_answer_that_leaves_out_a_session_fails_the_build(tmp_path):
     assert f"cell {missing} names agenda items ['20.6.1'] but no session cites it" in gemini.calls[1]
 
 
-def test_what_the_conventions_filled_in_is_reported_once_per_meeting(tmp_path):
+def test_what_the_conventions_filled_in_is_not_a_build_notice(offline_config, tmp_path, monkeypatch):
+    # Following a written convention is the rules working; the page says it, no issue is opened.
     from shared import notices
-    document = {'filled': ['Q2 is written "1100 - 12" in the Session Plan. This page reads it as 11:00–12:30, '
-                           'Q2 of earlier SA2 Session Plans.']}
-    pipeline.report_filled(document, 'sa2#178', 'S2-261nnnn_SA2-178-Session Plan.zip')
-    pipeline.report_filled(document, 'sa2#178', 'S2-2611111_SA2-178-Session Plan - r1.docx')
-    [notice] = notices.read()
-    assert notice['title'] == 'SA2: Session Plan read by convention' and notice['kind'] == 'convention'
-    assert notice['lines'][:3] == ['Meeting: sa2#178', 'Source: S2-261nnnn_SA2-178-Session Plan.zip',
-                                   document['filled'][0]]
+    name = 'S2-261nnnn_SA2-178-Session Plan.docx'
+    local = tmp_path / name
+    local.write_bytes((FIXTURES / name).read_bytes())
+    offline_config['local_agenda'] = None
+    offline_config['meetings'] = {'178': {'starts_on': '2026-11-16', 'ends_on': '2026-11-20',
+                                          'timezone': 'America/Edmonton'}}
+    schedule = pipeline.build_schedule(SimpleNamespace(local=str(local), output_dir=tmp_path / 'out'))
+    assert any(b.get('text') == 'Filled in from earlier Session Plans' for b in schedule.supplements)
+    assert notices.read() == []

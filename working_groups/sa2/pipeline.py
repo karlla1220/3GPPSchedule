@@ -6,14 +6,13 @@ Rules read the plan; Gemini is the fallback for what they are unsure about
 from __future__ import annotations
 
 from datetime import date, datetime
-import hashlib
 from pathlib import Path
 import shutil
 from zoneinfo import ZoneInfo
 
 import httpx
 
-from shared import notices, officials, timezones
+from shared import officials, timezones
 from shared.agenda import agenda_map
 from shared.agenda_labels import infer_for_schedule
 from shared.llm_cells import gemini_request, has_key
@@ -72,19 +71,6 @@ def chair_names(labels, cfg, meeting: str, starts_on: str, previous: dict, offli
         except (httpx.HTTPError, ValueError) as exc:
             print(f'[sa2] Officials unavailable ({exc}); keeping convener names as last built or written')
     return {label: saved.get(label, label) for label in labels}
-
-
-def report_filled(document: dict, meeting: str, source: str) -> None:
-    """Tell the owner what the plan left unclear and the conventions filled in (conventions.py).
-
-    Once per meeting and sentence: a later revision that still writes "1100 - 12" is not reported again.
-    """
-    for text in document.get('filled', []):
-        key = hashlib.sha256(text.encode()).hexdigest()[:16]
-        notices.add('sa2', 'convention', f'sa2:convention:{meeting}:{key}', 'SA2: Session Plan read by convention',
-                    [f'Meeting: {meeting}', f'Source: {source}', text,
-                     'Compare the page with the source. If the plan meant something else, correct '
-                     'working_groups/sa2/conventions.json and CONVENTIONS.md.'])
 
 
 def llm_request(cfg, request=None):
@@ -159,7 +145,6 @@ def build_schedule(options=None, *, request=None):
     infer_for_schedule(schedule, 'sa2', 'SA2', agenda, enabled=not offline and request is not None)
     # No checkpoint before parsing and rendering both succeed.
     generate_html(schedule)
-    report_filled(document, meeting, plan['name'])
     state = {k: v for k, v in bundle.manifest.items() if k != 'portal_metadata'}
     llm = (refine.summary if refine else {'model': cfg['model'], 'document': True} if prebuilt
            else {'used': False})

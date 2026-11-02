@@ -8,7 +8,8 @@ is not guessed. The values are in conventions.json and the history behind
 them in CONVENTIONS.md.
 
 Each use is described in a sentence (the document's ``filled``), which the
-page shows below the grid and the build reports to the repository owner.
+page shows below the grid. It is no build notice: following a written
+convention is the rules working, not the plan changing its layout.
 """
 from __future__ import annotations
 
