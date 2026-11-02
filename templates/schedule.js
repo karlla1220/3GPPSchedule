@@ -977,7 +977,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
         function applyFilter() {
             var hasFilter = activeAIs.size > 0 || activeSessions.size > 0 || activeNoAISessions.size > 0;
-            document.documentElement.classList.toggle('filtering', hasFilter);
             // Derive session keys for sessions whose ALL AIs (+ noAI) are active.
             // This ensures blocks without data-ai still match when the
             // session (or parent group) checkbox is fully checked.
