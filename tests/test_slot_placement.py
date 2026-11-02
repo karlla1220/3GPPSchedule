@@ -217,6 +217,18 @@ def test_source_cell_problems():
     assert "do not cover 201" in problems[2]
 
 
+def test_vice_chair_cell_alone_is_not_enough_where_main_has_a_cell():
+    vice = SlotSource(label="Sorour's schedule", entries=[
+        _cell("cvice0", ["Room A"], "Sorouri (60) / .10.7.1 (30) / .9.4 (30)", 0)])
+    slot = _slot(_tuesday_cells(), extra_sources=[vice])
+    _, alias_to_name = build_room_aliases(ROOMS)
+    parsed = {"sessions": [_s("RAN1_off2", "9.4 NTN-NR", 30, ["cvice0"])]}
+    problems = source_cell_problems(parsed, slot, ROOMS, alias_to_name)
+    assert problems == ["session 1 '9.4 NTN-NR' in RAN1_off2: name the Main Schedule cell of 203 as well"]
+    parsed["sessions"][0]["source_cells"] = ["coff20", "cvice0"]
+    assert source_cell_problems(parsed, slot, ROOMS, alias_to_name) == []
+
+
 def test_prompt_heads_each_cell_with_its_id():
     slot = _slot(_tuesday_cells())
     name_to_alias, _ = build_room_aliases(ROOMS)

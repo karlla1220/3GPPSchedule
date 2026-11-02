@@ -219,6 +219,9 @@ Main Schedule cell that holds it and every vice-chair cell whose text you used
 for it. Never leave source_cells empty and never invent an id.
 
 - A session from a Main Schedule cell stays in that cell's rooms.
+- Where the Main Schedule has a cell for the session's room, source_cells
+  includes that Main Schedule cell, even when the detail comes from a
+  vice-chair cell.
 - A multi-room session written in several cells (e.g. "Early dinner (60)" in
   the online table and again in the offline table) lists every one of them.
 - Session times are worked out in code from where these cells sit in the

@@ -1107,6 +1107,12 @@ def source_cell_problems(
     (the Main Schedule decides what goes in each room).
     """
     entries = _slot_entries(slot)
+    main_covered = {
+        name
+        for label, entry in entries.values()
+        if label == "Main Schedule"
+        for name in getattr(entry, "room_names", ())
+    }
     problems = []
     for index, sd in enumerate(parsed.get("sessions") or []):
         label = f"session {index + 1} '{sd.get('name', '')}' in {sd.get('room_name', '')}"
@@ -1124,9 +1130,18 @@ def source_cell_problems(
             if entries[cell_id][0] == "Main Schedule"
             for name in getattr(entries[cell_id][1], "room_names", ())
         }
+        _, _, room_indices = _session_rooms(sd.get("room_name", ""), day_rooms, alias_to_name)
+        names = {day_rooms[i].name for i in room_indices if i < len(day_rooms)}
+        if not main_rooms:
+            # Vice-chair tables are placed by content and their rows need not
+            # match the Main Schedule; where the Main Schedule has a cell for
+            # the room, the session is placed by that cell.
+            covering = sorted(names & main_covered)
+            if covering:
+                problems.append(
+                    f"{label}: name the Main Schedule cell of {', '.join(covering)} as well"
+                )
         if main_rooms:
-            _, _, room_indices = _session_rooms(sd.get("room_name", ""), day_rooms, alias_to_name)
-            names = {day_rooms[i].name for i in room_indices if i < len(day_rooms)}
             outside = sorted(names - main_rooms)
             if outside:
                 problems.append(
