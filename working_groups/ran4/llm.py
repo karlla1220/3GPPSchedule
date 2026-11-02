@@ -16,8 +16,9 @@ rule as for the rules' reading.
 
 A file whose layout breaks the rules (a table slide with no weekday title, no
 time column) is read whole from ``shared.office_outline`` blocks. That answer
-cites block ids and is checked against the slides' text the same way; when it
-fails, the build fails and the last page stays (``read_document``).
+cites block ids and is checked against the slides' text the same way, and a
+session's times are held to its own row and cells; when it fails, the build
+fails and the last page stays (``read_document``).
 """
 from __future__ import annotations
 
@@ -31,8 +32,8 @@ from shared import llm_cells, office_outline
 from shared.llm_cells import check_times, citation_errors, gemini_request, title_errors, written_errors
 from shared.officials import join_chairs, split_chairs
 from shared.schedule import MIN_PART_MINUTES, time_to_minutes
-from .document import DAYS, TITLE, LayoutError, clock, file_info, meeting_id, read_core, room_info
-from .sessions import (DASH_MARK, PROSE_TIME, RANGE_LINE, RANGE_PAREN, START_AT, UNTIL, Part,
+from .document import DAYS, TITLE, LayoutError, clock, file_info, meeting_id, read_core, read_slot, room_info
+from .sessions import (DASH_MARK, LIST_HEAD, PROSE_TIME, RANGE_LINE, RANGE_PAREN, START_AT, UNTIL, Part,
                        build_session, coffee_break, end_of_meeting, resolve_overlaps)
 from .sources import CACHE
 
@@ -265,13 +266,79 @@ def _minutes(value: str) -> int:
     return 24 * 60 if value == 'EOM' else time_to_minutes(value)
 
 
-def check_document(result: DocResult, texts: dict[str, str]) -> list[str]:
+def row_times(blocks: list[dict]) -> dict[str, set[str]]:
+    """The times of each table cell's rows, by cell id: {"08:00", "10:30"}, with
+    "EOM" for "14:00-EOM". A cell spanning rows has the times of them all.
+
+    A row's time is its leftmost one-line cell that reads as a time block; a
+    cell in a block can hold such a line too, but the time column comes first.
+    A row with no such cell gets no entry: the layout broke, so the row's time
+    is unknown, not wrong.
+    """
+    found = {}
+    for slide in blocks:
+        for shape in slide.get('shapes', []):
+            rows = shape.get('rows') or []
+            times = []
+            for cells in rows:
+                slots = (slot_of(cell['text']) for cell in cells)
+                times.append(next((slot for slot in slots if slot), None))
+            for r, cells in enumerate(rows):
+                for cell in cells:
+                    if cell.get('merged'):
+                        continue
+                    covered = [t for t in times[r:r + cell.get('rowspan', 1)] if t]
+                    if covered:
+                        found[cell['id']] = set().union(*covered)
+    return found
+
+
+def slot_of(text: str) -> set[str] | None:
+    if '\n' in text.strip():
+        return None
+    try:
+        slot = read_slot(text)
+    except ValueError:
+        return None
+    return {slot[0], slot[1] or 'EOM'} if slot else None
+
+
+def row_errors(prefix: str, session: DocSession, texts: dict[str, str], rows: dict[str, set[str]]) -> list[str]:
+    """A session's times are its row's or written in the cells it cites: a time in
+    another cell belongs to that cell ("Return to (start at 8:30)" beside a
+    block from 8:00). A session held in a break is checked against the break."""
+    if session.in_break or any(ref not in rows for ref in session.refs):
+        return []
+    own = set().union(*(rows[ref] for ref in session.refs))
+    cells = [texts[ref] for ref in session.refs]
+    written = written_times('\n'.join(cells).split('\n'))
+    if any(re.search(r'\bEOM\b', cell) for cell in cells):
+        written.add('EOM')
+    return [f'{prefix}: {value} is neither the time of its row ({" ".join(sorted(own))}) nor written in '
+            f'{" ".join(session.refs)}: a time written in another cell applies to that cell only, so use '
+            f'the row\'s time or a time written in this cell; if this session is held in the break after '
+            f'the block, set in_break'
+            for value in dict.fromkeys((session.start, session.end)) if value not in own | written]
+
+
+def line_hint(prefix: str, session: DocSession, texts: dict[str, str]) -> str:
+    """The cell's lines by number. Blank lines count, and a miscount cites the
+    wrong line: without the numbers, the answer has nothing to correct it by."""
+    lines = texts[session.refs[0]].split('\n')
+    numbered = ' | '.join(f'{i}: {line.strip() or "(blank)"}' for i, line in enumerate(lines))
+    return (f'{prefix}: line_numbers {session.line_numbers} may be miscounted: every line counts, blank ones too, '
+            f'and {session.refs[0]} has {numbered}')
+
+
+def check_document(result: DocResult, texts: dict[str, str], rows: dict[str, set[str]]) -> list[str]:
     """Problems of a whole-document answer against the slides' text.
 
     Times, room and break names, titles, topic numbers and chairs are written
-    in the source; a session cites the cells it comes from, and cells shared
-    by several sessions are split by line numbers; pieces (part = [k, n]) are
-    blank-line groups of one cell; sessions in one room do not overlap.
+    in the source; a session's times are its row's or written in the cells it
+    cites (``rows`` from ``row_times``); a session cites the cells it comes
+    from, and cells shared by several sessions are split by line numbers;
+    pieces (part = [k, n]) are blank-line groups of one cell, and a candidate
+    list is not one (DECISIONS.md R1); sessions in one room do not overlap.
     """
     errors = []
     source = '\n'.join(texts.values())
@@ -317,10 +384,14 @@ def check_document(result: DocResult, texts: dict[str, str]) -> list[str]:
             continue
         for ref in s.refs:
             cited_by.setdefault(ref, []).append(n)
+        errors += row_errors(prefix, s, texts, rows)
         text = '\n'.join(cited_lines(s, texts))
-        errors += title_errors(prefix, s.title, text)
-        errors += written_errors(prefix, s.topics, spelled_topics(text), 'topic number')
-        errors += written_errors(prefix, split_chairs(s.chair), text, 'chair')
+        wrong = title_errors(prefix, s.title, text)
+        wrong += written_errors(prefix, s.topics, spelled_topics(text), 'topic number')
+        wrong += written_errors(prefix, split_chairs(s.chair), text, 'chair')
+        if wrong and s.line_numbers is not None:
+            wrong.append(line_hint(prefix, s, texts))
+        errors += wrong
         if s.in_break and not any((b.start, b.end) == (s.start, s.end) for b in day.breaks):
             errors.append(f'{prefix}: a session held in a break takes that break\'s times')
         key = (s.day, s.start, s.end, tuple(sorted(s.room_ids)))
@@ -329,6 +400,11 @@ def check_document(result: DocResult, texts: dict[str, str]) -> list[str]:
             if len(s.part) != 2 or not 1 <= k <= n_parts or n_parts < 2:
                 errors.append(f'{prefix}: part must be [k, n] with 1 <= k <= n and n >= 2')
                 continue
+            head = next(iter(without_times(cited_lines(s, texts))), '')
+            if LIST_HEAD.match(head):
+                errors.append(f'{prefix}: {head!r} heads a candidate list, which is not a piece: give the block '
+                              'one session with part null that cites these lines and the lines before them, '
+                              'even across blank lines')
             blocks.setdefault(key, []).append(n)
         else:
             placed.append((key, [n]))
@@ -410,6 +486,7 @@ def read_document(data: bytes, name: str, model: str, request=None, cache_dir: P
     except (zipfile.BadZipFile, KeyError, ValueError) as exc:
         raise LayoutError(f'{name} cannot be outlined for the LLM: {exc}') from exc
     texts = {key: text for key, text in office_outline.texts(blocks).items() if text.strip()}
+    rows = row_times(blocks)
     info = file_info(name)
     titled = next((TITLE.search(t) for t in texts.values() if TITLE.search(t)), None)
     meeting = info[0] if info else meeting_id(titled[1], titled[2]) if titled else None
@@ -417,7 +494,7 @@ def read_document(data: bytes, name: str, model: str, request=None, cache_dir: P
         raise ValueError('Cannot tell the RAN4 meeting from the file name or the slides')
     prompt = (PROMPTS / 'document.md').read_text(encoding='utf-8')
     try:
-        result = llm_cells.read_document(prompt, blocks, DocResult, lambda r: check_document(r, texts), model=model,
+        result = llm_cells.read_document(prompt, blocks, DocResult, lambda r: check_document(r, texts, rows), model=model,
                                          cache_dir=cache_dir, wg_id='ran4', source=name, meeting=meeting,
                                          request=request or gemini_request, version=VERSION)
     except ValueError as exc:
