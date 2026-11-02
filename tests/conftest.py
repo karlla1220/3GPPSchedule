@@ -1,12 +1,27 @@
+import ftplib
+
 import pytest
 
 from shared import meeting_folders, remote_files
+
+
+class NothingOverFtp:
+    """3GPP's FTP server where nothing exists; a mock server's 403 is then a missing path."""
+
+    def __init__(self, *args, **kwargs): pass
+    def login(self): pass
+    def quit(self): pass
+    def close(self): pass
+    def voidcmd(self, cmd): return '200 OK'
+    def cwd(self, path): raise ftplib.error_perm('550 The system cannot find the file specified.')
+    size = cwd
 
 
 @pytest.fixture(autouse=True)
 def fresh_listings(tmp_path, monkeypatch):
     """Each test sees its own mock server, not listings an earlier test fetched."""
     remote_files.new_run()
+    monkeypatch.setattr(ftplib, 'FTP', NothingOverFtp)
     # Nor meeting folders an earlier test (or a local build) found.
     monkeypatch.setattr(meeting_folders, 'CACHE_PATH', tmp_path / 'meeting-folders.json')
     # Never record found folders in the repository's config.json.
