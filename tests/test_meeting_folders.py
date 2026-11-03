@@ -8,12 +8,16 @@ import pytest
 from shared import meeting_folders, remote_files
 from working_groups.ran1 import config as ran1_config
 
+
+def noon(day):
+    return datetime.fromisoformat(f'{day}T12:00:00+00:00')
+
 WG1 = 'https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/'
 WG2 = 'https://www.3gpp.org/ftp/tsg_ran/WG2_RL2/'
 NOW = datetime(2026, 10, 11, 12, tzinfo=timezone.utc)
 
 
-@pytest.fixture(autouse=True)
+@pytest.fixture
 def no_ftp(monkeypatch):
     """A real failure goes to FTP, which is unreachable here."""
     def fail(url, **kwargs):
@@ -57,6 +61,36 @@ def test_candidate_names_spell_bis_both_ways():
     assert meeting_folders.folder_key('ran-plenary', 'TSGR_88e') == 'ran#88'
     assert meeting_folders.folder_key('ran2', 'Invitation') is None
     assert meeting_folders.folder_key('ran2', 'TSGR1_126') is None
+
+
+def test_ran3_ran4_and_sa_folder_names():
+    assert meeting_folders.candidate_names('ran3', 'ran3#133bis') == ['TSGR3_133-bis', 'TSGR3_133bis']
+    assert meeting_folders.candidate_names('ran4', 'ran4#120bis') == ['TSGR4_120bis', 'TSGR4_120b']
+    for wg, name, key in [('ran3', 'TSGR3_133-bis', 'ran3#133bis'), ('ran3', 'TSGR3_101bis', 'ran3#101bis'),
+                          ('ran3', 'TSGR3_107_e', 'ran3#107'), ('ran3', 'TSGR3_114bis-e', 'ran3#114bis'),
+                          ('ran4', 'TSGR4_101-bis-e', 'ran4#101bis'), ('ran4', 'TSGR4_94Bis', 'ran4#94bis'),
+                          ('sa1', 'TSGS1_116_Calgary', 'sa1#116'), ('sa1', 'TSGS1_107bis_online', 'sa1#107bis'),
+                          ('sa2', 'TSGS2_177_Prague_2026-10', 'sa2#177')]:
+        assert meeting_folders.folder_key(wg, name) == key, name
+    # Ad hoc folders are no regular meeting; RAN names do not run on.
+    for wg, name in [('sa1', 'TSGS1_112-Ad_Hoc-e'), ('sa2', 'TSGS2_175-AH-e_Electronic_2026-06'),
+                     ('sa2', 'TSGS2_154AHE_Electronic'), ('ran1', 'TSGR1_126_Prague')]:
+        assert meeting_folders.folder_key(wg, name) is None, name
+    # SA names carry the venue, so none can be built from the meeting id.
+    assert meeting_folders.candidate_names('sa2', 'sa2#178') == []
+
+
+def test_sa_folder_comes_from_portal_or_the_root_listing():
+    sa2 = 'https://www.3gpp.org/ftp/tsg_sa/WG2_Arch/'
+    rows = [row('3GPPSA1#116', '2026-11-16', '2026-11-20',
+                'https://www.3gpp.org/ftp//tsg_sa/WG1_Serv/TSGS1_116_Calgary/', tb=384)]
+    seen = []
+    assert resolve('sa1', ['sa1#116'], {}, seen, rows=rows) == {
+        'sa1#116': 'https://www.3gpp.org/ftp/tsg_sa/WG1_Serv/TSGS1_116_Calgary/'}
+    assert seen == []
+    listing = {sa2: ['TSGS2_175-AH-e_Electronic_2026-06/', 'TSGS2_178_Calgary_2026-11/']}
+    assert resolve('sa2', ['sa2#178'], listing, seen) == {'sa2#178': sa2 + 'TSGS2_178_Calgary_2026-11/'}
+    assert seen == [sa2]
 
 
 def test_portal_mtgdocurl_needs_no_request():
@@ -137,6 +171,7 @@ def test_override_wins_over_portal_and_cache():
     assert seen == []
 
 
+@pytest.mark.usefixtures('no_ftp')
 def test_a_real_failure_is_not_absence():
     remote_files.new_run()
     with server({}, [], status=500) as http, pytest.raises(httpx.HTTPError):
@@ -155,18 +190,18 @@ def test_ran1_lists_the_next_meeting_and_the_built_one(tmp_path, monkeypatch):
             row('3GPPRAN1#128', '2027-02-08', '2027-02-12', tb=379)]
     seen = []
     with server({WG1 + 'TSGR1_127/': ['Inbox/'], WG1 + 'TSGR1_126b/': ['Inbox/']}, seen) as http:
-        found = ran1_config.with_meeting_folders(cfg, 'ran1#126bis', rows=rows, today='2026-10-20', http=http)
-    # The next meeting (by name; Portal has no URL yet) and the built one; not RAN1#128.
-    assert found['agenda_urls'] == [WG1 + 'TSGR1_127/Agenda/', WG1 + 'TSGR1_126b/Agenda/']
+        found = ran1_config.with_meeting_folders(cfg, 'ran1#126bis', rows=rows, now=noon('2026-10-20'), http=http)
+    # The built one and the next (by name; Portal has no URL yet); not RAN1#128.
+    assert found['agenda_urls'] == [WG1 + 'TSGR1_126b/Agenda/', WG1 + 'TSGR1_127/Agenda/']
     assert found['inbox_urls'] == [ran1_config.DEFAULT_MEETING_SYNC + 'Inbox/',
-                                   WG1 + 'TSGR1_127/Inbox/', WG1 + 'TSGR1_126b/Inbox/']
+                                   WG1 + 'TSGR1_126b/Inbox/', WG1 + 'TSGR1_127/Inbox/']
     assert WG1 not in seen
-    assert found['meeting_specific'] == [WG1 + 'TSGR1_127/', WG1 + 'TSGR1_126b/']
+    assert found['meeting_specific'] == [WG1 + 'TSGR1_126b/', WG1 + 'TSGR1_127/']
     # An override wins for its meeting and is not recorded as found.
     path.write_text('{"meeting_specific_override": ["https://example.org/TSGR1_127/"]}')
     found = ran1_config.with_meeting_folders(ran1_config.load_config(path), None, rows=rows,
-                                             today='2026-10-20', http=None)
-    assert found['agenda_urls'] == ['https://example.org/TSGR1_127/Agenda/']
+                                             now=noon('2026-10-20'), http=None)
+    assert found['agenda_urls'] == ['https://example.org/TSGR1_127/Agenda/', WG1 + 'TSGR1_126/Agenda/']
     # Offline: the recorded folder of the overridden meeting is not read either.
     path.write_text(json.dumps({'meeting_specific': [WG1 + 'TSGR1_127/', WG1 + 'TSGR1_126b/'],
                                 'meeting_specific_override': ['https://example.org/TSGR1_127/']}))
@@ -177,6 +212,7 @@ def test_ran1_lists_the_next_meeting_and_the_built_one(tmp_path, monkeypatch):
     assert ran1_config.load_config(path)['agenda_urls'] == [WG1 + 'TSGR1_126b/Agenda/']
 
 
+@pytest.mark.usefixtures('no_ftp')
 def test_ran1_keeps_the_sync_folder_when_the_lookup_fails(tmp_path, monkeypatch):
     monkeypatch.delenv('SCHEDULE_MEETING_SPECIFIC', raising=False)
     monkeypatch.delenv('SCHEDULE_MEETING_SPECIFIC_OVERRIDE', raising=False)
@@ -185,7 +221,7 @@ def test_ran1_keeps_the_sync_folder_when_the_lookup_fails(tmp_path, monkeypatch)
     cfg = ran1_config.load_config(path)
     remote_files.new_run()
     with server({}, [], status=500) as http:
-        found = ran1_config.with_meeting_folders(cfg, 'ran1#126bis', rows=[], today='2026-10-20', http=http)
+        found = ran1_config.with_meeting_folders(cfg, 'ran1#126bis', rows=[], now=noon('2026-10-20'), http=http)
     assert found['inbox_urls'] == cfg['inbox_urls'] and found['agenda_urls'] == []
 
 

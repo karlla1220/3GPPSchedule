@@ -7,7 +7,8 @@ In order, a meeting's folder is:
 1. the WG's ``meeting_specific_override`` entry for it (set by hand),
 2. Portal's ``MtgDocURL`` (already fetched once per run, no request),
 3. the WG's ``meeting_specific``, which records what earlier runs found,
-4. the first candidate name that lists (``TSGR1_126b``; one request each),
+4. the first candidate name that lists (``TSGR1_126b``; one request each;
+   none for SA, whose folder names carry the venue),
 5. the WG root listing (several hundred entries), at most every ROOT_EVERY.
 
 Each run writes the folders it found to ``meeting_specific`` in the WG's
@@ -33,7 +34,8 @@ from bs4 import BeautifulSoup
 import httpx
 
 from shared import remote_files
-from shared.portal_meetings import TB_IDS, meeting_key
+from shared.json_files import read_json, write_json
+from shared.portal_meetings import TB_IDS, meeting_key, timezone_reference
 
 # When the root was last listed for a meeting not found (not worth committing).
 CACHE_PATH = Path('.cache/meeting-folders.json')
@@ -41,20 +43,33 @@ ROOT_EVERY = timedelta(hours=6)
 CONFIG_PATHS = {
     'ran1': Path('working_groups/ran1/config.json'),
     'ran2': Path('working_groups/ran2/config.json'),
+    'ran3': Path('working_groups/ran3/config.json'),
+    'ran4': Path('working_groups/ran4/config.json'),
     'ran-plenary': Path('working_groups/ran_plenary/config.json'),
+    'sa1': Path('working_groups/sa1/config.json'),
+    'sa2': Path('working_groups/sa2/config.json'),
 }
 # This run's folders by WG and meeting (overrides excluded), and the lists
 # it wrote to meeting_specific. The CI check reports a written list as a
 # reason to build and hands it to the build job, which commits it.
 _FOUND = {}
 _WRITTEN = {}
-# Archive root, folder prefix and the spellings of "bis" in folder names, in
-# the order they are tried. RAN2 used both (TSGR2_133b, TSGR2_135bis).
+# Archive root, folder prefix, the spellings of "bis" in folder names in the
+# order they are tried, and whether names go on past the meeting. RAN2 used
+# both b and bis (TSGR2_133b, TSGR2_135bis); RAN3 writes TSGR3_133-bis.
+# SA names add the venue (TSGS1_116_Calgary, TSGS2_177_Prague_2026-10), so a
+# name cannot be built from the meeting id: Portal, the record or the root
+# listing finds it.
 WGS = {
-    'ran1': ('https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/', 'TSGR1_', ('b', 'bis')),
-    'ran2': ('https://www.3gpp.org/ftp/tsg_ran/WG2_RL2/', 'TSGR2_', ('bis', 'b')),
-    'ran-plenary': ('https://www.3gpp.org/ftp/tsg_ran/TSG_RAN/', 'TSGR_', ('bis', 'b')),
+    'ran1': ('https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/', 'TSGR1_', ('b', 'bis'), False),
+    'ran2': ('https://www.3gpp.org/ftp/tsg_ran/WG2_RL2/', 'TSGR2_', ('bis', 'b'), False),
+    'ran3': ('https://www.3gpp.org/ftp/tsg_ran/WG3_Iu/', 'TSGR3_', ('-bis', 'bis'), False),
+    'ran4': ('https://www.3gpp.org/ftp/tsg_ran/WG4_Radio/', 'TSGR4_', ('bis', 'b'), False),
+    'ran-plenary': ('https://www.3gpp.org/ftp/tsg_ran/TSG_RAN/', 'TSGR_', ('bis', 'b'), False),
+    'sa1': ('https://www.3gpp.org/ftp/tsg_sa/WG1_Serv/', 'TSGS1_', (), True),
+    'sa2': ('https://www.3gpp.org/ftp/tsg_sa/WG2_Arch/', 'TSGS2_', (), True),
 }
+_TSG = {'TSGR': 'ran', 'TSGS': 'sa'}
 
 
 def root_url(wg_id):
@@ -64,22 +79,24 @@ def root_url(wg_id):
 def folder_key(wg_id, name):
     """The meeting id a folder name stands for: TSGR2_133b -> ran2#133bis.
 
-    E-meeting folders carry a suffix (TSGR1_104-e, TSGR_88e) and still name
-    the meeting.
+    E-meeting folders carry a suffix (TSGR1_104-e, TSGR_88e, TSGR3_107_e,
+    TSGR4_101-bis-e) and still name the meeting. SA names go on with the
+    venue (TSGS2_177_Prague_2026-10 -> sa2#177); an ad hoc folder
+    (TSGS2_175-AH-e_Electronic, TSGS1_112-Ad_Hoc-e) is no regular meeting.
     """
-    prefix = WGS[wg_id][1]
-    match = re.fullmatch(re.escape(prefix) + r'(\d+)(bis|b)?(?:-?e)?/?', name, re.I)
+    prefix, named = WGS[wg_id][1], WGS[wg_id][3]
+    venue = r'(?:_[^/]*)?' if named else ''
+    match = re.fullmatch(re.escape(prefix) + r'(\d+)(?:-?(bis|b))?(?:[-_]?e)?' + venue + '/?', name, re.I)
     if not match:
         return None
-    wg = prefix[4:-1]
-    return f'ran{wg}#{match[1]}{"bis" if match[2] else ""}'
+    return f'{_TSG[prefix[:4]]}{prefix[4:-1]}#{match[1]}{"bis" if match[2] else ""}'
 
 
 def candidate_names(wg_id, meeting):
-    match = re.fullmatch(r'ran\d?#(\d+)(bis)?', meeting or '')
-    if not match:
+    match = re.fullmatch(r'(?:ran|sa)\d?#(\d+)(bis)?', meeting or '')
+    _, prefix, spellings, named = WGS[wg_id]
+    if not match or named:
         return []
-    prefix, spellings = WGS[wg_id][1], WGS[wg_id][2]
     if not match[2]:
         return [f'{prefix}{match[1]}']
     return [f'{prefix}{match[1]}{suffix}' for suffix in spellings]
@@ -90,11 +107,15 @@ def _folder(url):
 
 
 def _archive_url(url):
-    """Portal writes ftp.3gpp.org; the rest of the site reads www.3gpp.org/ftp."""
+    """Portal writes ftp.3gpp.org; the rest of the site reads www.3gpp.org/ftp.
+
+    SA rows double a slash (https://www.3gpp.org/ftp//tsg_sa/WG1_Serv/...).
+    """
     parts = urlsplit(url)
+    path = re.sub(r'/{2,}', '/', parts.path)
     if parts.hostname == 'ftp.3gpp.org':
-        return 'https://www.3gpp.org/ftp' + parts.path
-    return url
+        return 'https://www.3gpp.org/ftp' + path
+    return parts._replace(path=path).geturl()
 
 
 def _in_archive(wg_id, url, root):
@@ -124,6 +145,22 @@ def portal_key(row):
     return meeting_key(re.sub(r'^3GPP\s+', '3GPP', str(row.get('Title') or '').strip()))
 
 
+def portal_metadata(rows: list[dict], meeting: str) -> dict | None:
+    """Dates, place and time zone of a meeting from its single Portal row."""
+    matches = [row for row in rows if portal_key(row) == meeting]
+    if len(matches) != 1:
+        return None
+    row = matches[0]
+    reference = timezone_reference(row) or {}
+    metadata = {'starts_on': row['StartDate'][:10], 'ends_on': row['EndDate'][:10],
+                'location': row.get('Location') or '', 'country': row.get('Country') or '',
+                'portal_timezone': row.get('StartTimeZone') or '', 'portal_id': row.get('Id')}
+    for key in ('timezone', 'starts_at', 'ends_at', 'starts_on', 'ends_on'):
+        if reference.get(key):
+            metadata[key] = reference[key]
+    return metadata
+
+
 def wg_rows(wg_id, rows):
     return [row for row in rows or [] if row.get('TBId') == TB_IDS[wg_id]]
 
@@ -141,16 +178,6 @@ def portal_folders(wg_id, rows, root=None):
     return found
 
 
-def upcoming(wg_id, rows, today):
-    """Meetings that have not ended (by Portal EndDate), earliest first."""
-    dated = []
-    for row in wg_rows(wg_id, rows):
-        key = portal_key(row)
-        if key and str(row.get('StartDate') or '') and str(row.get('EndDate') or '')[:10] >= today:
-            dated.append((row['StartDate'][:10], key))
-    return [key for _, key in sorted(set(dated))]
-
-
 def new_run():
     _FOUND.clear()
     _WRITTEN.clear()
@@ -164,22 +191,6 @@ def written(wg_id):
 def updates(wg_id):
     folders = written(wg_id)
     return [] if folders is None else [f'meeting folders now {", ".join(folders) or "none"}']
-
-
-def _read_json(path):
-    try:
-        value = json.loads(Path(path).read_text(encoding='utf-8'))
-        return value if isinstance(value, dict) else {}
-    except (OSError, ValueError):
-        return {}
-
-
-def _write_json(path, value):
-    path = Path(path)
-    path.parent.mkdir(parents=True, exist_ok=True)
-    temporary = path.with_suffix('.tmp')
-    temporary.write_text(json.dumps(value, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
-    temporary.replace(path)
 
 
 def write(wg_id, folders):
@@ -196,7 +207,7 @@ def write(wg_id, folders):
     if not isinstance(config, dict) or config.get('meeting_specific') == folders:
         return False
     config['meeting_specific'] = folders
-    _write_json(path, config)
+    write_json(path, config)
     print(f'[{wg_id}] Recorded meeting_specific: {folders}')
     return True
 
@@ -245,7 +256,7 @@ def resolve(wg_id, meetings, *, rows=None, override=(), recorded=(), root=None, 
     manual, portal = overrides(wg_id, override), portal_folders(wg_id, rows, root)
     # A recorded folder under another archive_url is stale.
     known = {k: v for k, v in overrides(wg_id, recorded).items() if v.startswith(root)}
-    cache = _read_json(CACHE_PATH)
+    cache = read_json(CACHE_PATH)
     root_listed = cache.setdefault(wg_id, {}).setdefault('root_listed', {})
     before = json.dumps(cache, sort_keys=True)
     found = _FOUND.setdefault(wg_id, {})
@@ -275,7 +286,7 @@ def resolve(wg_id, meetings, *, rows=None, override=(), recorded=(), root=None, 
         found[meeting] = folder
         result.setdefault(meeting, folder)
     if json.dumps(cache, sort_keys=True) != before:
-        _write_json(CACHE_PATH, cache)
+        write_json(CACHE_PATH, cache)
     if record:
         _record(wg_id)
     return result

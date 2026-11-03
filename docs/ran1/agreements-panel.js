@@ -4,6 +4,19 @@ const manifest = JSON.parse(document.getElementById('agreement-data').textConten
 let latest = null;
 let pending = null;
 let updateSelection = null;
+// The panel's words; a WG other than RAN1 gives its own (SA1: TDoc conclusions).
+const TEXT = {
+    heading: 'Agreements for',
+    select: 'Select a schedule cell to read its agreements here.',
+    unavailable: 'No chairman note is available for this meeting.',
+    loading: 'Loading agreements…',
+    error: 'Could not load this agreement.',
+    missing: 'is not a heading in the chair notes.',
+    subsections: 'Nothing is recorded directly under this item; see its subsections.',
+    empty: 'Nothing is recorded under this item yet.',
+    updated: 'Updated in the latest note',
+    ...(manifest.text || {}),
+};
 
 // Changes are dated in the meeting's time zone, like the schedule.
 const when = iso => {
@@ -515,10 +528,10 @@ async function start() {
         // An item without text is normal (a heading over subsections, or nothing agreed yet).
         const emptyNote = () => {
             const ai = activeAI();
-            if (!entry()) return 'AI ' + ai + ' is not a heading in the chair notes.';
-            if (Object.keys(manifest.sections).some(other => other.startsWith(ai + '.'))) return 'Nothing is recorded directly under this item; see its subsections.';
+            if (!entry()) return 'AI ' + ai + ' ' + TEXT.missing;
+            if (Object.keys(manifest.sections).some(other => other.startsWith(ai + '.'))) return TEXT.subsections;
             if (entry().excluded_tdoc_rows) return 'Only TDoc listings are recorded under this item.';
-            return 'Nothing is recorded under this item yet.';
+            return TEXT.empty;
         };
         const [document, { refetch }] = createResource(activeAI, async ai => {
             controller?.abort();
@@ -565,24 +578,24 @@ async function start() {
         return html`
             <div>
                 <div class="agreement-header">
-                    <h2 id="agreement-title" title=${manifest.document_file ? manifest.document_file + ' · SHA-256 ' + manifest.sha256 : ''}>Agreements for</h2>
+                    <h2 id="agreement-title" title=${manifest.document_file ? manifest.document_file + ' · SHA-256 ' + manifest.sha256 : ''}>${TEXT.heading}</h2>
                     <${Show} when=${() => selection()?.ais.length}>
                         <div class="agreement-tabs" role="tablist" aria-label="Agreement agenda items">
                             <${For} each=${() => selection().ais}>${ai => html`
                                 <button type="button" role="tab" id=${tabID(ai)} aria-controls="agreement-body"
                                     aria-selected=${() => activeAI() === ai ? 'true' : 'false'} tabindex=${() => activeAI() === ai ? 0 : -1}
-                                    onClick=${() => setActiveAI(ai)} onKeyDown=${event => keyTab(event, ai)}>AI ${ai}<${Show} when=${() => updatedNow(ai)}><span class="agreement-updated" title="Updated in the latest note"></span><//></button>`}<//>
+                                    onClick=${() => setActiveAI(ai)} onKeyDown=${event => keyTab(event, ai)}>AI ${ai}<${Show} when=${() => updatedNow(ai)}><span class="agreement-updated" title=${TEXT.updated}></span><//></button>`}<//>
                         </div>
                     <//>
                     ${() => sourceNote(entry())}
                 </div>
-                <p class="agreement-status" role="status" aria-live="polite">${() => !selection() ? 'Select a schedule cell to read its agreements here.' : !selection().ais.length ? 'This cell has no agenda number.' : manifest.status !== 'ready' ? 'No chairman note is available for this meeting.' : document.loading ? 'Loading agreements…' : ''}</p>
+                <p class="agreement-status" role="status" aria-live="polite">${() => !selection() ? TEXT.select : !selection().ais.length ? 'This cell has no agenda number.' : manifest.status !== 'ready' ? TEXT.unavailable : document.loading ? TEXT.loading : ''}</p>
                 <${Show} when=${() => activeAI() && manifest.status === 'ready'}>
                     <section id="agreement-body" role="tabpanel" aria-labelledby=${() => tabID(activeAI())} aria-busy=${() => document.loading ? 'true' : 'false'}>
                         <h3><span class="agreement-ai">${() => 'AI ' + activeAI()}</span>${' '}<span>${() => entry()?.title || ''}</span></h3>
                         <${Show} when=${changeNote}><p class=${() => 'agreement-change' + (entry()?.added ? ' has-added' : '')}>${changeNote}</p><//>
                         <${Show} when=${() => !document.loading}>
-                            <${Show} when=${() => document()?.error}><p>Could not load this agreement. <button type="button" class="agreement-action" onClick=${() => refetch()}>Retry</button></p><//>
+                            <${Show} when=${() => document()?.error}><p>${TEXT.error} <button type="button" class="agreement-action" onClick=${() => refetch()}>Retry</button></p><//>
                             <${Show} when=${() => !document()?.error && !document()?.content}><p class="agreement-note">${emptyNote}</p><//>
                             <${Show} when=${() => document()?.content} keyed=${true}>${content => documentView(content)}<//>
                         <//>

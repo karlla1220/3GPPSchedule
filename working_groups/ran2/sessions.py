@@ -20,8 +20,11 @@ from dataclasses import dataclass, field
 from datetime import date, timedelta
 import re
 
+from shared.agenda import describe, group_label, is_descendant
+from shared.officials import join_chairs
 from shared.schedule import (DaySchedule, RoomInfo, Schedule, Session, Timeline,
                              minutes_to_time, time_to_minutes)
+from shared.titles import clean, unbracketed
 from .document import clock
 
 # A bare clock needs a colon, so "8.10 NR20 MIMO" is never read as 08:10.
@@ -51,7 +54,8 @@ NOT_NAMES = {'Note', 'Notes', 'Main', 'Continue', 'Continued', 'Cont', 'Optional
 @dataclass
 class Line:
     raw: str
-    text: str = ''
+    text: str = ''             # the words, to tell heads from the rest
+    label: str = ''            # the same line as a title shows it
     ais: list[str] = field(default_factory=list)
     lead: bool = False          # starts with an agenda item
     offline: list[str] = field(default_factory=list)
@@ -99,17 +103,6 @@ def expand_range(first: str, last: str) -> list[str]:
     return [f'{prefix}.{n}' if prefix else str(n) for n in range(int(a[-1]), int(b[-1]) + 1)]
 
 
-def clean(text: str) -> str:
-    """Display label: drop qualifiers such as "(if time allows)", keep "(e)RedCap"."""
-    previous = None
-    while previous != text:
-        previous = text
-        text = re.sub(r'\s*\([^()]*\)(?![A-Za-z])', ' ', text)
-    text = re.sub(r'\s*\([^()]*$', ' ', text)
-    text = re.sub(r'\[\s*\]', ' ', text)
-    return ' '.join(text.split()).strip(' ,;:/-–—&.')
-
-
 def analyze(raw: str, chairs: set[str], agenda: dict | None = None) -> Line:
     line = Line(raw)
     text = raw
@@ -151,16 +144,11 @@ def analyze(raw: str, chairs: set[str], agenda: dict | None = None) -> Line:
         if parts and all(p in chairs for p in parts):
             line.chairs.extend(parts)
             return ' '
-        if parts and all(p.lower() in COMPANIES for p in parts):
-            return ' '
         return match[0]
-    line.text = clean(re.sub(r'\(([^()]*)\)', parenthetical, text))
+    text = re.sub(r'\(([^()]*)\)', parenthetical, text)
+    line.text, line.label = unbracketed(text), clean(text)
     line.chairs = list(dict.fromkeys(line.chairs))
     return line
-
-
-def is_descendant(item: str, ancestor: str) -> bool:
-    return item != ancestor and item.startswith(ancestor + '.')
 
 
 # ------------------------------------------------------------------- parts
@@ -241,12 +229,12 @@ def title_and_chair(infos: list[Line]):
         heads.append(info)
         seen.extend(info.ais)
     if heads:
-        title = ' / '.join(h.text for h in heads[:3]) + (' …' if len(heads) > 3 else '')
+        title = ' / '.join(h.label for h in heads[:3]) + (' …' if len(heads) > 3 else '')
     else:
-        title = next((i.text for i in infos if i.text), '')
+        title = next((i.label for i in infos if i.text), '')
     chairs = [c for h in heads for c in h.chairs] or [c for i in infos for c in i.chairs]
     group_item = next((h.ais[0] for h in heads if h.ais), None)
-    return title, ', '.join(dict.fromkeys(chairs)) or None, group_item, bool(heads)
+    return title, join_chairs(chairs), group_item, bool(heads)
 
 
 # Times inside prose use a colon; "[7.10]" is an agenda item, not 07:10.
@@ -390,26 +378,6 @@ def interpret(document: dict, agenda: dict | None = None, refine=None) -> list[d
 
 
 # --------------------------------------------------------------- schedule
-
-def describe(item: str, agenda: dict) -> dict | None:
-    match = item
-    while match not in agenda and '.' in match:
-        match = match.rsplit('.', 1)[0]
-    if match not in agenda:
-        return None
-    parts = match.split('.')
-    path = ['.'.join(parts[:i]) for i in range(1, len(parts) + 1)]
-    return {'agenda_item': item, 'matched_agenda_item': match, 'description': agenda[match],
-            'hierarchy': [{'agenda_item': p, 'description': agenda.get(p)} for p in path]}
-
-
-def group_label(item: str | None, agenda: dict) -> str:
-    if not item:
-        return ''
-    top = item.split('.')[0]
-    description = agenda.get(top)
-    return description.split(' - ')[0].strip() if description else f'AI {top}'
-
 
 def break_name(start: int, end: int, named: list[dict]) -> str:
     best, overlap = 'Break', 0

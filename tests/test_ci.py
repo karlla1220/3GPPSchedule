@@ -1,8 +1,10 @@
 """Fresh-runner lifecycle and deployment decisions without network or credentials."""
+from datetime import datetime, timedelta
 from dataclasses import replace
 import json
 from pathlib import Path
 from types import SimpleNamespace
+from zoneinfo import ZoneInfo
 from unittest.mock import MagicMock
 
 import pytest
@@ -364,14 +366,19 @@ def test_portal_status_transition_renders_root_without_rebuilding_wgs(site, monk
     for wg, identity in [('ran1', 'ran1#126'), ('ran-plenary', 'ran#113')]:
         snapshot = Path('docs') / wg / 'schedule.json'
         save_schedule(replace(load_schedule(snapshot), meeting_id=identity, is_demo=False), snapshot)
-    rows = [{'Id': 2, 'TBId': 373, 'Title': '3GPPRAN#113', 'MeetingPeriod': 'ONGOING'}]
+    today = datetime.now(ZoneInfo('Asia/Seoul')).date()
+    rows = [{'Id': 2, 'TBId': 373, 'Title': '3GPPRAN#113', 'StartTimeZone': '(GMT+09:00) Seoul',
+             'StartDate': f'{today - timedelta(days=1)} 09:00:00', 'EndDate': f'{today + timedelta(days=1)} 17:00:00',
+             # Portal's own classification is ignored; the dates decide.
+             'MeetingPeriod': 'ENDED'}]
     monkeypatch.setattr(ci, 'fetch_site_meetings', lambda: rows)
     plan = ci.check_site()
     assert plan['build_ids'] == [] and plan['render_required']
     assert ci.build_site()['site_changed']
     assert './ran-plenary/' in Path('docs/index.html').read_text()
     assert not ci.check_site()['build_required']
-    rows[0]['MeetingPeriod'] = 'ENDED'
+    rows[0].update(StartDate=f'{today - timedelta(days=9)} 09:00:00', EndDate=f'{today - timedelta(days=5)} 17:00:00',
+                   MeetingPeriod='ONGOING')
     assert ci.check_site()['render_required']
     assert ci.build_site()['site_changed']
     assert './ran1/' in Path('docs/index.html').read_text()

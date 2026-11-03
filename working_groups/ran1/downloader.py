@@ -897,6 +897,7 @@ def download_and_resolve(
 
 def download_latest_schedule(
     dest_dir: Path = DOWNLOADS_DIR / "Chair_notes",
+    locked_meeting_id: str | None = None,
 ) -> Path:
     """Download the latest schedule from 3GPP FTP.
 
@@ -904,7 +905,7 @@ def download_latest_schedule(
     Returns the path to the downloaded (or already existing) document.
     """
     files = list_remote_files()
-    latest = find_latest_schedule(files)
+    latest = find_latest_schedule(files, locked_meeting_id=locked_meeting_id)
 
     if latest is None:
         raise FileNotFoundError("No schedule files found on FTP server")

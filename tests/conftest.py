@@ -1,12 +1,27 @@
+import ftplib
+
 import pytest
 
 from shared import meeting_folders, remote_files
+
+
+class NothingOverFtp:
+    """3GPP's FTP server where nothing exists; a mock server's 403 is then a missing path."""
+
+    def __init__(self, *args, **kwargs): pass
+    def login(self): pass
+    def quit(self): pass
+    def close(self): pass
+    def voidcmd(self, cmd): return '200 OK'
+    def cwd(self, path): raise ftplib.error_perm('550 The system cannot find the file specified.')
+    size = cwd
 
 
 @pytest.fixture(autouse=True)
 def fresh_listings(tmp_path, monkeypatch):
     """Each test sees its own mock server, not listings an earlier test fetched."""
     remote_files.new_run()
+    monkeypatch.setattr(ftplib, 'FTP', NothingOverFtp)
     # Nor meeting folders an earlier test (or a local build) found.
     monkeypatch.setattr(meeting_folders, 'CACHE_PATH', tmp_path / 'meeting-folders.json')
     # Never record found folders in the repository's config.json.
@@ -19,6 +34,19 @@ def fresh_listings(tmp_path, monkeypatch):
     monkeypatch.setattr(email_updates, 'in_meeting', lambda *a, **k: False)
     monkeypatch.setattr(email_updates, 'RECORD_DIR', tmp_path / 'email' / 'docs')
     monkeypatch.setattr(email_updates, 'CACHE_DIR', tmp_path / 'email' / 'cache')
+    # Venue timezones: never the repository's list, never a live LLM call.
+    from shared import timezones
+    monkeypatch.setattr(timezones, 'MAP_PATH', tmp_path / 'timezone_map.jsonl')
+    monkeypatch.setattr(timezones, 'gemini_request', lambda *a, **k: None)
+    # Office outlines come from python-docx in tests, whether or not docx-cli is installed.
+    monkeypatch.setenv('DOCX_CLI', '')
+    # Notices for the build's report go to the test's own folder.
+    from shared import notices
+    monkeypatch.setattr(notices, 'PATH', tmp_path / 'notices.json')
+    # Agenda labels of cells without an AI: never a live LLM call, never the repository's lists.
+    from shared import agenda_labels
+    monkeypatch.setattr(agenda_labels, 'LABEL_MAP_ROOT', tmp_path / 'agenda_label_map')
+    monkeypatch.setattr(agenda_labels, 'gemini_judge', lambda *a, **k: {})
     # RAN1 tests give their own folders; the lookup has its own tests.
     for module in ('check_update', 'pipeline'):
         monkeypatch.setattr(f'working_groups.ran1.{module}.with_meeting_folders', lambda cfg, *a, **k: cfg)

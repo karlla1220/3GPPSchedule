@@ -11,7 +11,7 @@ from pathlib import Path
 from unittest.mock import MagicMock, patch
 
 import working_groups.ran1.slot_state as slot_state
-from working_groups.ran1.merger import SlotSource, SourceEntry, TimeSlotData, _annotate_freshness
+from working_groups.ran1.merger import SlotSource, SourceEntry, TimeSlotData, _annotate_freshness, _assign_cell_ids
 from working_groups.ran1.models import RoomInfo
 from working_groups.ran1.session_parser import _build_time_slot_prompt, _enforce_main_room_chair_evidence
 from working_groups.ran1.slot_state import (
@@ -42,12 +42,12 @@ def _build_slot(
         ],
     )
     for label, entries in sources.items():
-        slot.sources.append(
-            SlotSource(
-                label=label,
-                entries=[SourceEntry(room_label=r, cell_text=t) for r, t in entries],
-            )
+        source = SlotSource(
+            label=label,
+            entries=[SourceEntry(room_label=r, cell_text=t) for r, t in entries],
         )
+        _assign_cell_ids(source)
+        slot.sources.append(source)
     return slot
 
 
@@ -172,6 +172,17 @@ class SlotStateFilesystemTests(unittest.TestCase):
         self.assertIsNotNone(loaded)
         self.assertEqual(loaded.source_hashes, {"Main Schedule": "abc"})
         self.assertEqual(loaded.merged_sessions, [{"name": "x"}])
+
+    def test_unchanged_merge_keeps_its_time(self):
+        def merge(at, sessions):
+            save_slot_state(SlotState(day="Tuesday", time_block_index=3,
+                                      source_hashes={"Main Schedule": "abc"},
+                                      merged_sessions=sessions, merged_at=at))
+            return json.loads(slot_state.slot_state_path("Tuesday", 3).read_text())["merged_at"]
+
+        self.assertEqual(merge("2026-10-28T06:01:17", [{"name": "x"}]), "2026-10-28T06:01:17")
+        self.assertEqual(merge("2026-10-29T06:01:30", [{"name": "x"}]), "2026-10-28T06:01:17")
+        self.assertEqual(merge("2026-10-30T06:01:30", [{"name": "y"}]), "2026-10-30T06:01:30")
 
     def test_missing_returns_none(self):
         self.assertIsNone(load_slot_state("Friday", 0))
@@ -381,7 +392,14 @@ class FakeGeminiClient:
                 "system_instruction": config.system_instruction,
             }
         )
-        return FakeGeminiResponse(self.scripted_response)
+        # Sessions cite the first cell headed in the prompt unless scripted.
+        import copy
+        import re as _re
+        response = copy.deepcopy(self.scripted_response)
+        cited = _re.findall(r"\[cell (c[0-9a-f]{6}) — ", contents)
+        for session in response.get("sessions", []):
+            session.setdefault("source_cells", cited[:1])
+        return FakeGeminiResponse(response)
 
 
 class ParseTimeSlotsIntegrationTests(unittest.TestCase):
@@ -490,10 +508,13 @@ class ParseTimeSlotsIntegrationTests(unittest.TestCase):
         )
         prompt = call["contents"]
         # Every cell goes in, tagged with whether it changed.
-        self.assertIn("[RAN1_main] UNCHANGED\nAI/ML (120)", prompt)
-        self.assertIn("[RAN1_brk1] CHANGED\nMIMO (60) / NTN (60)", prompt)
-        self.assertIn("MIMO (120)", prompt)  # the A1 text before
-        self.assertIn("[Sorour — RAN1_main] UNCHANGED\nAI 9.1.1 (60) / AI 9.1.2 (60)", prompt)
+        main, sorour = slot2.sources
+        self.assertIn(f"[cell {main.entries[0].cell_id} — RAN1_main] UNCHANGED\nAI/ML (120)", prompt)
+        self.assertIn(f"[cell {main.entries[1].cell_id} — RAN1_brk1] CHANGED\nMIMO (60) / NTN (60)", prompt)
+        self.assertIn("was:\nMIMO (120)", prompt)  # the A1 text before
+        self.assertIn(
+            f"[cell {sorour.entries[0].cell_id} — Sorour — RAN1_main] UNCHANGED\n"
+            "AI 9.1.1 (60) / AI 9.1.2 (60)", prompt)
         # The baseline is the starting point.
         self.assertIn('"AI 9.1.1"', prompt)
 
@@ -526,30 +547,71 @@ class ParseTimeSlotsIntegrationTests(unittest.TestCase):
             [e["cell_text"] for e in state.source_entries["Main"]], ["AI/ML v2 (120)"]
         )
 
-    def test_hash_change_without_cell_change_is_rebuilt_cold(self):
-        """A new merge prompt version changes every hash but no cell."""
-        from working_groups.ran1.merger import _annotate_freshness, ledger_entries
+    def test_new_merge_prompt_version_is_rebuilt_cold(self):
+        """A baseline made under an older merge prompt is not copied forward.
+
+        Both cases go cold: only the hash changed (the version is in it), and
+        the version changed in the same run as a cell. Copying the baseline
+        in the second case would keep the old rules in every other room.
+        """
+        from working_groups.ran1.merger import MERGE_PROMPT_VERSION, _annotate_freshness, ledger_entries
         from working_groups.ran1.session_parser import MULTI_SOURCE_SYSTEM_INSTRUCTION_COLD
 
-        slot1 = _build_slot({"Main": [("F1+F2+F3", "AI/ML (120)")]})
-        _annotate_freshness(slot1)
-        save_slot_state(
-            SlotState(
-                day=slot1.day,
-                time_block_index=slot1.time_block_index,
-                source_hashes={"Main": "hash-under-the-previous-prompt-version"},
-                merged_sessions=[{"room_name": "RAN1_main", "name": "Old"}],
-                source_entries=ledger_entries(slot1, "2026-10-15T10:41:00+00:00"),
-            )
+        for second_text in ("AI/ML (120)", "AI/ML (60) / NTN (60)"):
+            with self.subTest(second_text=second_text):
+                slot1 = _build_slot({"Main": [("F1+F2+F3", "AI/ML (120)"), ("A1", "MIMO (120)")]})
+                _annotate_freshness(slot1)
+                save_slot_state(
+                    SlotState(
+                        day=slot1.day,
+                        time_block_index=slot1.time_block_index,
+                        source_hashes={"Main": "hash-under-the-previous-prompt-version"},
+                        merged_sessions=[{"room_name": "RAN1_main", "name": "Old"}],
+                        source_entries=ledger_entries(slot1),
+                        merge_prompt_version=MERGE_PROMPT_VERSION - 1,
+                    )
+                )
+                slot2 = _build_slot({"Main": [("F1+F2+F3", second_text), ("A1", "MIMO (120)")]})
+                _annotate_freshness(slot2)
+                self.assertEqual(slot2.source_freshness, {"Main": "FRESH"})
+
+                _, client = self._run([slot2], {"sessions": []})
+
+                self.assertEqual(len(client.calls), 1)
+                self.assertEqual(client.calls[0]["system_instruction"], MULTI_SOURCE_SYSTEM_INSTRUCTION_COLD)
+                state = load_slot_state(slot2.day, slot2.time_block_index)
+                self.assertEqual(state.merge_prompt_version, MERGE_PROMPT_VERSION)
+
+    def test_after_a_wipe_the_cold_merge_starts_a_new_ledger(self):
+        """force-deploy wipes every slot state: the next run is cold and
+        knows nothing of before; the run after it is incremental again."""
+        from working_groups.ran1.merger import _annotate_freshness
+        from working_groups.ran1.session_parser import (
+            MULTI_SOURCE_SYSTEM_INSTRUCTION_COLD,
+            MULTI_SOURCE_SYSTEM_INSTRUCTION_INCREMENTAL,
         )
-        slot2 = _build_slot({"Main": [("F1+F2+F3", "AI/ML (120)")]})
-        _annotate_freshness(slot2)
-        self.assertEqual(slot2.source_freshness, {"Main": "FRESH"})
 
-        _, client = self._run([slot2], {"sessions": []})
+        sessions = [{"room_name": "RAN1_main", "name": "AI/ML", "duration_minutes": 120,
+                     "specified_start_time": None, "chair": None, "group_header": "",
+                     "agenda_item": None}]
+        cells = {"Main": [("F1+F2+F3", "AI/ML (120)"), ("A1", "MIMO (120)")]}
+        slot = _build_slot(cells)
+        _annotate_freshness(slot)
+        self._run([slot], {"sessions": sessions})
+        clear_all_slot_states()
 
-        self.assertEqual(len(client.calls), 1)
+        slot = _build_slot(cells)
+        _annotate_freshness(slot)
+        self.assertIsNone(slot.previous_merge)
+        self.assertEqual({e.change for s in slot.sources for e in s.entries}, {None})
+        _, client = self._run([slot], {"sessions": sessions})
         self.assertEqual(client.calls[0]["system_instruction"], MULTI_SOURCE_SYSTEM_INSTRUCTION_COLD)
+        self.assertNotIn("UNCHANGED", client.calls[0]["contents"])
+
+        slot = _build_slot({"Main": [("F1+F2+F3", "AI/ML (120)"), ("A1", "MIMO (60) / NTN (60)")]})
+        _annotate_freshness(slot)
+        _, client = self._run([slot], {"sessions": sessions})
+        self.assertEqual(client.calls[0]["system_instruction"], MULTI_SOURCE_SYSTEM_INSTRUCTION_INCREMENTAL)
 
     def test_cold_path_when_no_previous_state(self):
         from working_groups.ran1.merger import _annotate_freshness
@@ -594,7 +656,7 @@ class ParseTimeSlotsIntegrationTests(unittest.TestCase):
         _annotate_freshness(slot_a)
         _annotate_freshness(slot_b)
         # Seed both with previous merges.
-        from working_groups.ran1.merger import ledger_entries
+        from working_groups.ran1.merger import MERGE_PROMPT_VERSION, ledger_entries
 
         for s in (slot_a, slot_b):
             save_slot_state(
@@ -602,7 +664,8 @@ class ParseTimeSlotsIntegrationTests(unittest.TestCase):
                     day=s.day,
                     time_block_index=s.time_block_index,
                     source_hashes=s.current_hashes,
-                    source_entries=ledger_entries(s, "2026-10-15T10:41:00+00:00"),
+                    source_entries=ledger_entries(s),
+                    merge_prompt_version=MERGE_PROMPT_VERSION,
                     merged_sessions=[
                         {
                             "room_name": "RAN1_main",
@@ -666,6 +729,66 @@ class ParseTimeSlotsIntegrationTests(unittest.TestCase):
         instructions = [c["system_instruction"] for c in fake_client.calls]
         self.assertIn(MULTI_SOURCE_SYSTEM_INSTRUCTION_COLD, instructions)
         self.assertIn(MULTI_SOURCE_SYSTEM_INSTRUCTION_INCREMENTAL, instructions)
+
+
+class SourceCellRetryTests(unittest.TestCase):
+    """An answer whose source_cells are unusable is asked again, then fails."""
+
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(self.tmp.cleanup)
+        self._orig_dir = slot_state.SLOT_STATE_DIR
+        slot_state.SLOT_STATE_DIR = Path(self.tmp.name) / "slot_state"
+        os.environ["GEMINI_API_KEY"] = "fake-key"
+        from shared import notices
+        self._orig_notices = notices.PATH
+        notices.PATH = Path(self.tmp.name) / "notices.json"
+
+    def tearDown(self):
+        from shared import notices
+        slot_state.SLOT_STATE_DIR = self._orig_dir
+        notices.PATH = self._orig_notices
+
+    def _run(self, answers):
+        from working_groups.ran1.merger import _annotate_freshness
+        from working_groups.ran1.session_parser import parse_time_slots
+
+        slot = _build_slot({"Main": [("F1+F2+F3", "AI/ML (120)")]})
+        _annotate_freshness(slot)
+        client = FakeGeminiClient({})
+        replies = iter(answers)
+        client.generate_content = lambda **kw: (
+            client.calls.append(kw["contents"]) or FakeGeminiResponse(next(replies))
+        )
+        with patch("google.genai.Client", return_value=client):
+            with patch("time.sleep"):
+                sessions = parse_time_slots([slot], {"Monday": slot.main_rooms})
+        return slot, sessions, client.calls
+
+    @staticmethod
+    def _answer(cells):
+        return {"sessions": [{
+            "room_name": "RAN1_main", "name": "AI/ML", "duration_minutes": 120,
+            "specified_start_time": None, "chair": None, "group_header": "",
+            "agenda_item": None, "source_cells": cells,
+        }]}
+
+    def test_asks_again_with_the_problems(self):
+        good = _build_slot({"Main": [("F1+F2+F3", "AI/ML (120)")]}).sources[0].entries[0].cell_id
+        _, sessions, calls = self._run([self._answer(["cdead00"]), self._answer([good])])
+        self.assertEqual(len(calls), 2)
+        self.assertIn("Fix these problems with source_cells", calls[1])
+        self.assertIn("no cell cdead00", calls[1])
+        self.assertEqual((sessions[0].start_time, sessions[0].end_time), ("11:00", "13:00"))
+
+    def test_gives_up_with_a_notice(self):
+        from shared import notices
+
+        with self.assertRaises(RuntimeError):
+            self._run([self._answer([])] * 3)
+        recorded = json.loads(notices.PATH.read_text())
+        self.assertEqual(recorded[0]["kind"], "source-cells")
+        self.assertTrue(any("source_cells is empty" in line for line in recorded[0]["lines"]))
 
 
 if __name__ == "__main__":

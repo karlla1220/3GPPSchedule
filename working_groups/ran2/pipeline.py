@@ -5,14 +5,16 @@ Rules read the document; Gemini is the fallback for what they are unsure about
 """
 from __future__ import annotations
 
-from datetime import datetime
+from datetime import date, datetime
 from pathlib import Path
 import shutil
 from zoneinfo import ZoneInfo
 
-from shared.portal_meetings import timezone_from_label
+from shared import timezones
+from shared.agenda import agenda_map
+from shared.agenda_labels import infer_for_schedule
 from shared.renderer import generate_html
-from .document import LayoutError, agenda_map, extract_document
+from .document import LayoutError, extract_document
 from .llm import CellRefiner, gemini_request, has_key, read_document
 from .sessions import make_schedule
 from .sources import (CACHE, DOWNLOADS, Bundle, client, config_hash, fetch_bundle, load_config, local_bundle,
@@ -20,12 +22,17 @@ from .sources import (CACHE, DOWNLOADS, Bundle, client, config_hash, fetch_bundl
 
 
 def meeting_metadata(meeting: str, cfg: dict, previous: dict, live: dict | None) -> dict:
-    """Dates and venue zone: config override > live Portal > last successful build."""
+    """Dates and venue zone: config override > live Portal > last successful build.
+
+    A venue zone the Portal label does not give is resolved by shared.timezones
+    (venue list, then the LLM once)."""
     override = override_for(cfg, meeting)
     cached = previous.get('metadata', {}) if previous.get('meeting_id') == meeting else {}
     metadata = {**(live or cached), **override}
-    if not metadata.get('timezone'):
-        metadata['timezone'] = timezone_from_label(metadata.get('portal_timezone'), metadata.get('country'))
+    if not metadata.get('timezone') and metadata.get('starts_on'):
+        metadata['timezone'] = timezones.resolve(
+            metadata.get('portal_timezone'), metadata.get('country'), metadata.get('location'),
+            on=date.fromisoformat(metadata['starts_on']))
     missing = [k for k in ('starts_on', 'ends_on', 'timezone') if not metadata.get(k)]
     if missing:
         number = meeting.split('#', 1)[1]
@@ -107,6 +114,8 @@ def build_schedule(options=None, *, request=None):
     generated = datetime.now(ZoneInfo(metadata['timezone'])).strftime('%Y-%m-%d %H:%M')
     sources = [name] + (['agenda.csv'] if bundle.agenda else [])
     schedule = make_schedule(document, agenda, metadata, sources, generated, refine=refine, sessions=prebuilt)
+    # Cells the schedule gives no AI: an LLM reads their label for the filter (shared/agenda_labels.py).
+    infer_for_schedule(schedule, 'ran2', 'RAN2', agenda, enabled=not offline and request is not None)
     # No checkpoint before parsing and rendering both succeed.
     generate_html(schedule)
     state = {k: v for k, v in bundle.manifest.items() if k != 'portal_metadata'}

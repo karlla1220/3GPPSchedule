@@ -1,6 +1,7 @@
 """Static, content-addressed agreement pages and a small lazy-loading manifest."""
 
 import hashlib
+from html import escape
 import json
 from pathlib import Path
 import re
@@ -16,13 +17,14 @@ def agenda_section_ids(value, sections):
     Keep unknown IDs for the UI's missing-section message. A section brings
     its subsections, since agreements often sit only there; .x brings the
     subsections alone. Slash shorthand denotes siblings (10.3.1/4).
+    A range names the siblings it spans (20.6.12–20.6.16, 1–8).
     Schedule text and popup labels remain unchanged.
     """
     result = []
     for field in (value or '').split(','):
         field = field.strip()
         match = re.fullmatch(r'(\d+(?:\.\d+)*(?:\.x)?)(?:\.)?(?:\s+[^\d].*)?', field, re.I)
-        tokens = [match[1]] if match else []
+        tokens = [match[1]] if match else _range(field)
         if not tokens and '/' in field:
             parts = [part.strip().rstrip('.') for part in field.split('/')]
             if all(re.fullmatch(r'\d+(?:\.\d+)*', part) for part in parts):
@@ -38,6 +40,31 @@ def agenda_section_ids(value, sections):
                 result.append(token)
                 result.extend(ai for ai in sections if ai.startswith(token + '.'))
     return list(dict.fromkeys(result))
+
+
+def _range(field):
+    """"20.6.12–20.6.16" or "1–8": the siblings from the first to the last, else []."""
+    match = re.fullmatch(r'((?:\d+\.)*)(\d+)\s*[–-]\s*((?:\d+\.)*)(\d+)', field)
+    if not match or match[3] not in ('', match[1]):
+        return []
+    first, last = int(match[2]), int(match[4])
+    if not first < last <= first + 40:
+        return []
+    return [f'{match[1]}{n}' for n in range(first, last + 1)]
+
+
+def has_panel(schedule):
+    """RAN1 always has its agreement panel. Another WG has it when its own data
+    says so with its ``wg_id`` (SA1: the TDoc conclusions of its chair file,
+    working_groups/sa1/conclusions.py); RAN1 data on another page is not shown."""
+    return schedule.wg_id == "ran1" or (schedule.chairman_agreements or {}).get("wg_id") == schedule.wg_id
+
+
+# The panel's words for RAN1's chair notes; a WG's data may give its own ("text").
+PANEL_TEXT = {
+    "heading": "Agreements for",
+    "select": "Select a schedule cell to read its agreements here.",
+}
 
 
 def current_agreements(schedule):
@@ -103,7 +130,7 @@ def package_agreements(data, previous=None):
 
 
 def agreement_assets(schedule):
-    if schedule.wg_id != "ran1":
+    if not has_panel(schedule):
         return {}, {}
     data = current_agreements(schedule)
     manifest = {
@@ -121,6 +148,8 @@ def agreement_assets(schedule):
         )
         if k in data
     }
+    if isinstance(data.get("text"), dict):
+        manifest["text"] = {k: v for k, v in data["text"].items() if isinstance(v, str)}
     manifest.update(
         meeting_id=schedule.meeting_id,
         status=data.get("status", "unavailable"),
@@ -170,7 +199,7 @@ def write_agreement_assets(schedule, directory):
     that neither this build nor the previous one refers to. Only HTML
     fragments are published; source document bytes are not exported.
     """
-    if schedule.wg_id != "ran1":
+    if not has_panel(schedule):
         return
     manifest, assets = agreement_assets(schedule)
     referenced = {s["url"][2:] for s in manifest["sections"].values() if "url" in s}
@@ -192,9 +221,12 @@ def write_agreement_assets(schedule, directory):
 
 
 def render_agreement_panel(schedule):
-    if schedule.wg_id != "ran1":
+    if not has_panel(schedule):
         return ""
     manifest, _ = agreement_assets(schedule)
+    text = {**PANEL_TEXT, **manifest.get("text", {})}
+    kind = current_agreements(schedule).get("kind")
+    classes = "agreement-panel" + (f" {kind}" if kind and re.fullmatch(r"[a-z-]+", kind) else "")
     payload = (
         json.dumps(manifest, ensure_ascii=False)
         .replace("<", "\\u003c")
@@ -202,8 +234,8 @@ def render_agreement_panel(schedule):
         .replace("&", "\\u0026")
     )
     return (
-        """<section id="agreement-panel" class="agreement-panel" aria-labelledby="agreement-title">
-<div id="agreement-app"><div class="agreement-header"><h2 id="agreement-title">Agreements for</h2></div><p class="agreement-status">Select a schedule cell to read its agreements here.</p></div>
+        f"""<section id="agreement-panel" class="{classes}" aria-labelledby="agreement-title">
+<div id="agreement-app"><div class="agreement-header"><h2 id="agreement-title">{escape(text["heading"])}</h2></div><p class="agreement-status">{escape(text["select"])}</p></div>
 <noscript>JavaScript is required to select and load agreements.</noscript>
 </section>
 <script type="application/json" id="agreement-data">"""

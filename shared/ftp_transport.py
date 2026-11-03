@@ -13,6 +13,7 @@ import logging
 import re
 import threading
 import time
+import zlib
 from urllib.parse import quote, unquote, urlsplit
 
 import httpx
@@ -27,6 +28,7 @@ _RETRY_STATUS = {500, 502, 503, 504, 520, 521, 522, 523, 524, 525, 526}
 _FIREWALL_PAGE = b'web application firewall'
 _FIREWALL_PAGE_BYTES = 256 * 1024
 _MAX_BYTES = 64 * 1024 * 1024
+_GZIP = b'\x1f\x8b'
 # One anonymous FTP login serves every fallback in a run, instead of a new
 # connection and login per file or folder.
 _session = None
@@ -36,6 +38,7 @@ _session_lock = threading.Lock()
 # under them go straight to FTP instead of repeating what failed.
 _https_failed = {}  # prefix -> why HTTPS failed
 _FIREWALL = '3GPP firewall blocked HTTPS (403)'
+_BLOCKED = '3GPP answered 403 for a path FTP can read'
 _MAX_SECONDS = 180
 # The live Microsoft FTP server advertises SIZE/MDTM, but not MLSD.
 _IIS_ROW = re.compile(r'^(\d{2}-\d{2}-\d{2,4})\s+(\d{2}:\d{2}[AP]M)\s+(<DIR>|\d+)\s+(.+)$')
@@ -69,9 +72,9 @@ def _retryable(error):
 def _firewall_blocked(response, url):
     """True for the firewall's 403 page only.
 
-    An ordinary 403 stays an HTTP error: 3GPP also answers 403 for a folder
-    that does not exist, and callers rely on that. Any other 403 is logged
-    at debug level with its headers and text.
+    Any other 403 is usually a path that does not exist, but not always, so
+    get() asks FTP (_answer_403). It is logged at debug level with its headers
+    and text.
     """
     if response.status_code != 403:
         return False
@@ -85,8 +88,7 @@ def _firewall_blocked(response, url):
             body = b''
     if _FIREWALL_PAGE in body.lower():
         return True
-    # Usually a path that does not exist (IIS answers 403); debug level, since
-    # sync folders come and go with every meeting.
+    # Debug level, since sync folders come and go with every meeting.
     logging.getLogger(__name__).debug('3GPP answered 403 without the firewall page: %s %s',
                                       url, _describe(response, body))
     return False
@@ -137,6 +139,55 @@ def _blocked_ftp(url, **kwargs):
     logging.getLogger(__name__).warning('%s: %s; trying FTP', _FIREWALL, url)
     _https_failed[_folder(url)] = _FIREWALL
     return _ftp_because(url, _FIREWALL, **kwargs)
+
+
+def ftp_missing(error):
+    """True when an FTP failure says the path does not exist (550)."""
+    return isinstance(error, httpx.ConnectError) and re.search(r'\b550\b', str(error)) is not None
+
+
+def _answer_403(url, response, **kwargs):
+    """The answer to a plain 403: IIS means a missing path, a block means nothing.
+
+    Both look the same over HTTPS. FTP tells them apart: 550 keeps the 403,
+    anything it can read is what HTTPS would not give. FTP failing any other
+    way leaves the question open, which is an error and not "absent".
+    """
+    try:
+        confirmed = ftp_response(url, **kwargs)
+    except httpx.ConnectError as exc:
+        if ftp_missing(exc):
+            return response
+        raise httpx.ConnectError(f'HTTPS answered 403 and {exc}', request=exc.request) from exc
+    logging.getLogger(__name__).warning('%s: %s %s; using FTP', _BLOCKED, url,
+                                        _describe(response, response.content[:_FIREWALL_PAGE_BYTES]))
+    response.close()
+    _https_failed[_folder(url)] = _BLOCKED
+    return confirmed
+
+
+def _unpacked(response, url):
+    """The response with its gzip undone when 3GPP did not say it was gzip.
+
+    Since 2026-11-02 some 200 answers carry a gzip body without Content-Encoding,
+    so httpx leaves it packed and a listing reads as an empty folder. Hence a
+    run seeing no files, or only the older copies in another folder. A file
+    that is gzip by name stays as it is.
+    """
+    if (response.status_code != 200 or not response.content.startswith(_GZIP)
+            or urlsplit(url).path.lower().endswith(('.gz', '.tgz'))):
+        return response
+    unpack = zlib.decompressobj(zlib.MAX_WBITS | 16)
+    try:
+        body = unpack.decompress(response.content, _MAX_BYTES)
+    except zlib.error:
+        return response
+    if not unpack.eof:
+        return response
+    logging.getLogger(__name__).warning('3GPP sent gzip without saying so: %s', url)
+    headers = [(name, value) for name, value in response.headers.items()
+               if name.lower() not in ('content-length', 'content-encoding')]
+    return httpx.Response(200, headers=headers, content=body, request=response.request)
 
 
 def _identified(kwargs):
@@ -264,6 +315,10 @@ def _over_ftp(read):
             _drop()
             if not reused:
                 raise
+        except ftplib.error_perm:
+            # The server answered (550 for a missing path): the session is
+            # fine, and a run asks this about several folders.
+            raise
         except BaseException:
             # Unknown state after a partial command: never reuse it.
             _drop()
@@ -296,7 +351,8 @@ def ftp_response(url, *, listing=False, cached=None):
 def get(url, *, listing=False, http=None, cached=None, **kwargs):
     """Retry eligible HTTPS once, then use FTP; preserve normal HTTP semantics.
 
-    A firewall 403 goes to FTP at once, without a second HTTPS request.
+    A firewall 403 goes to FTP at once, without a second HTTPS request. Any
+    other 403 is returned only once FTP has said the path is missing.
     """
     request = http.get if http is not None else httpx.get
     if ftp_path(url) is None:
@@ -322,10 +378,12 @@ def get(url, *, listing=False, http=None, cached=None, **kwargs):
             else:
                 _remember_failure(url, exc)
             continue
-        if not _firewall_blocked(response, url):
-            return response
-        response.close()
-        return _blocked_ftp(url, listing=listing, cached=cached)
+        if _firewall_blocked(response, url):
+            response.close()
+            return _blocked_ftp(url, listing=listing, cached=cached)
+        if response.status_code == 403:
+            return _answer_403(url, response, listing=listing, cached=cached)
+        return _unpacked(response, url)
     return ftp_response(url, listing=listing, cached=cached)
 
 

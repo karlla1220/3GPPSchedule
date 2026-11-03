@@ -1,6 +1,6 @@
 """Contracts between independent WG pipelines, the site builder and renderer."""
 from dataclasses import replace
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 import json
 from pathlib import Path
 import subprocess
@@ -61,6 +61,8 @@ def test_plenary_uses_daily_rooms_and_timeline_without_ran1_breaks():
     assert '--time-rows:22' in tuesday['style']
     assert len(monday.select('.room-header')) == 3  # time + 2 rooms
     assert len(tuesday.select('.room-header')) == 2
+    # A room without a place keeps the one-line header.
+    assert not monday.select('.room-header.has-place, .room-place')
     reports = monday.select_one('[data-name="Working group reports"]')
     assert 'grid-row:5/8;' in reports['style']
     discussion = monday.select_one('[data-name="Rapporteur discussion"]')
@@ -87,8 +89,8 @@ def test_building_one_wg_preserves_other_snapshot_and_connects_real_pages(tmp_pa
     for wg, sibling in [('ran1', 'ran-plenary'), ('ran-plenary', 'ran1')]:
         html = BeautifulSoup((opts.output_dir / wg / 'index.html').read_text(), 'html.parser')
         assert html.select_one('[aria-current="page"]')['href'] == f'../{wg}/'
-        assert html.select_one('.wg-link')['href'] == f'../{sibling}/'
-        assert html.select_one('.wg-current h1') is not None
+        assert html.select_one('.wg-switch-item:not([aria-current])')['href'] == f'../{sibling}/'
+        assert html.select_one('.wg-switch summary h1') is not None
     assert load_schedule(opts.output_dir / 'ran1/schedule.json') == ran1
 
 
@@ -131,9 +133,43 @@ def test_navigation_uses_venue_dates_and_keeps_latest_ended_meeting():
     html = BeautifulSoup(generate_html(ended, schedules={'ran1': ended, 'ran-plenary': demo}, groups=groups), 'html.parser')
     assert html.select_one('[aria-current]')['href'] == '../ran1/'
     html = BeautifulSoup(generate_html(demo, schedules={'ran1': ended, 'ran-plenary': demo}, groups=groups), 'html.parser')
-    link = html.select_one('.wg-link')
+    link = html.select_one('.wg-switch-item:not([aria-current])')
     assert link['href'] == '../ran1/'
-    assert link.select_one('.meeting-status').text == 'Ended'
+    assert link.find_previous('p', class_='wg-switch-group').text == 'Ended'
+    assert link.select_one('.wg-switch-dates').text == '1\u20132 Jan'
+
+
+def _meeting(wg_id, name, starts_on, ends_on):
+    return replace(plenary_schedule(), wg_id=wg_id, meeting_id=wg_id, meeting_name=name, is_demo=False,
+                   starts_on=starts_on, ends_on=ends_on, timezone='Asia/Seoul')
+
+
+def test_switch_menu_lists_active_meetings_first_in_3gpp_order():
+    today = datetime.now(timezone.utc).date()
+    on = (str(today - timedelta(days=1)), str(today + timedelta(days=1)))
+    soon = (str(today + timedelta(days=20)), str(today + timedelta(days=24)))
+    past = ('2000-01-30', '2000-02-02')
+    schedules = {
+        'sa2': _meeting('sa2', 'SA2#1', *soon), 'ran-plenary': _meeting('ran-plenary', 'RAN#1', *past),
+        'ran2': _meeting('ran2', 'RAN2#1', *on), 'ran1': _meeting('ran1', 'RAN1#1', *on),
+        'ct1': _meeting('ct1', 'CT1#1', *past), 'ran4': _meeting('ran4', 'RAN4#1', *soon),
+    }
+    groups = [{'id': wg} for wg in schedules]
+    html = BeautifulSoup(generate_html(schedules['ran2'], schedules=schedules, groups=groups), 'html.parser')
+    menu = html.select_one('.wg-switch-menu')
+    assert [el.text for el in menu.select('.wg-switch-group, .wg-switch-item > span:first-child')] == [
+        'In progress', 'RAN1#1', 'RAN2#1', 'Upcoming', 'RAN4#1', 'SA2#1', 'Ended', 'RAN#1', 'CT1#1']
+    assert menu.select_one('[aria-current]')['href'] == '../ran2/'
+    assert menu.select('.wg-switch-dates')[-1].text == '30 Jan \u2013 2 Feb'
+    assert 'RAN1#1, RAN4#1, SA2#1, RAN#1, CT1#1' in html.select_one('#wg-switch-hint').text
+    assert html.select_one('#wg-switch-hint').has_attr('hidden')
+
+
+def test_single_meeting_has_a_plain_title():
+    schedule = _meeting('ran1', 'RAN1#1', '2000-01-01', '2000-01-02')
+    html = BeautifulSoup(generate_html(schedule, schedules={'ran1': schedule}, groups=[{'id': 'ran1'}]), 'html.parser')
+    assert html.select_one('.wg-title h1').text.endswith('RAN1#1')
+    assert html.select_one('.wg-switch') is None and html.select_one('#wg-switch-hint') is None
 
 
 @pytest.mark.parametrize('kwargs', [{'slot_minutes': 0}, {'label_minutes': -1}, {'start': '18:00'}, {'slot_minutes': 7}, {'slot_minutes': 15, 'label_minutes': 20}])
@@ -187,14 +223,39 @@ def test_default_prefers_matching_ongoing_meeting_with_stable_ties():
         'ran1': replace(plenary_schedule(), wg_id='ran1', meeting_id='ran1#126', is_demo=False),
         'ran-plenary': replace(plenary_schedule(), meeting_id='ran#113', is_demo=False),
     }
-    rows = [{'Id': 1, 'TBId': 379, 'Title': '3GPPRAN1#126', 'MeetingPeriod': 'ENDED'},
-            {'Id': 2, 'TBId': 373, 'Title': '3GPPRAN#113', 'MeetingPeriod': 'ONGOING'}]
-    assert select_default_wg(cfg, schedules, rows) == 'ran-plenary'
-    rows[0]['MeetingPeriod'] = 'ONGOING'
-    assert select_default_wg(cfg, schedules, rows) == 'ran1'
-    rows[0]['MeetingPeriod'] = 'NOT_STARTED'
+    seoul = '(GMT+09:00) Seoul'
+    rows = [{'Id': 1, 'TBId': 379, 'Title': '3GPPRAN1#126', 'StartTimeZone': seoul,
+             'StartDate': '2026-08-24 09:00:00', 'EndDate': '2026-08-28 17:30:00'},
+            {'Id': 2, 'TBId': 373, 'Title': '3GPPRAN#113', 'StartTimeZone': seoul,
+             'StartDate': '2026-09-14 09:00:00', 'EndDate': '2026-09-17 17:00:00'}]
+    now = datetime(2026, 9, 15, 3, tzinfo=timezone.utc)
+    assert select_default_wg(cfg, schedules, rows, now=now) == 'ran-plenary'
+    rows[0].update(StartDate='2026-09-14 09:00:00', EndDate='2026-09-18 17:00:00')
+    assert select_default_wg(cfg, schedules, rows, now=now) == 'ran1'
+    # Portal's MeetingPeriod is not trusted: it calls meetings months away ONGOING.
+    rows[0].update(StartDate='2027-01-25 09:00:00', EndDate='2027-01-29 17:00:00', MeetingPeriod='ONGOING')
     rows[1]['MeetingPeriod'] = 'UNKNOWN'
-    assert select_default_wg(cfg, schedules, rows) == 'ran1'
+    assert select_default_wg(cfg, schedules, rows, now=now) == 'ran-plenary'
+
+
+def test_ongoing_is_the_venue_calendar_day():
+    from shared.navigation import select_default_wg
+    cfg = {'default_wg': 'ran1', 'working_groups': [{'id': 'ran1'}, {'id': 'ran-plenary'}]}
+    schedules = {'ran1': replace(plenary_schedule(), wg_id='ran1', meeting_id='ran1#126', is_demo=False),
+                 'ran-plenary': replace(plenary_schedule(), meeting_id='ran#113', is_demo=False,
+                                        timezone='America/Edmonton')}
+    rows = [{'Id': 2, 'TBId': 373, 'Title': '3GPPRAN#113', 'Country': 'CA',
+             'StartTimeZone': '(GMT-07:00) Mountain Time (US & Canada)',
+             'StartDate': '2026-11-16 08:30:00', 'EndDate': '2026-11-20 17:00:00'}]
+    # Monday 16 Nov already in Seoul but still Sunday in Calgary: not yet.
+    assert select_default_wg(cfg, schedules, rows, now=datetime(2026, 11, 16, 2, tzinfo=timezone.utc)) == 'ran1'
+    # Monday early morning in Calgary, before the opening: the meeting's first day counts.
+    assert select_default_wg(cfg, schedules, rows, now=datetime(2026, 11, 16, 13, tzinfo=timezone.utc)) == 'ran-plenary'
+    # Friday evening in Calgary is Saturday in UTC: still the last day there.
+    assert select_default_wg(cfg, schedules, rows, now=datetime(2026, 11, 21, 4, tzinfo=timezone.utc)) == 'ran-plenary'
+    # A label the resolver does not know falls back to the saved page's zone.
+    rows[0]['StartTimeZone'] = '(GMT-07:00) Somewhere'
+    assert select_default_wg(cfg, schedules, rows, now=datetime(2026, 11, 16, 13, tzinfo=timezone.utc)) == 'ran-plenary'
 
 
 def test_default_cannot_promote_demo_missing_or_different_meeting():
@@ -219,3 +280,43 @@ def test_offline_default_uses_saved_venue_dates_and_preserves_query_and_hash(tmp
     assert select_default_wg(cfg, schedules, [], now=now) == 'ran-plenary'
     root = build.render_root(cfg, schedules, [])
     assert 'location.search + location.hash' in root
+
+
+def test_day_is_chosen_before_its_grid_is_parsed():
+    html = generate_html(plenary_schedule())
+    # The script after the tabs shows a day by a rule, so the grid is drawn in place as it arrives.
+    assert html.index("style.id = 'initial-day'") < html.index('class="day-panel"')
+    assert html.index('class="tab"') < html.index("style.id = 'initial-day'")
+
+
+def test_switching_meetings_cross_fades_but_entering_from_the_root_does_not(tmp_path):
+    opts = options(tmp_path)
+    seed_ran1(opts)
+    opts.render_only = True
+    save_schedule(plenary_schedule(), opts.output_dir / 'ran-plenary/schedule.json')
+    build.build_site(opts)
+    assert '@view-transition { navigation: auto; }' in (opts.output_dir / 'ran1/index.html').read_text()
+    assert '@view-transition' not in (opts.output_dir / 'index.html').read_text()
+
+
+def test_the_grid_end_follows_the_day_panels_and_the_arrival_check_is_in_the_head():
+    html = generate_html(plenary_schedule())
+    head, body = html.split('</head>', 1)
+    assert 'blocking="render"' in head  # switch-arrival.js, parser-run in <head>.
+    panels = BeautifulSoup(body, 'html.parser')
+    end = panels.select_one('#grid-end')
+    assert end is not None and end.has_attr('hidden')
+    assert not end.find_all_next(class_='day-panel')
+    assert end.find_all_previous(class_='day-panel')
+
+
+def test_what_both_pages_have_is_named_to_move_on_a_meeting_switch():
+    html = BeautifulSoup(generate_html(plenary_schedule()), 'html.parser')
+    # One name per day tab and, within a day, per time: each moves to its partner on the next page.
+    assert [t['style'] for t in html.select('.schedule-toolbar .tab')] == [
+        f"view-transition-name:day-tab-{t['data-day']};view-transition-class:grid-move"
+        for t in html.select('.schedule-toolbar .tab')]
+    for panel in html.select('.day-panel'):
+        names = [label['style'].split('view-transition-name:')[1].split(';')[0] for label in panel.select('.time-label')]
+        assert names and len(set(names)) == len(names)
+        assert names[0] == f"time-{panel.select_one('.schedule-grid')['data-start']}"

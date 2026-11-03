@@ -11,23 +11,20 @@ but never takes it down. Answers are cached by their exact input.
 from __future__ import annotations
 
 import io
-import json
-import os
 from pathlib import Path
-import re
-import time
 
 from docx import Document
 from pydantic import BaseModel
 
-from shared.schedule import time_to_minutes
+from shared import llm_cells
+from shared.llm_cells import check_times, citation_errors, gemini_request, has_key, title_errors, written_errors  # noqa: F401 - pipeline imports has_key from here
+from shared.officials import join_chairs, split_chairs
 from .document import DAYS, LayoutError, clock, extract_breaks, identify, outline, supplements
 from .sessions import CLOCK_TEXT, COMPANIES, is_agenda, meaningful, parse_marker, written_times
-from .sources import CACHE, digest, read_json, write_json
+from .sources import CACHE
 
 PROMPTS = Path(__file__).parent / 'prompts'
 VERSION = 1
-HHMM = re.compile(r'(?:[01]\d|2[0-3]):[0-5]\d')
 
 
 class CellSession(BaseModel):
@@ -43,10 +40,6 @@ class CellSession(BaseModel):
 class CellAnswer(BaseModel):
     id: str
     sessions: list[CellSession]
-
-
-class CellsResult(BaseModel):
-    cells: list[CellAnswer]
 
 
 class DocRoom(BaseModel):
@@ -82,67 +75,15 @@ class DocResult(BaseModel):
     sessions: list[DocSession]
 
 
-def has_key() -> bool:
-    from dotenv import load_dotenv
-    load_dotenv()
-    return bool(os.environ.get('GEMINI_API_KEY'))
-
-
-def gemini_request(payload, schema, model, thinking='medium'):
-    from google import genai
-    from google.genai import types
-    if not has_key():
-        raise ValueError('GEMINI_API_KEY is required for the RAN2 LLM fallback')
-    with genai.Client(api_key=os.environ['GEMINI_API_KEY']) as client:
-        for attempt in range(3):
-            try:
-                response = client.models.generate_content(
-                    model=model, contents=payload,
-                    config=types.GenerateContentConfig(
-                        response_mime_type='application/json',
-                        response_json_schema=schema, max_output_tokens=65536,
-                        thinking_config=types.ThinkingConfig(thinking_level=thinking)))
-                return json.loads(response.text)
-            except (genai.errors.APIError, ValueError) as exc:
-                if attempt == 2:
-                    raise RuntimeError('RAN2 LLM request failed after three attempts') from exc
-                time.sleep(2 * (attempt + 1))
-
-
 # ----------------------------------------------------------------- checks
 
-def words(text: str) -> list[str]:
-    return [w.lower() for w in re.findall(r'[A-Za-z0-9]+', text)]
-
-
 def check_session(prefix, title, chair, agenda_items, source: str, text: str) -> list[str]:
-    errors = []
-    if not title.strip() or len(title) > 160:
-        errors.append(f'{prefix}: empty or overlong title')
-    missing = sorted(set(words(title)) - set(words(source)))
-    if missing:
-        errors.append(f'{prefix}: title words not in its cited text: {missing}')
-    for name in filter(None, (n.strip() for n in (chair or '').split(','))):
-        if name.lower() in COMPANIES or not re.search(rf'(?<!\w){re.escape(name)}(?!\w)', text):
-            errors.append(f'{prefix}: chair {name!r} is not a name written in the text')
-    for item in agenda_items:
-        if not is_agenda(item) or not re.search(rf'(?<![\d.]){re.escape(item)}(?!\d)', source):
-            errors.append(f'{prefix}: agenda item {item!r} is not written in its cited text')
-    return errors
-
-
-def check_times(prefix, start, end, allowed) -> list[str]:
-    if not (HHMM.fullmatch(start) and HHMM.fullmatch(end)):
-        return [f'{prefix}: times must be HH:MM']
-    errors = []
-    if start >= end:
-        errors.append(f'{prefix}: start {start} is not before end {end}')
-    if time_to_minutes(start) % 5 or time_to_minutes(end) % 5:
-        errors.append(f'{prefix}: times must be on a 5-minute grid')
-    for value in (start, end):
-        if value not in allowed:
-            errors.append(f'{prefix}: {value} is not written in the source')
-    return errors
+    names = split_chairs(chair)
+    errors = title_errors(prefix, title, source)
+    errors += [f'{prefix}: chair {n!r} is not a name written in the text' for n in names if n.lower() in COMPANIES]
+    errors += written_errors(prefix, [n for n in names if n.lower() not in COMPANIES], text, 'chair')
+    errors += [f'{prefix}: agenda item {i!r} is not written in its cited text' for i in agenda_items if not is_agenda(i)]
+    return errors + written_errors(prefix, [i for i in agenda_items if is_agenda(i)], source, 'agenda item')
 
 
 def check_cell(answer: CellAnswer, item: dict) -> list[str]:
@@ -150,7 +91,7 @@ def check_cell(answer: CellAnswer, item: dict) -> list[str]:
     lines = cell['lines']
     text = '\n'.join(lines)
     allowed = {cell['start'], cell['end']} | written_times(lines, bounds)
-    errors, cited, previous = [], [], None
+    errors, previous = [], None
     if not answer.sessions:
         return [f'{cell["id"]}: no sessions']
     for n, session in enumerate(answer.sessions):
@@ -159,19 +100,10 @@ def check_cell(answer: CellAnswer, item: dict) -> list[str]:
         if previous and session.start < previous:
             errors.append(f'{prefix}: overlaps or is out of order')
         previous = session.end
-        bad = [i for i in session.lines if not 0 <= i < len(lines) or not lines[i]]
-        if not session.lines or bad:
-            errors.append(f'{prefix}: cite one or more non-blank line numbers (bad: {bad})')
-            continue
-        cited += session.lines
-        source = '\n'.join(lines[i] for i in session.lines)
-        errors += check_session(prefix, session.title, session.chair, session.agenda_items, source, text)
-    if len(cited) != len(set(cited)):
-        errors.append(f'{cell["id"]}: a line is cited by more than one session')
-    uncited = sorted(i for i, raw in enumerate(lines) if raw and meaningful(raw) and i not in cited)
-    if uncited:
-        errors.append(f'{cell["id"]}: lines {uncited} are not cited')
-    return errors
+        if session.lines and all(0 <= i < len(lines) and lines[i] for i in session.lines):
+            source = '\n'.join(lines[i] for i in session.lines)
+            errors += check_session(prefix, session.title, session.chair, session.agenda_items, source, text)
+    return errors + citation_errors(cell['id'], [s.lines for s in answer.sessions], lines, meaningful)
 
 
 def to_sessions(answer: CellAnswer, item: dict) -> list[dict]:
@@ -182,7 +114,7 @@ def to_sessions(answer: CellAnswer, item: dict) -> list[dict]:
         items = list(dict.fromkeys(session.agenda_items))
         result.append({'rooms': cell['rooms'], 'start': session.start, 'end': session.end,
                        'fixed': session.start != cell['start'] or session.start in marked,
-                       'name': ' '.join(session.title.split()), 'chair': (session.chair or '').strip() or None,
+                       'name': ' '.join(session.title.split()), 'chair': join_chairs(split_chairs(session.chair)),
                        'agenda_items': items, 'group_item': items[0] if items else None,
                        'offline': session.offline, 'lines': [cell['lines'][i] for i in sorted(session.lines)]})
     return result
@@ -209,58 +141,16 @@ class CellRefiner:
 
     def __call__(self, doubtful: list[dict]) -> dict[str, list[dict]]:
         items = {item['cell']['id']: item for item in doubtful}
-        payload = [cell_payload(item) for item in doubtful]
         prompt = (PROMPTS / 'cells.md').read_text(encoding='utf-8')
-        key = digest(json.dumps([VERSION, prompt, self.model, payload], sort_keys=True).encode())
-        path = self.cache_dir / f'cells-{key}.json'
-        answers = self._cached(path, items)
-        if answers is None:
-            try:
-                answers = self._ask(prompt, payload, items)
-                write_json(path, {'cells': {k: v.model_dump() for k, v in answers.items()}})
-            except Exception as exc:   # the rules' reading stands; the next build may retry
-                print(f'[ran2] LLM fallback failed ({exc}); keeping the rule-based reading')
-                self.summary['error'] = str(exc)[:300]
-                answers = {}
+        answers = llm_cells.ask(prompt, [cell_payload(item) for item in doubtful], CellAnswer,
+                                lambda answer, _: check_cell(answer, items[answer.id]),
+                                model=self.model, cache_dir=self.cache_dir, cache_name='cells', label='[ran2]',
+                                request=self.request, version=VERSION)
+        if answers.error:
+            self.summary['error'] = answers.error
         self.summary.update(uncertain=len(items), applied=len(answers), kept_rules=len(items) - len(answers))
         print(f'[ran2] LLM fallback: {len(items)} uncertain cells, {len(answers)} read by {self.model}')
         return {cell_id: to_sessions(answer, items[cell_id]) for cell_id, answer in answers.items()}
-
-    def _cached(self, path, items):
-        cached = read_json(path)
-        if not cached:
-            return None
-        try:
-            answers = {k: CellAnswer.model_validate(v) for k, v in cached['cells'].items()}
-        except (KeyError, ValueError):
-            return None
-        return {k: a for k, a in answers.items() if k in items and not check_cell(a, items[k])}
-
-    def _ask(self, prompt, payload, items):
-        accepted, errors = {}, {}
-        message = prompt + '\n\nCELLS (untrusted data):\n' + json.dumps(payload, ensure_ascii=False)
-        for attempt in range(2):
-            raw = self.request(message, CellsResult.model_json_schema(), self.model, thinking='medium')
-            for answer in CellsResult.model_validate(raw).cells:
-                if answer.id not in items or answer.id in accepted:
-                    continue
-                problems = check_cell(answer, items[answer.id])
-                if problems:
-                    errors[answer.id] = problems
-                else:
-                    accepted[answer.id] = answer
-                    errors.pop(answer.id, None)
-            for cell_id in items.keys() - accepted.keys() - errors.keys():
-                errors[cell_id] = [f'{cell_id}: no answer']
-            if not errors or attempt:
-                break
-            retry = [p for p in payload if p['id'] in errors]
-            message = (prompt + '\n\nCELLS (untrusted data):\n' + json.dumps(retry, ensure_ascii=False)
-                       + '\n\nYOUR PREVIOUS ANSWER:\n' + json.dumps(raw, ensure_ascii=False)
-                       + '\n\nFIX THESE PROBLEMS:\n' + '\n'.join(e for v in errors.values() for e in v))
-        for cell_id, problems in errors.items():
-            print(f'[ran2] LLM answer for {cell_id} rejected: {problems[0]}')
-        return accepted
 
 
 # --------------------------------------------------------------- document
@@ -316,35 +206,19 @@ def read_document(data: bytes, name: str, model: str, request=None, cache_dir: P
     texts = {b['id']: b['text'] for b in blocks if 'text' in b}
     texts.update({c['id']: c['text'] for b in blocks for row in b.get('rows', []) for c in row})
     prompt = (PROMPTS / 'document.md').read_text(encoding='utf-8')
-    key = digest(json.dumps([VERSION, prompt, model, blocks], sort_keys=True).encode())
-    path = cache_dir / f'document-{key}.json'
-    result, errors = None, ['no answer']
-    cached = read_json(path)
-    if cached:
-        try:
-            result = DocResult.model_validate(cached['result'])
-            errors = check_document(result, texts)
-        except (KeyError, ValueError):
-            result = None
-    message = prompt + '\n\nDOCUMENT (untrusted data):\n' + json.dumps(blocks, ensure_ascii=False)
-    for attempt in range(2):
-        if result is not None and not errors:
-            break
-        raw = request(message, DocResult.model_json_schema(), model, thinking='high')
-        result = DocResult.model_validate(raw)
-        errors = check_document(result, texts)
-        message += ('\n\nYOUR PREVIOUS ANSWER:\n' + json.dumps(raw, ensure_ascii=False)
-                    + '\n\nFIX THESE PROBLEMS:\n' + '\n'.join(errors))
-    if errors:
-        raise LayoutError(f'The LLM could not read the schedule either: {errors[:3]}')
-    write_json(path, {'result': result.model_dump()})
+    try:
+        result = llm_cells.read_document(prompt, blocks, DocResult, lambda r: check_document(r, texts), model=model,
+                                         cache_dir=cache_dir, wg_id='ran2', source=name, meeting=meeting,
+                                         request=request, version=VERSION)
+    except ValueError as exc:
+        raise LayoutError(f'The LLM could not read the schedule either: {exc}') from exc
     print(f'[ran2] Table layout not recognised; {len(result.sessions)} sessions read by {model}')
 
     rooms = [{'id': r.id, 'name': r.name, 'label': r.name} for r in result.rooms]
     days = [{'day': d.day, 'slots': sorted((s.start, s.end) for s in d.slots), 'cells': [], 'notes': []}
             for d in sorted(result.days, key=lambda d: DAYS.index(d.day))]
     sessions = [{'day': s.day, 'rooms': s.room_ids, 'start': s.start, 'end': s.end, 'fixed': True,
-                 'name': ' '.join(s.title.split()), 'chair': (s.chair or '').strip() or None,
+                 'name': ' '.join(s.title.split()), 'chair': join_chairs(split_chairs(s.chair)),
                  'agenda_items': list(dict.fromkeys(s.agenda_items)),
                  'group_item': s.agenda_items[0] if s.agenda_items else None, 'offline': s.offline,
                  'lines': [line for ref in s.refs for line in texts[ref].split('\n')]}

@@ -9,6 +9,7 @@ produce the most detailed session list possible.
 
 from __future__ import annotations
 
+import hashlib
 import re
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -19,7 +20,7 @@ from .rooms import online_rooms as _online_rooms
 from .slot_state import hash_source_text, load_slot_state
 
 
-MERGE_PROMPT_VERSION = 4
+MERGE_PROMPT_VERSION = 5
 
 
 # ── Room name resolution ────────────────────────────────────
@@ -153,12 +154,21 @@ class SourceEntry:
     room_label: str
     cell_text: str
     fallback_start_time: str | None = None
+    # The id the LLM cites in ``source_cells``; derived from the source, room
+    # and text so an unchanged cell keeps its id from run to run.
+    cell_id: str = ""
+    # Where the cell sits in its table's time block (see ``CellData``).
+    table_index: int = 0
+    block_row: int = 0
+    row_span: int = 1
+    row_starts: tuple[str | None, ...] = (None,)
+    # Physical rooms the cell covers; empty when they are not target rooms.
+    room_names: tuple[str, ...] = ()
     # Against the slot's cell ledger (set by _annotate_freshness): UNCHANGED,
     # CHANGED, NEW, or REMOVED for a cell that is gone. None when the slot
-    # has no ledger, so nothing is known about what changed.
+    # has no usable ledger, so nothing is known about what changed.
     change: str | None = None
     previous_text: str | None = None  # the cell's text before, for CHANGED
-    since: str | None = None  # when the cell got its text, for UNCHANGED
 
 
 @dataclass
@@ -189,6 +199,9 @@ class TimeSlotData:
     # that were in it but are gone now, by source label.
     previous_entries: dict[str, list[dict]] | None = None
     removed_entries: dict[str, list[SourceEntry]] = field(default_factory=dict)
+    # Ids of the ledger's cells that are not here unchanged any more: the
+    # baseline sessions that cite one of them must be made again.
+    stale_cell_ids: set[str] = field(default_factory=set)
 
 
 def _normalize_cell(text: str) -> str:
@@ -244,19 +257,19 @@ def diff_source_entries(
         if same is None:
             unmatched.append(entry)
         else:
-            entry.change, entry.previous_text, entry.since = "UNCHANGED", None, same.get("since")
+            entry.change, entry.previous_text = "UNCHANGED", None
     for entry in unmatched:
         before = take(lambda c: c.get("room_label", "") == entry.room_label)
         if before is None:
             entry.change, entry.previous_text = "NEW", None
         else:
             entry.change, entry.previous_text = "CHANGED", before.get("cell_text", "")
-        entry.since = None
     return [
         SourceEntry(
             room_label=cell.get("room_label", ""),
             cell_text=cell.get("cell_text", ""),
             fallback_start_time=cell.get("fallback_start_time"),
+            cell_id=cell.get("cell_id", ""),
             change="REMOVED",
         )
         for cell in pool
@@ -277,26 +290,15 @@ def has_cell_changes(slot: TimeSlotData) -> bool:
     )
 
 
-def ledger_entries(slot: TimeSlotData, merged_at: str) -> dict[str, list[dict]]:
-    """The slot's cells as the ledger records them after a merge at ``merged_at``.
-
-    An unchanged cell keeps its ``since``; a changed or new cell gets
-    ``merged_at``. Without a previous ledger, ``since`` is unknown (None).
-    """
-    def since(entry: SourceEntry) -> str | None:
-        if entry.change == "UNCHANGED":
-            return entry.since
-        if entry.change in ("CHANGED", "NEW"):
-            return merged_at
-        return None
-
+def ledger_entries(slot: TimeSlotData) -> dict[str, list[dict]]:
+    """The slot's cells as the ledger records them after a merge."""
     return {
         source.label: [
             {
                 "room_label": entry.room_label,
                 "cell_text": entry.cell_text,
                 "fallback_start_time": entry.fallback_start_time,
-                "since": since(entry),
+                "cell_id": entry.cell_id,
             }
             for entry in source.entries
         ]
@@ -326,6 +328,47 @@ def _room_label_for_cell(
     # Fallback
     indices = ", ".join(str(i) for i in cell.room_indices)
     return f"Table {cell.table_index} Room [{indices}]"
+
+
+def _cell_rooms(cell: CellData, rooms_for_day: list[RoomInfo]) -> tuple[str, ...]:
+    """Physical names of the target rooms a main-schedule cell covers."""
+    return tuple(
+        r.name for r in rooms_for_day
+        if r.table_index == cell.table_index
+        and r.room_index_in_table in cell.room_indices
+    )
+
+
+def _source_entry(
+    cell: CellData, room_label: str, room_names: tuple[str, ...] = (),
+) -> SourceEntry:
+    return SourceEntry(
+        room_label=room_label,
+        cell_text=cell.text,
+        fallback_start_time=cell.fallback_start_time,
+        table_index=cell.table_index,
+        block_row=cell.block_row,
+        row_span=cell.row_span,
+        row_starts=tuple(cell.row_starts),
+        room_names=room_names,
+    )
+
+
+def _assign_cell_ids(source: SlotSource) -> None:
+    """Give each entry a short id that stays the same while its cell does.
+
+    The id hashes the source, room and text, so the baseline of an
+    incremental merge (and a reused slot state) still names the same cells.
+    The same text twice in one room gets a running number.
+    """
+    seen: dict[str, int] = {}
+    for entry in source.entries:
+        text = re.sub(r"\s+", " ", entry.cell_text).strip()
+        basis = f"{source.label}\0{entry.room_label}\0{text}"
+        n = seen.get(basis, 0)
+        seen[basis] = n + 1
+        digest = hashlib.sha256(f"{basis}\0{n}".encode()).hexdigest()
+        entry.cell_id = "c" + digest[:6]
 
 
 def _group_cells_by_slot(
@@ -403,12 +446,9 @@ def collect_time_slot_data(
         for cell in m_cells:
             room_label = _room_label_for_cell(cell, main_rooms)
             main_source.entries.append(
-                SourceEntry(
-                    room_label=room_label,
-                    cell_text=cell.text,
-                    fallback_start_time=cell.fallback_start_time,
-                )
+                _source_entry(cell, room_label, _cell_rooms(cell, main_rooms))
             )
+        _assign_cell_ids(main_source)
         slot.sources.append(main_source)
 
         # Add vice-chair sources
@@ -434,15 +474,10 @@ def collect_time_slot_data(
                 # Content-based matching in the LLM handles correct placement.
                 if room_label in main_room_names:
                     room_label = f"{person}: {room_label}"
-                vc_source.entries.append(
-                    SourceEntry(
-                        room_label=room_label,
-                        cell_text=cell.text,
-                        fallback_start_time=cell.fallback_start_time,
-                    )
-                )
+                vc_source.entries.append(_source_entry(cell, room_label))
 
             if vc_source.entries:
+                _assign_cell_ids(vc_source)
                 slot.sources.append(vc_source)
 
         time_slots.append(slot)
@@ -467,9 +502,13 @@ def _annotate_freshness(slot: TimeSlotData, meeting_id: str | None = None) -> No
     and tag each source as FRESH / STALE / NEW. Sources present in the
     previous snapshot but missing now are tagged REMOVED.
 
-    When the snapshot has a cell ledger, every cell is also tagged against
-    it (``diff_source_entries``); cells that are gone go to
-    ``slot.removed_entries``.
+    When the snapshot has a cell ledger made under the current merge prompt
+    version, every cell is also tagged against it (``diff_source_entries``);
+    cells that are gone go to ``slot.removed_entries``. A ledger from another
+    prompt version is not used: the baseline was made under other rules, so
+    the slot is made again cold. When the ledger shows no changed cell, the
+    cells are the same as the baseline's (only their order moved), so the
+    baseline is reused as when every source is STALE.
 
     When ``meeting_id`` is given and differs from the snapshot's meeting, the
     snapshot is discarded and the slot is treated as brand-new (cold).
@@ -478,9 +517,10 @@ def _annotate_freshness(slot: TimeSlotData, meeting_id: str | None = None) -> No
     slot.current_hashes = current_hashes
     slot.previous_entries = None
     slot.removed_entries = {}
+    slot.stale_cell_ids = set()
     for source in slot.sources:
         for entry in source.entries:
-            entry.change = entry.previous_text = entry.since = None
+            entry.change = entry.previous_text = None
 
     prev_state = load_slot_state(slot.day, slot.time_block_index, meeting_id)
     if prev_state is None:
@@ -489,7 +529,10 @@ def _annotate_freshness(slot: TimeSlotData, meeting_id: str | None = None) -> No
         slot.all_stale = False
         return
 
-    if prev_state.source_entries is not None:
+    if (
+        prev_state.source_entries is not None
+        and prev_state.merge_prompt_version == MERGE_PROMPT_VERSION
+    ):
         slot.previous_entries = prev_state.source_entries
         for source in slot.sources:
             removed = diff_source_entries(
@@ -501,6 +544,17 @@ def _annotate_freshness(slot: TimeSlotData, meeting_id: str | None = None) -> No
         for label, cells in slot.previous_entries.items():
             if label not in current_labels and cells:
                 slot.removed_entries[label] = diff_source_entries(cells, [])
+        unchanged = {
+            entry.cell_id
+            for source in slot.sources
+            for entry in source.entries
+            if entry.change == "UNCHANGED"
+        }
+        slot.stale_cell_ids = {
+            cell.get("cell_id", "")
+            for cells in slot.previous_entries.values()
+            for cell in cells
+        } - unchanged - {""}
 
     prev_hashes = prev_state.source_hashes or {}
     freshness: dict[str, str] = {}
@@ -518,3 +572,5 @@ def _annotate_freshness(slot: TimeSlotData, meeting_id: str | None = None) -> No
     slot.source_freshness = freshness
     slot.previous_merge = prev_state.merged_sessions
     slot.all_stale = bool(freshness) and all(v == "STALE" for v in freshness.values())
+    if slot.previous_entries is not None and not has_cell_changes(slot):
+        slot.all_stale = True

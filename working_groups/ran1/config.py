@@ -317,21 +317,24 @@ def with_meeting_folders(
     built_meeting_id: str | None,
     *,
     rows: list[dict] | None = None,
-    today: str | None = None,
+    now=None,
+    saved_dates: dict | None = None,
     http=None,
 ) -> dict:
     """``cfg`` plus the meeting folders found for this run.
 
-    The meetings are the earliest one by Portal dates that has not ended
-    and the built one, which stays until the next meeting's files replace
-    it. ``meeting_specific_override`` wins for its meeting, and the folders
+    The meetings are the built one and the next one, whatever the date.
+    ``held_meeting`` says when the built meeting has not ended, so the next
+    meeting's files must wait; ``saved_dates`` are the built meeting's dates
+    from the last build, for when Portal has none.
+    ``meeting_specific_override`` wins for its meeting, and the folders
     found are recorded in ``meeting_specific``. A folder that cannot be
     looked up (outage) is left out for this run: the sync folder and the
     built state still work, as when the folder does not exist yet.
     """
     import httpx
 
-    from shared import meeting_folders, portal_meetings
+    from shared import meeting_folders, meeting_turn, portal_meetings
 
     if rows is None:
         try:
@@ -339,14 +342,15 @@ def with_meeting_folders(
         except (httpx.HTTPError, ValueError) as exc:
             print(f"Warning: Portal unavailable ({exc}); finding meeting folders by name")
             rows = []
-    if today is None:
-        from datetime import datetime
-        from zoneinfo import ZoneInfo
-
-        today = datetime.now(ZoneInfo("Asia/Seoul")).date().isoformat()
-    meetings = meeting_folders.upcoming("ran1", rows, today)[:1]
-    if isinstance(built_meeting_id, str) and built_meeting_id:
-        meetings.append(built_meeting_id.lower())
+    now = now or meeting_turn.right_now()
+    built = built_meeting_id.lower() if isinstance(built_meeting_id, str) and built_meeting_id else None
+    dates = meeting_turn.known_dates(
+        meeting_folders.wg_rows("ran1", rows),
+        {"meeting_id": built, "metadata": saved_dates},
+    )
+    held = built if meeting_turn.holds(built, dates, now) else None
+    cfg = {**cfg, "held_meeting": held}
+    meetings = meeting_turn.to_read(built, dates, now)
     try:
         found = meeting_folders.resolve(
             "ran1", meetings, rows=rows, override=cfg["meeting_specific_override"],

@@ -19,9 +19,19 @@ An AREA is the room (or the rooms of a multi-room cell) that a cell covers.
 A Main Schedule cell covers the rooms in its label. A vice-chair cell covers
 the room its CONTENT matches (its label is unreliable, as in a full merge).
 
+A cell that changed or is gone also covers the rooms of the baseline
+sessions made from it. Each cell is headed by its id (`cell c1a2b3`), and
+each baseline session lists the cells it came from in source_cells. When a
+cell's text changes it gets a new id, so a baseline session citing an id
+that is not among the current cells came from a cell that changed or is
+gone. The rooms of those sessions are listed under "Rooms whose baseline
+cells changed" (when there are some); rebuild every room listed there, even
+when the changed cell's new text belongs to another room.
+
 ## What to rebuild and what to keep
 
-- Rebuild an area ONLY when a CHANGED, NEW or REMOVED cell covers it.
+- Rebuild an area ONLY when a CHANGED, NEW or REMOVED cell covers it, or
+  when it is listed under "Rooms whose baseline cells changed".
 - Rebuild it from ALL current cells for that area — changed and unchanged
   alike, from every source — with the full-merge rules below: the Main
   Schedule decides what is in the room, vice-chair cells add detail. The
@@ -29,7 +39,7 @@ the room its CONTENT matches (its label is unreliable, as in a full merge).
   make it. Ignore the baseline's sessions for that area.
 - For every other area, COPY THE BASELINE sessions verbatim (same name,
   duration, chair, group_header, agenda_item, specified_start_time,
-  room_name).
+  room_name, source_cells).
 - An UNCHANGED cell never changes the baseline by itself, even when it
   disagrees with the baseline. Vice-chair documents often contain old copies
   of Main Schedule tables; such a copy keeps saying what it said before, and

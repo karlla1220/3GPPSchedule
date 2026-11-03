@@ -6,6 +6,10 @@ PIPELINES = {
     'ran1': 'working_groups.ran1.lifecycle',
     'ran-plenary': 'working_groups.ran_plenary.lifecycle',
     'ran2': 'working_groups.ran2.lifecycle',
+    'ran4': 'working_groups.ran4.lifecycle',
+    'ran3': 'working_groups.ran3.lifecycle',
+    'sa2': 'working_groups.sa2.lifecycle',
+    'sa1': 'working_groups.sa1.lifecycle',
 }
 
 

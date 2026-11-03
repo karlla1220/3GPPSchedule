@@ -40,7 +40,7 @@ const context = {
         querySelectorAll: selector => selector === 'input[data-ai]' ? inputs.filter(el => 'ai' in el.dataset) : [],
         createElement: element,
         addEventListener(event, fn) { listeners[event] = fn; },
-        documentElement: {clientWidth: 1440, clientHeight: 900, style: {setProperty() {}}},
+        documentElement: {clientWidth: 1440, clientHeight: 900, classList: {toggle() {}}, style: {setProperty() {}}},
     },
     window: {addEventListener() {}},
     localStorage: {

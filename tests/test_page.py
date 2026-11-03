@@ -17,7 +17,7 @@ def test_header_escapes_site_metadata_and_keeps_demo_disclosure():
     html = render_header(schedule, presentation={
         'creator': '<script>bad()</script>', 'contact_name': '<Support>',
         'contact_email': 'new@example.com', 'notice': 'Official'})
-    assert '<script>' not in html and '&lt;Support&gt;' in html
+    assert '<script>bad()' not in html and '&lt;Support&gt;' in html
     assert 'mailto:new@example.com' in html and 'old@example.com' not in html
     assert 'Demo schedule' in html and 'Official' not in html
     assert 'id="tz-now"' in html
@@ -39,8 +39,20 @@ def test_sources_are_short_labels_with_the_version_and_the_file_name_on_hover():
     assert sources(source_files=files, source_labels=dict(zip(files, ['Main', 'Hiroki', 'Sorour']))) == (
         'Sources: Main\xa0draft\xa0v03 · Hiroki\xa0v01 · Sorour\xa0v00 ', files)
     plenary = ['RAN#113 time plan v09.zip', 'agenda.csv']
+    # agenda.csv is read at every build, so the line names only the schedule files.
     assert sources(source_files=plenary, source_labels=dict(zip(plenary, ['Time plan', 'Agenda'])))[0] == (
-        'Sources: Time\xa0plan\xa0v09 · Agenda ')
+        'Sources: Time\xa0plan\xa0v09 ')
+    ran3 = ['RAN3_133bis_agenda_20261014_1825.docx', 'agenda_133bis.csv']
+    assert sources(source_files=ran3, source_labels={ran3[0]: 'agenda_20261014_1825'})[0] == (
+        'Sources: agenda_20261014_1825 ')
+    # A label that already carries the version does not repeat it.
+    for label, name, shown in (
+            ('Schedule after Monday v3', 'RAN4_120bis_meeting_schedule_after_Monday v3.pptx',
+             'Schedule\xa0after\xa0Monday\xa0v3'),
+            ('Schedule v06 morning Monday', 'RAN4_120bis_meeting_schedule_v06_morning_Monday.pptx',
+             'Schedule\xa0v06\xa0morning\xa0Monday'),
+            ('Schedule V9 Friday', 'RAN4_117_meeting_schedule_V9_Friday.pptx', 'Schedule\xa0V9\xa0Friday')):
+        assert sources(source_files=[name], source_labels={name: label})[0] == f'Sources: {shown} '
 
 
 @pytest.mark.parametrize('name, shown', [
@@ -67,7 +79,7 @@ def test_source_without_a_label_keeps_its_file_name():
     # Snapshots saved before labels existed, and the demo schedule.
     name = 'Draft <RAN1#126b> schedules - v03.docx'
     header = render_header(replace(build_schedule(), source_files=[name, 'agenda.csv']))
-    assert 'Sources: Draft &lt;RAN1#126b&gt; schedules - v03.docx · agenda.csv &nbsp;|' in header
+    assert 'Sources: Draft &lt;RAN1#126b&gt; schedules - v03.docx &nbsp;|' in header
     assert sources(source_files=[])[0] == 'Sources: Fixed demonstration schedule '
     labelled = render_header(replace(build_schedule(), source_files=[name + '"x'], source_labels={name + '"x': '<Main>'}))
     assert 'title="Draft &lt;RAN1#126b&gt; schedules - v03.docx&quot;x">&lt;Main&gt;&nbsp;draft&nbsp;v03</span>' in labelled
@@ -160,7 +172,8 @@ def test_support_links_are_joined_as_a_sentence():
 
 def support_note(schedule, **site):
     header = BeautifulSoup(render_header(schedule, presentation=SITE | site), 'html.parser')
-    return header.select_one('#support-note'), header.find('script')
+    note = header.select_one('#support-note')
+    return note, note and note.find_next_sibling('script')
 
 
 def run_note(schedule, now, **options):

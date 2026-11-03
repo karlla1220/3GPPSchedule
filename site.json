@@ -2,6 +2,11 @@
   "default_wg": "ran1",
   "working_groups": [
     {
+      "id": "ran-plenary",
+      "label": "RAN Plenary",
+      "enabled": true
+    },
+    {
       "id": "ran1",
       "label": "RAN1",
       "enabled": true
@@ -12,9 +17,28 @@
       "enabled": true
     },
     {
-      "id": "ran-plenary",
-      "label": "RAN Plenary",
-      "enabled": true
+      "id": "ran3",
+      "label": "RAN3",
+      "enabled": true,
+      "experimental": true
+    },
+    {
+      "id": "ran4",
+      "label": "RAN4",
+      "enabled": true,
+      "experimental": true
+    },
+    {
+      "id": "sa1",
+      "label": "SA1",
+      "enabled": true,
+      "experimental": true
+    },
+    {
+      "id": "sa2",
+      "label": "SA2",
+      "enabled": true,
+      "experimental": true
     }
   ],
   "presentation": {
@@ -24,6 +48,7 @@
     "contact_email": "duckhyun.bae@lge.com",
     "disclaimer": "Personal side project · Not affiliated with LG Electronics or 3GPP",
     "feedback_url": "https://github.com/karlla1220/3GPPSchedule/issues",
+    "experimental_note": "Duckhyun built this page without any knowledge of how this WG works. It may read the schedule wrongly, so check the chair's file.",
     "support_title": "Proposal 1: Buy a coffee for Duckhyun",
     "support_links": [
       {

@@ -4,8 +4,8 @@
 
 이 문서는 RAN1 파이프라인을 설명합니다. 아래의 파서·모델·세션 모듈 이름은
 `working_groups/ran1/` 기준이며 공통 HTML 생성기는 `shared/renderer.py`,
-화면 템플릿은 `templates/`에 있습니다. 시간대는 Portal API를 우선 사용하며
-실제 시작·종료 시각에 따른 NOW 제어는 공통 화면에서 처리합니다.
+화면 템플릿은 `templates/`에 있습니다. 시간대는 Portal API를 우선 사용하고
+모든 WG가 공통 `shared/timezones.py`로 정하며, 실제 시작·종료 시각에 따른 NOW 제어는 공통 화면에서 처리합니다.
 
 ## 전체 흐름
 
@@ -62,6 +62,7 @@ Session 모델 → docs/ran1/schedule.json → docs/ran1/index.html
 - 표의 행 시간으로부터 시간 블록 인덱스
 - 각 일정 셀의 **원문 텍스트 그대로**
 - 일부 특수 행의 parser-derived `fallback_start_time`
+- 셀이 시간 블록 안 몇째 줄에 있는지(아래 `block_row`, `row_span`, `row_starts`)
 
 결과는 `models.py:CellData`이며 주요 필드는 다음과 같다.
 
@@ -72,7 +73,13 @@ room_indices         셀이 차지하는 방 열
 time_block_index     표의 시간 행이 속한 표준 시간 블록
 time_block_start/end 표준 시간 블록 경계
 fallback_start_time  표 구조로 안전하게 유추된 예외적 시작 시각
+block_row            블록 안에서 셀이 시작하는 줄(0부터)
+row_span             셀이 세로 병합으로 걸친 줄 수
+row_starts           블록의 줄마다 시간 칸에 적힌 시작 시각(병합으로 이어진 줄은 None)
 ```
+
+한 블록을 여러 줄로 나누는 표가 있다. 시간 칸을 세로로 병합하고(RAN1#126bis 화요일 17:00~19:30: 첫 줄에 방마다 칸, 둘째 줄에 `Early dinner (60)`),
+또는 늦게 시작하는 줄에 자기 시간 칸(`09:00 ~ 10:30`)을 둔다. 이어진 물리 행이 같은 블록이면 한 블록의 줄들이다. 줄 높이는 읽지 않는다(표시용이다).
 
 여기서 `parser.py`의 `HH:MM` 정규식은 **표 왼쪽의 시간 행을 어느 시간 블록에 넣을지** 판단하는 데 사용된다. 일정 셀 내부의 `9 :50-10 :30` 같은 문자열을 세션으로 분해하기 위한 정규식은 아니다.
 
@@ -93,6 +100,7 @@ Xiaodong
 - Hiroki/Sorour 등의 문서는 `<person>'s schedule`로 등록한다.
 - Main과 완전히 같은 vice-chair 셀 텍스트는 중복 제거한다.
 - 물리 방 이름은 LLM 입력에서 안정적인 `RAN1_main`, `RAN1_brk1`, `RAN1_off1` 등의 alias로 바뀐다.
+- 셀마다 id(`cell c1a2b3`)를 붙인다(`_assign_cell_ids`). source, 방, 글로 만들어서 셀이 그대로이면 실행이 바뀌어도 같은 id다. 증분 병합의 baseline과 재사용한 slot state가 그 id로 셀을 가리킨다.
 
 vice-chair 문서가 방 이름 대신 `Room A`처럼 모호한 이름만 제공하면 `merger.py:_resolve_vc_room_names()`가 문서의 표 앞 문맥을 LLM에 보내 Main schedule의 방과 연결한다. 즉, 이 부분은 구조 파싱 중 예외적으로 LLM의 도움을 받는다. 결과는 `.cache/`에 저장될 수 있다.
 
@@ -110,8 +118,9 @@ vice-chair 문서가 방 이름 대신 `Room A`처럼 모호한 이름만 제공
 
 - 칸은 방 label과 원문(공백 무시)으로 맞춘다. 같은 방 label에 다른 원문이 있었으면 `CHANGED`이고 이전 원문을 함께 둔다.
   병합 칸이 나뉘거나 합쳐지면 방 label이 바뀌므로 `NEW`와 `REMOVED`가 된다. 방 배치를 따로 해석하지 않아서 방이 몇 개이든 같다.
-- 칸마다 `since`(칸이 지금 원문이 된 실행 시각)를 둔다. 바뀌지 않은 칸은 이전 값을 잇고, 바뀐 칸은 그 병합 시각이 된다. 칸 이력이 없던 때부터 그대로인 칸은 `null`이다.
-  지금은 기록만 하고 병합에는 쓰지 않는다.
+- 칸 이력은 칸마다 id(`cell_id`)도 둔다. 바뀌거나 사라진 칸의 옛 id를 baseline 세션의 `source_cells`에서 찾으면 그 칸이 먹여 살리던 방을 코드가 안다(`stale_cell_ids`).
+- 칸 이력은 그 병합의 지시문 버전(`merge_prompt_version`)과 함께 저장한다. 버전이 다르면 칸 이력을 쓰지 않는다(cold).
+- 칸이 바뀐 시각(`since`)은 두지 않는다. 증분이 다시 만드는 영역은 cold와 같은 규칙이라 시각으로 정할 것이 없고, 이력을 지우면 사라지는 값에 결과가 기대면 안 된다(2026-11-03 결정).
 - RAN1#126bis 금요일 08:30 두 업데이트가 테스트다(`tests/test_cell_changes.py`). Main v04 → v05는 203 칸만, Hiroki v07 → v08은 Hiroki의 Yeongju B Hall 칸만 바뀐 것으로 나와야 한다.
   예전 증분 병합은 source 단위로 판단해서 Main v05가 Yeongju B Hall의 Hiroki 세부를 지웠고, Hiroki v08 안의 옛 Main 사본이 Tamna BC Hall·Yeongju A Hall을 Main v02로 되돌렸다.
 
@@ -156,16 +165,24 @@ LLM에 의해 다음처럼 해석된다.
 
 | 경로 | LLM에 전달되는 데이터 | 사용 조건 |
 |---|---|---|
-| Cold | 현재 모든 source의 모든 칸 | 이전 slot state가 없음, 칸 이력이 없음, 또는 칸은 그대로인데 hash만 바뀜(prompt version) |
-| Incremental | 이전 merge baseline + 모든 source의 모든 칸(칸마다 변경 표시) + 사라진 칸 | 이전 state에 칸 이력이 있고 바뀐 칸이 있음 |
-| Short-circuit | 전달 없음 | 모든 source가 `STALE`; 이전 merge 결과 재사용 |
+| Cold | 현재 모든 source의 모든 칸 | 이전 slot state가 없음, 칸 이력이 없음, 칸 이력의 지시문 버전이 다름(`MERGE_PROMPT_VERSION`을 올림) |
+| Incremental | 이전 merge baseline + 모든 source의 모든 칸(칸마다 id와 변경 표시) + 사라진 칸 + 다시 만들 방 목록 | 같은 버전의 칸 이력이 있고 바뀐 칸이 있음 |
+| Short-circuit | 전달 없음 | 모든 source가 `STALE`, 또는 칸 이력과 칸이 모두 같음(같은 방 label끼리 순서만 바뀜); 이전 merge 결과 재사용 |
 
 증분 병합은 `UNCHANGED`가 아닌 칸이 걸친 영역(방)만 다시 만들고, 다른 영역은 baseline을 그대로 옮긴다(`prompts/multi_source_incremental_prefix.md`).
+바뀐 칸의 옛 글이 걸쳐 있던 방도 다시 만든다. 부의장 칸은 내용으로 방이 정해지므로, `Room A` 칸이 9.3.x(Yeongju B Hall)에서 10.2(203)로 바뀌면 203만이 아니라 Yeongju B Hall도 다시 만들어야 옛 9.3.x가 남지 않는다.
+코드가 baseline 세션의 `source_cells`로 그 방을 찾아 프롬프트의 `Rooms whose baseline cells changed`에 적는다.
 다시 만드는 영역은 그 영역의 모든 칸으로 cold와 같은 규칙에 따라 만든다. Main 칸만 바뀌어도 바뀌지 않은 부의장 칸의 세부가 그 방에 다시 들어간다.
 바뀌지 않은 칸까지 모두 보내는 것은 병합 칸이 여러 방에 걸치고 부의장 칸이 다른 방의 세부를 알려 주기 때문이다. 바뀌지 않은 칸은 그것만으로 baseline을 바꾸지 않는다.
 
-baseline에 들어간 오류는 그 영역의 칸이 다시 바뀌기 전까지 남는다. 그때는 cold로 다시 만든다.
-`force-deploy`는 `.cache/`와 상태 파일을 지우고 `main.py --rebuild-slots`로 실행하므로 모든 시간 슬롯이 이전 baseline 없이 cold 경로로 재생성된다. 칸 이력도 함께 지워져 `since`가 처음부터 다시 쌓인다.
+baseline에 들어간 오류는 그 영역의 칸이 다시 바뀌면 증분이 그 영역을 다시 만들면서 없어진다. 칸이 바뀌지 않는 영역의 오류는 cold로만 없어진다(`--rebuild-slots`, 슬롯 파일 하나 지우기).
+
+**칸 이력은 호출을 줄이고 결과를 흔들지 않으려는 것일 뿐, 맞는 결과의 근거가 아니다.** 기준은 지금 칸으로 한 cold다.
+- 증분을 여러 번 이어 온 결과는 지금 칸으로 한 cold 한 번과 같아야 한다. 다시 만드는 영역은 cold 규칙이고, 다시 만들지 않는 영역은 칸이 그대로다.
+- 그래서 이력을 모두 지워도(`force-deploy`) 잃는 것은 호출 비용뿐이다. 모든 슬롯이 cold로 다시 만들어지고, 그 cold가 새 칸 이력을 저장해 다음 실행부터 증분이 된다.
+- 이력에만 있고 원본 문서에는 없는 정보로 결과를 정하지 않는다. cold가 알아야 하는 것(예: 부의장 문서의 옛 Main 사본 가려내기)은 원본 문서에서 다시 만들 수 있어야 한다.
+
+`force-deploy`는 `.cache/`와 상태 파일을 지우고 `main.py --rebuild-slots`로 실행하므로 모든 시간 슬롯이 이전 baseline 없이 cold 경로로 재생성된다.
 칸 이력이 생기기 전에 저장된 slot state는 그대로 읽힌다. 바뀌지 않은 슬롯은 건너뛰면서 칸 이력을 저장하고, 바뀐 슬롯은 한 번 cold로 만든다.
 
 ## 5. LLM 응답 이후의 결정론적 처리
@@ -175,16 +192,14 @@ LLM 응답을 그대로 HTML에 쓰지는 않는다. 코드가 다음 후처리�
 1. Main room의 chair는 Main schedule에 명시적 근거가 있을 때만 유지한다.
 2. `agenda_item`을 세션 이름과 맞춘다(`_normalize_agenda_fields`). AI 번호와 이름 앞 번호의 끝 점을 떼고(`10.8.1.` → `10.8.1`), 하나뿐인 AI가 이름 번호의 상위(`10.5.4`, `10.5.4.x`)이면 이름 번호(`10.5.4.4`)로 바꾼다. 원문의 `10.8.1.(40)` 같은 점이 남으면 필터에 `10.8.1`과 다른 항목으로 보이고, Main의 `.10.5.4 (120)`을 vice-chair의 하위 항목으로 나눌 때 LLM이 부모 번호를 하위 세션에 그대로 붙이는 경우가 있어서다. 이 단계는 설명 계층을 붙이고 `slot_state`에 저장하기 전에 돈다. 그래서 팝업의 AI 이름도 보정된 번호를 따르고, 다음 증분 실행의 baseline도 보정된 값이다. 캐시된 슬롯도 매 실행 이 단계를 거쳐 다시 저장된다. AI가 비어 있으면 Session으로 바꿀 때 이름 앞의 번호를 쓴다(이 값은 저장하지 않는다).
 3. `agenda_item` 또는 세션 이름을 `docs/agenda_item_description.json`과 연결해 설명 계층을 추가한다.
-4. `specified_start_time`이 있으면 `time_to_minutes()`로 분 단위로 바꾼다.
-5. 값이 없으면 방별 cursor를 이용해 앞 세션 종료 직후에 순차 배치한다.
-6. parser-derived `fallback_start_time`이 적용되는 예외라면 해당 시작 시각을 사용한다.
-7. duration을 더해 최종 `start_time`과 `end_time`을 `HH:MM`으로 생성한다.
-8. LLM으로 `group_header` 표기를 정리한 뒤, 남은 빈 group은 이름 일치 규칙으로 보완한다.
-9. AI 번호가 없는 셀은 이름을 회의별 매핑 목록(`docs/ran1/agenda_label_map/<meeting>.jsonl`)에서 찾아 `inferred_agenda_items`를 채운다. 목록에 없는 이름만 LLM에 묻고 답을 목록에 덧붙인다(`agenda_labels.py`, CLAUDE.md의 "AI 없는 셀의 AI 추정").
+4. 시각은 각 세션의 셀이 표의 어느 줄에 있는지로 정한다(아래 "시각은 셀의 줄에서"). `specified_start_time`이 있으면 그 시각이 이긴다.
+5. duration을 더해 최종 `start_time`과 `end_time`을 `HH:MM`으로 생성한다.
+6. LLM으로 `group_header` 표기를 정리한 뒤, 남은 빈 group은 이름 일치 규칙으로 보완한다.
+7. AI 번호가 없는 셀은 이름을 회의별 매핑 목록(`docs/ran1/agenda_label_map/<meeting>.jsonl`)에서 찾아 `inferred_agenda_items`를 채운다. 목록에 없는 이름만 LLM에 묻고 답을 목록에 덧붙인다(`agenda_labels.py`, CLAUDE.md의 "AI 없는 셀의 AI 추정").
 
 ### 같은 시각, 두 방의 같은 AI: 빌드 실패
 
-LLM 해석 직후(위 8·9단계 전) `consistency.py`가 같은 날 서로 다른 방에서 시간이 겹치는 세션이 같은 AI 번호를 가졌는지 본다. RAN1은 한 AI를 두 방에서 동시에 다루지 않으므로, 이런 세션은 어느 source가 엉뚱한 방에 놓였다는 뜻이다. RAN1#126bis 목요일에는 Hiroki의 10.5.4.x가 Tamna BC Hall과 Yeongju B Hall 두 곳에 들어가면서 Tamna의 10.5.3.x가 사라졌다.
+LLM 해석 직후(위 6·7단계 전) `consistency.py`가 같은 날 서로 다른 방에서 시간이 겹치는 세션이 같은 AI 번호를 가졌는지 본다. RAN1은 한 AI를 두 방에서 동시에 다루지 않으므로, 이런 세션은 어느 source가 엉뚱한 방에 놓였다는 뜻이다. RAN1#126bis 목요일에는 Hiroki의 10.5.4.x가 Tamna BC Hall과 Yeongju B Hall 두 곳에 들어가면서 Tamna의 10.5.3.x가 사라졌다.
 
 - 고치지 않는다. 빌드를 실패시켜 관리자가 알게 한다. 화면에는 직전에 배포된 일정이 그대로 남는다.
 - 해당 슬롯의 `slot_state`는 지운다(`RejectedState`). 다른 실패처럼 상태를 되돌리면 같은 결과가 다음 실행에도 재사용되기 때문이다. 지운 파일은 실패한 빌드에서도 커밋된다.
@@ -193,7 +208,32 @@ LLM 해석 직후(위 8·9단계 전) `consistency.py`가 같은 날 서로 다�
 - AI 번호는 일정에 적힌 `agenda_item`만 본다. 추정한 `inferred_agenda_items`와 번호 없는 세션(식사, 휴식, 자리표시)은 보지 않는다.
 - 세부 AI만 비교한다. 제목 수준의 번호(`10.5.2.x`, 또는 `10.5.2.1`이 있는 `10.5.2`)는 두 방에 동시에 있어도 된다. 같은 제목 아래에서 방마다 다른 세부 AI(`10.5.2.1`, `10.5.2.2`)를 논의할 수 있기 때문이다. 하위 항목이 있는지는 이 회의의 agenda와 일정에 나온 번호로 판단한다.
 
-`specified_start_time`을 분으로 바꿀 수 없는 경우 현재 구현은 오류를 중단시키지 않고 그 방의 순차 cursor로 fallback한다. 따라서 잘못된 문자열이 들어와도 빌드는 성공할 수 있지만 배치 시각이 원문과 달라질 가능성이 있다.
+`specified_start_time`을 분으로 바꿀 수 없는 경우 현재 구현은 오류를 중단시키지 않고 그 셀의 줄에서 순서대로 놓는다. 따라서 잘못된 문자열이 들어와도 빌드는 성공할 수 있지만 배치 시각이 원문과 달라질 가능성이 있다.
+
+### 시각은 셀의 줄에서
+
+LLM 답의 순서로 시각을 정하지 않는다. 프롬프트가 정하는 순서는 방 그룹 안에서뿐이고, 여러 방 그룹(`ALL_ONLINE`, `ALL_ROOMS`)이 방 그룹들 사이 어디에 오는지는 LLM 마음이다.
+RAN1#126bis 화요일 17:00~19:30은 원본도 답 내용도 같은데 재병합 때 `Early dinner`(`ALL_ROOMS`)가 온라인 방과 오프라인 방 사이로 왔다. 예전 방별 cursor는 이것을 순서대로 믿어서, 오프라인 방의 17:00 세션을 19:30~21:00으로 밀었다(그리드 밖으로 나갔다).
+
+- **LLM은 세션마다 출처 셀의 id를 답한다(`source_cells`).** 시각을 판단하는 일이 아니라 찾아 적는 일이다. 프롬프트의 셀 머리에 id가 있다(`[cell c1a2b3 — RAN1_main]`). 증분 병합도 모든 칸을 글과 id로 보낸다.
+  - 코드가 검사한다(`source_cell_problems`): 비어 있지 않고, 이 슬롯에 있는 id이고, Main Schedule 셀에서 온 세션은 그 셀의 방 안에 있다.
+    Main Schedule에 그 방의 칸이 있으면 부의장 셀만 가리켜서는 안 된다(부의장 표는 내용으로 맞추고, 방 이름과 줄 구조를 믿을 수 없다). 틀리면 문제를 붙여 다시 묻고(3번), 끝내 틀리면 알림을 남기고 빌드가 실패한다.
+  - 줄의 시각은 프롬프트에 넣지 않는다. 표 구조에서 나온 시각은 코드가 적용한다.
+- **세션은 셀의 줄 시작부터 놓인다.** Main Schedule 셀을 가리키면 그 셀, 아니면 부의장 셀의 줄이다. 같은 방에서 앞선 세션 뒤에 이어 놓는다.
+  줄은 문서 순서대로, 줄 안에서는 답의 순서대로 놓는다. 그래서 저녁이 답의 어디에 있든 오프라인 세션은 17:00에 시작한다.
+- **줄의 시작은 문서가 말하는 만큼 정한다(`_row_bounds`).** 순서대로:
+  1. 첫 줄은 블록 시작, 마지막 줄의 끝은 블록 끝, 시간 칸이 있는 줄은 그 시각
+  2. parser-derived `fallback_start_time`(마지막 줄에 길이가 하나만 적힌 칸, `Early dinner (60)` → 18:30)
+  3. 위 줄에서 끝나는 셀 중 가장 긴 것의 끝(`(60)`이 없어도 첫 줄의 90분 칸이 18:30을 말한다)
+  4. 그 줄에서 시작하는 셀이 제때 끝나려면 시작해야 하는 시각
+- **빈칸은 빈 시간이다.** 첫 줄에 칸이 없는 방은 자기 칸이 있는 줄까지 비어 있다. LLM에게 빈 세션을 만들게 하지 않는다. 길이를 지어내야 하기 때문이다.
+- **셀에 들어가지 않으면 빌드가 실패한다.** 순서대로 놓은 세션이 셀의 마지막 줄 끝을 넘거나, 세션이 이 슬롯의 셀을 가리키지 않거나, 줄의 시작을 알 수 없으면 `SlotPlacementError`다.
+  `parse_time_slots`가 모든 슬롯을 본 뒤 GitHub 이슈 알림(`RAN1: session times do not fit the schedule document`)을 남기고 `RejectedState`로 실패한다.
+  해당 슬롯의 `slot_state`를 지우므로 다음 빌드가 그 슬롯을 cold로 다시 묻는다. 위 "같은 시각, 두 방의 같은 AI"와 같은 처리다. 같은 문제는 이슈에 한 번만 댓글로 남는다.
+- **이력.** 처음(2026-02)에는 셀마다 따로 LLM에 물어 셀이 곧 위치였다. 부의장 문서를 함께 보려고 시간 블록마다 한 번에 묻게 바꾸면서 세션과 셀의 연결이 끊겼고, 방 그룹마다 블록 시작부터 쌓게 되었다.
+  2026-08 세로 병합된 줄(저녁)을 다룰 때 파서가 셀 시작을 셌고, 처음에는 그 시각을 프롬프트에 `Explicit cell start time`으로 넣었다가, 따로 `fallback_start_time` 칸으로 답하게 했다가, 결국 프롬프트에서 빼고 코드가 이름과 열로 맞췄다(LLM이 추정 시각을 옮기거나 baseline에 남기지 않게).
+  같은 때 여러 방 세션이 블록 시작에 놓이던 것을 방별 cursor로 고쳤는데, 이것이 답의 순서를 믿는 원인이 되었다. 지금 방식도 줄의 시각은 LLM에 주지 않는다. LLM은 매번 검사하는 셀 id만 답하고 시각은 코드가 빌드마다 다시 센다.
+  블록을 넘지 않는 어긋남도 셀의 끝으로 잡는다. 예전처럼 블록 끝만 보면 저녁이 답의 맨 앞에 올 때(17:00 저녁, 나머지 18:00~19:30) 아무것도 걸리지 않는다.
 
 ## 6. Agenda 설명의 출처
 
@@ -210,7 +250,7 @@ LLM 해석 직후(위 8·9단계 전) `consistency.py`가 같은 날 서로 다�
 
 ## 7. 특정 일정의 출처 추적 방법
 
-현재 slot state는 source별 hash, 최종 merge 결과, 그 merge에 쓴 칸(칸 이력, 칸마다 `since`)을 저장하지만, **각 세션이 어느 source의 어느 셀에서 유래했는지에 대한 per-session provenance는 저장하지 않는다.** 따라서 다음 순서로 역추적한다. 칸 이력의 `since`로 어느 칸이 언제 바뀌었는지는 바로 볼 수 있다.
+현재 slot state는 source별 hash, 최종 merge 결과, 그 merge에 쓴 칸(칸 이력)을 저장한다. 세션마다 출처 칸의 id(`source_cells`)가 있고, 칸 이력에서 그 id의 source·방·원문을 찾을 수 있다. 원본 파일까지 따라가려면 다음 순서로 본다.
 
 1. `docs/ran1/index.html` 또는 `docs/ran1/slot_state/{Day}_{TB}.json`에서 최종 일정 확인
 2. slot state의 `source_hashes`에서 참여한 source 확인

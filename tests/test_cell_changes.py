@@ -14,10 +14,12 @@ from pathlib import Path
 
 import working_groups.ran1.slot_state as slot_state
 from working_groups.ran1.merger import (
+    MERGE_PROMPT_VERSION,
     SlotSource,
     SourceEntry,
     TimeSlotData,
     _annotate_freshness,
+    _assign_cell_ids,
     diff_source_entries,
     has_cell_changes,
     ledger_entries,
@@ -31,8 +33,8 @@ FIXTURE = Path(__file__).parent / "fixtures" / "ran1" / "slot_cells_126bis" / "f
 MEETING = "ran1#126bis"
 
 
-def _entry(room_label: str, text: str, since: str | None = None) -> dict:
-    return {"room_label": room_label, "cell_text": text, "fallback_start_time": None, "since": since}
+def _entry(room_label: str, text: str, cell_id: str = "") -> dict:
+    return {"room_label": room_label, "cell_text": text, "fallback_start_time": None, "cell_id": cell_id}
 
 
 def _cells(*pairs: tuple[str, str]) -> list[SourceEntry]:
@@ -50,9 +52,9 @@ def _fixture_slot(combo: str) -> TimeSlotData:
         main_rooms=[RoomInfo(**room) for room in data["main_rooms"]],
     )
     for source in data["slots"][combo]:
-        slot.sources.append(
-            SlotSource(label=source["label"], entries=[SourceEntry(**e) for e in source["entries"]])
-        )
+        entries = SlotSource(label=source["label"], entries=[SourceEntry(**e) for e in source["entries"]])
+        _assign_cell_ids(entries)
+        slot.sources.append(entries)
     return slot
 
 
@@ -128,15 +130,9 @@ class DiffSourceEntriesTests(unittest.TestCase):
         self.assertEqual(current[1].previous_text, "6GR (120) / .10.7.1 NTN (60) / .10.5.2.x (60)")
         self.assertEqual(removed, [])
 
-    def test_since_is_carried_for_unchanged_cells_only(self):
-        current = _cells(("201", "Sorour (120)"), ("203", "Hiroki (90)"))
-        diff_source_entries(
-            [_entry("201", "Sorour (120)", since="2026-10-14T04:20:00+00:00"),
-             _entry("203", "Hiroki (120)", since="2026-10-14T04:20:00+00:00")],
-            current,
-        )
-        self.assertEqual(current[0].since, "2026-10-14T04:20:00+00:00")
-        self.assertIsNone(current[1].since)
+    def test_removed_cells_keep_their_old_id(self):
+        removed = diff_source_entries([_entry("203", "Hiroki (120)", cell_id="c0ld203")], [])
+        self.assertEqual([(e.cell_id, e.change) for e in removed], [("c0ld203", "REMOVED")])
 
 
 class _SlotStateDir(unittest.TestCase):
@@ -149,7 +145,8 @@ class _SlotStateDir(unittest.TestCase):
     def tearDown(self):
         slot_state.SLOT_STATE_DIR = self._orig_dir
 
-    def _save_merged(self, slot: TimeSlotData, merged_at: str, sessions=None) -> None:
+    def _save_merged(self, slot: TimeSlotData, merged_at: str, sessions=None,
+                     version: int = MERGE_PROMPT_VERSION) -> None:
         """Record ``slot`` as merged, the way parse_time_slots does after a merge."""
         save_slot_state(
             SlotState(
@@ -159,7 +156,8 @@ class _SlotStateDir(unittest.TestCase):
                 merged_sessions=sessions or [{"room_name": "RAN1_main", "name": "x"}],
                 merged_at=merged_at,
                 meeting_id=MEETING,
-                source_entries=ledger_entries(slot, merged_at),
+                source_entries=ledger_entries(slot),
+                merge_prompt_version=version,
             )
         )
 
@@ -205,13 +203,13 @@ class RealUpdateTests(_SlotStateDir):
 
         off2 = name_to_alias["203"]
         brk2 = name_to_alias["Yeongju B Hall"]
-        self.assertIn(f"[{off2}] CHANGED", prompt)
+        self.assertIn(f" — {off2}] CHANGED", prompt)
         self.assertIn(".10.8.x Sensing (60)\n10.5.4.x (60)", prompt)  # the text before
-        self.assertIn(f"[{brk2}] UNCHANGED\nR20 (120)\nA-IoT Phase2 (120)", prompt)
+        self.assertIn(f" — {brk2}] UNCHANGED\nR20 (120)\nA-IoT Phase2 (120)", prompt)
         # Hiroki did not change, but its cells are what 203 is rebuilt from.
-        self.assertIn(f"[Hiroki's schedule — Hiroki: {off2}] UNCHANGED", prompt)
+        self.assertIn(f" — Hiroki's schedule — Hiroki: {off2}] UNCHANGED", prompt)
         self.assertIn("10.5.4.1 (30)", prompt)
-        self.assertIn(f"[Hiroki's schedule — Hiroki: {brk2}] UNCHANGED", prompt)
+        self.assertIn(f" — Hiroki's schedule — Hiroki: {brk2}] UNCHANGED", prompt)
         self.assertIn("9.3.1(40), 9.3.2(40), 9.3.3(40)", prompt)
         # The baseline is still the starting point for every other room.
         self.assertIn('"name": "x"', prompt)
@@ -232,6 +230,49 @@ class RealUpdateTests(_SlotStateDir):
         self.assertIn(f"[Hiroki's schedule — Hiroki: {name_to_alias['203']}] REMOVED", prompt)
 
 
+class StaleRoomTests(_SlotStateDir):
+    """A changed cell also rebuilds the rooms its old text fed (review of #66)."""
+
+    def test_vice_chair_cell_moving_to_another_room_rebuilds_the_old_room(self):
+        # Hiroki's "Room A" cell said 9.3.x (Yeongju B Hall) and now says
+        # 10.2 (203). The baseline's Yeongju B Hall sessions cite the old
+        # cell, so that room is rebuilt although no Main cell there changed.
+        first = _fixture_slot("Main v05 + Hiroki v08 + Sorour v01")
+        _annotate_freshness(first, meeting_id=MEETING)
+        hiroki = next(s for s in first.sources if s.label == "Hiroki's schedule")
+        old = next(e for e in hiroki.entries if e.room_label == "Hiroki: Yeongju B Hall")
+        main_brk2 = next(e for e in first.sources[0].entries if e.room_label == "Yeongju B Hall")
+        name_to_alias, _ = build_room_aliases(first.main_rooms)
+        brk2, off2 = name_to_alias["Yeongju B Hall"], name_to_alias["203"]
+        self._save_merged(first, "2026-10-15T22:41:00+00:00", sessions=[
+            {"room_name": brk2, "name": "9.3.3", "source_cells": [main_brk2.cell_id, old.cell_id]},
+            {"room_name": off2, "name": "10.5.4.1", "source_cells": [first.sources[0].entries[-1].cell_id]},
+        ])
+
+        second = _fixture_slot("Main v05 + Hiroki v08 + Sorour v01")
+        moved = next(e for s in second.sources if s.label == "Hiroki's schedule"
+                     for e in s.entries if e.room_label == "Hiroki: Yeongju B Hall")
+        moved.cell_text = "10.2 (60) / 10.2.1 (60)"
+        _assign_cell_ids(next(s for s in second.sources if s.label == "Hiroki's schedule"))
+        _annotate_freshness(second, meeting_id=MEETING)
+
+        self.assertEqual(moved.change, "CHANGED")
+        self.assertEqual(second.stale_cell_ids, {old.cell_id})
+        prompt = _build_time_slot_prompt(second, name_to_alias, mode="incremental")
+        self.assertIn(f"## Rooms whose baseline cells changed (rebuild these)\n- {brk2}\n", prompt)
+        self.assertNotIn(f"- {off2}\n", prompt.split("## Rooms whose baseline cells changed")[1].split("##")[0])
+
+    def test_no_room_list_when_only_new_cells(self):
+        first = _fixture_slot("Main v04 + Hiroki v07 + Sorour v01")
+        _annotate_freshness(first, meeting_id=MEETING)
+        self._save_merged(first, "2026-10-15T10:41:00+00:00")  # sessions cite nothing
+        second = _fixture_slot("Main v05 + Hiroki v07 + Sorour v01")
+        _annotate_freshness(second, meeting_id=MEETING)
+        name_to_alias, _ = build_room_aliases(second.main_rooms)
+        prompt = _build_time_slot_prompt(second, name_to_alias, mode="incremental")
+        self.assertNotIn("Rooms whose baseline cells changed", prompt)
+
+
 class LedgerTests(_SlotStateDir):
     def test_ledger_round_trips_through_slot_state(self):
         slot = _fixture_slot("Main v05 + Hiroki v08 + Sorour v01")
@@ -239,31 +280,43 @@ class LedgerTests(_SlotStateDir):
         self._save_merged(slot, "2026-10-15T22:41:00+00:00")
 
         state = load_slot_state("Friday", 0, MEETING)
+        self.assertEqual(state.merge_prompt_version, MERGE_PROMPT_VERSION)
         self.assertEqual(set(state.source_entries), {"Main Schedule", "Hiroki's schedule", "Sorour's schedule"})
         main = state.source_entries["Main Schedule"]
         self.assertEqual([e["room_label"] for e in main],
                          ["Tamna BC Hall", "Yeongju A Hall", "Yeongju B Hall", "201", "203"])
-        # No earlier ledger: when these texts first appeared is unknown.
-        self.assertEqual({e["since"] for e in main}, {None})
+        self.assertEqual([e["cell_id"] for e in main], [e.cell_id for e in slot.sources[0].entries])
 
-    def test_changed_cells_get_the_merge_time_and_unchanged_keep_theirs(self):
-        slot = _fixture_slot("Main v04 + Hiroki v07 + Sorour v01")
-        _annotate_freshness(slot, meeting_id=MEETING)
-        self._save_merged(slot, "2026-10-15T10:41:00+00:00")
-        slot = _fixture_slot("Main v05 + Hiroki v07 + Sorour v01")
-        _annotate_freshness(slot, meeting_id=MEETING)
-        self._save_merged(slot, "2026-10-15T11:01:00+00:00")
-        slot = _fixture_slot("Main v05 + Hiroki v08 + Sorour v01")
-        _annotate_freshness(slot, meeting_id=MEETING)
-        self._save_merged(slot, "2026-10-15T22:41:00+00:00")
+    def test_ledger_from_another_prompt_version_is_not_used(self):
+        # The baseline was made under other rules; copying it would keep them.
+        first = _fixture_slot("Main v04 + Hiroki v07 + Sorour v01")
+        _annotate_freshness(first, meeting_id=MEETING)
+        self._save_merged(first, "2026-10-15T10:41:00+00:00", version=MERGE_PROMPT_VERSION - 1)
+        second = _fixture_slot("Main v05 + Hiroki v07 + Sorour v01")
+        _annotate_freshness(second, meeting_id=MEETING)
+        self.assertIsNone(second.previous_entries)
+        self.assertFalse(has_cell_changes(second))
+        self.assertFalse(second.all_stale)
 
-        state = load_slot_state("Friday", 0, MEETING)
-        since = {(label, e["room_label"]): e["since"]
-                 for label, entries in state.source_entries.items() for e in entries}
-        self.assertEqual(since[("Main Schedule", "203")], "2026-10-15T11:01:00+00:00")
-        self.assertEqual(since[("Hiroki's schedule", "Hiroki: Yeongju B Hall")], "2026-10-15T22:41:00+00:00")
-        self.assertIsNone(since[("Main Schedule", "Yeongju B Hall")])
-        self.assertIsNone(since[("Hiroki's schedule", "Hiroki: Yeongju A Hall")])
+    def test_cells_in_another_order_reuse_the_baseline(self):
+        # Two cells with the same room label swap places: the source hash
+        # changes, the cells do not.
+        first = _fixture_slot("Main v05 + Hiroki v08 + Sorour v01")
+        sorour = next(s for s in first.sources if s.label == "Sorour's schedule")
+        sorour.entries.append(SourceEntry(room_label=sorour.entries[0].room_label, cell_text="TBD"))
+        _assign_cell_ids(sorour)
+        _annotate_freshness(first, meeting_id=MEETING)
+        self._save_merged(first, "2026-10-15T22:41:00+00:00")
+
+        second = _fixture_slot("Main v05 + Hiroki v08 + Sorour v01")
+        sorour = next(s for s in second.sources if s.label == "Sorour's schedule")
+        sorour.entries.insert(0, SourceEntry(room_label=sorour.entries[0].room_label, cell_text="TBD"))
+        _assign_cell_ids(sorour)
+        _annotate_freshness(second, meeting_id=MEETING)
+
+        self.assertEqual(second.source_freshness["Sorour's schedule"], "FRESH")
+        self.assertFalse(has_cell_changes(second))
+        self.assertTrue(second.all_stale)
 
     def test_state_saved_before_the_ledger_existed_still_loads(self):
         slot_state.SLOT_STATE_DIR.mkdir(parents=True)

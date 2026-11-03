@@ -6,7 +6,10 @@ from shared.topic_references import render_supplements, render_topic_references
 
 import json
 import re
+from dataclasses import dataclass
 from datetime import datetime
+from functools import reduce
+from math import gcd
 from pathlib import Path
 from urllib.parse import quote
 
@@ -21,6 +24,7 @@ from shared.page import render_header
 from shared.agreement_assets import (
     agenda_section_ids,
     current_agreements,
+    has_panel,
     render_agreement_panel,
     write_agreement_assets,
 )
@@ -324,9 +328,9 @@ def generate_html(schedule: Schedule, *, schedules=None, groups=None, presentati
 
     color_map = _assign_group_colors(all_sessions)
     filter_data_json = _build_filter_data(all_sessions)
-    # None outside RAN1: cells there have no agreement panel to control.
+    # None without the agreement panel (RAN1, or a WG that gives its data): cells have nothing to control.
     agreement_sections = (
-        current_agreements(schedule).get("sections", {}) if schedule.wg_id == "ran1" else None
+        current_agreements(schedule).get("sections", {}) if has_panel(schedule) else None
     )
     page_header = render_header(schedule, presentation=presentation, schedules=schedules, groups=groups)
 
@@ -350,16 +354,35 @@ def generate_html(schedule: Schedule, *, schedules=None, groups=None, presentati
         day_lower = day_schedule.day_name.lower()
         day_short = day_schedule.day_name[:3]
         html_parts.append(
-            f'            <button class="tab" data-day="{day_lower}">{day_short}</button>\n'
+            # Named so the meeting switch slides each day's tab to its place (schedule.css).
+            f'            <button class="tab" data-day="{day_lower}" style="view-transition-name:day-tab-{day_lower};view-transition-class:grid-move">{day_short}</button>\n'
+        )
+    week = _week_layout(schedule)
+    if week:
+        html_parts.append(
+            f'            <button class="tab tab-all" data-day="{_ALL_DAYS}" data-grid-min-width="{week.min_width}" '
+            f'title="Every day of the meeting at a glance" style="view-transition-name:day-tab-{_ALL_DAYS};view-transition-class:grid-move">All</button>\n'
         )
     html_parts.append("        </div>\n")
+    if week and len(week.rooms) > 1:
+        html_parts.append(_render_room_picks(week))
     html_parts.append(
-        '        <button class="now-toggle" id="now-toggle" type="button" '
+        '        <button class="now-toggle" id="now-toggle" type="button" style="view-transition-name:now-toggle;view-transition-class:grid-move" '
         'aria-pressed="false" disabled title="NOW is available during the meeting">NOW</button>\n'
     )
     html_parts.append("    </div>\n")
+    state_id_json = json.dumps(schedule.wg_id + ":" + schedule.meeting_id).replace("<", "\\u003c")
+    if week and len(week.rooms) > 1:
+        # Before day-select.js, which fits the zoom to the rooms left.
+        html_parts.append("    <script>" + _render_template("room-picks.js", {"STATE_ID_JSON": state_id_json}) + "</script>\n")
+    # Picks the day before its grid is parsed, so the page never draws without one.
+    html_parts.append("    <script>" + _render_template("day-select.js", {
+        "STATE_ID_JSON": state_id_json,
+        "MEETING_TIMEZONE_JSON": json.dumps(schedule.timezone).replace("<", "\\u003c"),
+    }) + "</script>\n")
 
     # Day panels
+    week_cells: list[str] = []
     for day_schedule in schedule.days:
         day_lower = day_schedule.day_name.lower()
         num_rooms = len(day_schedule.rooms)
@@ -383,14 +406,22 @@ def generate_html(schedule: Schedule, *, schedules=None, groups=None, presentati
         # Room headers
         html_parts.append(
             '                <div class="room-header time-col" '
-            'style="grid-column:1;grid-row:1"><span>Time</span></div>\n'
+            'style="grid-column:1;grid-row:1;view-transition-name:time-head;view-transition-class:grid-move"><span>Time</span></div>\n'
         )
         for ri, room in enumerate(day_schedule.rooms):
             col = ri + 2
-            html_parts.append(
-                f'                <div class="room-header" '
-                f'style="grid-column:{col};grid-row:1">{_esc(room.name)}</div>\n'
-            )
+            if room.detail:
+                # Where the room is, under its name; the whole line stays on hover.
+                html_parts.append(
+                    f'                <div class="room-header has-place" title="{_esc(_room_text([room]))}" '
+                    f'style="grid-column:{col};grid-row:1"><span class="room-name">{_esc(room.name)}</span>'
+                    f'<span class="room-place">{_esc(room.detail)}</span></div>\n'
+                )
+            else:
+                html_parts.append(
+                    f'                <div class="room-header" title="{_esc(room.name)}" '
+                    f'style="grid-column:{col};grid-row:1">{_room_name_html(room.name)}</div>\n'
+                )
 
         # Each day supplies its own range, precision and label spacing.
         base_min = time_to_minutes(timeline.start)
@@ -400,7 +431,8 @@ def generate_html(schedule: Schedule, *, schedules=None, groups=None, presentati
             span = min(timeline.label_minutes // timeline.slot_minutes, timeline.rows + 2 - row)
             label = f"{minute // 60:02d}:{minute % 60:02d}"
             major = " major" if minute % 60 == 0 else ""
-            html_parts.append(f'<div class="time-label" style="grid-row:{row}/{row + span}"><span>{label}</span></div>')
+            # Named by its time: the meeting switch moves 09:00 to where 09:00 is on the next grid.
+            html_parts.append(f'<div class="time-label" style="grid-row:{row}/{row + span};view-transition-name:time-{minute};view-transition-class:grid-move"><span>{label}</span></div>')
             html_parts.append(f'<div class="grid-line{major}" style="grid-row:{row}"></div>')
 
         for brk in timeline.breaks:
@@ -416,6 +448,7 @@ def generate_html(schedule: Schedule, *, schedules=None, groups=None, presentati
                     html_parts.append(f'<div class="break-bar" style="grid-row:{row_start}/{row_end}">{label}</div>')
 
         # Session blocks
+        cell_index = 0
         for session in day_schedule.sessions:
             colors = color_map.get(session.group_header, _DEFAULT_COLOR)
             row_start = timeline.row(session.start_time)
@@ -426,6 +459,9 @@ def generate_html(schedule: Schedule, *, schedules=None, groups=None, presentati
                     row_end = row_start + 1
                 else:
                     continue  # Skip zero/negative duration
+            if session.part:
+                # Equal heights: the schedule gives the order, not the times.
+                row_start, row_end = _part_rows(session.part, row_start, row_end)
 
             # Map session room columns to this day's room layout.
             # session.room_col_start/end are global (with col 1=time),
@@ -473,14 +509,15 @@ def generate_html(schedule: Schedule, *, schedules=None, groups=None, presentati
             # chair are one quiet secondary tone.
             if slots >= 3 and session.chair:
                 chair_html = (
-                    f'<div class="session-chair">{_esc(session.chair)}</div>'
+                    f'<div class="session-chair">{_esc(_cell_chair(session.chair))}</div>'
                 )
             if slots >= 4:
                 # Duration leads: it is what people look for first. The row is
                 # one line tall, so a narrow column drops the clock range whole.
                 dur_html = (
                     f'<div class="session-duration">'
-                    f'<span class="session-minutes">{session.duration_minutes} <span class="session-unit">min</span></span>'
+                    f'<span class="session-minutes">{_part_prefix(session.part)}'
+                    f'{session.duration_minutes} <span class="session-unit">min</span></span>'
                     f'<span class="session-range">\u00b7 {session.start_time}\u2013{session.end_time}</span>'
                     f"</div>"
                 )
@@ -514,16 +551,15 @@ def generate_html(schedule: Schedule, *, schedules=None, groups=None, presentati
             if session.agenda_item:
                 popup_lines.append(f"AI: {_esc(session.agenda_item)}")
             popup_lines.append(
-                f"Time: {session.start_time} - {session.end_time} ({session.duration_minutes} min)"
+                f"Time: {session.start_time} - {session.end_time} "
+                f"({_part_text(session.part)}{session.duration_minutes} min)"
             )
-            room_names_in_span = []
-            for ri in range(col_start - 2, min(col_end - 2, num_rooms)):
-                if ri < len(day_schedule.rooms):
-                    room_names_in_span.append(day_schedule.rooms[ri].name)
+            rooms_in_span = [day_schedule.rooms[ri] for ri in range(col_start - 2, min(col_end - 2, num_rooms))
+                             if ri < len(day_schedule.rooms)]
             if scope_label:
                 popup_lines.append(f"Room: {scope_label} (merged display, not a booking of every room)")
-            elif room_names_in_span:
-                popup_lines.append(f"Room: {_esc(', '.join(room_names_in_span))}")
+            elif rooms_in_span:
+                popup_lines.append(f"Room: {_esc(_room_text(rooms_in_span))}")
             if notes:
                 # One separated block; a "Note:" label on every line only adds noise.
                 popup_lines.append(
@@ -559,12 +595,18 @@ def generate_html(schedule: Schedule, *, schedules=None, groups=None, presentati
             else:
                 data_ai = ""
             data_ai_attr = _esc(data_ai).replace('"', '&quot;')
-            # A cell without an AI is matched and opened by the items its label
-            # was read as (inferred_agenda_items); data-ai stays as written.
-            scope_ai = session.agenda_item or ", ".join(session.inferred_agenda_items)
+            # A cell is also matched and opened by items it does not write
+            # (inferred_agenda_items: its label read by an LLM, or a WG's rules
+            # such as RAN4 candidate lists); data-ai stays as written.
+            found_ai = ", ".join(session.inferred_agenda_items)
+            scope_ai = ", ".join(filter(None, [session.agenda_item, found_ai]))
             # A "maybe" item is filtered like the cell's own: the slot may be its session.
-            filter_ai = ", ".join(filter(None, [scope_ai, *maybe]))
-            data_ai_scope_attr = _esc(_ai_filter_scope(filter_ai)).replace('"', '&quot;')
+            # Written and found items are scoped apart, so a found sub-item does
+            # not narrow a written "8.1" to 8.1's own part.
+            filter_ai = "|".join(filter(None, [
+                _ai_filter_scope(", ".join(filter(None, [session.agenda_item, *maybe]))),
+                _ai_filter_scope(found_ai)]))
+            data_ai_scope_attr = _esc("|".join(dict.fromkeys(filter_ai.split("|"))) if filter_ai else "").replace('"', '&quot;')
             # The panel opens the chair-note sections an AI covers (10.6.x →
             # 10.6.1, 10.6.2). The filter keeps matching the AI as written.
             agreement_attrs = ""
@@ -594,6 +636,29 @@ def generate_html(schedule: Schedule, *, schedules=None, groups=None, presentati
                 f"                    {name_html}{details_html}{chair_html}\n"
                 f"                </div>\n"
             )
+            if week:
+                # The same cell at a glance: its title, and everything the
+                # filter and the agreement panel read. The popup stays on the
+                # day's cell (data-popup-of), the largest part of a page.
+                top, bottom = week.row(day_schedule, row_start), week.row(day_schedule, row_end)
+                left = week.columns[day_lower] + col_start - 2
+                size = " tiny-session" if is_tiny else " short-session" if is_short else ""
+                # In every room it spans, so it stays while one of them is shown.
+                room_marks = week.room_classes(day_schedule.rooms[col_start - 2:col_end - 2])
+                week_cells.append(
+                    f'<div class="session-block week-cell{size} {room_marks}" style="grid-row:{top}/{bottom};--cell-rows:{bottom - top};'
+                    f'grid-column:{left}/{left + col_end - col_start};--session-border:{colors["border"]}"'
+                    f'{agreement_attrs}'
+                    f' title="{_esc(session.name)} · {session.start_time}–{session.end_time}"'
+                    f' data-popup-of="{day_lower}:{cell_index}"'
+                    f' data-room-scope="{session.room_scope}"'
+                    f' data-ai="{data_ai_attr}"'
+                    f' data-ai-scope="{data_ai_scope_attr}"'
+                    f' data-name="{data_name_attr}"'
+                    f' data-group="{data_group_attr}"'
+                    f'><div class="session-name">{_esc(session.name)}</div></div>\n'
+                )
+            cell_index += 1
 
         html_parts.append(
             "            </div>\n"
@@ -601,6 +666,11 @@ def generate_html(schedule: Schedule, *, schedules=None, groups=None, presentati
             "    </div>\n"
         )
 
+    if week:
+        html_parts.append(_render_all_days(schedule, week, week_cells))
+
+    # The end of the grids, which a page arriving from another WG waits for (switch-arrival.js).
+    html_parts.append('    <div id="grid-end" hidden></div>\n')
     html_parts.append(render_agreement_panel(schedule))
     html_parts.append(_render_email_informal(schedule))
     html_parts.append(render_topic_references(schedule.topic_references, schedule.topic_preamble))
@@ -612,6 +682,7 @@ def generate_html(schedule: Schedule, *, schedules=None, groups=None, presentati
         "FAVICON": "data:image/svg+xml," + quote(_load_template("favicon.svg").replace("\n", "").replace("\r", "")),
         "HEADER": page_header,
         "STYLES": _generate_css(10),
+        "ARRIVAL_SCRIPT": _load_template("switch-arrival.js"),
         "SCHEDULE_CONTENT": "".join(html_parts),
         "FILTER_DATA": filter_data_json,
         "SCRIPT": _generate_js(schedule.timezone,
@@ -619,6 +690,201 @@ def generate_html(schedule: Schedule, *, schedules=None, groups=None, presentati
             starts_at=None if schedule.is_demo else schedule.starts_at,
             ends_at=None if schedule.is_demo else schedule.ends_at),
     })
+
+
+# The day tab and panel that show every day at once.
+_ALL_DAYS = "all-days"
+_WEEK_ROOM_WIDTH = 52   # px: a cell of the widest meetings still holds "10.5.2.1"
+_WEEK_GUTTER = 6        # px between two days
+_WEEK_AXIS = 36         # px: --time-col-width
+_WEEK_FIRST_ROW = 3     # under the day names and the room names
+
+
+@dataclass
+class _WeekLayout:
+    """Where the days sit in the one grid of the All view: one time axis, each day's rooms side by side."""
+
+    days: list
+    start: int          # minutes: the earliest start of any day
+    end: int            # minutes: the latest end of any day
+    slot: int           # minutes per row, a slot every day's times fall on
+    label: int          # minutes between time labels
+    columns: dict       # day name -> grid column of its first room
+    last_column: int
+    rooms: list         # _WeekRoom: the rooms of the meeting, in order of first use
+
+    @property
+    def rows(self) -> int:
+        return (self.end - self.start) // self.slot
+
+    @property
+    def min_width(self) -> int:
+        rooms = sum(len(day.rooms) for day in self.days)
+        return _WEEK_AXIS + rooms * _WEEK_ROOM_WIDTH + (len(self.days) - 1) * _WEEK_GUTTER
+
+    def room_index(self, room) -> int:
+        key = _room_key(room)
+        return next(i for i, known in enumerate(self.rooms) if known.key == key)
+
+    def room_classes(self, rooms) -> str:
+        return " ".join(f"wr-{self.room_index(room)}" for room in rooms)
+
+    def row(self, day, row: int) -> int:
+        """A row of the day's own grid, as a row of this grid."""
+        minute = time_to_minutes(day.timeline.start) + (row - 2) * day.timeline.slot_minutes
+        return (minute - self.start) // self.slot + _WEEK_FIRST_ROW
+
+
+def _week_layout(schedule: Schedule) -> _WeekLayout | None:
+    """The All view's grid, or None for a meeting with one day to show."""
+    days = [day for day in schedule.days if day.rooms]
+    if len(days) < 2:
+        return None
+    start = min(time_to_minutes(day.timeline.start) for day in days)
+    # A session may run past its day's timeline (RAN1's evening after an early dinner).
+    end = max(time_to_minutes(value) for day in days
+              for value in [day.timeline.end, *(s.end_time for s in day.sessions)])
+    timelines = [day.timeline for day in days]
+    columns, column = {}, 2
+    for day in days:
+        columns[day.day_name.lower()] = column
+        column += len(day.rooms) + 1  # a gutter after each day
+    slot = reduce(gcd, [t.slot_minutes for t in timelines]
+                  + [time_to_minutes(t.start) - start for t in timelines])
+    return _WeekLayout(
+        days=days, start=start, end=end + (start - end) % slot, slot=slot,
+        label=reduce(gcd, [t.label_minutes for t in timelines]),
+        columns=columns, last_column=column - 2,
+        rooms=_week_rooms(days),
+    )
+
+
+@dataclass
+class _WeekRoom:
+    """A room box of the All view: one room across the days."""
+
+    key: str            # _room_key, the same every day
+    names: list         # every name the days give it, the most used first
+
+    @property
+    def name(self) -> str:
+        return self.names[0]
+
+
+def _room_label(name: str) -> str:
+    """A room's name without the hours one day gives it.
+
+    RAN Plenary writes "Breakout: Madrid 1-2 (08:00–12:30)" for the room that is
+    "Breakout: Madrid 1-2" on Monday.
+    """
+    return re.sub(r"\s*\(\d{1,2}:\d{2}\s*[–-]\s*\d{1,2}:\d{2}\)\s*$", "", name).strip()
+
+
+def _room_key(room) -> str:
+    """What makes a room the same on every day: the id its WG gives it.
+
+    The name is not: RAN4 heads Shan's column "RAN4 Breakout 1(BR1) (Shan Session)"
+    on Monday and "RAN4 RRM_Demod_OTA (Shan Session)" from Tuesday, both "shan".
+    A room without an id (RAN1) is its name, without the hours and case.
+    """
+    return room.id or _room_label(room.name).casefold()
+
+
+def _week_rooms(days) -> list[_WeekRoom]:
+    spellings: dict[str, dict[str, list]] = {}   # key -> casefolded name -> [name, days]
+    for day in days:
+        for room in day.rooms:
+            label = _room_label(room.name)
+            seen = spellings.setdefault(_room_key(room), {}).setdefault(label.casefold(), [label, 0])
+            seen[1] += 1
+    # The box shows the name most days use; a tie keeps the first.
+    return [_WeekRoom(key, [name for name, _ in sorted(names.values(), key=lambda n: -n[1])])
+            for key, names in spellings.items()]
+
+
+def _render_room_picks(week: "_WeekLayout") -> str:
+    """A checkbox per room, beside the All tab and shown only under it."""
+    data = json.dumps({
+        "days": [[week.room_index(room) for room in day.rooms] for day in week.days],
+        "room": _WEEK_ROOM_WIDTH, "gutter": _WEEK_GUTTER, "axis": _WEEK_AXIS,
+    }, separators=(",", ":"))
+    # The title names the room the way every day does.
+    picks = "".join(
+        f'<label class="room-pick" title="{_esc(chr(10).join(room.names))}"><input type="checkbox" checked '
+        f'data-room="{i}" data-key="{_esc(room.key)}"><span>{_esc(room.name)}</span></label>'
+        for i, room in enumerate(week.rooms)
+    )
+    return (f'        <div class="room-picks" role="group" aria-label="Rooms shown in All" '
+            f"data-week='{data}'>{picks}</div>\n")
+
+
+def _render_all_days(schedule: Schedule, week: _WeekLayout, cells: list[str]) -> str:
+    """The panel of the All tab: every day on one time axis, cells with their titles only."""
+    tracks = ["var(--axis-col-width)"]
+    for i, day in enumerate(week.days):
+        if i:
+            tracks.append(f"{_WEEK_GUTTER}px")
+        tracks.append(f"repeat({len(day.rooms)}, minmax(0, 1fr))")
+    parts = [
+        f'    <div class="day-panel all-days" id="{_ALL_DAYS}" data-date="">\n'
+        '        <div class="grid-wrapper">\n'
+        f'            <div class="schedule-grid week-grid" data-start="{week.start}" data-end="{week.end}" '
+        f'data-slot="{week.slot}" data-first-row="{_WEEK_FIRST_ROW}" '
+        f'style="grid-template-columns:{" ".join(tracks)};--time-rows:{week.rows};'
+        f'--slot-scale:{week.slot / 5:g};--week-slots:{(week.end - week.start) / 5:g};'
+        f'--grid-min-width:{week.min_width}px">\n'
+        '                <div class="room-header time-col" style="grid-column:1;grid-row:1/3;'
+        'view-transition-name:time-head;view-transition-class:grid-move"><span>Time</span></div>\n'
+    ]
+    for minute in range(week.start, week.end, week.label):
+        row = (minute - week.start) // week.slot + _WEEK_FIRST_ROW
+        span = min(week.label // week.slot, week.rows + _WEEK_FIRST_ROW - row)
+        label = f"{minute // 60:02d}:{minute % 60:02d}"
+        major = " major" if minute % 60 == 0 else ""
+        parts.append(f'<div class="time-label" style="grid-row:{row}/{row + span};view-transition-name:time-{minute};view-transition-class:grid-move"><span>{label}</span></div>')
+        parts.append(f'<div class="grid-line{major}" style="grid-row:{row}"></div>')
+    for index, day in enumerate(week.days):
+        day_lower = day.day_name.lower()
+        first = week.columns[day_lower]
+        after = first + len(day.rooms)
+        date = _short_date(day.date)
+        # The day's name opens its own grid.
+        parts.append(
+            f'<button type="button" class="week-day wd-{index}" data-day="{day_lower}" '
+            f'style="grid-column:{first}/{after};grid-row:1"><span>{_esc(day.day_name[:3])}'
+            + (f' <span class="week-date">{date}</span>' if date else "") + "</span></button>\n"
+        )
+        if after <= week.last_column:
+            parts.append(f'<div class="week-gutter wg-{index}" style="grid-column:{after}"></div>\n')
+        for ri, room in enumerate(day.rooms):
+            parts.append(
+                f'<div class="room-header {week.room_classes([room])}" title="{_esc(_room_text([room]))}" '
+                f'style="grid-column:{first + ri};grid-row:2">{_room_name_html(room.name)}</div>\n'
+            )
+        for brk in day.timeline.breaks:
+            row_start = max(_WEEK_FIRST_ROW, week.row(day, day.timeline.row(brk["start"])))
+            row_end = min(week.rows + _WEEK_FIRST_ROW, week.row(day, day.timeline.row(brk["end"])))
+            if row_end > row_start:
+                # The axis is shared, so a break named there is only drawn here.
+                label = "" if brk.get("label_position") == "time-axis" else _esc(brk["name"])
+                parts.append(f'<div class="break-bar wd-{index}" title="{_esc(brk["name"])}" '
+                             f'style="grid-column:{first}/{after};grid-row:{row_start}/{row_end}">{label}</div>')
+    parts.extend(cells)
+    parts.append(
+        "            </div>\n"
+        "        </div>\n"
+        "    </div>\n"
+    )
+    return "".join(parts)
+
+
+def _short_date(value: str | None) -> str:
+    """"2026-10-12" -> "12 Oct"; nothing for a day without a date."""
+    try:
+        day = datetime.fromisoformat(value or "")
+    except ValueError:
+        return ""
+    return f"{day.day} {day:%b}"
 
 
 def _maybe_items(session) -> list[str]:
@@ -838,14 +1104,17 @@ def _render_email_informal(schedule) -> str:
     for day, when, ai, text, author, url in sorted(rows):
         weekday = datetime.fromisoformat(day).strftime("%A").lower()
         items_html.append(
-            f'<li data-ai="{_esc(ai)}" data-date="{_esc(day)}" data-day="{weekday}">'
+            f'<li data-ai="{_esc(ai)}" data-date="{_esc(day)}" data-day="{weekday}" hidden>'
+            # Only under the All tab; a day's tab already says which day.
+            + f'<span class="email-informal-day">{weekday[:3].capitalize()}</span> '
             + (f'<span class="email-informal-when">{_esc(when)}</span> ' if when else "")
             + f'<span class="email-informal-ai">AI {_esc(ai)}</span> {_esc(text)}'
             + (f' <span class="email-informal-from">{source}</span>' if (source := _mail_source(author, url)) else "")
             + "</li>"
         )
     return (
-        '<section class="email-informal" aria-labelledby="email-informal-title">'
+        # Hidden until the script below picks the day's rows: no flash of every day's.
+        '<section class="email-informal" aria-labelledby="email-informal-title" hidden>'
         '<div class="email-informal-header"><h2 id="email-informal-title">Off-offline and FL whereabouts</h2>'
         "<p>From the email threads, not on the schedule</p></div>"
         f'<ul>{"".join(items_html)}</ul></section>\n'
@@ -858,7 +1127,9 @@ def _render_email_informal(schedule) -> str:
         "        const day = tab ? tab.dataset.day : '';\n"
         "        const panel = day && document.getElementById(day);\n"
         "        const date = panel ? panel.dataset.date : '';\n"
-        "        rows.forEach(row => { row.hidden = row.dataset.day !== day || (!!date && row.dataset.date !== date); });\n"
+        f"        const all = day === '{_ALL_DAYS}';\n"
+        "        box.classList.toggle('every-day', all);\n"
+        "        rows.forEach(row => { row.hidden = !all && (row.dataset.day !== day || (!!date && row.dataset.date !== date)); });\n"
         "        box.hidden = rows.every(row => row.hidden);\n"
         "    };\n"
         "    document.querySelectorAll('.tab[data-day]').forEach(tab => tab.addEventListener('click', () => showDay(tab)));\n"
@@ -900,10 +1171,35 @@ _CHAIR_ROW = _SECONDARY_LINE + 1  # pinned 3px above the border, 1px into the co
 _NOTES_RULE = 7            # 3px gap, the short rule, 4px gap above the first note
 
 
+_AI_ONLY_NOTE = re.compile(r'(?:\bAI(?![A-Za-z])|\band\b|\d+(?:\.\d+)*(?:\.x)?|[\s,;/\[\]()–-])*', re.I)
+
+
+def _repeats_ai_line(note: str, ai_ids: set[str]) -> bool:
+    """A note of nothing but agenda numbers the AI line already shows ("AI32, AI6")."""
+    if not _AI_ONLY_NOTE.fullmatch(note) or not re.search(r'\d', note):
+        return False
+    text = re.sub(r'\bAI(?![A-Za-z])|\band\b|[\[\]()]', ' ', note, flags=re.I)
+    fields = [f.strip() for f in re.split(r'[,;]', text) if f.strip()]
+    ids = {i for f in fields for i in agenda_section_ids(re.sub(r'\s+', ' ', f), ())}
+    return bool(ids) and ids <= ai_ids
+
+
+def _without_ai_brackets(note: str, ai_ids: set[str]) -> str:
+    """The note less brackets of AI-line numbers: "KI#18 (AI for Network) (20.6.18)"."""
+    text = re.sub(r'[\[(]([^\[\]()]*)[\])]',
+                  lambda m: ' ' if _repeats_ai_line(m[1], ai_ids) else m[0], note)
+    return ' '.join(text.split())
+
+
 def _cell_notes(session) -> list[str]:
-    """Notes worth showing; a line that only repeats the title adds nothing."""
+    """Notes worth showing: a line that is the whole title, but for numbers the AI
+    line shows, or that only lists such numbers, adds nothing. Other head lines
+    stay: the title may have lost words in the cleaning, or be one of several."""
     name = session.name.strip().casefold()
-    return [n for n in session.notes if n.strip() and n.strip().casefold() != name]
+    ai_ids = set(agenda_section_ids(session.agenda_item or "", ()))
+    return [n for n in session.notes
+            if n.strip() and _without_ai_brackets(n, ai_ids).casefold() != name
+            and not _repeats_ai_line(n, ai_ids)]
 
 
 def _notes_html(notes: list[str], slots: float, ai_html: str, scope_label: str | None,
@@ -931,6 +1227,71 @@ def _notes_html(notes: list[str], slots: float, ai_html: str, scope_label: str |
         f'<div class="{classes}" style="--note-lines:{lines};--note-lines-full:{lines_full}">'
         f"{items}</div>"
     )
+
+
+def _part_rows(part, row_start: int, row_end: int) -> tuple[int, int]:
+    """Grid rows of piece k of n: equal shares of the block, whole rows."""
+    k, n = part
+    rows = row_end - row_start
+    return row_start + rows * (k - 1) // n, row_start + rows * k // n
+
+
+def _part_prefix(part) -> str:
+    """"1/2 of " before the block minutes; "of" is sized like the unit."""
+    return f'{part[0]}/{part[1]} <span class="session-unit">of</span> ' if part else ""
+
+
+def _cell_chair(chair: str) -> str:
+    """The name the cell shows: the given name of a "Given FAMILY" name.
+
+    The cell's chair is the quietest line and is cut short in narrow columns, so
+    it carries the name people call the chair by ("Lixiang XU" -> "Lixiang");
+    the popup keeps the full name. A name without a capitalised family part is
+    shown as written ("Hiroki", "Ruixin Wang"). Several chairs keep their
+    separator ("Yang TANG / Shan YANG" -> "Yang / Shan", shared/officials.py).
+    """
+    def given(name: str) -> str:
+        words = name.split()
+        for i, word in enumerate(words[1:], 1):
+            letters = [c for c in word if c.isalpha()]
+            if len(letters) > 1 and all(c.isupper() for c in letters):
+                return ' '.join(words[:i])
+        return name
+
+    return ' / '.join(given(part) for part in chair.split(' / '))
+
+
+def _room_name_html(name: str) -> str:
+    """A room name that may take two lines, breaking before its last bracket.
+
+    "RAN4 Breakout 2 (BR2)(Gene Session)" is "RAN4 Breakout 2 (BR2)" over
+    "(Gene Session)": the bracket names whose session or hours it is, so it
+    moves down whole. Words with a hyphen or slash ("A-IOT", "3/4/5/6") do
+    not break inside; the browser breaks only at spaces and before the bracket.
+    """
+    def word(text: str) -> str:
+        return f'<span class="room-word">{_esc(text)}</span>' if re.search(r'[-/–]', text) else _esc(text)
+
+    match = re.fullmatch(r'(.*?\S)(\s*)(\([^()]*\))', name.strip())
+    head, gap, tail = (match[1], match[2], match[3]) if match else (name.strip(), '', '')
+    html = ' '.join(word(w) for w in head.split())
+    if tail:
+        html += (' ' if gap else '<wbr>') + f'<span class="room-word">{_esc(tail)}</span>'
+    return f'<span class="room-name-text">{html}</span>'
+
+
+def _room_text(rooms):
+    """The popup Room line: "Breakout 1 · B3 (Floor 2) · Stream 2".
+
+    A place may hold a comma ("D3/D4, Floor 3"), so rooms with one are
+    separated by semicolons.
+    """
+    shown = [f"{room.name} · {room.detail}" if room.detail else room.name for room in rooms]
+    return ("; " if any(room.detail for room in rooms) else ", ").join(shown)
+
+
+def _part_text(part) -> str:
+    return f"{part[0]}/{part[1]} of " if part else ""
 
 
 def _crosses_time_block(start_time: str, end_time: str, timeline: Timeline) -> bool:

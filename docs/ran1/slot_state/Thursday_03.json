@@ -2,9 +2,9 @@
   "day": "Thursday",
   "time_block_index": 3,
   "source_hashes": {
-    "Main Schedule": "473d07cf8fe2cd93",
-    "Hiroki's schedule": "ea0d2c887cd718ba",
-    "Sorour's schedule": "3d82c184638685c7"
+    "Main Schedule": "56c7476827a77320",
+    "Hiroki's schedule": "fc3fda6764a86e92",
+    "Sorour's schedule": "b63e6c159120d051"
   },
   "merged_sessions": [
     {
@@ -15,6 +15,10 @@
       "chair": null,
       "group_header": "6GR",
       "agenda_item": "10.5.3.1",
+      "source_cells": [
+        "c5b2bde",
+        "c9b9289"
+      ],
       "description": "Aspects of downlink-based CSI acquisition",
       "agenda_descriptions": [
         {
@@ -54,6 +58,10 @@
       "chair": null,
       "group_header": "6GR",
       "agenda_item": "10.5.3.2",
+      "source_cells": [
+        "c5b2bde",
+        "c9b9289"
+      ],
       "description": "Aspects of uplink-based CSI acquisition",
       "agenda_descriptions": [
         {
@@ -93,6 +101,10 @@
       "chair": null,
       "group_header": "6GR",
       "agenda_item": "10.5.3.3",
+      "source_cells": [
+        "c5b2bde",
+        "c9b9289"
+      ],
       "description": "Other aspects",
       "agenda_descriptions": [
         {
@@ -132,6 +144,10 @@
       "chair": null,
       "group_header": "6GR",
       "agenda_item": "10.5.3.4",
+      "source_cells": [
+        "c5b2bde",
+        "c9b9289"
+      ],
       "description": "Beam management for downlink and uplink",
       "agenda_descriptions": [
         {
@@ -171,6 +187,10 @@
       "chair": "Sorour",
       "group_header": "6GR",
       "agenda_item": "10.3.1",
+      "source_cells": [
+        "c5de323",
+        "c2e637e"
+      ],
       "description": "Channel coding",
       "agenda_descriptions": [
         {
@@ -205,6 +225,10 @@
       "chair": "Sorour",
       "group_header": "6GR",
       "agenda_item": "10.3.2",
+      "source_cells": [
+        "c5de323",
+        "c2e637e"
+      ],
       "description": "Modulation",
       "agenda_descriptions": [
         {
@@ -239,6 +263,10 @@
       "chair": "Sorour",
       "group_header": "R20 / R20 NR",
       "agenda_item": "9.1",
+      "source_cells": [
+        "c5de323",
+        "c2e637e"
+      ],
       "description": "Artificial Intelligence (AI)/Machine Learning (ML) for NR air interface enhancements",
       "agenda_descriptions": [
         {
@@ -268,6 +296,10 @@
       "chair": "Hiroki",
       "group_header": "6GR / 6G 10.5.4.x",
       "agenda_item": "10.5.4.4",
+      "source_cells": [
+        "c6a5ba7",
+        "c633213"
+      ],
       "description": "Handling of potential multiple uplink transmissions",
       "agenda_descriptions": [
         {
@@ -307,6 +339,10 @@
       "chair": "Hiroki",
       "group_header": "6GR / 6G 10.5.4.x",
       "agenda_item": "10.5.4.3",
+      "source_cells": [
+        "c6a5ba7",
+        "c633213"
+      ],
       "description": "HARQ related Aspects",
       "agenda_descriptions": [
         {
@@ -346,6 +382,10 @@
       "chair": "Hiroki",
       "group_header": "6GR / 6G 10.5.4.x",
       "agenda_item": "10.5.4.1",
+      "source_cells": [
+        "c6a5ba7",
+        "c633213"
+      ],
       "description": "Downlink control channel, scheduling for downlink and uplink transmission",
       "agenda_descriptions": [
         {
@@ -385,6 +425,10 @@
       "chair": "Hiroki",
       "group_header": "6GR / 6G 10.5.4.x",
       "agenda_item": "10.5.4.2",
+      "source_cells": [
+        "c6a5ba7",
+        "c633213"
+      ],
       "description": "Downlink and uplink transmission without dynamic scheduling",
       "agenda_descriptions": [
         {
@@ -424,6 +468,9 @@
       "chair": "Xiaodong",
       "group_header": "6GR",
       "agenda_item": "10.5.1.1",
+      "source_cells": [
+        "c068fa1"
+      ],
       "description": "Synchronization acquisition and beam measurement",
       "agenda_descriptions": [
         {
@@ -463,6 +510,9 @@
       "chair": "Xiaodong",
       "group_header": "6GR",
       "agenda_item": "10.5.1.2",
+      "source_cells": [
+        "c068fa1"
+      ],
       "description": "PRACH and RACH procedure",
       "agenda_descriptions": [
         {
@@ -502,6 +552,9 @@
       "chair": "Xiaodong",
       "group_header": "6GR",
       "agenda_item": "10.5.1.3",
+      "source_cells": [
+        "c068fa1"
+      ],
       "description": "Bandwidth operation",
       "agenda_descriptions": [
         {
@@ -541,6 +594,9 @@
       "chair": "Sorour",
       "group_header": "6GR",
       "agenda_item": "10.7.1",
+      "source_cells": [
+        "c068fa1"
+      ],
       "description": "NTN specific requirements and design",
       "agenda_descriptions": [
         {
@@ -574,7 +630,10 @@
       "specified_start_time": null,
       "chair": "Sorour",
       "group_header": "R20",
-      "agenda_item": null
+      "agenda_item": null,
+      "source_cells": [
+        "c6f4e27"
+      ]
     },
     {
       "room_name": "RAN1_off2",
@@ -584,6 +643,10 @@
       "chair": "Hiroki",
       "group_header": "R20",
       "agenda_item": "9.3.1, 9.3.2, 9.3.3",
+      "source_cells": [
+        "c6f4e27",
+        "c276ac1"
+      ],
       "description": "R2D signals, channels, waveform and procedures",
       "agenda_descriptions": [
         {
@@ -655,7 +718,7 @@
       ]
     }
   ],
-  "merged_at": "2026-10-23T06:01:17.493111+00:00",
+  "merged_at": "2026-11-02T18:42:06.354965+00:00",
   "meeting_id": "ran1#126bis",
-  "schema_version": 2
+  "schema_version": 3
 }

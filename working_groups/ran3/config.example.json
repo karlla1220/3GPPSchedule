@@ -1,0 +1,27 @@
+{
+  "sync_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN3/",
+  "archive_url": "https://www.3gpp.org/ftp/tsg_ran/WG3_Iu/",
+  "meeting_specific": [],
+  "meeting_specific_override": [
+    "https://www.3gpp.org/ftp/tsg_ran/WG3_Iu/TSGR3_133-bis/"
+  ],
+  "llm_fallback": true,
+  "model": "gemini-3.8-flash",
+  "officials_code": "R3",
+  "chair_aliases": {
+    "L": "XU, Lixiang",
+    "X": "YANG, Xudong",
+    "G": "CAO, Gen"
+  },
+  "local_agenda": "tests/fixtures/ran3/agenda_133bis.csv",
+  "local_offline": "tests/fixtures/ran3/RAN3 offline discussion_ver_03.xlsx",
+  "meetings": {
+    "133bis": {
+      "starts_on": "2026-10-12",
+      "ends_on": "2026-10-16",
+      "location": "Jeju",
+      "country": "KR",
+      "timezone": "Asia/Seoul"
+    }
+  }
+}

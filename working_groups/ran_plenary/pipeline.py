@@ -8,6 +8,8 @@ from zoneinfo import ZoneInfo
 
 import httpx
 
+from shared.agenda_labels import infer_for_schedule
+from shared.llm_cells import has_key
 from shared.renderer import generate_html
 from .document import agenda_map, extract_document
 from .interpreter import gemini_request, interpret, make_schedule, resolve_timezone
@@ -36,15 +38,20 @@ def meeting_metadata(number, cfg, previous, http, request, supplied=None):
         if 'timezone' not in override and any(metadata.get(k) != cached.get(k)
                                               for k in ('location', 'country', 'portal_timezone')):
             metadata.pop('timezone', None)
-        # Reuse the resolved zone only when the venue has not changed.
-        if 'timezone' not in metadata and cached.get('timezone') and all(
-                metadata.get(k) == cached.get(k) for k in ('location', 'country', 'portal_timezone')):
-            metadata['timezone'] = cached['timezone']
     for key in ('starts_on', 'ends_on'):
         if not metadata.get(key):
             raise ValueError(f'Missing {key} for RAN#{number}')
         date.fromisoformat(metadata[key])
-    metadata['timezone'] = resolve_timezone(metadata, cfg['model'], request)
+    # The venue list (shared/timezones.py) answers a known venue without a call, so a
+    # corrected line takes effect. The last build's zone is only the fallback.
+    try:
+        metadata['timezone'] = resolve_timezone(metadata, cfg['model'], request)
+    except ValueError:
+        if not cached.get('timezone') or any(metadata.get(k) != cached.get(k)
+                                             for k in ('location', 'country', 'portal_timezone')):
+            raise
+        print(f'[ran-plenary] Venue timezone unresolved; keeping RAN#{number} zone from the last build')
+        metadata['timezone'] = cached['timezone']
     zone = ZoneInfo(metadata['timezone'])
     for boundary in ('starts', 'ends'):
         key = f'{boundary}_at'
@@ -87,7 +94,7 @@ def build_schedule(options=None, *, request=gemini_request):
         document = extract_document(bundle.timeplan, bundle.manifest['timeplan']['name'])
         if document['meeting_number'] != bundle.manifest['meeting_number']:
             raise ValueError('Input bundle meeting identity mismatch')
-        descriptions = agenda_map(bundle.agenda)
+        descriptions = agenda_map(bundle.agenda) if bundle.agenda else {}
         metadata = meeting_metadata(document['meeting_number'], cfg, previous,
                                     None if offline else http, request,
                                     supplied=bundle.manifest.get('portal_metadata'))
@@ -98,6 +105,8 @@ def build_schedule(options=None, *, request=gemini_request):
         generated = datetime.now(ZoneInfo(metadata['timezone'])).strftime('%Y-%m-%d %H:%M')
         schedule = make_schedule(document, result, descriptions, metadata,
                                  bundle.manifest['timeplan']['name'], generated)
+        # Cells the time plan gives no AI: an LLM reads their label for the filter (shared/agenda_labels.py).
+        infer_for_schedule(schedule, 'ran-plenary', 'RAN Plenary', descriptions, enabled=not offline and has_key())
         # No successful checkpoint before interpretation and rendering both pass.
         generate_html(schedule)
         write_json(state_path, {**bundle.manifest, 'metadata': metadata})

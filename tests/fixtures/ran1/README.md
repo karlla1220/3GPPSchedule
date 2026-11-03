@@ -18,3 +18,13 @@ The source remains this local fixture; the viewer does not offer a download.
 schedule around these real agreements; session timings are demo fixtures,
 not a re-parsed RAN1#124 timetable. See `AGREEMENTS_VERIFICATION.md` for scope
 and limits.
+
+## RAN1#126bis schedule
+
+`RAN1#126b online and offline schedules - v05.docx` is the actual public
+chair schedule (Chair_notes, uploaded 2026-10-15), supplied by the user.
+SHA-256: `751696ae773f906842757e6814ad61031183c64e182be19162895d372a77395e`.
+Its Tuesday 17:00-19:30 block has two rows: one cell per room in the first,
+`Early dinner (60)` in the second, once in the online table and once in the
+offline table. `tests/test_parser.py` checks the rows the parser records;
+`tests/test_slot_placement.py` places sessions from them.
