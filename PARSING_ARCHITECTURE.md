@@ -98,7 +98,14 @@ Xiaodong
 
 - Chair schedule은 `Main Schedule`로 등록한다.
 - Hiroki/Sorour 등의 문서는 `<person>'s schedule`로 등록한다.
-- Main과 완전히 같은 vice-chair 셀 텍스트는 중복 제거한다.
+- vice-chair 셀 가운데 같은 요일·시간 블록의 Main 글과 같은 셀(공백 차이 무시)은 뺀다. 지금 Main뿐 아니라 이 회의에서 본 모든 Main 버전(Draft 포함)의 글과 비교한다(`main_history.py`).
+  부의장 문서에는 의장 표를 붙여 둔 사본이 있고, 사본은 의장이 나중에 고친 내용을 따라가지 않는다. 옛 Main 글이 그대로인 셀은 부의장이 고친 것이 아니라 사본이므로 병합에 넣지 않는다.
+  - RAN1#126bis: Hiroki v08의 사본 표(표 2·3)는 모두 빠지고(금요일 08:30 Tamna BC Hall·Yeongju A Hall의 Main v02 글 포함), 자기 표(표 0·1)는 모두 남는다.
+    Sorour v01의 사본 표에서는 Sorour가 고친 5칸(`AI 10.3.1` 표기, `9.4`·`9.5` NTN)만 남는다. 지난번에 Sorour가 고친 것으로 본 10.5.4 세부 시간(50/25/40/35)은 Main Draft의 글 그대로라서 빠진다. 10.5.4는 Hiroki 세션이고 Hiroki 자기 표의 세부가 따로 있다.
+  - Main 글은 실행마다 `docs/ran1/main_history/<회의>.json`에 블록별로 쌓는다. 같은 글은 한 번만 두어서 회의 하나가 약 8KB다(#126bis Main 10개 버전).
+    slot state와 따로 두므로 `force-deploy`가 지우지 않는다. 결과의 근거가 원본 문서의 기록이라서 cold도 같은 입력을 본다.
+  - 실행이 보지 못한 Main 버전은 기록에 없다. 그 버전의 사본은 남을 뿐이고(예전과 같다), 부의장 글을 잘못 빼지는 않는다.
+    FTP의 회의 보관 폴더에는 #126bis Main이 Draft v00~v03과 v00만 남아서, 지난 버전을 나중에 FTP에서 다시 채울 수는 없다. 그래서 실행마다 쌓는다.
 - 물리 방 이름은 LLM 입력에서 안정적인 `RAN1_main`, `RAN1_brk1`, `RAN1_off1` 등의 alias로 바뀐다.
 - 셀마다 id(`cell c1a2b3`)를 붙인다(`_assign_cell_ids`). source, 방, 글로 만들어서 셀이 그대로이면 실행이 바뀌어도 같은 id다. 증분 병합의 baseline과 재사용한 slot state가 그 id로 셀을 가리킨다.
 

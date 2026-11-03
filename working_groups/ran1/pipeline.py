@@ -68,6 +68,7 @@ from .downloader import (
     _local_doc_preference,
     _meeting_rank,
 )
+from . import main_history
 from .merger import collect_time_slot_data
 from .config import load_config, with_meeting_folders
 from .agenda_labels import apply_inferred_agenda_items
@@ -525,7 +526,8 @@ def build_schedule(args) -> Schedule:
     # Step 4: Parse sessions (always use time-slot grouping for fewer LLM calls)
     print("\nCollecting schedule data...")
     time_slots = collect_time_slot_data(
-        cells, day_rooms_map, vice_chair_paths, meeting_id=current_meeting_id
+        cells, day_rooms_map, vice_chair_paths, meeting_id=current_meeting_id,
+        main_texts_seen=main_history.record(current_meeting_id, cells),
     )
     n_enriched = sum(1 for s in time_slots if len(s.sources) > 1)
     if vice_chair_paths:
