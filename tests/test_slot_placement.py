@@ -239,7 +239,9 @@ def test_prompt_heads_each_cell_with_its_id():
     assert "18:30" not in prompt
 
 
-def test_incremental_prompt_lists_unchanged_cells_by_id():
+def test_incremental_prompt_heads_every_cell_with_its_id():
+    # Unchanged sources are sent in full too: a rebuilt area is made from all
+    # its cells (GLOSSARY.md), and copied baseline sessions cite them.
     vice = SlotSource(label="Hiroki's schedule", entries=[
         _cell("cvice0", ["Room A"], "Hiroki (90) / 9.3.1 (30) / 9.3.3 (60)", 0)])
     slot = _slot(_tuesday_cells(), extra_sources=[vice])
@@ -247,9 +249,9 @@ def test_incremental_prompt_lists_unchanged_cells_by_id():
     slot.source_freshness = {"Main Schedule": "STALE", "Hiroki's schedule": "FRESH"}
     name_to_alias, _ = build_room_aliases(ROOMS)
     prompt = _build_time_slot_prompt(slot, name_to_alias, mode="incremental")
-    assert "- cell cmain0 — Main Schedule — RAN1_main" in prompt
-    assert "6GR (90)" not in prompt  # stale text stays omitted
-    assert "[cell cvice0 — Room A]" in prompt
+    assert "[cell cmain0 — RAN1_main]" in prompt
+    assert "6GR (90)" in prompt
+    assert "[cell cvice0 — Hiroki's schedule — Room A]" in prompt
 
 
 def test_cell_ids_follow_the_cell_not_its_position():

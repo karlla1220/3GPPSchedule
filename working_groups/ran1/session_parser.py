@@ -553,9 +553,9 @@ def _build_time_slot_prompt(
     Args:
         slot: a TimeSlotData object from merger.py.
         name_to_alias: room-name → alias mapping (if None, uses raw names).
-        mode: "cold" (all sources sent, no baseline) or "incremental"
-            (baseline + only FRESH/NEW sources sent, freshness summary
-            included).
+        mode: "cold" (all cells, no baseline) or "incremental" (baseline,
+            then all cells, each tagged with its change against the cell
+            ledger, then the cells that are gone).
     """
     parts = []
     parts.append(
@@ -577,84 +577,71 @@ def _build_time_slot_prompt(
     def _alias_label(label: str) -> str:
         return _alias_room_label(label, name_to_alias) if name_to_alias else label
 
-    if mode == "incremental":
-        # Freshness summary covers every source seen now or previously.
-        summary_lines = []
-        for label in sorted(slot.source_freshness):
-            status = slot.source_freshness[label]
-            note = ""
-            if status == "STALE":
-                note = "  (unchanged, content omitted from this prompt)"
-            elif status == "REMOVED":
-                note = "  (no longer present in this run)"
-            summary_lines.append(f"- {label}: {status}{note}")
-        parts.append("\n## Source freshness summary\n" + "\n".join(summary_lines))
+    incremental = mode == "incremental"
 
-        # Unchanged cells are still cited by id, so list them without text.
-        stale_cells = [
-            f"- cell {entry.cell_id} — {source.label} — {_alias_label(entry.room_label)}"
-            for source in slot.sources
-            if slot.source_freshness.get(source.label) == "STALE"
-            for entry in source.entries
-            if getattr(entry, "cell_id", "")
-        ]
-        if stale_cells:
-            parts.append(
-                "\n## Cells of unchanged sources (for source_cells)\n"
-                + "\n".join(stale_cells)
-            )
+    def _cell(label: str, entry) -> None:
+        # Every cell is headed by its id for source_cells. The incremental
+        # prompt also tags it with its change; a CHANGED cell shows its text
+        # before. A REMOVED cell has no current id and must not be cited.
+        change = getattr(entry, "change", None)
+        if change == "REMOVED":
+            parts.append(f"\n[{label}] REMOVED")
+            parts.append(entry.cell_text)
+            return
+        tag = f" {change}" if incremental and change else ""
+        parts.append(f"\n[{_cell_tag(entry)}{label}]{tag}")
+        parts.append(entry.cell_text)
+        if incremental and change == "CHANGED":
+            parts.append("was:")
+            parts.append(entry.previous_text or "")
 
+    if incremental:
         baseline = strip_derived_description_fields(slot.previous_merge or [])
         for session in baseline:
             session.pop("fallback_start_time", None)
         parts.append(
-            "\n## Previous merge result (BASELINE — carry forward unless overridden)"
+            "\n## Previous merge result (BASELINE — keep every area no changed cell covers)"
         )
         parts.append(json.dumps(baseline, ensure_ascii=False, indent=2))
 
-        fresh_labels = {
-            label
-            for label, status in slot.source_freshness.items()
-            if status in ("FRESH", "NEW")
-        }
-        fresh_sources = [s for s in slot.sources if s.label in fresh_labels]
-
-        if fresh_sources:
-            parts.append("\n## Fresh source raw input")
-            for source in fresh_sources:
-                status = slot.source_freshness.get(source.label, "FRESH")
-                parts.append(f"\n### {source.label} ({status})")
-                for entry in source.entries:
-                    parts.append(f"\n[{_cell_tag(entry)}{_alias_label(entry.room_label)}]")
-                    parts.append(entry.cell_text)
-        else:
-            # No fresh raw input — REMOVED-only case. The LLM still
-            # needs to know it can carry the baseline forward as-is.
+        # Rooms fed by a cell that changed or is gone: the baseline names its
+        # cells, so code knows them even when the new text is about another
+        # room.
+        stale_ids = getattr(slot, "stale_cell_ids", set())
+        rooms = sorted({
+            session.get("room_name", "")
+            for session in baseline
+            if stale_ids & set(session.get("source_cells") or [])
+        } - {""})
+        if rooms:
             parts.append(
-                "\n## Fresh source raw input\n"
-                "(none — only REMOVED sources changed; keep the baseline "
-                "except where a REMOVED source's contribution no longer "
-                "applies)"
+                "\n## Rooms whose baseline cells changed (rebuild these)\n"
+                + "\n".join(f"- {room}" for room in rooms)
             )
 
-        return "\n".join(parts)
-
-    # Cold-path prompt: same as legacy behaviour.
     main_source = slot.sources[0] if slot.sources else None
     vc_sources = slot.sources[1:] if len(slot.sources) > 1 else []
 
     if main_source:
         parts.append("\n## Main Schedule (defines what goes in each room)")
         for entry in main_source.entries:
-            parts.append(f'\n[{_cell_tag(entry)}{_alias_label(entry.room_label)}]')
-            parts.append(entry.cell_text)
+            _cell(_alias_label(entry.room_label), entry)
 
     if vc_sources:
         parts.append("\n## Vice-chair detail (match by CONTENT to target rooms, ignore room labels)")
         for source in vc_sources:
             for entry in source.entries:
-                parts.append(f'\n[{_cell_tag(entry)}{source.label} — {_alias_label(entry.room_label)}]')
-                parts.append(entry.cell_text)
+                _cell(f"{source.label} — {_alias_label(entry.room_label)}", entry)
+
+    removed = [
+        (label, entry)
+        for label, entries in slot.removed_entries.items()
+        for entry in entries
+    ] if incremental else []
+    if removed:
+        parts.append("\n## Removed cells (in the previous version, gone now)")
+        for label, entry in removed:
+            _cell(f"{label} — {_alias_label(entry.room_label)}", entry)
 
     return "\n".join(parts)
 
@@ -828,6 +815,7 @@ def parse_time_slots(
     )
 
     from datetime import datetime, timezone
+    from .merger import MERGE_PROMPT_VERSION, has_cell_changes, ledger_entries
     from .slot_state import SlotState, save_slot_state
 
     MAX_RETRIES = 3
@@ -849,6 +837,7 @@ def parse_time_slots(
             parsed_result.get("sessions", []),
             agenda_description_map,
         )
+        merged_at = datetime.now(timezone.utc).isoformat()
         try:
             save_slot_state(
                 SlotState(
@@ -856,8 +845,10 @@ def parse_time_slots(
                     time_block_index=slot.time_block_index,
                     source_hashes=dict(slot.current_hashes),
                     merged_sessions=parsed_result.get("sessions", []),
-                    merged_at=datetime.now(timezone.utc).isoformat(),
+                    merged_at=merged_at,
                     meeting_id=meeting_id or "",
+                    source_entries=ledger_entries(slot),
+                    merge_prompt_version=MERGE_PROMPT_VERSION,
                 )
             )
         except OSError as e:
@@ -871,13 +862,21 @@ def parse_time_slots(
         freshness_str = ", ".join(
             f"{label}={status}" for label, status in sorted(freshness.items())
         ) or "(no sources)"
+        if slot.previous_entries is None:
+            freshness_str += "; no cell ledger"
+        else:
+            changed = sum(
+                entry.change != "UNCHANGED" for s in slot.sources for entry in s.entries
+            ) + sum(len(cells) for cells in slot.removed_entries.values())
+            freshness_str += f"; {changed} changed cell(s)"
         if slot.all_stale and slot.previous_merge is not None:
             continue
         name_to_alias, _ = build_room_aliases(day_rooms_map.get(slot.day, []))
-        has_baseline = slot.previous_merge is not None
-        if has_baseline and any(
-            s in ("FRESH", "NEW", "REMOVED") for s in freshness.values()
-        ):
+        # Incremental only when the cell ledger says which cells changed.
+        # Without a ledger nothing says which areas to keep; with no changed
+        # cell the hashes changed for another reason (the merge prompt
+        # version), so the whole slot is made again.
+        if slot.previous_merge is not None and has_cell_changes(slot):
             mode, system_instruction = "incremental", MULTI_SOURCE_SYSTEM_INSTRUCTION_INCREMENTAL
         else:
             mode, system_instruction = "cold", MULTI_SOURCE_SYSTEM_INSTRUCTION_COLD

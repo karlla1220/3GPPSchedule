@@ -1,6 +1,6 @@
 # CLAUDE.md
 
-프로젝트 구조와 실행 방법은 `README.md`, 파싱 설계는 `PARSING_ARCHITECTURE.md`, WG 전환과 첫 화면의 설계는 `WG_SWITCH_DESIGN.md`, Help 투어를 고치고 단계를 더하는 규칙은 `HELP_TOUR.md`를 본다.
+프로젝트 구조와 실행 방법은 `README.md`, 파싱 설계는 `PARSING_ARCHITECTURE.md`, RAN1 병합의 용어(칸, 칸 이력, baseline, cold·증분)는 `GLOSSARY.md`, WG 전환과 첫 화면의 설계는 `WG_SWITCH_DESIGN.md`, Help 투어를 고치고 단계를 더하는 규칙은 `HELP_TOUR.md`를 본다.
 
 ## 세션 블록 디자인
 

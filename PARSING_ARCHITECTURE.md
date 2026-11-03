@@ -23,6 +23,7 @@ CellData + 방 목록
   ├─ [결정론적] 같은 (요일, 시간 블록)의 Main/vice-chair 셀 수집
   ├─ [LLM 보조] vice-chair 문서의 모호한 Room A/B 이름 해석
   ├─ [결정론적] source hash 및 이전 slot state 비교
+  ├─ [결정론적] 칸 이력과 지금 칸을 비교해 칸마다 변경 표시
   ▼
 TimeSlotData
   │
@@ -110,6 +111,19 @@ vice-chair 문서가 방 이름 대신 `Room A`처럼 모호한 이름만 제공
 - `NEW`: 새 source가 생김
 - `REMOVED`: 이전 source가 사라짐
 
+이 상태는 슬롯을 건너뛸지 정하는 데만 쓴다. 칸 하나만 바뀌어도 source 전체가 `FRESH`가 되기 때문이다.
+무엇이 바뀌었는지는 칸 단위로 본다. slot state에는 직전 병합에 쓴 칸들(칸 이력, `source_entries`)이 함께 저장되고,
+`merger.py:diff_source_entries()`가 지금 칸을 그것과 맞춰 칸마다 `UNCHANGED`·`CHANGED`·`NEW`를 붙이고 사라진 칸을 `REMOVED`로 모은다.
+비교는 파싱 결과끼리만 한다. LLM 결과는 실행마다 달라질 수 있어 기준이 되지 못한다. 용어는 `GLOSSARY.md`에 있다.
+
+- 칸은 방 label과 원문(공백 무시)으로 맞춘다. 같은 방 label에 다른 원문이 있었으면 `CHANGED`이고 이전 원문을 함께 둔다.
+  병합 칸이 나뉘거나 합쳐지면 방 label이 바뀌므로 `NEW`와 `REMOVED`가 된다. 방 배치를 따로 해석하지 않아서 방이 몇 개이든 같다.
+- 칸 이력은 칸마다 id(`cell_id`)도 둔다. 바뀌거나 사라진 칸의 옛 id를 baseline 세션의 `source_cells`에서 찾으면 그 칸이 먹여 살리던 방을 코드가 안다(`stale_cell_ids`).
+- 칸 이력은 그 병합의 지시문 버전(`merge_prompt_version`)과 함께 저장한다. 버전이 다르면 칸 이력을 쓰지 않는다(cold).
+- 칸이 바뀐 시각(`since`)은 두지 않는다. 증분이 다시 만드는 영역은 cold와 같은 규칙이라 시각으로 정할 것이 없고, 이력을 지우면 사라지는 값에 결과가 기대면 안 된다(2026-11-03 결정).
+- RAN1#126bis 금요일 08:30 두 업데이트가 테스트다(`tests/test_cell_changes.py`). Main v04 → v05는 203 칸만, Hiroki v07 → v08은 Hiroki의 Yeongju B Hall 칸만 바뀐 것으로 나와야 한다.
+  예전 증분 병합은 source 단위로 판단해서 Main v05가 Yeongju B Hall의 Hiroki 세부를 지웠고, Hiroki v08 안의 옛 Main 사본이 Tamna BC Hall·Yeongju A Hall을 Main v02로 되돌렸다.
+
 ## 4. 비정형 셀 해석: LLM 영역
 
 `session_parser.py:parse_time_slots()`는 시간 슬롯마다 Gemini를 호출한다. LLM은 다음 의미 해석을 담당한다.
@@ -151,11 +165,25 @@ LLM에 의해 다음처럼 해석된다.
 
 | 경로 | LLM에 전달되는 데이터 | 사용 조건 |
 |---|---|---|
-| Cold | 현재 모든 source의 원문 | 이전 slot state가 없거나 `--rebuild-slots` 실행 |
-| Incremental | 이전 merge baseline + 변경된 source 원문 | 이전 state가 있고 일부 source가 변경됨 |
-| Short-circuit | 전달 없음 | 모든 source가 `STALE`; 이전 merge 결과 재사용 |
+| Cold | 현재 모든 source의 모든 칸 | 이전 slot state가 없음, 칸 이력이 없음, 칸 이력의 지시문 버전이 다름(`MERGE_PROMPT_VERSION`을 올림) |
+| Incremental | 이전 merge baseline + 모든 source의 모든 칸(칸마다 id와 변경 표시) + 사라진 칸 + 다시 만들 방 목록 | 같은 버전의 칸 이력이 있고 바뀐 칸이 있음 |
+| Short-circuit | 전달 없음 | 모든 source가 `STALE`, 또는 칸 이력과 칸이 모두 같음(같은 방 label끼리 순서만 바뀜); 이전 merge 결과 재사용 |
+
+증분 병합은 `UNCHANGED`가 아닌 칸이 걸친 영역(방)만 다시 만들고, 다른 영역은 baseline을 그대로 옮긴다(`prompts/multi_source_incremental_prefix.md`).
+바뀐 칸의 옛 글이 걸쳐 있던 방도 다시 만든다. 부의장 칸은 내용으로 방이 정해지므로, `Room A` 칸이 9.3.x(Yeongju B Hall)에서 10.2(203)로 바뀌면 203만이 아니라 Yeongju B Hall도 다시 만들어야 옛 9.3.x가 남지 않는다.
+코드가 baseline 세션의 `source_cells`로 그 방을 찾아 프롬프트의 `Rooms whose baseline cells changed`에 적는다.
+다시 만드는 영역은 그 영역의 모든 칸으로 cold와 같은 규칙에 따라 만든다. Main 칸만 바뀌어도 바뀌지 않은 부의장 칸의 세부가 그 방에 다시 들어간다.
+바뀌지 않은 칸까지 모두 보내는 것은 병합 칸이 여러 방에 걸치고 부의장 칸이 다른 방의 세부를 알려 주기 때문이다. 바뀌지 않은 칸은 그것만으로 baseline을 바꾸지 않는다.
+
+baseline에 들어간 오류는 그 영역의 칸이 다시 바뀌면 증분이 그 영역을 다시 만들면서 없어진다. 칸이 바뀌지 않는 영역의 오류는 cold로만 없어진다(`--rebuild-slots`, 슬롯 파일 하나 지우기).
+
+**칸 이력은 호출을 줄이고 결과를 흔들지 않으려는 것일 뿐, 맞는 결과의 근거가 아니다.** 기준은 지금 칸으로 한 cold다.
+- 증분을 여러 번 이어 온 결과는 지금 칸으로 한 cold 한 번과 같아야 한다. 다시 만드는 영역은 cold 규칙이고, 다시 만들지 않는 영역은 칸이 그대로다.
+- 그래서 이력을 모두 지워도(`force-deploy`) 잃는 것은 호출 비용뿐이다. 모든 슬롯이 cold로 다시 만들어지고, 그 cold가 새 칸 이력을 저장해 다음 실행부터 증분이 된다.
+- 이력에만 있고 원본 문서에는 없는 정보로 결과를 정하지 않는다. cold가 알아야 하는 것(예: 부의장 문서의 옛 Main 사본 가려내기)은 원본 문서에서 다시 만들 수 있어야 한다.
 
 `force-deploy`는 `.cache/`와 상태 파일을 지우고 `main.py --rebuild-slots`로 실행하므로 모든 시간 슬롯이 이전 baseline 없이 cold 경로로 재생성된다.
+칸 이력이 생기기 전에 저장된 slot state는 그대로 읽힌다. 바뀌지 않은 슬롯은 건너뛰면서 칸 이력을 저장하고, 바뀐 슬롯은 한 번 cold로 만든다.
 
 ## 5. LLM 응답 이후의 결정론적 처리
 
@@ -187,7 +215,7 @@ LLM 해석 직후(위 6·7단계 전) `consistency.py`가 같은 날 서로 다�
 LLM 답의 순서로 시각을 정하지 않는다. 프롬프트가 정하는 순서는 방 그룹 안에서뿐이고, 여러 방 그룹(`ALL_ONLINE`, `ALL_ROOMS`)이 방 그룹들 사이 어디에 오는지는 LLM 마음이다.
 RAN1#126bis 화요일 17:00~19:30은 원본도 답 내용도 같은데 재병합 때 `Early dinner`(`ALL_ROOMS`)가 온라인 방과 오프라인 방 사이로 왔다. 예전 방별 cursor는 이것을 순서대로 믿어서, 오프라인 방의 17:00 세션을 19:30~21:00으로 밀었다(그리드 밖으로 나갔다).
 
-- **LLM은 세션마다 출처 셀의 id를 답한다(`source_cells`).** 시각을 판단하는 일이 아니라 찾아 적는 일이다. 프롬프트의 셀 머리에 id가 있고(`[cell c1a2b3 — RAN1_main]`), 증분 병합은 바뀌지 않은 source의 셀을 글 없이 id만 나열한다.
+- **LLM은 세션마다 출처 셀의 id를 답한다(`source_cells`).** 시각을 판단하는 일이 아니라 찾아 적는 일이다. 프롬프트의 셀 머리에 id가 있다(`[cell c1a2b3 — RAN1_main]`). 증분 병합도 모든 칸을 글과 id로 보낸다.
   - 코드가 검사한다(`source_cell_problems`): 비어 있지 않고, 이 슬롯에 있는 id이고, Main Schedule 셀에서 온 세션은 그 셀의 방 안에 있다.
     Main Schedule에 그 방의 칸이 있으면 부의장 셀만 가리켜서는 안 된다(부의장 표는 내용으로 맞추고, 방 이름과 줄 구조를 믿을 수 없다). 틀리면 문제를 붙여 다시 묻고(3번), 끝내 틀리면 알림을 남기고 빌드가 실패한다.
   - 줄의 시각은 프롬프트에 넣지 않는다. 표 구조에서 나온 시각은 코드가 적용한다.
@@ -222,7 +250,7 @@ RAN1#126bis 화요일 17:00~19:30은 원본도 답 내용도 같은데 재병합
 
 ## 7. 특정 일정의 출처 추적 방법
 
-현재 slot state는 source별 hash와 최종 merge 결과를 저장하지만, **각 세션이 어느 source의 어느 셀에서 유래했는지에 대한 per-session provenance는 저장하지 않는다.** 따라서 다음 순서로 역추적한다.
+현재 slot state는 source별 hash, 최종 merge 결과, 그 merge에 쓴 칸(칸 이력)을 저장한다. 세션마다 출처 칸의 id(`source_cells`)가 있고, 칸 이력에서 그 id의 source·방·원문을 찾을 수 있다. 원본 파일까지 따라가려면 다음 순서로 본다.
 
 1. `docs/ran1/index.html` 또는 `docs/ran1/slot_state/{Day}_{TB}.json`에서 최종 일정 확인
 2. slot state의 `source_hashes`에서 참여한 source 확인

@@ -1,0 +1,277 @@
+{
+  "meeting_id": "ran1#126bis",
+  "day": "Friday",
+  "time_block_index": 0,
+  "documents": {
+    "Main v04": "RAN1#126b online and offline schedules - v04.docx",
+    "Main v05": "RAN1#126b online and offline schedules - v05.docx",
+    "Hiroki v07": "RAN1#126bis schedule for Hiroki Adhoc2 sessions_v07.docx",
+    "Hiroki v08": "RAN1#126bis schedule for Hiroki Adhoc2 sessions_v08.docx",
+    "Sorour v01": "RAN1#126b Sorour sessions online and offline schedules - v01.docx"
+  },
+  "main_rooms": [
+    {
+      "name": "Tamna BC Hall",
+      "table_index": 0,
+      "room_index_in_table": 0,
+      "kind": "online"
+    },
+    {
+      "name": "Yeongju A Hall",
+      "table_index": 0,
+      "room_index_in_table": 1,
+      "kind": "online"
+    },
+    {
+      "name": "Yeongju B Hall",
+      "table_index": 0,
+      "room_index_in_table": 2,
+      "kind": "online"
+    },
+    {
+      "name": "201",
+      "table_index": 1,
+      "room_index_in_table": 0,
+      "kind": "offline"
+    },
+    {
+      "name": "203",
+      "table_index": 1,
+      "room_index_in_table": 1,
+      "kind": "offline"
+    }
+  ],
+  "slots": {
+    "Main v04 + Hiroki v07 + Sorour v01": [
+      {
+        "label": "Main Schedule",
+        "entries": [
+          {
+            "room_label": "Tamna BC Hall",
+            "cell_text": "6GR (120)\n.10.5.1.3(30)\n.10.5.1.1(50)\n.10.5.1.2(40)",
+            "fallback_start_time": null
+          },
+          {
+            "room_label": "Yeongju A Hall",
+            "cell_text": "R20 \n.NR-NTN (20)\n\n6GR (100)\n.10.7.1 NT\nN (40)\n\n.10.5.2.1 (60)",
+            "fallback_start_time": null
+          },
+          {
+            "room_label": "Yeongju B Hall",
+            "cell_text": "R20 (120)\nA-IoT Phase2 (120)",
+            "fallback_start_time": null
+          },
+          {
+            "room_label": "201",
+            "cell_text": "Sorouri (90)\n6GR\n.10.5.2.2 (45)\n.10.5.2.3 (45)\n\nXiaodong (30)\n6GR\n.10.4.2 (30)",
+            "fallback_start_time": null
+          },
+          {
+            "room_label": "203",
+            "cell_text": "Hiroki (120)\n6GR \n.10.8.x Sensing (60)\n10.5.4.x (60)",
+            "fallback_start_time": null
+          }
+        ]
+      },
+      {
+        "label": "Hiroki's schedule",
+        "entries": [
+          {
+            "room_label": "Hiroki: Yeongju B Hall",
+            "cell_text": "R20 A-IoT (120)\n9.3.1(40), 9.3.2(40), 9.3.3(40)",
+            "fallback_start_time": null
+          },
+          {
+            "room_label": "Hiroki: 203",
+            "cell_text": "6G 10.5.4.x (60)\n10.5.4.1 (30)\n10.5.4.3 (30)\n\n6G ISAC (60)",
+            "fallback_start_time": null
+          },
+          {
+            "room_label": "Hiroki: Tamna BC Hall",
+            "cell_text": "6GR (120)\n.10.5.1.1(50)\n.10.5.1.2(40)\n.10.5.1.3(30)",
+            "fallback_start_time": null
+          },
+          {
+            "room_label": "Hiroki: Yeongju A Hall",
+            "cell_text": "6GR (120)\n.10.7.1 NTN (60)\n\n.10.5.2.x (60)",
+            "fallback_start_time": null
+          }
+        ]
+      },
+      {
+        "label": "Sorour's schedule",
+        "entries": [
+          {
+            "room_label": "TamnaBC (5F)",
+            "cell_text": "6GR (120)\n.10.5.1.1(50)\n.10.5.1.2(40)\n.10.5.1.3(30)",
+            "fallback_start_time": null
+          },
+          {
+            "room_label": "Yeongju A (1F)",
+            "cell_text": "6GR (120)\n.10.7.1 NTN (60)\n\n.10.5.2.x (60)",
+            "fallback_start_time": null
+          },
+          {
+            "room_label": "Yeongju A (1F)",
+            "cell_text": "6GR (120)\nAI 10.7.1 NTN (60)\n\nAI 10.5.2.x (60)",
+            "fallback_start_time": null
+          }
+        ]
+      }
+    ],
+    "Main v05 + Hiroki v07 + Sorour v01": [
+      {
+        "label": "Main Schedule",
+        "entries": [
+          {
+            "room_label": "Tamna BC Hall",
+            "cell_text": "6GR (120)\n.10.5.1.3(30)\n.10.5.1.1(50)\n.10.5.1.2(40)",
+            "fallback_start_time": null
+          },
+          {
+            "room_label": "Yeongju A Hall",
+            "cell_text": "R20 \n.NR-NTN (20)\n\n6GR (100)\n.10.7.1 NT\nN (40)\n\n.10.5.2.1 (60)",
+            "fallback_start_time": null
+          },
+          {
+            "room_label": "Yeongju B Hall",
+            "cell_text": "R20 (120)\nA-IoT Phase2 (120)",
+            "fallback_start_time": null
+          },
+          {
+            "room_label": "201",
+            "cell_text": "Sorouri (90)\n6GR\n.10.5.2.2 (45)\n.10.5.2.3 (45)\n\nXiaodong (30)\n6GR\n.10.4.2 (30)",
+            "fallback_start_time": null
+          },
+          {
+            "room_label": "203",
+            "cell_text": "Hiroki (120)\n6GR \n.10.5.4.x (60)\n.10.8.x Sensing (60)",
+            "fallback_start_time": null
+          }
+        ]
+      },
+      {
+        "label": "Hiroki's schedule",
+        "entries": [
+          {
+            "room_label": "Hiroki: Yeongju B Hall",
+            "cell_text": "R20 A-IoT (120)\n9.3.1(40), 9.3.2(40), 9.3.3(40)",
+            "fallback_start_time": null
+          },
+          {
+            "room_label": "Hiroki: 203",
+            "cell_text": "6G 10.5.4.x (60)\n10.5.4.1 (30)\n10.5.4.3 (30)\n\n6G ISAC (60)",
+            "fallback_start_time": null
+          },
+          {
+            "room_label": "Hiroki: Tamna BC Hall",
+            "cell_text": "6GR (120)\n.10.5.1.1(50)\n.10.5.1.2(40)\n.10.5.1.3(30)",
+            "fallback_start_time": null
+          },
+          {
+            "room_label": "Hiroki: Yeongju A Hall",
+            "cell_text": "6GR (120)\n.10.7.1 NTN (60)\n\n.10.5.2.x (60)",
+            "fallback_start_time": null
+          }
+        ]
+      },
+      {
+        "label": "Sorour's schedule",
+        "entries": [
+          {
+            "room_label": "TamnaBC (5F)",
+            "cell_text": "6GR (120)\n.10.5.1.1(50)\n.10.5.1.2(40)\n.10.5.1.3(30)",
+            "fallback_start_time": null
+          },
+          {
+            "room_label": "Yeongju A (1F)",
+            "cell_text": "6GR (120)\n.10.7.1 NTN (60)\n\n.10.5.2.x (60)",
+            "fallback_start_time": null
+          },
+          {
+            "room_label": "Yeongju A (1F)",
+            "cell_text": "6GR (120)\nAI 10.7.1 NTN (60)\n\nAI 10.5.2.x (60)",
+            "fallback_start_time": null
+          }
+        ]
+      }
+    ],
+    "Main v05 + Hiroki v08 + Sorour v01": [
+      {
+        "label": "Main Schedule",
+        "entries": [
+          {
+            "room_label": "Tamna BC Hall",
+            "cell_text": "6GR (120)\n.10.5.1.3(30)\n.10.5.1.1(50)\n.10.5.1.2(40)",
+            "fallback_start_time": null
+          },
+          {
+            "room_label": "Yeongju A Hall",
+            "cell_text": "R20 \n.NR-NTN (20)\n\n6GR (100)\n.10.7.1 NT\nN (40)\n\n.10.5.2.1 (60)",
+            "fallback_start_time": null
+          },
+          {
+            "room_label": "Yeongju B Hall",
+            "cell_text": "R20 (120)\nA-IoT Phase2 (120)",
+            "fallback_start_time": null
+          },
+          {
+            "room_label": "201",
+            "cell_text": "Sorouri (90)\n6GR\n.10.5.2.2 (45)\n.10.5.2.3 (45)\n\nXiaodong (30)\n6GR\n.10.4.2 (30)",
+            "fallback_start_time": null
+          },
+          {
+            "room_label": "203",
+            "cell_text": "Hiroki (120)\n6GR \n.10.5.4.x (60)\n.10.8.x Sensing (60)",
+            "fallback_start_time": null
+          }
+        ]
+      },
+      {
+        "label": "Hiroki's schedule",
+        "entries": [
+          {
+            "room_label": "Hiroki: Yeongju B Hall",
+            "cell_text": "R20 A-IoT (120)\n9.3.3(60), 9.3.1(40), 9.3.2(20)",
+            "fallback_start_time": null
+          },
+          {
+            "room_label": "Hiroki: 203",
+            "cell_text": "6G 10.5.4.x (60)\n10.5.4.1 (30)\n10.5.4.3 (30)\n\n6G ISAC (60)",
+            "fallback_start_time": null
+          },
+          {
+            "room_label": "Hiroki: Tamna BC Hall",
+            "cell_text": "6GR (120)\n.10.5.1.1(50)\n.10.5.1.2(40)\n.10.5.1.3(30)",
+            "fallback_start_time": null
+          },
+          {
+            "room_label": "Hiroki: Yeongju A Hall",
+            "cell_text": "6GR (120)\n.10.7.1 NTN (60)\n\n.10.5.2.x (60)",
+            "fallback_start_time": null
+          }
+        ]
+      },
+      {
+        "label": "Sorour's schedule",
+        "entries": [
+          {
+            "room_label": "TamnaBC (5F)",
+            "cell_text": "6GR (120)\n.10.5.1.1(50)\n.10.5.1.2(40)\n.10.5.1.3(30)",
+            "fallback_start_time": null
+          },
+          {
+            "room_label": "Yeongju A (1F)",
+            "cell_text": "6GR (120)\n.10.7.1 NTN (60)\n\n.10.5.2.x (60)",
+            "fallback_start_time": null
+          },
+          {
+            "room_label": "Yeongju A (1F)",
+            "cell_text": "6GR (120)\nAI 10.7.1 NTN (60)\n\nAI 10.5.2.x (60)",
+            "fallback_start_time": null
+          }
+        ]
+      }
+    ]
+  }
+}
