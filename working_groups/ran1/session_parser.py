@@ -1102,8 +1102,9 @@ def source_cell_problems(
     """What is wrong with the ``source_cells`` of a merge, if anything.
 
     Every session names the cells it comes from, the ids exist in this
-    slot, and a session drawn from Main Schedule cells stays in their rooms
-    (the Main Schedule decides what goes in each room).
+    slot, a session drawn from Main Schedule cells stays in their rooms
+    (the Main Schedule decides what goes in each room), and every Main
+    Schedule cell with text is named by some session.
     """
     entries = _slot_entries(slot)
     main_covered = {
@@ -1146,6 +1147,23 @@ def source_cell_problems(
                 problems.append(
                     f"{label}: its Main Schedule cells do not cover {', '.join(outside)}"
                 )
+    # Every Main Schedule cell must reach the page. A cell that says nothing
+    # is decided yet ("To be assigned by Sorour") is kept as written, not
+    # dropped; only a cell that is all struck out has nothing to show.
+    cited = {
+        cell_id
+        for sd in parsed.get("sessions") or []
+        for cell_id in sd.get("source_cells") or []
+    }
+    for cell_id, (source, entry) in entries.items():
+        if source != "Main Schedule" or cell_id in cited:
+            continue
+        if not re.sub(r"~~.*?~~", "", entry.cell_text, flags=re.DOTALL).strip():
+            continue
+        problems.append(
+            f"Main Schedule cell {cell_id} ({entry.room_label}) is in no session's "
+            "source_cells: keep it (an undecided cell stays as written)"
+        )
     return problems
 
 

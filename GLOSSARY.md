@@ -22,6 +22,7 @@ RAN1 일정 병합(`working_groups/ran1/`)을 이야기할 때 쓰는 말이다.
   이 회의에서 본 어느 Main 버전(Draft 포함)의 같은 블록 글과 같은 부의장 칸은 사본으로 보고 병합에서 뺀다(공백 차이 무시).
 - **Main 이력** (`main_history`, `docs/ran1/main_history/<회의>.json`): 이 회의에서 실행이 본 모든 Main 버전의 칸 글을 블록별로 모은 것. 같은 글은 한 번만 둔다.
   원본 문서의 기록이라 slot state와 따로 두고, `force-deploy`가 지우지 않는다.
+- **미정 칸**: 그 자리에 무엇을 할지 아직 정하지 않았다고 적은 칸(`To be assigned by Sorour`, `TBD`). 다른 칸이 정해 두지 않았으면 적힌 그대로 남기고, 칸이 적은 사람을 의장으로 둔다.
 - **칸 id** (`cell_id`): 소스, 방 label, 원문으로 만든 짧은 id(`c1a2b3`). 칸이 그대로이면 실행이 바뀌어도 같고, 원문이 바뀌면 새 id다.
   LLM은 세션마다 출처 칸의 id를 답한다(`source_cells`).
 

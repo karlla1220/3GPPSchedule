@@ -103,6 +103,30 @@ Example 4 – Sweep session over a topic area (no explicit durations):
    UNLESS the cell text contains explicit time ranges (see "Explicit time
    ranges" section below).
 
+## Undecided cells
+
+A cell can say that what happens there is not decided yet: "To be assigned
+by Sorour", "TBD", "TBC", "Reserved". Lose as little of the cell as possible:
+
+- If another cell decides what happens in that room at that time (e.g. a
+  vice-chair table that matches by content), use it as detail as usual, and
+  list the undecided cell in source_cells too.
+- Otherwise keep the cell as written: one entry whose name is the cell text
+  (lines joined with " / "), over the whole time the cell covers, with
+  agenda_item null and group_header "". Never drop the cell, and never make
+  up a topic, durations or a split the cell does not write.
+- When the cell names who assigns or chairs it ("To be assigned by Sorour"),
+  set chair to that person. Several people are joined with " / "
+  ("Sorour / Hiroki").
+- A cell over several rooms stays ONE entry over those rooms (room_name
+  e.g. "RAN1_off1 + RAN1_off2"); do not copy it into each room.
+
+Example – a merged offline cell over 201 + 203, nothing else decides it:
+  To be assigned by Sorour / To be assigned by Hiroki
+  Result (120-min block): [{room_name:"RAN1_off1 + RAN1_off2",
+    name:"To be assigned by Sorour / To be assigned by Hiroki", dur:120,
+    chair:"Sorour / Hiroki", agenda_item:null, group_header:""}]
+
 ## Session chair assignment from vice-chair detail
 
 When a vice-chair source provides SIGNIFICANTLY more detail than the main schedule

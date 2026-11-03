@@ -210,7 +210,7 @@ def test_source_cell_problems():
         _s("RAN1_off1", "wrong room", 30, ["cmain0"]),
         _s("ALL_ROOMS", "Early dinner", 60, ["cdin00", "cdin01"]),
     ]}
-    problems = source_cell_problems(parsed, slot, ROOMS, alias_to_name)
+    problems = _session_problems(source_cell_problems(parsed, slot, ROOMS, alias_to_name))
     assert len(problems) == 3
     assert "'empty'" in problems[0] and "empty" in problems[0]
     assert "no cell czzzzzz" in problems[1]
@@ -223,9 +223,35 @@ def test_vice_chair_cell_alone_is_not_enough_where_main_has_a_cell():
     slot = _slot(_tuesday_cells(), extra_sources=[vice])
     _, alias_to_name = build_room_aliases(ROOMS)
     parsed = {"sessions": [_s("RAN1_off2", "9.4 NTN-NR", 30, ["cvice0"])]}
-    problems = source_cell_problems(parsed, slot, ROOMS, alias_to_name)
+    problems = _session_problems(source_cell_problems(parsed, slot, ROOMS, alias_to_name))
     assert problems == ["session 1 '9.4 NTN-NR' in RAN1_off2: name the Main Schedule cell of 203 as well"]
     parsed["sessions"][0]["source_cells"] = ["coff20", "cvice0"]
+    assert _session_problems(source_cell_problems(parsed, slot, ROOMS, alias_to_name)) == []
+
+
+def _session_problems(problems):
+    """Problems about the sessions given, without the Main cells they leave out."""
+    return [p for p in problems if "is in no session's source_cells" not in p]
+
+
+def test_every_main_cell_must_be_named():
+    # A Main cell no session names would vanish from the page; an undecided
+    # cell ("To be assigned by Sorour") is kept as written, not dropped.
+    cells = _tuesday_cells() + [
+        _cell("ctba00", ["201", "203"], "To be assigned by Sorour / To be assigned by Hiroki", 1),
+        _cell("cgone0", ["201"], "~~10.5.1.2 (30)~~", 1),
+    ]
+    slot = _slot(cells)
+    _, alias_to_name = build_room_aliases(ROOMS)
+    parsed = {"sessions": ONLINE + OFFLINE + [_s("ALL_ROOMS", "Early dinner", 60, ["cdin00", "cdin01"])]}
+    assert source_cell_problems(parsed, slot, ROOMS, alias_to_name) == [
+        "Main Schedule cell ctba00 (201 + 203) is in no session's source_cells: "
+        "keep it (an undecided cell stays as written)"
+    ]
+    parsed["sessions"].append(dict(
+        _s("RAN1_off1 + RAN1_off2", "To be assigned by Sorour / To be assigned by Hiroki", 120, ["ctba00"]),
+        chair="Sorour / Hiroki", agenda_item=None))
+    # The struck-out cell has nothing to show and need not be named.
     assert source_cell_problems(parsed, slot, ROOMS, alias_to_name) == []
 
 
