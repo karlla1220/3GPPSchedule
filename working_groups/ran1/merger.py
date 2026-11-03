@@ -14,6 +14,7 @@ import re
 from dataclasses import dataclass, field
 from pathlib import Path
 
+from . import main_history
 from .models import CellData, RoomInfo, TIME_BLOCKS
 from .parser import parse_docx, build_room_list
 from .rooms import online_rooms as _online_rooms
@@ -387,6 +388,7 @@ def collect_time_slot_data(
     main_rooms_map: dict[str, list[RoomInfo]],
     vice_chair_paths: dict[str, Path],
     meeting_id: str | None = None,
+    main_texts_seen: dict[str, set[str]] | None = None,
 ) -> list[TimeSlotData]:
     """Collect all schedule data grouped by (day, time_block).
 
@@ -398,6 +400,10 @@ def collect_time_slot_data(
         main_cells: CellData list from the main (Chair_notes) schedule.
         main_rooms_map: day → list[RoomInfo] from main schedule.
         vice_chair_paths: person_name → Path to their schedule DOCX.
+        main_texts_seen: every Main text seen this meeting, by slot
+            (``main_history``). A vice-chair cell that repeats one is an old
+            copy of a Main table and is left out. Without it, only copies of
+            the current Main are left out.
 
     Returns:
         List of TimeSlotData, sorted by day order then time block index.
@@ -461,13 +467,17 @@ def collect_time_slot_data(
             vc_cells = vc_groups[key]
             vc_day_rooms = vc_rooms.get(day, [])
 
-            # De-duplicate: skip VC entries whose text is identical to a main entry
-            main_texts = {cell.text.strip() for cell in m_cells}
+            # A vice-chair cell that repeats a Main text of this slot, now or
+            # in an earlier version, is a copy of a Main table: the current
+            # Main already says it, or the chair has changed it since.
+            main_texts = set(
+                (main_texts_seen or {}).get(main_history.slot_key(day, tb_idx), ())
+            ) | {main_history.normalize(cell.text) for cell in m_cells}
 
             vc_source = SlotSource(label=f"{person}'s schedule")
             for cell in vc_cells:
-                if cell.text.strip() in main_texts:
-                    continue  # Skip duplicate content
+                if main_history.normalize(cell.text) in main_texts:
+                    continue
                 room_label = _room_label_for_cell(cell, vc_day_rooms)
                 # Prefix VC room labels that match a main target room name
                 # to prevent Gemini from blindly assigning sessions by label.
