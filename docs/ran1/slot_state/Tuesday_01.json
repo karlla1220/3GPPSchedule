@@ -574,7 +574,58 @@
       ]
     }
   ],
-  "merged_at": "2026-11-02T17:42:37.810726+00:00",
+  "merged_at": "2026-11-03T07:01:37.953946+00:00",
   "meeting_id": "ran1#126bis",
-  "schema_version": 3
+  "schema_version": 3,
+  "source_entries": {
+    "Main Schedule": [
+      {
+        "room_label": "Tamna BC Hall",
+        "cell_text": "6GR (120)\n.10.5.5 (40)\n\n.10.4.2 (40)\n.10.4.1 (40)",
+        "fallback_start_time": null,
+        "cell_id": "caf4c6a"
+      },
+      {
+        "room_label": "Yeongju A Hall",
+        "cell_text": "R20 (80)AI/ML (40)\nMIMO (40)\n\nAI 8.1 (40)",
+        "fallback_start_time": null,
+        "cell_id": "cafbf44"
+      },
+      {
+        "room_label": "Yeongju B Hall",
+        "cell_text": "6GR (80)\n.10.8 Sensing (80)\n\nR20 (40)\nA-IoT Phase2 (40)",
+        "fallback_start_time": null,
+        "cell_id": "cf01351"
+      },
+      {
+        "room_label": "201",
+        "cell_text": "Xiaodong (120)\n6GR\n.10.6.1.2 (30)\n.10.6.2 (30)\n.10.6.3 (20)\n\n.10.5.1.2(40)",
+        "fallback_start_time": null,
+        "cell_id": "cea8fe1"
+      },
+      {
+        "room_label": "203",
+        "cell_text": "Sorour (120)\n6GR \n.10.5.2.3(60)\n.10.5.2.2(60)",
+        "fallback_start_time": null,
+        "cell_id": "c9ae009"
+      }
+    ],
+    "Hiroki's schedule": [
+      {
+        "room_label": "Hiroki: Yeongju B Hall",
+        "cell_text": "6G ISAC (80)\n10.8.3(40), 10.8.1.(40)\n\nR20 A-IoT (40)\n9.3.2",
+        "fallback_start_time": null,
+        "cell_id": "c8d2cd3"
+      }
+    ],
+    "Sorour's schedule": [
+      {
+        "room_label": "Yeongju A (1F)",
+        "cell_text": "R20 NR (80)\nAI 9.1 AIML (40)\nAI 9.2 MIMO (40)\n\nAI 8.1 (40)",
+        "fallback_start_time": null,
+        "cell_id": "cd4cce5"
+      }
+    ]
+  },
+  "merge_prompt_version": 5
 }

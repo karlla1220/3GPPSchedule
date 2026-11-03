@@ -516,7 +516,76 @@
       ]
     }
   ],
-  "merged_at": "2026-11-02T18:42:06.349430+00:00",
+  "merged_at": "2026-11-03T07:01:37.968584+00:00",
   "meeting_id": "ran1#126bis",
-  "schema_version": 3
+  "schema_version": 3,
+  "source_entries": {
+    "Main Schedule": [
+      {
+        "room_label": "Tamna BC Hall",
+        "cell_text": "6GR (120)\n.10.5.1.1(50)\n.10.5.1.2(40)\n\n.10.5.1.3(30)",
+        "fallback_start_time": null,
+        "cell_id": "c7d1522"
+      },
+      {
+        "room_label": "Yeongju A Hall",
+        "cell_text": "6GR (50)\n.10.7.1 NTN (50)\n\nR20 (70)\n.9.5 NTN(30)\nNTN-NR (40)",
+        "fallback_start_time": null,
+        "cell_id": "cc6e4e0"
+      },
+      {
+        "room_label": "Yeongju B Hall",
+        "cell_text": "6GR (80)\n.10.2.1 Waveform (80)\n\nAI 7/8.2 (40)",
+        "fallback_start_time": null,
+        "cell_id": "ce5589e"
+      },
+      {
+        "room_label": "201",
+        "cell_text": "Xiaodong (120)\n6GR\n\n.10.4.2 (30)\n.10.5.5 (30)\n\n.10.5.3.1 (60)",
+        "fallback_start_time": null,
+        "cell_id": "c4ed92d"
+      },
+      {
+        "room_label": "203",
+        "cell_text": "Sorour (40)\nR20\nAI/ML (40)\n\nXiaodong (80)\n6GR\n.10.6.2/10.6.1.1/106.1.2 (80)",
+        "fallback_start_time": null,
+        "cell_id": "c04512e"
+      }
+    ],
+    "Hiroki's schedule": [
+      {
+        "room_label": "Hiroki: Yeongju B Hall",
+        "cell_text": "6G waveform (40)\n10.2.1\n\nMaintenance (80)\n8.2 R19 ISAC CM, Duplex(CLI)\n7 R1-2608105",
+        "fallback_start_time": null,
+        "cell_id": "ca25ec8"
+      },
+      {
+        "room_label": "Hiroki: Yeongju B Hall",
+        "cell_text": "6GR (40)\n.10.2.1 Waveform (40)\n\nAI 7/8.2 (80)",
+        "fallback_start_time": null,
+        "cell_id": "c749cef"
+      }
+    ],
+    "Sorour's schedule": [
+      {
+        "room_label": "Yeongju B (1F)",
+        "cell_text": "6GR (40)\n.10.2.1 Waveform (40)\n\nAI 7/8.2 (80)",
+        "fallback_start_time": null,
+        "cell_id": "c95755b"
+      },
+      {
+        "room_label": "Sorour: 201",
+        "cell_text": "Xiaodong (120)\n6GR\n.10.4.2 (30)\n.10.5.5 (30)\n\n.10.5.3.1 (60)",
+        "fallback_start_time": null,
+        "cell_id": "c110168"
+      },
+      {
+        "room_label": "Yeongju A (1F)",
+        "cell_text": "6GR (50)\nAI 10.7.1 NTN (50)\n\nR20 NR (70)\nAI 9.5 NTN (30)\nAI 9.4 NR-NTN (40)",
+        "fallback_start_time": null,
+        "cell_id": "c9c51cc"
+      }
+    ]
+  },
+  "merge_prompt_version": 5
 }

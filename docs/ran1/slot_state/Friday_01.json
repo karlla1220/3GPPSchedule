@@ -261,7 +261,70 @@
       ]
     }
   ],
-  "merged_at": "2026-11-02T18:42:06.358767+00:00",
+  "merged_at": "2026-11-03T07:01:37.978788+00:00",
   "meeting_id": "ran1#126bis",
-  "schema_version": 3
+  "schema_version": 3,
+  "source_entries": {
+    "Main Schedule": [
+      {
+        "room_label": "Tamna BC Hall",
+        "cell_text": "Sweep",
+        "fallback_start_time": null,
+        "cell_id": "cd300cd"
+      },
+      {
+        "room_label": "Yeongju A Hall",
+        "cell_text": "6GR (120)\n10.5.2.2 (60)\n10.5.2.3 (60)",
+        "fallback_start_time": null,
+        "cell_id": "c78e700"
+      },
+      {
+        "room_label": "Yeongju B Hall",
+        "cell_text": "6GR (120)\n.10.5.4.x (60)\n.10.2.1 Waveform (10)\n.10.8 Sensing (50)",
+        "fallback_start_time": null,
+        "cell_id": "cffbb57"
+      }
+    ],
+    "Hiroki's schedule": [
+      {
+        "room_label": "Hiroki: Yeongju B Hall",
+        "cell_text": "6G 10.5.4.x (60)\n10.5.4.3 (30)\n10.5.4.1 (30)\n\n6G waveform (10)\n\n6G ISAC (50)",
+        "fallback_start_time": null,
+        "cell_id": "cfd8297"
+      },
+      {
+        "room_label": "Hiroki: Yeongju A Hall",
+        "cell_text": "TBD",
+        "fallback_start_time": null,
+        "cell_id": "c4e0da7"
+      },
+      {
+        "room_label": "Hiroki: Yeongju B Hall",
+        "cell_text": "TBD",
+        "fallback_start_time": null,
+        "cell_id": "cad619d"
+      }
+    ],
+    "Sorour's schedule": [
+      {
+        "room_label": "Yeongju A (1F)",
+        "cell_text": "TBD",
+        "fallback_start_time": null,
+        "cell_id": "c25f8b6"
+      },
+      {
+        "room_label": "Yeongju B (1F)",
+        "cell_text": "TBD",
+        "fallback_start_time": null,
+        "cell_id": "c87447d"
+      },
+      {
+        "room_label": "Yeongju A (1F)",
+        "cell_text": "TBD",
+        "fallback_start_time": null,
+        "cell_id": "cc8b310"
+      }
+    ]
+  },
+  "merge_prompt_version": 5
 }

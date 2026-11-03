@@ -663,7 +663,64 @@
       ]
     }
   ],
-  "merged_at": "2026-11-02T17:42:37.812600+00:00",
+  "merged_at": "2026-11-03T07:01:37.955977+00:00",
   "meeting_id": "ran1#126bis",
-  "schema_version": 3
+  "schema_version": 3,
+  "source_entries": {
+    "Main Schedule": [
+      {
+        "room_label": "Tamna BC Hall",
+        "cell_text": "6GR (60)\n.10.6.x (60)\n\n.10.5.1.1(60)",
+        "fallback_start_time": null,
+        "cell_id": "c6e7348"
+      },
+      {
+        "room_label": "Yeongju A Hall",
+        "cell_text": "6GR (120)\n.10.5.2.1(30)\n.10.5.2.2(45)\n.10.5.2.3(45)",
+        "fallback_start_time": null,
+        "cell_id": "ce2ebe2"
+      },
+      {
+        "room_label": "Yeongju B Hall",
+        "cell_text": "TEI, AI 7/8.2 (80)\n\n6GR (40)\n.10.2.1 Waveform (40)",
+        "fallback_start_time": null,
+        "cell_id": "ccba416"
+      },
+      {
+        "room_label": "201",
+        "cell_text": "Xiaodong (120)\n6GR\n.10.5.3.1 (45)\n.10.5.3.2 (25)\n.10.5.3.3 (20)\n.10.5.3.4 (30)",
+        "fallback_start_time": null,
+        "cell_id": "cba2f3e"
+      },
+      {
+        "room_label": "203",
+        "cell_text": "Hiroki (90)\nR20\nA-IoT (90)\n\nSorouri (30)\n6GR \n.10.3.2 (30)",
+        "fallback_start_time": null,
+        "cell_id": "c1bff24"
+      }
+    ],
+    "Hiroki's schedule": [
+      {
+        "room_label": "Hiroki: Yeongju B Hall",
+        "cell_text": "11 TEI20 (10)\n\nMaintenance (70)\n8.2 R19 Duplex, R19 ISAC CM, R19 XR (25)\n8.3 UE features (25)\n8.2 R19 LP-WUS (20)\n\n6G waveform (40)\n10.2.1",
+        "fallback_start_time": null,
+        "cell_id": "c9bc456"
+      },
+      {
+        "room_label": "Hiroki: 203",
+        "cell_text": "14:30 - 16:00\nR20 A-IoT (90)\n9.3.1, 9.3.3",
+        "fallback_start_time": null,
+        "cell_id": "c8bff82"
+      }
+    ],
+    "Sorour's schedule": [
+      {
+        "room_label": "Yeongju A (1F)",
+        "cell_text": "6GR (120)\nAI 10.5.2.1 PDCCH (30)\nAI 10.5.2.2 PDSCH (45)\nAI 10.5.2.3 PUxCH (45)",
+        "fallback_start_time": null,
+        "cell_id": "c07de1d"
+      }
+    ]
+  },
+  "merge_prompt_version": 5
 }

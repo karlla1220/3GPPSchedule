@@ -558,7 +558,76 @@
       ]
     }
   ],
-  "merged_at": "2026-11-02T18:42:06.343397+00:00",
+  "merged_at": "2026-11-03T07:01:37.962028+00:00",
   "meeting_id": "ran1#126bis",
-  "schema_version": 3
+  "schema_version": 3,
+  "source_entries": {
+    "Main Schedule": [
+      {
+        "room_label": "Tamna BC Hall",
+        "cell_text": "6GR (120)\n.10.5.3.1(60)\n.10.5.3.2(30)\n.10.5.3.3(30)",
+        "fallback_start_time": null,
+        "cell_id": "c71a0ee"
+      },
+      {
+        "room_label": "Yeongju A Hall",
+        "cell_text": "R20 (60)\nAI/ML (60)\n\n6GR (30)\n.10.3.1 Channel coding (30)\n\n6GR (30)\n.10.5.2.2(30)",
+        "fallback_start_time": null,
+        "cell_id": "c16c751"
+      },
+      {
+        "room_label": "Yeongju B Hall",
+        "cell_text": "6GR (120)\n.10.8 Sensing (120)",
+        "fallback_start_time": null,
+        "cell_id": "cfcf5d3"
+      },
+      {
+        "room_label": "201",
+        "cell_text": "Xiaodong (90)\n6GR\n.10.6.x (90)\n\nHiroki (30)\n6GR\n.10.5.4.x (30)",
+        "fallback_start_time": null,
+        "cell_id": "c942d17"
+      },
+      {
+        "room_label": "203",
+        "cell_text": "Sorour (120)\n6GR\n.10.5.2.1(30)\n.10.5.2.3(60)\n\nR20\nMIMO (30)",
+        "fallback_start_time": null,
+        "cell_id": "cd74ea2"
+      }
+    ],
+    "Hiroki's schedule": [
+      {
+        "room_label": "Hiroki: Yeongju B Hall",
+        "cell_text": "6G ISAC (120)\n10.8.2(40), 10.8.1(40), 10.8.3(40)",
+        "fallback_start_time": null,
+        "cell_id": "ca2d0ca"
+      },
+      {
+        "room_label": "Hiroki: 201",
+        "cell_text": "12:30 - 13:00\n6G 10.5.4.x (30)\n 10.5.4.1",
+        "fallback_start_time": null,
+        "cell_id": "c005004"
+      },
+      {
+        "room_label": "Hiroki: Yeongju A Hall",
+        "cell_text": "R20 (60)\nAI/ML (60)\n\nAI 8.1 (30)\n\n6GR (30)\n.10.5.2.2(30)",
+        "fallback_start_time": null,
+        "cell_id": "cbc04e7"
+      }
+    ],
+    "Sorour's schedule": [
+      {
+        "room_label": "Yeongju A (1F)",
+        "cell_text": "R20 (60)\nAI/ML (60)\n\nAI 10.3.1 Channel coding (30)\n\n6GR (30)\n.10.5.2.2(30)",
+        "fallback_start_time": null,
+        "cell_id": "ca57d4e"
+      },
+      {
+        "room_label": "Yeongju A (1F)",
+        "cell_text": "R20 NR (60)\nAI 9.1 AIML (60)\n6GR (30)\nAI 10.3.1 Coding (30)\n\n6GR (30)\nAI 10.5.2.2 PDSCH (30)",
+        "fallback_start_time": null,
+        "cell_id": "ce7ccfe"
+      }
+    ]
+  },
+  "merge_prompt_version": 5
 }

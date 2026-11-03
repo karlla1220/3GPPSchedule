@@ -599,7 +599,70 @@
       ]
     }
   ],
-  "merged_at": "2026-11-02T17:42:37.819807+00:00",
+  "merged_at": "2026-11-03T07:01:37.964056+00:00",
   "meeting_id": "ran1#126bis",
-  "schema_version": 3
+  "schema_version": 3,
+  "source_entries": {
+    "Main Schedule": [
+      {
+        "room_label": "Tamna BC Hall",
+        "cell_text": "6GR (120)\n.10.5.3.4(30)\n\n.10.6.x (90)",
+        "fallback_start_time": null,
+        "cell_id": "cedd475"
+      },
+      {
+        "room_label": "Yeongju A Hall",
+        "cell_text": "6GR (120)\n.10.5.2.1(40)\n.10.5.2.3(80)",
+        "fallback_start_time": null,
+        "cell_id": "c92c6ef"
+      },
+      {
+        "room_label": "Yeongju B Hall",
+        "cell_text": "TEI, AI 7/8.2 (90)\n\nR20 Coverage RRC (30)",
+        "fallback_start_time": null,
+        "cell_id": "cc6e6a7"
+      },
+      {
+        "room_label": "201",
+        "cell_text": "Hiroki (60)\n6GR\n.10.5.4.x (60)\n\nXiaodong (60)\n6GR\n.10.4.2 (30)\n.10.4.1 (30)",
+        "fallback_start_time": null,
+        "cell_id": "cd81a2a"
+      },
+      {
+        "room_label": "203",
+        "cell_text": "Sorour (40)\n6GR\n.10.3.1 (40)\n\nHiroki (80)\nR20\nA-IoT (80)",
+        "fallback_start_time": null,
+        "cell_id": "c78971e"
+      }
+    ],
+    "Hiroki's schedule": [
+      {
+        "room_label": "Hiroki: Yeongju B Hall",
+        "cell_text": "Maintenance (90-120)\n8.2 R19 LP-WUS, R19/20 Mobility (30)\n7 pre-Rel-19 CRs, 8.2 R19 Duplex(50)\n11 TEI20 (10)\nR20 Coverage RRC (30)",
+        "fallback_start_time": null,
+        "cell_id": "c981ea9"
+      },
+      {
+        "room_label": "Hiroki: 201",
+        "cell_text": "14:30 - 15:30\n6G 10.5.4.x(60)\n 10.5.4.2, 10.5.4.3, 10.5.4.4",
+        "fallback_start_time": null,
+        "cell_id": "ce80151"
+      },
+      {
+        "room_label": "Hiroki: 203",
+        "cell_text": "15:10 - 16:30\nR20 A-IoT (80)\n9.3.2, 9.3.3, 9.3.1",
+        "fallback_start_time": null,
+        "cell_id": "c4fe89a"
+      }
+    ],
+    "Sorour's schedule": [
+      {
+        "room_label": "Yeongju A (1F)",
+        "cell_text": "6GR (120)\nAI 10.5.2.1 PDCCH (40)\nAI 10.5.2.3 PUxCH (80)",
+        "fallback_start_time": null,
+        "cell_id": "c6e8e81"
+      }
+    ]
+  },
+  "merge_prompt_version": 5
 }

@@ -125,7 +125,26 @@
       ]
     }
   ],
-  "merged_at": "2026-11-02T17:42:37.801385+00:00",
+  "merged_at": "2026-11-03T07:01:37.944079+00:00",
   "meeting_id": "ran1#126bis",
-  "schema_version": 3
+  "schema_version": 3,
+  "source_entries": {
+    "Main Schedule": [
+      {
+        "room_label": "Tamna BC Hall + Yeongju A Hall + Yeongju B Hall",
+        "cell_text": "RAN1#126b commences at 09:00 on Monday \nAgenda items 1, 2, 3, 4, 5\n6GR (30)\n.10.5.1.1 (30)",
+        "fallback_start_time": null,
+        "cell_id": "cd0b357"
+      }
+    ],
+    "Hiroki's schedule": [
+      {
+        "room_label": "Hiroki: Yeongju B Hall",
+        "cell_text": "RAN1#126b commences at 09:00 on Monday",
+        "fallback_start_time": null,
+        "cell_id": "c4c83f0"
+      }
+    ]
+  },
+  "merge_prompt_version": 5
 }

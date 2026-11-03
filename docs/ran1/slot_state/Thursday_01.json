@@ -588,7 +588,88 @@
       ]
     }
   ],
-  "merged_at": "2026-11-02T18:42:06.351083+00:00",
+  "merged_at": "2026-11-03T07:01:37.970501+00:00",
   "meeting_id": "ran1#126bis",
-  "schema_version": 3
+  "schema_version": 3,
+  "source_entries": {
+    "Main Schedule": [
+      {
+        "room_label": "Tamna BC Hall",
+        "cell_text": "6GR (120)\n.10.5.5 (40)\n\n.10.4.1 (40)\n.10.4.2 (40)",
+        "fallback_start_time": null,
+        "cell_id": "c357809"
+      },
+      {
+        "room_label": "Yeongju A Hall",
+        "cell_text": "6GR (30)\n.10.3.1 Channel coding (30)\n\nR20 (90)\nAI/ML (50)\nMIMO (40)",
+        "fallback_start_time": null,
+        "cell_id": "cec8879"
+      },
+      {
+        "room_label": "Yeongju B Hall",
+        "cell_text": "R20 (120)\nA-IoT Phase2 (120)",
+        "fallback_start_time": null,
+        "cell_id": "cf41f07"
+      },
+      {
+        "room_label": "201",
+        "cell_text": "Hiroki (90)\n6GR \n.10.8.x Sensing (90)\n\nXiaodong (30)\n6GR\n.10.5.3.4 (30)",
+        "fallback_start_time": null,
+        "cell_id": "c43342a"
+      },
+      {
+        "room_label": "203",
+        "cell_text": "Sorouri (120)\n6GR\n.10.5.2.3 (45)\n\n.10.5.2.1 (30)\n.10.5.2.2 (45)",
+        "fallback_start_time": null,
+        "cell_id": "cc3dd02"
+      }
+    ],
+    "Hiroki's schedule": [
+      {
+        "room_label": "Hiroki: Yeongju B Hall",
+        "cell_text": "R20 A-IoT (120)\n9.3.3(40), 9.3.1(40), 9.3.2(40)",
+        "fallback_start_time": null,
+        "cell_id": "c05c940"
+      },
+      {
+        "room_label": "Hiroki: 201",
+        "cell_text": "11:00 - 12:30\n6G ISAC (90)\n10.8.1, 10.8.2, 10.8.3",
+        "fallback_start_time": null,
+        "cell_id": "cfaa134"
+      },
+      {
+        "room_label": "Hiroki: Yeongju A Hall",
+        "cell_text": "AI 8.1 (30)\n\nR20 (90)\nAI/ML (50)\nMIMO (40)",
+        "fallback_start_time": null,
+        "cell_id": "c62b8a7"
+      },
+      {
+        "room_label": "Hiroki: 201",
+        "cell_text": "Hiroki (90)\n6GR \n.10.8.x Sensing (90)\n\nXiaodong (30)\n6GR\n.10.5.3.2 (30)",
+        "fallback_start_time": null,
+        "cell_id": "c325ce5"
+      }
+    ],
+    "Sorour's schedule": [
+      {
+        "room_label": "Yeongju A (1F)",
+        "cell_text": "AI 10.3.1 Channel coding (30)\n\nR20 (90)\nAI/ML (50)\nMIMO (40)",
+        "fallback_start_time": null,
+        "cell_id": "cb237c0"
+      },
+      {
+        "room_label": "Sorour: 201",
+        "cell_text": "Hiroki (90)\n6GR \n.10.8.x Sensing (90)\n\nXiaodong (30)\n6GR\n.10.5.3.2 (30)",
+        "fallback_start_time": null,
+        "cell_id": "c69bb0c"
+      },
+      {
+        "room_label": "Yeongju A (1F)",
+        "cell_text": "6GR (30)\nAI 10.3.1 Coding (30)\n\nR20 NR (90)\nAI 9.1 AIML (50)\nAI 9.2 MIMO (40)",
+        "fallback_start_time": null,
+        "cell_id": "c1c2694"
+      }
+    ]
+  },
+  "merge_prompt_version": 5
 }

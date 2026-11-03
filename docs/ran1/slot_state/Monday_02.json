@@ -586,7 +586,64 @@
       ]
     }
   ],
-  "merged_at": "2026-11-02T17:42:37.804299+00:00",
+  "merged_at": "2026-11-03T07:01:37.947400+00:00",
   "meeting_id": "ran1#126bis",
-  "schema_version": 3
+  "schema_version": 3,
+  "source_entries": {
+    "Main Schedule": [
+      {
+        "room_label": "Tamna BC Hall",
+        "cell_text": "6GR (120)\n.10.4.x (60)\n.10.6.x (60)",
+        "fallback_start_time": null,
+        "cell_id": "c59563b"
+      },
+      {
+        "room_label": "Yeongju A Hall",
+        "cell_text": "R20 (60)\nNTN-NR (40)\n.9.5 NTN (20)\n\n6GR (60)\n.10.7.1 NTN (60)",
+        "fallback_start_time": null,
+        "cell_id": "c2ae44a"
+      },
+      {
+        "room_label": "Yeongju B Hall",
+        "cell_text": "R20 (60)\nA-IoT Phase2 (60)\n\n6GR (60)\n.10.8 Sensing (60)",
+        "fallback_start_time": null,
+        "cell_id": "ccd1225"
+      },
+      {
+        "room_label": "201",
+        "cell_text": "Xiaodong (120)\n6GR\n.10.5.3.4 (25)\n.10.5.3.1 (45)\n.10.5.3.2 (25)\n.10.5.3.3 (25)",
+        "fallback_start_time": null,
+        "cell_id": "c0137dd"
+      },
+      {
+        "room_label": "203",
+        "cell_text": "Xiaodong (30)\n6GR\n.10.5.5 (30)\n\nHiroki (90)\n6GR \n.10.5.4.x (90)",
+        "fallback_start_time": null,
+        "cell_id": "c1b5745"
+      }
+    ],
+    "Hiroki's schedule": [
+      {
+        "room_label": "Hiroki: Yeongju B Hall",
+        "cell_text": "R20 A-IoT (60)\n9.3.1\n\n6G ISAC (60)\n10.8.2",
+        "fallback_start_time": null,
+        "cell_id": "c3c8b5e"
+      },
+      {
+        "room_label": "Hiroki: 203",
+        "cell_text": "15:00 - 16:30\n6G 10.5.4.x(90)\n10.5.4.1, 10.5.4.3, 10.5.4.4",
+        "fallback_start_time": null,
+        "cell_id": "c65abf4"
+      }
+    ],
+    "Sorour's schedule": [
+      {
+        "room_label": "Yeongju A (1F)",
+        "cell_text": "R20 NR (60)\nAI 9.4 NTN-NR (40)\nAI 9.5 NTN (20)\n\n6GR (60)\nAI 10.7.1 NTN (60)",
+        "fallback_start_time": null,
+        "cell_id": "c83f2ec"
+      }
+    ]
+  },
+  "merge_prompt_version": 5
 }

@@ -718,7 +718,70 @@
       ]
     }
   ],
-  "merged_at": "2026-11-02T18:42:06.354965+00:00",
+  "merged_at": "2026-11-03T07:01:37.974644+00:00",
   "meeting_id": "ran1#126bis",
-  "schema_version": 3
+  "schema_version": 3,
+  "source_entries": {
+    "Main Schedule": [
+      {
+        "room_label": "Tamna BC Hall",
+        "cell_text": "6GR (150)\n.10.5.3.1(50)\n.10.5.3.2(40)\n.10.5.3.3(30)\n.10.5.3.4(30)",
+        "fallback_start_time": null,
+        "cell_id": "c5b2bde"
+      },
+      {
+        "room_label": "Yeongju A Hall",
+        "cell_text": "6GR (90)\n.10.3.1 Channel coding (60)\n\n.10.3.2 Modulation (30)\n\nR20 (60)\nAI/ML (60)",
+        "fallback_start_time": null,
+        "cell_id": "c5de323"
+      },
+      {
+        "room_label": "Yeongju B Hall",
+        "cell_text": "6GR (150)\n.10.5.4(150)",
+        "fallback_start_time": null,
+        "cell_id": "c6a5ba7"
+      },
+      {
+        "room_label": "201",
+        "cell_text": "Xiaodong (120)\n6GR\n.10.5.1.1 (50)\n.10.5.1.2 (40)\n.10.5.1.3 (30)\n\nSorour (30)\n6GR \n.10.7.1 NTN (30)",
+        "fallback_start_time": null,
+        "cell_id": "c068fa1"
+      },
+      {
+        "room_label": "203",
+        "cell_text": "Sorour (40)\nR20\nAI/ML (40)\n\nHiroki (110)\nR20\nA-IoT (110)",
+        "fallback_start_time": null,
+        "cell_id": "c6f4e27"
+      }
+    ],
+    "Hiroki's schedule": [
+      {
+        "room_label": "Hiroki: Yeongju B Hall",
+        "cell_text": "6G 10.5.4.x (150)\n10.5.4.4(30), 10.5.4.3(40), 10.5.4.1(50), 10.5.4.2(30)",
+        "fallback_start_time": null,
+        "cell_id": "c633213"
+      },
+      {
+        "room_label": "Hiroki: 203",
+        "cell_text": "17:40 - 19:30\nR20 A-IoT (110)\n9.3.1, 9.3.2, 9.3.3",
+        "fallback_start_time": null,
+        "cell_id": "c276ac1"
+      },
+      {
+        "room_label": "Hiroki: Tamna BC Hall",
+        "cell_text": "6GR (150)\n.10.5.3.1(50).10.5.3.2(40)\n.10.5.3.3(30)\n.10.5.3.4(30)",
+        "fallback_start_time": null,
+        "cell_id": "c9b9289"
+      }
+    ],
+    "Sorour's schedule": [
+      {
+        "room_label": "Yeongju A (1F)",
+        "cell_text": "6GR (90)\nAI 10.3.1 Coding (60)\nAI 10.3.2 Modulation (30)\n\nR20 NR (60)\nAI 9.1 AIML (60)",
+        "fallback_start_time": null,
+        "cell_id": "c2e637e"
+      }
+    ]
+  },
+  "merge_prompt_version": 5
 }

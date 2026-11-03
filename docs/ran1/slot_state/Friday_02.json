@@ -69,7 +69,32 @@
       ]
     }
   ],
-  "merged_at": "2026-11-02T17:42:37.833555+00:00",
+  "merged_at": "2026-11-03T07:01:37.979814+00:00",
   "meeting_id": "ran1#126bis",
-  "schema_version": 3
+  "schema_version": 3,
+  "source_entries": {
+    "Main Schedule": [
+      {
+        "room_label": "Tamna BC Hall + Yeongju A Hall + Yeongju B Hall",
+        "cell_text": "Any other open issues. Session reports\nRAN1#126b expected to close at 17:00",
+        "fallback_start_time": null,
+        "cell_id": "c6b2af6"
+      },
+      {
+        "room_label": "201 + 203",
+        "cell_text": "To be assigned by Sorour\nTo be assigned by Hiroki",
+        "fallback_start_time": null,
+        "cell_id": "c935642"
+      }
+    ],
+    "Hiroki's schedule": [
+      {
+        "room_label": "201 + 203",
+        "cell_text": "To be assigned by Hiroki",
+        "fallback_start_time": null,
+        "cell_id": "c3675df"
+      }
+    ]
+  },
+  "merge_prompt_version": 5
 }
