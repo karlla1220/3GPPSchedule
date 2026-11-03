@@ -2,8 +2,8 @@
   "day": "Friday",
   "time_block_index": 2,
   "source_hashes": {
-    "Main Schedule": "7ab5bcba7a3e861f",
-    "Hiroki's schedule": "02fec76e067fa3d8"
+    "Main Schedule": "826fe0cde26ef9c1",
+    "Hiroki's schedule": "75e312e41be246da"
   },
   "merged_sessions": [
     {
@@ -19,57 +19,20 @@
       ]
     },
     {
-      "room_name": "RAN1_off1",
-      "name": "To be assigned by Sorour",
-      "duration_minutes": 60,
+      "room_name": "RAN1_off1 + RAN1_off2",
+      "name": "To be assigned by Sorour / To be assigned by Hiroki",
+      "duration_minutes": 120,
       "specified_start_time": null,
-      "chair": "Sorour",
+      "chair": "Sorour / Hiroki",
       "group_header": "",
       "agenda_item": null,
       "source_cells": [
-        "c935642"
-      ]
-    },
-    {
-      "room_name": "RAN1_off1",
-      "name": "To be assigned by Hiroki",
-      "duration_minutes": 60,
-      "specified_start_time": null,
-      "chair": "Hiroki",
-      "group_header": "",
-      "agenda_item": null,
-      "source_cells": [
-        "c3675df",
-        "c935642"
-      ]
-    },
-    {
-      "room_name": "RAN1_off2",
-      "name": "To be assigned by Sorour",
-      "duration_minutes": 60,
-      "specified_start_time": null,
-      "chair": "Sorour",
-      "group_header": "",
-      "agenda_item": null,
-      "source_cells": [
-        "c935642"
-      ]
-    },
-    {
-      "room_name": "RAN1_off2",
-      "name": "To be assigned by Hiroki",
-      "duration_minutes": 60,
-      "specified_start_time": null,
-      "chair": "Hiroki",
-      "group_header": "",
-      "agenda_item": null,
-      "source_cells": [
-        "c3675df",
-        "c935642"
+        "c935642",
+        "c3675df"
       ]
     }
   ],
-  "merged_at": "2026-11-03T07:01:37.979814+00:00",
+  "merged_at": "2026-11-03T08:42:08.559739+00:00",
   "meeting_id": "ran1#126bis",
   "schema_version": 3,
   "source_entries": {
@@ -96,5 +59,5 @@
       }
     ]
   },
-  "merge_prompt_version": 5
+  "merge_prompt_version": 6
 }

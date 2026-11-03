@@ -2,9 +2,9 @@
   "day": "Wednesday",
   "time_block_index": 2,
   "source_hashes": {
-    "Main Schedule": "85497afa9ddfbc1e",
-    "Hiroki's schedule": "43e70ec9e4e54ce8",
-    "Sorour's schedule": "b66eaa831457d2f5"
+    "Main Schedule": "8829504d0319b037",
+    "Hiroki's schedule": "443a77d733b794e3",
+    "Sorour's schedule": "966fd32312f78b24"
   },
   "merged_sessions": [
     {
@@ -195,7 +195,7 @@
       "duration_minutes": 30,
       "specified_start_time": null,
       "chair": "Hiroki",
-      "group_header": "Maintenance",
+      "group_header": "TEI, AI 7/8.2 / Maintenance",
       "agenda_item": "8.2",
       "source_cells": [
         "cc6e6a7",
@@ -228,7 +228,7 @@
       "duration_minutes": 50,
       "specified_start_time": null,
       "chair": "Hiroki",
-      "group_header": "Maintenance",
+      "group_header": "TEI, AI 7/8.2 / Maintenance",
       "agenda_item": "7, 8.2",
       "source_cells": [
         "cc6e6a7",
@@ -273,7 +273,7 @@
       "duration_minutes": 10,
       "specified_start_time": null,
       "chair": "Hiroki",
-      "group_header": "Maintenance",
+      "group_header": "TEI, AI 7/8.2 / Maintenance",
       "agenda_item": "11",
       "source_cells": [
         "cc6e6a7",
@@ -310,11 +310,11 @@
     },
     {
       "room_name": "RAN1_off1",
-      "name": "10.5.4.x",
+      "name": "6G 10.5.4.x",
       "duration_minutes": 60,
       "specified_start_time": "14:30",
       "chair": "Hiroki",
-      "group_header": "6G",
+      "group_header": "6GR",
       "agenda_item": "10.5.4.2, 10.5.4.3, 10.5.4.4",
       "source_cells": [
         "cd81a2a",
@@ -599,7 +599,7 @@
       ]
     }
   ],
-  "merged_at": "2026-11-03T07:01:37.964056+00:00",
+  "merged_at": "2026-11-03T08:42:08.543146+00:00",
   "meeting_id": "ran1#126bis",
   "schema_version": 3,
   "source_entries": {
@@ -664,5 +664,5 @@
       }
     ]
   },
-  "merge_prompt_version": 5
+  "merge_prompt_version": 6
 }

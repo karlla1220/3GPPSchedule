@@ -2,9 +2,9 @@
   "day": "Tuesday",
   "time_block_index": 0,
   "source_hashes": {
-    "Main Schedule": "c698dc2acc35fae6",
-    "Hiroki's schedule": "88eba5436566d1dd",
-    "Sorour's schedule": "8818fd320641f395"
+    "Main Schedule": "68661dd8f9dbbf7a",
+    "Hiroki's schedule": "d32d5f5bee4ef76e",
+    "Sorour's schedule": "b10031c44efbf3c0"
   },
   "merged_sessions": [
     {
@@ -177,7 +177,7 @@
       "duration_minutes": 30,
       "specified_start_time": null,
       "chair": null,
-      "group_header": "R20 NR",
+      "group_header": "R20 / R20 NR",
       "agenda_item": "9.5",
       "source_cells": [
         "cc6e4e0",
@@ -210,7 +210,7 @@
       "duration_minutes": 40,
       "specified_start_time": null,
       "chair": null,
-      "group_header": "R20 NR",
+      "group_header": "R20 / R20 NR",
       "agenda_item": "9.4",
       "source_cells": [
         "cc6e4e0",
@@ -242,8 +242,8 @@
       "name": "10.5.4.1",
       "duration_minutes": 40,
       "specified_start_time": null,
-      "chair": "Hiroki",
-      "group_header": "6G",
+      "chair": null,
+      "group_header": "6GR / 6G 10.5.4.x",
       "agenda_item": "10.5.4.1",
       "source_cells": [
         "ce1e8b3",
@@ -285,8 +285,8 @@
       "name": "10.5.4.2",
       "duration_minutes": 40,
       "specified_start_time": null,
-      "chair": "Hiroki",
-      "group_header": "6G",
+      "chair": null,
+      "group_header": "6GR / 6G 10.5.4.x",
       "agenda_item": "10.5.4.2",
       "source_cells": [
         "ce1e8b3",
@@ -328,8 +328,8 @@
       "name": "10.5.4.3",
       "duration_minutes": 40,
       "specified_start_time": null,
-      "chair": "Hiroki",
-      "group_header": "6G",
+      "chair": null,
+      "group_header": "6GR / 6G 10.5.4.x",
       "agenda_item": "10.5.4.3",
       "source_cells": [
         "ce1e8b3",
@@ -556,7 +556,7 @@
       ]
     }
   ],
-  "merged_at": "2026-11-03T07:01:37.951997+00:00",
+  "merged_at": "2026-11-03T08:42:08.529972+00:00",
   "meeting_id": "ran1#126bis",
   "schema_version": 3,
   "source_entries": {
@@ -621,5 +621,5 @@
       }
     ]
   },
-  "merge_prompt_version": 5
+  "merge_prompt_version": 6
 }

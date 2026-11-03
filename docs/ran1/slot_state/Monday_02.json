@@ -2,9 +2,9 @@
   "day": "Monday",
   "time_block_index": 2,
   "source_hashes": {
-    "Main Schedule": "21aba3558b94a535",
-    "Hiroki's schedule": "11fadd0620e9c616",
-    "Sorour's schedule": "6a5ee4f3b36bb940"
+    "Main Schedule": "e2a24da4a4476a71",
+    "Hiroki's schedule": "3fda3bcd2f271f7a",
+    "Sorour's schedule": "086f59f7e685328a"
   },
   "merged_sessions": [
     {
@@ -109,7 +109,7 @@
       "duration_minutes": 40,
       "specified_start_time": null,
       "chair": "Sorour",
-      "group_header": "R20 NR",
+      "group_header": "R20",
       "agenda_item": "9.4",
       "source_cells": [
         "c2ae44a",
@@ -142,7 +142,7 @@
       "duration_minutes": 20,
       "specified_start_time": null,
       "chair": "Sorour",
-      "group_header": "R20 NR",
+      "group_header": "R20",
       "agenda_item": "9.5",
       "source_cells": [
         "c2ae44a",
@@ -586,7 +586,7 @@
       ]
     }
   ],
-  "merged_at": "2026-11-03T07:01:37.947400+00:00",
+  "merged_at": "2026-11-03T08:42:08.524811+00:00",
   "meeting_id": "ran1#126bis",
   "schema_version": 3,
   "source_entries": {
@@ -645,5 +645,5 @@
       }
     ]
   },
-  "merge_prompt_version": 5
+  "merge_prompt_version": 6
 }

@@ -1932,7 +1932,7 @@
           "day": "Monday",
           "room_col_start": 5,
           "room_col_end": 6,
-          "chair": "Xiaodong",
+          "chair": null,
           "agenda_item": "10.4.1",
           "group_header": "6GR",
           "description": "Operation in idle mode",
@@ -1975,7 +1975,7 @@
           "day": "Monday",
           "room_col_start": 6,
           "room_col_end": 7,
-          "chair": "Sorouri",
+          "chair": "Sorour",
           "agenda_item": "10.5.2.1",
           "group_header": "6GR",
           "description": "Downlink transmission scheme(s) for downlink control channels",
@@ -2023,7 +2023,7 @@
           "day": "Monday",
           "room_col_start": 6,
           "room_col_end": 7,
-          "chair": "Sorouri",
+          "chair": "Sorour",
           "agenda_item": "10.7.1",
           "group_header": "6GR",
           "description": "NTN specific requirements and design",
@@ -2066,7 +2066,7 @@
           "day": "Monday",
           "room_col_start": 6,
           "room_col_end": 7,
-          "chair": "Sorouri",
+          "chair": "Sorour",
           "agenda_item": "9.5",
           "group_header": "R20",
           "description": "NR NTN in systems using downlink compensation",
@@ -2104,7 +2104,7 @@
           "day": "Monday",
           "room_col_start": 6,
           "room_col_end": 7,
-          "chair": "Sorouri",
+          "chair": "Sorour",
           "agenda_item": "9.4",
           "group_header": "R20",
           "description": "GNSS resilient NR-NTN operation",
@@ -2502,7 +2502,7 @@
           "day": "Tuesday",
           "room_col_start": 4,
           "room_col_end": 5,
-          "chair": "Hiroki",
+          "chair": null,
           "agenda_item": "10.5.4.1",
           "group_header": "6GR",
           "description": "Downlink control channel, scheduling for downlink and uplink transmission",
@@ -2550,7 +2550,7 @@
           "day": "Tuesday",
           "room_col_start": 4,
           "room_col_end": 5,
-          "chair": "Hiroki",
+          "chair": null,
           "agenda_item": "10.5.4.2",
           "group_header": "6GR",
           "description": "Downlink and uplink transmission without dynamic scheduling",
@@ -2598,7 +2598,7 @@
           "day": "Tuesday",
           "room_col_start": 4,
           "room_col_end": 5,
-          "chair": "Hiroki",
+          "chair": null,
           "agenda_item": "10.5.4.3",
           "group_header": "6GR",
           "description": "HARQ related Aspects",
@@ -3189,7 +3189,7 @@
           "part": null
         },
         {
-          "name": "R20 A-IoT",
+          "name": "A-IoT Phase2",
           "duration_minutes": 40,
           "start_time": "12:20",
           "end_time": "13:00",
@@ -3831,7 +3831,7 @@
           "room_col_end": 5,
           "chair": "Hiroki",
           "agenda_item": "11",
-          "group_header": "Maintenance",
+          "group_header": "TEI",
           "description": "TEI",
           "agenda_descriptions": [
             {
@@ -3864,7 +3864,7 @@
           "room_col_end": 5,
           "chair": "Hiroki",
           "agenda_item": "8.2",
-          "group_header": "Maintenance",
+          "group_header": "TEI",
           "description": "Maintenance on others",
           "agenda_descriptions": [
             {
@@ -3902,7 +3902,7 @@
           "room_col_end": 5,
           "chair": "Hiroki",
           "agenda_item": "8.3",
-          "group_header": "Maintenance",
+          "group_header": "TEI",
           "description": "Maintenance on UE features",
           "agenda_descriptions": [
             {
@@ -3940,7 +3940,7 @@
           "room_col_end": 5,
           "chair": "Hiroki",
           "agenda_item": "8.2",
-          "group_header": "Maintenance",
+          "group_header": "TEI",
           "description": "Maintenance on others",
           "agenda_descriptions": [
             {
@@ -3990,7 +3990,7 @@
           "part": null
         },
         {
-          "name": "6G waveform",
+          "name": "10.2.1 6G waveform",
           "duration_minutes": 40,
           "start_time": "15:50",
           "end_time": "16:30",
@@ -4314,7 +4314,7 @@
           "day": "Tuesday",
           "room_col_start": 6,
           "room_col_end": 7,
-          "chair": "Sorouri",
+          "chair": "Sorour",
           "agenda_item": "10.3.2",
           "group_header": "6GR",
           "description": "Modulation",
@@ -4519,7 +4519,7 @@
           "day": "Tuesday",
           "room_col_start": 3,
           "room_col_end": 4,
-          "chair": null,
+          "chair": "Sorour",
           "agenda_item": "10.3.1",
           "group_header": "6GR",
           "description": "Channel coding",
@@ -4580,7 +4580,7 @@
           "day": "Tuesday",
           "room_col_start": 3,
           "room_col_end": 4,
-          "chair": null,
+          "chair": "Sorour",
           "agenda_item": "10.3.2",
           "group_header": "6GR",
           "description": "Modulation",
@@ -4883,7 +4883,7 @@
           "day": "Tuesday",
           "room_col_start": 6,
           "room_col_end": 7,
-          "chair": "Sorouri",
+          "chair": "Sorour",
           "agenda_item": "10.7.1",
           "group_header": "6GR",
           "description": "NTN specific requirements and design",
@@ -4926,7 +4926,7 @@
           "day": "Tuesday",
           "room_col_start": 6,
           "room_col_end": 7,
-          "chair": "Sorouri",
+          "chair": "Sorour",
           "agenda_item": "9.4",
           "group_header": "R20",
           "description": "GNSS resilient NR-NTN operation",
@@ -5298,7 +5298,7 @@
           "day": "Wednesday",
           "room_col_start": 3,
           "room_col_end": 4,
-          "chair": "Sorour",
+          "chair": null,
           "agenda_item": "10.7.1",
           "group_header": "6GR",
           "description": "NTN specific requirements and design",
@@ -5341,7 +5341,7 @@
           "day": "Wednesday",
           "room_col_start": 3,
           "room_col_end": 4,
-          "chair": "Sorour",
+          "chair": null,
           "agenda_item": "9.4",
           "group_header": "R20",
           "description": "GNSS resilient NR-NTN operation",
@@ -5396,7 +5396,7 @@
           "day": "Wednesday",
           "room_col_start": 3,
           "room_col_end": 4,
-          "chair": "Sorour",
+          "chair": null,
           "agenda_item": "9.2",
           "group_header": "R20",
           "description": "NR MIMO Phase 6",
@@ -5637,7 +5637,7 @@
           "part": null
         },
         {
-          "name": "6G waveform",
+          "name": "10.2.1 Waveform",
           "duration_minutes": 30,
           "start_time": "09:00",
           "end_time": "09:30",
@@ -5680,7 +5680,7 @@
           "part": null
         },
         {
-          "name": "6G ISAC",
+          "name": "10.8.x Sensing",
           "duration_minutes": 60,
           "start_time": "09:30",
           "end_time": "10:30",
@@ -6042,7 +6042,7 @@
           "day": "Wednesday",
           "room_col_start": 3,
           "room_col_end": 4,
-          "chair": "Sorour",
+          "chair": null,
           "agenda_item": "9.1",
           "group_header": "R20",
           "description": "Artificial Intelligence (AI)/Machine Learning (ML) for NR air interface enhancements",
@@ -6073,14 +6073,14 @@
           "part": null
         },
         {
-          "name": "AI 10.3.1 Channel coding",
+          "name": "AI 10.3.1 Coding",
           "duration_minutes": 30,
           "start_time": "12:00",
           "end_time": "12:30",
           "day": "Wednesday",
           "room_col_start": 3,
           "room_col_end": 4,
-          "chair": "Sorour",
+          "chair": null,
           "agenda_item": "10.3.1",
           "group_header": "6GR",
           "description": "Channel coding",
@@ -6142,7 +6142,7 @@
           "day": "Wednesday",
           "room_col_start": 3,
           "room_col_end": 4,
-          "chair": "Sorour",
+          "chair": null,
           "agenda_item": "10.5.2.2",
           "group_header": "6GR",
           "description": "Downlink transmission scheme(s) for downlink shared channels",
@@ -6489,7 +6489,7 @@
           "part": null
         },
         {
-          "name": "10.5.4.1",
+          "name": "6G 10.5.4.x",
           "duration_minutes": 30,
           "start_time": "12:30",
           "end_time": "13:00",
@@ -7067,7 +7067,7 @@
           "room_col_end": 5,
           "chair": "Hiroki",
           "agenda_item": "8.2",
-          "group_header": "Maintenance",
+          "group_header": "TEI",
           "description": "Maintenance on others",
           "agenda_descriptions": [
             {
@@ -7160,7 +7160,7 @@
           "room_col_end": 5,
           "chair": "Hiroki",
           "agenda_item": "7, 8.2",
-          "group_header": "Maintenance",
+          "group_header": "TEI",
           "description": "Pre-Rel-19 NR Maintenance",
           "agenda_descriptions": [
             {
@@ -7231,7 +7231,7 @@
           "room_col_end": 5,
           "chair": "Hiroki",
           "agenda_item": "11",
-          "group_header": "Maintenance",
+          "group_header": "TEI",
           "description": "TEI",
           "agenda_descriptions": [
             {
@@ -7275,7 +7275,7 @@
           "part": null
         },
         {
-          "name": "10.5.4.x",
+          "name": "6G 10.5.4.x",
           "duration_minutes": 60,
           "start_time": "14:30",
           "end_time": "15:30",
@@ -8127,7 +8127,7 @@
           "day": "Wednesday",
           "room_col_start": 4,
           "room_col_end": 5,
-          "chair": "Hiroki",
+          "chair": null,
           "agenda_item": "10.2.1",
           "group_header": "6GR",
           "description": "Waveform",
@@ -8170,7 +8170,7 @@
           "day": "Wednesday",
           "room_col_start": 4,
           "room_col_end": 5,
-          "chair": "Hiroki",
+          "chair": null,
           "agenda_item": "10.5.4.2",
           "group_header": "6GR",
           "description": "Downlink and uplink transmission without dynamic scheduling",
@@ -8239,7 +8239,7 @@
           "day": "Wednesday",
           "room_col_start": 4,
           "room_col_end": 5,
-          "chair": "Hiroki",
+          "chair": null,
           "agenda_item": "10.5.4.1",
           "group_header": "6GR",
           "description": "Downlink control channel, scheduling for downlink and uplink transmission",
@@ -8308,7 +8308,7 @@
           "day": "Wednesday",
           "room_col_start": 4,
           "room_col_end": 5,
-          "chair": "Hiroki",
+          "chair": null,
           "agenda_item": "10.5.4.4",
           "group_header": "6GR",
           "description": "Handling of potential multiple uplink transmissions",
@@ -8356,7 +8356,7 @@
           "day": "Wednesday",
           "room_col_start": 4,
           "room_col_end": 5,
-          "chair": "Hiroki",
+          "chair": null,
           "agenda_item": "10.5.4.3",
           "group_header": "6GR",
           "description": "HARQ related Aspects",
@@ -9289,7 +9289,7 @@
           "day": "Thursday",
           "room_col_start": 4,
           "room_col_end": 5,
-          "chair": "Hiroki",
+          "chair": null,
           "agenda_item": "10.2.1",
           "group_header": "6GR",
           "description": "Waveform",
@@ -9332,11 +9332,23 @@
           "day": "Thursday",
           "room_col_start": 4,
           "room_col_end": 5,
-          "chair": "Hiroki",
-          "agenda_item": "8.2, 7",
-          "group_header": "Maintenance",
-          "description": "Maintenance on others",
+          "chair": null,
+          "agenda_item": "7, 8.2",
+          "group_header": "",
+          "description": "Pre-Rel-19 NR Maintenance",
           "agenda_descriptions": [
+            {
+              "agenda_item": "7",
+              "matched_agenda_item": "7",
+              "description": "Pre-Rel-19 NR Maintenance",
+              "hierarchy": [
+                {
+                  "agenda_item": "7",
+                  "description": "Pre-Rel-19 NR Maintenance",
+                  "has_description": true
+                }
+              ]
+            },
             {
               "agenda_item": "8.2",
               "matched_agenda_item": "8.2",
@@ -9350,18 +9362,6 @@
                 {
                   "agenda_item": "8.2",
                   "description": "Maintenance on others",
-                  "has_description": true
-                }
-              ]
-            },
-            {
-              "agenda_item": "7",
-              "matched_agenda_item": "7",
-              "description": "Pre-Rel-19 NR Maintenance",
-              "hierarchy": [
-                {
-                  "agenda_item": "7",
-                  "description": "Pre-Rel-19 NR Maintenance",
                   "has_description": true
                 }
               ]
@@ -9940,14 +9940,14 @@
           "part": null
         },
         {
-          "name": "AI 10.3.1 Channel coding",
+          "name": "AI 10.3.1 Coding",
           "duration_minutes": 30,
           "start_time": "11:00",
           "end_time": "11:30",
           "day": "Thursday",
           "room_col_start": 3,
           "room_col_end": 4,
-          "chair": "Sorour",
+          "chair": null,
           "agenda_item": "10.3.1",
           "group_header": "6GR",
           "description": "Channel coding",
@@ -10007,7 +10007,7 @@
           "day": "Thursday",
           "room_col_start": 3,
           "room_col_end": 4,
-          "chair": "Sorour",
+          "chair": null,
           "agenda_item": "9.1",
           "group_header": "R20",
           "description": "Artificial Intelligence (AI)/Machine Learning (ML) for NR air interface enhancements",
@@ -10062,7 +10062,7 @@
           "day": "Thursday",
           "room_col_start": 3,
           "room_col_end": 4,
-          "chair": "Sorour",
+          "chair": null,
           "agenda_item": "9.2",
           "group_header": "R20",
           "description": "NR MIMO Phase 6",
@@ -14326,74 +14326,14 @@
           "part": null
         },
         {
-          "name": "To be assigned by Sorour",
-          "duration_minutes": 60,
+          "name": "To be assigned by Sorour / To be assigned by Hiroki",
+          "duration_minutes": 120,
           "start_time": "14:30",
-          "end_time": "15:30",
-          "day": "Friday",
-          "room_col_start": 5,
-          "room_col_end": 6,
-          "chair": "Sorour",
-          "agenda_item": null,
-          "group_header": "",
-          "description": null,
-          "agenda_descriptions": [],
-          "room_ids": [],
-          "room_scope": "assigned",
-          "notes": [],
-          "inferred_agenda_items": [],
-          "email_details": [],
-          "part": null
-        },
-        {
-          "name": "To be assigned by Hiroki",
-          "duration_minutes": 60,
-          "start_time": "15:30",
           "end_time": "16:30",
           "day": "Friday",
           "room_col_start": 5,
-          "room_col_end": 6,
-          "chair": "Hiroki",
-          "agenda_item": null,
-          "group_header": "",
-          "description": null,
-          "agenda_descriptions": [],
-          "room_ids": [],
-          "room_scope": "assigned",
-          "notes": [],
-          "inferred_agenda_items": [],
-          "email_details": [],
-          "part": null
-        },
-        {
-          "name": "To be assigned by Sorour",
-          "duration_minutes": 60,
-          "start_time": "14:30",
-          "end_time": "15:30",
-          "day": "Friday",
-          "room_col_start": 6,
           "room_col_end": 7,
-          "chair": "Sorour",
-          "agenda_item": null,
-          "group_header": "",
-          "description": null,
-          "agenda_descriptions": [],
-          "room_ids": [],
-          "room_scope": "assigned",
-          "notes": [],
-          "inferred_agenda_items": [],
-          "email_details": [],
-          "part": null
-        },
-        {
-          "name": "To be assigned by Hiroki",
-          "duration_minutes": 60,
-          "start_time": "15:30",
-          "end_time": "16:30",
-          "day": "Friday",
-          "room_col_start": 6,
-          "room_col_end": 7,
-          "chair": "Hiroki",
+          "chair": "Sorour / Hiroki",
           "agenda_item": null,
           "group_header": "",
           "description": null,
@@ -14459,7 +14399,7 @@
     }
   ],
   "source_file": "RAN1#126b online and offline schedules - v05.docx",
-  "generated_at": "2026-11-03 16:01",
+  "generated_at": "2026-11-03 17:42",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
