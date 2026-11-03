@@ -126,8 +126,8 @@
         {
           "name": "Rel-19 maintenance",
           "duration_minutes": 90,
-          "start_time": "11:00",
-          "end_time": "12:30",
+          "start_time": "12:30",
+          "end_time": "14:00",
           "day": "Monday",
           "room_col_start": 2,
           "room_col_end": 3,
@@ -162,8 +162,8 @@
         {
           "name": "KI#1.1 (NAS)",
           "duration_minutes": 90,
-          "start_time": "11:00",
-          "end_time": "12:30",
+          "start_time": "12:30",
+          "end_time": "14:00",
           "day": "Monday",
           "room_col_start": 2,
           "room_col_end": 3,
@@ -207,48 +207,129 @@
           ]
         },
         {
-          "name": "Pre-Rel-19 maintenance",
+          "name": "KI#10 (FWA) / KI#12 – KI#16",
           "duration_minutes": 90,
-          "start_time": "11:00",
-          "end_time": "12:30",
+          "start_time": "12:30",
+          "end_time": "14:00",
           "day": "Monday",
           "room_col_start": 2,
           "room_col_end": 3,
           "chair": "Michael STARSINIC",
-          "agenda_item": "5.x, 6.x, 7.x",
-          "group_header": "Pre-Rel-17 Maintenance (excluding all 5G topics)",
-          "description": "Pre-Rel-17 Maintenance (excluding all 5G topics)\nRel-15/Rel-16 Maintenance for 5G (only related to 5GS_Ph1 Work Item)\nRel-16 Maintenance for 5G (excluding 5GS_Ph1)",
+          "agenda_item": "20.6.10, 20.6.12–20.6.16",
+          "group_header": "Rel-20 SIDs and WIDs",
+          "description": "Study on Architecture for 6G System (FS_6G_ARC) - Fixed Wireless Access\nStudy on Architecture for 6G System (FS_6G_ARC) - Voice Services for 6G\nStudy on Architecture for 6G System (FS_6G_ARC) - Emergency Voice Services for 6G\nStudy on Architecture for 6G System (FS_6G_ARC) - Location Services for 6G\nStudy on Architecture for 6G System (FS_6G_ARC) - Messaging Services for 6G\nStudy on Architecture for 6G System (FS_6G_ARC) - Other Essential/Regulatory Services for 6G",
           "agenda_descriptions": [
             {
-              "agenda_item": "5.x",
-              "matched_agenda_item": "5",
-              "description": "Pre-Rel-17 Maintenance (excluding all 5G topics)",
+              "agenda_item": "20.6.10",
+              "matched_agenda_item": "20.6.10",
+              "description": "Study on Architecture for 6G System (FS_6G_ARC) - Fixed Wireless Access",
               "hierarchy": [
                 {
-                  "agenda_item": "5",
-                  "description": "Pre-Rel-17 Maintenance (excluding all 5G topics)"
+                  "agenda_item": "20",
+                  "description": "Rel-20 SIDs and WIDs"
+                },
+                {
+                  "agenda_item": "20.6",
+                  "description": null
+                },
+                {
+                  "agenda_item": "20.6.10",
+                  "description": "Study on Architecture for 6G System (FS_6G_ARC) - Fixed Wireless Access"
                 }
               ]
             },
             {
-              "agenda_item": "6.x",
-              "matched_agenda_item": "6",
-              "description": "Rel-15/Rel-16 Maintenance for 5G (only related to 5GS_Ph1 Work Item)",
+              "agenda_item": "20.6.12",
+              "matched_agenda_item": "20.6.12",
+              "description": "Study on Architecture for 6G System (FS_6G_ARC) - Voice Services for 6G",
               "hierarchy": [
                 {
-                  "agenda_item": "6",
-                  "description": "Rel-15/Rel-16 Maintenance for 5G (only related to 5GS_Ph1 Work Item)"
+                  "agenda_item": "20",
+                  "description": "Rel-20 SIDs and WIDs"
+                },
+                {
+                  "agenda_item": "20.6",
+                  "description": null
+                },
+                {
+                  "agenda_item": "20.6.12",
+                  "description": "Study on Architecture for 6G System (FS_6G_ARC) - Voice Services for 6G"
                 }
               ]
             },
             {
-              "agenda_item": "7.x",
-              "matched_agenda_item": "7",
-              "description": "Rel-16 Maintenance for 5G (excluding 5GS_Ph1)",
+              "agenda_item": "20.6.13",
+              "matched_agenda_item": "20.6.13",
+              "description": "Study on Architecture for 6G System (FS_6G_ARC) - Emergency Voice Services for 6G",
               "hierarchy": [
                 {
-                  "agenda_item": "7",
-                  "description": "Rel-16 Maintenance for 5G (excluding 5GS_Ph1)"
+                  "agenda_item": "20",
+                  "description": "Rel-20 SIDs and WIDs"
+                },
+                {
+                  "agenda_item": "20.6",
+                  "description": null
+                },
+                {
+                  "agenda_item": "20.6.13",
+                  "description": "Study on Architecture for 6G System (FS_6G_ARC) - Emergency Voice Services for 6G"
+                }
+              ]
+            },
+            {
+              "agenda_item": "20.6.14",
+              "matched_agenda_item": "20.6.14",
+              "description": "Study on Architecture for 6G System (FS_6G_ARC) - Location Services for 6G",
+              "hierarchy": [
+                {
+                  "agenda_item": "20",
+                  "description": "Rel-20 SIDs and WIDs"
+                },
+                {
+                  "agenda_item": "20.6",
+                  "description": null
+                },
+                {
+                  "agenda_item": "20.6.14",
+                  "description": "Study on Architecture for 6G System (FS_6G_ARC) - Location Services for 6G"
+                }
+              ]
+            },
+            {
+              "agenda_item": "20.6.15",
+              "matched_agenda_item": "20.6.15",
+              "description": "Study on Architecture for 6G System (FS_6G_ARC) - Messaging Services for 6G",
+              "hierarchy": [
+                {
+                  "agenda_item": "20",
+                  "description": "Rel-20 SIDs and WIDs"
+                },
+                {
+                  "agenda_item": "20.6",
+                  "description": null
+                },
+                {
+                  "agenda_item": "20.6.15",
+                  "description": "Study on Architecture for 6G System (FS_6G_ARC) - Messaging Services for 6G"
+                }
+              ]
+            },
+            {
+              "agenda_item": "20.6.16",
+              "matched_agenda_item": "20.6.16",
+              "description": "Study on Architecture for 6G System (FS_6G_ARC) - Other Essential/Regulatory Services for 6G",
+              "hierarchy": [
+                {
+                  "agenda_item": "20",
+                  "description": "Rel-20 SIDs and WIDs"
+                },
+                {
+                  "agenda_item": "20.6",
+                  "description": null
+                },
+                {
+                  "agenda_item": "20.6.16",
+                  "description": "Study on Architecture for 6G System (FS_6G_ARC) - Other Essential/Regulatory Services for 6G"
                 }
               ]
             }
@@ -258,8 +339,8 @@
           ],
           "room_scope": "assigned",
           "notes": [
-            "Pre-Rel-19 maintenance",
-            "(5.x, 6.x, 7.x)"
+            "KI#10 (FWA) (20.6.10)",
+            "KI#12 – KI#16 (20.6.12 - 16)"
           ],
           "inferred_agenda_items": [],
           "email_details": [],
@@ -271,8 +352,8 @@
         {
           "name": "KI#1.1 (NAS) / KI#1.2",
           "duration_minutes": 90,
-          "start_time": "11:00",
-          "end_time": "12:30",
+          "start_time": "12:30",
+          "end_time": "14:00",
           "day": "Monday",
           "room_col_start": 2,
           "room_col_end": 3,
@@ -308,6 +389,53 @@
           "notes": [
             "KI#1.1 (NAS) (20.6.1)",
             "KI#1.2 (20.6.1)"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": [
+            2,
+            2
+          ]
+        },
+        {
+          "name": "SMS2EC-ARC",
+          "duration_minutes": 90,
+          "start_time": "12:30",
+          "end_time": "14:00",
+          "day": "Monday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "Michael STARSINIC",
+          "agenda_item": "20.8.2",
+          "group_header": "Rel-20 SIDs and WIDs",
+          "description": "Short Message Service to Emergency Response Centre (SMS2EC-ARC)",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "20.8.2",
+              "matched_agenda_item": "20.8.2",
+              "description": "Short Message Service to Emergency Response Centre (SMS2EC-ARC)",
+              "hierarchy": [
+                {
+                  "agenda_item": "20",
+                  "description": "Rel-20 SIDs and WIDs"
+                },
+                {
+                  "agenda_item": "20.8",
+                  "description": null
+                },
+                {
+                  "agenda_item": "20.8.2",
+                  "description": "Short Message Service to Emergency Response Centre (SMS2EC-ARC)"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "stream2"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "SMS2EC-ARC (20.8.2)"
           ],
           "inferred_agenda_items": [],
           "email_details": [],
@@ -852,11 +980,11 @@
           {
             "name": "Coffee",
             "start": "10:30",
-            "end": "11:00"
+            "end": "12:30"
           },
           {
             "name": "Lunch",
-            "start": "12:30",
+            "start": "14:00",
             "end": "14:00"
           },
           {
@@ -1264,8 +1392,8 @@
         {
           "name": "KI#19 (Network for AI)",
           "duration_minutes": 90,
-          "start_time": "11:00",
-          "end_time": "12:30",
+          "start_time": "12:30",
+          "end_time": "14:00",
           "day": "Tuesday",
           "room_col_start": 2,
           "room_col_end": 3,
@@ -1310,129 +1438,48 @@
           ]
         },
         {
-          "name": "KI#10 (FWA) / KI#12 – KI#16",
+          "name": "Pre-Rel-19 maintenance",
           "duration_minutes": 90,
-          "start_time": "11:00",
-          "end_time": "12:30",
+          "start_time": "12:30",
+          "end_time": "14:00",
           "day": "Tuesday",
           "room_col_start": 2,
           "room_col_end": 3,
           "chair": "Michael STARSINIC",
-          "agenda_item": "20.6.10, 20.6.12–20.6.16",
-          "group_header": "Rel-20 SIDs and WIDs",
-          "description": "Study on Architecture for 6G System (FS_6G_ARC) - Fixed Wireless Access\nStudy on Architecture for 6G System (FS_6G_ARC) - Voice Services for 6G\nStudy on Architecture for 6G System (FS_6G_ARC) - Emergency Voice Services for 6G\nStudy on Architecture for 6G System (FS_6G_ARC) - Location Services for 6G\nStudy on Architecture for 6G System (FS_6G_ARC) - Messaging Services for 6G\nStudy on Architecture for 6G System (FS_6G_ARC) - Other Essential/Regulatory Services for 6G",
+          "agenda_item": "5.x, 6.x, 7.x",
+          "group_header": "Pre-Rel-17 Maintenance (excluding all 5G topics)",
+          "description": "Pre-Rel-17 Maintenance (excluding all 5G topics)\nRel-15/Rel-16 Maintenance for 5G (only related to 5GS_Ph1 Work Item)\nRel-16 Maintenance for 5G (excluding 5GS_Ph1)",
           "agenda_descriptions": [
             {
-              "agenda_item": "20.6.10",
-              "matched_agenda_item": "20.6.10",
-              "description": "Study on Architecture for 6G System (FS_6G_ARC) - Fixed Wireless Access",
+              "agenda_item": "5.x",
+              "matched_agenda_item": "5",
+              "description": "Pre-Rel-17 Maintenance (excluding all 5G topics)",
               "hierarchy": [
                 {
-                  "agenda_item": "20",
-                  "description": "Rel-20 SIDs and WIDs"
-                },
-                {
-                  "agenda_item": "20.6",
-                  "description": null
-                },
-                {
-                  "agenda_item": "20.6.10",
-                  "description": "Study on Architecture for 6G System (FS_6G_ARC) - Fixed Wireless Access"
+                  "agenda_item": "5",
+                  "description": "Pre-Rel-17 Maintenance (excluding all 5G topics)"
                 }
               ]
             },
             {
-              "agenda_item": "20.6.12",
-              "matched_agenda_item": "20.6.12",
-              "description": "Study on Architecture for 6G System (FS_6G_ARC) - Voice Services for 6G",
+              "agenda_item": "6.x",
+              "matched_agenda_item": "6",
+              "description": "Rel-15/Rel-16 Maintenance for 5G (only related to 5GS_Ph1 Work Item)",
               "hierarchy": [
                 {
-                  "agenda_item": "20",
-                  "description": "Rel-20 SIDs and WIDs"
-                },
-                {
-                  "agenda_item": "20.6",
-                  "description": null
-                },
-                {
-                  "agenda_item": "20.6.12",
-                  "description": "Study on Architecture for 6G System (FS_6G_ARC) - Voice Services for 6G"
+                  "agenda_item": "6",
+                  "description": "Rel-15/Rel-16 Maintenance for 5G (only related to 5GS_Ph1 Work Item)"
                 }
               ]
             },
             {
-              "agenda_item": "20.6.13",
-              "matched_agenda_item": "20.6.13",
-              "description": "Study on Architecture for 6G System (FS_6G_ARC) - Emergency Voice Services for 6G",
+              "agenda_item": "7.x",
+              "matched_agenda_item": "7",
+              "description": "Rel-16 Maintenance for 5G (excluding 5GS_Ph1)",
               "hierarchy": [
                 {
-                  "agenda_item": "20",
-                  "description": "Rel-20 SIDs and WIDs"
-                },
-                {
-                  "agenda_item": "20.6",
-                  "description": null
-                },
-                {
-                  "agenda_item": "20.6.13",
-                  "description": "Study on Architecture for 6G System (FS_6G_ARC) - Emergency Voice Services for 6G"
-                }
-              ]
-            },
-            {
-              "agenda_item": "20.6.14",
-              "matched_agenda_item": "20.6.14",
-              "description": "Study on Architecture for 6G System (FS_6G_ARC) - Location Services for 6G",
-              "hierarchy": [
-                {
-                  "agenda_item": "20",
-                  "description": "Rel-20 SIDs and WIDs"
-                },
-                {
-                  "agenda_item": "20.6",
-                  "description": null
-                },
-                {
-                  "agenda_item": "20.6.14",
-                  "description": "Study on Architecture for 6G System (FS_6G_ARC) - Location Services for 6G"
-                }
-              ]
-            },
-            {
-              "agenda_item": "20.6.15",
-              "matched_agenda_item": "20.6.15",
-              "description": "Study on Architecture for 6G System (FS_6G_ARC) - Messaging Services for 6G",
-              "hierarchy": [
-                {
-                  "agenda_item": "20",
-                  "description": "Rel-20 SIDs and WIDs"
-                },
-                {
-                  "agenda_item": "20.6",
-                  "description": null
-                },
-                {
-                  "agenda_item": "20.6.15",
-                  "description": "Study on Architecture for 6G System (FS_6G_ARC) - Messaging Services for 6G"
-                }
-              ]
-            },
-            {
-              "agenda_item": "20.6.16",
-              "matched_agenda_item": "20.6.16",
-              "description": "Study on Architecture for 6G System (FS_6G_ARC) - Other Essential/Regulatory Services for 6G",
-              "hierarchy": [
-                {
-                  "agenda_item": "20",
-                  "description": "Rel-20 SIDs and WIDs"
-                },
-                {
-                  "agenda_item": "20.6",
-                  "description": null
-                },
-                {
-                  "agenda_item": "20.6.16",
-                  "description": "Study on Architecture for 6G System (FS_6G_ARC) - Other Essential/Regulatory Services for 6G"
+                  "agenda_item": "7",
+                  "description": "Rel-16 Maintenance for 5G (excluding 5GS_Ph1)"
                 }
               ]
             }
@@ -1442,8 +1489,8 @@
           ],
           "room_scope": "assigned",
           "notes": [
-            "KI#10 (FWA) (20.6.10)",
-            "KI#12 – KI#16 (20.6.12 - 16)"
+            "Pre-Rel-19 maintenance",
+            "(5.x, 6.x, 7.x)"
           ],
           "inferred_agenda_items": [],
           "email_details": [],
@@ -1455,8 +1502,8 @@
         {
           "name": "KI#20 (Sensing)",
           "duration_minutes": 90,
-          "start_time": "11:00",
-          "end_time": "12:30",
+          "start_time": "12:30",
+          "end_time": "14:00",
           "day": "Tuesday",
           "room_col_start": 2,
           "room_col_end": 3,
@@ -1503,8 +1550,8 @@
         {
           "name": "5GSAT_Ph4-ARC",
           "duration_minutes": 90,
-          "start_time": "11:00",
-          "end_time": "12:30",
+          "start_time": "12:30",
+          "end_time": "14:00",
           "day": "Tuesday",
           "room_col_start": 2,
           "room_col_end": 3,
@@ -1595,7 +1642,7 @@
           ]
         },
         {
-          "name": "Sensing-ARC / Rel-19 maintenance",
+          "name": "Rel-19 maintenance",
           "duration_minutes": 90,
           "start_time": "14:00",
           "end_time": "15:30",
@@ -1603,29 +1650,10 @@
           "room_col_start": 2,
           "room_col_end": 3,
           "chair": "Wanqiang ZHANG",
-          "agenda_item": "20.2.2, 19.x",
-          "group_header": "Rel-20 SIDs and WIDs",
-          "description": "Architecture Enhancement to support Integrated Sensing and Communication (Sensing_ARC)\nRel-19 SIDs and WIDs",
+          "agenda_item": "19.x",
+          "group_header": "Rel-19 SIDs and WIDs",
+          "description": "Rel-19 SIDs and WIDs",
           "agenda_descriptions": [
-            {
-              "agenda_item": "20.2.2",
-              "matched_agenda_item": "20.2.2",
-              "description": "Architecture Enhancement to support Integrated Sensing and Communication (Sensing_ARC)",
-              "hierarchy": [
-                {
-                  "agenda_item": "20",
-                  "description": "Rel-20 SIDs and WIDs"
-                },
-                {
-                  "agenda_item": "20.2",
-                  "description": null
-                },
-                {
-                  "agenda_item": "20.2.2",
-                  "description": "Architecture Enhancement to support Integrated Sensing and Communication (Sensing_ARC)"
-                }
-              ]
-            },
             {
               "agenda_item": "19.x",
               "matched_agenda_item": "19",
@@ -1644,7 +1672,6 @@
           "room_scope": "assigned",
           "notes": [
             "In Breakout 1",
-            "Sensing-ARC (20.2.2)",
             "Rel-19 maintenance (19.x)"
           ],
           "inferred_agenda_items": [],
@@ -1770,7 +1797,7 @@
           ]
         },
         {
-          "name": "Rel-19 maintenance / EnergySys_Ph2-ARC",
+          "name": "Sensing-ARC / EnergySys_Ph2-ARC",
           "duration_minutes": 90,
           "start_time": "14:00",
           "end_time": "15:30",
@@ -1778,18 +1805,26 @@
           "room_col_start": 2,
           "room_col_end": 3,
           "chair": "Wanqiang ZHANG",
-          "agenda_item": "19.x, 20.4.2",
-          "group_header": "Rel-19 SIDs and WIDs",
-          "description": "Rel-19 SIDs and WIDs\nEnergy Efficiency and Energy Saving Phase2 (EnergySys_Ph2)",
+          "agenda_item": "20.2.2, 20.4.2",
+          "group_header": "Rel-20 SIDs and WIDs",
+          "description": "Architecture Enhancement to support Integrated Sensing and Communication (Sensing_ARC)\nEnergy Efficiency and Energy Saving Phase2 (EnergySys_Ph2)",
           "agenda_descriptions": [
             {
-              "agenda_item": "19.x",
-              "matched_agenda_item": "19",
-              "description": "Rel-19 SIDs and WIDs",
+              "agenda_item": "20.2.2",
+              "matched_agenda_item": "20.2.2",
+              "description": "Architecture Enhancement to support Integrated Sensing and Communication (Sensing_ARC)",
               "hierarchy": [
                 {
-                  "agenda_item": "19",
-                  "description": "Rel-19 SIDs and WIDs"
+                  "agenda_item": "20",
+                  "description": "Rel-20 SIDs and WIDs"
+                },
+                {
+                  "agenda_item": "20.2",
+                  "description": null
+                },
+                {
+                  "agenda_item": "20.2.2",
+                  "description": "Architecture Enhancement to support Integrated Sensing and Communication (Sensing_ARC)"
                 }
               ]
             },
@@ -1819,7 +1854,7 @@
           "room_scope": "assigned",
           "notes": [
             "In Breakout 1",
-            "Rel-19 maintenance (19.x)",
+            "Sensing-ARC (20.2.2)",
             "EnergySys_Ph2-ARC (20.4.2)"
           ],
           "inferred_agenda_items": [],
@@ -1830,7 +1865,7 @@
           ]
         },
         {
-          "name": "SMS2EC-ARC",
+          "name": "In Breakout 2",
           "duration_minutes": 90,
           "start_time": "14:00",
           "end_time": "15:30",
@@ -1838,37 +1873,16 @@
           "room_col_start": 2,
           "room_col_end": 3,
           "chair": "Michael STARSINIC",
-          "agenda_item": "20.8.2",
-          "group_header": "Rel-20 SIDs and WIDs",
-          "description": "Short Message Service to Emergency Response Centre (SMS2EC-ARC)",
-          "agenda_descriptions": [
-            {
-              "agenda_item": "20.8.2",
-              "matched_agenda_item": "20.8.2",
-              "description": "Short Message Service to Emergency Response Centre (SMS2EC-ARC)",
-              "hierarchy": [
-                {
-                  "agenda_item": "20",
-                  "description": "Rel-20 SIDs and WIDs"
-                },
-                {
-                  "agenda_item": "20.8",
-                  "description": null
-                },
-                {
-                  "agenda_item": "20.8.2",
-                  "description": "Short Message Service to Emergency Response Centre (SMS2EC-ARC)"
-                }
-              ]
-            }
-          ],
+          "agenda_item": null,
+          "group_header": "",
+          "description": null,
+          "agenda_descriptions": [],
           "room_ids": [
             "stream3"
           ],
           "room_scope": "assigned",
           "notes": [
-            "In Breakout 2",
-            "SMS2EC-ARC (20.8.2)"
+            "In Breakout 2"
           ],
           "inferred_agenda_items": [],
           "email_details": [],
@@ -1953,11 +1967,11 @@
           {
             "name": "Coffee",
             "start": "10:30",
-            "end": "11:00"
+            "end": "12:30"
           },
           {
             "name": "Lunch",
-            "start": "12:30",
+            "start": "14:00",
             "end": "14:00"
           },
           {
@@ -2233,8 +2247,8 @@
         {
           "name": "In main room",
           "duration_minutes": 90,
-          "start_time": "11:00",
-          "end_time": "12:30",
+          "start_time": "12:30",
+          "end_time": "14:00",
           "day": "Wednesday",
           "room_col_start": 2,
           "room_col_end": 3,
@@ -2260,8 +2274,8 @@
         {
           "name": "KI#12 – KI#16",
           "duration_minutes": 90,
-          "start_time": "11:00",
-          "end_time": "12:30",
+          "start_time": "12:30",
+          "end_time": "14:00",
           "day": "Wednesday",
           "room_col_start": 2,
           "room_col_end": 3,
@@ -2383,8 +2397,8 @@
         {
           "name": "KI#3 (Slicing)",
           "duration_minutes": 90,
-          "start_time": "11:00",
-          "end_time": "12:30",
+          "start_time": "12:30",
+          "end_time": "14:00",
           "day": "Wednesday",
           "room_col_start": 2,
           "room_col_end": 3,
@@ -2431,8 +2445,8 @@
         {
           "name": "KI#19 (Network for AI)",
           "duration_minutes": 90,
-          "start_time": "11:00",
-          "end_time": "12:30",
+          "start_time": "12:30",
+          "end_time": "14:00",
           "day": "Wednesday",
           "room_col_start": 2,
           "room_col_end": 3,
@@ -2479,8 +2493,8 @@
         {
           "name": "KI#24 (IoT)",
           "duration_minutes": 90,
-          "start_time": "11:00",
-          "end_time": "12:30",
+          "start_time": "12:30",
+          "end_time": "14:00",
           "day": "Wednesday",
           "room_col_start": 2,
           "room_col_end": 3,
@@ -2526,8 +2540,8 @@
         {
           "name": "KI#2 (SBA)",
           "duration_minutes": 90,
-          "start_time": "11:00",
-          "end_time": "12:30",
+          "start_time": "12:30",
+          "end_time": "14:00",
           "day": "Wednesday",
           "room_col_start": 2,
           "room_col_end": 3,
@@ -2754,11 +2768,11 @@
           {
             "name": "Coffee",
             "start": "10:30",
-            "end": "11:00"
+            "end": "12:30"
           },
           {
             "name": "Lunch",
-            "start": "12:30",
+            "start": "14:00",
             "end": "14:00"
           },
           {
@@ -3216,8 +3230,8 @@
         {
           "name": "FS_enIMS_ARC",
           "duration_minutes": 90,
-          "start_time": "11:00",
-          "end_time": "12:30",
+          "start_time": "12:30",
+          "end_time": "14:00",
           "day": "Thursday",
           "room_col_start": 2,
           "room_col_end": 3,
@@ -3261,8 +3275,8 @@
         {
           "name": "KI#22 (Computing) / KI#4 (UP Arch)",
           "duration_minutes": 90,
-          "start_time": "11:00",
-          "end_time": "12:30",
+          "start_time": "12:30",
+          "end_time": "14:00",
           "day": "Thursday",
           "room_col_start": 2,
           "room_col_end": 3,
@@ -3329,8 +3343,8 @@
         {
           "name": "Rel-19 maintenance / KI#20 (Sensing)",
           "duration_minutes": 90,
-          "start_time": "11:00",
-          "end_time": "12:30",
+          "start_time": "12:30",
+          "end_time": "14:00",
           "day": "Thursday",
           "room_col_start": 2,
           "room_col_end": 3,
@@ -3388,8 +3402,8 @@
         {
           "name": "AIML_CN_Ph2 / KI#23 (NTN) / KI#22 (Computing)",
           "duration_minutes": 90,
-          "start_time": "11:00",
-          "end_time": "12:30",
+          "start_time": "12:30",
+          "end_time": "14:00",
           "day": "Thursday",
           "room_col_start": 2,
           "room_col_end": 3,
@@ -3476,8 +3490,8 @@
         {
           "name": "AmbientIoT_Ph2-ARC / KI#17 (IWK)",
           "duration_minutes": 90,
-          "start_time": "11:00",
-          "end_time": "12:30",
+          "start_time": "12:30",
+          "end_time": "14:00",
           "day": "Thursday",
           "room_col_start": 2,
           "room_col_end": 3,
@@ -4466,11 +4480,11 @@
           {
             "name": "Coffee",
             "start": "10:30",
-            "end": "11:00"
+            "end": "12:30"
           },
           {
             "name": "Lunch",
-            "start": "12:30",
+            "start": "14:00",
             "end": "14:00"
           },
           {
@@ -4663,8 +4677,8 @@
         {
           "name": "Revisions",
           "duration_minutes": 90,
-          "start_time": "11:00",
-          "end_time": "12:30",
+          "start_time": "12:30",
+          "end_time": "14:00",
           "day": "Friday",
           "room_col_start": 2,
           "room_col_end": 3,
@@ -4687,8 +4701,8 @@
         {
           "name": "Revisions",
           "duration_minutes": 90,
-          "start_time": "11:00",
-          "end_time": "12:30",
+          "start_time": "12:30",
+          "end_time": "14:00",
           "day": "Friday",
           "room_col_start": 2,
           "room_col_end": 3,
@@ -4711,8 +4725,8 @@
         {
           "name": "Revisions",
           "duration_minutes": 90,
-          "start_time": "11:00",
-          "end_time": "12:30",
+          "start_time": "12:30",
+          "end_time": "14:00",
           "day": "Friday",
           "room_col_start": 2,
           "room_col_end": 3,
@@ -4832,13 +4846,12 @@
           {
             "name": "Coffee",
             "start": "10:30",
-            "end": "11:00"
+            "end": "12:30"
           },
           {
             "name": "Lunch",
-            "start": "12:30",
-            "end": "14:00",
-            "label_position": "time-axis"
+            "start": "14:00",
+            "end": "14:00"
           },
           {
             "name": "Coffee",
@@ -4851,16 +4864,16 @@
       }
     }
   ],
-  "source_file": "S2-261nnnn_SA2-178-Session Plan.zip",
-  "generated_at": "2026-11-02 11:00",
+  "source_file": "S2-261nnnn_SA2-178-Session Plan - r1.zip",
+  "generated_at": "2026-11-03 05:01",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
-    "S2-261nnnn_SA2-178-Session Plan.zip",
+    "S2-261nnnn_SA2-178-Session Plan - r1.zip",
     "agenda.csv"
   ],
   "source_labels": {
-    "S2-261nnnn_SA2-178-Session Plan.zip": "Session Plan",
+    "S2-261nnnn_SA2-178-Session Plan - r1.zip": "Session Plan - r1",
     "agenda.csv": "agenda.csv"
   },
   "timezone": "America/Edmonton",
@@ -4939,15 +4952,6 @@
           "Close of meeting by 1600"
         ]
       ]
-    },
-    {
-      "type": "heading",
-      "text": "Filled in from earlier Session Plans"
-    },
-    {
-      "type": "paragraph",
-      "text": "Q2 is written \"1100 - 12\" in the Session Plan. This page reads it as 11:00–12:30, Q2 of earlier SA2 Session Plans.",
-      "bold": false
     }
   ],
   "chairman_agreements": {},
