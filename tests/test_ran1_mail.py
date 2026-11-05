@@ -122,3 +122,28 @@ def test_a_mailed_main_is_not_kept_in_the_main_history(tmp_path, monkeypatch):
 
 def test_mail_state_is_per_wg():
     assert email_sources.state_path('ran1') != email_sources.state_path('ran2')
+
+
+def test_the_build_opens_no_mail_the_check_did_not(monkeypatch):
+    """Check opens new mail; build reuses what check found and opens nothing more."""
+    from shared import listserv
+    from tests.listserv_archive import Archive
+    archive = Archive({
+        'a1.2611a': {'title': 'x', 'date': '2026-11-05T09:00:00+00:00'},
+        'a2.2611a': {'title': 'Updated schedule', 'date': '2026-11-05T10:00:00+00:00',
+                     'files': {'RAN1#127 online and offline schedules - v00.docx': b'PK v00'}},
+    })
+    cfg = {'email_list': '3GPP_TSG_RAN_WG2'}  # the archive serves this list name
+    with archive.client() as http:
+        files, record = downloader.mailed_schedule_files(cfg, {}, http=http, max_opens=1)   # check
+    assert archive.opened() == ['a1.2611a'] and files == []
+    listserv.new_run()
+    archive.seen.clear()
+    with archive.client() as http:
+        files, _ = downloader.mailed_schedule_files(cfg, {'email': record}, http=http, max_opens=0)  # build
+    assert archive.opened() == [] and files == []
+    listserv.new_run()
+    with archive.client() as http:
+        files, _ = downloader.mailed_schedule_files(cfg, {'email': record}, http=http)   # next check
+    assert archive.opened() == ['a2.2611a'] and [f['name'] for f in files] == [
+        'RAN1#127 online and offline schedules - v00.docx']

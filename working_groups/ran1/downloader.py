@@ -1700,13 +1700,14 @@ def schedule_stem(name: str) -> str:
 _MAIL_KEYS = ("url", "name", "uploaded_at", "listing", "origin", "message_id", "sent")
 
 
-def mailed_schedule_files(cfg: dict, state: dict, *, http=None, now=None) -> tuple[list[dict], dict | None]:
+def mailed_schedule_files(cfg: dict, state: dict, *, http=None, now=None,
+                          max_opens: int = email_sources.MAX_OPENS) -> tuple[list[dict], dict | None]:
     """Schedule attachments on the list, and the mailed files the last build used.
 
     The built files are read from the committed state: an archived mail does
     not change and stays fetchable, so a build never steps back to an older
     FTP version because the CI cache lost the mail. ``([], None)`` when no
-    list is configured.
+    list is configured. The build passes ``max_opens=0`` (see ``email_sources.for_wg``).
     """
     list_name = cfg.get("email_list")
     if not list_name:
@@ -1714,7 +1715,8 @@ def mailed_schedule_files(cfg: dict, state: dict, *, http=None, now=None) -> tup
     own = http is None
     http = http or remote_files.client()
     try:
-        scan = email_sources.for_wg("ran1", list_name, is_schedule_name, http, now=now, previous=state)
+        scan = email_sources.for_wg("ran1", list_name, is_schedule_name, http, now=now, previous=state,
+                                    max_opens=max_opens)
     finally:
         if own:
             http.close()

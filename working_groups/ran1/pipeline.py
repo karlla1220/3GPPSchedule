@@ -460,8 +460,10 @@ def build_schedule(args) -> Schedule:
         locked_meeting_id = locked_meeting_id or cfg.get("held_meeting")
         # Newer versions mailed to the list (shared/email_sources.py). Mail
         # only brings a file earlier, so a failure here never stops the build.
+        # Only the check opens new mail: the build uses what the check found
+        # (its cache and the pages it handed on), never a mail the check did not see.
         try:
-            mail_files, email_record = mailed_schedule_files(cfg, prev_state)
+            mail_files, email_record = mailed_schedule_files(cfg, prev_state, max_opens=0)
         except Exception as e:  # noqa: BLE001
             print(f"Warning: mailed schedules not read: {e}")
             mail_files, email_record = [], None

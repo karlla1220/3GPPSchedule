@@ -210,15 +210,17 @@ def check_list_name(value) -> None:
 
 
 def for_wg(wg: str, list_name: str | None, accept: Callable[[str], bool], http, *, now=None,
-           previous: dict | None = None) -> Scan | None:
+           previous: dict | None = None, max_opens: int = MAX_OPENS) -> Scan | None:
     """A WG's scan: None when it reads no list; the notes go to the log, prefixed with the WG.
 
     ``previous`` is the WG's manifest; its ``email.checked_through`` is where
-    reading resumes when the CI cache is gone.
+    reading resumes when the CI cache is gone. A build that follows a check
+    passes ``max_opens=0``: only the check reads new mail, so the build uses
+    what the check decided on (and nothing the check did not see).
     """
     if not list_name:
         return None
-    found = scan(wg, list_name, accept, http, now=now,
+    found = scan(wg, list_name, accept, http, now=now, max_opens=max_opens,
                  checked_through=((previous or {}).get('email') or {}).get('checked_through'))
     for note in found.notes:
         print(f'[{wg}] {note}')
