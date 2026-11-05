@@ -1077,3 +1077,13 @@ def test_mail_is_read_only_when_a_list_is_configured(tmp_path, monkeypatch):
         (tmp_path / 'c.json').write_text(json.dumps({'email_list': 'ran2 list'}))
         monkeypatch.setattr(sources, 'CONFIG_PATH', tmp_path / 'c.json')
         sources.load_config()
+
+
+def test_ran2s_own_rule_for_the_built_copy():
+    built = {'version': 10, 'url': SYNC + 'v10', 'name': 'R2_136_Schedule_v10.docx', 'uploaded_at': '2026-11-17 08:00'}
+    archive_copy = {**built, 'url': FOLDER_136 + 'Agenda/v10', 'uploaded_at': '2026-11-20 08:00'}
+    mailed = {**built, 'url': 'm', 'origin': 'email', 'sent': '2026-11-17T07:00:00+00:00'}
+    # Another upload of the built version does not replace it; an FTP copy of a mailed version does.
+    assert sources.keep_built(built, archive_copy) and sources.keep_built(built, mailed)
+    assert not sources.keep_built(mailed, archive_copy)
+    assert not sources.keep_built(built, {**archive_copy, 'version': 11})

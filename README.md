@@ -160,7 +160,7 @@ shared/
   office_outline.py            # 문서 전체 LLM 폴백에 넘길 DOCX(docx-cli)·PPTX·XLSX 블록
   notices.py                   # 빌드가 사람에게 알릴 것 → ci.py notify가 GitHub 이슈 댓글로
   meeting_folders.py           # 아카이브의 미팅 폴더 찾기
-  file_sources.py              # 여러 곳(FTP sync·미팅 폴더·메일)에서 찾은 사본 중 쓸 것: 버전 > FTP > 먼저 온 메일, 빌드본 유지
+  file_sources.py              # 여러 곳(FTP sync·미팅 폴더·메일)에서 찾은 사본의 공용 구조: 출처, 빌드본 틀, 메일 부품(고르는 규칙은 WG sources.py)
   email_sources.py             # 메일링 리스트 첨부를 원천으로: 새 메일만 한 번씩 열기, 기준점·찾은 첨부는 CI 캐시
   listserv.py                  # list.etsi.org LISTSERV: 피드, 주간 목록, 메일 페이지의 첨부 링크
 # WG별 결과/상태는 아래 폴더에 격리
@@ -407,7 +407,7 @@ Gemini가 다시 읽되, 원문으로 확인되는 답만 씁니다(아래 "LLM 
   - 어디까지 읽었는지(`checked_through`), 최근 하루 동안 연 메일, 찾은 첨부는 CI 캐시(`.cache/ran2/email_sources.json`)에 둡니다.
     커밋되는 것은 빌드할 때의 manifest(`.schedule_state.json`)뿐입니다: 읽은 시점(`email.checked_through`)과 페이지를 만든 메일(`schedule.origin`, `message_id`).
     캐시가 사라지면 manifest의 시점부터 다시 읽습니다.
-  - 고르는 규칙은 공용입니다(`shared/file_sources.py`): 높은 버전 > 같은 버전이면 FTP > 같은 버전의 메일끼리는 먼저 보낸 것.
+  - 고르는 규칙은 RAN2의 것(`sources.order`, `keep_built`)이고, 메일 부분은 공용 부품(`file_sources.copy_order`)을 씁니다: 높은 버전 > 같은 버전이면 FTP > 같은 버전의 메일끼리는 먼저 보낸 것.
     FTP 사본이 올라오면 그 판으로 돌아갑니다. 같은 이름을 다시 첨부한 답장(코멘트본)은 늦게 와서 지고, 보낸 사람은 가리지 않습니다.
   - 메일로 빌드한 판이 피드와 캐시에서 모두 사라져도 내려가지 않습니다. 첨부 주소에서 다시 받아 sha256이 같을 때만 씁니다.
   - 리스트를 읽지 못해도 빌드는 계속합니다(메일은 앞당길 뿐입니다). `email_list`가 `null`이면 메일을 읽지 않습니다.

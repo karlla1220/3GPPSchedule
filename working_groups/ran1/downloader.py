@@ -1750,7 +1750,9 @@ def _with_mail(sources: list[ScheduleSource], mail_files: list[dict] | None) -> 
                 if _extract_meeting_id(m["name"]) == meeting and schedule_stem(m["name"]) == stem]
         if not same:
             continue
-        best = file_sources.choose([source.file_info, *same], version, ftp_order)
+        # The newer release; at equal release the FTP copy, then the earliest mail.
+        best = max([source.file_info, *same],
+                   key=lambda entry: (version(entry), *file_sources.copy_order(entry, ftp_order)))
         if file_sources.origin(best) == file_sources.EMAIL:
             sent = best.get("sent")
             source.file_info = {**best, "uploaded_at": datetime.fromisoformat(sent) if sent else None}

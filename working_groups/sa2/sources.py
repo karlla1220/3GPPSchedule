@@ -200,10 +200,6 @@ def schedule_candidates(entries: list[dict]) -> list[dict]:
     return result
 
 
-def version(entry: dict) -> int:
-    return entry['version']
-
-
 def ftp_order(entry: dict) -> tuple:
     """FTP copies of one revision: the later upload, then the live copy.
 
@@ -212,8 +208,23 @@ def ftp_order(entry: dict) -> tuple:
     return entry.get('uploaded_at') or '', 'Meetings_3GPP_SYNC' in entry['url'], entry['name']
 
 
-def uploaded(entry: dict) -> str:
-    return entry.get('uploaded_at') or ''
+def order(entry: dict) -> tuple:
+    """The higher revision; at equal revision the later upload (then the live copy); mail after FTP."""
+    return entry['version'], *file_sources.copy_order(entry, ftp_order)
+
+
+def keep_built(built: dict, chosen: dict) -> bool:
+    """A vanished built plan stays unless something listed is newer.
+
+    A later upload of the built revision replaces it ("-r14 - Friday plan"
+    after "-r14"), and an FTP copy replaces a mailed one.
+    """
+    rank = lambda e: (e['version'], file_sources.is_ftp(e))
+    if rank(built) != rank(chosen):
+        return rank(built) > rank(chosen)
+    if file_sources.is_ftp(built):
+        return (built.get('uploaded_at') or '') >= (chosen.get('uploaded_at') or '')
+    return True
 
 
 # --------------------------------------------------------------------- Portal
@@ -243,7 +254,7 @@ def choose_schedule(candidates: list[dict], dates: dict, now, built=None) -> dic
     same = [c for c in candidates if c['meeting_id'] == meeting]
     if not same:
         raise ValueError(f'No SA2 Session Plan of {meeting} listed')
-    return file_sources.choose(same, version, ftp_order)
+    return max(same, key=order)
 
 
 # -------------------------------------------------------------------- bundles
@@ -277,7 +288,7 @@ def built_copy(cfg, previous, chosen, candidates, rows, error, http=None) -> Bun
     old = previous.get('schedule') or {}
     built = {**old, 'version': previous.get('version', -1)} if old.get('url') else None
     if (previous.get('meeting_id') != chosen['meeting_id']
-            or not file_sources.keep_built(built, chosen, candidates, version, uploaded)):
+            or not file_sources.hold_built(built, chosen, candidates, keep_built)):
         return None
     error = error or ValueError(f"{old.get('name')} is no longer listed and its stored copy is missing")
     schedule = file_sources.built_body(built, http)
