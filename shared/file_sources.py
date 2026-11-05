@@ -76,17 +76,24 @@ def choose(candidates: Iterable[dict], version: Callable[[dict], object],
     return max(candidates, key=lambda entry: order(entry, version, ftp_order))
 
 
-def keep_built(built: dict | None, chosen: dict, candidates: list[dict], version: Callable[[dict], object]) -> bool:
+def keep_built(built: dict | None, chosen: dict, candidates: list[dict], version: Callable[[dict], object],
+               tiebreak: Callable[[dict], object] | None = None) -> bool:
     """Keep the built copy: it is no longer listed, and nothing listed has a higher rank.
 
     ``built`` is the built file as an entry (same meeting as ``chosen``; the
-    caller checks). The rank is version and origin only: another upload of
-    the built version (the meeting folder's copy of a sync file) does not
-    replace it, while an FTP copy of a mailed version does.
+    caller checks). The rank is version and origin: another upload of the
+    built version (the meeting folder's copy of a sync file) does not replace
+    it, while an FTP copy of a mailed version does. A WG whose FTP copies of
+    one version follow one another (SA2's "-r14 - Friday plan" after "-r14")
+    passes ``tiebreak``; a later FTP copy of the built version then replaces it.
     """
     if not built or any(c['url'] == built.get('url') for c in candidates):
         return False
-    return rank(built, version) >= rank(chosen, version)
+    if rank(built, version) != rank(chosen, version):
+        return rank(built, version) > rank(chosen, version)
+    if tiebreak is not None and origin(built) == origin(chosen) == FTP:
+        return tiebreak(built) >= tiebreak(chosen)
+    return True
 
 
 def built_body(built: dict, http=None) -> bytes | None:

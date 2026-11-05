@@ -39,6 +39,7 @@ from .downloader import (
     local_reference_meeting_id,
     load_external_files_state,
     load_schedule_state,
+    mailed_schedule_files,
     save_external_files_state,
     EXTRA_FILES_DIR,
     _external_config_fingerprint,
@@ -182,11 +183,17 @@ def check_updates(*, staging_dir=None) -> CheckResult:
     locked_meeting_id = locked_meeting_id or cfg.get("held_meeting")
 
     try:
+        mail_files, _ = mailed_schedule_files(cfg, state)
+    except Exception as e:  # noqa: BLE001 - mail only brings a file earlier
+        print(f"Warning: mailed schedules not read: {e}")
+        mail_files = []
+    try:
         remote_all = get_all_remote_schedule_info(
             urls=cfg["inbox_urls"],
             extra_folders=cfg["extra_folders"],
             preferred_meeting_id=preferred_meeting_id,
             locked_meeting_id=locked_meeting_id,
+            mail_files=mail_files,
         )
     except Exception as e:
         print(f"FTP check failed: {e}")

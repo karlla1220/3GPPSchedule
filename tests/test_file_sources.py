@@ -111,3 +111,16 @@ def test_the_manifest_record_says_which_mail_a_file_came_from():
 def test_a_mail_without_a_date_loses_to_a_dated_one(sent):
     dated = mail(10, '2026-11-17T10:00:00+00:00', 'dated.2611c')
     assert choose(mail(10, sent, 'undated.2611c'), dated)['message_id'] == 'dated.2611c'
+
+
+def test_a_later_upload_of_the_built_version_replaces_it_when_the_wg_says_so():
+    # SA2: "-r14 - Friday plan" follows "-r14". Without a tiebreak another upload of the
+    # built version never replaces it (RAN2's archive copy of a sync file).
+    built = ftp(14, SYNC, '2026-11-17 08:00')
+    later = {**ftp(14, FOLDER, '2026-11-17 18:00'), 'name': 'S2-x - r14 - Friday plan.docx'}
+    uploaded = lambda entry: entry['uploaded_at']
+    assert file_sources.keep_built(built, later, [later], version)
+    assert not file_sources.keep_built(built, later, [later], version, uploaded)
+    assert file_sources.keep_built({**built, 'uploaded_at': '2026-11-17 19:00'}, later, [later], version, uploaded)
+    # Mail never takes part in the tiebreak: the rank decides.
+    assert file_sources.keep_built(built, mail(14, '2026-11-17T20:00:00+00:00'), [], version, uploaded)

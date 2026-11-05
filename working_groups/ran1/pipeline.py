@@ -55,6 +55,7 @@ from .downloader import (
     local_reference_hashes,
     discover_schedule_sources,
     download_all_schedules,
+    mailed_schedule_files,
     save_schedule_state,
     load_schedule_state,
     _extract_meeting_id,
@@ -341,6 +342,7 @@ def build_schedule(args) -> Schedule:
     docx_path: Path | None = None
     vice_chair_paths: dict[str, Path] = {}
     sources: list | None = None  # set during FTP discovery (step 1)
+    email_record: dict | None = None  # how far the list was read, when it was
     extra_chair_notes_paths: list[Path] = []
 
     if args.local:
@@ -456,6 +458,14 @@ def build_schedule(args) -> Schedule:
             locked_meeting_id = next(iter(local_main_ids))
             preferred_meeting_id = locked_meeting_id
         locked_meeting_id = locked_meeting_id or cfg.get("held_meeting")
+        # Newer versions mailed to the list (shared/email_sources.py). Mail
+        # only brings a file earlier, so a failure here never stops the build.
+        try:
+            mail_files, email_record = mailed_schedule_files(cfg, prev_state)
+        except Exception as e:  # noqa: BLE001
+            print(f"Warning: mailed schedules not read: {e}")
+            mail_files, email_record = [], None
+
         def discover_and_download():
             nonlocal sources
             # Set before downloading: a download failure must still raise below.
@@ -465,6 +475,7 @@ def build_schedule(args) -> Schedule:
                 local_schedule_sources=local_ref_sources,
                 preferred_meeting_id=preferred_meeting_id,
                 locked_meeting_id=locked_meeting_id,
+                mail_files=mail_files,
             )
             if not sources:
                 return None, {}
@@ -522,12 +533,15 @@ def build_schedule(args) -> Schedule:
     # Extract meeting id early so slot-state freshness can invalidate the
     # incremental cache when the target meeting changes.
     current_meeting_id = _extract_meeting_id(docx_path.name)
+    mailed_main = any(s.is_main and s.file_info.get("origin") == "email" for s in sources or [])
 
     # Step 4: Parse sessions (always use time-slot grouping for fewer LLM calls)
     print("\nCollecting schedule data...")
     time_slots = collect_time_slot_data(
         cells, day_rooms_map, vice_chair_paths, meeting_id=current_meeting_id,
-        main_texts_seen=main_history.record(current_meeting_id, cells),
+        # A mailed Main is not recorded: the history is permanent, and a mailed
+        # copy someone edited would make vice-chair cells look like copies.
+        main_texts_seen=main_history.record(current_meeting_id, cells, store=not mailed_main),
     )
     n_enriched = sum(1 for s in time_slots if len(s.sources) > 1)
     if vice_chair_paths:
@@ -791,6 +805,7 @@ def build_schedule(args) -> Schedule:
             agenda=_agenda_state_for_save(agenda_record, agenda_path),
             agreements_ref=agreements_ref,
             local_refs=local_reference_hashes(),
+            email=email_record,
         )
 
     days = []
@@ -824,6 +839,12 @@ def build_schedule(args) -> Schedule:
     if vice_chair_paths:
         source_files.extend([p.name for p in vice_chair_paths.values()])
         source_labels.update({p.name: person for person, p in vice_chair_paths.items()})
+    # Files read from the list say so on the Sources line.
+    source_mails = {
+        s.local_path.name: s.file_info.get("listing") or s.file_info["url"]
+        for s in sources or []
+        if s.local_path is not None and s.file_info.get("origin") == "email"
+    }
 
     schedule = Schedule(
         meeting_name=meeting_name,
@@ -831,6 +852,7 @@ def build_schedule(args) -> Schedule:
         source_file=docx_path.name,
         source_files=source_files,
         source_labels=source_labels,
+        source_mails=source_mails,
         generated_at=generated_at,
         timezone=meeting_tz,
         wg_id="ran1",

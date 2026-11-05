@@ -59,17 +59,19 @@ def add(history: dict[str, set[str]], cells) -> dict[str, set[str]]:
     return merged
 
 
-def record(meeting_id: str | None, cells) -> dict[str, set[str]]:
+def record(meeting_id: str | None, cells, *, store: bool = True) -> dict[str, set[str]]:
     """Add this run's Main cells to the meeting's history and return it.
 
     Without a meeting id nothing is stored; the current cells alone are
-    returned, which drops only exact copies of the current Main.
+    returned, which drops only exact copies of the current Main. With
+    ``store`` false (a Main mailed to the list, not uploaded) the cells are
+    used for this run and not kept.
     """
     if not meeting_id:
         return add({}, cells)
     history = load(meeting_id)
     merged = add(history, cells)
-    if merged != history:
+    if store and merged != history:
         write_json(_path(meeting_id), {
             "meeting_id": meeting_id,
             "slots": {key: sorted(texts) for key, texts in sorted(merged.items())},
