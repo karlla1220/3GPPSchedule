@@ -8,6 +8,7 @@ from pathlib import Path
 import httpx
 import pytest
 
+from shared import listserv, remote_files
 from shared.schedule import DaySchedule, RoomInfo, Schedule, Session, Timeline, load_schedule, save_schedule
 from working_groups.ran1 import email_updates
 from working_groups.ran1.email_sessions import body_text, needs_full_body, newest_reply, parse_feed
@@ -115,6 +116,8 @@ def _extract(asked, fail=()):
 
 
 def _update(schedule, asked, fail=()):
+    """One run: nothing an earlier run read is reused."""
+    listserv.new_run()
     http, calls = _archive()
     new = email_updates.update_records(schedule, now=NOW, http=http, extract=_extract(asked, fail),
                                        sleep=lambda _: None)
@@ -187,8 +190,27 @@ def test_check_finds_only_unrecorded_mails_with_words_of_time(meeting):
     # By the preview alone: 36 of the 41 asked mails show a word of time in it.
     assert len(email_updates.pending(meeting, now=NOW, http=http)) == 36
     _update(meeting, [])
+    listserv.new_run()
     assert email_updates.pending(meeting, now=NOW, http=http) == []
     assert calls == ["feed", "feed"]
+
+
+def test_build_reads_the_feed_and_pages_check_read(meeting, tmp_path):
+    """Check reads the feed; build in the next job reuses it and asks the archive only for what check did not read."""
+    listserv.new_run()
+    http, calls = _archive()
+    assert len(email_updates.pending(meeting, now=NOW, http=http)) == 36
+    remote_files.save_listings(tmp_path / "listings.json")  # end of the check job
+    remote_files.new_run()  # the build job
+    assert remote_files.load_listings(tmp_path / "listings.json") == 1
+    calls.clear()
+    email_updates.update_records(meeting, now=NOW, http=http, extract=_extract([]), sleep=lambda _: None)
+    assert "feed" not in calls and calls.count("page") == 20
+    # In one job, each page once: a second reader of the list asks for nothing.
+    calls.clear()
+    from working_groups.ran1.email_sessions import collect
+    collect("126bis", http=http, sleep=lambda _: None)
+    assert calls == []
 
 
 def test_recorded_answers_go_on_the_grid(meeting, tmp_path):

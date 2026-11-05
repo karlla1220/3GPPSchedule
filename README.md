@@ -160,6 +160,9 @@ shared/
   office_outline.py            # 문서 전체 LLM 폴백에 넘길 DOCX(docx-cli)·PPTX·XLSX 블록
   notices.py                   # 빌드가 사람에게 알릴 것 → ci.py notify가 GitHub 이슈 댓글로
   meeting_folders.py           # 아카이브의 미팅 폴더 찾기
+  file_sources.py              # 여러 곳(FTP sync·미팅 폴더·메일)에서 찾은 사본 중 쓸 것: 버전 > FTP > 먼저 온 메일, 빌드본 유지
+  email_sources.py             # 메일링 리스트 첨부를 원천으로: 새 메일만 한 번씩 열기, 기준점·찾은 첨부는 CI 캐시
+  listserv.py                  # list.etsi.org LISTSERV: 피드, 주간 목록, 메일 페이지의 첨부 링크
 # WG별 결과/상태는 아래 폴더에 격리
 docs/ran1/                     # index.html, schedule.json, slot_state/, 상태 JSON
 docs/ran2/                     # index.html, schedule.json, .schedule_state.json
@@ -397,6 +400,19 @@ Gemini가 다시 읽되, 원문으로 확인되는 답만 씁니다(아래 "LLM 
 - **같은 미팅 안에서는 버전이 내려가지 않습니다(`sources.built_copy`).** 빌드한 판의 파일이 목록에서 사라지고(교체 중, sync 정리) 보이는 판이 같거나 낮으면, 빌드한 판을 `.cache/3gpp/`에서 꺼내 그대로 둡니다. 더 높은 판이 보이면 바로 그 판으로 바꿉니다. 원본이 캐시에 없으면 오류로 보고합니다.
 - **현재 미팅은 Portal 날짜로 정합니다.** 빌드한 미팅이 끝나기 전에는 그 미팅이고, 끝나면 schedule이 있는 가장 이른 다음 미팅입니다. 없으면 빌드한 미팅을 유지합니다(`shared/meeting_turn.py`, CLAUDE.md "회의 전환").
 - 같은 미팅에서는 가장 높은 버전을 쓰고, 같은 버전이면 sync 폴더 사본을 우선합니다.
+- **메일로 온 판도 씁니다(`config.json`의 `email_list`, `shared/email_sources.py`).** 의장은 새 판을
+  `3GPP_TSG_RAN_WG2` 리스트에 첨부해 보내고, FTP보다 먼저 보내기도 합니다(2026-11-05 `R2_136_Schedule_v00.docx`).
+  - 피드·주간 목록·검색 어디에도 첨부 이름은 없고 메일 페이지에만 있습니다. 그래서 새 메일은 한 번씩 열고(실행당 20통),
+    제목·본문이 아니라 **첨부 파일 이름**을 FTP와 같은 이름 규칙(`document.file_info`)으로 판정합니다.
+  - 어디까지 읽었는지(`checked_through`), 최근 하루 동안 연 메일, 찾은 첨부는 CI 캐시(`.cache/ran2/email_sources.json`)에 둡니다.
+    커밋되는 것은 빌드할 때의 manifest(`.schedule_state.json`)뿐입니다: 읽은 시점(`email.checked_through`)과 페이지를 만든 메일(`schedule.origin`, `message_id`).
+    캐시가 사라지면 manifest의 시점부터 다시 읽습니다.
+  - 고르는 규칙은 공용입니다(`shared/file_sources.py`): 높은 버전 > 같은 버전이면 FTP > 같은 버전의 메일끼리는 먼저 보낸 것.
+    FTP 사본이 올라오면 그 판으로 돌아갑니다. 같은 이름을 다시 첨부한 답장(코멘트본)은 늦게 와서 지고, 보낸 사람은 가리지 않습니다.
+  - 메일로 빌드한 판이 피드와 캐시에서 모두 사라져도 내려가지 않습니다. 첨부 주소에서 다시 받아 sha256이 같을 때만 씁니다.
+  - 리스트를 읽지 못해도 빌드는 계속합니다(메일은 앞당길 뿐입니다). `email_list`가 `null`이면 메일을 읽지 않습니다.
+  - check가 읽은 리스트 페이지(줄인 형태)는 FTP 목록과 함께 `.ci/listings.json`으로 build에 넘어가, build는 리스트에 다시 요청하지 않습니다.
+  - 메일로 받은 판은 헤더 Sources 줄에 `Schedule v01 (email)`로 보이고 `email`이 그 메일로 가는 링크입니다.
 - `agenda.csv`는 같은 미팅의 아카이브 폴더에서 받아 AI 설명과 범례 그룹에 씁니다. 일정이 sync에서 왔으면 회의 첫날부터 sync의 파일도 씁니다. 없으면 생략합니다.
 - 날짜·시간대·시작/종료 시각은 Portal(TB 380)에서 가져옵니다. 순서는
   `config.json`의 `meetings` 지정 > Portal > 같은 미팅의 마지막 성공 상태입니다.
