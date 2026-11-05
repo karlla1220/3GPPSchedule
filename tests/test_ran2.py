@@ -436,6 +436,10 @@ FIREWALL = b'<html><body>This transfer is blocked by a Web Application Firewall.
 
 def mock_server(files, blocked=(), seen=None):
     """3GPP-like server: listings for folders, 403 for missing paths, the firewall page for blocked ones."""
+    return httpx.Client(transport=httpx.MockTransport(server_handler(files, blocked, seen)))
+
+
+def server_handler(files, blocked=(), seen=None):
     def handler(request):
         url = str(request.url)
         if seen is not None:
@@ -451,7 +455,7 @@ def mock_server(files, blocked=(), seen=None):
         if url in files:
             return httpx.Response(200, content=files[url], headers={'etag': f'"{len(files[url])}"'})
         return httpx.Response(403)
-    return httpx.Client(transport=httpx.MockTransport(handler))
+    return handler
 
 
 def test_fetch_bundle_reads_the_upcoming_archive_folder_and_its_agenda(tmp_path, monkeypatch):
@@ -957,3 +961,101 @@ def test_a_next_schedule_waits_for_the_last_day_at_the_venue(tmp_path, monkeypat
         bundle = sources.fetch_bundle(sources.DEFAULTS, previous, http, rows=rows,
                                       now=datetime.fromisoformat('2026-11-21T00:30-06:00'), cache_dir=tmp_path / 'inputs2')
     assert bundle.manifest['meeting_id'] == 'ran2#137'
+
+
+# ---------------------------------------------------------------- mailed versions
+
+FOLDER_136 = ARCHIVE + 'TSGR2_136/'
+ROWS_136 = [{'Title': '3GPPRAN2#136', 'TBId': 380, 'Id': 2, 'StartDate': '2026-11-16 09:00:00',
+             'EndDate': '2026-11-20 17:30:00', 'StartTimeZone': '(GMT-07:00) Mountain Time (US & Canada)',
+             'Country': 'CA'}]
+
+
+@pytest.fixture
+def mailing(tmp_path, monkeypatch):
+    """RAN2#136 with v00 in the meeting folder and the list read for new versions."""
+    from tests.listserv_archive import LIST, Archive
+    monkeypatch.setattr(sources.remote_files, 'CACHE_DIR', tmp_path / 'cache')
+    cfg = {**sources.DEFAULTS, 'meeting_specific_override': [FOLDER_136], 'email_list': LIST}
+    files = {FOLDER_136 + 'Agenda/R2_136_Schedule_v00.docx': b'ftp v00',
+             FOLDER_136 + 'Agenda/agenda.csv': (FIXTURES / 'agenda_135bis.csv').read_bytes()}
+    archive = Archive({
+        'c0a1.2611c': {'title': 'Updated Schedule (V01)', 'date': '2026-11-16T15:00:00+00:00',
+                        'files': {'R2_136_Schedule_v01.docx': b'mail v01'}},
+        'e0b2.2611c': {'title': 'Re: Updated Schedule (V01)', 'date': '2026-11-16T16:00:00+00:00',
+                        'files': {'R2_136_Schedule_v01.docx': b'v01 with comments'}},
+        'd0c3.2611c': {'title': '[136][101][NR] Running CR', 'date': '2026-11-16T15:30:00+00:00',
+                        'files': {'38331 CR v3.docx': b'cr'}},
+    })
+
+    def run(previous, now='2026-11-17'):
+        sources.remote_files.new_run()  # each call is a separate run
+        with archive.client(server_handler(files)) as http:
+            return sources.fetch_bundle(cfg, previous, http, rows=ROWS_136, now=noon(now),
+                                        cache_dir=tmp_path / 'inputs')
+    return run, files, archive
+
+
+def test_a_mailed_version_newer_than_the_upload_is_built(mailing):
+    run, _, archive = mailing
+    bundle = run({})
+    # The chair's mail, not the reply that attached the file again later.
+    assert bundle.schedule == b'mail v01' and bundle.manifest['version'] == 1
+    record = bundle.manifest['schedule']
+    assert (record['origin'], record['message_id'], record['name']) == ('email', 'c0a1.2611c', 'R2_136_Schedule_v01.docx')
+    assert bundle.manifest['agenda']['url'] == FOLDER_136 + 'Agenda/agenda.csv'
+    assert bundle.manifest['email'] == {'list': '3GPP_TSG_RAN_WG2', 'checked_through': '2026-11-16T16:00:00+00:00'}
+    # Each mail was opened once.
+    assert sorted(archive.opened()) == ['c0a1.2611c', 'd0c3.2611c', 'e0b2.2611c']
+
+
+def test_a_built_mail_out_of_the_feed_and_the_cache_is_kept_not_stepped_back(mailing, tmp_path):
+    run, _, archive = mailing
+    previous = run({}).manifest
+    archive.feed = []  # the mails are no longer in the feed
+    shutil.rmtree(tmp_path / 'email_sources')  # and the CI cache is gone
+    shutil.rmtree(tmp_path / 'cache')
+    archive.seen.clear()
+    bundle = run(previous)
+    # Not the meeting folder's v00: the built v01, fetched again from the archive.
+    assert bundle.schedule == b'mail v01' and bundle.manifest['schedule'] == previous['schedule']
+    assert any('N=R2_136_Schedule_v01.docx' in url for url in archive.seen)
+    assert bundle.manifest['email']['checked_through'] == '2026-11-16T16:00:00+00:00'
+    # Without the archive either, the build stops and the page stays as it is.
+    shutil.rmtree(tmp_path / 'cache')
+    archive.mails.clear()
+    with pytest.raises(ValueError, match='no longer listed'):
+        run(previous)
+
+
+def test_the_upload_of_the_mailed_version_takes_over(mailing):
+    run, files, _ = mailing
+    previous = run({}).manifest
+    files[FOLDER_136 + 'Agenda/R2_136_Schedule_v01.docx'] = b'ftp v01'
+    bundle = run(previous)
+    assert bundle.schedule == b'ftp v01' and 'origin' not in bundle.manifest['schedule']
+    # A newer mail wins again.
+    _, _, archive = mailing
+    archive.mails['f0d4.2611c'] = {'title': 'Updated Schedule (V02)', 'date': '2026-11-17T08:00:00+00:00',
+                                  'files': {'R2_136_Schedule_v02.docx': b'mail v02'}}
+    assert run(bundle.manifest).schedule == b'mail v02'
+
+
+def test_mail_of_a_meeting_not_read_is_not_a_candidate(mailing):
+    run, _, archive = mailing
+    archive.mails['b0e5.2611c'] = {'title': 'Fw: old schedule', 'date': '2026-11-16T17:00:00+00:00',
+                                  'files': {'R2_135b_Schedule_v20.docx': b'old'}}
+    assert run({}).schedule == b'mail v01'
+
+
+def test_mail_is_read_only_when_a_list_is_configured(tmp_path, monkeypatch):
+    monkeypatch.setattr(sources.remote_files, 'CACHE_DIR', tmp_path / 'cache')
+    cfg = {**sources.DEFAULTS, 'meeting_specific_override': [FOLDER_136]}
+    seen = []
+    with mock_server({FOLDER_136 + 'Agenda/R2_136_Schedule_v00.docx': b'v00'}, seen=seen) as http:
+        bundle = sources.fetch_bundle(cfg, {}, http, rows=ROWS_136, now=noon('2026-11-17'), cache_dir=tmp_path / 'i')
+    assert 'email' not in bundle.manifest and not any('list.etsi.org' in url for url in seen)
+    with pytest.raises(ValueError, match='email_list'):
+        (tmp_path / 'c.json').write_text(json.dumps({'email_list': 'ran2 list'}))
+        monkeypatch.setattr(sources, 'CONFIG_PATH', tmp_path / 'c.json')
+        sources.load_config()

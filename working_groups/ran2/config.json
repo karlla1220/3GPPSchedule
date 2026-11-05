@@ -9,5 +9,6 @@
   "llm_fallback": true,
   "model": "gemini-3.8-flash",
   "local_agenda": null,
-  "meetings": {}
+  "meetings": {},
+  "email_list": "3GPP_TSG_RAN_WG2"
 }

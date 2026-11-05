@@ -11,32 +11,26 @@ before the newest reply ends, that is, when the preview ends with "[...]"
 and shows no quote header. The full text is the message's first text/plain
 part, linked from the message page (two requests per message).
 
-The archive drops the connection, without an HTTP response, for Python's
-default User-Agent, and now and then stalls a TLS handshake. Requests go
-one at a time, a few seconds apart, with one later retry.
+Requests go one at a time, a few seconds apart, with one later retry
+(``shared/listserv.py`` reads the archive; this module reads the mails).
 """
 
 from __future__ import annotations
 
-import html
 import re
 import time
 from urllib.parse import unquote
 from dataclasses import dataclass, field
-from email.utils import parsedate_to_datetime
 from datetime import datetime
 from typing import Callable
 
 import httpx
-from defusedxml import ElementTree as ET
 
+from shared import listserv
+from shared.listserv import ARCHIVE, FEED_LIMIT, REQUEST_GAP, body_text, body_url, preview_text  # noqa: F401
 from shared.remote_files import client
 
-ARCHIVE = "https://list.etsi.org"
 LIST_NAME = "3GPP_TSG_RAN_WG1"
-FEED_LIMIT = 100
-REQUEST_GAP = 3.0  # seconds between requests to the archive
-RETRY_GAP = 15.0
 MAX_BODIES = 30  # full-text fetches per run; the rest wait for the next run
 
 TRUNCATED = "[...]"
@@ -50,9 +44,6 @@ QUOTE_HEADER = re.compile(
     re.IGNORECASE,
 )
 
-_BODY_LINK = re.compile(r'href="(/scripts/wa\.exe\?A3=[^"]*)"')
-_MESSAGE_ID = re.compile(r";([0-9a-f]+\.\d{4}[a-z]?)", re.IGNORECASE)
-_INLINE_URL = re.compile(r"<(?:https?|mailto):[^>\s]*>")
 
 
 @dataclass
@@ -70,11 +61,11 @@ class Mail:
 
 def message_url(message_id: str, list_name: str = LIST_NAME) -> str:
     """The archive page of one mail, as the feed links it."""
-    return f"{ARCHIVE}/scripts/wa.exe?A2={list_name};{message_id}"
+    return listserv.message_url(message_id, list_name)
 
 
 def feed_url(list_name: str = LIST_NAME, limit: int = FEED_LIMIT) -> str:
-    return f"{ARCHIVE}/scripts/wa.exe?RSS&L={list_name}&v=2.0&LIMIT={limit}"
+    return listserv.feed_url(list_name, limit)
 
 
 def meeting_tag(meeting_id: str) -> str:
@@ -237,13 +228,6 @@ def agenda_of(title: str, reply: str, index: dict, agenda: set[str]) -> dict:
     }
 
 
-def preview_text(description: str, *, links: bool = False) -> str:
-    """Feed item HTML as plain text. Inline link targets ("folder<https://…>") are dropped unless ``links``."""
-    text = re.sub(r"<br\s*/?>", "\n", description or "", flags=re.IGNORECASE)
-    text = html.unescape(re.sub(r"<[^>]+>", "", text))
-    return text if links else _INLINE_URL.sub("", text)
-
-
 _TDOC = re.compile(r"(?<![\w-])R1-\d{7}(?!\d)")
 
 
@@ -268,54 +252,22 @@ def needs_full_body(snippet: str) -> bool:
 
 
 def parse_feed(xml: str) -> list[Mail]:
-    mails = []
-    for item in ET.fromstring(xml).findall("channel/item"):
-        link = (item.findtext("link") or "").strip()
-        match = _MESSAGE_ID.search(link)
-        if not match:
-            continue
-        try:
-            date = parsedate_to_datetime(item.findtext("pubDate") or "")
-        except (TypeError, ValueError):
-            date = None
-        mails.append(Mail(
-            id=match.group(1).lower(),
-            title=" ".join((item.findtext("title") or "").split()),
-            author=(item.findtext("author") or "").strip(),
-            date=date,
-            link=link,
-            snippet=preview_text(item.findtext("description") or ""),
-            tdocs=tdoc_numbers(newest_reply(preview_text(item.findtext("description") or "", links=True))),
-        ))
-    return mails
-
-
-def body_url(message_page: str) -> str | None:
-    """Raw text of the message's first text/plain part (else text/html) on the message page."""
-    links = [html.unescape(href) for href in _BODY_LINK.findall(message_page)]
-    for kind in ("T=text%2Fplain", "T=text%2Fhtml"):
-        for link in links:
-            if kind in link:
-                return ARCHIVE + link.replace("&header=1", "")
-    return None
-
-
-def body_text(raw: str, *, is_html: bool = False) -> str:
-    """Body part as plain text. Masked addresses arrive as links; their text is kept."""
-    if is_html:
-        raw = re.sub(r"<(style|script)\b.*?</\1>", "", raw, flags=re.IGNORECASE | re.DOTALL)
-        raw = re.sub(r"<br\s*/?>|</(?:p|div|li|tr)>", "\n", raw, flags=re.IGNORECASE)
-    return html.unescape(re.sub(r"<[^>]+>", "", raw))
+    return [
+        Mail(
+            id=item.id,
+            title=item.title,
+            author=item.author,
+            date=item.date,
+            link=item.link,
+            snippet=preview_text(item.description),
+            tdocs=tdoc_numbers(newest_reply(preview_text(item.description, links=True))),
+        )
+        for item in listserv.parse_feed(xml)
+    ]
 
 
 def _get(http: httpx.Client, url: str, sleep: Callable[[float], None]) -> str:
-    try:
-        response = http.get(url)
-    except httpx.TransportError:
-        sleep(RETRY_GAP)
-        response = http.get(url)
-    response.raise_for_status()
-    return response.text
+    return listserv.get(http, url, sleep)
 
 
 def collect(

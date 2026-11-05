@@ -34,6 +34,10 @@ def fresh_listings(tmp_path, monkeypatch):
     monkeypatch.setattr(email_updates, 'in_meeting', lambda *a, **k: False)
     monkeypatch.setattr(email_updates, 'RECORD_DIR', tmp_path / 'email' / 'docs')
     monkeypatch.setattr(email_updates, 'CACHE_DIR', tmp_path / 'email' / 'cache')
+    # Nor the CI cache of mailed input files (shared/email_sources.py).
+    from shared import email_sources
+    monkeypatch.setattr(email_sources, 'STATE_ROOT', tmp_path / 'email_sources')
+    monkeypatch.setattr(email_sources, 'pause', lambda seconds: None)
     # Venue timezones: never the repository's list, never a live LLM call.
     from shared import timezones
     monkeypatch.setattr(timezones, 'MAP_PATH', tmp_path / 'timezone_map.jsonl')

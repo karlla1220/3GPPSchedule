@@ -15,7 +15,7 @@ from urllib.parse import unquote, urljoin, urlparse, urlsplit
 from bs4 import BeautifulSoup
 import httpx
 
-from shared import ftp_transport
+from shared import ftp_transport, listserv
 
 CACHE_DIR = Path('.cache/3gpp')
 MAX_BYTES = 30_000_000
@@ -138,9 +138,10 @@ def _absent_response(url, status):
 
 
 def new_run():
-    """Forget this process's listings and transport failures."""
+    """Forget this process's listings, mail archive pages and transport failures."""
     _LISTINGS.clear()
     _ABSENT.clear()
+    listserv.new_run()
     ftp_transport.reset()
 
 
@@ -168,14 +169,52 @@ def load_listings(path):
     return len(listings) + len(absent)
 
 
+def is_mail_attachment(url):
+    """A file attached to an archived mail (list.etsi.org ``A3=…&N=<name>``)."""
+    return listserv.attachment_name(url) is not None
+
+
+def _fetch_attachment(http, url, sha256=None):
+    """A mail attachment: archived mails do not change, so a stored body is used without asking.
+
+    With sha256 the body must be exactly that file: the link of a mail the
+    page was built from is fetched again only to get the same bytes back.
+    """
+    info, body = _load(url)
+    if body is not None and (sha256 is None or info.get('sha256') == sha256):
+        return body, info
+    own = http is None
+    http = http or client()
+    try:
+        response = http.get(url)
+        response.raise_for_status()
+        body = response.content
+    finally:
+        if own:
+            http.close()
+    if not body or len(body) > MAX_BYTES:
+        raise ValueError(f'Empty or excessive input: {url}')
+    if sha256 is not None and _digest(body) != sha256:
+        raise ValueError(f'{listserv.attachment_name(url)} is not the file it was ({url})')
+    info = {'url': url, 'name': listserv.attachment_name(url), 'size': len(body), 'sha256': _digest(body),
+            'content_type': response.headers.get('content-type'),
+            'content_disposition': response.headers.get('content-disposition')}
+    _save(url, body, info)
+    return body, info
+
+
 def fetch_file(http, url, old=None, local=None):
     """Return (body, metadata); reuse only a verified, revalidated body.
 
     HTTP uses ETag/Last-Modified. FTP compares path, exact size and MDTM before
     RETR. A missing/corrupt body is fetched even when old metadata is available.
     The optional old/local pair supports migration from WG-owned caches.
+    A mail attachment is kept like a public 3GPP file but never revalidated
+    (``_fetch_attachment``).
     """
     old = old or {}
+    if is_mail_attachment(url):
+        return _fetch_attachment(http, url, old.get('sha256') if old.get('url') == url else None)
     public = is_3gpp_file(url)
     if public:
         cached, body = _load(url)
