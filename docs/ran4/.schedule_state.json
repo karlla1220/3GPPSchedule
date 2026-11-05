@@ -33,8 +33,8 @@
     "name": "agenda.csv",
     "size": 16509,
     "sha256": "01b3a1ad4721b3631127bf45f5b66e08903dcf1cb7a3a422c034cd414421b7b1",
-    "etag": "\"5cd0f3853168dd1:0\"",
-    "last_modified": "Fri, 30 Oct 2026 05:43:00 GMT",
+    "etag": "\"c6aa6588e86cdd1:0\"",
+    "last_modified": "Thu, 05 Nov 2026 05:43:06 GMT",
     "ftp_modified": null,
     "content_type": "application/octet-stream",
     "content_disposition": null
@@ -51,7 +51,6 @@
     "ends_at": "2026-10-16T17:30:00+09:00"
   },
   "warnings": [
-    "RAN4 officials history unavailable (The read operation timed out); chairs shown as written",
     "thu-r3c4: '[206] NR_Mob_Ph5_RRM, Chaired by Hua Li (Apple)' names topic 207, not its number; agenda items left out",
     "thu-r8c4: '[102-A/B] System Parameter, Chaired by Leo (Huawei)/Jinqiang (OPPO)' names topic 101-A, not its number; agenda items left out"
   ],

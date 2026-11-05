@@ -25,6 +25,10 @@
     "content_type": "application/octet-stream",
     "content_disposition": null
   },
+  "email": {
+    "list": "3GPP_TSG_RAN_WG2",
+    "checked_through": "2026-11-03T07:17:47+00:00"
+  },
   "metadata": {
     "starts_on": "2026-11-16",
     "ends_on": "2026-11-20",
