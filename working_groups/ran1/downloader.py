@@ -14,7 +14,7 @@ from urllib.parse import unquote, urlsplit
 import httpx
 from bs4 import BeautifulSoup
 
-from shared import remote_files
+from shared import email_sources, file_sources, remote_files
 
 from .models import ScheduleSource
 
@@ -809,7 +809,7 @@ def download_file(url: str, dest_path: Path) -> Path:
     Validates the downloaded content to ensure we didn't receive a
     server error page disguised as a successful response.
     """
-    if remote_files.is_3gpp_file(url):
+    if remote_files.is_3gpp_file(url) or remote_files.is_mail_attachment(url):
         return remote_files.download(url, dest_path)
     print(f"Downloading: {url}")
     last_exc: Exception | None = None
@@ -1667,6 +1667,109 @@ def _dedup_sources(sources: list[ScheduleSource]) -> list[ScheduleSource]:
     return out
 
 
+# ── Schedules mailed to the list (shared/email_sources.py) ──────────────
+#
+# The chair and vice chairs also mail a new version to the list, sometimes
+# before uploading it. A mailed file stands in for one document already found
+# on FTP (Main, or a vice chair's): the one whose file name, without version,
+# draft and closing marks, is the same. Without a matching FTP document the
+# mail is not used: the name alone does not say whose schedule it is
+# ("RAN1#126b Sorour sessions … schedules - v00" names no "schedule for"),
+# while FTP says it by folder. Which copy wins is shared/file_sources.py: the
+# newer version, at equal version the FTP copy, then the earliest mail.
+
+_STEM_MARKS = re.compile(
+    r"(?<![a-z])(?:draft|v\d+(?:[._]\d+)*|(?:eom|final)(?:[ _-]*\d+)?)(?![a-z0-9])",
+    re.IGNORECASE,
+)
+
+
+def is_schedule_name(name: str) -> bool:
+    """A schedule file of a known meeting, as the FTP selection reads names."""
+    lower = name.lower()
+    return ("schedule" in lower and lower.endswith(SCHEDULE_EXTENSIONS)
+            and _extract_meeting_id(name) is not None)
+
+
+def schedule_stem(name: str) -> str:
+    """The name one document keeps across its versions: no version, draft or closing marks."""
+    base = name.rsplit(".", 1)[0].lower()
+    return " ".join(re.findall(r"[a-z0-9#]+", _STEM_MARKS.sub(" ", base)))
+
+
+_MAIL_KEYS = ("url", "name", "uploaded_at", "listing", "origin", "message_id", "sent")
+
+
+def mailed_schedule_files(cfg: dict, state: dict, *, http=None, now=None) -> tuple[list[dict], dict | None]:
+    """Schedule attachments on the list, and the mailed files the last build used.
+
+    The built files are read from the committed state: an archived mail does
+    not change and stays fetchable, so a build never steps back to an older
+    FTP version because the CI cache lost the mail. ``([], None)`` when no
+    list is configured.
+    """
+    list_name = cfg.get("email_list")
+    if not list_name:
+        return [], None
+    own = http is None
+    http = http or remote_files.client()
+    try:
+        scan = email_sources.for_wg("ran1", list_name, is_schedule_name, http, now=now, previous=state)
+    finally:
+        if own:
+            http.close()
+    files = {
+        entry["url"]: {key: entry.get(key) for key in _MAIL_KEYS}
+        for entry in state.get("files") or []
+        if isinstance(entry, dict) and entry.get("origin") == file_sources.EMAIL and entry.get("url")
+    }
+    files.update({entry["url"]: entry for entry in scan.files})
+    return list(files.values()), email_sources.manifest_record(scan)
+
+
+def _with_mail(sources: list[ScheduleSource], mail_files: list[dict] | None) -> list[ScheduleSource]:
+    """Each FTP source, or a mailed version of the same document that outranks it."""
+    if not mail_files:
+        return sources
+
+    def version(entry):
+        return _release_key(entry["name"])
+
+    def ftp_order(entry):
+        uploaded = entry.get("uploaded_at")
+        return (uploaded.timestamp() if isinstance(uploaded, datetime) else 0.0, entry["name"].lower(), entry["name"])
+
+    for source in sources:
+        if source.origin != "remote" or source.local_path is not None:
+            continue
+        name = source.file_info.get("name", "")
+        meeting, stem = _extract_meeting_id(name), schedule_stem(name)
+        same = [m for m in mail_files
+                if _extract_meeting_id(m["name"]) == meeting and schedule_stem(m["name"]) == stem]
+        if not same:
+            continue
+        best = file_sources.choose([source.file_info, *same], version, ftp_order)
+        if file_sources.origin(best) == file_sources.EMAIL:
+            sent = best.get("sent")
+            source.file_info = {**best, "uploaded_at": datetime.fromisoformat(sent) if sent else None}
+            print(f"  Mailed: {best['name']} ({best.get('listing')}) for {source.folder_name}/{name}")
+    return sources
+
+
+def _state_entry(source: ScheduleSource) -> dict:
+    """One selected source as the state and the check job record it."""
+    uploaded_at = source.file_info.get("uploaded_at")
+    entry = {
+        "folder": source.folder_name,
+        "name": source.file_info["name"],
+        "uploaded_at": uploaded_at.isoformat() if isinstance(uploaded_at, datetime) else uploaded_at,
+    }
+    if file_sources.origin(source.file_info) == file_sources.EMAIL:
+        # The mail it came from, so a later run can use it again.
+        entry.update({key: source.file_info.get(key) for key in _MAIL_KEYS if key not in entry})
+    return entry
+
+
 def _current_meeting_from_sources(
     sources: list[ScheduleSource],
     preferred_meeting_id: str | None = None,
@@ -1913,6 +2016,7 @@ def discover_schedule_sources(
     local_schedule_sources: list[ScheduleSource] | None = None,
     preferred_meeting_id: str | None = None,
     locked_meeting_id: str | None = None,
+    mail_files: list[dict] | None = None,
 ) -> list[ScheduleSource]:
     """Discover schedule sources across one or more inbox URLs and extra folders.
 
@@ -1936,6 +2040,10 @@ def discover_schedule_sources(
     ``locked_meeting_id`` is used for an authoritative local reference. When
     set, all remote discovery is restricted to that exact meeting so a newer
     FTP meeting cannot displace the local input.
+
+    ``mail_files`` are schedule attachments from the list
+    (``mailed_schedule_files``); a newer mailed version of a found document
+    replaces it (``_with_mail``).
     """
     if urls is None:
         urls = [url] if url is not None else [INBOX_URL]
@@ -1966,7 +2074,7 @@ def discover_schedule_sources(
         all_sources,
         preferred_meeting_id=preferred_meeting_id,
     )
-    return _dedup_sources(_filter_sources_to_meeting(all_sources, current_meeting_id))
+    return _with_mail(_dedup_sources(_filter_sources_to_meeting(all_sources, current_meeting_id)), mail_files)
 
 
 def _fallback_chair_only(
@@ -2009,7 +2117,8 @@ def download_schedule_source(
     dest_dir = base_dir / source.folder_name
     dest_path = dest_dir / source.file_info["name"]
 
-    if dest_path.exists() and not remote_files.is_3gpp_file(source.file_info["url"]):
+    url = source.file_info["url"]
+    if dest_path.exists() and not (remote_files.is_3gpp_file(url) or remote_files.is_mail_attachment(url)):
         if dest_path.suffix.lower() == ".zip":
             extracted = _find_extracted_document(dest_path)
             if extracted:
@@ -2082,6 +2191,7 @@ def save_schedule_state(
     agenda: dict | None = None,
     agreements_ref: dict | None = None,
     local_refs: dict[str, str] | None = None,
+    email: dict | None = None,
 ) -> None:
     """Persist FTP state from already-fetched ScheduleSource objects.
 
@@ -2100,19 +2210,7 @@ def save_schedule_state(
     """
     import json
 
-    info: list[dict] = []
-    for s in sources:
-        uploaded_at = s.file_info.get("uploaded_at")
-        info.append({
-            "folder": s.folder_name,
-            "name": s.file_info["name"],
-            "uploaded_at": (
-                uploaded_at.isoformat()
-                if isinstance(uploaded_at, datetime)
-                else uploaded_at  # already a string or None
-            ),
-        })
-    info.sort(key=lambda x: x.get("folder", ""))
+    info = sorted((_state_entry(s) for s in sources), key=lambda x: x.get("folder", ""))
 
     state: dict = {"files": info, "agreements_ref": agreements_ref}
     if meeting_id is not None:
@@ -2128,6 +2226,9 @@ def save_schedule_state(
         state["agenda"] = agenda
     if local_refs is not None:
         state["local_refs"] = local_refs
+    if email is not None:
+        # How far the list was read (shared/email_sources.py).
+        state["email"] = email
 
     state_path.parent.mkdir(parents=True, exist_ok=True)
     state_path.write_text(json.dumps(state, ensure_ascii=False, indent=2))
@@ -2223,6 +2324,7 @@ def get_all_remote_schedule_info(
     extra_folders: list[dict] | None = None,
     preferred_meeting_id: str | None = None,
     locked_meeting_id: str | None = None,
+    mail_files: list[dict] | None = None,
 ) -> list[dict]:
     """Return metadata of the schedule sources selected for a build.
 
@@ -2250,21 +2352,10 @@ def get_all_remote_schedule_info(
         extra_folders=extra_folders,
         preferred_meeting_id=preferred_meeting_id,
         locked_meeting_id=locked_meeting_id,
+        mail_files=mail_files,
     )
 
-    result: list[dict] = []
-    for source in sources:
-        uploaded_at = source.file_info.get("uploaded_at")
-        result.append({
-            "folder": source.folder_name,
-            "name": source.file_info["name"],
-            "uploaded_at": (
-                uploaded_at.isoformat()
-                if isinstance(uploaded_at, datetime)
-                else uploaded_at
-            ),
-        })
-
+    result = [_state_entry(source) for source in sources]
     result.sort(key=lambda x: (x.get("folder", ""), x.get("name", "")))
     return result
 

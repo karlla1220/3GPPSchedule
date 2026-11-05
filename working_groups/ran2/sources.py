@@ -65,7 +65,6 @@ FOLDER = re.compile(r'TSGR2_(\d+)(bis|b)?(?:-?e)?/?', re.I)
 FOLDER_KEYS = ('meeting_specific', 'meeting_specific_override')
 # Where a document is found does not change how it is read.
 PLACE_KEYS = (*FOLDER_KEYS, 'email_list')
-LIST_NAME = re.compile(r'3GPP_[A-Z0-9_]+')
 
 
 def digest(data: bytes) -> str:
@@ -89,9 +88,7 @@ def load_config() -> dict:
                        or not FOLDER.fullmatch(url.rstrip('/').rsplit('/', 1)[-1] + '/')
                        for url in result[name])):
             raise ValueError(f'{name} must list RAN2 meeting folder URLs such as .../TSGR2_135bis/')
-    if result['email_list'] is not None and not (isinstance(result['email_list'], str)
-                                                 and LIST_NAME.fullmatch(result['email_list'])):
-        raise ValueError('email_list must be null or a list name such as 3GPP_TSG_RAN_WG2')
+    email_sources.check_list_name(result['email_list'])
     if not isinstance(result['meetings'], dict):
         raise ValueError('meetings must map a meeting such as "135bis" to its metadata')
     for key, value in result['meetings'].items():
@@ -205,13 +202,8 @@ def version(entry: dict) -> int:
 
 def mailed(cfg, previous, http, now) -> email_sources.Scan | None:
     """Schedules attached to new mails on the list; None when no list is read."""
-    if not cfg['email_list']:
-        return None
-    found = email_sources.scan('ran2', cfg['email_list'], lambda name: file_info(name) is not None, http,
-                               now=now, checked_through=(previous.get('email') or {}).get('checked_through'))
-    for note in found.notes:
-        print(f'[ran2] {note}')
-    return found
+    return email_sources.for_wg('ran2', cfg['email_list'], lambda name: file_info(name) is not None, http,
+                                now=now, previous=previous)
 
 
 def choose_schedule(candidates: list[dict], dates: dict, now, built=None) -> dict:

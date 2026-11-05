@@ -25,7 +25,7 @@ import zipfile
 
 import httpx
 
-from shared import meeting_folders, meeting_turn, remote_files
+from shared import email_sources, file_sources, meeting_folders, meeting_turn, remote_files
 from shared.json_files import read_json, write_json
 from shared.meeting_folders import portal_metadata
 from shared.portal_meetings import TB_IDS, get_meetings, meeting_key
@@ -55,10 +55,15 @@ DEFAULTS = {
     'llm_fallback': True,
     'model': 'gemini-3.8-flash',
     'meetings': {},
+    # The mailing list whose attachments are read for new versions; null reads no mail
+    # (shared/email_sources.py).
+    'email_list': None,
 }
 METADATA_KEYS = {'starts_on', 'ends_on', 'starts_at', 'ends_at', 'location', 'country', 'timezone'}
 FOLDER = re.compile(r'TSGS2_(\d+)(?:_[^/]*)?/?', re.I)
 FOLDER_KEYS = ('meeting_specific', 'meeting_specific_override')
+# Where a document is found does not change how it is read.
+PLACE_KEYS = (*FOLDER_KEYS, 'email_list')
 PLANS = 'DRAFTS/_Session_Plan_Updates/'
 
 
@@ -85,6 +90,7 @@ def load_config() -> dict:
                        or not FOLDER.fullmatch(unquote(url.rstrip('/').rsplit('/', 1)[-1]) + '/')
                        for url in result[name])):
             raise ValueError(f'{name} must list SA2 meeting folder URLs such as .../TSGS2_177_Prague_2026-10/')
+    email_sources.check_list_name(result['email_list'])
     if not isinstance(result['meetings'], dict):
         raise ValueError('meetings must map a meeting such as "178" to its metadata')
     for key, value in result['meetings'].items():
@@ -95,7 +101,7 @@ def load_config() -> dict:
 
 def config_hash(cfg) -> str:
     # Where a document is found does not change how it is read.
-    return digest(json.dumps({k: v for k, v in cfg.items() if k not in FOLDER_KEYS}, sort_keys=True).encode())
+    return digest(json.dumps({k: v for k, v in cfg.items() if k not in PLACE_KEYS}, sort_keys=True).encode())
 
 
 def rank(meeting: str) -> int:
@@ -194,9 +200,20 @@ def schedule_candidates(entries: list[dict]) -> list[dict]:
     return result
 
 
-def order(entry: dict) -> tuple:
-    """Revision, then upload time: "-r14 - Friday plan" came after "-r14", and #176's r15 before r14."""
-    return entry['version'], entry.get('uploaded_at') or '', 'Meetings_3GPP_SYNC' in entry['url'], entry['name']
+def version(entry: dict) -> int:
+    return entry['version']
+
+
+def ftp_order(entry: dict) -> tuple:
+    """FTP copies of one revision: the later upload, then the live copy.
+
+    "-r14 - Friday plan" came after "-r14", and #176's r15 before r14 (the revision decides first).
+    """
+    return entry.get('uploaded_at') or '', 'Meetings_3GPP_SYNC' in entry['url'], entry['name']
+
+
+def uploaded(entry: dict) -> str:
+    return entry.get('uploaded_at') or ''
 
 
 # --------------------------------------------------------------------- Portal
@@ -226,7 +243,7 @@ def choose_schedule(candidates: list[dict], dates: dict, now, built=None) -> dic
     same = [c for c in candidates if c['meeting_id'] == meeting]
     if not same:
         raise ValueError(f'No SA2 Session Plan of {meeting} listed')
-    return max(same, key=order)
+    return file_sources.choose(same, version, ftp_order)
 
 
 # -------------------------------------------------------------------- bundles
@@ -251,19 +268,19 @@ def sync_warnings(bundle, error, dates, now) -> Bundle:
     return bundle
 
 
-def built_copy(cfg, previous, chosen, candidates, rows, error) -> Bundle | None:
+def built_copy(cfg, previous, chosen, candidates, rows, error, http=None) -> Bundle | None:
     """The built plan, when its file is gone and nothing newer is listed.
 
     The sync folder can lose a plan at any time (replaced, cleared); never
     step back within a meeting. Without its stored body, raise error.
     """
     old = previous.get('schedule') or {}
+    built = {**old, 'version': previous.get('version', -1)} if old.get('url') else None
     if (previous.get('meeting_id') != chosen['meeting_id']
-            or (previous.get('version', -1), old.get('uploaded_at') or '') < (chosen['version'], chosen['uploaded_at'])
-            or any(c['url'] == old.get('url') for c in candidates)):
+            or not file_sources.keep_built(built, chosen, candidates, version, uploaded)):
         return None
     error = error or ValueError(f"{old.get('name')} is no longer listed and its stored copy is missing")
-    schedule = remote_files.cached(old['url'], old.get('sha256'))
+    schedule = file_sources.built_body(built, http)
     agenda_info = previous.get('agenda') or None
     agenda = remote_files.cached(agenda_info['url'], agenda_info.get('sha256')) if agenda_info else b''
     if schedule is None or agenda is None:
@@ -293,13 +310,20 @@ def fetch_bundle(cfg, previous, http, *, rows=None, now=None, cache_dir=DOWNLOAD
         plans, agendas[meeting] = meeting_folder(archive[meeting], http)
         entries.extend(plans)
     candidates = schedule_candidates(entries)
+    scan = email_sources.for_wg('sa2', cfg['email_list'], lambda name: file_info(name) is not None, http,
+                                now=now, previous=previous)
+    if scan is not None:
+        # Mail of the meetings this run reads; an old plan forwarded later is not a candidate.
+        candidates += [c for c in schedule_candidates(scan.files) if not wanted or c['meeting_id'] in wanted]
     if sync_error is not None and not candidates:
         raise sync_error
     chosen = choose_schedule(candidates, dates, now, previous.get('meeting_id'))
-    kept = built_copy(cfg, previous, chosen, candidates, rows, sync_error)
+    kept = built_copy(cfg, previous, chosen, candidates, rows, sync_error, http)
     if kept is not None:
         print(f"[sa2] Keeping {kept.manifest['schedule']['name']}: it is no longer listed, "
               f"and {chosen['name']} is not newer")
+        if scan is not None:
+            kept.manifest['email'] = email_sources.manifest_record(scan)
         return sync_warnings(kept, sync_error, dates, now)
     meeting = chosen['meeting_id']
     if meeting not in agendas:
@@ -321,8 +345,9 @@ def fetch_bundle(cfg, previous, http, *, rows=None, now=None, cache_dir=DOWNLOAD
         agenda, agenda_info = fetch_file(http, agenda_entry['url'], previous.get('agenda') or {},
                                          cached.agenda if cached and cached.agenda else None)
     manifest = {'meeting_id': meeting, 'version': chosen['version'], 'config_hash': config_hash(cfg),
-                'schedule': {**{k: chosen[k] for k in ('name', 'url', 'uploaded_at')}, **schedule_info},
-                'agenda': agenda_info}
+                'schedule': file_sources.source_record(chosen, schedule_info), 'agenda': agenda_info}
+    if scan is not None:
+        manifest['email'] = email_sources.manifest_record(scan)
     metadata = portal_metadata(rows or [], meeting)
     if metadata:
         manifest['portal_metadata'] = metadata

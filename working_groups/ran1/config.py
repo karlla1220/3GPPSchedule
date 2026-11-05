@@ -173,6 +173,8 @@ def load_config(path: Path = DEFAULT_CONFIG_PATH) -> dict:
                                           each base + 'Agenda/'
         extra_folders    : list[dict]   — manually-listed folders
         extra_files      : list[dict]   — manually-listed external files
+        email_list       : str | None   — mailing list whose attachments are read for
+                                          new schedule versions (shared/email_sources.py)
     """
     meeting_sync: str | None = DEFAULT_MEETING_SYNC
     meeting_specific: list[str] = []
@@ -180,6 +182,7 @@ def load_config(path: Path = DEFAULT_CONFIG_PATH) -> dict:
     legacy_inbox: list[str] = []
     extra_folders: list[dict] = []
     extra_files: list[dict] = []
+    email_list: str | None = None
 
     # 1. config.json
     if path.exists():
@@ -228,6 +231,13 @@ def load_config(path: Path = DEFAULT_CONFIG_PATH) -> dict:
 
         if isinstance(data.get("extra_files"), list):
             extra_files = [e for e in data["extra_files"] if isinstance(e, dict)]
+
+        from shared.email_sources import check_list_name
+        try:
+            check_list_name(data.get("email_list"))
+            email_list = data.get("email_list")
+        except ValueError as e:
+            print(f"Warning: {e} — reading no mail")
 
     # 2. Environment overrides
     env_sync = os.environ.get("SCHEDULE_MEETING_SYNC")
@@ -285,6 +295,7 @@ def load_config(path: Path = DEFAULT_CONFIG_PATH) -> dict:
         "legacy_inbox": [_normalize_url(u) for u in legacy_inbox],
         "extra_folders": extra_folders,
         "extra_files": extra_files,
+        "email_list": email_list,
     })
 
 

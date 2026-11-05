@@ -34,6 +34,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
+import re
 import time
 from typing import Callable
 from xml.etree.ElementTree import ParseError
@@ -48,6 +49,7 @@ MAX_OPENS = 20
 OVERLAP = timedelta(hours=24)
 KEEP_FILES = timedelta(days=60)
 ORIGIN = 'email'
+LIST_NAME = re.compile(r'3GPP_[A-Z0-9_]+')
 # Waits between requests to the archive (tests replace it).
 pause = time.sleep
 
@@ -199,6 +201,28 @@ def scan(wg: str, list_name: str, accept: Callable[[str], bool], http, *, now: d
     write_json(state_path(wg), state)
     result.files = list(state['files'])
     return result
+
+
+def check_list_name(value) -> None:
+    """A WG's ``email_list`` setting: null (no mail read) or a list name such as 3GPP_TSG_RAN_WG2."""
+    if value is not None and not (isinstance(value, str) and LIST_NAME.fullmatch(value)):
+        raise ValueError('email_list must be null or a list name such as 3GPP_TSG_RAN_WG2')
+
+
+def for_wg(wg: str, list_name: str | None, accept: Callable[[str], bool], http, *, now=None,
+           previous: dict | None = None) -> Scan | None:
+    """A WG's scan: None when it reads no list; the notes go to the log, prefixed with the WG.
+
+    ``previous`` is the WG's manifest; its ``email.checked_through`` is where
+    reading resumes when the CI cache is gone.
+    """
+    if not list_name:
+        return None
+    found = scan(wg, list_name, accept, http, now=now,
+                 checked_through=((previous or {}).get('email') or {}).get('checked_through'))
+    for note in found.notes:
+        print(f'[{wg}] {note}')
+    return found
 
 
 def manifest_record(scan_result: Scan | None) -> dict | None:

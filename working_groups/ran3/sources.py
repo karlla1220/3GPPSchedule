@@ -27,7 +27,7 @@ from urllib.parse import urlparse
 
 import httpx
 
-from shared import meeting_folders, meeting_turn, remote_files
+from shared import email_sources, file_sources, meeting_folders, meeting_turn, remote_files
 from shared.json_files import read_json, write_json
 from shared.meeting_folders import portal_metadata
 from shared.portal_meetings import TB_IDS, get_meetings, meeting_key
@@ -57,10 +57,15 @@ DEFAULTS = {
     'officials_code': 'R3',
     'chair_aliases': {'L': 'XU, Lixiang', 'X': 'YANG, Xudong', 'G': 'CAO, Gen'},
     'meetings': {},
+    # The mailing list whose attachments are read for new versions; null reads no mail
+    # (shared/email_sources.py).
+    'email_list': None,
 }
 METADATA_KEYS = {'starts_on', 'ends_on', 'starts_at', 'ends_at', 'location', 'country', 'timezone'}
 FOLDER = re.compile(r'TSGR3_(\d+)(-?bis)?(?:-?e)?/?', re.I)
 FOLDER_KEYS = ('meeting_specific', 'meeting_specific_override')
+# Where a document is found does not change how it is read.
+PLACE_KEYS = (*FOLDER_KEYS, 'email_list')
 CHAIRS = 'Inbox/Chairs_Notes/'
 OFFLINE = 'Offline_meeting_room/'
 OFFLINE_FILE = re.compile(r'RAN3[ _]offline[ _]discussion[ _]*ver[ _]*(\d+)\.xlsx', re.I)
@@ -91,6 +96,7 @@ def load_config() -> dict:
                        or not FOLDER.fullmatch(url.rstrip('/').rsplit('/', 1)[-1] + '/')
                        for url in result[name])):
             raise ValueError(f'{name} must list RAN3 meeting folder URLs such as .../TSGR3_133-bis/')
+    email_sources.check_list_name(result['email_list'])
     if not isinstance(result['meetings'], dict):
         raise ValueError('meetings must map a meeting such as "133bis" to its metadata')
     for key, value in result['meetings'].items():
@@ -101,7 +107,7 @@ def load_config() -> dict:
 
 def config_hash(cfg) -> str:
     # Where a document is found does not change how it is read.
-    return digest(json.dumps({k: v for k, v in cfg.items() if k not in FOLDER_KEYS},
+    return digest(json.dumps({k: v for k, v in cfg.items() if k not in PLACE_KEYS},
                              sort_keys=True).encode())
 
 
@@ -227,7 +233,12 @@ def choose_schedule(candidates: list[dict], dates: dict, now, built=None) -> dic
     if not same:
         raise ValueError(f'No RAN3 living agenda of {meeting} listed')
     # The sync folder is the live copy; the archive gets the same files at the close.
-    return max(same, key=lambda c: (c['version'], 'Meetings_3GPP_SYNC' in c['url'], c['uploaded_at'], c['name']))
+    return file_sources.choose(same, version)
+
+
+def version(entry: dict) -> str:
+    """The date and time in the name ("20261014_1825"): later is newer."""
+    return str(entry['version'])
 
 
 # -------------------------------------------------------------------- bundles
@@ -255,22 +266,23 @@ def sync_warnings(bundle, error, dates, now) -> Bundle:
     return bundle
 
 
-def built_copy(cfg, previous, chosen, candidates, rows, error) -> Bundle | None:
+def built_copy(cfg, previous, chosen, candidates, rows, error, http=None) -> Bundle | None:
     """The built version, when its file is gone and nothing newer is listed.
 
     Never step back within a meeting: the sync folder can lose a version at
     any time. Without its stored body, raise error.
     """
     old = previous.get('schedule') or {}
+    built = {**old, 'version': str(previous.get('version', ''))} if old.get('url') else None
     if (previous.get('meeting_id') != chosen['meeting_id']
-            or str(previous.get('version', '')) < chosen['version']
-            or any(c['url'] == old.get('url') for c in candidates)):
+            or not file_sources.keep_built(built, chosen, candidates, version)):
         return None
     error = error or ValueError(f"{old.get('name')} is no longer listed and its stored copy is missing")
     bodies = {}
     for key in INPUTS:
         info = previous.get(key) or None
-        bodies[key] = remote_files.cached(info['url'], info.get('sha256')) if info else b''
+        bodies[key] = (file_sources.built_body(built, http) if key == 'schedule'
+                       else remote_files.cached(info['url'], info.get('sha256')) if info else b'')
         if bodies[key] is None:
             raise error
     manifest = {'meeting_id': previous['meeting_id'], 'version': previous['version'],
@@ -296,20 +308,29 @@ def fetch_bundle(cfg, previous, http, *, rows=None, now=None, cache_dir=DOWNLOAD
     for meeting in [m for m in wanted if m in archive]:
         entries.extend(subfolder(archive[meeting], CHAIRS, http))
     candidates = schedule_candidates(entries)
+    scan = email_sources.for_wg('ran3', cfg['email_list'], lambda name: file_info(name) is not None, http,
+                                now=now, previous=previous)
+    if scan is not None:
+        # Mail of the meetings this run reads; an old version forwarded later is not a candidate.
+        candidates += [c for c in schedule_candidates(scan.files) if not wanted or c['meeting_id'] in wanted]
     if sync_error is not None and not candidates:
         raise sync_error
     chosen = choose_schedule(candidates, dates, now, previous.get('meeting_id'))
-    kept = built_copy(cfg, previous, chosen, candidates, rows, sync_error)
+    kept = built_copy(cfg, previous, chosen, candidates, rows, sync_error, http)
     if kept is not None:
         print(f"[ran3] Keeping {kept.manifest['schedule']['name']}: it is no longer listed, "
               f"and {chosen['name']} is not newer")
+        if scan is not None:
+            kept.manifest['email'] = email_sources.manifest_record(scan)
         return sync_warnings(kept, sync_error, dates, now)
     meeting = chosen['meeting_id']
     if meeting not in archive:
         # A meeting known only from the sync folder (Portal unavailable).
         archive.update(find_folders(cfg, [meeting], rows, http))
     folder = archive.get(meeting)
-    live = chosen['listing'] == sync_chairs
+    # A mailed version during the meeting goes with the live offline sheet too.
+    live = chosen['listing'] == sync_chairs or (file_sources.origin(chosen) == file_sources.EMAIL
+                                                and meeting_turn.in_progress(meeting, dates, now))
     # The offline sheet beside the living agenda: live during the meeting, archived after it.
     offline_entries = (sync_listing(sync_offline, http) if live and sync_error is None
                        else subfolder(folder, OFFLINE, http) if folder else [])
@@ -330,7 +351,9 @@ def fetch_bundle(cfg, previous, http, *, rows=None, now=None, cache_dir=DOWNLOAD
             continue
         old_body = getattr(cached, key) if cached and getattr(cached, key) else None
         bodies[key], info = fetch_file(http, entry['url'], previous.get(key) or {}, old_body)
-        manifest[key] = {**{k: entry[k] for k in ('name', 'url', 'uploaded_at')}, **info}
+        manifest[key] = file_sources.source_record(entry, info)
+    if scan is not None:
+        manifest['email'] = email_sources.manifest_record(scan)
     metadata = portal_metadata(rows or [], meeting)
     if metadata:
         manifest['portal_metadata'] = metadata
