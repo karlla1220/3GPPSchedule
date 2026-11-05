@@ -242,3 +242,16 @@ def test_meeting_id_cannot_close_the_support_script():
     assert r'\u003c/script>' in script.string
     assert run_note(schedule, '2026-10-17T00:00:00Z', dismiss=True)['stored'] == {
         '3gpp_schedule_support_dismissed:ran1:</script><b>': 'true'}
+
+
+def test_a_mailed_source_says_so_and_links_the_mail():
+    name = 'R2_136_Schedule_v01.docx'
+    mail = 'https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG2;c0a1.2611c'
+    schedule = replace(build_schedule(), source_files=[name, 'agenda.csv'],
+                       source_labels={name: 'Schedule'}, source_mails={name: mail})
+    assert sources(source_files=schedule.source_files, source_labels=schedule.source_labels,
+                   source_mails=schedule.source_mails)[0] == 'Sources: Schedule\xa0v01\xa0(email) '
+    link = BeautifulSoup(render_header(schedule), 'html.parser').select_one('p.meta a[href*="list.etsi.org"]')
+    assert link['href'] == mail and link['target'] == '_blank' and link.get_text() == 'email'
+    # Uploaded files carry no mark.
+    assert '(email)' not in sources(source_files=[name], source_labels={name: 'Schedule'})[0]

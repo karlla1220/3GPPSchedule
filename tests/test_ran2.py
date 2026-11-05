@@ -674,6 +674,24 @@ def test_local_build_needs_no_network_and_records_state(offline_config, tmp_path
     assert again.days == schedule.days
 
 
+def test_a_page_built_from_a_mail_names_the_mail(offline_config, tmp_path, monkeypatch):
+    """A prepared bundle whose schedule came from the list: the Sources line says so."""
+    bundle = sources.local_bundle(FIXTURES / V11, offline_config)
+    mail = 'https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG2;c0a1.2611c'
+    bundle.manifest['schedule'].update(origin='email', message_id='c0a1.2611c', listing=mail,
+                                       sent='2026-08-26T15:00:00+00:00')
+    bundle.manifest['email'] = {'list': '3GPP_TSG_RAN_WG2', 'checked_through': '2026-08-26T16:00:00+00:00'}
+    bundle.save(sources.DOWNLOADS / 'prepared')
+    monkeypatch.setattr(pipeline, 'portal_rows', lambda: [])  # the configured dates decide
+    schedule = pipeline.build_schedule(SimpleNamespace(output_dir=tmp_path / 'out'))
+    assert schedule.source_mails == {V11: mail}
+    from shared.page import render_sources
+    assert f'href="{mail}"' in render_sources(schedule) and '(<a' in render_sources(schedule)
+    # The committed state names the mail and how far the list was read.
+    state = sources.read_json(tmp_path / 'out/ran2/.schedule_state.json')
+    assert state['schedule']['message_id'] == 'c0a1.2611c' and state['email']['checked_through']
+
+
 def test_a_new_meeting_without_dates_fails_clearly(offline_config, tmp_path, monkeypatch):
     offline_config['meetings'] = {}
     monkeypatch.setattr(pipeline, 'portal_rows', lambda: None)

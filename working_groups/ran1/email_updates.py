@@ -223,14 +223,14 @@ def pending(schedule: Schedule, *, now: datetime | None = None, http=None) -> li
     first = _meeting_days(schedule)[0] - timedelta(days=LEAD_DAYS)
     tz = ZoneInfo(schedule.timezone or "UTC")
     from .email_sessions import feed_url, parse_feed
+    from shared import listserv
     from shared.remote_files import client
 
     own = http is None
     http = http or client(timeout=30)
     try:
-        response = http.get(feed_url())
-        response.raise_for_status()
-        mails = parse_feed(response.text)
+        # Read once per run; build reuses this feed (shared/listserv.py).
+        mails = parse_feed(listserv.page(http, feed_url()))
     finally:
         if own:
             http.close()

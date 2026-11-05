@@ -193,7 +193,7 @@ def _build_site(action, config, plan_path):
             raise ValueError('CI plan contains an inactive WG')
         from shared.portal_meetings import use_meetings
         from shared.remote_files import load_listings
-        print(f'Reusing {load_listings(plan_path.parent / LISTINGS_PATH.name)} folder listing(s) from check')
+        print(f'Reusing {load_listings(plan_path.parent / LISTINGS_PATH.name)} folder listing(s) and mail page(s) from check')
         if plan.get('portal_meetings') is not None:
             use_meetings(plan['portal_meetings'])
     else:

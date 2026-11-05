@@ -57,3 +57,39 @@ def test_a_control_character_in_a_subject_does_not_break_the_feed():
            '<pubDate>Thu, 5 Nov 2026 01:00:00 +0000</pubDate></item></channel></rss>')
     [item] = listserv.parse_feed(xml)
     assert item.id == '0a1b.2611a' and '[POST135bis][504][XR]' in item.title
+
+
+def test_pages_are_kept_small_and_read_the_same():
+    message = 'https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG2;8ee902d7.2611a'
+    index = 'https://list.etsi.org/scripts/wa.exe?A1=ind2611A&L=3GPP_TSG_RAN_WG2'
+    page = (FIXTURES / 'message_page.html').read_text()
+    rows = (FIXTURES / 'week_index.html').read_text()
+    kept = listserv.slim(message, page)
+    # Only the part links stay; attachments and the body link read the same.
+    assert len(kept) < len(page) / 2 and 'Diana' not in kept
+    assert listserv.attachments(kept) == listserv.attachments(page)
+    assert listserv.body_url(kept) == listserv.body_url(page)
+    assert listserv.parse_index(listserv.slim(index, rows), '3GPP_TSG_RAN_WG2') == \
+        listserv.parse_index(rows, '3GPP_TSG_RAN_WG2')
+    feed = RAN1_FEED.read_text(encoding='utf-8')
+    assert listserv.slim(listserv.feed_url('3GPP_TSG_RAN_WG1'), feed) == feed
+
+
+def test_check_hands_the_pages_it_read_to_build(tmp_path):
+    import httpx
+    from shared import remote_files
+    url = listserv.feed_url('3GPP_TSG_RAN_WG2')
+    calls = []
+
+    def handler(request):
+        calls.append(str(request.url))
+        return httpx.Response(200, text='<rss/>')
+    with httpx.Client(transport=httpx.MockTransport(handler)) as http:
+        assert listserv.page(http, url) == listserv.page(http, url) == '<rss/>'
+        assert len(calls) == 1  # once per run
+        remote_files.save_listings(tmp_path / 'listings.json')
+        remote_files.new_run()
+        assert remote_files.load_listings(tmp_path / 'listings.json') == 1
+        assert listserv.page(http, url) == '<rss/>' and len(calls) == 1
+    # Only archive pages are taken back.
+    assert listserv.restore({'https://example.com/x': 'y', url: 1}) == 0

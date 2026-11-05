@@ -20,6 +20,7 @@ from shared import ftp_transport, listserv
 CACHE_DIR = Path('.cache/3gpp')
 MAX_BYTES = 30_000_000
 # Folder listings already fetched in this run: url -> (content type, body).
+# Mailing list pages are kept by shared/listserv.py and handed on with these.
 # RAN1 reads the same Inbox and Chair_notes listings from several places, and
 # build reads what check listed a minute earlier (save_listings/load_listings).
 TIMESTAMP = re.compile(r'(\d{4})[/-](\d{2})[/-](\d{2})\s+(\d{1,2}):(\d{2})')
@@ -152,13 +153,18 @@ def save_listings(path):
     saved = {url: {'content_type': kind, 'body': base64.b64encode(body).decode()}
              for url, (kind, body) in _LISTINGS.items()}
     saved.update({url: {'absent': status} for url, status in _ABSENT.items()})
+    # The mailing list pages read too (shared/listserv.py), so build does not ask again.
+    saved.update({url: {'mail_page': text} for url, text in listserv.saved().items()})
     path.write_text(json.dumps(saved))
 
 
 def load_listings(path):
-    """Reuse the listings the check of this run saved; returns how many."""
+    """Reuse the listings (and mailing list pages) the check of this run saved; returns how many."""
     try:
-        saved = {url: entry for url, entry in json.loads(Path(path).read_text()).items() if is_3gpp_file(url)}
+        everything = json.loads(Path(path).read_text())
+        mail = {url: entry['mail_page'] for url, entry in everything.items()
+                if isinstance(entry, dict) and 'mail_page' in entry}
+        saved = {url: entry for url, entry in everything.items() if is_3gpp_file(url)}
         absent = {url: int(entry['absent']) for url, entry in saved.items() if 'absent' in entry}
         listings = {url: (entry['content_type'], base64.b64decode(entry['body']))
                     for url, entry in saved.items() if 'absent' not in entry}
@@ -166,7 +172,7 @@ def load_listings(path):
         return 0
     _LISTINGS.update(listings)
     _ABSENT.update(absent)
-    return len(listings) + len(absent)
+    return len(listings) + len(absent) + listserv.restore(mail)
 
 
 def is_mail_attachment(url):

@@ -428,6 +428,7 @@ HTML은 `shared/page.py`, 표시 판단은 `templates/support-note.js`, 값은 `
   - Draft 파일은 버전 앞에 `draft`를 적는다(`Main draft v03`). 의장이 `Draft`를 떼면서 `v00`부터 다시 매기므로,
     숫자만 보면 `v03` 다음에 `v00`이 나와 뒤로 간 것처럼 보인다. Agreement 패널의 변경 줄(`· Chair notes draft v01`)도 같다.
   - Final·EOM 파일은 그 낱말과 번호를 적는다(`Chair notes Final`, `Chair notes EOM`, `Chair notes EOM2`). 버전 번호가 없다.
+  - 메일링 리스트에서 받은 파일은 `(email)`을 붙이고 그 낱말이 메일로 가는 링크다(`Schedule v01 (email)`, `Schedule.source_mails`). 아직 FTP에 올라온 파일이 아니라는 것을 밝힌다. 같은 판이 FTP에 올라오면 그 파일로 바뀌고 표시도 사라진다. 다른 링크처럼 밑줄로만 구별한다.
 - **제작자 줄은 맨 아래 두 줄이다.** `Created by 이름 (메일), 소개` 아래에 `면책 문구 · Feedback`.
   - 메일 주소는 그대로 적는다. `Feedback`(GitHub Issues)만 두면 계정이 없는 참석자는 연락할 방법이 없다.
   헤더 meta 링크는 meta 회색을 그대로 쓰고 밑줄로만 구별한다.
@@ -494,6 +495,10 @@ LISTSERV 읽기는 `shared/listserv.py`, 메일 원천은 `shared/email_sources.
   - 저장소: 빌드할 때의 manifest(`docs/<wg>/.schedule_state.json`)에 읽은 시점(`email.checked_through`)과 페이지를 만든 메일(`schedule.origin`, `message_id`, `sent`)만 적는다. 빌드는 어차피 커밋하므로 커밋이 늘지 않는다. 읽은 시점만 바뀐 것은 빌드 사유가 아니다.
   - 캐시가 사라지면 manifest의 시점부터 다시 읽는다. 메일 Date는 보낸 사람 시계라서 그 시점보다 하루 앞(`OVERLAP`)까지 다시 본다.
   - 피드가 마지막으로 읽은 시점 뒤에서 시작하면(그사이 메일이 피드 수보다 많음) 주간 목록(`A1=ind2611A`, 1~7일이 A)으로 메운다.
+- **리스트의 페이지는 실행마다 한 번만 받고, check가 읽은 것은 build가 다시 받지 않는다(`listserv.page`).** 모든 WG와 RAN1 이메일 토론 수집이 같은 길로 읽는다.
+  - check가 읽은 페이지를 FTP 목록과 같은 파일(`.ci/listings.json`, `remote_files.save_listings`)로 build에 넘긴다. 주소만 넘기면 build가 내용을 얻으려 다시 받아야 하므로 내용을 넘긴다.
+  - 메일 페이지는 부분 링크만, 주간 목록은 행만 남긴다(`listserv.slim`). 원문은 대부분 아카이브 화면 틀(통당 약 85KB)이다. 피드와 본문 글은 그대로다.
+  - CI 캐시로 넘기지 않는다. 같은 실행의 build가 복원한다는 보장이 없다. 캐시는 다음 실행을 위한 "어디까지 읽었나"에만 쓴다.
 - **고르는 규칙(`file_sources.order`):** 높은 버전 > 같은 버전이면 FTP > 같은 버전의 메일끼리는 먼저 보낸 것.
   - FTP가 기록이다. 메일본이 잠깐 달라도 FTP에 같은 판이 올라오면 그 판으로 돌아온다. 반대로 FTP 판에서 메일본으로 가지는 않는다(한 방향이라 RAN1 증분 병합이 오가지 않는다).
   - 같은 이름을 다시 첨부한 답장(코멘트본)은 늦게 와서 진다. 보낸 사람은 가리지 않는다(비서가 보낼 수 있다).

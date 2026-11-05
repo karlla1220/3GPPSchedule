@@ -14,18 +14,22 @@ An attachment link (``A3=…&N=<file name>``) points into the archived week
 and returns the file itself, without logging in. Archived mails do not
 change, so neither does what the link returns.
 
+Every page a run reads goes through ``page``: it is asked for once per run,
+and check hands what it read to build (``saved``/``restore``, in the same
+file as the FTP listings), so build does not ask the archive again. A
+message page is kept as its part links only and a weekly index as its rows
+(a full page is ~85 KB of archive layout); the feed and text parts as read.
+
 The archive drops the connection, without an HTTP response, for Python's
 default User-Agent (``remote_files.client`` sets ours), and now and then
-stalls a TLS handshake: one later retry. The feed and message pages a run
-has read are kept for the rest of the run, so several readers of one list
-(RAN1's session details, schedule attachments) ask for each page once.
+stalls a TLS handshake: one later retry.
 """
 
 from __future__ import annotations
 
 from dataclasses import dataclass
 from datetime import date, datetime, timedelta
-from email.utils import parsedate_to_datetime
+from email.utils import format_datetime, parsedate_to_datetime
 import html
 import re
 import time
@@ -215,15 +219,41 @@ def get(http: httpx.Client, url: str, sleep: Callable[[float], None] = time.slee
     return response.text
 
 
+def slim(url: str, text: str) -> str:
+    """What a page is kept as: a message page's part links, a weekly index's rows, else the page.
+
+    The readers (``attachments``, ``body_url``, ``parse_index``) read the
+    kept form as they read the page.
+    """
+    if "A2=" in url:
+        return "".join(f'<a href="{html.escape(link[len(ARCHIVE):])}"></a>' for link in part_links(text))
+    if "A1=ind" in url:
+        list_name = (parse_qs(urlsplit(url).query).get("L") or [""])[0]
+        return "".join(
+            f'<tr><td><a href="{html.escape(item.link[len(ARCHIVE):])}">{html.escape(item.title)}</a></td>'
+            f'<td>{html.escape(item.author)}</td><td>{format_datetime(item.date) if item.date else ""}</td></tr>'
+            for item in parse_index(text, list_name))
+    return text
+
+
 def page(http: httpx.Client, url: str, sleep: Callable[[float], None] = time.sleep) -> str:
-    """``get``, once per run: a page read earlier in this run is not asked for again."""
+    """A page of the archive, asked for once per run (``slim``)."""
     if url not in _PAGES:
-        _PAGES[url] = get(http, url, sleep)
+        _PAGES[url] = slim(url, get(http, url, sleep))
     return _PAGES[url]
 
 
-def read_this_run(url: str) -> bool:
-    return url in _PAGES
+def saved() -> dict[str, str]:
+    """The pages this run read, for the next step of the run (check -> build)."""
+    return dict(_PAGES)
+
+
+def restore(pages: dict) -> int:
+    """Reuse pages an earlier step of this run read; returns how many."""
+    kept = {url: text for url, text in pages.items()
+            if isinstance(url, str) and isinstance(text, str) and urlsplit(url).hostname == urlsplit(ARCHIVE).hostname}
+    _PAGES.update(kept)
+    return len(kept)
 
 
 def new_run():

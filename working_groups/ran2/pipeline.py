@@ -114,6 +114,9 @@ def build_schedule(options=None, *, request=None):
     generated = datetime.now(ZoneInfo(metadata['timezone'])).strftime('%Y-%m-%d %H:%M')
     sources = [name] + (['agenda.csv'] if bundle.agenda else [])
     schedule = make_schedule(document, agenda, metadata, sources, generated, refine=refine, sessions=prebuilt)
+    record = bundle.manifest['schedule']
+    if record.get('origin') == 'email':
+        schedule.source_mails = {name: record.get('listing') or record['url']}
     # Cells the schedule gives no AI: an LLM reads their label for the filter (shared/agenda_labels.py).
     infer_for_schedule(schedule, 'ran2', 'RAN2', agenda, enabled=not offline and request is not None)
     # No checkpoint before parsing and rendering both succeed.

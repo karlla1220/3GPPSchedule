@@ -13,6 +13,7 @@ part, linked from the message page (two requests per message).
 
 Requests go one at a time, a few seconds apart, with one later retry
 (``shared/listserv.py`` reads the archive; this module reads the mails).
+Each page is asked for once per run, and build reuses what check read.
 """
 
 from __future__ import annotations
@@ -266,10 +267,6 @@ def parse_feed(xml: str) -> list[Mail]:
     ]
 
 
-def _get(http: httpx.Client, url: str, sleep: Callable[[float], None]) -> str:
-    return listserv.get(http, url, sleep)
-
-
 def collect(
     tag: str,
     seen: set[str] = frozenset(),
@@ -292,7 +289,7 @@ def collect(
     http = http or client(timeout=30)
     try:
         mails = [
-            mail for mail in parse_feed(_get(http, feed_url(), sleep))
+            mail for mail in parse_feed(listserv.page(http, feed_url(), sleep))
             if mail.id not in seen and (wanted(mail) if wanted else is_meeting_thread(mail.title, tag))
         ]
         fetched = 0
@@ -305,11 +302,11 @@ def collect(
             fetched += 1
             try:
                 sleep(REQUEST_GAP)
-                url = body_url(_get(http, mail.link, sleep))
+                url = body_url(listserv.page(http, mail.link, sleep))
                 if url is None:
                     continue
                 sleep(REQUEST_GAP)
-                raw = _get(http, url, sleep)
+                raw = listserv.page(http, url, sleep)
             except httpx.HTTPError:
                 continue
             mail.reply = newest_reply(body_text(raw, is_html="T=text%2Fhtml" in url))
