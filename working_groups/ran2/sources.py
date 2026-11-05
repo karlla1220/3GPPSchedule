@@ -196,8 +196,22 @@ def meeting_dates(cfg, rows, previous) -> dict[str, meeting_turn.Dates]:
                                     {meeting_key(f'RAN2#{key}'): value for key, value in cfg['meetings'].items()})
 
 
-def version(entry: dict) -> int:
-    return entry['version']
+def order(entry: dict) -> tuple:
+    """The newer version; at equal version the live sync copy, then the later upload; a mailed copy after both.
+
+    Mailed copies of one version: the earliest mail (``file_sources.copy_order``).
+    """
+    return entry['version'], *file_sources.copy_order(
+        entry, lambda e: ('Meetings_3GPP_SYNC' in e['url'], e.get('uploaded_at') or '', e['name']))
+
+
+def keep_built(built: dict, chosen: dict) -> bool:
+    """A vanished built version stays unless something listed is newer.
+
+    Another upload of the built version (the meeting folder's copy of a sync
+    file) does not replace it; an FTP copy of a mailed version does.
+    """
+    return (built['version'], file_sources.is_ftp(built)) >= (chosen['version'], file_sources.is_ftp(chosen))
 
 
 def mailed(cfg, previous, http, now) -> email_sources.Scan | None:
@@ -218,7 +232,7 @@ def choose_schedule(candidates: list[dict], dates: dict, now, built=None) -> dic
     if not same:
         raise ValueError(f'No RAN2 session schedule of {meeting} listed')
     # The sync folder is the live copy; the archive re-uploads the same version later.
-    return file_sources.choose(same, version)
+    return max(same, key=order)
 
 
 # -------------------------------------------------------------------- bundles
@@ -263,7 +277,7 @@ def built_copy(cfg, previous, chosen, candidates, rows, error, http=None) -> Bun
     old = previous.get('schedule') or {}
     built = {**old, 'version': previous.get('version', -1)} if old.get('url') else None
     if (previous.get('meeting_id') != chosen['meeting_id']
-            or not file_sources.keep_built(built, chosen, candidates, version)):
+            or not file_sources.hold_built(built, chosen, candidates, keep_built)):
         return None
     error = error or ValueError(f"{old.get('name')} is no longer listed and its stored copy is missing")
     schedule = file_sources.built_body(built, http)

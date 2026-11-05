@@ -233,12 +233,23 @@ def choose_schedule(candidates: list[dict], dates: dict, now, built=None) -> dic
     if not same:
         raise ValueError(f'No RAN3 living agenda of {meeting} listed')
     # The sync folder is the live copy; the archive gets the same files at the close.
-    return file_sources.choose(same, version)
+    return max(same, key=order)
 
 
 def version(entry: dict) -> str:
     """The date and time in the name ("20261014_1825"): later is newer."""
     return str(entry['version'])
+
+
+def order(entry: dict) -> tuple:
+    """The later living agenda; at equal version the live sync copy, then the later upload; mail after both."""
+    return version(entry), *file_sources.copy_order(
+        entry, lambda e: ('Meetings_3GPP_SYNC' in e['url'], e.get('uploaded_at') or '', e['name']))
+
+
+def keep_built(built: dict, chosen: dict) -> bool:
+    """A vanished built version stays unless something listed is newer, or is the FTP copy of a mailed one."""
+    return (version(built), file_sources.is_ftp(built)) >= (version(chosen), file_sources.is_ftp(chosen))
 
 
 # -------------------------------------------------------------------- bundles
@@ -275,7 +286,7 @@ def built_copy(cfg, previous, chosen, candidates, rows, error, http=None) -> Bun
     old = previous.get('schedule') or {}
     built = {**old, 'version': str(previous.get('version', ''))} if old.get('url') else None
     if (previous.get('meeting_id') != chosen['meeting_id']
-            or not file_sources.keep_built(built, chosen, candidates, version)):
+            or not file_sources.hold_built(built, chosen, candidates, keep_built)):
         return None
     error = error or ValueError(f"{old.get('name')} is no longer listed and its stored copy is missing")
     bodies = {}

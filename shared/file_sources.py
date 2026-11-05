@@ -1,4 +1,4 @@
-"""Copies of a WG's input file found in several places, and the one a build uses.
+"""Copies of a WG's input file found in several places: the common structure.
 
 A WG's file can be listed in more than one place at once: the live FTP sync
 folder, the meeting's FTP folder, and the mailing list (a chair mails a new
@@ -7,31 +7,38 @@ entries of one shape: ``{'url', 'name', 'uploaded_at', 'listing'}``, plus
 ``'origin': 'email'`` and the mail's ``message_id`` and ``sent`` for a mailed
 file. FTP entries have no origin.
 
-What a file is (its meeting and version) is the WG's to say, from the name
-or the content (``version``). Which copy wins is common:
+The flow is the same for every WG; the choices are each WG's own:
 
-1. The newer version wins, wherever it was found.
-2. At equal version an FTP copy wins over a mailed one. The FTP folder is
-   the record, so a page built from a mail returns to the uploaded file as
-   soon as it is listed, even when the two differ.
-3. FTP copies of one version are ordered by the WG (``ftp_order``; by
-   default the live sync copy, then the later upload).
-4. Mailed copies of one version: the earliest mail wins. A later mail with
-   the same file is a reply that attached it again, possibly with comments.
-   Anyone may mail the list; who sent it is not checked.
-5. A mail's date (sender's clock) and an FTP upload time are never compared.
-6. Within a meeting a build never steps back (``keep_built``): when the built
-   file is no longer listed and nothing listed is newer, the build keeps it.
+1. Gather the entries of every place (the WG lists its folders; mail comes
+   from ``email_sources.for_wg``).
+2. Choose one copy: the WG's rule, in its own ``sources.py`` (RAN1:
+   ``downloader.py``). What a version is, how FTP copies of one version are
+   ordered, and when a later file wins differ by WG (RAN3 orders dated
+   names, SA2 later uploads of one revision, RAN4 the revision inside the
+   file), so no common rule decides it.
+3. Keep the built copy when it is no longer listed and the WG's rule says
+   nothing listed replaces it (``hold_built``): within a meeting a build
+   never steps back.
+4. Fetch the body (``remote_files.fetch_file`` for both origins; the built
+   copy through ``built_body``) and record where it came from
+   (``source_record``).
 
-Bodies come from ``remote_files.fetch_file`` for both origins. A mailed
-file is stored like a 3GPP file and, should the CI cache lose it, fetched
-from the archive again and checked against the built file's sha256.
+Parts a WG may use in its rule, so mail is handled alike where a WG wants
+it (``copy_order``):
+
+- At equal version an FTP copy wins over a mailed one. The FTP folder is
+  the record, so a page built from a mail returns to the uploaded file as
+  soon as it is listed.
+- Mailed copies of one version: the earliest mail wins. A later mail with the
+  same file is a reply that attached it again, possibly with comments.
+  Anyone may mail the list; who sent it is not checked.
+- A mail's date (sender's clock) and an FTP upload time are never compared.
 """
 
 from __future__ import annotations
 
 from datetime import datetime
-from typing import Callable, Iterable
+from typing import Callable
 
 import httpx
 
@@ -47,9 +54,8 @@ def origin(entry: dict) -> str:
     return entry.get('origin') or FTP
 
 
-def live_first(entry: dict) -> tuple:
-    """FTP copies of one version: the sync folder's live copy, then the later upload."""
-    return 'Meetings_3GPP_SYNC' in entry['url'], entry.get('uploaded_at') or '', entry['name']
+def is_ftp(entry: dict) -> bool:
+    return origin(entry) == FTP
 
 
 def _sent(entry: dict) -> float:
@@ -59,41 +65,30 @@ def _sent(entry: dict) -> float:
         return float('inf')
 
 
-def rank(entry: dict, version: Callable[[dict], object]) -> tuple:
-    """Version, then FTP over mail."""
-    return version(entry), 1 if origin(entry) == FTP else 0
+def copy_order(entry: dict, ftp_key: Callable[[dict], tuple]) -> tuple:
+    """Copies of one version, the largest first: FTP (in the WG's ``ftp_key`` order), then the earliest mail.
 
-
-def order(entry: dict, version: Callable[[dict], object], ftp_order: Callable[[dict], tuple] = live_first) -> tuple:
-    """The sort key of one copy; the largest wins (rules 1–5 above)."""
-    if origin(entry) == FTP:
-        return (*rank(entry, version), *ftp_order(entry))
-    return (*rank(entry, version), -_sent(entry), entry['name'])
-
-
-def choose(candidates: Iterable[dict], version: Callable[[dict], object],
-           ftp_order: Callable[[dict], tuple] = live_first) -> dict:
-    return max(candidates, key=lambda entry: order(entry, version, ftp_order))
-
-
-def keep_built(built: dict | None, chosen: dict, candidates: list[dict], version: Callable[[dict], object],
-               tiebreak: Callable[[dict], object] | None = None) -> bool:
-    """Keep the built copy: it is no longer listed, and nothing listed has a higher rank.
-
-    ``built`` is the built file as an entry (same meeting as ``chosen``; the
-    caller checks). The rank is version and origin: another upload of the
-    built version (the meeting folder's copy of a sync file) does not replace
-    it, while an FTP copy of a mailed version does. A WG whose FTP copies of
-    one version follow one another (SA2's "-r14 - Friday plan" after "-r14")
-    passes ``tiebreak``; a later FTP copy of the built version then replaces it.
+    A WG puts its version before it: ``max(copies, key=lambda c: (version(c), *copy_order(c, ftp_key)))``.
+    The two origins never reach each other's keys, so mail and upload times are not compared.
     """
-    if not built or any(c['url'] == built.get('url') for c in candidates):
-        return False
-    if rank(built, version) != rank(chosen, version):
-        return rank(built, version) > rank(chosen, version)
-    if tiebreak is not None and origin(built) == origin(chosen) == FTP:
-        return tiebreak(built) >= tiebreak(chosen)
-    return True
+    if is_ftp(entry):
+        return (1, *ftp_key(entry))
+    return (0, -_sent(entry), entry['name'])
+
+
+def listed(entry: dict | None, candidates: list[dict]) -> bool:
+    return bool(entry) and any(c['url'] == entry.get('url') for c in candidates)
+
+
+def hold_built(built: dict | None, chosen: dict, candidates: list[dict],
+               keep: Callable[[dict, dict], bool]) -> bool:
+    """Keep the built copy instead of ``chosen``: it is no longer listed and the WG's ``keep`` says so.
+
+    A built copy that is still listed takes part in the WG's normal choice;
+    only a vanished one needs the WG's word that nothing listed replaces it.
+    The caller checks that ``built`` is of the same meeting.
+    """
+    return bool(built) and not listed(built, candidates) and keep(built, chosen)
 
 
 def built_body(built: dict, http=None) -> bytes | None:

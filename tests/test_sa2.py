@@ -452,3 +452,18 @@ def test_a_written_range_stays_a_range_on_the_ai_line():
     read = sessions.reading(['KI#12 – KI#16 (20.6.12 - 16) [5,0,2,0,1]'], {})
     assert read['agenda_items'] == ['20.6.12', '20.6.13', '20.6.14', '20.6.15', '20.6.16']
     assert written_ranges(read['agenda_items'], read['ranges']) == ['20.6.12–20.6.16']
+
+
+def test_a_later_upload_of_the_built_revision_replaces_it():
+    """SA2's own rule: "-r14 - Friday plan" follows "-r14"; mail never outranks an upload."""
+    from working_groups.sa2 import sources as sa2
+    built = {'version': 14, 'url': 'u1', 'name': 'S2-x - r14.docx', 'uploaded_at': '2026-11-17 08:00'}
+    later = {'version': 14, 'url': 'u2', 'name': 'S2-x - r14 - Friday plan.docx', 'uploaded_at': '2026-11-17 18:00'}
+    mailed = {'version': 14, 'url': 'm', 'name': 'S2-x - r14.docx', 'origin': 'email',
+              'sent': '2026-11-17T20:00:00+00:00'}
+    assert not sa2.keep_built(built, later)
+    assert sa2.keep_built({**built, 'uploaded_at': '2026-11-17 19:00'}, later)
+    assert sa2.keep_built(built, mailed) and not sa2.keep_built(mailed, built)
+    assert sa2.keep_built({**built, 'version': 15}, later)
+    # The choice: the later upload, and an upload over the mailed copy.
+    assert max([built, later, mailed], key=sa2.order) is later

@@ -486,7 +486,7 @@ HTML과 단계 문구는 `shared/page.py`(`render_help`, `HELP_STEPS`), 동작�
 ## 메일로 온 입력 파일 (공용)
 
 의장은 새 판을 메일링 리스트에 첨부해 보내고, FTP보다 먼저 보내기도 한다(RAN2#136 `R2_136_Schedule_v00.docx`, 2026-11-05). 메일 첨부는 FTP 폴더와 나란한 원천 하나다.
-LISTSERV 읽기는 `shared/listserv.py`, 메일 원천은 `shared/email_sources.py`(`for_wg`), 사본 고르기는 `shared/file_sources.py`다. WG는 `config.json`의 `email_list`로 켜고, 파일 이름 규칙과 버전만 넘긴다.
+LISTSERV 읽기는 `shared/listserv.py`, 메일 원천은 `shared/email_sources.py`(`for_wg`), 여러 곳에서 찾은 사본을 다루는 구조는 `shared/file_sources.py`다. WG는 `config.json`의 `email_list`로 켠다.
 RAN1·RAN2는 켜 두었다. RAN3·SA2는 같은 구조로 연결했지만 `email_list`가 `null`이다(의장이 메일로 판을 보내는지 확인하면 켠다). RAN4·SA1·RAN P는 연결하지 않았다.
 
 - **판정은 첨부 파일 이름으로만 한다.** 제목과 본문은 사람이 정해진 규칙 없이 쓴다(SA2 `Session plan`, RAN1 FL 메일의 "schedule"). 파일 이름은 의장이 FTP에 올리는 이름과 같아서, FTP와 같은 이름 규칙(RAN2 `file_info`)을 쓴다. FTP가 받지 않는 이름은 메일에서도 받지 않는다.
@@ -500,12 +500,15 @@ RAN1·RAN2는 켜 두었다. RAN3·SA2는 같은 구조로 연결했지만 `emai
   - check가 읽은 페이지를 FTP 목록과 같은 파일(`.ci/listings.json`, `remote_files.save_listings`)로 build에 넘긴다. 주소만 넘기면 build가 내용을 얻으려 다시 받아야 하므로 내용을 넘긴다.
   - 메일 페이지는 부분 링크만, 주간 목록은 행만 남긴다(`listserv.slim`). 원문은 대부분 아카이브 화면 틀(통당 약 85KB)이다. 피드와 본문 글은 그대로다.
   - CI 캐시로 넘기지 않는다. 같은 실행의 build가 복원한다는 보장이 없다. 캐시는 다음 실행을 위한 "어디까지 읽었나"에만 쓴다.
-- **고르는 규칙(`file_sources.order`):** 높은 버전 > 같은 버전이면 FTP > 같은 버전의 메일끼리는 먼저 보낸 것.
+- **구조는 공용, 고르는 규칙은 WG의 것이다(2026-11-06 결정).** 공용 함수 하나가 모든 WG의 선택을 정하면, 한 WG 때문에 고친 것이 다른 WG의 선택을 바꾼다(RAN3는 날짜 이름, SA2는 같은 판의 나중 업로드, RAN4는 파일 안 revision).
+  - 공용(`file_sources`): 출처(`origin`, `is_ftp`), 목록에 남은 빌드본은 따로 지키지 않는다는 틀(`hold_built`), 메일 부품(`copy_order`), 빌드본 본문(`built_body`), manifest 기록(`source_record`).
+  - WG: 무엇을 고르는지(`order`)와 사라진 빌드본을 언제 지키는지(`keep_built`)를 자기 `sources.py`에 적는다(RAN1은 `downloader.py`의 `_with_mail`). 테스트도 WG 테스트에 둔다.
+- **메일 부품(`copy_order`)이 정하는 것:** 같은 버전이면 FTP > 같은 버전의 메일끼리는 먼저 보낸 것. 버전은 WG가 그 앞에 둔다. 지금 메일을 읽는 WG는 모두 이 부품을 쓴다.
   - FTP가 기록이다. 메일본이 잠깐 달라도 FTP에 같은 판이 올라오면 그 판으로 돌아온다. 반대로 FTP 판에서 메일본으로 가지는 않는다(한 방향이라 RAN1 증분 병합이 오가지 않는다).
   - 같은 이름을 다시 첨부한 답장(코멘트본)은 늦게 와서 진다. 보낸 사람은 가리지 않는다(비서가 보낼 수 있다).
   - 메일 시각과 FTP 업로드 시각은 비교하지 않는다. 시계가 다르다.
-  - FTP 사본끼리의 순서는 WG가 준다(`ftp_order`; 기본은 sync 사본, 그다음 나중 업로드. SA2는 나중 업로드가 먼저다: `-r14 - Friday plan`이 `-r14` 뒤).
-  - 같은 회의 안에서 내려가지 않는다(`keep_built`): 빌드한 파일이 목록에 없고 목록의 어떤 사본도 버전·출처 순위가 높지 않으면 빌드본을 둔다. SA2처럼 같은 판의 FTP 사본이 이어 올라오는 WG는 `tiebreak`(업로드 시각)를 넘겨 나중 사본이 빌드본을 바꾸게 한다. 메일 첨부는 바뀌지 않으므로 캐시가 없으면 첨부 주소에서 다시 받고 sha256이 같을 때만 쓴다. 그것도 안 되면 빌드가 실패해 직전 페이지가 남는다. 낮은 FTP 판으로 내려가지 않는다.
+  - FTP 사본끼리의 순서는 WG의 것이다(RAN2·RAN3는 sync 사본, 그다음 나중 업로드. SA2는 나중 업로드가 먼저다: `-r14 - Friday plan`이 `-r14` 뒤).
+  - 같은 회의 안에서 내려가지 않는다: 빌드한 파일이 목록에 없으면 WG의 `keep_built`가 정한다. RAN2·RAN3는 버전·출처가 더 높은 사본이 없으면 둔다. SA2는 같은 판의 나중 업로드면 바꾼다. 메일 첨부는 바뀌지 않으므로 캐시가 없으면 첨부 주소에서 다시 받고 sha256이 같을 때만 쓴다. 그것도 안 되면 빌드가 실패해 직전 페이지가 남는다. 낮은 FTP 판으로 내려가지 않는다.
 - **메일은 앞당기는 장치일 뿐이다.** 리스트를 못 읽거나 메일을 놓쳐도 FTP에 올라올 때 반영된다. 그래서 메일 쪽 실패는 빌드도 check도 실패시키지 않고 로그에만 남긴다.
 - 빌드하는 회의와 다음 회의(`meeting_turn.to_read`)의 첨부만 후보다. 지난 회의 판을 나중에 전달한 메일은 후보가 아니다.
 - 피드는 XML이 허용하지 않는 제어 문자를 날것으로 담기도 한다(RAN2 2026-11-05, ISO-2022-JP 제목의 ESC). `listserv.parse_feed`가 지우고 읽는다.
