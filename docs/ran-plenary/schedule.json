@@ -1707,6 +1707,9 @@
     "RAN#113 time plan v09.zip": "Time plan",
     "agenda.csv": "Agenda"
   },
+  "source_urls": {
+    "RAN#113 time plan v09.zip": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN/Inbox/Chair/RAN%23113%20time%20plan%20v09.zip"
+  },
   "source_mails": {},
   "timezone": "Europe/Madrid",
   "wg_id": "ran-plenary",
@@ -6569,8 +6572,5 @@
   ],
   "supplements": [],
   "chairman_agreements": {},
-  "email_informal": {},
-  "source_urls": {
-    "RAN#113 time plan v09.zip": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN/Inbox/Chair/RAN%23113%20time%20plan%20v09.zip"
-  }
+  "email_informal": {}
 }

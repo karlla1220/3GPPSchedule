@@ -10078,7 +10078,7 @@
     }
   ],
   "source_file": "RAN4_120bis_meeting_schedule_THU_afternoon.pptx",
-  "generated_at": "2026-11-05 23:43",
+  "generated_at": "2026-11-06 22:02",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
@@ -10090,6 +10090,11 @@
     "RAN4_120bis_meeting_schedule_THU_afternoon.pptx": "Schedule THU afternoon",
     "List_Topics_moderators-RAN4_120bis_final.xlsx": "Topics",
     "agenda.csv": "Agenda"
+  },
+  "source_urls": {
+    "RAN4_120bis_meeting_schedule_THU_afternoon.pptx": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN4/Inbox/Meeting_Arrangements/RAN4_120bis_meeting_schedule_THU_afternoon.pptx",
+    "List_Topics_moderators-RAN4_120bis_final.xlsx": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN4/Inbox/Meeting_Arrangements/List_Topics_moderators-RAN4_120bis_final.xlsx",
+    "agenda.csv": "https://www.3gpp.org/ftp/tsg_ran/WG4_Radio/TSGR4_120bis/Agenda/agenda.csv"
   },
   "source_mails": {},
   "timezone": "Asia/Seoul",
@@ -10114,9 +10119,5 @@
     }
   ],
   "chairman_agreements": {},
-  "email_informal": {},
-  "source_urls": {
-    "RAN4_120bis_meeting_schedule_THU_afternoon.pptx": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN4/Inbox/Meeting_Arrangements/RAN4_120bis_meeting_schedule_THU_afternoon.pptx",
-    "List_Topics_moderators-RAN4_120bis_final.xlsx": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN4/Inbox/Meeting_Arrangements/List_Topics_moderators-RAN4_120bis_final.xlsx"
-  }
+  "email_informal": {}
 }
