@@ -20626,5 +20626,10 @@
         "date": "2026-10-15"
       }
     ]
+  },
+  "source_urls": {
+    "RAN1#126b online and offline schedules - v05.docx": "https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_126b/Inbox/Chair_notes/RAN1%23126b%20online%20and%20offline%20schedules%20-%20v05.docx",
+    "RAN1#126bis schedule for Hiroki Adhoc2 sessions_v08.docx": "https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_126b/Inbox/Hiroki_notes/RAN1%23126bis%20schedule%20for%20Hiroki%20Adhoc2%20sessions_v08.docx",
+    "RAN1#126b Sorour sessions online and offline schedules - v01.docx": "https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_126b/Inbox/Sorour_notes/RAN1%23126b%20Sorour%20sessions%20online%20and%20offline%20schedules%20-%20v01.docx"
   }
 }

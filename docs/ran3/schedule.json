@@ -1374,5 +1374,8 @@
     }
   ],
   "chairman_agreements": {},
-  "email_informal": {}
+  "email_informal": {},
+  "source_urls": {
+    "RAN3_134_agenda_20261023.docx": "https://www.3gpp.org/ftp/tsg_ran/WG3_Iu/TSGR3_134/Inbox/Chairs_Notes/RAN3_134_agenda_20261023.docx"
+  }
 }

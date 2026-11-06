@@ -3429,5 +3429,8 @@
     }
   ],
   "chairman_agreements": {},
-  "email_informal": {}
+  "email_informal": {},
+  "source_urls": {
+    "S2-261nnnn_SA2-178-Session Plan - r3.zip": "https://www.3gpp.org/ftp/tsg_sa/WG2_Arch/TSGS2_178_Calgary_2026-11/INBOX/DRAFTS/_Session_Plan_Updates/S2-261nnnn_SA2-178-Session%20Plan%20-%20r3.zip"
+  }
 }

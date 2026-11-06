@@ -3088,5 +3088,8 @@
     },
     "retained_files": []
   },
-  "email_informal": {}
+  "email_informal": {},
+  "source_urls": {
+    "Agenda for SA1#115_Friday_1550_END_OF_MEETING.docx": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/SA1/Inbox/agenda/Agenda%20for%20SA1%23115_Friday_1550_END_OF_MEETING.docx"
+  }
 }

@@ -6569,5 +6569,8 @@
   ],
   "supplements": [],
   "chairman_agreements": {},
-  "email_informal": {}
+  "email_informal": {},
+  "source_urls": {
+    "RAN#113 time plan v09.zip": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN/Inbox/Chair/RAN%23113%20time%20plan%20v09.zip"
+  }
 }

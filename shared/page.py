@@ -174,13 +174,14 @@ def render_help():
     )
 
 
-def _source(name, label, mail=None):
+def _source(name, label, mail=None, url=None):
     """One source as "Main v03": readers check the version, the meeting is in the title above.
 
     A draft says so ("Main draft v03"): its numbers and the released file's are
     separate series, so "v03" alone does not tell which one is shown.
     The closing notes count on their own ("Main Final", "Main EOM", "Main EOM2").
     The file name stays on hover. A file without a label is shown by its name.
+    When a remote URL is available, the source text links directly to the file.
     A file read from the mailing list says so ("Schedule v01 (email)"), the
     word linking to the mail: it is not the uploaded file yet, and the
     uploaded one replaces it once listed. Underlined like the other links of
@@ -190,7 +191,8 @@ def _source(name, label, mail=None):
             'the FTP upload of this version replaces it">email</a>)'.format(escape(mail, quote=True))
             if mail else '')
     if not label:
-        return escape(name) + note
+        body = f'<a href="{escape(url, quote=True)}" target="_blank" rel="noopener">{escape(name)}</a>' if url else escape(name)
+        return body + note
     versions = _VERSION.findall(name)
     closing = _CLOSING.search(name)
     version = versions[-1].lower() if versions else ""
@@ -200,13 +202,18 @@ def _source(name, label, mail=None):
              f"{_CLOSING_LABEL[closing[1].lower()]}{int(closing[2]) if closing[2] else ''}" if closing else "",
              "" if in_label else version]
     text = escape(" ".join(filter(None, shown))).replace(" ", "&nbsp;")
+    if url:
+        return f'<a href="{escape(url, quote=True)}" target="_blank" rel="noopener" title="{escape(name, quote=True)}">{text}</a>{note}'
     return f'<span title="{escape(name, quote=True)}">{text}</span>{note}'
 
 
 def render_sources(schedule):
     # agenda.csv is read by every WG at every build; the line names the schedule files.
     names = [name for name in schedule.source_files if not _AGENDA_CSV.fullmatch(name)] or [schedule.source_file]
-    return " · ".join(_source(name, schedule.source_labels.get(name), schedule.source_mails.get(name))
+    labels = getattr(schedule, "source_labels", {}) or {}
+    mails = getattr(schedule, "source_mails", {}) or {}
+    urls = getattr(schedule, "source_urls", {}) or {}
+    return " · ".join(_source(name, labels.get(name), mails.get(name), urls.get(name))
                       for name in names)
 
 

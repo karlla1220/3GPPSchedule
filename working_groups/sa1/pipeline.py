@@ -163,6 +163,7 @@ def build_schedule(options=None, *, request=None, history=None):
     schedule = make_schedule(document, metadata, [f['name'] for f in files],
                              {f['name']: source_label(f['name']) for f in files}, generated,
                              refine=refine, resolve_chair=resolve, read=read)
+    schedule.source_urls = {f['name']: f['url'] for f in files if f.get('url')}
     attach_conclusions(schedule, chair_doc or schedule_doc, manifest.get('chair') or manifest['schedule'],
                        root / 'schedule.json', cfg['archive_url'])
     # Cells the schedule gives no AI: an LLM reads their label for the filter (shared/agenda_labels.py).

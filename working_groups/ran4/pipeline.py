@@ -168,6 +168,13 @@ def build_schedule(options=None, *, request=None, history=None):
     names, labels = source_labels(manifest)
     schedule, read_warnings = make_schedule(document, agenda, topics, metadata, names, labels, generated,
                                             column_chairs=chairs, refine=refine, reader=reader)
+    schedule.source_urls = {
+        manifest[k]['name']: manifest[k]['url']
+        for k in ('schedule', 'topics', 'agenda')
+        if isinstance(manifest.get(k), dict)
+        and manifest[k].get('name')
+        and manifest[k].get('url')
+    }
     warnings = list(bundle.warnings) + warnings + read_warnings
     for warning in warnings:
         print(f'[ran4] {warning}')

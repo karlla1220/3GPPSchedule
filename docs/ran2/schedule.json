@@ -3456,5 +3456,8 @@
     }
   ],
   "chairman_agreements": {},
-  "email_informal": {}
+  "email_informal": {},
+  "source_urls": {
+    "R2_136_Schedule_v01.docx": "https://www.3gpp.org/ftp/tsg_ran/WG2_RL2/TSGR2_136/Agenda/R2_136_Schedule_v01.docx"
+  }
 }
