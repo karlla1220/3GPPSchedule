@@ -167,6 +167,13 @@ def build_schedule(options=None, *, request=None):
     schedule = make_schedule(document, agenda, metadata, names, source_labels(bundle.manifest), generated,
                              slots=slots, cbs=cbs, chair=chair_resolver(cfg, metadata['starts_on'], not offline),
                              refine=refine, warnings=warnings)
+    schedule.source_urls = {
+        bundle.manifest[k]['name']: bundle.manifest[k]['url']
+        for k in ('schedule', 'offline', 'agenda')
+        if isinstance(bundle.manifest.get(k), dict)
+        and bundle.manifest[k].get('name')
+        and bundle.manifest[k].get('url')
+    }
     for warning in warnings:
         print(f'[ran3] {warning}')
     # Cells the schedule gives no AI: an LLM reads their label for the filter (shared/agenda_labels.py).

@@ -419,6 +419,7 @@ HTML은 `shared/page.py`, 표시 판단은 `templates/support-note.js`, 값은 `
     회의 종료 인사도 같은 목록을 같은 순서로 쓴다. 같은 안내를 제작자 줄에 한 번 더 적지 않는다.
 - **원본 파일은 이름 전체가 아니라 짧은 이름과 버전으로 적는다(`Sources: Main v03 · Hiroki v01 · Sorour v00`).**
   이 줄에서 확인하는 것은 최신 버전이 반영됐는지뿐이고, 미팅 이름은 바로 위 제목에 있다. 파일 이름은 `title`(hover)에 남긴다.
+  원격 https URL이 있으면 소스 이름 자체가 링크(`<a>`)가 되어 원본 파일을 바로 열거나 받을 수 있다(`Schedule.source_urls`).
   - 짧은 이름은 각 WG 파이프라인이 `Schedule.source_labels`(파일 이름 → 이름)로 넘긴다. RAN1은 `Main`과 부의장 이름,
     RAN2는 `Schedule`, RAN P는 `Time plan`이다. 파일 이름에서 사람 이름을 추측하지 않는다.
   - `agenda.csv`(`agenda*.csv`)는 적지 않는다(`page.py`의 `_AGENDA_CSV`). 모든 WG가 빌드마다 읽는 표라서 확인할 것이 없다. 줄에는 일정 원본만 남는다.

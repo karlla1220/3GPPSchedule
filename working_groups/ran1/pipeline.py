@@ -847,6 +847,11 @@ def build_schedule(args) -> Schedule:
         for s in sources or []
         if s.local_path is not None and s.file_info.get("origin") == "email"
     }
+    source_urls = {
+        s.local_path.name: s.file_info["url"]
+        for s in sources or []
+        if s.local_path is not None and s.file_info.get("url")
+    }
 
     schedule = Schedule(
         meeting_name=meeting_name,
@@ -854,6 +859,7 @@ def build_schedule(args) -> Schedule:
         source_file=docx_path.name,
         source_files=source_files,
         source_labels=source_labels,
+        source_urls=source_urls,
         source_mails=source_mails,
         generated_at=generated_at,
         timezone=meeting_tz,

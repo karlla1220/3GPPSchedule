@@ -155,6 +155,8 @@ def build_schedule(options=None, *, request=None):
     labels = {plan['name']: source_label(plan['name']), 'agenda.csv': 'agenda.csv'}
     schedule = make_schedule(document, agenda, metadata, sources, labels, generated, chairs=chairs,
                              refine=refine, sessions=prebuilt)
+    if plan.get('url'):
+        schedule.source_urls = {plan['name']: plan['url']}
     # Cells the schedule gives no AI: an LLM reads their label for the filter (shared/agenda_labels.py).
     infer_for_schedule(schedule, 'sa2', 'SA2', agenda, enabled=not offline and request is not None)
     # No checkpoint before parsing and rendering both succeed.

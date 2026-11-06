@@ -105,6 +105,9 @@ def build_schedule(options=None, *, request=gemini_request):
         generated = datetime.now(ZoneInfo(metadata['timezone'])).strftime('%Y-%m-%d %H:%M')
         schedule = make_schedule(document, result, descriptions, metadata,
                                  bundle.manifest['timeplan']['name'], generated)
+        timeplan = bundle.manifest.get('timeplan') or {}
+        if timeplan.get('name') and timeplan.get('url'):
+            schedule.source_urls = {timeplan['name']: timeplan['url']}
         # Cells the time plan gives no AI: an LLM reads their label for the filter (shared/agenda_labels.py).
         infer_for_schedule(schedule, 'ran-plenary', 'RAN Plenary', descriptions, enabled=not offline and has_key())
         # No successful checkpoint before interpretation and rendering both pass.

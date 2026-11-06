@@ -29,7 +29,7 @@ def test_empty_site_contact_does_not_restore_legacy_snapshot_contact():
 
 def sources(**changes):
     line = BeautifulSoup(render_header(replace(build_schedule(), **changes)), 'html.parser').select_one('p.meta')
-    return line.get_text().split('\xa0|\xa0')[0], [span['title'] for span in line.select('span[title]')]
+    return line.get_text().split('\xa0|\xa0')[0], [el['title'] for el in line.select('span[title], a[title]')]
 
 
 def test_sources_are_short_labels_with_the_version_and_the_file_name_on_hover():
@@ -255,3 +255,26 @@ def test_a_mailed_source_says_so_and_links_the_mail():
     assert link['href'] == mail and link['target'] == '_blank' and link.get_text() == 'email'
     # Uploaded files carry no mark.
     assert '(email)' not in sources(source_files=[name], source_labels={name: 'Schedule'})[0]
+
+
+def test_a_source_with_https_url_links_directly_to_the_file():
+    name = 'R2_136_Schedule_v01.docx'
+    url = 'https://www.3gpp.org/ftp/tsg_ran/WG2_RL2/TSGR2_136/Agenda/R2_136_Schedule_v01.docx'
+    schedule = replace(build_schedule(), source_files=[name, 'agenda.csv'],
+                       source_labels={name: 'Schedule'}, source_urls={name: url})
+    text, titles = sources(source_files=schedule.source_files, source_labels=schedule.source_labels,
+                           source_urls=schedule.source_urls)
+    assert text == 'Sources: Schedule\xa0v01 '
+    assert titles == [name]
+    link = BeautifulSoup(render_header(schedule), 'html.parser').select_one('p.meta a[href*="3gpp.org"]')
+    assert link['href'] == url
+    assert link['target'] == '_blank'
+    assert link['title'] == name
+    assert link.get_text() == 'Schedule\xa0v01'
+
+    # An unlabelled file with a URL links directly to the file using its name
+    unlabelled = replace(build_schedule(), source_files=[name], source_urls={name: url})
+    link_unlabelled = BeautifulSoup(render_header(unlabelled), 'html.parser').select_one('p.meta a[href*="3gpp.org"]')
+    assert link_unlabelled['href'] == url
+    assert link_unlabelled.get_text() == name
+
