@@ -3340,7 +3340,7 @@
     }
   ],
   "source_file": "R2_136_Schedule_v01.docx",
-  "generated_at": "2026-11-05 14:01",
+  "generated_at": "2026-11-06 03:01",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
@@ -3351,9 +3351,7 @@
     "R2_136_Schedule_v01.docx": "Schedule",
     "agenda.csv": "Agenda"
   },
-  "source_mails": {
-    "R2_136_Schedule_v01.docx": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG2;c09d17d6.2611a"
-  },
+  "source_mails": {},
   "timezone": "America/Edmonton",
   "wg_id": "ran2",
   "meeting_id": "ran2#136",
