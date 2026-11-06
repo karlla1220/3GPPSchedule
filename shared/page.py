@@ -9,8 +9,8 @@ from zoneinfo import ZoneInfo
 from shared.navigation import EXPERIMENTAL_NOTE, TITLE_EMOJI, render_navigation
 
 DEFAULT_NOTICE = (
-    "ℹ️ This page is automatically generated from uploaded documents. "
-    "Some details may not be fully accurate — your feedback helps improve it."
+    "ℹ️ Auto-generated from uploaded documents. "
+    "Some details may be inaccurate — feedback welcome."
 )
 DEMO_NOTICE = "Demo schedule — fixed sample data, not an official meeting schedule."
 _HTTPS_URL = r"https://[^\s\"'<>\\]+"
@@ -234,7 +234,7 @@ def render_header(schedule, *, presentation=None, schedules=None, groups=None):
             creator = _link(metadata["creator_url"], creator)
         if own_email:
             creator += f" ({mailto})"
-        bio = f', {escape(metadata["creator_bio"])}' if metadata["creator_bio"] else ""
+        bio = f' · {escape(metadata["creator_bio"])}' if metadata["creator_bio"] else ""
         parts.append(f'<p class="meta">Created by {creator}{bio}</p>')
     about = [escape(metadata["disclaimer"])] if metadata["disclaimer"] else []
     if metadata["feedback_url"]:
