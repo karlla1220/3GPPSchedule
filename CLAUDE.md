@@ -429,7 +429,7 @@ HTML은 `shared/page.py`, 표시 판단은 `templates/support-note.js`, 값은 `
     숫자만 보면 `v03` 다음에 `v00`이 나와 뒤로 간 것처럼 보인다. Agreement 패널의 변경 줄(`· Chair notes draft v01`)도 같다.
   - Final·EOM 파일은 그 낱말과 번호를 적는다(`Chair notes Final`, `Chair notes EOM`, `Chair notes EOM2`). 버전 번호가 없다.
   - 메일링 리스트에서 받은 파일은 `(email)`을 붙이고 그 낱말이 메일로 가는 링크다(`Schedule v01 (email)`, `Schedule.source_mails`). 아직 FTP에 올라온 파일이 아니라는 것을 밝힌다. 같은 판이 FTP에 올라오면 그 파일로 바뀌고 표시도 사라진다. 다른 링크처럼 밑줄로만 구별한다.
-- **제작자 줄은 맨 아래 두 줄이다.** `Created by 이름 (메일), 소개` 아래에 `면책 문구 · Feedback`.
+- **제작자 줄은 맨 아래 두 줄이다.** `Created by 이름 (메일) · 소개` 아래에 `면책 문구 · Feedback`.
   - 메일 주소는 그대로 적는다. `Feedback`(GitHub Issues)만 두면 계정이 없는 참석자는 연락할 방법이 없다.
   헤더 meta 링크는 meta 회색을 그대로 쓰고 밑줄로만 구별한다.
   - 소속은 제작자 소개(bio)에만 쓴다. 후원 문구에는 회사 이름을 넣지 않는다.

@@ -1308,9 +1308,9 @@ Please send email to duckhyun.bae@lge.com or use issue in repo.
 "presentation": {
   "creator": "Duckhyun Bae",
   "creator_url": "https://www.linkedin.com/in/...",
-  "creator_bio": "RAN1 delegate from LGE",
+  "creator_bio": "LGE RAN1 delegate",
   "contact_email": "duckhyun.bae@lge.com",
-  "disclaimer": "Personal side project · Not affiliated with LG Electronics or 3GPP",
+  "disclaimer": "Personal side project · Not affiliated with LGE or 3GPP",
   "feedback_url": "https://github.com/karlla1220/3GPPSchedule/issues",
   "experimental_note": "Duckhyun built this page without any knowledge of how this WG works. ...",
   "support_title": "Proposal 1: Buy a coffee for Duckhyun",
@@ -1327,8 +1327,8 @@ Please send email to duckhyun.bae@lge.com or use issue in repo.
 ```
                     RAN2#135bis   📅 RAN1#126bis   RAN#113        ☕ Proposal 1: Buy a coffee for Duckhyun
                                                                      on Patreon or GitHub Sponsors
-Created by Duckhyun Bae (duckhyun.bae@lge.com), RAN1 delegate from LGE
-Personal side project · Not affiliated with LG Electronics or 3GPP · Feedback
+Created by Duckhyun Bae (duckhyun.bae@lge.com) · LGE RAN1 delegate
+Personal side project · Not affiliated with LGE or 3GPP · Feedback
 ```
 
 - `creator_url`은 이름에, `feedback_url`은 `Feedback`에 걸립니다. 값을 비우면 그 링크(또는 그 줄)를 숨깁니다.

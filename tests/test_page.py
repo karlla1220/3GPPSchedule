@@ -110,7 +110,7 @@ def real_meeting(**changes):
 def test_header_links_creator_feedback_and_support():
     header = BeautifulSoup(render_header(real_meeting(), presentation=SITE), 'html.parser')
     created, about = [p for p in header.select('p.meta') if p.find('a')]
-    assert created.get_text() == 'Created by Site Author, RAN1 delegate <LGE>'
+    assert created.get_text() == 'Created by Site Author · RAN1 delegate <LGE>'
     assert created.a['href'] == SITE['creator_url']
     assert about.get_text() == 'Personal & unofficial · Feedback'
     assert about.a['href'] == SITE['feedback_url']
@@ -127,11 +127,11 @@ def test_creator_email_follows_the_name_but_another_contact_keeps_its_line():
         return [p.get_text() for p in header.select('p.meta')][-3:], header.select_one('a[href^="mailto:"]')['href']
     for name in ('', 'Site Author'):
         texts, href = lines(contact_email='author@example.com', contact_name=name)
-        assert texts[1:] == ['Created by Site Author (author@example.com), RAN1 delegate <LGE>',
+        assert texts[1:] == ['Created by Site Author (author@example.com) · RAN1 delegate <LGE>',
                              'Personal & unofficial · Feedback']
         assert href == 'mailto:author@example.com'
     texts, href = lines(contact_email='help@example.com', contact_name='Help Desk')
-    assert texts[0] == 'Created by Site Author, RAN1 delegate <LGE>'
+    assert texts[0] == 'Created by Site Author · RAN1 delegate <LGE>'
     assert texts[2] == 'Contact: Help Desk (help@example.com) for reports or feature requests.'
     assert lines(contact_email='help@example.com', creator='')[0][-1].startswith('Contact:  (help@example.com)')
 
