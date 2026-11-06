@@ -862,7 +862,7 @@
           "part": null
         },
         {
-          "name": "Ambient IoT",
+          "name": "SON/MDT",
           "duration_minutes": 90,
           "start_time": "09:00",
           "end_time": "10:30",
@@ -870,18 +870,18 @@
           "room_col_start": 2,
           "room_col_end": 3,
           "chair": "Xudong YANG",
-          "agenda_item": "14",
-          "group_header": "Solutions for Ambient IoT in NR Phase 2",
-          "description": "Solutions for Ambient IoT in NR Phase 2",
+          "agenda_item": "11",
+          "group_header": "Data Collection for SON/MDT in NR Phase 5 (RAN3-led)",
+          "description": "Data Collection for SON/MDT in NR Phase 5 (RAN3-led)",
           "agenda_descriptions": [
             {
-              "agenda_item": "14",
-              "matched_agenda_item": "14",
-              "description": "Solutions for Ambient IoT in NR Phase 2",
+              "agenda_item": "11",
+              "matched_agenda_item": "11",
+              "description": "Data Collection for SON/MDT in NR Phase 5 (RAN3-led)",
               "hierarchy": [
                 {
-                  "agenda_item": "14",
-                  "description": "Solutions for Ambient IoT in NR Phase 2"
+                  "agenda_item": "11",
+                  "description": "Data Collection for SON/MDT in NR Phase 5 (RAN3-led)"
                 }
               ]
             }
@@ -891,7 +891,7 @@
           ],
           "room_scope": "assigned",
           "notes": [
-            "Ambient IoT: AI 14",
+            "SON/MDT: AI 11",
             "X"
           ],
           "inferred_agenda_items": [],
@@ -926,7 +926,7 @@
           "part": null
         },
         {
-          "name": "SON/MDT",
+          "name": "Ambient IoT",
           "duration_minutes": 120,
           "start_time": "11:00",
           "end_time": "13:00",
@@ -934,18 +934,18 @@
           "room_col_start": 2,
           "room_col_end": 3,
           "chair": "Xudong YANG",
-          "agenda_item": "11",
-          "group_header": "Data Collection for SON/MDT in NR Phase 5 (RAN3-led)",
-          "description": "Data Collection for SON/MDT in NR Phase 5 (RAN3-led)",
+          "agenda_item": "14",
+          "group_header": "Solutions for Ambient IoT in NR Phase 2",
+          "description": "Solutions for Ambient IoT in NR Phase 2",
           "agenda_descriptions": [
             {
-              "agenda_item": "11",
-              "matched_agenda_item": "11",
-              "description": "Data Collection for SON/MDT in NR Phase 5 (RAN3-led)",
+              "agenda_item": "14",
+              "matched_agenda_item": "14",
+              "description": "Solutions for Ambient IoT in NR Phase 2",
               "hierarchy": [
                 {
-                  "agenda_item": "11",
-                  "description": "Data Collection for SON/MDT in NR Phase 5 (RAN3-led)"
+                  "agenda_item": "14",
+                  "description": "Solutions for Ambient IoT in NR Phase 2"
                 }
               ]
             }
@@ -955,7 +955,7 @@
           ],
           "room_scope": "assigned",
           "notes": [
-            "SON/MDT: AI 11",
+            "Ambient IoT: AI 14",
             "X"
           ],
           "inferred_agenda_items": [],
@@ -1318,20 +1318,20 @@
       }
     }
   ],
-  "source_file": "RAN3_134_agenda_20261023.docx",
-  "generated_at": "2026-11-06 07:02",
+  "source_file": "RAN3_134_agenda_20261106.docx",
+  "generated_at": "2026-11-06 08:41",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
-    "RAN3_134_agenda_20261023.docx",
+    "RAN3_134_agenda_20261106.docx",
     "agenda.csv"
   ],
   "source_labels": {
-    "RAN3_134_agenda_20261023.docx": "agenda_20261023",
+    "RAN3_134_agenda_20261106.docx": "agenda_20261106",
     "agenda.csv": "agenda.csv"
   },
   "source_urls": {
-    "RAN3_134_agenda_20261023.docx": "https://www.3gpp.org/ftp/tsg_ran/WG3_Iu/TSGR3_134/Inbox/Chairs_Notes/RAN3_134_agenda_20261023.docx",
+    "RAN3_134_agenda_20261106.docx": "https://www.3gpp.org/ftp/tsg_ran/WG3_Iu/TSGR3_134/Inbox/Chairs_Notes/RAN3_134_agenda_20261106.docx",
     "agenda.csv": "https://www.3gpp.org/ftp/tsg_ran/WG3_Iu/TSGR3_134/Agenda/agenda.csv"
   },
   "source_mails": {},
