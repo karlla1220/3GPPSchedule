@@ -11,7 +11,8 @@
           "room_index_in_table": 0,
           "id": "madrid-3-4-5-6",
           "kind": "",
-          "detail": ""
+          "detail": "",
+          "stream": ""
         },
         {
           "name": "Breakout: Madrid 1-2",
@@ -19,7 +20,8 @@
           "room_index_in_table": 0,
           "id": "madrid-1-2",
           "kind": "",
-          "detail": ""
+          "detail": "",
+          "stream": ""
         }
       ],
       "sessions": [
@@ -49,7 +51,8 @@
             "7"
           ],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         },
         {
           "name": "TBD",
@@ -71,7 +74,8 @@
           "notes": [],
           "inferred_agenda_items": [],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         },
         {
           "name": "Early items",
@@ -93,7 +97,8 @@
           "notes": [],
           "inferred_agenda_items": [],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         },
         {
           "name": "TBD",
@@ -115,7 +120,8 @@
           "notes": [],
           "inferred_agenda_items": [],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         },
         {
           "name": "TBD",
@@ -137,7 +143,8 @@
           "notes": [],
           "inferred_agenda_items": [],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         },
         {
           "name": "Early items: Rel-21 5G-Adv",
@@ -161,7 +168,8 @@
             "15"
           ],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         },
         {
           "name": "TBD",
@@ -183,7 +191,8 @@
           "notes": [],
           "inferred_agenda_items": [],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         },
         {
           "name": "TBD",
@@ -205,7 +214,8 @@
           "notes": [],
           "inferred_agenda_items": [],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         },
         {
           "name": "Early items: Rel-21 5G-Adv",
@@ -229,7 +239,8 @@
             "15"
           ],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         },
         {
           "name": "Rel-21 5G-Adv (AI 15.2 – RAN1/2/3 NTN, Xiaodong)",
@@ -267,7 +278,8 @@
           "notes": [],
           "inferred_agenda_items": [],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         },
         {
           "name": "6G diverse devices",
@@ -313,7 +325,8 @@
           "notes": [],
           "inferred_agenda_items": [],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         }
       ],
       "date": "2026-09-14",
@@ -354,7 +367,8 @@
           "room_index_in_table": 0,
           "id": "madrid-3-4-5-6",
           "kind": "",
-          "detail": ""
+          "detail": "",
+          "stream": ""
         },
         {
           "name": "Breakout: Madrid 1-2 (08:00–12:30)",
@@ -362,7 +376,8 @@
           "room_index_in_table": 0,
           "id": "madrid-1-2",
           "kind": "",
-          "detail": ""
+          "detail": "",
+          "stream": ""
         },
         {
           "name": "Breakout: Neptuno + PTA Alcala (12:30–19:00)",
@@ -370,7 +385,8 @@
           "room_index_in_table": 0,
           "id": "neptuno-pta-alcala",
           "kind": "",
-          "detail": ""
+          "detail": "",
+          "stream": ""
         }
       ],
       "sessions": [
@@ -410,7 +426,8 @@
           "notes": [],
           "inferred_agenda_items": [],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         },
         {
           "name": "ITU Adhoc",
@@ -434,7 +451,8 @@
             "6.1"
           ],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         },
         {
           "name": "Early items",
@@ -456,7 +474,8 @@
           "notes": [],
           "inferred_agenda_items": [],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         },
         {
           "name": "NTN time/frequency compensation",
@@ -498,7 +517,8 @@
           "notes": [],
           "inferred_agenda_items": [],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         },
         {
           "name": "TBD",
@@ -520,7 +540,8 @@
           "notes": [],
           "inferred_agenda_items": [],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         },
         {
           "name": "Early items",
@@ -542,7 +563,8 @@
           "notes": [],
           "inferred_agenda_items": [],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         },
         {
           "name": "6G spec modernization",
@@ -566,7 +588,8 @@
             "6.2.1"
           ],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         },
         {
           "name": "Rel-21 5G-Adv (AI 15.3 – RAN4 Others, Xutao)",
@@ -604,7 +627,8 @@
           "notes": [],
           "inferred_agenda_items": [],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         },
         {
           "name": "Early items",
@@ -626,7 +650,8 @@
           "notes": [],
           "inferred_agenda_items": [],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         },
         {
           "name": "TBD",
@@ -648,7 +673,8 @@
           "notes": [],
           "inferred_agenda_items": [],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         },
         {
           "name": "NTN time/frequency compensation",
@@ -690,7 +716,8 @@
           "notes": [],
           "inferred_agenda_items": [],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         },
         {
           "name": "Early items / 1st sweep",
@@ -712,7 +739,8 @@
           "notes": [],
           "inferred_agenda_items": [],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         },
         {
           "name": "6G diverse devices",
@@ -760,7 +788,8 @@
           ],
           "inferred_agenda_items": [],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         },
         {
           "name": "Rel-21 5G-Adv (AI 15.3 – RAN4 NTN, Yang)",
@@ -798,7 +827,8 @@
           "notes": [],
           "inferred_agenda_items": [],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         }
       ],
       "date": "2026-09-15",
@@ -839,7 +869,8 @@
           "room_index_in_table": 0,
           "id": "madrid-3-4-5-6",
           "kind": "",
-          "detail": ""
+          "detail": "",
+          "stream": ""
         },
         {
           "name": "Breakout: Neptuno + PTA Alcala",
@@ -847,7 +878,8 @@
           "room_index_in_table": 0,
           "id": "neptuno-pta-alcala",
           "kind": "",
-          "detail": ""
+          "detail": "",
+          "stream": ""
         }
       ],
       "sessions": [
@@ -895,7 +927,8 @@
           "notes": [],
           "inferred_agenda_items": [],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         },
         {
           "name": "NTN time/frequency compensation",
@@ -937,7 +970,8 @@
           "notes": [],
           "inferred_agenda_items": [],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         },
         {
           "name": "Report on 6G AS Security – RAN2/SA3 Chairs / 1st sweep / comebacks",
@@ -961,7 +995,8 @@
             "8.4"
           ],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         },
         {
           "name": "TBD",
@@ -983,7 +1018,8 @@
           "notes": [],
           "inferred_agenda_items": [],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         },
         {
           "name": "TBD",
@@ -1005,7 +1041,8 @@
           "notes": [],
           "inferred_agenda_items": [],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         },
         {
           "name": "1st sweep / comebacks",
@@ -1027,7 +1064,8 @@
           "notes": [],
           "inferred_agenda_items": [],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         },
         {
           "name": "6G Migration, Aggregation",
@@ -1073,7 +1111,8 @@
           "notes": [],
           "inferred_agenda_items": [],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         },
         {
           "name": "Rel-21 5G-Adv (AI 15.2 – RAN1/2/3 NTN, Xiaodong)",
@@ -1111,7 +1150,8 @@
           "notes": [],
           "inferred_agenda_items": [],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         },
         {
           "name": "Comebacks",
@@ -1133,7 +1173,8 @@
           "notes": [],
           "inferred_agenda_items": [],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         },
         {
           "name": "TBD",
@@ -1155,7 +1196,8 @@
           "notes": [],
           "inferred_agenda_items": [],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         },
         {
           "name": "6G diverse devices",
@@ -1201,7 +1243,8 @@
           "notes": [],
           "inferred_agenda_items": [],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         },
         {
           "name": "Comebacks",
@@ -1223,7 +1266,8 @@
           "notes": [],
           "inferred_agenda_items": [],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         },
         {
           "name": "TBD",
@@ -1245,7 +1289,8 @@
           "notes": [],
           "inferred_agenda_items": [],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         },
         {
           "name": "Rel-21 5G-Adv (AI 15.3 – RAN4 NTN, Yang)",
@@ -1283,7 +1328,8 @@
           "notes": [],
           "inferred_agenda_items": [],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         }
       ],
       "date": "2026-09-16",
@@ -1324,7 +1370,8 @@
           "room_index_in_table": 0,
           "id": "madrid-3-4-5-6",
           "kind": "",
-          "detail": ""
+          "detail": "",
+          "stream": ""
         },
         {
           "name": "Breakout: Neptuno + PTA Alcala",
@@ -1332,7 +1379,8 @@
           "room_index_in_table": 0,
           "id": "neptuno-pta-alcala",
           "kind": "",
-          "detail": ""
+          "detail": "",
+          "stream": ""
         }
       ],
       "sessions": [
@@ -1356,7 +1404,8 @@
           "notes": [],
           "inferred_agenda_items": [],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         },
         {
           "name": "NTN time/frequency compensation",
@@ -1398,7 +1447,8 @@
           "notes": [],
           "inferred_agenda_items": [],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         },
         {
           "name": "Comebacks",
@@ -1420,7 +1470,8 @@
           "notes": [],
           "inferred_agenda_items": [],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         },
         {
           "name": "TBD",
@@ -1442,7 +1493,8 @@
           "notes": [],
           "inferred_agenda_items": [],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         },
         {
           "name": "NTN time/frequency compensation",
@@ -1484,7 +1536,8 @@
           "notes": [],
           "inferred_agenda_items": [],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         },
         {
           "name": "Comebacks",
@@ -1506,7 +1559,8 @@
           "notes": [],
           "inferred_agenda_items": [],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         },
         {
           "name": "TBD",
@@ -1528,7 +1582,8 @@
           "notes": [],
           "inferred_agenda_items": [],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         },
         {
           "name": "NTN time/frequency compensation",
@@ -1570,7 +1625,8 @@
           "notes": [],
           "inferred_agenda_items": [],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         },
         {
           "name": "Comebacks",
@@ -1592,7 +1648,8 @@
           "notes": [],
           "inferred_agenda_items": [],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         },
         {
           "name": "TBD",
@@ -1614,7 +1671,8 @@
           "notes": [],
           "inferred_agenda_items": [],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         },
         {
           "name": "TBD",
@@ -1636,7 +1694,8 @@
           "notes": [],
           "inferred_agenda_items": [],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         },
         {
           "name": "Comebacks",
@@ -1662,7 +1721,8 @@
             "17"
           ],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         }
       ],
       "date": "2026-09-17",

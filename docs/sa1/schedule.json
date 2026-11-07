@@ -11,7 +11,8 @@
           "room_index_in_table": 0,
           "id": "plenary",
           "kind": "",
-          "detail": "D3/D4, Floor 3"
+          "detail": "D3/D4, Floor 3",
+          "stream": ""
         },
         {
           "name": "Breakout 2",
@@ -19,7 +20,8 @@
           "room_index_in_table": 0,
           "id": "breakout-2",
           "kind": "",
-          "detail": "D9, Floor 3"
+          "detail": "D9, Floor 3",
+          "stream": ""
         }
       ],
       "sessions": [
@@ -81,7 +83,8 @@
           ],
           "inferred_agenda_items": [],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         },
         {
           "name": "Plenary",
@@ -129,7 +132,8 @@
           ],
           "inferred_agenda_items": [],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         },
         {
           "name": "Plenary",
@@ -209,7 +213,8 @@
           ],
           "inferred_agenda_items": [],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         },
         {
           "name": "Plenary",
@@ -253,7 +258,8 @@
           ],
           "inferred_agenda_items": [],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         },
         {
           "name": "Plenary",
@@ -321,7 +327,8 @@
           ],
           "inferred_agenda_items": [],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         }
       ],
       "date": "2026-08-24",
@@ -359,7 +366,8 @@
           "room_index_in_table": 0,
           "id": "plenary",
           "kind": "",
-          "detail": "D3/D4, Floor 3"
+          "detail": "D3/D4, Floor 3",
+          "stream": ""
         },
         {
           "name": "Breakout 2",
@@ -367,7 +375,8 @@
           "room_index_in_table": 0,
           "id": "breakout-2",
           "kind": "",
-          "detail": "D9, Floor 3"
+          "detail": "D9, Floor 3",
+          "stream": ""
         }
       ],
       "sessions": [
@@ -423,7 +432,8 @@
           ],
           "inferred_agenda_items": [],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         },
         {
           "name": "7.3.5 Ubiquitous",
@@ -467,7 +477,8 @@
           ],
           "inferred_agenda_items": [],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         },
         {
           "name": "7.3.3 AI",
@@ -511,7 +522,8 @@
           ],
           "inferred_agenda_items": [],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         },
         {
           "name": "7.3.9 Computing",
@@ -555,7 +567,8 @@
           ],
           "inferred_agenda_items": [],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         },
         {
           "name": "7.3.2 System and Operation",
@@ -599,7 +612,8 @@
           ],
           "inferred_agenda_items": [],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         },
         {
           "name": "7.3.6 Immersive+7.3.10 IMS",
@@ -662,7 +676,8 @@
           ],
           "inferred_agenda_items": [],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         },
         {
           "name": "7.3.2 System and Operation",
@@ -706,7 +721,8 @@
           ],
           "inferred_agenda_items": [],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         },
         {
           "name": "7.3.8 Verticals+7.3.7 Massive",
@@ -769,7 +785,8 @@
           ],
           "inferred_agenda_items": [],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         },
         {
           "name": "7.3.4 ISAC",
@@ -813,7 +830,8 @@
           ],
           "inferred_agenda_items": [],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         },
         {
           "name": "MMS",
@@ -835,7 +853,8 @@
           ],
           "inferred_agenda_items": [],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         }
       ],
       "date": "2026-08-25",
@@ -873,7 +892,8 @@
           "room_index_in_table": 0,
           "id": "plenary",
           "kind": "",
-          "detail": "D3/D4, Floor 3"
+          "detail": "D3/D4, Floor 3",
+          "stream": ""
         },
         {
           "name": "Breakout 2",
@@ -881,7 +901,8 @@
           "room_index_in_table": 0,
           "id": "breakout-2",
           "kind": "",
-          "detail": "D9, Floor 3"
+          "detail": "D9, Floor 3",
+          "stream": ""
         }
       ],
       "sessions": [
@@ -907,7 +928,8 @@
             "7.3.9"
           ],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         },
         {
           "name": "7.3.5 Ubiquitous",
@@ -951,7 +973,8 @@
           ],
           "inferred_agenda_items": [],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         },
         {
           "name": "7.3.3 AI",
@@ -995,7 +1018,8 @@
           ],
           "inferred_agenda_items": [],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         },
         {
           "name": "7.3.9 Computing",
@@ -1039,7 +1063,8 @@
           ],
           "inferred_agenda_items": [],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         },
         {
           "name": "7.3.2 System and Operation",
@@ -1083,7 +1108,8 @@
           ],
           "inferred_agenda_items": [],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         },
         {
           "name": "Drafting on UE sensing profile",
@@ -1107,7 +1133,8 @@
             "7.3.4"
           ],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         },
         {
           "name": "7.3.10 IMS+7.3.6 Immersive",
@@ -1170,7 +1197,8 @@
           ],
           "inferred_agenda_items": [],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         },
         {
           "name": "7.3.2 System and Operation",
@@ -1214,7 +1242,8 @@
           ],
           "inferred_agenda_items": [],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         },
         {
           "name": "7.3.7 Massive+7.3.8 Verticals",
@@ -1277,7 +1306,8 @@
           ],
           "inferred_agenda_items": [],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         },
         {
           "name": "7.3.4 ISAC",
@@ -1321,7 +1351,8 @@
           ],
           "inferred_agenda_items": [],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         },
         {
           "name": "7.3.9 Computing",
@@ -1365,7 +1396,8 @@
           ],
           "inferred_agenda_items": [],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         }
       ],
       "date": "2026-08-26",
@@ -1404,7 +1436,8 @@
           "room_index_in_table": 0,
           "id": "plenary",
           "kind": "",
-          "detail": "D3/D4, Floor 3"
+          "detail": "D3/D4, Floor 3",
+          "stream": ""
         },
         {
           "name": "Breakout 2",
@@ -1412,7 +1445,8 @@
           "room_index_in_table": 0,
           "id": "breakout-2",
           "kind": "",
-          "detail": "D9, Floor 3"
+          "detail": "D9, Floor 3",
+          "stream": ""
         }
       ],
       "sessions": [
@@ -1478,7 +1512,8 @@
           ],
           "inferred_agenda_items": [],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         },
         {
           "name": "Plenary",
@@ -1538,7 +1573,8 @@
           ],
           "inferred_agenda_items": [],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         },
         {
           "name": "Plenary",
@@ -1622,7 +1658,8 @@
           ],
           "inferred_agenda_items": [],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         },
         {
           "name": "Plenary",
@@ -1702,7 +1739,8 @@
           ],
           "inferred_agenda_items": [],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         },
         {
           "name": "Plenary",
@@ -1826,7 +1864,8 @@
           ],
           "inferred_agenda_items": [],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         },
         {
           "name": "Plenary",
@@ -1910,7 +1949,8 @@
           ],
           "inferred_agenda_items": [],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         }
       ],
       "date": "2026-08-27",
@@ -1948,7 +1988,8 @@
           "room_index_in_table": 0,
           "id": "plenary",
           "kind": "",
-          "detail": "D3/D4, Floor 3"
+          "detail": "D3/D4, Floor 3",
+          "stream": ""
         },
         {
           "name": "Breakout 2",
@@ -1956,7 +1997,8 @@
           "room_index_in_table": 0,
           "id": "breakout-2",
           "kind": "",
-          "detail": "D9, Floor 3"
+          "detail": "D9, Floor 3",
+          "stream": ""
         }
       ],
       "sessions": [
@@ -1980,7 +2022,8 @@
           "notes": [],
           "inferred_agenda_items": [],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         },
         {
           "name": "Plenary",
@@ -2004,7 +2047,8 @@
           ],
           "inferred_agenda_items": [],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         },
         {
           "name": "Plenary",
@@ -2028,7 +2072,8 @@
           ],
           "inferred_agenda_items": [],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         },
         {
           "name": "Plenary",
@@ -2052,7 +2097,8 @@
           ],
           "inferred_agenda_items": [],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         }
       ],
       "date": "2026-08-28",

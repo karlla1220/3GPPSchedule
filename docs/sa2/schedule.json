@@ -11,7 +11,8 @@
           "room_index_in_table": 0,
           "id": "stream1",
           "kind": "",
-          "detail": "Palomino E-H · Stream 1"
+          "detail": "Palomino E-H",
+          "stream": "Stream 1"
         },
         {
           "name": "Breakout 1",
@@ -19,7 +20,8 @@
           "room_index_in_table": 0,
           "id": "stream2",
           "kind": "",
-          "detail": "BMO Room 203 · Stream 2"
+          "detail": "BMO Room 203",
+          "stream": "Stream 2"
         },
         {
           "name": "Breakout 2",
@@ -27,7 +29,8 @@
           "room_index_in_table": 0,
           "id": "stream3",
           "kind": "",
-          "detail": "Percheron CD · Stream 3"
+          "detail": "Percheron CD",
+          "stream": "Stream 3"
         }
       ],
       "sessions": [
@@ -121,7 +124,8 @@
           ],
           "inferred_agenda_items": [],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         },
         {
           "name": "Rel-19 maintenance",
@@ -157,7 +161,8 @@
           ],
           "inferred_agenda_items": [],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         },
         {
           "name": "KI#1.1 (NAS)",
@@ -204,7 +209,8 @@
           "part": [
             1,
             2
-          ]
+          ],
+          "stream": ""
         },
         {
           "name": "KI#12 – KI#16",
@@ -327,7 +333,8 @@
           "part": [
             1,
             2
-          ]
+          ],
+          "stream": ""
         },
         {
           "name": "KI#1.1 (NAS) / KI#1.2",
@@ -375,7 +382,8 @@
           "part": [
             2,
             2
-          ]
+          ],
+          "stream": ""
         },
         {
           "name": "KI#18 (AI for Network)",
@@ -419,7 +427,8 @@
           ],
           "inferred_agenda_items": [],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         },
         {
           "name": "Pre-Rel-19 maintenance",
@@ -481,7 +490,8 @@
           "part": [
             1,
             2
-          ]
+          ],
+          "stream": ""
         },
         {
           "name": "KI#7 (Net Exposure)",
@@ -528,7 +538,8 @@
           "part": [
             1,
             2
-          ]
+          ],
+          "stream": ""
         },
         {
           "name": "KI#9 (Localized Net)",
@@ -575,7 +586,8 @@
           "part": [
             2,
             2
-          ]
+          ],
+          "stream": ""
         },
         {
           "name": "Rel-19 maintenance",
@@ -614,7 +626,8 @@
           "part": [
             2,
             2
-          ]
+          ],
+          "stream": ""
         },
         {
           "name": "6G Single Stream",
@@ -653,7 +666,8 @@
           "part": [
             1,
             2
-          ]
+          ],
+          "stream": ""
         },
         {
           "name": "6G Single Stream",
@@ -693,7 +707,8 @@
           "part": [
             2,
             2
-          ]
+          ],
+          "stream": ""
         },
         {
           "name": "KI#5 (QoS)",
@@ -740,7 +755,8 @@
           "part": [
             1,
             2
-          ]
+          ],
+          "stream": ""
         },
         {
           "name": "NG_RTC_Ph3-ARC",
@@ -787,7 +803,8 @@
           "part": [
             1,
             2
-          ]
+          ],
+          "stream": ""
         },
         {
           "name": "Pre-Rel-19 maintenance",
@@ -849,7 +866,8 @@
           "part": [
             1,
             2
-          ]
+          ],
+          "stream": ""
         },
         {
           "name": "KI#4 (UP Arch)",
@@ -896,7 +914,8 @@
           "part": [
             2,
             2
-          ]
+          ],
+          "stream": ""
         },
         {
           "name": "KI#20 (Sensing)",
@@ -943,7 +962,8 @@
           "part": [
             2,
             2
-          ]
+          ],
+          "stream": ""
         }
       ],
       "date": "2026-11-16",
@@ -986,7 +1006,8 @@
           "room_index_in_table": 0,
           "id": "stream1",
           "kind": "",
-          "detail": "Palomino E-H"
+          "detail": "Palomino E-H",
+          "stream": "Stream 1"
         },
         {
           "name": "Breakout 1",
@@ -994,7 +1015,8 @@
           "room_index_in_table": 0,
           "id": "stream2",
           "kind": "",
-          "detail": "BMO Room 203"
+          "detail": "BMO Room 203",
+          "stream": "Stream 2"
         },
         {
           "name": "Breakout 2",
@@ -1002,7 +1024,8 @@
           "room_index_in_table": 0,
           "id": "stream3",
           "kind": "",
-          "detail": "Percheron CD"
+          "detail": "Percheron CD",
+          "stream": "Stream 3"
         }
       ],
       "sessions": [
@@ -1030,7 +1053,8 @@
             "20.6.0"
           ],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         },
         {
           "name": "Drafting",
@@ -1054,7 +1078,8 @@
           ],
           "inferred_agenda_items": [],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         },
         {
           "name": "Drafting",
@@ -1078,7 +1103,8 @@
           ],
           "inferred_agenda_items": [],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         },
         {
           "name": "AIML_CN_Ph2 / KI#23 (NTN)",
@@ -1146,7 +1172,8 @@
           "part": [
             1,
             2
-          ]
+          ],
+          "stream": "Stream 2"
         },
         {
           "name": "FS_enIMS_ARC",
@@ -1194,7 +1221,8 @@
           "part": [
             1,
             2
-          ]
+          ],
+          "stream": "Stream 1"
         },
         {
           "name": "AmbientIoT_Ph2-ARC",
@@ -1241,7 +1269,8 @@
           "part": [
             1,
             2
-          ]
+          ],
+          "stream": ""
         },
         {
           "name": "KI#22 (Computing)",
@@ -1289,7 +1318,8 @@
           "part": [
             2,
             2
-          ]
+          ],
+          "stream": "Stream 2"
         },
         {
           "name": "In breakout 1",
@@ -1316,7 +1346,8 @@
           "part": [
             2,
             2
-          ]
+          ],
+          "stream": "Stream 1"
         },
         {
           "name": "KI#17 (IWK)",
@@ -1363,7 +1394,8 @@
           "part": [
             2,
             2
-          ]
+          ],
+          "stream": ""
         },
         {
           "name": "In main room",
@@ -1390,7 +1422,8 @@
           "part": [
             1,
             2
-          ]
+          ],
+          "stream": "Stream 3"
         },
         {
           "name": "KI#12 – KI#16",
@@ -1513,7 +1546,8 @@
           "part": [
             1,
             2
-          ]
+          ],
+          "stream": ""
         },
         {
           "name": "KI#3 (Slicing)",
@@ -1561,7 +1595,8 @@
           "part": [
             1,
             2
-          ]
+          ],
+          "stream": "Stream 1"
         },
         {
           "name": "KI#19 (Network for AI)",
@@ -1609,7 +1644,8 @@
           "part": [
             2,
             2
-          ]
+          ],
+          "stream": "Stream 3"
         },
         {
           "name": "KI#24 (IoT)",
@@ -1656,7 +1692,8 @@
           "part": [
             2,
             2
-          ]
+          ],
+          "stream": ""
         },
         {
           "name": "KI#2 (SBA)",
@@ -1704,7 +1741,8 @@
           "part": [
             2,
             2
-          ]
+          ],
+          "stream": "Stream 1"
         },
         {
           "name": "FS_enIMS_ARC",
@@ -1751,7 +1789,8 @@
           "part": [
             1,
             2
-          ]
+          ],
+          "stream": ""
         },
         {
           "name": "Rel-19 maintenance",
@@ -1791,7 +1830,8 @@
           "part": [
             1,
             2
-          ]
+          ],
+          "stream": "Stream 3"
         },
         {
           "name": "KI#8 (Net Sharing) / KI#22 (Computing)",
@@ -1859,7 +1899,8 @@
           "part": [
             1,
             2
-          ]
+          ],
+          "stream": "Stream 2"
         },
         {
           "name": "KI#6 (Policy)",
@@ -1906,7 +1947,8 @@
           "part": [
             2,
             2
-          ]
+          ],
+          "stream": ""
         },
         {
           "name": "Rel-19 maintenance / EnergySys_Ph2-ARC",
@@ -1966,7 +2008,8 @@
           "part": [
             2,
             2
-          ]
+          ],
+          "stream": "Stream 3"
         },
         {
           "name": "In Breakout 2",
@@ -1993,7 +2036,8 @@
           "part": [
             2,
             2
-          ]
+          ],
+          "stream": "Stream 2"
         },
         {
           "name": "6G Single Stream",
@@ -2029,7 +2073,8 @@
           ],
           "inferred_agenda_items": [],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         },
         {
           "name": "Rel-21 5G-A discussion",
@@ -2053,7 +2098,8 @@
             "30.4"
           ],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         }
       ],
       "date": "2026-11-17",
@@ -2101,7 +2147,8 @@
           "room_index_in_table": 0,
           "id": "stream1",
           "kind": "",
-          "detail": "Palomino E-H"
+          "detail": "Palomino E-H",
+          "stream": "Stream 1"
         },
         {
           "name": "Breakout 1",
@@ -2109,7 +2156,8 @@
           "room_index_in_table": 0,
           "id": "stream2",
           "kind": "",
-          "detail": "BMO Room 203 · Stream 2"
+          "detail": "BMO Room 203",
+          "stream": "Stream 2"
         },
         {
           "name": "Breakout 2",
@@ -2117,7 +2165,8 @@
           "room_index_in_table": 0,
           "id": "stream3",
           "kind": "",
-          "detail": "Percheron CD · Stream 3"
+          "detail": "Percheron CD",
+          "stream": "Stream 3"
         }
       ],
       "sessions": [
@@ -2145,7 +2194,8 @@
             "20.6.0"
           ],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         },
         {
           "name": "Drafting",
@@ -2169,7 +2219,8 @@
           ],
           "inferred_agenda_items": [],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         },
         {
           "name": "Drafting",
@@ -2193,7 +2244,8 @@
           ],
           "inferred_agenda_items": [],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         },
         {
           "name": "KI#21 (Data Framework)",
@@ -2237,7 +2289,8 @@
           ],
           "inferred_agenda_items": [],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         },
         {
           "name": "Pre-Rel-19 maintenance",
@@ -2299,7 +2352,8 @@
           "part": [
             1,
             2
-          ]
+          ],
+          "stream": ""
         },
         {
           "name": "KI#11 (Non-3GPP)",
@@ -2346,7 +2400,8 @@
           "part": [
             2,
             2
-          ]
+          ],
+          "stream": ""
         },
         {
           "name": "KI#19 (Network for AI)",
@@ -2394,7 +2449,8 @@
           "part": [
             1,
             2
-          ]
+          ],
+          "stream": "Stream 3"
         },
         {
           "name": "Pre-Rel-19 maintenance",
@@ -2456,7 +2512,8 @@
           "part": [
             1,
             2
-          ]
+          ],
+          "stream": ""
         },
         {
           "name": "KI#20 (Sensing)",
@@ -2504,7 +2561,8 @@
           "part": [
             2,
             2
-          ]
+          ],
+          "stream": "Stream 3"
         },
         {
           "name": "5GSAT_Ph4-ARC",
@@ -2551,7 +2609,8 @@
           "part": [
             2,
             2
-          ]
+          ],
+          "stream": ""
         },
         {
           "name": "6G Single Stream",
@@ -2598,7 +2657,8 @@
           "part": [
             1,
             2
-          ]
+          ],
+          "stream": ""
         },
         {
           "name": "6G Single Stream",
@@ -2646,7 +2706,8 @@
           "part": [
             2,
             2
-          ]
+          ],
+          "stream": ""
         },
         {
           "name": "6G Single Stream",
@@ -2682,7 +2743,8 @@
           ],
           "inferred_agenda_items": [],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         },
         {
           "name": "Work planning, etc",
@@ -2717,7 +2779,8 @@
           ],
           "inferred_agenda_items": [],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         }
       ],
       "date": "2026-11-18",
@@ -2765,7 +2828,8 @@
           "room_index_in_table": 0,
           "id": "stream1",
           "kind": "",
-          "detail": "Palomino E-H · Stream 1"
+          "detail": "Palomino E-H",
+          "stream": "Stream 1"
         },
         {
           "name": "Breakout 1",
@@ -2773,7 +2837,8 @@
           "room_index_in_table": 0,
           "id": "stream2",
           "kind": "",
-          "detail": "BMO Room 203 · Stream 2"
+          "detail": "BMO Room 203",
+          "stream": "Stream 2"
         },
         {
           "name": "Breakout 2",
@@ -2781,7 +2846,8 @@
           "room_index_in_table": 0,
           "id": "stream3",
           "kind": "",
-          "detail": "Percheron CD · Stream 3"
+          "detail": "Percheron CD",
+          "stream": "Stream 3"
         }
       ],
       "sessions": [
@@ -2847,7 +2913,8 @@
           ],
           "inferred_agenda_items": [],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         },
         {
           "name": "Sensing-ARC – not revisions",
@@ -2891,7 +2958,8 @@
           ],
           "inferred_agenda_items": [],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         },
         {
           "name": "6G revisions (single stream)",
@@ -2939,7 +3007,8 @@
             "20.6.24"
           ],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         }
       ],
       "date": "2026-11-19",
@@ -2982,7 +3051,8 @@
           "room_index_in_table": 0,
           "id": "stream1",
           "kind": "",
-          "detail": "Palomino E-H · Stream 1"
+          "detail": "Palomino E-H",
+          "stream": "Stream 1"
         },
         {
           "name": "Breakout 1",
@@ -2990,7 +3060,8 @@
           "room_index_in_table": 0,
           "id": "stream2",
           "kind": "",
-          "detail": "BMO Room 203 · Stream 2"
+          "detail": "BMO Room 203",
+          "stream": "Stream 2"
         },
         {
           "name": "Breakout 2",
@@ -2998,7 +3069,8 @@
           "room_index_in_table": 0,
           "id": "stream3",
           "kind": "",
-          "detail": "Percheron CD · Stream 3"
+          "detail": "Percheron CD",
+          "stream": "Stream 3"
         }
       ],
       "sessions": [
@@ -3024,7 +3096,8 @@
           ],
           "inferred_agenda_items": [],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         },
         {
           "name": "Revisions",
@@ -3048,7 +3121,8 @@
           ],
           "inferred_agenda_items": [],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         },
         {
           "name": "Revisions",
@@ -3072,7 +3146,8 @@
           ],
           "inferred_agenda_items": [],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         },
         {
           "name": "Revisions",
@@ -3096,7 +3171,8 @@
           ],
           "inferred_agenda_items": [],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         },
         {
           "name": "Revisions",
@@ -3120,7 +3196,8 @@
           ],
           "inferred_agenda_items": [],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         },
         {
           "name": "Revisions",
@@ -3144,7 +3221,8 @@
           ],
           "inferred_agenda_items": [],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         },
         {
           "name": "Revisions",
@@ -3168,7 +3246,8 @@
           ],
           "inferred_agenda_items": [],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         },
         {
           "name": "Revisions",
@@ -3192,7 +3271,8 @@
           ],
           "inferred_agenda_items": [],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         },
         {
           "name": "Revisions",
@@ -3216,7 +3296,8 @@
           ],
           "inferred_agenda_items": [],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         },
         {
           "name": "Plenary session",
@@ -3238,7 +3319,8 @@
           ],
           "inferred_agenda_items": [],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         },
         {
           "name": "List of agreed tdocs for block approval / Revisions (including 30.1)",
@@ -3277,7 +3359,8 @@
           ],
           "inferred_agenda_items": [],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         },
         {
           "name": "block approval of agreed tdocs",
@@ -3300,7 +3383,8 @@
           ],
           "inferred_agenda_items": [],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         }
       ],
       "date": "2026-11-20",
@@ -3338,7 +3422,7 @@
     }
   ],
   "source_file": "S2-261nnnn_SA2-178-Session Plan - r3.zip",
-  "generated_at": "2026-11-06 05:21",
+  "generated_at": "2026-11-06 18:21",
   "contact_name": "",
   "contact_email": "",
   "source_files": [

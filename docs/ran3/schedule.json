@@ -11,7 +11,8 @@
           "room_index_in_table": 0,
           "id": "main",
           "kind": "",
-          "detail": ""
+          "detail": "",
+          "stream": ""
         }
       ],
       "sessions": [
@@ -104,7 +105,8 @@
           ],
           "inferred_agenda_items": [],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         },
         {
           "name": "Corrections",
@@ -140,7 +142,8 @@
           ],
           "inferred_agenda_items": [],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         },
         {
           "name": "6G SI",
@@ -176,7 +179,8 @@
           ],
           "inferred_agenda_items": [],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         },
         {
           "name": "6G SI",
@@ -212,7 +216,8 @@
           ],
           "inferred_agenda_items": [],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         }
       ],
       "date": "2026-11-16",
@@ -253,7 +258,8 @@
           "room_index_in_table": 0,
           "id": "main",
           "kind": "",
-          "detail": ""
+          "detail": "",
+          "stream": ""
         }
       ],
       "sessions": [
@@ -280,7 +286,8 @@
           ],
           "inferred_agenda_items": [],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         },
         {
           "name": "Offline*",
@@ -305,7 +312,8 @@
           ],
           "inferred_agenda_items": [],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         },
         {
           "name": "6G SI",
@@ -341,7 +349,8 @@
           ],
           "inferred_agenda_items": [],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         },
         {
           "name": "6G SI",
@@ -377,7 +386,8 @@
           ],
           "inferred_agenda_items": [],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         },
         {
           "name": "6G SI",
@@ -413,7 +423,8 @@
           ],
           "inferred_agenda_items": [],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         },
         {
           "name": "6G SI",
@@ -452,7 +463,8 @@
           "part": [
             1,
             2
-          ]
+          ],
+          "stream": ""
         },
         {
           "name": "6G Offline*",
@@ -482,7 +494,8 @@
           "part": [
             2,
             2
-          ]
+          ],
+          "stream": ""
         }
       ],
       "date": "2026-11-17",
@@ -523,7 +536,8 @@
           "room_index_in_table": 0,
           "id": "main",
           "kind": "",
-          "detail": ""
+          "detail": "",
+          "stream": ""
         }
       ],
       "sessions": [
@@ -552,7 +566,8 @@
             "10"
           ],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         },
         {
           "name": "AIML RAN",
@@ -589,7 +604,8 @@
           ],
           "inferred_agenda_items": [],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         },
         {
           "name": "6G Offline*",
@@ -616,7 +632,8 @@
             "10"
           ],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         },
         {
           "name": "ISAC SI",
@@ -652,7 +669,8 @@
           ],
           "inferred_agenda_items": [],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         },
         {
           "name": "6G SI",
@@ -693,7 +711,8 @@
           ],
           "inferred_agenda_items": [],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         },
         {
           "name": "6G Offline*",
@@ -720,7 +739,8 @@
             "10"
           ],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         },
         {
           "name": "MobEnh",
@@ -759,7 +779,8 @@
           "part": [
             1,
             2
-          ]
+          ],
+          "stream": ""
         },
         {
           "name": "6G Offline*",
@@ -789,7 +810,8 @@
           "part": [
             2,
             2
-          ]
+          ],
+          "stream": ""
         }
       ],
       "date": "2026-11-18",
@@ -830,7 +852,8 @@
           "room_index_in_table": 0,
           "id": "main",
           "kind": "",
-          "detail": ""
+          "detail": "",
+          "stream": ""
         }
       ],
       "sessions": [
@@ -859,7 +882,8 @@
             "10"
           ],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         },
         {
           "name": "SON/MDT",
@@ -896,7 +920,8 @@
           ],
           "inferred_agenda_items": [],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         },
         {
           "name": "6G Offline*",
@@ -923,7 +948,8 @@
             "10"
           ],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         },
         {
           "name": "Ambient IoT",
@@ -960,7 +986,8 @@
           ],
           "inferred_agenda_items": [],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         },
         {
           "name": "TEI20",
@@ -999,7 +1026,8 @@
           "part": [
             1,
             2
-          ]
+          ],
+          "stream": ""
         },
         {
           "name": "6G SI",
@@ -1038,7 +1066,8 @@
           "part": [
             2,
             2
-          ]
+          ],
+          "stream": ""
         },
         {
           "name": "6G Offline*",
@@ -1065,7 +1094,8 @@
             "10"
           ],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         },
         {
           "name": "Early CBs",
@@ -1092,7 +1122,8 @@
           "part": [
             1,
             2
-          ]
+          ],
+          "stream": ""
         },
         {
           "name": "6G Offline*",
@@ -1122,7 +1153,8 @@
           "part": [
             2,
             2
-          ]
+          ],
+          "stream": ""
         }
       ],
       "date": "2026-11-19",
@@ -1163,7 +1195,8 @@
           "room_index_in_table": 0,
           "id": "main",
           "kind": "",
-          "detail": ""
+          "detail": "",
+          "stream": ""
         }
       ],
       "sessions": [
@@ -1190,7 +1223,8 @@
           ],
           "inferred_agenda_items": [],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         },
         {
           "name": "Offline*",
@@ -1215,7 +1249,8 @@
           ],
           "inferred_agenda_items": [],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         },
         {
           "name": "CBs",
@@ -1239,7 +1274,8 @@
           ],
           "inferred_agenda_items": [],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         },
         {
           "name": "CBs",
@@ -1263,7 +1299,8 @@
           ],
           "inferred_agenda_items": [],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         },
         {
           "name": "CBs*",
@@ -1291,7 +1328,8 @@
           ],
           "inferred_agenda_items": [],
           "email_details": [],
-          "part": null
+          "part": null,
+          "stream": ""
         }
       ],
       "date": "2026-11-20",
