@@ -981,7 +981,23 @@ def test_filter_keeps_written_ai_and_panel_gets_sections(note):
     assert block["data-agreement-ai"].split("|")[:2] == ["10.1", "10.10"]
     assert block["aria-label"] == "Multi, AI 10.1, 10.10"
     other = BeautifulSoup(generate_html(schedule(wg="ran-plenary")), "html.parser")
-    assert not other.select_one(".session-block").has_attr("data-agreement-ai")
+    plain = other.select_one(".session-block")
+    assert not plain.has_attr("data-agreement-ai")
+    # Without a panel the cell still opens its popup, so it stays a keyboard stop.
+    assert plain["tabindex"] == "0" and plain["role"] == "button" and plain["aria-label"]
+    assert not plain.has_attr("aria-pressed") and not plain.has_attr("aria-controls")
+
+
+def test_page_controls_carry_names_and_state():
+    """Day tabs say which is shown; the collapsed filter stays out of the tab order."""
+    page = BeautifulSoup(generate_html(schedule(wg="ran-plenary")), "html.parser")
+    assert {tab["aria-pressed"] for tab in page.select(".tab")} == {"false"}
+    assert page.select_one("#popup-floating")["role"] == "dialog"
+    assert page.select_one("#popup-close-btn")["aria-label"] == "Close"
+    assert page.select_one(".filter-toggle")["aria-expanded"] == "false"
+    panel = page.select_one(".filter-panel")
+    assert all(child.has_attr("inert") for child in panel.find_all(recursive=False)
+               if "filter-toggle" not in child.get("class", []))
 
 
 def test_zip_inner_name_without_meeting_uses_published_name(note, tmp_path):

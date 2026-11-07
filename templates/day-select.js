@@ -23,6 +23,7 @@
     chosen = chosen || document.querySelector('.tab');
     if (!chosen) return;
     chosen.classList.add('active');
+    chosen.setAttribute('aria-pressed', 'true');
     const style = document.createElement('style');
     style.id = 'initial-day';
     // The names give the switch's animation its grid (schedule.css, @view-transition).

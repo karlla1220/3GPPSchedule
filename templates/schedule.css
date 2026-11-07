@@ -359,6 +359,8 @@ header .meta a:focus-visible,
 .support-note-close:hover { color: var(--ink); background: var(--page-bg); }
 @media (max-width: 600px) {
     header { --title-size: 18px; --title-line: 24px; }
+    /* The fixed Filter tab (32px) sits on the right edge, level with these lines. */
+    header .meta { padding-inline: 32px; }
 }
 
 /* Tabs */
@@ -396,7 +398,7 @@ header .meta a:focus-visible,
     letter-spacing: .04em;
     cursor: pointer;
     border-radius: 999px;
-    transition: all 0.15s;
+    transition: background-color 0.15s, border-color 0.15s, color 0.15s;
     line-height: 1;
 }
 
@@ -426,7 +428,7 @@ header .meta a:focus-visible,
     font-size: 13.5px;
     font-weight: 500;
     cursor: pointer;
-    transition: all 0.15s;
+    transition: background-color 0.15s, color 0.15s, box-shadow 0.15s;
     border-radius: 7px;
 }
 
@@ -842,10 +844,13 @@ header .meta a:focus-visible,
     line-height: calc(var(--slot-height) - 2px);
 }
 
-.session-block:hover {
-    border-color: var(--edge-hover);
-    box-shadow: 0 2px 8px -2px rgba(15,23,42,.12);
-    z-index: 15;
+/* A tap would leave this on a phone, where it reads as a selected cell. */
+@media (hover: hover) {
+    .session-block:hover {
+        border-color: var(--edge-hover);
+        box-shadow: 0 2px 8px -2px rgba(15,23,42,.12);
+        z-index: 15;
+    }
 }
 
 /* Primary: the title. Everything else is one quiet secondary tone. */
@@ -1037,6 +1042,9 @@ header .meta a:focus-visible,
 .popup-floating.show {
     display: block;
 }
+/* Enter on a cell moves focus here (schedule.js). */
+.popup-floating:focus-visible { outline: 2px solid #93C5FD; outline-offset: 2px; }
+.popup-floating .popup-close:focus-visible { outline: 2px solid #93C5FD; outline-offset: 1px; border-radius: 2px; }
 
 .popup-floating .popup-close {
     position: absolute;
@@ -1224,6 +1232,9 @@ header .meta a:focus-visible,
 .filter-panel.collapsed {
     transform: translateX(calc(100%)) translateY(-50%);
 }
+@media (prefers-reduced-motion: reduce) {
+    .filter-panel { transition: none; }
+}
 
 .filter-toggle {
     position: absolute;
@@ -1329,7 +1340,8 @@ header .meta a:focus-visible,
     display: flex;
     align-items: center;
     gap: 5px;
-    padding: 3px 4px;
+    /* The label carries the 24px row (WCAG 2.5.8): it toggles the checkbox. */
+    padding: 0 4px;
     border-radius: 4px;
     cursor: pointer;
     font-size: 12px;
@@ -1347,6 +1359,8 @@ header .meta a:focus-visible,
 }
 
 .filter-item label {
+    padding: 3px 0;
+    line-height: 18px;
     cursor: pointer;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -1356,8 +1370,10 @@ header .meta a:focus-visible,
 }
 
 .filter-item .tree-toggle {
-    width: 16px;
-    height: 16px;
+    /* A 24px target that takes the old 16px of the row. */
+    width: 24px;
+    height: 24px;
+    margin: 0 -4px;
     display: flex;
     align-items: center;
     justify-content: center;

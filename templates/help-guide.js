@@ -254,7 +254,7 @@
                 await moveTo(c.dot, within(c.stage, c.toggle, 0.5, 0.5), token, 800);
                 await tap(c.dot, token);
                 c.panel.classList.remove('collapsed');
-                c.toggle.textContent = '▶';
+                c.toggle.textContent = '▶ Hide';
                 await sleep(500, token);
                 await moveTo(c.dot, within(c.stage, c.target.querySelector('input'), 0.5, 0.5), token, 600);
                 await tap(c.dot, token);
