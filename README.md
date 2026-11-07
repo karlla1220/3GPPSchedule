@@ -939,7 +939,7 @@ SA2#172·#174·#175·#176·#177·#178(첫 판)의 실제 문서로 확인했습�
 - 방 이름은 방 표의 순서(`Main Room | B2 … | Breakout 1 | …`)로 Stream에 붙입니다: `Main`, `Breakout 1`, `Breakout 2`.
   이름 다음 칸이 장소이고, 좌석 수(`[300]`, #178 `Palomino E-H (300)`, #164 `- 105 pax`)는 뺍니다(`(Floor 2)`는 남습니다). 팝업 Room 줄은 장소와 Stream 번호를 붙여 `Room: Breakout 1 · B3 (Floor 2) · Stream 2`입니다.
   Session Plan과 의장 notes는 행을 Stream으로 부르고, 참석자는 방을 `B3`로 찾습니다.
-  그날 다른 Stream의 세션이 들어온 방(아래 `In main room`)은 그날만 Stream 번호 없이 장소만 적습니다(#178 화: `Main · Palomino E-H`).
+  방 머리의 Stream은 방 표 순서 그대로 매일 같습니다. 다른 Stream의 세션이 들어온 쿼터(아래 `In main room`)는 세션이 자기 Stream을 밝힙니다.
 - 병합 칸은 XML 요소로 식별합니다(`gridSpan`, `vMerge`). 변경 추적은 수락한 상태로 읽습니다(r7·r11·r13·r14에 있습니다).
 - 표 밖의 문단과 방 표는 "Additional information"에 그대로 둡니다. 머리 문단(회의 이름, 장소·날짜)은 첫 판에서 틀리므로 뺍니다.
 
@@ -955,6 +955,10 @@ SA2#172·#174·#175·#176·#177·#178(첫 판)의 실제 문서로 확인했습�
 - `-`(그 Stream은 쉰다)와 빈 칸은 셀이 아닙니다. `Revisions`, `Drafting:` 같은 자리표시는 원문 그대로 셀입니다.
 - **첫 줄이 `In breakout 1`·`In main room`인 칸은 그 방 열에 둡니다(#178부터).** 그 쿼터에 Stream이 방을 바꾸는 표기입니다(화 09:00 Stream 1 `In breakout 1 ⏎ FS_enIMS_ARC`, Stream 2 `In main room ⏎ AIML_CN_Ph2`).
   열은 참석자가 찾아가는 방이라서 옮기고, 세션은 그 Stream의 것으로 남습니다(Chair는 그 Stream의 convener).
+  옮긴 세션은 셀 우하단 Chair 자리에 자기 Stream을 붙입니다(`Michael · Stream 2`, convener가 없는 Stream 1은 `Stream 1`, `Session.stream`).
+  팝업 Room 줄도 방의 Stream 대신 세션의 Stream입니다(`Room: Main · Palomino E-H · Stream 2`). 원본은 행(Stream)을 지키고 방 줄을 빨간 글로 적습니다.
+  우리는 열(방)을 지키므로, 원본의 행 정보를 셀에 남깁니다. MCC가 notes를 받는 것이 Stream 1 세션이라 Stream은 세션의 성격입니다(이슈 #133).
+  `Stream 1`에 `Chair`를 붙이지 않습니다. 원본이 Stream 1의 의장을 적지 않습니다(CLAUDE.md "의장").
   제목은 방 줄 다음 줄부터 읽고 방 줄은 Note에 남습니다. 방 줄만 있는 칸(`In breakout 1`)은 그 줄이 제목입니다.
   옮길 방에 그대로 남는 세션이 같은 때 있으면 원본이 두 말을 하는 것이라 옮기지 않고, 칸은 원문 그대로(제목에 방 줄 포함) 자기 Stream 열에 둡니다.
 - 제목은 칸의 문단을 앞 셋까지 ` / `로 잇고(더 있으면 ` …`), 괄호는 RAN2처럼 모두 뗍니다: `KI#18 (AI for Network) (20.6.18) [5+15]` → `KI#18`.

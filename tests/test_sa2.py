@@ -428,24 +428,35 @@ def test_render_and_snapshot_roundtrip(r20, tmp_path):
     assert 'Revisions (including 30.1)' in shared['data-popup']
 
 
-def test_a_room_is_named_by_its_stream_only_on_days_it_holds_no_other():
+def test_a_moved_session_says_whose_stream_it_is():
+    """#178 swaps rooms for a quarter ("In main room"): the room keeps its stream, the session says its own."""
     schedule = sessions.make_schedule(extract(R0_178), agenda_178(), META_178, [R0_178, 'agenda.csv'],
                                       {R0_178: 'Session Plan', 'agenda.csv': 'agenda.csv'}, '2026-11-02 12:00',
                                       chairs={'Mike': 'Michael STARSINIC', 'Wanqiang': 'Wanqiang ZHANG'})
     # What the conventions filled in is said below the grid.
     heading = next(i for i, b in enumerate(schedule.supplements) if b.get('text') == 'Filled in from earlier Session Plans')
     assert schedule.supplements[heading + 1]['text'].startswith('Q2 is written "1100 - 12"')
-    details = {d.day_name: [r.detail for r in d.rooms] for d in schedule.days}
-    assert details['Monday'] == ['Palomino E-H · Stream 1', 'BMO Room 203 · Stream 2', 'Percheron CD · Stream 3']
-    assert details['Tuesday'] == ['Palomino E-H', 'BMO Room 203', 'Percheron CD']
-    assert details['Wednesday'] == ['Palomino E-H', 'BMO Room 203 · Stream 2', 'Percheron CD']
-    # A moved session keeps its stream's convener.
+    for day in schedule.days:   # the same on every day, swapped quarters or not
+        assert [(r.detail, r.stream) for r in day.rooms] == [
+            ('Palomino E-H', 'Stream 1'), ('BMO Room 203', 'Stream 2'), ('Percheron CD', 'Stream 3')]
     tuesday = schedule.days[1]
-    main = [s for s in tuesday.sessions if s.start_time == '09:00' and s.room_ids == ['stream1']]
-    assert {s.chair for s in main} == {'Michael STARSINIC'}   # Stream 2 (green) in the main room
+    at_nine = {(s.room_ids[0], s.part[0]): (s.stream, s.chair) for s in tuesday.sessions if s.start_time == '09:00'}
+    assert at_nine == {
+        ('stream1', 1): ('Stream 2', 'Michael STARSINIC'), ('stream1', 2): ('Stream 2', 'Michael STARSINIC'),
+        ('stream2', 1): ('Stream 1', None), ('stream2', 2): ('Stream 1', None),   # no convener: the stream alone
+        ('stream3', 1): ('', 'Wanqiang ZHANG'), ('stream3', 2): ('', 'Wanqiang ZHANG')}   # in its own room
     html = BeautifulSoup(generate_html(schedule), 'html.parser')
+    header = html.select('#tuesday .room-header .room-place')
+    assert [h.text for h in header] == ['Palomino E-H · Stream 1', 'BMO Room 203 · Stream 2', 'Percheron CD · Stream 3']
     moved = html.select('#tuesday [data-name="FS_enIMS_ARC"]')[0]   # Stream 1's, in Breakout 1
-    assert 'Room: Breakout 1 · BMO Room 203<div class="popup-notes">In breakout 1</div>' in moved['data-popup']
+    assert 'Room: Breakout 1 · BMO Room 203 · Stream 1<div class="popup-notes">In breakout 1</div>' in moved['data-popup']
+    assert moved.select_one('.session-chair').text == 'Stream 1'
+    main = html.select('#tuesday [data-name="KI#22 (Computing)"]')[0]   # Stream 2's, in the main room
+    assert main.select_one('.session-chair').text == 'Michael · Stream 2'
+    assert 'Room: Main · Palomino E-H · Stream 2' in main['data-popup']
+    stays = html.select('#tuesday [data-name="KI#17 (IWK)"]')[0]
+    assert stays.select_one('.session-chair').text == 'Wanqiang'
+    assert 'Room: Breakout 2 · Percheron CD · Stream 3' in stays['data-popup']
 
 
 def test_a_written_range_stays_a_range_on_the_ai_line():

@@ -410,12 +410,13 @@ def generate_html(schedule: Schedule, *, schedules=None, groups=None, presentati
         )
         for ri, room in enumerate(day_schedule.rooms):
             col = ri + 2
-            if room.detail:
+            place = _room_place(room)
+            if place:
                 # Where the room is, under its name; the whole line stays on hover.
                 html_parts.append(
                     f'                <div class="room-header has-place" title="{_esc(_room_text([room]))}" '
                     f'style="grid-column:{col};grid-row:1"><span class="room-name">{_esc(room.name)}</span>'
-                    f'<span class="room-place">{_esc(room.detail)}</span></div>\n'
+                    f'<span class="room-place">{_esc(place)}</span></div>\n'
                 )
             else:
                 html_parts.append(
@@ -507,10 +508,11 @@ def generate_html(schedule: Schedule, *, schedules=None, groups=None, presentati
 
             # The title is the only primary line; duration, clock range, AI and
             # chair are one quiet secondary tone.
-            if slots >= 3 and session.chair:
-                chair_html = (
-                    f'<div class="session-chair">{_esc(_cell_chair(session.chair))}</div>'
-                )
+            if slots >= 3 and (session.chair or session.stream):
+                # A session held in another stream's room says whose it is beside the chair.
+                corner = " · ".join(filter(None, [session.chair and _cell_chair(session.chair), session.stream]))
+                chair_html = f'<div class="session-chair">{_esc(corner)}</div>'
+
             if slots >= 4:
                 # Duration leads: it is what people look for first. The row is
                 # one line tall, so a narrow column drops the clock range whole.
@@ -559,7 +561,7 @@ def generate_html(schedule: Schedule, *, schedules=None, groups=None, presentati
             if scope_label:
                 popup_lines.append(f"Room: {scope_label} (merged display, not a booking of every room)")
             elif rooms_in_span:
-                popup_lines.append(f"Room: {_esc(_room_text(rooms_in_span))}")
+                popup_lines.append(f"Room: {_esc(_room_text(rooms_in_span, session.stream))}")
             if notes:
                 # One separated block; a "Note:" label on every line only adds noise.
                 popup_lines.append(
@@ -1280,14 +1282,24 @@ def _room_name_html(name: str) -> str:
     return f'<span class="room-name-text">{html}</span>'
 
 
-def _room_text(rooms):
+def _room_place(room, stream: str = "") -> str:
+    """Where the room is and whose row meets there: "B3 (Floor 2) · Stream 2".
+
+    ``stream`` is the session's own stream when it is held in another
+    stream's room (SA2 "In main room"); it replaces the room's.
+    """
+    return " · ".join(filter(None, [room.detail, stream or room.stream]))
+
+
+def _room_text(rooms, stream: str = ""):
     """The popup Room line: "Breakout 1 · B3 (Floor 2) · Stream 2".
 
     A place may hold a comma ("D3/D4, Floor 3"), so rooms with one are
     separated by semicolons.
     """
-    shown = [f"{room.name} · {room.detail}" if room.detail else room.name for room in rooms]
-    return ("; " if any(room.detail for room in rooms) else ", ").join(shown)
+    places = [_room_place(room, stream) for room in rooms]
+    shown = [f"{room.name} · {place}" if place else room.name for room, place in zip(rooms, places)]
+    return ("; " if any(places) else ", ").join(shown)
 
 
 def _part_text(part) -> str:

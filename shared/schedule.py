@@ -47,8 +47,11 @@ class RoomInfo:
     id: str = ""
     kind: str = ""  # "online" or "offline" when the schedule says so (RAN1 table headings)
     # Where the room is, as the source writes it, shown after the name in the
-    # popup Room line: SA1 "D3/D4, Floor 3", SA2 "B3 (Floor 2) · Stream 2".
+    # popup Room line: SA1 "D3/D4, Floor 3", SA2 "B3 (Floor 2)".
     detail: str = ""
+    # The plan row that meets in this room when the plan names rows apart from
+    # rooms (SA2 "Stream 2"). Shown after the place in the header and popup.
+    stream: str = ""
 
 
 # The shortest piece of a split block: the length at which a cell shows its AI line.
@@ -88,6 +91,10 @@ class Session:
     # schedule lists in order without times. Drawn as equal heights; the times
     # stay the block's.
     part: list[int] | None = None
+    # The plan row a session belongs to when it is held in another row's room
+    # (SA2 "In main room": Stream 2's session in Stream 1's room). Shown beside
+    # the chair and in the popup Room line; empty when the session is in its own room.
+    stream: str = ""
 
     def __post_init__(self):
         if self.part is None:
