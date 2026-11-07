@@ -352,17 +352,16 @@ def interpret(document: dict, agenda: dict | None = None, refine=None) -> tuple[
 
 # --------------------------------------------------------------- schedule
 
-def room_detail(room: dict, streams=()) -> str:
-    """The popup Room line after the name: where the room is and the stream the plan calls its row.
+def room_stream(room: dict) -> str:
+    """The stream that meets in a room by the plan's room table: "Stream 2".
 
-    "B3 (Floor 2) · Stream 2". A room named by its stream (no room table) or
-    read by the LLM (no stream) gives what it has. ``streams`` are the
-    streams whose sessions the room holds that day: a room that holds another
-    stream's ("In main room", #178) is not that day named by its own.
+    A room named by its stream (no room table) or read by the LLM (no stream)
+    has nothing to add. The room keeps its stream on every day, also when a
+    quarter swaps rooms ("In main room", #178): the moved session says whose
+    it is (``Session.stream``).
     """
     stream = room.get('stream')
-    named = stream and not room['name'].startswith('Stream') and set(streams) <= {stream}
-    return ' · '.join(filter(None, [room.get('place', ''), f'Stream {stream}' if named else '']))
+    return f'Stream {stream}' if stream and not room['name'].startswith('Stream') else ''
 
 
 def make_schedule(document: dict, agenda: dict | None, metadata: dict, source_files: list[str],
@@ -381,17 +380,13 @@ def make_schedule(document: dict, agenda: dict | None, metadata: dict, source_fi
     # The convener of a stream is linked by colour: the name's highlight in the
     # "Convener" line is the highlight on that stream's row labels.
     convener = {stream: document['conveners'].get(colour) for stream, colour in document['stream_colours'].items()}
+    own = {r['stream']: r['id'] for r in document['rooms'] if room_stream(r)}
     days = []
     for day in document['days']:
         raw = [s for s in sessions if s['day'] == day]
         if not raw:
             continue
-        held = {}
-        for s in raw:
-            if s['scope'] == 'assigned' and s['stream']:
-                for room in s['rooms']:
-                    held.setdefault(room, set()).add(s['stream'])
-        rooms = [RoomInfo(id=r['id'], name=r['name'], detail=room_detail(r, held.get(r['id'], ())))
+        rooms = [RoomInfo(id=r['id'], name=r['name'], detail=r.get('place', ''), stream=room_stream(r))
                  for r in document['rooms']]
         if day not in dates:
             print(f'[sa2] {day} is outside the meeting dates {first}..{last}; shown without a date')
@@ -413,6 +408,9 @@ def make_schedule(document: dict, agenda: dict | None, metadata: dict, source_fi
             tops = [ai for ai in s['agenda_items'] if not any(is_descendant(ai, a) for a in s['agenda_items'])]
             descriptions = [d for d in (describe(ai, agenda) for ai in tops[:6]) if d]
             label = convener.get(s['stream']) if s['scope'] == 'assigned' and s['stream'] else None
+            # A session held in another stream's room ("In main room") says whose it is.
+            moved = (s['scope'] == 'assigned' and s.get('stream') and own.get(s['stream'])
+                     and s['rooms'] != [own[s['stream']]])
             built.append(Session(
                 name=s['name'], start_time=s['start'], end_time=s['end'], day=day,
                 duration_minutes=time_to_minutes(s['end']) - time_to_minutes(s['start']),
@@ -421,7 +419,8 @@ def make_schedule(document: dict, agenda: dict | None, metadata: dict, source_fi
                 agenda_item=', '.join(written_ranges(s['agenda_items'], s.get('ranges', ()))) or None,
                 group_header=group_label(s['group_item'], agenda),
                 description='\n'.join(d['description'] for d in descriptions) or None,
-                agenda_descriptions=descriptions, notes=s['lines']))
+                agenda_descriptions=descriptions, notes=s['lines'],
+                stream=f"Stream {s['stream']}" if moved else ''))
         days.append(DaySchedule(day_name=day, date=dates.get(day), rooms=rooms, sessions=built,
                                 timeline=Timeline(start=minutes_to_time(start), end=minutes_to_time(end),
                                                   breaks=breaks)))
