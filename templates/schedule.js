@@ -122,9 +122,10 @@ document.addEventListener('DOMContentLoaded', function() {
     tabs.forEach(tab => {
         tab.addEventListener('click', function() {
             rememberViewZoom();
-            tabs.forEach(t => t.classList.remove('active'));
+            tabs.forEach(t => { t.classList.remove('active'); t.setAttribute('aria-pressed', 'false'); });
             panels.forEach(p => p.classList.remove('active'));
             this.classList.add('active');
+            this.setAttribute('aria-pressed', 'true');
             const day = this.dataset.day;
             const panel = document.getElementById(day);
             if (panel) panel.classList.add('active');
@@ -499,10 +500,15 @@ document.addEventListener('DOMContentLoaded', function() {
     const popupContent = document.getElementById('popup-content');
     const popupCloseBtn = document.getElementById('popup-close-btn');
 
+    // The cell that opened the popup gets focus back when the popup closes
+    // with focus inside it (Escape, the close button, a scroll).
+    let popupOpener = null;
     function closePopup() {
+        const hadFocus = popupEl.contains(document.activeElement);
         popupEl.classList.remove('show');
         backdrop.classList.remove('active');
         releasePanelHeight();
+        if (hadFocus && popupOpener && popupOpener.isConnected) popupOpener.focus({ preventScroll: true });
     }
 
     // A cell click also swaps the agreement panel below the grid (a loading
@@ -653,8 +659,13 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     document.querySelectorAll('.session-block').forEach(block => {
-        if (agreementPanel) block.addEventListener('keydown', e => {
-            if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); block.click(); }
+        // Enter or Space opens the popup like a click and moves focus into it,
+        // so its controls come next in the tab order.
+        block.addEventListener('keydown', e => {
+            if (e.key !== 'Enter' && e.key !== ' ') return;
+            e.preventDefault();
+            block.click();
+            if (isPopupOpen() && popupOpener === block) popupEl.focus({ preventScroll: true });
         });
         block.addEventListener('click', function(e) {
             e.stopPropagation();
@@ -672,6 +683,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 }}));
             }
             if (opens) {
+                popupOpener = this;
+                popupEl.setAttribute('aria-label', this.getAttribute('aria-label') || this.dataset.name || '');
                 popupContent.innerHTML = html;
                 syncAgendaToggle();
                 popupEl.scrollTop = 0;
@@ -683,6 +696,29 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     backdrop.addEventListener('click', closePopup);
+    // Escape closes. Tab past the popup's last control, or Shift+Tab before its
+    // first, closes it and goes on from the cell that opened it.
+    document.addEventListener('keydown', function(e) {
+        if (!isPopupOpen()) return;
+        if (e.key === 'Escape') {
+            const inside = popupEl.contains(document.activeElement) || document.activeElement === popupOpener;
+            closePopup();
+            if (inside && popupOpener) popupOpener.focus({ preventScroll: true });
+            return;
+        }
+        if (e.key !== 'Tab' || !popupEl.contains(document.activeElement)) return;
+        const stops = Array.from(popupEl.querySelectorAll('a[href], button, [tabindex="0"]'))
+            .filter(el => el.offsetParent !== null);
+        const first = stops[0], last = stops[stops.length - 1];
+        const active = document.activeElement;
+        if (e.shiftKey && (active === popupEl || active === first)) {
+            e.preventDefault();
+            closePopup();
+        } else if (!e.shiftKey && (active === last || !last)) {
+            // Focus the opener and let the browser's Tab continue from it.
+            closePopup();
+        }
+    });
     popupCloseBtn.addEventListener('click', function(e) {
         e.stopPropagation();
         closePopup();
@@ -762,15 +798,20 @@ document.addEventListener('DOMContentLoaded', function() {
 
         function mkEl(tag, cls) { const e = document.createElement(tag); if (cls) e.className = cls; return e; }
         function mkSpacer() { const s = document.createElement('span'); s.style.width='16px'; s.style.flexShrink='0'; return s; }
-        function mkToggle(container) {
+        // Named after its row ("Items under 8.1"); the glyph alone reads as a triangle.
+        function mkToggle(container, name) {
             const btn = mkEl('button','tree-toggle');
+            btn.type = 'button';
+            btn.setAttribute('aria-label', 'Items under ' + name);
             btn.textContent = '\u25B6';
+            btn.setAttribute('aria-expanded', 'false');
             btn.addEventListener('click', function(e) {
                 e.stopPropagation();
                 const ch = container.querySelector(':scope > .filter-children');
                 if (!ch) return;
                 const exp = ch.classList.toggle('expanded');
                 btn.textContent = exp ? '\u25BC' : '\u25B6';
+                btn.setAttribute('aria-expanded', exp ? 'true' : 'false');
             });
             return btn;
         }
@@ -782,7 +823,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 const grpDiv = mkEl('div','filter-group');
                 // Group header row
                 const grpRow = mkEl('div','filter-item');
-                grpRow.appendChild(mkToggle(grpDiv));
+                grpRow.appendChild(mkToggle(grpDiv, group.name));
                 const gcb = document.createElement('input');
                 gcb.type = 'checkbox'; gcb.id = 'fg'+gi; gcb.dataset.gk = group.key;
                 gcb.addEventListener('change', function() { onGroupChange(group.key, gcb.checked); });
@@ -798,7 +839,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     const sessWrap = mkEl('div','filter-group');
                     const sessRow = mkEl('div','filter-item');
                     if (sess.ais.length > 0) {
-                        sessRow.appendChild(mkToggle(sessWrap));
+                        sessRow.appendChild(mkToggle(sessWrap, sess.name));
                     } else {
                         sessRow.appendChild(mkSpacer());
                     }
@@ -1091,24 +1132,28 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (hasActive) {
                     ch.classList.add('expanded');
                     var tog = grpEl.querySelector(':scope > .filter-item > .tree-toggle');
-                    if (tog) tog.textContent = '\u25BC';
+                    if (tog) { tog.textContent = '\u25BC'; tog.setAttribute('aria-expanded', 'true'); }
                 }
             });
         }
 
-        // Panel toggle
+        // Panel toggle. A collapsed panel sits off screen, so its controls
+        // leave the tab order (inert) until it opens.
+        function setFilterOpen(open) {
+            filterPanel.classList.toggle('collapsed', !open);
+            filterToggle.textContent = open ? '\u25B6 Hide' : '\u25C0 Filter';
+            filterToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+            filterPanel.querySelectorAll(':scope > :not(.filter-toggle)').forEach(function(el) { el.inert = !open; });
+        }
         filterToggle.addEventListener('click', function() {
-            var collapsed = filterPanel.classList.toggle('collapsed');
-            filterToggle.textContent = collapsed ? '◀ Filter' : '▶';
-            try { sessionStorage.setItem(STATE_KEY + ':filter-panel', collapsed ? 'c' : 'o'); } catch(e) {}
+            var open = filterPanel.classList.contains('collapsed');
+            setFilterOpen(open);
+            try { sessionStorage.setItem(STATE_KEY + ':filter-panel', open ? 'o' : 'c'); } catch(e) {}
         });
 
         // Restore panel state
         try {
-            if (sessionStorage.getItem(STATE_KEY + ':filter-panel') === 'o') {
-                filterPanel.classList.remove('collapsed');
-                filterToggle.textContent = '\u25B6';
-            }
+            if (sessionStorage.getItem(STATE_KEY + ':filter-panel') === 'o') setFilterOpen(true);
         } catch(e) {}
 
         // Clear all

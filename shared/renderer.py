@@ -355,12 +355,12 @@ def generate_html(schedule: Schedule, *, schedules=None, groups=None, presentati
         day_short = day_schedule.day_name[:3]
         html_parts.append(
             # Named so the meeting switch slides each day's tab to its place (schedule.css).
-            f'            <button class="tab" data-day="{day_lower}" style="view-transition-name:day-tab-{day_lower};view-transition-class:grid-move">{day_short}</button>\n'
+            f'            <button class="tab" type="button" aria-pressed="false" data-day="{day_lower}" style="view-transition-name:day-tab-{day_lower};view-transition-class:grid-move">{day_short}</button>\n'
         )
     week = _week_layout(schedule)
     if week:
         html_parts.append(
-            f'            <button class="tab tab-all" data-day="{_ALL_DAYS}" data-grid-min-width="{week.min_width}" '
+            f'            <button class="tab tab-all" type="button" aria-pressed="false" data-day="{_ALL_DAYS}" data-grid-min-width="{week.min_width}" '
             f'title="Every day of the meeting at a glance" style="view-transition-name:day-tab-{_ALL_DAYS};view-transition-class:grid-move">All</button>\n'
         )
     html_parts.append("        </div>\n")
@@ -611,13 +611,16 @@ def generate_html(schedule: Schedule, *, schedules=None, groups=None, presentati
             data_ai_scope_attr = _esc("|".join(dict.fromkeys(filter_ai.split("|"))) if filter_ai else "").replace('"', '&quot;')
             # The panel opens the chair-note sections an AI covers (10.6.x →
             # 10.6.1, 10.6.2). The filter keeps matching the AI as written.
-            agreement_attrs = ""
+            # Every cell opens its popup, so every cell is a keyboard stop.
+            label = f"{session.name}, AI {session.agenda_item}" if session.agenda_item else session.name
+            agreement_attrs = (
+                ' tabindex="0" role="button" aria-haspopup="dialog"'
+                f' aria-label="{_esc(label).replace(chr(34), "&quot;")}"'
+            )
             if agreement_sections is not None:
                 agreement_ai = "|".join(agenda_section_ids(scope_ai, agreement_sections))
-                label = f"{session.name}, AI {session.agenda_item}" if session.agenda_item else session.name
-                agreement_attrs = (
-                    ' tabindex="0" role="button" aria-controls="agreement-panel" aria-pressed="false"'
-                    f' aria-label="{_esc(label).replace(chr(34), "&quot;")}"'
+                agreement_attrs += (
+                    ' aria-controls="agreement-panel" aria-pressed="false"'
                     f' data-agreement-ai="{_esc(agreement_ai).replace(chr(34), "&quot;")}"'
                 )
             data_name_attr = _esc(session.name).replace('"', '&quot;')
