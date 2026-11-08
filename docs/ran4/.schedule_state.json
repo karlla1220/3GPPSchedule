@@ -20,10 +20,10 @@
   "topics": {
     "url": "https://www.3gpp.org/ftp/tsg_ran/WG4_Radio/TSGR4_121/Inbox/Meeting_Arrangements/List_Topics_moderators%20-RAN4_121_v2.xlsx",
     "name": "List_Topics_moderators -RAN4_121_v2.xlsx",
-    "size": 36271,
-    "sha256": "973625cf502e7894221d64000068557f31326310587f3890e03d6e556a042659",
-    "etag": "\"77a1abb1706fdd1:0\"",
-    "last_modified": "Sun, 08 Nov 2026 11:02:49 GMT",
+    "size": 36222,
+    "sha256": "f9e59dc5db78b5f980661ba72b098d8d7c1b5a9cb421d3d3fa9c3e924655112e",
+    "etag": "\"cdd5ffb766fdd1:0\"",
+    "last_modified": "Sun, 08 Nov 2026 11:47:50 GMT",
     "ftp_modified": null,
     "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
     "content_disposition": null
