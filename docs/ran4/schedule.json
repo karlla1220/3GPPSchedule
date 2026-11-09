@@ -8551,22 +8551,22 @@
     }
   ],
   "source_file": "RAN4_121_meeting_schedule_v01.pptx",
-  "generated_at": "2026-11-08 05:21",
+  "generated_at": "2026-11-09 03:21",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
     "RAN4_121_meeting_schedule_v01.pptx",
-    "List_Topics_moderators -RAN4_121_v2.xlsx",
+    "List_Topics_moderators -RAN4_121_v3.xlsx",
     "agenda.csv"
   ],
   "source_labels": {
     "RAN4_121_meeting_schedule_v01.pptx": "Schedule",
-    "List_Topics_moderators -RAN4_121_v2.xlsx": "Topics",
+    "List_Topics_moderators -RAN4_121_v3.xlsx": "Topics",
     "agenda.csv": "Agenda"
   },
   "source_urls": {
     "RAN4_121_meeting_schedule_v01.pptx": "https://www.3gpp.org/ftp/tsg_ran/WG4_Radio/TSGR4_121/Inbox/Meeting_Arrangements/RAN4_121_meeting_schedule_v01.pptx",
-    "List_Topics_moderators -RAN4_121_v2.xlsx": "https://www.3gpp.org/ftp/tsg_ran/WG4_Radio/TSGR4_121/Inbox/Meeting_Arrangements/List_Topics_moderators%20-RAN4_121_v2.xlsx",
+    "List_Topics_moderators -RAN4_121_v3.xlsx": "https://www.3gpp.org/ftp/tsg_ran/WG4_Radio/TSGR4_121/Inbox/Meeting_Arrangements/List_Topics_moderators%20-RAN4_121_v3.xlsx",
     "agenda.csv": "https://www.3gpp.org/ftp/tsg_ran/WG4_Radio/TSGR4_121/Agenda/agenda.csv"
   },
   "source_mails": {},

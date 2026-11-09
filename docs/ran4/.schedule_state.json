@@ -18,12 +18,12 @@
     "modified": "2026-11-06T17:56:29Z"
   },
   "topics": {
-    "url": "https://www.3gpp.org/ftp/tsg_ran/WG4_Radio/TSGR4_121/Inbox/Meeting_Arrangements/List_Topics_moderators%20-RAN4_121_v2.xlsx",
-    "name": "List_Topics_moderators -RAN4_121_v2.xlsx",
-    "size": 36222,
-    "sha256": "f9e59dc5db78b5f980661ba72b098d8d7c1b5a9cb421d3d3fa9c3e924655112e",
-    "etag": "\"cdd5ffb766fdd1:0\"",
-    "last_modified": "Sun, 08 Nov 2026 11:47:50 GMT",
+    "url": "https://www.3gpp.org/ftp/tsg_ran/WG4_Radio/TSGR4_121/Inbox/Meeting_Arrangements/List_Topics_moderators%20-RAN4_121_v3.xlsx",
+    "name": "List_Topics_moderators -RAN4_121_v3.xlsx",
+    "size": 36171,
+    "sha256": "22e3724756f3bad6241bd1b2af320ae505b0bce055d70e7cb1e07280b4db0144",
+    "etag": "\"4fdd91eb2a70dd1:0\"",
+    "last_modified": "Mon, 09 Nov 2026 09:15:53 GMT",
     "ftp_modified": null,
     "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
     "content_disposition": null
@@ -33,8 +33,8 @@
     "name": "agenda.csv",
     "size": 18606,
     "sha256": "c35c8ba8eb18e820f553f2ccd9304f87e16dae904c8e810b5b93851f32a35559",
-    "etag": "\"8ae329446fdd1:0\"",
-    "last_modified": "Sun, 08 Nov 2026 05:43:09 GMT",
+    "etag": "\"cb7ef734d70dd1:0\"",
+    "last_modified": "Mon, 09 Nov 2026 05:43:11 GMT",
     "ftp_modified": null,
     "content_type": "application/octet-stream",
     "content_disposition": null
