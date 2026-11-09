@@ -119,97 +119,12 @@
           "room_scope": "shared",
           "notes": [
             "Opening (1), Agenda (2), Reports (3)",
-            "Common Issues (4.1) [20]",
-            "20.48, 20.49, 20.50"
+            "Common Issues (4.1) [8]",
+            "20.48, 20.49, 20.50 [14]"
           ],
           "inferred_agenda_items": [],
           "email_details": [],
           "part": null,
-          "stream": ""
-        },
-        {
-          "name": "Rel-19 maintenance",
-          "duration_minutes": 90,
-          "start_time": "11:00",
-          "end_time": "12:30",
-          "day": "Monday",
-          "room_col_start": 2,
-          "room_col_end": 3,
-          "chair": "Wanqiang ZHANG",
-          "agenda_item": "19.x",
-          "group_header": "Rel-19 SIDs and WIDs",
-          "description": "Rel-19 SIDs and WIDs",
-          "agenda_descriptions": [
-            {
-              "agenda_item": "19.x",
-              "matched_agenda_item": "19",
-              "description": "Rel-19 SIDs and WIDs",
-              "hierarchy": [
-                {
-                  "agenda_item": "19",
-                  "description": "Rel-19 SIDs and WIDs"
-                }
-              ]
-            }
-          ],
-          "room_ids": [
-            "stream3"
-          ],
-          "room_scope": "assigned",
-          "notes": [
-            "Rel-19 maintenance (19.x)"
-          ],
-          "inferred_agenda_items": [],
-          "email_details": [],
-          "part": null,
-          "stream": ""
-        },
-        {
-          "name": "KI#1.1 (NAS)",
-          "duration_minutes": 90,
-          "start_time": "11:00",
-          "end_time": "12:30",
-          "day": "Monday",
-          "room_col_start": 2,
-          "room_col_end": 3,
-          "chair": null,
-          "agenda_item": "20.6.1",
-          "group_header": "Rel-20 SIDs and WIDs",
-          "description": "Study on Architecture for 6G System (FS_6G_ARC) - support for control signalling for 6G System",
-          "agenda_descriptions": [
-            {
-              "agenda_item": "20.6.1",
-              "matched_agenda_item": "20.6.1",
-              "description": "Study on Architecture for 6G System (FS_6G_ARC) - support for control signalling for 6G System",
-              "hierarchy": [
-                {
-                  "agenda_item": "20",
-                  "description": "Rel-20 SIDs and WIDs"
-                },
-                {
-                  "agenda_item": "20.6",
-                  "description": null
-                },
-                {
-                  "agenda_item": "20.6.1",
-                  "description": "Study on Architecture for 6G System (FS_6G_ARC) - support for control signalling for 6G System"
-                }
-              ]
-            }
-          ],
-          "room_ids": [
-            "stream1"
-          ],
-          "room_scope": "assigned",
-          "notes": [
-            "KI#1.1 (NAS) (20.6.1)"
-          ],
-          "inferred_agenda_items": [],
-          "email_details": [],
-          "part": [
-            1,
-            2
-          ],
           "stream": ""
         },
         {
@@ -330,6 +245,51 @@
           ],
           "inferred_agenda_items": [],
           "email_details": [],
+          "part": null,
+          "stream": ""
+        },
+        {
+          "name": "KI#1.1 (NAS)",
+          "duration_minutes": 90,
+          "start_time": "11:00",
+          "end_time": "12:30",
+          "day": "Monday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": "20.6.1",
+          "group_header": "Rel-20 SIDs and WIDs",
+          "description": "Study on Architecture for 6G System (FS_6G_ARC) - support for control signalling for 6G System",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "20.6.1",
+              "matched_agenda_item": "20.6.1",
+              "description": "Study on Architecture for 6G System (FS_6G_ARC) - support for control signalling for 6G System",
+              "hierarchy": [
+                {
+                  "agenda_item": "20",
+                  "description": "Rel-20 SIDs and WIDs"
+                },
+                {
+                  "agenda_item": "20.6",
+                  "description": null
+                },
+                {
+                  "agenda_item": "20.6.1",
+                  "description": "Study on Architecture for 6G System (FS_6G_ARC) - support for control signalling for 6G System"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "stream1"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "KI#1.1 (NAS) (20.6.1)"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
           "part": [
             1,
             2
@@ -431,69 +391,6 @@
           "stream": ""
         },
         {
-          "name": "Pre-Rel-19 maintenance",
-          "duration_minutes": 90,
-          "start_time": "14:00",
-          "end_time": "15:30",
-          "day": "Monday",
-          "room_col_start": 2,
-          "room_col_end": 3,
-          "chair": "Michael STARSINIC",
-          "agenda_item": "5.x, 6.x, 7.x",
-          "group_header": "Pre-Rel-17 Maintenance (excluding all 5G topics)",
-          "description": "Pre-Rel-17 Maintenance (excluding all 5G topics)\nRel-15/Rel-16 Maintenance for 5G (only related to 5GS_Ph1 Work Item)\nRel-16 Maintenance for 5G (excluding 5GS_Ph1)",
-          "agenda_descriptions": [
-            {
-              "agenda_item": "5.x",
-              "matched_agenda_item": "5",
-              "description": "Pre-Rel-17 Maintenance (excluding all 5G topics)",
-              "hierarchy": [
-                {
-                  "agenda_item": "5",
-                  "description": "Pre-Rel-17 Maintenance (excluding all 5G topics)"
-                }
-              ]
-            },
-            {
-              "agenda_item": "6.x",
-              "matched_agenda_item": "6",
-              "description": "Rel-15/Rel-16 Maintenance for 5G (only related to 5GS_Ph1 Work Item)",
-              "hierarchy": [
-                {
-                  "agenda_item": "6",
-                  "description": "Rel-15/Rel-16 Maintenance for 5G (only related to 5GS_Ph1 Work Item)"
-                }
-              ]
-            },
-            {
-              "agenda_item": "7.x",
-              "matched_agenda_item": "7",
-              "description": "Rel-16 Maintenance for 5G (excluding 5GS_Ph1)",
-              "hierarchy": [
-                {
-                  "agenda_item": "7",
-                  "description": "Rel-16 Maintenance for 5G (excluding 5GS_Ph1)"
-                }
-              ]
-            }
-          ],
-          "room_ids": [
-            "stream2"
-          ],
-          "room_scope": "assigned",
-          "notes": [
-            "Pre-Rel-19 maintenance",
-            "(5.x, 6.x, 7.x )"
-          ],
-          "inferred_agenda_items": [],
-          "email_details": [],
-          "part": [
-            1,
-            2
-          ],
-          "stream": ""
-        },
-        {
           "name": "KI#7 (Net Exposure)",
           "duration_minutes": 90,
           "start_time": "14:00",
@@ -590,7 +487,7 @@
           "stream": ""
         },
         {
-          "name": "Rel-19 maintenance",
+          "name": "CHFSeg / XRM_Ph2",
           "duration_minutes": 90,
           "start_time": "14:00",
           "end_time": "15:30",
@@ -598,18 +495,41 @@
           "room_col_start": 2,
           "room_col_end": 3,
           "chair": "Wanqiang ZHANG",
-          "agenda_item": "19.x",
+          "agenda_item": "19.49, 19.3.2",
           "group_header": "Rel-19 SIDs and WIDs",
-          "description": "Rel-19 SIDs and WIDs",
+          "description": "Generic Rel-19 LSs\nExtended Reality and Media service (XRM) Phase 2 (XRM_Ph2)",
           "agenda_descriptions": [
             {
-              "agenda_item": "19.x",
-              "matched_agenda_item": "19",
-              "description": "Rel-19 SIDs and WIDs",
+              "agenda_item": "19.49",
+              "matched_agenda_item": "19.49",
+              "description": "Generic Rel-19 LSs",
               "hierarchy": [
                 {
                   "agenda_item": "19",
                   "description": "Rel-19 SIDs and WIDs"
+                },
+                {
+                  "agenda_item": "19.49",
+                  "description": "Generic Rel-19 LSs"
+                }
+              ]
+            },
+            {
+              "agenda_item": "19.3.2",
+              "matched_agenda_item": "19.3.2",
+              "description": "Extended Reality and Media service (XRM) Phase 2 (XRM_Ph2)",
+              "hierarchy": [
+                {
+                  "agenda_item": "19",
+                  "description": "Rel-19 SIDs and WIDs"
+                },
+                {
+                  "agenda_item": "19.3",
+                  "description": null
+                },
+                {
+                  "agenda_item": "19.3.2",
+                  "description": "Extended Reality and Media service (XRM) Phase 2 (XRM_Ph2)"
                 }
               ]
             }
@@ -619,7 +539,8 @@
           ],
           "room_scope": "assigned",
           "notes": [
-            "Rel-19 maintenance (19.x)"
+            "CHFSeg (19.49) [1]",
+            "XRM_Ph2 (19.3.2) [1]"
           ],
           "inferred_agenda_items": [],
           "email_details": [],
@@ -796,70 +717,7 @@
           ],
           "room_scope": "assigned",
           "notes": [
-            "NG_RTC_Ph3-ARC (20.7.2)"
-          ],
-          "inferred_agenda_items": [],
-          "email_details": [],
-          "part": [
-            1,
-            2
-          ],
-          "stream": ""
-        },
-        {
-          "name": "Pre-Rel-19 maintenance",
-          "duration_minutes": 75,
-          "start_time": "17:45",
-          "end_time": "19:00",
-          "day": "Monday",
-          "room_col_start": 2,
-          "room_col_end": 3,
-          "chair": "Wanqiang ZHANG",
-          "agenda_item": "5.x, 6.x, 7.x",
-          "group_header": "Pre-Rel-17 Maintenance (excluding all 5G topics)",
-          "description": "Pre-Rel-17 Maintenance (excluding all 5G topics)\nRel-15/Rel-16 Maintenance for 5G (only related to 5GS_Ph1 Work Item)\nRel-16 Maintenance for 5G (excluding 5GS_Ph1)",
-          "agenda_descriptions": [
-            {
-              "agenda_item": "5.x",
-              "matched_agenda_item": "5",
-              "description": "Pre-Rel-17 Maintenance (excluding all 5G topics)",
-              "hierarchy": [
-                {
-                  "agenda_item": "5",
-                  "description": "Pre-Rel-17 Maintenance (excluding all 5G topics)"
-                }
-              ]
-            },
-            {
-              "agenda_item": "6.x",
-              "matched_agenda_item": "6",
-              "description": "Rel-15/Rel-16 Maintenance for 5G (only related to 5GS_Ph1 Work Item)",
-              "hierarchy": [
-                {
-                  "agenda_item": "6",
-                  "description": "Rel-15/Rel-16 Maintenance for 5G (only related to 5GS_Ph1 Work Item)"
-                }
-              ]
-            },
-            {
-              "agenda_item": "7.x",
-              "matched_agenda_item": "7",
-              "description": "Rel-16 Maintenance for 5G (excluding 5GS_Ph1)",
-              "hierarchy": [
-                {
-                  "agenda_item": "7",
-                  "description": "Rel-16 Maintenance for 5G (excluding 5GS_Ph1)"
-                }
-              ]
-            }
-          ],
-          "room_ids": [
-            "stream3"
-          ],
-          "room_scope": "assigned",
-          "notes": [
-            "Pre-Rel-19 maintenance",
-            "(5.x, 6.x, 7.x )"
+            "NG_RTC_Ph3-ARC (20.7.2) [12]"
           ],
           "inferred_agenda_items": [],
           "email_details": [],
@@ -1107,7 +965,7 @@
           "stream": ""
         },
         {
-          "name": "AIML_CN_Ph2 / KI#23 (NTN)",
+          "name": "KI#23 (NTN)",
           "duration_minutes": 90,
           "start_time": "09:00",
           "end_time": "10:30",
@@ -1115,29 +973,10 @@
           "room_col_start": 2,
           "room_col_end": 3,
           "chair": "Michael STARSINIC",
-          "agenda_item": "20.3.2, 20.6.23",
+          "agenda_item": "20.6.23",
           "group_header": "Rel-20 SIDs and WIDs",
-          "description": "Core Network Enhanced Support for Artificial Intelligence (AI)/Machine Learning (ML)_Ph2 (AIML_CN_Ph2)\nStudy on Architecture for 6G System (FS_6G_ARC) - Support of 6G NTN",
+          "description": "Study on Architecture for 6G System (FS_6G_ARC) - Support of 6G NTN",
           "agenda_descriptions": [
-            {
-              "agenda_item": "20.3.2",
-              "matched_agenda_item": "20.3.2",
-              "description": "Core Network Enhanced Support for Artificial Intelligence (AI)/Machine Learning (ML)_Ph2 (AIML_CN_Ph2)",
-              "hierarchy": [
-                {
-                  "agenda_item": "20",
-                  "description": "Rel-20 SIDs and WIDs"
-                },
-                {
-                  "agenda_item": "20.3",
-                  "description": null
-                },
-                {
-                  "agenda_item": "20.3.2",
-                  "description": "Core Network Enhanced Support for Artificial Intelligence (AI)/Machine Learning (ML)_Ph2 (AIML_CN_Ph2)"
-                }
-              ]
-            },
             {
               "agenda_item": "20.6.23",
               "matched_agenda_item": "20.6.23",
@@ -1164,7 +1003,6 @@
           "room_scope": "assigned",
           "notes": [
             "In main room",
-            "AIML_CN_Ph2 (20.3.2)",
             "KI#23 (NTN) (20.6.23)"
           ],
           "inferred_agenda_items": [],
@@ -1214,7 +1052,7 @@
           "room_scope": "assigned",
           "notes": [
             "In breakout 1",
-            "FS_enIMS_ARC (20.10.1)"
+            "FS_enIMS_ARC (20.10.1) [23]"
           ],
           "inferred_agenda_items": [],
           "email_details": [],
@@ -1262,7 +1100,7 @@
           ],
           "room_scope": "assigned",
           "notes": [
-            "AmbientIoT_Ph2-ARC (20.5.2)"
+            "AmbientIoT_Ph2-ARC (20.5.2) [62]"
           ],
           "inferred_agenda_items": [],
           "email_details": [],
@@ -1782,7 +1620,7 @@
           ],
           "room_scope": "assigned",
           "notes": [
-            "FS_enIMS_ARC (20.10.1)"
+            "FS_enIMS_ARC (20.10.1) [23]"
           ],
           "inferred_agenda_items": [],
           "email_details": [],
@@ -1793,7 +1631,7 @@
           "stream": ""
         },
         {
-          "name": "Rel-19 maintenance",
+          "name": "In Breakout 1",
           "duration_minutes": 90,
           "start_time": "14:00",
           "end_time": "15:30",
@@ -1801,29 +1639,16 @@
           "room_col_start": 2,
           "room_col_end": 3,
           "chair": "Wanqiang ZHANG",
-          "agenda_item": "19.x",
-          "group_header": "Rel-19 SIDs and WIDs",
-          "description": "Rel-19 SIDs and WIDs",
-          "agenda_descriptions": [
-            {
-              "agenda_item": "19.x",
-              "matched_agenda_item": "19",
-              "description": "Rel-19 SIDs and WIDs",
-              "hierarchy": [
-                {
-                  "agenda_item": "19",
-                  "description": "Rel-19 SIDs and WIDs"
-                }
-              ]
-            }
-          ],
+          "agenda_item": null,
+          "group_header": "",
+          "description": null,
+          "agenda_descriptions": [],
           "room_ids": [
             "stream2"
           ],
           "room_scope": "assigned",
           "notes": [
-            "In Breakout 1",
-            "Rel-19 maintenance (19.x)"
+            "In Breakout 1"
           ],
           "inferred_agenda_items": [],
           "email_details": [],
@@ -1951,7 +1776,7 @@
           "stream": ""
         },
         {
-          "name": "Rel-19 maintenance / EnergySys_Ph2-ARC",
+          "name": "EnergySys_Ph2-ARC",
           "duration_minutes": 90,
           "start_time": "14:00",
           "end_time": "15:30",
@@ -1959,21 +1784,10 @@
           "room_col_start": 2,
           "room_col_end": 3,
           "chair": "Wanqiang ZHANG",
-          "agenda_item": "19.x, 20.4.2",
-          "group_header": "Rel-19 SIDs and WIDs",
-          "description": "Rel-19 SIDs and WIDs\nEnergy Efficiency and Energy Saving Phase2 (EnergySys_Ph2)",
+          "agenda_item": "20.4.2",
+          "group_header": "Rel-20 SIDs and WIDs",
+          "description": "Energy Efficiency and Energy Saving Phase2 (EnergySys_Ph2)",
           "agenda_descriptions": [
-            {
-              "agenda_item": "19.x",
-              "matched_agenda_item": "19",
-              "description": "Rel-19 SIDs and WIDs",
-              "hierarchy": [
-                {
-                  "agenda_item": "19",
-                  "description": "Rel-19 SIDs and WIDs"
-                }
-              ]
-            },
             {
               "agenda_item": "20.4.2",
               "matched_agenda_item": "20.4.2",
@@ -2000,8 +1814,7 @@
           "room_scope": "assigned",
           "notes": [
             "In Breakout 1",
-            "Rel-19 maintenance (19.x)",
-            "EnergySys_Ph2-ARC (20.4.2)"
+            "EnergySys_Ph2-ARC (20.4.2) [2]"
           ],
           "inferred_agenda_items": [],
           "email_details": [],
@@ -2092,9 +1905,10 @@
           "room_ids": [],
           "room_scope": "shared",
           "notes": [
-            "Rel-21 5G-A discussion"
+            "Rel-21 5G-A discussion [21]"
           ],
           "inferred_agenda_items": [
+            "30.2",
             "30.4"
           ],
           "email_details": [],
@@ -2293,69 +2107,6 @@
           "stream": ""
         },
         {
-          "name": "Pre-Rel-19 maintenance",
-          "duration_minutes": 90,
-          "start_time": "09:00",
-          "end_time": "10:30",
-          "day": "Wednesday",
-          "room_col_start": 2,
-          "room_col_end": 3,
-          "chair": "Michael STARSINIC",
-          "agenda_item": "5.x, 6.x, 7.x",
-          "group_header": "Pre-Rel-17 Maintenance (excluding all 5G topics)",
-          "description": "Pre-Rel-17 Maintenance (excluding all 5G topics)\nRel-15/Rel-16 Maintenance for 5G (only related to 5GS_Ph1 Work Item)\nRel-16 Maintenance for 5G (excluding 5GS_Ph1)",
-          "agenda_descriptions": [
-            {
-              "agenda_item": "5.x",
-              "matched_agenda_item": "5",
-              "description": "Pre-Rel-17 Maintenance (excluding all 5G topics)",
-              "hierarchy": [
-                {
-                  "agenda_item": "5",
-                  "description": "Pre-Rel-17 Maintenance (excluding all 5G topics)"
-                }
-              ]
-            },
-            {
-              "agenda_item": "6.x",
-              "matched_agenda_item": "6",
-              "description": "Rel-15/Rel-16 Maintenance for 5G (only related to 5GS_Ph1 Work Item)",
-              "hierarchy": [
-                {
-                  "agenda_item": "6",
-                  "description": "Rel-15/Rel-16 Maintenance for 5G (only related to 5GS_Ph1 Work Item)"
-                }
-              ]
-            },
-            {
-              "agenda_item": "7.x",
-              "matched_agenda_item": "7",
-              "description": "Rel-16 Maintenance for 5G (excluding 5GS_Ph1)",
-              "hierarchy": [
-                {
-                  "agenda_item": "7",
-                  "description": "Rel-16 Maintenance for 5G (excluding 5GS_Ph1)"
-                }
-              ]
-            }
-          ],
-          "room_ids": [
-            "stream2"
-          ],
-          "room_scope": "assigned",
-          "notes": [
-            "Pre-Rel-19 maintenance",
-            "(5.x, 6.x, 7.x)"
-          ],
-          "inferred_agenda_items": [],
-          "email_details": [],
-          "part": [
-            1,
-            2
-          ],
-          "stream": ""
-        },
-        {
           "name": "KI#11 (Non-3GPP)",
           "duration_minutes": 90,
           "start_time": "09:00",
@@ -2453,69 +2204,6 @@
           "stream": "Stream 3"
         },
         {
-          "name": "Pre-Rel-19 maintenance",
-          "duration_minutes": 90,
-          "start_time": "11:00",
-          "end_time": "12:30",
-          "day": "Wednesday",
-          "room_col_start": 2,
-          "room_col_end": 3,
-          "chair": "Michael STARSINIC",
-          "agenda_item": "5.x, 6.x, 7.x",
-          "group_header": "Pre-Rel-17 Maintenance (excluding all 5G topics)",
-          "description": "Pre-Rel-17 Maintenance (excluding all 5G topics)\nRel-15/Rel-16 Maintenance for 5G (only related to 5GS_Ph1 Work Item)\nRel-16 Maintenance for 5G (excluding 5GS_Ph1)",
-          "agenda_descriptions": [
-            {
-              "agenda_item": "5.x",
-              "matched_agenda_item": "5",
-              "description": "Pre-Rel-17 Maintenance (excluding all 5G topics)",
-              "hierarchy": [
-                {
-                  "agenda_item": "5",
-                  "description": "Pre-Rel-17 Maintenance (excluding all 5G topics)"
-                }
-              ]
-            },
-            {
-              "agenda_item": "6.x",
-              "matched_agenda_item": "6",
-              "description": "Rel-15/Rel-16 Maintenance for 5G (only related to 5GS_Ph1 Work Item)",
-              "hierarchy": [
-                {
-                  "agenda_item": "6",
-                  "description": "Rel-15/Rel-16 Maintenance for 5G (only related to 5GS_Ph1 Work Item)"
-                }
-              ]
-            },
-            {
-              "agenda_item": "7.x",
-              "matched_agenda_item": "7",
-              "description": "Rel-16 Maintenance for 5G (excluding 5GS_Ph1)",
-              "hierarchy": [
-                {
-                  "agenda_item": "7",
-                  "description": "Rel-16 Maintenance for 5G (excluding 5GS_Ph1)"
-                }
-              ]
-            }
-          ],
-          "room_ids": [
-            "stream2"
-          ],
-          "room_scope": "assigned",
-          "notes": [
-            "Pre-Rel-19 maintenance",
-            "(5.x, 6.x, 7.x)"
-          ],
-          "inferred_agenda_items": [],
-          "email_details": [],
-          "part": [
-            1,
-            2
-          ],
-          "stream": ""
-        },
-        {
           "name": "KI#20 (Sensing)",
           "duration_minutes": 90,
           "start_time": "11:00",
@@ -2602,7 +2290,7 @@
           ],
           "room_scope": "assigned",
           "notes": [
-            "5GSAT_Ph4-ARC (20.1.2)"
+            "5GSAT_Ph4-ARC (20.1.2) [15]"
           ],
           "inferred_agenda_items": [],
           "email_details": [],
@@ -2909,7 +2597,7 @@
           "room_scope": "assigned",
           "notes": [
             "KI#10 (FWA) (20.6.10) – not revisions",
-            "SMS2EC-ARC (20.8.2) – not revisions"
+            "SMS2EC-ARC (20.8.2) [6] – not revisions"
           ],
           "inferred_agenda_items": [],
           "email_details": [],
@@ -2954,7 +2642,7 @@
           ],
           "room_scope": "assigned",
           "notes": [
-            "Sensing-ARC (20.2.2) – not revisions"
+            "Sensing-ARC (20.2.2) [57] – not revisions"
           ],
           "inferred_agenda_items": [],
           "email_details": [],
@@ -3421,20 +3109,20 @@
       }
     }
   ],
-  "source_file": "S2-261nnnn_SA2-178-Session Plan - r3.zip",
-  "generated_at": "2026-11-06 18:21",
+  "source_file": "S2-2611637_SA2-178-Session Plan - r4.zip",
+  "generated_at": "2026-11-09 05:21",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
-    "S2-261nnnn_SA2-178-Session Plan - r3.zip",
+    "S2-2611637_SA2-178-Session Plan - r4.zip",
     "agenda.csv"
   ],
   "source_labels": {
-    "S2-261nnnn_SA2-178-Session Plan - r3.zip": "Session Plan - r3",
+    "S2-2611637_SA2-178-Session Plan - r4.zip": "Session Plan - r4",
     "agenda.csv": "agenda.csv"
   },
   "source_urls": {
-    "S2-261nnnn_SA2-178-Session Plan - r3.zip": "https://www.3gpp.org/ftp/tsg_sa/WG2_Arch/TSGS2_178_Calgary_2026-11/INBOX/DRAFTS/_Session_Plan_Updates/S2-261nnnn_SA2-178-Session%20Plan%20-%20r3.zip"
+    "S2-2611637_SA2-178-Session Plan - r4.zip": "https://www.3gpp.org/ftp/tsg_sa/WG2_Arch/TSGS2_178_Calgary_2026-11/INBOX/DRAFTS/_Session_Plan_Updates/S2-2611637_SA2-178-Session%20Plan%20-%20r4.zip"
   },
   "source_mails": {},
   "timezone": "America/Edmonton",
