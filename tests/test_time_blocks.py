@@ -233,8 +233,8 @@ class MergedOverBlocksTests(unittest.TestCase):
         self.assertEqual({c.cell_end for c in tuesday_dinner}, {None})
 
 
-def test_ran1_127_friday_items_without_lengths_become_parts():
-    # The recorded slot merge answer for Friday 11:00 (merge prompt v8).
+def _recorded_sessions(day, block_index, fixture):
+    """Place a recorded slot merge answer for RAN1#127 v00 (merge prompt v8)."""
     from working_groups.ran1.merger import collect_time_slot_data
     from working_groups.ran1.parser import build_room_list
     from working_groups.ran1.session_parser import _slot_result_to_sessions, build_room_aliases
@@ -243,10 +243,22 @@ def test_ran1_127_friday_items_without_lengths_become_parts():
     rooms = build_room_list(meta)
     blocks, _ = document_time_blocks(meta)
     slot = next(s for s in collect_time_slot_data(cells, rooms, {}, meeting_id=MEETING, blocks=blocks)
-                if (s.day, s.time_block_index) == ("Friday", 1))
-    answer = json.loads((FIXTURES / "llm_127_friday_1100.json").read_text())
-    _, alias_to_name = build_room_aliases(rooms["Friday"])
-    sessions = _slot_result_to_sessions({"sessions": answer["sessions"]}, slot, rooms, alias_to_name)
+                if (s.day, s.time_block_index) == (day, block_index))
+    answer = json.loads((FIXTURES / fixture).read_text())
+    _, alias_to_name = build_room_aliases(rooms[day])
+    return _slot_result_to_sessions({"sessions": answer["sessions"]}, slot, rooms, alias_to_name)
+
+
+def test_ran1_127_tuesday_header_length_bounds_its_items():
+    # Brk2: "6GR (60)" over ".10.8 Sensing (70)"; the cell adds up to 160 of 150 min.
+    sessions = _recorded_sessions("Tuesday", 0, "llm_127_tuesday_0800.json")
+    brk2 = [(s.name, s.start_time, s.end_time) for s in sessions if s.room_col_start == 4]
+    assert brk2[-1] == ("10.8 Sensing", "09:30", "10:30")
+
+
+def test_ran1_127_friday_items_without_lengths_become_parts():
+    # The recorded slot merge answer for Friday 11:00.
+    sessions = _recorded_sessions("Friday", 1, "llm_127_friday_1100.json")
 
     brk2 = [(s.name, s.start_time, s.end_time, s.part, s.agenda_item, s.group_header)
             for s in sessions if s.room_col_start == 4]
