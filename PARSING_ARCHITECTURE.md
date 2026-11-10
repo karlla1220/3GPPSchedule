@@ -21,7 +21,7 @@ DOCX
 CellData + 방 목록
   │
   ├─ [결정론적] 같은 (요일, 시간 블록)의 Main/vice-chair 셀 수집
-  ├─ [LLM 보조] vice-chair 문서의 모호한 Room A/B 이름 해석
+  ├─ [LLM 보조] vice-chair 문서의 기본 방 이름(Main, Brk1 …) 해석
   ├─ [결정론적] source hash 및 이전 slot state 비교
   ├─ [결정론적] 칸 이력과 지금 칸을 비교해 칸마다 변경 표시
   ▼
@@ -132,7 +132,9 @@ Xiaodong
 - 물리 방 이름은 LLM 입력에서 안정적인 `RAN1_main`, `RAN1_brk1`, `RAN1_off1` 등의 alias로 바뀐다.
 - 셀마다 id(`cell c1a2b3`)를 붙인다(`_assign_cell_ids`). source, 방, 글로 만들어서 셀이 그대로이면 실행이 바뀌어도 같은 id다. 증분 병합의 baseline과 재사용한 slot state가 그 id로 셀을 가리킨다.
 
-vice-chair 문서가 방 이름 대신 `Room A`처럼 모호한 이름만 제공하면 `merger.py:_resolve_vc_room_names()`가 문서의 표 앞 문맥을 LLM에 보내 Main schedule의 방과 연결한다. 즉, 이 부분은 구조 파싱 중 예외적으로 LLM의 도움을 받는다. 결과는 `.cache/`에 저장될 수 있다.
+문서가 방 이름을 적지 않으면(방 이름 글상자가 비어 있으면) RAN1의 방 역할 이름을 쓴다: online 표 `Main`, `Brk1`, `Brk2`, offline 표 `Offline1`, `Offline2`(`parser.py`의 `_default_room_names`). RAN1#127 v00이 그렇다. 표 아래에 `RAN1 Meeting Rooms (Main, Brk#1, Brk#2)`, `RAN1 Offline Meeting Room (Offline#1, Offline#2)`만 있고 글상자가 비어 있다. 표 메타데이터의 `default_room_names`가 이것을 밝힌다.
+
+vice-chair 문서의 방 이름이 이 기본값이면(`default_room_names`) `merger.py:_resolve_vc_room_names()`가 문서의 표 앞 문맥을 LLM에 보내 Main schedule의 방과 연결한다. 즉, 이 부분은 구조 파싱 중 예외적으로 LLM의 도움을 받는다. 결과는 `.cache/`에 저장될 수 있다.
 
 각 source는 방 label, 셀 원문, prompt version을 포함해 hash된다. 이 hash와 `docs/ran1/slot_state/{Day}_{TB}.json`의 이전 hash를 비교하여 다음 상태를 정한다.
 

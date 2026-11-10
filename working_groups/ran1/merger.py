@@ -33,7 +33,8 @@ def _resolve_vc_room_names(
 ) -> None:
     """Resolve generic room names in vice-chair tables using LLM.
 
-    When a vice-chair schedule table has fallback room names like "Room A",
+    When a vice-chair schedule table has RAN1 default room names ("Main",
+    "Brk1", "Offline1": the document names none),
     this function uses the paragraph context (title/heading above the table)
     and LLM to determine which of the main schedule's rooms the table
     actually represents.
@@ -58,10 +59,7 @@ def _resolve_vc_room_names(
         # Check if any room has a generic/fallback name
         sample_day = next(iter(day_rooms))
         sample_rooms = day_rooms[sample_day]
-        has_generic = any(
-            r.startswith("Room ") or r.startswith("Offline ")
-            for r in sample_rooms
-        )
+        has_generic = meta.get("default_room_names", False)
 
         if not has_generic:
             continue  # Room names already resolved
