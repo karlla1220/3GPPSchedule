@@ -64,6 +64,16 @@ class DocumentBlocksTests(unittest.TestCase):
         self.assertEqual((monday_morning[0].time_block_start, monday_morning[0].time_block_end),
                          ("08:00", "10:30"))
 
+    def test_empty_room_text_boxes_give_ran1_room_roles(self):
+        # v00 names no rooms: "RAN1 Meeting Rooms (Main, Brk#1, Brk#2)" with
+        # empty text boxes, and "(Offline#1, Offline#2)".
+        _, meta = parse_docx(RAN1_127)
+        self.assertEqual(meta[0]["day_rooms"]["Monday"], ["Main", "Brk1", "Brk2"])
+        self.assertEqual(meta[1]["day_rooms"]["Monday"], ["Offline1", "Offline2"])
+        self.assertTrue(all(m["default_room_names"] for m in meta))
+        _, meta = parse_docx(RAN1_126BIS)
+        self.assertFalse(any(m["default_room_names"] for m in meta))
+
     def test_ran1_126bis_keeps_its_blocks(self):
         _, meta = parse_docx(RAN1_126BIS)
         blocks, _ = document_time_blocks(meta)

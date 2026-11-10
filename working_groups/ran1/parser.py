@@ -510,6 +510,19 @@ def _match_rooms_to_table(
     return None
 
 
+# RAN1's rooms by role, for a schedule whose room-name text boxes are empty
+# (RAN1#127 v00: "RAN1 Meeting Rooms (Main, Brk#1, Brk#2)", "RAN1 Offline
+# Meeting Room (Offline#1, Offline#2)").
+DEFAULT_ONLINE_ROOMS = ("Main", "Brk1", "Brk2")
+
+
+def _default_room_names(offline: bool, count: int) -> list[str]:
+    if offline:
+        return [f"Offline{i + 1}" for i in range(count)]
+    names = list(DEFAULT_ONLINE_ROOMS[:count])
+    return names + [f"Brk{i}" for i in range(len(names), count)]
+
+
 def _extract_room_names_from_doc(
     doc: Document,
 ) -> tuple[list[str] | None, list[str] | None]:
@@ -861,6 +874,7 @@ def parse_docx(
             textbox_rooms, table, day_columns, actual_rooms,
         )
 
+        default_names = False
         for day, (col_start, col_end) in day_columns.items():
             num_rooms = actual_rooms[day]
             if color_matched and num_rooms <= len(color_matched):
@@ -870,10 +884,8 @@ def parse_docx(
             elif table_idx > 0 and offline_room_names_fb and num_rooms <= len(offline_room_names_fb):
                 day_rooms[day] = offline_room_names_fb[:num_rooms]
             else:
-                prefix = "Offline" if table_idx > 0 else "Room"
-                day_rooms[day] = [
-                    f"{prefix} {chr(65 + i)}" for i in range(num_rooms)
-                ]
+                day_rooms[day] = _default_room_names(table_idx > 0, num_rooms)
+                default_names = True
 
         tables_meta.append(
             {
@@ -882,6 +894,8 @@ def parse_docx(
                 "day_rooms": day_rooms,
                 "context_text": table_contexts.get(orig_idx, ''),
                 "kind": table_kind(table_contexts.get(orig_idx, '')),
+                # Room names are RAN1 defaults, not read from the document.
+                "default_room_names": default_names,
                 "blocks": blocks,
                 "breaks": breaks,
             }
