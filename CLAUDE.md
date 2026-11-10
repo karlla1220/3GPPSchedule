@@ -518,9 +518,12 @@ RAN1·RAN2는 켜 두었다. RAN3·SA2는 같은 구조로 연결했지만 `emai
 - **메일은 앞당기는 장치일 뿐이다.** 리스트를 못 읽거나 메일을 놓쳐도 FTP에 올라올 때 반영된다. 그래서 메일 쪽 실패는 빌드도 check도 실패시키지 않고 로그에만 남긴다.
 - 빌드하는 회의와 다음 회의(`meeting_turn.to_read`)의 첨부만 후보다. 지난 회의 판을 나중에 전달한 메일은 후보가 아니다.
 - 피드는 XML이 허용하지 않는 제어 문자를 날것으로 담기도 한다(RAN2 2026-11-05, ISO-2022-JP 제목의 ESC). `listserv.parse_feed`가 지우고 읽는다.
-- **RAN1(`downloader.py`의 `mailed_schedule_files`, `_with_mail`):** 메일 첨부는 FTP에서 이미 찾은 문서(Main 또는 부의장 문서) 하나의 새 판으로만 쓴다.
+- **RAN1(`downloader.py`의 `mailed_schedule_files`, `_with_mail`, `_mailed_documents`):** 메일 첨부는 FTP에서 찾은 문서(Main 또는 부의장 문서)의 새 판이거나, FTP에 아직 없는 새 일정이다.
   - 같은 문서인지는 판 번호·`Draft`·Final/EOM 표시를 뺀 파일 이름으로 가린다(`schedule_stem`). 이름만으로는 누구 문서인지 알 수 없다(`RAN1#126b Sorour sessions … schedules - v00`에는 `schedule for`가 없다). FTP는 폴더로 가른다.
-  - FTP에 아직 없는 문서가 메일로만 오면 쓰지 않는다. 올라오면 그때부터다.
+  - FTP에 아직 없는 문서도 메일로 오면 쓴다(`_mailed_documents`). 다음 회의의 첫 일정(RAN1#127 `Draft … schedules - v00`은 2026-11-08 메일로 먼저 왔고 FTP `Chair_notes`는 비어 있었다)과 회의 중 부의장이 메일로 보낸 새 일정이다.
+    - 누구 문서인지는 지난 회의의 같은 문서(회의 번호까지 뺀 이름, `_document_name`)의 폴더로 정한다. 없으면 이름의 사람(`schedule for Hiroki`), 그것도 없으면 Main이다. 지난 회의에 있던 문서가 먼저 자리를 잡는다.
+    - FTP가 이미 채운 자리(그 회의의 Main, 그 부의장)는 차지하지 않는다. 메일 Main이 더 새 회의면 그 회의로 넘어간다(지난 회의가 끝나지 않았으면 `held_meeting` 잠금 때문에 넘어가지 않는다).
+  - 후보는 빌드한 회의와 다음 회의(`read_meetings`, `meeting_turn.to_read`)의 첨부뿐이다.
   - 빌드한 메일본은 상태 파일(`.schedule_state.json`의 `files`)에 메일 주소까지 적고, 다음 실행의 후보로 늘 다시 넣는다. 첨부는 아카이브에서 사라지지 않으므로 캐시를 잃어도 내려가지 않는다. check도 같은 후보로 비교한다.
   - 소스 이름(`Main Schedule`)과 폴더는 출처와 상관없이 그대로다. 이름이 바뀌면 모든 슬롯이 `NEW`/`REMOVED`로 증분 재병합된다.
   - 메일본 Main은 `main_history`에 더하지 않는다(`record(..., store=False)`). 영구 기록이라 잘못된 메일본이 부의장 칸을 사본으로 지울 수 있다.

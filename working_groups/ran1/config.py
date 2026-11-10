@@ -360,8 +360,9 @@ def with_meeting_folders(
         {"meeting_id": built, "metadata": saved_dates},
     )
     held = built if meeting_turn.holds(built, dates, now) else None
-    cfg = {**cfg, "held_meeting": held}
     meetings = meeting_turn.to_read(built, dates, now)
+    # ``read_meetings``: a mailed schedule of another meeting is not a candidate.
+    cfg = {**cfg, "held_meeting": held, "read_meetings": meetings}
     try:
         found = meeting_folders.resolve(
             "ran1", meetings, rows=rows, override=cfg["meeting_specific_override"],

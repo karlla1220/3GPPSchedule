@@ -147,3 +147,48 @@ def test_the_build_opens_no_mail_the_check_did_not(monkeypatch):
         files, _ = downloader.mailed_schedule_files(cfg, {'email': record}, http=http)   # next check
     assert archive.opened() == ['a2.2611a'] and [f['name'] for f in files] == [
         'RAN1#127 online and offline schedules - v00.docx']
+
+
+NEXT_MAIN = 'Draft RAN1#127 online and offline schedules - v00.docx'
+
+
+def test_the_first_schedule_of_the_next_meeting_can_come_by_mail():
+    """RAN1#127 v00 was mailed (2026-11-08) while Chair_notes had only #126bis."""
+    found = downloader._mailed_documents(sources(), [
+        mail(NEXT_MAIN, message_id='8140fcce.2611b'),
+        mail('RAN1#127 schedule - v00.docx', message_id='x.2611b'),  # no known document: Main is already taken
+        mail('RAN1#127 Sorour sessions online and offline schedules - v00.docx', message_id='s.2611b'),
+        mail('RAN1#127 schedule for Hiroki Adhoc2 sessions_v00.docx', message_id='h.2611b'),
+    ])
+    roles = {s.file_info['name']: (s.folder_name, s.person_name, s.is_main) for s in found}
+    # Whose: the same document in the earlier meeting decides, so Sorour's name needs no "schedule for".
+    assert roles[NEXT_MAIN] == ('Chair_notes', None, True)
+    assert roles['RAN1#127 Sorour sessions online and offline schedules - v00.docx'] == ('Sorour_notes', 'Sorour', False)
+    assert roles['RAN1#127 schedule for Hiroki Adhoc2 sessions_v00.docx'] == ('Hiroki_notes', 'Hiroki', False)
+    assert 'RAN1#127 schedule - v00.docx' not in roles
+    main = next(s for s in found if s.is_main)
+    assert main.file_info['uploaded_at'] == datetime(2026, 10, 13, 9, 0, tzinfo=timezone.utc)
+    # The mailed main makes it the current meeting; the #126bis sources drop out.
+    assert downloader._current_meeting_from_sources(sources() + found, 'ran1#126bis') == 'ran1#127'
+
+
+def test_a_vice_chair_can_mail_a_new_schedule_during_the_meeting():
+    found = downloader._mailed_documents(sources(), [
+        mail('RAN1#126b schedule for Younsun sessions - v00.docx'),
+        mail('RAN1#126b online and offline schedules - v00 comments.docx', message_id='c.2610b'),  # Main is taken
+        mail('RAN1#126b Sorour sessions online and offline schedules - v09.docx', message_id='s.2610b'),  # _with_mail's
+    ])
+    assert [(s.folder_name, s.person_name, s.is_main) for s in found] == [('Younsun_notes', 'Younsun', False)]
+
+
+def test_a_held_meeting_takes_no_mail_of_the_next():
+    assert downloader._mailed_documents(sources(), [mail(NEXT_MAIN)], locked_meeting_id='ran1#126bis') == []
+
+
+def test_only_the_meetings_read_are_mail_candidates():
+    state = {'files': [{**mail(NEXT_MAIN), 'folder': 'Chair_notes'},
+                       {**mail('RAN1#128 online and offline schedules - v00.docx', message_id='z.2612a'), 'folder': 'Chair_notes'}]}
+    feedless = httpx.Client(transport=httpx.MockTransport(lambda request: httpx.Response(503)))
+    files, _ = downloader.mailed_schedule_files(
+        {'email_list': '3GPP_TSG_RAN_WG1', 'read_meetings': ['ran1#126bis', 'ran1#127']}, state, http=feedless)
+    assert [f['name'] for f in files] == [NEXT_MAIN]
