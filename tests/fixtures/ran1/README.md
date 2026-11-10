@@ -41,3 +41,9 @@ Its third table, the old "Detailed Schedule for RAN1 Main Session" template,
 still writes the RAN1#126bis times. `tests/test_time_blocks.py` reads the
 blocks from it, and Friday's two cells merged from 14:00 down to 19:00 (over
 an afternoon coffee row that covers Monday-Thursday only) as irregular cells.
+
+`llm_127_friday_1100.json` is the slot merge's answer for that schedule's
+Friday 11:00 block, recorded once (gemini-3.8-flash, low; merge prompt v8).
+Brk2 lists `6GR (TBD) / .10.8 Sensing ()` and `R20 (TBD) / A-IoT Phase2 (TBD)`
+with no lengths; the answer gives each item its own session with a null
+duration, and `tests/test_time_blocks.py` places them as parts 1/2 and 2/2.

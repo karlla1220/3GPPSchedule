@@ -14,6 +14,7 @@ from .agenda_descriptions import (
     load_agenda_description_map,
     strip_derived_description_fields,
 )
+from shared.schedule import MIN_PART_MINUTES
 from .models import RoomInfo, Session, time_to_minutes, minutes_to_time
 
 
@@ -53,7 +54,7 @@ MULTI_SOURCE_SESSION_SCHEMA = {
                 "properties": {
                     "room_name": {"type": "string"},
                     "name": {"type": "string"},
-                    "duration_minutes": {"type": "integer"},
+                    "duration_minutes": {"type": "integer", "nullable": True},
                     "specified_start_time": {"type": "string", "nullable": True},
                     "chair": {"type": "string", "nullable": True},
                     "group_header": {"type": "string"},
@@ -1208,7 +1209,8 @@ def _row_bounds(cells: dict, positioned: dict, block_start: int, block_end: int)
         spans = []
         for cell_id, entry in table_cells:
             placed = positioned.get(cell_id) or []
-            if not placed or any(sd.get("specified_start_time") for sd in placed):
+            if not placed or any(sd.get("specified_start_time") or sd.get("duration_minutes") is None
+                                 for sd in placed):
                 continue
             total = sum(sd["duration_minutes"] for sd in placed)
             spans.append((entry.block_row, entry.block_row + entry.row_span, total))
@@ -1262,7 +1264,8 @@ def _slot_result_to_sessions(
     items = []  # (index, sd, position cell ids, col_start, col_end, room_indices)
     positioned: dict[str, list[dict]] = {}
     for index, sd in enumerate(parsed.get("sessions", []) or []):
-        if (sd.get("duration_minutes") or 0) <= 0:
+        duration = sd.get("duration_minutes")
+        if duration is not None and duration <= 0:
             continue
         cited = [c for c in (sd.get("source_cells") or []) if c in entries]
         main = [c for c in cited if entries[c][0] == "Main Schedule"]
@@ -1309,7 +1312,16 @@ def _slot_result_to_sessions(
     placed.sort(key=lambda item: (item[0], item[1]))
     cursors: dict[int, int] = {}
     sessions: list[Session] = []
+    # Sessions the cell gives no length ("6GR (TBD) / .10.8 Sensing ()") share
+    # the time their cell has left once the timed ones are placed.
+    untimed: dict[tuple, list] = {}
+    for item in placed:
+        row_start, _, sd, row_end, col_start, col_end, room_indices = item
+        if sd.get("duration_minutes") is None:
+            untimed.setdefault((row_start, row_end, col_start, col_end), []).append(item)
     for row_start, _, sd, row_end, col_start, col_end, room_indices in placed:
+        if sd.get("duration_minutes") is None:
+            continue
         duration = sd["duration_minutes"]
         start = None
         specified = sd.get("specified_start_time")
@@ -1330,39 +1342,75 @@ def _slot_result_to_sessions(
         for i in room_indices:
             cursors[i] = max(cursors.get(i, block_start_min), end)
 
-        name = sd.get("name", "Unknown")
-        group_header = sd.get("group_header", "")
-        agenda_item = sd.get("agenda_item")
+        sessions.append(_session(sd, slot.day, start, end, col_start, col_end))
 
-        # Post-process: extract agenda_item from name if not provided
-        if not agenda_item:
-            name, extracted_agenda_item = _extract_agenda_item_from_name(name)
-            if extracted_agenda_item:
-                agenda_item = extracted_agenda_item
-            # Check group_header for agenda context
-            if not agenda_item and group_header:
-                m = re.match(r"AI\s+(\d[\d.]*)", group_header)
-                if m:
-                    agenda_item = m.group(1).strip(".")
-
-        sessions.append(Session(
-            name=name,
-            duration_minutes=duration,
-            start_time=minutes_to_time(start),
-            end_time=minutes_to_time(end),
-            day=slot.day,
-            room_col_start=col_start,
-            room_col_end=col_end,
-            chair=sd.get("chair"),
-            agenda_item=agenda_item,
-            group_header=group_header,
-            description=sd.get("description"),
-            agenda_descriptions=sd.get("agenda_descriptions") or [],
-        ))
+    for (row_start, row_end, col_start, col_end), group in untimed.items():
+        room_indices = group[0][6]
+        start = max([row_start] + [cursors.get(i, row_start) for i in room_indices])
+        minutes = row_end - start
+        names = ", ".join(f"'{item[2].get('name', '')}'" for item in group)
+        if minutes <= 0:
+            problems.append(
+                f"{slot_label}: no time is left in the cell for {names}, which have no length"
+            )
+            continue
+        for i in room_indices:
+            cursors[i] = row_end
+        if len(group) == 1:
+            sessions.append(_session(group[0][2], slot.day, start, row_end, col_start, col_end))
+        elif minutes >= len(group) * MIN_PART_MINUTES:
+            # Pieces of the time left, in the answer's order; their own times
+            # are unknown, so each keeps the whole span (CLAUDE.md, "시각 없이
+            # 나뉜 블록").
+            for k, item in enumerate(group, 1):
+                sessions.append(_session(item[2], slot.day, start, row_end, col_start, col_end,
+                                         part=[k, len(group)]))
+        else:
+            # Too short to show each piece's AI line: one cell listing them.
+            joined = dict(group[0][2])
+            joined["name"] = " / ".join(item[2].get("name", "") for item in group)
+            items = [item[2].get("agenda_item") for item in group if item[2].get("agenda_item")]
+            joined["agenda_item"] = ", ".join(items) or None
+            sessions.append(_session(joined, slot.day, start, row_end, col_start, col_end))
 
     if problems:
         raise SlotPlacementError(problems)
     return sessions
+
+
+def _session(sd: dict, day: str, start: int, end: int, col_start: int, col_end: int,
+             part: list[int] | None = None) -> Session:
+    """A Session from one merged session of the answer, placed at ``start``-``end``."""
+    name = sd.get("name", "Unknown")
+    group_header = sd.get("group_header", "")
+    agenda_item = sd.get("agenda_item")
+
+    # Post-process: extract agenda_item from name if not provided
+    if not agenda_item:
+        name, extracted_agenda_item = _extract_agenda_item_from_name(name)
+        if extracted_agenda_item:
+            agenda_item = extracted_agenda_item
+        # Check group_header for agenda context
+        if not agenda_item and group_header:
+            m = re.match(r"AI\s+(\d[\d.]*)", group_header)
+            if m:
+                agenda_item = m.group(1).strip(".")
+
+    return Session(
+        name=name,
+        duration_minutes=end - start,
+        start_time=minutes_to_time(start),
+        end_time=minutes_to_time(end),
+        day=day,
+        room_col_start=col_start,
+        room_col_end=col_end,
+        chair=sd.get("chair"),
+        agenda_item=agenda_item,
+        group_header=group_header,
+        description=sd.get("description"),
+        agenda_descriptions=sd.get("agenda_descriptions") or [],
+        part=part,
+    )
 
 
 def normalize_group_headers(sessions: list[Session]) -> list[Session]:

@@ -236,6 +236,23 @@ For these cases:
        specified_start_time:"09:00", agenda_item:"1, 2, 3, 4, 5"}
       {name:"10.5.0", dur:30, specified_start_time:null, group_header:"6GR"}
 
+### Items without a length
+
+A cell may list items without saying how long each one takes: "(TBD)",
+empty "()", or no number at all. Example (one cell, two groups):
+  6GR (TBD)
+  .10.8 Sensing ()
+
+  R20 (TBD)
+  A-IoT Phase2 (TBD)
+- Make one session per item, as for any cell: "10.8 Sensing" (group_header
+  "6GR", agenda_item "10.8") and "A-IoT Phase2" (group_header "R20").
+  Never join the items into one session named after the whole cell.
+- Set duration_minutes to null for each item whose length the cell does not
+  give. Do not invent a length or share the time out yourself: code gives
+  these items the time the cell has left after the items with a length.
+- An item whose length is given (e.g. "(30)") keeps it.
+
 ### When the day opens and closes
 
 A cell may say when the meeting or the day starts or ends, in any wording:
@@ -286,7 +303,7 @@ for it. Never leave source_cells empty and never invent an id.
     {
       "room_name": "<room alias or ALL_ONLINE / ALL_ROOMS>",
       "name": "session name (include AI number if known)",
-      "duration_minutes": N,
+      "duration_minutes": N or null (null only when the cell gives the item no length),
       "specified_start_time": "HH:MM or null (only when cell text has explicit time range or explicit start time)",
       "chair": "person or null",
       "group_header": "category labels joined by ' / ', or empty string",

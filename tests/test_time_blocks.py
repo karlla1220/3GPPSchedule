@@ -231,3 +231,26 @@ class MergedOverBlocksTests(unittest.TestCase):
         tuesday_dinner = [c for c in cells if c.text == "Early dinner (60)"]
         self.assertTrue(tuesday_dinner)
         self.assertEqual({c.cell_end for c in tuesday_dinner}, {None})
+
+
+def test_ran1_127_friday_items_without_lengths_become_parts():
+    # The recorded slot merge answer for Friday 11:00 (merge prompt v8).
+    from working_groups.ran1.merger import collect_time_slot_data
+    from working_groups.ran1.parser import build_room_list
+    from working_groups.ran1.session_parser import _slot_result_to_sessions, build_room_aliases
+
+    cells, meta = parse_docx(RAN1_127)
+    rooms = build_room_list(meta)
+    blocks, _ = document_time_blocks(meta)
+    slot = next(s for s in collect_time_slot_data(cells, rooms, {}, meeting_id=MEETING, blocks=blocks)
+                if (s.day, s.time_block_index) == ("Friday", 1))
+    answer = json.loads((FIXTURES / "llm_127_friday_1100.json").read_text())
+    _, alias_to_name = build_room_aliases(rooms["Friday"])
+    sessions = _slot_result_to_sessions({"sessions": answer["sessions"]}, slot, rooms, alias_to_name)
+
+    brk2 = [(s.name, s.start_time, s.end_time, s.part, s.agenda_item, s.group_header)
+            for s in sessions if s.room_col_start == 4]
+    assert brk2 == [
+        ("10.8 Sensing", "11:00", "12:30", [1, 2], "10.8", "6GR"),
+        ("A-IoT Phase2", "11:00", "12:30", [2, 2], None, "R20"),
+    ]

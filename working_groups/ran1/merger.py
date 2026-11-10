@@ -21,7 +21,7 @@ from .rooms import online_rooms as _online_rooms
 from .slot_state import hash_source_text, load_slot_state
 
 
-MERGE_PROMPT_VERSION = 7
+MERGE_PROMPT_VERSION = 8
 
 
 # ── Room name resolution ────────────────────────────────────
