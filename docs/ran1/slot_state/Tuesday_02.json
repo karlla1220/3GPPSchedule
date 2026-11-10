@@ -2,7 +2,7 @@
   "day": "Tuesday",
   "time_block_index": 2,
   "source_hashes": {
-    "Main Schedule": "6c3a3a34112076e8"
+    "Main Schedule": "b56867a496319600"
   },
   "merged_sessions": [
     {
@@ -14,7 +14,7 @@
       "group_header": "6GR",
       "agenda_item": "10.5.3.1",
       "source_cells": [
-        "c7c1771"
+        "c1b04b9"
       ],
       "description": "Aspects of downlink-based CSI acquisition",
       "agenda_descriptions": [
@@ -56,7 +56,7 @@
       "group_header": "6GR",
       "agenda_item": "10.5.3.2",
       "source_cells": [
-        "c7c1771"
+        "c1b04b9"
       ],
       "description": "Aspects of uplink-based CSI acquisition",
       "agenda_descriptions": [
@@ -98,7 +98,7 @@
       "group_header": "6GR",
       "agenda_item": "10.5.3.3",
       "source_cells": [
-        "c7c1771"
+        "c1b04b9"
       ],
       "description": "Other aspects",
       "agenda_descriptions": [
@@ -140,7 +140,7 @@
       "group_header": "6GR",
       "agenda_item": "10.5.3.4",
       "source_cells": [
-        "c7c1771"
+        "c1b04b9"
       ],
       "description": "Beam management for downlink and uplink",
       "agenda_descriptions": [
@@ -182,7 +182,7 @@
       "group_header": "6GR",
       "agenda_item": "10.5.2.1",
       "source_cells": [
-        "c7853c4"
+        "c323aa9"
       ],
       "description": "Downlink transmission scheme(s) for downlink control channels",
       "agenda_descriptions": [
@@ -224,7 +224,7 @@
       "group_header": "6GR",
       "agenda_item": "10.5.2.2",
       "source_cells": [
-        "c7853c4"
+        "c323aa9"
       ],
       "description": "Downlink transmission scheme(s) for downlink shared channels",
       "agenda_descriptions": [
@@ -266,7 +266,7 @@
       "group_header": "6GR",
       "agenda_item": "10.5.2.3",
       "source_cells": [
-        "c7853c4"
+        "c323aa9"
       ],
       "description": "Uplink transmission scheme(s) for uplink channels",
       "agenda_descriptions": [
@@ -308,7 +308,7 @@
       "group_header": "6GR",
       "agenda_item": "10.3.2",
       "source_cells": [
-        "c7853c4"
+        "c323aa9"
       ],
       "description": "Modulation",
       "agenda_descriptions": [
@@ -345,7 +345,7 @@
       "group_header": "R20",
       "agenda_item": null,
       "source_cells": [
-        "c51115b"
+        "c622274"
       ]
     },
     {
@@ -357,7 +357,7 @@
       "group_header": "6GR",
       "agenda_item": "10.2.1",
       "source_cells": [
-        "c51115b"
+        "c622274"
       ],
       "description": "Waveform",
       "agenda_descriptions": [
@@ -394,7 +394,7 @@
       "group_header": "6GR",
       "agenda_item": "10.6.1.1",
       "source_cells": [
-        "c407f80"
+        "cd686a9"
       ],
       "description": "Design of WUS with OFDM based sequence",
       "agenda_descriptions": [
@@ -436,7 +436,7 @@
       "group_header": "6GR",
       "agenda_item": "10.6.1.2",
       "source_cells": [
-        "c407f80"
+        "cd686a9"
       ],
       "description": "WUS operation in RRC states",
       "agenda_descriptions": [
@@ -478,7 +478,7 @@
       "group_header": "6GR",
       "agenda_item": "10.6.2",
       "source_cells": [
-        "c407f80"
+        "cd686a9"
       ],
       "description": "Uplink WUS and operation",
       "agenda_descriptions": [
@@ -515,7 +515,7 @@
       "group_header": "6GR",
       "agenda_item": "10.6.3",
       "source_cells": [
-        "c407f80"
+        "cd686a9"
       ],
       "description": "WUS operation with other functionalities",
       "agenda_descriptions": [
@@ -552,7 +552,7 @@
       "group_header": "6GR",
       "agenda_item": "10.5.5",
       "source_cells": [
-        "c407f80"
+        "cd686a9"
       ],
       "description": "Other physical layer signals, channels and procedure",
       "agenda_descriptions": [
@@ -589,7 +589,7 @@
       "group_header": "",
       "agenda_item": "10.2.1",
       "source_cells": [
-        "c5f3152"
+        "c491768"
       ],
       "description": "Waveform",
       "agenda_descriptions": [
@@ -626,7 +626,7 @@
       "group_header": "6GR",
       "agenda_item": "10.3.2",
       "source_cells": [
-        "c5f3152"
+        "c491768"
       ],
       "description": "Modulation",
       "agenda_descriptions": [
@@ -663,7 +663,7 @@
       "group_header": "6GR",
       "agenda_item": "10.5.4.2",
       "source_cells": [
-        "c5f3152"
+        "c491768"
       ],
       "description": "Downlink and uplink transmission without dynamic scheduling",
       "agenda_descriptions": [
@@ -705,7 +705,7 @@
       "group_header": "6GR",
       "agenda_item": "10.5.4.3",
       "source_cells": [
-        "c5f3152"
+        "c491768"
       ],
       "description": "HARQ related Aspects",
       "agenda_descriptions": [
@@ -747,7 +747,7 @@
       "group_header": "6GR",
       "agenda_item": "10.5.4.4",
       "source_cells": [
-        "c5f3152"
+        "c491768"
       ],
       "description": "Handling of potential multiple uplink transmissions",
       "agenda_descriptions": [
@@ -781,40 +781,40 @@
       ]
     }
   ],
-  "merged_at": "2026-11-10T08:26:05.796281+00:00",
+  "merged_at": "2026-11-10T08:35:05.700949+00:00",
   "meeting_id": "ran1#127",
   "schema_version": 3,
   "source_entries": {
     "Main Schedule": [
       {
-        "room_label": "Room A",
+        "room_label": "Main",
         "cell_text": "6GR (150)\n.10.5.3.1(60)\n.10.5.3.2(35)\n.10.5.3.3(30)\n.10.5.3.4(25)",
         "fallback_start_time": null,
-        "cell_id": "c7c1771"
+        "cell_id": "c1b04b9"
       },
       {
-        "room_label": "Room B",
+        "room_label": "Brk1",
         "cell_text": "6GR (150)\n.10.5.2.1 (20)\n.10.5.2.2 (50)\n.10.5.2.3 (50)\n\n.10.3.2 Modulation (30)",
         "fallback_start_time": null,
-        "cell_id": "c7853c4"
+        "cell_id": "c323aa9"
       },
       {
-        "room_label": "Room C",
+        "room_label": "Brk2",
         "cell_text": "R20 (120)\nA-IoT Phase2 (120)\n6GR (30)\n\n.10.2.1 Waveform (30)",
         "fallback_start_time": null,
-        "cell_id": "c51115b"
+        "cell_id": "c622274"
       },
       {
-        "room_label": "Offline A",
+        "room_label": "Offline1",
         "cell_text": "Xiaodong (150)\n6GR\n.10.6.1.1 (40)\n.10.6.1.2 (35)\n.10.6.2 (25)\n.10.6.3 (20)\n\n.10.5.5 (30)",
         "fallback_start_time": null,
-        "cell_id": "c407f80"
+        "cell_id": "cd686a9"
       },
       {
-        "room_label": "Offline B",
+        "room_label": "Offline2",
         "cell_text": "Hiroki (30)\n10.2.1 Waveform (30)\nSorour (30)\n6GR (30)\n.10.3.2 Modulation (30)\nHiroki (120)\n6GR (120)\n.10.5.4.2 (20)\n.10.5.4.3 (40)\n.10.5.4.4 (30)",
         "fallback_start_time": null,
-        "cell_id": "c5f3152"
+        "cell_id": "c491768"
       }
     ]
   },

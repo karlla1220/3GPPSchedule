@@ -2,7 +2,7 @@
   "day": "Friday",
   "time_block_index": 2,
   "source_hashes": {
-    "Main Schedule": "2a7ce3bc23d4f4ea"
+    "Main Schedule": "63a745b1e05f142a"
   },
   "merged_sessions": [
     {
@@ -14,7 +14,7 @@
       "group_header": "",
       "agenda_item": null,
       "source_cells": [
-        "c4b3453"
+        "cdbfdb9"
       ]
     },
     {
@@ -26,27 +26,27 @@
       "group_header": "",
       "agenda_item": null,
       "source_cells": [
-        "c672a1d"
+        "cf40fc5"
       ]
     }
   ],
-  "merged_at": "2026-11-10T08:26:05.816327+00:00",
+  "merged_at": "2026-11-10T08:35:05.722989+00:00",
   "meeting_id": "ran1#127",
   "schema_version": 3,
   "source_entries": {
     "Main Schedule": [
       {
-        "room_label": "Room A + Room B + Room C",
+        "room_label": "Main + Brk1 + Brk2",
         "cell_text": "Any other open issues. Session reports\nRAN1#127expected to close at 16:00",
         "fallback_start_time": null,
-        "cell_id": "c4b3453",
+        "cell_id": "cdbfdb9",
         "cell_end": "19:00"
       },
       {
-        "room_label": "Offline A + Offline B",
+        "room_label": "Offline1 + Offline2",
         "cell_text": "To be assigned by Sorour\nTo be assigned by Hiroki",
         "fallback_start_time": null,
-        "cell_id": "c672a1d",
+        "cell_id": "cf40fc5",
         "cell_end": "19:00"
       }
     ]

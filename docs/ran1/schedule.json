@@ -6,7 +6,7 @@
       "day_name": "Monday",
       "rooms": [
         {
-          "name": "Room A",
+          "name": "Main",
           "table_index": 0,
           "room_index_in_table": 0,
           "id": "",
@@ -15,7 +15,7 @@
           "stream": ""
         },
         {
-          "name": "Room B",
+          "name": "Brk1",
           "table_index": 0,
           "room_index_in_table": 1,
           "id": "",
@@ -24,7 +24,7 @@
           "stream": ""
         },
         {
-          "name": "Room C",
+          "name": "Brk2",
           "table_index": 0,
           "room_index_in_table": 2,
           "id": "",
@@ -33,7 +33,7 @@
           "stream": ""
         },
         {
-          "name": "Offline A",
+          "name": "Offline1",
           "table_index": 1,
           "room_index_in_table": 0,
           "id": "",
@@ -42,7 +42,7 @@
           "stream": ""
         },
         {
-          "name": "Offline B",
+          "name": "Offline2",
           "table_index": 1,
           "room_index_in_table": 1,
           "id": "",
@@ -2259,7 +2259,7 @@
       "day_name": "Tuesday",
       "rooms": [
         {
-          "name": "Room A",
+          "name": "Main",
           "table_index": 0,
           "room_index_in_table": 0,
           "id": "",
@@ -2268,7 +2268,7 @@
           "stream": ""
         },
         {
-          "name": "Room B",
+          "name": "Brk1",
           "table_index": 0,
           "room_index_in_table": 1,
           "id": "",
@@ -2277,7 +2277,7 @@
           "stream": ""
         },
         {
-          "name": "Room C",
+          "name": "Brk2",
           "table_index": 0,
           "room_index_in_table": 2,
           "id": "",
@@ -2286,7 +2286,7 @@
           "stream": ""
         },
         {
-          "name": "Offline A",
+          "name": "Offline1",
           "table_index": 1,
           "room_index_in_table": 0,
           "id": "",
@@ -2295,7 +2295,7 @@
           "stream": ""
         },
         {
-          "name": "Offline B",
+          "name": "Offline2",
           "table_index": 1,
           "room_index_in_table": 1,
           "id": "",
@@ -5082,7 +5082,7 @@
       "day_name": "Wednesday",
       "rooms": [
         {
-          "name": "Room A",
+          "name": "Main",
           "table_index": 0,
           "room_index_in_table": 0,
           "id": "",
@@ -5091,7 +5091,7 @@
           "stream": ""
         },
         {
-          "name": "Room B",
+          "name": "Brk1",
           "table_index": 0,
           "room_index_in_table": 1,
           "id": "",
@@ -5100,7 +5100,7 @@
           "stream": ""
         },
         {
-          "name": "Room C",
+          "name": "Brk2",
           "table_index": 0,
           "room_index_in_table": 2,
           "id": "",
@@ -5109,7 +5109,7 @@
           "stream": ""
         },
         {
-          "name": "Offline A",
+          "name": "Offline1",
           "table_index": 1,
           "room_index_in_table": 0,
           "id": "",
@@ -5118,7 +5118,7 @@
           "stream": ""
         },
         {
-          "name": "Offline B",
+          "name": "Offline2",
           "table_index": 1,
           "room_index_in_table": 1,
           "id": "",
@@ -7574,7 +7574,7 @@
       "day_name": "Thursday",
       "rooms": [
         {
-          "name": "Room A",
+          "name": "Main",
           "table_index": 0,
           "room_index_in_table": 0,
           "id": "",
@@ -7583,7 +7583,7 @@
           "stream": ""
         },
         {
-          "name": "Room B",
+          "name": "Brk1",
           "table_index": 0,
           "room_index_in_table": 1,
           "id": "",
@@ -7592,7 +7592,7 @@
           "stream": ""
         },
         {
-          "name": "Room C",
+          "name": "Brk2",
           "table_index": 0,
           "room_index_in_table": 2,
           "id": "",
@@ -7601,7 +7601,7 @@
           "stream": ""
         },
         {
-          "name": "Offline A",
+          "name": "Offline1",
           "table_index": 1,
           "room_index_in_table": 0,
           "id": "",
@@ -7610,7 +7610,7 @@
           "stream": ""
         },
         {
-          "name": "Offline B",
+          "name": "Offline2",
           "table_index": 1,
           "room_index_in_table": 1,
           "id": "",
@@ -10035,7 +10035,7 @@
           "day": "Thursday",
           "room_col_start": 6,
           "room_col_end": 7,
-          "chair": "Sorour",
+          "chair": "Sorouri",
           "agenda_item": "10.7.1",
           "group_header": "6GR",
           "description": "NTN specific requirements and design",
@@ -10079,7 +10079,7 @@
           "day": "Thursday",
           "room_col_start": 6,
           "room_col_end": 7,
-          "chair": "Sorour",
+          "chair": "Sorouri",
           "agenda_item": null,
           "group_header": "6GR",
           "description": null,
@@ -10174,7 +10174,7 @@
       "day_name": "Friday",
       "rooms": [
         {
-          "name": "Room A",
+          "name": "Main",
           "table_index": 0,
           "room_index_in_table": 0,
           "id": "",
@@ -10183,7 +10183,7 @@
           "stream": ""
         },
         {
-          "name": "Room B",
+          "name": "Brk1",
           "table_index": 0,
           "room_index_in_table": 1,
           "id": "",
@@ -10192,7 +10192,7 @@
           "stream": ""
         },
         {
-          "name": "Room C",
+          "name": "Brk2",
           "table_index": 0,
           "room_index_in_table": 2,
           "id": "",
@@ -10201,7 +10201,7 @@
           "stream": ""
         },
         {
-          "name": "Offline A",
+          "name": "Offline1",
           "table_index": 1,
           "room_index_in_table": 0,
           "id": "",
@@ -10210,7 +10210,7 @@
           "stream": ""
         },
         {
-          "name": "Offline B",
+          "name": "Offline2",
           "table_index": 1,
           "room_index_in_table": 1,
           "id": "",
@@ -10899,7 +10899,7 @@
           "room_col_end": 5,
           "chair": null,
           "agenda_item": null,
-          "group_header": "6GR",
+          "group_header": "R20",
           "description": "ISAC",
           "agenda_descriptions": [
             {
@@ -11027,7 +11027,7 @@
     }
   ],
   "source_file": "Draft RAN1#127 online and offline schedules - v00.docx",
-  "generated_at": "2026-11-10 02:26",
+  "generated_at": "2026-11-10 02:35",
   "contact_name": "",
   "contact_email": "",
   "source_files": [

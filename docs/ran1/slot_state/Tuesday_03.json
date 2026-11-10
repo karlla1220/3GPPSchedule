@@ -2,7 +2,7 @@
   "day": "Tuesday",
   "time_block_index": 3,
   "source_hashes": {
-    "Main Schedule": "9d1e8a6ff49eeff5"
+    "Main Schedule": "13cbdb93672e3ec6"
   },
   "merged_sessions": [
     {
@@ -14,7 +14,7 @@
       "group_header": "6GR",
       "agenda_item": "10.6.1.1",
       "source_cells": [
-        "c34f099"
+        "c966f78"
       ],
       "description": "Design of WUS with OFDM based sequence",
       "agenda_descriptions": [
@@ -56,7 +56,7 @@
       "group_header": "6GR",
       "agenda_item": "10.6.1.2",
       "source_cells": [
-        "c34f099"
+        "c966f78"
       ],
       "description": "WUS operation in RRC states",
       "agenda_descriptions": [
@@ -98,7 +98,7 @@
       "group_header": "6GR",
       "agenda_item": "10.6.2",
       "source_cells": [
-        "c34f099"
+        "c966f78"
       ],
       "description": "Uplink WUS and operation",
       "agenda_descriptions": [
@@ -135,7 +135,7 @@
       "group_header": "6GR",
       "agenda_item": "10.5.5",
       "source_cells": [
-        "c34f099"
+        "c966f78"
       ],
       "description": "Other physical layer signals, channels and procedure",
       "agenda_descriptions": [
@@ -172,7 +172,7 @@
       "group_header": "R20",
       "agenda_item": null,
       "source_cells": [
-        "c6ef7a1"
+        "cac5e0b"
       ]
     },
     {
@@ -184,7 +184,7 @@
       "group_header": "R20",
       "agenda_item": null,
       "source_cells": [
-        "c6ef7a1"
+        "cac5e0b"
       ]
     },
     {
@@ -196,7 +196,7 @@
       "group_header": "",
       "agenda_item": "8.1",
       "source_cells": [
-        "c6ef7a1"
+        "cac5e0b"
       ],
       "description": "Maintenance on all items of Rel-19 NR and E-UTRA",
       "agenda_descriptions": [
@@ -228,7 +228,7 @@
       "group_header": "6GR",
       "agenda_item": "10.5.4.2",
       "source_cells": [
-        "cee27a1"
+        "c895181"
       ],
       "description": "Downlink and uplink transmission without dynamic scheduling",
       "agenda_descriptions": [
@@ -270,7 +270,7 @@
       "group_header": "6GR",
       "agenda_item": "10.5.4.3",
       "source_cells": [
-        "cee27a1"
+        "c895181"
       ],
       "description": "HARQ related Aspects",
       "agenda_descriptions": [
@@ -312,7 +312,7 @@
       "group_header": "6GR",
       "agenda_item": "10.5.4.4",
       "source_cells": [
-        "cee27a1"
+        "c895181"
       ],
       "description": "Handling of potential multiple uplink transmissions",
       "agenda_descriptions": [
@@ -354,7 +354,7 @@
       "group_header": "6GR",
       "agenda_item": "10.5.1.1",
       "source_cells": [
-        "cef8b2c"
+        "c7138e4"
       ],
       "description": "Synchronization acquisition and beam measurement",
       "agenda_descriptions": [
@@ -396,7 +396,7 @@
       "group_header": "6GR",
       "agenda_item": "10.5.1.3",
       "source_cells": [
-        "cef8b2c"
+        "c7138e4"
       ],
       "description": "Bandwidth operation",
       "agenda_descriptions": [
@@ -438,7 +438,7 @@
       "group_header": "6GR",
       "agenda_item": "10.5.1.2",
       "source_cells": [
-        "cef8b2c"
+        "c7138e4"
       ],
       "description": "PRACH and RACH procedure",
       "agenda_descriptions": [
@@ -480,7 +480,7 @@
       "group_header": "6GR",
       "agenda_item": "10.3.1",
       "source_cells": [
-        "cd618a7"
+        "c40acba"
       ],
       "description": "Channel coding",
       "agenda_descriptions": [
@@ -517,7 +517,7 @@
       "group_header": "6GR",
       "agenda_item": "10.7.1",
       "source_cells": [
-        "cd618a7"
+        "c40acba"
       ],
       "description": "NTN specific requirements and design",
       "agenda_descriptions": [
@@ -554,7 +554,7 @@
       "group_header": "R20",
       "agenda_item": "9.5",
       "source_cells": [
-        "cd618a7"
+        "c40acba"
       ],
       "description": "NR NTN in systems using downlink compensation",
       "agenda_descriptions": [
@@ -586,44 +586,44 @@
       "group_header": "R20",
       "agenda_item": null,
       "source_cells": [
-        "cd618a7"
+        "c40acba"
       ]
     }
   ],
-  "merged_at": "2026-11-10T08:26:05.798538+00:00",
+  "merged_at": "2026-11-10T08:35:05.703435+00:00",
   "meeting_id": "ran1#127",
   "schema_version": 3,
   "source_entries": {
     "Main Schedule": [
       {
-        "room_label": "Room A",
+        "room_label": "Main",
         "cell_text": "6GR (120)\n.10.6.1.1 (35)\n.10.6.1.2 (35)\n.10.6.2 (20)\n\n.10.5.5 (30)",
         "fallback_start_time": null,
-        "cell_id": "c34f099"
+        "cell_id": "c966f78"
       },
       {
-        "room_label": "Room B",
+        "room_label": "Brk1",
         "cell_text": "R20 (90)AI/ML (50)\nUE feature (40)\n\nAI 8.1 (30)",
         "fallback_start_time": null,
-        "cell_id": "c6ef7a1"
+        "cell_id": "cac5e0b"
       },
       {
-        "room_label": "Room C",
+        "room_label": "Brk2",
         "cell_text": "6GR (120)\n.10.5.4.2 (30)\n.10.5.4.3 (50)\n.10.5.4.4 (40)",
         "fallback_start_time": null,
-        "cell_id": "cee27a1"
+        "cell_id": "c895181"
       },
       {
-        "room_label": "Offline A",
+        "room_label": "Offline1",
         "cell_text": "Xiaodong (120)\n6GR\n.10.5.1.1(50)\n.10.5.1.3(30)\n.10.5.1.2(40)",
         "fallback_start_time": null,
-        "cell_id": "cef8b2c"
+        "cell_id": "c7138e4"
       },
       {
-        "room_label": "Offline B",
+        "room_label": "Offline2",
         "cell_text": "Sorour (120)\n6GR (60)\n10.3.1 Channel coding (30)\n.10.7.1 NTN (30)\nR20 (60)\n.9.5 NTN (30)\nNTN-NR (30)",
         "fallback_start_time": null,
-        "cell_id": "cd618a7"
+        "cell_id": "c40acba"
       }
     ]
   },

@@ -2,7 +2,7 @@
   "day": "Wednesday",
   "time_block_index": 2,
   "source_hashes": {
-    "Main Schedule": "7b912a110e53a7ea"
+    "Main Schedule": "46455a5763d8e4ad"
   },
   "merged_sessions": [
     {
@@ -14,7 +14,7 @@
       "group_header": "6GR",
       "agenda_item": "10.5.3.1",
       "source_cells": [
-        "c7c1771"
+        "c1b04b9"
       ],
       "description": "Aspects of downlink-based CSI acquisition",
       "agenda_descriptions": [
@@ -56,7 +56,7 @@
       "group_header": "6GR",
       "agenda_item": "10.5.3.2",
       "source_cells": [
-        "c7c1771"
+        "c1b04b9"
       ],
       "description": "Aspects of uplink-based CSI acquisition",
       "agenda_descriptions": [
@@ -98,7 +98,7 @@
       "group_header": "6GR",
       "agenda_item": "10.5.3.3",
       "source_cells": [
-        "c7c1771"
+        "c1b04b9"
       ],
       "description": "Other aspects",
       "agenda_descriptions": [
@@ -140,7 +140,7 @@
       "group_header": "6GR",
       "agenda_item": "10.5.3.4",
       "source_cells": [
-        "c7c1771"
+        "c1b04b9"
       ],
       "description": "Beam management for downlink and uplink",
       "agenda_descriptions": [
@@ -182,7 +182,7 @@
       "group_header": "6GR",
       "agenda_item": "10.5.2.1",
       "source_cells": [
-        "c7853c4"
+        "c323aa9"
       ],
       "description": "Downlink transmission scheme(s) for downlink control channels",
       "agenda_descriptions": [
@@ -224,7 +224,7 @@
       "group_header": "6GR",
       "agenda_item": "10.5.2.2",
       "source_cells": [
-        "c7853c4"
+        "c323aa9"
       ],
       "description": "Downlink transmission scheme(s) for downlink shared channels",
       "agenda_descriptions": [
@@ -266,7 +266,7 @@
       "group_header": "6GR",
       "agenda_item": "10.5.2.3",
       "source_cells": [
-        "c7853c4"
+        "c323aa9"
       ],
       "description": "Uplink transmission scheme(s) for uplink channels",
       "agenda_descriptions": [
@@ -308,7 +308,7 @@
       "group_header": "6GR",
       "agenda_item": "10.3.2",
       "source_cells": [
-        "c7853c4"
+        "c323aa9"
       ],
       "description": "Modulation",
       "agenda_descriptions": [
@@ -345,7 +345,7 @@
       "group_header": "6GR",
       "agenda_item": "10.2.1",
       "source_cells": [
-        "cdb563f"
+        "c52ab9e"
       ],
       "description": "Waveform",
       "agenda_descriptions": [
@@ -382,7 +382,7 @@
       "group_header": "R20",
       "agenda_item": null,
       "source_cells": [
-        "cdb563f"
+        "c52ab9e"
       ]
     },
     {
@@ -394,7 +394,7 @@
       "group_header": "6GR",
       "agenda_item": "10.6.1.1",
       "source_cells": [
-        "cce270c"
+        "c602b2e"
       ],
       "description": "Design of WUS with OFDM based sequence",
       "agenda_descriptions": [
@@ -436,7 +436,7 @@
       "group_header": "6GR",
       "agenda_item": "10.6.1.2",
       "source_cells": [
-        "cce270c"
+        "c602b2e"
       ],
       "description": "WUS operation in RRC states",
       "agenda_descriptions": [
@@ -478,7 +478,7 @@
       "group_header": "6GR",
       "agenda_item": "10.6.2",
       "source_cells": [
-        "cce270c"
+        "c602b2e"
       ],
       "description": "Uplink WUS and operation",
       "agenda_descriptions": [
@@ -515,7 +515,7 @@
       "group_header": "6GR",
       "agenda_item": "10.6.3",
       "source_cells": [
-        "cce270c"
+        "c602b2e"
       ],
       "description": "WUS operation with other functionalities",
       "agenda_descriptions": [
@@ -552,7 +552,7 @@
       "group_header": "6GR",
       "agenda_item": "10.5.1.1",
       "source_cells": [
-        "cce270c"
+        "c602b2e"
       ],
       "description": "Synchronization acquisition and beam measurement",
       "agenda_descriptions": [
@@ -594,7 +594,7 @@
       "group_header": "6GR",
       "agenda_item": "10.3.1",
       "source_cells": [
-        "c0b5d36"
+        "cb8df37"
       ],
       "description": "Channel coding",
       "agenda_descriptions": [
@@ -631,7 +631,7 @@
       "group_header": "6GR",
       "agenda_item": "10.5.4.4",
       "source_cells": [
-        "c0b5d36"
+        "cb8df37"
       ],
       "description": "Handling of potential multiple uplink transmissions",
       "agenda_descriptions": [
@@ -673,7 +673,7 @@
       "group_header": "6GR",
       "agenda_item": "10.5.4.3",
       "source_cells": [
-        "c0b5d36"
+        "cb8df37"
       ],
       "description": "HARQ related Aspects",
       "agenda_descriptions": [
@@ -715,7 +715,7 @@
       "group_header": "6GR",
       "agenda_item": "10.5.4.1",
       "source_cells": [
-        "c0b5d36"
+        "cb8df37"
       ],
       "description": "Downlink control channel, scheduling for downlink and uplink transmission",
       "agenda_descriptions": [
@@ -749,40 +749,40 @@
       ]
     }
   ],
-  "merged_at": "2026-11-10T08:26:05.803666+00:00",
+  "merged_at": "2026-11-10T08:35:05.709076+00:00",
   "meeting_id": "ran1#127",
   "schema_version": 3,
   "source_entries": {
     "Main Schedule": [
       {
-        "room_label": "Room A",
+        "room_label": "Main",
         "cell_text": "6GR (150)\n.10.5.3.1(60)\n.10.5.3.2(35)\n.10.5.3.3(30)\n.10.5.3.4(25)",
         "fallback_start_time": null,
-        "cell_id": "c7c1771"
+        "cell_id": "c1b04b9"
       },
       {
-        "room_label": "Room B",
+        "room_label": "Brk1",
         "cell_text": "6GR (150)\n.10.5.2.1 (20)\n.10.5.2.2 (50)\n.10.5.2.3 (50)\n\n.10.3.2 Modulation (30)",
         "fallback_start_time": null,
-        "cell_id": "c7853c4"
+        "cell_id": "c323aa9"
       },
       {
-        "room_label": "Room C",
+        "room_label": "Brk2",
         "cell_text": "6GR (30)\n10.2.1 Waveform (30)\n\nR20 (120)\nA-IoT Phase2 (120)",
         "fallback_start_time": null,
-        "cell_id": "cdb563f"
+        "cell_id": "c52ab9e"
       },
       {
-        "room_label": "Offline A",
+        "room_label": "Offline1",
         "cell_text": "6GR (150)\n.10.6.1.1 (40)\n.10.6.1.2 (35)\n.10.6.2 (25)\n.10.6.3 (20)\n\n.10.5.1.1 (30)",
         "fallback_start_time": null,
-        "cell_id": "cce270c"
+        "cell_id": "c602b2e"
       },
       {
-        "room_label": "Offline B",
+        "room_label": "Offline2",
         "cell_text": "Sorouri (30)\n6GR\n10.3.1 Channel coding (30)\nHiroki (120)\n6GR (120)\n.10.5.4.4 (30)\n.10.5.4.3 (30)\n.10.5.4.1 (60)",
         "fallback_start_time": null,
-        "cell_id": "c0b5d36"
+        "cell_id": "cb8df37"
       }
     ]
   },

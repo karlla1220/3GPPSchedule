@@ -2,7 +2,7 @@
   "day": "Monday",
   "time_block_index": 0,
   "source_hashes": {
-    "Main Schedule": "f00bb9dab5da66e5"
+    "Main Schedule": "8ff11ac81a59319a"
   },
   "merged_sessions": [
     {
@@ -14,7 +14,7 @@
       "group_header": "",
       "agenda_item": "1, 2, 3, 4, 5",
       "source_cells": [
-        "cc01048"
+        "ce37664"
       ],
       "description": "Opening of the meeting",
       "agenda_descriptions": [
@@ -89,7 +89,7 @@
       "group_header": "6GR",
       "agenda_item": "10.5.1.1",
       "source_cells": [
-        "cc01048"
+        "ce37664"
       ],
       "description": "Synchronization acquisition and beam measurement",
       "agenda_descriptions": [
@@ -123,16 +123,16 @@
       ]
     }
   ],
-  "merged_at": "2026-11-10T08:26:05.785230+00:00",
+  "merged_at": "2026-11-10T08:35:05.688998+00:00",
   "meeting_id": "ran1#127",
   "schema_version": 3,
   "source_entries": {
     "Main Schedule": [
       {
-        "room_label": "Room A + Room B + Room C",
+        "room_label": "Main + Brk1 + Brk2",
         "cell_text": "RAN1#127 commences at 09:00 on Monday \nAgenda items 1, 2, 3, 4, 5\n6GR (30)\n.10.5.1.1 (30)",
         "fallback_start_time": null,
-        "cell_id": "cc01048"
+        "cell_id": "ce37664"
       }
     ]
   },
