@@ -253,6 +253,20 @@ empty "()", or no number at all. Example (one cell, two groups):
   these items the time the cell has left after the items with a length.
 - An item whose length is given (e.g. "(30)") keeps it.
 
+### Lengths that add up past the cell
+
+The chair sometimes writes a group header's length and its items' lengths
+that do not agree, so the cell adds up to more than it has. Example (an
+08:00-10:30 cell, 150 min):
+  TEI, AI 7/8.1 (50)
+  UE feature (40)
+  6GR (60)
+  .10.8 Sensing (70)
+50 + 40 + 70 = 160 min, more than the cell. The header "6GR (60)" bounds its
+group: 10.8 Sensing is 60 min. When the written lengths add up past the cell
+end, the group header's length wins over the lengths of the items under it.
+Sessions never run past their cell's end.
+
 ### When the day opens and closes
 
 A cell may say when the meeting or the day starts or ends, in any wording:

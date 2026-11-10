@@ -47,3 +47,8 @@ Friday 11:00 block, recorded once (gemini-3.8-flash, low; merge prompt v8).
 Brk2 lists `6GR (TBD) / .10.8 Sensing ()` and `R20 (TBD) / A-IoT Phase2 (TBD)`
 with no lengths; the answer gives each item its own session with a null
 duration, and `tests/test_time_blocks.py` places them as parts 1/2 and 2/2.
+
+`llm_127_tuesday_0800.json` is the slot merge's answer for Tuesday 08:00,
+recorded the same way. Brk2 writes `6GR (60)` over `.10.8 Sensing (70)`, so the
+cell adds up to 160 min of 150; the header's 60 wins (3 of 3 runs). A build
+that took the 70 failed placement (10.8 Sensing past 10:30).
