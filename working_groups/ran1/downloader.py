@@ -1672,11 +1672,16 @@ def _dedup_sources(sources: list[ScheduleSource]) -> list[ScheduleSource]:
 # The chair and vice chairs also mail a new version to the list, sometimes
 # before uploading it. A mailed file stands in for one document already found
 # on FTP (Main, or a vice chair's): the one whose file name, without version,
-# draft and closing marks, is the same. Without a matching FTP document the
-# mail is not used: the name alone does not say whose schedule it is
-# ("RAN1#126b Sorour sessions … schedules - v00" names no "schedule for"),
-# while FTP says it by folder. Which copy wins is shared/file_sources.py: the
-# newer version, at equal version the FTP copy, then the earliest mail.
+# draft and closing marks, is the same (``_with_mail``). Which copy wins is
+# shared/file_sources.py: the newer version, at equal version the FTP copy,
+# then the earliest mail.
+#
+# A mailed document that is not on FTP yet is used too (``_mailed_documents``):
+# the first schedule of the next meeting (RAN1#127 v00 was mailed before
+# Chair_notes had it), or a vice chair's new schedule during the meeting.
+# Whose it is: the folder of the same document in an earlier meeting (the
+# name without the meeting), else the person the name gives ("schedule for
+# Hiroki"), else Main. It never takes a place FTP already fills.
 
 _STEM_MARKS = re.compile(
     r"(?<![a-z])(?:draft|v\d+(?:[._]\d+)*|(?:eom|final)(?:[ _-]*\d+)?)(?![a-z0-9])",
@@ -1726,7 +1731,75 @@ def mailed_schedule_files(cfg: dict, state: dict, *, http=None, now=None,
         if isinstance(entry, dict) and entry.get("origin") == file_sources.EMAIL and entry.get("url")
     }
     files.update({entry["url"]: entry for entry in scan.files})
-    return list(files.values()), email_sources.manifest_record(scan)
+    # Only the built and the next meeting (meeting_turn.to_read): a forwarded
+    # schedule of another meeting is not a candidate.
+    meetings = cfg.get("read_meetings")
+    found = [entry for entry in files.values()
+             if meetings is None or _extract_meeting_id(entry["name"]) in meetings]
+    return found, email_sources.manifest_record(scan)
+
+
+def _document_name(name: str) -> str:
+    """The name one document keeps across meetings and versions."""
+    return schedule_stem(_MEETING_ID_PATTERN.sub(" ", name))
+
+
+def _mailed_documents(sources: list[ScheduleSource], mail_files: list[dict] | None,
+                      locked_meeting_id: str | None = None) -> list[ScheduleSource]:
+    """Mailed documents that no FTP or local source of their meeting is a version of."""
+    if not mail_files:
+        return []
+    known: dict[str, tuple[str, str | None, bool]] = {}
+    present: set[tuple[str | None, str]] = set()
+    mains: set[str | None] = set()
+    persons: set[tuple[str | None, str]] = set()
+    for source in sources:
+        name = source.file_info.get("name", "")
+        meeting = _extract_meeting_id(name)
+        present.add((meeting, schedule_stem(name)))
+        known.setdefault(_document_name(name), (source.folder_name, source.person_name, source.is_main))
+        if source.is_main:
+            mains.add(meeting)
+        elif source.person_name:
+            persons.add((meeting, source.person_name))
+
+    documents: dict[tuple[str, str], list[dict]] = {}
+    for entry in mail_files:
+        meeting = _extract_meeting_id(entry["name"])
+        if meeting is None or (locked_meeting_id and meeting != locked_meeting_id):
+            continue
+        key = (meeting, schedule_stem(entry["name"]))
+        if key not in present:
+            documents.setdefault(key, []).append(entry)
+
+    def best_copy(copies):
+        return max(copies, key=lambda entry: (_release_key(entry["name"]),
+                                              *file_sources.copy_order(entry, lambda e: ())))
+
+    # Documents known from an earlier meeting first: a name of no known
+    # document must not take Main before the chair's own schedule does.
+    picks = sorted(((meeting, best_copy(copies)) for (meeting, _), copies in documents.items()),
+                   key=lambda pick: (_document_name(pick[1]["name"]) not in known, pick[0] or "", pick[1]["name"]))
+    found = []
+    for meeting, best in picks:
+        folder, person, is_main = known.get(_document_name(best["name"]), (None, None, False))
+        if folder is None:
+            person = _extract_person_from_filename(best["name"])
+            folder, is_main = (f"{person}_notes", False) if person else ("Chair_notes", True)
+        if (is_main and meeting in mains) or (person and (meeting, person) in persons):
+            continue
+        if is_main:
+            mains.add(meeting)
+        elif person:
+            persons.add((meeting, person))
+        sent = best.get("sent")
+        print(f"  Mailed, not on FTP: {best['name']} ({best.get('listing')}) "
+              f"[{'MAIN' if is_main else person or folder}]")
+        found.append(ScheduleSource(
+            folder_name=folder, person_name=person, is_main=is_main,
+            file_info={**best, "uploaded_at": datetime.fromisoformat(sent) if sent else None},
+        ))
+    return found
 
 
 def _with_mail(sources: list[ScheduleSource], mail_files: list[dict] | None) -> list[ScheduleSource]:
@@ -1742,7 +1815,8 @@ def _with_mail(sources: list[ScheduleSource], mail_files: list[dict] | None) -> 
         return (uploaded.timestamp() if isinstance(uploaded, datetime) else 0.0, entry["name"].lower(), entry["name"])
 
     for source in sources:
-        if source.origin != "remote" or source.local_path is not None:
+        if (source.origin != "remote" or source.local_path is not None
+                or file_sources.origin(source.file_info) == file_sources.EMAIL):
             continue
         name = source.file_info.get("name", "")
         meeting, stem = _extract_meeting_id(name), schedule_stem(name)
@@ -2073,6 +2147,7 @@ def discover_schedule_sources(
 
     if local_schedule_sources:
         all_sources.extend(local_schedule_sources)
+    all_sources.extend(_mailed_documents(all_sources, mail_files, locked_meeting_id))
 
     current_meeting_id = _current_meeting_from_sources(
         all_sources,
