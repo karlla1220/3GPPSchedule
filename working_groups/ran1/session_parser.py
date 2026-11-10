@@ -589,6 +589,9 @@ def _build_time_slot_prompt(
             parts.append(entry.cell_text)
             return
         tag = f" {change}" if incremental and change else ""
+        cell_end = getattr(entry, "cell_end", None)
+        if cell_end:
+            tag += f" (cell merged down to {cell_end}, past this time block)"
         parts.append(f"\n[{_cell_tag(entry)}{label}]{tag}")
         parts.append(entry.cell_text)
         if incremental and change == "CHANGED":
@@ -1284,7 +1287,10 @@ def _slot_result_to_sessions(
             label, entry = entries[cell_id]
             b = bounds[(label, entry.table_index)]
             starts.append(b[entry.block_row])
-            ends.append(b[min(entry.block_row + entry.row_span, len(b) - 1)])
+            if getattr(entry, "cell_end", None):
+                ends.append(time_to_minutes(entry.cell_end))
+            else:
+                ends.append(b[min(entry.block_row + entry.row_span, len(b) - 1)])
         if any(v is None for v in starts + ends):
             return None, None
         return max(starts), min(ends)

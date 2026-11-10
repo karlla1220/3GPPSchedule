@@ -908,6 +908,15 @@ def parse_docx(
             for block_row, row_idx in enumerate(group_rows):
                 row_place[row_idx] = (block_row, group_rows)
 
+        # A cell merged down over a break into later blocks is one irregular
+        # cell (RAN1#127 v00 Friday: "Any other open issues" from 14:00 to
+        # 19:00, over an afternoon coffee row that covers Monday-Thursday
+        # only). It stays in the block it starts in and ``cell_end`` says
+        # where the merge ends. What the text says about the close ("expected
+        # to close at 16:00") is read by the slot merge, not here.
+        block_of_row = {row_idx: tb for row_idx, _, tb, _ in time_rows}
+        block_end_of = {b["index"]: b["end"] for b in blocks}
+
         for row_idx, row_cells, tb_index, _ in time_rows:
             row = rows[row_idx]
             block_row, group_rows = row_place[row_idx]
@@ -974,6 +983,12 @@ def parse_docx(
                         )
                         running_room += rooms_count
 
+                    if (not text.strip() and block_row == 0
+                            and _is_vmerge_continuation_at_col(row, col_start)):
+                        # A merge that starts in a row with no time label (a
+                        # Friday-only lunch row, RAN1#119) starts here.
+                        text = _unplaced_merge_text(rows, row_idx, col_start, block_of_row)
+
                     if not text.strip():
                         continue
 
@@ -1000,6 +1015,8 @@ def parse_docx(
                         block_row=block_row,
                         row_span=1 + _continued_rows(rows, later_rows, col_start),
                         row_starts=row_starts,
+                        cell_end=_merge_end(rows, row_idx, col_start, block_of_row,
+                                            block_end_of, tb_index),
                     )
                     all_cells.append(cell_data)
 
@@ -1051,6 +1068,31 @@ def _label_start(time_text: str) -> str | None:
     if not match:
         return None
     return f"{int(match.group(1)):02d}:{match.group(2)}"
+
+
+def _unplaced_merge_text(rows, row_idx: int, grid_col: int, block_of_row: dict) -> str:
+    """The text of the merge a continuation cell belongs to, when the merge
+    started in a row that is in no time block and this is the first block it
+    reaches; "" otherwise (an earlier block has the cell already).
+    """
+    origin = row_idx
+    while origin > 1 and _is_vmerge_continuation_at_col(rows[origin], grid_col):
+        origin -= 1
+    if any(r in block_of_row for r in range(origin, row_idx)):
+        return ""
+    return _get_cell_text(rows[row_idx].cells[grid_col])
+
+
+def _merge_end(rows, row_idx: int, grid_col: int, block_of_row: dict,
+               block_end_of: dict, tb_index: int) -> str | None:
+    """Where a cell's vertical merge ends when it runs past its own block:
+    the end of the last block it reaches. None when it ends in its block."""
+    last = row_idx
+    while last + 1 < len(rows) and _is_vmerge_continuation_at_col(rows[last + 1], grid_col):
+        last += 1
+    reached = [block_of_row[r] for r in range(row_idx, last + 1) if r in block_of_row]
+    final = max(reached, default=tb_index)
+    return block_end_of[final] if final != tb_index else None
 
 
 def _continued_rows(rows, later_rows: list[int], grid_col: int) -> int:

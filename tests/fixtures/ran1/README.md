@@ -39,4 +39,5 @@ It moves the breaks: 08:00-10:30, coffee 10:30-11:00, 11:00-12:30, lunch
 08:30-10:30, 11:00-13:00, lunch 13:00-14:30, 14:30-16:30, 17:00-19:30).
 Its third table, the old "Detailed Schedule for RAN1 Main Session" template,
 still writes the RAN1#126bis times. `tests/test_time_blocks.py` reads the
-blocks from it.
+blocks from it, and Friday's two cells merged from 14:00 down to 19:00 (over
+an afternoon coffee row that covers Monday-Thursday only) as irregular cells.

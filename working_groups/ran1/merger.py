@@ -21,7 +21,7 @@ from .rooms import online_rooms as _online_rooms
 from .slot_state import hash_source_text, load_slot_state
 
 
-MERGE_PROMPT_VERSION = 6
+MERGE_PROMPT_VERSION = 7
 
 
 # ── Room name resolution ────────────────────────────────────
@@ -163,6 +163,8 @@ class SourceEntry:
     block_row: int = 0
     row_span: int = 1
     row_starts: tuple[str | None, ...] = (None,)
+    # Where an irregular cell ends, past its block (see ``CellData``).
+    cell_end: str | None = None
     # Physical rooms the cell covers; empty when they are not target rooms.
     room_names: tuple[str, ...] = ()
     # Against the slot's cell ledger (set by _annotate_freshness): UNCHANGED,
@@ -216,6 +218,8 @@ def _serialize_source(source: SlotSource) -> str:
     for e in entries:
         cell = _normalize_cell(e.cell_text)
         timing = f"\tfallback={e.fallback_start_time}" if e.fallback_start_time else ""
+        if e.cell_end:
+            timing += f"\tend={e.cell_end}"
         lines.append(f"{e.room_label}{timing}\t{cell}")
     return "\n".join(lines)
 
@@ -223,9 +227,10 @@ def _serialize_source(source: SlotSource) -> str:
 # ── Cell changes ─────────────────────────────────────────────
 
 
-def _cell_key(room_label: str, cell_text: str, fallback_start_time: str | None) -> tuple:
+def _cell_key(room_label: str, cell_text: str, fallback_start_time: str | None,
+              cell_end: str | None = None) -> tuple:
     # The same fields, normalized the same way, as the source hash.
-    return (room_label, _normalize_cell(cell_text), fallback_start_time or None)
+    return (room_label, _normalize_cell(cell_text), fallback_start_time or None, cell_end or None)
 
 
 def diff_source_entries(
@@ -252,9 +257,10 @@ def diff_source_entries(
 
     unmatched = []
     for entry in current:
-        key = _cell_key(entry.room_label, entry.cell_text, entry.fallback_start_time)
+        key = _cell_key(entry.room_label, entry.cell_text, entry.fallback_start_time, entry.cell_end)
         same = take(lambda c: _cell_key(
-            c.get("room_label", ""), c.get("cell_text", ""), c.get("fallback_start_time")) == key)
+            c.get("room_label", ""), c.get("cell_text", ""), c.get("fallback_start_time"),
+            c.get("cell_end")) == key)
         if same is None:
             unmatched.append(entry)
         else:
@@ -300,6 +306,7 @@ def ledger_entries(slot: TimeSlotData) -> dict[str, list[dict]]:
                 "cell_text": entry.cell_text,
                 "fallback_start_time": entry.fallback_start_time,
                 "cell_id": entry.cell_id,
+                **({"cell_end": entry.cell_end} if entry.cell_end else {}),
             }
             for entry in source.entries
         ]
@@ -351,6 +358,7 @@ def _source_entry(
         block_row=cell.block_row,
         row_span=cell.row_span,
         row_starts=tuple(cell.row_starts),
+        cell_end=cell.cell_end,
         room_names=room_names,
     )
 

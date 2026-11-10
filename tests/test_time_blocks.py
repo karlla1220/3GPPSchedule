@@ -103,6 +103,17 @@ class DocumentBlocksTests(unittest.TestCase):
         self.assertEqual({c.text: c.time_block_index for c in cells},
                          {"late morning": 1, "evening": 3})
 
+    def test_ran1_127_friday_is_one_cell_from_14_00_to_19_00(self):
+        # "Any other open issues" is merged from 14:00 down to 19:00 over a
+        # coffee row that covers Monday-Thursday only. One irregular cell;
+        # its "expected to close at 16:00" is for the slot merge to read.
+        cells, _ = parse_docx(RAN1_127)
+        friday = sorted((c.table_index, c.time_block_index, c.cell_end, c.text.split("\n")[0])
+                        for c in cells if c.day == "Friday" and c.time_block_index >= 2)
+        self.assertEqual(friday, [(0, 2, "19:00", "Any other open issues. Session reports"),
+                                  (1, 2, "19:00", "To be assigned by Sorour")])
+        self.assertEqual([c for c in cells if c.cell_end and c.day != "Friday"], [])
+
     def test_timeline_follows_the_blocks(self):
         timeline = ran1_timeline(BLOCKS_127, [])
         self.assertEqual((timeline.start, timeline.end), ("08:00", "19:15"))
@@ -151,3 +162,62 @@ class MovedBlockSlotStateTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+def _friday_table(path: Path, close_text: str = "", lunch_row: bool = False) -> None:
+    """Two Friday rooms; room B's cell is merged from the 14:00 block to 19:00
+    over a coffee row that covers room A only (RAN1#127 v00 layout)."""
+    document = Document()
+    table = document.add_table(rows=7, cols=3)
+    table.cell(0, 1).merge(table.cell(0, 2)).text = "Friday"
+    r = 1
+    table.cell(r, 0).text = "11:00 ~ 12:30 (90 min)"
+    table.cell(r, 1).text = "late morning A"
+    table.cell(r, 2).text = "late morning B"
+    r += 1
+    if lunch_row:  # a Friday-only lunch row with no time label (RAN1#119)
+        table.cell(r, 0).text = ""
+        table.cell(r, 1).text = "Lunch"
+        r += 1
+    else:
+        table.cell(r, 0).merge(table.cell(r, 2)).text = "Lunch break: 12:30 ~ 14:00"
+        r += 1
+    start = r - 1 if lunch_row else r
+    table.cell(r, 0).text = "14:00 ~ 16:30 (150 min)"
+    table.cell(r, 1).text = "afternoon A"
+    table.cell(r + 1, 0).merge(table.cell(r + 1, 1)).text = "Afternoon coffee break: 16:30 ~ 17:00"
+    table.cell(r + 2, 0).text = "17:00 ~ 19:00 (120 min)"
+    table.cell(r + 2, 1).text = "evening A"
+    table.cell(start, 2).merge(table.cell(r + 2, 2)).text = "Open issues" + close_text
+    table.cell(r + 3, 0).merge(table.cell(r + 3, 2)).text = "All sessions end at 19:00 - no exceptions"
+    document.save(path)
+
+
+class MergedOverBlocksTests(unittest.TestCase):
+    """A cell merged down over a break is one irregular cell in the block it
+    starts in, ending where the merge ends."""
+
+    def _cells_of(self, **kwargs):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "friday.docx"
+            _friday_table(path, **kwargs)
+            cells, _ = parse_docx(path)
+        return [(c.time_block_index, c.cell_end) for c in cells if c.text.startswith("Open issues")]
+
+    def test_a_cell_merged_over_a_break_ends_where_the_merge_ends(self):
+        self.assertEqual(self._cells_of(), [(2, "19:00")])
+
+    def test_the_parser_does_not_read_the_close_from_the_text(self):
+        # The slot merge reads "expected to close at" by meaning.
+        self.assertEqual(self._cells_of(close_text="\nRAN1#127expected to close at 16:00"),
+                         [(2, "19:00")])
+
+    def test_a_merge_starting_in_a_row_without_a_time_label_is_kept(self):
+        # Before, the origin row was skipped and the cell was lost entirely.
+        self.assertEqual(self._cells_of(lunch_row=True), [(2, "19:00")])
+
+    def test_a_cell_in_its_own_block_has_no_cell_end(self):
+        cells, _ = parse_docx(RAN1_126BIS)
+        tuesday_dinner = [c for c in cells if c.text == "Early dinner (60)"]
+        self.assertTrue(tuesday_dinner)
+        self.assertEqual({c.cell_end for c in tuesday_dinner}, {None})

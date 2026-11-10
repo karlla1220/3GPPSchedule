@@ -47,6 +47,10 @@ class CellData:
     block_row: int = 0
     row_span: int = 1
     row_starts: tuple[str | None, ...] = (None,)
+    # Where an irregular cell ends: one merged down over a break into later
+    # blocks ends with the last block it reaches (RAN1#127 Friday 14:00-19:00).
+    # None for a cell that ends in its own block.
+    cell_end: str | None = None
 
 
 @dataclass
