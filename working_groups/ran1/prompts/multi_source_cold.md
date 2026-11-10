@@ -223,7 +223,8 @@ For these cases:
 - Do NOT create an empty session for the time before that start.
 - If the started session has no "(N)" duration, infer its duration from the
   remaining schedulable time:
-    duration = time_block_end - specified_start_time - following_leaf_durations
+    duration = cell_end - specified_start_time - following_leaf_durations
+  where cell_end is the time block end, or the later end in the cell header.
 - following_leaf_durations means the total duration of subsequent non-header
   leaf sessions in the same room/multi-room block.
 - Example for an 08:30-10:30 block:
@@ -234,6 +235,32 @@ For these cases:
       {name:"RAN1#124b commences at 09:00 on Monday", dur:60,
        specified_start_time:"09:00", agenda_item:"1, 2, 3, 4, 5"}
       {name:"10.5.0", dur:30, specified_start_time:null, group_header:"6GR"}
+
+### When the day opens and closes
+
+A cell may say when the meeting or the day starts or ends, in any wording:
+"RAN1#127 commences at 09:00 on Monday", "RAN1#127expected to close at 16:00",
+"closing by 4pm", "the meeting will end around 15:30", "wrap-up until 16:00".
+Read these by meaning, not by exact words. Such a statement holds for EVERY
+room of that day in this time slot, not only for the cell that says it:
+- No session starts before the opening: set specified_start_time to the
+  opening for the first session of each room.
+- No session ends after the closing. A session that would run past it ends
+  at the closing. This includes cells in other rooms and tables that say
+  nothing about the close (e.g. "To be assigned by Sorour" in an offline room
+  merged down to 19:00 ends at the closing too).
+- Keep every Main Schedule cell: shorten its session, do not drop it.
+- A statement only about one room ("Room 201 until 15:00") holds for that room.
+
+### Cells merged past their time block
+
+A cell header may say "(cell merged down to 19:00, past this time block)".
+The chair merged the cell over a break into later blocks; it is one cell
+from this block's start to that time. Its sessions may end after the time
+block end, up to that time. A merge that long is often table layout: when
+the text gives durations or a closing time, those decide how long the
+sessions are, not the merge. A session with neither runs to the cell end
+(or the closing, if earlier).
 
 ## Source cells
 

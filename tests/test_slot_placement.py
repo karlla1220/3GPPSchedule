@@ -305,3 +305,41 @@ def test_misplaced_slot_fails_the_build_and_leaves_a_notice(tmp_path, monkeypatc
     assert recorded[0]["kind"] == "slot-placement"
     assert recorded[0]["title"] == "RAN1: session times do not fit the schedule document"
     assert any("'Extra'" in line for line in recorded[0]["lines"])
+
+
+def _friday_slot():
+    # RAN1#127 v00 Friday: both cells are merged from 14:00 down to 19:00.
+    open_issues = SourceEntry(
+        room_label="Tamna BC Hall + Yeongju A Hall", cell_id="cfri00",
+        cell_text="Any other open issues. Session reports\nRAN1#127expected to close at 16:00",
+        table_index=0, row_starts=("14:00",), room_names=("Tamna BC Hall", "Yeongju A Hall"),
+        cell_end="19:00",
+    )
+    assigned = SourceEntry(
+        room_label="201 + 203", cell_id="cfri01",
+        cell_text="To be assigned by Sorour\nTo be assigned by Hiroki",
+        table_index=1, row_starts=("14:00",), room_names=("201", "203"), cell_end="19:00",
+    )
+    slot = TimeSlotData(day="Tuesday", time_block_index=2, time_block_start="14:00",
+                        time_block_end="16:30", time_block_duration=150, main_rooms=ROOMS)
+    slot.sources = [SlotSource(label="Main Schedule", entries=[open_issues, assigned])]
+    return slot
+
+
+def test_a_cell_merged_past_its_block_ends_where_the_merge_ends():
+    slot = _friday_slot()
+    closing = [_s("ALL_ONLINE", "Any other open issues", 120, ["cfri00"]),
+               _s("RAN1_off1", "To be assigned by Sorour", 120, ["cfri01"])]
+    assert set(_times(closing, slot).values()) == {("14:00", "16:00")}
+    # Up to the merge's end (19:00), past the block end (16:30).
+    assert set(_times([_s("ALL_ONLINE", "Any other open issues", 300, ["cfri00"])], slot).values()) \
+        == {("14:00", "19:00")}
+    with pytest.raises(SlotPlacementError, match="past the end of its cell at 19:00"):
+        _times([_s("ALL_ONLINE", "Any other open issues", 310, ["cfri00"])], slot)
+
+
+def test_the_prompt_says_where_a_merged_cell_ends():
+    aliases, _ = build_room_aliases(ROOMS)
+    prompt = _build_time_slot_prompt(_friday_slot(), aliases)
+    assert "[cell cfri00 — " in prompt
+    assert "(cell merged down to 19:00, past this time block)" in prompt

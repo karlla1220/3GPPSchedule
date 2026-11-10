@@ -28,3 +28,16 @@ Its Tuesday 17:00-19:30 block has two rows: one cell per room in the first,
 `Early dinner (60)` in the second, once in the online table and once in the
 offline table. `tests/test_parser.py` checks the rows the parser records;
 `tests/test_slot_placement.py` places sessions from them.
+
+## RAN1#127 schedule
+
+`Draft RAN1#127 online and offline schedules - v00.docx` is the actual public
+chair schedule mailed to the RAN1 list on 2026-11-08 (before FTP had it).
+SHA-256: `4386c117175d50c74fe5a913ac593d514b5eec54eff38bf548dbc7e337fc7d2f`.
+It moves the breaks: 08:00-10:30, coffee 10:30-11:00, 11:00-12:30, lunch
+12:30-14:00, 14:00-16:30, coffee 16:30-17:00, 17:00-19:00 (RAN1#126bis:
+08:30-10:30, 11:00-13:00, lunch 13:00-14:30, 14:30-16:30, 17:00-19:30).
+Its third table, the old "Detailed Schedule for RAN1 Main Session" template,
+still writes the RAN1#126bis times. `tests/test_time_blocks.py` reads the
+blocks from it, and Friday's two cells merged from 14:00 down to 19:00 (over
+an afternoon coffee row that covers Monday-Thursday only) as irregular cells.

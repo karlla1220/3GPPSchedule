@@ -12,6 +12,7 @@ from docx import Document
 from .downloader import _extract_meeting_id, _is_chair_notes_name, _iter_local_files, _local_doc_preference
 from .rooms import table_kind
 from .models import (
+    BREAKS,
     TIME_BLOCKS,
     CellData,
     DAY_ORDER,
@@ -20,10 +21,12 @@ from .models import (
     time_to_minutes,
 )
 
-_TIME_BLOCK_MINUTES = [
-    (block["index"], time_to_minutes(block["start"]), time_to_minutes(block["end"]))
-    for block in TIME_BLOCKS
-]
+# A time label's range: "08:00 \n~\n10:30", "Lunch break: 12:30 ~ 14:00".
+_TIME_RANGE = re.compile(
+    r"(\d{1,2}):(\d{2})\s*(?:~|-|\u2013|\u2014|to)\s*(\d{1,2}):(\d{2})"
+)
+# Names for breaks the table shows without a time, by position between blocks.
+_GAP_NAMES = ("Morning Coffee Break", "Lunch Break", "Afternoon Coffee Break")
 
 
 def extract_meeting_location(docx_path: Path) -> str | None:
@@ -604,7 +607,7 @@ def _is_schedule_table(table) -> bool:
 
 
 def _count_actual_rooms_per_day(
-    table, day_columns: dict[str, tuple[int, int]]
+    table, day_columns: dict[str, tuple[int, int]], blocks: list[dict] = TIME_BLOCKS,
 ) -> dict[str, int]:
     """Determine the actual number of rooms per day by examining data rows.
 
@@ -625,7 +628,7 @@ def _count_actual_rooms_per_day(
             continue
         if not cells:
             continue
-        if _determine_time_block_index(cells[0][0]) is None:
+        if _determine_time_block_index(cells[0][0], blocks) is None:
             continue
 
         for day, (day_col_start, day_col_end) in day_columns.items():
@@ -640,30 +643,149 @@ def _count_actual_rooms_per_day(
     return max_cells
 
 
-def _determine_time_block_index(time_text: str) -> int | None:
-    """Match a time label cell to a time block index."""
-    # Extract start time from text like "08:30\n~\n10:30\n\n(120 min)".
-    # Some schedules split the first morning block into later-starting rows
-    # such as "09:00 ~ 10:30"; these should still map into TB0.
-    match = re.search(r"(\d{1,2}:\d{2})", time_text)
+def _label_range(text: str) -> tuple[int, int] | None:
+    """The ``(start, end)`` minutes a time label writes, or None."""
+    match = _TIME_RANGE.search(text)
     if not match:
         return None
+    start = int(match[1]) * 60 + int(match[2])
+    end = int(match[3]) * 60 + int(match[4])
+    return (start, end) if end > start else None
 
-    start_time = match.group(1)
-    # Zero-pad hour
-    if len(start_time) == 4:
-        start_time = "0" + start_time
 
+def _break_name(text: str) -> str:
+    """"Morning coffee break: 10:30 ~ 11:00" -> "Morning coffee break"."""
+    name = re.split(r"[:(]?\s*\d{1,2}:\d{2}", text, maxsplit=1)[0]
+    return " ".join(name.split()).rstrip(" :") or "Break"
+
+
+def read_time_blocks(table) -> tuple[list[dict], list[dict]] | None:
+    """The time blocks and breaks one schedule table's time labels write.
+
+    The chair moves the breaks between meetings (RAN1#126bis: 08:30-10:30,
+    11:00-13:00, lunch 13:00-14:30; RAN1#127: 08:00-10:30, 11:00-12:30, lunch
+    12:30-14:00), so the blocks are read from the document, not assumed.
+    Consecutive labelled rows with no break row between them are one block
+    (a block split into rows such as "08:30 ~ 09:00" / "09:00 ~ 10:30", or the
+    same label written twice).  None when the labels do not give ordered,
+    non-overlapping blocks.
+    """
+    groups: list[list[int]] = []
+    breaks: list[dict] = []
+    current: list[int] | None = None
+    for row in table.rows[1:]:
+        cells = _dedupe_row_cells(row)
+        if not cells:
+            current = None
+            continue
+        if _is_break_row(cells):
+            current = None
+            span = _label_range(cells[0][0])
+            if span:
+                breaks.append({"name": _break_name(cells[0][0]),
+                               "start": minutes_to_time(span[0]),
+                               "end": minutes_to_time(span[1])})
+            continue
+        if _is_footer_row(cells) or _is_metadata_row(cells):
+            current = None
+            continue
+        span = _label_range(cells[0][0])
+        if span is None:
+            if current is not None and _is_vmerge_continuation_at_col(row, 0):
+                continue
+            if current is not None and _label_start(cells[0][0]):
+                continue  # a sub-row labelled with its start only
+            current = None
+            continue
+        if current is None:
+            current = list(span)
+            groups.append(current)
+        else:
+            current[0], current[1] = min(current[0], span[0]), max(current[1], span[1])
+    if not groups:
+        return None
+    for before, after in zip(groups, groups[1:]):
+        if after[0] < before[1]:
+            return None
+    indices = _canonical_indices(groups)
+    blocks = [
+        {"index": index, "start": minutes_to_time(start), "end": minutes_to_time(end),
+         "duration": end - start}
+        for index, (start, end) in zip(indices, groups)
+    ]
+    if not breaks:
+        gaps = [(a[1], b[0]) for a, b in zip(groups, groups[1:]) if b[0] > a[1]]
+        names = _GAP_NAMES if len(gaps) == len(_GAP_NAMES) else ("Break",) * len(gaps)
+        breaks = [{"name": name, "start": minutes_to_time(start), "end": minutes_to_time(end)}
+                  for name, (start, end) in zip(names, gaps)]
+    return blocks, breaks
+
+
+def _canonical_indices(groups: list[list[int]]) -> list[int]:
+    """Each block's index: the default RAN1 block it overlaps most.
+
+    The index names the slot (``Monday_03``) in the slot states and the Main
+    history, so a moved block keeps the index of the block it replaces
+    (08:00-10:30 is still block 0) and a table with fewer blocks keeps the
+    others' indices.  Blocks that do not pair one-to-one are numbered in order.
+    """
+    indices = []
+    for start, end in groups:
+        overlaps = [
+            (min(end, time_to_minutes(b["end"])) - max(start, time_to_minutes(b["start"])), b["index"])
+            for b in TIME_BLOCKS
+        ]
+        overlap, index = max(overlaps)
+        indices.append(index if overlap > 0 else None)
+    if None in indices or indices != sorted(set(indices)):
+        return list(range(len(groups)))
+    return indices
+
+
+def document_time_blocks(tables_meta: list[dict]) -> tuple[list[dict], list[dict]]:
+    """The blocks and breaks of a parsed document (``parse_docx`` metadata).
+
+    The default RAN1 blocks when the document's labels could not be read.
+    """
+    for meta in tables_meta:
+        if meta.get("blocks"):
+            return meta["blocks"], meta["breaks"]
+    return [dict(b) for b in TIME_BLOCKS], [dict(b) for b in BREAKS]
+
+
+def _determine_time_block_index(
+    time_text: str, blocks: list[dict] = TIME_BLOCKS,
+) -> int | None:
+    """Match a time label cell to a time block index.
+
+    A label with a range goes to the block it overlaps most, so a
+    vice-chair table with other times ("08:30 ~ 10:30" against the main
+    "08:00 ~ 10:30") still meets the main block.  A label with a start only
+    goes to the block that contains it; a later-starting sub-row such as
+    "09:00 ~ 10:30" stays in its block either way.
+    """
+    span = _label_range(time_text)
+    if span is not None:
+        best, best_overlap = None, 0
+        for block in blocks:
+            overlap = (min(span[1], time_to_minutes(block["end"]))
+                       - max(span[0], time_to_minutes(block["start"])))
+            if overlap > best_overlap:
+                best, best_overlap = block["index"], overlap
+        return best
+    start_time = _label_start(time_text)
+    if start_time is None:
+        return None
     start_minutes = time_to_minutes(start_time)
-
-    for block_index, block_start, block_end in _TIME_BLOCK_MINUTES:
-        if block_start <= start_minutes < block_end:
-            return block_index
+    for block in blocks:
+        if time_to_minutes(block["start"]) <= start_minutes < time_to_minutes(block["end"]):
+            return block["index"]
     return None
 
 
 def parse_docx(
     filepath: str | Path, *, max_tables: int | None = 2,
+    blocks: list[dict] | None = None,
 ) -> tuple[list[CellData], list[dict]]:
     """Parse a schedule DOCX file and extract all cell data.
 
@@ -672,6 +794,9 @@ def parse_docx(
         max_tables: Maximum number of schedule tables to parse.
             The largest tables (by column count) are kept.
             Set to None to parse ALL schedule tables.
+        blocks: The time blocks to place cells in.  None reads them from
+            the document's first schedule table (the main schedule); a
+            vice-chair schedule is placed in the main schedule's blocks.
 
     Returns:
         (cells, tables_meta) where:
@@ -706,6 +831,11 @@ def parse_docx(
         # Re-sort by original index
         schedule_tables.sort(key=lambda x: x[0])
 
+    own = read_time_blocks(schedule_tables[0][1])
+    if blocks is None:
+        blocks = own[0] if own else [dict(b) for b in TIME_BLOCKS]
+    breaks = own[1] if own else [dict(b) for b in BREAKS]
+
     all_cells = []
     tables_meta = []
 
@@ -722,7 +852,7 @@ def parse_docx(
             continue
 
         # Determine actual rooms per day (header span may exceed real rooms)
-        actual_rooms = _count_actual_rooms_per_day(table, day_columns)
+        actual_rooms = _count_actual_rooms_per_day(table, day_columns, blocks)
 
         day_rooms: dict[str, list[str]] = {}
 
@@ -752,6 +882,8 @@ def parse_docx(
                 "day_rooms": day_rooms,
                 "context_text": table_contexts.get(orig_idx, ''),
                 "kind": table_kind(table_contexts.get(orig_idx, '')),
+                "blocks": blocks,
+                "breaks": breaks,
             }
         )
 
@@ -759,7 +891,7 @@ def parse_docx(
         # physical rows and vertically merge the time-label cell.  Keep the
         # last explicit block so continuation rows can retain their own
         # horizontally merged (gridSpan) schedule cells.
-        time_rows = list(_time_rows(rows))
+        time_rows = list(_time_rows(rows, blocks))
         # Consecutive physical rows of one block form that block's rows.
         block_groups: list[list[int]] = []
         for position, (row_idx, _, tb_index, _) in enumerate(time_rows):
@@ -776,13 +908,22 @@ def parse_docx(
             for block_row, row_idx in enumerate(group_rows):
                 row_place[row_idx] = (block_row, group_rows)
 
+        # A cell merged down over a break into later blocks is one irregular
+        # cell (RAN1#127 v00 Friday: "Any other open issues" from 14:00 to
+        # 19:00, over an afternoon coffee row that covers Monday-Thursday
+        # only). It stays in the block it starts in and ``cell_end`` says
+        # where the merge ends. What the text says about the close ("expected
+        # to close at 16:00") is read by the slot merge, not here.
+        block_of_row = {row_idx: tb for row_idx, _, tb, _ in time_rows}
+        block_end_of = {b["index"]: b["end"] for b in blocks}
+
         for row_idx, row_cells, tb_index, _ in time_rows:
             row = rows[row_idx]
             block_row, group_rows = row_place[row_idx]
             row_starts = tuple(label_start_of[r] for r in group_rows)
             later_rows = group_rows[block_row + 1:]
 
-            time_block = TIME_BLOCKS[tb_index]
+            time_block = next(b for b in blocks if b["index"] == tb_index)
 
             # A vertically merged time label may split one time block into
             # physical sub-rows.  If this is the final continuation row and a
@@ -842,6 +983,12 @@ def parse_docx(
                         )
                         running_room += rooms_count
 
+                    if (not text.strip() and block_row == 0
+                            and _is_vmerge_continuation_at_col(row, col_start)):
+                        # A merge that starts in a row with no time label (a
+                        # Friday-only lunch row, RAN1#119) starts here.
+                        text = _unplaced_merge_text(rows, row_idx, col_start, block_of_row)
+
                     if not text.strip():
                         continue
 
@@ -868,13 +1015,15 @@ def parse_docx(
                         block_row=block_row,
                         row_span=1 + _continued_rows(rows, later_rows, col_start),
                         row_starts=row_starts,
+                        cell_end=_merge_end(rows, row_idx, col_start, block_of_row,
+                                            block_end_of, tb_index),
                     )
                     all_cells.append(cell_data)
 
     return all_cells, tables_meta
 
 
-def _time_rows(rows):
+def _time_rows(rows, blocks: list[dict] = TIME_BLOCKS):
     """``(row_idx, row_cells, tb_index, label_start)`` for each schedule row.
 
     ``label_start`` is the start written in the row's own time label, or None
@@ -895,7 +1044,7 @@ def _time_rows(rows):
             continue
 
         time_cell_text = row_cells[0][0]
-        tb_index = _determine_time_block_index(time_cell_text)
+        tb_index = _determine_time_block_index(time_cell_text, blocks)
         label_start = None
 
         if tb_index is None:
@@ -919,6 +1068,31 @@ def _label_start(time_text: str) -> str | None:
     if not match:
         return None
     return f"{int(match.group(1)):02d}:{match.group(2)}"
+
+
+def _unplaced_merge_text(rows, row_idx: int, grid_col: int, block_of_row: dict) -> str:
+    """The text of the merge a continuation cell belongs to, when the merge
+    started in a row that is in no time block and this is the first block it
+    reaches; "" otherwise (an earlier block has the cell already).
+    """
+    origin = row_idx
+    while origin > 1 and _is_vmerge_continuation_at_col(rows[origin], grid_col):
+        origin -= 1
+    if any(r in block_of_row for r in range(origin, row_idx)):
+        return ""
+    return _get_cell_text(rows[row_idx].cells[grid_col])
+
+
+def _merge_end(rows, row_idx: int, grid_col: int, block_of_row: dict,
+               block_end_of: dict, tb_index: int) -> str | None:
+    """Where a cell's vertical merge ends when it runs past its own block:
+    the end of the last block it reaches. None when it ends in its block."""
+    last = row_idx
+    while last + 1 < len(rows) and _is_vmerge_continuation_at_col(rows[last + 1], grid_col):
+        last += 1
+    reached = [block_of_row[r] for r in range(row_idx, last + 1) if r in block_of_row]
+    final = max(reached, default=tb_index)
+    return block_end_of[final] if final != tb_index else None
 
 
 def _continued_rows(rows, later_rows: list[int], grid_col: int) -> int:

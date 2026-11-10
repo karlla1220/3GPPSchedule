@@ -15,13 +15,13 @@ from dataclasses import dataclass, field
 from pathlib import Path
 
 from . import main_history
-from .models import CellData, RoomInfo, TIME_BLOCKS
+from .models import CellData, RoomInfo
 from .parser import parse_docx, build_room_list
 from .rooms import online_rooms as _online_rooms
 from .slot_state import hash_source_text, load_slot_state
 
 
-MERGE_PROMPT_VERSION = 6
+MERGE_PROMPT_VERSION = 7
 
 
 # ── Room name resolution ────────────────────────────────────
@@ -163,6 +163,8 @@ class SourceEntry:
     block_row: int = 0
     row_span: int = 1
     row_starts: tuple[str | None, ...] = (None,)
+    # Where an irregular cell ends, past its block (see ``CellData``).
+    cell_end: str | None = None
     # Physical rooms the cell covers; empty when they are not target rooms.
     room_names: tuple[str, ...] = ()
     # Against the slot's cell ledger (set by _annotate_freshness): UNCHANGED,
@@ -216,6 +218,8 @@ def _serialize_source(source: SlotSource) -> str:
     for e in entries:
         cell = _normalize_cell(e.cell_text)
         timing = f"\tfallback={e.fallback_start_time}" if e.fallback_start_time else ""
+        if e.cell_end:
+            timing += f"\tend={e.cell_end}"
         lines.append(f"{e.room_label}{timing}\t{cell}")
     return "\n".join(lines)
 
@@ -223,9 +227,10 @@ def _serialize_source(source: SlotSource) -> str:
 # ── Cell changes ─────────────────────────────────────────────
 
 
-def _cell_key(room_label: str, cell_text: str, fallback_start_time: str | None) -> tuple:
+def _cell_key(room_label: str, cell_text: str, fallback_start_time: str | None,
+              cell_end: str | None = None) -> tuple:
     # The same fields, normalized the same way, as the source hash.
-    return (room_label, _normalize_cell(cell_text), fallback_start_time or None)
+    return (room_label, _normalize_cell(cell_text), fallback_start_time or None, cell_end or None)
 
 
 def diff_source_entries(
@@ -252,9 +257,10 @@ def diff_source_entries(
 
     unmatched = []
     for entry in current:
-        key = _cell_key(entry.room_label, entry.cell_text, entry.fallback_start_time)
+        key = _cell_key(entry.room_label, entry.cell_text, entry.fallback_start_time, entry.cell_end)
         same = take(lambda c: _cell_key(
-            c.get("room_label", ""), c.get("cell_text", ""), c.get("fallback_start_time")) == key)
+            c.get("room_label", ""), c.get("cell_text", ""), c.get("fallback_start_time"),
+            c.get("cell_end")) == key)
         if same is None:
             unmatched.append(entry)
         else:
@@ -300,6 +306,7 @@ def ledger_entries(slot: TimeSlotData) -> dict[str, list[dict]]:
                 "cell_text": entry.cell_text,
                 "fallback_start_time": entry.fallback_start_time,
                 "cell_id": entry.cell_id,
+                **({"cell_end": entry.cell_end} if entry.cell_end else {}),
             }
             for entry in source.entries
         ]
@@ -351,6 +358,7 @@ def _source_entry(
         block_row=cell.block_row,
         row_span=cell.row_span,
         row_starts=tuple(cell.row_starts),
+        cell_end=cell.cell_end,
         room_names=room_names,
     )
 
@@ -389,6 +397,7 @@ def collect_time_slot_data(
     vice_chair_paths: dict[str, Path],
     meeting_id: str | None = None,
     main_texts_seen: dict[str, set[str]] | None = None,
+    blocks: list[dict] | None = None,
 ) -> list[TimeSlotData]:
     """Collect all schedule data grouped by (day, time_block).
 
@@ -404,6 +413,8 @@ def collect_time_slot_data(
             (``main_history``). A vice-chair cell that repeats one is an old
             copy of a Main table and is left out. Without it, only copies of
             the current Main are left out.
+        blocks: The main schedule's time blocks (``document_time_blocks``).
+            Vice-chair cells are placed in them.
 
     Returns:
         List of TimeSlotData, sorted by day order then time block index.
@@ -418,7 +429,7 @@ def collect_time_slot_data(
     for person, path in vice_chair_paths.items():
         print(f"  Parsing {person}'s schedule (all tables): {path.name}")
         try:
-            vc_cells, vc_meta = parse_docx(path, max_tables=None)
+            vc_cells, vc_meta = parse_docx(path, max_tables=None, blocks=blocks)
 
             # Resolve generic room names using LLM + document context
             _resolve_vc_room_names(vc_meta, main_rooms_map)
@@ -435,7 +446,8 @@ def collect_time_slot_data(
     time_slots: list[TimeSlotData] = []
 
     for (day, tb_idx), m_cells in main_groups.items():
-        tb = TIME_BLOCKS[tb_idx]
+        tb = {"start": m_cells[0].time_block_start, "end": m_cells[0].time_block_end,
+              "duration": m_cells[0].time_block_duration}
         main_rooms = main_rooms_map.get(day, [])
 
         slot = TimeSlotData(
@@ -533,6 +545,9 @@ def _annotate_freshness(slot: TimeSlotData, meeting_id: str | None = None) -> No
             entry.change = entry.previous_text = None
 
     prev_state = load_slot_state(slot.day, slot.time_block_index, meeting_id)
+    if prev_state is not None and prev_state.block() != (slot.time_block_start, slot.time_block_end):
+        # The block moved (a break changed): its old session times are wrong.
+        prev_state = None
     if prev_state is None:
         slot.previous_merge = None
         slot.source_freshness = {label: "NEW" for label in current_hashes}

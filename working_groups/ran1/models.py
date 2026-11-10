@@ -47,6 +47,10 @@ class CellData:
     block_row: int = 0
     row_span: int = 1
     row_starts: tuple[str | None, ...] = (None,)
+    # Where an irregular cell ends: one merged down over a break into later
+    # blocks ends with the last block it reaches (RAN1#127 Friday 14:00-19:00).
+    # None for a cell that ends in its own block.
+    cell_end: str | None = None
 
 
 @dataclass
@@ -65,7 +69,16 @@ class ScheduleSource:
             self.origin = "local" if self.local_path is not None else "remote"
 
 
-def ran1_timeline() -> Timeline:
-    return Timeline(start="08:30", end="19:45", slot_minutes=5,
-                    label_minutes=30, breaks=[dict(b) for b in BREAKS],
-                    blocks=[dict(b) for b in TIME_BLOCKS])
+def ran1_timeline(blocks: list[dict] | None = None,
+                  breaks: list[dict] | None = None) -> Timeline:
+    """The day's axis from the main schedule's time blocks (default: RAN1#126bis).
+
+    It runs from the first block's start to 15 minutes past the last block's
+    end (08:30-19:45 for blocks ending at 19:30).
+    """
+    blocks = [dict(b) for b in (blocks or TIME_BLOCKS)]
+    breaks = [dict(b) for b in (BREAKS if breaks is None else breaks)]
+    start = time_to_minutes(blocks[0]["start"])
+    end = time_to_minutes(blocks[-1]["end"]) + 15
+    return Timeline(start=minutes_to_time(start), end=minutes_to_time(end),
+                    slot_minutes=5, label_minutes=30, breaks=breaks, blocks=blocks)

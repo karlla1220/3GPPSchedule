@@ -42,9 +42,9 @@ def _overlaps(a: Session, b: Session) -> bool:
             and time_to_minutes(b.start_time) < time_to_minutes(a.end_time))
 
 
-def _time_block_index(session: Session) -> int | None:
+def _time_block_index(session: Session, blocks=TIME_BLOCKS) -> int | None:
     start = time_to_minutes(session.start_time)
-    for block in TIME_BLOCKS:
+    for block in blocks:
         if time_to_minutes(block["start"]) <= start < time_to_minutes(block["end"]):
             return block["index"]
     return None
@@ -94,7 +94,7 @@ def _room(session: Session, day_rooms_map) -> str:
 
 
 def reject_concurrent_agenda_duplicates(
-    sessions: list[Session], day_rooms_map=None, agenda_items=(),
+    sessions: list[Session], day_rooms_map=None, agenda_items=(), blocks=TIME_BLOCKS,
 ) -> None:
     """Fail the build when a detailed agenda item is in two rooms at the same time.
 
@@ -113,11 +113,11 @@ def reject_concurrent_agenda_duplicates(
             f"in {_room(b, day_rooms_map)}"
         )
         for session in (a, b):
-            index = _time_block_index(session)
+            index = _time_block_index(session, blocks)
             if index is None:
                 # Unknown slot: discard the whole day rather than keep a bad one.
                 discard.update(slot_state_path(session.day, block["index"])
-                               for block in TIME_BLOCKS)
+                               for block in blocks)
             else:
                 discard.add(slot_state_path(session.day, index))
     raise RejectedState(

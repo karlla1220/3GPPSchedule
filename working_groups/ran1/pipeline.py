@@ -36,7 +36,8 @@ from dotenv import load_dotenv
 load_dotenv()
 
 from .models import DAY_ORDER, DaySchedule, Schedule, ScheduleSource, ran1_timeline
-from .parser import build_room_list, parse_docx, extract_meeting_location, find_chair_notes_docx
+from .parser import (build_room_list, document_time_blocks, parse_docx,
+                     extract_meeting_location, find_chair_notes_docx)
 from .session_parser import parse_time_slots, normalize_group_headers, fill_missing_groups
 from shared.renderer import save_html
 from shared.portal_meetings import lookup_timezone_reference
@@ -522,6 +523,9 @@ def build_schedule(args) -> Schedule:
     print(f"\nParsing: {docx_path}")
     cells, tables_meta = parse_docx(docx_path)
     print(f"Extracted {len(cells)} schedule cells from {len(tables_meta)} tables")
+    # The chair moves the breaks between meetings: the blocks are the Main's.
+    time_blocks, time_breaks = document_time_blocks(tables_meta)
+    print("Time blocks: " + ", ".join(f"{b['start']}-{b['end']}" for b in time_blocks))
 
     # Step 3: Build room mapping
     day_rooms_map = build_room_list(tables_meta)
@@ -544,6 +548,7 @@ def build_schedule(args) -> Schedule:
         # A mailed Main is not recorded: the history is permanent, and a mailed
         # copy someone edited would make vice-chair cells look like copies.
         main_texts_seen=main_history.record(current_meeting_id, cells, store=not mailed_main),
+        blocks=time_blocks,
     )
     n_enriched = sum(1 for s in time_slots if len(s.sources) > 1)
     if vice_chair_paths:
@@ -624,6 +629,7 @@ def build_schedule(args) -> Schedule:
     reject_concurrent_agenda_duplicates(
         sessions, day_rooms_map,
         agenda_items=load_agenda_description_map(meeting_id=current_meeting_id),
+        blocks=time_blocks,
     )
 
     # Step 4b: Normalize group headers for cleaner legend
@@ -822,7 +828,7 @@ def build_schedule(args) -> Schedule:
                     day_name=day_name,
                     rooms=rooms,
                     sessions=day_sessions,
-                    timeline=ran1_timeline(),
+                    timeline=ran1_timeline(time_blocks, time_breaks),
                 )
             )
 
