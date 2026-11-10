@@ -2,7 +2,7 @@
   "day": "Tuesday",
   "time_block_index": 2,
   "source_hashes": {
-    "Main Schedule": "b56867a496319600"
+    "Main Schedule": "332ee2b7e04934f6"
   },
   "merged_sessions": [
     {
@@ -781,7 +781,7 @@
       ]
     }
   ],
-  "merged_at": "2026-11-10T08:35:05.700949+00:00",
+  "merged_at": "2026-11-10T09:00:37.585808+00:00",
   "meeting_id": "ran1#127",
   "schema_version": 3,
   "source_entries": {
@@ -818,7 +818,7 @@
       }
     ]
   },
-  "merge_prompt_version": 7,
+  "merge_prompt_version": 8,
   "block_start": "14:00",
   "block_end": "16:30"
 }

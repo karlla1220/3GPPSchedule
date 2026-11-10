@@ -5480,7 +5480,7 @@
           "room_col_start": 4,
           "room_col_end": 5,
           "chair": null,
-          "agenda_item": "7, 8.1",
+          "agenda_item": "7/8.1",
           "group_header": "",
           "description": "Pre-Rel-19 NR Maintenance",
           "agenda_descriptions": [
@@ -10035,7 +10035,7 @@
           "day": "Thursday",
           "room_col_start": 6,
           "room_col_end": 7,
-          "chair": "Sorouri",
+          "chair": "Sorour",
           "agenda_item": "10.7.1",
           "group_header": "6GR",
           "description": "NTN specific requirements and design",
@@ -10079,7 +10079,7 @@
           "day": "Thursday",
           "room_col_start": 6,
           "room_col_end": 7,
-          "chair": "Sorouri",
+          "chair": "Sorour",
           "agenda_item": null,
           "group_header": "6GR",
           "description": null,
@@ -10890,7 +10890,7 @@
           "stream": ""
         },
         {
-          "name": "6GR (TBD) / .10.8 Sensing () / R20 (TBD) / A-IoT Phase2 (TBD)",
+          "name": "10.8 Sensing",
           "duration_minutes": 90,
           "start_time": "11:00",
           "end_time": "12:30",
@@ -10898,8 +10898,8 @@
           "room_col_start": 4,
           "room_col_end": 5,
           "chair": null,
-          "agenda_item": null,
-          "group_header": "R20",
+          "agenda_item": "10.8",
+          "group_header": "6GR",
           "description": "ISAC",
           "agenda_descriptions": [
             {
@@ -10923,12 +10923,38 @@
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": [
+            1,
+            2
+          ],
+          "stream": ""
+        },
+        {
+          "name": "A-IoT Phase2",
+          "duration_minutes": 90,
+          "start_time": "11:00",
+          "end_time": "12:30",
+          "day": "Friday",
+          "room_col_start": 4,
+          "room_col_end": 5,
+          "chair": null,
+          "agenda_item": null,
+          "group_header": "R20",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [],
+          "room_scope": "assigned",
+          "notes": [],
           "inferred_agenda_items": [
-            "9.3",
-            "10"
+            "9.3"
           ],
           "email_details": [],
-          "part": null,
+          "part": [
+            2,
+            2
+          ],
           "stream": ""
         },
         {
@@ -11027,7 +11053,7 @@
     }
   ],
   "source_file": "Draft RAN1#127 online and offline schedules - v00.docx",
-  "generated_at": "2026-11-10 02:35",
+  "generated_at": "2026-11-10 03:00",
   "contact_name": "",
   "contact_email": "",
   "source_files": [

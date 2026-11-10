@@ -2,7 +2,7 @@
   "day": "Friday",
   "time_block_index": 1,
   "source_hashes": {
-    "Main Schedule": "2cedc7cab739e968"
+    "Main Schedule": "979f8efc3af9c17e"
   },
   "merged_sessions": [
     {
@@ -103,12 +103,12 @@
     },
     {
       "room_name": "RAN1_brk2",
-      "name": "6GR (TBD) / .10.8 Sensing () / R20 (TBD) / A-IoT Phase2 (TBD)",
-      "duration_minutes": 90,
+      "name": "10.8 Sensing",
+      "duration_minutes": null,
       "specified_start_time": null,
       "chair": null,
-      "group_header": "",
-      "agenda_item": null,
+      "group_header": "6GR",
+      "agenda_item": "10.8",
       "source_cells": [
         "ce532ad"
       ],
@@ -132,9 +132,21 @@
           ]
         }
       ]
+    },
+    {
+      "room_name": "RAN1_brk2",
+      "name": "A-IoT Phase2",
+      "duration_minutes": null,
+      "specified_start_time": null,
+      "chair": null,
+      "group_header": "R20",
+      "agenda_item": null,
+      "source_cells": [
+        "ce532ad"
+      ]
     }
   ],
-  "merged_at": "2026-11-10T08:35:05.722187+00:00",
+  "merged_at": "2026-11-10T09:00:37.602474+00:00",
   "meeting_id": "ran1#127",
   "schema_version": 3,
   "source_entries": {
@@ -159,7 +171,7 @@
       }
     ]
   },
-  "merge_prompt_version": 7,
+  "merge_prompt_version": 8,
   "block_start": "11:00",
   "block_end": "12:30"
 }
