@@ -2,29 +2,16 @@
   "files": [
     {
       "folder": "Chair_notes",
-      "name": "RAN1#126b online and offline schedules - v05.docx",
-      "uploaded_at": "2026-10-15T10:47:00"
-    },
-    {
-      "folder": "Chair_notes",
-      "name": "RAN1#126b online and offline schedules - v00.docx",
-      "uploaded_at": "2026-10-10T06:54:00"
-    },
-    {
-      "folder": "Hiroki_notes",
-      "name": "RAN1#126bis schedule for Hiroki Adhoc2 sessions_v08.docx",
-      "uploaded_at": "2026-10-15T22:31:00"
-    },
-    {
-      "folder": "Sorour_notes",
-      "name": "RAN1#126b Sorour sessions online and offline schedules - v01.docx",
-      "uploaded_at": "2026-10-14T04:18:00"
+      "name": "Draft RAN1#127 online and offline schedules - v00.docx",
+      "uploaded_at": "2026-11-08T11:09:44+00:00",
+      "url": "https://list.etsi.org/scripts/wa.exe?A3=ind2611b&L=3GPP_TSG_RAN_WG1&E=base64&P=217264&B=------%3D_001_NextPart211207348300_%3D----&T=application%2Foctet-stream;%20name=%22Draft+RAN1%23127+online+and+offline+schedules+-+v00.docx%22&N=Draft+RAN1%23127+online+and+offline+schedules+-+v00.docx&attachment=q&XSS=3",
+      "listing": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;8140fcce.2611b",
+      "origin": "email",
+      "message_id": "8140fcce.2611b",
+      "sent": "2026-11-08T11:09:44+00:00"
     }
   ],
   "agreements_ref": {
-    "name": "Chair notes RAN1#126bis_eom1.docx",
-    "url": "https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_126b/Inbox/Chair_notes/Chair%20notes%20RAN1%23126bis_eom1.docx",
-    "sha256": "1e58e858b2430b38fb32c6af0e6cde28363afa877fadd7d45f73468be2509f85",
     "session_notes": [
       {
         "name": "draft_R1-2607284_Session Notes of AI 7_v03.docx",
@@ -113,42 +100,42 @@
       }
     ]
   },
-  "meeting_id": "ran1#126bis",
+  "meeting_id": "ran1#127",
   "meeting_source": "remote",
-  "timezone": "Asia/Seoul",
+  "timezone": "America/Edmonton",
   "timezone_status": "resolved",
   "timezone_ref": {
     "type": "portal",
-    "id": 60714,
-    "timezone": "Asia/Seoul",
-    "starts_on": "2026-10-12",
-    "ends_on": "2026-10-16",
-    "starts_at": "2026-10-12T09:00:00+09:00",
-    "ends_at": "2026-10-16T17:30:00+09:00",
-    "start_timezone": "(GMT+09:00) Seoul",
-    "end_timezone": "(GMT+09:00) Seoul",
-    "location": "South Korea",
-    "country": "KR"
+    "id": 60715,
+    "timezone": "America/Edmonton",
+    "starts_on": "2026-11-16",
+    "ends_on": "2026-11-20",
+    "starts_at": "2026-11-16T09:00:00-06:00",
+    "ends_at": "2026-11-20T17:30:00-06:00",
+    "start_timezone": "(GMT-07:00) Mountain Time (US & Canada)",
+    "end_timezone": "(GMT-07:00) Mountain Time (US & Canada)",
+    "location": "Calgary",
+    "country": "CA"
   },
   "agenda": {
     "name": "agenda.csv",
-    "uploaded_at": "2026-10-29T05:42:00",
-    "url": "https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_126b/Agenda/agenda.csv",
-    "source_url": "https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_126b/Agenda/",
-    "sha256": "2c81bc6350ab22d9c80c7f7cd21962609821954662da0996618bb370f4e2beae",
+    "uploaded_at": "2026-11-10T05:43:00",
+    "url": "https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_127/Agenda/agenda.csv",
+    "source_url": "https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_127/Agenda/",
+    "sha256": "4c7372b9a97ca543202ad379dc2fe8260c9418a0fe0f897365a3983bf7223d48",
     "document_file": "agenda.csv",
-    "local_path": "downloads/ran1/Agenda/ran1_126bis/agenda.csv",
+    "local_path": "downloads/ran1/Agenda/ran1_127/agenda.csv",
     "description_json": "docs/ran1/agenda_item_description.json",
-    "description_generated_at": "2026-10-29T06:01:29.354191+00:00",
+    "description_generated_at": "2026-11-10T07:50:29.714875+00:00",
     "description_source_type": "agenda_csv",
     "description_source_file": "agenda.csv",
     "description_source_agenda_file": "agenda.csv",
-    "description_source_url": "https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_126b/Agenda/agenda.csv",
-    "description_source_uploaded_at": "2026-10-29T05:42:00"
+    "description_source_url": "https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_127/Agenda/agenda.csv",
+    "description_source_uploaded_at": "2026-11-10T05:43:00"
   },
   "local_refs": {},
   "email": {
     "list": "3GPP_TSG_RAN_WG1",
-    "checked_through": "2026-11-06T20:04:41+00:00"
+    "checked_through": "2026-11-10T03:07:36+00:00"
   }
 }
