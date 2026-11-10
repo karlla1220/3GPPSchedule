@@ -4626,7 +4626,7 @@
           "room_col_end": 5,
           "chair": null,
           "agenda_item": null,
-          "group_header": "6GR",
+          "group_header": "R20",
           "description": "ISAC",
           "agenda_descriptions": [
             {
@@ -4712,7 +4712,7 @@
     }
   ],
   "source_file": "Draft RAN1#127 online and offline schedules - v00.docx",
-  "generated_at": "2026-11-10 01:51",
+  "generated_at": "2026-11-10 02:02",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
