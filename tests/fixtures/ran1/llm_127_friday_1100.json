@@ -1,0 +1,67 @@
+{
+ "model": "gemini-3.8-flash (low)",
+ "merge_prompt_version": 8,
+ "slot": "RAN1#127 v00 Friday 11:00-12:30",
+ "sessions": [
+  {
+   "room_name": "RAN1_main",
+   "name": "Sweep",
+   "duration_minutes": 90,
+   "specified_start_time": null,
+   "chair": null,
+   "group_header": "",
+   "agenda_item": null,
+   "source_cells": [
+    "c348879"
+   ]
+  },
+  {
+   "room_name": "RAN1_brk1",
+   "name": "10.5.2.2",
+   "duration_minutes": 30,
+   "specified_start_time": null,
+   "chair": null,
+   "group_header": "6GR",
+   "agenda_item": "10.5.2.2",
+   "source_cells": [
+    "c3c989b"
+   ]
+  },
+  {
+   "room_name": "RAN1_brk1",
+   "name": "10.5.2.3",
+   "duration_minutes": 60,
+   "specified_start_time": null,
+   "chair": null,
+   "group_header": "6GR",
+   "agenda_item": "10.5.2.3",
+   "source_cells": [
+    "c3c989b"
+   ]
+  },
+  {
+   "room_name": "RAN1_brk2",
+   "name": "10.8 Sensing",
+   "duration_minutes": null,
+   "specified_start_time": null,
+   "chair": null,
+   "group_header": "6GR",
+   "agenda_item": "10.8",
+   "source_cells": [
+    "ce532ad"
+   ]
+  },
+  {
+   "room_name": "RAN1_brk2",
+   "name": "A-IoT Phase2",
+   "duration_minutes": null,
+   "specified_start_time": null,
+   "chair": null,
+   "group_header": "R20",
+   "agenda_item": null,
+   "source_cells": [
+    "ce532ad"
+   ]
+  }
+ ]
+}

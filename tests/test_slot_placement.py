@@ -343,3 +343,58 @@ def test_the_prompt_says_where_a_merged_cell_ends():
     prompt = _build_time_slot_prompt(_friday_slot(), aliases)
     assert "[cell cfri00 — " in prompt
     assert "(cell merged down to 19:00, past this time block)" in prompt
+
+
+def _friday_morning_slot(text="6GR (TBD)\n.10.8 Sensing ()\n\nR20 (TBD)\nA-IoT Phase2 (TBD)"):
+    # RAN1#127 v00 Friday 11:00 Brk2: two groups, no lengths.
+    cell = SourceEntry(room_label="Yeongju A Hall", cell_id="cbrk2f", cell_text=text,
+                       table_index=0, row_starts=("11:00",), room_names=("Yeongju A Hall",))
+    slot = TimeSlotData(day="Tuesday", time_block_index=1, time_block_start="11:00",
+                        time_block_end="12:30", time_block_duration=90, main_rooms=ROOMS)
+    slot.sources = [SlotSource(label="Main Schedule", entries=[cell])]
+    return slot
+
+
+def _untimed(name, group, ai=None):
+    return {"room_name": "RAN1_brk1", "name": name, "duration_minutes": None,
+            "specified_start_time": None, "source_cells": ["cbrk2f"],
+            "group_header": group, "agenda_item": ai}
+
+
+def _sessions(answer, slot):
+    _, alias_to_name = build_room_aliases(ROOMS)
+    return _slot_result_to_sessions({"sessions": answer}, slot, {"Tuesday": ROOMS}, alias_to_name)
+
+
+def test_items_without_a_length_are_equal_parts_of_the_cell():
+    sessions = _sessions([_untimed("10.8 Sensing", "6GR", "10.8"),
+                          _untimed("A-IoT Phase2", "R20")], _friday_morning_slot())
+    assert [(s.name, s.start_time, s.end_time, s.duration_minutes, s.part, s.agenda_item)
+            for s in sessions] == [
+        ("10.8 Sensing", "11:00", "12:30", 90, [1, 2], "10.8"),
+        ("A-IoT Phase2", "11:00", "12:30", 90, [2, 2], None),
+    ]
+
+
+def test_untimed_items_take_the_time_left_after_the_timed_ones():
+    timed = dict(_untimed("10.8 Sensing", "6GR", "10.8"), duration_minutes=30)
+    sessions = _sessions([timed, _untimed("A-IoT Phase2", "R20")], _friday_morning_slot())
+    assert [(s.name, s.start_time, s.end_time, s.part) for s in sessions] == [
+        ("10.8 Sensing", "11:00", "11:30", None),
+        ("A-IoT Phase2", "11:30", "12:30", None),
+    ]
+
+
+def test_untimed_items_too_short_for_parts_stay_one_cell():
+    timed = dict(_untimed("10.5.2.2", "6GR", "10.5.2.2"), duration_minutes=40)
+    sessions = _sessions([timed, _untimed("10.8 Sensing", "6GR", "10.8"),
+                          _untimed("A-IoT Phase2", "R20")], _friday_morning_slot())
+    # 50 min left: two pieces would be 25 min, shorter than a part may be.
+    assert [(s.name, s.start_time, s.end_time, s.part, s.agenda_item) for s in sessions][1] == \
+        ("10.8 Sensing / A-IoT Phase2", "11:40", "12:30", None, "10.8")
+
+
+def test_untimed_items_with_no_time_left_are_refused():
+    timed = dict(_untimed("10.5.2.2", "6GR", "10.5.2.2"), duration_minutes=90)
+    with pytest.raises(SlotPlacementError, match="no time is left"):
+        _sessions([timed, _untimed("10.8 Sensing", "6GR", "10.8")], _friday_morning_slot())
