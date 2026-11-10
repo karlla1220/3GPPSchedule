@@ -849,6 +849,8 @@ def parse_time_slots(
                     meeting_id=meeting_id or "",
                     source_entries=ledger_entries(slot),
                     merge_prompt_version=MERGE_PROMPT_VERSION,
+                    block_start=slot.time_block_start,
+                    block_end=slot.time_block_end,
                 )
             )
         except OSError as e:

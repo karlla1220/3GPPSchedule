@@ -51,6 +51,21 @@ class SlotState:
     # MERGE_PROMPT_VERSION the merge was made under. An incremental merge
     # copies the baseline, so a ledger from another version is not used.
     merge_prompt_version: int | None = None
+    # The time block the merge placed sessions in ("08:00", "10:30"). The
+    # chair moves breaks between meetings and within one, and a merge made
+    # for other block times has the wrong session times. "" for a state
+    # saved before blocks were read from the document: RAN1#126bis blocks.
+    block_start: str = ""
+    block_end: str = ""
+
+    def block(self) -> tuple[str, str]:
+        if self.block_start and self.block_end:
+            return self.block_start, self.block_end
+        from .models import TIME_BLOCKS
+        if 0 <= self.time_block_index < len(TIME_BLOCKS):
+            default = TIME_BLOCKS[self.time_block_index]
+            return default["start"], default["end"]
+        return "", ""
 
 
 def hash_source_text(text: str) -> str:
@@ -97,6 +112,8 @@ def load_slot_state(
         schema_version=data.get("schema_version", SCHEMA_VERSION),
         source_entries=data.get("source_entries"),
         merge_prompt_version=data.get("merge_prompt_version"),
+        block_start=data.get("block_start", ""),
+        block_end=data.get("block_end", ""),
     )
 
 

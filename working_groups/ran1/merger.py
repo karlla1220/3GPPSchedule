@@ -15,7 +15,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 
 from . import main_history
-from .models import CellData, RoomInfo, TIME_BLOCKS
+from .models import CellData, RoomInfo
 from .parser import parse_docx, build_room_list
 from .rooms import online_rooms as _online_rooms
 from .slot_state import hash_source_text, load_slot_state
@@ -389,6 +389,7 @@ def collect_time_slot_data(
     vice_chair_paths: dict[str, Path],
     meeting_id: str | None = None,
     main_texts_seen: dict[str, set[str]] | None = None,
+    blocks: list[dict] | None = None,
 ) -> list[TimeSlotData]:
     """Collect all schedule data grouped by (day, time_block).
 
@@ -404,6 +405,8 @@ def collect_time_slot_data(
             (``main_history``). A vice-chair cell that repeats one is an old
             copy of a Main table and is left out. Without it, only copies of
             the current Main are left out.
+        blocks: The main schedule's time blocks (``document_time_blocks``).
+            Vice-chair cells are placed in them.
 
     Returns:
         List of TimeSlotData, sorted by day order then time block index.
@@ -418,7 +421,7 @@ def collect_time_slot_data(
     for person, path in vice_chair_paths.items():
         print(f"  Parsing {person}'s schedule (all tables): {path.name}")
         try:
-            vc_cells, vc_meta = parse_docx(path, max_tables=None)
+            vc_cells, vc_meta = parse_docx(path, max_tables=None, blocks=blocks)
 
             # Resolve generic room names using LLM + document context
             _resolve_vc_room_names(vc_meta, main_rooms_map)
@@ -435,7 +438,8 @@ def collect_time_slot_data(
     time_slots: list[TimeSlotData] = []
 
     for (day, tb_idx), m_cells in main_groups.items():
-        tb = TIME_BLOCKS[tb_idx]
+        tb = {"start": m_cells[0].time_block_start, "end": m_cells[0].time_block_end,
+              "duration": m_cells[0].time_block_duration}
         main_rooms = main_rooms_map.get(day, [])
 
         slot = TimeSlotData(
@@ -533,6 +537,9 @@ def _annotate_freshness(slot: TimeSlotData, meeting_id: str | None = None) -> No
             entry.change = entry.previous_text = None
 
     prev_state = load_slot_state(slot.day, slot.time_block_index, meeting_id)
+    if prev_state is not None and prev_state.block() != (slot.time_block_start, slot.time_block_end):
+        # The block moved (a break changed): its old session times are wrong.
+        prev_state = None
     if prev_state is None:
         slot.previous_merge = None
         slot.source_freshness = {label: "NEW" for label in current_hashes}
