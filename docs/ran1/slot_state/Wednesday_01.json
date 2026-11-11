@@ -2,7 +2,7 @@
   "day": "Wednesday",
   "time_block_index": 1,
   "source_hashes": {
-    "Main Schedule": "2bcadbcf9717bf35"
+    "Main Schedule": "42994db7e6a4391b"
   },
   "merged_sessions": [
     {
@@ -81,18 +81,6 @@
     },
     {
       "room_name": "RAN1_brk1",
-      "name": "AI/ML",
-      "duration_minutes": 50,
-      "specified_start_time": null,
-      "chair": null,
-      "group_header": "R20",
-      "agenda_item": null,
-      "source_cells": [
-        "c01717e"
-      ]
-    },
-    {
-      "room_name": "RAN1_brk1",
       "name": "MIMO",
       "duration_minutes": 40,
       "specified_start_time": null,
@@ -100,7 +88,19 @@
       "group_header": "R20",
       "agenda_item": null,
       "source_cells": [
-        "c01717e"
+        "cad2b54"
+      ]
+    },
+    {
+      "room_name": "RAN1_brk1",
+      "name": "AI/ML",
+      "duration_minutes": 50,
+      "specified_start_time": null,
+      "chair": null,
+      "group_header": "R20",
+      "agenda_item": null,
+      "source_cells": [
+        "cad2b54"
       ]
     },
     {
@@ -274,7 +274,7 @@
       ]
     }
   ],
-  "merged_at": "2026-11-10T09:00:37.590995+00:00",
+  "merged_at": "2026-11-11T11:02:10.707406+00:00",
   "meeting_id": "ran1#127",
   "schema_version": 3,
   "source_entries": {
@@ -287,9 +287,9 @@
       },
       {
         "room_label": "Brk1",
-        "cell_text": "R20 (90)AI/ML (50)\nMIMO (40)",
+        "cell_text": "R20 (90) \nMIMO (40)\nAI/ML (50)",
         "fallback_start_time": null,
-        "cell_id": "c01717e"
+        "cell_id": "cad2b54"
       },
       {
         "room_label": "Brk2",

@@ -2,7 +2,7 @@
   "day": "Tuesday",
   "time_block_index": 0,
   "source_hashes": {
-    "Main Schedule": "dd628d7611098fa5"
+    "Main Schedule": "a232d048e626284d"
   },
   "merged_sessions": [
     {
@@ -133,43 +133,6 @@
     },
     {
       "room_name": "RAN1_brk1",
-      "name": "10.3.1 Channel coding",
-      "duration_minutes": 40,
-      "specified_start_time": null,
-      "chair": null,
-      "group_header": "6GR",
-      "agenda_item": "10.3.1",
-      "source_cells": [
-        "c4f308e"
-      ],
-      "description": "Channel coding",
-      "agenda_descriptions": [
-        {
-          "agenda_item": "10.3.1",
-          "matched_agenda_item": "10.3.1",
-          "description": "Channel coding",
-          "hierarchy": [
-            {
-              "agenda_item": "10",
-              "description": "Rel-20 Study of 6GR",
-              "has_description": true
-            },
-            {
-              "agenda_item": "10.3",
-              "description": "Channel coding and modulation for 6GR interface",
-              "has_description": true
-            },
-            {
-              "agenda_item": "10.3.1",
-              "description": "Channel coding",
-              "has_description": true
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "room_name": "RAN1_brk1",
       "name": "10.7.1 NTN",
       "duration_minutes": 40,
       "specified_start_time": null,
@@ -177,7 +140,7 @@
       "group_header": "6GR",
       "agenda_item": "10.7.1",
       "source_cells": [
-        "c4f308e"
+        "c3e0fcc"
       ],
       "description": "NTN specific requirements and design",
       "agenda_descriptions": [
@@ -214,7 +177,7 @@
       "group_header": "R20",
       "agenda_item": "9.5",
       "source_cells": [
-        "c4f308e"
+        "c3e0fcc"
       ],
       "description": "NR NTN in systems using downlink compensation",
       "agenda_descriptions": [
@@ -246,7 +209,76 @@
       "group_header": "R20",
       "agenda_item": null,
       "source_cells": [
-        "c4f308e"
+        "c3e0fcc"
+      ]
+    },
+    {
+      "room_name": "RAN1_brk1",
+      "name": "10.3.1 Channel coding",
+      "duration_minutes": 40,
+      "specified_start_time": null,
+      "chair": null,
+      "group_header": "6GR",
+      "agenda_item": "10.3.1",
+      "source_cells": [
+        "c3e0fcc"
+      ],
+      "description": "Channel coding",
+      "agenda_descriptions": [
+        {
+          "agenda_item": "10.3.1",
+          "matched_agenda_item": "10.3.1",
+          "description": "Channel coding",
+          "hierarchy": [
+            {
+              "agenda_item": "10",
+              "description": "Rel-20 Study of 6GR",
+              "has_description": true
+            },
+            {
+              "agenda_item": "10.3",
+              "description": "Channel coding and modulation for 6GR interface",
+              "has_description": true
+            },
+            {
+              "agenda_item": "10.3.1",
+              "description": "Channel coding",
+              "has_description": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "room_name": "RAN1_brk2",
+      "name": "10.8 Sensing",
+      "duration_minutes": 60,
+      "specified_start_time": null,
+      "chair": null,
+      "group_header": "6GR",
+      "agenda_item": "10.8",
+      "source_cells": [
+        "c9b5e65"
+      ],
+      "description": "ISAC",
+      "agenda_descriptions": [
+        {
+          "agenda_item": "10.8",
+          "matched_agenda_item": "10.8",
+          "description": "ISAC",
+          "hierarchy": [
+            {
+              "agenda_item": "10",
+              "description": "Rel-20 Study of 6GR",
+              "has_description": true
+            },
+            {
+              "agenda_item": "10.8",
+              "description": "ISAC",
+              "has_description": true
+            }
+          ]
+        }
       ]
     },
     {
@@ -258,7 +290,7 @@
       "group_header": "",
       "agenda_item": "7/8.1",
       "source_cells": [
-        "c6123b3"
+        "c9b5e65"
       ],
       "description": "Pre-Rel-19 NR Maintenance",
       "agenda_descriptions": [
@@ -302,39 +334,7 @@
       "group_header": "",
       "agenda_item": null,
       "source_cells": [
-        "c6123b3"
-      ]
-    },
-    {
-      "room_name": "RAN1_brk2",
-      "name": "10.8 Sensing",
-      "duration_minutes": 60,
-      "specified_start_time": null,
-      "chair": null,
-      "group_header": "6GR",
-      "agenda_item": "10.8",
-      "source_cells": [
-        "c6123b3"
-      ],
-      "description": "ISAC",
-      "agenda_descriptions": [
-        {
-          "agenda_item": "10.8",
-          "matched_agenda_item": "10.8",
-          "description": "ISAC",
-          "hierarchy": [
-            {
-              "agenda_item": "10",
-              "description": "Rel-20 Study of 6GR",
-              "has_description": true
-            },
-            {
-              "agenda_item": "10.8",
-              "description": "ISAC",
-              "has_description": true
-            }
-          ]
-        }
+        "c9b5e65"
       ]
     },
     {
@@ -532,7 +532,7 @@
       ]
     }
   ],
-  "merged_at": "2026-11-10T09:00:37.583245+00:00",
+  "merged_at": "2026-11-11T11:02:10.699372+00:00",
   "meeting_id": "ran1#127",
   "schema_version": 3,
   "source_entries": {
@@ -545,15 +545,15 @@
       },
       {
         "room_label": "Brk1",
-        "cell_text": "6GR (90)\n.10.3.1 Channel coding (40)\n.10.7.1 NTN (40)\nR20 (70)\n.9.5 NTN (30)\nNTN-NR (40)",
+        "cell_text": ".10.7.1 NTN (40)\nR20 (70)\n.9.5 NTN (30)\nNTN-NR (40)\n6GR (90)\n.10.3.1 Channel coding (40)",
         "fallback_start_time": null,
-        "cell_id": "c4f308e"
+        "cell_id": "c3e0fcc"
       },
       {
         "room_label": "Brk2",
-        "cell_text": "TEI, AI 7/8.1(50)\n\nUE feature (40)\n\n6GR (60)\n.10.8 Sensing (70)",
+        "cell_text": "6GR (60)\n.10.8 Sensing (70)\n\nTEI, AI 7/8.1(50)\n\nUE feature (40)",
         "fallback_start_time": null,
-        "cell_id": "c6123b3"
+        "cell_id": "c9b5e65"
       },
       {
         "room_label": "Offline1",

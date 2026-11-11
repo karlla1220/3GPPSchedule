@@ -2,7 +2,7 @@
   "day": "Wednesday",
   "time_block_index": 0,
   "source_hashes": {
-    "Main Schedule": "b7a0fef02cf04d64"
+    "Main Schedule": "2584a8edac2c6630"
   },
   "merged_sessions": [
     {
@@ -295,7 +295,7 @@
       "group_header": "",
       "agenda_item": "7/8.1",
       "source_cells": [
-        "c7d3287"
+        "cac4a7d"
       ],
       "description": "Pre-Rel-19 NR Maintenance",
       "agenda_descriptions": [
@@ -332,18 +332,6 @@
     },
     {
       "room_name": "RAN1_brk2",
-      "name": "UE feature",
-      "duration_minutes": 40,
-      "specified_start_time": null,
-      "chair": null,
-      "group_header": "",
-      "agenda_item": null,
-      "source_cells": [
-        "c7d3287"
-      ]
-    },
-    {
-      "room_name": "RAN1_brk2",
       "name": "10.5.4.1",
       "duration_minutes": 60,
       "specified_start_time": null,
@@ -351,7 +339,7 @@
       "group_header": "6GR",
       "agenda_item": "10.5.4.1",
       "source_cells": [
-        "c7d3287"
+        "cac4a7d"
       ],
       "description": "Downlink control channel, scheduling for downlink and uplink transmission",
       "agenda_descriptions": [
@@ -382,6 +370,18 @@
             }
           ]
         }
+      ]
+    },
+    {
+      "room_name": "RAN1_brk2",
+      "name": "UE feature",
+      "duration_minutes": 40,
+      "specified_start_time": null,
+      "chair": null,
+      "group_header": "",
+      "agenda_item": null,
+      "source_cells": [
+        "cac4a7d"
       ]
     },
     {
@@ -624,7 +624,7 @@
       ]
     }
   ],
-  "merged_at": "2026-11-10T09:00:37.589416+00:00",
+  "merged_at": "2026-11-11T11:02:10.705783+00:00",
   "meeting_id": "ran1#127",
   "schema_version": 3,
   "source_entries": {
@@ -643,9 +643,9 @@
       },
       {
         "room_label": "Brk2",
-        "cell_text": "T TEI, AI 7/8.1 (50)\n\nUE feature (40)\n\n6GR (60)\n.10.5.4.1 (60)",
+        "cell_text": "T TEI, AI 7/8.1 (50)\n\n6GR (60)\n.10.5.4.1 (60)\n\nUE feature (40)",
         "fallback_start_time": null,
-        "cell_id": "c7d3287"
+        "cell_id": "cac4a7d"
       },
       {
         "room_label": "Offline1",
