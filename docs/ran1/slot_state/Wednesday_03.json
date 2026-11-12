@@ -2,7 +2,7 @@
   "day": "Wednesday",
   "time_block_index": 3,
   "source_hashes": {
-    "Main Schedule": "4a808683651ec250"
+    "Main Schedule": "432652daccc9d841"
   },
   "merged_sessions": [
     {
@@ -61,14 +61,14 @@
     },
     {
       "room_name": "RAN1_brk1",
-      "name": "UE feature",
+      "name": "MIMO",
       "duration_minutes": 40,
       "specified_start_time": null,
       "chair": null,
       "group_header": "R20",
       "agenda_item": null,
       "source_cells": [
-        "c7952c7"
+        "c19f60d"
       ]
     },
     {
@@ -80,7 +80,7 @@
       "group_header": "",
       "agenda_item": "8.1",
       "source_cells": [
-        "c7952c7"
+        "c19f60d"
       ],
       "description": "Maintenance on all items of Rel-19 NR and E-UTRA",
       "agenda_descriptions": [
@@ -334,7 +334,7 @@
       ]
     }
   ],
-  "merged_at": "2026-11-10T09:00:37.594013+00:00",
+  "merged_at": "2026-11-12T11:02:19.778893+00:00",
   "meeting_id": "ran1#127",
   "schema_version": 3,
   "source_entries": {
@@ -347,9 +347,9 @@
       },
       {
         "room_label": "Brk1",
-        "cell_text": "R20 (40)\nUE feature (40)\n\nAI 8.1 (20)",
+        "cell_text": "R20 (40)\nMIMO (40)\n\nAI 8.1 (20)",
         "fallback_start_time": null,
-        "cell_id": "c7952c7"
+        "cell_id": "c19f60d"
       },
       {
         "room_label": "Brk2",
