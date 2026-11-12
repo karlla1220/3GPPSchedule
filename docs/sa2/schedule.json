@@ -551,91 +551,10 @@
           "stream": ""
         },
         {
-          "name": "6G Single Stream",
-          "duration_minutes": 90,
-          "start_time": "16:00",
-          "end_time": "17:30",
-          "day": "Monday",
-          "room_col_start": 2,
-          "room_col_end": 3,
-          "chair": null,
-          "agenda_item": "20.6.x",
-          "group_header": "Rel-20 SIDs and WIDs",
-          "description": "Rel-20 SIDs and WIDs",
-          "agenda_descriptions": [
-            {
-              "agenda_item": "20.6.x",
-              "matched_agenda_item": "20",
-              "description": "Rel-20 SIDs and WIDs",
-              "hierarchy": [
-                {
-                  "agenda_item": "20",
-                  "description": "Rel-20 SIDs and WIDs"
-                }
-              ]
-            }
-          ],
-          "room_ids": [
-            "stream1"
-          ],
-          "room_scope": "assigned",
-          "notes": [
-            "6G Single Stream (20.6.x)"
-          ],
-          "inferred_agenda_items": [],
-          "email_details": [],
-          "part": [
-            1,
-            2
-          ],
-          "stream": ""
-        },
-        {
-          "name": "6G Single Stream",
-          "duration_minutes": 90,
-          "start_time": "16:00",
-          "end_time": "17:30",
-          "day": "Monday",
-          "room_col_start": 2,
-          "room_col_end": 3,
-          "chair": null,
-          "agenda_item": "20.6.x",
-          "group_header": "Rel-20 SIDs and WIDs",
-          "description": "Rel-20 SIDs and WIDs",
-          "agenda_descriptions": [
-            {
-              "agenda_item": "20.6.x",
-              "matched_agenda_item": "20",
-              "description": "Rel-20 SIDs and WIDs",
-              "hierarchy": [
-                {
-                  "agenda_item": "20",
-                  "description": "Rel-20 SIDs and WIDs"
-                }
-              ]
-            }
-          ],
-          "room_ids": [
-            "stream1"
-          ],
-          "room_scope": "assigned",
-          "notes": [
-            "6G Single Stream (20.6.x)",
-            "(including RAN migration topic)"
-          ],
-          "inferred_agenda_items": [],
-          "email_details": [],
-          "part": [
-            2,
-            2
-          ],
-          "stream": ""
-        },
-        {
           "name": "KI#5 (QoS)",
           "duration_minutes": 75,
-          "start_time": "17:45",
-          "end_time": "19:00",
+          "start_time": "16:00",
+          "end_time": "17:15",
           "day": "Monday",
           "room_col_start": 2,
           "room_col_end": 3,
@@ -682,8 +601,8 @@
         {
           "name": "NG_RTC_Ph3-ARC",
           "duration_minutes": 75,
-          "start_time": "17:45",
-          "end_time": "19:00",
+          "start_time": "16:00",
+          "end_time": "17:15",
           "day": "Monday",
           "room_col_start": 2,
           "room_col_end": 3,
@@ -730,8 +649,8 @@
         {
           "name": "KI#4 (UP Arch)",
           "duration_minutes": 75,
-          "start_time": "17:45",
-          "end_time": "19:00",
+          "start_time": "16:00",
+          "end_time": "17:15",
           "day": "Monday",
           "room_col_start": 2,
           "room_col_end": 3,
@@ -778,8 +697,8 @@
         {
           "name": "KI#20 (Sensing)",
           "duration_minutes": 75,
-          "start_time": "17:45",
-          "end_time": "19:00",
+          "start_time": "16:00",
+          "end_time": "17:15",
           "day": "Monday",
           "room_col_start": 2,
           "room_col_end": 3,
@@ -822,6 +741,87 @@
             2
           ],
           "stream": ""
+        },
+        {
+          "name": "6G Single Stream",
+          "duration_minutes": 90,
+          "start_time": "17:30",
+          "end_time": "19:00",
+          "day": "Monday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": "20.6.x",
+          "group_header": "Rel-20 SIDs and WIDs",
+          "description": "Rel-20 SIDs and WIDs",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "20.6.x",
+              "matched_agenda_item": "20",
+              "description": "Rel-20 SIDs and WIDs",
+              "hierarchy": [
+                {
+                  "agenda_item": "20",
+                  "description": "Rel-20 SIDs and WIDs"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "stream1"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "6G Single Stream (20.6.x)"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": [
+            1,
+            2
+          ],
+          "stream": ""
+        },
+        {
+          "name": "6G Single Stream",
+          "duration_minutes": 90,
+          "start_time": "17:30",
+          "end_time": "19:00",
+          "day": "Monday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": "20.6.x",
+          "group_header": "Rel-20 SIDs and WIDs",
+          "description": "Rel-20 SIDs and WIDs",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "20.6.x",
+              "matched_agenda_item": "20",
+              "description": "Rel-20 SIDs and WIDs",
+              "hierarchy": [
+                {
+                  "agenda_item": "20",
+                  "description": "Rel-20 SIDs and WIDs"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "stream1"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "6G Single Stream (20.6.x)",
+            "(including RAN migration topic)"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": [
+            2,
+            2
+          ],
+          "stream": ""
         }
       ],
       "date": "2026-11-16",
@@ -848,8 +848,8 @@
           },
           {
             "name": "Break",
-            "start": "17:30",
-            "end": "17:45"
+            "start": "17:15",
+            "end": "17:30"
           }
         ],
         "blocks": []
@@ -1486,54 +1486,6 @@
           "stream": "Stream 3"
         },
         {
-          "name": "KI#24 (IoT)",
-          "duration_minutes": 90,
-          "start_time": "11:00",
-          "end_time": "12:30",
-          "day": "Tuesday",
-          "room_col_start": 2,
-          "room_col_end": 3,
-          "chair": "Michael STARSINIC",
-          "agenda_item": "20.6.24",
-          "group_header": "Rel-20 SIDs and WIDs",
-          "description": "Study on Architecture for 6G System (FS_6G_ARC) - Analyse 5GS IoT features and solutions",
-          "agenda_descriptions": [
-            {
-              "agenda_item": "20.6.24",
-              "matched_agenda_item": "20.6.24",
-              "description": "Study on Architecture for 6G System (FS_6G_ARC) - Analyse 5GS IoT features and solutions",
-              "hierarchy": [
-                {
-                  "agenda_item": "20",
-                  "description": "Rel-20 SIDs and WIDs"
-                },
-                {
-                  "agenda_item": "20.6",
-                  "description": null
-                },
-                {
-                  "agenda_item": "20.6.24",
-                  "description": "Study on Architecture for 6G System (FS_6G_ARC) - Analyse 5GS IoT features and solutions"
-                }
-              ]
-            }
-          ],
-          "room_ids": [
-            "stream2"
-          ],
-          "room_scope": "assigned",
-          "notes": [
-            "KI#24 (IoT) (20.6.24)"
-          ],
-          "inferred_agenda_items": [],
-          "email_details": [],
-          "part": [
-            2,
-            2
-          ],
-          "stream": ""
-        },
-        {
           "name": "KI#2 (SBA)",
           "duration_minutes": 90,
           "start_time": "11:00",
@@ -1853,10 +1805,41 @@
           "stream": "Stream 2"
         },
         {
+          "name": "Rel-21 5G-A discussion",
+          "duration_minutes": 75,
+          "start_time": "16:00",
+          "end_time": "17:15",
+          "day": "Tuesday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": null,
+          "group_header": "",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [
+            "stream1"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "Rel-21 5G-A discussion [21]"
+          ],
+          "inferred_agenda_items": [
+            "30.2",
+            "30.4"
+          ],
+          "email_details": [],
+          "part": [
+            1,
+            2
+          ],
+          "stream": ""
+        },
+        {
           "name": "6G Single Stream",
           "duration_minutes": 90,
-          "start_time": "16:00",
-          "end_time": "17:30",
+          "start_time": "17:30",
+          "end_time": "19:00",
           "day": "Tuesday",
           "room_col_start": 2,
           "room_col_end": 3,
@@ -1885,32 +1868,6 @@
             "6G Single Stream (20.6.x)"
           ],
           "inferred_agenda_items": [],
-          "email_details": [],
-          "part": null,
-          "stream": ""
-        },
-        {
-          "name": "Rel-21 5G-A discussion",
-          "duration_minutes": 75,
-          "start_time": "17:45",
-          "end_time": "19:00",
-          "day": "Tuesday",
-          "room_col_start": 2,
-          "room_col_end": 3,
-          "chair": null,
-          "agenda_item": null,
-          "group_header": "",
-          "description": null,
-          "agenda_descriptions": [],
-          "room_ids": [],
-          "room_scope": "shared",
-          "notes": [
-            "Rel-21 5G-A discussion [21]"
-          ],
-          "inferred_agenda_items": [
-            "30.2",
-            "30.4"
-          ],
           "email_details": [],
           "part": null,
           "stream": ""
@@ -1945,8 +1902,8 @@
           },
           {
             "name": "Break",
-            "start": "17:30",
-            "end": "17:45"
+            "start": "17:15",
+            "end": "17:30"
           }
         ],
         "blocks": []
@@ -2204,6 +2161,54 @@
           "stream": "Stream 3"
         },
         {
+          "name": "KI#24 (IoT)",
+          "duration_minutes": 90,
+          "start_time": "11:00",
+          "end_time": "12:30",
+          "day": "Wednesday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "Michael STARSINIC",
+          "agenda_item": "20.6.24",
+          "group_header": "Rel-20 SIDs and WIDs",
+          "description": "Study on Architecture for 6G System (FS_6G_ARC) - Analyse 5GS IoT features and solutions",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "20.6.24",
+              "matched_agenda_item": "20.6.24",
+              "description": "Study on Architecture for 6G System (FS_6G_ARC) - Analyse 5GS IoT features and solutions",
+              "hierarchy": [
+                {
+                  "agenda_item": "20",
+                  "description": "Rel-20 SIDs and WIDs"
+                },
+                {
+                  "agenda_item": "20.6",
+                  "description": null
+                },
+                {
+                  "agenda_item": "20.6.24",
+                  "description": "Study on Architecture for 6G System (FS_6G_ARC) - Analyse 5GS IoT features and solutions"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "stream2"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "KI#24 (IoT) (20.6.24)"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": [
+            1,
+            2
+          ],
+          "stream": ""
+        },
+        {
           "name": "KI#20 (Sensing)",
           "duration_minutes": 90,
           "start_time": "11:00",
@@ -2398,10 +2403,51 @@
           "stream": ""
         },
         {
+          "name": "Work planning, etc",
+          "duration_minutes": 75,
+          "start_time": "16:00",
+          "end_time": "17:15",
+          "day": "Wednesday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": "30.x",
+          "group_header": "Project Planning and Management",
+          "description": "Project Planning and Management",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "30.x",
+              "matched_agenda_item": "30",
+              "description": "Project Planning and Management",
+              "hierarchy": [
+                {
+                  "agenda_item": "30",
+                  "description": "Project Planning and Management"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "stream1"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "Work planning (30.x), etc",
+            "(Rel-21 5G-A revisions)"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": [
+            1,
+            2
+          ],
+          "stream": ""
+        },
+        {
           "name": "6G Single Stream",
           "duration_minutes": 90,
-          "start_time": "16:00",
-          "end_time": "17:30",
+          "start_time": "17:30",
+          "end_time": "19:00",
           "day": "Wednesday",
           "room_col_start": 2,
           "room_col_end": 3,
@@ -2431,43 +2477,51 @@
           ],
           "inferred_agenda_items": [],
           "email_details": [],
-          "part": null,
+          "part": [
+            1,
+            2
+          ],
           "stream": ""
         },
         {
-          "name": "Work planning, etc",
-          "duration_minutes": 75,
-          "start_time": "17:45",
+          "name": "6G Single Stream",
+          "duration_minutes": 90,
+          "start_time": "17:30",
           "end_time": "19:00",
           "day": "Wednesday",
           "room_col_start": 2,
           "room_col_end": 3,
           "chair": null,
-          "agenda_item": "30.x",
-          "group_header": "Project Planning and Management",
-          "description": "Project Planning and Management",
+          "agenda_item": "20.6.x",
+          "group_header": "Rel-20 SIDs and WIDs",
+          "description": "Rel-20 SIDs and WIDs",
           "agenda_descriptions": [
             {
-              "agenda_item": "30.x",
-              "matched_agenda_item": "30",
-              "description": "Project Planning and Management",
+              "agenda_item": "20.6.x",
+              "matched_agenda_item": "20",
+              "description": "Rel-20 SIDs and WIDs",
               "hierarchy": [
                 {
-                  "agenda_item": "30",
-                  "description": "Project Planning and Management"
+                  "agenda_item": "20",
+                  "description": "Rel-20 SIDs and WIDs"
                 }
               ]
             }
           ],
-          "room_ids": [],
-          "room_scope": "shared",
+          "room_ids": [
+            "stream1"
+          ],
+          "room_scope": "assigned",
           "notes": [
-            "Work planning (30.x), etc",
-            "(Rel-21 5G-A revisions)"
+            "6G Single Stream (20.6.x)",
+            "("
           ],
           "inferred_agenda_items": [],
           "email_details": [],
-          "part": null,
+          "part": [
+            2,
+            2
+          ],
           "stream": ""
         }
       ],
@@ -2500,8 +2554,8 @@
           },
           {
             "name": "Break",
-            "start": "17:30",
-            "end": "17:45"
+            "start": "17:15",
+            "end": "17:30"
           }
         ],
         "blocks": []
@@ -2652,8 +2706,8 @@
         {
           "name": "6G revisions (single stream)",
           "duration_minutes": 90,
-          "start_time": "16:00",
-          "end_time": "17:30",
+          "start_time": "17:30",
+          "end_time": "19:00",
           "day": "Thursday",
           "room_col_start": 2,
           "room_col_end": 3,
@@ -2662,8 +2716,10 @@
           "group_header": "",
           "description": null,
           "agenda_descriptions": [],
-          "room_ids": [],
-          "room_scope": "shared",
+          "room_ids": [
+            "stream1"
+          ],
+          "room_scope": "assigned",
           "notes": [
             "6G revisions (single stream)"
           ],
@@ -2702,7 +2758,7 @@
       "date": "2026-11-19",
       "timeline": {
         "start": "08:00",
-        "end": "17:30",
+        "end": "19:00",
         "slot_minutes": 5,
         "label_minutes": 30,
         "breaks": [
@@ -2725,6 +2781,11 @@
             "name": "Coffee",
             "start": "15:30",
             "end": "16:00"
+          },
+          {
+            "name": "Break",
+            "start": "17:15",
+            "end": "17:30"
           }
         ],
         "blocks": []
@@ -3109,20 +3170,20 @@
       }
     }
   ],
-  "source_file": "S2-2611637_SA2-178-Session Plan - r4.zip",
-  "generated_at": "2026-11-09 05:21",
+  "source_file": "S2-2611637_SA2-178-Session Plan - r6.zip",
+  "generated_at": "2026-11-12 09:02",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
-    "S2-2611637_SA2-178-Session Plan - r4.zip",
+    "S2-2611637_SA2-178-Session Plan - r6.zip",
     "agenda.csv"
   ],
   "source_labels": {
-    "S2-2611637_SA2-178-Session Plan - r4.zip": "Session Plan - r4",
+    "S2-2611637_SA2-178-Session Plan - r6.zip": "Session Plan - r6",
     "agenda.csv": "agenda.csv"
   },
   "source_urls": {
-    "S2-2611637_SA2-178-Session Plan - r4.zip": "https://www.3gpp.org/ftp/tsg_sa/WG2_Arch/TSGS2_178_Calgary_2026-11/INBOX/DRAFTS/_Session_Plan_Updates/S2-2611637_SA2-178-Session%20Plan%20-%20r4.zip"
+    "S2-2611637_SA2-178-Session Plan - r6.zip": "https://www.3gpp.org/ftp/tsg_sa/WG2_Arch/TSGS2_178_Calgary_2026-11/INBOX/DRAFTS/_Session_Plan_Updates/S2-2611637_SA2-178-Session%20Plan%20-%20r6.zip"
   },
   "source_mails": {},
   "timezone": "America/Edmonton",
