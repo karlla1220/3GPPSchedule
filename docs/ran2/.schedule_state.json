@@ -4,16 +4,15 @@
   "config_hash": "c6c411aa629f66fe98cdf07087bfd44847afbc5a4762e030c55fe7817b8286f4",
   "schedule": {
     "name": "R2_136_Schedule_v02.docx",
-    "url": "https://list.etsi.org/scripts/wa.exe?A3=ind2611b&L=3GPP_TSG_RAN_WG2&E=base64&P=9084278&B=--_004_MW4PR10MB6462C8A87BA39F24BC03E80EF07F2MW4PR10MB6462namp_&T=application%2Fvnd.openxmlformats-officedocument.wordprocessingml.document;%20name=%22R2_136_Schedule_v02.docx%22&N=R2_136_Schedule_v02.docx&attachment=q&XSS=3",
-    "uploaded_at": "2026-11-13T18:45:51+00:00",
-    "origin": "email",
-    "message_id": "58795608.2611b",
-    "sent": "2026-11-13T18:45:51+00:00",
-    "listing": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG2;58795608.2611b",
+    "url": "https://www.3gpp.org/ftp/tsg_ran/WG2_RL2/TSGR2_136/Agenda/R2_136_Schedule_v02.docx",
+    "uploaded_at": "2026-11-13 20:12",
     "size": 296117,
     "sha256": "428c3ffd22fc4f77b2f5a36107b5558d991e302e73b7a657a4ce742a85cb2672",
-    "content_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document; name=",
-    "content_disposition": "attachment; filename=\"R2_136_Schedule_v02.docx\""
+    "etag": "\"eca3760ab73dd1:0\"",
+    "last_modified": "Fri, 13 Nov 2026 20:12:58 GMT",
+    "ftp_modified": null,
+    "content_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    "content_disposition": null
   },
   "agenda": {
     "url": "https://www.3gpp.org/ftp/tsg_ran/WG2_RL2/TSGR2_136/Agenda/agenda.csv",
