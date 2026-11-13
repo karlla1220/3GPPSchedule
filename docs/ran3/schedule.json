@@ -154,18 +154,41 @@
           "room_col_start": 2,
           "room_col_end": 3,
           "chair": null,
-          "agenda_item": "10",
+          "agenda_item": "10.1, 10.3.1",
           "group_header": "Study on 6G Radio",
-          "description": "Study on 6G Radio",
+          "description": "General\nRAN-CN control plane for non-connectivity services",
           "agenda_descriptions": [
             {
-              "agenda_item": "10",
-              "matched_agenda_item": "10",
-              "description": "Study on 6G Radio",
+              "agenda_item": "10.1",
+              "matched_agenda_item": "10.1",
+              "description": "General",
               "hierarchy": [
                 {
                   "agenda_item": "10",
                   "description": "Study on 6G Radio"
+                },
+                {
+                  "agenda_item": "10.1",
+                  "description": "General"
+                }
+              ]
+            },
+            {
+              "agenda_item": "10.3.1",
+              "matched_agenda_item": "10.3.1",
+              "description": "RAN-CN control plane for non-connectivity services",
+              "hierarchy": [
+                {
+                  "agenda_item": "10",
+                  "description": "Study on 6G Radio"
+                },
+                {
+                  "agenda_item": "10.3",
+                  "description": "RAN-CN interface"
+                },
+                {
+                  "agenda_item": "10.3.1",
+                  "description": "RAN-CN control plane for non-connectivity services"
                 }
               ]
             }
@@ -175,7 +198,7 @@
           ],
           "room_scope": "assigned",
           "notes": [
-            "6G SI: AI 10"
+            "6G SI: AI 10.1, 10.3.1"
           ],
           "inferred_agenda_items": [],
           "email_details": [],
@@ -191,18 +214,26 @@
           "room_col_start": 2,
           "room_col_end": 3,
           "chair": null,
-          "agenda_item": "10",
+          "agenda_item": "10.3.1",
           "group_header": "Study on 6G Radio",
-          "description": "Study on 6G Radio",
+          "description": "RAN-CN control plane for non-connectivity services",
           "agenda_descriptions": [
             {
-              "agenda_item": "10",
-              "matched_agenda_item": "10",
-              "description": "Study on 6G Radio",
+              "agenda_item": "10.3.1",
+              "matched_agenda_item": "10.3.1",
+              "description": "RAN-CN control plane for non-connectivity services",
               "hierarchy": [
                 {
                   "agenda_item": "10",
                   "description": "Study on 6G Radio"
+                },
+                {
+                  "agenda_item": "10.3",
+                  "description": "RAN-CN interface"
+                },
+                {
+                  "agenda_item": "10.3.1",
+                  "description": "RAN-CN control plane for non-connectivity services"
                 }
               ]
             }
@@ -212,7 +243,7 @@
           ],
           "room_scope": "assigned",
           "notes": [
-            "6G SI: AI 10"
+            "6G SI: AI 10.3.1"
           ],
           "inferred_agenda_items": [],
           "email_details": [],
@@ -324,18 +355,26 @@
           "room_col_start": 2,
           "room_col_end": 3,
           "chair": null,
-          "agenda_item": "10",
+          "agenda_item": "10.3.2",
           "group_header": "Study on 6G Radio",
-          "description": "Study on 6G Radio",
+          "description": "RAN-CN control plane for connectivity services",
           "agenda_descriptions": [
             {
-              "agenda_item": "10",
-              "matched_agenda_item": "10",
-              "description": "Study on 6G Radio",
+              "agenda_item": "10.3.2",
+              "matched_agenda_item": "10.3.2",
+              "description": "RAN-CN control plane for connectivity services",
               "hierarchy": [
                 {
                   "agenda_item": "10",
                   "description": "Study on 6G Radio"
+                },
+                {
+                  "agenda_item": "10.3",
+                  "description": "RAN-CN interface"
+                },
+                {
+                  "agenda_item": "10.3.2",
+                  "description": "RAN-CN control plane for connectivity services"
                 }
               ]
             }
@@ -345,7 +384,7 @@
           ],
           "room_scope": "assigned",
           "notes": [
-            "6G SI: AI 10"
+            "6G SI: AI 10.3.2"
           ],
           "inferred_agenda_items": [],
           "email_details": [],
@@ -361,18 +400,22 @@
           "room_col_start": 2,
           "room_col_end": 3,
           "chair": null,
-          "agenda_item": "10",
+          "agenda_item": "10.2",
           "group_header": "Study on 6G Radio",
-          "description": "Study on 6G Radio",
+          "description": "Overall RAN architecture",
           "agenda_descriptions": [
             {
-              "agenda_item": "10",
-              "matched_agenda_item": "10",
-              "description": "Study on 6G Radio",
+              "agenda_item": "10.2",
+              "matched_agenda_item": "10.2",
+              "description": "Overall RAN architecture",
               "hierarchy": [
                 {
                   "agenda_item": "10",
                   "description": "Study on 6G Radio"
+                },
+                {
+                  "agenda_item": "10.2",
+                  "description": "Overall RAN architecture"
                 }
               ]
             }
@@ -382,7 +425,7 @@
           ],
           "room_scope": "assigned",
           "notes": [
-            "6G SI: AI 10"
+            "6G SI: AI 10.2"
           ],
           "inferred_agenda_items": [],
           "email_details": [],
@@ -398,18 +441,22 @@
           "room_col_start": 2,
           "room_col_end": 3,
           "chair": null,
-          "agenda_item": "10",
+          "agenda_item": "10.6",
           "group_header": "Study on 6G Radio",
-          "description": "Study on 6G Radio",
+          "description": "Paging",
           "agenda_descriptions": [
             {
-              "agenda_item": "10",
-              "matched_agenda_item": "10",
-              "description": "Study on 6G Radio",
+              "agenda_item": "10.6",
+              "matched_agenda_item": "10.6",
+              "description": "Paging",
               "hierarchy": [
                 {
                   "agenda_item": "10",
                   "description": "Study on 6G Radio"
+                },
+                {
+                  "agenda_item": "10.6",
+                  "description": "Paging"
                 }
               ]
             }
@@ -419,7 +466,7 @@
           ],
           "room_scope": "assigned",
           "notes": [
-            "6G SI: AI 10"
+            "6G SI: AI 10.6"
           ],
           "inferred_agenda_items": [],
           "email_details": [],
@@ -435,18 +482,22 @@
           "room_col_start": 2,
           "room_col_end": 3,
           "chair": null,
-          "agenda_item": "10",
+          "agenda_item": "10.8",
           "group_header": "Study on 6G Radio",
-          "description": "Study on 6G Radio",
+          "description": "Other functionalities",
           "agenda_descriptions": [
             {
-              "agenda_item": "10",
-              "matched_agenda_item": "10",
-              "description": "Study on 6G Radio",
+              "agenda_item": "10.8",
+              "matched_agenda_item": "10.8",
+              "description": "Other functionalities",
               "hierarchy": [
                 {
                   "agenda_item": "10",
                   "description": "Study on 6G Radio"
+                },
+                {
+                  "agenda_item": "10.8",
+                  "description": "Other functionalities"
                 }
               ]
             }
@@ -456,7 +507,7 @@
           ],
           "room_scope": "assigned",
           "notes": [
-            "6G SI: AI 10"
+            "6G SI: AI 10.8"
           ],
           "inferred_agenda_items": [],
           "email_details": [],
@@ -1356,20 +1407,20 @@
       }
     }
   ],
-  "source_file": "RAN3_134_agenda_20261106.docx",
-  "generated_at": "2026-11-06 08:41",
+  "source_file": "RAN3_134_agenda_20261113.docx",
+  "generated_at": "2026-11-13 10:03",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
-    "RAN3_134_agenda_20261106.docx",
+    "RAN3_134_agenda_20261113.docx",
     "agenda.csv"
   ],
   "source_labels": {
-    "RAN3_134_agenda_20261106.docx": "agenda_20261106",
+    "RAN3_134_agenda_20261113.docx": "agenda_20261113",
     "agenda.csv": "agenda.csv"
   },
   "source_urls": {
-    "RAN3_134_agenda_20261106.docx": "https://www.3gpp.org/ftp/tsg_ran/WG3_Iu/TSGR3_134/Inbox/Chairs_Notes/RAN3_134_agenda_20261106.docx",
+    "RAN3_134_agenda_20261113.docx": "https://www.3gpp.org/ftp/tsg_ran/WG3_Iu/TSGR3_134/Inbox/Chairs_Notes/RAN3_134_agenda_20261113.docx",
     "agenda.csv": "https://www.3gpp.org/ftp/tsg_ran/WG3_Iu/TSGR3_134/Agenda/agenda.csv"
   },
   "source_mails": {},

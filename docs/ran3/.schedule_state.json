@@ -1,15 +1,15 @@
 {
   "meeting_id": "ran3#134",
-  "version": "20261106.0.0000",
+  "version": "20261113.0.0000",
   "config_hash": "fdf80a0eb29dd64dbe8f8e0dbf1f6320eb2cbdcf53e080038977ac99443fe045",
   "schedule": {
-    "name": "RAN3_134_agenda_20261106.docx",
-    "url": "https://www.3gpp.org/ftp/tsg_ran/WG3_Iu/TSGR3_134/Inbox/Chairs_Notes/RAN3_134_agenda_20261106.docx",
-    "uploaded_at": "2026-11-06 14:29",
-    "size": 212890,
-    "sha256": "2a2b518eba4a36588ee5ba36e364a9e9c699ca1eabd4af60d5c0a7c44af47f65",
-    "etag": "\"ad1e7e3efb6ddd1:0\"",
-    "last_modified": "Fri, 06 Nov 2026 14:29:34 GMT",
+    "name": "RAN3_134_agenda_20261113.docx",
+    "url": "https://www.3gpp.org/ftp/tsg_ran/WG3_Iu/TSGR3_134/Inbox/Chairs_Notes/RAN3_134_agenda_20261113.docx",
+    "uploaded_at": "2026-11-13 15:59",
+    "size": 215197,
+    "sha256": "9d2c470292114efb990dbb6db92df5fa924d284073e1aa18f6f762092ae98aa7",
+    "etag": "\"fc797e88773dd1:0\"",
+    "last_modified": "Fri, 13 Nov 2026 15:59:04 GMT",
     "ftp_modified": null,
     "content_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
     "content_disposition": null
@@ -18,11 +18,11 @@
   "agenda": {
     "name": "agenda.csv",
     "url": "https://www.3gpp.org/ftp/tsg_ran/WG3_Iu/TSGR3_134/Agenda/agenda.csv",
-    "uploaded_at": "2026-11-10 05:43",
+    "uploaded_at": "2026-11-13 05:43",
     "size": 2828,
     "sha256": "447a91ff8195ef425d9a1c52311d1917b6058ca7eb602f76aae203367014ef0f",
-    "etag": "\"3459a45fd670dd1:0\"",
-    "last_modified": "Tue, 10 Nov 2026 05:43:12 GMT",
+    "etag": "\"9afee1e13173dd1:0\"",
+    "last_modified": "Fri, 13 Nov 2026 05:43:17 GMT",
     "ftp_modified": null,
     "content_type": "application/octet-stream",
     "content_disposition": null
