@@ -11165,7 +11165,7 @@
     }
   ],
   "source_file": "Draft RAN1#127 online and offline schedules - v02.docx",
-  "generated_at": "2026-11-13 03:21",
+  "generated_at": "2026-11-13 05:02",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
@@ -11604,7 +11604,57 @@
     ],
     "source_url": "https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_127/Inbox/Chair_notes/Draft%20Chair%20notes%20RAN1%23127_v02.docx",
     "source_name": "Draft Chair notes RAN1#127_v02.docx",
-    "session_notes": {},
+    "session_notes": {
+      "R1-2609118": {
+        "name": "draft_R1-2609118_Session Notes of AI 10.8_v00.docx",
+        "agenda_item": "10.8",
+        "changed_at": "2026-11-13T11:01:21+00:00",
+        "sha256": "65cb966cca859b81153988ceaa9f925bd309058dbef9ae978fc9f0985657e400",
+        "source_url": "https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_127/Inbox/Hiroki_notes/draft_R1-2609118_Session%20Notes%20of%20AI%2010.8_v00.docx"
+      },
+      "R1-2609120": {
+        "name": "draft_R1-2609120_Session Notes of AI 10.5.4_v00.docx",
+        "agenda_item": "10.5.4",
+        "changed_at": "2026-11-13T11:01:20+00:00",
+        "sha256": "939e9d59954e6286036f31e2c53b13941d5f1b73c6c87909ddb20bf8a57efb6a",
+        "source_url": "https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_127/Inbox/Hiroki_notes/draft_R1-2609120_Session%20Notes%20of%20AI%2010.5.4_v00.docx"
+      },
+      "R1-2609124": {
+        "name": "draft_R1-2609124_Session Notes of AI 10.2.1_v00.docx",
+        "agenda_item": "10.2.1",
+        "changed_at": "2026-11-13T11:01:20+00:00",
+        "sha256": "ec38b058a5f0a2bbe59ce3190f7e6fabe1325dbcae95d7367d23ad07f7244c03",
+        "source_url": "https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_127/Inbox/Hiroki_notes/draft_R1-2609124_Session%20Notes%20of%20AI%2010.2.1_v00.docx"
+      },
+      "R1-2609128": {
+        "name": "draft_R1-2609128_Session Notes of AI 9.3_v00.docx",
+        "agenda_item": "9.3",
+        "changed_at": "2026-11-13T11:01:21+00:00",
+        "sha256": "aee5409cd4123eecf64c76d2540744df2214004c255a4f280ad829ebe8652485",
+        "source_url": "https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_127/Inbox/Hiroki_notes/draft_R1-2609128_Session%20Notes%20of%20AI%209.3_v00.docx"
+      },
+      "R1-2609132": {
+        "name": "draft_R1-2609132_Session Notes of AI 7_v00.docx",
+        "agenda_item": "7",
+        "changed_at": "2026-11-13T11:01:20+00:00",
+        "sha256": "8f37941b8d044d2f884fc4d0405e8b37b66762ecb1d52ce12f02d300c51c863f",
+        "source_url": "https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_127/Inbox/Hiroki_notes/draft_R1-2609132_Session%20Notes%20of%20AI%207_v00.docx"
+      },
+      "R1-2610805": {
+        "name": "draft_R1-2610805_Session Notes of AI 8.1_v00.docx",
+        "agenda_item": "8.1",
+        "changed_at": "2026-11-13T11:01:21+00:00",
+        "sha256": "0b98164600dacacb87cd379d6171a07dbea82e7c2395b1164210434d58bde499",
+        "source_url": "https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_127/Inbox/Hiroki_notes/draft_R1-2610805_Session%20Notes%20of%20AI%208.1_v00.docx"
+      },
+      "R1-2610807": {
+        "name": "draft_R1-2610807_Session Notes of AI 11_v00.docx",
+        "agenda_item": "11",
+        "changed_at": "2026-11-13T11:01:21+00:00",
+        "sha256": "968d760ee38f5b1f529ec2d312d18ac5a1efea46f9f7e6dfbe3554e1a40f49f3",
+        "source_url": "https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_127/Inbox/Hiroki_notes/draft_R1-2610807_Session%20Notes%20of%20AI%2011_v00.docx"
+      }
+    },
     "document_changed_at": "2026-11-11T10:57:29+00:00",
     "sections": {
       "1": {
@@ -11852,13 +11902,14 @@
           "be2f5796f732"
         ],
         "sources": {
-          "chair": "e49d045b28a9"
+          "chair": "e49d045b28a9",
+          "R1-2609132": "e49d045b28a9"
         },
         "change": "initial",
         "added": [],
         "changed_at": "2026-11-11T10:57:29+00:00",
         "changed_in": "Draft Chair notes RAN1#127_v02.docx",
-        "file": "agreements/7da12d4f5a7f47ea2c33.html"
+        "file": "agreements/060192eafe6a5f9e619b.html"
       },
       "8": {
         "title": "Maintenance on Rel-19 NR and E-UTRA",
@@ -11867,7 +11918,8 @@
           "219f81b28842"
         ],
         "sources": {
-          "chair": "aad5e826dc59"
+          "chair": "aad5e826dc59",
+          "R1-2610805": "aad5e826dc59"
         },
         "change": "initial",
         "added": [],
@@ -11877,7 +11929,7 @@
       },
       "8.1": {
         "title": "Maintenance on all items of Rel-19 NR and E-UTRA",
-        "excluded_tdoc_rows": 6,
+        "excluded_tdoc_rows": 46,
         "blocks": [
           "c518792d59a9",
           "e017ac1d8d44",
@@ -11904,16 +11956,42 @@
           "3bb3cff26a61",
           "e3a28fa41d79",
           "de99062dce50",
-          "347dd11bbcd9"
+          "347dd11bbcd9",
+          "99609bd8c73d",
+          "ed96c3b23f46",
+          "383c439467e9",
+          "0faa266f2431",
+          "0399fbcb1816",
+          "8100b891e68f",
+          "b2e219aa6e15",
+          "0faa266f2431",
+          "09a988778c70",
+          "c9df7a3f956a",
+          "fd5b4cb043ee",
+          "0faa266f2431"
         ],
         "sources": {
-          "chair": "86915bbbdbda"
+          "chair": "86915bbbdbda",
+          "R1-2610805": "f56eaaf210d1"
         },
-        "change": "initial",
-        "added": [],
-        "changed_at": "2026-11-11T10:57:29+00:00",
-        "changed_in": "Draft Chair notes RAN1#127_v02.docx",
-        "file": "agreements/8a39672be21b5ab6a28e.html"
+        "change": "updated",
+        "added": [
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          32,
+          33,
+          34,
+          35,
+          36,
+          37
+        ],
+        "changed_at": "2026-11-13T11:01:21+00:00",
+        "changed_in": "draft_R1-2610805_Session Notes of AI 8.1_v00.docx",
+        "file": "agreements/95398c3a1d07b2eb968e.html"
       },
       "9": {
         "title": "Release 20 NR",
@@ -12014,7 +12092,8 @@
           "b6ff4bdc464d"
         ],
         "sources": {
-          "chair": "177c4494c690"
+          "chair": "177c4494c690",
+          "R1-2609128": "177c4494c690"
         },
         "change": "initial",
         "added": [],
@@ -12029,13 +12108,14 @@
           "9e89e69f5f99"
         ],
         "sources": {
-          "chair": "da1e39b6e4fd"
+          "chair": "da1e39b6e4fd",
+          "R1-2609128": "da1e39b6e4fd"
         },
         "change": "initial",
         "added": [],
         "changed_at": "2026-11-11T10:57:29+00:00",
         "changed_in": "Draft Chair notes RAN1#127_v02.docx",
-        "file": "agreements/05d30f37c12e17d94f22.html"
+        "file": "agreements/c75d0f89f4acda3f73c8.html"
       },
       "9.3.2": {
         "title": "D2R signals, channels, waveform and procedures",
@@ -12044,13 +12124,14 @@
           "445ca829ee86"
         ],
         "sources": {
-          "chair": "1e62364262b6"
+          "chair": "1e62364262b6",
+          "R1-2609128": "1e62364262b6"
         },
         "change": "initial",
         "added": [],
         "changed_at": "2026-11-11T10:57:29+00:00",
         "changed_in": "Draft Chair notes RAN1#127_v02.docx",
-        "file": "agreements/a4a830a18bdd378de179.html"
+        "file": "agreements/e393590088db68db17a6.html"
       },
       "9.3.3": {
         "title": "Other procedures",
@@ -12060,13 +12141,14 @@
           "e10ac19d46d0"
         ],
         "sources": {
-          "chair": "46868e13b745"
+          "chair": "46868e13b745",
+          "R1-2609128": "46868e13b745"
         },
         "change": "initial",
         "added": [],
         "changed_at": "2026-11-11T10:57:29+00:00",
         "changed_in": "Draft Chair notes RAN1#127_v02.docx",
-        "file": "agreements/f8ec35ffce5a33cb607a.html"
+        "file": "agreements/bc59c0d8c9bcec1f4918.html"
       },
       "9.4": {
         "title": "GNSS resilient NR-NTN operation",
@@ -12193,7 +12275,8 @@
           "7ad24cbf96c4"
         ],
         "sources": {
-          "chair": "10cf2108c5cc"
+          "chair": "10cf2108c5cc",
+          "R1-2609124": "10cf2108c5cc"
         },
         "change": "initial",
         "added": [],
@@ -12208,13 +12291,14 @@
           "c1e2bf5fcfc7"
         ],
         "sources": {
-          "chair": "26e720c9c145"
+          "chair": "26e720c9c145",
+          "R1-2609124": "26e720c9c145"
         },
         "change": "initial",
         "added": [],
         "changed_at": "2026-11-11T10:57:29+00:00",
         "changed_in": "Draft Chair notes RAN1#127_v02.docx",
-        "file": "agreements/72a1d324d0e2ae4cfb23.html"
+        "file": "agreements/28b1e1eefdfa4cb86965.html"
       },
       "10.3": {
         "title": "Channel coding and modulation for 6GR interface",
@@ -12550,7 +12634,8 @@
           "fa914b9b2a68"
         ],
         "sources": {
-          "chair": "21ea85e7a93f"
+          "chair": "21ea85e7a93f",
+          "R1-2609120": "21ea85e7a93f"
         },
         "change": "initial",
         "added": [],
@@ -12567,13 +12652,14 @@
           "334907737e61"
         ],
         "sources": {
-          "chair": "ed41f2d5fafc"
+          "chair": "ed41f2d5fafc",
+          "R1-2609120": "ed41f2d5fafc"
         },
         "change": "initial",
         "added": [],
         "changed_at": "2026-11-11T10:57:29+00:00",
         "changed_in": "Draft Chair notes RAN1#127_v02.docx",
-        "file": "agreements/8d7d3af7a0e005a5acbb.html"
+        "file": "agreements/c5b88ad93addc3177cbc.html"
       },
       "10.5.4.2": {
         "title": "Downlink and uplink transmission without dynamic scheduling",
@@ -12584,13 +12670,14 @@
           "334907737e61"
         ],
         "sources": {
-          "chair": "dfda3fb84f50"
+          "chair": "dfda3fb84f50",
+          "R1-2609120": "dfda3fb84f50"
         },
         "change": "initial",
         "added": [],
         "changed_at": "2026-11-11T10:57:29+00:00",
         "changed_in": "Draft Chair notes RAN1#127_v02.docx",
-        "file": "agreements/2ffb35cf2c3762dafa40.html"
+        "file": "agreements/fac0071db65680db0142.html"
       },
       "10.5.4.3": {
         "title": "HARQ related Aspects",
@@ -12601,13 +12688,14 @@
           "334907737e61"
         ],
         "sources": {
-          "chair": "0095f4e1f6a0"
+          "chair": "0095f4e1f6a0",
+          "R1-2609120": "0095f4e1f6a0"
         },
         "change": "initial",
         "added": [],
         "changed_at": "2026-11-11T10:57:29+00:00",
         "changed_in": "Draft Chair notes RAN1#127_v02.docx",
-        "file": "agreements/c1d89e729e1fcefaa48a.html"
+        "file": "agreements/29db0005fb76c972d63f.html"
       },
       "10.5.4.4": {
         "title": "Handling of potential multiple uplink transmissions",
@@ -12618,13 +12706,14 @@
           "334907737e61"
         ],
         "sources": {
-          "chair": "363da63e8471"
+          "chair": "363da63e8471",
+          "R1-2609120": "363da63e8471"
         },
         "change": "initial",
         "added": [],
         "changed_at": "2026-11-11T10:57:29+00:00",
         "changed_in": "Draft Chair notes RAN1#127_v02.docx",
-        "file": "agreements/1cb424b882ec885e8745.html"
+        "file": "agreements/441152cd6fe4808127a0.html"
       },
       "10.5.5": {
         "title": "Other physical layer signals, channels and procedure",
@@ -12776,7 +12865,8 @@
           "13f98ac71c76"
         ],
         "sources": {
-          "chair": "d64efc82a88d"
+          "chair": "d64efc82a88d",
+          "R1-2609118": "d64efc82a88d"
         },
         "change": "initial",
         "added": [],
@@ -12793,7 +12883,8 @@
           "334907737e61"
         ],
         "sources": {
-          "chair": "6991aa173550"
+          "chair": "6991aa173550",
+          "R1-2609118": "6991aa173550"
         },
         "change": "initial",
         "added": [],
@@ -12810,7 +12901,8 @@
           "334907737e61"
         ],
         "sources": {
-          "chair": "601ec80c3e40"
+          "chair": "601ec80c3e40",
+          "R1-2609118": "601ec80c3e40"
         },
         "change": "initial",
         "added": [],
@@ -12827,7 +12919,8 @@
           "334907737e61"
         ],
         "sources": {
-          "chair": "d9f29682bc6d"
+          "chair": "d9f29682bc6d",
+          "R1-2609118": "d9f29682bc6d"
         },
         "change": "initial",
         "added": [],
@@ -12846,7 +12939,8 @@
           "ecebffc1a4fe"
         ],
         "sources": {
-          "chair": "ddbd50007521"
+          "chair": "ddbd50007521",
+          "R1-2610807": "f953a97707c8"
         },
         "change": "initial",
         "added": [],
@@ -12865,7 +12959,18 @@
         "changed_in": "Draft Chair notes RAN1#127_v02.docx"
       }
     },
-    "retained_files": []
+    "retained_files": [
+      "agreements/05d30f37c12e17d94f22.html",
+      "agreements/1cb424b882ec885e8745.html",
+      "agreements/2ffb35cf2c3762dafa40.html",
+      "agreements/72a1d324d0e2ae4cfb23.html",
+      "agreements/7da12d4f5a7f47ea2c33.html",
+      "agreements/8a39672be21b5ab6a28e.html",
+      "agreements/8d7d3af7a0e005a5acbb.html",
+      "agreements/a4a830a18bdd378de179.html",
+      "agreements/c1d89e729e1fcefaa48a.html",
+      "agreements/f8ec35ffce5a33cb607a.html"
+    ]
   },
   "email_informal": {}
 }
