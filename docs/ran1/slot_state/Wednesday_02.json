@@ -2,7 +2,8 @@
   "day": "Wednesday",
   "time_block_index": 2,
   "source_hashes": {
-    "Main Schedule": "b125992dc2b26de7"
+    "Main Schedule": "b125992dc2b26de7",
+    "Hiroki's schedule": "02a900a6c80ea4b4"
   },
   "merged_sessions": [
     {
@@ -345,7 +346,8 @@
       "group_header": "6GR",
       "agenda_item": "10.2.1",
       "source_cells": [
-        "c52ab9e"
+        "c52ab9e",
+        "c7701cc"
       ],
       "description": "Waveform",
       "agenda_descriptions": [
@@ -375,14 +377,116 @@
     },
     {
       "room_name": "RAN1_brk2",
-      "name": "A-IoT Phase2",
-      "duration_minutes": 120,
+      "name": "9.3.1",
+      "duration_minutes": 40,
       "specified_start_time": null,
-      "chair": null,
-      "group_header": "R20",
-      "agenda_item": null,
+      "chair": "Hiroki",
+      "group_header": "R20 / A-IoT Phase2",
+      "agenda_item": "9.3.1",
       "source_cells": [
-        "c52ab9e"
+        "c52ab9e",
+        "c7701cc"
+      ],
+      "description": "R2D signals, channels, waveform and procedures",
+      "agenda_descriptions": [
+        {
+          "agenda_item": "9.3.1",
+          "matched_agenda_item": "9.3.1",
+          "description": "R2D signals, channels, waveform and procedures",
+          "hierarchy": [
+            {
+              "agenda_item": "9",
+              "description": "Release 20 NR",
+              "has_description": true
+            },
+            {
+              "agenda_item": "9.3",
+              "description": "Solutions for Ambient IoT (Internet of Things) in NR Phase 2",
+              "has_description": true
+            },
+            {
+              "agenda_item": "9.3.1",
+              "description": "R2D signals, channels, waveform and procedures",
+              "has_description": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "room_name": "RAN1_brk2",
+      "name": "9.3.2",
+      "duration_minutes": 30,
+      "specified_start_time": null,
+      "chair": "Hiroki",
+      "group_header": "R20 / A-IoT Phase2",
+      "agenda_item": "9.3.2",
+      "source_cells": [
+        "c52ab9e",
+        "c7701cc"
+      ],
+      "description": "D2R signals, channels, waveform and procedures",
+      "agenda_descriptions": [
+        {
+          "agenda_item": "9.3.2",
+          "matched_agenda_item": "9.3.2",
+          "description": "D2R signals, channels, waveform and procedures",
+          "hierarchy": [
+            {
+              "agenda_item": "9",
+              "description": "Release 20 NR",
+              "has_description": true
+            },
+            {
+              "agenda_item": "9.3",
+              "description": "Solutions for Ambient IoT (Internet of Things) in NR Phase 2",
+              "has_description": true
+            },
+            {
+              "agenda_item": "9.3.2",
+              "description": "D2R signals, channels, waveform and procedures",
+              "has_description": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "room_name": "RAN1_brk2",
+      "name": "9.3.3",
+      "duration_minutes": 50,
+      "specified_start_time": null,
+      "chair": "Hiroki",
+      "group_header": "R20 / A-IoT Phase2",
+      "agenda_item": "9.3.3",
+      "source_cells": [
+        "c52ab9e",
+        "c7701cc"
+      ],
+      "description": "Other procedures",
+      "agenda_descriptions": [
+        {
+          "agenda_item": "9.3.3",
+          "matched_agenda_item": "9.3.3",
+          "description": "Other procedures",
+          "hierarchy": [
+            {
+              "agenda_item": "9",
+              "description": "Release 20 NR",
+              "has_description": true
+            },
+            {
+              "agenda_item": "9.3",
+              "description": "Solutions for Ambient IoT (Internet of Things) in NR Phase 2",
+              "has_description": true
+            },
+            {
+              "agenda_item": "9.3.3",
+              "description": "Other procedures",
+              "has_description": true
+            }
+          ]
+        }
       ]
     },
     {
@@ -749,7 +853,7 @@
       ]
     }
   ],
-  "merged_at": "2026-11-11T11:02:10.708616+00:00",
+  "merged_at": "2026-11-13T11:21:54.349774+00:00",
   "meeting_id": "ran1#127",
   "schema_version": 3,
   "source_entries": {
@@ -783,6 +887,14 @@
         "cell_text": "Sorouri (30)\n6GR\n10.3.1 Channel coding (30)\nHiroki (120)\n6GR (120)\n.10.5.4.3 (30)\n.10.5.4.4 (30)\n.10.5.4.1 (60)",
         "fallback_start_time": null,
         "cell_id": "cce0d71"
+      }
+    ],
+    "Hiroki's schedule": [
+      {
+        "room_label": "Hiroki: Brk2",
+        "cell_text": "6GR (30)\n10.2.1 Waveform (30)\n\nR20 (120)\nA-IoT Phase2 (120)\n 9.3.1 (40)\n9.3.2 (30)\n9.3.3 (50)",
+        "fallback_start_time": null,
+        "cell_id": "c7701cc"
       }
     ]
   },

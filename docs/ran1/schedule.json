@@ -1881,22 +1881,22 @@
           "stream": ""
         },
         {
-          "name": "10.8 Sensing",
-          "duration_minutes": 120,
+          "name": "10.8.2",
+          "duration_minutes": 60,
           "start_time": "17:00",
-          "end_time": "19:00",
+          "end_time": "18:00",
           "day": "Monday",
           "room_col_start": 4,
           "room_col_end": 5,
-          "chair": null,
-          "agenda_item": "10.8",
+          "chair": "Hiroki",
+          "agenda_item": "10.8.2",
           "group_header": "6GR",
-          "description": "ISAC",
+          "description": "Aspects of integration with communication",
           "agenda_descriptions": [
             {
-              "agenda_item": "10.8",
-              "matched_agenda_item": "10.8",
-              "description": "ISAC",
+              "agenda_item": "10.8.2",
+              "matched_agenda_item": "10.8.2",
+              "description": "Aspects of integration with communication",
               "hierarchy": [
                 {
                   "agenda_item": "10",
@@ -1906,6 +1906,55 @@
                 {
                   "agenda_item": "10.8",
                   "description": "ISAC",
+                  "has_description": true
+                },
+                {
+                  "agenda_item": "10.8.2",
+                  "description": "Aspects of integration with communication",
+                  "has_description": true
+                }
+              ]
+            }
+          ],
+          "room_ids": [],
+          "room_scope": "assigned",
+          "notes": [],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": null,
+          "stream": ""
+        },
+        {
+          "name": "10.8.3",
+          "duration_minutes": 60,
+          "start_time": "18:00",
+          "end_time": "19:00",
+          "day": "Monday",
+          "room_col_start": 4,
+          "room_col_end": 5,
+          "chair": "Hiroki",
+          "agenda_item": "10.8.3",
+          "group_header": "6GR",
+          "description": "Waveform and frame structure",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "10.8.3",
+              "matched_agenda_item": "10.8.3",
+              "description": "Waveform and frame structure",
+              "hierarchy": [
+                {
+                  "agenda_item": "10",
+                  "description": "Rel-20 Study of 6GR",
+                  "has_description": true
+                },
+                {
+                  "agenda_item": "10.8",
+                  "description": "ISAC",
+                  "has_description": true
+                },
+                {
+                  "agenda_item": "10.8.3",
+                  "description": "Waveform and frame structure",
                   "has_description": true
                 }
               ]
@@ -2620,22 +2669,22 @@
           "stream": ""
         },
         {
-          "name": "10.8 Sensing",
-          "duration_minutes": 60,
+          "name": "10.8.1",
+          "duration_minutes": 30,
           "start_time": "08:00",
-          "end_time": "09:00",
+          "end_time": "08:30",
           "day": "Tuesday",
           "room_col_start": 4,
           "room_col_end": 5,
-          "chair": null,
-          "agenda_item": "10.8",
+          "chair": "Hiroki",
+          "agenda_item": "10.8.1",
           "group_header": "6GR",
-          "description": "ISAC",
+          "description": "Evaluations",
           "agenda_descriptions": [
             {
-              "agenda_item": "10.8",
-              "matched_agenda_item": "10.8",
-              "description": "ISAC",
+              "agenda_item": "10.8.1",
+              "matched_agenda_item": "10.8.1",
+              "description": "Evaluations",
               "hierarchy": [
                 {
                   "agenda_item": "10",
@@ -2645,6 +2694,11 @@
                 {
                   "agenda_item": "10.8",
                   "description": "ISAC",
+                  "has_description": true
+                },
+                {
+                  "agenda_item": "10.8.1",
+                  "description": "Evaluations",
                   "has_description": true
                 }
               ]
@@ -2657,7 +2711,7 @@
           "email_details": [
             {
               "kind": "session",
-              "session": "Tue 08:00-09:00 Brk2",
+              "session": "Tue 08:00-08:30 Brk2",
               "quote": "Really appreciate if you can provide your inputs by Monday Oct. 12th 19:00 local time, considering that we will have online session on Tuesday morning.",
               "mode": "online",
               "summary": "Online session on Tuesday morning; inputs due Monday 19:00",
@@ -2677,30 +2731,62 @@
           "stream": ""
         },
         {
-          "name": "TEI, AI 7/8.1",
-          "duration_minutes": 50,
-          "start_time": "09:00",
-          "end_time": "09:50",
+          "name": "10.8.3",
+          "duration_minutes": 30,
+          "start_time": "08:30",
+          "end_time": "09:00",
           "day": "Tuesday",
           "room_col_start": 4,
           "room_col_end": 5,
-          "chair": null,
-          "agenda_item": "7/8.1",
-          "group_header": "",
-          "description": "Pre-Rel-19 NR Maintenance",
+          "chair": "Hiroki",
+          "agenda_item": "10.8.3",
+          "group_header": "6GR",
+          "description": "Waveform and frame structure",
           "agenda_descriptions": [
             {
-              "agenda_item": "7",
-              "matched_agenda_item": "7",
-              "description": "Pre-Rel-19 NR Maintenance",
+              "agenda_item": "10.8.3",
+              "matched_agenda_item": "10.8.3",
+              "description": "Waveform and frame structure",
               "hierarchy": [
                 {
-                  "agenda_item": "7",
-                  "description": "Pre-Rel-19 NR Maintenance",
+                  "agenda_item": "10",
+                  "description": "Rel-20 Study of 6GR",
+                  "has_description": true
+                },
+                {
+                  "agenda_item": "10.8",
+                  "description": "ISAC",
+                  "has_description": true
+                },
+                {
+                  "agenda_item": "10.8.3",
+                  "description": "Waveform and frame structure",
                   "has_description": true
                 }
               ]
-            },
+            }
+          ],
+          "room_ids": [],
+          "room_scope": "assigned",
+          "notes": [],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": null,
+          "stream": ""
+        },
+        {
+          "name": "8.1 Duplex",
+          "duration_minutes": 25,
+          "start_time": "09:00",
+          "end_time": "09:25",
+          "day": "Tuesday",
+          "room_col_start": 4,
+          "room_col_end": 5,
+          "chair": "Hiroki",
+          "agenda_item": "8.1",
+          "group_header": "TEI",
+          "description": "Maintenance on all items of Rel-19 NR and E-UTRA",
+          "agenda_descriptions": [
             {
               "agenda_item": "8.1",
               "matched_agenda_item": "8.1",
@@ -2728,6 +2814,79 @@
           "stream": ""
         },
         {
+          "name": "8.1 Mobility/LP-WUS",
+          "duration_minutes": 15,
+          "start_time": "09:25",
+          "end_time": "09:40",
+          "day": "Tuesday",
+          "room_col_start": 4,
+          "room_col_end": 5,
+          "chair": "Hiroki",
+          "agenda_item": "8.1",
+          "group_header": "TEI",
+          "description": "Maintenance on all items of Rel-19 NR and E-UTRA",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "8.1",
+              "matched_agenda_item": "8.1",
+              "description": "Maintenance on all items of Rel-19 NR and E-UTRA",
+              "hierarchy": [
+                {
+                  "agenda_item": "8",
+                  "description": "Maintenance on Rel-19 NR and E-UTRA",
+                  "has_description": true
+                },
+                {
+                  "agenda_item": "8.1",
+                  "description": "Maintenance on all items of Rel-19 NR and E-UTRA",
+                  "has_description": true
+                }
+              ]
+            }
+          ],
+          "room_ids": [],
+          "room_scope": "assigned",
+          "notes": [],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": null,
+          "stream": ""
+        },
+        {
+          "name": "7 pre-Rel-19 CRs",
+          "duration_minutes": 10,
+          "start_time": "09:40",
+          "end_time": "09:50",
+          "day": "Tuesday",
+          "room_col_start": 4,
+          "room_col_end": 5,
+          "chair": "Hiroki",
+          "agenda_item": "7",
+          "group_header": "TEI",
+          "description": "Pre-Rel-19 NR Maintenance",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "7",
+              "matched_agenda_item": "7",
+              "description": "Pre-Rel-19 NR Maintenance",
+              "hierarchy": [
+                {
+                  "agenda_item": "7",
+                  "description": "Pre-Rel-19 NR Maintenance",
+                  "has_description": true
+                }
+              ]
+            }
+          ],
+          "room_ids": [],
+          "room_scope": "assigned",
+          "notes": [],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": null,
+          "stream": ""
+        },
+        {
           "name": "UE feature",
           "duration_minutes": 40,
           "start_time": "09:50",
@@ -2735,7 +2894,7 @@
           "day": "Tuesday",
           "room_col_start": 4,
           "room_col_end": 5,
-          "chair": null,
+          "chair": "Hiroki",
           "agenda_item": null,
           "group_header": "R20",
           "description": null,
@@ -3170,22 +3329,22 @@
           "stream": ""
         },
         {
-          "name": "10.8 Sensing",
+          "name": "10.8.2",
           "duration_minutes": 90,
           "start_time": "11:00",
           "end_time": "12:30",
           "day": "Tuesday",
           "room_col_start": 4,
           "room_col_end": 5,
-          "chair": null,
-          "agenda_item": "10.8",
+          "chair": "Hiroki",
+          "agenda_item": "10.8.2",
           "group_header": "6GR",
-          "description": "ISAC",
+          "description": "Aspects of integration with communication",
           "agenda_descriptions": [
             {
-              "agenda_item": "10.8",
-              "matched_agenda_item": "10.8",
-              "description": "ISAC",
+              "agenda_item": "10.8.2",
+              "matched_agenda_item": "10.8.2",
+              "description": "Aspects of integration with communication",
               "hierarchy": [
                 {
                   "agenda_item": "10",
@@ -3195,6 +3354,11 @@
                 {
                   "agenda_item": "10.8",
                   "description": "ISAC",
+                  "has_description": true
+                },
+                {
+                  "agenda_item": "10.8.2",
+                  "description": "Aspects of integration with communication",
                   "has_description": true
                 }
               ]
@@ -3823,24 +3987,133 @@
           "stream": ""
         },
         {
-          "name": "A-IoT Phase2",
-          "duration_minutes": 120,
+          "name": "9.3.1",
+          "duration_minutes": 40,
           "start_time": "14:00",
+          "end_time": "14:40",
+          "day": "Tuesday",
+          "room_col_start": 4,
+          "room_col_end": 5,
+          "chair": "Hiroki",
+          "agenda_item": "9.3.1",
+          "group_header": "R20",
+          "description": "R2D signals, channels, waveform and procedures",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "9.3.1",
+              "matched_agenda_item": "9.3.1",
+              "description": "R2D signals, channels, waveform and procedures",
+              "hierarchy": [
+                {
+                  "agenda_item": "9",
+                  "description": "Release 20 NR",
+                  "has_description": true
+                },
+                {
+                  "agenda_item": "9.3",
+                  "description": "Solutions for Ambient IoT (Internet of Things) in NR Phase 2",
+                  "has_description": true
+                },
+                {
+                  "agenda_item": "9.3.1",
+                  "description": "R2D signals, channels, waveform and procedures",
+                  "has_description": true
+                }
+              ]
+            }
+          ],
+          "room_ids": [],
+          "room_scope": "assigned",
+          "notes": [],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": null,
+          "stream": ""
+        },
+        {
+          "name": "9.3.2",
+          "duration_minutes": 30,
+          "start_time": "14:40",
+          "end_time": "15:10",
+          "day": "Tuesday",
+          "room_col_start": 4,
+          "room_col_end": 5,
+          "chair": "Hiroki",
+          "agenda_item": "9.3.2",
+          "group_header": "R20",
+          "description": "D2R signals, channels, waveform and procedures",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "9.3.2",
+              "matched_agenda_item": "9.3.2",
+              "description": "D2R signals, channels, waveform and procedures",
+              "hierarchy": [
+                {
+                  "agenda_item": "9",
+                  "description": "Release 20 NR",
+                  "has_description": true
+                },
+                {
+                  "agenda_item": "9.3",
+                  "description": "Solutions for Ambient IoT (Internet of Things) in NR Phase 2",
+                  "has_description": true
+                },
+                {
+                  "agenda_item": "9.3.2",
+                  "description": "D2R signals, channels, waveform and procedures",
+                  "has_description": true
+                }
+              ]
+            }
+          ],
+          "room_ids": [],
+          "room_scope": "assigned",
+          "notes": [],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": null,
+          "stream": ""
+        },
+        {
+          "name": "9.3.3",
+          "duration_minutes": 50,
+          "start_time": "15:10",
           "end_time": "16:00",
           "day": "Tuesday",
           "room_col_start": 4,
           "room_col_end": 5,
-          "chair": null,
-          "agenda_item": null,
+          "chair": "Hiroki",
+          "agenda_item": "9.3.3",
           "group_header": "R20",
-          "description": null,
-          "agenda_descriptions": [],
+          "description": "Other procedures",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "9.3.3",
+              "matched_agenda_item": "9.3.3",
+              "description": "Other procedures",
+              "hierarchy": [
+                {
+                  "agenda_item": "9",
+                  "description": "Release 20 NR",
+                  "has_description": true
+                },
+                {
+                  "agenda_item": "9.3",
+                  "description": "Solutions for Ambient IoT (Internet of Things) in NR Phase 2",
+                  "has_description": true
+                },
+                {
+                  "agenda_item": "9.3.3",
+                  "description": "Other procedures",
+                  "has_description": true
+                }
+              ]
+            }
+          ],
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": [
-            "9.3"
-          ],
+          "inferred_agenda_items": [],
           "email_details": [],
           "part": null,
           "stream": ""
@@ -3853,7 +4126,7 @@
           "day": "Tuesday",
           "room_col_start": 4,
           "room_col_end": 5,
-          "chair": null,
+          "chair": "Hiroki",
           "agenda_item": "10.2.1",
           "group_header": "6GR",
           "description": "Waveform",
@@ -5584,30 +5857,91 @@
           "stream": ""
         },
         {
-          "name": "T TEI, AI 7/8.1",
-          "duration_minutes": 50,
+          "name": "11 TEI20",
+          "duration_minutes": 10,
           "start_time": "08:00",
+          "end_time": "08:10",
+          "day": "Wednesday",
+          "room_col_start": 4,
+          "room_col_end": 5,
+          "chair": "Hiroki",
+          "agenda_item": "11",
+          "group_header": "TEI",
+          "description": "TEI",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "11",
+              "matched_agenda_item": "11",
+              "description": "TEI",
+              "hierarchy": [
+                {
+                  "agenda_item": "11",
+                  "description": "TEI",
+                  "has_description": true
+                }
+              ]
+            }
+          ],
+          "room_ids": [],
+          "room_scope": "assigned",
+          "notes": [],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": null,
+          "stream": ""
+        },
+        {
+          "name": "8.1 Channel model",
+          "duration_minutes": 15,
+          "start_time": "08:10",
+          "end_time": "08:25",
+          "day": "Wednesday",
+          "room_col_start": 4,
+          "room_col_end": 5,
+          "chair": "Hiroki",
+          "agenda_item": "8.1",
+          "group_header": "TEI",
+          "description": "Maintenance on all items of Rel-19 NR and E-UTRA",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "8.1",
+              "matched_agenda_item": "8.1",
+              "description": "Maintenance on all items of Rel-19 NR and E-UTRA",
+              "hierarchy": [
+                {
+                  "agenda_item": "8",
+                  "description": "Maintenance on Rel-19 NR and E-UTRA",
+                  "has_description": true
+                },
+                {
+                  "agenda_item": "8.1",
+                  "description": "Maintenance on all items of Rel-19 NR and E-UTRA",
+                  "has_description": true
+                }
+              ]
+            }
+          ],
+          "room_ids": [],
+          "room_scope": "assigned",
+          "notes": [],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": null,
+          "stream": ""
+        },
+        {
+          "name": "8.1 5GA ISAC",
+          "duration_minutes": 25,
+          "start_time": "08:25",
           "end_time": "08:50",
           "day": "Wednesday",
           "room_col_start": 4,
           "room_col_end": 5,
-          "chair": null,
-          "agenda_item": "7/8.1",
-          "group_header": "",
-          "description": "Pre-Rel-19 NR Maintenance",
+          "chair": "Hiroki",
+          "agenda_item": "8.1",
+          "group_header": "TEI",
+          "description": "Maintenance on all items of Rel-19 NR and E-UTRA",
           "agenda_descriptions": [
-            {
-              "agenda_item": "7",
-              "matched_agenda_item": "7",
-              "description": "Pre-Rel-19 NR Maintenance",
-              "hierarchy": [
-                {
-                  "agenda_item": "7",
-                  "description": "Pre-Rel-19 NR Maintenance",
-                  "has_description": true
-                }
-              ]
-            },
             {
               "agenda_item": "8.1",
               "matched_agenda_item": "8.1",
@@ -6133,22 +6467,22 @@
           "stream": ""
         },
         {
-          "name": "10.8 Sensing",
-          "duration_minutes": 90,
+          "name": "10.8.3",
+          "duration_minutes": 30,
           "start_time": "11:00",
-          "end_time": "12:30",
+          "end_time": "11:30",
           "day": "Wednesday",
           "room_col_start": 4,
           "room_col_end": 5,
-          "chair": null,
-          "agenda_item": "10.8",
+          "chair": "Hiroki",
+          "agenda_item": "10.8.3",
           "group_header": "6GR",
-          "description": "ISAC",
+          "description": "Waveform and frame structure",
           "agenda_descriptions": [
             {
-              "agenda_item": "10.8",
-              "matched_agenda_item": "10.8",
-              "description": "ISAC",
+              "agenda_item": "10.8.3",
+              "matched_agenda_item": "10.8.3",
+              "description": "Waveform and frame structure",
               "hierarchy": [
                 {
                   "agenda_item": "10",
@@ -6158,6 +6492,55 @@
                 {
                   "agenda_item": "10.8",
                   "description": "ISAC",
+                  "has_description": true
+                },
+                {
+                  "agenda_item": "10.8.3",
+                  "description": "Waveform and frame structure",
+                  "has_description": true
+                }
+              ]
+            }
+          ],
+          "room_ids": [],
+          "room_scope": "assigned",
+          "notes": [],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": null,
+          "stream": ""
+        },
+        {
+          "name": "10.8.2",
+          "duration_minutes": 60,
+          "start_time": "11:30",
+          "end_time": "12:30",
+          "day": "Wednesday",
+          "room_col_start": 4,
+          "room_col_end": 5,
+          "chair": "Hiroki",
+          "agenda_item": "10.8.2",
+          "group_header": "6GR",
+          "description": "Aspects of integration with communication",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "10.8.2",
+              "matched_agenda_item": "10.8.2",
+              "description": "Aspects of integration with communication",
+              "hierarchy": [
+                {
+                  "agenda_item": "10",
+                  "description": "Rel-20 Study of 6GR",
+                  "has_description": true
+                },
+                {
+                  "agenda_item": "10.8",
+                  "description": "ISAC",
+                  "has_description": true
+                },
+                {
+                  "agenda_item": "10.8.2",
+                  "description": "Aspects of integration with communication",
                   "has_description": true
                 }
               ]
@@ -6773,24 +7156,133 @@
           "stream": ""
         },
         {
-          "name": "A-IoT Phase2",
-          "duration_minutes": 120,
+          "name": "9.3.1",
+          "duration_minutes": 40,
           "start_time": "14:30",
+          "end_time": "15:10",
+          "day": "Wednesday",
+          "room_col_start": 4,
+          "room_col_end": 5,
+          "chair": "Hiroki",
+          "agenda_item": "9.3.1",
+          "group_header": "R20",
+          "description": "R2D signals, channels, waveform and procedures",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "9.3.1",
+              "matched_agenda_item": "9.3.1",
+              "description": "R2D signals, channels, waveform and procedures",
+              "hierarchy": [
+                {
+                  "agenda_item": "9",
+                  "description": "Release 20 NR",
+                  "has_description": true
+                },
+                {
+                  "agenda_item": "9.3",
+                  "description": "Solutions for Ambient IoT (Internet of Things) in NR Phase 2",
+                  "has_description": true
+                },
+                {
+                  "agenda_item": "9.3.1",
+                  "description": "R2D signals, channels, waveform and procedures",
+                  "has_description": true
+                }
+              ]
+            }
+          ],
+          "room_ids": [],
+          "room_scope": "assigned",
+          "notes": [],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": null,
+          "stream": ""
+        },
+        {
+          "name": "9.3.2",
+          "duration_minutes": 30,
+          "start_time": "15:10",
+          "end_time": "15:40",
+          "day": "Wednesday",
+          "room_col_start": 4,
+          "room_col_end": 5,
+          "chair": "Hiroki",
+          "agenda_item": "9.3.2",
+          "group_header": "R20",
+          "description": "D2R signals, channels, waveform and procedures",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "9.3.2",
+              "matched_agenda_item": "9.3.2",
+              "description": "D2R signals, channels, waveform and procedures",
+              "hierarchy": [
+                {
+                  "agenda_item": "9",
+                  "description": "Release 20 NR",
+                  "has_description": true
+                },
+                {
+                  "agenda_item": "9.3",
+                  "description": "Solutions for Ambient IoT (Internet of Things) in NR Phase 2",
+                  "has_description": true
+                },
+                {
+                  "agenda_item": "9.3.2",
+                  "description": "D2R signals, channels, waveform and procedures",
+                  "has_description": true
+                }
+              ]
+            }
+          ],
+          "room_ids": [],
+          "room_scope": "assigned",
+          "notes": [],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": null,
+          "stream": ""
+        },
+        {
+          "name": "9.3.3",
+          "duration_minutes": 50,
+          "start_time": "15:40",
           "end_time": "16:30",
           "day": "Wednesday",
           "room_col_start": 4,
           "room_col_end": 5,
-          "chair": null,
-          "agenda_item": null,
+          "chair": "Hiroki",
+          "agenda_item": "9.3.3",
           "group_header": "R20",
-          "description": null,
-          "agenda_descriptions": [],
+          "description": "Other procedures",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "9.3.3",
+              "matched_agenda_item": "9.3.3",
+              "description": "Other procedures",
+              "hierarchy": [
+                {
+                  "agenda_item": "9",
+                  "description": "Release 20 NR",
+                  "has_description": true
+                },
+                {
+                  "agenda_item": "9.3",
+                  "description": "Solutions for Ambient IoT (Internet of Things) in NR Phase 2",
+                  "has_description": true
+                },
+                {
+                  "agenda_item": "9.3.3",
+                  "description": "Other procedures",
+                  "has_description": true
+                }
+              ]
+            }
+          ],
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": [
-            "9.3"
-          ],
+          "inferred_agenda_items": [],
           "email_details": [],
           "part": null,
           "stream": ""
@@ -8032,22 +8524,22 @@
           "stream": ""
         },
         {
-          "name": "10.8 Sensing",
+          "name": "10.8.3",
           "duration_minutes": 50,
           "start_time": "08:00",
           "end_time": "08:50",
           "day": "Thursday",
           "room_col_start": 4,
           "room_col_end": 5,
-          "chair": null,
-          "agenda_item": "10.8",
+          "chair": "Hiroki",
+          "agenda_item": "10.8.3",
           "group_header": "6GR",
-          "description": "ISAC",
+          "description": "Waveform and frame structure",
           "agenda_descriptions": [
             {
-              "agenda_item": "10.8",
-              "matched_agenda_item": "10.8",
-              "description": "ISAC",
+              "agenda_item": "10.8.3",
+              "matched_agenda_item": "10.8.3",
+              "description": "Waveform and frame structure",
               "hierarchy": [
                 {
                   "agenda_item": "10",
@@ -8057,6 +8549,11 @@
                 {
                   "agenda_item": "10.8",
                   "description": "ISAC",
+                  "has_description": true
+                },
+                {
+                  "agenda_item": "10.8.3",
+                  "description": "Waveform and frame structure",
                   "has_description": true
                 }
               ]
@@ -8078,7 +8575,7 @@
           "day": "Thursday",
           "room_col_start": 4,
           "room_col_end": 5,
-          "chair": null,
+          "chair": "Hiroki",
           "agenda_item": "10.5.4.1",
           "group_header": "6GR",
           "description": "Downlink control channel, scheduling for downlink and uplink transmission",
@@ -8127,9 +8624,9 @@
           "day": "Thursday",
           "room_col_start": 4,
           "room_col_end": 5,
-          "chair": null,
+          "chair": "Hiroki",
           "agenda_item": "7, 8.1",
-          "group_header": "",
+          "group_header": "TEI",
           "description": "Pre-Rel-19 NR Maintenance",
           "agenda_descriptions": [
             {
@@ -8661,22 +9158,22 @@
           "stream": ""
         },
         {
-          "name": "10.8 Sensing",
-          "duration_minutes": 90,
+          "name": "10.8.1",
+          "duration_minutes": 45,
           "start_time": "11:00",
-          "end_time": "12:30",
+          "end_time": "11:45",
           "day": "Thursday",
           "room_col_start": 4,
           "room_col_end": 5,
-          "chair": null,
-          "agenda_item": "10.8",
+          "chair": "Hiroki",
+          "agenda_item": "10.8.1",
           "group_header": "6GR",
-          "description": "ISAC",
+          "description": "Evaluations",
           "agenda_descriptions": [
             {
-              "agenda_item": "10.8",
-              "matched_agenda_item": "10.8",
-              "description": "ISAC",
+              "agenda_item": "10.8.1",
+              "matched_agenda_item": "10.8.1",
+              "description": "Evaluations",
               "hierarchy": [
                 {
                   "agenda_item": "10",
@@ -8686,6 +9183,55 @@
                 {
                   "agenda_item": "10.8",
                   "description": "ISAC",
+                  "has_description": true
+                },
+                {
+                  "agenda_item": "10.8.1",
+                  "description": "Evaluations",
+                  "has_description": true
+                }
+              ]
+            }
+          ],
+          "room_ids": [],
+          "room_scope": "assigned",
+          "notes": [],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": null,
+          "stream": ""
+        },
+        {
+          "name": "10.8.2",
+          "duration_minutes": 45,
+          "start_time": "11:45",
+          "end_time": "12:30",
+          "day": "Thursday",
+          "room_col_start": 4,
+          "room_col_end": 5,
+          "chair": "Hiroki",
+          "agenda_item": "10.8.2",
+          "group_header": "6GR",
+          "description": "Aspects of integration with communication",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "10.8.2",
+              "matched_agenda_item": "10.8.2",
+              "description": "Aspects of integration with communication",
+              "hierarchy": [
+                {
+                  "agenda_item": "10",
+                  "description": "Rel-20 Study of 6GR",
+                  "has_description": true
+                },
+                {
+                  "agenda_item": "10.8",
+                  "description": "ISAC",
+                  "has_description": true
+                },
+                {
+                  "agenda_item": "10.8.2",
+                  "description": "Aspects of integration with communication",
                   "has_description": true
                 }
               ]
@@ -9182,24 +9728,133 @@
           "stream": ""
         },
         {
-          "name": "A-IoT Phase2",
-          "duration_minutes": 150,
+          "name": "9.3.1",
+          "duration_minutes": 60,
           "start_time": "14:00",
+          "end_time": "15:00",
+          "day": "Thursday",
+          "room_col_start": 4,
+          "room_col_end": 5,
+          "chair": "Hiroki",
+          "agenda_item": "9.3.1",
+          "group_header": "R20",
+          "description": "R2D signals, channels, waveform and procedures",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "9.3.1",
+              "matched_agenda_item": "9.3.1",
+              "description": "R2D signals, channels, waveform and procedures",
+              "hierarchy": [
+                {
+                  "agenda_item": "9",
+                  "description": "Release 20 NR",
+                  "has_description": true
+                },
+                {
+                  "agenda_item": "9.3",
+                  "description": "Solutions for Ambient IoT (Internet of Things) in NR Phase 2",
+                  "has_description": true
+                },
+                {
+                  "agenda_item": "9.3.1",
+                  "description": "R2D signals, channels, waveform and procedures",
+                  "has_description": true
+                }
+              ]
+            }
+          ],
+          "room_ids": [],
+          "room_scope": "assigned",
+          "notes": [],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": null,
+          "stream": ""
+        },
+        {
+          "name": "9.3.2",
+          "duration_minutes": 30,
+          "start_time": "15:00",
+          "end_time": "15:30",
+          "day": "Thursday",
+          "room_col_start": 4,
+          "room_col_end": 5,
+          "chair": "Hiroki",
+          "agenda_item": "9.3.2",
+          "group_header": "R20",
+          "description": "D2R signals, channels, waveform and procedures",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "9.3.2",
+              "matched_agenda_item": "9.3.2",
+              "description": "D2R signals, channels, waveform and procedures",
+              "hierarchy": [
+                {
+                  "agenda_item": "9",
+                  "description": "Release 20 NR",
+                  "has_description": true
+                },
+                {
+                  "agenda_item": "9.3",
+                  "description": "Solutions for Ambient IoT (Internet of Things) in NR Phase 2",
+                  "has_description": true
+                },
+                {
+                  "agenda_item": "9.3.2",
+                  "description": "D2R signals, channels, waveform and procedures",
+                  "has_description": true
+                }
+              ]
+            }
+          ],
+          "room_ids": [],
+          "room_scope": "assigned",
+          "notes": [],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": null,
+          "stream": ""
+        },
+        {
+          "name": "9.3.3",
+          "duration_minutes": 60,
+          "start_time": "15:30",
           "end_time": "16:30",
           "day": "Thursday",
           "room_col_start": 4,
           "room_col_end": 5,
-          "chair": null,
-          "agenda_item": null,
+          "chair": "Hiroki",
+          "agenda_item": "9.3.3",
           "group_header": "R20",
-          "description": null,
-          "agenda_descriptions": [],
+          "description": "Other procedures",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "9.3.3",
+              "matched_agenda_item": "9.3.3",
+              "description": "Other procedures",
+              "hierarchy": [
+                {
+                  "agenda_item": "9",
+                  "description": "Release 20 NR",
+                  "has_description": true
+                },
+                {
+                  "agenda_item": "9.3",
+                  "description": "Solutions for Ambient IoT (Internet of Things) in NR Phase 2",
+                  "has_description": true
+                },
+                {
+                  "agenda_item": "9.3.3",
+                  "description": "Other procedures",
+                  "has_description": true
+                }
+              ]
+            }
+          ],
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": [
-            "9.3"
-          ],
+          "inferred_agenda_items": [],
           "email_details": [],
           "part": null,
           "stream": ""
@@ -10619,22 +11274,22 @@
           "stream": ""
         },
         {
-          "name": "10.8 Sensing",
-          "duration_minutes": 80,
+          "name": "10.8.1",
+          "duration_minutes": 30,
           "start_time": "08:00",
-          "end_time": "09:20",
+          "end_time": "08:30",
           "day": "Friday",
           "room_col_start": 4,
           "room_col_end": 5,
-          "chair": null,
-          "agenda_item": "10.8",
+          "chair": "Hiroki",
+          "agenda_item": "10.8.1",
           "group_header": "6GR",
-          "description": "ISAC",
+          "description": "Evaluations",
           "agenda_descriptions": [
             {
-              "agenda_item": "10.8",
-              "matched_agenda_item": "10.8",
-              "description": "ISAC",
+              "agenda_item": "10.8.1",
+              "matched_agenda_item": "10.8.1",
+              "description": "Evaluations",
               "hierarchy": [
                 {
                   "agenda_item": "10",
@@ -10644,6 +11299,55 @@
                 {
                   "agenda_item": "10.8",
                   "description": "ISAC",
+                  "has_description": true
+                },
+                {
+                  "agenda_item": "10.8.1",
+                  "description": "Evaluations",
+                  "has_description": true
+                }
+              ]
+            }
+          ],
+          "room_ids": [],
+          "room_scope": "assigned",
+          "notes": [],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": null,
+          "stream": ""
+        },
+        {
+          "name": "10.8.2",
+          "duration_minutes": 50,
+          "start_time": "08:30",
+          "end_time": "09:20",
+          "day": "Friday",
+          "room_col_start": 4,
+          "room_col_end": 5,
+          "chair": "Hiroki",
+          "agenda_item": "10.8.2",
+          "group_header": "6GR",
+          "description": "Aspects of integration with communication",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "10.8.2",
+              "matched_agenda_item": "10.8.2",
+              "description": "Aspects of integration with communication",
+              "hierarchy": [
+                {
+                  "agenda_item": "10",
+                  "description": "Rel-20 Study of 6GR",
+                  "has_description": true
+                },
+                {
+                  "agenda_item": "10.8",
+                  "description": "ISAC",
+                  "has_description": true
+                },
+                {
+                  "agenda_item": "10.8.2",
+                  "description": "Aspects of integration with communication",
                   "has_description": true
                 }
               ]
@@ -10686,17 +11390,38 @@
           "day": "Friday",
           "room_col_start": 4,
           "room_col_end": 5,
-          "chair": null,
-          "agenda_item": null,
+          "chair": "Hiroki",
+          "agenda_item": "9.3.3",
           "group_header": "R20",
-          "description": null,
-          "agenda_descriptions": [],
+          "description": "Other procedures",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "9.3.3",
+              "matched_agenda_item": "9.3.3",
+              "description": "Other procedures",
+              "hierarchy": [
+                {
+                  "agenda_item": "9",
+                  "description": "Release 20 NR",
+                  "has_description": true
+                },
+                {
+                  "agenda_item": "9.3",
+                  "description": "Solutions for Ambient IoT (Internet of Things) in NR Phase 2",
+                  "has_description": true
+                },
+                {
+                  "agenda_item": "9.3.3",
+                  "description": "Other procedures",
+                  "has_description": true
+                }
+              ]
+            }
+          ],
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": [
-            "9.3"
-          ],
+          "inferred_agenda_items": [],
           "email_details": [],
           "part": null,
           "stream": ""
@@ -11165,17 +11890,20 @@
     }
   ],
   "source_file": "Draft RAN1#127 online and offline schedules - v02.docx",
-  "generated_at": "2026-11-13 05:02",
+  "generated_at": "2026-11-13 05:22",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
-    "Draft RAN1#127 online and offline schedules - v02.docx"
+    "Draft RAN1#127 online and offline schedules - v02.docx",
+    "Draft RAN1#127 online and offline schedules - v02_hh.docx"
   ],
   "source_labels": {
-    "Draft RAN1#127 online and offline schedules - v02.docx": "Main"
+    "Draft RAN1#127 online and offline schedules - v02.docx": "Main",
+    "Draft RAN1#127 online and offline schedules - v02_hh.docx": "Hiroki"
   },
   "source_urls": {
-    "Draft RAN1#127 online and offline schedules - v02.docx": "https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_127/Inbox/Chair_notes/Draft%20RAN1%23127%20online%20and%20offline%20schedules%20-%20v02.docx"
+    "Draft RAN1#127 online and offline schedules - v02.docx": "https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_127/Inbox/Chair_notes/Draft%20RAN1%23127%20online%20and%20offline%20schedules%20-%20v02.docx",
+    "Draft RAN1#127 online and offline schedules - v02_hh.docx": "https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_127/Inbox/Hiroki_notes/Draft%20RAN1%23127%20online%20and%20offline%20schedules%20-%20v02_hh.docx"
   },
   "source_mails": {},
   "timezone": "America/Edmonton",
@@ -12959,18 +13687,7 @@
         "changed_in": "Draft Chair notes RAN1#127_v02.docx"
       }
     },
-    "retained_files": [
-      "agreements/05d30f37c12e17d94f22.html",
-      "agreements/1cb424b882ec885e8745.html",
-      "agreements/2ffb35cf2c3762dafa40.html",
-      "agreements/72a1d324d0e2ae4cfb23.html",
-      "agreements/7da12d4f5a7f47ea2c33.html",
-      "agreements/8a39672be21b5ab6a28e.html",
-      "agreements/8d7d3af7a0e005a5acbb.html",
-      "agreements/a4a830a18bdd378de179.html",
-      "agreements/c1d89e729e1fcefaa48a.html",
-      "agreements/f8ec35ffce5a33cb607a.html"
-    ]
+    "retained_files": []
   },
   "email_informal": {}
 }

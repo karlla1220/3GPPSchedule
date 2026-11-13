@@ -2,7 +2,8 @@
   "day": "Tuesday",
   "time_block_index": 1,
   "source_hashes": {
-    "Main Schedule": "5073af500e7e7a15"
+    "Main Schedule": "5073af500e7e7a15",
+    "Hiroki's schedule": "3f9a0b609a2a10ec"
   },
   "merged_sessions": [
     {
@@ -105,21 +106,22 @@
     },
     {
       "room_name": "RAN1_brk2",
-      "name": "10.8 Sensing",
+      "name": "10.8.2",
       "duration_minutes": 90,
       "specified_start_time": null,
-      "chair": null,
-      "group_header": "6GR",
-      "agenda_item": "10.8",
+      "chair": "Hiroki",
+      "group_header": "6GR / 10.8 Sensing",
+      "agenda_item": "10.8.2",
       "source_cells": [
-        "c2c0339"
+        "c2c0339",
+        "c1ffed9"
       ],
-      "description": "ISAC",
+      "description": "Aspects of integration with communication",
       "agenda_descriptions": [
         {
-          "agenda_item": "10.8",
-          "matched_agenda_item": "10.8",
-          "description": "ISAC",
+          "agenda_item": "10.8.2",
+          "matched_agenda_item": "10.8.2",
+          "description": "Aspects of integration with communication",
           "hierarchy": [
             {
               "agenda_item": "10",
@@ -129,6 +131,11 @@
             {
               "agenda_item": "10.8",
               "description": "ISAC",
+              "has_description": true
+            },
+            {
+              "agenda_item": "10.8.2",
+              "description": "Aspects of integration with communication",
               "has_description": true
             }
           ]
@@ -388,7 +395,7 @@
       ]
     }
   ],
-  "merged_at": "2026-11-12T11:02:19.766661+00:00",
+  "merged_at": "2026-11-13T11:21:54.340439+00:00",
   "meeting_id": "ran1#127",
   "schema_version": 3,
   "source_entries": {
@@ -422,6 +429,14 @@
         "cell_text": "Xiaodong (90)\n6GR\n.10.5.3.1 (45)\n.10.5.3.4 (20)\n.10.5.3.3 (25)",
         "fallback_start_time": null,
         "cell_id": "cf3c950"
+      }
+    ],
+    "Hiroki's schedule": [
+      {
+        "room_label": "Hiroki: Brk2",
+        "cell_text": "6GR (90)\n.10.8 Sensing (90)\n10.8.2 (90)",
+        "fallback_start_time": null,
+        "cell_id": "c1ffed9"
       }
     ]
   },

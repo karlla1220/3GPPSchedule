@@ -2,7 +2,8 @@
   "day": "Monday",
   "time_block_index": 3,
   "source_hashes": {
-    "Main Schedule": "971181a011a9d15e"
+    "Main Schedule": "971181a011a9d15e",
+    "Hiroki's schedule": "31e0cb4d94787edf"
   },
   "merged_sessions": [
     {
@@ -298,21 +299,22 @@
     },
     {
       "room_name": "RAN1_brk2",
-      "name": "10.8 Sensing",
-      "duration_minutes": 120,
+      "name": "10.8.2",
+      "duration_minutes": 60,
       "specified_start_time": null,
-      "chair": null,
-      "group_header": "6GR",
-      "agenda_item": "10.8",
+      "chair": "Hiroki",
+      "group_header": "6GR / 10.8 Sensing",
+      "agenda_item": "10.8.2",
       "source_cells": [
-        "ced43e3"
+        "ced43e3",
+        "c8a30a9"
       ],
-      "description": "ISAC",
+      "description": "Aspects of integration with communication",
       "agenda_descriptions": [
         {
-          "agenda_item": "10.8",
-          "matched_agenda_item": "10.8",
-          "description": "ISAC",
+          "agenda_item": "10.8.2",
+          "matched_agenda_item": "10.8.2",
+          "description": "Aspects of integration with communication",
           "hierarchy": [
             {
               "agenda_item": "10",
@@ -322,6 +324,49 @@
             {
               "agenda_item": "10.8",
               "description": "ISAC",
+              "has_description": true
+            },
+            {
+              "agenda_item": "10.8.2",
+              "description": "Aspects of integration with communication",
+              "has_description": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "room_name": "RAN1_brk2",
+      "name": "10.8.3",
+      "duration_minutes": 60,
+      "specified_start_time": null,
+      "chair": "Hiroki",
+      "group_header": "6GR / 10.8 Sensing",
+      "agenda_item": "10.8.3",
+      "source_cells": [
+        "ced43e3",
+        "c8a30a9"
+      ],
+      "description": "Waveform and frame structure",
+      "agenda_descriptions": [
+        {
+          "agenda_item": "10.8.3",
+          "matched_agenda_item": "10.8.3",
+          "description": "Waveform and frame structure",
+          "hierarchy": [
+            {
+              "agenda_item": "10",
+              "description": "Rel-20 Study of 6GR",
+              "has_description": true
+            },
+            {
+              "agenda_item": "10.8",
+              "description": "ISAC",
+              "has_description": true
+            },
+            {
+              "agenda_item": "10.8.3",
+              "description": "Waveform and frame structure",
               "has_description": true
             }
           ]
@@ -573,7 +618,7 @@
       ]
     }
   ],
-  "merged_at": "2026-11-12T11:02:19.762684+00:00",
+  "merged_at": "2026-11-13T11:21:54.337047+00:00",
   "meeting_id": "ran1#127",
   "schema_version": 3,
   "source_entries": {
@@ -607,6 +652,14 @@
         "cell_text": "Sorour (120)\n6GR (60)\n10.3.1 Channel coding (30)\n\n.10.7.1 NTN (30)\nR20 (60)\n.9.5 NTN (30)\nNTN-NR (30)",
         "fallback_start_time": null,
         "cell_id": "c40acba"
+      }
+    ],
+    "Hiroki's schedule": [
+      {
+        "room_label": "Hiroki: Brk2",
+        "cell_text": "6GR (120)\n.10.8 Sensing (120)\n 10.8.2 (60)\n10.8.3 (60)",
+        "fallback_start_time": null,
+        "cell_id": "c8a30a9"
       }
     ]
   },

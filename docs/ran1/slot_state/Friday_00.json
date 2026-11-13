@@ -2,7 +2,8 @@
   "day": "Friday",
   "time_block_index": 0,
   "source_hashes": {
-    "Main Schedule": "d755c944cff13655"
+    "Main Schedule": "d755c944cff13655",
+    "Hiroki's schedule": "d985c37885c770dd"
   },
   "merged_sessions": [
     {
@@ -236,21 +237,22 @@
     },
     {
       "room_name": "RAN1_brk2",
-      "name": "10.8 Sensing",
-      "duration_minutes": 80,
+      "name": "10.8.1",
+      "duration_minutes": 30,
       "specified_start_time": null,
-      "chair": null,
-      "group_header": "6GR",
-      "agenda_item": "10.8",
+      "chair": "Hiroki",
+      "group_header": "6GR / 10.8 Sensing",
+      "agenda_item": "10.8.1",
       "source_cells": [
-        "cfc679b"
+        "cfc679b",
+        "ce4ad5d"
       ],
-      "description": "ISAC",
+      "description": "Evaluations",
       "agenda_descriptions": [
         {
-          "agenda_item": "10.8",
-          "matched_agenda_item": "10.8",
-          "description": "ISAC",
+          "agenda_item": "10.8.1",
+          "matched_agenda_item": "10.8.1",
+          "description": "Evaluations",
           "hierarchy": [
             {
               "agenda_item": "10",
@@ -260,6 +262,49 @@
             {
               "agenda_item": "10.8",
               "description": "ISAC",
+              "has_description": true
+            },
+            {
+              "agenda_item": "10.8.1",
+              "description": "Evaluations",
+              "has_description": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "room_name": "RAN1_brk2",
+      "name": "10.8.2",
+      "duration_minutes": 50,
+      "specified_start_time": null,
+      "chair": "Hiroki",
+      "group_header": "6GR / 10.8 Sensing",
+      "agenda_item": "10.8.2",
+      "source_cells": [
+        "cfc679b",
+        "ce4ad5d"
+      ],
+      "description": "Aspects of integration with communication",
+      "agenda_descriptions": [
+        {
+          "agenda_item": "10.8.2",
+          "matched_agenda_item": "10.8.2",
+          "description": "Aspects of integration with communication",
+          "hierarchy": [
+            {
+              "agenda_item": "10",
+              "description": "Rel-20 Study of 6GR",
+              "has_description": true
+            },
+            {
+              "agenda_item": "10.8",
+              "description": "ISAC",
+              "has_description": true
+            },
+            {
+              "agenda_item": "10.8.2",
+              "description": "Aspects of integration with communication",
               "has_description": true
             }
           ]
@@ -275,7 +320,8 @@
       "group_header": "",
       "agenda_item": null,
       "source_cells": [
-        "cfc679b"
+        "cfc679b",
+        "ce4ad5d"
       ]
     },
     {
@@ -283,11 +329,37 @@
       "name": "A-IoT Phase2",
       "duration_minutes": 60,
       "specified_start_time": null,
-      "chair": null,
+      "chair": "Hiroki",
       "group_header": "R20",
-      "agenda_item": null,
+      "agenda_item": "9.3.3",
       "source_cells": [
-        "cfc679b"
+        "cfc679b",
+        "ce4ad5d"
+      ],
+      "description": "Other procedures",
+      "agenda_descriptions": [
+        {
+          "agenda_item": "9.3.3",
+          "matched_agenda_item": "9.3.3",
+          "description": "Other procedures",
+          "hierarchy": [
+            {
+              "agenda_item": "9",
+              "description": "Release 20 NR",
+              "has_description": true
+            },
+            {
+              "agenda_item": "9.3",
+              "description": "Solutions for Ambient IoT (Internet of Things) in NR Phase 2",
+              "has_description": true
+            },
+            {
+              "agenda_item": "9.3.3",
+              "description": "Other procedures",
+              "has_description": true
+            }
+          ]
+        }
       ]
     },
     {
@@ -431,7 +503,7 @@
       ]
     }
   ],
-  "merged_at": "2026-11-10T09:00:37.601247+00:00",
+  "merged_at": "2026-11-13T11:21:54.359354+00:00",
   "meeting_id": "ran1#127",
   "schema_version": 3,
   "source_entries": {
@@ -465,6 +537,14 @@
         "cell_text": "Hiroki (80)\nR20\nA-IoT (80)\n\nBreak (10)\n\n6GR (60)\n.10.8 Sensing (60)",
         "fallback_start_time": null,
         "cell_id": "cdbcb1e"
+      }
+    ],
+    "Hiroki's schedule": [
+      {
+        "room_label": "Hiroki: Brk2",
+        "cell_text": "6GR (80)\n.10.8 Sensing (80)\n10.8.1 (30)\n10.8.2 (50)\n\nBreak (10)\n\nR20 (60)\nA-IoT Phase2 (60)\n 9.3.3 (60)",
+        "fallback_start_time": null,
+        "cell_id": "ce4ad5d"
       }
     ]
   },

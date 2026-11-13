@@ -2,7 +2,8 @@
   "day": "Wednesday",
   "time_block_index": 0,
   "source_hashes": {
-    "Main Schedule": "2584a8edac2c6630"
+    "Main Schedule": "2584a8edac2c6630",
+    "Hiroki's schedule": "afee9396b82c61ca"
   },
   "merged_sessions": [
     {
@@ -288,29 +289,79 @@
     },
     {
       "room_name": "RAN1_brk2",
-      "name": "T TEI, AI 7/8.1",
-      "duration_minutes": 50,
+      "name": "11 TEI20",
+      "duration_minutes": 10,
       "specified_start_time": null,
-      "chair": null,
-      "group_header": "",
-      "agenda_item": "7/8.1",
+      "chair": "Hiroki",
+      "group_header": "TEI, AI 7/8.1",
+      "agenda_item": "11",
       "source_cells": [
-        "cac4a7d"
+        "cac4a7d",
+        "c5a4171"
       ],
-      "description": "Pre-Rel-19 NR Maintenance",
+      "description": "TEI",
       "agenda_descriptions": [
         {
-          "agenda_item": "7",
-          "matched_agenda_item": "7",
-          "description": "Pre-Rel-19 NR Maintenance",
+          "agenda_item": "11",
+          "matched_agenda_item": "11",
+          "description": "TEI",
           "hierarchy": [
             {
-              "agenda_item": "7",
-              "description": "Pre-Rel-19 NR Maintenance",
+              "agenda_item": "11",
+              "description": "TEI",
               "has_description": true
             }
           ]
-        },
+        }
+      ]
+    },
+    {
+      "room_name": "RAN1_brk2",
+      "name": "8.1 Channel model",
+      "duration_minutes": 15,
+      "specified_start_time": null,
+      "chair": "Hiroki",
+      "group_header": "TEI, AI 7/8.1",
+      "agenda_item": "8.1",
+      "source_cells": [
+        "cac4a7d",
+        "c5a4171"
+      ],
+      "description": "Maintenance on all items of Rel-19 NR and E-UTRA",
+      "agenda_descriptions": [
+        {
+          "agenda_item": "8.1",
+          "matched_agenda_item": "8.1",
+          "description": "Maintenance on all items of Rel-19 NR and E-UTRA",
+          "hierarchy": [
+            {
+              "agenda_item": "8",
+              "description": "Maintenance on Rel-19 NR and E-UTRA",
+              "has_description": true
+            },
+            {
+              "agenda_item": "8.1",
+              "description": "Maintenance on all items of Rel-19 NR and E-UTRA",
+              "has_description": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "room_name": "RAN1_brk2",
+      "name": "8.1 5GA ISAC",
+      "duration_minutes": 25,
+      "specified_start_time": null,
+      "chair": "Hiroki",
+      "group_header": "TEI, AI 7/8.1",
+      "agenda_item": "8.1",
+      "source_cells": [
+        "cac4a7d",
+        "c5a4171"
+      ],
+      "description": "Maintenance on all items of Rel-19 NR and E-UTRA",
+      "agenda_descriptions": [
         {
           "agenda_item": "8.1",
           "matched_agenda_item": "8.1",
@@ -339,7 +390,8 @@
       "group_header": "6GR",
       "agenda_item": "10.5.4.1",
       "source_cells": [
-        "cac4a7d"
+        "cac4a7d",
+        "c5a4171"
       ],
       "description": "Downlink control channel, scheduling for downlink and uplink transmission",
       "agenda_descriptions": [
@@ -381,7 +433,8 @@
       "group_header": "",
       "agenda_item": null,
       "source_cells": [
-        "cac4a7d"
+        "cac4a7d",
+        "c5a4171"
       ]
     },
     {
@@ -624,7 +677,7 @@
       ]
     }
   ],
-  "merged_at": "2026-11-11T11:02:10.705783+00:00",
+  "merged_at": "2026-11-13T11:21:54.346751+00:00",
   "meeting_id": "ran1#127",
   "schema_version": 3,
   "source_entries": {
@@ -658,6 +711,14 @@
         "cell_text": "Sorour (60)\n6GR\n.10.5.2.2 (30)\n.10.5.2.3 (30)\nHiroki (90)\n6GR\n.10.8 Sensing (90)",
         "fallback_start_time": null,
         "cell_id": "cd821aa"
+      }
+    ],
+    "Hiroki's schedule": [
+      {
+        "room_label": "Hiroki: Brk2",
+        "cell_text": "TEI, AI 7/8.1 (50)\n11 TEI20 (10)\n8.1 Channel model (15)\n 8.1 5GA ISAC (25)\n\n6GR (60)\n.10.5.4.1 (60)\n\nUE feature (40)",
+        "fallback_start_time": null,
+        "cell_id": "c5a4171"
       }
     ]
   },

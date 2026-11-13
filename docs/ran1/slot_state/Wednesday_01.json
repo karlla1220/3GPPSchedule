@@ -2,7 +2,8 @@
   "day": "Wednesday",
   "time_block_index": 1,
   "source_hashes": {
-    "Main Schedule": "bd87744c8851fd63"
+    "Main Schedule": "bd87744c8851fd63",
+    "Hiroki's schedule": "5b207f30c7dea015"
   },
   "merged_sessions": [
     {
@@ -105,21 +106,22 @@
     },
     {
       "room_name": "RAN1_brk2",
-      "name": "10.8 Sensing",
-      "duration_minutes": 90,
+      "name": "10.8.3",
+      "duration_minutes": 30,
       "specified_start_time": null,
-      "chair": null,
+      "chair": "Hiroki",
       "group_header": "6GR",
-      "agenda_item": "10.8",
+      "agenda_item": "10.8.3",
       "source_cells": [
-        "c2c0339"
+        "c2c0339",
+        "c3bcaeb"
       ],
-      "description": "ISAC",
+      "description": "Waveform and frame structure",
       "agenda_descriptions": [
         {
-          "agenda_item": "10.8",
-          "matched_agenda_item": "10.8",
-          "description": "ISAC",
+          "agenda_item": "10.8.3",
+          "matched_agenda_item": "10.8.3",
+          "description": "Waveform and frame structure",
           "hierarchy": [
             {
               "agenda_item": "10",
@@ -129,6 +131,49 @@
             {
               "agenda_item": "10.8",
               "description": "ISAC",
+              "has_description": true
+            },
+            {
+              "agenda_item": "10.8.3",
+              "description": "Waveform and frame structure",
+              "has_description": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "room_name": "RAN1_brk2",
+      "name": "10.8.2",
+      "duration_minutes": 60,
+      "specified_start_time": null,
+      "chair": "Hiroki",
+      "group_header": "6GR",
+      "agenda_item": "10.8.2",
+      "source_cells": [
+        "c2c0339",
+        "c3bcaeb"
+      ],
+      "description": "Aspects of integration with communication",
+      "agenda_descriptions": [
+        {
+          "agenda_item": "10.8.2",
+          "matched_agenda_item": "10.8.2",
+          "description": "Aspects of integration with communication",
+          "hierarchy": [
+            {
+              "agenda_item": "10",
+              "description": "Rel-20 Study of 6GR",
+              "has_description": true
+            },
+            {
+              "agenda_item": "10.8",
+              "description": "ISAC",
+              "has_description": true
+            },
+            {
+              "agenda_item": "10.8.2",
+              "description": "Aspects of integration with communication",
               "has_description": true
             }
           ]
@@ -274,7 +319,7 @@
       ]
     }
   ],
-  "merged_at": "2026-11-12T11:02:19.775120+00:00",
+  "merged_at": "2026-11-13T11:21:54.348496+00:00",
   "meeting_id": "ran1#127",
   "schema_version": 3,
   "source_entries": {
@@ -308,6 +353,14 @@
         "cell_text": "Hiroki (90)\nR20 (90)\nA-IoT (90)",
         "fallback_start_time": null,
         "cell_id": "c1475f4"
+      }
+    ],
+    "Hiroki's schedule": [
+      {
+        "room_label": "Hiroki: Brk2",
+        "cell_text": "6GR (90)\n.10.8 Sensing (90)\n10.8.3 (30)\n10.8.2 (60)",
+        "fallback_start_time": null,
+        "cell_id": "c3bcaeb"
       }
     ]
   },

@@ -2,7 +2,8 @@
   "day": "Thursday",
   "time_block_index": 0,
   "source_hashes": {
-    "Main Schedule": "4d3b0b3351f5000b"
+    "Main Schedule": "4d3b0b3351f5000b",
+    "Hiroki's schedule": "496b5cb0b89827e5"
   },
   "merged_sessions": [
     {
@@ -251,21 +252,22 @@
     },
     {
       "room_name": "RAN1_brk2",
-      "name": "10.8 Sensing",
+      "name": "10.8.3",
       "duration_minutes": 50,
       "specified_start_time": null,
-      "chair": null,
-      "group_header": "6GR",
-      "agenda_item": "10.8",
+      "chair": "Hiroki",
+      "group_header": "6GR / 10.8 Sensing",
+      "agenda_item": "10.8.3",
       "source_cells": [
-        "c0b1200"
+        "c0b1200",
+        "c9b891f"
       ],
-      "description": "ISAC",
+      "description": "Waveform and frame structure",
       "agenda_descriptions": [
         {
-          "agenda_item": "10.8",
-          "matched_agenda_item": "10.8",
-          "description": "ISAC",
+          "agenda_item": "10.8.3",
+          "matched_agenda_item": "10.8.3",
+          "description": "Waveform and frame structure",
           "hierarchy": [
             {
               "agenda_item": "10",
@@ -275,6 +277,11 @@
             {
               "agenda_item": "10.8",
               "description": "ISAC",
+              "has_description": true
+            },
+            {
+              "agenda_item": "10.8.3",
+              "description": "Waveform and frame structure",
               "has_description": true
             }
           ]
@@ -286,11 +293,12 @@
       "name": "10.5.4.1",
       "duration_minutes": 60,
       "specified_start_time": null,
-      "chair": null,
+      "chair": "Hiroki",
       "group_header": "6GR",
       "agenda_item": "10.5.4.1",
       "source_cells": [
-        "c0b1200"
+        "c0b1200",
+        "c9b891f"
       ],
       "description": "Downlink control channel, scheduling for downlink and uplink transmission",
       "agenda_descriptions": [
@@ -328,11 +336,12 @@
       "name": "TEI, AI 7/8.1",
       "duration_minutes": 40,
       "specified_start_time": null,
-      "chair": null,
+      "chair": "Hiroki",
       "group_header": "",
       "agenda_item": "7, 8.1",
       "source_cells": [
-        "c0b1200"
+        "c0b1200",
+        "c9b891f"
       ],
       "description": "Pre-Rel-19 NR Maintenance",
       "agenda_descriptions": [
@@ -634,7 +643,7 @@
       ]
     }
   ],
-  "merged_at": "2026-11-11T11:02:10.711807+00:00",
+  "merged_at": "2026-11-13T11:21:54.353047+00:00",
   "meeting_id": "ran1#127",
   "schema_version": 3,
   "source_entries": {
@@ -668,6 +677,14 @@
         "cell_text": "Sorour (150)\n6GR (120)\n.10.5.2.1 (20)\n.10.5.2.2 (50)\n.10.5.2.3 (50)\n\nR20 MIMO (30)",
         "fallback_start_time": null,
         "cell_id": "cf71d48"
+      }
+    ],
+    "Hiroki's schedule": [
+      {
+        "room_label": "Hiroki: Brk2",
+        "cell_text": "6GR (110)\n.10.8 Sensing (50)\n 10.8.3 (50)\n\n.10.5.4.1 (60)\n\nTEI, AI 7/8.1 (40)\n TBD",
+        "fallback_start_time": null,
+        "cell_id": "c9b891f"
       }
     ]
   },
