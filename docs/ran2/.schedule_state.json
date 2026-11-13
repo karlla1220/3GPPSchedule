@@ -1,33 +1,34 @@
 {
   "meeting_id": "ran2#136",
-  "version": 1,
+  "version": 2,
   "config_hash": "c6c411aa629f66fe98cdf07087bfd44847afbc5a4762e030c55fe7817b8286f4",
   "schedule": {
-    "name": "R2_136_Schedule_v01.docx",
-    "url": "https://www.3gpp.org/ftp/tsg_ran/WG2_RL2/TSGR2_136/Agenda/R2_136_Schedule_v01.docx",
-    "uploaded_at": "2026-11-06 08:55",
-    "size": 294811,
-    "sha256": "f21c9c0ff894f98d8add7d4d94bd7e597fce405b29b189aa45e170d5e26ce7be",
-    "etag": "\"b6828388cc6ddd1:0\"",
-    "last_modified": "Fri, 06 Nov 2026 08:55:12 GMT",
-    "ftp_modified": null,
-    "content_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-    "content_disposition": null
+    "name": "R2_136_Schedule_v02.docx",
+    "url": "https://list.etsi.org/scripts/wa.exe?A3=ind2611b&L=3GPP_TSG_RAN_WG2&E=base64&P=9084278&B=--_004_MW4PR10MB6462C8A87BA39F24BC03E80EF07F2MW4PR10MB6462namp_&T=application%2Fvnd.openxmlformats-officedocument.wordprocessingml.document;%20name=%22R2_136_Schedule_v02.docx%22&N=R2_136_Schedule_v02.docx&attachment=q&XSS=3",
+    "uploaded_at": "2026-11-13T18:45:51+00:00",
+    "origin": "email",
+    "message_id": "58795608.2611b",
+    "sent": "2026-11-13T18:45:51+00:00",
+    "listing": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG2;58795608.2611b",
+    "size": 296117,
+    "sha256": "428c3ffd22fc4f77b2f5a36107b5558d991e302e73b7a657a4ce742a85cb2672",
+    "content_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document; name=",
+    "content_disposition": "attachment; filename=\"R2_136_Schedule_v02.docx\""
   },
   "agenda": {
     "url": "https://www.3gpp.org/ftp/tsg_ran/WG2_RL2/TSGR2_136/Agenda/agenda.csv",
     "name": "agenda.csv",
     "size": 6189,
     "sha256": "549f724a850bd121128e1eb3a26982fb566474459b17f57e7ed8645154eafd45",
-    "etag": "\"dbf6a15fd670dd1:0\"",
-    "last_modified": "Tue, 10 Nov 2026 05:43:12 GMT",
+    "etag": "\"54d2e4e13173dd1:0\"",
+    "last_modified": "Fri, 13 Nov 2026 05:43:17 GMT",
     "ftp_modified": null,
     "content_type": "application/octet-stream",
     "content_disposition": null
   },
   "email": {
     "list": "3GPP_TSG_RAN_WG2",
-    "checked_through": "2026-11-10T07:51:57+00:00"
+    "checked_through": "2026-11-13T18:45:51+00:00"
   },
   "metadata": {
     "starts_on": "2026-11-16",

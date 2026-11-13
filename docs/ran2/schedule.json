@@ -402,9 +402,9 @@
           "room_col_start": 2,
           "room_col_end": 3,
           "chair": "Erlin",
-          "agenda_item": "8.10, 8.10.1, 8.10.2, 7.12, 7.4, 7.11",
+          "agenda_item": "8.10, 8.10.1, 8.10.2, 7.12, 7.4, 8.13, 8.13.1, 8.13.2",
           "group_header": "NR Rel-20",
-          "description": "NR MIMO Ph6\nNR MIMO Phase 5\nLow-power wake-up signal and receiver for NR (LP-WUS/WUR)\nEvolution of NR duplex operation: Sub-band full duplex (SBFD)",
+          "description": "NR MIMO Ph6\nNR MIMO Phase 5\nLow-power wake-up signal and receiver for NR (LP-WUS/WUR)\nNR Others",
           "agenda_descriptions": [
             {
               "agenda_item": "8.10",
@@ -452,17 +452,17 @@
               ]
             },
             {
-              "agenda_item": "7.11",
-              "matched_agenda_item": "7.11",
-              "description": "Evolution of NR duplex operation: Sub-band full duplex (SBFD)",
+              "agenda_item": "8.13",
+              "matched_agenda_item": "8.13",
+              "description": "NR Others",
               "hierarchy": [
                 {
-                  "agenda_item": "7",
-                  "description": "NR Rel-19"
+                  "agenda_item": "8",
+                  "description": "NR Rel-20"
                 },
                 {
-                  "agenda_item": "7.11",
-                  "description": "Evolution of NR duplex operation: Sub-band full duplex (SBFD)"
+                  "agenda_item": "8.13",
+                  "description": "NR Others"
                 }
               ]
             }
@@ -476,7 +476,10 @@
             "Rel-19 corrections (Erlin)",
             "[7.12] MIMO",
             "[7.4] NR LPWUS (Erlin)",
-            "[7.11] NR SBFD"
+            "Note: SBFD IPA CRs will be confirmed by email, i.e., no online session.",
+            "[8.13] Rel-20 NR Others",
+            "[8.13.1] extension to n77",
+            "[8.13.2] MLT-CT"
           ],
           "inferred_agenda_items": [],
           "email_details": [],
@@ -819,7 +822,7 @@
           "room_scope": "assigned",
           "notes": [
             "[9.6] NTN pre-meeting offline (Erlin)",
-            "Focus on GNSS resilient/free operation (overview of the potential issues related to mobility, initial discussion on proposed solutions, and proposals specific to R20 GNSS WID if time allows)"
+            "Focus on GNSS resilient/free operation (start from R2-2608316 email summary of #013, can discuss other aspects if time allows)"
           ],
           "inferred_agenda_items": [],
           "email_details": [],
@@ -1129,9 +1132,9 @@
           "stream": ""
         },
         {
-          "name": "CP offlines (measurements)",
-          "duration_minutes": 60,
-          "start_time": "11:00",
+          "name": "CP offlines (ASN.1 examples)",
+          "duration_minutes": 90,
+          "start_time": "10:30",
           "end_time": "12:00",
           "day": "Tuesday",
           "room_col_start": 2,
@@ -1146,27 +1149,26 @@
           ],
           "room_scope": "assigned",
           "notes": [
-            "CP offlines (measurements)"
+            "CP offlines (ASN.1 examples)"
           ],
           "inferred_agenda_items": [
-            "9.3.2",
-            "9.4.2"
+            "9.3.2"
           ],
           "email_details": [],
           "part": null,
           "stream": ""
         },
         {
-          "name": "NR20 AI mobility",
-          "duration_minutes": 60,
+          "name": "Offlines for AI mobility / NR20 AI mobility",
+          "duration_minutes": 90,
           "start_time": "11:00",
-          "end_time": "12:00",
+          "end_time": "12:30",
           "day": "Tuesday",
           "room_col_start": 2,
           "room_col_end": 3,
           "chair": "Kyeongin",
           "agenda_item": "8.3, 8.3.2, 8.3.3",
-          "group_header": "NR Rel-20",
+          "group_header": "Offline",
           "description": "AI/ML for mobility",
           "agenda_descriptions": [
             {
@@ -1190,6 +1192,7 @@
           ],
           "room_scope": "assigned",
           "notes": [
+            "Offlines for AI mobility",
             "[8.3] NR20 AI mobility [1] (Kyeongin)",
             "[8.3.2] LCM procedure (continue)",
             "[8.3.3] Data collection"
@@ -1246,7 +1249,7 @@
           "stream": ""
         },
         {
-          "name": "CP offlines (ASN.1 examples)",
+          "name": "CP offlines (measurements)",
           "duration_minutes": 60,
           "start_time": "12:00",
           "end_time": "13:00",
@@ -1263,19 +1266,20 @@
           ],
           "room_scope": "assigned",
           "notes": [
-            "CP offlines (ASN.1 examples)"
+            "CP offlines (measurements)"
           ],
           "inferred_agenda_items": [
-            "9.3.2"
+            "9.3.2",
+            "9.4.2"
           ],
           "email_details": [],
           "part": null,
           "stream": ""
         },
         {
-          "name": "TBD Offline AIML",
-          "duration_minutes": 60,
-          "start_time": "12:00",
+          "name": "TBD Offline AIML (if time allows?)",
+          "duration_minutes": 30,
+          "start_time": "12:30",
           "end_time": "13:00",
           "day": "Tuesday",
           "room_col_start": 2,
@@ -1290,7 +1294,7 @@
           ],
           "room_scope": "assigned",
           "notes": [
-            "TBD Offline AIML"
+            "TBD Offline AIML (if time allows?)"
           ],
           "inferred_agenda_items": [
             "7.1",
@@ -1333,33 +1337,18 @@
           "stream": ""
         },
         {
-          "name": "LTENR1718 Pos / NR17 relay documents / NR1819 relay …",
-          "duration_minutes": 115,
+          "name": "NR17 Pos / NR19 Ambient IoT / NR20 Others …",
+          "duration_minutes": 120,
           "start_time": "14:30",
-          "end_time": "16:25",
+          "end_time": "16:30",
           "day": "Tuesday",
           "room_col_start": 2,
           "room_col_end": 3,
           "chair": "Nathan",
-          "agenda_item": "4.2, 5.2, 6.0.2.21, 5.1, 6.0.2.19, 7.13, 7.2, 8.13.2, 8.14",
-          "group_header": "EUTRA",
-          "description": "EUTRA Positioning corrections\nNR Positioning Corrections\nExpanded and improved NR positioning\nNR Common\nEnhanced NR Sidelink Relay\nNR sidelink multi-hop relay",
+          "agenda_item": "5.2, 7.2, 8.13.2, 8.14",
+          "group_header": "NR Rel-17 and earlier",
+          "description": "NR Positioning Corrections\nAmbient IoT\nOther WGs\nTEI20",
           "agenda_descriptions": [
-            {
-              "agenda_item": "4.2",
-              "matched_agenda_item": "4.2",
-              "description": "EUTRA Positioning corrections",
-              "hierarchy": [
-                {
-                  "agenda_item": "4",
-                  "description": "EUTRA"
-                },
-                {
-                  "agenda_item": "4.2",
-                  "description": "EUTRA Positioning corrections"
-                }
-              ]
-            },
             {
               "agenda_item": "5.2",
               "matched_agenda_item": "5.2",
@@ -1376,78 +1365,51 @@
               ]
             },
             {
-              "agenda_item": "6.0.2.21",
-              "matched_agenda_item": "6.0.2.21",
-              "description": "Expanded and improved NR positioning",
-              "hierarchy": [
-                {
-                  "agenda_item": "6",
-                  "description": "NR Rel-18"
-                },
-                {
-                  "agenda_item": "6.0",
-                  "description": "Common"
-                },
-                {
-                  "agenda_item": "6.0.2",
-                  "description": "Rel-18 corrections"
-                },
-                {
-                  "agenda_item": "6.0.2.21",
-                  "description": "Expanded and improved NR positioning"
-                }
-              ]
-            },
-            {
-              "agenda_item": "5.1",
-              "matched_agenda_item": "5.1",
-              "description": "NR Common",
-              "hierarchy": [
-                {
-                  "agenda_item": "5",
-                  "description": "NR Rel-17 and earlier"
-                },
-                {
-                  "agenda_item": "5.1",
-                  "description": "NR Common"
-                }
-              ]
-            },
-            {
-              "agenda_item": "6.0.2.19",
-              "matched_agenda_item": "6.0.2.19",
-              "description": "Enhanced NR Sidelink Relay",
-              "hierarchy": [
-                {
-                  "agenda_item": "6",
-                  "description": "NR Rel-18"
-                },
-                {
-                  "agenda_item": "6.0",
-                  "description": "Common"
-                },
-                {
-                  "agenda_item": "6.0.2",
-                  "description": "Rel-18 corrections"
-                },
-                {
-                  "agenda_item": "6.0.2.19",
-                  "description": "Enhanced NR Sidelink Relay"
-                }
-              ]
-            },
-            {
-              "agenda_item": "7.13",
-              "matched_agenda_item": "7.13",
-              "description": "NR sidelink multi-hop relay",
+              "agenda_item": "7.2",
+              "matched_agenda_item": "7.2",
+              "description": "Ambient IoT",
               "hierarchy": [
                 {
                   "agenda_item": "7",
                   "description": "NR Rel-19"
                 },
                 {
-                  "agenda_item": "7.13",
-                  "description": "NR sidelink multi-hop relay"
+                  "agenda_item": "7.2",
+                  "description": "Ambient IoT"
+                }
+              ]
+            },
+            {
+              "agenda_item": "8.13.2",
+              "matched_agenda_item": "8.13.2",
+              "description": "Other WGs",
+              "hierarchy": [
+                {
+                  "agenda_item": "8",
+                  "description": "NR Rel-20"
+                },
+                {
+                  "agenda_item": "8.13",
+                  "description": "NR Others"
+                },
+                {
+                  "agenda_item": "8.13.2",
+                  "description": "Other WGs"
+                }
+              ]
+            },
+            {
+              "agenda_item": "8.14",
+              "matched_agenda_item": "8.14",
+              "description": "TEI20",
+              "hierarchy": [
+                {
+                  "agenda_item": "8",
+                  "description": "NR Rel-20"
+                },
+                {
+                  "agenda_item": "8.14",
+                  "description": "TEI20"
                 }
               ]
             }
@@ -1457,9 +1419,7 @@
           ],
           "room_scope": "assigned",
           "notes": [
-            "[4.2] [5.2] [6.0.2.21] LTENR1718 Pos (Nathan)",
-            "[5.1] NR17 relay documents",
-            "[6.0.2.19] [7.13] NR1819 relay",
+            "[5.2] NR17 Pos (Nathan)",
             "[7.2] NR19 Ambient IoT [0] (Nathan)",
             "[8.13.2] NR20 Others",
             "- Documents on U2U MANET",
@@ -1473,9 +1433,9 @@
         },
         {
           "name": "User Plane",
-          "duration_minutes": 60,
+          "duration_minutes": 80,
           "start_time": "14:30",
-          "end_time": "15:30",
+          "end_time": "15:50",
           "day": "Tuesday",
           "room_col_start": 2,
           "room_col_end": 3,
@@ -1520,9 +1480,9 @@
         },
         {
           "name": "E-UTRA TN to NR NTN HO / R20 IoT NTN",
-          "duration_minutes": 55,
+          "duration_minutes": 60,
           "start_time": "15:30",
-          "end_time": "16:25",
+          "end_time": "16:30",
           "day": "Tuesday",
           "room_col_start": 2,
           "room_col_end": 3,
@@ -1577,9 +1537,9 @@
         },
         {
           "name": "Scheduling information",
-          "duration_minutes": 55,
-          "start_time": "15:30",
-          "end_time": "16:25",
+          "duration_minutes": 40,
+          "start_time": "15:50",
+          "end_time": "16:30",
           "day": "Tuesday",
           "room_col_start": 2,
           "room_col_end": 3,
@@ -1631,9 +1591,9 @@
         },
         {
           "name": "R20 NR NTN DL compensation",
-          "duration_minutes": 115,
-          "start_time": "16:50",
-          "end_time": "18:45",
+          "duration_minutes": 120,
+          "start_time": "17:00",
+          "end_time": "19:00",
           "day": "Tuesday",
           "room_col_start": 2,
           "room_col_end": 3,
@@ -1672,9 +1632,9 @@
         },
         {
           "name": "Spectrum aggregation",
-          "duration_minutes": 115,
-          "start_time": "16:50",
-          "end_time": "18:45",
+          "duration_minutes": 120,
+          "start_time": "17:00",
+          "end_time": "19:00",
           "day": "Tuesday",
           "room_col_start": 2,
           "room_col_end": 3,
@@ -1724,7 +1684,7 @@
       "date": "2026-11-17",
       "timeline": {
         "start": "08:30",
-        "end": "18:45",
+        "end": "19:00",
         "slot_minutes": 5,
         "label_minutes": 30,
         "breaks": [
@@ -1740,8 +1700,8 @@
           },
           {
             "name": "Afternoon coffee",
-            "start": "16:25",
-            "end": "16:50"
+            "start": "16:30",
+            "end": "17:00"
           }
         ],
         "blocks": []
@@ -1780,7 +1740,34 @@
       ],
       "sessions": [
         {
-          "name": "NR19 AI/ML PHY",
+          "name": "ISAC offline (TBD)",
+          "duration_minutes": 90,
+          "start_time": "08:30",
+          "end_time": "10:00",
+          "day": "Wednesday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": null,
+          "group_header": "Offline",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [
+            "brk1"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "ISAC offline (TBD)"
+          ],
+          "inferred_agenda_items": [
+            "9.5"
+          ],
+          "email_details": [],
+          "part": null,
+          "stream": ""
+        },
+        {
+          "name": "NR19 AI/ML PHY / NR20 AI/ML PHY",
           "duration_minutes": 60,
           "start_time": "08:30",
           "end_time": "09:30",
@@ -1788,9 +1775,9 @@
           "room_col_start": 2,
           "room_col_end": 3,
           "chair": "Erlin",
-          "agenda_item": "7.1",
+          "agenda_item": "7.1, 8.1, 8.1.1, 8.1.2",
           "group_header": "NR Rel-19",
-          "description": "AI/ML for NR air interface",
+          "description": "AI/ML for NR air interface\nAI/ML for PHY Ph2",
           "agenda_descriptions": [
             {
               "agenda_item": "7.1",
@@ -1806,6 +1793,21 @@
                   "description": "AI/ML for NR air interface"
                 }
               ]
+            },
+            {
+              "agenda_item": "8.1",
+              "matched_agenda_item": "8.1",
+              "description": "AI/ML for PHY Ph2",
+              "hierarchy": [
+                {
+                  "agenda_item": "8",
+                  "description": "NR Rel-20"
+                },
+                {
+                  "agenda_item": "8.1",
+                  "description": "AI/ML for PHY Ph2"
+                }
+              ]
             }
           ],
           "room_ids": [
@@ -1813,8 +1815,9 @@
           ],
           "room_scope": "assigned",
           "notes": [
-            "(TBD)",
-            "[7.1] NR19 AI/ML PHY [0] (Erlin)"
+            "[7.1] NR19 AI/ML PHY [0] (Erlin)",
+            "[8.1] NR20 AI/ML PHY [2] (Erlin)",
+            "[8.1.1] topics other than performance monitoring"
           ],
           "inferred_agenda_items": [],
           "email_details": [],
@@ -1858,33 +1861,6 @@
             "[8.14] TEI20"
           ],
           "inferred_agenda_items": [],
-          "email_details": [],
-          "part": null,
-          "stream": ""
-        },
-        {
-          "name": "ISAC offline (TBD)",
-          "duration_minutes": 90,
-          "start_time": "09:00",
-          "end_time": "10:30",
-          "day": "Wednesday",
-          "room_col_start": 2,
-          "room_col_end": 3,
-          "chair": null,
-          "agenda_item": null,
-          "group_header": "Offline",
-          "description": null,
-          "agenda_descriptions": [],
-          "room_ids": [
-            "brk1"
-          ],
-          "room_scope": "assigned",
-          "notes": [
-            "ISAC offline (TBD)"
-          ],
-          "inferred_agenda_items": [
-            "9.5"
-          ],
           "email_details": [],
           "part": null,
           "stream": ""
@@ -1935,7 +1911,7 @@
           "stream": ""
         },
         {
-          "name": "common AI PHY and AI mob issues",
+          "name": "NR20 common AI PHY and AI mob issues",
           "duration_minutes": 60,
           "start_time": "09:30",
           "end_time": "10:30",
@@ -1952,11 +1928,38 @@
           ],
           "room_scope": "assigned",
           "notes": [
-            "common AI PHY and AI mob issues (Erlin, Kyeongin)"
+            "NR20 common AI PHY and AI mob issues (Erlin, Kyeongin)"
           ],
           "inferred_agenda_items": [
             "8.1",
             "8.3"
+          ],
+          "email_details": [],
+          "part": null,
+          "stream": ""
+        },
+        {
+          "name": "RRC modeling",
+          "duration_minutes": 60,
+          "start_time": "10:00",
+          "end_time": "11:00",
+          "day": "Wednesday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": null,
+          "group_header": "",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [
+            "brk1"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "RRC modeling"
+          ],
+          "inferred_agenda_items": [
+            "9.3.2.1"
           ],
           "email_details": [],
           "part": null,
@@ -2097,7 +2100,7 @@
           "stream": ""
         },
         {
-          "name": "CP 6G TBD",
+          "name": "CP 6G (System information)?",
           "duration_minutes": 30,
           "start_time": "12:30",
           "end_time": "13:00",
@@ -2114,10 +2117,10 @@
           ],
           "room_scope": "assigned",
           "notes": [
-            "CP 6G TBD"
+            "CP 6G (System information)?"
           ],
           "inferred_agenda_items": [
-            "9.3.2"
+            "9.3.2.3"
           ],
           "email_details": [],
           "part": null,
@@ -2528,14 +2531,23 @@
           "kind": "",
           "detail": "",
           "stream": ""
+        },
+        {
+          "name": "Breakout 3",
+          "table_index": 0,
+          "room_index_in_table": 0,
+          "id": "brk3",
+          "kind": "",
+          "detail": "",
+          "stream": ""
         }
       ],
       "sessions": [
         {
           "name": "UP Offlines",
-          "duration_minutes": 120,
+          "duration_minutes": 60,
           "start_time": "08:30",
-          "end_time": "10:30",
+          "end_time": "09:30",
           "day": "Thursday",
           "room_col_start": 2,
           "room_col_end": 3,
@@ -2549,10 +2561,11 @@
           ],
           "room_scope": "assigned",
           "notes": [
-            "UP Offlines"
+            "UP Offlines",
+            "upper UP functionality offline (e.g. RLC)"
           ],
           "inferred_agenda_items": [
-            "9.3.1"
+            "9.3.1.1"
           ],
           "email_details": [],
           "part": null,
@@ -2567,7 +2580,7 @@
           "room_col_start": 2,
           "room_col_end": 3,
           "chair": "Sergio",
-          "agenda_item": "8.7, 8.7.2, 8.7.3, 8.13.1, 8.14",
+          "agenda_item": "8.7, 8.7.2, 8.13.1, 8.14",
           "group_header": "NR Rel-20",
           "description": "IoT NTN Ph4\nRAN4\nTEI20",
           "agenda_descriptions": [
@@ -2627,7 +2640,7 @@
           "room_scope": "assigned",
           "notes": [
             "[8.7] R20 IoT NTN [1] (Sergio)",
-            "[8.7.2] cont, [8.7.3]",
+            "[8.7.2] TBD",
             "[8.13.1] RAN4 - NTN related (Sergio)",
             "[8.14] TEI20 – NTN related (Sergio)"
           ],
@@ -2683,10 +2696,10 @@
           "stream": ""
         },
         {
-          "name": "UP offlines",
-          "duration_minutes": 120,
-          "start_time": "11:00",
-          "end_time": "13:00",
+          "name": "QoS offline",
+          "duration_minutes": 60,
+          "start_time": "09:30",
+          "end_time": "10:30",
           "day": "Thursday",
           "room_col_start": 2,
           "room_col_end": 3,
@@ -2700,10 +2713,68 @@
           ],
           "room_scope": "assigned",
           "notes": [
-            "UP offlines"
+            "QoS offline"
           ],
           "inferred_agenda_items": [
-            "9.3.1"
+            "9.3.1.2"
+          ],
+          "email_details": [],
+          "part": null,
+          "stream": ""
+        },
+        {
+          "name": "[MOB] offlines",
+          "duration_minutes": 60,
+          "start_time": "10:30",
+          "end_time": "11:30",
+          "day": "Thursday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": null,
+          "group_header": "Offline",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [
+            "brk3"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "[MOB] offlines"
+          ],
+          "inferred_agenda_items": [
+            "7.6",
+            "8.3",
+            "8.4",
+            "9.4"
+          ],
+          "email_details": [],
+          "part": null,
+          "stream": ""
+        },
+        {
+          "name": "UP offlines",
+          "duration_minutes": 60,
+          "start_time": "11:00",
+          "end_time": "12:00",
+          "day": "Thursday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": null,
+          "group_header": "Offline",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [
+            "brk1"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "UP offlines",
+            "CB-PUSCH offline"
+          ],
+          "inferred_agenda_items": [
+            "9.3.1.3.2"
           ],
           "email_details": [],
           "part": null,
@@ -2711,9 +2782,9 @@
         },
         {
           "name": "Cont. NTN R20 GNSS",
-          "duration_minutes": 50,
+          "duration_minutes": 45,
           "start_time": "11:00",
-          "end_time": "11:50",
+          "end_time": "11:45",
           "day": "Thursday",
           "room_col_start": 2,
           "room_col_end": 3,
@@ -2797,10 +2868,40 @@
           "stream": ""
         },
         {
+          "name": "[MOB] offlines",
+          "duration_minutes": 30,
+          "start_time": "11:30",
+          "end_time": "12:00",
+          "day": "Thursday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": null,
+          "group_header": "Offline",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [
+            "brk3"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "[MOB] offlines"
+          ],
+          "inferred_agenda_items": [
+            "7.6",
+            "8.3",
+            "8.4",
+            "9.4"
+          ],
+          "email_details": [],
+          "part": null,
+          "stream": ""
+        },
+        {
           "name": "NR20 CovEnh",
-          "duration_minutes": 60,
-          "start_time": "11:50",
-          "end_time": "12:50",
+          "duration_minutes": 45,
+          "start_time": "11:45",
+          "end_time": "12:30",
           "day": "Thursday",
           "room_col_start": 2,
           "room_col_end": 3,
@@ -2843,9 +2944,64 @@
           "stream": ""
         },
         {
-          "name": "CB for Rel-19 LPWUS",
-          "duration_minutes": 10,
-          "start_time": "12:50",
+          "name": "other UP topics",
+          "duration_minutes": 60,
+          "start_time": "12:00",
+          "end_time": "13:00",
+          "day": "Thursday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": null,
+          "group_header": "",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [
+            "brk1"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "other UP topics"
+          ],
+          "inferred_agenda_items": [
+            "9.3.1.4"
+          ],
+          "email_details": [],
+          "part": null,
+          "stream": ""
+        },
+        {
+          "name": "12-13 :00 AI phy offlines",
+          "duration_minutes": 60,
+          "start_time": "12:00",
+          "end_time": "13:00",
+          "day": "Thursday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": null,
+          "group_header": "Offline",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [
+            "brk3"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "12-13 :00 AI phy offlines"
+          ],
+          "inferred_agenda_items": [
+            "7.1",
+            "8.1"
+          ],
+          "email_details": [],
+          "part": null,
+          "stream": ""
+        },
+        {
+          "name": "CB for Rel-19 MIMO, LPWUS (if needed, details TBD)",
+          "duration_minutes": 30,
+          "start_time": "12:30",
           "end_time": "13:00",
           "day": "Thursday",
           "room_col_start": 2,
@@ -2860,10 +3016,11 @@
           ],
           "room_scope": "assigned",
           "notes": [
-            "CB for Rel-19 LPWUS (focus on outcome of offline #201)"
+            "CB for Rel-19 MIMO, LPWUS (if needed, details TBD)"
           ],
           "inferred_agenda_items": [
-            "7.4"
+            "7.4",
+            "7.12"
           ],
           "email_details": [],
           "part": null,
@@ -2935,7 +3092,9 @@
           "room_scope": "assigned",
           "notes": [
             "CB Nathan",
-            "[8.14] TEI20 positioning/relay if needed"
+            "[8.14] TEI20 positioning/relay if needed",
+            "CB Mattias",
+            "TBD"
           ],
           "inferred_agenda_items": [],
           "email_details": [],
@@ -3224,14 +3383,14 @@
       ],
       "sessions": [
         {
-          "name": "CB Kyeongin",
+          "name": "CB",
           "duration_minutes": 60,
           "start_time": "08:30",
           "end_time": "09:30",
           "day": "Friday",
           "room_col_start": 2,
           "room_col_end": 3,
-          "chair": null,
+          "chair": "Kyeongin",
           "agenda_item": null,
           "group_header": "",
           "description": null,
@@ -3244,7 +3403,9 @@
             "CB Kyeongin",
             "@8:30-9:30"
           ],
-          "inferred_agenda_items": [],
+          "inferred_agenda_items": [
+            "8.3"
+          ],
           "email_details": [],
           "part": null,
           "stream": ""
@@ -3275,14 +3436,14 @@
           "stream": ""
         },
         {
-          "name": "CB for NR20 AI/M PHY",
+          "name": "CB for NR20 AI/M PHY, performance monitoring, other issues for CB tbd",
           "duration_minutes": 60,
           "start_time": "09:30",
           "end_time": "10:30",
           "day": "Friday",
           "room_col_start": 2,
           "room_col_end": 3,
-          "chair": null,
+          "chair": "Erlin",
           "agenda_item": null,
           "group_header": "",
           "description": null,
@@ -3294,7 +3455,7 @@
           "notes": [
             "CB Erlin",
             "@9:30-10:30",
-            "CB for NR20 AI/M PHY,"
+            "CB for NR20 AI/M PHY, performance monitoring, other issues for CB tbd"
           ],
           "inferred_agenda_items": [
             "8.1"
@@ -3416,22 +3577,24 @@
       }
     }
   ],
-  "source_file": "R2_136_Schedule_v01.docx",
-  "generated_at": "2026-11-06 03:01",
+  "source_file": "R2_136_Schedule_v02.docx",
+  "generated_at": "2026-11-13 13:01",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
-    "R2_136_Schedule_v01.docx",
+    "R2_136_Schedule_v02.docx",
     "agenda.csv"
   ],
   "source_labels": {
-    "R2_136_Schedule_v01.docx": "Schedule",
+    "R2_136_Schedule_v02.docx": "Schedule",
     "agenda.csv": "Agenda"
   },
   "source_urls": {
-    "R2_136_Schedule_v01.docx": "https://www.3gpp.org/ftp/tsg_ran/WG2_RL2/TSGR2_136/Agenda/R2_136_Schedule_v01.docx"
+    "R2_136_Schedule_v02.docx": "https://list.etsi.org/scripts/wa.exe?A3=ind2611b&L=3GPP_TSG_RAN_WG2&E=base64&P=9084278&B=--_004_MW4PR10MB6462C8A87BA39F24BC03E80EF07F2MW4PR10MB6462namp_&T=application%2Fvnd.openxmlformats-officedocument.wordprocessingml.document;%20name=%22R2_136_Schedule_v02.docx%22&N=R2_136_Schedule_v02.docx&attachment=q&XSS=3"
   },
-  "source_mails": {},
+  "source_mails": {
+    "R2_136_Schedule_v02.docx": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG2;58795608.2611b"
+  },
   "timezone": "America/Edmonton",
   "wg_id": "ran2",
   "meeting_id": "ran2#136",
