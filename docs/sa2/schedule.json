@@ -346,6 +346,31 @@
           "stream": ""
         },
         {
+          "name": "Main: Drafting for SoH questions: KI#3, KI#5, KI#11, KI#17?/KI#22?",
+          "duration_minutes": 90,
+          "start_time": "12:30",
+          "end_time": "14:00",
+          "day": "Monday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": null,
+          "group_header": "",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [],
+          "room_scope": "unassigned",
+          "notes": [
+            "Main: Drafting for SoH questions: KI#3, KI#5, KI#11, KI#17?/KI#22?"
+          ],
+          "inferred_agenda_items": [
+            "20.6.0"
+          ],
+          "email_details": [],
+          "part": null,
+          "stream": ""
+        },
+        {
           "name": "KI#18 (AI for Network)",
           "duration_minutes": 90,
           "start_time": "14:00",
@@ -772,7 +797,8 @@
           ],
           "room_scope": "assigned",
           "notes": [
-            "6G Single Stream (20.6.x)"
+            "6G Single Stream (20.6.x)",
+            "Show of hands takes place (KI#5, KI#11, KI#22?)."
           ],
           "inferred_agenda_items": [],
           "email_details": [],
@@ -839,7 +865,8 @@
           {
             "name": "Lunch",
             "start": "12:30",
-            "end": "14:00"
+            "end": "14:00",
+            "label_position": "time-axis"
           },
           {
             "name": "Coffee",
@@ -1426,7 +1453,8 @@
           "room_scope": "assigned",
           "notes": [
             "In Breakout 2",
-            "KI#3 (Slicing) (20.6.3)"
+            "KI#3 (Slicing) (20.6.3)",
+            "KI#3 Slicing (Show of hands takes place in Breakout 2 in Slicing session)"
           ],
           "inferred_agenda_items": [],
           "email_details": [],
@@ -1533,6 +1561,31 @@
             2
           ],
           "stream": "Stream 1"
+        },
+        {
+          "name": "Main: Drafting for SoH questions: KI#17?/KI#22?, KI#19, KI#21",
+          "duration_minutes": 90,
+          "start_time": "12:30",
+          "end_time": "14:00",
+          "day": "Tuesday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": null,
+          "group_header": "",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [],
+          "room_scope": "unassigned",
+          "notes": [
+            "Main: Drafting for SoH questions: KI#17?/KI#22?, KI#19, KI#21"
+          ],
+          "inferred_agenda_items": [
+            "20.6.0"
+          ],
+          "email_details": [],
+          "part": null,
+          "stream": ""
         },
         {
           "name": "FS_enIMS_ARC",
@@ -1865,11 +1918,55 @@
           ],
           "room_scope": "assigned",
           "notes": [
+            "6G Single Stream (20.6.x)",
+            "Show of hands takes place (KI#17?/KI#22?, KI#19, KI#21)."
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": [
+            1,
+            2
+          ],
+          "stream": ""
+        },
+        {
+          "name": "6G Single Stream",
+          "duration_minutes": 90,
+          "start_time": "17:30",
+          "end_time": "19:00",
+          "day": "Tuesday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": "20.6.x",
+          "group_header": "Rel-20 SIDs and WIDs",
+          "description": "Rel-20 SIDs and WIDs",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "20.6.x",
+              "matched_agenda_item": "20",
+              "description": "Rel-20 SIDs and WIDs",
+              "hierarchy": [
+                {
+                  "agenda_item": "20",
+                  "description": "Rel-20 SIDs and WIDs"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "stream1"
+          ],
+          "room_scope": "assigned",
+          "notes": [
             "6G Single Stream (20.6.x)"
           ],
           "inferred_agenda_items": [],
           "email_details": [],
-          "part": null,
+          "part": [
+            2,
+            2
+          ],
           "stream": ""
         }
       ],
@@ -1893,7 +1990,8 @@
           {
             "name": "Lunch",
             "start": "12:30",
-            "end": "14:00"
+            "end": "14:00",
+            "label_position": "time-axis"
           },
           {
             "name": "Coffee",
@@ -2306,6 +2404,31 @@
           "stream": ""
         },
         {
+          "name": "Main: Drafting for SoH questions: KI#18, other KI (s) if any",
+          "duration_minutes": 90,
+          "start_time": "12:30",
+          "end_time": "14:00",
+          "day": "Wednesday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": null,
+          "group_header": "",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [],
+          "room_scope": "unassigned",
+          "notes": [
+            "Main: Drafting for SoH questions: KI#18, other KI(s) if any"
+          ],
+          "inferred_agenda_items": [
+            "20.6.0"
+          ],
+          "email_details": [],
+          "part": null,
+          "stream": ""
+        },
+        {
           "name": "6G Single Stream",
           "duration_minutes": 90,
           "start_time": "14:00",
@@ -2473,7 +2596,8 @@
           ],
           "room_scope": "assigned",
           "notes": [
-            "6G Single Stream (20.6.x)"
+            "6G Single Stream (20.6.x)",
+            "Show of hands takes place (KI#18, other KI(s) if any)."
           ],
           "inferred_agenda_items": [],
           "email_details": [],
@@ -2513,8 +2637,7 @@
           ],
           "room_scope": "assigned",
           "notes": [
-            "6G Single Stream (20.6.x)",
-            "("
+            "6G Single Stream (20.6.x)"
           ],
           "inferred_agenda_items": [],
           "email_details": [],
@@ -2545,7 +2668,8 @@
           {
             "name": "Lunch",
             "start": "12:30",
-            "end": "14:00"
+            "end": "14:00",
+            "label_position": "time-axis"
           },
           {
             "name": "Coffee",
@@ -3170,20 +3294,20 @@
       }
     }
   ],
-  "source_file": "S2-2611637_SA2-178-Session Plan - r6.zip",
-  "generated_at": "2026-11-12 09:02",
+  "source_file": "S2-2611637_SA2-178-Session Plan - r7.zip",
+  "generated_at": "2026-11-13 05:43",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
-    "S2-2611637_SA2-178-Session Plan - r6.zip",
+    "S2-2611637_SA2-178-Session Plan - r7.zip",
     "agenda.csv"
   ],
   "source_labels": {
-    "S2-2611637_SA2-178-Session Plan - r6.zip": "Session Plan - r6",
+    "S2-2611637_SA2-178-Session Plan - r7.zip": "Session Plan - r7",
     "agenda.csv": "agenda.csv"
   },
   "source_urls": {
-    "S2-2611637_SA2-178-Session Plan - r6.zip": "https://www.3gpp.org/ftp/tsg_sa/WG2_Arch/TSGS2_178_Calgary_2026-11/INBOX/DRAFTS/_Session_Plan_Updates/S2-2611637_SA2-178-Session%20Plan%20-%20r6.zip"
+    "S2-2611637_SA2-178-Session Plan - r7.zip": "https://www.3gpp.org/ftp/tsg_sa/WG2_Arch/TSGS2_178_Calgary_2026-11/INBOX/DRAFTS/_Session_Plan_Updates/S2-2611637_SA2-178-Session%20Plan%20-%20r7.zip"
   },
   "source_mails": {},
   "timezone": "America/Edmonton",
