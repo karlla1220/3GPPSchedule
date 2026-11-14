@@ -1664,6 +1664,21 @@
               "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;811f6cf1.2611b",
               "author": "Yingyang Li 李迎阳",
               "sent": "2026-11-13T11:31:41-06:00"
+            },
+            {
+              "kind": "session",
+              "session": "Mon 14:30-16:00 Offline2",
+              "quote": "As ISAC offline session starts at 2:30 pm on Monday, it would be great to provide responses as early as possible.",
+              "mode": "offline",
+              "summary": "ISAC offline session starts at 2:30 pm; provide responses as early as possible",
+              "topics": [],
+              "start": "14:30",
+              "day": "Monday",
+              "split": [],
+              "mail": "3d6a2337.2611b",
+              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;3d6a2337.2611b",
+              "author": "Woo-Suk Ko",
+              "sent": "2026-11-14T05:36:55-06:00"
             }
           ],
           "part": null,
@@ -12204,7 +12219,7 @@
     }
   ],
   "source_file": "Draft RAN1#127 online and offline schedules - v02.docx",
-  "generated_at": "2026-11-14 01:41",
+  "generated_at": "2026-11-14 05:41",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
