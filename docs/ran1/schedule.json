@@ -1819,7 +1819,28 @@
           "room_scope": "assigned",
           "notes": [],
           "inferred_agenda_items": [],
-          "email_details": [],
+          "email_details": [
+            {
+              "kind": "session",
+              "session": "Mon 17:00-17:50 Main",
+              "quote": "Since WUS (10.6.x) has its first online session at 17:00 on Monday, and considering the slow speed for uploading comments, please prioritize comments for sections of FL comments and proposals marked as HIGH. For that session, I will have a first cut-off on Monday at 15:00.",
+              "mode": "online",
+              "summary": "Online session for 10.6.x; comments cut-off at 15:00",
+              "topics": [
+                "sections of FL comments and proposals marked as HIGH"
+              ],
+              "start": "17:00",
+              "day": "Monday",
+              "input_due": {
+                "at": "15:00"
+              },
+              "split": [],
+              "mail": "875cbfca.2611b",
+              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;875cbfca.2611b",
+              "author": "Magnus Åström",
+              "sent": "2026-11-14T11:06:33-06:00"
+            }
+          ],
           "part": null,
           "stream": ""
         },
@@ -4657,7 +4678,25 @@
           "room_scope": "assigned",
           "notes": [],
           "inferred_agenda_items": [],
-          "email_details": [],
+          "email_details": [
+            {
+              "kind": "session",
+              "session": "Tue 14:55-15:35 Offline1",
+              "quote": "For Tuesday’s offline and online discussions, the deadline for comments is Tuesday at 11:00.",
+              "mode": "offline",
+              "summary": "Offline discussion; comments deadline Tuesday at 11:00",
+              "topics": [],
+              "day": "Tuesday",
+              "input_due": {
+                "at": "11:00"
+              },
+              "split": [],
+              "mail": "875cbfca.2611b",
+              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;875cbfca.2611b",
+              "author": "Magnus Åström",
+              "sent": "2026-11-14T11:06:33-06:00"
+            }
+          ],
           "part": null,
           "stream": ""
         },
@@ -5143,7 +5182,25 @@
           "room_scope": "assigned",
           "notes": [],
           "inferred_agenda_items": [],
-          "email_details": [],
+          "email_details": [
+            {
+              "kind": "session",
+              "session": "Tue 17:50-18:25 Main",
+              "quote": "For Tuesday’s offline and online discussions, the deadline for comments is Tuesday at 11:00.",
+              "mode": "online",
+              "summary": "Online discussion; comments deadline Tuesday at 11:00",
+              "topics": [],
+              "day": "Tuesday",
+              "input_due": {
+                "at": "11:00"
+              },
+              "split": [],
+              "mail": "875cbfca.2611b",
+              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;875cbfca.2611b",
+              "author": "Magnus Åström",
+              "sent": "2026-11-14T11:06:33-06:00"
+            }
+          ],
           "part": null,
           "stream": ""
         },
@@ -12268,7 +12325,7 @@
     }
   ],
   "source_file": "Draft RAN1#127 online and offline schedules - v02.docx",
-  "generated_at": "2026-11-14 09:21",
+  "generated_at": "2026-11-14 11:21",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
