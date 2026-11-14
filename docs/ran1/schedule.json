@@ -1294,7 +1294,25 @@
           "room_scope": "assigned",
           "notes": [],
           "inferred_agenda_items": [],
-          "email_details": [],
+          "email_details": [
+            {
+              "kind": "session",
+              "session": "Mon 14:00-14:25 Offline1",
+              "quote": "We will have a short offline and an online session on Monday. The plan is to start with Proposal 1-1 followed by Proposal 1-3 (if time allows).",
+              "mode": "offline",
+              "summary": "Offline session on Proposals 1-1 and 1-3",
+              "topics": [
+                "Proposal 1-1",
+                "Proposal 1-3"
+              ],
+              "day": "Monday",
+              "split": [],
+              "mail": "94532024.2611b",
+              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;94532024.2611b",
+              "author": "Yanping Xing",
+              "sent": "2026-11-13T19:31:39-06:00"
+            }
+          ],
           "part": null,
           "stream": ""
         },
@@ -1843,7 +1861,25 @@
           "room_scope": "assigned",
           "notes": [],
           "inferred_agenda_items": [],
-          "email_details": [],
+          "email_details": [
+            {
+              "kind": "session",
+              "session": "Mon 18:20-18:40 Main",
+              "quote": "We will have a short offline and an online session on Monday. The plan is to start with Proposal 1-1 followed by Proposal 1-3 (if time allows).",
+              "mode": "online",
+              "summary": "Online session on Proposals 1-1 and 1-3",
+              "topics": [
+                "Proposal 1-1",
+                "Proposal 1-3"
+              ],
+              "day": "Monday",
+              "split": [],
+              "mail": "94532024.2611b",
+              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;94532024.2611b",
+              "author": "Yanping Xing",
+              "sent": "2026-11-13T19:31:39-06:00"
+            }
+          ],
           "part": null,
           "stream": ""
         },
@@ -12086,7 +12122,7 @@
     }
   ],
   "source_file": "Draft RAN1#127 online and offline schedules - v02.docx",
-  "generated_at": "2026-11-13 15:41",
+  "generated_at": "2026-11-13 19:42",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
