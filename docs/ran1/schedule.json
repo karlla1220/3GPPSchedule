@@ -6366,7 +6366,26 @@
           "room_scope": "assigned",
           "notes": [],
           "inferred_agenda_items": [],
-          "email_details": [],
+          "email_details": [
+            {
+              "kind": "session",
+              "session": "Wed 08:00-08:10 Brk2",
+              "quote": "Since this topic will be treated online at 8:00 AM on Wednesday to avoid the collision with NTN sessions as per chairman's guidance, the deadline for comments is at 20:00 on Tuesday.",
+              "mode": "online",
+              "summary": "Online session on Wednesday at 08:00; comments deadline 20:00 Tuesday",
+              "topics": [],
+              "start": "08:00",
+              "day": "Wednesday",
+              "input_due": {
+                "at": "20:00"
+              },
+              "split": [],
+              "mail": "d26990f0.2611b",
+              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;d26990f0.2611b",
+              "author": "Ying ZHAO",
+              "sent": "2026-11-14T13:10:58-06:00"
+            }
+          ],
           "part": null,
           "stream": ""
         },
@@ -12370,7 +12389,7 @@
     }
   ],
   "source_file": "Draft RAN1#127 online and offline schedules - v02.docx",
-  "generated_at": "2026-11-14 12:01",
+  "generated_at": "2026-11-14 13:21",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
