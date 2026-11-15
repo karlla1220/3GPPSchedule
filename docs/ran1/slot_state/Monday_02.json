@@ -2,7 +2,8 @@
   "day": "Monday",
   "time_block_index": 2,
   "source_hashes": {
-    "Main Schedule": "eca2cb13140ac025"
+    "Main Schedule": "eca2cb13140ac025",
+    "Sorour's schedule": "752667e8733a6888"
   },
   "merged_sessions": [
     {
@@ -175,26 +176,48 @@
     },
     {
       "room_name": "RAN1_brk1",
-      "name": "NTN-NR",
+      "name": "AI 9.4 NTN-NR",
       "duration_minutes": 40,
       "specified_start_time": null,
-      "chair": null,
-      "group_header": "R20",
-      "agenda_item": null,
+      "chair": "Sorour",
+      "group_header": "R20 / R20 NR",
+      "agenda_item": "9.4",
       "source_cells": [
-        "c0e5ea4"
+        "c0e5ea4",
+        "c9aeeff"
+      ],
+      "description": "GNSS resilient NR-NTN operation",
+      "agenda_descriptions": [
+        {
+          "agenda_item": "9.4",
+          "matched_agenda_item": "9.4",
+          "description": "GNSS resilient NR-NTN operation",
+          "hierarchy": [
+            {
+              "agenda_item": "9",
+              "description": "Release 20 NR",
+              "has_description": true
+            },
+            {
+              "agenda_item": "9.4",
+              "description": "GNSS resilient NR-NTN operation",
+              "has_description": true
+            }
+          ]
+        }
       ]
     },
     {
       "room_name": "RAN1_brk1",
-      "name": "9.5 NTN",
+      "name": "AI 9.5 NTN",
       "duration_minutes": 20,
       "specified_start_time": null,
-      "chair": null,
-      "group_header": "R20",
+      "chair": "Sorour",
+      "group_header": "R20 / R20 NR",
       "agenda_item": "9.5",
       "source_cells": [
-        "c0e5ea4"
+        "c0e5ea4",
+        "c9aeeff"
       ],
       "description": "NR NTN in systems using downlink compensation",
       "agenda_descriptions": [
@@ -219,14 +242,15 @@
     },
     {
       "room_name": "RAN1_brk1",
-      "name": "10.7.1 NTN",
+      "name": "AI 10.7.1 NTN",
       "duration_minutes": 40,
       "specified_start_time": null,
-      "chair": null,
+      "chair": "Sorour",
       "group_header": "6GR",
       "agenda_item": "10.7.1",
       "source_cells": [
-        "c0e5ea4"
+        "c0e5ea4",
+        "c9aeeff"
       ],
       "description": "NTN specific requirements and design",
       "agenda_descriptions": [
@@ -259,11 +283,12 @@
       "name": "10.3.1 Channel coding",
       "duration_minutes": 50,
       "specified_start_time": null,
-      "chair": null,
+      "chair": "Sorour",
       "group_header": "6GR",
       "agenda_item": "10.3.1",
       "source_cells": [
-        "c0e5ea4"
+        "c0e5ea4",
+        "c9aeeff"
       ],
       "description": "Channel coding",
       "agenda_descriptions": [
@@ -761,7 +786,7 @@
       ]
     }
   ],
-  "merged_at": "2026-11-11T11:02:10.695392+00:00",
+  "merged_at": "2026-11-15T22:02:00.957742+00:00",
   "meeting_id": "ran1#127",
   "schema_version": 3,
   "source_entries": {
@@ -795,6 +820,14 @@
         "cell_text": "Sorour (30)\n10.3.1 Channel coding (30)\nHiroki (90)\n6GR (90)\n.10.8 Sensing (90)\nXiaodong (30)\n6GR\n.10.5.5 (30)",
         "fallback_start_time": null,
         "cell_id": "cf97827"
+      }
+    ],
+    "Sorour's schedule": [
+      {
+        "room_label": "Room 225-226",
+        "cell_text": "R20 NR (60)\nAI 9.4 NTN-NR (40)\nAI 9.5 NTN (20)\n6GR (90)\nAI 10.7.1 NTN (40)\nAI 10.3.1 Coding (50)",
+        "fallback_start_time": null,
+        "cell_id": "c9aeeff"
       }
     ]
   },

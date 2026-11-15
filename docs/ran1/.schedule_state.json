@@ -9,6 +9,11 @@
       "folder": "Hiroki_notes",
       "name": "Draft RAN1#127 online and offline schedules - v02_hh.docx",
       "uploaded_at": "2026-11-13T11:02:00"
+    },
+    {
+      "folder": "Sorour_notes",
+      "name": "RAN1#127 Sorour sessions online and offline schedules - v00.docx",
+      "uploaded_at": "2026-11-15T21:45:00"
     }
   ],
   "agreements_ref": {
@@ -22,9 +27,29 @@
         "uploaded_at": "2026-11-13T11:01:00"
       },
       {
+        "name": "Draft R1-2609119 Session Notes of AI 10.7 - v00.docx",
+        "url": "https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_127/Inbox/Sorour_notes/Draft%20R1-2609119%20Session%20Notes%20of%20AI%2010.7%20-%20v00.docx",
+        "uploaded_at": "2026-11-15T21:45:00"
+      },
+      {
         "name": "draft_R1-2609120_Session Notes of AI 10.5.4_v00.docx",
         "url": "https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_127/Inbox/Hiroki_notes/draft_R1-2609120_Session%20Notes%20of%20AI%2010.5.4_v00.docx",
         "uploaded_at": "2026-11-13T11:01:00"
+      },
+      {
+        "name": "Draft R1-2609121 Session Notes of AI 10.5.2 - v00.docx",
+        "url": "https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_127/Inbox/Sorour_notes/Draft%20R1-2609121%20Session%20Notes%20of%20AI%2010.5.2%20-%20v00.docx",
+        "uploaded_at": "2026-11-15T21:45:00"
+      },
+      {
+        "name": "Draft R1-2609122 Session Notes of AI 10.3.2 - v00.docx",
+        "url": "https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_127/Inbox/Sorour_notes/Draft%20R1-2609122%20Session%20Notes%20of%20AI%2010.3.2%20-%20v00.docx",
+        "uploaded_at": "2026-11-15T21:45:00"
+      },
+      {
+        "name": "Draft R1-2609123 Session Notes of AI 10.3.1 - v00.docx",
+        "url": "https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_127/Inbox/Sorour_notes/Draft%20R1-2609123%20Session%20Notes%20of%20AI%2010.3.1%20-%20v00.docx",
+        "uploaded_at": "2026-11-15T21:45:00"
       },
       {
         "name": "draft_R1-2609124_Session Notes of AI 10.2.1_v00.docx",
@@ -32,9 +57,34 @@
         "uploaded_at": "2026-11-13T11:01:00"
       },
       {
+        "name": "Draft R1-2609126 Session Notes of AI 9.5 - v00.docx",
+        "url": "https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_127/Inbox/Sorour_notes/Draft%20R1-2609126%20Session%20Notes%20of%20AI%209.5%20-%20v00.docx",
+        "uploaded_at": "2026-11-15T21:45:00"
+      },
+      {
+        "name": "Draft R1-2609127 Session Notes of AI 9.4 - v00.docx",
+        "url": "https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_127/Inbox/Sorour_notes/Draft%20R1-2609127%20Session%20Notes%20of%20AI%209.4%20-%20v00.docx",
+        "uploaded_at": "2026-11-15T21:45:00"
+      },
+      {
         "name": "draft_R1-2609128_Session Notes of AI 9.3_v00.docx",
         "url": "https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_127/Inbox/Hiroki_notes/draft_R1-2609128_Session%20Notes%20of%20AI%209.3_v00.docx",
         "uploaded_at": "2026-11-13T11:01:00"
+      },
+      {
+        "name": "Draft R1-2609129 Session Notes of AI 9.2 - v00.docx",
+        "url": "https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_127/Inbox/Sorour_notes/Draft%20R1-2609129%20Session%20Notes%20of%20AI%209.2%20-%20v00.docx",
+        "uploaded_at": "2026-11-15T21:45:00"
+      },
+      {
+        "name": "Draft R1-2609130 Session Notes of AI 9.1 - v00.docx",
+        "url": "https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_127/Inbox/Sorour_notes/Draft%20R1-2609130%20Session%20Notes%20of%20AI%209.1%20-%20v00.docx",
+        "uploaded_at": "2026-11-15T21:45:00"
+      },
+      {
+        "name": "Draft R1-2609131 Session Notes of AI 8.1 - v00.docx",
+        "url": "https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_127/Inbox/Sorour_notes/Draft%20R1-2609131%20Session%20Notes%20of%20AI%208.1%20-%20v00.docx",
+        "uploaded_at": "2026-11-15T21:45:00"
       },
       {
         "name": "draft_R1-2609132_Session Notes of AI 7_v00.docx",
@@ -89,6 +139,6 @@
   "local_refs": {},
   "email": {
     "list": "3GPP_TSG_RAN_WG1",
-    "checked_through": "2026-11-15T19:49:20+00:00"
+    "checked_through": "2026-11-15T21:26:36+00:00"
   }
 }

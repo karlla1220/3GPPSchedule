@@ -922,39 +922,53 @@
           "stream": ""
         },
         {
-          "name": "NTN-NR",
+          "name": "AI 9.4 NTN-NR",
           "duration_minutes": 40,
           "start_time": "14:00",
           "end_time": "14:40",
           "day": "Monday",
           "room_col_start": 3,
           "room_col_end": 4,
-          "chair": null,
-          "agenda_item": null,
+          "chair": "Sorour",
+          "agenda_item": "9.4",
           "group_header": "R20",
-          "description": null,
-          "agenda_descriptions": [],
+          "description": "GNSS resilient NR-NTN operation",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "9.4",
+              "matched_agenda_item": "9.4",
+              "description": "GNSS resilient NR-NTN operation",
+              "hierarchy": [
+                {
+                  "agenda_item": "9",
+                  "description": "Release 20 NR",
+                  "has_description": true
+                },
+                {
+                  "agenda_item": "9.4",
+                  "description": "GNSS resilient NR-NTN operation",
+                  "has_description": true
+                }
+              ]
+            }
+          ],
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": [
-            "9.4",
-            "9.5",
-            "10.7"
-          ],
+          "inferred_agenda_items": [],
           "email_details": [],
           "part": null,
           "stream": ""
         },
         {
-          "name": "9.5 NTN",
+          "name": "AI 9.5 NTN",
           "duration_minutes": 20,
           "start_time": "14:40",
           "end_time": "15:00",
           "day": "Monday",
           "room_col_start": 3,
           "room_col_end": 4,
-          "chair": null,
+          "chair": "Sorour",
           "agenda_item": "9.5",
           "group_header": "R20",
           "description": "NR NTN in systems using downlink compensation",
@@ -1001,14 +1015,14 @@
           "stream": ""
         },
         {
-          "name": "10.7.1 NTN",
+          "name": "AI 10.7.1 NTN",
           "duration_minutes": 40,
           "start_time": "15:00",
           "end_time": "15:40",
           "day": "Monday",
           "room_col_start": 3,
           "room_col_end": 4,
-          "chair": null,
+          "chair": "Sorour",
           "agenda_item": "10.7.1",
           "group_header": "6GR",
           "description": "NTN specific requirements and design",
@@ -1052,7 +1066,7 @@
           "day": "Monday",
           "room_col_start": 3,
           "room_col_end": 4,
-          "chair": null,
+          "chair": "Sorour",
           "agenda_item": "10.3.1",
           "group_header": "6GR",
           "description": "Channel coding",
@@ -2098,14 +2112,14 @@
           "stream": ""
         },
         {
-          "name": "10.5.2.1",
+          "name": "AI 10.5.2.1 PDCCH",
           "duration_minutes": 20,
           "start_time": "17:00",
           "end_time": "17:20",
           "day": "Monday",
           "room_col_start": 3,
           "room_col_end": 4,
-          "chair": null,
+          "chair": "Sorour",
           "agenda_item": "10.5.2.1",
           "group_header": "6GR",
           "description": "Downlink transmission scheme(s) for downlink control channels",
@@ -2167,14 +2181,14 @@
           "stream": ""
         },
         {
-          "name": "10.5.2.2",
+          "name": "AI 10.5.2.2 PDSCH",
           "duration_minutes": 50,
           "start_time": "17:20",
           "end_time": "18:10",
           "day": "Monday",
           "room_col_start": 3,
           "room_col_end": 4,
-          "chair": null,
+          "chair": "Sorour",
           "agenda_item": "10.5.2.2",
           "group_header": "6GR",
           "description": "Downlink transmission scheme(s) for downlink shared channels",
@@ -2216,14 +2230,14 @@
           "stream": ""
         },
         {
-          "name": "10.5.2.3",
+          "name": "AI 10.5.2.3 PUxCH",
           "duration_minutes": 50,
           "start_time": "18:10",
           "end_time": "19:00",
           "day": "Monday",
           "room_col_start": 3,
           "room_col_end": 4,
-          "chair": null,
+          "chair": "Sorour",
           "agenda_item": "10.5.2.3",
           "group_header": "6GR",
           "description": "Uplink transmission scheme(s) for uplink channels",
@@ -2948,14 +2962,14 @@
           "stream": ""
         },
         {
-          "name": "10.7.1 NTN",
+          "name": "AI 10.7.1 NTN",
           "duration_minutes": 40,
           "start_time": "08:00",
           "end_time": "08:40",
           "day": "Tuesday",
           "room_col_start": 3,
           "room_col_end": 4,
-          "chair": null,
+          "chair": "Sorour",
           "agenda_item": "10.7.1",
           "group_header": "6GR",
           "description": "NTN specific requirements and design",
@@ -2992,14 +3006,14 @@
           "stream": ""
         },
         {
-          "name": "9.5 NTN",
+          "name": "AI 9.5 NTN",
           "duration_minutes": 30,
           "start_time": "08:40",
           "end_time": "09:10",
           "day": "Tuesday",
           "room_col_start": 3,
           "room_col_end": 4,
-          "chair": null,
+          "chair": "Sorour",
           "agenda_item": "9.5",
           "group_header": "R20",
           "description": "NR NTN in systems using downlink compensation",
@@ -3031,39 +3045,53 @@
           "stream": ""
         },
         {
-          "name": "NTN-NR",
+          "name": "AI 9.4 NR-NTN",
           "duration_minutes": 40,
           "start_time": "09:10",
           "end_time": "09:50",
           "day": "Tuesday",
           "room_col_start": 3,
           "room_col_end": 4,
-          "chair": null,
-          "agenda_item": null,
+          "chair": "Sorour",
+          "agenda_item": "9.4",
           "group_header": "R20",
-          "description": null,
-          "agenda_descriptions": [],
+          "description": "GNSS resilient NR-NTN operation",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "9.4",
+              "matched_agenda_item": "9.4",
+              "description": "GNSS resilient NR-NTN operation",
+              "hierarchy": [
+                {
+                  "agenda_item": "9",
+                  "description": "Release 20 NR",
+                  "has_description": true
+                },
+                {
+                  "agenda_item": "9.4",
+                  "description": "GNSS resilient NR-NTN operation",
+                  "has_description": true
+                }
+              ]
+            }
+          ],
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": [
-            "9.4",
-            "9.5",
-            "10.7"
-          ],
+          "inferred_agenda_items": [],
           "email_details": [],
           "part": null,
           "stream": ""
         },
         {
-          "name": "10.3.1 Channel coding",
+          "name": "AI 10.3.1 Coding",
           "duration_minutes": 40,
           "start_time": "09:50",
           "end_time": "10:30",
           "day": "Tuesday",
           "room_col_start": 3,
           "room_col_end": 4,
-          "chair": null,
+          "chair": "Sorour",
           "agenda_item": "10.3.1",
           "group_header": "6GR",
           "description": "Channel coding",
@@ -3364,7 +3392,7 @@
           "room_col_end": 5,
           "chair": "Hiroki",
           "agenda_item": null,
-          "group_header": "R20",
+          "group_header": "",
           "description": null,
           "agenda_descriptions": [],
           "room_ids": [],
@@ -3754,14 +3782,14 @@
           "stream": ""
         },
         {
-          "name": "UE feature",
+          "name": "UE Features",
           "duration_minutes": 40,
           "start_time": "11:00",
           "end_time": "11:40",
           "day": "Tuesday",
           "room_col_start": 3,
           "room_col_end": 4,
-          "chair": null,
+          "chair": "Sorour",
           "agenda_item": null,
           "group_header": "R20",
           "description": null,
@@ -3777,24 +3805,40 @@
           "stream": ""
         },
         {
-          "name": "AI/ML",
+          "name": "AI 9.1 AIML",
           "duration_minutes": 50,
           "start_time": "11:40",
           "end_time": "12:30",
           "day": "Tuesday",
           "room_col_start": 3,
           "room_col_end": 4,
-          "chair": null,
-          "agenda_item": null,
+          "chair": "Sorour",
+          "agenda_item": "9.1",
           "group_header": "R20",
-          "description": null,
-          "agenda_descriptions": [],
+          "description": "Artificial Intelligence (AI)/Machine Learning (ML) for NR air interface enhancements",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "9.1",
+              "matched_agenda_item": "9.1",
+              "description": "Artificial Intelligence (AI)/Machine Learning (ML) for NR air interface enhancements",
+              "hierarchy": [
+                {
+                  "agenda_item": "9",
+                  "description": "Release 20 NR",
+                  "has_description": true
+                },
+                {
+                  "agenda_item": "9.1",
+                  "description": "Artificial Intelligence (AI)/Machine Learning (ML) for NR air interface enhancements",
+                  "has_description": true
+                }
+              ]
+            }
+          ],
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": [
-            "9.1"
-          ],
+          "inferred_agenda_items": [],
           "email_details": [
             {
               "kind": "session",
@@ -4405,7 +4449,7 @@
           "day": "Tuesday",
           "room_col_start": 3,
           "room_col_end": 4,
-          "chair": null,
+          "chair": "Sorour",
           "agenda_item": "8.1",
           "group_header": "",
           "description": "Maintenance on all items of Rel-19 NR and E-UTRA",
@@ -4437,37 +4481,53 @@
           "stream": ""
         },
         {
-          "name": "R20 AI/ML",
+          "name": "AI 9.1 AIML",
           "duration_minutes": 50,
           "start_time": "14:30",
           "end_time": "15:20",
           "day": "Tuesday",
           "room_col_start": 3,
           "room_col_end": 4,
-          "chair": null,
-          "agenda_item": null,
+          "chair": "Sorour",
+          "agenda_item": "9.1",
           "group_header": "R20",
-          "description": null,
-          "agenda_descriptions": [],
+          "description": "Artificial Intelligence (AI)/Machine Learning (ML) for NR air interface enhancements",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "9.1",
+              "matched_agenda_item": "9.1",
+              "description": "Artificial Intelligence (AI)/Machine Learning (ML) for NR air interface enhancements",
+              "hierarchy": [
+                {
+                  "agenda_item": "9",
+                  "description": "Release 20 NR",
+                  "has_description": true
+                },
+                {
+                  "agenda_item": "9.1",
+                  "description": "Artificial Intelligence (AI)/Machine Learning (ML) for NR air interface enhancements",
+                  "has_description": true
+                }
+              ]
+            }
+          ],
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": [
-            "9.1"
-          ],
+          "inferred_agenda_items": [],
           "email_details": [],
           "part": null,
           "stream": ""
         },
         {
-          "name": "10.3.2 Modulation",
+          "name": "AI 10.3.2 Modulation",
           "duration_minutes": 30,
           "start_time": "15:20",
           "end_time": "15:50",
           "day": "Tuesday",
           "room_col_start": 3,
           "room_col_end": 4,
-          "chair": null,
+          "chair": "Sorour",
           "agenda_item": "10.3.2",
           "group_header": "6GR",
           "description": "Modulation",
@@ -4519,24 +4579,40 @@
           "stream": ""
         },
         {
-          "name": "R20 MIMO",
+          "name": "AI 9.2 MIMO",
           "duration_minutes": 40,
           "start_time": "15:50",
           "end_time": "16:30",
           "day": "Tuesday",
           "room_col_start": 3,
           "room_col_end": 4,
-          "chair": null,
-          "agenda_item": null,
+          "chair": "Sorour",
+          "agenda_item": "9.2",
           "group_header": "R20",
-          "description": null,
-          "agenda_descriptions": [],
+          "description": "NR MIMO Phase 6",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "9.2",
+              "matched_agenda_item": "9.2",
+              "description": "NR MIMO Phase 6",
+              "hierarchy": [
+                {
+                  "agenda_item": "9",
+                  "description": "Release 20 NR",
+                  "has_description": true
+                },
+                {
+                  "agenda_item": "9.2",
+                  "description": "NR MIMO Phase 6",
+                  "has_description": true
+                }
+              ]
+            }
+          ],
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": [
-            "9.2"
-          ],
+          "inferred_agenda_items": [],
           "email_details": [],
           "part": null,
           "stream": ""
@@ -5444,14 +5520,14 @@
           "stream": ""
         },
         {
-          "name": "10.5.2.1",
+          "name": "AI 10.5.2.1 PDCCH",
           "duration_minutes": 20,
           "start_time": "17:00",
           "end_time": "17:20",
           "day": "Tuesday",
           "room_col_start": 3,
           "room_col_end": 4,
-          "chair": null,
+          "chair": "Sorour",
           "agenda_item": "10.5.2.1",
           "group_header": "6GR",
           "description": "Downlink transmission scheme(s) for downlink control channels",
@@ -5493,14 +5569,14 @@
           "stream": ""
         },
         {
-          "name": "10.5.2.2",
+          "name": "AI 10.5.2.2 PDSCH",
           "duration_minutes": 50,
           "start_time": "17:20",
           "end_time": "18:10",
           "day": "Tuesday",
           "room_col_start": 3,
           "room_col_end": 4,
-          "chair": null,
+          "chair": "Sorour",
           "agenda_item": "10.5.2.2",
           "group_header": "6GR",
           "description": "Downlink transmission scheme(s) for downlink shared channels",
@@ -5542,14 +5618,14 @@
           "stream": ""
         },
         {
-          "name": "10.5.2.3",
+          "name": "AI 10.5.2.3 PUxCH",
           "duration_minutes": 50,
           "start_time": "18:10",
           "end_time": "19:00",
           "day": "Tuesday",
           "room_col_start": 3,
           "room_col_end": 4,
-          "chair": null,
+          "chair": "Sorour",
           "agenda_item": "10.5.2.3",
           "group_header": "6GR",
           "description": "Uplink transmission scheme(s) for uplink channels",
@@ -6330,14 +6406,14 @@
           "stream": ""
         },
         {
-          "name": "10.3.1 Channel coding",
+          "name": "AI 10.3.1 Coding",
           "duration_minutes": 40,
           "start_time": "08:00",
           "end_time": "08:40",
           "day": "Wednesday",
           "room_col_start": 3,
           "room_col_end": 4,
-          "chair": null,
+          "chair": "Sorour",
           "agenda_item": "10.3.1",
           "group_header": "6GR",
           "description": "Channel coding",
@@ -6374,14 +6450,14 @@
           "stream": ""
         },
         {
-          "name": "10.7.1 NTN",
+          "name": "AI 10.7.1 NTN",
           "duration_minutes": 40,
           "start_time": "08:40",
           "end_time": "09:20",
           "day": "Wednesday",
           "room_col_start": 3,
           "room_col_end": 4,
-          "chair": null,
+          "chair": "Sorour",
           "agenda_item": "10.7.1",
           "group_header": "6GR",
           "description": "NTN specific requirements and design",
@@ -6418,14 +6494,14 @@
           "stream": ""
         },
         {
-          "name": "9.5 NTN",
+          "name": "AI 9.5 NTN",
           "duration_minutes": 30,
           "start_time": "09:20",
           "end_time": "09:50",
           "day": "Wednesday",
           "room_col_start": 3,
           "room_col_end": 4,
-          "chair": null,
+          "chair": "Sorour",
           "agenda_item": "9.5",
           "group_header": "R20",
           "description": "NR NTN in systems using downlink compensation",
@@ -6457,26 +6533,40 @@
           "stream": ""
         },
         {
-          "name": "NTN-NR",
+          "name": "AI 9.4 NR-NTN",
           "duration_minutes": 40,
           "start_time": "09:50",
           "end_time": "10:30",
           "day": "Wednesday",
           "room_col_start": 3,
           "room_col_end": 4,
-          "chair": null,
-          "agenda_item": null,
+          "chair": "Sorour",
+          "agenda_item": "9.4",
           "group_header": "R20",
-          "description": null,
-          "agenda_descriptions": [],
+          "description": "GNSS resilient NR-NTN operation",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "9.4",
+              "matched_agenda_item": "9.4",
+              "description": "GNSS resilient NR-NTN operation",
+              "hierarchy": [
+                {
+                  "agenda_item": "9",
+                  "description": "Release 20 NR",
+                  "has_description": true
+                },
+                {
+                  "agenda_item": "9.4",
+                  "description": "GNSS resilient NR-NTN operation",
+                  "has_description": true
+                }
+              ]
+            }
+          ],
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": [
-            "9.4",
-            "9.5",
-            "10.7"
-          ],
+          "inferred_agenda_items": [],
           "email_details": [],
           "part": null,
           "stream": ""
@@ -6671,7 +6761,7 @@
           "room_col_end": 5,
           "chair": null,
           "agenda_item": null,
-          "group_header": "R20",
+          "group_header": "",
           "description": null,
           "agenda_descriptions": [],
           "room_ids": [],
@@ -7065,14 +7155,14 @@
           "stream": ""
         },
         {
-          "name": "UE feature",
+          "name": "UE Features",
           "duration_minutes": 40,
           "start_time": "11:00",
           "end_time": "11:40",
           "day": "Wednesday",
           "room_col_start": 3,
           "room_col_end": 4,
-          "chair": null,
+          "chair": "Sorour",
           "agenda_item": null,
           "group_header": "R20",
           "description": null,
@@ -7088,24 +7178,40 @@
           "stream": ""
         },
         {
-          "name": "AI/ML",
+          "name": "AI 9.1 AIML",
           "duration_minutes": 50,
           "start_time": "11:40",
           "end_time": "12:30",
           "day": "Wednesday",
           "room_col_start": 3,
           "room_col_end": 4,
-          "chair": null,
-          "agenda_item": null,
+          "chair": "Sorour",
+          "agenda_item": "9.1",
           "group_header": "R20",
-          "description": null,
-          "agenda_descriptions": [],
+          "description": "Artificial Intelligence (AI)/Machine Learning (ML) for NR air interface enhancements",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "9.1",
+              "matched_agenda_item": "9.1",
+              "description": "Artificial Intelligence (AI)/Machine Learning (ML) for NR air interface enhancements",
+              "hierarchy": [
+                {
+                  "agenda_item": "9",
+                  "description": "Release 20 NR",
+                  "has_description": true
+                },
+                {
+                  "agenda_item": "9.1",
+                  "description": "Artificial Intelligence (AI)/Machine Learning (ML) for NR air interface enhancements",
+                  "has_description": true
+                }
+              ]
+            }
+          ],
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": [
-            "9.1"
-          ],
+          "inferred_agenda_items": [],
           "email_details": [],
           "part": null,
           "stream": ""
@@ -7565,7 +7671,7 @@
           "stream": ""
         },
         {
-          "name": "10.5.2.1",
+          "name": "AI 10.5.2.1 PDCCH",
           "duration_minutes": 20,
           "start_time": "14:00",
           "end_time": "14:20",
@@ -7614,7 +7720,7 @@
           "stream": ""
         },
         {
-          "name": "10.5.2.2",
+          "name": "AI 10.5.2.2 PDSCH",
           "duration_minutes": 50,
           "start_time": "14:20",
           "end_time": "15:10",
@@ -7663,7 +7769,7 @@
           "stream": ""
         },
         {
-          "name": "10.5.2.3",
+          "name": "AI 10.5.2.3 PUxCH",
           "duration_minutes": 50,
           "start_time": "15:10",
           "end_time": "16:00",
@@ -7712,7 +7818,7 @@
           "stream": ""
         },
         {
-          "name": "10.3.2 Modulation",
+          "name": "AI 10.3.2 Modulation",
           "duration_minutes": 30,
           "start_time": "16:00",
           "end_time": "16:30",
@@ -8419,37 +8525,53 @@
           "stream": ""
         },
         {
-          "name": "MIMO",
+          "name": "AI 9.2 MIMO",
           "duration_minutes": 40,
           "start_time": "17:00",
           "end_time": "17:40",
           "day": "Wednesday",
           "room_col_start": 3,
           "room_col_end": 4,
-          "chair": null,
-          "agenda_item": null,
+          "chair": "Sorour",
+          "agenda_item": "9.2",
           "group_header": "R20",
-          "description": null,
-          "agenda_descriptions": [],
+          "description": "NR MIMO Phase 6",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "9.2",
+              "matched_agenda_item": "9.2",
+              "description": "NR MIMO Phase 6",
+              "hierarchy": [
+                {
+                  "agenda_item": "9",
+                  "description": "Release 20 NR",
+                  "has_description": true
+                },
+                {
+                  "agenda_item": "9.2",
+                  "description": "NR MIMO Phase 6",
+                  "has_description": true
+                }
+              ]
+            }
+          ],
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": [
-            "9.2"
-          ],
+          "inferred_agenda_items": [],
           "email_details": [],
           "part": null,
           "stream": ""
         },
         {
-          "name": "AI 8.1",
+          "name": "TBD: AI 8.1",
           "duration_minutes": 20,
           "start_time": "17:40",
           "end_time": "18:00",
           "day": "Wednesday",
           "room_col_start": 3,
           "room_col_end": 4,
-          "chair": null,
+          "chair": "Sorour",
           "agenda_item": "8.1",
           "group_header": "",
           "description": "Maintenance on all items of Rel-19 NR and E-UTRA",
@@ -9016,14 +9138,14 @@
           "stream": ""
         },
         {
-          "name": "10.7.1 NTN",
+          "name": "AI 10.7.1 NTN",
           "duration_minutes": 40,
           "start_time": "08:00",
           "end_time": "08:40",
           "day": "Thursday",
           "room_col_start": 3,
           "room_col_end": 4,
-          "chair": null,
+          "chair": "Sorour",
           "agenda_item": "10.7.1",
           "group_header": "6GR",
           "description": "NTN specific requirements and design",
@@ -9060,14 +9182,14 @@
           "stream": ""
         },
         {
-          "name": "9.5 NTN",
+          "name": "AI 9.5 NTN",
           "duration_minutes": 20,
           "start_time": "08:40",
           "end_time": "09:00",
           "day": "Thursday",
           "room_col_start": 3,
           "room_col_end": 4,
-          "chair": null,
+          "chair": "Sorour",
           "agenda_item": "9.5",
           "group_header": "R20",
           "description": "NR NTN in systems using downlink compensation",
@@ -9099,39 +9221,53 @@
           "stream": ""
         },
         {
-          "name": "NTN-NR",
+          "name": "AI 9.4 NR-NTN",
           "duration_minutes": 40,
           "start_time": "09:00",
           "end_time": "09:40",
           "day": "Thursday",
           "room_col_start": 3,
           "room_col_end": 4,
-          "chair": null,
-          "agenda_item": null,
+          "chair": "Sorour",
+          "agenda_item": "9.4",
           "group_header": "R20",
-          "description": null,
-          "agenda_descriptions": [],
+          "description": "GNSS resilient NR-NTN operation",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "9.4",
+              "matched_agenda_item": "9.4",
+              "description": "GNSS resilient NR-NTN operation",
+              "hierarchy": [
+                {
+                  "agenda_item": "9",
+                  "description": "Release 20 NR",
+                  "has_description": true
+                },
+                {
+                  "agenda_item": "9.4",
+                  "description": "GNSS resilient NR-NTN operation",
+                  "has_description": true
+                }
+              ]
+            }
+          ],
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": [
-            "9.4",
-            "9.5",
-            "10.7"
-          ],
+          "inferred_agenda_items": [],
           "email_details": [],
           "part": null,
           "stream": ""
         },
         {
-          "name": "10.3.1 Channel coding",
+          "name": "AI 10.3.1 Coding",
           "duration_minutes": 50,
           "start_time": "09:40",
           "end_time": "10:30",
           "day": "Thursday",
           "room_col_start": 3,
           "room_col_end": 4,
-          "chair": null,
+          "chair": "Sorour",
           "agenda_item": "10.3.1",
           "group_header": "6GR",
           "description": "Channel coding",
@@ -9730,37 +9866,53 @@
           "stream": ""
         },
         {
-          "name": "MIMO",
+          "name": "AI 9.2 MIMO",
           "duration_minutes": 40,
           "start_time": "11:00",
           "end_time": "11:40",
           "day": "Thursday",
           "room_col_start": 3,
           "room_col_end": 4,
-          "chair": null,
-          "agenda_item": null,
+          "chair": "Sorour",
+          "agenda_item": "9.2",
           "group_header": "R20",
-          "description": null,
-          "agenda_descriptions": [],
+          "description": "NR MIMO Phase 6",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "9.2",
+              "matched_agenda_item": "9.2",
+              "description": "NR MIMO Phase 6",
+              "hierarchy": [
+                {
+                  "agenda_item": "9",
+                  "description": "Release 20 NR",
+                  "has_description": true
+                },
+                {
+                  "agenda_item": "9.2",
+                  "description": "NR MIMO Phase 6",
+                  "has_description": true
+                }
+              ]
+            }
+          ],
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": [
-            "9.2"
-          ],
+          "inferred_agenda_items": [],
           "email_details": [],
           "part": null,
           "stream": ""
         },
         {
-          "name": "10.5.2.2",
+          "name": "AI 10.5.2.2 PDSCH",
           "duration_minutes": 50,
           "start_time": "11:40",
           "end_time": "12:30",
           "day": "Thursday",
           "room_col_start": 3,
           "room_col_end": 4,
-          "chair": null,
+          "chair": "Sorour",
           "agenda_item": "10.5.2.2",
           "group_header": "6GR",
           "description": "Downlink transmission scheme(s) for downlink shared channels",
@@ -10251,37 +10403,53 @@
           "stream": ""
         },
         {
-          "name": "AI/ML",
+          "name": "AI 9.1 AIML",
           "duration_minutes": 50,
           "start_time": "14:00",
           "end_time": "14:50",
           "day": "Thursday",
           "room_col_start": 3,
           "room_col_end": 4,
-          "chair": null,
-          "agenda_item": null,
+          "chair": "Sorour",
+          "agenda_item": "9.1",
           "group_header": "R20",
-          "description": null,
-          "agenda_descriptions": [],
+          "description": "Artificial Intelligence (AI)/Machine Learning (ML) for NR air interface enhancements",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "9.1",
+              "matched_agenda_item": "9.1",
+              "description": "Artificial Intelligence (AI)/Machine Learning (ML) for NR air interface enhancements",
+              "hierarchy": [
+                {
+                  "agenda_item": "9",
+                  "description": "Release 20 NR",
+                  "has_description": true
+                },
+                {
+                  "agenda_item": "9.1",
+                  "description": "Artificial Intelligence (AI)/Machine Learning (ML) for NR air interface enhancements",
+                  "has_description": true
+                }
+              ]
+            }
+          ],
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": [
-            "9.1"
-          ],
+          "inferred_agenda_items": [],
           "email_details": [],
           "part": null,
           "stream": ""
         },
         {
-          "name": "10.5.2.1",
+          "name": "AI 10.5.2.1 PDCCH",
           "duration_minutes": 40,
           "start_time": "14:50",
           "end_time": "15:30",
           "day": "Thursday",
           "room_col_start": 3,
           "room_col_end": 4,
-          "chair": null,
+          "chair": "Sorour",
           "agenda_item": "10.5.2.1",
           "group_header": "6GR",
           "description": "Downlink transmission scheme(s) for downlink control channels",
@@ -10323,14 +10491,14 @@
           "stream": ""
         },
         {
-          "name": "10.5.2.3",
+          "name": "AI 10.5.2.3 PUxCH",
           "duration_minutes": 60,
           "start_time": "15:30",
           "end_time": "16:30",
           "day": "Thursday",
           "room_col_start": 3,
           "room_col_end": 4,
-          "chair": null,
+          "chair": "Sorour",
           "agenda_item": "10.5.2.3",
           "group_header": "6GR",
           "description": "Uplink transmission scheme(s) for uplink channels",
@@ -11035,7 +11203,7 @@
           "day": "Thursday",
           "room_col_start": 3,
           "room_col_end": 4,
-          "chair": null,
+          "chair": "Sorour",
           "agenda_item": "8.1",
           "group_header": "",
           "description": "Maintenance on all items of Rel-19 NR and E-UTRA",
@@ -11067,14 +11235,14 @@
           "stream": ""
         },
         {
-          "name": "10.5.2.2",
+          "name": "AI 10.5.2.2 PDSCH",
           "duration_minutes": 30,
           "start_time": "17:30",
           "end_time": "18:00",
           "day": "Thursday",
           "room_col_start": 3,
           "room_col_end": 4,
-          "chair": null,
+          "chair": "Sorour",
           "agenda_item": "10.5.2.2",
           "group_header": "6GR",
           "description": "Downlink transmission scheme(s) for downlink shared channels",
@@ -11116,14 +11284,14 @@
           "stream": ""
         },
         {
-          "name": "10.5.2.3",
+          "name": "AI 10.5.2.3 PUxCH",
           "duration_minutes": 30,
           "start_time": "18:00",
           "end_time": "18:30",
           "day": "Thursday",
           "room_col_start": 3,
           "room_col_end": 4,
-          "chair": null,
+          "chair": "Sorour",
           "agenda_item": "10.5.2.3",
           "group_header": "6GR",
           "description": "Uplink transmission scheme(s) for uplink channels",
@@ -11165,14 +11333,14 @@
           "stream": ""
         },
         {
-          "name": "10.3.2 Modulation",
+          "name": "AI 10.3.2 Modulation",
           "duration_minutes": 30,
           "start_time": "18:30",
           "end_time": "19:00",
           "day": "Thursday",
           "room_col_start": 3,
           "room_col_end": 4,
-          "chair": null,
+          "chair": "Sorour",
           "agenda_item": "10.3.2",
           "group_header": "6GR",
           "description": "Modulation",
@@ -11779,18 +11947,53 @@
           "stream": ""
         },
         {
-          "name": "[TBD : AI/ML,MIMO]",
+          "name": "TBD: AI 9.1/9.2",
           "duration_minutes": 40,
           "start_time": "08:00",
           "end_time": "08:40",
           "day": "Friday",
           "room_col_start": 3,
           "room_col_end": 4,
-          "chair": null,
-          "agenda_item": null,
+          "chair": "Sorour",
+          "agenda_item": "9.1, 9.2",
           "group_header": "R20",
-          "description": null,
-          "agenda_descriptions": [],
+          "description": "Artificial Intelligence (AI)/Machine Learning (ML) for NR air interface enhancements",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "9.1",
+              "matched_agenda_item": "9.1",
+              "description": "Artificial Intelligence (AI)/Machine Learning (ML) for NR air interface enhancements",
+              "hierarchy": [
+                {
+                  "agenda_item": "9",
+                  "description": "Release 20 NR",
+                  "has_description": true
+                },
+                {
+                  "agenda_item": "9.1",
+                  "description": "Artificial Intelligence (AI)/Machine Learning (ML) for NR air interface enhancements",
+                  "has_description": true
+                }
+              ]
+            },
+            {
+              "agenda_item": "9.2",
+              "matched_agenda_item": "9.2",
+              "description": "NR MIMO Phase 6",
+              "hierarchy": [
+                {
+                  "agenda_item": "9",
+                  "description": "Release 20 NR",
+                  "has_description": true
+                },
+                {
+                  "agenda_item": "9.2",
+                  "description": "NR MIMO Phase 6",
+                  "has_description": true
+                }
+              ]
+            }
+          ],
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
@@ -11800,39 +12003,53 @@
           "stream": ""
         },
         {
-          "name": "NTN-NR",
+          "name": "AI 9.5 NTN",
           "duration_minutes": 40,
           "start_time": "08:40",
           "end_time": "09:20",
           "day": "Friday",
           "room_col_start": 3,
           "room_col_end": 4,
-          "chair": null,
-          "agenda_item": null,
+          "chair": "Sorour",
+          "agenda_item": "9.5",
           "group_header": "R20",
-          "description": null,
-          "agenda_descriptions": [],
+          "description": "NR NTN in systems using downlink compensation",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "9.5",
+              "matched_agenda_item": "9.5",
+              "description": "NR NTN in systems using downlink compensation",
+              "hierarchy": [
+                {
+                  "agenda_item": "9",
+                  "description": "Release 20 NR",
+                  "has_description": true
+                },
+                {
+                  "agenda_item": "9.5",
+                  "description": "NR NTN in systems using downlink compensation",
+                  "has_description": true
+                }
+              ]
+            }
+          ],
           "room_ids": [],
           "room_scope": "assigned",
           "notes": [],
-          "inferred_agenda_items": [
-            "9.4",
-            "9.5",
-            "10.7"
-          ],
+          "inferred_agenda_items": [],
           "email_details": [],
           "part": null,
           "stream": ""
         },
         {
-          "name": "10.7.1 NTN",
+          "name": "AI 10.7.1 NTN",
           "duration_minutes": 40,
           "start_time": "09:20",
           "end_time": "10:00",
           "day": "Friday",
           "room_col_start": 3,
           "room_col_end": 4,
-          "chair": null,
+          "chair": "Sorour",
           "agenda_item": "10.7.1",
           "group_header": "6GR",
           "description": "NTN specific requirements and design",
@@ -11869,14 +12086,14 @@
           "stream": ""
         },
         {
-          "name": "10.5.2.2",
+          "name": "AI 10.5.2.2 PDSCH",
           "duration_minutes": 30,
           "start_time": "10:00",
           "end_time": "10:30",
           "day": "Friday",
           "room_col_start": 3,
           "room_col_end": 4,
-          "chair": null,
+          "chair": "Sorour",
           "agenda_item": "10.5.2.2",
           "group_header": "6GR",
           "description": "Downlink transmission scheme(s) for downlink shared channels",
@@ -12273,14 +12490,14 @@
           "stream": ""
         },
         {
-          "name": "10.5.2.2",
+          "name": "AI 10.5.2.2 PDSCH",
           "duration_minutes": 30,
           "start_time": "11:00",
           "end_time": "11:30",
           "day": "Friday",
           "room_col_start": 3,
           "room_col_end": 4,
-          "chair": null,
+          "chair": "Sorour",
           "agenda_item": "10.5.2.2",
           "group_header": "6GR",
           "description": "Downlink transmission scheme(s) for downlink shared channels",
@@ -12322,14 +12539,14 @@
           "stream": ""
         },
         {
-          "name": "10.5.2.3",
+          "name": "AI 10.5.2.3 PUxCH",
           "duration_minutes": 60,
           "start_time": "11:30",
           "end_time": "12:30",
           "day": "Friday",
           "room_col_start": 3,
           "room_col_end": 4,
-          "chair": null,
+          "chair": "Sorour",
           "agenda_item": "10.5.2.3",
           "group_header": "6GR",
           "description": "Uplink transmission scheme(s) for uplink channels",
@@ -12534,20 +12751,23 @@
     }
   ],
   "source_file": "Draft RAN1#127 online and offline schedules - v02.docx",
-  "generated_at": "2026-11-15 12:41",
+  "generated_at": "2026-11-15 16:03",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
     "Draft RAN1#127 online and offline schedules - v02.docx",
-    "Draft RAN1#127 online and offline schedules - v02_hh.docx"
+    "Draft RAN1#127 online and offline schedules - v02_hh.docx",
+    "RAN1#127 Sorour sessions online and offline schedules - v00.docx"
   ],
   "source_labels": {
     "Draft RAN1#127 online and offline schedules - v02.docx": "Main",
-    "Draft RAN1#127 online and offline schedules - v02_hh.docx": "Hiroki"
+    "Draft RAN1#127 online and offline schedules - v02_hh.docx": "Hiroki",
+    "RAN1#127 Sorour sessions online and offline schedules - v00.docx": "Sorour"
   },
   "source_urls": {
     "Draft RAN1#127 online and offline schedules - v02.docx": "https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_127/Inbox/Chair_notes/Draft%20RAN1%23127%20online%20and%20offline%20schedules%20-%20v02.docx",
-    "Draft RAN1#127 online and offline schedules - v02_hh.docx": "https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_127/Inbox/Hiroki_notes/Draft%20RAN1%23127%20online%20and%20offline%20schedules%20-%20v02_hh.docx"
+    "Draft RAN1#127 online and offline schedules - v02_hh.docx": "https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_127/Inbox/Hiroki_notes/Draft%20RAN1%23127%20online%20and%20offline%20schedules%20-%20v02_hh.docx",
+    "RAN1#127 Sorour sessions online and offline schedules - v00.docx": "https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_127/Inbox/Sorour_notes/RAN1%23127%20Sorour%20sessions%20online%20and%20offline%20schedules%20-%20v00.docx"
   },
   "source_mails": {},
   "timezone": "America/Edmonton",
@@ -12984,12 +13204,40 @@
         "sha256": "65cb966cca859b81153988ceaa9f925bd309058dbef9ae978fc9f0985657e400",
         "source_url": "https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_127/Inbox/Hiroki_notes/draft_R1-2609118_Session%20Notes%20of%20AI%2010.8_v00.docx"
       },
+      "R1-2609119": {
+        "name": "Draft R1-2609119 Session Notes of AI 10.7 - v00.docx",
+        "agenda_item": "10.7",
+        "changed_at": "2026-11-15T21:45:56+00:00",
+        "sha256": "9a025d8d49dc123e30290b3a27f2d3ad5104493ca251baf315fa82d885764455",
+        "source_url": "https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_127/Inbox/Sorour_notes/Draft%20R1-2609119%20Session%20Notes%20of%20AI%2010.7%20-%20v00.docx"
+      },
       "R1-2609120": {
         "name": "draft_R1-2609120_Session Notes of AI 10.5.4_v00.docx",
         "agenda_item": "10.5.4",
         "changed_at": "2026-11-13T11:01:20+00:00",
         "sha256": "939e9d59954e6286036f31e2c53b13941d5f1b73c6c87909ddb20bf8a57efb6a",
         "source_url": "https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_127/Inbox/Hiroki_notes/draft_R1-2609120_Session%20Notes%20of%20AI%2010.5.4_v00.docx"
+      },
+      "R1-2609121": {
+        "name": "Draft R1-2609121 Session Notes of AI 10.5.2 - v00.docx",
+        "agenda_item": "10.5.2",
+        "changed_at": "2026-11-15T21:45:56+00:00",
+        "sha256": "8e1084aa43cfd89acd4f74fb98170dcb0db11ded97eaa8e74c3d58ffe9531967",
+        "source_url": "https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_127/Inbox/Sorour_notes/Draft%20R1-2609121%20Session%20Notes%20of%20AI%2010.5.2%20-%20v00.docx"
+      },
+      "R1-2609122": {
+        "name": "Draft R1-2609122 Session Notes of AI 10.3.2 - v00.docx",
+        "agenda_item": "10.3.2",
+        "changed_at": "2026-11-15T21:45:56+00:00",
+        "sha256": "0f5b199eee8affa945ff9267fccadef7db4bd220390b88dd140fcb43e2eb72dc",
+        "source_url": "https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_127/Inbox/Sorour_notes/Draft%20R1-2609122%20Session%20Notes%20of%20AI%2010.3.2%20-%20v00.docx"
+      },
+      "R1-2609123": {
+        "name": "Draft R1-2609123 Session Notes of AI 10.3.1 - v00.docx",
+        "agenda_item": "10.3.1",
+        "changed_at": "2026-11-15T21:45:56+00:00",
+        "sha256": "366796258dd7d7cbc64c300973797fde2f0d2b0b656397140fe53cf69dc529fe",
+        "source_url": "https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_127/Inbox/Sorour_notes/Draft%20R1-2609123%20Session%20Notes%20of%20AI%2010.3.1%20-%20v00.docx"
       },
       "R1-2609124": {
         "name": "draft_R1-2609124_Session Notes of AI 10.2.1_v00.docx",
@@ -12998,12 +13246,47 @@
         "sha256": "ec38b058a5f0a2bbe59ce3190f7e6fabe1325dbcae95d7367d23ad07f7244c03",
         "source_url": "https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_127/Inbox/Hiroki_notes/draft_R1-2609124_Session%20Notes%20of%20AI%2010.2.1_v00.docx"
       },
+      "R1-2609126": {
+        "name": "Draft R1-2609126 Session Notes of AI 9.5 - v00.docx",
+        "agenda_item": "9.5",
+        "changed_at": "2026-11-15T21:45:56+00:00",
+        "sha256": "98d69f1c321bba2dc8761db5914b041484acddfa88de577f274f2e920598c6ca",
+        "source_url": "https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_127/Inbox/Sorour_notes/Draft%20R1-2609126%20Session%20Notes%20of%20AI%209.5%20-%20v00.docx"
+      },
+      "R1-2609127": {
+        "name": "Draft R1-2609127 Session Notes of AI 9.4 - v00.docx",
+        "agenda_item": "9.4",
+        "changed_at": "2026-11-15T21:45:56+00:00",
+        "sha256": "c91b41e84d58aaca332e2bee391a978be623844687eb0050bf14b18c60cd41e4",
+        "source_url": "https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_127/Inbox/Sorour_notes/Draft%20R1-2609127%20Session%20Notes%20of%20AI%209.4%20-%20v00.docx"
+      },
       "R1-2609128": {
         "name": "draft_R1-2609128_Session Notes of AI 9.3_v00.docx",
         "agenda_item": "9.3",
         "changed_at": "2026-11-13T11:01:21+00:00",
         "sha256": "aee5409cd4123eecf64c76d2540744df2214004c255a4f280ad829ebe8652485",
         "source_url": "https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_127/Inbox/Hiroki_notes/draft_R1-2609128_Session%20Notes%20of%20AI%209.3_v00.docx"
+      },
+      "R1-2609129": {
+        "name": "Draft R1-2609129 Session Notes of AI 9.2 - v00.docx",
+        "agenda_item": "9.2",
+        "changed_at": "2026-11-15T21:45:56+00:00",
+        "sha256": "f281fc503e0428e70b252e9b85d8ec8f9b8d4b3a953f2c6a27e06e1db8e65526",
+        "source_url": "https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_127/Inbox/Sorour_notes/Draft%20R1-2609129%20Session%20Notes%20of%20AI%209.2%20-%20v00.docx"
+      },
+      "R1-2609130": {
+        "name": "Draft R1-2609130 Session Notes of AI 9.1 - v00.docx",
+        "agenda_item": "9.1",
+        "changed_at": "2026-11-15T21:45:56+00:00",
+        "sha256": "cf0629c759669ed917a4e2aef5fb6639664ada22b397e30b900461da750386a0",
+        "source_url": "https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_127/Inbox/Sorour_notes/Draft%20R1-2609130%20Session%20Notes%20of%20AI%209.1%20-%20v00.docx"
+      },
+      "R1-2609131": {
+        "name": "Draft R1-2609131 Session Notes of AI 8.1 - v00.docx",
+        "agenda_item": "8.1",
+        "changed_at": "2026-11-15T21:45:56+00:00",
+        "sha256": "20b2475a2e95143cb85aeec9003487beb78ff799578a668b424bcb40794182bc",
+        "source_url": "https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_127/Inbox/Sorour_notes/Draft%20R1-2609131%20Session%20Notes%20of%20AI%208.1%20-%20v00.docx"
       },
       "R1-2609132": {
         "name": "draft_R1-2609132_Session Notes of AI 7_v00.docx",
@@ -13344,6 +13627,7 @@
         ],
         "sources": {
           "chair": "86915bbbdbda",
+          "R1-2609131": "df1e639fe55d",
           "R1-2610805": "f56eaaf210d1"
         },
         "change": "updated",
@@ -13387,18 +13671,21 @@
         "excluded_tdoc_rows": 0,
         "blocks": [
           "72fe4a4a211b",
-          "6873de8d5d6d",
+          "7fdcdf392f51",
           "334907737e61",
           "2c16a6647771"
         ],
         "sources": {
-          "chair": "24b7f089f12b"
+          "chair": "24b7f089f12b",
+          "R1-2609130": "505b8ec3306e"
         },
-        "change": "initial",
-        "added": [],
-        "changed_at": "2026-11-11T10:57:29+00:00",
-        "changed_in": "Draft Chair notes RAN1#127_v02.docx",
-        "file": "agreements/d9b9f793c958328a9431.html"
+        "change": "updated",
+        "added": [
+          1
+        ],
+        "changed_at": "2026-11-15T21:45:56+00:00",
+        "changed_in": "Draft R1-2609130 Session Notes of AI 9.1 - v00.docx",
+        "file": "agreements/73cd0d30833b24f49b55.html"
       },
       "9.1.1": {
         "title": "CSI spatial/frequency compression without temporal aspects (“Case 0”)",
@@ -13407,7 +13694,8 @@
           "4990068f3b1a"
         ],
         "sources": {
-          "chair": "207a38856a5a"
+          "chair": "207a38856a5a",
+          "R1-2609130": "207a38856a5a"
         },
         "change": "initial",
         "added": [],
@@ -13419,16 +13707,24 @@
         "title": "Inter-vendor training collaboration for two-sided AI/ML models",
         "excluded_tdoc_rows": 32,
         "blocks": [
-          "934fcbb8e3ec"
+          "934fcbb8e3ec",
+          "3e4d27eedb5d",
+          "f6997a6bed26",
+          "c579a33fb17a"
         ],
         "sources": {
-          "chair": "9b040eb33654"
+          "chair": "9b040eb33654",
+          "R1-2609130": "13c254c605f9"
         },
-        "change": "initial",
-        "added": [],
-        "changed_at": "2026-11-11T10:57:29+00:00",
-        "changed_in": "Draft Chair notes RAN1#127_v02.docx",
-        "file": "agreements/793da462d857baf08162.html"
+        "change": "updated",
+        "added": [
+          1,
+          2,
+          3
+        ],
+        "changed_at": "2026-11-15T21:45:56+00:00",
+        "changed_in": "Draft R1-2609130 Session Notes of AI 9.1 - v00.docx",
+        "file": "agreements/c5c694c96529a012ef1c.html"
       },
       "9.2": {
         "title": "NR MIMO Phase 6",
@@ -13441,16 +13737,34 @@
           "2051705dd8de",
           "a209803a88e8",
           "334907737e61",
-          "75e9be961ca2"
+          "75e9be961ca2",
+          "a47caa9e4cb0",
+          "f37bbf2fd00b",
+          "c898aa9048d2",
+          "ff347ce27469",
+          "189be9c0aa3f",
+          "2051705dd8de",
+          "638e5a51de25",
+          "910fe71cd209"
         ],
         "sources": {
-          "chair": "c26480efbf7e"
+          "chair": "c26480efbf7e",
+          "R1-2609129": "1579aa9fd694"
         },
-        "change": "initial",
-        "added": [],
-        "changed_at": "2026-11-11T10:57:29+00:00",
-        "changed_in": "Draft Chair notes RAN1#127_v02.docx",
-        "file": "agreements/485592b280684ace8689.html"
+        "change": "updated",
+        "added": [
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15
+        ],
+        "changed_at": "2026-11-15T21:45:56+00:00",
+        "changed_in": "Draft R1-2609129 Session Notes of AI 9.2 - v00.docx",
+        "file": "agreements/fec2225bcfb6b989908d.html"
       },
       "9.3": {
         "title": "Solutions for Ambient IoT (Internet of Things) in NR Phase 2",
@@ -13536,7 +13850,8 @@
           "105189664550"
         ],
         "sources": {
-          "chair": "672c1a2dd2ca"
+          "chair": "672c1a2dd2ca",
+          "R1-2609127": "672c1a2dd2ca"
         },
         "change": "initial",
         "added": [],
@@ -13564,7 +13879,8 @@
           "320ad10fe148"
         ],
         "sources": {
-          "chair": "5e7a0c6133a5"
+          "chair": "5e7a0c6133a5",
+          "R1-2609126": "5e7a0c6133a5"
         },
         "change": "initial",
         "added": [],
@@ -13579,7 +13895,8 @@
           "09d55af1ba0a"
         ],
         "sources": {
-          "chair": "a3f53176f2ff"
+          "chair": "a3f53176f2ff",
+          "R1-2609126": "a3f53176f2ff"
         },
         "change": "initial",
         "added": [],
@@ -13689,20 +14006,21 @@
       },
       "10.3.1": {
         "title": "Channel coding",
-        "excluded_tdoc_rows": 43,
+        "excluded_tdoc_rows": 46,
         "blocks": [
           "21a6bb0e7b95",
           "334907737e61",
           "8f5da92c039a"
         ],
         "sources": {
-          "chair": "bd5238a24b2c"
+          "chair": "bd5238a24b2c",
+          "R1-2609123": "bd5238a24b2c"
         },
         "change": "initial",
         "added": [],
         "changed_at": "2026-11-11T10:57:29+00:00",
         "changed_in": "Draft Chair notes RAN1#127_v02.docx",
-        "file": "agreements/86ae3ef8b41796d74c11.html"
+        "file": "agreements/357ff20e52c300d2b143.html"
       },
       "10.3.2": {
         "title": "Modulation",
@@ -13714,7 +14032,8 @@
           "194d983dae5e"
         ],
         "sources": {
-          "chair": "6f9103c69f8a"
+          "chair": "6f9103c69f8a",
+          "R1-2609122": "6f9103c69f8a"
         },
         "change": "initial",
         "added": [],
@@ -13860,7 +14179,8 @@
           "e212e3a10218"
         ],
         "sources": {
-          "chair": "af9271572c71"
+          "chair": "af9271572c71",
+          "R1-2609121": "af9271572c71"
         },
         "change": "initial",
         "added": [],
@@ -13877,7 +14197,8 @@
           "334907737e61"
         ],
         "sources": {
-          "chair": "25edf0d03cb9"
+          "chair": "25edf0d03cb9",
+          "R1-2609121": "25edf0d03cb9"
         },
         "change": "initial",
         "added": [],
@@ -13887,14 +14208,15 @@
       },
       "10.5.2.2": {
         "title": "Downlink transmission scheme(s) for downlink shared channels",
-        "excluded_tdoc_rows": 65,
+        "excluded_tdoc_rows": 67,
         "blocks": [
           "53d66e56a274",
           "c34382a60777",
           "334907737e61"
         ],
         "sources": {
-          "chair": "f8ff7f1e7d42"
+          "chair": "f8ff7f1e7d42",
+          "R1-2609121": "f8ff7f1e7d42"
         },
         "change": "initial",
         "added": [],
@@ -13904,20 +14226,21 @@
       },
       "10.5.2.3": {
         "title": "Uplink transmission scheme(s) for uplink channels",
-        "excluded_tdoc_rows": 57,
+        "excluded_tdoc_rows": 60,
         "blocks": [
           "cf89236b5acf",
           "1ff59d1a18f0",
           "334907737e61"
         ],
         "sources": {
-          "chair": "3fe631186fcb"
+          "chair": "3fe631186fcb",
+          "R1-2609121": "3fe631186fcb"
         },
         "change": "initial",
         "added": [],
         "changed_at": "2026-11-11T10:57:29+00:00",
         "changed_in": "Draft Chair notes RAN1#127_v02.docx",
-        "file": "agreements/ee9197fa7216bbe11503.html"
+        "file": "agreements/8dddc9f2828698e1314d.html"
       },
       "10.5.3": {
         "title": "CSI acquisition and report",
@@ -14204,7 +14527,8 @@
           "7c29647ed0e9"
         ],
         "sources": {
-          "chair": "87351d53aaa1"
+          "chair": "87351d53aaa1",
+          "R1-2609119": "87351d53aaa1"
         },
         "change": "initial",
         "added": [],
@@ -14221,7 +14545,8 @@
           "334907737e61"
         ],
         "sources": {
-          "chair": "05c4334984d6"
+          "chair": "05c4334984d6",
+          "R1-2609119": "05c4334984d6"
         },
         "change": "initial",
         "added": [],
@@ -14331,7 +14656,13 @@
         "changed_in": "Draft Chair notes RAN1#127_v02.docx"
       }
     },
-    "retained_files": []
+    "retained_files": [
+      "agreements/485592b280684ace8689.html",
+      "agreements/793da462d857baf08162.html",
+      "agreements/86ae3ef8b41796d74c11.html",
+      "agreements/d9b9f793c958328a9431.html",
+      "agreements/ee9197fa7216bbe11503.html"
+    ]
   },
   "email_informal": {
     "10.6.3": [
