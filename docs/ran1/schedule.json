@@ -1697,7 +1697,23 @@
           "room_scope": "assigned",
           "notes": [],
           "inferred_agenda_items": [],
-          "email_details": [],
+          "email_details": [
+            {
+              "kind": "session",
+              "session": "Mon 14:00-14:30 Offline2",
+              "quote": "The first offline session is Monday 14:00pm",
+              "mode": "offline",
+              "summary": "First offline session",
+              "topics": [],
+              "start": "14:00",
+              "day": "Monday",
+              "split": [],
+              "mail": "61b30662.2611c",
+              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;61b30662.2611c",
+              "author": "<>",
+              "sent": "2026-11-15T16:16:17-06:00"
+            }
+          ],
           "part": null,
           "stream": ""
         },
@@ -2600,7 +2616,23 @@
           "room_scope": "assigned",
           "notes": [],
           "inferred_agenda_items": [],
-          "email_details": [],
+          "email_details": [
+            {
+              "kind": "session",
+              "session": "Mon 17:00-17:30 Offline2",
+              "quote": "the second offline session in Monday 17:00pm",
+              "mode": "offline",
+              "summary": "Second offline session",
+              "topics": [],
+              "start": "17:00",
+              "day": "Monday",
+              "split": [],
+              "mail": "61b30662.2611c",
+              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;61b30662.2611c",
+              "author": "<>",
+              "sent": "2026-11-15T16:16:17-06:00"
+            }
+          ],
           "part": null,
           "stream": ""
         },
@@ -12751,7 +12783,7 @@
     }
   ],
   "source_file": "Draft RAN1#127 online and offline schedules - v02.docx",
-  "generated_at": "2026-11-15 16:03",
+  "generated_at": "2026-11-15 16:21",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
@@ -14656,13 +14688,7 @@
         "changed_in": "Draft Chair notes RAN1#127_v02.docx"
       }
     },
-    "retained_files": [
-      "agreements/485592b280684ace8689.html",
-      "agreements/793da462d857baf08162.html",
-      "agreements/86ae3ef8b41796d74c11.html",
-      "agreements/d9b9f793c958328a9431.html",
-      "agreements/ee9197fa7216bbe11503.html"
-    ]
+    "retained_files": []
   },
   "email_informal": {
     "10.6.3": [
