@@ -224,15 +224,10 @@ class Bundle:
 
 # ------------------------------------------------------------------- listings
 
-def listing_entries(html: str, url: str) -> list[dict]:
-    """The folder's own entries: SA1 walks into previous_ones/, so parent links are left out."""
-    return remote_files.listing_entries(html, url, children_only=True)
-
-
 def fetch_listing(url: str, http) -> list[dict]:
     """A folder's entries; none while it does not exist (3GPP answers 403 for absent folders)."""
     try:
-        return listing_entries(remote_files.get_listing(url, http=http).text, url)
+        return remote_files.listing_entries(remote_files.get_listing(url, http=http).text, url)
     except httpx.HTTPError as exc:
         if not remote_files.is_absent(exc):
             raise
@@ -254,11 +249,10 @@ def archive_entries(folder: str, meeting: str, http) -> list[dict]:
     """Agenda TDoc zips in Docs/ and closing files in the report folders of one meeting folder."""
     entries = []
     for sub in fetch_listing(folder, http):
-        # The folder name alone: 3GPP links folders without a trailing '/' since 2026-11.
-        if not REPORT_FOLDERS.match(sub['name']) or urlparse(sub['url']).query:
+        if not sub['is_dir'] or not REPORT_FOLDERS.match(sub['name']):
             continue
         report = sub['name'].lower() != 'docs'
-        for entry in fetch_listing(sub['url'].rstrip('/') + '/', http):
+        for entry in fetch_listing(sub['url'], http):
             if report or AGENDA_TDOC.match(entry['name']):
                 entries.append({**entry, 'folder_meeting': meeting, 'report': report})
     return entries

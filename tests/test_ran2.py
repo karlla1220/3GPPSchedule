@@ -17,6 +17,7 @@ from shared.agenda import agenda_map
 from shared.renderer import generate_html
 from shared.schedule import load_schedule, save_schedule, time_to_minutes
 from working_groups.ran2 import document as docmod, lifecycle, pipeline, sessions, sources
+from tests import ftp_listing
 
 
 def noon(day):
@@ -381,13 +382,12 @@ def test_days_outside_the_meeting_dates_are_shown_without_a_date():
 # ------------------------------------------------------------------- sources
 
 def listing(names, base='https://www.3gpp.org/ftp/x/'):
-    rows = ''.join(f'<tr><td><a href="{base}{n}">{n}</a></td><td>2026/09/30 8:32</td></tr>' for n in names)
-    return f'<table>{rows}</table>'
+    return ftp_listing.listing(names, base, '2026/09/30 8:32')
 
 
 def test_listing_parses_names_and_times():
-    entries = sources.listing_entries(listing(['TSGR2_135bis/', 'Invitation/']),
-                                      'https://www.3gpp.org/ftp/tsg_ran/WG2_RL2/')
+    url = 'https://www.3gpp.org/ftp/tsg_ran/WG2_RL2/'
+    entries = sources.listing_entries(listing(['TSGR2_135bis/', 'Invitation/'], url), url)
     assert entries[0]['uploaded_at'] == '2026-09-30 08:32'
     assert [e['name'] for e in entries] == ['TSGR2_135bis', 'Invitation']
     assert sources.rank('ran2#135') < sources.rank('ran2#135bis') < sources.rank('ran2#136')

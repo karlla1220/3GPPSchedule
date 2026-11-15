@@ -28,6 +28,7 @@ from working_groups.ran1.downloader import (
     local_reference_hashes,
     local_reference_meeting_id,
     load_schedule_state,
+    list_inbox_subfolders,
     list_remote_files,
     save_schedule_state,
 )
@@ -560,6 +561,18 @@ def test_list_remote_files_includes_docm_chair_notes():
         files = list_remote_files("https://example.com/Chair_notes")
 
     assert [f["name"] for f in files] == ["Chair notes RAN1#126_v00.docm"]
+
+
+def test_inbox_subfolders_are_the_folder_rows_of_the_listing():
+    """Since 2026-11 folders are linked without '/'; a dotted folder is a folder, a bare file is not."""
+    from tests import ftp_listing
+    inbox = "https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_126b/Inbox/"
+    html = ftp_listing.listing(["Chair_notes/", "Hiroki.notes/", "README", "R1-2607551.zip"], inbox)
+    with patch("working_groups.ran1.downloader._get_with_retry", return_value=MagicMock(text=html)):
+        folders = list_inbox_subfolders(inbox)
+    assert [(f["name"], f["url"]) for f in folders] == [
+        ("Chair_notes", inbox + "Chair_notes/"), ("Hiroki.notes", inbox + "Hiroki.notes/")]
+    assert folders[0]["uploaded_at"] == datetime(2026, 10, 14, 9, 25)
 
 
 def test_forced_chair_notes_refresh_replaces_same_filename(tmp_path):

@@ -5,7 +5,7 @@ import json
 import subprocess
 import sys
 from types import SimpleNamespace
-from urllib.parse import quote, unquote
+from urllib.parse import unquote
 import zipfile
 
 from bs4 import BeautifulSoup
@@ -16,6 +16,7 @@ import pytest
 from test_sa1 import EOM, FIXTURES, HISTORY, META_115, M113, TIMETABLE, find
 from working_groups.sa1 import lifecycle, pipeline, sources
 from working_groups.sa1.document import UnreadTable
+from tests import ftp_listing
 
 
 def noon(day):
@@ -58,7 +59,7 @@ ROWS = [{'Title': '3GPPSA1#115', 'TBId': 384, 'Id': 1, 'StartDate': '2026-08-24 
 def mock_server(files, bare_folders=False):
     """3GPP-like server: listings with upload times, 403 for missing paths.
 
-    bare_folders: the listing since 2026-11, folder links without '/' after sort links.
+    bare_folders: the listing since 2026-11, folder links without '/'.
     """
     def handler(request):
         url = unquote(str(request.url))
@@ -67,13 +68,8 @@ def mock_server(files, bare_folders=False):
                             for u in files if u.startswith(url) and u != url})
             if not names:
                 return httpx.Response(403)
-            if bare_folders:
-                names = [n.rstrip('/') for n in names]
-            rows = ''.join(f'<tr><td><a href="{quote(url + n, safe=":/")}">{n}</a></td>'
-                           f'<td>{files.get(url + n, (None, "2026/08/26 15:22"))[1]}'
-                           '</td></tr>' for n in names)
-            sort = ''.join(f'<a href="?sortby={key}">x</a>' for key in ('name', 'date')) if bare_folders else ''
-            return httpx.Response(200, text=f'{sort}<table>{rows}</table>')
+            entries = [(n, files.get(url + n, (None, "2026/08/26 15:22"))[1]) for n in names]
+            return httpx.Response(200, text=ftp_listing.listing(entries, url, slashed=not bare_folders))
         if url in files:
             return httpx.Response(200, content=files[url][0], headers={'etag': f'"{len(files[url][0])}"'})
         return httpx.Response(403)

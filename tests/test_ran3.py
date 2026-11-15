@@ -17,6 +17,7 @@ from shared.agenda import agenda_map, written_ranges
 from shared.renderer import generate_html
 from shared.schedule import load_schedule, save_schedule
 from working_groups.ran3 import document as docmod, lifecycle, llm, pipeline, sessions, sources
+from tests import ftp_listing
 
 
 def noon(day):
@@ -535,8 +536,7 @@ def test_render_roundtrip_and_split_pieces(eom, tmp_path):
 # ------------------------------------------------------------------ sources
 
 def listing(names, base):
-    rows = ''.join(f'<tr><td><a href="{base}{n}">{n}</a></td><td>2026/10/14 9:25</td></tr>' for n in names)
-    return f'<table>{rows}</table>'
+    return ftp_listing.listing(names, base)
 
 
 def mock_server(files, seen=None):
