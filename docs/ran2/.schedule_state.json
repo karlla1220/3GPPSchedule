@@ -8,10 +8,10 @@
     "uploaded_at": "2026-11-13 20:12",
     "size": 296117,
     "sha256": "428c3ffd22fc4f77b2f5a36107b5558d991e302e73b7a657a4ce742a85cb2672",
-    "etag": "\"eca3760ab73dd1:0\"",
+    "etag": null,
     "last_modified": "Fri, 13 Nov 2026 20:12:58 GMT",
-    "ftp_modified": null,
-    "content_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    "ftp_modified": "213 20261113201258",
+    "content_type": "application/octet-stream",
     "content_disposition": null
   },
   "agenda": {
@@ -19,15 +19,15 @@
     "name": "agenda.csv",
     "size": 6189,
     "sha256": "549f724a850bd121128e1eb3a26982fb566474459b17f57e7ed8645154eafd45",
-    "etag": "\"54d2e4e13173dd1:0\"",
-    "last_modified": "Fri, 13 Nov 2026 05:43:17 GMT",
+    "etag": "\"587ab937c474dd1:0\"",
+    "last_modified": "Sun, 15 Nov 2026 05:43:18 GMT",
     "ftp_modified": null,
     "content_type": "application/octet-stream",
     "content_disposition": null
   },
   "email": {
     "list": "3GPP_TSG_RAN_WG2",
-    "checked_through": "2026-11-13T18:45:51+00:00"
+    "checked_through": "2026-11-15T17:41:36+00:00"
   },
   "metadata": {
     "starts_on": "2026-11-16",
