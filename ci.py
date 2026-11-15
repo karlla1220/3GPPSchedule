@@ -281,9 +281,41 @@ def outputs(values):
                 stream.write(f'{key}={encoded}\n')
 
 
+def push_schedules(paths, url=None, token=None, opener=None):
+    """PUT each changed docs/<wg>/schedule.json to specDuck as is; never raises.
+
+    specDuck's Live Topic view reads these. Sending the committed bytes skips the
+    Pages CDN cache. A failure only warns: the schedule site does not depend on it.
+    """
+    import urllib.request
+    url = url if url is not None else os.environ.get('SPECDUCK_URL', '')
+    token = token if token is not None else os.environ.get('SPECDUCK_TOKEN', '')
+    if not url or not token:
+        return []
+    opener = opener or urllib.request.urlopen
+    sent = []
+    for path in map(Path, paths):
+        if len(path.parts) != 3 or path.parts[0] != 'docs' or path.name != 'schedule.json' or not path.exists():
+            continue
+        wg = path.parts[1]
+        request = urllib.request.Request(f"{url.rstrip('/')}/api/schedules/{wg}", data=path.read_bytes(), method='PUT',
+                                         headers={'Authorization': f'Bearer {token}', 'Content-Type': 'application/json'})
+        try:
+            with opener(request, timeout=20) as response:
+                status = response.status
+        except Exception as error:  # HTTPError (401/403 token, 422 format, 404 not deployed) or network
+            status = getattr(error, 'code', None) or type(error).__name__
+        if status in (200, 204):
+            sent.append(wg)
+        else:
+            print(f'::warning::specDuck rejected {wg} schedule: {status}')
+    return sent
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('command', choices=['check', 'build', 'stage', 'notify'])
+    parser.add_argument('command', choices=['check', 'build', 'stage', 'notify', 'push'])
+    parser.add_argument('paths', nargs='*', help='push: files the commit changed')
     parser.add_argument('--action', choices=['check-build-deploy', 'build-deploy', 'force-deploy'], default='check-build-deploy')
     parser.add_argument('--site-config', type=Path, default=Path('site.json'))
     args = parser.parse_args()
@@ -299,6 +331,8 @@ def main():
         server, repository, run_id = (os.environ.get(k) for k in ('GITHUB_SERVER_URL', 'GITHUB_REPOSITORY', 'GITHUB_RUN_ID'))
         run_url = f'{server}/{repository}/actions/runs/{run_id}' if server and repository and run_id else None
         print(f'Posted {notices.report(run_url, os.environ.get("GITHUB_REPOSITORY_OWNER"))} notice(s)')
+    elif args.command == 'push':
+        print(f'Pushed {push_schedules(args.paths)} to specDuck')
     else:
         import subprocess
         # Only paths owned by the build are staged; deletions are included.

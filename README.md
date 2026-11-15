@@ -1213,6 +1213,7 @@ repository_dispatch(cronjob_trigger) / workflow_dispatch
   → ci.py build: 변경된 WG만 준비·파싱, 공통 사이트 조립
   → 공개 파일 내용이 바뀐 경우만 Pages 배포
   → 성공한 WG의 결과·상태를 커밋
+  → ci.py push: 그 커밋에서 바뀐 docs/<wg>/schedule.json을 specDuck에 PUT
 ```
 
 자동 호출 주기는 외부 스케줄러에서 관리합니다. 저장소 workflow 자체에는 cron이 없습니다.
@@ -1292,6 +1293,10 @@ uv run python ci.py build --action force-deploy
 ### 환경과 Pages 설정
 
 - `github-pages` environment(또는 repository secrets)에 `GEMINI_API_KEY`를 둡니다.
+- specDuck(Live Topic 화면)에 일정을 보내려면 repository secret `SPECDUCK_TOKEN`과 repository variable `SPECDUCK_URL`을 둡니다.
+  커밋에서 바뀐 WG마다 `PUT {SPECDUCK_URL}/api/schedules/<wg>`(`Authorization: Bearer`, 본문은 `schedule.json` 바이트 그대로, 20초 timeout)를 보냅니다.
+  Pages CDN 캐시를 기다리지 않으려고 Pages에서 다시 받지 않습니다. 둘 중 하나라도 없으면 건너뛰고,
+  실패(401·403 토큰, 422 형식 거부, 404 미배포, 네트워크)는 `::warning::`만 남기며 빌드·배포를 실패시키지 않습니다.
 - 공통 제작자·연락처는 `site.json`의 `presentation`에서 읽습니다. WG 파서는 연락처 환경변수를 요구하지 않습니다.
 - Repository Settings → Pages → Source는 **GitHub Actions**입니다.
 - `pages.yml`은 `main`의 `docs/**` 변경 또는 수동 트리거로 저장된 사이트를 배포하는 별도 경로입니다.

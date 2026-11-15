@@ -160,6 +160,7 @@ jobs:
       # Commit AFTER deployment: if Pages fails, the next check still sees
       # the old source state and retries. State-only updates need no deploy.
       - name: Commit successful WG results and state
+        id: commit
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
@@ -167,7 +168,17 @@ jobs:
           if ! git diff --cached --quiet; then
             git commit -m "Update WG schedules [skip ci]"
             git push
+            echo "committed=true" >> "$GITHUB_OUTPUT"
           fi
+      # specDuck's Live Topic view reads the schedules; send the committed bytes
+      # so it need not wait for the Pages CDN. Skipped without the secret/variable.
+      - name: Push changed schedules to specDuck
+        if: steps.commit.outputs.committed == 'true'
+        continue-on-error: true
+        env:
+          SPECDUCK_URL: ${{ vars.SPECDUCK_URL }}
+          SPECDUCK_TOKEN: ${{ secrets.SPECDUCK_TOKEN }}
+        run: uv run python ci.py push $(git diff --name-only HEAD~1 HEAD -- 'docs/*/schedule.json')
       - name: Post build notices
         if: always() && !cancelled() && steps.build.outcome != 'skipped'
         continue-on-error: true

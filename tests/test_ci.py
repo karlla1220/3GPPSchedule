@@ -473,3 +473,26 @@ def test_recorded_meeting_folders_build_once_without_changing_the_wg_inputs(site
     # A real configuration change still counts.
     config.write_text(json.dumps({'meeting_specific': [found], 'extra_files': [{'url': 'x'}]}))
     assert ci.check_site()['build_ids'] == ['ran1']
+
+
+def test_push_schedules_sends_changed_schedule_bytes(tmp_path, monkeypatch, capsys):
+    import urllib.error
+    monkeypatch.chdir(tmp_path)
+    for wg in ('ran1', 'sa2'):
+        (tmp_path / 'docs' / wg).mkdir(parents=True)
+        (tmp_path / 'docs' / wg / 'schedule.json').write_bytes(b'{"wg": "%s"}' % wg.encode())
+    requests = []
+
+    def opener(request, timeout):
+        requests.append(request)
+        if request.full_url.endswith('/sa2'):
+            raise urllib.error.HTTPError(request.full_url, 422, 'bad', {}, None)
+        return MagicMock(__enter__=lambda self: SimpleNamespace(status=204), __exit__=lambda *a: None)
+
+    paths = ['docs/ran1/schedule.json', 'docs/sa2/schedule.json', 'docs/ran1/index.html']
+    assert ci.push_schedules(paths, 'https://duck.example/', 'tok', opener) == ['ran1']
+    assert [r.full_url for r in requests] == ['https://duck.example/api/schedules/ran1', 'https://duck.example/api/schedules/sa2']
+    assert requests[0].get_method() == 'PUT' and requests[0].data == b'{"wg": "ran1"}'
+    assert requests[0].get_header('Authorization') == 'Bearer tok'
+    assert '::warning::specDuck rejected sa2 schedule: 422' in capsys.readouterr().out
+    assert ci.push_schedules(paths, '', 'tok', opener) == [] and len(requests) == 2
