@@ -313,7 +313,7 @@ def fetch_bundle(cfg, previous, http, *, rows=None, now=None, cache_dir=DOWNLOAD
     if agenda_entry is not None:
         agenda, agenda_info = fetch_file(http, agenda_entry['url'], previous.get('agenda') or {},
                                          cached.agenda if cached and cached.agenda else None)
-    schedule_info = {k: v for k, v in chosen.items() if k not in ('body', 'listing', 'meeting_id')}
+    schedule_info = {k: v for k, v in chosen.items() if k not in ('body', 'listing', 'is_dir', 'meeting_id')}
     manifest = {'meeting_id': meeting, 'version': chosen['revision'], 'config_hash': config_hash(cfg),
                 'schedule': schedule_info, 'topics': topics_info, 'agenda': agenda_info}
     metadata = portal_metadata(rows or [], meeting)

@@ -516,6 +516,7 @@ def test_versions_are_ordered_by_revision_not_by_name(tmp_path, monkeypatch):
     manifest = bundle.manifest
     assert (manifest['meeting_id'], manifest['version']) == ('ran4#120bis', 4412)
     assert manifest['schedule']['name'] == 'RAN4_120bis_meeting_schedule_THU_afternoon.pptx'
+    assert 'is_dir' not in manifest['schedule'] and 'listing' not in manifest['schedule']
     assert manifest['topics']['name'] == TOPICS and manifest['agenda']['name'] == 'agenda.csv'
     assert manifest['portal_metadata']['timezone'] == 'Asia/Seoul'
     # The sync copy of a newer save wins during the meeting.
