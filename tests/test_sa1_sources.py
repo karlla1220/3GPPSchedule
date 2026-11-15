@@ -55,8 +55,11 @@ ROWS = [{'Title': '3GPPSA1#115', 'TBId': 384, 'Id': 1, 'StartDate': '2026-08-24 
          'StartTimeZone': '(GMT-07:00) Mountain Time (US & Canada)'}]
 
 
-def mock_server(files):
-    """3GPP-like server: listings with upload times, 403 for missing paths."""
+def mock_server(files, bare_folders=False):
+    """3GPP-like server: listings with upload times, 403 for missing paths.
+
+    bare_folders: the listing since 2026-11, folder links without '/' after sort links.
+    """
     def handler(request):
         url = unquote(str(request.url))
         if url.endswith('/'):
@@ -64,10 +67,13 @@ def mock_server(files):
                             for u in files if u.startswith(url) and u != url})
             if not names:
                 return httpx.Response(403)
+            if bare_folders:
+                names = [n.rstrip('/') for n in names]
             rows = ''.join(f'<tr><td><a href="{quote(url + n, safe=":/")}">{n}</a></td>'
                            f'<td>{files.get(url + n, (None, "2026/08/26 15:22"))[1]}'
                            '</td></tr>' for n in names)
-            return httpx.Response(200, text=f'<table>{rows}</table>')
+            sort = ''.join(f'<a href="?sortby={key}">x</a>' for key in ('name', 'date')) if bare_folders else ''
+            return httpx.Response(200, text=f'{sort}<table>{rows}</table>')
         if url in files:
             return httpx.Response(200, content=files[url][0], headers={'etag': f'"{len(files[url][0])}"'})
         return httpx.Response(403)
@@ -121,8 +127,8 @@ def test_header_names_keep_the_file_name(name, shown):
     assert BeautifulSoup(_source(name, sources.source_label(name)), 'html.parser').get_text() == shown.replace(' ', '\xa0')
 
 
-def fetch(files, today, previous=None, tmp_path=None):
-    with mock_server(files) as http:
+def fetch(files, today, previous=None, tmp_path=None, bare_folders=False):
+    with mock_server(files, bare_folders) as http:
         return sources.fetch_bundle(sources.DEFAULTS, previous or {}, http, rows=ROWS, now=noon(today),
                                     cache_dir=tmp_path / 'inputs')
 
@@ -159,6 +165,14 @@ def test_a_next_agenda_without_a_table_leaves_the_page_on_the_built_meeting(serv
              SYNC + 'agenda/Agenda for SA1#116_Monday_0900.docx': (blank_docx('3GPP TSG-SA WG1 Meeting #116'), '2026/11/02 09:00')}
     previous = {'meeting_id': 'sa1#115', 'metadata': META_115}
     assert fetch(files, '2026-11-02', previous, tmp_path).manifest['meeting_id'] == 'sa1#115'
+
+
+def test_archive_folders_linked_without_a_slash_keep_the_ended_meeting(server_cache, tmp_path):
+    # 2026-11-15: the sync Inbox was emptied before #116 and 3GPP stopped ending folder links in '/'.
+    files = {ARCHIVE + 'TSGS1_115_Prague/temp_reports/' + EOM: ((FIXTURES / EOM).read_bytes(), '2026/08/28 13:52')}
+    previous = {'meeting_id': 'sa1#115', 'metadata': META_115}
+    bundle = fetch(files, '2026-11-15', previous, tmp_path, bare_folders=True)
+    assert (bundle.manifest['meeting_id'], bundle.manifest['version']) == ('sa1#115', 'Agenda for Friday_1550_END_OF_MEETING')
 
 
 def test_a_held_meeting_without_a_table_is_an_error_not_a_move(server_cache, tmp_path):
