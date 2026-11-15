@@ -254,10 +254,11 @@ def archive_entries(folder: str, meeting: str, http) -> list[dict]:
     """Agenda TDoc zips in Docs/ and closing files in the report folders of one meeting folder."""
     entries = []
     for sub in fetch_listing(folder, http):
-        if not REPORT_FOLDERS.match(sub['name']) or not sub['url'].endswith('/'):
+        # The folder name alone: 3GPP links folders without a trailing '/' since 2026-11.
+        if not REPORT_FOLDERS.match(sub['name']) or urlparse(sub['url']).query:
             continue
         report = sub['name'].lower() != 'docs'
-        for entry in fetch_listing(sub['url'], http):
+        for entry in fetch_listing(sub['url'].rstrip('/') + '/', http):
             if report or AGENDA_TDOC.match(entry['name']):
                 entries.append({**entry, 'folder_meeting': meeting, 'report': report})
     return entries
