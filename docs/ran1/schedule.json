@@ -1903,6 +1903,27 @@
               "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;875cbfca.2611b",
               "author": "Magnus Åström",
               "sent": "2026-11-14T11:06:33-06:00"
+            },
+            {
+              "kind": "session",
+              "session": "Mon 17:00-17:50 Main",
+              "quote": "As we will have an online at 17.00pm on Monday, please provide your comments to Proposal 5.2.2-1 and Proposal 4.2.5-1 before 15:00 Monday local time",
+              "mode": "online",
+              "summary": "Online session; comments on Proposals 5.2.2-1 & 4.2.5-1 due by 15:00 Monday",
+              "topics": [
+                "Proposal 5.2.2-1",
+                "Proposal 4.2.5-1"
+              ],
+              "start": "17:00",
+              "day": "Monday",
+              "input_due": {
+                "at": "15:00"
+              },
+              "split": [],
+              "mail": "eb672a5a.2611c",
+              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;eb672a5a.2611c",
+              "author": "Qu Xin (vivo)",
+              "sent": "2026-11-15T10:28:52-06:00"
             }
           ],
           "part": null,
@@ -12477,7 +12498,7 @@
     }
   ],
   "source_file": "Draft RAN1#127 online and offline schedules - v02.docx",
-  "generated_at": "2026-11-15 06:22",
+  "generated_at": "2026-11-15 10:41",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
