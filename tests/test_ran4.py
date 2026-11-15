@@ -6,6 +6,7 @@ import pytest
 
 from shared.agenda import agenda_map
 from working_groups.ran4 import document as docmod, topics as topicmod
+from tests import ftp_listing
 
 
 def noon(day):
@@ -480,8 +481,7 @@ def with_revision(data: bytes, revision: int) -> bytes:
 
 
 def listing(names, base):
-    rows = ''.join(f'<tr><td><a href="{base}{n}">{n}</a></td><td>2026/10/30 8:32</td></tr>' for n in names)
-    return f'<table>{rows}</table>'
+    return ftp_listing.listing(names, base, '2026/10/30 8:32')
 
 
 def mock_server(files):

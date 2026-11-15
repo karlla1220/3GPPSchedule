@@ -15,6 +15,7 @@ import pytest
 
 from shared import officials
 from working_groups.sa2 import document as docmod, lifecycle, llm, pipeline, sessions, sources
+from tests import ftp_listing
 
 
 def noon(day):
@@ -40,8 +41,7 @@ ROWS = [{'Title': '3GPPSA2#176', 'TBId': 385, 'Id': 1, 'StartDate': '2026-08-24 
 
 
 def listing(entries, base):
-    rows = ''.join(f'<tr><td><a href="{base}{n}">{n}</a></td><td>{t}</td></tr>' for n, t in entries)
-    return f'<table>{rows}</table>'
+    return ftp_listing.listing(entries, base)
 
 
 def mock_server(files, stamps=None, seen=None):

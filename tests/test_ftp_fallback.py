@@ -366,7 +366,7 @@ def test_a_403_ftp_cannot_settle_is_a_failure_not_absence(ftp, monkeypatch, tmp_
     assert remote_files.load_listings(tmp_path / 'listings.json') == 0
 
 
-LISTING = f'<table><tr><td><a href="{CHAIR}a.zip">a.zip</a></td><td>2026/10/15 10:47</td></tr></table>'
+LISTING = f'<table><tr><td><a class="file" href="{CHAIR}a.zip">a.zip</a></td><td>2026/10/15 10:47</td></tr></table>'
 
 
 def packed_without_saying(url, body):
@@ -380,7 +380,7 @@ def test_a_listing_sent_as_unlabelled_gzip_is_still_a_listing(ftp, caplog):
     from shared import remote_files
     with packed_without_saying(CHAIR, LISTING.encode()) as http:
         html = remote_files.get_listing(CHAIR, http=http).text
-    assert [e['name'] for e in remote_files.listing_entries(html, CHAIR, children_only=True)] == ['a.zip']
+    assert [(e['name'], e['is_dir']) for e in remote_files.listing_entries(html, CHAIR)] == [('a.zip', False)]
     assert 'gzip without saying so' in caplog.text and ftp.calls == []
 
 

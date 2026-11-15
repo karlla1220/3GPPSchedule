@@ -1326,42 +1326,18 @@ def _find_extracted_document(
 def list_inbox_subfolders(url: str = INBOX_URL) -> list[dict]:
     """Fetch the Inbox directory listing and return subfolder info.
 
-    Each returned dict has keys: name, url, uploaded_at (datetime | None).
+    Each returned dict has keys: name, url (ending in '/'), uploaded_at (datetime | None).
     Only directories are returned (no files).
     """
     resp = _get_with_retry(url)
-
-    soup = BeautifulSoup(resp.text, "html.parser")
     folders = []
-    for tr in soup.find_all("tr"):
-        tds = tr.find_all("td")
-        if len(tds) < 4:
+    for entry in remote_files.listing_entries(resp.text, url):
+        if not entry["is_dir"]:
             continue
-
-        link = tds[2].find("a", href=True)
-        if link is None:
-            continue
-
-        href = link["href"]
-        # Folders end with / and have no file extension
-        if not href.rstrip("/").split("/")[-1]:
-            continue
-        # Skip file-like entries (have extensions)
-        basename = unquote(href.rstrip("/").split("/")[-1])
-        if "." in basename:
-            continue
-
-        full_url = href if href.startswith("http") else f"{url.rstrip('/')}/{basename}/"
-
-        date_text = tds[3].get_text(strip=True)
         uploaded_at = None
-        try:
-            uploaded_at = datetime.strptime(date_text, "%Y/%m/%d %H:%M")
-        except (ValueError, TypeError):
-            pass
-
-        folders.append({"name": basename, "url": full_url, "uploaded_at": uploaded_at})
-
+        if entry["uploaded_at"]:
+            uploaded_at = datetime.strptime(entry["uploaded_at"], "%Y-%m-%d %H:%M")
+        folders.append({"name": entry["name"], "url": entry["url"], "uploaded_at": uploaded_at})
     return folders
 
 

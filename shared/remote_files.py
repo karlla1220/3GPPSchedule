@@ -110,22 +110,30 @@ def get_listing(url, *, http=None, **kwargs):
     return response
 
 
-def listing_entries(html: str, url: str, *, children_only=False) -> list[dict]:
-    """A folder listing's links with their upload time ('' when the row has none).
+def listing_entries(html: str, url: str) -> list[dict]:
+    """The folder's own entries with is_dir and upload time ('' when the row has none).
 
-    children_only leaves out links that are not inside the folder (parent, sort links).
+    Left out: the path links above the table, the sort links (?sortby=, since
+    2026-11) and anything else not inside the folder. A folder is a link
+    ending in '/' (FTP fallback, listings before 2026-11) or a row without
+    class="file": 3GPP links folders without a trailing '/' since 2026-11.
+    A folder's url ends in '/'.
     """
+    base = url if url.endswith('/') else url + '/'
     entries = []
     for anchor in BeautifulSoup(html, 'html.parser').find_all('a', href=True):
-        href = urljoin(url, anchor['href'])
-        if children_only and (not href.startswith(url) or href.rstrip('/') == url.rstrip('/')):
+        href = urljoin(base, anchor['href'])
+        if not href.startswith(base) or href == base or urlparse(href).query:
             continue
+        is_dir = href.endswith('/') or 'file' not in (anchor.get('class') or [])
+        if is_dir and not href.endswith('/'):
+            href += '/'
         name = unquote(urlparse(href).path.rstrip('/').rsplit('/', 1)[-1])
         row = anchor.find_parent('tr')
         text = row.get_text(' ', strip=True) if row else ''
         stamp = TIMESTAMP.search(text)
         uploaded = (f'{stamp[1]}-{stamp[2]}-{stamp[3]} {int(stamp[4]):02d}:{stamp[5]}' if stamp else '')
-        entries.append({'url': href, 'name': name, 'uploaded_at': uploaded, 'listing': url})
+        entries.append({'url': href, 'name': name, 'is_dir': is_dir, 'uploaded_at': uploaded, 'listing': url})
     return entries
 
 

@@ -225,8 +225,9 @@ def _directory(ftp, path, url, deadline):
         fmt = '%m-%d-%Y %I:%M%p' if len(date) == 10 else '%m-%d-%y %I:%M%p'
         modified = datetime.strptime(f'{date} {clock}', fmt).strftime('%Y/%m/%d %H:%M')
         href = str(url).rstrip('/') + '/' + quote(name, safe='') + ('/' if size == '<DIR>' else '')
-        # Matches both existing RAN1 table readers and plenary link selection.
-        rows.append(f'<tr><td></td><td></td><td><a href="{escape(href, quote=True)}">'
+        # The 3GPP HTTPS listing's shape: RAN1 table readers, plenary links, listing_entries' is_dir.
+        kind = '' if size == '<DIR>' else ' class="file"'
+        rows.append(f'<tr><td></td><td></td><td><a{kind} href="{escape(href, quote=True)}">'
                     f'{escape(name)}</a></td><td>{modified}</td><td>{escape(size)}</td></tr>')
     ftp.retrlines('LIST', collect)
     return ('<table>' + ''.join(rows) + '</table>').encode(), {'content-type': 'text/html; charset=utf-8'}

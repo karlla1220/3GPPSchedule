@@ -9,6 +9,7 @@ from shared.officials import full_name, join_chairs, split_chairs
 from shared.remote_files import listing_entries
 from shared.renderer import _cell_chair, _room_name_html
 from shared.titles import clean
+from tests import ftp_listing
 
 
 def test_clean_keeps_brackets_only_this_title_shows():
@@ -55,14 +56,19 @@ def test_paragraph_text_accepts_changes_and_collects_struck_text():
     assert paragraph_text(p, keep_struck=True) == 'Keep added struck'
 
 
-def test_listing_entries_can_keep_only_the_folders_children():
+def test_listing_entries_keep_only_the_folders_children_and_mark_folders():
+    """The listing since 2026-11: path links, sort links, folders without '/'."""
     url = 'https://www.3gpp.org/ftp/tsg_sa/WG1_Serv/Inbox/'
-    html = ('<table><tr><td><a href="../">Parent Directory</a></td></tr>'
-            '<tr><td><a href="agenda.docx">agenda.docx</a></td><td>2026/10/14 9:05</td></tr></table>')
-    assert [e['name'] for e in listing_entries(html, url)] == ['WG1_Serv', 'agenda.docx']
-    entries = listing_entries(html, url, children_only=True)
-    assert entries == [{'url': url + 'agenda.docx', 'name': 'agenda.docx',
-                        'uploaded_at': '2026-10-14 09:05', 'listing': url}]
+    html = ftp_listing.listing([('agenda/', '2026/10/14 9:05'), 'agenda.docx'], url)
+    assert '?sortby=name' in html and '>WG1_Serv<' in html
+    assert listing_entries(html, url) == [
+        {'url': url + 'agenda/', 'name': 'agenda', 'is_dir': True, 'uploaded_at': '2026-10-14 09:05', 'listing': url},
+        {'url': url + 'agenda.docx', 'name': 'agenda.docx', 'is_dir': False, 'uploaded_at': '2026-10-14 09:25',
+         'listing': url}]
+    # A listing URL without '/' reads the same; folders linked with '/' (FTP fallback, before 2026-11) too.
+    assert listing_entries(html, url.rstrip('/'))[0]['url'] == url + 'agenda/'
+    slashed = ftp_listing.listing(['agenda/'], url, slashed=True)
+    assert [(e['name'], e['is_dir']) for e in listing_entries(slashed, url)] == [('agenda', True)]
 
 
 def test_written_errors_names_what_was_not_written():
