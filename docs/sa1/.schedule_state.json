@@ -8,17 +8,17 @@
   ],
   "config_hash": "34ace93968194d48aef98cda62021215205aa3bfe1318816596146787c5e1f0a",
   "schedule": {
-    "url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/SA1/Inbox/agenda/Agenda%20for%20SA1%23115_Friday_1550_END_OF_MEETING.docx",
+    "url": "https://www.3gpp.org/ftp/tsg_sa/WG1_Serv/TSGS1_115_Prague/temp_reports/Agenda%20for%20SA1%23115_Friday_1550_END_OF_MEETING.docx",
     "name": "Agenda for SA1#115_Friday_1550_END_OF_MEETING.docx",
     "size": 261046,
     "sha256": "2bd7e4bff47e5283ddeb991782ca4fdb2d4536e965ca7b8adda2a8fa8ded7b6f",
-    "etag": null,
-    "last_modified": "Fri, 28 Aug 2026 13:52:23 GMT",
-    "ftp_modified": "213 20260828135223",
-    "content_type": "application/octet-stream",
+    "etag": "\"3ea3c185039dd1:0\"",
+    "last_modified": "Mon, 31 Aug 2026 13:53:25 GMT",
+    "ftp_modified": null,
+    "content_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
     "content_disposition": null,
     "label": "Agenda for Friday_1550_END_OF_MEETING",
-    "uploaded_at": "2026-08-28 13:52"
+    "uploaded_at": "2026-08-31 13:53"
   },
   "chair": null,
   "metadata": {
