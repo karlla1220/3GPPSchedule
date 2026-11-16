@@ -1,15 +1,15 @@
 {
   "meeting_id": "sa2#178",
-  "version": 11,
+  "version": 12,
   "config_hash": "1778aa4f941bc6a0aa73721a4e7b2b5fd004a756bb9aa9eac646ff9541d5d381",
   "schedule": {
-    "name": "S2-2611637_SA2-178-Session Plan - r11.docx",
-    "url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/SA2/Inbox/Drafts/_Session_Plan_Updates/S2-2611637_SA2-178-Session%20Plan%20-%20r11.docx",
-    "uploaded_at": "2026-11-16 15:50",
-    "size": 75168,
-    "sha256": "5f8934aef12ef9fb5e89530c304fdc7dd5dcaadc3a994373ddf0181308559359",
-    "etag": "\"80d5dd2be275dd1:0\"",
-    "last_modified": "Mon, 16 Nov 2026 15:50:15 GMT",
+    "name": "S2-2611637_SA2-178-Session Plan - r12.docx",
+    "url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/SA2/Inbox/Drafts/_Session_Plan_Updates/S2-2611637_SA2-178-Session%20Plan%20-%20r12.docx",
+    "uploaded_at": "2026-11-16 18:35",
+    "size": 75269,
+    "sha256": "4140c643f6af99ea129c7908fee32de1e16e9fb93fc33cb0c9b96debb402059a",
+    "etag": "\"80e2d645f975dd1:0\"",
+    "last_modified": "Mon, 16 Nov 2026 18:35:37 GMT",
     "ftp_modified": null,
     "content_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
     "content_disposition": null

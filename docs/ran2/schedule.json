@@ -43,9 +43,9 @@
           "room_col_start": 2,
           "room_col_end": 3,
           "chair": "Mattias",
-          "agenda_item": "4.1, 5.1.1, 5.1.2, 5.1.3.1, 5.1.3.2, 5.1.3.3, 6.0.2.1, 6.0.2.2, 6.0.2.3, 6.0.2.4, 6.0.2.5, 6.0.2.6, 6.0.2.7, 6.0.2.8, 6.0.2.9, 6.0.2.10, 6.0.2.11, 6.0.2.12, 6.0.2.14, 6.0.2.15, 6.0.2.20, 6.0.2.23, 6.0.2.24",
+          "agenda_item": "4.1, 5.1.0, 5.1.1, 5.1.2, 5.1.3.1, 5.1.3.2, 5.1.3.3, 6.0.0, 6.0.2.1, 6.0.2.2, 6.0.2.3, 6.0.2.4, 6.0.2.5, 6.0.2.6, 6.0.2.7, 6.0.2.8, 6.0.2.9, 6.0.2.10, 6.0.2.11, 6.0.2.12, 6.0.2.14, 6.0.2.15, 6.0.2.20, 6.0.2.23, 6.0.2.24",
           "group_header": "EUTRA",
-          "description": "EUTRA corrections Rel-19and earlier\nStage 2 and Organisational\nUser Plane corrections\nNR RRC\nUE capabilities\nOther",
+          "description": "EUTRA corrections Rel-19and earlier\nIn-principle agreed CRs\nStage 2 and Organisational\nUser Plane corrections\nNR RRC\nUE capabilities",
           "agenda_descriptions": [
             {
               "agenda_item": "4.1",
@@ -59,6 +59,25 @@
                 {
                   "agenda_item": "4.1",
                   "description": "EUTRA corrections Rel-19and earlier"
+                }
+              ]
+            },
+            {
+              "agenda_item": "5.1.0",
+              "matched_agenda_item": "5.1.0",
+              "description": "In-principle agreed CRs",
+              "hierarchy": [
+                {
+                  "agenda_item": "5",
+                  "description": "NR Rel-17 and earlier"
+                },
+                {
+                  "agenda_item": "5.1",
+                  "description": "NR Common"
+                },
+                {
+                  "agenda_item": "5.1.0",
+                  "description": "In-principle agreed CRs"
                 }
               ]
             },
@@ -143,29 +162,6 @@
                 {
                   "agenda_item": "5.1.3.2",
                   "description": "UE capabilities"
-                }
-              ]
-            },
-            {
-              "agenda_item": "5.1.3.3",
-              "matched_agenda_item": "5.1.3.3",
-              "description": "Other",
-              "hierarchy": [
-                {
-                  "agenda_item": "5",
-                  "description": "NR Rel-17 and earlier"
-                },
-                {
-                  "agenda_item": "5.1",
-                  "description": "NR Common"
-                },
-                {
-                  "agenda_item": "5.1.3",
-                  "description": "Control Plane corrections"
-                },
-                {
-                  "agenda_item": "5.1.3.3",
-                  "description": "Other"
                 }
               ]
             }
@@ -336,7 +332,7 @@
           "stream": ""
         },
         {
-          "name": "EUTRA&NR15161718 con’t / NR19 SONMDT / NR20 SONMDT",
+          "name": "EUTRA&NR15161718 con’t / NR19 SONMDT / TEI20 SON/MDT related R2-2608675 …",
           "duration_minutes": 120,
           "start_time": "11:00",
           "end_time": "13:00",
@@ -344,9 +340,9 @@
           "room_col_start": 2,
           "room_col_end": 3,
           "chair": "Mattias",
-          "agenda_item": "7.10, 8.6",
+          "agenda_item": "7.10, 8.14, 8.6",
           "group_header": "NR Rel-19",
-          "description": "SON/MDT Ph4\nSON/MDT Ph5",
+          "description": "SON/MDT Ph4\nTEI20\nSON/MDT Ph5",
           "agenda_descriptions": [
             {
               "agenda_item": "7.10",
@@ -360,6 +356,21 @@
                 {
                   "agenda_item": "7.10",
                   "description": "SON/MDT Ph4"
+                }
+              ]
+            },
+            {
+              "agenda_item": "8.14",
+              "matched_agenda_item": "8.14",
+              "description": "TEI20",
+              "hierarchy": [
+                {
+                  "agenda_item": "8",
+                  "description": "NR Rel-20"
+                },
+                {
+                  "agenda_item": "8.14",
+                  "description": "TEI20"
                 }
               ]
             },
@@ -386,6 +397,7 @@
           "notes": [
             "EUTRA&NR15161718 (Mattias) con’t",
             "[7.10] NR19 SONMDT [0] (Mattias)",
+            "[8.14] TEI20 SON/MDT related R2-2608675",
             "[8.6] NR20 SONMDT [0.5] (Mattias)"
           ],
           "inferred_agenda_items": [],
@@ -602,7 +614,7 @@
           "stream": ""
         },
         {
-          "name": "R17/18 NR / IoT NTN / R17 NR NTN corrections / R18 NR NTN corrections …",
+          "name": "R17/18 NR / IoT NTN / R17 NR NTN corrections (apart from R2-2609304) / R18 NR NTN corrections …",
           "duration_minutes": 120,
           "start_time": "14:30",
           "end_time": "16:30",
@@ -727,7 +739,7 @@
           "room_scope": "assigned",
           "notes": [
             "R17/18 NR / IoT NTN (Sergio)",
-            "[5.3] R17 NR NTN corrections",
+            "[5.3] R17 NR NTN corrections (apart from R2-2609304)",
             "[6.0.2.17] R18 NR NTN corrections",
             "[6.0.2.18] R18 IoT NTN corrections",
             "[7.8] NR19 NR NTN [0] (Sergio)",
@@ -2350,89 +2362,6 @@
           "stream": ""
         },
         {
-          "name": "NR18/19/20 XR / NR18 XR / NR19 XR …",
-          "duration_minutes": 120,
-          "start_time": "17:00",
-          "end_time": "19:00",
-          "day": "Wednesday",
-          "room_col_start": 2,
-          "room_col_end": 3,
-          "chair": "Dawid",
-          "agenda_item": "6.0.2.16, 7.7, 8.5",
-          "group_header": "NR Rel-18",
-          "description": "XR Enhancements for NR\nXR Enhancements Ph3\nXR Enhancements Ph4",
-          "agenda_descriptions": [
-            {
-              "agenda_item": "6.0.2.16",
-              "matched_agenda_item": "6.0.2.16",
-              "description": "XR Enhancements for NR",
-              "hierarchy": [
-                {
-                  "agenda_item": "6",
-                  "description": "NR Rel-18"
-                },
-                {
-                  "agenda_item": "6.0",
-                  "description": "Common"
-                },
-                {
-                  "agenda_item": "6.0.2",
-                  "description": "Rel-18 corrections"
-                },
-                {
-                  "agenda_item": "6.0.2.16",
-                  "description": "XR Enhancements for NR"
-                }
-              ]
-            },
-            {
-              "agenda_item": "7.7",
-              "matched_agenda_item": "7.7",
-              "description": "XR Enhancements Ph3",
-              "hierarchy": [
-                {
-                  "agenda_item": "7",
-                  "description": "NR Rel-19"
-                },
-                {
-                  "agenda_item": "7.7",
-                  "description": "XR Enhancements Ph3"
-                }
-              ]
-            },
-            {
-              "agenda_item": "8.5",
-              "matched_agenda_item": "8.5",
-              "description": "XR Enhancements Ph4",
-              "hierarchy": [
-                {
-                  "agenda_item": "8",
-                  "description": "NR Rel-20"
-                },
-                {
-                  "agenda_item": "8.5",
-                  "description": "XR Enhancements Ph4"
-                }
-              ]
-            }
-          ],
-          "room_ids": [
-            "brk2"
-          ],
-          "room_scope": "assigned",
-          "notes": [
-            "(confirm room capacity)",
-            "NR18/19/20 XR (Dawid)",
-            "[6.0.2.16] NR18 XR",
-            "[7.7] NR19 XR",
-            "[8.5] NR 20 XR"
-          ],
-          "inferred_agenda_items": [],
-          "email_details": [],
-          "part": null,
-          "stream": ""
-        },
-        {
           "name": "NTN",
           "duration_minutes": 120,
           "start_time": "17:00",
@@ -2580,7 +2509,7 @@
           "room_col_start": 2,
           "room_col_end": 3,
           "chair": "Sergio",
-          "agenda_item": "8.7, 8.7.2, 8.13.1, 8.14",
+          "agenda_item": "8.7, 8.13.1, 8.14",
           "group_header": "NR Rel-20",
           "description": "IoT NTN Ph4\nRAN4\nTEI20",
           "agenda_descriptions": [
@@ -2640,7 +2569,7 @@
           "room_scope": "assigned",
           "notes": [
             "[8.7] R20 IoT NTN [1] (Sergio)",
-            "[8.7.2] TBD",
+            "TBD",
             "[8.13.1] RAN4 - NTN related (Sergio)",
             "[8.14] TEI20 – NTN related (Sergio)"
           ],
@@ -3220,7 +3149,6 @@
           ],
           "room_scope": "assigned",
           "notes": [
-            "(placeholder if can’t do it Wednesday do to room capacity)",
             "NR18/19/20 XR (Dawid)",
             "[6.0.2.16] NR18 XR",
             "[7.7] NR19 XR",
@@ -3577,20 +3505,20 @@
       }
     }
   ],
-  "source_file": "R2_136_Schedule_v02.docx",
-  "generated_at": "2026-11-15 18:21",
+  "source_file": "R2_136_Schedule_v03.docx",
+  "generated_at": "2026-11-16 13:02",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
-    "R2_136_Schedule_v02.docx",
+    "R2_136_Schedule_v03.docx",
     "agenda.csv"
   ],
   "source_labels": {
-    "R2_136_Schedule_v02.docx": "Schedule",
+    "R2_136_Schedule_v03.docx": "Schedule",
     "agenda.csv": "Agenda"
   },
   "source_urls": {
-    "R2_136_Schedule_v02.docx": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN2/Agenda/R2_136_Schedule_v02.docx"
+    "R2_136_Schedule_v03.docx": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN2/Agenda/R2_136_Schedule_v03.docx"
   },
   "source_mails": {},
   "timezone": "America/Edmonton",

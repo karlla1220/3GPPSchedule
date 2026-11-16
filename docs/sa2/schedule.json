@@ -346,7 +346,7 @@
           "stream": ""
         },
         {
-          "name": "Main: Drafting for SoH questions: KI#3, KI#5, KI#11, KI#17?/KI#22?",
+          "name": "Main:13:00 Drafting for SoH questions: KI#3, KI#5, KI#11, KI#17?/KI#22?",
           "duration_minutes": 90,
           "start_time": "12:30",
           "end_time": "14:00",
@@ -361,10 +361,14 @@
           "room_ids": [],
           "room_scope": "unassigned",
           "notes": [
-            "Main: Drafting for SoH questions: KI#3, KI#5, KI#11, KI#17?/KI#22?"
+            "Main:13:00 Drafting for SoH questions: KI#3, KI#5, KI#11, KI#17?/KI#22?"
           ],
           "inferred_agenda_items": [
-            "20.6.0"
+            "20.6.3",
+            "20.6.5",
+            "20.6.11",
+            "20.6.17",
+            "20.6.22"
           ],
           "email_details": [],
           "part": null,
@@ -1562,7 +1566,7 @@
           "stream": "Stream 1"
         },
         {
-          "name": "Main: Drafting for SoH questions: KI#17?/KI#22?, KI#19, KI#21",
+          "name": "Main:13:00 Drafting for SoH questions: KI#17?/KI#22?, KI#19, KI#21",
           "duration_minutes": 90,
           "start_time": "12:30",
           "end_time": "14:00",
@@ -1577,10 +1581,13 @@
           "room_ids": [],
           "room_scope": "unassigned",
           "notes": [
-            "Main: Drafting for SoH questions: KI#17?/KI#22?, KI#19, KI#21"
+            "Main:13:00 Drafting for SoH questions: KI#17?/KI#22?, KI#19, KI#21"
           ],
           "inferred_agenda_items": [
-            "20.6.0"
+            "20.6.17",
+            "20.6.19",
+            "20.6.21",
+            "20.6.22"
           ],
           "email_details": [],
           "part": null,
@@ -2433,7 +2440,7 @@
           "stream": ""
         },
         {
-          "name": "Main: Drafting for SoH questions: KI#18, other KI (s) if any",
+          "name": "Main:13:00 Drafting for SoH questions: KI#18, other KI (s) if any",
           "duration_minutes": 90,
           "start_time": "12:30",
           "end_time": "14:00",
@@ -2448,10 +2455,10 @@
           "room_ids": [],
           "room_scope": "unassigned",
           "notes": [
-            "Main: Drafting for SoH questions: KI#18, other KI(s) if any"
+            "Main:13:00 Drafting for SoH questions: KI#18, other KI(s) if any"
           ],
           "inferred_agenda_items": [
-            "20.6.0"
+            "20.6.18"
           ],
           "email_details": [],
           "part": null,
@@ -3323,20 +3330,20 @@
       }
     }
   ],
-  "source_file": "S2-2611637_SA2-178-Session Plan - r11.docx",
-  "generated_at": "2026-11-16 10:02",
+  "source_file": "S2-2611637_SA2-178-Session Plan - r12.docx",
+  "generated_at": "2026-11-16 13:02",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
-    "S2-2611637_SA2-178-Session Plan - r11.docx",
+    "S2-2611637_SA2-178-Session Plan - r12.docx",
     "agenda.csv"
   ],
   "source_labels": {
-    "S2-2611637_SA2-178-Session Plan - r11.docx": "Session Plan - r11",
+    "S2-2611637_SA2-178-Session Plan - r12.docx": "Session Plan - r12",
     "agenda.csv": "agenda.csv"
   },
   "source_urls": {
-    "S2-2611637_SA2-178-Session Plan - r11.docx": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/SA2/Inbox/Drafts/_Session_Plan_Updates/S2-2611637_SA2-178-Session%20Plan%20-%20r11.docx"
+    "S2-2611637_SA2-178-Session Plan - r12.docx": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/SA2/Inbox/Drafts/_Session_Plan_Updates/S2-2611637_SA2-178-Session%20Plan%20-%20r12.docx"
   },
   "source_mails": {},
   "timezone": "America/Edmonton",
