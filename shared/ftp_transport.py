@@ -2,8 +2,14 @@
 
 FTP is unencrypted. Never forward HTTP credentials, headers or query strings.
 The response retains the HTTPS identity so a transport change is not an update.
+
+A ``Meetings_3GPP_SYNC/<WG>/`` path is first read from that meeting's venue
+FTP when ``VENUE_FTP`` names one: the server the sync folder copies from, ahead
+of it by minutes. Any venue failure falls back to the path above.
 """
 import atexit
+import json
+import os
 from contextlib import contextmanager, ExitStack
 from datetime import datetime, timezone
 from email.utils import format_datetime
@@ -29,9 +35,9 @@ _FIREWALL_PAGE = b'web application firewall'
 _FIREWALL_PAGE_BYTES = 256 * 1024
 _MAX_BYTES = 64 * 1024 * 1024
 _GZIP = b'\x1f\x8b'
-# One anonymous FTP login serves every fallback in a run, instead of a new
+# One FTP login per host serves every request in a run, instead of a new
 # connection and login per file or folder.
-_session = None
+_sessions = {}  # host -> open session
 _session_lock = threading.Lock()
 # URL prefixes whose HTTPS already failed in this run: a folder after a 5xx or
 # a firewall 403, the whole host after a connection or TLS failure. Requests
@@ -40,6 +46,10 @@ _https_failed = {}  # prefix -> why HTTPS failed
 _FIREWALL = '3GPP firewall blocked HTTPS (403)'
 _BLOCKED = '3GPP answered 403 for a path FTP can read'
 _MAX_SECONDS = 180
+_PUBLIC = 'ftp.3gpp.org'
+# Venue hosts whose connection or login failed in this run: host -> why.
+_venue_failed = {}
+_SYNC = re.compile(r'/Meetings_3GPP_SYNC/([^/]+)/(.*)', re.S)
 # The live Microsoft FTP server advertises SIZE/MDTM, but not MLSD.
 _IIS_ROW = re.compile(r'^(\d{2}-\d{2}-\d{2,4})\s+(\d{2}:\d{2}[AP]M)\s+(<DIR>|\d+)\s+(.+)$')
 
@@ -259,61 +269,71 @@ def _file(ftp, path, deadline, cached=None):
     return bytes(data), headers
 
 
-def _connect():
-    ftp = ftplib.FTP('ftp.3gpp.org', timeout=20)
+def _connect(venue=None):
+    """Anonymous ftp.3gpp.org, or a venue: TLS, its account, UTF-8 names."""
+    if venue is None:
+        ftp = ftplib.FTP(_PUBLIC, timeout=20)
+    else:
+        # The venue (IIS) refuses a login without TLS.
+        ftp = ftplib.FTP_TLS(venue['host'], timeout=20)
     try:
-        ftp.login()
+        if venue is None:
+            ftp.login()
+        else:
+            ftp.login(venue['user'], venue['password'])
+            ftp.prot_p()
+            # Without it some names (non-breaking spaces) arrive as cp1252 bytes.
+            ftp.sendcmd('OPTS UTF8 ON')
     except BaseException:
         ftp.close()
         raise
     return ftp
 
 
-def _drop():
-    global _session
-    if _session is not None:
+def _drop(host):
+    session = _sessions.pop(host, None)
+    if session is not None:
         try:
-            _session.close()
+            session.close()
         except Exception:  # closing never fails a run
             pass
-    _session = None
 
 
 def close_session():
-    """Log out of the shared FTP session, if one is open."""
-    global _session
-    if _session is not None:
+    """Log out of every open FTP session."""
+    for host, session in list(_sessions.items()):
         try:
-            _session.quit()
+            session.quit()
         except Exception:  # closing never fails a run
             pass
-    _drop()
+        _drop(host)
 
 
 atexit.register(close_session)
 
 
 def reset():
-    """Start a new run: forget HTTPS failures and close the FTP session."""
+    """Start a new run: forget HTTPS and venue failures and close the FTP sessions."""
     _https_failed.clear()
+    _venue_failed.clear()
     close_session()
 
 
-def _over_ftp(read):
-    """Run read(ftp) on the shared session.
+def _over_ftp(read, venue=None):
+    """Run read(ftp) on the shared session of the host.
 
     A session the server closed while idle (421, EOF, reset) is replaced
     once. After any other failure the session is closed and the error kept.
     """
-    global _session
+    host = _PUBLIC if venue is None else venue['host']
     with _session_lock:
-        reused = _session is not None
-        if _session is None:
-            _session = _connect()
+        reused = host in _sessions
+        if not reused:
+            _sessions[host] = _connect(venue)
         try:
-            return read(_session)
+            return read(_sessions[host])
         except (EOFError, OSError, ftplib.error_temp):
-            _drop()
+            _drop(host)
             if not reused:
                 raise
         except ftplib.error_perm:
@@ -322,14 +342,68 @@ def _over_ftp(read):
             raise
         except BaseException:
             # Unknown state after a partial command: never reuse it.
-            _drop()
+            _drop(host)
             raise
-        _session = _connect()
+        _sessions[host] = _connect(venue)
         try:
-            return read(_session)
+            return read(_sessions[host])
         except BaseException:
-            _drop()
+            _drop(host)
             raise
+
+
+def _venue(path):
+    """(venue, venue path) for a sync folder path whose WG has a venue FTP, else None.
+
+    VENUE_FTP is JSON keyed by the sync folder's WG: {"RAN1": {"host", "user",
+    "password"}}, set per meeting. The venue keeps the WG under its TSG
+    (RAN1 -> /RAN/RAN1/, seen at RAN1#127); "root" gives another place.
+    """
+    match = _SYNC.fullmatch(path)
+    if match is None or not os.environ.get('VENUE_FTP'):
+        return None
+    try:
+        venue = json.loads(os.environ['VENUE_FTP']).get(match[1])
+    except (ValueError, AttributeError):
+        logging.getLogger(__name__).warning('VENUE_FTP is not a JSON object; reading the sync folder')
+        return None
+    if not isinstance(venue, dict) or not all(isinstance(venue.get(k), str) and venue[k]
+                                              for k in ('host', 'user', 'password')):
+        return None
+    tsg = re.match(r'[A-Za-z]+', match[1])
+    root = venue.get('root') or (f'/{tsg[0].upper()}/{match[1]}/' if tsg else None)
+    if not isinstance(root, str) or not root.startswith('/'):
+        return None
+    return venue, root.rstrip('/') + '/' + match[2]
+
+
+def _from_venue(url, path, *, listing=False, cached=None):
+    """The venue's answer for a sync folder URL, or None to read the sync folder.
+
+    The response keeps the sync URL, so links and cache identity stay public.
+    Never logs the account: only the host and the error.
+    """
+    found = _venue(path)
+    if found is None:
+        return None
+    venue, venue_path = found
+    log = logging.getLogger(__name__)
+    if venue['host'] in _venue_failed:
+        return None
+    deadline = time.monotonic() + _MAX_SECONDS
+    try:
+        body, headers = _over_ftp(lambda ftp: _directory(ftp, venue_path, url, deadline) if listing
+                                  else _file(ftp, venue_path, deadline, cached), venue)
+    except (ftplib.Error, OSError, EOFError, ValueError) as exc:
+        # No session left: connecting or logging in failed (530 after the meeting),
+        # or the server sent what we cannot read. A 550 for one path keeps it.
+        if venue['host'] not in _sessions:
+            _venue_failed[venue['host']] = str(exc)
+        log.warning('Venue FTP %s failed for %s (%s: %s); reading the sync folder',
+                    venue['host'], venue_path, type(exc).__name__, exc)
+        return None
+    return httpx.Response(200, content=body, headers={**headers, 'x-3gpp-transport': 'venue-ftp'},
+                          request=httpx.Request('GET', url))
 
 
 def ftp_response(url, *, listing=False, cached=None):
@@ -356,8 +430,12 @@ def get(url, *, listing=False, http=None, cached=None, **kwargs):
     other 403 is returned only once FTP has said the path is missing.
     """
     request = http.get if http is not None else httpx.get
-    if ftp_path(url) is None:
+    path = ftp_path(url)
+    if path is None:
         return request(url, **kwargs)
+    venue = _from_venue(url, path, listing=listing, cached=cached)
+    if venue is not None:
+        return venue
     reason = _https_failure(url)
     if reason:
         return _ftp_because(url, f'{reason} earlier in this run', listing=listing, cached=cached)
