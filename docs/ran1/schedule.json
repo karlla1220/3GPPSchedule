@@ -1033,7 +1033,27 @@
           "room_scope": "assigned",
           "notes": [],
           "inferred_agenda_items": [],
-          "email_details": [],
+          "email_details": [
+            {
+              "kind": "session",
+              "session": "Mon 15:35-16:05 Champions Ballroom A",
+              "quote": "Proposals/observations for online are provided in section 4.",
+              "mode": "online",
+              "summary": "Proposals/observations for online provided in Section 4",
+              "topics": [
+                "section 4"
+              ],
+              "day": "Monday",
+              "tdocs": [
+                "R1-2609885"
+              ],
+              "split": [],
+              "mail": "8f67a99c.2611c",
+              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;8f67a99c.2611c",
+              "author": "Bingchao BC2 Liu",
+              "sent": "2026-11-16T14:17:59-06:00"
+            }
+          ],
           "part": null,
           "stream": ""
         },
@@ -1082,7 +1102,25 @@
           "room_scope": "assigned",
           "notes": [],
           "inferred_agenda_items": [],
-          "email_details": [],
+          "email_details": [
+            {
+              "kind": "session",
+              "session": "Mon 16:05-16:30 Champions Ballroom A",
+              "quote": "The final version (R1-2609716) with the proposals for today online can be found in the draft folder",
+              "mode": "online",
+              "summary": "Online session with final proposals in R1-2609716",
+              "topics": [],
+              "day": "Monday",
+              "tdocs": [
+                "R1-2609716"
+              ],
+              "split": [],
+              "mail": "89a3622e.2611c",
+              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;89a3622e.2611c",
+              "author": "Bo Gao",
+              "sent": "2026-11-16T14:22:52-06:00"
+            }
+          ],
           "part": null,
           "stream": ""
         },
@@ -1431,6 +1469,25 @@
               "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;eb9057e5.2611c",
               "author": "Xiaodong Shen",
               "sent": "2026-11-16T12:29:13-06:00"
+            },
+            {
+              "kind": "session",
+              "session": "Mon 14:30-15:20 BMO 214-215",
+              "quote": "R1-2609865 is now available in Inbox for online session. Please check the proposals in Section 2.2.",
+              "mode": "online",
+              "summary": "R1-2609865 available for online session; check Section 2.2 proposals",
+              "topics": [
+                "Section 2.2"
+              ],
+              "day": "Monday",
+              "tdocs": [
+                "R1-2609865"
+              ],
+              "split": [],
+              "mail": "9941316b.2611c",
+              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;9941316b.2611c",
+              "author": "Sigen Ye",
+              "sent": "2026-11-16T14:07:55-06:00"
             }
           ],
           "part": null,
@@ -1687,6 +1744,23 @@
               "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;d43931dd.2611b",
               "author": "Naoya Shibaike",
               "sent": "2026-11-13T08:18:36-06:00"
+            },
+            {
+              "kind": "session",
+              "session": "Mon 14:25-14:50 BMO 212",
+              "quote": "For the upcoming offline, our plan remains as I informed earlier: starting section 3.1, followed by 2.2/2.3/2.4 (if time permits), using v26 from Qualcomm.",
+              "mode": "offline",
+              "summary": "Offline discussing section 3.1, then 2.2/2.3/2.4 (time permitting), using v26",
+              "topics": [
+                "section 3.1",
+                "2.2/2.3/2.4 (if time permits)"
+              ],
+              "day": "Monday",
+              "split": [],
+              "mail": "5c8943d1.2611c",
+              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;5c8943d1.2611c",
+              "author": "Naoya Shibaike",
+              "sent": "2026-11-16T14:02:42-06:00"
             }
           ],
           "part": null,
@@ -2341,6 +2415,25 @@
               "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;94532024.2611b",
               "author": "Yanping Xing",
               "sent": "2026-11-13T19:31:39-06:00"
+            },
+            {
+              "kind": "session",
+              "session": "Mon 18:20-18:40 Champions Ballroom A",
+              "quote": "R1-2609358 has been uploaded with proposal in section 2 for today's online session.",
+              "mode": "online",
+              "summary": "R1-2609358 uploaded with proposal in section 2 for today's online session",
+              "topics": [
+                "section 2"
+              ],
+              "day": "Monday",
+              "tdocs": [
+                "R1-2609358"
+              ],
+              "split": [],
+              "mail": "ee250e3b.2611c",
+              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;ee250e3b.2611c",
+              "author": "Yanping Xing",
+              "sent": "2026-11-16T14:44:40-06:00"
             }
           ],
           "part": null,
@@ -4838,49 +4931,10 @@
           "stream": ""
         },
         {
-          "name": "AI 9.1 AIML",
-          "duration_minutes": 50,
-          "start_time": "14:30",
-          "end_time": "15:20",
-          "day": "Tuesday",
-          "room_col_start": 3,
-          "room_col_end": 4,
-          "chair": "Sorour",
-          "agenda_item": "9.1",
-          "group_header": "R20",
-          "description": "Artificial Intelligence (AI)/Machine Learning (ML) for NR air interface enhancements",
-          "agenda_descriptions": [
-            {
-              "agenda_item": "9.1",
-              "matched_agenda_item": "9.1",
-              "description": "Artificial Intelligence (AI)/Machine Learning (ML) for NR air interface enhancements",
-              "hierarchy": [
-                {
-                  "agenda_item": "9",
-                  "description": "Release 20 NR",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "9.1",
-                  "description": "Artificial Intelligence (AI)/Machine Learning (ML) for NR air interface enhancements",
-                  "has_description": true
-                }
-              ]
-            }
-          ],
-          "room_ids": [],
-          "room_scope": "assigned",
-          "notes": [],
-          "inferred_agenda_items": [],
-          "email_details": [],
-          "part": null,
-          "stream": ""
-        },
-        {
           "name": "AI 10.3.2 Modulation",
           "duration_minutes": 30,
-          "start_time": "15:20",
-          "end_time": "15:50",
+          "start_time": "14:30",
+          "end_time": "15:00",
           "day": "Tuesday",
           "room_col_start": 3,
           "room_col_end": 4,
@@ -4919,7 +4973,7 @@
           "email_details": [
             {
               "kind": "session",
-              "session": "Tue 15:20-15:50 BMO 225-226",
+              "session": "Tue 14:30-15:00 BMO 225-226",
               "quote": "followed by online",
               "mode": "online",
               "summary": "Online session following the offline",
@@ -4938,8 +4992,8 @@
         {
           "name": "AI 9.2 MIMO",
           "duration_minutes": 40,
-          "start_time": "15:50",
-          "end_time": "16:30",
+          "start_time": "15:00",
+          "end_time": "15:40",
           "day": "Tuesday",
           "room_col_start": 3,
           "room_col_end": 4,
@@ -4961,6 +5015,45 @@
                 {
                   "agenda_item": "9.2",
                   "description": "NR MIMO Phase 6",
+                  "has_description": true
+                }
+              ]
+            }
+          ],
+          "room_ids": [],
+          "room_scope": "assigned",
+          "notes": [],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": null,
+          "stream": ""
+        },
+        {
+          "name": "AI 9.1 AIML",
+          "duration_minutes": 50,
+          "start_time": "15:40",
+          "end_time": "16:30",
+          "day": "Tuesday",
+          "room_col_start": 3,
+          "room_col_end": 4,
+          "chair": "Sorour",
+          "agenda_item": "9.1",
+          "group_header": "R20",
+          "description": "Artificial Intelligence (AI)/Machine Learning (ML) for NR air interface enhancements",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "9.1",
+              "matched_agenda_item": "9.1",
+              "description": "Artificial Intelligence (AI)/Machine Learning (ML) for NR air interface enhancements",
+              "hierarchy": [
+                {
+                  "agenda_item": "9",
+                  "description": "Release 20 NR",
+                  "has_description": true
+                },
+                {
+                  "agenda_item": "9.1",
+                  "description": "Artificial Intelligence (AI)/Machine Learning (ML) for NR air interface enhancements",
                   "has_description": true
                 }
               ]
@@ -8415,59 +8508,10 @@
           "stream": ""
         },
         {
-          "name": "10.5.1.1",
-          "duration_minutes": 30,
-          "start_time": "14:00",
-          "end_time": "14:30",
-          "day": "Wednesday",
-          "room_col_start": 5,
-          "room_col_end": 6,
-          "chair": null,
-          "agenda_item": "10.5.1.1",
-          "group_header": "6GR",
-          "description": "Synchronization acquisition and beam measurement",
-          "agenda_descriptions": [
-            {
-              "agenda_item": "10.5.1.1",
-              "matched_agenda_item": "10.5.1.1",
-              "description": "Synchronization acquisition and beam measurement",
-              "hierarchy": [
-                {
-                  "agenda_item": "10",
-                  "description": "Rel-20 Study of 6GR",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "10.5",
-                  "description": "Multi-antenna system",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "10.5.1",
-                  "description": "Initial access and mobility",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "10.5.1.1",
-                  "description": "Synchronization acquisition and beam measurement",
-                  "has_description": true
-                }
-              ]
-            }
-          ],
-          "room_ids": [],
-          "room_scope": "assigned",
-          "notes": [],
-          "inferred_agenda_items": [],
-          "email_details": [],
-          "part": null,
-          "stream": ""
-        },
-        {
           "name": "10.6.1.1",
           "duration_minutes": 40,
-          "start_time": "14:30",
-          "end_time": "15:10",
+          "start_time": "14:00",
+          "end_time": "14:40",
           "day": "Wednesday",
           "room_col_start": 5,
           "room_col_end": 6,
@@ -8515,8 +8559,8 @@
         {
           "name": "10.6.1.2",
           "duration_minutes": 35,
-          "start_time": "15:10",
-          "end_time": "15:45",
+          "start_time": "14:40",
+          "end_time": "15:15",
           "day": "Wednesday",
           "room_col_start": 5,
           "room_col_end": 6,
@@ -8564,8 +8608,8 @@
         {
           "name": "10.6.2",
           "duration_minutes": 25,
-          "start_time": "15:45",
-          "end_time": "16:10",
+          "start_time": "15:15",
+          "end_time": "15:40",
           "day": "Wednesday",
           "room_col_start": 5,
           "room_col_end": 6,
@@ -8608,8 +8652,8 @@
         {
           "name": "10.6.3",
           "duration_minutes": 20,
-          "start_time": "16:10",
-          "end_time": "16:30",
+          "start_time": "15:40",
+          "end_time": "16:00",
           "day": "Wednesday",
           "room_col_start": 5,
           "room_col_end": 6,
@@ -8636,6 +8680,55 @@
                 {
                   "agenda_item": "10.6.3",
                   "description": "WUS operation with other functionalities",
+                  "has_description": true
+                }
+              ]
+            }
+          ],
+          "room_ids": [],
+          "room_scope": "assigned",
+          "notes": [],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": null,
+          "stream": ""
+        },
+        {
+          "name": "10.5.1.1",
+          "duration_minutes": 30,
+          "start_time": "16:00",
+          "end_time": "16:30",
+          "day": "Wednesday",
+          "room_col_start": 5,
+          "room_col_end": 6,
+          "chair": null,
+          "agenda_item": "10.5.1.1",
+          "group_header": "6GR",
+          "description": "Synchronization acquisition and beam measurement",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "10.5.1.1",
+              "matched_agenda_item": "10.5.1.1",
+              "description": "Synchronization acquisition and beam measurement",
+              "hierarchy": [
+                {
+                  "agenda_item": "10",
+                  "description": "Rel-20 Study of 6GR",
+                  "has_description": true
+                },
+                {
+                  "agenda_item": "10.5",
+                  "description": "Multi-antenna system",
+                  "has_description": true
+                },
+                {
+                  "agenda_item": "10.5.1",
+                  "description": "Initial access and mobility",
+                  "has_description": true
+                },
+                {
+                  "agenda_item": "10.5.1.1",
+                  "description": "Synchronization acquisition and beam measurement",
                   "has_description": true
                 }
               ]
@@ -10780,49 +10873,10 @@
           "stream": ""
         },
         {
-          "name": "AI 9.1 AIML",
-          "duration_minutes": 50,
-          "start_time": "14:00",
-          "end_time": "14:50",
-          "day": "Thursday",
-          "room_col_start": 3,
-          "room_col_end": 4,
-          "chair": "Sorour",
-          "agenda_item": "9.1",
-          "group_header": "R20",
-          "description": "Artificial Intelligence (AI)/Machine Learning (ML) for NR air interface enhancements",
-          "agenda_descriptions": [
-            {
-              "agenda_item": "9.1",
-              "matched_agenda_item": "9.1",
-              "description": "Artificial Intelligence (AI)/Machine Learning (ML) for NR air interface enhancements",
-              "hierarchy": [
-                {
-                  "agenda_item": "9",
-                  "description": "Release 20 NR",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "9.1",
-                  "description": "Artificial Intelligence (AI)/Machine Learning (ML) for NR air interface enhancements",
-                  "has_description": true
-                }
-              ]
-            }
-          ],
-          "room_ids": [],
-          "room_scope": "assigned",
-          "notes": [],
-          "inferred_agenda_items": [],
-          "email_details": [],
-          "part": null,
-          "stream": ""
-        },
-        {
           "name": "AI 10.5.2.1 PDCCH",
           "duration_minutes": 40,
-          "start_time": "14:50",
-          "end_time": "15:30",
+          "start_time": "14:00",
+          "end_time": "14:40",
           "day": "Thursday",
           "room_col_start": 3,
           "room_col_end": 4,
@@ -10870,8 +10924,8 @@
         {
           "name": "AI 10.5.2.3 PUxCH",
           "duration_minutes": 60,
-          "start_time": "15:30",
-          "end_time": "16:30",
+          "start_time": "14:40",
+          "end_time": "15:40",
           "day": "Thursday",
           "room_col_start": 3,
           "room_col_end": 4,
@@ -10903,6 +10957,45 @@
                 {
                   "agenda_item": "10.5.2.3",
                   "description": "Uplink transmission scheme(s) for uplink channels",
+                  "has_description": true
+                }
+              ]
+            }
+          ],
+          "room_ids": [],
+          "room_scope": "assigned",
+          "notes": [],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": null,
+          "stream": ""
+        },
+        {
+          "name": "AI 9.1 AIML",
+          "duration_minutes": 50,
+          "start_time": "15:40",
+          "end_time": "16:30",
+          "day": "Thursday",
+          "room_col_start": 3,
+          "room_col_end": 4,
+          "chair": "Sorour",
+          "agenda_item": "9.1",
+          "group_header": "R20",
+          "description": "Artificial Intelligence (AI)/Machine Learning (ML) for NR air interface enhancements",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "9.1",
+              "matched_agenda_item": "9.1",
+              "description": "Artificial Intelligence (AI)/Machine Learning (ML) for NR air interface enhancements",
+              "hierarchy": [
+                {
+                  "agenda_item": "9",
+                  "description": "Release 20 NR",
+                  "has_description": true
+                },
+                {
+                  "agenda_item": "9.1",
+                  "description": "Artificial Intelligence (AI)/Machine Learning (ML) for NR air interface enhancements",
                   "has_description": true
                 }
               ]
@@ -13127,22 +13220,22 @@
       }
     }
   ],
-  "source_file": "RAN1#127 online and offline schedules - v00.docx",
-  "generated_at": "2026-11-16 13:42",
+  "source_file": "RAN1#127 online and offline schedules - v01.docx",
+  "generated_at": "2026-11-16 15:42",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
-    "RAN1#127 online and offline schedules - v00.docx",
+    "RAN1#127 online and offline schedules - v01.docx",
     "RAN1#127 online and offline schedules - v00_hh.docx",
     "RAN1#127 Sorour sessions online and offline schedules - v01.docx"
   ],
   "source_labels": {
-    "RAN1#127 online and offline schedules - v00.docx": "Main",
+    "RAN1#127 online and offline schedules - v01.docx": "Main",
     "RAN1#127 online and offline schedules - v00_hh.docx": "Hiroki",
     "RAN1#127 Sorour sessions online and offline schedules - v01.docx": "Sorour"
   },
   "source_urls": {
-    "RAN1#127 online and offline schedules - v00.docx": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Chair_notes/RAN1%23127%20online%20and%20offline%20schedules%20-%20v00.docx",
+    "RAN1#127 online and offline schedules - v01.docx": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/R1-2610231/RAN1%23127%20online%20and%20offline%20schedules%20-%20v01.docx",
     "RAN1#127 online and offline schedules - v00_hh.docx": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Hiroki_notes/RAN1%23127%20online%20and%20offline%20schedules%20-%20v00_hh.docx",
     "RAN1#127 Sorour sessions online and offline schedules - v01.docx": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Sorour_notes/RAN1%23127%20Sorour%20sessions%20online%20and%20offline%20schedules%20-%20v01.docx",
     "Draft RAN1#127 online and offline schedules - v02.docx": "https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_127/Inbox/Chair_notes/Draft%20RAN1%23127%20online%20and%20offline%20schedules%20-%20v02.docx"

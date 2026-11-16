@@ -2,8 +2,8 @@
   "files": [
     {
       "folder": "Chair_notes",
-      "name": "RAN1#127 online and offline schedules - v00.docx",
-      "uploaded_at": "2026-11-16T14:41:00"
+      "name": "RAN1#127 online and offline schedules - v01.docx",
+      "uploaded_at": "2026-11-16T19:55:00"
     },
     {
       "folder": "Chair_notes",
@@ -14,6 +14,11 @@
       "folder": "Hiroki_notes",
       "name": "RAN1#127 online and offline schedules - v00_hh.docx",
       "uploaded_at": "2026-11-16T15:53:00"
+    },
+    {
+      "folder": "R1-2610231",
+      "name": "RAN1#127 online and offline schedules - v01.docx",
+      "uploaded_at": "2026-11-16T21:22:00"
     },
     {
       "folder": "Sorour_notes",
@@ -144,6 +149,6 @@
   "local_refs": {},
   "email": {
     "list": "3GPP_TSG_RAN_WG1",
-    "checked_through": "2026-11-16T19:24:12+00:00"
+    "checked_through": "2026-11-16T20:50:35+00:00"
   }
 }
