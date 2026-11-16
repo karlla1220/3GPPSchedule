@@ -7,6 +7,7 @@ from pathlib import Path
 import re
 
 from shared.docx_html import DOCUMENT_CSS
+from shared.timezones import browser_zone
 
 TEMPLATES = Path(__file__).resolve().parent.parent / "templates"
 
@@ -153,7 +154,7 @@ def agreement_assets(schedule):
     manifest.update(
         meeting_id=schedule.meeting_id,
         status=data.get("status", "unavailable"),
-        timezone=schedule.timezone,
+        timezone=browser_zone(schedule.timezone, schedule.starts_on, schedule.ends_on),
         sections={},
         document_css=DOCUMENT_CSS,
     )

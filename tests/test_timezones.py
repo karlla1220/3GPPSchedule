@@ -103,3 +103,11 @@ def test_an_unwritable_list_does_not_lose_the_answer(monkeypatch, tmp_path):
     request, _ = asker({'timezone': 'Europe/Prague'})
     assert timezones.resolve('(GMT+02:00) Somewhere', 'CZ', 'Prague', request=request,
                              path=blocked / 'timezone_map.jsonl') == 'Europe/Prague'
+
+
+def test_browser_zone_fixes_the_offset_the_build_knows():
+    from shared.timezones import browser_zone
+    assert browser_zone("Asia/Seoul", "2026-01-05", "2026-01-09") == "Etc/GMT-9"
+    assert browser_zone("Asia/Kolkata", "2026-01-05", "2026-01-09") == "Asia/Kolkata"  # half hour
+    assert browser_zone("Europe/Madrid", "2026-03-23", "2026-03-31") == "Europe/Madrid"  # DST change
+    assert browser_zone("UTC", None, None) == "UTC"
