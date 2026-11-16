@@ -460,6 +460,22 @@ header .meta a:focus-visible,
     display: none;
 }
 
+/* A day's warnings (DaySchedule.caveats), above its grid. Amber like the Experimental mark. */
+.schedule-caveats {
+    display: flex;
+    gap: 8px;
+    margin: 0 0 8px;
+    padding: 8px 12px;
+    border: 1px solid #F3D9A4;
+    border-radius: var(--radius-sm);
+    background: #FFF8EB;
+    color: #7C4A03;
+    font-size: 12.5px;
+    line-height: 1.45;
+}
+.schedule-caveats ul { margin: 0; padding: 0; list-style: none; }
+.schedule-caveats li + li { margin-top: 4px; }
+
 .day-panel.active {
     display: block;
 }
@@ -2920,7 +2936,7 @@ header .meta a:focus-visible,
 // DOMContentLoaded by clicking the tab marked here.
 (function() {
     const STATE_KEY = '3gpp_schedule_state:' + "ran3:ran3#134";
-    const MEETING_TZ = "America/Edmonton";
+    const MEETING_TZ = "Etc/GMT+6";
     const tab = day => day ? document.querySelector('.tab[data-day="' + day + '"]') : null;
     let saved = null;
     try {
@@ -3206,7 +3222,7 @@ RAN-CN control plane for non-connectivity services">
     <script type="application/json" id="filter-data">{"groups": [{"name": "AI/ML for NG-RAN Phase 3 (RAN3-led)", "key": "AI/ML for NG-RAN Phase 3 (RAN3-led)", "sessions": [{"name": "AIML RAN", "key": "AIML RAN|AI/ML for NG-RAN Phase 3 (RAN3-led)", "ais": ["12"]}]}, {"name": "Corrections and Enhancements to Rel-20", "key": "Corrections and Enhancements to Rel-20", "sessions": [{"name": "TEI20", "key": "TEI20|Corrections and Enhancements to Rel-20", "ais": ["31"]}]}, {"name": "Corrections to Rel-19 or earlier releases", "key": "Corrections to Rel-19 or earlier releases", "sessions": [{"name": "Corrections", "key": "Corrections|Corrections to Rel-19 or earlier releases", "ais": ["9"]}]}, {"name": "Data Collection for SON/MDT in NR Phase 5 (RAN3-led)", "key": "Data Collection for SON/MDT in NR Phase 5 (RAN3-led)", "sessions": [{"name": "R20 SON/MDT (GTW)", "key": "R20 SON/MDT (GTW)|Data Collection for SON/MDT in NR Phase 5 (RAN3-led)", "ais": ["11.2"]}, {"name": "SON/MDT", "key": "SON/MDT|Data Collection for SON/MDT in NR Phase 5 (RAN3-led)", "ais": ["11"]}]}, {"name": "Integrated Sensing And Communication for NR (RAN3-led)", "key": "Integrated Sensing And Communication for NR (RAN3-led)", "sessions": [{"name": "ISAC SI", "key": "ISAC SI|Integrated Sensing And Communication for NR (RAN3-led)", "ais": ["13"]}]}, {"name": "NR mobility enhancements Phase 5", "key": "NR mobility enhancements Phase 5", "sessions": [{"name": "MobEnh", "key": "MobEnh|NR mobility enhancements Phase 5", "ais": ["15"]}]}, {"name": "Opening of the meeting (9:00am)", "key": "Opening of the meeting (9:00am)", "sessions": [{"name": "Org", "key": "Org|Opening of the meeting (9:00am)", "ais": ["1–8"]}]}, {"name": "Solutions for Ambient IoT in NR Phase 2", "key": "Solutions for Ambient IoT in NR Phase 2", "sessions": [{"name": "Ambient IoT", "key": "Ambient IoT|Solutions for Ambient IoT in NR Phase 2", "ais": ["14"]}]}, {"name": "Study on 6G Radio", "key": "Study on 6G Radio", "sessions": [{"name": "6G SI", "key": "6G SI|Study on 6G Radio", "ais": ["10", "10.1", "10.2", "10.3.1", "10.3.2", "10.5", "10.6", "10.8"]}]}, {"name": "Other", "key": "__other__", "sessions": [{"name": "6G Offline*", "key": "6G Offline*|", "ais": []}, {"name": "CBs", "key": "CBs|", "ais": []}, {"name": "CBs*", "key": "CBs*|", "ais": []}, {"name": "Early CBs", "key": "Early CBs|", "ais": []}, {"name": "ISAC offline (GTW)", "key": "ISAC offline (GTW)|", "ais": []}, {"name": "Offline*", "key": "Offline*|", "ais": []}, {"name": "R20 mobility enhancements (GTW)", "key": "R20 mobility enhancements (GTW)|", "ais": []}, {"name": "Rel-20 Ambient IoT (GTW)", "key": "Rel-20 Ambient IoT (GTW)|", "ais": []}]}], "allAIs": ["1–8", "9", "10", "10.1", "10.2", "10.3.1", "10.3.2", "10.5", "10.6", "10.8", "11", "11.2", "12", "13", "14", "15", "31"], "aiIds": {"1–8": ["1", "2", "3", "4", "5", "6", "7", "8"]}}</script>
 </div>
 <script>document.addEventListener('DOMContentLoaded', function() {
-    const MEETING_TZ = "America/Edmonton";
+    const MEETING_TZ = "Etc/GMT+6";
     const AUTO_REFRESH_MS = 300000; // 5 minutes
     const STATE_KEY = '3gpp_schedule_state:' + "ran3:ran3#134";
     const NOW_TOGGLE_KEY = '3gpp_schedule_show_now:' + "ran3:ran3#134";

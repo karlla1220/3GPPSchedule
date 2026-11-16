@@ -976,7 +976,8 @@
           }
         ],
         "blocks": []
-      }
+      },
+      "caveats": []
     },
     {
       "day_name": "Tuesday",
@@ -1717,7 +1718,8 @@
           }
         ],
         "blocks": []
-      }
+      },
+      "caveats": []
     },
     {
       "day_name": "Wednesday",
@@ -2429,7 +2431,8 @@
           }
         ],
         "blocks": []
-      }
+      },
+      "caveats": []
     },
     {
       "day_name": "Thursday",
@@ -3276,7 +3279,8 @@
           }
         ],
         "blocks": []
-      }
+      },
+      "caveats": []
     },
     {
       "day_name": "Friday",
@@ -3502,7 +3506,8 @@
           }
         ],
         "blocks": []
-      }
+      },
+      "caveats": []
     }
   ],
   "source_file": "R2_136_Schedule_v03.docx",

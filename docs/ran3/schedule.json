@@ -278,7 +278,8 @@
           }
         ],
         "blocks": []
-      }
+      },
+      "caveats": []
     },
     {
       "day_name": "Tuesday",
@@ -576,7 +577,8 @@
           }
         ],
         "blocks": []
-      }
+      },
+      "caveats": []
     },
     {
       "day_name": "Wednesday",
@@ -971,7 +973,8 @@
           }
         ],
         "blocks": []
-      }
+      },
+      "caveats": []
     },
     {
       "day_name": "Thursday",
@@ -1379,7 +1382,8 @@
           }
         ],
         "blocks": []
-      }
+      },
+      "caveats": []
     },
     {
       "day_name": "Friday",
@@ -1548,7 +1552,8 @@
           }
         ],
         "blocks": []
-      }
+      },
+      "caveats": []
     }
   ],
   "source_file": "RAN3_134_agenda_20261116_1310.docx",

@@ -884,7 +884,8 @@
           }
         ],
         "blocks": []
-      }
+      },
+      "caveats": []
     },
     {
       "day_name": "Tuesday",
@@ -2011,7 +2012,8 @@
           }
         ],
         "blocks": []
-      }
+      },
+      "caveats": []
     },
     {
       "day_name": "Wednesday",
@@ -2719,7 +2721,8 @@
           }
         ],
         "blocks": []
-      }
+      },
+      "caveats": []
     },
     {
       "day_name": "Thursday",
@@ -2949,7 +2952,8 @@
           }
         ],
         "blocks": []
-      }
+      },
+      "caveats": []
     },
     {
       "day_name": "Friday",
@@ -3327,7 +3331,8 @@
           }
         ],
         "blocks": []
-      }
+      },
+      "caveats": []
     }
   ],
   "source_file": "S2-2611637_SA2-178-Session Plan - r12.docx",

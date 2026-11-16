@@ -460,6 +460,22 @@ header .meta a:focus-visible,
     display: none;
 }
 
+/* A day's warnings (DaySchedule.caveats), above its grid. Amber like the Experimental mark. */
+.schedule-caveats {
+    display: flex;
+    gap: 8px;
+    margin: 0 0 8px;
+    padding: 8px 12px;
+    border: 1px solid #F3D9A4;
+    border-radius: var(--radius-sm);
+    background: #FFF8EB;
+    color: #7C4A03;
+    font-size: 12.5px;
+    line-height: 1.45;
+}
+.schedule-caveats ul { margin: 0; padding: 0; list-style: none; }
+.schedule-caveats li + li { margin-top: 4px; }
+
 .day-panel.active {
     display: block;
 }
@@ -2915,7 +2931,7 @@ header .meta a:focus-visible,
 // DOMContentLoaded by clicking the tab marked here.
 (function() {
     const STATE_KEY = '3gpp_schedule_state:' + "sa2:sa2#178";
-    const MEETING_TZ = "America/Edmonton";
+    const MEETING_TZ = "Etc/GMT+6";
     const tab = day => day ? document.querySelector('.tab[data-day="' + day + '"]') : null;
     let saved = null;
     try {
@@ -3358,7 +3374,7 @@ Short Message Service to Emergency Response Centre (SMS2EC-ARC)">
     <script type="application/json" id="filter-data">{"groups": [{"name": "Opening of the meeting", "key": "Opening of the meeting", "sessions": [{"name": "Opening, Agenda, Reports / Common Issues / 20.48, 20.49, 20.50", "key": "Opening, Agenda, Reports / Common Issues / 20.48, 20.49, 20.50|Opening of the meeting", "ais": ["1", "2", "3", "4.1", "20.48", "20.49", "20.50"]}]}, {"name": "Project Planning and Management", "key": "Project Planning and Management", "sessions": [{"name": "List of agreed tdocs for block approval / Revisions (including 30.1)", "key": "List of agreed tdocs for block approval / Revisions (including 30.1)|Project Planning and Management", "ais": ["30.1"]}, {"name": "Work planning, etc", "key": "Work planning, etc|Project Planning and Management", "ais": ["30.x"]}]}, {"name": "Rel-19 SIDs and WIDs", "key": "Rel-19 SIDs and WIDs", "sessions": [{"name": "CHFSeg / XRM_Ph2", "key": "CHFSeg / XRM_Ph2|Rel-19 SIDs and WIDs", "ais": ["19.3.2", "19.49"]}]}, {"name": "Rel-20 SIDs and WIDs", "key": "Rel-20 SIDs and WIDs", "sessions": [{"name": "5GSAT_Ph4-ARC", "key": "5GSAT_Ph4-ARC|Rel-20 SIDs and WIDs", "ais": ["20.1.2"]}, {"name": "6G Single Stream", "key": "6G Single Stream|Rel-20 SIDs and WIDs", "ais": ["20.6.0", "20.6.x"]}, {"name": "AmbientIoT_Ph2-ARC", "key": "AmbientIoT_Ph2-ARC|Rel-20 SIDs and WIDs", "ais": ["20.5.2"]}, {"name": "EnergySys_Ph2-ARC", "key": "EnergySys_Ph2-ARC|Rel-20 SIDs and WIDs", "ais": ["20.4.2"]}, {"name": "FS_enIMS_ARC", "key": "FS_enIMS_ARC|Rel-20 SIDs and WIDs", "ais": ["20.10.1"]}, {"name": "KI#1.1 (NAS)", "key": "KI#1.1 (NAS)|Rel-20 SIDs and WIDs", "ais": ["20.6.1"]}, {"name": "KI#1.1 (NAS) / KI#1.2", "key": "KI#1.1 (NAS) / KI#1.2|Rel-20 SIDs and WIDs", "ais": ["20.6.1"]}, {"name": "KI#2 (SBA)", "key": "KI#2 (SBA)|Rel-20 SIDs and WIDs", "ais": ["20.6.2"]}, {"name": "KI#3 (Slicing)", "key": "KI#3 (Slicing)|Rel-20 SIDs and WIDs", "ais": ["20.6.3"]}, {"name": "KI#4 (UP Arch)", "key": "KI#4 (UP Arch)|Rel-20 SIDs and WIDs", "ais": ["20.6.4"]}, {"name": "KI#5 (QoS)", "key": "KI#5 (QoS)|Rel-20 SIDs and WIDs", "ais": ["20.6.5"]}, {"name": "KI#6 (Policy)", "key": "KI#6 (Policy)|Rel-20 SIDs and WIDs", "ais": ["20.6.6"]}, {"name": "KI#7 (Net Exposure)", "key": "KI#7 (Net Exposure)|Rel-20 SIDs and WIDs", "ais": ["20.6.7"]}, {"name": "KI#8 (Net Sharing) / KI#22 (Computing)", "key": "KI#8 (Net Sharing) / KI#22 (Computing)|Rel-20 SIDs and WIDs", "ais": ["20.6.8", "20.6.22"]}, {"name": "KI#9 (Localized Net)", "key": "KI#9 (Localized Net)|Rel-20 SIDs and WIDs", "ais": ["20.6.9"]}, {"name": "KI#10 (FWA) – not revisions / SMS2EC-ARC – not revisions", "key": "KI#10 (FWA) – not revisions / SMS2EC-ARC – not revisions|Rel-20 SIDs and WIDs", "ais": ["20.6.10", "20.8.2"]}, {"name": "KI#11 (Non-3GPP)", "key": "KI#11 (Non-3GPP)|Rel-20 SIDs and WIDs", "ais": ["20.6.11"]}, {"name": "KI#12 – KI#16", "key": "KI#12 – KI#16|Rel-20 SIDs and WIDs", "ais": ["20.6.12–20.6.16"]}, {"name": "KI#17 (IWK)", "key": "KI#17 (IWK)|Rel-20 SIDs and WIDs", "ais": ["20.6.17"]}, {"name": "KI#18 (AI for Network)", "key": "KI#18 (AI for Network)|Rel-20 SIDs and WIDs", "ais": ["20.6.18"]}, {"name": "KI#19 (Network for AI)", "key": "KI#19 (Network for AI)|Rel-20 SIDs and WIDs", "ais": ["20.6.19"]}, {"name": "KI#20 (Sensing)", "key": "KI#20 (Sensing)|Rel-20 SIDs and WIDs", "ais": ["20.6.20"]}, {"name": "KI#21 (Data Framework)", "key": "KI#21 (Data Framework)|Rel-20 SIDs and WIDs", "ais": ["20.6.21"]}, {"name": "KI#22 (Computing)", "key": "KI#22 (Computing)|Rel-20 SIDs and WIDs", "ais": ["20.6.22"]}, {"name": "KI#23 (NTN) – no IMS", "key": "KI#23 (NTN) – no IMS|Rel-20 SIDs and WIDs", "ais": ["20.6.23"]}, {"name": "KI#24 (IoT)", "key": "KI#24 (IoT)|Rel-20 SIDs and WIDs", "ais": ["20.6.24"]}, {"name": "NG_RTC_Ph3-ARC", "key": "NG_RTC_Ph3-ARC|Rel-20 SIDs and WIDs", "ais": ["20.7.2"]}, {"name": "Sensing-ARC – not revisions", "key": "Sensing-ARC – not revisions|Rel-20 SIDs and WIDs", "ais": ["20.2.2"]}]}, {"name": "Other", "key": "__other__", "sessions": [{"name": "6G revisions (single stream)", "key": "6G revisions (single stream)|", "ais": []}, {"name": "block approval of agreed tdocs", "key": "block approval of agreed tdocs|", "ais": []}, {"name": "Drafting", "key": "Drafting|", "ais": []}, {"name": "Drafting: 6G", "key": "Drafting: 6G|", "ais": []}, {"name": "In breakout 1", "key": "In breakout 1|", "ais": []}, {"name": "In Breakout 1", "key": "In Breakout 1|", "ais": []}, {"name": "In Breakout 2", "key": "In Breakout 2|", "ais": []}, {"name": "In main room", "key": "In main room|", "ais": []}, {"name": "KI#23 NTN", "key": "KI#23 NTN|", "ais": []}, {"name": "Main:13:00 Drafting for SoH questions: KI#3, KI#5, KI#11, KI#17?/KI#22?", "key": "Main:13:00 Drafting for SoH questions: KI#3, KI#5, KI#11, KI#17?/KI#22?|", "ais": []}, {"name": "Main:13:00 Drafting for SoH questions: KI#17?/KI#22?, KI#19, KI#21", "key": "Main:13:00 Drafting for SoH questions: KI#17?/KI#22?, KI#19, KI#21|", "ais": []}, {"name": "Main:13:00 Drafting for SoH questions: KI#18, other KI (s) if any", "key": "Main:13:00 Drafting for SoH questions: KI#18, other KI (s) if any|", "ais": []}, {"name": "Plenary session", "key": "Plenary session|", "ais": []}, {"name": "Rel-21 5G-A discussion", "key": "Rel-21 5G-A discussion|", "ais": []}, {"name": "Revisions", "key": "Revisions|", "ais": []}]}], "allAIs": ["1", "2", "3", "4.1", "19.3.2", "19.49", "20.1.2", "20.2.2", "20.4.2", "20.5.2", "20.6.0", "20.6.1", "20.6.2", "20.6.3", "20.6.4", "20.6.5", "20.6.6", "20.6.7", "20.6.8", "20.6.9", "20.6.10", "20.6.11", "20.6.12–20.6.16", "20.6.17", "20.6.18", "20.6.19", "20.6.20", "20.6.21", "20.6.22", "20.6.23", "20.6.24", "20.6.x", "20.7.2", "20.8.2", "20.10.1", "20.48", "20.49", "20.50", "30.1", "30.x"], "aiIds": {"20.6.12–20.6.16": ["20.6.12", "20.6.13", "20.6.14", "20.6.15", "20.6.16"], "20.6.x": ["20.6"], "30.x": ["30"]}}</script>
 </div>
 <script>document.addEventListener('DOMContentLoaded', function() {
-    const MEETING_TZ = "America/Edmonton";
+    const MEETING_TZ = "Etc/GMT+6";
     const AUTO_REFRESH_MS = 300000; // 5 minutes
     const STATE_KEY = '3gpp_schedule_state:' + "sa2:sa2#178";
     const NOW_TOGGLE_KEY = '3gpp_schedule_show_now:' + "sa2:sa2#178";

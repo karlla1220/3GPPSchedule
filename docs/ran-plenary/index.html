@@ -460,6 +460,22 @@ header .meta a:focus-visible,
     display: none;
 }
 
+/* A day's warnings (DaySchedule.caveats), above its grid. Amber like the Experimental mark. */
+.schedule-caveats {
+    display: flex;
+    gap: 8px;
+    margin: 0 0 8px;
+    padding: 8px 12px;
+    border: 1px solid #F3D9A4;
+    border-radius: var(--radius-sm);
+    background: #FFF8EB;
+    color: #7C4A03;
+    font-size: 12.5px;
+    line-height: 1.45;
+}
+.schedule-caveats ul { margin: 0; padding: 0; list-style: none; }
+.schedule-caveats li + li { margin-top: 4px; }
+
 .day-panel.active {
     display: block;
 }
@@ -2894,7 +2910,7 @@ header .meta a:focus-visible,
 // DOMContentLoaded by clicking the tab marked here.
 (function() {
     const STATE_KEY = '3gpp_schedule_state:' + "ran-plenary:ran#113";
-    const MEETING_TZ = "Europe/Madrid";
+    const MEETING_TZ = "Etc/GMT-2";
     const tab = day => day ? document.querySelector('.tab[data-day="' + day + '"]') : null;
     let saved = null;
     try {
@@ -3225,7 +3241,7 @@ header .meta a:focus-visible,
     <script type="application/json" id="filter-data">{"groups": [{"name": "6G", "key": "6G", "sessions": [{"name": "6G diverse devices", "key": "6G diverse devices|6G", "ais": ["8.2.1.2"]}, {"name": "6G Migration, Aggregation", "key": "6G Migration, Aggregation|6G", "ais": ["8.2.1.1"]}, {"name": "6G spec modernization", "key": "6G spec modernization|6G", "ais": []}, {"name": "Report on 6G AS Security – RAN2/SA3 Chairs / 1st sweep / comebacks", "key": "Report on 6G AS Security – RAN2/SA3 Chairs / 1st sweep / comebacks|6G", "ais": []}]}, {"name": "Comebacks", "key": "Comebacks", "sessions": [{"name": "1st sweep / comebacks", "key": "1st sweep / comebacks|Comebacks", "ais": []}, {"name": "Comebacks", "key": "Comebacks|Comebacks", "ais": []}]}, {"name": "Early items", "key": "Early items", "sessions": [{"name": "Early items", "key": "Early items|Early items", "ais": []}, {"name": "Early items / 1st sweep", "key": "Early items / 1st sweep|Early items", "ais": []}, {"name": "Incoming LSs, WG reports, early items", "key": "Incoming LSs, WG reports, early items|Early items", "ais": []}, {"name": "ITU Adhoc", "key": "ITU Adhoc|Early items", "ais": []}]}, {"name": "Rel-20", "key": "Rel-20", "sessions": [{"name": "NTN time/frequency compensation", "key": "NTN time/frequency compensation|Rel-20", "ais": ["9.1.1"]}]}, {"name": "Rel-21 5G-Adv", "key": "Rel-21 5G-Adv", "sessions": [{"name": "Early items: Rel-21 5G-Adv", "key": "Early items: Rel-21 5G-Adv|Rel-21 5G-Adv", "ais": []}, {"name": "Rel-21 5G-Adv (AI 15.2 – RAN1/2/3 NTN, Xiaodong)", "key": "Rel-21 5G-Adv (AI 15.2 – RAN1/2/3 NTN, Xiaodong)|Rel-21 5G-Adv", "ais": ["15.2"]}, {"name": "Rel-21 5G-Adv (AI 15.2 – RAN1/2/3 Others, Jerome)", "key": "Rel-21 5G-Adv (AI 15.2 – RAN1/2/3 Others, Jerome)|Rel-21 5G-Adv", "ais": ["15.2"]}, {"name": "Rel-21 5G-Adv (AI 15.3 – RAN4 NTN, Yang)", "key": "Rel-21 5G-Adv (AI 15.3 – RAN4 NTN, Yang)|Rel-21 5G-Adv", "ais": ["15.3"]}, {"name": "Rel-21 5G-Adv (AI 15.3 – RAN4 Others, Xutao)", "key": "Rel-21 5G-Adv (AI 15.3 – RAN4 Others, Xutao)|Rel-21 5G-Adv", "ais": ["15.3"]}]}, {"name": "TBD", "key": "TBD", "sessions": [{"name": "TBD", "key": "TBD|TBD", "ais": []}]}], "allAIs": ["8.2.1.1", "8.2.1.2", "9.1.1", "15.2", "15.3"], "aiIds": {}}</script>
 </div>
 <script>document.addEventListener('DOMContentLoaded', function() {
-    const MEETING_TZ = "Europe/Madrid";
+    const MEETING_TZ = "Etc/GMT-2";
     const AUTO_REFRESH_MS = 300000; // 5 minutes
     const STATE_KEY = '3gpp_schedule_state:' + "ran-plenary:ran#113";
     const NOW_TOGGLE_KEY = '3gpp_schedule_show_now:' + "ran-plenary:ran#113";

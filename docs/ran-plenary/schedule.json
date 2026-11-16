@@ -356,7 +356,8 @@
           }
         ],
         "blocks": []
-      }
+      },
+      "caveats": []
     },
     {
       "day_name": "Tuesday",
@@ -858,7 +859,8 @@
           }
         ],
         "blocks": []
-      }
+      },
+      "caveats": []
     },
     {
       "day_name": "Wednesday",
@@ -1359,7 +1361,8 @@
           }
         ],
         "blocks": []
-      }
+      },
+      "caveats": []
     },
     {
       "day_name": "Thursday",
@@ -1752,7 +1755,8 @@
           }
         ],
         "blocks": []
-      }
+      },
+      "caveats": []
     }
   ],
   "source_file": "RAN#113 time plan v09.zip",

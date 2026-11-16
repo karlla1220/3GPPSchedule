@@ -2155,7 +2155,8 @@
           }
         ],
         "blocks": []
-      }
+      },
+      "caveats": []
     },
     {
       "day_name": "Tuesday",
@@ -4424,7 +4425,8 @@
           }
         ],
         "blocks": []
-      }
+      },
+      "caveats": []
     },
     {
       "day_name": "Wednesday",
@@ -6961,7 +6963,8 @@
           }
         ],
         "blocks": []
-      }
+      },
+      "caveats": []
     },
     {
       "day_name": "Thursday",
@@ -8573,7 +8576,8 @@
           }
         ],
         "blocks": []
-      }
+      },
+      "caveats": []
     },
     {
       "day_name": "Friday",
@@ -8887,7 +8891,8 @@
           }
         ],
         "blocks": []
-      }
+      },
+      "caveats": []
     }
   ],
   "source_file": "RAN4_121_meeting_schedule_v06.pptx",
