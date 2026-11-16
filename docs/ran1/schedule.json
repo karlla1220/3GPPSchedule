@@ -884,6 +884,40 @@
               "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;85d32bc3.2611c",
               "author": "<>",
               "sent": "2026-11-16T09:02:58-06:00"
+            },
+            {
+              "kind": "session",
+              "session": "Mon 14:00-15:00 Champions Ballroom A",
+              "quote": "The following observations/proposal are to be proposed today’s online.",
+              "mode": "online",
+              "summary": "Observation A.2-1 (CJT codebook) proposed for today's online",
+              "topics": [
+                "Observation A.2-1 (CJT codebook)"
+              ],
+              "day": "Monday",
+              "split": [],
+              "mail": "9a423d82.2611c",
+              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;9a423d82.2611c",
+              "author": "<>",
+              "sent": "2026-11-16T13:02:38-06:00"
+            },
+            {
+              "kind": "session",
+              "session": "Mon 14:00-15:00 Champions Ballroom A",
+              "quote": "We will use this version for online discussion later. I’ll discuss P5.1, P4.2-5, O4.2-2 and others, if time allows.",
+              "mode": "online",
+              "summary": "Online discussion covering P5.1, P4.2-5, O4.2-2 and others using v035_Futurewei3_Mod2",
+              "topics": [
+                "P5.1",
+                "P4.2-5",
+                "O4.2-2"
+              ],
+              "day": "Monday",
+              "split": [],
+              "mail": "79b06ab8.2611c",
+              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;79b06ab8.2611c",
+              "author": "Hao Wu",
+              "sent": "2026-11-16T13:05:40-06:00"
             }
           ],
           "part": null,
@@ -13074,7 +13108,7 @@
     }
   ],
   "source_file": "RAN1#127 online and offline schedules - v00.docx",
-  "generated_at": "2026-11-16 13:01",
+  "generated_at": "2026-11-16 13:22",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
