@@ -2,8 +2,8 @@
   "day": "Wednesday",
   "time_block_index": 1,
   "source_hashes": {
-    "Main Schedule": "bd87744c8851fd63",
-    "Hiroki's schedule": "5b207f30c7dea015",
+    "Main Schedule": "c749f5d03b336103",
+    "Hiroki's schedule": "92bb9c6c130c3b52",
     "Sorour's schedule": "6aa0d1c6f4b77c60"
   },
   "merged_sessions": [
@@ -16,7 +16,7 @@
       "group_header": "6GR",
       "agenda_item": "10.4.1",
       "source_cells": [
-        "c02cdd5"
+        "ccd182e"
       ],
       "description": "Operation in idle mode",
       "agenda_descriptions": [
@@ -53,7 +53,7 @@
       "group_header": "6GR",
       "agenda_item": "10.4.2",
       "source_cells": [
-        "c02cdd5"
+        "ccd182e"
       ],
       "description": "Operation in connected mode",
       "agenda_descriptions": [
@@ -90,8 +90,8 @@
       "group_header": "R20",
       "agenda_item": null,
       "source_cells": [
-        "c70aae6",
-        "c83e9ae"
+        "c83e9ae",
+        "cf7c65a"
       ]
     },
     {
@@ -103,8 +103,8 @@
       "group_header": "R20",
       "agenda_item": "9.1",
       "source_cells": [
-        "c70aae6",
-        "c83e9ae"
+        "c83e9ae",
+        "cf7c65a"
       ],
       "description": "Artificial Intelligence (AI)/Machine Learning (ML) for NR air interface enhancements",
       "agenda_descriptions": [
@@ -136,8 +136,8 @@
       "group_header": "6GR",
       "agenda_item": "10.8.3",
       "source_cells": [
-        "c2c0339",
-        "c3bcaeb"
+        "c6bfc67",
+        "cda8974"
       ],
       "description": "Waveform and frame structure",
       "agenda_descriptions": [
@@ -174,8 +174,8 @@
       "group_header": "6GR",
       "agenda_item": "10.8.2",
       "source_cells": [
-        "c2c0339",
-        "c3bcaeb"
+        "c6bfc67",
+        "cda8974"
       ],
       "description": "Aspects of integration with communication",
       "agenda_descriptions": [
@@ -212,7 +212,7 @@
       "group_header": "6GR",
       "agenda_item": "10.5.3.1",
       "source_cells": [
-        "cbaddcf"
+        "c81cbb8"
       ],
       "description": "Aspects of downlink-based CSI acquisition",
       "agenda_descriptions": [
@@ -254,7 +254,7 @@
       "group_header": "6GR",
       "agenda_item": "10.5.3.2",
       "source_cells": [
-        "cbaddcf"
+        "c81cbb8"
       ],
       "description": "Aspects of uplink-based CSI acquisition",
       "agenda_descriptions": [
@@ -296,7 +296,7 @@
       "group_header": "6GR",
       "agenda_item": "10.5.3.3",
       "source_cells": [
-        "cbaddcf"
+        "c81cbb8"
       ],
       "description": "Other aspects",
       "agenda_descriptions": [
@@ -338,52 +338,52 @@
       "group_header": "R20",
       "agenda_item": null,
       "source_cells": [
-        "c1475f4"
+        "cda0ec3"
       ]
     }
   ],
-  "merged_at": "2026-11-15T22:02:00.967750+00:00",
+  "merged_at": "2026-11-16T16:02:20.416377+00:00",
   "meeting_id": "ran1#127",
   "schema_version": 3,
   "source_entries": {
     "Main Schedule": [
       {
-        "room_label": "Main",
+        "room_label": "Champions Ballroom A",
         "cell_text": "6GR (90)\n.10.4.1 (30)\n.10.4.2 (60)",
         "fallback_start_time": null,
-        "cell_id": "c02cdd5"
+        "cell_id": "ccd182e"
       },
       {
-        "room_label": "Brk1",
+        "room_label": "BMO 225-226",
         "cell_text": "R20 (90) \nUE feature (40)\nAI/ML (50)",
         "fallback_start_time": null,
-        "cell_id": "c70aae6"
+        "cell_id": "cf7c65a"
       },
       {
-        "room_label": "Brk2",
+        "room_label": "BMO 214-215",
         "cell_text": "6GR (90)\n.10.8 Sensing (90)",
         "fallback_start_time": null,
-        "cell_id": "c2c0339"
+        "cell_id": "c6bfc67"
       },
       {
-        "room_label": "Offline1",
+        "room_label": "BMO 212",
         "cell_text": "Xiaodong (90)\n6GR\n.10.5.3.1 (45)\n.10.5.3.2 (25)\n.10.5.3.3 (20)",
         "fallback_start_time": null,
-        "cell_id": "cbaddcf"
+        "cell_id": "c81cbb8"
       },
       {
-        "room_label": "Offline2",
+        "room_label": "BMO 221",
         "cell_text": "Hiroki (90)\nR20 (90)\nA-IoT (90)",
         "fallback_start_time": null,
-        "cell_id": "c1475f4"
+        "cell_id": "cda0ec3"
       }
     ],
     "Hiroki's schedule": [
       {
-        "room_label": "Hiroki: Brk2",
+        "room_label": "Hiroki: BMO 214-215",
         "cell_text": "6GR (90)\n.10.8 Sensing (90)\n10.8.3 (30)\n10.8.2 (60)",
         "fallback_start_time": null,
-        "cell_id": "c3bcaeb"
+        "cell_id": "cda8974"
       }
     ],
     "Sorour's schedule": [

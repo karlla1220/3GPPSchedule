@@ -6,7 +6,7 @@
       "day_name": "Monday",
       "rooms": [
         {
-          "name": "Main",
+          "name": "Champions Ballroom A",
           "table_index": 0,
           "room_index_in_table": 0,
           "id": "",
@@ -15,7 +15,7 @@
           "stream": ""
         },
         {
-          "name": "Brk1",
+          "name": "BMO 225-226",
           "table_index": 0,
           "room_index_in_table": 1,
           "id": "",
@@ -24,7 +24,7 @@
           "stream": ""
         },
         {
-          "name": "Brk2",
+          "name": "BMO 214-215",
           "table_index": 0,
           "room_index_in_table": 2,
           "id": "",
@@ -33,7 +33,7 @@
           "stream": ""
         },
         {
-          "name": "Offline1",
+          "name": "BMO 212",
           "table_index": 1,
           "room_index_in_table": 0,
           "id": "",
@@ -42,7 +42,7 @@
           "stream": ""
         },
         {
-          "name": "Offline2",
+          "name": "BMO 221",
           "table_index": 1,
           "room_index_in_table": 1,
           "id": "",
@@ -182,7 +182,7 @@
           "email_details": [
             {
               "kind": "session",
-              "session": "Mon 10:00-10:30 Main + Brk1 + Brk2",
+              "session": "Mon 10:00-10:30 Champions Ballroom A + BMO 225-226 + BMO 214-215",
               "quote": "online discussion at 10:00 on Monday morning, you may prioritize the proposals in section 4",
               "mode": "online",
               "summary": "Online discussion on Section 4 proposals",
@@ -196,23 +196,6 @@
               "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;ebeb71a2.2611c",
               "author": "songxinghua",
               "sent": "2026-11-15T01:12:58-06:00"
-            },
-            {
-              "kind": "session",
-              "session": "Mon 10:00-10:30 Main + Brk1 + Brk2",
-              "quote": "Really appreciated if the first-round comments can be provided before 9:00 AM before the first online session.",
-              "mode": "online",
-              "summary": "First-round comments due before 9:00 AM for the first online session",
-              "topics": [],
-              "day": "Monday",
-              "input_due": {
-                "at": "09:00"
-              },
-              "split": [],
-              "mail": "1f7a387c.2611c",
-              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;1f7a387c.2611c",
-              "author": "songxinghua",
-              "sent": "2026-11-15T06:05:45-06:00"
             }
           ],
           "part": null,
@@ -315,7 +298,7 @@
           "email_details": [
             {
               "kind": "session",
-              "session": "Mon 11:20-12:00 Main + Brk1 + Brk2",
+              "session": "Mon 11:20-12:00 Champions Ballroom A + BMO 225-226 + BMO 214-215",
               "quote": "I plan to use this document for discussion on Monday morning session. The list of proposals that I would like to start with are provided in Section 2.",
               "mode": null,
               "summary": "Discussion on Monday morning based on moderator summary v00 (Section 2)",
@@ -381,7 +364,7 @@
           "email_details": [
             {
               "kind": "session",
-              "session": "Mon 12:00-12:30 Main + Brk1 + Brk2",
+              "session": "Mon 12:00-12:30 Champions Ballroom A + BMO 225-226 + BMO 214-215",
               "quote": "For the online/offline discussions on 11/16 Mon, please first focus on Section 2, 3, 4, 5 and proposals with [High].",
               "mode": "online",
               "summary": "Focus on Section 2, 3, 4, 5 and [High] proposals",
@@ -451,7 +434,7 @@
           "email_details": [
             {
               "kind": "session",
-              "session": "Mon 11:00-11:40 Offline1",
+              "session": "Mon 11:00-11:40 BMO 212",
               "quote": "We will have our first offline after morning coffee break.",
               "mode": "offline",
               "summary": "First offline session after morning coffee break",
@@ -465,7 +448,7 @@
             },
             {
               "kind": "session",
-              "session": "Mon 11:00-11:40 Offline1",
+              "session": "Mon 11:00-11:40 BMO 212",
               "quote": "For the offline, we will start from non-AI part.",
               "mode": "offline",
               "summary": "Offline will start from non-AI part",
@@ -481,7 +464,7 @@
             },
             {
               "kind": "session",
-              "session": "Mon 11:00-11:40 Offline1",
+              "session": "Mon 11:00-11:40 BMO 212",
               "quote": "For today’s offline/online, let’s start with the observations on CJT and CJTC -> AP/P  ->DLable, etc , if time is allowed.",
               "mode": "offline",
               "summary": "Start with observations on CJT and CJTC, then AP/P and DLable",
@@ -599,7 +582,7 @@
           "email_details": [
             {
               "kind": "session",
-              "session": "Mon 12:05-12:30 Offline1",
+              "session": "Mon 12:05-12:30 BMO 212",
               "quote": "Our first offline session is at 12:05pm on Monday.",
               "mode": "offline",
               "summary": "First offline session",
@@ -713,7 +696,7 @@
           "email_details": [
             {
               "kind": "session",
-              "session": "Mon 11:40-12:00 Offline2",
+              "session": "Mon 11:40-12:00 BMO 221",
               "quote": "we will have an offline session on Monday at 11:40 AM",
               "mode": "offline",
               "summary": "Offline session",
@@ -778,7 +761,7 @@
           "email_details": [
             {
               "kind": "session",
-              "session": "Mon 12:00-12:30 Offline2",
+              "session": "Mon 12:00-12:30 BMO 221",
               "quote": "Our first offline session then follow-by an online session will be on Monday noon starting from around 12:00pm Calgary local time. To allow some FL processing time to revise proposals, please share your inputs if possible by Monday 10:00 AM",
               "mode": "offline",
               "summary": "Offline session starting around 12:00",
@@ -846,7 +829,7 @@
           "email_details": [
             {
               "kind": "session",
-              "session": "Mon 14:00-15:00 Main",
+              "session": "Mon 14:00-15:00 Champions Ballroom A",
               "quote": "Please take a look before online. It seem they are two observations that can be handled early, i.e. afternoon online.",
               "mode": "online",
               "summary": "Discuss CJT and CJTC observations, then AP/P and DLable",
@@ -1091,7 +1074,7 @@
           "email_details": [
             {
               "kind": "session",
-              "session": "Mon 14:40-15:00 Brk1",
+              "session": "Mon 14:40-15:00 BMO 225-226",
               "quote": "If you provide your comments by lunch break on Monday I will try to take them into account for the 1st online session.",
               "mode": "online",
               "summary": "1st online session (comments by Monday lunch break)",
@@ -1150,7 +1133,7 @@
           "email_details": [
             {
               "kind": "session",
-              "session": "Mon 15:00-15:40 Brk1",
+              "session": "Mon 15:00-15:40 BMO 225-226",
               "quote": "If you enter your comments by Monday lunch time, I will try to take them into account for the first online session.",
               "mode": "online",
               "summary": "First online session; enter comments marked [HIGH**] by Monday lunch time",
@@ -1253,7 +1236,7 @@
           "email_details": [
             {
               "kind": "session",
-              "session": "Mon 14:00-14:30 Brk2",
+              "session": "Mon 14:00-14:30 BMO 214-215",
               "quote": "I plan to take the Q3-1-1, Q3-2 and Q3-3-1 on Monday online at 14:00. Comments provided by Monday noon Calgary time will make it to my processing.",
               "mode": "online",
               "summary": "Online discussion on Q3-1-1, Q3-2, and Q3-3-1",
@@ -1374,7 +1357,7 @@
           "email_details": [
             {
               "kind": "session",
-              "session": "Mon 15:20-15:50 Brk2",
+              "session": "Mon 15:20-15:50 BMO 214-215",
               "quote": "followed by an online session at 3:20 PM",
               "mode": "online",
               "summary": "Online session",
@@ -1439,7 +1422,7 @@
           "email_details": [
             {
               "kind": "session",
-              "session": "Mon 15:50-16:30 Brk2",
+              "session": "Mon 15:50-16:30 BMO 214-215",
               "quote": "then follow-by an online session will be on Monday noon starting from around 12:00pm Calgary local time.",
               "mode": "online",
               "summary": "Online session following the offline session",
@@ -1501,7 +1484,7 @@
           "email_details": [
             {
               "kind": "session",
-              "session": "Mon 14:00-14:25 Offline1",
+              "session": "Mon 14:00-14:25 BMO 212",
               "quote": "We will have a short offline and an online session on Monday. The plan is to start with Proposal 1-1 followed by Proposal 1-3 (if time allows).",
               "mode": "offline",
               "summary": "Offline session on Proposals 1-1 and 1-3",
@@ -1563,7 +1546,7 @@
           "email_details": [
             {
               "kind": "session",
-              "session": "Mon 14:25-14:50 Offline1",
+              "session": "Mon 14:25-14:50 BMO 212",
               "quote": "On Monday, we have short offline and then online, for which I plan to focus on section 3.1 and time permitting 2.2/2.3/2.4.",
               "mode": "offline",
               "summary": "Offline on Monday covering section 3.1 and time permitting 2.2/2.3/2.4",
@@ -1630,7 +1613,7 @@
           "email_details": [
             {
               "kind": "session",
-              "session": "Mon 14:50-15:30 Offline1",
+              "session": "Mon 14:50-15:30 BMO 212",
               "quote": "Note that we HAVE off/online time on Monday in this meeting",
               "mode": "offline",
               "summary": "Monday offline session",
@@ -1644,7 +1627,7 @@
             },
             {
               "kind": "session",
-              "session": "Mon 14:50-15:30 Offline1",
+              "session": "Mon 14:50-15:30 BMO 212",
               "quote": "(Note that we HAVE off/online time on Monday in this meeting)",
               "mode": "offline",
               "summary": "Offline session on Monday",
@@ -1658,7 +1641,7 @@
             },
             {
               "kind": "session",
-              "session": "Mon 14:50-15:30 Offline1",
+              "session": "Mon 14:50-15:30 BMO 212",
               "quote": "Monday Offline (PM 2:50 ~ PM 3:30): DMRS related proposals\n*\tProposal 4.1.1-2: Extend Nmax=48 for both waveforms\n*\tProposal 4.1.1-3: FD-OCC sequence\n*\tProposal 4.1.1-4: Orphan RE",
               "mode": "offline",
               "summary": "Monday offline on DMRS related proposals (4.1.1-2 to 4.4.1-1)",
@@ -1734,7 +1717,7 @@
           "email_details": [
             {
               "kind": "session",
-              "session": "Mon 15:30-15:50 Offline1",
+              "session": "Mon 15:30-15:50 BMO 212",
               "quote": "The first Offline session on Monday will take place already at 15:30. I will do my best to consider comments received before the lunch break, i.e., at 12:30.",
               "mode": "offline",
               "summary": "Offline session on Monday; comments requested by 12:30",
@@ -1806,7 +1789,7 @@
           "email_details": [
             {
               "kind": "session",
-              "session": "Mon 15:50-16:30 Offline1",
+              "session": "Mon 15:50-16:30 BMO 212",
               "quote": "Offline session (15.50–16:30): ~20 min for DMRS part followed by ~20 min for PDSCH part",
               "mode": "offline",
               "summary": "Offline split: ~20 min DMRS, ~20 min PDSCH (Proposals 4-8-1, 4-9-1/2)",
@@ -1881,7 +1864,7 @@
           "email_details": [
             {
               "kind": "session",
-              "session": "Mon 14:00-14:30 Offline2",
+              "session": "Mon 14:00-14:30 BMO 221",
               "quote": "The first offline session is Monday 14:00pm",
               "mode": "offline",
               "summary": "First offline session",
@@ -1936,7 +1919,7 @@
           "email_details": [
             {
               "kind": "session",
-              "session": "Mon 14:30-16:00 Offline2",
+              "session": "Mon 14:30-16:00 BMO 221",
               "quote": "The offline session at Monday will start from 2:30pm. Therefore, please provide your comments by 11:00am at latest.\n-          The plan is to start with profile-based and scattering point/object based me",
               "mode": "offline",
               "summary": "Monday offline from 14:30; comments due by 11:00",
@@ -1957,7 +1940,7 @@
             },
             {
               "kind": "session",
-              "session": "Mon 14:30-16:00 Offline2",
+              "session": "Mon 14:30-16:00 BMO 221",
               "quote": "As ISAC offline session starts at 2:30 pm on Monday, it would be great to provide responses as early as possible.",
               "mode": "offline",
               "summary": "ISAC offline session starts at 2:30 pm; provide responses as early as possible",
@@ -2017,7 +2000,7 @@
           "email_details": [
             {
               "kind": "session",
-              "session": "Mon 16:00-16:30 Offline2",
+              "session": "Mon 16:00-16:30 BMO 221",
               "quote": "Our first offline session is at 4:00pm on Monday. Please provide your inputs (if any ) by 12:00pm of Monday Calgary time.",
               "mode": "offline",
               "summary": "First offline session; inputs due by 12:00 Monday",
@@ -2097,7 +2080,7 @@
           "email_details": [
             {
               "kind": "session",
-              "session": "Mon 17:00-17:50 Main",
+              "session": "Mon 17:00-17:50 Champions Ballroom A",
               "quote": "Since WUS (10.6.x) has its first online session at 17:00 on Monday, and considering the slow speed for uploading comments, please prioritize comments for sections of FL comments and proposals marked as HIGH. For that session, I will have a first cut-off on Monday at 15:00.",
               "mode": "online",
               "summary": "Online session for 10.6.x; comments cut-off at 15:00",
@@ -2117,7 +2100,7 @@
             },
             {
               "kind": "session",
-              "session": "Mon 17:00-17:50 Main",
+              "session": "Mon 17:00-17:50 Champions Ballroom A",
               "quote": "As we will have an online at 17.00pm on Monday, please provide your comments to Proposal 5.2.2-1 and Proposal 4.2.5-1 before 15:00 Monday local time",
               "mode": "online",
               "summary": "Online session; comments on Proposals 5.2.2-1 & 4.2.5-1 due by 15:00 Monday",
@@ -2227,7 +2210,7 @@
           "email_details": [
             {
               "kind": "session",
-              "session": "Mon 18:20-18:40 Main",
+              "session": "Mon 18:20-18:40 Champions Ballroom A",
               "quote": "We will have a short offline and an online session on Monday. The plan is to start with Proposal 1-1 followed by Proposal 1-3 (if time allows).",
               "mode": "online",
               "summary": "Online session on Proposals 1-1 and 1-3",
@@ -2289,7 +2272,7 @@
           "email_details": [
             {
               "kind": "session",
-              "session": "Mon 18:40-19:00 Main",
+              "session": "Mon 18:40-19:00 Champions Ballroom A",
               "quote": "On Monday, we have short offline and then online, for which I plan to focus on section 3.1 and time permitting 2.2/2.3/2.4.",
               "mode": "online",
               "summary": "Online on Monday covering section 3.1 and time permitting 2.2/2.3/2.4",
@@ -2356,7 +2339,7 @@
           "email_details": [
             {
               "kind": "session",
-              "session": "Mon 17:00-17:20 Brk1",
+              "session": "Mon 17:00-17:20 BMO 225-226",
               "quote": "The offline will be followed by Online at 17:00.",
               "mode": "online",
               "summary": "Online session on Monday following offline",
@@ -2425,7 +2408,7 @@
           "email_details": [
             {
               "kind": "session",
-              "session": "Mon 17:20-18:10 Brk1",
+              "session": "Mon 17:20-18:10 BMO 225-226",
               "quote": "Online session (17:20–18:10): ~15–20 min for DMRS part followed by ~30–35 min for PDSCH part.",
               "mode": "online",
               "summary": "Online split: DMRS and PDSCH (Proposals 4-5-1-2, 4-8-1/4-8-3, 4-3-1)",
@@ -2504,7 +2487,7 @@
           "email_details": [
             {
               "kind": "session",
-              "session": "Mon 18:10-19:00 Brk1",
+              "session": "Mon 18:10-19:00 BMO 225-226",
               "quote": "Note that we HAVE off/online time on Monday in this meeting",
               "mode": "online",
               "summary": "Monday online session",
@@ -2518,7 +2501,7 @@
             },
             {
               "kind": "session",
-              "session": "Mon 18:10-19:00 Brk1",
+              "session": "Mon 18:10-19:00 BMO 225-226",
               "quote": "(Note that we HAVE off/online time on Monday in this meeting)",
               "mode": "online",
               "summary": "Online session on Monday",
@@ -2532,7 +2515,7 @@
             },
             {
               "kind": "session",
-              "session": "Mon 18:10-19:00 Brk1",
+              "session": "Mon 18:10-19:00 BMO 225-226",
               "quote": "Monday Online (PM 6:10 ~ PM 7:00)\n*\tWill discuss the outcome of offline session",
               "mode": "online",
               "summary": "Monday online to discuss outcome of offline session",
@@ -2688,7 +2671,7 @@
           "email_details": [
             {
               "kind": "session",
-              "session": "Mon 17:00-17:50 Offline1",
+              "session": "Mon 17:00-17:50 BMO 212",
               "quote": "provide your comments to other proposals after the online session before 4:30 PM in the afternoon (30 mins before the offline discussion)",
               "mode": "offline",
               "summary": "Offline discussion; comments due by 16:30 (30 mins before)",
@@ -2755,7 +2738,7 @@
           "email_details": [
             {
               "kind": "session",
-              "session": "Mon 17:50-18:20 Offline1",
+              "session": "Mon 17:50-18:20 BMO 212",
               "quote": "For the online/offline discussions on 11/16 Mon, please first focus on Section 2, 3, 4, 5 and proposals with [High].",
               "mode": "offline",
               "summary": "Focus on Section 2, 3, 4, 5 and [High] proposals",
@@ -2869,7 +2852,7 @@
           "email_details": [
             {
               "kind": "session",
-              "session": "Mon 17:00-17:30 Offline2",
+              "session": "Mon 17:00-17:30 BMO 221",
               "quote": "the second offline session in Monday 17:00pm",
               "mode": "offline",
               "summary": "Second offline session",
@@ -3050,7 +3033,7 @@
       "day_name": "Tuesday",
       "rooms": [
         {
-          "name": "Main",
+          "name": "Champions Ballroom A",
           "table_index": 0,
           "room_index_in_table": 0,
           "id": "",
@@ -3059,7 +3042,7 @@
           "stream": ""
         },
         {
-          "name": "Brk1",
+          "name": "BMO 225-226",
           "table_index": 0,
           "room_index_in_table": 1,
           "id": "",
@@ -3068,7 +3051,7 @@
           "stream": ""
         },
         {
-          "name": "Brk2",
+          "name": "BMO 214-215",
           "table_index": 0,
           "room_index_in_table": 2,
           "id": "",
@@ -3077,7 +3060,7 @@
           "stream": ""
         },
         {
-          "name": "Offline1",
+          "name": "BMO 212",
           "table_index": 1,
           "room_index_in_table": 0,
           "id": "",
@@ -3086,7 +3069,7 @@
           "stream": ""
         },
         {
-          "name": "Offline2",
+          "name": "BMO 221",
           "table_index": 1,
           "room_index_in_table": 1,
           "id": "",
@@ -3452,7 +3435,7 @@
           "email_details": [
             {
               "kind": "session",
-              "session": "Tue 08:00-08:30 Brk2",
+              "session": "Tue 08:00-08:30 BMO 214-215",
               "quote": "Really appreciate if you can provide your inputs by Monday Oct. 12th 19:00 local time, considering that we will have online session on Tuesday morning.",
               "mode": "online",
               "summary": "Online session on Tuesday morning; inputs due Monday 19:00",
@@ -3550,24 +3533,7 @@
           "room_scope": "assigned",
           "notes": [],
           "inferred_agenda_items": [],
-          "email_details": [
-            {
-              "kind": "session",
-              "session": "Tue 09:00-09:25 Brk2",
-              "quote": "Given that the online session is on Tuesday morning, please provide your feedback before the end of Monday session.",
-              "mode": "online",
-              "summary": "Online session on SBFD TX/RX/measurement procedures",
-              "topics": [
-                "SBFD TX/RX/measurement procedures"
-              ],
-              "day": "Tuesday",
-              "split": [],
-              "mail": "6f09ba83.2611b",
-              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;6f09ba83.2611b",
-              "author": "Yanping Xing",
-              "sent": "2026-11-13T19:42:58-06:00"
-            }
-          ],
+          "email_details": [],
           "part": null,
           "stream": ""
         },
@@ -3606,27 +3572,7 @@
           "room_scope": "assigned",
           "notes": [],
           "inferred_agenda_items": [],
-          "email_details": [
-            {
-              "kind": "session",
-              "session": "Tue 09:25-09:40 Brk2",
-              "quote": "Considering we will have online on Tuesday, please provide your comments by Monday 18.00 local time if possible.",
-              "mode": "online",
-              "summary": "Online session on R19 LP-WUS; comments due Monday 18:00",
-              "topics": [
-                "R19 LP-WUS"
-              ],
-              "day": "Tuesday",
-              "input_due": {
-                "at": "18:00"
-              },
-              "split": [],
-              "mail": "d401989e.2611c",
-              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;d401989e.2611c",
-              "author": "Qu Xin (vivo)",
-              "sent": "2026-11-14T21:31:52-06:00"
-            }
-          ],
+          "email_details": [],
           "part": null,
           "stream": ""
         },
@@ -3846,7 +3792,7 @@
           "email_details": [
             {
               "kind": "session",
-              "session": "Tue 09:50-10:30 Offline1",
+              "session": "Tue 09:50-10:30 BMO 212",
               "quote": "Our first offline and online session will be on Tuesday morning, so please try to upload your comments by Monday 10/12 19:30 local time.",
               "mode": "offline",
               "summary": "First offline session (chaired remotely)",
@@ -3884,7 +3830,7 @@
           "email_details": [
             {
               "kind": "session",
-              "session": "Tue 08:00-09:30 Offline2",
+              "session": "Tue 08:00-09:30 BMO 221",
               "quote": "prepare the proposals for Tuesday online/offline discussion",
               "mode": "offline",
               "summary": "Proposals prepared for Tuesday offline discussion",
@@ -4124,7 +4070,7 @@
           "email_details": [
             {
               "kind": "session",
-              "session": "Tue 11:40-12:30 Brk1",
+              "session": "Tue 11:40-12:30 BMO 225-226",
               "quote": "Our first offline and online session will be on Tuesday morning, so please try to upload your comments by Monday 10/12 19:30 local time.",
               "mode": "online",
               "summary": "First online session",
@@ -4281,7 +4227,7 @@
           "email_details": [
             {
               "kind": "session",
-              "session": "Tue 11:35-12:15 Offline1",
+              "session": "Tue 11:35-12:15 BMO 212",
               "quote": "The official deadline of companies input for this Round#1 is 2 hours before Tuesday offline local time.",
               "mode": "offline",
               "summary": "Round#1 inputs due 2 hours before Tuesday offline session",
@@ -4298,7 +4244,7 @@
             },
             {
               "kind": "session",
-              "session": "Tue 11:35-12:15 Offline1",
+              "session": "Tue 11:35-12:15 BMO 212",
               "quote": "provide comments until 2 hours before Tuesday offline local time.",
               "mode": "offline",
               "summary": "Comments on Part1 PUSCH MIMO V001 due 2 hours before Tuesday offline",
@@ -4317,7 +4263,7 @@
             },
             {
               "kind": "session",
-              "session": "Tue 11:35-12:15 Offline1",
+              "session": "Tue 11:35-12:15 BMO 212",
               "quote": "Please check the above things, and provide comments until 2 hours before Tuesday offline local time.",
               "mode": "offline",
               "summary": "Comments due 2 hours before Tuesday offline",
@@ -4844,7 +4790,7 @@
           "email_details": [
             {
               "kind": "session",
-              "session": "Tue 15:20-15:50 Brk1",
+              "session": "Tue 15:20-15:50 BMO 225-226",
               "quote": "followed by online",
               "mode": "online",
               "summary": "Online session following the offline",
@@ -5030,7 +4976,7 @@
           "email_details": [
             {
               "kind": "session",
-              "session": "Tue 15:10-16:00 Brk2",
+              "session": "Tue 15:10-16:00 BMO 214-215",
               "quote": "prepare the proposals for Tuesday online/offline discussion",
               "mode": "online",
               "summary": "Proposals prepared for Tuesday online discussion",
@@ -5229,7 +5175,7 @@
           "email_details": [
             {
               "kind": "session",
-              "session": "Tue 14:55-15:35 Offline1",
+              "session": "Tue 14:55-15:35 BMO 212",
               "quote": "For Tuesday’s offline and online discussions, the deadline for comments is Tuesday at 11:00.",
               "mode": "offline",
               "summary": "Offline discussion; comments deadline Tuesday at 11:00",
@@ -5428,7 +5374,7 @@
           "email_details": [
             {
               "kind": "session",
-              "session": "Tue 14:30-15:00 Offline2",
+              "session": "Tue 14:30-15:00 BMO 221",
               "quote": "According to the v02 of schedule, the first offline is at 2:30pm Tuesday",
               "mode": "offline",
               "summary": "First offline session",
@@ -5733,7 +5679,7 @@
           "email_details": [
             {
               "kind": "session",
-              "session": "Tue 17:50-18:25 Main",
+              "session": "Tue 17:50-18:25 Champions Ballroom A",
               "quote": "For Tuesday’s offline and online discussions, the deadline for comments is Tuesday at 11:00.",
               "mode": "online",
               "summary": "Online discussion; comments deadline Tuesday at 11:00",
@@ -6450,7 +6396,7 @@
       "day_name": "Wednesday",
       "rooms": [
         {
-          "name": "Main",
+          "name": "Champions Ballroom A",
           "table_index": 0,
           "room_index_in_table": 0,
           "id": "",
@@ -6459,7 +6405,7 @@
           "stream": ""
         },
         {
-          "name": "Brk1",
+          "name": "BMO 225-226",
           "table_index": 0,
           "room_index_in_table": 1,
           "id": "",
@@ -6468,7 +6414,7 @@
           "stream": ""
         },
         {
-          "name": "Brk2",
+          "name": "BMO 214-215",
           "table_index": 0,
           "room_index_in_table": 2,
           "id": "",
@@ -6477,7 +6423,7 @@
           "stream": ""
         },
         {
-          "name": "Offline1",
+          "name": "BMO 212",
           "table_index": 1,
           "room_index_in_table": 0,
           "id": "",
@@ -6486,7 +6432,7 @@
           "stream": ""
         },
         {
-          "name": "Offline2",
+          "name": "BMO 221",
           "table_index": 1,
           "room_index_in_table": 1,
           "id": "",
@@ -6886,7 +6832,7 @@
           "email_details": [
             {
               "kind": "session",
-              "session": "Wed 08:00-08:10 Brk2",
+              "session": "Wed 08:00-08:10 BMO 214-215",
               "quote": "Since this topic will be treated online at 8:00 AM on Wednesday to avoid the collision with NTN sessions as per chairman's guidance, the deadline for comments is at 20:00 on Tuesday.",
               "mode": "online",
               "summary": "Online session on Wednesday at 08:00; comments deadline 20:00 Tuesday",
@@ -9226,7 +9172,7 @@
       "day_name": "Thursday",
       "rooms": [
         {
-          "name": "Main",
+          "name": "Champions Ballroom A",
           "table_index": 0,
           "room_index_in_table": 0,
           "id": "",
@@ -9235,7 +9181,7 @@
           "stream": ""
         },
         {
-          "name": "Brk1",
+          "name": "BMO 225-226",
           "table_index": 0,
           "room_index_in_table": 1,
           "id": "",
@@ -9244,7 +9190,7 @@
           "stream": ""
         },
         {
-          "name": "Brk2",
+          "name": "BMO 214-215",
           "table_index": 0,
           "room_index_in_table": 2,
           "id": "",
@@ -9253,7 +9199,7 @@
           "stream": ""
         },
         {
-          "name": "Offline1",
+          "name": "BMO 212",
           "table_index": 1,
           "room_index_in_table": 0,
           "id": "",
@@ -9262,7 +9208,7 @@
           "stream": ""
         },
         {
-          "name": "Offline2",
+          "name": "BMO 221",
           "table_index": 1,
           "room_index_in_table": 1,
           "id": "",
@@ -12035,7 +11981,7 @@
       "day_name": "Friday",
       "rooms": [
         {
-          "name": "Main",
+          "name": "Champions Ballroom A",
           "table_index": 0,
           "room_index_in_table": 0,
           "id": "",
@@ -12044,7 +11990,7 @@
           "stream": ""
         },
         {
-          "name": "Brk1",
+          "name": "BMO 225-226",
           "table_index": 0,
           "room_index_in_table": 1,
           "id": "",
@@ -12053,7 +11999,7 @@
           "stream": ""
         },
         {
-          "name": "Brk2",
+          "name": "BMO 214-215",
           "table_index": 0,
           "room_index_in_table": 2,
           "id": "",
@@ -12062,7 +12008,7 @@
           "stream": ""
         },
         {
-          "name": "Offline1",
+          "name": "BMO 212",
           "table_index": 1,
           "room_index_in_table": 0,
           "id": "",
@@ -12071,7 +12017,7 @@
           "stream": ""
         },
         {
-          "name": "Offline2",
+          "name": "BMO 221",
           "table_index": 1,
           "room_index_in_table": 1,
           "id": "",
@@ -13032,24 +12978,25 @@
       }
     }
   ],
-  "source_file": "Draft RAN1#127 online and offline schedules - v02.docx",
-  "generated_at": "2026-11-16 09:22",
+  "source_file": "RAN1#127 online and offline schedules - v00.docx",
+  "generated_at": "2026-11-16 10:02",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
-    "Draft RAN1#127 online and offline schedules - v02.docx",
-    "Draft RAN1#127 online and offline schedules - v02_hh.docx",
+    "RAN1#127 online and offline schedules - v00.docx",
+    "RAN1#127 online and offline schedules - v00_hh.docx",
     "RAN1#127 Sorour sessions online and offline schedules - v00.docx"
   ],
   "source_labels": {
-    "Draft RAN1#127 online and offline schedules - v02.docx": "Main",
-    "Draft RAN1#127 online and offline schedules - v02_hh.docx": "Hiroki",
+    "RAN1#127 online and offline schedules - v00.docx": "Main",
+    "RAN1#127 online and offline schedules - v00_hh.docx": "Hiroki",
     "RAN1#127 Sorour sessions online and offline schedules - v00.docx": "Sorour"
   },
   "source_urls": {
-    "Draft RAN1#127 online and offline schedules - v02.docx": "https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_127/Inbox/Chair_notes/Draft%20RAN1%23127%20online%20and%20offline%20schedules%20-%20v02.docx",
-    "Draft RAN1#127 online and offline schedules - v02_hh.docx": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Hiroki_notes/Draft%20RAN1%23127%20online%20and%20offline%20schedules%20-%20v02_hh.docx",
-    "RAN1#127 Sorour sessions online and offline schedules - v00.docx": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Sorour_notes/RAN1%23127%20Sorour%20sessions%20online%20and%20offline%20schedules%20-%20v00.docx"
+    "RAN1#127 online and offline schedules - v00.docx": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Chair_notes/RAN1%23127%20online%20and%20offline%20schedules%20-%20v00.docx",
+    "RAN1#127 online and offline schedules - v00_hh.docx": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Hiroki_notes/RAN1%23127%20online%20and%20offline%20schedules%20-%20v00_hh.docx",
+    "RAN1#127 Sorour sessions online and offline schedules - v00.docx": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Sorour_notes/RAN1%23127%20Sorour%20sessions%20online%20and%20offline%20schedules%20-%20v00.docx",
+    "Draft RAN1#127 online and offline schedules - v02.docx": "https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_127/Inbox/Chair_notes/Draft%20RAN1%23127%20online%20and%20offline%20schedules%20-%20v02.docx"
   },
   "source_mails": {},
   "timezone": "America/Edmonton",

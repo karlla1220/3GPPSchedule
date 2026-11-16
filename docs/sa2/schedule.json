@@ -286,7 +286,7 @@
           ],
           "room_scope": "assigned",
           "notes": [
-            "KI#1.1 (NAS) (20.6.1)"
+            "KI#1.1 (NAS) (20.6.1) [8]"
           ],
           "inferred_agenda_items": [],
           "email_details": [],
@@ -334,8 +334,8 @@
           ],
           "room_scope": "assigned",
           "notes": [
-            "KI#1.1 (NAS) (20.6.1)",
-            "KI#1.2 (20.6.1)"
+            "KI#1.1 (NAS) (20.6.1) [8]",
+            "KI#1.2 (20.6.1) [1]"
           ],
           "inferred_agenda_items": [],
           "email_details": [],
@@ -408,7 +408,7 @@
           ],
           "room_scope": "assigned",
           "notes": [
-            "KI#18 (AI for Network) (20.6.18)"
+            "KI#18 (AI for Network) (20.6.18) [9]"
           ],
           "inferred_agenda_items": [],
           "email_details": [],
@@ -613,7 +613,7 @@
           ],
           "room_scope": "assigned",
           "notes": [
-            "KI#5 (QoS) (20.6.5)"
+            "KI#5 (QoS) (20.6.5) [9]"
           ],
           "inferred_agenda_items": [],
           "email_details": [],
@@ -798,7 +798,7 @@
           "room_scope": "assigned",
           "notes": [
             "6G Single Stream (20.6.x)",
-            "Show of hands takes place (KI#5, KI#11, KI#22?)."
+            "Show of hands takes place (KI#5, KI#11, KI#3, KI#22)."
           ],
           "inferred_agenda_items": [],
           "email_details": [],
@@ -992,7 +992,7 @@
           "stream": ""
         },
         {
-          "name": "KI#23 (NTN)",
+          "name": "KI#23 (NTN) – no IMS",
           "duration_minutes": 90,
           "start_time": "09:00",
           "end_time": "10:30",
@@ -1030,7 +1030,7 @@
           "room_scope": "assigned",
           "notes": [
             "In main room",
-            "KI#23 (NTN) (20.6.23)"
+            "KI#23 (NTN) – no IMS (20.6.23)"
           ],
           "inferred_agenda_items": [],
           "email_details": [],
@@ -1453,8 +1453,7 @@
           "room_scope": "assigned",
           "notes": [
             "In Breakout 2",
-            "KI#3 (Slicing) (20.6.3)",
-            "KI#3 Slicing (Show of hands takes place in Breakout 2 in Slicing session)"
+            "KI#3 (Slicing) (20.6.3) [3]"
           ],
           "inferred_agenda_items": [],
           "email_details": [],
@@ -1552,7 +1551,7 @@
           "room_scope": "assigned",
           "notes": [
             "In Breakout 2",
-            "KI#2 (SBA) (20.6.2)"
+            "KI#2 (SBA) (20.6.2) [7]"
           ],
           "inferred_agenda_items": [],
           "email_details": [],
@@ -1770,7 +1769,7 @@
           ],
           "room_scope": "assigned",
           "notes": [
-            "KI#6 (Policy) (20.6.6)"
+            "KI#6 (Policy) (20.6.6) [7]"
           ],
           "inferred_agenda_items": [],
           "email_details": [],
@@ -2154,11 +2153,41 @@
           ],
           "room_scope": "assigned",
           "notes": [
-            "KI#21 (Data Framework) (20.6.21)"
+            "KI#21 (Data Framework) (20.6.21) [11]"
           ],
           "inferred_agenda_items": [],
           "email_details": [],
           "part": null,
+          "stream": ""
+        },
+        {
+          "name": "KI#23 NTN",
+          "duration_minutes": 90,
+          "start_time": "09:00",
+          "end_time": "10:30",
+          "day": "Wednesday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "Michael STARSINIC",
+          "agenda_item": null,
+          "group_header": "",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [
+            "stream2"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "KI#23 NTN"
+          ],
+          "inferred_agenda_items": [
+            "20.6.23"
+          ],
+          "email_details": [],
+          "part": [
+            1,
+            2
+          ],
           "stream": ""
         },
         {
@@ -3294,20 +3323,20 @@
       }
     }
   ],
-  "source_file": "S2-2611637_SA2-178-Session Plan - r7.zip",
-  "generated_at": "2026-11-15 18:21",
+  "source_file": "S2-2611637_SA2-178-Session Plan - r11.docx",
+  "generated_at": "2026-11-16 10:02",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
-    "S2-2611637_SA2-178-Session Plan - r7.zip",
+    "S2-2611637_SA2-178-Session Plan - r11.docx",
     "agenda.csv"
   ],
   "source_labels": {
-    "S2-2611637_SA2-178-Session Plan - r7.zip": "Session Plan - r7",
+    "S2-2611637_SA2-178-Session Plan - r11.docx": "Session Plan - r11",
     "agenda.csv": "agenda.csv"
   },
   "source_urls": {
-    "S2-2611637_SA2-178-Session Plan - r7.zip": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/SA2/Inbox/Drafts/_Session_Plan_Updates/S2-2611637_SA2-178-Session%20Plan%20-%20r7.zip"
+    "S2-2611637_SA2-178-Session Plan - r11.docx": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/SA2/Inbox/Drafts/_Session_Plan_Updates/S2-2611637_SA2-178-Session%20Plan%20-%20r11.docx"
   },
   "source_mails": {},
   "timezone": "America/Edmonton",

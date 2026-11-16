@@ -589,6 +589,15 @@
           "kind": "",
           "detail": "",
           "stream": ""
+        },
+        {
+          "name": "Offline room",
+          "table_index": 0,
+          "room_index_in_table": 0,
+          "id": "offline",
+          "kind": "",
+          "detail": "",
+          "stream": ""
         }
       ],
       "sessions": [
@@ -654,6 +663,34 @@
             "L"
           ],
           "inferred_agenda_items": [],
+          "email_details": [],
+          "part": null,
+          "stream": ""
+        },
+        {
+          "name": "Rel-20 Ambient IoT (GTW)",
+          "duration_minutes": 90,
+          "start_time": "09:00",
+          "end_time": "10:30",
+          "day": "Wednesday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "Seokjung Kim",
+          "agenda_item": null,
+          "group_header": "",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [
+            "offline"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "Rel-20 Ambient IoT (GTW)",
+            "Seokjung Kim (LGE)"
+          ],
+          "inferred_agenda_items": [
+            "14"
+          ],
           "email_details": [],
           "part": null,
           "stream": ""
@@ -905,6 +942,15 @@
           "kind": "",
           "detail": "",
           "stream": ""
+        },
+        {
+          "name": "Offline room",
+          "table_index": 0,
+          "room_index_in_table": 0,
+          "id": "offline",
+          "kind": "",
+          "detail": "",
+          "stream": ""
         }
       ],
       "sessions": [
@@ -975,6 +1021,34 @@
           "stream": ""
         },
         {
+          "name": "ISAC offline",
+          "duration_minutes": 90,
+          "start_time": "09:00",
+          "end_time": "10:30",
+          "day": "Thursday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "Jiang Zheng",
+          "agenda_item": null,
+          "group_header": "",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [
+            "offline"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "ISAC offline",
+            "Jiang Zheng (China Telecom)"
+          ],
+          "inferred_agenda_items": [
+            "13"
+          ],
+          "email_details": [],
+          "part": null,
+          "stream": ""
+        },
+        {
           "name": "6G Offline*",
           "duration_minutes": 30,
           "start_time": "10:30",
@@ -1036,6 +1110,34 @@
             "X"
           ],
           "inferred_agenda_items": [],
+          "email_details": [],
+          "part": null,
+          "stream": ""
+        },
+        {
+          "name": "R20 mobility enhancements (GTW)",
+          "duration_minutes": 120,
+          "start_time": "11:00",
+          "end_time": "13:00",
+          "day": "Thursday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "Shuigen Yang",
+          "agenda_item": null,
+          "group_header": "",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [
+            "offline"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "R20 mobility enhancements (GTW)",
+            "Shuigen Yang (Lenovo)"
+          ],
+          "inferred_agenda_items": [
+            "15"
+          ],
           "email_details": [],
           "part": null,
           "stream": ""
@@ -1407,23 +1509,23 @@
       }
     }
   ],
-  "source_file": "RAN3_134_agenda_20261113.docx",
-  "generated_at": "2026-11-15 22:03",
+  "source_file": "RAN3_134_agenda_20261116_0900.docx",
+  "generated_at": "2026-11-16 10:02",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
-    "RAN3_134_agenda_20261113.docx",
-    "RAN3 offline discussion_ver_00.xlsx",
+    "RAN3_134_agenda_20261116_0900.docx",
+    "RAN3 offline discussion_ver_01.xlsx",
     "agenda.csv"
   ],
   "source_labels": {
-    "RAN3_134_agenda_20261113.docx": "agenda_20261113",
-    "RAN3 offline discussion_ver_00.xlsx": "offline discussion_ver_00",
+    "RAN3_134_agenda_20261116_0900.docx": "agenda_20261116_0900",
+    "RAN3 offline discussion_ver_01.xlsx": "offline discussion_ver_01",
     "agenda.csv": "agenda.csv"
   },
   "source_urls": {
-    "RAN3_134_agenda_20261113.docx": "https://www.3gpp.org/ftp/tsg_ran/WG3_Iu/TSGR3_134/Inbox/Chairs_Notes/RAN3_134_agenda_20261113.docx",
-    "RAN3 offline discussion_ver_00.xlsx": "https://www.3gpp.org/ftp/tsg_ran/WG3_Iu/TSGR3_134/Offline_meeting_room/RAN3%20offline%20discussion_ver_00.xlsx",
+    "RAN3_134_agenda_20261116_0900.docx": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN3/Inbox/Chairs_Notes/RAN3_134_agenda_20261116_0900.docx",
+    "RAN3 offline discussion_ver_01.xlsx": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN3/Offline_meeting_room/RAN3%20offline%20discussion_ver_01.xlsx",
     "agenda.csv": "https://www.3gpp.org/ftp/tsg_ran/WG3_Iu/TSGR3_134/Agenda/agenda.csv"
   },
   "source_mails": {},

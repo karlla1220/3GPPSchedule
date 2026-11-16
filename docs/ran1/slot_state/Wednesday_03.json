@@ -2,7 +2,7 @@
   "day": "Wednesday",
   "time_block_index": 3,
   "source_hashes": {
-    "Main Schedule": "432652daccc9d841",
+    "Main Schedule": "f4f5985770ad8f88",
     "Sorour's schedule": "e94a558c5da32cb7"
   },
   "merged_sessions": [
@@ -15,7 +15,7 @@
       "group_header": "6GR",
       "agenda_item": "10.6.x",
       "source_cells": [
-        "cb8c491"
+        "cea482e"
       ],
       "description": "WUS and operation",
       "agenda_descriptions": [
@@ -69,7 +69,7 @@
       "group_header": "R20 / R20 NR",
       "agenda_item": "9.2",
       "source_cells": [
-        "c19f60d",
+        "cc44764",
         "cc281bd"
       ],
       "description": "NR MIMO Phase 6",
@@ -102,7 +102,7 @@
       "group_header": "",
       "agenda_item": "8.1",
       "source_cells": [
-        "c19f60d",
+        "cc44764",
         "cc281bd"
       ],
       "description": "Maintenance on all items of Rel-19 NR and E-UTRA",
@@ -135,7 +135,7 @@
       "group_header": "6GR",
       "agenda_item": "10.5.4.4",
       "source_cells": [
-        "c12cfb5"
+        "cb63ef1"
       ],
       "description": "Handling of potential multiple uplink transmissions",
       "agenda_descriptions": [
@@ -177,7 +177,7 @@
       "group_header": "6GR",
       "agenda_item": "10.5.4.3",
       "source_cells": [
-        "c12cfb5"
+        "cb63ef1"
       ],
       "description": "HARQ related Aspects",
       "agenda_descriptions": [
@@ -219,7 +219,7 @@
       "group_header": "6GR",
       "agenda_item": "10.5.1.2",
       "source_cells": [
-        "c862f40"
+        "ca54696"
       ],
       "description": "PRACH and RACH procedure",
       "agenda_descriptions": [
@@ -261,7 +261,7 @@
       "group_header": "6GR",
       "agenda_item": "10.5.1.3",
       "source_cells": [
-        "c862f40"
+        "ca54696"
       ],
       "description": "Bandwidth operation",
       "agenda_descriptions": [
@@ -303,7 +303,7 @@
       "group_header": "6GR",
       "agenda_item": "10.7.1",
       "source_cells": [
-        "cdb3ac1"
+        "ceda4c2"
       ],
       "description": "NTN specific requirements and design",
       "agenda_descriptions": [
@@ -340,7 +340,7 @@
       "group_header": "R20",
       "agenda_item": null,
       "source_cells": [
-        "cdb3ac1"
+        "ceda4c2"
       ]
     },
     {
@@ -352,57 +352,57 @@
       "group_header": "",
       "agenda_item": null,
       "source_cells": [
-        "c351ac6",
-        "ca97652"
+        "c270375",
+        "cca8c15"
       ]
     }
   ],
-  "merged_at": "2026-11-15T22:02:00.975351+00:00",
+  "merged_at": "2026-11-16T16:02:20.420456+00:00",
   "meeting_id": "ran1#127",
   "schema_version": 3,
   "source_entries": {
     "Main Schedule": [
       {
-        "room_label": "Main",
+        "room_label": "Champions Ballroom A",
         "cell_text": "6GR (60)\n.10.6.x (60)",
         "fallback_start_time": null,
-        "cell_id": "cb8c491"
+        "cell_id": "cea482e"
       },
       {
-        "room_label": "Brk1",
+        "room_label": "BMO 225-226",
         "cell_text": "R20 (40)\nMIMO (40)\n\nAI 8.1 (20)",
         "fallback_start_time": null,
-        "cell_id": "c19f60d"
+        "cell_id": "cc44764"
       },
       {
-        "room_label": "Brk2",
+        "room_label": "BMO 214-215",
         "cell_text": "6GR (60)\n.10.5.4.4 (30)\n.10.5.4.3 (30)",
         "fallback_start_time": null,
-        "cell_id": "c12cfb5"
+        "cell_id": "cb63ef1"
       },
       {
-        "room_label": "Main + Brk1 + Brk2",
+        "room_label": "Champions Ballroom A + BMO 225-226 + BMO 214-215",
         "cell_text": "Early dinner (60)",
         "fallback_start_time": "18:00",
-        "cell_id": "c351ac6"
+        "cell_id": "c270375"
       },
       {
-        "room_label": "Offline1",
+        "room_label": "BMO 212",
         "cell_text": "Xiaodong (60)\n6GR\n.10.5.1.2(30)\n.10.5.1.3(30)",
         "fallback_start_time": null,
-        "cell_id": "c862f40"
+        "cell_id": "ca54696"
       },
       {
-        "room_label": "Offline2",
+        "room_label": "BMO 221",
         "cell_text": "Sorour (60)\n6GR\n.10.7.1 NTN (30)\n\nR20\nNTN-NR (30)",
         "fallback_start_time": null,
-        "cell_id": "cdb3ac1"
+        "cell_id": "ceda4c2"
       },
       {
-        "room_label": "Offline1 + Offline2",
+        "room_label": "BMO 212 + BMO 221",
         "cell_text": "Early dinner (60)",
         "fallback_start_time": "18:00",
-        "cell_id": "ca97652"
+        "cell_id": "cca8c15"
       }
     ],
     "Sorour's schedule": [
