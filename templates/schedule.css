@@ -450,6 +450,22 @@ header .meta a:focus-visible,
     display: none;
 }
 
+/* A day's warnings (DaySchedule.caveats), above its grid. Amber like the Experimental mark. */
+.schedule-caveats {
+    display: flex;
+    gap: 8px;
+    margin: 0 0 8px;
+    padding: 8px 12px;
+    border: 1px solid #F3D9A4;
+    border-radius: var(--radius-sm);
+    background: #FFF8EB;
+    color: #7C4A03;
+    font-size: 12.5px;
+    line-height: 1.45;
+}
+.schedule-caveats ul { margin: 0; padding: 0; list-style: none; }
+.schedule-caveats li + li { margin-top: 4px; }
+
 .day-panel.active {
     display: block;
 }

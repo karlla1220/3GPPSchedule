@@ -629,7 +629,7 @@ def build_schedule(args) -> Schedule:
     # in two rooms at once. The build fails and the slots involved are
     # re-interpreted cold next time; a cold reading that gives it too is the
     # document's own, published with a notice.
-    reject_concurrent_agenda_duplicates(
+    caveats = reject_concurrent_agenda_duplicates(
         sessions, day_rooms_map,
         agenda_items=load_agenda_description_map(meeting_id=current_meeting_id),
         blocks=time_blocks, incremental=incremental, meeting_id=current_meeting_id,
@@ -832,6 +832,7 @@ def build_schedule(args) -> Schedule:
                     rooms=rooms,
                     sessions=day_sessions,
                     timeline=ran1_timeline(time_blocks, time_breaks),
+                    caveats=caveats.get(day_name, []),
                 )
             )
 
