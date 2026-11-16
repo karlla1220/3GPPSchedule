@@ -2789,6 +2789,23 @@
               "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;2825258.2611c",
               "author": "Youngrok Jang",
               "sent": "2026-11-16T05:37:55-06:00"
+            },
+            {
+              "kind": "session",
+              "session": "Mon 18:10-19:00 BMO 225-226",
+              "quote": "You can check “Online Monday proposals.docx” file for today (Monday)’s proposal.",
+              "mode": "online",
+              "summary": "Check Online Monday proposals.docx file for Monday online session",
+              "topics": [],
+              "day": "Monday",
+              "tdocs": [
+                "R1-2609607"
+              ],
+              "split": [],
+              "mail": "8fc68d6c.2611c",
+              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;8fc68d6c.2611c",
+              "author": "Youngrok Jang",
+              "sent": "2026-11-16T17:29:12-06:00"
             }
           ],
           "part": null,
@@ -13337,7 +13354,7 @@
     }
   ],
   "source_file": "RAN1#127 online and offline schedules - v01.docx",
-  "generated_at": "2026-11-16 17:01",
+  "generated_at": "2026-11-16 17:41",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
@@ -15523,14 +15540,7 @@
         "changed_in": "Draft Chair notes RAN1#127_v02.docx"
       }
     },
-    "retained_files": [
-      "agreements/03e5a21c14533576fd6c.html",
-      "agreements/28b1e1eefdfa4cb86965.html",
-      "agreements/63038f21318449073703.html",
-      "agreements/d61a6947d8c7c614676d.html",
-      "agreements/e65d2ed2feb48fcc6cd8.html",
-      "agreements/ebd74056454ed12bf13e.html"
-    ]
+    "retained_files": []
   },
   "email_informal": {
     "10.6.3": [
