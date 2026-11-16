@@ -2328,6 +2328,25 @@
               "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;3dcf13ee.2611c",
               "author": "Magnus Åström",
               "sent": "2026-11-16T16:19:08-06:00"
+            },
+            {
+              "kind": "session",
+              "session": "Mon 17:00-17:50 Champions Ballroom A",
+              "quote": "R1-2610895 is available in the inbox, for Monday online session. Considering Proposals based on evaluation results need more time to discuss offline, the following proposal will be brought up during Monday online session",
+              "mode": "online",
+              "summary": "Online session to discuss Proposal #6-1a (R1-2610895)",
+              "topics": [
+                "Proposal #6-1a"
+              ],
+              "day": "Monday",
+              "tdocs": [
+                "R1-2610895"
+              ],
+              "split": [],
+              "mail": "47731193.2611c",
+              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;47731193.2611c",
+              "author": "Seonwook Kim",
+              "sent": "2026-11-16T16:22:59-06:00"
             }
           ],
           "part": null,
@@ -13318,7 +13337,7 @@
     }
   ],
   "source_file": "RAN1#127 online and offline schedules - v01.docx",
-  "generated_at": "2026-11-16 16:22",
+  "generated_at": "2026-11-16 16:41",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
@@ -15334,10 +15353,7 @@
         "changed_in": "Draft Chair notes RAN1#127_v02.docx"
       }
     },
-    "retained_files": [
-      "agreements/4ce02ef9a0f0b4350c98.html",
-      "agreements/daa38d7dea6debf443e6.html"
-    ]
+    "retained_files": []
   },
   "email_informal": {
     "10.6.3": [
