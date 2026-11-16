@@ -14,7 +14,18 @@
     "content_type": "application/octet-stream",
     "content_disposition": null
   },
-  "offline": null,
+  "offline": {
+    "name": "RAN3 offline discussion_ver_00.xlsx",
+    "url": "https://www.3gpp.org/ftp/tsg_ran/WG3_Iu/TSGR3_134/Offline_meeting_room/RAN3%20offline%20discussion_ver_00.xlsx",
+    "uploaded_at": "2026-11-16 03:31",
+    "size": 22955,
+    "sha256": "46df678a12a243d13a9fafc4994537208de9b5de8696055d3c5934d6dc68935d",
+    "etag": "\"25ba21ef7a75dd1:0\"",
+    "last_modified": "Mon, 16 Nov 2026 03:31:14 GMT",
+    "ftp_modified": null,
+    "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    "content_disposition": null
+  },
   "agenda": {
     "name": "agenda.csv",
     "url": "https://www.3gpp.org/ftp/tsg_ran/WG3_Iu/TSGR3_134/Agenda/agenda.csv",

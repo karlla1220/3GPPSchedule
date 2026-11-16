@@ -312,7 +312,24 @@
           "room_scope": "assigned",
           "notes": [],
           "inferred_agenda_items": [],
-          "email_details": [],
+          "email_details": [
+            {
+              "kind": "session",
+              "session": "Mon 11:20-12:00 Main + Brk1 + Brk2",
+              "quote": "I plan to use this document for discussion on Monday morning session. The list of proposals that I would like to start with are provided in Section 2.",
+              "mode": null,
+              "summary": "Discussion on Monday morning based on moderator summary v00 (Section 2)",
+              "topics": [
+                "Section 2"
+              ],
+              "day": "Monday",
+              "split": [],
+              "mail": "f84d2158.2611c",
+              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;f84d2158.2611c",
+              "author": "Daewon Lee",
+              "sent": "2026-11-15T21:45:46-06:00"
+            }
+          ],
           "part": null,
           "stream": ""
         },
@@ -12798,7 +12815,7 @@
     }
   ],
   "source_file": "Draft RAN1#127 online and offline schedules - v02.docx",
-  "generated_at": "2026-11-15 20:23",
+  "generated_at": "2026-11-15 22:02",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
