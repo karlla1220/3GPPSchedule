@@ -1,15 +1,15 @@
 {
   "meeting_id": "ran3#134",
-  "version": "20261116.0.0900",
+  "version": "20261116.0.1030",
   "config_hash": "fdf80a0eb29dd64dbe8f8e0dbf1f6320eb2cbdcf53e080038977ac99443fe045",
   "schedule": {
-    "name": "RAN3_134_agenda_20261116_0900.docx",
-    "url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN3/Inbox/Chairs_Notes/RAN3_134_agenda_20261116_0900.docx",
-    "uploaded_at": "2026-11-16 14:57",
-    "size": 215197,
-    "sha256": "9d2c470292114efb990dbb6db92df5fa924d284073e1aa18f6f762092ae98aa7",
-    "etag": "\"80879ddda75dd1:0\"",
-    "last_modified": "Mon, 16 Nov 2026 14:57:57 GMT",
+    "name": "RAN3_134_agenda_20261116_1030.docx",
+    "url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN3/Inbox/Chairs_Notes/RAN3_134_agenda_20261116_1030.docx",
+    "uploaded_at": "2026-11-16 16:34",
+    "size": 214416,
+    "sha256": "9f88ba8df793137f87e2a5cab3b4ba6a7f44bb4e2afefa67af62b835b7703612",
+    "etag": "\"807e366e875dd1:0\"",
+    "last_modified": "Mon, 16 Nov 2026 16:34:51 GMT",
     "ftp_modified": null,
     "content_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
     "content_disposition": null
@@ -49,7 +49,23 @@
     "starts_at": "2026-11-16T09:00:00-06:00",
     "ends_at": "2026-11-20T17:30:00-06:00"
   },
-  "cbs": {},
+  "cbs": {
+    "1": {
+      "agenda_item": "8.1",
+      "name": "CB: # 1_MultilingualPWS",
+      "moderator": "Nokia"
+    },
+    "2": {
+      "agenda_item": "9.1",
+      "name": "CB: # 2_R19PSCellinfo",
+      "moderator": "Huawei"
+    },
+    "3": {
+      "agenda_item": "9.2",
+      "name": "CB: # 3_R19UEperfm",
+      "moderator": "Huawei"
+    }
+  },
   "llm": {
     "model": "gemini-3.8-flash",
     "uncertain": 1,
