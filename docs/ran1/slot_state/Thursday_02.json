@@ -4,7 +4,7 @@
   "source_hashes": {
     "Main Schedule": "3d58f378e0fd4c7d",
     "Hiroki's schedule": "de7f742d6a928aba",
-    "Sorour's schedule": "7878f838003a687d"
+    "Sorour's schedule": "bc4763db30dfab0c"
   },
   "merged_sessions": [
     {
@@ -180,7 +180,8 @@
       "agenda_item": "9.1",
       "source_cells": [
         "c329f14",
-        "ce39ae2"
+        "cd9c35e",
+        "ce87e93"
       ],
       "description": "Artificial Intelligence (AI)/Machine Learning (ML) for NR air interface enhancements",
       "agenda_descriptions": [
@@ -213,7 +214,8 @@
       "agenda_item": "10.5.2.1",
       "source_cells": [
         "c329f14",
-        "ce39ae2"
+        "cd9c35e",
+        "ce87e93"
       ],
       "description": "Downlink transmission scheme(s) for downlink control channels",
       "agenda_descriptions": [
@@ -256,7 +258,8 @@
       "agenda_item": "10.5.2.3",
       "source_cells": [
         "c329f14",
-        "ce39ae2"
+        "cd9c35e",
+        "ce87e93"
       ],
       "description": "Uplink transmission scheme(s) for uplink channels",
       "agenda_descriptions": [
@@ -688,7 +691,7 @@
       ]
     }
   ],
-  "merged_at": "2026-11-16T16:02:20.425781+00:00",
+  "merged_at": "2026-11-16T17:41:58.744677+00:00",
   "meeting_id": "ran1#127",
   "schema_version": 3,
   "source_entries": {
@@ -735,9 +738,15 @@
     "Sorour's schedule": [
       {
         "room_label": "Room 225-226",
-        "cell_text": "R20 NR (50)\nAI 9.1 AIML (50)\n6GR (100)\nAI 10.5.2.1 PDCCH (40)\nAI 10.5.2.3 PUxCH (60)",
+        "cell_text": "6GR (100)\n.10.5.2.1 (40)\n.10.5.2.3 (60)\n\nAI/ML (50)",
         "fallback_start_time": null,
-        "cell_id": "ce39ae2"
+        "cell_id": "ce87e93"
+      },
+      {
+        "room_label": "Room 225-226",
+        "cell_text": "6GR (100)\nAI 10.5.2.1 PDCCH (40)\nAI 10.5.2.3 PUxCH (60)\nR20 NR (50)\nAI 9.1 AIML (50)",
+        "fallback_start_time": null,
+        "cell_id": "cd9c35e"
       }
     ]
   },

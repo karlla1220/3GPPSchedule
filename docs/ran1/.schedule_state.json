@@ -17,8 +17,8 @@
     },
     {
       "folder": "Sorour_notes",
-      "name": "RAN1#127 Sorour sessions online and offline schedules - v00.docx",
-      "uploaded_at": "2026-11-16T01:56:00"
+      "name": "RAN1#127 Sorour sessions online and offline schedules - v01.docx",
+      "uploaded_at": "2026-11-16T17:34:00"
     }
   ],
   "agreements_ref": {
@@ -144,6 +144,6 @@
   "local_refs": {},
   "email": {
     "list": "3GPP_TSG_RAN_WG1",
-    "checked_through": "2026-11-16T17:15:50+00:00"
+    "checked_through": "2026-11-16T17:33:47+00:00"
   }
 }
