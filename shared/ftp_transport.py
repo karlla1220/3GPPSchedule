@@ -356,8 +356,9 @@ def _venue(path):
 
     Set per meeting: VENUE_FTP_HOST and VENUE_FTP_USER (GitHub variables),
     VENUE_FTP_PASSWORD (secret). The venue keeps a WG under its TSG
-    (Meetings_3GPP_SYNC/RAN1/ -> /RAN/RAN1/, seen at RAN1#127); a WG that is
-    not there answers 550 and is read from the sync folder.
+    (Meetings_3GPP_SYNC/RAN1/ -> /RAN/RAN1/; every WG's folders matched at
+    Calgary, 2026-11-17). A WG that is not there answers 550 and is read from
+    the sync folder.
     """
     match = _SYNC.fullmatch(path)
     venue = {key: os.environ.get(f'VENUE_FTP_{key.upper()}', '').strip() for key in ('host', 'user', 'password')}
