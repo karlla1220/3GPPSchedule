@@ -1,0 +1,35 @@
+name: Push schedules to specDuck
+
+# Manual: send the committed docs/<wg>/schedule.json to specDuck without a build
+# (first fill, token check). deploy.yml does the same after each schedule commit.
+on:
+  workflow_dispatch:
+    inputs:
+      wgs:
+        description: 'WG ids separated by spaces (empty = all)'
+        type: string
+        default: ''
+
+permissions:
+  contents: read
+
+jobs:
+  push:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v4
+        with:
+          enable-cache: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: uv sync --locked
+      - name: Push schedules
+        env:
+          SPECDUCK_URL: ${{ vars.SPECDUCK_URL }}
+          SPECDUCK_TOKEN: ${{ secrets.SPECDUCK_TOKEN }}
+          WGS: ${{ inputs.wgs }}
+        run: |
+          if [ -n "$WGS" ]; then paths=$(for wg in $WGS; do echo "docs/$wg/schedule.json"; done); else paths=$(ls docs/*/schedule.json); fi
+          uv run python ci.py push $paths
