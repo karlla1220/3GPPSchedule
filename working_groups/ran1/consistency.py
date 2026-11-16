@@ -108,7 +108,7 @@ def _slot_paths(session: Session, blocks) -> set:
 def reject_concurrent_agenda_duplicates(
     sessions: list[Session], day_rooms_map=None, agenda_items=(), blocks=TIME_BLOCKS,
     incremental=None, meeting_id: str | None = None,
-) -> None:
+) -> dict[str, list[str]]:
     """Fail the build when a detailed agenda item is in two rooms at the same time.
 
     The slot states of every slot involved are discarded, so the next build
@@ -116,10 +116,12 @@ def reject_concurrent_agenda_duplicates(
     incrementally in this run; when given, a duplicate from slots read cold
     (or reused, so read cold and kept before) is what the document says: it
     is published and a notice names it.  Without it every duplicate fails.
+    Returns the published duplicates as caveats by day, for the page.
     """
     pairs = concurrent_agenda_duplicates(sessions, agenda_items)
+    caveats: dict[str, list[str]] = defaultdict(list)
     if not pairs:
-        return
+        return caveats
     lines, written = [], []
     discard = set()
     for number, a, b in pairs:
@@ -131,6 +133,13 @@ def reject_concurrent_agenda_duplicates(
         slots = _slot_paths(a, blocks) | _slot_paths(b, blocks)
         if incremental is not None and not slots & set(incremental):
             written.append(line)
+            caveats[a.day].append(
+                f"AI {number} is in two rooms at the same time: {a.start_time}–{a.end_time} in "
+                f"{_room(a, day_rooms_map)} and {b.start_time}–{b.end_time} in {_room(b, day_rooms_map)}. "
+                "The schedule documents show it this way too, so this page keeps it as written. "
+                "Check with the session chair before you go. Another schedule document or "
+                "the next update will probably resolve it."
+            )
             continue
         lines.append(line)
         discard |= slots
@@ -144,7 +153,7 @@ def reject_concurrent_agenda_duplicates(
              "Read from scratch it comes out the same, so the page shows it as the document has it."],
         )
     if not lines:
-        return
+        return caveats
     raise RejectedState(
         "Same agenda item in two rooms at the same time; discarded slot state "
         f"{', '.join(sorted(p.stem for p in discard))} for a cold retry:\n  "

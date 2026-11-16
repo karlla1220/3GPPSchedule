@@ -397,6 +397,7 @@ def generate_html(schedule: Schedule, *, schedules=None, groups=None, presentati
 
         html_parts.append(
             f'    <div class="day-panel" id="{day_lower}" data-date="{_esc(day_schedule.date or "")}">\n'
+            + _caveats_html(day_schedule.caveats) +
             f'        <div class="grid-wrapper">\n'
             f'            <div class="schedule-grid" '
             f'data-start="{time_to_minutes(timeline.start)}" data-end="{time_to_minutes(timeline.end)}" '
@@ -833,6 +834,7 @@ def _render_all_days(schedule: Schedule, week: _WeekLayout, cells: list[str]) ->
         tracks.append(f"repeat({len(day.rooms)}, minmax(0, 1fr))")
     parts = [
         f'    <div class="day-panel all-days" id="{_ALL_DAYS}" data-date="">\n'
+        + _caveats_html([f"{day.day_name}: {text}" for day in week.days for text in day.caveats]) +
         '        <div class="grid-wrapper">\n'
         f'            <div class="schedule-grid week-grid" data-start="{week.start}" data-end="{week.end}" '
         f'data-slot="{week.slot}" data-first-row="{_WEEK_FIRST_ROW}" '
@@ -1340,6 +1342,15 @@ def _axis_break_label(name: str) -> str:
     """One word fits the time axis: "MORNING COFFEE BREAK" -> "Coffee"."""
     match = re.search(r"\b(coffee|lunch)\b", name, re.I)
     return match[1].capitalize() if match else "Break"
+
+
+def _caveats_html(caveats: list[str]) -> str:
+    """The day's warnings above its grid; nothing when the day has none."""
+    if not caveats:
+        return ""
+    items = "".join(f"<li>{_esc(text)}</li>" for text in caveats)
+    return (f'        <div class="schedule-caveats" role="note"><span aria-hidden="true">⚠️</span>'
+            f'<ul>{items}</ul></div>\n')
 
 
 def _esc(text: str) -> str:

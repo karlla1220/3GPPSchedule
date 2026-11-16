@@ -116,7 +116,10 @@ def test_duplicate_from_an_incremental_merge_is_still_rejected():
 
 def test_duplicate_read_cold_is_the_documents_and_is_published_with_a_notice():
     from shared import notices
-    reject_concurrent_agenda_duplicates(_tuesday_10_3_2(), incremental=set(), meeting_id="ran1#127")
+    caveats = reject_concurrent_agenda_duplicates(_tuesday_10_3_2(), incremental=set(), meeting_id="ran1#127")
+    [caveat] = caveats["Tuesday"]
+    assert caveat.startswith("AI 10.3.2 is in two rooms at the same time: 14:30–15:00")
+    assert "next update" in caveat
     [notice] = notices.read()
     assert notice["kind"] == "source-duplicate"
     assert any("Tuesday AI 10.3.2" in line for line in notice["lines"])

@@ -116,6 +116,10 @@ class DaySchedule:
     sessions: list[Session] = field(default_factory=list)
     date: str | None = None
     timeline: Timeline = field(default_factory=Timeline)
+    # Warnings about this day's cells, shown above its grid (RAN1: one agenda
+    # item in two rooms at once, as the documents have it). Made by each build,
+    # so they go away when an update resolves them.
+    caveats: list[str] = field(default_factory=list)
 
 
 @dataclass
