@@ -3,6 +3,10 @@
 A failed check rejects the build and discards the slot states involved, so an
 operator sees the failure and the next build interprets those slots cold
 instead of reusing the result.  Nothing is repaired automatically.
+
+A duplicate that a cold reading gives too is in the source itself (RAN1#127
+Main v01: Tuesday 14:30 10.3.2 in BMO 225-226 and BMO 221). It is published
+as written, with a notice.
 """
 
 from __future__ import annotations
@@ -93,33 +97,54 @@ def _room(session: Session, day_rooms_map) -> str:
     return " + ".join(names) or f"room column {session.room_col_start}"
 
 
+def _slot_paths(session: Session, blocks) -> set:
+    index = _time_block_index(session, blocks)
+    if index is None:
+        # Unknown slot: the whole day rather than keep a bad one.
+        return {slot_state_path(session.day, block["index"]) for block in blocks}
+    return {slot_state_path(session.day, index)}
+
+
 def reject_concurrent_agenda_duplicates(
     sessions: list[Session], day_rooms_map=None, agenda_items=(), blocks=TIME_BLOCKS,
+    incremental=None, meeting_id: str | None = None,
 ) -> None:
     """Fail the build when a detailed agenda item is in two rooms at the same time.
 
     The slot states of every slot involved are discarded, so the next build
-    interprets them cold.  If the duplicate comes back, it fails again.
+    interprets them cold.  ``incremental`` names the slot states merged
+    incrementally in this run; when given, a duplicate from slots read cold
+    (or reused, so read cold and kept before) is what the document says: it
+    is published and a notice names it.  Without it every duplicate fails.
     """
     pairs = concurrent_agenda_duplicates(sessions, agenda_items)
     if not pairs:
         return
-    lines = []
+    lines, written = [], []
     discard = set()
     for number, a, b in pairs:
-        lines.append(
+        line = (
             f"{a.day} AI {number}: '{a.name}' {a.start_time}-{a.end_time} in "
             f"{_room(a, day_rooms_map)} and '{b.name}' {b.start_time}-{b.end_time} "
             f"in {_room(b, day_rooms_map)}"
         )
-        for session in (a, b):
-            index = _time_block_index(session, blocks)
-            if index is None:
-                # Unknown slot: discard the whole day rather than keep a bad one.
-                discard.update(slot_state_path(session.day, block["index"])
-                               for block in blocks)
-            else:
-                discard.add(slot_state_path(session.day, index))
+        slots = _slot_paths(a, blocks) | _slot_paths(b, blocks)
+        if incremental is not None and not slots & set(incremental):
+            written.append(line)
+            continue
+        lines.append(line)
+        discard |= slots
+    if written:
+        from shared import notices
+        notices.add(
+            "ran1", "source-duplicate",
+            f"ran1:{meeting_id}:source-duplicate:" + "|".join(written),
+            "RAN1: the schedule puts one agenda item in two rooms at the same time",
+            [f"Meeting: {meeting_id or 'unknown'}", *written,
+             "Read from scratch it comes out the same, so the page shows it as the document has it."],
+        )
+    if not lines:
+        return
     raise RejectedState(
         "Same agenda item in two rooms at the same time; discarded slot state "
         f"{', '.join(sorted(p.stem for p in discard))} for a cold retry:\n  "

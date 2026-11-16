@@ -99,3 +99,24 @@ def test_rejected_paths_stay_removed_after_nested_rollbacks(tmp_path):
                 raise RejectedState("bad slot", discard=[slot])
     assert other.read_text() == "old"
     assert not slot.exists()
+
+
+def _tuesday_10_3_2():
+    # RAN1#127 Main v01: the online room moved 10.3.2 to 14:30, the offline room kept it there.
+    return [_session("AI 10.3.2 Modulation", "14:30", "15:00", 3, "10.3.2", day="Tuesday"),
+            _session("10.3.2 Modulation", "14:30", "15:00", 6, "10.3.2", day="Tuesday")]
+
+
+def test_duplicate_from_an_incremental_merge_is_still_rejected():
+    with pytest.raises(RejectedState) as caught:
+        reject_concurrent_agenda_duplicates(
+            _tuesday_10_3_2(), incremental={SLOT_STATE_DIR / "Tuesday_02.json"})
+    assert caught.value.discard == (SLOT_STATE_DIR / "Tuesday_02.json",)
+
+
+def test_duplicate_read_cold_is_the_documents_and_is_published_with_a_notice():
+    from shared import notices
+    reject_concurrent_agenda_duplicates(_tuesday_10_3_2(), incremental=set(), meeting_id="ran1#127")
+    [notice] = notices.read()
+    assert notice["kind"] == "source-duplicate"
+    assert any("Tuesday AI 10.3.2" in line for line in notice["lines"])
