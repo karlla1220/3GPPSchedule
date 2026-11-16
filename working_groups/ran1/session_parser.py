@@ -793,6 +793,7 @@ def parse_time_slots(
     time_slots: list,
     day_rooms_map: dict[str, list[RoomInfo]],
     meeting_id: str | None = None,
+    incremental: set | None = None,
 ) -> list[Session]:
     """Parse all time slots into Session objects using multi-source Gemini calls.
 
@@ -801,6 +802,8 @@ def parse_time_slots(
     Args:
         time_slots: list of TimeSlotData from merger.collect_time_slot_data()
         day_rooms_map: day → list[RoomInfo] for grid column mapping
+        incremental: filled with the slot state paths merged incrementally
+            in this run (the consistency check rejects only those)
 
     Returns:
         List of Session objects with calculated start/end times.
@@ -1005,6 +1008,10 @@ def parse_time_slots(
                 f"(cached, {len(sessions)} sessions)"
             )
 
+    if incremental is not None:
+        from .slot_state import slot_state_path
+        incremental.update(slot_state_path(job[1].day, job[1].time_block_index)
+                           for job in jobs if job[2] == "incremental")
     n_cold = sum(1 for job in jobs if job[2] == "cold")
     n_incremental = len(jobs) - n_cold
     print(

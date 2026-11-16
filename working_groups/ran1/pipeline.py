@@ -620,16 +620,19 @@ def build_schedule(args) -> Schedule:
         print(f"\nUsing agenda item descriptions: {DEFAULT_JSON_PATH}")
 
     print("\nParsing time slots (Gemini API)...")
-    sessions = parse_time_slots(time_slots, day_rooms_map, meeting_id=current_meeting_id)
+    incremental: set = set()
+    sessions = parse_time_slots(time_slots, day_rooms_map, meeting_id=current_meeting_id,
+                                incremental=incremental)
     print(f"Parsed {len(sessions)} sessions")
 
-    # Step 4a: Refuse a merge that puts one detailed agenda item in two rooms
-    # at once. The build fails and the slots involved are re-interpreted cold
-    # next time.
+    # Step 4a: Refuse an incremental merge that puts one detailed agenda item
+    # in two rooms at once. The build fails and the slots involved are
+    # re-interpreted cold next time; a cold reading that gives it too is the
+    # document's own, published with a notice.
     reject_concurrent_agenda_duplicates(
         sessions, day_rooms_map,
         agenda_items=load_agenda_description_map(meeting_id=current_meeting_id),
-        blocks=time_blocks,
+        blocks=time_blocks, incremental=incremental, meeting_id=current_meeting_id,
     )
 
     # Step 4b: Normalize group headers for cleaner legend
