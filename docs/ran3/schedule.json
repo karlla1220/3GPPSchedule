@@ -761,6 +761,48 @@
           "stream": ""
         },
         {
+          "name": "R20 SON/MDT (GTW)",
+          "duration_minutes": 120,
+          "start_time": "11:00",
+          "end_time": "13:00",
+          "day": "Wednesday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "Ziqiao Liu, Xufei Dong",
+          "agenda_item": "11.2",
+          "group_header": "Data Collection for SON/MDT in NR Phase 5 (RAN3-led)",
+          "description": "MRO Enhancements",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "11.2",
+              "matched_agenda_item": "11.2",
+              "description": "MRO Enhancements",
+              "hierarchy": [
+                {
+                  "agenda_item": "11",
+                  "description": "Data Collection for SON/MDT in NR Phase 5 (RAN3-led)"
+                },
+                {
+                  "agenda_item": "11.2",
+                  "description": "MRO Enhancements"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "offline"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "R20 SON/MDT [AI:11.2] (GTW)",
+            "Ziqiao Liu (CATT), Xufei Dong (China Unicom)"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": null,
+          "stream": ""
+        },
+        {
           "name": "6G SI",
           "duration_minutes": 120,
           "start_time": "14:30",
@@ -1021,7 +1063,7 @@
           "stream": ""
         },
         {
-          "name": "ISAC offline",
+          "name": "ISAC offline (GTW)",
           "duration_minutes": 90,
           "start_time": "09:00",
           "end_time": "10:30",
@@ -1038,7 +1080,7 @@
           ],
           "room_scope": "assigned",
           "notes": [
-            "ISAC offline",
+            "ISAC offline (GTW)",
             "Jiang Zheng (China Telecom)"
           ],
           "inferred_agenda_items": [
@@ -1510,22 +1552,22 @@
     }
   ],
   "source_file": "RAN3_134_agenda_20261116_1310.docx",
-  "generated_at": "2026-11-16 13:22",
+  "generated_at": "2026-11-16 14:41",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
     "RAN3_134_agenda_20261116_1310.docx",
-    "RAN3 offline discussion_ver_01.xlsx",
+    "RAN3 offline discussion_ver_02.xlsx",
     "agenda.csv"
   ],
   "source_labels": {
     "RAN3_134_agenda_20261116_1310.docx": "agenda_20261116_1310",
-    "RAN3 offline discussion_ver_01.xlsx": "offline discussion_ver_01",
+    "RAN3 offline discussion_ver_02.xlsx": "offline discussion_ver_02",
     "agenda.csv": "agenda.csv"
   },
   "source_urls": {
     "RAN3_134_agenda_20261116_1310.docx": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN3/Inbox/Chairs_Notes/RAN3_134_agenda_20261116_1310.docx",
-    "RAN3 offline discussion_ver_01.xlsx": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN3/Offline_meeting_room/RAN3%20offline%20discussion_ver_01.xlsx",
+    "RAN3 offline discussion_ver_02.xlsx": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN3/Offline_meeting_room/RAN3%20offline%20discussion_ver_02.xlsx",
     "agenda.csv": "https://www.3gpp.org/ftp/tsg_ran/WG3_Iu/TSGR3_134/Agenda/agenda.csv"
   },
   "source_mails": {},
