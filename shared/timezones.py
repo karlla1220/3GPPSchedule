@@ -216,3 +216,21 @@ def resolve(label=None, country=None, location=None, *, on: date | None = None,
         return zone
     print(f'Resolved venue timezone {zone} for {venue} (recorded in {path})')
     return zone
+
+
+def browser_zone(zone: str, starts_on=None, ends_on=None) -> str:
+    """A fixed `Etc/GMT±N` zone for browsers when the meeting keeps one offset.
+
+    Browsers ship their own tzdata and lag rule changes (Alberta's 2026 move to
+    UTC-6 year-round: tzdata 2026a still says -7). The build's offset wins.
+    """
+    try:
+        offsets = {datetime.combine(date.fromisoformat(day), datetime.min.time().replace(hour=12),
+                                    ZoneInfo(zone)).utcoffset() for day in (starts_on, ends_on)}
+    except (TypeError, ValueError, ZoneInfoNotFoundError):
+        return zone
+    hours, rest = divmod(int(offsets.pop().total_seconds()), 3600) if len(offsets) == 1 else (0, 1)
+    # shortcut: half-hour zones and meetings across a DST change keep the IANA name.
+    if rest or not -14 <= hours <= 12:
+        return zone
+    return "UTC" if hours == 0 else f"Etc/GMT{-hours:+d}"

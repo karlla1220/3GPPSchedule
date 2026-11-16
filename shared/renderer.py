@@ -21,6 +21,7 @@ from shared.schedule import (
 )
 
 from shared.page import render_header
+from shared.timezones import browser_zone
 from shared.agreement_assets import (
     agenda_section_ids,
     current_agreements,
@@ -378,7 +379,7 @@ def generate_html(schedule: Schedule, *, schedules=None, groups=None, presentati
     # Picks the day before its grid is parsed, so the page never draws without one.
     html_parts.append("    <script>" + _render_template("day-select.js", {
         "STATE_ID_JSON": state_id_json,
-        "MEETING_TIMEZONE_JSON": json.dumps(schedule.timezone).replace("<", "\\u003c"),
+        "MEETING_TIMEZONE_JSON": json.dumps(browser_zone(schedule.timezone, schedule.starts_on, schedule.ends_on)).replace("<", "\\u003c"),
     }) + "</script>\n")
 
     # Day panels
@@ -690,7 +691,7 @@ def generate_html(schedule: Schedule, *, schedules=None, groups=None, presentati
         "ARRIVAL_SCRIPT": _load_template("switch-arrival.js"),
         "SCHEDULE_CONTENT": "".join(html_parts),
         "FILTER_DATA": filter_data_json,
-        "SCRIPT": _generate_js(schedule.timezone,
+        "SCRIPT": _generate_js(browser_zone(schedule.timezone, schedule.starts_on, schedule.ends_on),
             state_id=schedule.wg_id + ":" + schedule.meeting_id,
             starts_at=None if schedule.is_demo else schedule.starts_at,
             ends_at=None if schedule.is_demo else schedule.ends_at),
