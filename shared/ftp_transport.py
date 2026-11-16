@@ -4,11 +4,10 @@ FTP is unencrypted. Never forward HTTP credentials, headers or query strings.
 The response retains the HTTPS identity so a transport change is not an update.
 
 A ``Meetings_3GPP_SYNC/<WG>/`` path is first read from that meeting's venue
-FTP when ``VENUE_FTP`` names one: the server the sync folder copies from, ahead
+FTP when ``VENUE_FTP_*`` name one: the server the sync folder copies from, ahead
 of it by minutes. Any venue failure falls back to the path above.
 """
 import atexit
-import json
 import os
 from contextlib import contextmanager, ExitStack
 from datetime import datetime, timezone
@@ -353,28 +352,19 @@ def _over_ftp(read, venue=None):
 
 
 def _venue(path):
-    """(venue, venue path) for a sync folder path whose WG has a venue FTP, else None.
+    """(venue, venue path) for a sync folder path when a venue FTP is set, else None.
 
-    VENUE_FTP is JSON keyed by the sync folder's WG: {"RAN1": {"host", "user",
-    "password"}}, set per meeting. The venue keeps the WG under its TSG
-    (RAN1 -> /RAN/RAN1/, seen at RAN1#127); "root" gives another place.
+    Set per meeting: VENUE_FTP_HOST and VENUE_FTP_USER (GitHub variables),
+    VENUE_FTP_PASSWORD (secret). The venue keeps a WG under its TSG
+    (Meetings_3GPP_SYNC/RAN1/ -> /RAN/RAN1/, seen at RAN1#127); a WG that is
+    not there answers 550 and is read from the sync folder.
     """
     match = _SYNC.fullmatch(path)
-    if match is None or not os.environ.get('VENUE_FTP'):
+    venue = {key: os.environ.get(f'VENUE_FTP_{key.upper()}', '').strip() for key in ('host', 'user', 'password')}
+    tsg = re.match(r'[A-Za-z]+', match[1]) if match else None
+    if tsg is None or not all(venue.values()):
         return None
-    try:
-        venue = json.loads(os.environ['VENUE_FTP']).get(match[1])
-    except (ValueError, AttributeError):
-        logging.getLogger(__name__).warning('VENUE_FTP is not a JSON object; reading the sync folder')
-        return None
-    if not isinstance(venue, dict) or not all(isinstance(venue.get(k), str) and venue[k]
-                                              for k in ('host', 'user', 'password')):
-        return None
-    tsg = re.match(r'[A-Za-z]+', match[1])
-    root = venue.get('root') or (f'/{tsg[0].upper()}/{match[1]}/' if tsg else None)
-    if not isinstance(root, str) or not root.startswith('/'):
-        return None
-    return venue, root.rstrip('/') + '/' + match[2]
+    return venue, f'/{tsg[0].upper()}/{match[1]}/{match[2]}'
 
 
 def _from_venue(url, path, *, listing=False, cached=None):

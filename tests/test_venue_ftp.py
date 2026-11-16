@@ -1,6 +1,5 @@
 """A sync folder is read from the meeting's venue FTP first, and from the sync folder when that fails."""
 import ftplib
-import json
 import logging
 
 import httpx
@@ -50,8 +49,9 @@ class Venue:
 def venue(monkeypatch, tmp_path):
     monkeypatch.setattr(remote_files, 'CACHE_DIR', tmp_path / 'cache')
     monkeypatch.setattr(ftplib, 'FTP_TLS', Venue)
-    monkeypatch.setenv('VENUE_FTP', json.dumps(
-        {'RAN1': {'host': 'venue.example', 'user': 'meeting', 'password': PASSWORD}}))
+    monkeypatch.setenv('VENUE_FTP_HOST', 'venue.example')
+    monkeypatch.setenv('VENUE_FTP_USER', 'meeting')
+    monkeypatch.setenv('VENUE_FTP_PASSWORD', PASSWORD)
     Venue.calls, Venue.fail = [], None
     return Venue
 
@@ -93,21 +93,16 @@ def test_venue_failure_reads_the_sync_folder(venue, fail, caplog):
     assert PASSWORD not in caplog.text and 'reading the sync folder' in caplog.text
 
 
-@pytest.mark.parametrize('url', [
-    'https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_127/Inbox/',
-    'https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN2/Agenda/',
-])
-def test_other_folders_and_wgs_never_ask_the_venue(venue, url):
+def test_other_folders_never_ask_the_venue(venue):
+    url = 'https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_127/Inbox/'
     seen = []
     with sync_folder(seen) as http:
         ftp_transport.get(url, http=http, listing=True)
     assert venue.calls == [] and seen == [url]
 
 
-def test_root_and_bad_settings(venue, monkeypatch):
-    monkeypatch.setenv('VENUE_FTP', json.dumps(
-        {'RAN1': {'host': 'h', 'user': 'u', 'password': 'p', 'root': '/R1/'}}))
-    assert ftp_transport._venue('/Meetings_3GPP_SYNC/RAN1/Inbox/x.zip')[1] == '/R1/Inbox/x.zip'
-    for bad in ('not json', '[]', json.dumps({'RAN1': {'host': 'h'}})):
-        monkeypatch.setenv('VENUE_FTP', bad)
-        assert ftp_transport._venue('/Meetings_3GPP_SYNC/RAN1/Inbox/') is None
+def test_wg_path_and_missing_settings(venue, monkeypatch):
+    assert ftp_transport._venue('/Meetings_3GPP_SYNC/RAN2/Agenda/x.zip')[1] == '/RAN/RAN2/Agenda/x.zip'
+    assert ftp_transport._venue('/Meetings_3GPP_SYNC/SA2/Inbox/')[1] == '/SA/SA2/Inbox/'
+    monkeypatch.setenv('VENUE_FTP_PASSWORD', ' ')
+    assert ftp_transport._venue('/Meetings_3GPP_SYNC/RAN1/Inbox/') is None

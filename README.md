@@ -1109,13 +1109,12 @@ CI 변경 감지는 각 URL에 대응하는 커밋된 파일의 **콘텐츠 sha2
 
 - **회의장 FTP가 먼저다.** `Meetings_3GPP_SYNC/<WG>/` 아래 경로는 그 회의의 회의장 FTP를 먼저 읽고, 실패하면 지금처럼 sync 폴더(HTTPS → ftp.3gpp.org)를 읽습니다(`shared/ftp_transport.py`의 `_from_venue`).
   sync 폴더는 회의장 FTP를 몇 분 늦게 옮겨 싣는 곳이라, 회의장 FTP가 열려 있는 회의 기간에는 새 판을 더 빨리 봅니다.
-  - 회의마다 GitHub 저장소 secret `VENUE_FTP`에 JSON으로 넣습니다. 키는 sync 폴더의 WG 이름입니다.
-    `{"RAN1": {"host": "calgarybmocentre.3gpp.org", "user": "…", "password": "…"}}`
-    회의장 FTP는 WG를 TSG 아래 둡니다(`/RAN/RAN1/Inbox/`, RAN1#127에서 봄). 다르면 `"root": "/…/"`로 적습니다.
+  - 회의마다 GitHub 저장소 설정에 넣습니다. 호스트와 아이디는 variable `VENUE_FTP_HOST`, `VENUE_FTP_USER`, 비밀번호는 secret `VENUE_FTP_PASSWORD`입니다. 셋 중 하나라도 비면 쓰지 않습니다.
+    회의장 FTP는 WG를 TSG 아래 둡니다(`Meetings_3GPP_SYNC/RAN1/` → `/RAN/RAN1/`, RAN1#127에서 봄). 그 회의장에 없는 WG는 550을 받고 sync 폴더로 읽습니다.
   - TLS(`FTP_TLS`, `PROT P`)와 `OPTS UTF8 ON`으로 읽습니다. 회의장 서버(IIS)는 TLS 없는 로그인을 받지 않습니다. 목록 시각은 UTC이고 sync 폴더와 같습니다.
   - 응답은 sync 폴더 URL을 그대로 지닙니다. 링크, 캐시, 목록의 주소는 모두 공개된 sync 폴더 주소이고, 회의장에만 있는 파일도 몇 분 뒤 그 주소에 올라옵니다.
   - 실패는 빌드를 멈추지 않고 경고만 남깁니다. 연결·로그인이 실패한 회의장은 그 실행에서 다시 묻지 않고(회의가 끝나 계정이 사라진 경우), 한 경로만 없으면(550) 그 경로만 sync 폴더로 읽습니다.
-  - 비밀번호는 로그와 커밋에 남기지 않습니다. 회의가 끝나면 secret을 비우거나 지웁니다.
+  - 비밀번호는 로그와 커밋에 남기지 않습니다. 회의가 끝나면 variable과 secret을 비우거나 지웁니다.
 - 5xx나 연결 오류면 HTTPS를 1초 뒤 한 번 더 시도하고, 그래도 실패하면 익명 FTP(`ftp.3gpp.org`)로 같은 경로를 받습니다.
 - 3GPP 방화벽(WAF)의 차단 페이지가 담긴 403은 HTTPS를 다시 시도하지 않고 바로 FTP로 받습니다. 차단된 요청을 반복하지 않기 위해서입니다.
 - 그 밖의 403은 대부분 없는 경로이지만(IIS), 있는 폴더가 일시적으로 막혀도 똑같이 403입니다. HTTPS로는 둘을 가를 수 없어서 FTP에 묻습니다(`ftp_transport._answer_403`).
