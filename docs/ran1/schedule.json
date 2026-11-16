@@ -12798,7 +12798,7 @@
     }
   ],
   "source_file": "Draft RAN1#127 online and offline schedules - v02.docx",
-  "generated_at": "2026-11-15 17:01",
+  "generated_at": "2026-11-15 20:23",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
@@ -12813,8 +12813,8 @@
   },
   "source_urls": {
     "Draft RAN1#127 online and offline schedules - v02.docx": "https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_127/Inbox/Chair_notes/Draft%20RAN1%23127%20online%20and%20offline%20schedules%20-%20v02.docx",
-    "Draft RAN1#127 online and offline schedules - v02_hh.docx": "https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_127/Inbox/Hiroki_notes/Draft%20RAN1%23127%20online%20and%20offline%20schedules%20-%20v02_hh.docx",
-    "RAN1#127 Sorour sessions online and offline schedules - v00.docx": "https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_127/Inbox/Sorour_notes/RAN1%23127%20Sorour%20sessions%20online%20and%20offline%20schedules%20-%20v00.docx"
+    "Draft RAN1#127 online and offline schedules - v02_hh.docx": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Hiroki_notes/Draft%20RAN1%23127%20online%20and%20offline%20schedules%20-%20v02_hh.docx",
+    "RAN1#127 Sorour sessions online and offline schedules - v00.docx": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Sorour_notes/RAN1%23127%20Sorour%20sessions%20online%20and%20offline%20schedules%20-%20v00.docx"
   },
   "source_mails": {},
   "timezone": "America/Edmonton",
@@ -13241,120 +13241,120 @@
         ]
       }
     ],
-    "source_url": "https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_127/Inbox/Chair_notes/Draft%20Chair%20notes%20RAN1%23127_v02.docx",
+    "source_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Chair_notes/Draft%20Chair%20notes%20RAN1%23127_v02.docx",
     "source_name": "Draft Chair notes RAN1#127_v02.docx",
     "session_notes": {
       "R1-2609118": {
         "name": "draft_R1-2609118_Session Notes of AI 10.8_v00.docx",
         "agenda_item": "10.8",
-        "changed_at": "2026-11-13T11:01:21+00:00",
+        "changed_at": "2026-11-16T01:56:28+00:00",
         "sha256": "65cb966cca859b81153988ceaa9f925bd309058dbef9ae978fc9f0985657e400",
-        "source_url": "https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_127/Inbox/Hiroki_notes/draft_R1-2609118_Session%20Notes%20of%20AI%2010.8_v00.docx"
+        "source_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Hiroki_notes/draft_R1-2609118_Session%20Notes%20of%20AI%2010.8_v00.docx"
       },
       "R1-2609119": {
         "name": "Draft R1-2609119 Session Notes of AI 10.7 - v00.docx",
         "agenda_item": "10.7",
-        "changed_at": "2026-11-15T21:45:56+00:00",
+        "changed_at": "2026-11-16T01:56:32+00:00",
         "sha256": "9a025d8d49dc123e30290b3a27f2d3ad5104493ca251baf315fa82d885764455",
-        "source_url": "https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_127/Inbox/Sorour_notes/Draft%20R1-2609119%20Session%20Notes%20of%20AI%2010.7%20-%20v00.docx"
+        "source_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Sorour_notes/Draft%20R1-2609119%20Session%20Notes%20of%20AI%2010.7%20-%20v00.docx"
       },
       "R1-2609120": {
         "name": "draft_R1-2609120_Session Notes of AI 10.5.4_v00.docx",
         "agenda_item": "10.5.4",
-        "changed_at": "2026-11-13T11:01:20+00:00",
+        "changed_at": "2026-11-16T01:56:28+00:00",
         "sha256": "939e9d59954e6286036f31e2c53b13941d5f1b73c6c87909ddb20bf8a57efb6a",
-        "source_url": "https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_127/Inbox/Hiroki_notes/draft_R1-2609120_Session%20Notes%20of%20AI%2010.5.4_v00.docx"
+        "source_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Hiroki_notes/draft_R1-2609120_Session%20Notes%20of%20AI%2010.5.4_v00.docx"
       },
       "R1-2609121": {
         "name": "Draft R1-2609121 Session Notes of AI 10.5.2 - v00.docx",
         "agenda_item": "10.5.2",
-        "changed_at": "2026-11-15T21:45:56+00:00",
+        "changed_at": "2026-11-16T01:56:32+00:00",
         "sha256": "8e1084aa43cfd89acd4f74fb98170dcb0db11ded97eaa8e74c3d58ffe9531967",
-        "source_url": "https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_127/Inbox/Sorour_notes/Draft%20R1-2609121%20Session%20Notes%20of%20AI%2010.5.2%20-%20v00.docx"
+        "source_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Sorour_notes/Draft%20R1-2609121%20Session%20Notes%20of%20AI%2010.5.2%20-%20v00.docx"
       },
       "R1-2609122": {
         "name": "Draft R1-2609122 Session Notes of AI 10.3.2 - v00.docx",
         "agenda_item": "10.3.2",
-        "changed_at": "2026-11-15T21:45:56+00:00",
+        "changed_at": "2026-11-16T01:56:33+00:00",
         "sha256": "0f5b199eee8affa945ff9267fccadef7db4bd220390b88dd140fcb43e2eb72dc",
-        "source_url": "https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_127/Inbox/Sorour_notes/Draft%20R1-2609122%20Session%20Notes%20of%20AI%2010.3.2%20-%20v00.docx"
+        "source_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Sorour_notes/Draft%20R1-2609122%20Session%20Notes%20of%20AI%2010.3.2%20-%20v00.docx"
       },
       "R1-2609123": {
         "name": "Draft R1-2609123 Session Notes of AI 10.3.1 - v00.docx",
         "agenda_item": "10.3.1",
-        "changed_at": "2026-11-15T21:45:56+00:00",
+        "changed_at": "2026-11-16T01:56:33+00:00",
         "sha256": "366796258dd7d7cbc64c300973797fde2f0d2b0b656397140fe53cf69dc529fe",
-        "source_url": "https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_127/Inbox/Sorour_notes/Draft%20R1-2609123%20Session%20Notes%20of%20AI%2010.3.1%20-%20v00.docx"
+        "source_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Sorour_notes/Draft%20R1-2609123%20Session%20Notes%20of%20AI%2010.3.1%20-%20v00.docx"
       },
       "R1-2609124": {
         "name": "draft_R1-2609124_Session Notes of AI 10.2.1_v00.docx",
         "agenda_item": "10.2.1",
-        "changed_at": "2026-11-13T11:01:20+00:00",
+        "changed_at": "2026-11-16T01:56:29+00:00",
         "sha256": "ec38b058a5f0a2bbe59ce3190f7e6fabe1325dbcae95d7367d23ad07f7244c03",
-        "source_url": "https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_127/Inbox/Hiroki_notes/draft_R1-2609124_Session%20Notes%20of%20AI%2010.2.1_v00.docx"
+        "source_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Hiroki_notes/draft_R1-2609124_Session%20Notes%20of%20AI%2010.2.1_v00.docx"
       },
       "R1-2609126": {
         "name": "Draft R1-2609126 Session Notes of AI 9.5 - v00.docx",
         "agenda_item": "9.5",
-        "changed_at": "2026-11-15T21:45:56+00:00",
+        "changed_at": "2026-11-16T01:56:34+00:00",
         "sha256": "98d69f1c321bba2dc8761db5914b041484acddfa88de577f274f2e920598c6ca",
-        "source_url": "https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_127/Inbox/Sorour_notes/Draft%20R1-2609126%20Session%20Notes%20of%20AI%209.5%20-%20v00.docx"
+        "source_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Sorour_notes/Draft%20R1-2609126%20Session%20Notes%20of%20AI%209.5%20-%20v00.docx"
       },
       "R1-2609127": {
         "name": "Draft R1-2609127 Session Notes of AI 9.4 - v00.docx",
         "agenda_item": "9.4",
-        "changed_at": "2026-11-15T21:45:56+00:00",
+        "changed_at": "2026-11-16T01:56:34+00:00",
         "sha256": "c91b41e84d58aaca332e2bee391a978be623844687eb0050bf14b18c60cd41e4",
-        "source_url": "https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_127/Inbox/Sorour_notes/Draft%20R1-2609127%20Session%20Notes%20of%20AI%209.4%20-%20v00.docx"
+        "source_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Sorour_notes/Draft%20R1-2609127%20Session%20Notes%20of%20AI%209.4%20-%20v00.docx"
       },
       "R1-2609128": {
         "name": "draft_R1-2609128_Session Notes of AI 9.3_v00.docx",
         "agenda_item": "9.3",
-        "changed_at": "2026-11-13T11:01:21+00:00",
+        "changed_at": "2026-11-16T01:56:29+00:00",
         "sha256": "aee5409cd4123eecf64c76d2540744df2214004c255a4f280ad829ebe8652485",
-        "source_url": "https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_127/Inbox/Hiroki_notes/draft_R1-2609128_Session%20Notes%20of%20AI%209.3_v00.docx"
+        "source_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Hiroki_notes/draft_R1-2609128_Session%20Notes%20of%20AI%209.3_v00.docx"
       },
       "R1-2609129": {
         "name": "Draft R1-2609129 Session Notes of AI 9.2 - v00.docx",
         "agenda_item": "9.2",
-        "changed_at": "2026-11-15T21:45:56+00:00",
+        "changed_at": "2026-11-16T01:56:35+00:00",
         "sha256": "f281fc503e0428e70b252e9b85d8ec8f9b8d4b3a953f2c6a27e06e1db8e65526",
-        "source_url": "https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_127/Inbox/Sorour_notes/Draft%20R1-2609129%20Session%20Notes%20of%20AI%209.2%20-%20v00.docx"
+        "source_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Sorour_notes/Draft%20R1-2609129%20Session%20Notes%20of%20AI%209.2%20-%20v00.docx"
       },
       "R1-2609130": {
         "name": "Draft R1-2609130 Session Notes of AI 9.1 - v00.docx",
         "agenda_item": "9.1",
-        "changed_at": "2026-11-15T21:45:56+00:00",
+        "changed_at": "2026-11-16T01:56:35+00:00",
         "sha256": "cf0629c759669ed917a4e2aef5fb6639664ada22b397e30b900461da750386a0",
-        "source_url": "https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_127/Inbox/Sorour_notes/Draft%20R1-2609130%20Session%20Notes%20of%20AI%209.1%20-%20v00.docx"
+        "source_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Sorour_notes/Draft%20R1-2609130%20Session%20Notes%20of%20AI%209.1%20-%20v00.docx"
       },
       "R1-2609131": {
         "name": "Draft R1-2609131 Session Notes of AI 8.1 - v00.docx",
         "agenda_item": "8.1",
-        "changed_at": "2026-11-15T21:45:56+00:00",
+        "changed_at": "2026-11-16T01:56:35+00:00",
         "sha256": "20b2475a2e95143cb85aeec9003487beb78ff799578a668b424bcb40794182bc",
-        "source_url": "https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_127/Inbox/Sorour_notes/Draft%20R1-2609131%20Session%20Notes%20of%20AI%208.1%20-%20v00.docx"
+        "source_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Sorour_notes/Draft%20R1-2609131%20Session%20Notes%20of%20AI%208.1%20-%20v00.docx"
       },
       "R1-2609132": {
         "name": "draft_R1-2609132_Session Notes of AI 7_v00.docx",
         "agenda_item": "7",
-        "changed_at": "2026-11-13T11:01:20+00:00",
+        "changed_at": "2026-11-16T01:56:29+00:00",
         "sha256": "8f37941b8d044d2f884fc4d0405e8b37b66762ecb1d52ce12f02d300c51c863f",
-        "source_url": "https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_127/Inbox/Hiroki_notes/draft_R1-2609132_Session%20Notes%20of%20AI%207_v00.docx"
+        "source_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Hiroki_notes/draft_R1-2609132_Session%20Notes%20of%20AI%207_v00.docx"
       },
       "R1-2610805": {
         "name": "draft_R1-2610805_Session Notes of AI 8.1_v00.docx",
         "agenda_item": "8.1",
-        "changed_at": "2026-11-13T11:01:21+00:00",
+        "changed_at": "2026-11-16T01:56:30+00:00",
         "sha256": "0b98164600dacacb87cd379d6171a07dbea82e7c2395b1164210434d58bde499",
-        "source_url": "https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_127/Inbox/Hiroki_notes/draft_R1-2610805_Session%20Notes%20of%20AI%208.1_v00.docx"
+        "source_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Hiroki_notes/draft_R1-2610805_Session%20Notes%20of%20AI%208.1_v00.docx"
       },
       "R1-2610807": {
         "name": "draft_R1-2610807_Session Notes of AI 11_v00.docx",
         "agenda_item": "11",
-        "changed_at": "2026-11-13T11:01:21+00:00",
+        "changed_at": "2026-11-16T01:56:30+00:00",
         "sha256": "968d760ee38f5b1f529ec2d312d18ac5a1efea46f9f7e6dfbe3554e1a40f49f3",
-        "source_url": "https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_127/Inbox/Hiroki_notes/draft_R1-2610807_Session%20Notes%20of%20AI%2011_v00.docx"
+        "source_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Hiroki_notes/draft_R1-2610807_Session%20Notes%20of%20AI%2011_v00.docx"
       }
     },
     "document_changed_at": "2026-11-11T10:57:29+00:00",
