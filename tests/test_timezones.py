@@ -111,3 +111,12 @@ def test_browser_zone_fixes_the_offset_the_build_knows():
     assert browser_zone("Asia/Kolkata", "2026-01-05", "2026-01-09") == "Asia/Kolkata"  # half hour
     assert browser_zone("Europe/Madrid", "2026-03-23", "2026-03-31") == "Europe/Madrid"  # DST change
     assert browser_zone("UTC", None, None) == "UTC"
+
+
+def test_rules_come_from_the_tzdata_package():
+    import zoneinfo
+    from datetime import datetime, timedelta
+    import shared  # noqa: F401
+    assert zoneinfo.TZPATH == ()
+    # Alberta's year-round UTC-6 (tzdata 2026f); older OS data says -7.
+    assert datetime(2026, 11, 17, 12, tzinfo=zoneinfo.ZoneInfo("America/Edmonton")).utcoffset() == timedelta(hours=-6)
