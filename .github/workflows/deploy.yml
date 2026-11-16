@@ -56,6 +56,10 @@ jobs:
           operation: restore
       - name: Check every enabled WG
         id: detect
+        env:
+          VENUE_FTP_HOST: ${{ vars.VENUE_FTP_HOST }}
+          VENUE_FTP_USER: ${{ vars.VENUE_FTP_USER }}
+          VENUE_FTP_PASSWORD: ${{ secrets.VENUE_FTP_PASSWORD }}
         run: uv run python ci.py check
       - name: Save checked source caches
         if: always() && !cancelled() && steps.detect.outcome != 'skipped'
@@ -139,6 +143,9 @@ jobs:
         env:
           WG_ACTION: ${{ github.event.inputs.action || 'check-build-deploy' }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          VENUE_FTP_HOST: ${{ vars.VENUE_FTP_HOST }}
+          VENUE_FTP_USER: ${{ vars.VENUE_FTP_USER }}
+          VENUE_FTP_PASSWORD: ${{ secrets.VENUE_FTP_PASSWORD }}
         run: uv run python ci.py build --action "$WG_ACTION"
       - name: Save shared and WG caches
         if: always() && !cancelled() && steps.build.outcome != 'skipped'

@@ -229,7 +229,7 @@ def test_one_ftp_login_serves_every_fallback_of_a_run(ftp):
 def test_a_stale_ftp_session_is_replaced_once(ftp, monkeypatch):
     from shared import ftp_transport
     ftp_transport.ftp_response(CHAIR, listing=True)
-    ftp_transport._session.retrlines = lambda *a: (_ for _ in ()).throw(EOFError())
+    ftp_transport._sessions['ftp.3gpp.org'].retrlines = lambda *a: (_ for _ in ()).throw(EOFError())
     assert NAME in ftp_transport.ftp_response(CHAIR, listing=True).text
     assert [c[0] for c in ftp.calls].count('login') == 2
 

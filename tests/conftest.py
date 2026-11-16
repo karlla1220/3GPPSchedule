@@ -22,6 +22,9 @@ def fresh_listings(tmp_path, monkeypatch):
     """Each test sees its own mock server, not listings an earlier test fetched."""
     remote_files.new_run()
     monkeypatch.setattr(ftplib, 'FTP', NothingOverFtp)
+    # Never a venue FTP account from the environment (shared/ftp_transport.py).
+    for name in ('VENUE_FTP_HOST', 'VENUE_FTP_USER', 'VENUE_FTP_PASSWORD'):
+        monkeypatch.delenv(name, raising=False)
     # Nor meeting folders an earlier test (or a local build) found.
     monkeypatch.setattr(meeting_folders, 'CACHE_PATH', tmp_path / 'meeting-folders.json')
     # Never record found folders in the repository's config.json.
