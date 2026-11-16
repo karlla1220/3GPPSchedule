@@ -478,6 +478,25 @@
               "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;e5de1b85.2611b",
               "author": "<>",
               "sent": "2026-11-13T23:54:12-06:00"
+            },
+            {
+              "kind": "session",
+              "session": "Mon 11:00-11:40 Offline1",
+              "quote": "For today’s offline/online, let’s start with the observations on CJT and CJTC -> AP/P  ->DLable, etc , if time is allowed.",
+              "mode": "offline",
+              "summary": "Start with observations on CJT and CJTC, then AP/P and DLable",
+              "topics": [
+                "CJT",
+                "CJTC",
+                "AP/P",
+                "DLable"
+              ],
+              "day": "Monday",
+              "split": [],
+              "mail": "85d32bc3.2611c",
+              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;85d32bc3.2611c",
+              "author": "<>",
+              "sent": "2026-11-16T09:02:58-06:00"
             }
           ],
           "part": null,
@@ -824,7 +843,27 @@
           "room_scope": "assigned",
           "notes": [],
           "inferred_agenda_items": [],
-          "email_details": [],
+          "email_details": [
+            {
+              "kind": "session",
+              "session": "Mon 14:00-15:00 Main",
+              "quote": "Please take a look before online. It seem they are two observations that can be handled early, i.e. afternoon online.",
+              "mode": "online",
+              "summary": "Discuss CJT and CJTC observations, then AP/P and DLable",
+              "topics": [
+                "CJT",
+                "CJTC",
+                "AP/P",
+                "DLable"
+              ],
+              "day": "Monday",
+              "split": [],
+              "mail": "85d32bc3.2611c",
+              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;85d32bc3.2611c",
+              "author": "<>",
+              "sent": "2026-11-16T09:02:58-06:00"
+            }
+          ],
           "part": null,
           "stream": ""
         },
@@ -12994,7 +13033,7 @@
     }
   ],
   "source_file": "Draft RAN1#127 online and offline schedules - v02.docx",
-  "generated_at": "2026-11-16 08:02",
+  "generated_at": "2026-11-16 09:22",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
