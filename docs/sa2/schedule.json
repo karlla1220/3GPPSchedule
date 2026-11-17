@@ -2757,7 +2757,7 @@
       ],
       "sessions": [
         {
-          "name": "KI#10 (FWA) – not revisions / SMS2EC-ARC – not revisions",
+          "name": "KI#10 (FWA) – not revisions",
           "duration_minutes": 50,
           "start_time": "08:00",
           "end_time": "08:50",
@@ -2765,9 +2765,9 @@
           "room_col_start": 2,
           "room_col_end": 3,
           "chair": "Michael STARSINIC",
-          "agenda_item": "20.6.10, 20.8.2",
+          "agenda_item": "20.6.10",
           "group_header": "Rel-20 SIDs and WIDs",
-          "description": "Study on Architecture for 6G System (FS_6G_ARC) - Fixed Wireless Access\nShort Message Service to Emergency Response Centre (SMS2EC-ARC)",
+          "description": "Study on Architecture for 6G System (FS_6G_ARC) - Fixed Wireless Access",
           "agenda_descriptions": [
             {
               "agenda_item": "20.6.10",
@@ -2787,25 +2787,6 @@
                   "description": "Study on Architecture for 6G System (FS_6G_ARC) - Fixed Wireless Access"
                 }
               ]
-            },
-            {
-              "agenda_item": "20.8.2",
-              "matched_agenda_item": "20.8.2",
-              "description": "Short Message Service to Emergency Response Centre (SMS2EC-ARC)",
-              "hierarchy": [
-                {
-                  "agenda_item": "20",
-                  "description": "Rel-20 SIDs and WIDs"
-                },
-                {
-                  "agenda_item": "20.8",
-                  "description": null
-                },
-                {
-                  "agenda_item": "20.8.2",
-                  "description": "Short Message Service to Emergency Response Centre (SMS2EC-ARC)"
-                }
-              ]
             }
           ],
           "room_ids": [
@@ -2813,12 +2794,14 @@
           ],
           "room_scope": "assigned",
           "notes": [
-            "KI#10 (FWA) (20.6.10) – not revisions",
-            "SMS2EC-ARC (20.8.2) [6] – not revisions"
+            "KI#10 (FWA) (20.6.10) – not revisions"
           ],
           "inferred_agenda_items": [],
           "email_details": [],
-          "part": null,
+          "part": [
+            1,
+            2
+          ],
           "stream": ""
         },
         {
@@ -2863,7 +2846,58 @@
           ],
           "inferred_agenda_items": [],
           "email_details": [],
-          "part": null,
+          "part": [
+            1,
+            2
+          ],
+          "stream": ""
+        },
+        {
+          "name": "SMS2EC-ARC – not revisions",
+          "duration_minutes": 50,
+          "start_time": "08:00",
+          "end_time": "08:50",
+          "day": "Thursday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "Michael STARSINIC",
+          "agenda_item": "20.8.2",
+          "group_header": "Rel-20 SIDs and WIDs",
+          "description": "Short Message Service to Emergency Response Centre (SMS2EC-ARC)",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "20.8.2",
+              "matched_agenda_item": "20.8.2",
+              "description": "Short Message Service to Emergency Response Centre (SMS2EC-ARC)",
+              "hierarchy": [
+                {
+                  "agenda_item": "20",
+                  "description": "Rel-20 SIDs and WIDs"
+                },
+                {
+                  "agenda_item": "20.8",
+                  "description": null
+                },
+                {
+                  "agenda_item": "20.8.2",
+                  "description": "Short Message Service to Emergency Response Centre (SMS2EC-ARC)"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "stream2"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "SMS2EC-ARC (20.8.2) [6] – not revisions"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": [
+            2,
+            2
+          ],
           "stream": ""
         },
         {
@@ -3336,7 +3370,7 @@
     }
   ],
   "source_file": "S2-2611637_SA2-178-Session Plan - r12.docx",
-  "generated_at": "2026-11-16 13:02",
+  "generated_at": "2026-11-17 03:21",
   "contact_name": "",
   "contact_email": "",
   "source_files": [

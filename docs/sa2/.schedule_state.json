@@ -8,10 +8,10 @@
     "uploaded_at": "2026-11-16 18:35",
     "size": 75269,
     "sha256": "4140c643f6af99ea129c7908fee32de1e16e9fb93fc33cb0c9b96debb402059a",
-    "etag": "\"80e2d645f975dd1:0\"",
+    "etag": null,
     "last_modified": "Mon, 16 Nov 2026 18:35:37 GMT",
-    "ftp_modified": null,
-    "content_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    "ftp_modified": "213 20261116183537",
+    "content_type": "application/octet-stream",
     "content_disposition": null
   },
   "agenda": {
@@ -19,8 +19,8 @@
     "name": "agenda.csv",
     "size": 15236,
     "sha256": "e1b9eee08ad1abd2b579ea8398b208015aafd002a1b41ebf656020a9a1155ddf",
-    "etag": "\"1b423d628d75dd1:0\"",
-    "last_modified": "Mon, 16 Nov 2026 05:43:19 GMT",
+    "etag": "\"59ea328d5676dd1:0\"",
+    "last_modified": "Tue, 17 Nov 2026 05:43:19 GMT",
     "ftp_modified": null,
     "content_type": "application/octet-stream",
     "content_disposition": null
