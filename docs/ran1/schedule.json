@@ -4252,6 +4252,22 @@
               "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;4eddbb30.2611c",
               "author": "Teng Ma",
               "sent": "2026-11-17T00:08:07-06:00"
+            },
+            {
+              "kind": "session",
+              "session": "Tue 08:00-09:30 BMO 221",
+              "quote": "Due the limited time, we may not go through all of them in the morning offline session.",
+              "mode": "offline",
+              "summary": "Discuss Section 4.1 proposals in morning offline",
+              "topics": [
+                "Section 4.1"
+              ],
+              "day": "Tuesday",
+              "split": [],
+              "mail": "924a7171.2611c",
+              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;924a7171.2611c",
+              "author": "Jinzhe (A)",
+              "sent": "2026-11-17T00:55:35-06:00"
             }
           ],
           "part": null,
@@ -5994,7 +6010,26 @@
           "room_scope": "assigned",
           "notes": [],
           "inferred_agenda_items": [],
-          "email_details": [],
+          "email_details": [
+            {
+              "kind": "session",
+              "session": "Tue 15:20-15:50 BMO 221",
+              "quote": "As we will have an offline session on Tuesday ~3:20PM, please provide your comments and inputs by 3:00PM Tuesday.",
+              "mode": "offline",
+              "summary": "Offline session, inputs due by 15:00",
+              "topics": [],
+              "start": "15:20",
+              "day": "Tuesday",
+              "input_due": {
+                "at": "15:00"
+              },
+              "split": [],
+              "mail": "ee15c1b6.2611c",
+              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;ee15c1b6.2611c",
+              "author": "Mohammed Al-Imari",
+              "sent": "2026-11-17T00:41:44-06:00"
+            }
+          ],
           "part": null,
           "stream": ""
         },
@@ -13567,7 +13602,7 @@
     }
   ],
   "source_file": "RAN1#127 online and offline schedules - v01.docx",
-  "generated_at": "2026-11-17 00:21",
+  "generated_at": "2026-11-17 01:01",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
