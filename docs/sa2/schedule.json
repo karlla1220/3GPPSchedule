@@ -842,8 +842,7 @@
           ],
           "room_scope": "assigned",
           "notes": [
-            "6G Single Stream (20.6.x)",
-            "(including RAN migration topic)"
+            "6G Single Stream (20.6.x)"
           ],
           "inferred_agenda_items": [],
           "email_details": [],
@@ -1567,7 +1566,7 @@
           "stream": "Stream 1"
         },
         {
-          "name": "Main:13:00 Drafting for SoH questions: KI#17?/KI#22?, KI#19, KI#21",
+          "name": "Main:13:00 Drafting for SoH questions: KI#18",
           "duration_minutes": 90,
           "start_time": "12:30",
           "end_time": "14:00",
@@ -1582,13 +1581,10 @@
           "room_ids": [],
           "room_scope": "unassigned",
           "notes": [
-            "Main:13:00 Drafting for SoH questions: KI#17?/KI#22?, KI#19, KI#21"
+            "Main:13:00 Drafting for SoH questions: KI#18"
           ],
           "inferred_agenda_items": [
-            "20.6.17",
-            "20.6.19",
-            "20.6.21",
-            "20.6.22"
+            "20.6.18"
           ],
           "email_details": [],
           "part": null,
@@ -1926,7 +1922,9 @@
           "room_scope": "assigned",
           "notes": [
             "6G Single Stream (20.6.x)",
-            "Show of hands takes place (KI#17?/KI#22?, KI#19, KI#21)."
+            "Show of hands takes place",
+            "(including RAN migration topic)",
+            "6G Overall Architecture"
           ],
           "inferred_agenda_items": [],
           "email_details": [],
@@ -1966,7 +1964,8 @@
           ],
           "room_scope": "assigned",
           "notes": [
-            "6G Single Stream (20.6.x)"
+            "6G Single Stream (20.6.x)",
+            "(KI#17?/KI#22?, KI#19, KI#21)."
           ],
           "inferred_agenda_items": [],
           "email_details": [],
@@ -2048,7 +2047,7 @@
       ],
       "sessions": [
         {
-          "name": "Drafting: 6G",
+          "name": "Drafting: 6G Overall Architecture",
           "duration_minutes": 50,
           "start_time": "08:00",
           "end_time": "08:50",
@@ -2065,7 +2064,7 @@
           ],
           "room_scope": "assigned",
           "notes": [
-            "Drafting: 6G"
+            "Drafting: 6G Overall Architecture"
           ],
           "inferred_agenda_items": [
             "20.6.0"
@@ -2442,7 +2441,7 @@
           "stream": ""
         },
         {
-          "name": "Main:13:00 Drafting for SoH questions: KI#18, other KI (s) if any",
+          "name": "Main:13:00 Drafting for SoH questionsif any",
           "duration_minutes": 90,
           "start_time": "12:30",
           "end_time": "14:00",
@@ -2457,11 +2456,9 @@
           "room_ids": [],
           "room_scope": "unassigned",
           "notes": [
-            "Main:13:00 Drafting for SoH questions: KI#18, other KI(s) if any"
+            "Main:13:00 Drafting for SoH questionsif any"
           ],
-          "inferred_agenda_items": [
-            "20.6.18"
-          ],
+          "inferred_agenda_items": [],
           "email_details": [],
           "part": null,
           "stream": ""
@@ -2504,7 +2501,9 @@
           ],
           "room_scope": "assigned",
           "notes": [
-            "6G Single Stream (20.6.0)"
+            "6G Single Stream (20.6.0)",
+            "Other items",
+            "Architecture"
           ],
           "inferred_agenda_items": [],
           "email_details": [],
@@ -2675,7 +2674,8 @@
           ],
           "room_scope": "assigned",
           "notes": [
-            "6G Single Stream (20.6.x)"
+            "6G Single Stream (20.6.x)",
+            "6G Overall Architecture"
           ],
           "inferred_agenda_items": [],
           "email_details": [],
@@ -3369,20 +3369,20 @@
       "caveats": []
     }
   ],
-  "source_file": "S2-2611637_SA2-178-Session Plan - r12.docx",
-  "generated_at": "2026-11-17 03:21",
+  "source_file": "S2-2611637_SA2-178-Session Plan - r13.docx",
+  "generated_at": "2026-11-17 14:22",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
-    "S2-2611637_SA2-178-Session Plan - r12.docx",
+    "S2-2611637_SA2-178-Session Plan - r13.docx",
     "agenda.csv"
   ],
   "source_labels": {
-    "S2-2611637_SA2-178-Session Plan - r12.docx": "Session Plan - r12",
+    "S2-2611637_SA2-178-Session Plan - r13.docx": "Session Plan - r13",
     "agenda.csv": "agenda.csv"
   },
   "source_urls": {
-    "S2-2611637_SA2-178-Session Plan - r12.docx": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/SA2/Inbox/Drafts/_Session_Plan_Updates/S2-2611637_SA2-178-Session%20Plan%20-%20r12.docx"
+    "S2-2611637_SA2-178-Session Plan - r13.docx": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/SA2/Inbox/Drafts/_Session_Plan_Updates/S2-2611637_SA2-178-Session%20Plan%20-%20r13.docx"
   },
   "source_mails": {},
   "timezone": "America/Edmonton",
