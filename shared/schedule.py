@@ -56,6 +56,9 @@ class RoomInfo:
 
 # The shortest piece of a split block: the length at which a cell shows its AI line.
 MIN_PART_MINUTES = 30
+# The shortest piece the model accepts: title and time line still fit, the AI line does not.
+# SA2 splits its 50-minute Q0 into two 25-minute cells to keep the plan's layout.
+PART_FLOOR_MINUTES = 25
 
 
 @dataclass
@@ -103,8 +106,8 @@ class Session:
         if n < 2 or not 1 <= k <= n:
             raise ValueError(f"Invalid session part: {self.part}")
         # Shorter pieces lose the AI line; such topics stay one cell with a list.
-        if self.duration_minutes < n * MIN_PART_MINUTES:
-            raise ValueError(f"{n} parts of {self.duration_minutes} min are shorter than {MIN_PART_MINUTES} min")
+        if self.duration_minutes < n * PART_FLOOR_MINUTES:
+            raise ValueError(f"{n} parts of {self.duration_minutes} min are shorter than {PART_FLOOR_MINUTES} min")
 
 
 @dataclass
