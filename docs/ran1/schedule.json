@@ -5499,6 +5499,31 @@
               "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;f0b57c06.2611c",
               "author": "Chenxi Hao",
               "sent": "2026-11-17T08:15:04-06:00"
+            },
+            {
+              "kind": "session",
+              "session": "Tue 15:40-16:30 BMO 225-226",
+              "quote": "For afternoon section discussion 9.1.2, the FL summary is uploaded http://10.10.10.10/ftp/RAN/RAN1/Inbox/R1-2609842.zip.\nAll the remaining issues have been on the table for a while.",
+              "mode": null,
+              "summary": "Discussion on 9.1.2, covering proposals 1-1, 1-2, 2-1, 3-1, 3-2, 1-3",
+              "topics": [
+                "9.1.2",
+                "proposal 1-1",
+                "1-2",
+                "2-1",
+                "3-1",
+                "3-2",
+                "1-3"
+              ],
+              "day": "Tuesday",
+              "tdocs": [
+                "R1-2609842"
+              ],
+              "split": [],
+              "mail": "4f29eb19.2611c",
+              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;4f29eb19.2611c",
+              "author": "Huaning Niu",
+              "sent": "2026-11-17T11:33:56-06:00"
             }
           ],
           "part": null,
@@ -13805,7 +13830,7 @@
     }
   ],
   "source_file": "RAN1#127 online and offline schedules - v02.docx",
-  "generated_at": "2026-11-17 11:21",
+  "generated_at": "2026-11-17 11:41",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
