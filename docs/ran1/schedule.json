@@ -5369,6 +5369,34 @@
               "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;6b042c9c.2611c",
               "author": "Darcy Tsai (蔡承融)",
               "sent": "2026-11-17T11:19:50-06:00"
+            },
+            {
+              "kind": "session",
+              "session": "Tue 14:30-15:10 BMO 225-226",
+              "quote": "For today's online session, we start with DL CSI part first and switch to SRS part in the last 10 minutes.",
+              "mode": "online",
+              "summary": "Online session starts with DL CSI, SRS in last 10 minutes",
+              "topics": [
+                "DL CSI",
+                "SRS"
+              ],
+              "day": "Tuesday",
+              "tdocs": [
+                "R1-2609214"
+              ],
+              "split": [
+                {
+                  "topic": "DL CSI part first"
+                },
+                {
+                  "topic": "SRS part",
+                  "minutes": 10
+                }
+              ],
+              "mail": "3de6f721.2611c",
+              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;3de6f721.2611c",
+              "author": "Rebecca Chen (陳薏如)",
+              "sent": "2026-11-17T13:56:32-06:00"
             }
           ],
           "part": null,
@@ -7885,7 +7913,27 @@
           "room_scope": "assigned",
           "notes": [],
           "inferred_agenda_items": [],
-          "email_details": [],
+          "email_details": [
+            {
+              "kind": "session",
+              "session": "Wed 08:35-09:20 BMO 212",
+              "quote": "In tomorrow offline, we will treat section 5.1, followed by section 2.1, 2.6 and section 4.",
+              "mode": "offline",
+              "summary": "Offline on section 5.1, followed by section 2.1, 2.6 and section 4",
+              "topics": [
+                "section 5.1",
+                "section 2.1",
+                "2.6",
+                "section 4"
+              ],
+              "day": "Wednesday",
+              "split": [],
+              "mail": "37ac0993.2611c",
+              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;37ac0993.2611c",
+              "author": "Naoya Shibaike",
+              "sent": "2026-11-17T13:53:51-06:00"
+            }
+          ],
           "part": null,
           "stream": ""
         },
@@ -9006,7 +9054,27 @@
           "room_scope": "assigned",
           "notes": [],
           "inferred_agenda_items": [],
-          "email_details": [],
+          "email_details": [
+            {
+              "kind": "session",
+              "session": "Wed 14:30-15:10 BMO 214-215",
+              "quote": "FL proposals for upcoming online is in section 4.2 of v020",
+              "mode": "online",
+              "summary": "FL proposals for upcoming online in section 4.2 of v020",
+              "topics": [
+                "section 4.2 of v020"
+              ],
+              "day": "Wednesday",
+              "tdocs": [
+                "R1-2609055"
+              ],
+              "split": [],
+              "mail": "871b439f.2611c",
+              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;871b439f.2611c",
+              "author": "Jinzhe (A)",
+              "sent": "2026-11-17T14:00:05-06:00"
+            }
+          ],
           "part": null,
           "stream": ""
         },
@@ -13849,7 +13917,7 @@
     }
   ],
   "source_file": "RAN1#127 online and offline schedules - v02.docx",
-  "generated_at": "2026-11-17 13:42",
+  "generated_at": "2026-11-17 14:02",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
