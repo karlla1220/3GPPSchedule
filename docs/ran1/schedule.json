@@ -5414,7 +5414,24 @@
           "room_scope": "assigned",
           "notes": [],
           "inferred_agenda_items": [],
-          "email_details": [],
+          "email_details": [
+            {
+              "kind": "tentative",
+              "session": "Tue 15:00-15:40 BMO 225-226",
+              "agenda_item": "10.3.2",
+              "quote": "For the online session this afternoon, in v01 of schedule, there is a conflict between our online and offline session, both starting at 2:30pm. I asked the Chair to swap our online session with R20 MIMO session so our online will start at 3:10pm.",
+              "mode": "online",
+              "summary": "Online session swapped to start at 3:10pm",
+              "topics": [],
+              "start": "15:10",
+              "day": "Tuesday",
+              "split": [],
+              "mail": "9fbf6fde.2611c",
+              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;9fbf6fde.2611c",
+              "author": "Jing Sun",
+              "sent": "2026-11-17T10:40:01-06:00"
+            }
+          ],
           "part": null,
           "stream": ""
         },
@@ -13777,7 +13794,7 @@
     }
   ],
   "source_file": "RAN1#127 online and offline schedules - v01.docx",
-  "generated_at": "2026-11-17 10:22",
+  "generated_at": "2026-11-17 10:41",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
@@ -17276,12 +17293,7 @@
         "changed_in": "Chair notes RAN1#127_v01.docx"
       }
     },
-    "retained_files": [
-      "agreements/2ac040a28bef0c383123.html",
-      "agreements/945e75218ebfe6ac8b9b.html",
-      "agreements/9c5f0ef786216d0d2554.html",
-      "agreements/cc3057c2d5771b0c53f4.html"
-    ]
+    "retained_files": []
   },
   "email_informal": {
     "10.6.3": [
@@ -17399,6 +17411,21 @@
         "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;1da60b38.2611c",
         "author": "EL JAAFARI Mohamed",
         "sent": "2026-11-17T06:57:41-06:00",
+        "date": "2026-11-17"
+      },
+      {
+        "kind": "informal",
+        "quote": "Let's have an off-offline discussion today, 14:00 (local time).\nThe location: near Room 207 on Level 2.",
+        "mode": "off-offline",
+        "summary": "Off-offline discussion near Room 207 on Level 2",
+        "topics": [],
+        "start": "14:00",
+        "day": "Tuesday",
+        "place": "near Room 207 on Level 2",
+        "mail": "86f98ee8.2611c",
+        "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;86f98ee8.2611c",
+        "author": "EL JAAFARI Mohamed",
+        "sent": "2026-11-17T10:27:59-06:00",
         "date": "2026-11-17"
       }
     ],

@@ -1,16 +1,16 @@
 {
   "meeting_id": "ran3#134",
-  "version": "20261117.0.0900",
+  "version": "20261117.0.1030",
   "config_hash": "fdf80a0eb29dd64dbe8f8e0dbf1f6320eb2cbdcf53e080038977ac99443fe045",
   "schedule": {
-    "name": "RAN3_134_agenda_20261117_0900.docx",
-    "url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN3/Inbox/Chairs_Notes/RAN3_134_agenda_20261117_0900.docx",
-    "uploaded_at": "2026-11-17 14:22",
-    "size": 228000,
-    "sha256": "e0789629cd972798c2ca1e7298942a0695204257809b8233ca4edaea2f626da2",
+    "name": "RAN3_134_agenda_20261117_1030.docx",
+    "url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN3/Inbox/Chairs_Notes/RAN3_134_agenda_20261117_1030.docx",
+    "uploaded_at": "2026-11-17 16:32",
+    "size": 226730,
+    "sha256": "5ce8ca3cdae724605052cdc04251199643a49dfd3db4d3f1d17fe6f8db92e50b",
     "etag": null,
-    "last_modified": "Tue, 17 Nov 2026 14:22:42 GMT",
-    "ftp_modified": "213 20261117142242",
+    "last_modified": "Tue, 17 Nov 2026 16:32:00 GMT",
+    "ftp_modified": "213 20261117163200",
     "content_type": "application/octet-stream",
     "content_disposition": null
   },
@@ -74,6 +74,11 @@
       "agenda_item": "10.3.1.3",
       "name": "CB: # 5_6GRANCN_eval",
       "moderator": "Samsung"
+    },
+    "6": {
+      "agenda_item": "10.3.2",
+      "name": "CB: # 6_6GConnectivity",
+      "moderator": "ZTE"
     }
   },
   "llm": {

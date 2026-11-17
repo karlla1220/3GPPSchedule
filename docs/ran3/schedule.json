@@ -938,7 +938,7 @@
           "stream": ""
         },
         {
-          "name": "6G Offline*",
+          "name": "6G Offline (CB#6)",
           "duration_minutes": 120,
           "start_time": "17:00",
           "end_time": "19:00",
@@ -946,21 +946,39 @@
           "room_col_start": 2,
           "room_col_end": 3,
           "chair": null,
-          "agenda_item": null,
-          "group_header": "",
-          "description": null,
-          "agenda_descriptions": [],
+          "agenda_item": "10.3.2",
+          "group_header": "Study on 6G Radio",
+          "description": "RAN-CN control plane for connectivity services",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "10.3.2",
+              "matched_agenda_item": "10.3.2",
+              "description": "RAN-CN control plane for connectivity services",
+              "hierarchy": [
+                {
+                  "agenda_item": "10",
+                  "description": "Study on 6G Radio"
+                },
+                {
+                  "agenda_item": "10.3",
+                  "description": "RAN-CN interface"
+                },
+                {
+                  "agenda_item": "10.3.2",
+                  "description": "RAN-CN control plane for connectivity services"
+                }
+              ]
+            }
+          ],
           "room_ids": [
             "main"
           ],
           "room_scope": "assigned",
           "notes": [
-            "6G Offline*",
-            "* if needed"
+            "6G Offline (CB#6)",
+            "CB: # 6_6GConnectivity (moderator - ZTE)"
           ],
-          "inferred_agenda_items": [
-            "10"
-          ],
+          "inferred_agenda_items": [],
           "email_details": [],
           "part": [
             2,
@@ -1579,22 +1597,22 @@
       "caveats": []
     }
   ],
-  "source_file": "RAN3_134_agenda_20261117_0900.docx",
-  "generated_at": "2026-11-17 08:41",
+  "source_file": "RAN3_134_agenda_20261117_1030.docx",
+  "generated_at": "2026-11-17 10:41",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
-    "RAN3_134_agenda_20261117_0900.docx",
+    "RAN3_134_agenda_20261117_1030.docx",
     "RAN3 offline discussion_ver_02.xlsx",
     "agenda.csv"
   ],
   "source_labels": {
-    "RAN3_134_agenda_20261117_0900.docx": "agenda_20261117_0900",
+    "RAN3_134_agenda_20261117_1030.docx": "agenda_20261117_1030",
     "RAN3 offline discussion_ver_02.xlsx": "offline discussion_ver_02",
     "agenda.csv": "agenda.csv"
   },
   "source_urls": {
-    "RAN3_134_agenda_20261117_0900.docx": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN3/Inbox/Chairs_Notes/RAN3_134_agenda_20261117_0900.docx",
+    "RAN3_134_agenda_20261117_1030.docx": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN3/Inbox/Chairs_Notes/RAN3_134_agenda_20261117_1030.docx",
     "RAN3 offline discussion_ver_02.xlsx": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN3/Offline_meeting_room/RAN3%20offline%20discussion_ver_02.xlsx",
     "agenda.csv": "https://www.3gpp.org/ftp/tsg_ran/WG3_Iu/TSGR3_134/Agenda/agenda.csv"
   },
