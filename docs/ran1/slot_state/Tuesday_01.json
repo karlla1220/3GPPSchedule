@@ -4,6 +4,7 @@
   "source_hashes": {
     "Main Schedule": "7bb89f18051a82de",
     "Hiroki's schedule": "ea4c5f486e9922c6",
+    "Ralf's schedule": "88d1f19c0f438be5",
     "Sorour's schedule": "6aa0d1c6f4b77c60"
   },
   "merged_sessions": [
@@ -91,7 +92,8 @@
       "agenda_item": null,
       "source_cells": [
         "cf7c65a",
-        "c83e9ae"
+        "c83e9ae",
+        "c87a274"
       ]
     },
     {
@@ -104,7 +106,8 @@
       "agenda_item": "9.1",
       "source_cells": [
         "cf7c65a",
-        "c83e9ae"
+        "c83e9ae",
+        "c87a274"
       ],
       "description": "Artificial Intelligence (AI)/Machine Learning (ML) for NR air interface enhancements",
       "agenda_descriptions": [
@@ -418,7 +421,7 @@
       ]
     }
   ],
-  "merged_at": "2026-11-16T16:02:20.407693+00:00",
+  "merged_at": "2026-11-17T15:02:43.072191+00:00",
   "meeting_id": "ran1#127",
   "schema_version": 3,
   "source_entries": {
@@ -460,6 +463,14 @@
         "cell_text": "6GR (90)\n.10.8 Sensing (90)\n10.8.2 (90)",
         "fallback_start_time": null,
         "cell_id": "c8ffad3"
+      }
+    ],
+    "Ralf's schedule": [
+      {
+        "room_label": "Ralf: BMO 225-226",
+        "cell_text": "R20 (90) \nUE feature (40)\n.IoT-NTN\n.NR-NTN\n\nAI/ML (50)",
+        "fallback_start_time": null,
+        "cell_id": "c87a274"
       }
     ],
     "Sorour's schedule": [

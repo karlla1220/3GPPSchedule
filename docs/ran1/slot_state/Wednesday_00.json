@@ -4,6 +4,7 @@
   "source_hashes": {
     "Main Schedule": "d8064d85b3d60b78",
     "Hiroki's schedule": "a9da66b02c6bf5b0",
+    "Ralf's schedule": "e43deffc8c52dddc",
     "Sorour's schedule": "b750fbf9326e213e"
   },
   "merged_sessions": [
@@ -325,6 +326,7 @@
       "group_header": "TEI, AI 7/8.1",
       "agenda_item": "11",
       "source_cells": [
+        "c3ee39b",
         "c676e5a",
         "c97eefc"
       ],
@@ -353,6 +355,7 @@
       "group_header": "TEI, AI 7/8.1",
       "agenda_item": "8.1",
       "source_cells": [
+        "c3ee39b",
         "c676e5a",
         "c97eefc"
       ],
@@ -386,6 +389,7 @@
       "group_header": "TEI, AI 7/8.1",
       "agenda_item": "8.1",
       "source_cells": [
+        "c3ee39b",
         "c676e5a",
         "c97eefc"
       ],
@@ -419,6 +423,7 @@
       "group_header": "6GR",
       "agenda_item": "10.5.4.1",
       "source_cells": [
+        "c3ee39b",
         "c676e5a",
         "c97eefc"
       ],
@@ -455,13 +460,14 @@
     },
     {
       "room_name": "RAN1_brk2",
-      "name": "UE feature",
+      "name": "MIMO",
       "duration_minutes": 40,
       "specified_start_time": null,
       "chair": null,
-      "group_header": "",
+      "group_header": "UE feature",
       "agenda_item": null,
       "source_cells": [
+        "c3ee39b",
         "c676e5a",
         "c97eefc"
       ]
@@ -706,7 +712,7 @@
       ]
     }
   ],
-  "merged_at": "2026-11-16T16:02:20.414209+00:00",
+  "merged_at": "2026-11-17T15:02:43.075758+00:00",
   "meeting_id": "ran1#127",
   "schema_version": 3,
   "source_entries": {
@@ -748,6 +754,14 @@
         "cell_text": "TEI, AI 7/8.1 (50)\n11 TEI20 (10)\n8.1 Channel model (15)\n 8.1 5GA ISAC (25)\n\n6GR (60)\n.10.5.4.1 (60)\n\nUE feature (40)",
         "fallback_start_time": null,
         "cell_id": "c676e5a"
+      }
+    ],
+    "Ralf's schedule": [
+      {
+        "room_label": "Ralf: BMO 214-215",
+        "cell_text": "T TEI, AI 7/8.1 (50)\n\n6GR (60)\n.10.5.4.1 (60)\n\nUE feature (40)\n.MIMO",
+        "fallback_start_time": null,
+        "cell_id": "c3ee39b"
       }
     ],
     "Sorour's schedule": [

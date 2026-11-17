@@ -4,19 +4,21 @@
   "source_hashes": {
     "Main Schedule": "30d37192eb315eb1",
     "Hiroki's schedule": "6ea78ad3d936e989",
+    "Ralf's schedule": "b2454b17d4cc48d3",
     "Sorour's schedule": "2d4abfec898b849e"
   },
   "merged_sessions": [
     {
       "room_name": "RAN1_main",
-      "name": "Sweep",
+      "name": "Sweep 6GR",
       "duration_minutes": 90,
       "specified_start_time": null,
       "chair": null,
-      "group_header": "",
+      "group_header": "6GR",
       "agenda_item": null,
       "source_cells": [
-        "c98dfe2"
+        "c98dfe2",
+        "c1aa9fc"
       ]
     },
     {
@@ -152,7 +154,7 @@
       ]
     }
   ],
-  "merged_at": "2026-11-16T16:02:20.432169+00:00",
+  "merged_at": "2026-11-17T15:02:43.085164+00:00",
   "meeting_id": "ran1#127",
   "schema_version": 3,
   "source_entries": {
@@ -182,6 +184,14 @@
         "cell_text": "6GR (TBD)\n.10.8 Sensing (TBD)\n\nR20 (TBD)\nA-IoT Phase2 (TBD)",
         "fallback_start_time": null,
         "cell_id": "c4372ef"
+      }
+    ],
+    "Ralf's schedule": [
+      {
+        "room_label": "Ralf: Champions Ballroom A",
+        "cell_text": "Sweep\n 6GR",
+        "fallback_start_time": null,
+        "cell_id": "c1aa9fc"
       }
     ],
     "Sorour's schedule": [

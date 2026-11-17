@@ -21,6 +21,11 @@
       "uploaded_at": "2026-11-16T21:22:00"
     },
     {
+      "folder": "Ralf_notes",
+      "name": "RAN1#127 online and offline schedules - UE Features.docx",
+      "uploaded_at": "2026-11-17T14:51:00"
+    },
+    {
       "folder": "Sorour_notes",
       "name": "RAN1#127 Sorour sessions online and offline schedules - v01.docx",
       "uploaded_at": "2026-11-16T17:34:00"
@@ -149,6 +154,6 @@
   "local_refs": {},
   "email": {
     "list": "3GPP_TSG_RAN_WG1",
-    "checked_through": "2026-11-17T14:36:32+00:00"
+    "checked_through": "2026-11-17T14:56:08+00:00"
   }
 }

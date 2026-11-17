@@ -16,3 +16,4 @@
 {"label": "Any other open issues. Session reports", "agenda_items": [], "raw": [], "note": "Meeting administration and running order", "model": "gemini-3.8-flash (low)", "decided_at": "2026-11-10T08:26:10+00:00"}
 {"label": "To be assigned by Sorour / To be assigned by Hiroki", "agenda_items": [], "raw": [], "note": "Placeholder slot", "model": "gemini-3.8-flash (low)", "decided_at": "2026-11-10T08:26:10+00:00"}
 {"label": "UE Features", "agenda_items": ["9.6"], "raw": [{"agenda_item": "9.6", "reason": "Matches Rel-20 UE features"}], "note": "", "model": "gemini-3.8-flash (low)", "decided_at": "2026-11-15T22:02:13+00:00"}
+{"label": "Sweep 6GR", "agenda_items": [], "raw": [], "note": "Sweep sessions indicate running order/wrap-up for an area and do not map to specific agenda items.", "model": "gemini-3.8-flash (low)", "decided_at": "2026-11-17T15:02:59+00:00"}
