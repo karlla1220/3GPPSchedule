@@ -4047,7 +4047,25 @@
           "room_scope": "assigned",
           "notes": [],
           "inferred_agenda_items": [],
-          "email_details": [],
+          "email_details": [
+            {
+              "kind": "session",
+              "session": "Tue 08:35-09:20 BMO 212",
+              "quote": "Tomorrow offline will start from leftovers from today, followed by Proposal 5.1-1 (rev2).",
+              "mode": "offline",
+              "summary": "Offline starting with leftovers from today, then Proposal 5.1-1 (rev2)",
+              "topics": [
+                "leftovers from today",
+                "Proposal 5.1-1 (rev2)"
+              ],
+              "day": "Tuesday",
+              "split": [],
+              "mail": "50ebd987.2611c",
+              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;50ebd987.2611c",
+              "author": "Naoya Shibaike",
+              "sent": "2026-11-16T18:19:39-06:00"
+            }
+          ],
           "part": null,
           "stream": ""
         },
@@ -13369,7 +13387,7 @@
     }
   ],
   "source_file": "RAN1#127 online and offline schedules - v01.docx",
-  "generated_at": "2026-11-16 18:01",
+  "generated_at": "2026-11-16 18:21",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
@@ -15572,6 +15590,46 @@
         "author": "Hong He",
         "sent": "2026-11-14T01:32:04-06:00",
         "date": "2026-11-16"
+      }
+    ],
+    "10.5.2.1": [
+      {
+        "kind": "informal",
+        "quote": "On Wednesday, 10:30 - 11:00 (this is really needed since we do not have any offline before the online here)",
+        "mode": "off-offline",
+        "summary": "Off-offline discussion next to offline meeting rooms in front of room 221",
+        "topics": [],
+        "start": "10:30",
+        "end": "11:00",
+        "day": "Wednesday",
+        "tdocs": [
+          "R1-2610255"
+        ],
+        "place": "next to Offline meeting rooms, on the second floor, in front of room 221",
+        "mail": "c57ff601.2611c",
+        "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;c57ff601.2611c",
+        "author": "Dimitri Gold (Nokia)",
+        "sent": "2026-11-16T18:06:24-06:00",
+        "date": "2026-11-18"
+      },
+      {
+        "kind": "informal",
+        "quote": "On Thursday, 10:30 - 11:00.\nLet’s meet next to Offline meeting rooms, on the second floor, in front of room 221.",
+        "mode": "off-offline",
+        "summary": "Off-offline discussion next to offline meeting rooms in front of room 221",
+        "topics": [],
+        "start": "10:30",
+        "end": "11:00",
+        "day": "Thursday",
+        "tdocs": [
+          "R1-2610255"
+        ],
+        "place": "next to Offline meeting rooms, on the second floor, in front of room 221",
+        "mail": "c57ff601.2611c",
+        "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;c57ff601.2611c",
+        "author": "Dimitri Gold (Nokia)",
+        "sent": "2026-11-16T18:06:24-06:00",
+        "date": "2026-11-19"
       }
     ]
   }
