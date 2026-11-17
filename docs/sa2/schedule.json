@@ -1965,7 +1965,7 @@
           "room_scope": "assigned",
           "notes": [
             "6G Single Stream (20.6.x)",
-            "(KI#17?/KI#22?, KI#19, KI#21)."
+            "(KI#17,KI#19, KI#21, joint KI 14,20,21)"
           ],
           "inferred_agenda_items": [],
           "email_details": [],
@@ -3369,20 +3369,20 @@
       "caveats": []
     }
   ],
-  "source_file": "S2-2611637_SA2-178-Session Plan - r13.docx",
-  "generated_at": "2026-11-17 14:22",
+  "source_file": "S2-2611637_SA2-178-Session Plan - r14.docx",
+  "generated_at": "2026-11-17 15:41",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
-    "S2-2611637_SA2-178-Session Plan - r13.docx",
+    "S2-2611637_SA2-178-Session Plan - r14.docx",
     "agenda.csv"
   ],
   "source_labels": {
-    "S2-2611637_SA2-178-Session Plan - r13.docx": "Session Plan - r13",
+    "S2-2611637_SA2-178-Session Plan - r14.docx": "Session Plan - r14",
     "agenda.csv": "agenda.csv"
   },
   "source_urls": {
-    "S2-2611637_SA2-178-Session Plan - r13.docx": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/SA2/Inbox/Drafts/_Session_Plan_Updates/S2-2611637_SA2-178-Session%20Plan%20-%20r13.docx"
+    "S2-2611637_SA2-178-Session Plan - r14.docx": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/SA2/Inbox/Drafts/_Session_Plan_Updates/S2-2611637_SA2-178-Session%20Plan%20-%20r14.docx"
   },
   "source_mails": {},
   "timezone": "America/Edmonton",
