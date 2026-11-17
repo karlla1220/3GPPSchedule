@@ -3,7 +3,7 @@
   "time_block_index": 0,
   "source_hashes": {
     "Main Schedule": "54b3e85b78db77d2",
-    "Hiroki's schedule": "0e116e9dcbc0b2d9",
+    "Hiroki's schedule": "529ce457bcccf8da",
     "Sorour's schedule": "d6e2b326cb56a6bd"
   },
   "merged_sessions": [
@@ -289,7 +289,7 @@
       "agenda_item": "10.8.3",
       "source_cells": [
         "c1285d4",
-        "ca0939a"
+        "c2e077e"
       ],
       "description": "Waveform and frame structure",
       "agenda_descriptions": [
@@ -327,7 +327,7 @@
       "agenda_item": "10.5.4.1",
       "source_cells": [
         "c1285d4",
-        "ca0939a"
+        "c2e077e"
       ],
       "description": "Downlink control channel, scheduling for downlink and uplink transmission",
       "agenda_descriptions": [
@@ -370,7 +370,7 @@
       "agenda_item": "7, 8.1",
       "source_cells": [
         "c1285d4",
-        "ca0939a"
+        "c2e077e"
       ],
       "description": "Pre-Rel-19 NR Maintenance",
       "agenda_descriptions": [
@@ -672,7 +672,7 @@
       ]
     }
   ],
-  "merged_at": "2026-11-16T16:02:20.422061+00:00",
+  "merged_at": "2026-11-17T16:22:02.564017+00:00",
   "meeting_id": "ran1#127",
   "schema_version": 3,
   "source_entries": {
@@ -711,9 +711,9 @@
     "Hiroki's schedule": [
       {
         "room_label": "Hiroki: BMO 214-215",
-        "cell_text": "6GR (110)\n.10.8 Sensing (50)\n 10.8.3 (50)\n\n.10.5.4.1 (60)\n\nTEI, AI 7/8.1 (40)\n TBD",
+        "cell_text": "6GR (110)\n.10.8 Sensing (50)\n 10.8.3 (50)\n\n.10.5.4.1 (60)\n\nTEI, AI 7/8.1 (40)\n7 pre-Rel-19 CRs\n8.1 Duplex\n 8.1 Mobility",
         "fallback_start_time": null,
-        "cell_id": "ca0939a"
+        "cell_id": "c2e077e"
       }
     ],
     "Sorour's schedule": [
