@@ -154,25 +154,10 @@
           "room_col_start": 2,
           "room_col_end": 3,
           "chair": null,
-          "agenda_item": "10.1, 10.3.1",
+          "agenda_item": "10.3.1",
           "group_header": "Study on 6G Radio",
-          "description": "General\nRAN-CN control plane for non-connectivity services",
+          "description": "RAN-CN control plane for non-connectivity services",
           "agenda_descriptions": [
-            {
-              "agenda_item": "10.1",
-              "matched_agenda_item": "10.1",
-              "description": "General",
-              "hierarchy": [
-                {
-                  "agenda_item": "10",
-                  "description": "Study on 6G Radio"
-                },
-                {
-                  "agenda_item": "10.1",
-                  "description": "General"
-                }
-              ]
-            },
             {
               "agenda_item": "10.3.1",
               "matched_agenda_item": "10.3.1",
@@ -198,7 +183,8 @@
           ],
           "room_scope": "assigned",
           "notes": [
-            "6G SI: AI 10.1, 10.3.1"
+            "6G SI: AI 10.3.1",
+            "Not treated: 10.1,"
           ],
           "inferred_agenda_items": [],
           "email_details": [],
@@ -356,10 +342,25 @@
           "room_col_start": 2,
           "room_col_end": 3,
           "chair": null,
-          "agenda_item": "10.3.2",
+          "agenda_item": "10.1, 10.3.2",
           "group_header": "Study on 6G Radio",
-          "description": "RAN-CN control plane for connectivity services",
+          "description": "General\nRAN-CN control plane for connectivity services",
           "agenda_descriptions": [
+            {
+              "agenda_item": "10.1",
+              "matched_agenda_item": "10.1",
+              "description": "General",
+              "hierarchy": [
+                {
+                  "agenda_item": "10",
+                  "description": "Study on 6G Radio"
+                },
+                {
+                  "agenda_item": "10.1",
+                  "description": "General"
+                }
+              ]
+            },
             {
               "agenda_item": "10.3.2",
               "matched_agenda_item": "10.3.2",
@@ -385,7 +386,7 @@
           ],
           "room_scope": "assigned",
           "notes": [
-            "6G SI: AI 10.3.2"
+            "6G SI: AI 10.1, 10.3.2"
           ],
           "inferred_agenda_items": [],
           "email_details": [],
@@ -519,7 +520,7 @@
           "stream": ""
         },
         {
-          "name": "6G Offline*",
+          "name": "6G Offline (CB#5)",
           "duration_minutes": 120,
           "start_time": "17:00",
           "end_time": "19:00",
@@ -527,21 +528,43 @@
           "room_col_start": 2,
           "room_col_end": 3,
           "chair": null,
-          "agenda_item": null,
-          "group_header": "",
-          "description": null,
-          "agenda_descriptions": [],
+          "agenda_item": "10.3.1.3",
+          "group_header": "Study on 6G Radio",
+          "description": "Service Based Interface (SBI)",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "10.3.1.3",
+              "matched_agenda_item": "10.3.1.3",
+              "description": "Service Based Interface (SBI)",
+              "hierarchy": [
+                {
+                  "agenda_item": "10",
+                  "description": "Study on 6G Radio"
+                },
+                {
+                  "agenda_item": "10.3",
+                  "description": "RAN-CN interface"
+                },
+                {
+                  "agenda_item": "10.3.1",
+                  "description": "RAN-CN control plane for non-connectivity services"
+                },
+                {
+                  "agenda_item": "10.3.1.3",
+                  "description": "Service Based Interface (SBI)"
+                }
+              ]
+            }
+          ],
           "room_ids": [
             "main"
           ],
           "room_scope": "assigned",
           "notes": [
-            "6G Offline*",
-            "* if needed"
+            "6G Offline (CB#5)",
+            "CB: # 5_6GRANCN_eval (moderator - Samsung)"
           ],
-          "inferred_agenda_items": [
-            "10"
-          ],
+          "inferred_agenda_items": [],
           "email_details": [],
           "part": [
             2,
@@ -1556,22 +1579,22 @@
       "caveats": []
     }
   ],
-  "source_file": "RAN3_134_agenda_20261116_1310.docx",
-  "generated_at": "2026-11-16 14:41",
+  "source_file": "RAN3_134_agenda_20261116_1900.docx",
+  "generated_at": "2026-11-16 19:01",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
-    "RAN3_134_agenda_20261116_1310.docx",
+    "RAN3_134_agenda_20261116_1900.docx",
     "RAN3 offline discussion_ver_02.xlsx",
     "agenda.csv"
   ],
   "source_labels": {
-    "RAN3_134_agenda_20261116_1310.docx": "agenda_20261116_1310",
+    "RAN3_134_agenda_20261116_1900.docx": "agenda_20261116_1900",
     "RAN3 offline discussion_ver_02.xlsx": "offline discussion_ver_02",
     "agenda.csv": "agenda.csv"
   },
   "source_urls": {
-    "RAN3_134_agenda_20261116_1310.docx": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN3/Inbox/Chairs_Notes/RAN3_134_agenda_20261116_1310.docx",
+    "RAN3_134_agenda_20261116_1900.docx": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN3/Inbox/Chairs_Notes/RAN3_134_agenda_20261116_1900.docx",
     "RAN3 offline discussion_ver_02.xlsx": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN3/Offline_meeting_room/RAN3%20offline%20discussion_ver_02.xlsx",
     "agenda.csv": "https://www.3gpp.org/ftp/tsg_ran/WG3_Iu/TSGR3_134/Agenda/agenda.csv"
   },

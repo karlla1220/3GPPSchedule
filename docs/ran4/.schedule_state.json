@@ -1,31 +1,31 @@
 {
   "meeting_id": "ran4#121",
-  "version": 4410,
+  "version": 4413,
   "config_hash": "f04fc1d6db7022ddbcced9458ec46e5ab179d607bcdcc815909bda6ed3a4ff7a",
   "schedule": {
-    "url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN4/Inbox/Meeting_Arrangements/RAN4_121_meeting_schedule_v06.pptx",
-    "name": "RAN4_121_meeting_schedule_v06.pptx",
-    "uploaded_at": "2026-11-16 16:24",
-    "label": "v06",
-    "size": 144579,
-    "sha256": "d00b0142ca8f830a4c9e59b265550a1bb603629fa4d0c97bbbca8d3bac54f145",
-    "etag": "\"8021cdebe675dd1:0\"",
-    "last_modified": "Mon, 16 Nov 2026 16:24:15 GMT",
-    "ftp_modified": null,
-    "content_type": "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+    "url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN4/Inbox/Meeting_Arrangements/RAN4_121_meeting_schedule_v07_after_Monday.pptx",
+    "name": "RAN4_121_meeting_schedule_v07_after_Monday.pptx",
+    "uploaded_at": "2026-11-17 00:43",
+    "label": "v07_after_Monday",
+    "size": 145371,
+    "sha256": "d7f8eb82b88241f0fb05e349e493cfb5dcba865a063411661c613340d037dd50",
+    "etag": null,
+    "last_modified": "Tue, 17 Nov 2026 00:43:21 GMT",
+    "ftp_modified": "213 20261117004321",
+    "content_type": "application/octet-stream",
     "content_disposition": null,
-    "revision": 4410,
-    "modified": "2026-11-13T17:03:59Z"
+    "revision": 4413,
+    "modified": "2026-11-17T00:42:41Z"
   },
   "topics": {
     "url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN4/Inbox/Meeting_Arrangements/List_Topics_moderators%20-RAN4_121_v3.xlsx",
     "name": "List_Topics_moderators -RAN4_121_v3.xlsx",
     "size": 36171,
     "sha256": "22e3724756f3bad6241bd1b2af320ae505b0bce055d70e7cb1e07280b4db0144",
-    "etag": "\"02c5fe4e75dd1:0\"",
+    "etag": null,
     "last_modified": "Sun, 15 Nov 2026 22:10:00 GMT",
-    "ftp_modified": null,
-    "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    "ftp_modified": "213 20261115221000",
+    "content_type": "application/octet-stream",
     "content_disposition": null
   },
   "agenda": {
@@ -56,8 +56,8 @@
   ],
   "llm": {
     "model": "gemini-3.8-flash",
-    "uncertain": 1,
-    "applied": 1,
+    "uncertain": 3,
+    "applied": 3,
     "kept_rules": 0
   }
 }

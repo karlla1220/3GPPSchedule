@@ -661,7 +661,7 @@
           "room_scope": "assigned",
           "notes": [
             "5G UE RF",
-            "[340] NR_UE_RF_Ph5 (24)",
+            "[340] NR_UE_RF_Ph5 (24) (Rescheduled)",
             "[342] NR_low_band_CA_switching (4)"
           ],
           "inferred_agenda_items": [],
@@ -1380,6 +1380,108 @@
           "stream": ""
         },
         {
+          "name": "Coffeebreak AH: [101-B] System Parameter",
+          "duration_minutes": 30,
+          "start_time": "16:30",
+          "end_time": "17:00",
+          "day": "Monday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "Jinqiang",
+          "agenda_item": "8.2.3, 8.2.4, 8.2.5, 8.2.6",
+          "group_header": "6G study item",
+          "description": "Modulation\nNumber of Tx and Rx\nSmallest max CBW related SAW-less design\nChannel arrangement",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "8.2.3",
+              "matched_agenda_item": "8.2.3",
+              "description": "Modulation",
+              "hierarchy": [
+                {
+                  "agenda_item": "8",
+                  "description": "6G study item"
+                },
+                {
+                  "agenda_item": "8.2",
+                  "description": "System parameters"
+                },
+                {
+                  "agenda_item": "8.2.3",
+                  "description": "Modulation"
+                }
+              ]
+            },
+            {
+              "agenda_item": "8.2.4",
+              "matched_agenda_item": "8.2.4",
+              "description": "Number of Tx and Rx",
+              "hierarchy": [
+                {
+                  "agenda_item": "8",
+                  "description": "6G study item"
+                },
+                {
+                  "agenda_item": "8.2",
+                  "description": "System parameters"
+                },
+                {
+                  "agenda_item": "8.2.4",
+                  "description": "Number of Tx and Rx"
+                }
+              ]
+            },
+            {
+              "agenda_item": "8.2.5",
+              "matched_agenda_item": "8.2.5",
+              "description": "Smallest max CBW related SAW-less design",
+              "hierarchy": [
+                {
+                  "agenda_item": "8",
+                  "description": "6G study item"
+                },
+                {
+                  "agenda_item": "8.2",
+                  "description": "System parameters"
+                },
+                {
+                  "agenda_item": "8.2.5",
+                  "description": "Smallest max CBW related SAW-less design"
+                }
+              ]
+            },
+            {
+              "agenda_item": "8.2.6",
+              "matched_agenda_item": "8.2.6",
+              "description": "Channel arrangement",
+              "hierarchy": [
+                {
+                  "agenda_item": "8",
+                  "description": "6G study item"
+                },
+                {
+                  "agenda_item": "8.2",
+                  "description": "System parameters"
+                },
+                {
+                  "agenda_item": "8.2.6",
+                  "description": "Channel arrangement"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "yang"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "Coffeebreak AH: [101-B] System Parameter by Jinqiang (OPPO)"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": null,
+          "stream": ""
+        },
+        {
           "name": "BR1 Ad-hoc / Rel-20 OTA",
           "duration_minutes": 60,
           "start_time": "17:00",
@@ -1634,7 +1736,7 @@
           "notes": [
             "[NTN (cont)",
             "[351] LTE_IoT_NTN_high_power (12)",
-            "[356] NR_IoT_extended_guardband (15)"
+            "[356] NR_IoT_extended_guardband (15) (Rescheduled)"
           ],
           "inferred_agenda_items": [],
           "email_details": [],
@@ -2151,7 +2253,8 @@
           {
             "name": "Coffee break",
             "start": "16:30",
-            "end": "17:00"
+            "end": "17:00",
+            "label_position": "time-axis"
           }
         ],
         "blocks": []
@@ -2199,6 +2302,98 @@
         }
       ],
       "sessions": [
+        {
+          "name": "[356] NR_IoT_extended_guardband",
+          "duration_minutes": 30,
+          "start_time": "08:00",
+          "end_time": "08:30",
+          "day": "Tuesday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "Gene FONG",
+          "agenda_item": "7.12.2, 7.12.3.1, 7.12.3.2",
+          "group_header": "Rel-20 on-going non-spectrum related work/study items",
+          "description": "General aspects and workplan\nNR NTN\nIoT NTN",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "7.12.2",
+              "matched_agenda_item": "7.12.2",
+              "description": "General aspects and workplan",
+              "hierarchy": [
+                {
+                  "agenda_item": "7",
+                  "description": "Rel-20 on-going non-spectrum related work/study items"
+                },
+                {
+                  "agenda_item": "7.12",
+                  "description": "Extended guard band for NR NTN and IoT NTN"
+                },
+                {
+                  "agenda_item": "7.12.2",
+                  "description": "General aspects and workplan"
+                }
+              ]
+            },
+            {
+              "agenda_item": "7.12.3.1",
+              "matched_agenda_item": "7.12.3.1",
+              "description": "NR NTN",
+              "hierarchy": [
+                {
+                  "agenda_item": "7",
+                  "description": "Rel-20 on-going non-spectrum related work/study items"
+                },
+                {
+                  "agenda_item": "7.12",
+                  "description": "Extended guard band for NR NTN and IoT NTN"
+                },
+                {
+                  "agenda_item": "7.12.3",
+                  "description": "UE RF core requirements"
+                },
+                {
+                  "agenda_item": "7.12.3.1",
+                  "description": "NR NTN"
+                }
+              ]
+            },
+            {
+              "agenda_item": "7.12.3.2",
+              "matched_agenda_item": "7.12.3.2",
+              "description": "IoT NTN",
+              "hierarchy": [
+                {
+                  "agenda_item": "7",
+                  "description": "Rel-20 on-going non-spectrum related work/study items"
+                },
+                {
+                  "agenda_item": "7.12",
+                  "description": "Extended guard band for NR NTN and IoT NTN"
+                },
+                {
+                  "agenda_item": "7.12.3",
+                  "description": "UE RF core requirements"
+                },
+                {
+                  "agenda_item": "7.12.3.2",
+                  "description": "IoT NTN"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "gene"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "Start at 8:00 – 8:30",
+            "[356] NR_IoT_extended_guardband (15)"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": null,
+          "stream": ""
+        },
         {
           "name": "BR2 Ad-hoc: Spectrum basket work items",
           "duration_minutes": 60,
@@ -2341,7 +2536,7 @@
           "stream": ""
         },
         {
-          "name": "6G SI: BSRF",
+          "name": "6G SI: BSRF / [361] 6G_BSRF_coexistence_AAS",
           "duration_minutes": 120,
           "start_time": "08:30",
           "end_time": "10:30",
@@ -2780,6 +2975,71 @@
           "room_scope": "assigned",
           "notes": [
             "[107-B] 6G AI"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": null,
+          "stream": ""
+        },
+        {
+          "name": "Coffee break / [208] NR_NTN_GNSS_resilient_RRM",
+          "duration_minutes": 30,
+          "start_time": "10:30",
+          "end_time": "11:00",
+          "day": "Tuesday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "Dorin",
+          "agenda_item": "7.17.2, 7.17.4",
+          "group_header": "Rel-20 on-going non-spectrum related work/study items",
+          "description": "General aspects and workplan\nRRM core requirements",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "7.17.2",
+              "matched_agenda_item": "7.17.2",
+              "description": "General aspects and workplan",
+              "hierarchy": [
+                {
+                  "agenda_item": "7",
+                  "description": "Rel-20 on-going non-spectrum related work/study items"
+                },
+                {
+                  "agenda_item": "7.17",
+                  "description": "GNSS resilient NR-NTN operation"
+                },
+                {
+                  "agenda_item": "7.17.2",
+                  "description": "General aspects and workplan"
+                }
+              ]
+            },
+            {
+              "agenda_item": "7.17.4",
+              "matched_agenda_item": "7.17.4",
+              "description": "RRM core requirements",
+              "hierarchy": [
+                {
+                  "agenda_item": "7",
+                  "description": "Rel-20 on-going non-spectrum related work/study items"
+                },
+                {
+                  "agenda_item": "7.17",
+                  "description": "GNSS resilient NR-NTN operation"
+                },
+                {
+                  "agenda_item": "7.17.4",
+                  "description": "RRM core requirements"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "shan"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "Coffee break:",
+            "[208] NR_NTN_GNSS_resilient_RRM , Chaired by Dorin (Thales)"
           ],
           "inferred_agenda_items": [],
           "email_details": [],
@@ -3706,46 +3966,28 @@
           "stream": ""
         },
         {
-          "name": "Coffee break: [202] NR_UAV_req_RRM",
+          "name": "Coffee break ad-hoc: GNSS resilient RF related",
           "duration_minutes": 30,
           "start_time": "16:30",
           "end_time": "17:00",
           "day": "Tuesday",
           "room_col_start": 2,
           "room_col_end": 3,
-          "chair": null,
-          "agenda_item": "7.7.5",
-          "group_header": "Rel-20 on-going non-spectrum related work/study items",
-          "description": "RRM core requirements",
-          "agenda_descriptions": [
-            {
-              "agenda_item": "7.7.5",
-              "matched_agenda_item": "7.7.5",
-              "description": "RRM core requirements",
-              "hierarchy": [
-                {
-                  "agenda_item": "7",
-                  "description": "Rel-20 on-going non-spectrum related work/study items"
-                },
-                {
-                  "agenda_item": "7.7",
-                  "description": "Enhancement of NR RF and RRM requirements for uncrewed aerial vehicle (UAV)"
-                },
-                {
-                  "agenda_item": "7.7.5",
-                  "description": "RRM core requirements"
-                }
-              ]
-            }
-          ],
+          "chair": "Dorin",
+          "agenda_item": null,
+          "group_header": "",
+          "description": null,
+          "agenda_descriptions": [],
           "room_ids": [
-            "shan"
+            "gene"
           ],
           "room_scope": "assigned",
           "notes": [
-            "Coffee break: [202] NR_UAV_req_RRM"
+            "Coffee break ad-hoc: GNSS resilient RF related, chaired by Dorin (Thales)"
           ],
-          "inferred_agenda_items": [],
+          "inferred_agenda_items": [
+            "7.17.3"
+          ],
           "email_details": [],
           "part": null,
           "stream": ""
@@ -3854,10 +4096,10 @@
           "stream": ""
         },
         {
-          "name": "Rel-20 UAV",
-          "duration_minutes": 60,
+          "name": "Rel-20 UAV / [352] NR_UAV",
+          "duration_minutes": 30,
           "start_time": "17:00",
-          "end_time": "18:00",
+          "end_time": "17:30",
           "day": "Tuesday",
           "room_col_start": 2,
           "room_col_end": 3,
@@ -4014,6 +4256,140 @@
           "room_scope": "assigned",
           "notes": [
             "[111] 6G RAN4 operation efficiency"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": null,
+          "stream": ""
+        },
+        {
+          "name": "[340] NR_UE_RF_Ph5 (Originally Monday)",
+          "duration_minutes": 30,
+          "start_time": "17:30",
+          "end_time": "18:00",
+          "day": "Tuesday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "Gene FONG",
+          "agenda_item": "7.1.2, 7.1.3.2, 7.1.3.3, 7.1.3.4, 7.1.5",
+          "group_header": "Rel-20 on-going non-spectrum related work/study items",
+          "description": "General aspects and work plan\n2x26 PC1.5 for FDD bands)\n1x29 PC1.5 for TDD bands for FWA\n2x29 PC1 for TDD bands for FWA\nRelease independence",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "7.1.2",
+              "matched_agenda_item": "7.1.2",
+              "description": "General aspects and work plan",
+              "hierarchy": [
+                {
+                  "agenda_item": "7",
+                  "description": "Rel-20 on-going non-spectrum related work/study items"
+                },
+                {
+                  "agenda_item": "7.1",
+                  "description": "UE RF enhancements for NR FR1/FR2 and EN-DC, Phase 5"
+                },
+                {
+                  "agenda_item": "7.1.2",
+                  "description": "General aspects and work plan"
+                }
+              ]
+            },
+            {
+              "agenda_item": "7.1.3.2",
+              "matched_agenda_item": "7.1.3.2",
+              "description": "2x26 PC1.5 for FDD bands)",
+              "hierarchy": [
+                {
+                  "agenda_item": "7",
+                  "description": "Rel-20 on-going non-spectrum related work/study items"
+                },
+                {
+                  "agenda_item": "7.1",
+                  "description": "UE RF enhancements for NR FR1/FR2 and EN-DC, Phase 5"
+                },
+                {
+                  "agenda_item": "7.1.3",
+                  "description": "HPUE requirements"
+                },
+                {
+                  "agenda_item": "7.1.3.2",
+                  "description": "2x26 PC1.5 for FDD bands)"
+                }
+              ]
+            },
+            {
+              "agenda_item": "7.1.3.3",
+              "matched_agenda_item": "7.1.3.3",
+              "description": "1x29 PC1.5 for TDD bands for FWA",
+              "hierarchy": [
+                {
+                  "agenda_item": "7",
+                  "description": "Rel-20 on-going non-spectrum related work/study items"
+                },
+                {
+                  "agenda_item": "7.1",
+                  "description": "UE RF enhancements for NR FR1/FR2 and EN-DC, Phase 5"
+                },
+                {
+                  "agenda_item": "7.1.3",
+                  "description": "HPUE requirements"
+                },
+                {
+                  "agenda_item": "7.1.3.3",
+                  "description": "1x29 PC1.5 for TDD bands for FWA"
+                }
+              ]
+            },
+            {
+              "agenda_item": "7.1.3.4",
+              "matched_agenda_item": "7.1.3.4",
+              "description": "2x29 PC1 for TDD bands for FWA",
+              "hierarchy": [
+                {
+                  "agenda_item": "7",
+                  "description": "Rel-20 on-going non-spectrum related work/study items"
+                },
+                {
+                  "agenda_item": "7.1",
+                  "description": "UE RF enhancements for NR FR1/FR2 and EN-DC, Phase 5"
+                },
+                {
+                  "agenda_item": "7.1.3",
+                  "description": "HPUE requirements"
+                },
+                {
+                  "agenda_item": "7.1.3.4",
+                  "description": "2x29 PC1 for TDD bands for FWA"
+                }
+              ]
+            },
+            {
+              "agenda_item": "7.1.5",
+              "matched_agenda_item": "7.1.5",
+              "description": "Release independence",
+              "hierarchy": [
+                {
+                  "agenda_item": "7",
+                  "description": "Rel-20 on-going non-spectrum related work/study items"
+                },
+                {
+                  "agenda_item": "7.1",
+                  "description": "UE RF enhancements for NR FR1/FR2 and EN-DC, Phase 5"
+                },
+                {
+                  "agenda_item": "7.1.5",
+                  "description": "Release independence"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "gene"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "17:30",
+            "[340] NR_UE_RF_Ph5 (24) (Originally Monday)"
           ],
           "inferred_agenda_items": [],
           "email_details": [],
@@ -4402,7 +4778,7 @@
       ],
       "date": "2026-11-17",
       "timeline": {
-        "start": "08:30",
+        "start": "08:00",
         "end": "19:00",
         "slot_minutes": 5,
         "label_minutes": 30,
@@ -4410,7 +4786,8 @@
           {
             "name": "Coffee break",
             "start": "10:30",
-            "end": "11:00"
+            "end": "11:00",
+            "label_position": "time-axis"
           },
           {
             "name": "Lunch break",
@@ -8895,22 +9272,22 @@
       "caveats": []
     }
   ],
-  "source_file": "RAN4_121_meeting_schedule_v06.pptx",
-  "generated_at": "2026-11-16 10:42",
+  "source_file": "RAN4_121_meeting_schedule_v07_after_Monday.pptx",
+  "generated_at": "2026-11-16 19:02",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
-    "RAN4_121_meeting_schedule_v06.pptx",
+    "RAN4_121_meeting_schedule_v07_after_Monday.pptx",
     "List_Topics_moderators -RAN4_121_v3.xlsx",
     "agenda.csv"
   ],
   "source_labels": {
-    "RAN4_121_meeting_schedule_v06.pptx": "Schedule",
+    "RAN4_121_meeting_schedule_v07_after_Monday.pptx": "Schedule v07 after Monday",
     "List_Topics_moderators -RAN4_121_v3.xlsx": "Topics",
     "agenda.csv": "Agenda"
   },
   "source_urls": {
-    "RAN4_121_meeting_schedule_v06.pptx": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN4/Inbox/Meeting_Arrangements/RAN4_121_meeting_schedule_v06.pptx",
+    "RAN4_121_meeting_schedule_v07_after_Monday.pptx": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN4/Inbox/Meeting_Arrangements/RAN4_121_meeting_schedule_v07_after_Monday.pptx",
     "List_Topics_moderators -RAN4_121_v3.xlsx": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN4/Inbox/Meeting_Arrangements/List_Topics_moderators%20-RAN4_121_v3.xlsx",
     "agenda.csv": "https://www.3gpp.org/ftp/tsg_ran/WG4_Radio/TSGR4_121/Agenda/agenda.csv"
   },
