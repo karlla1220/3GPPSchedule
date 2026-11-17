@@ -3976,6 +3976,23 @@
               "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;133c0b39.2611c",
               "author": "BENDLIN, RALF M",
               "sent": "2026-11-16T21:58:02-06:00"
+            },
+            {
+              "kind": "session",
+              "session": "Tue 09:50-10:30 BMO 214-215",
+              "quote": "Draft session notes with proposals for all Tuesday sessions (TEI20, Coverage, IoT-NTN, NR-NTN) are now available here:",
+              "mode": null,
+              "summary": "Draft session notes with proposals available (TEI20, Coverage)",
+              "topics": [
+                "TEI20",
+                "Coverage"
+              ],
+              "day": "Tuesday",
+              "split": [],
+              "mail": "5533a9af.2611c",
+              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;5533a9af.2611c",
+              "author": "BENDLIN, RALF M",
+              "sent": "2026-11-17T08:36:32-06:00"
             }
           ],
           "part": null,
@@ -4552,6 +4569,23 @@
               "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;133c0b39.2611c",
               "author": "BENDLIN, RALF M",
               "sent": "2026-11-16T21:58:02-06:00"
+            },
+            {
+              "kind": "session",
+              "session": "Tue 11:00-11:40 BMO 225-226",
+              "quote": "Draft session notes with proposals for all Tuesday sessions (TEI20, Coverage, IoT-NTN, NR-NTN) are now available here:",
+              "mode": null,
+              "summary": "Draft session notes with proposals available (IoT-NTN, NR-NTN)",
+              "topics": [
+                "IoT-NTN",
+                "NR-NTN"
+              ],
+              "day": "Tuesday",
+              "split": [],
+              "mail": "5533a9af.2611c",
+              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;5533a9af.2611c",
+              "author": "BENDLIN, RALF M",
+              "sent": "2026-11-17T08:36:32-06:00"
             }
           ],
           "part": null,
@@ -13744,7 +13778,7 @@
     }
   ],
   "source_file": "RAN1#127 online and offline schedules - v01.docx",
-  "generated_at": "2026-11-17 08:21",
+  "generated_at": "2026-11-17 08:41",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
