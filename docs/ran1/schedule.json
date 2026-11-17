@@ -3959,7 +3959,25 @@
           "inferred_agenda_items": [
             "9.6"
           ],
-          "email_details": [],
+          "email_details": [
+            {
+              "kind": "session",
+              "session": "Tue 09:50-10:30 BMO 214-215",
+              "quote": "Tuesday before coffee\n6G Initial Access\n6G FEC\nR20 AI/ML\nR20 MIMO\n6G MIMO\nTEI20\nCoverage",
+              "mode": null,
+              "summary": "Tuesday before coffee: TEI20, Coverage",
+              "topics": [
+                "TEI20",
+                "Coverage"
+              ],
+              "day": "Tuesday",
+              "split": [],
+              "mail": "133c0b39.2611c",
+              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;133c0b39.2611c",
+              "author": "BENDLIN, RALF M",
+              "sent": "2026-11-16T21:58:02-06:00"
+            }
+          ],
           "part": null,
           "stream": ""
         },
@@ -4404,7 +4422,25 @@
           "inferred_agenda_items": [
             "9.6"
           ],
-          "email_details": [],
+          "email_details": [
+            {
+              "kind": "session",
+              "session": "Tue 11:00-11:40 BMO 225-226",
+              "quote": "Tuesday after coffee\n6G MC\n6G ISAC\n6G MIMO\n6G MIMO\nIoT-NTN\nNR-NTN",
+              "mode": null,
+              "summary": "Tuesday after coffee: IoT-NTN, NR-NTN",
+              "topics": [
+                "IoT-NTN",
+                "NR-NTN"
+              ],
+              "day": "Tuesday",
+              "split": [],
+              "mail": "133c0b39.2611c",
+              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;133c0b39.2611c",
+              "author": "BENDLIN, RALF M",
+              "sent": "2026-11-16T21:58:02-06:00"
+            }
+          ],
           "part": null,
           "stream": ""
         },
@@ -7431,7 +7467,24 @@
           "inferred_agenda_items": [
             "9.6"
           ],
-          "email_details": [],
+          "email_details": [
+            {
+              "kind": "session",
+              "session": "Wed 09:50-10:30 BMO 214-215",
+              "quote": "Wednesday before coffee\n6G Initial Access\n6G MC\nNTN-NR\nR20 AI/ML\n6G ISAC\nMIMO",
+              "mode": null,
+              "summary": "Wednesday before coffee: MIMO",
+              "topics": [
+                "MIMO"
+              ],
+              "day": "Wednesday",
+              "split": [],
+              "mail": "133c0b39.2611c",
+              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;133c0b39.2611c",
+              "author": "BENDLIN, RALF M",
+              "sent": "2026-11-16T21:58:02-06:00"
+            }
+          ],
           "part": null,
           "stream": ""
         },
@@ -7834,7 +7887,25 @@
           "inferred_agenda_items": [
             "9.6"
           ],
-          "email_details": [],
+          "email_details": [
+            {
+              "kind": "session",
+              "session": "Wed 11:00-11:40 BMO 225-226",
+              "quote": "Wednesday after coffee\n6G MC\n6G ISAC\n6G MIMO\nA-IoT\nAI/ML",
+              "mode": null,
+              "summary": "Wednesday after coffee: A-IoT, AI/ML",
+              "topics": [
+                "A-IoT",
+                "AI/ML"
+              ],
+              "day": "Wednesday",
+              "split": [],
+              "mail": "133c0b39.2611c",
+              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;133c0b39.2611c",
+              "author": "BENDLIN, RALF M",
+              "sent": "2026-11-16T21:58:02-06:00"
+            }
+          ],
           "part": null,
           "stream": ""
         },
@@ -13415,7 +13486,7 @@
     }
   ],
   "source_file": "RAN1#127 online and offline schedules - v01.docx",
-  "generated_at": "2026-11-16 19:41",
+  "generated_at": "2026-11-16 22:01",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
@@ -16808,39 +16879,7 @@
         "changed_in": "Chair notes RAN1#127_v01.docx"
       }
     },
-    "retained_files": [
-      "agreements/1110c713f198cbf20010.html",
-      "agreements/17f9fafceeac6ddf0464.html",
-      "agreements/2276706e3b531724621b.html",
-      "agreements/2a2f45852d845eb1e5bd.html",
-      "agreements/2c594a5b386d9f8871e9.html",
-      "agreements/32077bc1fe99152a2f1b.html",
-      "agreements/3c9510917ee4f967dc73.html",
-      "agreements/40c777842d7ceeb1ae55.html",
-      "agreements/5e8474f522b10380605e.html",
-      "agreements/63bcf6ca45d2983d3d1c.html",
-      "agreements/6f73969650b7d0a82a69.html",
-      "agreements/701f5528584b206bdc4b.html",
-      "agreements/7a7d6018adfd517b2fb8.html",
-      "agreements/806d244291bc16e0b083.html",
-      "agreements/82d13899291900ce82e5.html",
-      "agreements/84aec18ab805450913d9.html",
-      "agreements/87f766e94e7552fdc2a3.html",
-      "agreements/88b3f83458abf7d64682.html",
-      "agreements/91997d711503b8bd9fbd.html",
-      "agreements/9217e7122f813a9181af.html",
-      "agreements/9242f83ce226110906f7.html",
-      "agreements/95ae78aba48a5e7953a6.html",
-      "agreements/96083d5a95cc2bc73493.html",
-      "agreements/9ccb1c45d33538e2e579.html",
-      "agreements/a00b5cb0496b4cbd93aa.html",
-      "agreements/a34d31b5ca1a51d1e5a0.html",
-      "agreements/a37a04f2cdd370497d63.html",
-      "agreements/aaada52c8fdbbf2bea1a.html",
-      "agreements/b919e3d0b1d85deb3bc1.html",
-      "agreements/ee26947a6b18d3c04043.html",
-      "agreements/ef522f5df0df6b72d29d.html"
-    ]
+    "retained_files": []
   },
   "email_informal": {
     "10.6.3": [
