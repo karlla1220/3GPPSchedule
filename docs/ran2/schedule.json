@@ -1172,7 +1172,7 @@
           "stream": ""
         },
         {
-          "name": "Offlines for AI mobility / NR20 AI mobility",
+          "name": "Offlines for AI mobility NR20 AI mobility",
           "duration_minutes": 90,
           "start_time": "11:00",
           "end_time": "12:30",
@@ -1205,8 +1205,7 @@
           ],
           "room_scope": "assigned",
           "notes": [
-            "Offlines for AI mobility",
-            "[8.3] NR20 AI mobility [1] (Kyeongin)",
+            "Offlines for AI mobility [8.3] NR20 AI mobility [1] (Kyeongin)",
             "[8.3.2] LCM procedure (continue)",
             "[8.3.3] Data collection"
           ],
@@ -1644,6 +1643,34 @@
           "stream": ""
         },
         {
+          "name": "A-IoT offline",
+          "duration_minutes": 120,
+          "start_time": "17:00",
+          "end_time": "19:00",
+          "day": "Tuesday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": null,
+          "group_header": "Offline",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [
+            "brk2"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "@1630-1700 [401] A-IoT offline (vivo)"
+          ],
+          "inferred_agenda_items": [
+            "7.2",
+            "8.2"
+          ],
+          "email_details": [],
+          "part": null,
+          "stream": ""
+        },
+        {
           "name": "Spectrum aggregation",
           "duration_minutes": 120,
           "start_time": "17:00",
@@ -1747,6 +1774,15 @@
           "table_index": 0,
           "room_index_in_table": 0,
           "id": "brk2",
+          "kind": "",
+          "detail": "",
+          "stream": ""
+        },
+        {
+          "name": "Breakout 3",
+          "table_index": 0,
+          "room_index_in_table": 0,
+          "id": "brk3",
           "kind": "",
           "detail": "",
           "stream": ""
@@ -1953,7 +1989,7 @@
           "stream": ""
         },
         {
-          "name": "RRC modeling",
+          "name": "RRC modeling (Samsung)",
           "duration_minutes": 60,
           "start_time": "10:00",
           "end_time": "11:00",
@@ -1962,7 +1998,7 @@
           "room_col_end": 3,
           "chair": null,
           "agenda_item": null,
-          "group_header": "",
+          "group_header": "Offline",
           "description": null,
           "agenda_descriptions": [],
           "room_ids": [
@@ -1970,7 +2006,7 @@
           ],
           "room_scope": "assigned",
           "notes": [
-            "RRC modeling"
+            "[AT136][004] RRC modeling (Samsung)"
           ],
           "inferred_agenda_items": [
             "9.3.2.1"
@@ -2141,32 +2177,6 @@
           "stream": ""
         },
         {
-          "name": "Discuss potential SA3 questions",
-          "duration_minutes": 90,
-          "start_time": "13:30",
-          "end_time": "15:00",
-          "day": "Wednesday",
-          "room_col_start": 2,
-          "room_col_end": 3,
-          "chair": null,
-          "agenda_item": null,
-          "group_header": "",
-          "description": null,
-          "agenda_descriptions": [],
-          "room_ids": [
-            "main"
-          ],
-          "room_scope": "assigned",
-          "notes": [
-            "Potential SA3 joint session (TBD) – to be confirmed Monday afternoon.",
-            "Discuss potential SA3 questions"
-          ],
-          "inferred_agenda_items": [],
-          "email_details": [],
-          "part": null,
-          "stream": ""
-        },
-        {
           "name": "NR20 AIoT",
           "duration_minutes": 120,
           "start_time": "14:30",
@@ -2203,7 +2213,7 @@
             "[8.2] NR20 AIoT [2] (Nathan)",
             "[8.2.3] Device type C (cont.)",
             "[8.2.4] T2",
-            "[8.2.5] Device (un)availability (start with email summary)["
+            "[8.2.5] Device (un)availability (start with email summary)"
           ],
           "inferred_agenda_items": [],
           "email_details": [],
@@ -2256,8 +2266,8 @@
         },
         {
           "name": "6GR User Plane / Common UP/CP",
-          "duration_minutes": 90,
-          "start_time": "15:00",
+          "duration_minutes": 120,
+          "start_time": "14:30",
           "end_time": "16:30",
           "day": "Wednesday",
           "room_col_start": 2,
@@ -2359,6 +2369,33 @@
             "Overflow"
           ],
           "inferred_agenda_items": [],
+          "email_details": [],
+          "part": null,
+          "stream": ""
+        },
+        {
+          "name": "1630-1730 [AI-MOB] (Ericsson)",
+          "duration_minutes": 120,
+          "start_time": "17:00",
+          "end_time": "19:00",
+          "day": "Wednesday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": null,
+          "group_header": "Offline",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [
+            "brk3"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "1630-1730 [AT136][102][AI-MOB] (Ericsson)"
+          ],
+          "inferred_agenda_items": [
+            "8.3"
+          ],
           "email_details": [],
           "part": null,
           "stream": ""
@@ -3510,20 +3547,20 @@
       "caveats": []
     }
   ],
-  "source_file": "R2_136_Schedule_v03.docx",
-  "generated_at": "2026-11-16 13:02",
+  "source_file": "R2_136_Schedule_v04.docx",
+  "generated_at": "2026-11-16 21:21",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
-    "R2_136_Schedule_v03.docx",
+    "R2_136_Schedule_v04.docx",
     "agenda.csv"
   ],
   "source_labels": {
-    "R2_136_Schedule_v03.docx": "Schedule",
+    "R2_136_Schedule_v04.docx": "Schedule",
     "agenda.csv": "Agenda"
   },
   "source_urls": {
-    "R2_136_Schedule_v03.docx": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN2/Agenda/R2_136_Schedule_v03.docx"
+    "R2_136_Schedule_v04.docx": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN2/Agenda/R2_136_Schedule_v04.docx"
   },
   "source_mails": {},
   "timezone": "America/Edmonton",
@@ -3603,6 +3640,34 @@
           "Day/Time",
           "Place",
           "Coordinator"
+        ],
+        [
+          "[004]",
+          "6G RRC Modelling",
+          "Mon 10:00-11:00",
+          "BO1",
+          "Sangyeob (Samsung)"
+        ],
+        [
+          "[POST135bis][015] 6G CP (RRC Structure)",
+          "Tues 10:30-12:00",
+          "BO1",
+          "David (Huawei)",
+          ""
+        ],
+        [
+          "[401]",
+          "A-IoT",
+          "Tues 16:00-17:00",
+          "BO2",
+          "(vivo)"
+        ],
+        [
+          "[102]",
+          "AI-MOB",
+          "Wed 16:30-17:30",
+          "BO3",
+          "Cecilia (Ericsson)"
         ]
       ]
     },
