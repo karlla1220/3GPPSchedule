@@ -4082,6 +4082,24 @@
               "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;50ebd987.2611c",
               "author": "Naoya Shibaike",
               "sent": "2026-11-16T18:19:39-06:00"
+            },
+            {
+              "kind": "session",
+              "session": "Tue 08:35-09:20 BMO 212",
+              "quote": "Today’s offline will start with section 2.2, followed by 2.3 and 2.4.",
+              "mode": "offline",
+              "summary": "Offline will start with section 2.2, followed by 2.3 and 2.4",
+              "topics": [
+                "section 2.2",
+                "2.3",
+                "2.4"
+              ],
+              "day": "Tuesday",
+              "split": [],
+              "mail": "f5813984.2611c",
+              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;f5813984.2611c",
+              "author": "Naoya Shibaike",
+              "sent": "2026-11-17T05:54:56-06:00"
             }
           ],
           "part": null,
@@ -13674,7 +13692,7 @@
     }
   ],
   "source_file": "RAN1#127 online and offline schedules - v01.docx",
-  "generated_at": "2026-11-17 05:21",
+  "generated_at": "2026-11-17 06:01",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
