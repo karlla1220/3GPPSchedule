@@ -32,9 +32,9 @@
     }
   ],
   "agreements_ref": {
-    "name": "Chair notes RAN1#127_v03.docx",
-    "url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Chair_notes/Chair%20notes%20RAN1%23127_v03.docx",
-    "sha256": "39be3ecb7ebfa56f13a377fe0c024b6abaa6c2316282b450379b138695570089",
+    "name": "Chair notes RAN1#127_v04.docx",
+    "url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Chair_notes/Chair%20notes%20RAN1%23127_v04.docx",
+    "sha256": "d5a0037ecdb2c3e8a4c11be6877c85350f495dfb4df64876e930687d7be7f20b",
     "session_notes": [
       {
         "name": "draft_R1-2609118_Session Notes of AI 10.8_v03.docx",
@@ -67,9 +67,9 @@
         "uploaded_at": "2026-11-17T17:00:00"
       },
       {
-        "name": "draft_R1-2609124_Session Notes of AI 10.2.1_v01.docx",
-        "url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Hiroki_notes/draft_R1-2609124_Session%20Notes%20of%20AI%2010.2.1_v01.docx",
-        "uploaded_at": "2026-11-16T22:44:00"
+        "name": "draft_R1-2609124_Session Notes of AI 10.2.1_v02.docx",
+        "url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Hiroki_notes/draft_R1-2609124_Session%20Notes%20of%20AI%2010.2.1_v02.docx",
+        "uploaded_at": "2026-11-17T22:34:00"
       },
       {
         "name": "Draft R1-2609126 Session Notes of AI 9.5 - v02.docx",
@@ -154,6 +154,6 @@
   "local_refs": {},
   "email": {
     "list": "3GPP_TSG_RAN_WG1",
-    "checked_through": "2026-11-17T22:12:11+00:00"
+    "checked_through": "2026-11-17T22:34:59+00:00"
   }
 }
