@@ -5321,10 +5321,49 @@
           "stream": ""
         },
         {
+          "name": "AI 9.2 MIMO",
+          "duration_minutes": 40,
+          "start_time": "14:30",
+          "end_time": "15:10",
+          "day": "Tuesday",
+          "room_col_start": 3,
+          "room_col_end": 4,
+          "chair": "Sorour",
+          "agenda_item": "9.2",
+          "group_header": "R20",
+          "description": "NR MIMO Phase 6",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "9.2",
+              "matched_agenda_item": "9.2",
+              "description": "NR MIMO Phase 6",
+              "hierarchy": [
+                {
+                  "agenda_item": "9",
+                  "description": "Release 20 NR",
+                  "has_description": true
+                },
+                {
+                  "agenda_item": "9.2",
+                  "description": "NR MIMO Phase 6",
+                  "has_description": true
+                }
+              ]
+            }
+          ],
+          "room_ids": [],
+          "room_scope": "assigned",
+          "notes": [],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": null,
+          "stream": ""
+        },
+        {
           "name": "AI 10.3.2 Modulation",
           "duration_minutes": 30,
-          "start_time": "14:30",
-          "end_time": "15:00",
+          "start_time": "15:10",
+          "end_time": "15:40",
           "day": "Tuesday",
           "room_col_start": 3,
           "room_col_end": 4,
@@ -5363,7 +5402,7 @@
           "email_details": [
             {
               "kind": "session",
-              "session": "Tue 14:30-15:00 BMO 225-226",
+              "session": "Tue 15:10-15:40 BMO 225-226",
               "quote": "followed by online",
               "mode": "online",
               "summary": "Online session following the offline",
@@ -5374,51 +5413,10 @@
               "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;38ed44a2.2611b",
               "author": "Jing Sun",
               "sent": "2026-11-13T21:57:24-06:00"
-            }
-          ],
-          "part": null,
-          "stream": ""
-        },
-        {
-          "name": "AI 9.2 MIMO",
-          "duration_minutes": 40,
-          "start_time": "15:00",
-          "end_time": "15:40",
-          "day": "Tuesday",
-          "room_col_start": 3,
-          "room_col_end": 4,
-          "chair": "Sorour",
-          "agenda_item": "9.2",
-          "group_header": "R20",
-          "description": "NR MIMO Phase 6",
-          "agenda_descriptions": [
+            },
             {
-              "agenda_item": "9.2",
-              "matched_agenda_item": "9.2",
-              "description": "NR MIMO Phase 6",
-              "hierarchy": [
-                {
-                  "agenda_item": "9",
-                  "description": "Release 20 NR",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "9.2",
-                  "description": "NR MIMO Phase 6",
-                  "has_description": true
-                }
-              ]
-            }
-          ],
-          "room_ids": [],
-          "room_scope": "assigned",
-          "notes": [],
-          "inferred_agenda_items": [],
-          "email_details": [
-            {
-              "kind": "tentative",
-              "session": "Tue 15:00-15:40 BMO 225-226",
-              "agenda_item": "10.3.2",
+              "kind": "session",
+              "session": "Tue 15:10-15:40 BMO 225-226",
               "quote": "For the online session this afternoon, in v01 of schedule, there is a conflict between our online and offline session, both starting at 2:30pm. I asked the Chair to swap our online session with R20 MIMO session so our online will start at 3:10pm.",
               "mode": "online",
               "summary": "Online session swapped to start at 3:10pm",
@@ -7112,9 +7110,7 @@
           }
         ]
       },
-      "caveats": [
-        "AI 10.3.2 is in two rooms at the same time: 14:30–15:00 in BMO 225-226 and 14:30–15:00 in BMO 221. The schedule documents show it this way too, so this page keeps it as written. Check with the session chair before you go. Another schedule document or the next update will probably resolve it."
-      ]
+      "caveats": []
     },
     {
       "day_name": "Wednesday",
@@ -13793,27 +13789,28 @@
       "caveats": []
     }
   ],
-  "source_file": "RAN1#127 online and offline schedules - v01.docx",
-  "generated_at": "2026-11-17 10:41",
+  "source_file": "RAN1#127 online and offline schedules - v02.docx",
+  "generated_at": "2026-11-17 11:02",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
-    "RAN1#127 online and offline schedules - v01.docx",
+    "RAN1#127 online and offline schedules - v02.docx",
     "RAN1#127 online and offline schedules - v01_hh2.docx",
     "RAN1#127 online and offline schedules - UE Features.docx",
-    "RAN1#127 Sorour sessions online and offline schedules - v01.docx"
+    "RAN1#127 Sorour sessions online and offline schedules - v02.docx"
   ],
   "source_labels": {
-    "RAN1#127 online and offline schedules - v01.docx": "Main",
+    "RAN1#127 online and offline schedules - v02.docx": "Main",
     "RAN1#127 online and offline schedules - v01_hh2.docx": "Hiroki",
     "RAN1#127 online and offline schedules - UE Features.docx": "Ralf",
-    "RAN1#127 Sorour sessions online and offline schedules - v01.docx": "Sorour"
+    "RAN1#127 Sorour sessions online and offline schedules - v02.docx": "Sorour"
   },
   "source_urls": {
-    "RAN1#127 online and offline schedules - v01.docx": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/R1-2610231/RAN1%23127%20online%20and%20offline%20schedules%20-%20v01.docx",
+    "RAN1#127 online and offline schedules - v02.docx": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Chair_notes/RAN1%23127%20online%20and%20offline%20schedules%20-%20v02.docx",
     "RAN1#127 online and offline schedules - v01_hh2.docx": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Hiroki_notes/RAN1%23127%20online%20and%20offline%20schedules%20-%20v01_hh2.docx",
     "RAN1#127 online and offline schedules - UE Features.docx": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Ralf_notes/RAN1%23127%20online%20and%20offline%20schedules%20-%20UE%20Features.docx",
-    "RAN1#127 Sorour sessions online and offline schedules - v01.docx": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Sorour_notes/RAN1%23127%20Sorour%20sessions%20online%20and%20offline%20schedules%20-%20v01.docx",
+    "RAN1#127 Sorour sessions online and offline schedules - v02.docx": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Sorour_notes/RAN1%23127%20Sorour%20sessions%20online%20and%20offline%20schedules%20-%20v02.docx",
+    "RAN1#127 online and offline schedules - v01.docx": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/R1-2610231/RAN1%23127%20online%20and%20offline%20schedules%20-%20v01.docx",
     "Draft RAN1#127 online and offline schedules - v02.docx": "https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_127/Inbox/Chair_notes/Draft%20RAN1%23127%20online%20and%20offline%20schedules%20-%20v02.docx"
   },
   "source_mails": {},
@@ -14255,11 +14252,11 @@
         "source_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Hiroki_notes/draft_R1-2609118_Session%20Notes%20of%20AI%2010.8_v02.docx"
       },
       "R1-2609119": {
-        "name": "Draft R1-2609119 Session Notes of AI 10.7 - v01.docx",
+        "name": "Draft R1-2609119 Session Notes of AI 10.7 - v02.docx",
         "agenda_item": "10.7",
-        "changed_at": "2026-11-16T21:47:47+00:00",
-        "sha256": "b09709247df59f1e7047a30c6258586b04df0f9b6936c50069c55a60ef9d4ffd",
-        "source_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Sorour_notes/Draft%20R1-2609119%20Session%20Notes%20of%20AI%2010.7%20-%20v01.docx"
+        "changed_at": "2026-11-17T16:59:15+00:00",
+        "sha256": "5a77823831ab5ee31cbd4124b8be770479ef5c9895216a3a5e44a502d4eeca7d",
+        "source_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Sorour_notes/Draft%20R1-2609119%20Session%20Notes%20of%20AI%2010.7%20-%20v02.docx"
       },
       "R1-2609120": {
         "name": "draft_R1-2609120_Session Notes of AI 10.5.4_v01.docx",
@@ -14283,11 +14280,11 @@
         "source_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Sorour_notes/Draft%20R1-2609122%20Session%20Notes%20of%20AI%2010.3.2%20-%20v00.docx"
       },
       "R1-2609123": {
-        "name": "Draft R1-2609123 Session Notes of AI 10.3.1 - v01.docx",
+        "name": "Draft R1-2609123 Session Notes of AI 10.3.1 - v02.docx",
         "agenda_item": "10.3.1",
-        "changed_at": "2026-11-16T22:55:46+00:00",
-        "sha256": "60b3d5704f09ca564732ea2e672f9abfb694a12120d6e8dc7fd681d474e4ca14",
-        "source_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Sorour_notes/Draft%20R1-2609123%20Session%20Notes%20of%20AI%2010.3.1%20-%20v01.docx"
+        "changed_at": "2026-11-17T17:00:33+00:00",
+        "sha256": "64a24c651e8b154149520cb8f5b909b4ee60c5164bafe63b6fce6400228f4d64",
+        "source_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Sorour_notes/Draft%20R1-2609123%20Session%20Notes%20of%20AI%2010.3.1%20-%20v02.docx"
       },
       "R1-2609124": {
         "name": "draft_R1-2609124_Session Notes of AI 10.2.1_v01.docx",
@@ -14297,18 +14294,18 @@
         "source_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Hiroki_notes/draft_R1-2609124_Session%20Notes%20of%20AI%2010.2.1_v01.docx"
       },
       "R1-2609126": {
-        "name": "Draft R1-2609126 Session Notes of AI 9.5 - v01.docx",
+        "name": "Draft R1-2609126 Session Notes of AI 9.5 - v02.docx",
         "agenda_item": "9.5",
-        "changed_at": "2026-11-16T21:48:01+00:00",
-        "sha256": "b6cbbffcbef2427bd50829c618e7acaf7a2e43eec44eaaea9123c84afa6cf1c4",
-        "source_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Sorour_notes/Draft%20R1-2609126%20Session%20Notes%20of%20AI%209.5%20-%20v01.docx"
+        "changed_at": "2026-11-17T16:59:37+00:00",
+        "sha256": "1360056f0584c220f5d6e9f551d83ec1439f2227461caf9e18ff79789b0878d9",
+        "source_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Sorour_notes/Draft%20R1-2609126%20Session%20Notes%20of%20AI%209.5%20-%20v02.docx"
       },
       "R1-2609127": {
-        "name": "Draft R1-2609127 Session Notes of AI 9.4 - v01.docx",
+        "name": "Draft R1-2609127 Session Notes of AI 9.4 - v02.docx",
         "agenda_item": "9.4",
-        "changed_at": "2026-11-16T21:47:58+00:00",
-        "sha256": "136d8c0fc86c649b065b1b5d6c4f611353ce0ade11d7bef24ffce70f9acaa4f6",
-        "source_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Sorour_notes/Draft%20R1-2609127%20Session%20Notes%20of%20AI%209.4%20-%20v01.docx"
+        "changed_at": "2026-11-17T16:59:45+00:00",
+        "sha256": "394de1c5127e4b9b2c5af07ee52a0d65d6396864f73e6cd6244fc1c2f367e396",
+        "source_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Sorour_notes/Draft%20R1-2609127%20Session%20Notes%20of%20AI%209.4%20-%20v02.docx"
       },
       "R1-2609128": {
         "name": "draft_R1-2609128_Session Notes of AI 9.3_v00.docx",
@@ -14995,7 +14992,6 @@
         "title": "NR-NTN GNSS resilience",
         "excluded_tdoc_rows": 47,
         "blocks": [
-          "2fa9e87267b9",
           "63dc744f8bb3",
           "44b726fe02d3",
           "c2543115058f",
@@ -15010,33 +15006,43 @@
           "668544acaa68",
           "24330031bdd1",
           "668544acaa68",
-          "42f82f022d82"
+          "42f82f022d82",
+          "2fa9e87267b9",
+          "668544acaa68",
+          "3d1ed43c4e30",
+          "16ccfe402dd8",
+          "0e18cd4cbeff",
+          "668544acaa68",
+          "973ea3c303bd",
+          "c4b7a6ddabcd",
+          "668544acaa68",
+          "16b2638cdc34",
+          "4261c9c2053e",
+          "aa64f1011e7c",
+          "7bb1e0e3d92c"
         ],
         "sources": {
-          "R1-2609127": "6ff58c114df5"
+          "R1-2609127": "7e4360b14ad4"
         },
         "change": "updated",
         "added": [
-          0,
-          1,
-          2,
-          3,
-          4,
-          5,
-          6,
-          7,
-          8,
-          9,
-          10,
-          11,
-          12,
-          13,
-          14,
-          15
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27
         ],
-        "changed_at": "2026-11-16T21:47:58+00:00",
-        "changed_in": "Draft R1-2609127 Session Notes of AI 9.4 - v01.docx",
-        "file": "agreements/7be0678a29127e95d49c.html"
+        "changed_at": "2026-11-17T16:59:45+00:00",
+        "changed_in": "Draft R1-2609127 Session Notes of AI 9.4 - v02.docx",
+        "file": "agreements/bb5ba831cad341019e2b.html"
       },
       "9.5": {
         "title": "NR NTN in systems using downlink compensation",
@@ -15062,29 +15068,96 @@
         "excluded_tdoc_rows": 42,
         "blocks": [
           "09d55af1ba0a",
-          "5fb4d26b6c0e",
           "146e8752c505",
           "cfb5cb7370fd",
           "449fc82d5de2",
           "7dd310ba52a2",
-          "fc5cc0d00fc8"
+          "fc5cc0d00fc8",
+          "5fb4d26b6c0e",
+          "d18c870dbfd8",
+          "479867cd2b55",
+          "a8d463291385",
+          "398615cfd1d9",
+          "06b0abcb2f43",
+          "398615cfd1d9",
+          "c477e81a8423",
+          "5e058cafb6e1",
+          "398615cfd1d9",
+          "a7b53cb7a30f",
+          "398615cfd1d9",
+          "0eb73e54a62c",
+          "bc5a687e62d8",
+          "a53a2b514315",
+          "43c1b691a9b3",
+          "8eb03bfed283",
+          "77bf1f6e2f7d",
+          "60d3fb7b31a4",
+          "2de850e3c090",
+          "6c4f675b1367",
+          "fe60537d186b",
+          "9fa27df00eaf",
+          "3faec0f6ecb3",
+          "b3611248c3dc",
+          "c37f647e9689",
+          "bd4083af39cd",
+          "2b94e0bb1c45",
+          "de11c505f1c6",
+          "814061a542b3",
+          "5b240c9d47d9",
+          "9bf21e5042f2",
+          "abfb6adc1e15",
+          "af5d9db3830e",
+          "e27407f2e689",
+          "f4f1d03dd2da",
+          "49fc717d95f7"
         ],
         "sources": {
           "chair": "a3f53176f2ff",
-          "R1-2609126": "34dcd5dd3705"
+          "R1-2609126": "77c8bc45acb1"
         },
         "change": "updated",
         "added": [
-          1,
-          2,
-          3,
-          4,
-          5,
-          6
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42
         ],
-        "changed_at": "2026-11-16T21:48:01+00:00",
-        "changed_in": "Draft R1-2609126 Session Notes of AI 9.5 - v01.docx",
-        "file": "agreements/706cf22f8c9eccdd4dd6.html"
+        "changed_at": "2026-11-17T16:59:37+00:00",
+        "changed_in": "Draft R1-2609126 Session Notes of AI 9.5 - v02.docx",
+        "file": "agreements/762767f869265d38ebb2.html"
       },
       "9.6": {
         "title": "Rel-20 UE features",
@@ -15196,7 +15269,6 @@
           "21a6bb0e7b95",
           "334907737e61",
           "8f5da92c039a",
-          "2da3377c624c",
           "10cf9b42c67c",
           "b46a815ecb33",
           "d350b17c65c9",
@@ -15209,32 +15281,38 @@
           "0a4f5536a3d0",
           "3c5d42b3ee0d",
           "45ee5fcc526f",
-          "cb5c4b06fb9f"
+          "cb5c4b06fb9f",
+          "2da3377c624c",
+          "d18c870dbfd8",
+          "f96b14c08080",
+          "0da1d447fef8",
+          "4813c6de6c2d",
+          "8ef489d0e903",
+          "f7afb4ff6dc9",
+          "a295a77b924d",
+          "9da5fa0767c1",
+          "d861eff6220f"
         ],
         "sources": {
           "chair": "bd5238a24b2c",
-          "R1-2609123": "391f1518bce5"
+          "R1-2609123": "f464becf4d73"
         },
         "change": "updated",
         "added": [
-          3,
-          4,
-          5,
-          6,
-          7,
-          8,
-          9,
-          10,
-          11,
-          12,
-          13,
-          14,
-          15,
-          16
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25
         ],
-        "changed_at": "2026-11-16T22:55:46+00:00",
-        "changed_in": "Draft R1-2609123 Session Notes of AI 10.3.1 - v01.docx",
-        "file": "agreements/f55630d283d53a567032.html"
+        "changed_at": "2026-11-17T17:00:33+00:00",
+        "changed_in": "Draft R1-2609123 Session Notes of AI 10.3.1 - v02.docx",
+        "file": "agreements/94f160875d42a4f5b3be.html"
       },
       "10.3.2": {
         "title": "Modulation",
@@ -16053,13 +16131,12 @@
         "title": "NTN specific requirements and design",
         "excluded_tdoc_rows": 45,
         "sources": {
-          "R1-2609119": "0857555a26f0"
+          "R1-2609119": "d138cfd5ab3e"
         },
         "blocks": [
           "2f1cd2531320",
           "16fcd132cd60",
           "334907737e61",
-          "c161a32b8b8b",
           "244443e83dbe",
           "025c9623302c",
           "acd66122051f",
@@ -16074,30 +16151,46 @@
           "fdedd4e42531",
           "ab66de56c14e",
           "7cc3a130d55d",
-          "ddbcd3de2e5f"
+          "ddbcd3de2e5f",
+          "c161a32b8b8b",
+          "d18c870dbfd8",
+          "999e72a46f7d",
+          "252e4183fa6e",
+          "d10cf444c427",
+          "793e96bfbd60",
+          "168417e25ab7",
+          "e78d2967c12b",
+          "fbf1678637b6",
+          "7d3e59341c40",
+          "668544acaa68",
+          "50010692f388",
+          "ab5b0d202c3c",
+          "95961f9e20b5",
+          "5d84e998dd9f",
+          "520e1b7e91d8"
         ],
         "change": "updated",
         "added": [
-          3,
-          4,
-          5,
-          6,
-          7,
-          8,
-          9,
-          10,
-          11,
-          12,
-          13,
-          14,
-          15,
-          16,
-          17,
-          18
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          32,
+          33
         ],
-        "changed_at": "2026-11-16T21:47:47+00:00",
-        "changed_in": "Draft R1-2609119 Session Notes of AI 10.7 - v01.docx",
-        "file": "agreements/07b4917dfa0562be2d1f.html"
+        "changed_at": "2026-11-17T16:59:15+00:00",
+        "changed_in": "Draft R1-2609119 Session Notes of AI 10.7 - v02.docx",
+        "file": "agreements/675364238f1ad5dbd59c.html"
       },
       "10.8": {
         "title": "ISAC",
@@ -17293,7 +17386,12 @@
         "changed_in": "Chair notes RAN1#127_v01.docx"
       }
     },
-    "retained_files": []
+    "retained_files": [
+      "agreements/07b4917dfa0562be2d1f.html",
+      "agreements/706cf22f8c9eccdd4dd6.html",
+      "agreements/7be0678a29127e95d49c.html",
+      "agreements/f55630d283d53a567032.html"
+    ]
   },
   "email_informal": {
     "10.6.3": [
@@ -17370,6 +17468,28 @@
         "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;dc64358c.2611c",
         "author": "Sven Jacobsson",
         "sent": "2026-11-16T22:05:23-06:00",
+        "date": "2026-11-17"
+      },
+      {
+        "kind": "informal",
+        "quote": "For the offline session today, the plan is to discuss the following\nproposals. Thank you.\nProposal 5-1\n-\nSupport PT-RS for FR1 including around 7GHz\n   -\nConsider at least the following to determine the pres",
+        "mode": "offline",
+        "summary": "Discuss Proposal 5-1, (Updated) Proposal 5.4-1b, and (Updated) Proposal 5.4-2",
+        "topics": [
+          "Proposal 5-1",
+          "(Updated) Proposal 5.4-1b",
+          "(Updated) Proposal 5.4-2"
+        ],
+        "start": "11:00",
+        "end": "11:40",
+        "day": "Tuesday",
+        "tdocs": [
+          "R1-2606984"
+        ],
+        "mail": "b6f85d5a.2611c",
+        "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;b6f85d5a.2611c",
+        "author": "Yushu Zhang",
+        "sent": "2026-11-17T10:59:57-06:00",
         "date": "2026-11-17"
       }
     ],
