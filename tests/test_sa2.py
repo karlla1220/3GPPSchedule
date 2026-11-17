@@ -268,11 +268,12 @@ def test_the_two_cells_of_a_quarter_are_pieces_and_the_same_text_twice_is_one():
     assert [(s['name'], s['part']) for s in find(found, 'Tuesday', '09:00', 'stream3')] == [('KI#17 (IWK)', [2, 2])]
 
 
-def test_q0_is_one_session_with_the_left_cell_first():
+def test_q0_halves_are_two_25_minute_pieces():
+    # 50 minutes: two cells of 25 like the plan, though too short for the AI line.
     found = read(R20, agenda())
     q0 = find(found, 'Thursday', '08:00', 'stream1')
-    assert [(s['name'], s['end'], s['part']) for s in q0] == [('KI#1.1 (NAS) / KI#1.2', '08:50', None)]
-    assert q0[0]['lines'] == ['KI#1.1 (NAS) (20.6.1) [9]', 'KI#1.2 (20.6.1) [8]']
+    assert [(s['name'], s['end'], s['part']) for s in q0] == [('KI#1.1 (NAS)', '08:50', [1, 2]),
+                                                               ('KI#1.2', '08:50', [2, 2])]
 
 
 def test_topics_join_three_at_most_and_number_lines_add_to_the_topic_above():

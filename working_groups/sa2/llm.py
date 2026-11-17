@@ -19,7 +19,7 @@ from pydantic import BaseModel
 
 from shared import llm_cells
 from shared.llm_cells import check_times, gemini_request, title_errors, written_errors
-from shared.schedule import MIN_PART_MINUTES, time_to_minutes
+from shared.schedule import PART_FLOOR_MINUTES, time_to_minutes
 from . import conventions
 from .document import DAYS, LayoutError, W, _grid, cell_lines, identify, paragraph_text, squash, supplements
 from .sessions import known, line_items
@@ -231,8 +231,8 @@ def check_document(result: DocResult, texts: dict[str, str], agenda: dict) -> li
             minutes = time_to_minutes(session.end) - time_to_minutes(session.start) if not errors else 0
             if len(session.part) != 2 or not 1 <= k <= n_parts or n_parts < 2:
                 errors.append(f'{prefix}: part must be [k, n] with 1 <= k <= n and n >= 2')
-            elif minutes and minutes < n_parts * MIN_PART_MINUTES:
-                errors.append(f'{prefix}: {n_parts} pieces of {minutes} min are shorter than {MIN_PART_MINUTES} min')
+            elif minutes and minutes < n_parts * PART_FLOOR_MINUTES:
+                errors.append(f'{prefix}: {n_parts} pieces of {minutes} min are shorter than {PART_FLOOR_MINUTES} min')
             # A piece is a table cell of its own: the block's n pieces cite n different cells.
             siblings = [s for s in result.sessions if (s.day, s.start, s.end, s.room_ids) ==
                         (session.day, session.start, session.end, session.room_ids) and s.part]

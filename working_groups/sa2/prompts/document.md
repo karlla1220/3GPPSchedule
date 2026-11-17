@@ -13,7 +13,7 @@ rows between quarters, and whose columns are weekdays of two cells each. Find th
   When a quarter's two cells of one day hold different text, they are two pieces of the quarter:
   give both the quarter's start and end and part [1, 2] and [2, 2], each citing its own cell. Same
   text in both cells, or a cell spanning both, is one session with part null. A quarter shorter
-  than 60 minutes is never split. A cell spanning several rooms has all of them in room_ids.
+  than 50 minutes is never split. A cell spanning several rooms has all of them in room_ids.
   "-" means the room has no session. Sessions in one room must not overlap. Every timetable cell
   that names an agenda item is (part of) a session: leave none out.
 - refs cites the ids of the cells or paragraphs the session comes from; title uses their own words
