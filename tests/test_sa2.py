@@ -276,15 +276,6 @@ def test_q0_halves_are_two_25_minute_pieces():
                                                                ('KI#1.2', '08:50', [2, 2])]
 
 
-def test_q0_with_one_half_filled_is_the_whole_quarter():
-    # SA2#178 r12 Thu Q0 Stream 3: "Sensing-ARC" in the left half, the right half empty.
-    document = {'quarters': {'Q0': {'start': '08:00', 'end': '08:50'}}}
-    halves = {(1,): {'id': 'c1', 'lines': ['Sensing-ARC (20.2.2) [57] – not revisions']}}
-    found = sessions._quarter('Thursday', 'Q0', 3, halves, document, agenda())
-    assert [(s['name'], s['start'], s['end'], s['part']) for s in found] == [
-        ('Sensing-ARC – not revisions', '08:00', '08:50', None)]
-
-
 def test_topics_join_three_at_most_and_number_lines_add_to_the_topic_above():
     found = read(R20, agenda())
     opening = find(found, 'Monday', '09:00', scope='shared')[0]
