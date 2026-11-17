@@ -5233,7 +5233,25 @@
           "room_scope": "assigned",
           "notes": [],
           "inferred_agenda_items": [],
-          "email_details": [],
+          "email_details": [
+            {
+              "kind": "session",
+              "session": "Tue 15:35-16:00 Champions Ballroom A",
+              "quote": "The final version (R1-2609717) with the proposals for today online can be found in the draft folder",
+              "mode": "online",
+              "summary": "Online session with proposals in R1-2609717",
+              "topics": [],
+              "day": "Tuesday",
+              "tdocs": [
+                "R1-2609717"
+              ],
+              "split": [],
+              "mail": "1dd690d2.2611c",
+              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;1dd690d2.2611c",
+              "author": "Bo Gao",
+              "sent": "2026-11-17T14:36:12-06:00"
+            }
+          ],
           "part": null,
           "stream": ""
         },
@@ -5702,6 +5720,23 @@
               "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;46b67216.2611c",
               "author": "Teng Ma",
               "sent": "2026-11-15T12:38:55-06:00"
+            },
+            {
+              "kind": "session",
+              "session": "Tue 15:10-16:00 BMO 214-215",
+              "quote": "FL summary v17 is uploaded to the draft folder, and R1-2609344 is available in the inbox for Tuesday online session.",
+              "mode": "online",
+              "summary": "FL summary v17 uploaded; R1-2609344 in inbox for Tuesday online session",
+              "topics": [],
+              "day": "Tuesday",
+              "tdocs": [
+                "R1-2609344"
+              ],
+              "split": [],
+              "mail": "10ecb0ba.2611c",
+              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;10ecb0ba.2611c",
+              "author": "Teng Ma",
+              "sent": "2026-11-17T14:33:50-06:00"
             }
           ],
           "part": null,
@@ -6165,6 +6200,26 @@
               "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;eef36ec5.2611c",
               "author": "Lei Zhang (Fujitsu)",
               "sent": "2026-11-16T23:51:41-06:00"
+            },
+            {
+              "kind": "session",
+              "session": "Tue 15:00-15:20 BMO 221",
+              "quote": "We will have a 20-minute offline session from 3:00 pm, local time.",
+              "mode": "offline",
+              "summary": "Offline discussion on Proposal 7-1-1, 5-1-1, and Observations 5-2-2, 3-2-1",
+              "topics": [
+                "Proposal 7-1-1",
+                "Proposal 5-1-1",
+                "Observation 5-2-2",
+                "Observation 3-2-1"
+              ],
+              "start": "15:00",
+              "day": "Tuesday",
+              "split": [],
+              "mail": "e99e6dfd.2611c",
+              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;e99e6dfd.2611c",
+              "author": "Lei Zhang (Fujitsu)",
+              "sent": "2026-11-17T14:31:35-06:00"
             }
           ],
           "part": null,
@@ -13917,7 +13972,7 @@
     }
   ],
   "source_file": "RAN1#127 online and offline schedules - v02.docx",
-  "generated_at": "2026-11-17 14:02",
+  "generated_at": "2026-11-17 14:41",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
@@ -14456,11 +14511,11 @@
         "source_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Sorour_notes/Draft%20R1-2609130%20Session%20Notes%20of%20AI%209.1%20-%20v01.docx"
       },
       "R1-2609131": {
-        "name": "Draft R1-2609131 Session Notes of AI 8.1 - v00.docx",
+        "name": "Draft R1-2609131 Session Notes of AI 8.1 - v01.docx",
         "agenda_item": "8.1",
-        "changed_at": "2026-11-16T01:56:35+00:00",
-        "sha256": "20b2475a2e95143cb85aeec9003487beb78ff799578a668b424bcb40794182bc",
-        "source_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Sorour_notes/Draft%20R1-2609131%20Session%20Notes%20of%20AI%208.1%20-%20v00.docx"
+        "changed_at": "2026-11-17T20:32:11+00:00",
+        "sha256": "f5cd0165e1491d3af9d630a00b569455d3448e13454e40f24d7db94923237877",
+        "source_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Sorour_notes/Draft%20R1-2609131%20Session%20Notes%20of%20AI%208.1%20-%20v01.docx"
       },
       "R1-2609132": {
         "name": "draft_R1-2609132_Session Notes of AI 7_v01.docx",
@@ -14807,13 +14862,33 @@
           "78d7b01dae0d",
           "5726fe87ab09",
           "3f1f17e8f120",
+          "2f046a95b88c",
+          "668544acaa68",
+          "b20d3173f356",
           "d6a2d69eaaae",
+          "668544acaa68",
+          "8156b0969b14",
+          "dc1c2394d5ec",
           "e6ff2e096080",
+          "2bb08bbb4a44",
           "0e1d9d250b93",
           "c467b75d348c",
           "130e43fbe5cc",
+          "668544acaa68",
+          "37fb344149c3",
+          "bcdcc073bdeb",
+          "668544acaa68",
+          "49fcff0f7346",
+          "c5bd3b19f4a5",
+          "668544acaa68",
+          "6989c718cc60",
           "41dbe1d34d3d",
+          "668544acaa68",
+          "e24f26595788",
+          "d54b00b6e7f2",
           "2a02aa5ba8e5",
+          "668544acaa68",
+          "ffb27e5faa2c",
           "92a4f49e7738",
           "23d21e58d059",
           "6bff6a48f875",
@@ -14852,6 +14927,7 @@
           "3db2dea4de9a",
           "de99062dce50",
           "347dd11bbcd9",
+          "a3cbe4b249bc",
           "99609bd8c73d",
           "ed96c3b23f46",
           "383c439467e9",
@@ -14867,11 +14943,18 @@
         ],
         "sources": {
           "chair": "86915bbbdbda",
-          "R1-2609131": "df1e639fe55d",
+          "R1-2609131": "2fe6b7006041",
           "R1-2610805": "234ab6ecb117"
         },
         "change": "updated",
         "added": [
+          9,
+          10,
+          11,
+          13,
+          14,
+          15,
+          17,
           21,
           22,
           23,
@@ -14880,30 +14963,16 @@
           26,
           27,
           28,
-          29,
           30,
           31,
           32,
-          33,
+          34,
           35,
-          36,
-          37,
-          38,
-          41,
-          42,
-          43,
-          44,
-          45,
-          46,
-          47,
-          48,
-          49,
-          50,
-          51
+          74
         ],
-        "changed_at": "2026-11-17T16:09:54+00:00",
-        "changed_in": "draft_R1-2610805_Session Notes of AI 8.1_v01.docx",
-        "file": "agreements/7688742f9f44703b2c77.html"
+        "changed_at": "2026-11-17T20:32:11+00:00",
+        "changed_in": "Draft R1-2609131 Session Notes of AI 8.1 - v01.docx",
+        "file": "agreements/e1e6611935e67c67d3c9.html"
       },
       "9": {
         "title": "Release 20 NR",
@@ -17359,7 +17428,9 @@
         "changed_in": "Chair notes RAN1#127_v03.docx"
       }
     },
-    "retained_files": []
+    "retained_files": [
+      "agreements/7688742f9f44703b2c77.html"
+    ]
   },
   "email_informal": {
     "10.6.3": [
