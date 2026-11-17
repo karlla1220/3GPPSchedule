@@ -18,7 +18,7 @@ from datetime import date, timedelta
 import re
 
 from shared.agenda import describe, group_label, is_descendant, written_ranges
-from shared.schedule import (PART_FLOOR_MINUTES, DaySchedule, RoomInfo, Schedule, Session, Timeline,
+from shared.schedule import (MIN_PART_MINUTES, PART_FLOOR_MINUTES, DaySchedule, RoomInfo, Schedule, Session, Timeline,
                              minutes_to_time, time_to_minutes)
 from shared.titles import clean, unbracketed
 from .document import clock
@@ -216,8 +216,9 @@ def _quarter(day, q, stream, halves, document, agenda) -> list[dict]:
         # The same text twice is one topic for the whole quarter.
         return [_session(left['id'], day, left['lines'], start, end, agenda, stream=stream, rooms=room)]
     minutes = time_to_minutes(end) - time_to_minutes(start)
-    if minutes < 2 * PART_FLOOR_MINUTES:
+    if minutes < 2 * PART_FLOOR_MINUTES or (len(filled) == 1 and minutes < 2 * MIN_PART_MINUTES):
         # Pieces would be shorter than a cell can show; one session, left cell first.
+        # A short quarter (Q0) with one half filled is that topic for the quarter, not half of it.
         lines = list(dict.fromkeys(line for _, c in filled for line in c['lines']))
         return [_session(filled[0][1]['id'], day, lines, start, end, agenda, stream=stream, rooms=room)]
     return [_session(c['id'], day, c['lines'], start, end, agenda, stream=stream, rooms=room, part=[k, 2])
