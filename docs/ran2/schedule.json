@@ -1008,6 +1008,15 @@
           "kind": "",
           "detail": "",
           "stream": ""
+        },
+        {
+          "name": "Breakout 3",
+          "table_index": 0,
+          "room_index_in_table": 0,
+          "id": "brk3",
+          "kind": "",
+          "detail": "",
+          "stream": ""
         }
       ],
       "sessions": [
@@ -1660,11 +1669,40 @@
           ],
           "room_scope": "assigned",
           "notes": [
-            "@1630-1700 [401] A-IoT offline (vivo)"
+            "@1630-1700 [401] A-IoT offline (vivo)",
+            "Also listed here: Rel-20 NR Others"
           ],
           "inferred_agenda_items": [
             "7.2",
-            "8.2"
+            "8.2",
+            "8.13"
+          ],
+          "email_details": [],
+          "part": null,
+          "stream": ""
+        },
+        {
+          "name": "Correction to SI Update",
+          "duration_minutes": 120,
+          "start_time": "17:00",
+          "end_time": "19:00",
+          "day": "Tuesday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": null,
+          "group_header": "Offline",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [
+            "brk3"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "16 :00-17:00 [AT136][601][Maint] Correction to SI Update (vivo)"
+          ],
+          "inferred_agenda_items": [
+            "5.1.3.1"
           ],
           "email_details": [],
           "part": null,
@@ -1790,7 +1828,7 @@
       ],
       "sessions": [
         {
-          "name": "ISAC offline (TBD)",
+          "name": "ISAC offline (Xiaomi)",
           "duration_minutes": 90,
           "start_time": "08:30",
           "end_time": "10:00",
@@ -1807,7 +1845,7 @@
           ],
           "room_scope": "assigned",
           "notes": [
-            "ISAC offline (TBD)"
+            "ISAC offline (Xiaomi)"
           ],
           "inferred_agenda_items": [
             "9.5"
@@ -2333,15 +2371,15 @@
         },
         {
           "name": "NR20 AIoT",
-          "duration_minutes": 120,
-          "start_time": "17:00",
-          "end_time": "19:00",
+          "duration_minutes": 30,
+          "start_time": "16:30",
+          "end_time": "17:00",
           "day": "Wednesday",
           "room_col_start": 2,
           "room_col_end": 3,
           "chair": "Nathan",
           "agenda_item": "8.2",
-          "group_header": "NR Rel-20",
+          "group_header": "Offline",
           "description": "Ambient IoT Ph2",
           "agenda_descriptions": [
             {
@@ -2365,6 +2403,7 @@
           ],
           "room_scope": "assigned",
           "notes": [
+            "[AT136][403][AIoT] Impact analysis for DO-A for T2 (Qualcomm)",
             "[8.2] NR20 AIoT [2] (Nathan)",
             "Overflow"
           ],
@@ -2402,9 +2441,9 @@
         },
         {
           "name": "NTN",
-          "duration_minutes": 120,
+          "duration_minutes": 60,
           "start_time": "17:00",
-          "end_time": "19:00",
+          "end_time": "18:00",
           "day": "Wednesday",
           "room_col_start": 2,
           "room_col_end": 3,
@@ -2434,11 +2473,38 @@
           ],
           "room_scope": "assigned",
           "notes": [
-            "[9.6] NTN",
+            "[9.6] NTN"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": null,
+          "stream": ""
+        },
+        {
+          "name": "Continue with the 6G NTN offline, remaining proposals from R2-2608316",
+          "duration_minutes": 60,
+          "start_time": "18:00",
+          "end_time": "19:00",
+          "day": "Wednesday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "Erlin",
+          "agenda_item": null,
+          "group_header": "Offline",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [
+            "main"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "Continue with the 6G NTN offline, remaining proposals from R2-2608316 (Erlin)",
             "Report from Erlin’s session",
             "Other untreated topics"
           ],
-          "inferred_agenda_items": [],
+          "inferred_agenda_items": [
+            "9.6"
+          ],
           "email_details": [],
           "part": null,
           "stream": ""
@@ -3547,20 +3613,20 @@
       "caveats": []
     }
   ],
-  "source_file": "R2_136_Schedule_v04.docx",
-  "generated_at": "2026-11-16 21:21",
+  "source_file": "R2_136_Schedule_v05.docx",
+  "generated_at": "2026-11-17 13:21",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
-    "R2_136_Schedule_v04.docx",
+    "R2_136_Schedule_v05.docx",
     "agenda.csv"
   ],
   "source_labels": {
-    "R2_136_Schedule_v04.docx": "Schedule",
+    "R2_136_Schedule_v05.docx": "Schedule",
     "agenda.csv": "Agenda"
   },
   "source_urls": {
-    "R2_136_Schedule_v04.docx": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN2/Agenda/R2_136_Schedule_v04.docx"
+    "R2_136_Schedule_v05.docx": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN2/Agenda/R2_136_Schedule_v05.docx"
   },
   "source_mails": {},
   "timezone": "America/Edmonton",
@@ -3643,13 +3709,13 @@
         ],
         [
           "[004]",
-          "6G RRC Modelling",
+          "[6G RRC Modelling]",
           "Mon 10:00-11:00",
           "BO1",
           "Sangyeob (Samsung)"
         ],
         [
-          "[POST135bis][015] 6G CP (RRC Structure)",
+          "[POST135bis][015] [6G CP]RRC Structure",
           "Tues 10:30-12:00",
           "BO1",
           "David (Huawei)",
@@ -3657,17 +3723,31 @@
         ],
         [
           "[401]",
-          "A-IoT",
+          "[A-IoT]",
           "Tues 16:00-17:00",
           "BO2",
           "(vivo)"
         ],
         [
+          "[601]",
+          "[Maint] Correction to SI Update",
+          "Tues 16:30-17:00",
+          "BO3",
+          "Jing Liang (vivo)"
+        ],
+        [
           "[102]",
-          "AI-MOB",
+          "[AI-MOB]",
           "Wed 16:30-17:30",
           "BO3",
           "Cecilia (Ericsson)"
+        ],
+        [
+          "[405]",
+          "[AIoT] Impact analysis for DO-A for T2",
+          "Wed 16:40-17:00",
+          "BO1",
+          "(Qualcomm)"
         ]
       ]
     },
