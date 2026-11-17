@@ -4205,6 +4205,22 @@
               "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;bb622819.2611b",
               "author": "Chenxi Hao",
               "sent": "2026-11-13T01:54:37-06:00"
+            },
+            {
+              "kind": "session",
+              "session": "Tue 09:50-10:30 BMO 212",
+              "quote": "For Tuesday’s offline session, we will start with 2.1a.",
+              "mode": "offline",
+              "summary": "Start with Proposal 2.1a in Tuesday offline",
+              "topics": [
+                "2.1a"
+              ],
+              "day": "Tuesday",
+              "split": [],
+              "mail": "f0b57c06.2611c",
+              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;f0b57c06.2611c",
+              "author": "Chenxi Hao",
+              "sent": "2026-11-17T08:15:04-06:00"
             }
           ],
           "part": null,
@@ -4590,6 +4606,25 @@
               "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;bb622819.2611b",
               "author": "Chenxi Hao",
               "sent": "2026-11-13T01:54:37-06:00"
+            },
+            {
+              "kind": "session",
+              "session": "Tue 11:40-12:30 BMO 225-226",
+              "quote": "For the morning online session, let us try to progress on these four proposals.",
+              "mode": "online",
+              "summary": "Progress on Proposals 2.1a, 2.5a, 2.6a, and 3.1a",
+              "topics": [
+                "proposal 2.1a",
+                "2.5a",
+                "2.6a",
+                "3.1a"
+              ],
+              "day": "Tuesday",
+              "split": [],
+              "mail": "f0b57c06.2611c",
+              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;f0b57c06.2611c",
+              "author": "Chenxi Hao",
+              "sent": "2026-11-17T08:15:04-06:00"
             }
           ],
           "part": null,
@@ -5384,7 +5419,24 @@
           "room_scope": "assigned",
           "notes": [],
           "inferred_agenda_items": [],
-          "email_details": [],
+          "email_details": [
+            {
+              "kind": "session",
+              "session": "Tue 15:40-16:30 BMO 225-226",
+              "quote": "For the afternoon online session, the plan is to discuss agenda 9.1.2.",
+              "mode": "online",
+              "summary": "Discuss agenda 9.1.2",
+              "topics": [
+                "agenda 9.1.2"
+              ],
+              "day": "Tuesday",
+              "split": [],
+              "mail": "f0b57c06.2611c",
+              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;f0b57c06.2611c",
+              "author": "Chenxi Hao",
+              "sent": "2026-11-17T08:15:04-06:00"
+            }
+          ],
           "part": null,
           "stream": ""
         },
@@ -13692,7 +13744,7 @@
     }
   ],
   "source_file": "RAN1#127 online and offline schedules - v01.docx",
-  "generated_at": "2026-11-17 07:01",
+  "generated_at": "2026-11-17 08:21",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
