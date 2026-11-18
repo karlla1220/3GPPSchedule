@@ -28,7 +28,37 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  # A trigger that arrives while a build runs is dropped, not queued. The lock
+  # above holds it until that build ends; it would then build on the commit it
+  # was triggered at, behind the build's own commit, and fail to push.
+  gate:
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+    steps:
+      - name: Drop a trigger that waited for another build
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          # An API error lets the build run: a lost check must not stop every build.
+          mine=$(gh api "repos/$GH_REPO/actions/runs/$GITHUB_RUN_ID" --jq .created_at) || exit 0
+          # Another run of this workflow that started before this one was
+          # triggered and was still going then. A pending run replaced by this
+          # one is cancelled and never started, so it does not count.
+          busy=$(gh api "repos/$GH_REPO/actions/workflows/deploy.yml/runs?per_page=30" --jq "
+            [.workflow_runs[] | select(.id != $GITHUB_RUN_ID and .run_started_at != null
+              and .created_at < \"$mine\" and .updated_at > \"$mine\"
+              and .conclusion != \"cancelled\")] | length") || exit 0
+          if [ -n "$mine" ] && [ "${busy:-0}" -gt 0 ]; then
+            echo "Another build was running when this run was triggered: dropping this run."
+            gh run cancel "$GITHUB_RUN_ID"
+            sleep 300  # the cancel stops this job
+            exit 1
+          fi
+
   check:
+    needs: gate
     if: >-
       github.event_name == 'repository_dispatch' ||
       github.event.inputs.action == 'check-build-deploy'
@@ -82,7 +112,7 @@ jobs:
           exit 1
 
   build-and-deploy:
-    needs: check
+    needs: [gate, check]
     if: >-
       always() && !cancelled() &&
       (needs.check.outputs.build_required == 'true' ||
@@ -201,6 +231,7 @@ jobs:
           exit 1
 
   deploy-only:
+    needs: gate
     if: github.event.inputs.action == 'deploy-only'
     runs-on: ubuntu-latest
     environment:
