@@ -9933,6 +9933,25 @@
               "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;871b439f.2611c",
               "author": "Jinzhe (A)",
               "sent": "2026-11-17T14:00:05-06:00"
+            },
+            {
+              "kind": "session",
+              "session": "Wed 14:30-15:10 BMO 214-215",
+              "quote": "putting some candidate proposals in section 4.4 for Wednesday afternoon online discussion",
+              "mode": "online",
+              "summary": "Candidate proposals in section 4.4 for online discussion",
+              "topics": [
+                "section 4.4"
+              ],
+              "day": "Wednesday",
+              "tdocs": [
+                "R1-2609056"
+              ],
+              "split": [],
+              "mail": "29b233f5.2611c",
+              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;29b233f5.2611c",
+              "author": "Jinzhe (A)",
+              "sent": "2026-11-18T14:28:12-06:00"
             }
           ],
           "part": null,
@@ -14935,7 +14954,7 @@
     }
   ],
   "source_file": "RAN1#127 online and offline schedules - v02.docx",
-  "generated_at": "2026-11-18 14:22",
+  "generated_at": "2026-11-18 14:42",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
