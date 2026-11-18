@@ -28,7 +28,7 @@ stalls a TLS handshake: one later retry.
 from __future__ import annotations
 
 from dataclasses import dataclass
-from datetime import date, datetime, timedelta
+from datetime import date, datetime, timedelta, timezone
 from email.utils import format_datetime, parsedate_to_datetime
 import html
 import re
@@ -104,10 +104,16 @@ def message_id(link: str) -> str | None:
 
 
 def mail_date(text: str) -> datetime | None:
+    """A mail's Date, aware. "-0000" (zone unknown, RFC 5322) is read as UTC.
+
+    ``parsedate_to_datetime`` gives a naive time for "-0000"; one such mail in
+    the RAN2 feed (18 Nov 2026) failed every comparison with the others.
+    """
     try:
-        return parsedate_to_datetime(text or "")
+        value = parsedate_to_datetime(text or "")
     except (TypeError, ValueError):
         return None
+    return value.replace(tzinfo=timezone.utc) if value.tzinfo is None else value
 
 
 def preview_text(description: str, *, links: bool = False) -> str:

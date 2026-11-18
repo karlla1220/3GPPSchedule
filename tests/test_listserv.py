@@ -93,3 +93,13 @@ def test_check_hands_the_pages_it_read_to_build(tmp_path):
         assert listserv.page(http, url) == '<rss/>' and len(calls) == 1
     # Only archive pages are taken back.
     assert listserv.restore({'https://example.com/x': 'y', url: 1}) == 0
+
+
+def test_a_mail_date_of_unknown_zone_is_utc():
+    # RAN2, 18 Nov 2026: "-0000" gave a naive time that no other date compares with.
+    from datetime import datetime, timezone
+    from shared.listserv import mail_date
+    unknown = mail_date("Wed, 18 Nov 2026 15:27:56 -0000")
+    assert unknown == datetime(2026, 11, 18, 15, 27, 56, tzinfo=timezone.utc)
+    assert min(unknown, mail_date("Wed, 18 Nov 2026 17:00:00 +0100")) == unknown
+    assert mail_date("not a date") is None
