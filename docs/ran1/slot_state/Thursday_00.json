@@ -3,7 +3,7 @@
   "time_block_index": 0,
   "source_hashes": {
     "Main Schedule": "54b3e85b78db77d2",
-    "Hiroki's schedule": "529ce457bcccf8da",
+    "Hiroki's schedule": "1b8b561b19ca846e",
     "Sorour's schedule": "d6e2b326cb56a6bd"
   },
   "merged_sessions": [
@@ -289,7 +289,7 @@
       "agenda_item": "10.8.3",
       "source_cells": [
         "c1285d4",
-        "c2e077e"
+        "cd448ea"
       ],
       "description": "Waveform and frame structure",
       "agenda_descriptions": [
@@ -327,7 +327,7 @@
       "agenda_item": "10.5.4.1",
       "source_cells": [
         "c1285d4",
-        "c2e077e"
+        "cd448ea"
       ],
       "description": "Downlink control channel, scheduling for downlink and uplink transmission",
       "agenda_descriptions": [
@@ -367,10 +367,10 @@
       "specified_start_time": null,
       "chair": "Hiroki",
       "group_header": "",
-      "agenda_item": "7, 8.1",
+      "agenda_item": "7, 8.1, 11",
       "source_cells": [
         "c1285d4",
-        "c2e077e"
+        "cd448ea"
       ],
       "description": "Pre-Rel-19 NR Maintenance",
       "agenda_descriptions": [
@@ -399,6 +399,18 @@
             {
               "agenda_item": "8.1",
               "description": "Maintenance on all items of Rel-19 NR and E-UTRA",
+              "has_description": true
+            }
+          ]
+        },
+        {
+          "agenda_item": "11",
+          "matched_agenda_item": "11",
+          "description": "TEI",
+          "hierarchy": [
+            {
+              "agenda_item": "11",
+              "description": "TEI",
               "has_description": true
             }
           ]
@@ -672,7 +684,7 @@
       ]
     }
   ],
-  "merged_at": "2026-11-18T15:20:07.025153+00:00",
+  "merged_at": "2026-11-18T16:22:12.159060+00:00",
   "meeting_id": "ran1#127",
   "schema_version": 3,
   "source_entries": {
@@ -711,9 +723,9 @@
     "Hiroki's schedule": [
       {
         "room_label": "Hiroki: BMO 214-215",
-        "cell_text": "6GR (110)\n.10.8 Sensing (50)\n 10.8.3 (50)\n\n.10.5.4.1 (60)\n\nTEI, AI 7/8.1 (40)\n7 pre-Rel-19 CRs\n8.1 Duplex\n 8.1 Mobility",
+        "cell_text": "6GR (110)\n.10.8 Sensing (50)\n 10.8.3 (50)\n\n.10.5.4.1 (60)\n\nTEI, AI 7/8.1 (40)\n7 pre-Rel-19 CRs\n8.1 Duplex\n 8.1 Mobility\n 11 TEI20",
         "fallback_start_time": null,
-        "cell_id": "c2e077e"
+        "cell_id": "cd448ea"
       }
     ],
     "Sorour's schedule": [

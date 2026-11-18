@@ -11364,7 +11364,7 @@
           "room_col_start": 4,
           "room_col_end": 5,
           "chair": "Hiroki",
-          "agenda_item": "7, 8.1",
+          "agenda_item": "7, 8.1, 11",
           "group_header": "TEI",
           "description": "Pre-Rel-19 NR Maintenance",
           "agenda_descriptions": [
@@ -11393,6 +11393,18 @@
                 {
                   "agenda_item": "8.1",
                   "description": "Maintenance on all items of Rel-19 NR and E-UTRA",
+                  "has_description": true
+                }
+              ]
+            },
+            {
+              "agenda_item": "11",
+              "matched_agenda_item": "11",
+              "description": "TEI",
+              "hierarchy": [
+                {
+                  "agenda_item": "11",
+                  "description": "TEI",
                   "has_description": true
                 }
               ]
@@ -14568,14 +14580,53 @@
           "stream": ""
         },
         {
-          "name": "10.8 Sensing",
-          "duration_minutes": 90,
+          "name": "8.1 ISAC",
+          "duration_minutes": 20,
           "start_time": "11:00",
+          "end_time": "11:20",
+          "day": "Friday",
+          "room_col_start": 4,
+          "room_col_end": 5,
+          "chair": "Hiroki",
+          "agenda_item": "8.1",
+          "group_header": "",
+          "description": "Maintenance on all items of Rel-19 NR and E-UTRA",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "8.1",
+              "matched_agenda_item": "8.1",
+              "description": "Maintenance on all items of Rel-19 NR and E-UTRA",
+              "hierarchy": [
+                {
+                  "agenda_item": "8",
+                  "description": "Maintenance on Rel-19 NR and E-UTRA",
+                  "has_description": true
+                },
+                {
+                  "agenda_item": "8.1",
+                  "description": "Maintenance on all items of Rel-19 NR and E-UTRA",
+                  "has_description": true
+                }
+              ]
+            }
+          ],
+          "room_ids": [],
+          "room_scope": "assigned",
+          "notes": [],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": null,
+          "stream": ""
+        },
+        {
+          "name": "10.8 Sensing",
+          "duration_minutes": 70,
+          "start_time": "11:20",
           "end_time": "12:30",
           "day": "Friday",
           "room_col_start": 4,
           "room_col_end": 5,
-          "chair": null,
+          "chair": "Hiroki",
           "agenda_item": "10.8",
           "group_header": "6GR",
           "description": "ISAC",
@@ -14611,13 +14662,13 @@
         },
         {
           "name": "A-IoT Phase2",
-          "duration_minutes": 90,
-          "start_time": "11:00",
+          "duration_minutes": 70,
+          "start_time": "11:20",
           "end_time": "12:30",
           "day": "Friday",
           "room_col_start": 4,
           "room_col_end": 5,
-          "chair": null,
+          "chair": "Hiroki",
           "agenda_item": null,
           "group_header": "R20",
           "description": null,
@@ -14732,24 +14783,24 @@
     }
   ],
   "source_file": "RAN1#127 online and offline schedules - v02.docx",
-  "generated_at": "2026-11-18 10:02",
+  "generated_at": "2026-11-18 10:22",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
     "RAN1#127 online and offline schedules - v02.docx",
-    "RAN1#127 online and offline schedules - v02_hh2.docx",
+    "RAN1#127 online and offline schedules - v02_hh3.docx",
     "RAN1#127 online and offline schedules - UE Features.docx",
     "RAN1#127 Sorour sessions online and offline schedules - v03.docx"
   ],
   "source_labels": {
     "RAN1#127 online and offline schedules - v02.docx": "Main",
-    "RAN1#127 online and offline schedules - v02_hh2.docx": "Hiroki",
+    "RAN1#127 online and offline schedules - v02_hh3.docx": "Hiroki",
     "RAN1#127 online and offline schedules - UE Features.docx": "Ralf",
     "RAN1#127 Sorour sessions online and offline schedules - v03.docx": "Sorour"
   },
   "source_urls": {
     "RAN1#127 online and offline schedules - v02.docx": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Chair_notes/RAN1%23127%20online%20and%20offline%20schedules%20-%20v02.docx",
-    "RAN1#127 online and offline schedules - v02_hh2.docx": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Hiroki_notes/RAN1%23127%20online%20and%20offline%20schedules%20-%20v02_hh2.docx",
+    "RAN1#127 online and offline schedules - v02_hh3.docx": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Hiroki_notes/RAN1%23127%20online%20and%20offline%20schedules%20-%20v02_hh3.docx",
     "RAN1#127 online and offline schedules - UE Features.docx": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Ralf_notes/RAN1%23127%20online%20and%20offline%20schedules%20-%20UE%20Features.docx",
     "RAN1#127 Sorour sessions online and offline schedules - v03.docx": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Sorour_notes/RAN1%23127%20Sorour%20sessions%20online%20and%20offline%20schedules%20-%20v03.docx",
     "RAN1#127 online and offline schedules - v01.docx": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/R1-2610231/RAN1%23127%20online%20and%20offline%20schedules%20-%20v01.docx",
@@ -15285,11 +15336,11 @@
         "source_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Hiroki_notes/draft_R1-2609132_Session%20Notes%20of%20AI%207_v01.docx"
       },
       "R1-2610805": {
-        "name": "draft_R1-2610805_Session Notes of AI 8.1_v01.docx",
+        "name": "draft_R1-2610805_Session Notes of AI 8.1_v02.docx",
         "agenda_item": "8.1",
-        "changed_at": "2026-11-17T16:09:54+00:00",
-        "sha256": "c66dec6e606cfff6a9e37d4ca95db1c42e332e281f0d2146c1834e115749791b",
-        "source_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Hiroki_notes/draft_R1-2610805_Session%20Notes%20of%20AI%208.1_v01.docx"
+        "changed_at": "2026-11-18T16:04:24+00:00",
+        "sha256": "aebf077795a11623964dfa5cbbc5b8d0f75022a9eeb734e7256f3ce96470c50e",
+        "source_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Hiroki_notes/draft_R1-2610805_Session%20Notes%20of%20AI%208.1_v02.docx"
       },
       "R1-2610807": {
         "name": "draft_R1-2610807_Session Notes of AI 11_v01.docx",
@@ -15673,6 +15724,9 @@
           "07333cc58729",
           "98b5abdc7691",
           "3bb3cff26a61",
+          "c9df7a3f956a",
+          "fd5b4cb043ee",
+          "0faa266f2431",
           "e3a28fa41d79",
           "ac3baf1fba4c",
           "668544acaa68",
@@ -15691,48 +15745,81 @@
           "99609bd8c73d",
           "ed96c3b23f46",
           "383c439467e9",
+          "27e6e36fa324",
+          "668544acaa68",
+          "1a0706b80e89",
+          "51538cd2153d",
+          "1038d70675dd",
+          "40e5fdef62f0",
+          "5655ce88161d",
+          "faff69d1ce7d",
+          "6e6608930cfd",
+          "b8bb19725c3d",
+          "ab064dfc19bd",
+          "a388cb475e83",
+          "717cfb12e92a",
+          "0b0d075af9d6",
+          "66c48ff585db",
+          "0aa4bd03006c",
+          "1bec6ee4a735",
+          "16a4f1288a8a",
+          "4a3210de0921",
+          "cafe68aab017",
           "0faa266f2431",
           "0399fbcb1816",
           "8100b891e68f",
-          "b2e219aa6e15",
-          "0faa266f2431",
-          "09a988778c70",
-          "c9df7a3f956a",
-          "fd5b4cb043ee",
+          "11321ef3d03f",
+          "e92ff4d01bca",
+          "93abd0b207b9",
+          "f3f11e16c2c2",
+          "bb9cd6aac27a",
+          "13e9f13e8a99",
+          "78fba9092905",
+          "9f9a91bf7fc9",
           "0faa266f2431"
         ],
         "sources": {
           "chair": "86915bbbdbda",
           "R1-2609131": "2fe6b7006041",
-          "R1-2610805": "234ab6ecb117"
+          "R1-2610805": "04d1ae0ffe3f"
         },
         "change": "updated",
         "added": [
-          9,
-          10,
-          11,
-          13,
-          14,
-          15,
-          17,
-          21,
-          22,
-          23,
-          24,
-          25,
-          26,
-          27,
-          28,
-          30,
-          31,
-          32,
-          34,
-          35,
-          74
+          60,
+          61,
+          62,
+          81,
+          82,
+          83,
+          84,
+          85,
+          86,
+          87,
+          88,
+          89,
+          90,
+          91,
+          92,
+          93,
+          94,
+          95,
+          96,
+          97,
+          98,
+          99,
+          100,
+          104,
+          105,
+          106,
+          107,
+          108,
+          109,
+          110,
+          111
         ],
-        "changed_at": "2026-11-17T20:32:11+00:00",
-        "changed_in": "Draft R1-2609131 Session Notes of AI 8.1 - v01.docx",
-        "file": "agreements/e1e6611935e67c67d3c9.html"
+        "changed_at": "2026-11-18T16:04:24+00:00",
+        "changed_in": "draft_R1-2610805_Session Notes of AI 8.1_v02.docx",
+        "file": "agreements/b35bdf5feff82962c03c.html"
       },
       "9": {
         "title": "Release 20 NR",
@@ -18676,10 +18763,7 @@
       }
     },
     "retained_files": [
-      "agreements/3d26037471d5756f38bd.html",
-      "agreements/6e87e70bfc2a9db06355.html",
-      "agreements/762767f869265d38ebb2.html",
-      "agreements/b919e3d0b1d85deb3bc1.html"
+      "agreements/e1e6611935e67c67d3c9.html"
     ]
   },
   "email_informal": {
