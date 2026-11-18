@@ -95,11 +95,30 @@ def test_check_hands_the_pages_it_read_to_build(tmp_path):
     assert listserv.restore({'https://example.com/x': 'y', url: 1}) == 0
 
 
-def test_a_mail_date_of_unknown_zone_is_utc():
+
+def test_a_mail_date_of_unknown_zone_is_read_in_the_given_zone():
     # RAN2, 18 Nov 2026: "-0000" gave a naive time that no other date compares with.
     from datetime import datetime, timezone
+    from zoneinfo import ZoneInfo
     from shared.listserv import mail_date
-    unknown = mail_date("Wed, 18 Nov 2026 15:27:56 -0000")
-    assert unknown == datetime(2026, 11, 18, 15, 27, 56, tzinfo=timezone.utc)
-    assert min(unknown, mail_date("Wed, 18 Nov 2026 17:00:00 +0100")) == unknown
+    calgary = ZoneInfo("America/Edmonton")
+    assert mail_date("Wed, 18 Nov 2026 15:27:56 -0000", calgary) == datetime(2026, 11, 18, 15, 27, 56, tzinfo=calgary)
+    assert mail_date("Wed, 18 Nov 2026 15:27:56 -0000") == datetime(2026, 11, 18, 15, 27, 56, tzinfo=timezone.utc)
+    # A stated zone stays as written.
+    assert mail_date("Wed, 18 Nov 2026 15:27:56 +0900", calgary).utcoffset().total_seconds() == 9 * 3600
     assert mail_date("not a date") is None
+
+
+def test_the_venue_zone_only_while_the_meeting_is_on(tmp_path):
+    import json
+    from datetime import datetime, timezone
+    from shared.email_sources import meeting_zone
+    (tmp_path / "ran2").mkdir()
+    (tmp_path / "ran2" / "schedule.json").write_text(json.dumps(
+        {"starts_on": "2026-11-16", "ends_on": "2026-11-20", "timezone": "America/Edmonton"}))
+    on = datetime(2026, 11, 18, 22, 0, tzinfo=timezone.utc)
+    assert str(meeting_zone("ran2", on, docs=tmp_path)) == "America/Edmonton"
+    # 21 Nov 08:00 UTC is 21 Nov 01:00 in Calgary, the day after the meeting.
+    assert meeting_zone("ran2", datetime(2026, 11, 21, 8, 0, tzinfo=timezone.utc), docs=tmp_path) is None
+    assert meeting_zone("ran2", datetime(2026, 11, 15, 12, 0, tzinfo=timezone.utc), docs=tmp_path) is None
+    assert meeting_zone("sa2", on, docs=tmp_path) is None  # no page

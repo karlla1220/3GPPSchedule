@@ -28,7 +28,7 @@ stalls a TLS handshake: one later retry.
 from __future__ import annotations
 
 from dataclasses import dataclass
-from datetime import date, datetime, timedelta, timezone
+from datetime import date, datetime, timedelta, timezone, tzinfo
 from email.utils import format_datetime, parsedate_to_datetime
 import html
 import re
@@ -103,17 +103,19 @@ def message_id(link: str) -> str | None:
     return match.group(1).lower() if match else None
 
 
-def mail_date(text: str) -> datetime | None:
-    """A mail's Date, aware. "-0000" (zone unknown, RFC 5322) is read as UTC.
+def mail_date(text: str, zone: tzinfo | None = None) -> datetime | None:
+    """A mail's Date, aware. "-0000" (zone unknown, RFC 5322) is read in ``zone``, else UTC.
 
     ``parsedate_to_datetime`` gives a naive time for "-0000"; one such mail in
-    the RAN2 feed (18 Nov 2026) failed every comparison with the others.
+    the RAN2 feed (18 Nov 2026) failed every comparison with the others. The
+    caller passes the venue zone while a meeting is on
+    (``email_sources.meeting_zone``): the sender is most likely there.
     """
     try:
         value = parsedate_to_datetime(text or "")
     except (TypeError, ValueError):
         return None
-    return value.replace(tzinfo=timezone.utc) if value.tzinfo is None else value
+    return value.replace(tzinfo=zone or timezone.utc) if value.tzinfo is None else value
 
 
 def preview_text(description: str, *, links: bool = False) -> str:
@@ -123,7 +125,7 @@ def preview_text(description: str, *, links: bool = False) -> str:
     return text if links else _INLINE_URL.sub("", text)
 
 
-def parse_feed(xml: str) -> list[Item]:
+def parse_feed(xml: str, zone: tzinfo | None = None) -> list[Item]:
     """The feed's mails, newest first. Characters XML does not allow are dropped first."""
     items = []
     for entry in ET.fromstring(_NOT_XML.sub("", xml)).findall("channel/item"):
@@ -135,14 +137,14 @@ def parse_feed(xml: str) -> list[Item]:
             id=found,
             title=" ".join((entry.findtext("title") or "").split()),
             author=(entry.findtext("author") or "").strip(),
-            date=mail_date(entry.findtext("pubDate") or ""),
+            date=mail_date(entry.findtext("pubDate") or "", zone),
             link=link,
             description=entry.findtext("description") or "",
         ))
     return items
 
 
-def parse_index(page: str, list_name: str) -> list[Item]:
+def parse_index(page: str, list_name: str, zone: tzinfo | None = None) -> list[Item]:
     """The mails of a weekly index page, in the page's order.
 
     Each row links the message page from its subject, then gives the
@@ -160,7 +162,7 @@ def parse_index(page: str, list_name: str) -> list[Item]:
         stamp = next((m[0] for cell in cells for m in [_WEEKDAY_DATE.search(cell)] if m), "")
         author = cells[1] if len(cells) > 2 else ""
         items.append(Item(id=found, title=" ".join(anchor.get_text(" ", strip=True).split()),
-                          author=author, date=mail_date(stamp), link=message_url(found, list_name)))
+                          author=author, date=mail_date(stamp, zone), link=message_url(found, list_name)))
     return items
 
 
