@@ -37,6 +37,7 @@ from pathlib import Path
 import re
 import time
 from typing import Callable
+from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 from xml.etree.ElementTree import ParseError
 
 import httpx
@@ -108,13 +109,13 @@ def _later(*moments: str | None) -> str | None:
     return max(known, key=_moment) if known else None
 
 
-def _listed(list_name, since, http, sleep, notes) -> tuple[list[listserv.Item], bool]:
+def _listed(list_name, since, http, sleep, notes, zone=None) -> tuple[list[listserv.Item], bool]:
     """The mails a run looks at, and whether every one since ``since`` is among them.
 
     The feed, then the weekly indexes back to ``since`` when the feed starts
     after it (more mail arrived than the feed shows).
     """
-    items = listserv.parse_feed(listserv.page(http, listserv.feed_url(list_name), sleep))
+    items = listserv.parse_feed(listserv.page(http, listserv.feed_url(list_name), sleep), zone)
     dated = [item.date for item in items if item.date]
     if since is None or not dated or min(dated) <= since:
         return items, True
@@ -123,7 +124,7 @@ def _listed(list_name, since, http, sleep, notes) -> tuple[list[listserv.Item], 
         for week_id in listserv.weeks(since.date(), min(dated).date()):
             sleep(listserv.REQUEST_GAP)
             for item in listserv.parse_index(listserv.page(http, listserv.index_url(list_name, week_id), sleep),
-                                              list_name):
+                                              list_name, zone):
                 if item.id not in known:
                     known.add(item.id)
                     items.append(item)
@@ -136,11 +137,11 @@ def _listed(list_name, since, http, sleep, notes) -> tuple[list[listserv.Item], 
 
 def scan(wg: str, list_name: str, accept: Callable[[str], bool], http, *, now: datetime | None = None,
          checked_through: str | None = None, max_opens: int = MAX_OPENS,
-         sleep: Callable[[float], None] | None = None) -> Scan:
+         sleep: Callable[[float], None] | None = None, zone=None) -> Scan:
     """The accepted attachments on ``list_name``, reading only mails not read before.
 
     ``checked_through`` is the build's own record (the manifest), used when
-    the cache is older or gone.
+    the cache is older or gone. ``zone`` reads a mail dated "-0000" (``meeting_zone``).
     """
     now = now or datetime.now(timezone.utc)
     sleep = sleep or pause
@@ -150,7 +151,7 @@ def scan(wg: str, list_name: str, accept: Callable[[str], bool], http, *, now: d
     result = Scan(list_name, checked_through=since_text)
     files = {(f['message_id'], f['name']): f for f in state['files']}
     try:
-        items, complete = _listed(list_name, since, http, sleep, result.notes)
+        items, complete = _listed(list_name, since, http, sleep, result.notes, zone)
     except (httpx.HTTPError, ValueError, ParseError) as exc:
         result.notes.append(f'{list_name}: list unreadable ({exc}); using the mails found before')
         result.files = list(files.values())
@@ -209,6 +210,22 @@ def check_list_name(value) -> None:
         raise ValueError('email_list must be null or a list name such as 3GPP_TSG_RAN_WG2')
 
 
+def meeting_zone(wg: str, now: datetime | None = None, docs: Path = Path('docs')):
+    """The venue zone while ``wg``'s published meeting is in progress, else None (UTC).
+
+    A mail dated "-0000" does not say its zone; during a meeting its sender
+    is most likely at the venue. Read from the WG's page (``docs/<wg>/schedule.json``).
+    """
+    from shared.navigation import meeting_phase
+    data = read_json(docs / wg / 'schedule.json')
+    try:
+        if meeting_phase(data.get('starts_on'), data.get('ends_on'), data.get('timezone'), now) == 'In progress':
+            return ZoneInfo(data['timezone'])
+    except (TypeError, ValueError, KeyError, ZoneInfoNotFoundError):
+        pass
+    return None
+
+
 def for_wg(wg: str, list_name: str | None, accept: Callable[[str], bool], http, *, now=None,
            previous: dict | None = None, max_opens: int = MAX_OPENS) -> Scan | None:
     """A WG's scan: None when it reads no list; the notes go to the log, prefixed with the WG.
@@ -220,7 +237,7 @@ def for_wg(wg: str, list_name: str | None, accept: Callable[[str], bool], http, 
     """
     if not list_name:
         return None
-    found = scan(wg, list_name, accept, http, now=now, max_opens=max_opens,
+    found = scan(wg, list_name, accept, http, now=now, max_opens=max_opens, zone=meeting_zone(wg, now),
                  checked_through=((previous or {}).get('email') or {}).get('checked_through'))
     for note in found.notes:
         print(f'[{wg}] {note}')

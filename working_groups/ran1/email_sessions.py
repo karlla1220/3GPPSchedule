@@ -27,7 +27,7 @@ from typing import Callable
 
 import httpx
 
-from shared import listserv
+from shared import email_sources, listserv
 from shared.listserv import ARCHIVE, FEED_LIMIT, REQUEST_GAP, body_text, body_url, preview_text  # noqa: F401
 from shared.remote_files import client
 
@@ -263,7 +263,7 @@ def parse_feed(xml: str) -> list[Mail]:
             snippet=preview_text(item.description),
             tdocs=tdoc_numbers(newest_reply(preview_text(item.description, links=True))),
         )
-        for item in listserv.parse_feed(xml)
+        for item in listserv.parse_feed(xml, email_sources.meeting_zone("ran1"))
     ]
 
 
