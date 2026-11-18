@@ -34,6 +34,7 @@ SLOT = re.compile(CLOCK + r'\s*[-–—~]\s*(?:' + CLOCK + r'|(EOM)\b)', re.I)
 # RAN4_120bis_meeting_schedule_THU_afternoon.pptx, RAN4_118bis_meeting_schedule_v11.pptx,
 # RAN4_120_meeting_schedule_after Thursday.pptx
 FILE = re.compile(r'RAN4[_ -]?(\d+)(bis|b)?[_ -]+meeting[_ -]+schedule(?:[_ -]+(.*?))?\.pptx', re.I)
+FORMATS = ('.pptx',)   # what FILE accepts; a schedule-named file in another format is reported
 TITLE = re.compile(r'RAN4\s*#?\s*(\d+)\s*(bis|b)?(?![a-z0-9])', re.I)
 SESSION = re.compile(r'\(\s*([A-Za-z]+)\s+Session\s*\)', re.I)
 

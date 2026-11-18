@@ -361,17 +361,21 @@ class FindLatestScheduleMeetingAwareTests(unittest.TestCase):
     def test_returns_none_for_empty(self):
         self.assertIsNone(find_latest_schedule([]))
 
-    def test_macro_enabled_schedule_is_not_selected_for_table_parser(self):
-        latest = find_latest_schedule(
-            [
-                _f(
-                    "RAN1#126 schedule - v01.docm",
-                    datetime(2026, 8, 24, 9, 0),
-                ),
-            ]
-        )
+    def test_macro_enabled_schedule_is_selected(self):
+        # The parser opens .docm like .docx (tests/test_parser.py).
+        latest = find_latest_schedule([_f("RAN1#126 schedule - v01.docm", datetime(2026, 8, 24, 9, 0))])
 
-        self.assertIsNone(latest)
+        self.assertEqual(latest["name"], "RAN1#126 schedule - v01.docm")
+
+    def test_unreadable_formats_are_never_selected(self):
+        # RAN1#127: a v02 PDF next to the v01 Word schedule failed the build at parse time.
+        latest = find_latest_schedule([
+            _f("Draft RAN1#127 online and offline schedules - v01.docx", datetime(2026, 11, 16, 9, 0)),
+            _f("RAN1_127_Daily_Schedule_Online+Offline_v02.pdf", datetime(2026, 11, 17, 9, 0)),
+            _f("RAN1#127 schedule - v03.pptx", datetime(2026, 11, 17, 10, 0)),
+        ])
+
+        self.assertEqual(latest["name"], "Draft RAN1#127 online and offline schedules - v01.docx")
 
     def test_returns_none_when_no_schedule_files(self):
         files = [_f("agenda_v01.docx", datetime(2026, 4, 14, 8, 0))]
@@ -1772,3 +1776,19 @@ def test_a_later_mirror_copy_does_not_beat_a_newer_version():
                             file_info={"name": "RAN1#126 schedules - v02.docx", "uploaded_at": datetime(2026, 10, 12, 11)})
     [main, *_] = _dedup_sources([mirror, sync])
     assert main.file_info["name"] == "RAN1#126 schedules - v03.docx"
+
+
+def test_listing_reports_a_schedule_in_a_format_the_parser_cannot_read():
+    from shared import notices
+    from working_groups.ran1 import downloader
+
+    rows = "".join(
+        f'<tr><td></td><td></td><td><a href="{name}">{name}</a></td><td>2026/11/17 09:00</td></tr>'
+        for name in ("RAN1_127_Daily_Schedule_Online+Offline_v02.pdf",
+                     "RAN1#127 schedules - v01.docx", "Welcome_photo.pdf", "RAN1#127 schedule.doc"))
+    with patch.object(downloader, "_get_with_retry", return_value=MagicMock(text=f"<table>{rows}</table>")):
+        files = downloader.list_remote_files("https://example.com/Chair_notes")
+
+    assert [f["name"] for f in files] == ["RAN1#127 schedules - v01.docx"]
+    assert [n["lines"][0] for n in notices.read()] == [
+        "File: RAN1_127_Daily_Schedule_Online+Offline_v02.pdf", "File: RAN1#127 schedule.doc"]

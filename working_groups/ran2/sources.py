@@ -29,13 +29,13 @@ from urllib.parse import urlparse
 
 import httpx
 
-from shared import email_sources, file_sources, meeting_folders, meeting_turn, remote_files
+from shared import email_sources, file_sources, meeting_folders, meeting_turn, notices, remote_files
 from shared.json_files import read_json, write_json
 from shared.meeting_folders import portal_metadata
 from shared.portal_meetings import TB_IDS, get_meetings, meeting_key
 from shared.remote_files import client, fetch_file, listing_entries
 
-from .document import file_info
+from .document import FORMATS, file_info
 
 CONFIG_PATH = Path('working_groups/ran2/config.json')
 DOWNLOADS = Path('downloads/ran2')
@@ -172,6 +172,7 @@ def find_folders(cfg, meetings, rows, http) -> dict[str, str]:
 
 
 def schedule_candidates(entries: list[dict]) -> list[dict]:
+    notices.unreadable_schedules('ran2', 'RAN2', [e['name'] for e in entries], file_info, FORMATS)
     result = []
     for entry in entries:
         info = file_info(entry['name'])

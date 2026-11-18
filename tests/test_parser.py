@@ -479,3 +479,39 @@ def test_each_table_is_online_or_offline_as_its_heading_says(tmp_path):
     rooms = build_room_list(meta)["Monday"]
     assert [room.kind for room in rooms] == ["online"] * 3 + ["offline"] * 2
     assert online_rooms(rooms) == [room.name for room in rooms[:3]]
+
+
+def _as_docm(src: Path, dst: Path) -> Path:
+    """The same document saved as .docm: only the main part's content type differs."""
+    with ZipFile(src) as a, ZipFile(dst, "w") as b:
+        for item in a.infolist():
+            data = a.read(item)
+            if item.filename == "[Content_Types].xml":
+                data = data.replace(b"application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml",
+                                    b"application/vnd.ms-word.document.macroEnabled.main+xml")
+            b.writestr(item, data)
+    return dst
+
+
+def test_docm_schedule_parses_like_its_docx(tmp_path):
+    docx = Path("tests/fixtures/ran1/RAN1#126b online and offline schedules - v05.docx")
+    docm = _as_docm(docx, tmp_path / "RAN1#126b online and offline schedules - v05.docm")
+
+    assert parse_docx(docm) == parse_docx(docx)
+
+
+def test_unreadable_schedule_fails_with_a_notice(tmp_path):
+    import pytest
+    from shared import notices
+
+    pdf = tmp_path / "RAN1_127_Daily_Schedule_Online+Offline_v02.pdf"
+    pdf.write_bytes(b"%PDF-1.7")
+    archive = tmp_path / "RAN1#127 schedules - v03.zip"
+    with ZipFile(archive, "w") as z:
+        z.writestr("schedule.pdf", b"%PDF-1.7")
+
+    with pytest.raises(ValueError, match="reads .docx or .docm only"):
+        parse_docx(pdf)
+    with pytest.raises(ValueError, match="ZIP holds no .docx or .docm"):
+        parse_docx(archive)
+    assert [n["lines"][0] for n in notices.read()] == [f"File: {pdf.name}", f"File: {archive.name}"]
