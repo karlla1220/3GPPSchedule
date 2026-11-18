@@ -1333,6 +1333,52 @@
           "stream": ""
         },
         {
+          "name": "CB: # 9_6GServiceCharacterictics (GTW)",
+          "duration_minutes": 60,
+          "start_time": "13:00",
+          "end_time": "14:00",
+          "day": "Thursday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "Arled Papa",
+          "agenda_item": "10.8.1",
+          "group_header": "Study on 6G Radio",
+          "description": "Service Characteristics Awareness and Performance Monitoring",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "10.8.1",
+              "matched_agenda_item": "10.8.1",
+              "description": "Service Characteristics Awareness and Performance Monitoring",
+              "hierarchy": [
+                {
+                  "agenda_item": "10",
+                  "description": "Study on 6G Radio"
+                },
+                {
+                  "agenda_item": "10.8",
+                  "description": "Other functionalities"
+                },
+                {
+                  "agenda_item": "10.8.1",
+                  "description": "Service Characteristics Awareness and Performance Monitoring"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "offline"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "CB: # 9_6GServiceCharacterictics (GTW)",
+            "Arled Papa (Nokia)"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": null,
+          "stream": ""
+        },
+        {
           "name": "TEI20",
           "duration_minutes": 120,
           "start_time": "14:30",
@@ -1702,22 +1748,22 @@
     }
   ],
   "source_file": "RAN3_134_agenda_20261118_1310.docx",
-  "generated_at": "2026-11-18 13:42",
+  "generated_at": "2026-11-18 15:02",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
     "RAN3_134_agenda_20261118_1310.docx",
-    "RAN3 offline discussion_ver_03.xlsx",
+    "RAN3 offline discussion_ver_04.xlsx",
     "agenda.csv"
   ],
   "source_labels": {
     "RAN3_134_agenda_20261118_1310.docx": "agenda_20261118_1310",
-    "RAN3 offline discussion_ver_03.xlsx": "offline discussion_ver_03",
+    "RAN3 offline discussion_ver_04.xlsx": "offline discussion_ver_04",
     "agenda.csv": "agenda.csv"
   },
   "source_urls": {
     "RAN3_134_agenda_20261118_1310.docx": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN3/Inbox/Chairs_Notes/RAN3_134_agenda_20261118_1310.docx",
-    "RAN3 offline discussion_ver_03.xlsx": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN3/Offline_meeting_room/RAN3%20offline%20discussion_ver_03.xlsx",
+    "RAN3 offline discussion_ver_04.xlsx": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN3/Offline_meeting_room/RAN3%20offline%20discussion_ver_04.xlsx",
     "agenda.csv": "https://www.3gpp.org/ftp/tsg_ran/WG3_Iu/TSGR3_134/Agenda/agenda.csv"
   },
   "source_mails": {},

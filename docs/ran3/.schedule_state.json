@@ -15,14 +15,14 @@
     "content_disposition": null
   },
   "offline": {
-    "name": "RAN3 offline discussion_ver_03.xlsx",
-    "url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN3/Offline_meeting_room/RAN3%20offline%20discussion_ver_03.xlsx",
-    "uploaded_at": "2026-11-18 02:40",
-    "size": 23153,
-    "sha256": "0d26a02cdc289c7b5737c17b865181bdbc40cf539f250816512c57f460916e19",
+    "name": "RAN3 offline discussion_ver_04.xlsx",
+    "url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN3/Offline_meeting_room/RAN3%20offline%20discussion_ver_04.xlsx",
+    "uploaded_at": "2026-11-18 20:43",
+    "size": 23200,
+    "sha256": "eacc7fa60cc909ace7aeb2a9ea1de2f4fc6dfdc1c7a1001ef05ea5f9ca2130ee",
     "etag": null,
-    "last_modified": "Wed, 18 Nov 2026 02:40:31 GMT",
-    "ftp_modified": "213 20261118024031",
+    "last_modified": "Wed, 18 Nov 2026 20:43:26 GMT",
+    "ftp_modified": "213 20261118204326",
     "content_type": "application/octet-stream",
     "content_disposition": null
   },
