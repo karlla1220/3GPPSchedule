@@ -2,8 +2,8 @@
   "day": "Thursday",
   "time_block_index": 3,
   "source_hashes": {
-    "Main Schedule": "254c2e8cfea0325e",
-    "Sorour's schedule": "59e6eb255d39aeda"
+    "Main Schedule": "a318073c880f5e84",
+    "Sorour's schedule": "001f6c549676707d"
   },
   "merged_sessions": [
     {
@@ -15,7 +15,7 @@
       "group_header": "6GR",
       "agenda_item": "10.5.3.3",
       "source_cells": [
-        "c2dc5b9"
+        "c9fbe7c"
       ],
       "description": "Other aspects",
       "agenda_descriptions": [
@@ -57,7 +57,7 @@
       "group_header": "6GR",
       "agenda_item": "10.6.2",
       "source_cells": [
-        "c2dc5b9"
+        "c9fbe7c"
       ],
       "description": "Uplink WUS and operation",
       "agenda_descriptions": [
@@ -94,7 +94,7 @@
       "group_header": "6GR",
       "agenda_item": "10.6.1.1",
       "source_cells": [
-        "c2dc5b9"
+        "c9fbe7c"
       ],
       "description": "Design of WUS with OFDM based sequence",
       "agenda_descriptions": [
@@ -136,7 +136,7 @@
       "group_header": "6GR",
       "agenda_item": "10.6.1.2",
       "source_cells": [
-        "c2dc5b9"
+        "c9fbe7c"
       ],
       "description": "WUS operation in RRC states",
       "agenda_descriptions": [
@@ -178,8 +178,9 @@
       "group_header": "",
       "agenda_item": "8.1",
       "source_cells": [
-        "c555760",
-        "cb72567"
+        "cf4db36",
+        "c30dbad",
+        "cad18e7"
       ],
       "description": "Maintenance on all items of Rel-19 NR and E-UTRA",
       "agenda_descriptions": [
@@ -211,8 +212,9 @@
       "group_header": "6GR",
       "agenda_item": "10.5.2.2",
       "source_cells": [
-        "c555760",
-        "cb72567"
+        "cf4db36",
+        "c30dbad",
+        "cad18e7"
       ],
       "description": "Downlink transmission scheme(s) for downlink shared channels",
       "agenda_descriptions": [
@@ -254,8 +256,9 @@
       "group_header": "6GR",
       "agenda_item": "10.5.2.3",
       "source_cells": [
-        "c555760",
-        "cb72567"
+        "cf4db36",
+        "c30dbad",
+        "cad18e7"
       ],
       "description": "Uplink transmission scheme(s) for uplink channels",
       "agenda_descriptions": [
@@ -297,8 +300,9 @@
       "group_header": "6GR",
       "agenda_item": "10.3.2",
       "source_cells": [
-        "c555760",
-        "cb72567"
+        "cf4db36",
+        "c30dbad",
+        "cad18e7"
       ],
       "description": "Modulation",
       "agenda_descriptions": [
@@ -335,7 +339,7 @@
       "group_header": "6GR",
       "agenda_item": "10.5.4.2",
       "source_cells": [
-        "cda1bdd"
+        "ccda4f7"
       ],
       "description": "Downlink and uplink transmission without dynamic scheduling",
       "agenda_descriptions": [
@@ -377,7 +381,7 @@
       "group_header": "6GR",
       "agenda_item": "10.5.4.4",
       "source_cells": [
-        "cda1bdd"
+        "ccda4f7"
       ],
       "description": "Handling of potential multiple uplink transmissions",
       "agenda_descriptions": [
@@ -419,7 +423,7 @@
       "group_header": "6GR",
       "agenda_item": "10.5.4.3",
       "source_cells": [
-        "cda1bdd"
+        "ccda4f7"
       ],
       "description": "HARQ related Aspects",
       "agenda_descriptions": [
@@ -461,7 +465,7 @@
       "group_header": "6GR",
       "agenda_item": "10.3.2",
       "source_cells": [
-        "caca953"
+        "c996937"
       ],
       "description": "Modulation",
       "agenda_descriptions": [
@@ -498,7 +502,7 @@
       "group_header": "6GR",
       "agenda_item": "10.8",
       "source_cells": [
-        "caca953"
+        "c996937"
       ],
       "description": "ISAC",
       "agenda_descriptions": [
@@ -530,7 +534,7 @@
       "group_header": "",
       "agenda_item": null,
       "source_cells": [
-        "ce07d16"
+        "cb6dd25"
       ]
     },
     {
@@ -542,7 +546,7 @@
       "group_header": "6GR",
       "agenda_item": "10.7.1",
       "source_cells": [
-        "ce07d16"
+        "cb6dd25"
       ],
       "description": "NTN specific requirements and design",
       "agenda_descriptions": [
@@ -579,52 +583,58 @@
       "group_header": "R20",
       "agenda_item": null,
       "source_cells": [
-        "ce07d16"
+        "cb6dd25"
       ]
     }
   ],
-  "merged_at": "2026-11-18T14:21:55.877183+00:00",
+  "merged_at": "2026-11-18T15:20:07.029004+00:00",
   "meeting_id": "ran1#127",
   "schema_version": 3,
   "source_entries": {
     "Main Schedule": [
       {
-        "room_label": "Champion Ballroom A",
+        "room_label": "Champions Ballroom A",
         "cell_text": "6GR (120)\n.10.5.3.3(30)\n\n.10.6.2 (20)\n.10.6.1.1 (35)\n.10.6.1.2 (35)",
         "fallback_start_time": null,
-        "cell_id": "c2dc5b9"
+        "cell_id": "c9fbe7c"
       },
       {
-        "room_label": "Room 225-226",
-        "cell_text": "AI TBD (30)\n\n6GR (90)\n.10.5.2.2 (30)\n.10.5.2.3 (30)\n\n.10.3.2 Modulation (30)",
+        "room_label": "BMO 225-226",
+        "cell_text": "AI 8.1 (30)\n\n\n6GR (90)\n.10.5.2.2 (30)\n.10.5.2.3 (30)\n\n.10.3.2 Modulation (30)",
         "fallback_start_time": null,
-        "cell_id": "c555760"
+        "cell_id": "cf4db36"
       },
       {
-        "room_label": "Room 214-215",
+        "room_label": "BMO 214-215",
         "cell_text": "6GR (120)\n.10.5.4.2 (30)\n.10.5.4.4 (30)\n.10.5.4.3 (60)",
         "fallback_start_time": null,
-        "cell_id": "cda1bdd"
+        "cell_id": "ccda4f7"
       },
       {
-        "room_label": "Offline1",
+        "room_label": "BMO 212",
         "cell_text": "Sorour (30)\n6GR (30)\n.10.3.2 Modulation (30)\n\nHiroki (90)\n6GR\n.10.8 Sensing (90)",
         "fallback_start_time": null,
-        "cell_id": "caca953"
+        "cell_id": "c996937"
       },
       {
-        "room_label": "Offline2",
+        "room_label": "BMO 221",
         "cell_text": "Sorouri (60)\nR20 NTN-NR (30)\n6GR .10.7.1 NTN (30)\n\nHiroki (60)\nR20\nA-IoT (60)",
         "fallback_start_time": null,
-        "cell_id": "ce07d16"
+        "cell_id": "cb6dd25"
       }
     ],
     "Sorour's schedule": [
       {
-        "room_label": "Sorour: Room 225-226",
+        "room_label": "Room 225-226",
+        "cell_text": "AI TBD (30)\n\n6GR (90)\n.10.5.2.2 (30)\n.10.5.2.3 (30)\n\n.10.3.2 Modulation (30)",
+        "fallback_start_time": null,
+        "cell_id": "c30dbad"
+      },
+      {
+        "room_label": "Room 225-226",
         "cell_text": "TBD: AI 8.1 (30)\n6GR (90)\nAI 10.5.2.2 PDSCH (30)\nAI 10.5.2.3 PUxCH (30)\nAI 10.3.2 Modulation (30)",
         "fallback_start_time": null,
-        "cell_id": "cb72567"
+        "cell_id": "cad18e7"
       }
     ]
   },

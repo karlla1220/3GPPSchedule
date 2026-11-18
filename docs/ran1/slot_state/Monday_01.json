@@ -2,7 +2,7 @@
   "day": "Monday",
   "time_block_index": 1,
   "source_hashes": {
-    "Main Schedule": "3d4b61c11da75336"
+    "Main Schedule": "a07a2531f39b1488"
   },
   "merged_sessions": [
     {
@@ -14,7 +14,7 @@
       "group_header": "6GR",
       "agenda_item": "10.5.1.1",
       "source_cells": [
-        "c3b52e2"
+        "ca22417"
       ],
       "description": "Synchronization acquisition and beam measurement",
       "agenda_descriptions": [
@@ -56,7 +56,7 @@
       "group_header": "6GR",
       "agenda_item": "10.5.1.2",
       "source_cells": [
-        "c3b52e2"
+        "ca22417"
       ],
       "description": "PRACH and RACH procedure",
       "agenda_descriptions": [
@@ -98,7 +98,7 @@
       "group_header": "6GR",
       "agenda_item": "10.5.1.3",
       "source_cells": [
-        "c3b52e2"
+        "ca22417"
       ],
       "description": "Bandwidth operation",
       "agenda_descriptions": [
@@ -140,7 +140,7 @@
       "group_header": "6GR",
       "agenda_item": "10.5.3.1",
       "source_cells": [
-        "cc71a96"
+        "c809eff"
       ],
       "description": "Aspects of downlink-based CSI acquisition",
       "agenda_descriptions": [
@@ -182,7 +182,7 @@
       "group_header": "6GR",
       "agenda_item": "10.5.3.2",
       "source_cells": [
-        "cc71a96"
+        "c809eff"
       ],
       "description": "Aspects of uplink-based CSI acquisition",
       "agenda_descriptions": [
@@ -224,7 +224,7 @@
       "group_header": "6GR",
       "agenda_item": "10.5.3.3",
       "source_cells": [
-        "cc71a96"
+        "c809eff"
       ],
       "description": "Other aspects",
       "agenda_descriptions": [
@@ -266,7 +266,7 @@
       "group_header": "6GR",
       "agenda_item": "10.5.4.1",
       "source_cells": [
-        "c77d129"
+        "c96e1c2"
       ],
       "description": "Downlink control channel, scheduling for downlink and uplink transmission",
       "agenda_descriptions": [
@@ -308,7 +308,7 @@
       "group_header": "6GR",
       "agenda_item": "10.5.4.4",
       "source_cells": [
-        "c77d129"
+        "c96e1c2"
       ],
       "description": "Handling of potential multiple uplink transmissions",
       "agenda_descriptions": [
@@ -350,7 +350,7 @@
       "group_header": "6GR",
       "agenda_item": "10.5.4.3",
       "source_cells": [
-        "c77d129"
+        "c96e1c2"
       ],
       "description": "HARQ related Aspects",
       "agenda_descriptions": [
@@ -384,28 +384,28 @@
       ]
     }
   ],
-  "merged_at": "2026-11-18T14:21:55.861193+00:00",
+  "merged_at": "2026-11-18T15:20:07.008607+00:00",
   "meeting_id": "ran1#127",
   "schema_version": 3,
   "source_entries": {
     "Main Schedule": [
       {
-        "room_label": "Champion Ballroom A + Room 225-226 + Room 214-215",
+        "room_label": "Champions Ballroom A + BMO 225-226 + BMO 214-215",
         "cell_text": "6GR (90)\n.10.5.1.1(20)\n.10.5.1.2(40)\n.10.5.1.3(30)",
         "fallback_start_time": null,
-        "cell_id": "c3b52e2"
+        "cell_id": "ca22417"
       },
       {
-        "room_label": "Offline1",
+        "room_label": "BMO 212",
         "cell_text": "Xiaodong (90)\n6GR\n.10.5.3.1 (40)\n.10.5.3.2 (25)\n.10.5.3.3 (25)",
         "fallback_start_time": null,
-        "cell_id": "cc71a96"
+        "cell_id": "c809eff"
       },
       {
-        "room_label": "Offline2",
+        "room_label": "BMO 221",
         "cell_text": "Hiroki (90)\n6GR (90)\n.10.5.4.1 (40)\n.10.5.4.4 (20)\n.10.5.4.3 (30)",
         "fallback_start_time": null,
-        "cell_id": "c77d129"
+        "cell_id": "c96e1c2"
       }
     ]
   },
