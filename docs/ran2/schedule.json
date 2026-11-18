@@ -1328,7 +1328,7 @@
           "stream": ""
         },
         {
-          "name": "Offline on AI/ML TBD",
+          "name": "Offline on AI/ML",
           "duration_minutes": 60,
           "start_time": "14:30",
           "end_time": "15:30",
@@ -1345,7 +1345,7 @@
           ],
           "room_scope": "assigned",
           "notes": [
-            "Offline on AI/ML () TBD"
+            "Offline on AI/ML"
           ],
           "inferred_agenda_items": [
             "7.1",
@@ -2298,6 +2298,33 @@
             "[8.4.3] Dynamic L1 measurement configuration"
           ],
           "inferred_agenda_items": [],
+          "email_details": [],
+          "part": null,
+          "stream": ""
+        },
+        {
+          "name": "1430-1530 [R20 IoT NTN] MAC open issues (vivo)",
+          "duration_minutes": 120,
+          "start_time": "14:30",
+          "end_time": "16:30",
+          "day": "Wednesday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": null,
+          "group_header": "Offline",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [
+            "brk3"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "1430-1530 [AT136][301][R20 IoT NTN] MAC open issues (vivo)"
+          ],
+          "inferred_agenda_items": [
+            "8.7"
+          ],
           "email_details": [],
           "part": null,
           "stream": ""
@@ -3613,20 +3640,20 @@
       "caveats": []
     }
   ],
-  "source_file": "R2_136_Schedule_v06.docx",
-  "generated_at": "2026-11-17 14:42",
+  "source_file": "R2_136_Schedule_v07.docx",
+  "generated_at": "2026-11-17 19:01",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
-    "R2_136_Schedule_v06.docx",
+    "R2_136_Schedule_v07.docx",
     "agenda.csv"
   ],
   "source_labels": {
-    "R2_136_Schedule_v06.docx": "Schedule",
+    "R2_136_Schedule_v07.docx": "Schedule",
     "agenda.csv": "Agenda"
   },
   "source_urls": {
-    "R2_136_Schedule_v06.docx": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN2/Agenda/R2_136_Schedule_v06.docx"
+    "R2_136_Schedule_v07.docx": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN2/Agenda/R2_136_Schedule_v07.docx"
   },
   "source_mails": {},
   "timezone": "America/Edmonton",
@@ -3734,6 +3761,13 @@
           "Tues 16:30-17:00",
           "BO3",
           "Jing Liang (vivo)"
+        ],
+        [
+          "[301]",
+          "[R20 IoT NTN] MAC open issues",
+          "Wed 14:30-15:30",
+          "BO3",
+          "Xiaodong (vivo)"
         ],
         [
           "[102]",
