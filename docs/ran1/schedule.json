@@ -10173,7 +10173,7 @@
           "stream": ""
         },
         {
-          "name": "TBD: AI 8.1",
+          "name": "AI 10.3.1 Channel coding",
           "duration_minutes": 20,
           "start_time": "17:40",
           "end_time": "18:00",
@@ -10181,23 +10181,28 @@
           "room_col_start": 3,
           "room_col_end": 4,
           "chair": "Sorour",
-          "agenda_item": "8.1",
+          "agenda_item": "10.3.1",
           "group_header": "",
-          "description": "Maintenance on all items of Rel-19 NR and E-UTRA",
+          "description": "Channel coding",
           "agenda_descriptions": [
             {
-              "agenda_item": "8.1",
-              "matched_agenda_item": "8.1",
-              "description": "Maintenance on all items of Rel-19 NR and E-UTRA",
+              "agenda_item": "10.3.1",
+              "matched_agenda_item": "10.3.1",
+              "description": "Channel coding",
               "hierarchy": [
                 {
-                  "agenda_item": "8",
-                  "description": "Maintenance on Rel-19 NR and E-UTRA",
+                  "agenda_item": "10",
+                  "description": "Rel-20 Study of 6GR",
                   "has_description": true
                 },
                 {
-                  "agenda_item": "8.1",
-                  "description": "Maintenance on all items of Rel-19 NR and E-UTRA",
+                  "agenda_item": "10.3",
+                  "description": "Channel coding and modulation for 6GR interface",
+                  "has_description": true
+                },
+                {
+                  "agenda_item": "10.3.1",
+                  "description": "Channel coding",
                   "has_description": true
                 }
               ]
@@ -14400,26 +14405,26 @@
     }
   ],
   "source_file": "RAN1#127 online and offline schedules - v02.docx",
-  "generated_at": "2026-11-18 05:21",
+  "generated_at": "2026-11-18 05:41",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
     "RAN1#127 online and offline schedules - v02.docx",
     "RAN1#127 online and offline schedules - v02_hh2.docx",
     "RAN1#127 online and offline schedules - UE Features.docx",
-    "RAN1#127 Sorour sessions online and offline schedules - v02.docx"
+    "RAN1#127 Sorour sessions online and offline schedules - v03.docx"
   ],
   "source_labels": {
     "RAN1#127 online and offline schedules - v02.docx": "Main",
     "RAN1#127 online and offline schedules - v02_hh2.docx": "Hiroki",
     "RAN1#127 online and offline schedules - UE Features.docx": "Ralf",
-    "RAN1#127 Sorour sessions online and offline schedules - v02.docx": "Sorour"
+    "RAN1#127 Sorour sessions online and offline schedules - v03.docx": "Sorour"
   },
   "source_urls": {
     "RAN1#127 online and offline schedules - v02.docx": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Chair_notes/RAN1%23127%20online%20and%20offline%20schedules%20-%20v02.docx",
     "RAN1#127 online and offline schedules - v02_hh2.docx": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Hiroki_notes/RAN1%23127%20online%20and%20offline%20schedules%20-%20v02_hh2.docx",
     "RAN1#127 online and offline schedules - UE Features.docx": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Ralf_notes/RAN1%23127%20online%20and%20offline%20schedules%20-%20UE%20Features.docx",
-    "RAN1#127 Sorour sessions online and offline schedules - v02.docx": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Sorour_notes/RAN1%23127%20Sorour%20sessions%20online%20and%20offline%20schedules%20-%20v02.docx",
+    "RAN1#127 Sorour sessions online and offline schedules - v03.docx": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Sorour_notes/RAN1%23127%20Sorour%20sessions%20online%20and%20offline%20schedules%20-%20v03.docx",
     "RAN1#127 online and offline schedules - v01.docx": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/R1-2610231/RAN1%23127%20online%20and%20offline%20schedules%20-%20v01.docx",
     "Draft RAN1#127 online and offline schedules - v02.docx": "https://www.3gpp.org/ftp/tsg_ran/WG1_RL1/TSGR1_127/Inbox/Chair_notes/Draft%20RAN1%23127%20online%20and%20offline%20schedules%20-%20v02.docx"
   },
