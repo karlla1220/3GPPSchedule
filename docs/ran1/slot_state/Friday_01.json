@@ -2,10 +2,10 @@
   "day": "Friday",
   "time_block_index": 1,
   "source_hashes": {
-    "Main Schedule": "30d37192eb315eb1",
-    "Hiroki's schedule": "6ea78ad3d936e989",
-    "Ralf's schedule": "b2454b17d4cc48d3",
-    "Sorour's schedule": "2d4abfec898b849e"
+    "Main Schedule": "8c0ee404d078c144",
+    "Hiroki's schedule": "4fd597b3992edb10",
+    "Ralf's schedule": "ad071f1c97851ecb",
+    "Sorour's schedule": "9493c87cb9e17846"
   },
   "merged_sessions": [
     {
@@ -17,8 +17,8 @@
       "group_header": "6GR",
       "agenda_item": null,
       "source_cells": [
-        "c98dfe2",
-        "c1aa9fc"
+        "c1a5e6b",
+        "c35c38c"
       ]
     },
     {
@@ -30,8 +30,8 @@
       "group_header": "6GR",
       "agenda_item": "10.5.2.2",
       "source_cells": [
-        "c67be2e",
-        "c9e966e"
+        "c4844c9",
+        "c096a4e"
       ],
       "description": "Downlink transmission scheme(s) for downlink shared channels",
       "agenda_descriptions": [
@@ -73,8 +73,8 @@
       "group_header": "6GR",
       "agenda_item": "10.5.2.3",
       "source_cells": [
-        "c67be2e",
-        "c9e966e"
+        "c4844c9",
+        "c096a4e"
       ],
       "description": "Uplink transmission scheme(s) for uplink channels",
       "agenda_descriptions": [
@@ -116,8 +116,8 @@
       "group_header": "6GR",
       "agenda_item": "10.8",
       "source_cells": [
-        "ca0ec4e",
-        "c4372ef"
+        "cad8ed0",
+        "c05ad3b"
       ],
       "description": "ISAC",
       "agenda_descriptions": [
@@ -149,57 +149,57 @@
       "group_header": "R20",
       "agenda_item": null,
       "source_cells": [
-        "ca0ec4e",
-        "c4372ef"
+        "cad8ed0",
+        "c05ad3b"
       ]
     }
   ],
-  "merged_at": "2026-11-17T15:02:43.085164+00:00",
+  "merged_at": "2026-11-18T14:21:55.879114+00:00",
   "meeting_id": "ran1#127",
   "schema_version": 3,
   "source_entries": {
     "Main Schedule": [
       {
-        "room_label": "Champions Ballroom A",
+        "room_label": "Champion Ballroom A",
         "cell_text": "Sweep",
         "fallback_start_time": null,
-        "cell_id": "c98dfe2"
+        "cell_id": "c1a5e6b"
       },
       {
-        "room_label": "BMO 225-226",
+        "room_label": "Room 225-226",
         "cell_text": "6GR (90)\n.10.5.2.2 (30)\n.10.5.2.3 (60)",
         "fallback_start_time": null,
-        "cell_id": "c67be2e"
+        "cell_id": "c4844c9"
       },
       {
-        "room_label": "BMO 214-215",
+        "room_label": "Room 214-215",
         "cell_text": "6GR (TBD)\n.10.8 Sensing ()\n\nR20 (TBD)\nA-IoT Phase2 (TBD)",
         "fallback_start_time": null,
-        "cell_id": "ca0ec4e"
+        "cell_id": "cad8ed0"
       }
     ],
     "Hiroki's schedule": [
       {
-        "room_label": "Hiroki: BMO 214-215",
+        "room_label": "Hiroki: Room 214-215",
         "cell_text": "6GR (TBD)\n.10.8 Sensing (TBD)\n\nR20 (TBD)\nA-IoT Phase2 (TBD)",
         "fallback_start_time": null,
-        "cell_id": "c4372ef"
+        "cell_id": "c05ad3b"
       }
     ],
     "Ralf's schedule": [
       {
-        "room_label": "Ralf: Champions Ballroom A",
+        "room_label": "Ralf: Champion Ballroom A",
         "cell_text": "Sweep\n 6GR",
         "fallback_start_time": null,
-        "cell_id": "c1aa9fc"
+        "cell_id": "c35c38c"
       }
     ],
     "Sorour's schedule": [
       {
-        "room_label": "Room 225-226",
+        "room_label": "Sorour: Room 225-226",
         "cell_text": "6GR (90)\nAI 10.5.2.2 PDSCH (30)\nAI 10.5.2.3 PUxCH (60)",
         "fallback_start_time": null,
-        "cell_id": "c9e966e"
+        "cell_id": "c096a4e"
       }
     ]
   },

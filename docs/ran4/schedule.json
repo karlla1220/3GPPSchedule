@@ -3443,6 +3443,33 @@
           "stream": ""
         },
         {
+          "name": "Lunch break AH : 102-1 General and UE RF",
+          "duration_minutes": 60,
+          "start_time": "13:30",
+          "end_time": "14:30",
+          "day": "Tuesday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "Toni",
+          "agenda_item": null,
+          "group_header": "",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [
+            "yang"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "Lunch break AH (13.30-14.30): 102-1 General and UE RF by Toni (Qualcomm)"
+          ],
+          "inferred_agenda_items": [
+            "8.3"
+          ],
+          "email_details": [],
+          "part": null,
+          "stream": ""
+        },
+        {
           "name": "BR2 Ad-hoc: Ambient IoT D2T2",
           "duration_minutes": 60,
           "start_time": "14:30",
@@ -3701,9 +3728,9 @@
         },
         {
           "name": "Rel-20 RRM",
-          "duration_minutes": 60,
+          "duration_minutes": 80,
           "start_time": "14:30",
-          "end_time": "15:30",
+          "end_time": "15:50",
           "day": "Tuesday",
           "room_col_start": 2,
           "room_col_end": 3,
@@ -3922,8 +3949,8 @@
         },
         {
           "name": "[202] NR_UAV_req_RRM",
-          "duration_minutes": 60,
-          "start_time": "15:30",
+          "duration_minutes": 40,
+          "start_time": "15:50",
           "end_time": "16:30",
           "day": "Tuesday",
           "room_col_start": 2,
@@ -3987,6 +4014,33 @@
           ],
           "inferred_agenda_items": [
             "7.17.3"
+          ],
+          "email_details": [],
+          "part": null,
+          "stream": ""
+        },
+        {
+          "name": "Coffee break ad-hoc: 6G RRM",
+          "duration_minutes": 30,
+          "start_time": "16:30",
+          "end_time": "17:00",
+          "day": "Tuesday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "Jerry",
+          "agenda_item": null,
+          "group_header": "",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [
+            "yang"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "Coffee break ad-hoc: 6G RRM by Jerry (Apple)"
+          ],
+          "inferred_agenda_items": [
+            "8.6"
           ],
           "email_details": [],
           "part": null,
@@ -4792,7 +4846,8 @@
           {
             "name": "Lunch break",
             "start": "13:00",
-            "end": "14:30"
+            "end": "14:30",
+            "label_position": "time-axis"
           },
           {
             "name": "Coffee break",
@@ -5156,7 +5211,7 @@
           "room_scope": "assigned",
           "notes": [
             "OTA",
-            "[219] 6G_testability_OTA",
+            "[219] 6G_testability_OTA (Start from RAN4/RAN5 RRM work split topic)",
             "[226] OTA_Maintenance",
             "[216][217] NR_UE_OTA_Enh"
           ],
@@ -5166,7 +5221,7 @@
           "stream": ""
         },
         {
-          "name": "[107] 6G AI",
+          "name": "107] 6G AI",
           "duration_minutes": 120,
           "start_time": "08:30",
           "end_time": "10:30",
@@ -5174,95 +5229,20 @@
           "room_col_start": 2,
           "room_col_end": 3,
           "chair": "Yang TANG",
-          "agenda_item": "8.8.1, 8.8.2, 8.8.3, 8.8.4",
-          "group_header": "6G study item",
-          "description": "General\nAI-NC Sub-Case 1: AI-based DPoD (Digital Post-Distortion) at NW\nUse Case 3 AI-RRM use case\nOthers",
-          "agenda_descriptions": [
-            {
-              "agenda_item": "8.8.1",
-              "matched_agenda_item": "8.8.1",
-              "description": "General",
-              "hierarchy": [
-                {
-                  "agenda_item": "8",
-                  "description": "6G study item"
-                },
-                {
-                  "agenda_item": "8.8",
-                  "description": "AI"
-                },
-                {
-                  "agenda_item": "8.8.1",
-                  "description": "General"
-                }
-              ]
-            },
-            {
-              "agenda_item": "8.8.2",
-              "matched_agenda_item": "8.8.2",
-              "description": "AI-NC Sub-Case 1: AI-based DPoD (Digital Post-Distortion) at NW",
-              "hierarchy": [
-                {
-                  "agenda_item": "8",
-                  "description": "6G study item"
-                },
-                {
-                  "agenda_item": "8.8",
-                  "description": "AI"
-                },
-                {
-                  "agenda_item": "8.8.2",
-                  "description": "AI-NC Sub-Case 1: AI-based DPoD (Digital Post-Distortion) at NW"
-                }
-              ]
-            },
-            {
-              "agenda_item": "8.8.3",
-              "matched_agenda_item": "8.8.3",
-              "description": "Use Case 3 AI-RRM use case",
-              "hierarchy": [
-                {
-                  "agenda_item": "8",
-                  "description": "6G study item"
-                },
-                {
-                  "agenda_item": "8.8",
-                  "description": "AI"
-                },
-                {
-                  "agenda_item": "8.8.3",
-                  "description": "Use Case 3 AI-RRM use case"
-                }
-              ]
-            },
-            {
-              "agenda_item": "8.8.4",
-              "matched_agenda_item": "8.8.4",
-              "description": "Others",
-              "hierarchy": [
-                {
-                  "agenda_item": "8",
-                  "description": "6G study item"
-                },
-                {
-                  "agenda_item": "8.8",
-                  "description": "AI"
-                },
-                {
-                  "agenda_item": "8.8.4",
-                  "description": "Others"
-                }
-              ]
-            }
-          ],
+          "agenda_item": null,
+          "group_header": "",
+          "description": null,
+          "agenda_descriptions": [],
           "room_ids": [
             "yang"
           ],
           "room_scope": "assigned",
           "notes": [
-            "[107] 6G AI"
+            "107] 6G AI"
           ],
-          "inferred_agenda_items": [],
+          "inferred_agenda_items": [
+            "8.8"
+          ],
           "email_details": [],
           "part": null,
           "stream": ""
@@ -5395,6 +5375,74 @@
           "notes": [
             "BR2 Ad-Hoc: Ambient IoT sys param and D4T1",
             "[353] A-IoT_sys_outdoor chaired by Linling (Huawei)"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": null,
+          "stream": ""
+        },
+        {
+          "name": "Coffree break ad-hoc: Extended GB",
+          "duration_minutes": 30,
+          "start_time": "10:30",
+          "end_time": "11:00",
+          "day": "Wednesday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "Kun",
+          "agenda_item": null,
+          "group_header": "",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [
+            "gene"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "Coffree break ad-hoc: Extended GB chaired by Kun (Sony)"
+          ],
+          "inferred_agenda_items": [
+            "7.12"
+          ],
+          "email_details": [],
+          "part": null,
+          "stream": ""
+        },
+        {
+          "name": "Coffee break AH: [111] 6G operation efficiency",
+          "duration_minutes": 30,
+          "start_time": "10:30",
+          "end_time": "11:00",
+          "day": "Wednesday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "Aijun",
+          "agenda_item": "8.12",
+          "group_header": "6G study item",
+          "description": "RAN4 operation efficiency",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "8.12",
+              "matched_agenda_item": "8.12",
+              "description": "RAN4 operation efficiency",
+              "hierarchy": [
+                {
+                  "agenda_item": "8",
+                  "description": "6G study item"
+                },
+                {
+                  "agenda_item": "8.12",
+                  "description": "RAN4 operation efficiency"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "yang"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "Coffee break AH: [111] 6G operation efficiency by Aijun (CATT)"
           ],
           "inferred_agenda_items": [],
           "email_details": [],
@@ -5833,7 +5881,7 @@
           "stream": ""
         },
         {
-          "name": "[101-B] System Parameter",
+          "name": "101-B] System Parameter",
           "duration_minutes": 120,
           "start_time": "11:00",
           "end_time": "13:00",
@@ -5927,7 +5975,7 @@
           ],
           "room_scope": "assigned",
           "notes": [
-            "[101-B] System Parameter"
+            "101-B] System Parameter"
           ],
           "inferred_agenda_items": [],
           "email_details": [],
@@ -5972,6 +6020,7 @@
           ],
           "room_scope": "assigned",
           "notes": [
+            "----12:00-----",
             "Main Ad-hoc:",
             "[107-B] 6G AI, Chaired by Santhan (Ericsson)"
           ],
@@ -6113,6 +6162,130 @@
             "[224] Demod_Maintenance_up_to_R17",
             "[225] Demod_Maintenance_R18_to_R20",
             "[214] 6G Demod_Part1"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": null,
+          "stream": ""
+        },
+        {
+          "name": "Luch break AH: [101-A] 6G System parameter",
+          "duration_minutes": 90,
+          "start_time": "13:00",
+          "end_time": "14:30",
+          "day": "Wednesday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "Umeda-san",
+          "agenda_item": "8.2.1, 8.2.2, 8.2.7",
+          "group_header": "6G study item",
+          "description": "Waveform\nChannel bandwidth and aggregated channel bandwidth for intra-band contiguous CA\nOthers",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "8.2.1",
+              "matched_agenda_item": "8.2.1",
+              "description": "Waveform",
+              "hierarchy": [
+                {
+                  "agenda_item": "8",
+                  "description": "6G study item"
+                },
+                {
+                  "agenda_item": "8.2",
+                  "description": "System parameters"
+                },
+                {
+                  "agenda_item": "8.2.1",
+                  "description": "Waveform"
+                }
+              ]
+            },
+            {
+              "agenda_item": "8.2.2",
+              "matched_agenda_item": "8.2.2",
+              "description": "Channel bandwidth and aggregated channel bandwidth for intra-band contiguous CA",
+              "hierarchy": [
+                {
+                  "agenda_item": "8",
+                  "description": "6G study item"
+                },
+                {
+                  "agenda_item": "8.2",
+                  "description": "System parameters"
+                },
+                {
+                  "agenda_item": "8.2.2",
+                  "description": "Channel bandwidth and aggregated channel bandwidth for intra-band contiguous CA"
+                }
+              ]
+            },
+            {
+              "agenda_item": "8.2.7",
+              "matched_agenda_item": "8.2.7",
+              "description": "Others",
+              "hierarchy": [
+                {
+                  "agenda_item": "8",
+                  "description": "6G study item"
+                },
+                {
+                  "agenda_item": "8.2",
+                  "description": "System parameters"
+                },
+                {
+                  "agenda_item": "8.2.7",
+                  "description": "Others"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "ad-hoc-room"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "Luch break AH: [101-A] 6G System parameter Chaired by Umeda-san (Huawei)"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": null,
+          "stream": ""
+        },
+        {
+          "name": "Luch break AH: [105-A] 6G RRM",
+          "duration_minutes": 90,
+          "start_time": "13:00",
+          "end_time": "14:30",
+          "day": "Wednesday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "Jerry",
+          "agenda_item": "8.6, 8.6.2.1, 8.6.2.2, 8.6.3",
+          "group_header": "6G study item",
+          "description": "RRM",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "8.6",
+              "matched_agenda_item": "8.6",
+              "description": "RRM",
+              "hierarchy": [
+                {
+                  "agenda_item": "8",
+                  "description": "6G study item"
+                },
+                {
+                  "agenda_item": "8.6",
+                  "description": "RRM"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "yang"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "Luch break AH: [105-A] 6G RRM Chaired by Jerry (Apple)"
           ],
           "inferred_agenda_items": [],
           "email_details": [],
@@ -6601,6 +6774,33 @@
             "[323] NTN_Bands_Features_R20, chaired by Daniel (Apple)"
           ],
           "inferred_agenda_items": [],
+          "email_details": [],
+          "part": null,
+          "stream": ""
+        },
+        {
+          "name": "Coffree break ad-hoc: NTN DC CA RRM",
+          "duration_minutes": 30,
+          "start_time": "16:30",
+          "end_time": "17:00",
+          "day": "Wednesday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "Jinyeong",
+          "agenda_item": null,
+          "group_header": "",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [
+            "gene"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "Coffree break ad-hoc: NTN DC CA RRM chaired by Jinyeong (LGE)"
+          ],
+          "inferred_agenda_items": [
+            "7.6.6.3"
+          ],
           "email_details": [],
           "part": null,
           "stream": ""
@@ -7326,17 +7526,20 @@
           {
             "name": "Coffee break",
             "start": "10:30",
-            "end": "11:00"
+            "end": "11:00",
+            "label_position": "time-axis"
           },
           {
             "name": "Lunch break",
             "start": "13:00",
-            "end": "14:30"
+            "end": "14:30",
+            "label_position": "time-axis"
           },
           {
             "name": "Coffee break",
             "start": "16:30",
-            "end": "17:00"
+            "end": "17:00",
+            "label_position": "time-axis"
           }
         ],
         "blocks": []
@@ -7722,6 +7925,89 @@
             2,
             2
           ],
+          "stream": ""
+        },
+        {
+          "name": "Coffee break AH: [105-B] 6G RRM",
+          "duration_minutes": 30,
+          "start_time": "10:30",
+          "end_time": "11:00",
+          "day": "Thursday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "Jin-Yup",
+          "agenda_item": "8.6.1, 8.6.4, 8.6.5",
+          "group_header": "6G study item",
+          "description": "6G measurement gap design\n6G mobility related RRM\nOther RRM topics (driven by LS and the discussion of other RAN4 topics)",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "8.6.1",
+              "matched_agenda_item": "8.6.1",
+              "description": "6G measurement gap design",
+              "hierarchy": [
+                {
+                  "agenda_item": "8",
+                  "description": "6G study item"
+                },
+                {
+                  "agenda_item": "8.6",
+                  "description": "RRM"
+                },
+                {
+                  "agenda_item": "8.6.1",
+                  "description": "6G measurement gap design"
+                }
+              ]
+            },
+            {
+              "agenda_item": "8.6.4",
+              "matched_agenda_item": "8.6.4",
+              "description": "6G mobility related RRM",
+              "hierarchy": [
+                {
+                  "agenda_item": "8",
+                  "description": "6G study item"
+                },
+                {
+                  "agenda_item": "8.6",
+                  "description": "RRM"
+                },
+                {
+                  "agenda_item": "8.6.4",
+                  "description": "6G mobility related RRM"
+                }
+              ]
+            },
+            {
+              "agenda_item": "8.6.5",
+              "matched_agenda_item": "8.6.5",
+              "description": "Other RRM topics (driven by LS and the discussion of other RAN4 topics)",
+              "hierarchy": [
+                {
+                  "agenda_item": "8",
+                  "description": "6G study item"
+                },
+                {
+                  "agenda_item": "8.6",
+                  "description": "RRM"
+                },
+                {
+                  "agenda_item": "8.6.5",
+                  "description": "Other RRM topics (driven by LS and the discussion of other RAN4 topics)"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "ad-hoc-room"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "Coffee break AH: [105-B] 6G RRM Chaired by Jin-Yup (LGE)"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": null,
           "stream": ""
         },
         {
@@ -8938,7 +9224,8 @@
           {
             "name": "Coffee break",
             "start": "10:30",
-            "end": "11:00"
+            "end": "11:00",
+            "label_position": "time-axis"
           },
           {
             "name": "Lunch break",
@@ -8985,6 +9272,15 @@
           "kind": "",
           "detail": "",
           "stream": ""
+        },
+        {
+          "name": "Ad hoc room",
+          "table_index": 0,
+          "room_index_in_table": 0,
+          "id": "ad-hoc-room",
+          "kind": "",
+          "detail": "",
+          "stream": ""
         }
       ],
       "sessions": [
@@ -9021,29 +9317,105 @@
           "day": "Friday",
           "room_col_start": 2,
           "room_col_end": 3,
-          "chair": "Shan YANG",
+          "chair": "Gene FONG",
           "agenda_item": null,
           "group_header": "",
           "description": null,
           "agenda_descriptions": [],
           "room_ids": [
+            "gene"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "Return to"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": null,
+          "stream": ""
+        },
+        {
+          "name": "BR1 Ad-hoc / [218] NR_AIML_air_Ph2",
+          "duration_minutes": 60,
+          "start_time": "08:00",
+          "end_time": "09:00",
+          "day": "Friday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "Tom",
+          "agenda_item": "7.13",
+          "group_header": "Rel-20 on-going non-spectrum related work/study items",
+          "description": "Artificial Intelligence (AI)/Machine Learning (ML) for NR Air Interface",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "7.13",
+              "matched_agenda_item": "7.13",
+              "description": "Artificial Intelligence (AI)/Machine Learning (ML) for NR Air Interface",
+              "hierarchy": [
+                {
+                  "agenda_item": "7",
+                  "description": "Rel-20 on-going non-spectrum related work/study items"
+                },
+                {
+                  "agenda_item": "7.13",
+                  "description": "Artificial Intelligence (AI)/Machine Learning (ML) for NR Air Interface"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
             "shan"
           ],
           "room_scope": "assigned",
           "notes": [
-            "Return to",
-            "5G PHY AI and AI mobility",
-            "5G RRM",
-            "Demod"
+            "8:00-9:00",
+            "BR1 Ad-hoc:",
+            "[218] NR_AIML_air_Ph2, Chaired by Tom (E///)"
           ],
-          "inferred_agenda_items": [
-            "4.3.3",
-            "4.3.4",
-            "7.4",
-            "7.5",
-            "7.13",
-            "7.15"
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": null,
+          "stream": ""
+        },
+        {
+          "name": "BR1 Ad-hoc / [218] NR_AIML_air_Ph2",
+          "duration_minutes": 60,
+          "start_time": "08:00",
+          "end_time": "09:00",
+          "day": "Friday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "Tom",
+          "agenda_item": "7.13",
+          "group_header": "Rel-20 on-going non-spectrum related work/study items",
+          "description": "Artificial Intelligence (AI)/Machine Learning (ML) for NR Air Interface",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "7.13",
+              "matched_agenda_item": "7.13",
+              "description": "Artificial Intelligence (AI)/Machine Learning (ML) for NR Air Interface",
+              "hierarchy": [
+                {
+                  "agenda_item": "7",
+                  "description": "Rel-20 on-going non-spectrum related work/study items"
+                },
+                {
+                  "agenda_item": "7.13",
+                  "description": "Artificial Intelligence (AI)/Machine Learning (ML) for NR Air Interface"
+                }
+              ]
+            }
           ],
+          "room_ids": [
+            "shan"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "8:00-9:00",
+            "BR1 Ad-hoc:",
+            "[218] NR_AIML_air_Ph2, Chaired by Tom (E///)"
+          ],
+          "inferred_agenda_items": [],
           "email_details": [],
           "part": null,
           "stream": ""
@@ -9084,8 +9456,134 @@
         },
         {
           "name": "Return to",
-          "duration_minutes": 105,
+          "duration_minutes": 150,
+          "start_time": "08:00",
+          "end_time": "10:30",
+          "day": "Friday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "Yang TANG",
+          "agenda_item": null,
+          "group_header": "",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [
+            "yang"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "Return to",
+            "6G system parameter",
+            "6G UE RF",
+            "6G spectrum",
+            "6G spectrum sharing"
+          ],
+          "inferred_agenda_items": [
+            "8.2",
+            "8.3",
+            "8.5",
+            "8.9"
+          ],
+          "email_details": [],
+          "part": null,
+          "stream": ""
+        },
+        {
+          "name": "Return to / 5G AI mobility / 5G RRM",
+          "duration_minutes": 90,
+          "start_time": "09:00",
+          "end_time": "10:30",
+          "day": "Friday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "Shan YANG",
+          "agenda_item": null,
+          "group_header": "",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [
+            "shan"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "Return to (Start from 9:00)",
+            "5G AI mobility",
+            "5G RRM",
+            "5G PHY AI"
+          ],
+          "inferred_agenda_items": [
+            "7.4",
+            "7.13",
+            "7.15"
+          ],
+          "email_details": [],
+          "part": null,
+          "stream": ""
+        },
+        {
+          "name": "Return to / 5G AI mobility / 5G RRM",
+          "duration_minutes": 90,
+          "start_time": "09:00",
+          "end_time": "10:30",
+          "day": "Friday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "Shan YANG",
+          "agenda_item": null,
+          "group_header": "",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [
+            "shan"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "Return to (Start from 9:00)",
+            "5G AI mobility",
+            "5G RRM",
+            "5G PHY AI"
+          ],
+          "inferred_agenda_items": [
+            "7.4",
+            "7.13",
+            "7.15"
+          ],
+          "email_details": [],
+          "part": null,
+          "stream": ""
+        },
+        {
+          "name": "Joint session",
+          "duration_minutes": 30,
           "start_time": "11:00",
+          "end_time": "11:30",
+          "day": "Friday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": null,
+          "group_header": "",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [
+            "yang",
+            "shan",
+            "gene",
+            "ad-hoc-room"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "Joint session"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": null,
+          "stream": ""
+        },
+        {
+          "name": "Return to",
+          "duration_minutes": 75,
+          "start_time": "11:30",
           "end_time": "12:45",
           "day": "Friday",
           "room_col_start": 2,
@@ -9109,8 +9607,65 @@
         },
         {
           "name": "Return to",
-          "duration_minutes": 105,
-          "start_time": "11:00",
+          "duration_minutes": 75,
+          "start_time": "11:30",
+          "end_time": "12:45",
+          "day": "Friday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "Gene FONG",
+          "agenda_item": null,
+          "group_header": "",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [
+            "gene"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "Return to"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": null,
+          "stream": ""
+        },
+        {
+          "name": "Return to",
+          "duration_minutes": 75,
+          "start_time": "11:30",
+          "end_time": "12:45",
+          "day": "Friday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "Shan YANG",
+          "agenda_item": null,
+          "group_header": "",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [
+            "shan"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "Return to",
+            "NTN-resilient",
+            "OTA",
+            "Demod"
+          ],
+          "inferred_agenda_items": [
+            "7.3",
+            "7.5",
+            "7.17"
+          ],
+          "email_details": [],
+          "part": null,
+          "stream": ""
+        },
+        {
+          "name": "Return to",
+          "duration_minutes": 75,
+          "start_time": "11:30",
           "end_time": "12:45",
           "day": "Friday",
           "room_col_start": 2,
@@ -9138,8 +9693,45 @@
         },
         {
           "name": "6G RRM / 6G AI / 6G operation efficiency …",
-          "duration_minutes": 105,
-          "start_time": "11:00",
+          "duration_minutes": 75,
+          "start_time": "11:30",
+          "end_time": "12:45",
+          "day": "Friday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "Yang TANG",
+          "agenda_item": null,
+          "group_header": "",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [
+            "yang"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "6G RRM",
+            "6G AI",
+            "6G operation efficiency",
+            "5GA R19 AI",
+            "13 Any other business",
+            "14 Close of the meeting (main session)"
+          ],
+          "inferred_agenda_items": [
+            "7.13",
+            "8.6",
+            "8.8",
+            "8.12",
+            "14",
+            "15"
+          ],
+          "email_details": [],
+          "part": null,
+          "stream": ""
+        },
+        {
+          "name": "6G RRM / 6G AI / 6G operation efficiency …",
+          "duration_minutes": 75,
+          "start_time": "11:30",
           "end_time": "12:45",
           "day": "Friday",
           "room_col_start": 2,
@@ -9206,6 +9798,31 @@
           "day": "Friday",
           "room_col_start": 2,
           "room_col_end": 3,
+          "chair": "Gene FONG",
+          "agenda_item": null,
+          "group_header": "",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [
+            "gene"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "Return to (final round)"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": null,
+          "stream": ""
+        },
+        {
+          "name": "Return to (final round)",
+          "duration_minutes": 210,
+          "start_time": "14:00",
+          "end_time": "17:30",
+          "day": "Friday",
+          "room_col_start": 2,
+          "room_col_end": 3,
           "chair": "Shan YANG",
           "agenda_item": null,
           "group_header": "",
@@ -9213,6 +9830,56 @@
           "agenda_descriptions": [],
           "room_ids": [
             "shan"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "Return to (final round)"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": null,
+          "stream": ""
+        },
+        {
+          "name": "Return to (final round)",
+          "duration_minutes": 210,
+          "start_time": "14:00",
+          "end_time": "17:30",
+          "day": "Friday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "Shan YANG",
+          "agenda_item": null,
+          "group_header": "",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [
+            "shan"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "Return to (final round)"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": null,
+          "stream": ""
+        },
+        {
+          "name": "Return to (final round)",
+          "duration_minutes": 210,
+          "start_time": "14:00",
+          "end_time": "17:30",
+          "day": "Friday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "Yang TANG",
+          "agenda_item": null,
+          "group_header": "",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [
+            "yang"
           ],
           "room_scope": "assigned",
           "notes": [
@@ -9270,24 +9937,725 @@
         "blocks": []
       },
       "caveats": []
+    },
+    {
+      "day_name": "Friday",
+      "rooms": [
+        {
+          "name": "RAN4 Main (Yang Session)",
+          "table_index": 0,
+          "room_index_in_table": 0,
+          "id": "yang",
+          "kind": "",
+          "detail": "",
+          "stream": ""
+        },
+        {
+          "name": "RAN4 RRM_Demod_OTA (Shan Session)",
+          "table_index": 0,
+          "room_index_in_table": 0,
+          "id": "shan",
+          "kind": "",
+          "detail": "",
+          "stream": ""
+        },
+        {
+          "name": "RAN4 RF,NTN,A-IOT (Gene Session)",
+          "table_index": 0,
+          "room_index_in_table": 0,
+          "id": "gene",
+          "kind": "",
+          "detail": "",
+          "stream": ""
+        },
+        {
+          "name": "Ad hoc room",
+          "table_index": 0,
+          "room_index_in_table": 0,
+          "id": "ad-hoc-room",
+          "kind": "",
+          "detail": "",
+          "stream": ""
+        }
+      ],
+      "sessions": [
+        {
+          "name": "Return to",
+          "duration_minutes": 150,
+          "start_time": "08:00",
+          "end_time": "10:30",
+          "day": "Friday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "Gene FONG",
+          "agenda_item": null,
+          "group_header": "",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [
+            "gene"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "Return to"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": null,
+          "stream": ""
+        },
+        {
+          "name": "Return to",
+          "duration_minutes": 150,
+          "start_time": "08:00",
+          "end_time": "10:30",
+          "day": "Friday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "Gene FONG",
+          "agenda_item": null,
+          "group_header": "",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [
+            "gene"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "Return to"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": null,
+          "stream": ""
+        },
+        {
+          "name": "BR1 Ad-hoc / [218] NR_AIML_air_Ph2",
+          "duration_minutes": 60,
+          "start_time": "08:00",
+          "end_time": "09:00",
+          "day": "Friday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "Tom",
+          "agenda_item": "7.13",
+          "group_header": "Rel-20 on-going non-spectrum related work/study items",
+          "description": "Artificial Intelligence (AI)/Machine Learning (ML) for NR Air Interface",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "7.13",
+              "matched_agenda_item": "7.13",
+              "description": "Artificial Intelligence (AI)/Machine Learning (ML) for NR Air Interface",
+              "hierarchy": [
+                {
+                  "agenda_item": "7",
+                  "description": "Rel-20 on-going non-spectrum related work/study items"
+                },
+                {
+                  "agenda_item": "7.13",
+                  "description": "Artificial Intelligence (AI)/Machine Learning (ML) for NR Air Interface"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "shan"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "8:00-9:00",
+            "BR1 Ad-hoc:",
+            "[218] NR_AIML_air_Ph2, Chaired by Tom (E///)"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": null,
+          "stream": ""
+        },
+        {
+          "name": "BR1 Ad-hoc / [218] NR_AIML_air_Ph2",
+          "duration_minutes": 60,
+          "start_time": "08:00",
+          "end_time": "09:00",
+          "day": "Friday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "Tom",
+          "agenda_item": "7.13",
+          "group_header": "Rel-20 on-going non-spectrum related work/study items",
+          "description": "Artificial Intelligence (AI)/Machine Learning (ML) for NR Air Interface",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "7.13",
+              "matched_agenda_item": "7.13",
+              "description": "Artificial Intelligence (AI)/Machine Learning (ML) for NR Air Interface",
+              "hierarchy": [
+                {
+                  "agenda_item": "7",
+                  "description": "Rel-20 on-going non-spectrum related work/study items"
+                },
+                {
+                  "agenda_item": "7.13",
+                  "description": "Artificial Intelligence (AI)/Machine Learning (ML) for NR Air Interface"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "shan"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "8:00-9:00",
+            "BR1 Ad-hoc:",
+            "[218] NR_AIML_air_Ph2, Chaired by Tom (E///)"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": null,
+          "stream": ""
+        },
+        {
+          "name": "Return to",
+          "duration_minutes": 150,
+          "start_time": "08:00",
+          "end_time": "10:30",
+          "day": "Friday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "Yang TANG",
+          "agenda_item": null,
+          "group_header": "",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [
+            "yang"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "Return to",
+            "6G system parameter",
+            "6G UE RF",
+            "6G spectrum",
+            "6G spectrum sharing"
+          ],
+          "inferred_agenda_items": [
+            "8.2",
+            "8.3",
+            "8.5",
+            "8.9"
+          ],
+          "email_details": [],
+          "part": null,
+          "stream": ""
+        },
+        {
+          "name": "Return to",
+          "duration_minutes": 150,
+          "start_time": "08:00",
+          "end_time": "10:30",
+          "day": "Friday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "Yang TANG",
+          "agenda_item": null,
+          "group_header": "",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [
+            "yang"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "Return to",
+            "6G system parameter",
+            "6G UE RF",
+            "6G spectrum",
+            "6G spectrum sharing"
+          ],
+          "inferred_agenda_items": [
+            "8.2",
+            "8.3",
+            "8.5",
+            "8.9"
+          ],
+          "email_details": [],
+          "part": null,
+          "stream": ""
+        },
+        {
+          "name": "Return to / 5G AI mobility / 5G RRM",
+          "duration_minutes": 90,
+          "start_time": "09:00",
+          "end_time": "10:30",
+          "day": "Friday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "Shan YANG",
+          "agenda_item": null,
+          "group_header": "",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [
+            "shan"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "Return to (Start from 9:00)",
+            "5G AI mobility",
+            "5G RRM",
+            "5G PHY AI"
+          ],
+          "inferred_agenda_items": [
+            "7.4",
+            "7.13",
+            "7.15"
+          ],
+          "email_details": [],
+          "part": null,
+          "stream": ""
+        },
+        {
+          "name": "Return to / 5G AI mobility / 5G RRM",
+          "duration_minutes": 90,
+          "start_time": "09:00",
+          "end_time": "10:30",
+          "day": "Friday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "Shan YANG",
+          "agenda_item": null,
+          "group_header": "",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [
+            "shan"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "Return to (Start from 9:00)",
+            "5G AI mobility",
+            "5G RRM",
+            "5G PHY AI"
+          ],
+          "inferred_agenda_items": [
+            "7.4",
+            "7.13",
+            "7.15"
+          ],
+          "email_details": [],
+          "part": null,
+          "stream": ""
+        },
+        {
+          "name": "Joint session",
+          "duration_minutes": 30,
+          "start_time": "11:00",
+          "end_time": "11:30",
+          "day": "Friday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": null,
+          "group_header": "",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [
+            "yang",
+            "shan",
+            "gene",
+            "ad-hoc-room"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "Joint session"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": null,
+          "stream": ""
+        },
+        {
+          "name": "Return to",
+          "duration_minutes": 75,
+          "start_time": "11:30",
+          "end_time": "12:45",
+          "day": "Friday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "Gene FONG",
+          "agenda_item": null,
+          "group_header": "",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [
+            "gene"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "Return to"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": null,
+          "stream": ""
+        },
+        {
+          "name": "Return to",
+          "duration_minutes": 75,
+          "start_time": "11:30",
+          "end_time": "12:45",
+          "day": "Friday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "Gene FONG",
+          "agenda_item": null,
+          "group_header": "",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [
+            "gene"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "Return to"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": null,
+          "stream": ""
+        },
+        {
+          "name": "Return to",
+          "duration_minutes": 75,
+          "start_time": "11:30",
+          "end_time": "12:45",
+          "day": "Friday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "Shan YANG",
+          "agenda_item": null,
+          "group_header": "",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [
+            "shan"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "Return to",
+            "NTN-resilient",
+            "OTA",
+            "Demod"
+          ],
+          "inferred_agenda_items": [
+            "7.3",
+            "7.5",
+            "7.17"
+          ],
+          "email_details": [],
+          "part": null,
+          "stream": ""
+        },
+        {
+          "name": "Return to",
+          "duration_minutes": 75,
+          "start_time": "11:30",
+          "end_time": "12:45",
+          "day": "Friday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "Shan YANG",
+          "agenda_item": null,
+          "group_header": "",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [
+            "shan"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "Return to",
+            "OTA"
+          ],
+          "inferred_agenda_items": [
+            "7.3",
+            "8.11"
+          ],
+          "email_details": [],
+          "part": null,
+          "stream": ""
+        },
+        {
+          "name": "6G RRM / 6G AI / 6G operation efficiency …",
+          "duration_minutes": 75,
+          "start_time": "11:30",
+          "end_time": "12:45",
+          "day": "Friday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "Yang TANG",
+          "agenda_item": null,
+          "group_header": "",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [
+            "yang"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "6G RRM",
+            "6G AI",
+            "6G operation efficiency",
+            "5GA R19 AI",
+            "13 Any other business",
+            "14 Close of the meeting (main session)"
+          ],
+          "inferred_agenda_items": [
+            "7.13",
+            "8.6",
+            "8.8",
+            "8.12",
+            "14",
+            "15"
+          ],
+          "email_details": [],
+          "part": null,
+          "stream": ""
+        },
+        {
+          "name": "6G RRM / 6G AI / 6G operation efficiency …",
+          "duration_minutes": 75,
+          "start_time": "11:30",
+          "end_time": "12:45",
+          "day": "Friday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "Yang TANG",
+          "agenda_item": null,
+          "group_header": "",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [
+            "yang"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "6G RRM",
+            "6G AI",
+            "6G operation efficiency",
+            "5GA R19 AI",
+            "13 Any other business",
+            "14 Close of the meeting (main session)"
+          ],
+          "inferred_agenda_items": [
+            "7.13",
+            "8.6",
+            "8.8",
+            "8.12",
+            "14",
+            "15"
+          ],
+          "email_details": [],
+          "part": null,
+          "stream": ""
+        },
+        {
+          "name": "Return to (final round)",
+          "duration_minutes": 210,
+          "start_time": "14:00",
+          "end_time": "17:30",
+          "day": "Friday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "Gene FONG",
+          "agenda_item": null,
+          "group_header": "",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [
+            "gene"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "Return to (final round)"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": null,
+          "stream": ""
+        },
+        {
+          "name": "Return to (final round)",
+          "duration_minutes": 210,
+          "start_time": "14:00",
+          "end_time": "17:30",
+          "day": "Friday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "Gene FONG",
+          "agenda_item": null,
+          "group_header": "",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [
+            "gene"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "Return to (final round)"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": null,
+          "stream": ""
+        },
+        {
+          "name": "Return to (final round)",
+          "duration_minutes": 210,
+          "start_time": "14:00",
+          "end_time": "17:30",
+          "day": "Friday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "Shan YANG",
+          "agenda_item": null,
+          "group_header": "",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [
+            "shan"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "Return to (final round)"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": null,
+          "stream": ""
+        },
+        {
+          "name": "Return to (final round)",
+          "duration_minutes": 210,
+          "start_time": "14:00",
+          "end_time": "17:30",
+          "day": "Friday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "Shan YANG",
+          "agenda_item": null,
+          "group_header": "",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [
+            "shan"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "Return to (final round)"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": null,
+          "stream": ""
+        },
+        {
+          "name": "Return to (final round)",
+          "duration_minutes": 210,
+          "start_time": "14:00",
+          "end_time": "17:30",
+          "day": "Friday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "Yang TANG",
+          "agenda_item": null,
+          "group_header": "",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [
+            "yang"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "Return to (final round)"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": null,
+          "stream": ""
+        },
+        {
+          "name": "Return to (final round)",
+          "duration_minutes": 210,
+          "start_time": "14:00",
+          "end_time": "17:30",
+          "day": "Friday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "Yang TANG",
+          "agenda_item": null,
+          "group_header": "",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [
+            "yang"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "Return to (final round)"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": null,
+          "stream": ""
+        }
+      ],
+      "date": "2026-11-20",
+      "timeline": {
+        "start": "08:00",
+        "end": "17:30",
+        "slot_minutes": 5,
+        "label_minutes": 30,
+        "breaks": [
+          {
+            "name": "Coffee break",
+            "start": "10:30",
+            "end": "11:00"
+          },
+          {
+            "name": "Joint session",
+            "start": "11:00",
+            "end": "11:30",
+            "label_position": "time-axis"
+          },
+          {
+            "name": "Lunch break",
+            "start": "12:45",
+            "end": "13:45"
+          }
+        ],
+        "blocks": []
+      },
+      "caveats": []
     }
   ],
-  "source_file": "RAN4_121_meeting_schedule_v07_after_Monday.pptx",
-  "generated_at": "2026-11-16 19:02",
+  "source_file": "RAN4_121_meeting_schedule_v09_after_TUE.pptx",
+  "generated_at": "2026-11-18 08:22",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
-    "RAN4_121_meeting_schedule_v07_after_Monday.pptx",
+    "RAN4_121_meeting_schedule_v09_after_TUE.pptx",
     "List_Topics_moderators -RAN4_121_v3.xlsx",
     "agenda.csv"
   ],
   "source_labels": {
-    "RAN4_121_meeting_schedule_v07_after_Monday.pptx": "Schedule v07 after Monday",
+    "RAN4_121_meeting_schedule_v09_after_TUE.pptx": "Schedule v09 after TUE",
     "List_Topics_moderators -RAN4_121_v3.xlsx": "Topics",
     "agenda.csv": "Agenda"
   },
   "source_urls": {
-    "RAN4_121_meeting_schedule_v07_after_Monday.pptx": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN4/Inbox/Meeting_Arrangements/RAN4_121_meeting_schedule_v07_after_Monday.pptx",
+    "RAN4_121_meeting_schedule_v09_after_TUE.pptx": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN4/Inbox/Meeting_Arrangements/RAN4_121_meeting_schedule_v09_after_TUE.pptx",
     "List_Topics_moderators -RAN4_121_v3.xlsx": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN4/Inbox/Meeting_Arrangements/List_Topics_moderators%20-RAN4_121_v3.xlsx",
     "agenda.csv": "https://www.3gpp.org/ftp/tsg_ran/WG4_Radio/TSGR4_121/Agenda/agenda.csv"
   },
@@ -9303,6 +10671,15 @@
   "topic_references": [],
   "topic_preamble": [],
   "supplements": [
+    {
+      "type": "heading",
+      "text": "Friday"
+    },
+    {
+      "type": "paragraph",
+      "text": "Note: Depending on the progress and the need, the session chair(s) may introduce additional morning AH sessions, starting no earlier than 8 am.",
+      "bold": false
+    },
     {
       "type": "heading",
       "text": "Friday"

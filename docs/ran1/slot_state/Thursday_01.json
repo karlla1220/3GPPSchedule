@@ -2,9 +2,9 @@
   "day": "Thursday",
   "time_block_index": 1,
   "source_hashes": {
-    "Main Schedule": "14146249235103db",
-    "Hiroki's schedule": "86eebe7b3c1b0cb8",
-    "Sorour's schedule": "d69467ccad119864"
+    "Main Schedule": "c6fbb9d4cc815a6b",
+    "Hiroki's schedule": "ace7e4381a7ba2ce",
+    "Sorour's schedule": "4c473375c02f68df"
   },
   "merged_sessions": [
     {
@@ -16,7 +16,7 @@
       "group_header": "6GR",
       "agenda_item": "10.4.1",
       "source_cells": [
-        "c2a6a23"
+        "cc7e174"
       ],
       "description": "Operation in idle mode",
       "agenda_descriptions": [
@@ -53,7 +53,7 @@
       "group_header": "6GR",
       "agenda_item": "10.4.2",
       "source_cells": [
-        "c2a6a23"
+        "cc7e174"
       ],
       "description": "Operation in connected mode",
       "agenda_descriptions": [
@@ -90,9 +90,8 @@
       "group_header": "R20 / R20 NR",
       "agenda_item": "9.2",
       "source_cells": [
-        "c6bc06d",
-        "cfeb562",
-        "c1b3452"
+        "ce96f7f",
+        "cc3d95b"
       ],
       "description": "NR MIMO Phase 6",
       "agenda_descriptions": [
@@ -124,9 +123,8 @@
       "group_header": "6GR",
       "agenda_item": "10.5.2.2",
       "source_cells": [
-        "c6bc06d",
-        "cfeb562",
-        "c1b3452"
+        "ce96f7f",
+        "cc3d95b"
       ],
       "description": "Downlink transmission scheme(s) for downlink shared channels",
       "agenda_descriptions": [
@@ -168,8 +166,8 @@
       "group_header": "6GR / 10.8 Sensing",
       "agenda_item": "10.8.2",
       "source_cells": [
-        "c6bfc67",
-        "c248310"
+        "c31ead3",
+        "cc85818"
       ],
       "description": "Aspects of integration with communication",
       "agenda_descriptions": [
@@ -206,8 +204,8 @@
       "group_header": "6GR / 10.8 Sensing",
       "agenda_item": "10.8.1",
       "source_cells": [
-        "c6bfc67",
-        "c248310"
+        "c31ead3",
+        "cc85818"
       ],
       "description": "Evaluations",
       "agenda_descriptions": [
@@ -244,7 +242,7 @@
       "group_header": "6GR",
       "agenda_item": "10.5.3.1",
       "source_cells": [
-        "c7c6f60"
+        "c102c0d"
       ],
       "description": "Aspects of downlink-based CSI acquisition",
       "agenda_descriptions": [
@@ -286,7 +284,7 @@
       "group_header": "6GR",
       "agenda_item": "10.5.3.3",
       "source_cells": [
-        "c7c6f60"
+        "c102c0d"
       ],
       "description": "Other aspects",
       "agenda_descriptions": [
@@ -328,7 +326,7 @@
       "group_header": "6GR",
       "agenda_item": "10.5.3.4",
       "source_cells": [
-        "c7c6f60"
+        "c102c0d"
       ],
       "description": "Beam management for downlink and uplink",
       "agenda_descriptions": [
@@ -370,66 +368,60 @@
       "group_header": "R20",
       "agenda_item": null,
       "source_cells": [
-        "cda0ec3"
+        "c1475f4"
       ]
     }
   ],
-  "merged_at": "2026-11-17T01:41:36.414415+00:00",
+  "merged_at": "2026-11-18T14:21:55.875271+00:00",
   "meeting_id": "ran1#127",
   "schema_version": 3,
   "source_entries": {
     "Main Schedule": [
       {
-        "room_label": "Champions Ballroom A",
+        "room_label": "Champion Ballroom A",
         "cell_text": "6GR (90)\n.10.4.1 (45)\n.10.4.2 (45)",
         "fallback_start_time": null,
-        "cell_id": "c2a6a23"
+        "cell_id": "cc7e174"
       },
-      {
-        "room_label": "BMO 225-226",
-        "cell_text": "R20 (90) \nMIMO (40)\n\n6GR (50)\n.10.5.2.2 (50)",
-        "fallback_start_time": null,
-        "cell_id": "c6bc06d"
-      },
-      {
-        "room_label": "BMO 214-215",
-        "cell_text": "6GR (90)\n.10.8 Sensing (90)",
-        "fallback_start_time": null,
-        "cell_id": "c6bfc67"
-      },
-      {
-        "room_label": "BMO 212",
-        "cell_text": "Xiaodong (90)\n6GR\n.10.5.3.1 (45)\n.10.5.3.3 (25)\n.10.5.3.4 (20)",
-        "fallback_start_time": null,
-        "cell_id": "c7c6f60"
-      },
-      {
-        "room_label": "BMO 221",
-        "cell_text": "Hiroki (90)\nR20 (90)\nA-IoT (90)",
-        "fallback_start_time": null,
-        "cell_id": "cda0ec3"
-      }
-    ],
-    "Hiroki's schedule": [
-      {
-        "room_label": "Hiroki: BMO 214-215",
-        "cell_text": "6GR (90)\n.10.8 Sensing (90)\n10.8.2 (45)\n10.8.1 (45)",
-        "fallback_start_time": null,
-        "cell_id": "c248310"
-      }
-    ],
-    "Sorour's schedule": [
       {
         "room_label": "Room 225-226",
         "cell_text": "R20 (40) \nMIMO (40)\n\n6GR (50)\n.10.5.2.2 (50)",
         "fallback_start_time": null,
-        "cell_id": "cfeb562"
+        "cell_id": "ce96f7f"
       },
       {
-        "room_label": "Room 225-226",
+        "room_label": "Room 214-215",
+        "cell_text": "6GR (90)\n.10.8 Sensing (90)",
+        "fallback_start_time": null,
+        "cell_id": "c31ead3"
+      },
+      {
+        "room_label": "Offline1",
+        "cell_text": "Xiaodong (90)\n6GR\n.10.5.3.1 (45)\n.10.5.3.3 (25)\n.10.5.3.4 (20)",
+        "fallback_start_time": null,
+        "cell_id": "c102c0d"
+      },
+      {
+        "room_label": "Offline2",
+        "cell_text": "Hiroki (90)\nR20 (90)\nA-IoT (90)",
+        "fallback_start_time": null,
+        "cell_id": "c1475f4"
+      }
+    ],
+    "Hiroki's schedule": [
+      {
+        "room_label": "Hiroki: Room 214-215",
+        "cell_text": "6GR (90)\n.10.8 Sensing (90)\n10.8.2 (45)\n10.8.1 (45)",
+        "fallback_start_time": null,
+        "cell_id": "cc85818"
+      }
+    ],
+    "Sorour's schedule": [
+      {
+        "room_label": "Sorour: Room 225-226",
         "cell_text": "R20 NR (40)\nAI 9.2 MIMO (40)\n6GR (50)\nAI 10.5.2.2 PDSCH (50)",
         "fallback_start_time": null,
-        "cell_id": "c1b3452"
+        "cell_id": "cc3d95b"
       }
     ]
   },

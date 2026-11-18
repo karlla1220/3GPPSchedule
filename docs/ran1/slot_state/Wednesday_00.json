@@ -2,10 +2,10 @@
   "day": "Wednesday",
   "time_block_index": 0,
   "source_hashes": {
-    "Main Schedule": "d8064d85b3d60b78",
-    "Hiroki's schedule": "a9da66b02c6bf5b0",
-    "Ralf's schedule": "e43deffc8c52dddc",
-    "Sorour's schedule": "b750fbf9326e213e"
+    "Main Schedule": "6850990df17c6e87",
+    "Hiroki's schedule": "a2b59363d3e57096",
+    "Ralf's schedule": "6945b4e6410a2ac7",
+    "Sorour's schedule": "96c891050304166b"
   },
   "merged_sessions": [
     {
@@ -17,7 +17,7 @@
       "group_header": "6GR",
       "agenda_item": "10.5.1.1",
       "source_cells": [
-        "cd16101"
+        "c8fa1f9"
       ],
       "description": "Synchronization acquisition and beam measurement",
       "agenda_descriptions": [
@@ -59,7 +59,7 @@
       "group_header": "6GR",
       "agenda_item": "10.5.1.2",
       "source_cells": [
-        "cd16101"
+        "c8fa1f9"
       ],
       "description": "PRACH and RACH procedure",
       "agenda_descriptions": [
@@ -101,7 +101,7 @@
       "group_header": "6GR",
       "agenda_item": "10.5.1.3",
       "source_cells": [
-        "cd16101"
+        "c8fa1f9"
       ],
       "description": "Bandwidth operation",
       "agenda_descriptions": [
@@ -143,7 +143,7 @@
       "group_header": "6GR",
       "agenda_item": "10.4.1",
       "source_cells": [
-        "cd16101"
+        "c8fa1f9"
       ],
       "description": "Operation in idle mode",
       "agenda_descriptions": [
@@ -180,9 +180,8 @@
       "group_header": "6GR",
       "agenda_item": "10.3.1",
       "source_cells": [
-        "c7dfb38",
-        "cea8129",
-        "cea82e8"
+        "c287ab8",
+        "c3a76c0"
       ],
       "description": "Channel coding",
       "agenda_descriptions": [
@@ -219,9 +218,8 @@
       "group_header": "6GR",
       "agenda_item": "10.7.1",
       "source_cells": [
-        "c7dfb38",
-        "cea8129",
-        "cea82e8"
+        "c287ab8",
+        "c3a76c0"
       ],
       "description": "NTN specific requirements and design",
       "agenda_descriptions": [
@@ -258,9 +256,8 @@
       "group_header": "R20 / R20 NR",
       "agenda_item": "9.5",
       "source_cells": [
-        "c7dfb38",
-        "cea8129",
-        "cea82e8"
+        "c287ab8",
+        "c3a76c0"
       ],
       "description": "NR NTN in systems using downlink compensation",
       "agenda_descriptions": [
@@ -292,9 +289,8 @@
       "group_header": "R20 / R20 NR",
       "agenda_item": "9.4",
       "source_cells": [
-        "c7dfb38",
-        "cea8129",
-        "cea82e8"
+        "c287ab8",
+        "c3a76c0"
       ],
       "description": "GNSS resilient NR-NTN operation",
       "agenda_descriptions": [
@@ -326,9 +322,9 @@
       "group_header": "TEI, AI 7/8.1",
       "agenda_item": "11",
       "source_cells": [
-        "c3ee39b",
-        "c676e5a",
-        "c97eefc"
+        "c4a9cb5",
+        "c5181fc",
+        "c9f1ef2"
       ],
       "description": "TEI",
       "agenda_descriptions": [
@@ -355,9 +351,9 @@
       "group_header": "TEI, AI 7/8.1",
       "agenda_item": "8.1",
       "source_cells": [
-        "c3ee39b",
-        "c676e5a",
-        "c97eefc"
+        "c4a9cb5",
+        "c5181fc",
+        "c9f1ef2"
       ],
       "description": "Maintenance on all items of Rel-19 NR and E-UTRA",
       "agenda_descriptions": [
@@ -389,9 +385,9 @@
       "group_header": "TEI, AI 7/8.1",
       "agenda_item": "8.1",
       "source_cells": [
-        "c3ee39b",
-        "c676e5a",
-        "c97eefc"
+        "c4a9cb5",
+        "c5181fc",
+        "c9f1ef2"
       ],
       "description": "Maintenance on all items of Rel-19 NR and E-UTRA",
       "agenda_descriptions": [
@@ -423,9 +419,9 @@
       "group_header": "6GR",
       "agenda_item": "10.5.4.1",
       "source_cells": [
-        "c3ee39b",
-        "c676e5a",
-        "c97eefc"
+        "c4a9cb5",
+        "c5181fc",
+        "c9f1ef2"
       ],
       "description": "Downlink control channel, scheduling for downlink and uplink transmission",
       "agenda_descriptions": [
@@ -467,9 +463,9 @@
       "group_header": "UE feature",
       "agenda_item": null,
       "source_cells": [
-        "c3ee39b",
-        "c676e5a",
-        "c97eefc"
+        "c4a9cb5",
+        "c5181fc",
+        "c9f1ef2"
       ]
     },
     {
@@ -481,7 +477,7 @@
       "group_header": "6GR",
       "agenda_item": "10.4.1",
       "source_cells": [
-        "cc108a3"
+        "c7db694"
       ],
       "description": "Operation in idle mode",
       "agenda_descriptions": [
@@ -518,7 +514,7 @@
       "group_header": "6GR",
       "agenda_item": "10.4.2",
       "source_cells": [
-        "cc108a3"
+        "c7db694"
       ],
       "description": "Operation in connected mode",
       "agenda_descriptions": [
@@ -555,7 +551,7 @@
       "group_header": "6GR",
       "agenda_item": "10.2.1",
       "source_cells": [
-        "cc108a3"
+        "c7db694"
       ],
       "description": "Waveform",
       "agenda_descriptions": [
@@ -592,7 +588,7 @@
       "group_header": "",
       "agenda_item": null,
       "source_cells": [
-        "cc108a3"
+        "c7db694"
       ]
     },
     {
@@ -604,7 +600,7 @@
       "group_header": "6GR",
       "agenda_item": "10.5.2.2",
       "source_cells": [
-        "c658c44"
+        "cd821aa"
       ],
       "description": "Downlink transmission scheme(s) for downlink shared channels",
       "agenda_descriptions": [
@@ -646,7 +642,7 @@
       "group_header": "6GR",
       "agenda_item": "10.5.2.3",
       "source_cells": [
-        "c658c44"
+        "cd821aa"
       ],
       "description": "Uplink transmission scheme(s) for uplink channels",
       "agenda_descriptions": [
@@ -688,7 +684,7 @@
       "group_header": "6GR",
       "agenda_item": "10.8",
       "source_cells": [
-        "c658c44"
+        "cd821aa"
       ],
       "description": "ISAC",
       "agenda_descriptions": [
@@ -712,70 +708,64 @@
       ]
     }
   ],
-  "merged_at": "2026-11-17T15:02:43.075758+00:00",
+  "merged_at": "2026-11-18T14:21:55.869527+00:00",
   "meeting_id": "ran1#127",
   "schema_version": 3,
   "source_entries": {
     "Main Schedule": [
       {
-        "room_label": "Champions Ballroom A",
+        "room_label": "Champion Ballroom A",
         "cell_text": "6GR (150)\n.10.5.1.1(50)\n.10.5.1.2(40)\n.10.5.1.3(30)\n\n.10.4.1 (30)",
         "fallback_start_time": null,
-        "cell_id": "cd16101"
+        "cell_id": "c8fa1f9"
       },
-      {
-        "room_label": "BMO 225-226",
-        "cell_text": "6GR (90)\n.10.3.1 Channel coding (40)\n.10.7.1 NTN (40)\nR20 (70)\n.9.5 NTN (30)\nNTN-NR (40)",
-        "fallback_start_time": null,
-        "cell_id": "cea82e8"
-      },
-      {
-        "room_label": "BMO 214-215",
-        "cell_text": "T TEI, AI 7/8.1 (50)\n\n6GR (60)\n.10.5.4.1 (60)\n\nUE feature (40)",
-        "fallback_start_time": null,
-        "cell_id": "c97eefc"
-      },
-      {
-        "room_label": "BMO 212",
-        "cell_text": "Xiaodong (80)\n6GR\n.10.4.1 (35)\n.10.4.2 (45)\nHiroki (30)\n6GR\n10.2.1 Waveform (30)\nSorour (40)\nR20 AI/ML (40)",
-        "fallback_start_time": null,
-        "cell_id": "cc108a3"
-      },
-      {
-        "room_label": "BMO 221",
-        "cell_text": "Sorour (60)\n6GR\n.10.5.2.2 (30)\n.10.5.2.3 (30)\nHiroki (90)\n6GR\n.10.8 Sensing (90)",
-        "fallback_start_time": null,
-        "cell_id": "c658c44"
-      }
-    ],
-    "Hiroki's schedule": [
-      {
-        "room_label": "Hiroki: BMO 214-215",
-        "cell_text": "TEI, AI 7/8.1 (50)\n11 TEI20 (10)\n8.1 Channel model (15)\n 8.1 5GA ISAC (25)\n\n6GR (60)\n.10.5.4.1 (60)\n\nUE feature (40)",
-        "fallback_start_time": null,
-        "cell_id": "c676e5a"
-      }
-    ],
-    "Ralf's schedule": [
-      {
-        "room_label": "Ralf: BMO 214-215",
-        "cell_text": "T TEI, AI 7/8.1 (50)\n\n6GR (60)\n.10.5.4.1 (60)\n\nUE feature (40)\n.MIMO",
-        "fallback_start_time": null,
-        "cell_id": "c3ee39b"
-      }
-    ],
-    "Sorour's schedule": [
       {
         "room_label": "Room 225-226",
         "cell_text": "6GR (80)\n.10.3.1 Channel coding (40)\n.10.7.1 NTN (40)\nR20 (70)\n.9.5 NTN (30)\nNTN-NR (40)",
         "fallback_start_time": null,
-        "cell_id": "c7dfb38"
+        "cell_id": "c287ab8"
       },
       {
-        "room_label": "Room 225-226",
+        "room_label": "Room 214-215",
+        "cell_text": "T TEI, AI 7/8.1 (50)\n\n6GR (60)\n.10.5.4.1 (60)\n\nUE feature (40)",
+        "fallback_start_time": null,
+        "cell_id": "c9f1ef2"
+      },
+      {
+        "room_label": "Offline1",
+        "cell_text": "Xiaodong (80)\n6GR\n.10.4.1 (35)\n.10.4.2 (45)\nHiroki (30)\n6GR\n10.2.1 Waveform (30)\nSorour (40)\nR20 AI/ML (40)",
+        "fallback_start_time": null,
+        "cell_id": "c7db694"
+      },
+      {
+        "room_label": "Offline2",
+        "cell_text": "Sorour (60)\n6GR\n.10.5.2.2 (30)\n.10.5.2.3 (30)\nHiroki (90)\n6GR\n.10.8 Sensing (90)",
+        "fallback_start_time": null,
+        "cell_id": "cd821aa"
+      }
+    ],
+    "Hiroki's schedule": [
+      {
+        "room_label": "Hiroki: Room 214-215",
+        "cell_text": "TEI, AI 7/8.1 (50)\n11 TEI20 (10)\n8.1 Channel model (15)\n 8.1 5GA ISAC (25)\n\n6GR (60)\n.10.5.4.1 (60)\n\nUE feature (40)",
+        "fallback_start_time": null,
+        "cell_id": "c5181fc"
+      }
+    ],
+    "Ralf's schedule": [
+      {
+        "room_label": "BMO 214-215",
+        "cell_text": "T TEI, AI 7/8.1 (50)\n\n6GR (60)\n.10.5.4.1 (60)\n\nUE feature (40)\n.MIMO",
+        "fallback_start_time": null,
+        "cell_id": "c4a9cb5"
+      }
+    ],
+    "Sorour's schedule": [
+      {
+        "room_label": "Sorour: Room 225-226",
         "cell_text": "6GR (80)\nAI 10.3.1 Coding (40)\nAI 10.7.1 NTN (40)\nR20 NR (70)\nAI 9.5 NTN (30)\nAI 9.4 NR-NTN (40)",
         "fallback_start_time": null,
-        "cell_id": "cea8129"
+        "cell_id": "c3a76c0"
       }
     ]
   },
