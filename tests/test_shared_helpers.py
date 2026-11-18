@@ -207,3 +207,19 @@ def test_answers_match_their_labels_by_id_or_loosely_by_text():
     # The id wins over a changed echo; a loose echo still finds its label; an unknown answer is dropped.
     assert set(matched) == {labels[0], labels[1]}
     assert matched[labels[0]]['items'] == [{'agenda_item': '8.2'}]
+
+
+def test_each_wg_reports_a_schedule_in_a_format_it_does_not_read():
+    from shared import notices
+    from working_groups.ran2.sources import schedule_candidates as ran2_candidates
+    from working_groups.ran4.sources import schedule_candidates as ran4_candidates
+
+    ran2 = ran2_candidates([{'name': 'R2-137 Schedule v01.pdf'}, {'name': 'R2-137 Schedule v00.docx'},
+                            {'name': 'R2-137 agenda.pdf'}])
+    ran4 = ran4_candidates([{'name': 'RAN4_122_meeting_schedule_v02.pptx'},
+                            {'name': 'RAN4_122_meeting_schedule_v03.pdf'}])
+
+    assert [c['name'] for c in ran2] == ['R2-137 Schedule v00.docx']
+    assert [c['name'] for c in ran4] == ['RAN4_122_meeting_schedule_v02.pptx']
+    assert [(n['wg'], n['lines'][0]) for n in notices.read()] == [
+        ('ran2', 'File: R2-137 Schedule v01.pdf'), ('ran4', 'File: RAN4_122_meeting_schedule_v03.pdf')]

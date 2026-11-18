@@ -33,12 +33,14 @@ REF_IN_MANUAL_DIR = Path("ref_in_manual/ran1")
 # Folders in Inbox/ that never contain schedule files
 BLACKLISTED_FOLDERS = {"Agenda", "drafts", "Tdoc_list", "Welcome_speech"}
 
-# Supported document extensions (order = preference when extracting from ZIP)
+# Supported document extensions (order = preference when extracting from ZIP).
+# The parser reads Word files only; a PDF or PPTX schedule is skipped and reported
+# (``report_unreadable``), never picked: it would fail the build at parse time.
 WORD_DOCUMENT_EXTENSIONS = (".docx", ".docm")
-DOCUMENT_EXTENSIONS = (".docx", ".pptx", ".pdf")
+DOCUMENT_EXTENSIONS = WORD_DOCUMENT_EXTENSIONS
 # All extensions we accept from remote listings (documents + zip)
-SUPPORTED_EXTENSIONS = DOCUMENT_EXTENSIONS + (".docm", ".zip")
-SCHEDULE_EXTENSIONS = DOCUMENT_EXTENSIONS + (".zip",)
+SUPPORTED_EXTENSIONS = DOCUMENT_EXTENSIONS + (".zip",)
+SCHEDULE_EXTENSIONS = SUPPORTED_EXTENSIONS
 CHAIR_NOTES_EXTENSIONS = WORD_DOCUMENT_EXTENSIONS + (".zip",)
 
 # Local directory for externally-linked files (config.json ``extra_files``)
@@ -638,6 +640,7 @@ def list_remote_files(
 
     soup = BeautifulSoup(resp.text, "html.parser")
     files = []
+    skipped = []
     for tr in soup.find_all("tr"):
         tds = tr.find_all("td")
         if len(tds) < 4:
@@ -650,6 +653,7 @@ def list_remote_files(
 
         href = link["href"]
         if not any(href.lower().endswith(ext) for ext in supported_extensions):
+            skipped.append(unquote(href.split("/")[-1]))
             continue
 
         # Extract and decode filename
@@ -665,7 +669,14 @@ def list_remote_files(
             pass
 
         files.append({"name": name, "url": full_url, "uploaded_at": uploaded_at})
+    report_unreadable(skipped)
     return files
+
+
+def report_unreadable(names) -> list[str]:
+    """Notice each schedule-named file the parser cannot read (``….pdf``, ``….pptx``, ``….doc``)."""
+    from shared import notices
+    return notices.unreadable_schedules("ran1", "RAN1", names, is_schedule_name, SUPPORTED_EXTENSIONS)
 
 
 def find_latest_schedule(

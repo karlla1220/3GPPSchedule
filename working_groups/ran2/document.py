@@ -26,6 +26,7 @@ CLOCK = r'(\d{1,2})[:.](\d{2})'
 SLOT = re.compile(CLOCK + r'\s*[-–—~]\s*' + CLOCK)
 # R2_135_Schedule_v11.docx, R2_133b_Schedule_v14.docx, R2_131bis_Schedule v19.docx
 FILE = re.compile(r'R2[_-]?(\d+)(bis|b)?[_ -]+Schedule[_ -]*v(\d+)\.docx', re.I)
+FORMATS = ('.docx',)   # what FILE accepts; a schedule-named file in another format is reported
 TITLE = re.compile(r'RAN2\s*[-#]?\s*(\d+)\s*(bis|b)?(?![a-z0-9])', re.I)
 # "Morning coffee:   10:30 to 11:00" names the gaps between slots.
 BREAK = re.compile(r'^\s*([A-Za-z][A-Za-z ]*?)\s*:\s*' + CLOCK + r'\s*(?:to|[-–—])\s*' + CLOCK)

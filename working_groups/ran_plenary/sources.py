@@ -11,11 +11,11 @@ from urllib.parse import unquote, urljoin, urlparse
 from bs4 import BeautifulSoup
 import httpx
 
-from shared import meeting_folders, meeting_turn, remote_files
+from shared import meeting_folders, meeting_turn, notices, remote_files
 from shared.remote_files import client, fetch_file
 from shared.portal_meetings import TB_IDS, get_meetings, timezone_reference
 
-from .document import FILE
+from .document import FILE, FORMATS
 
 CONFIG_PATH = Path('working_groups/ran_plenary/config.json')
 DOWNLOADS = Path('downloads/ran-plenary')
@@ -139,11 +139,13 @@ def meeting_dates(cfg, rows, previous) -> dict[str, meeting_turn.Dates]:
 
 def select_timeplan(html: str, listing_url: str, previous: dict, dates: dict | None = None, now=None) -> dict:
     candidates = []
+    skipped = []
     for anchor in BeautifulSoup(html, 'html.parser').find_all('a', href=True):
         url = urljoin(listing_url, anchor['href'])
         name = unquote(urlparse(url).path.rsplit('/', 1)[-1])
         match = FILE.fullmatch(name)
         if not match:
+            skipped.append(name)
             continue
         row = anchor.find_parent('tr')
         uploaded = row.get_text(' ', strip=True) if row else ''
@@ -151,6 +153,7 @@ def select_timeplan(html: str, listing_url: str, previous: dict, dates: dict | N
         candidates.append({'url': url, 'name': name, 'meeting_number': int(match.group(1)),
                            'version': int(match.group(2)), 'listing_metadata': uploaded,
                            'uploaded_at': timestamp.group().replace('/', '-') if timestamp else ''})
+    notices.unreadable_schedules('ran-plenary', 'RAN Plenary', skipped, FILE.fullmatch, FORMATS)
     if not candidates:
         raise NothingNewer('No RAN timeplan found in Chair listing')
     built = meeting_id(previous['meeting_number']) if previous.get('meeting_number') else None

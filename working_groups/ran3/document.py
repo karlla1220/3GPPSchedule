@@ -32,6 +32,7 @@ ROWS, COLUMNS = 13, 7
 # RAN3_133bis_agenda_20261016_EOM.docx, RAN3_129_agenda_20250829_1620_EOM.docx.
 # Vice-chair copies carry initials instead (_LX, _yxd, -yxd) and are not schedules.
 FILE = re.compile(r'RAN3_(\d+)(bis)?_agenda_(\d{8})(?:_(\d{4}))?(?:([_-])([A-Za-z]+))?\.docx', re.I)
+FORMATS = ('.docx',)   # what FILE accepts; a schedule-named file in another format is reported
 TITLE = re.compile(r'WG3\s+Meeting\s*#\s*(\d+)\s*-?\s*(bis)?', re.I)
 CLOCK = re.compile(r'(?<!\d)(\d{1,2}):?(\d{2})(?!\d)')
 RANGE = re.compile(r'(\d{1,2}):?(\d{2})\s*~\s*(\d{1,2}):?(\d{2})')

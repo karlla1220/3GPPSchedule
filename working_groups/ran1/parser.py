@@ -8,6 +8,12 @@ from xml.etree import ElementTree
 from zipfile import BadZipFile, ZipFile
 
 from docx import Document
+from docx.opc.part import PartFactory
+from docx.package import Package as DocxPackage
+from docx.parts.document import DocumentPart
+
+# python-docx knows only the .docx main part; a .docm body is the same WordprocessingML.
+PartFactory.part_type_for["application/vnd.ms-word.document.macroEnabled.main+xml"] = DocumentPart
 
 from .downloader import _extract_meeting_id, _is_chair_notes_name, _iter_local_files, _local_doc_preference
 from .rooms import table_kind
@@ -816,7 +822,20 @@ def parse_docx(
         - cells: list of CellData for each non-empty schedule cell
         - tables_meta: list of dicts with table metadata (rooms per day)
     """
-    doc = Document(str(filepath))
+    filepath = Path(filepath)
+    if filepath.suffix.lower() not in (".docx", ".docm"):
+        # A ZIP with no Word file inside (the ZIP is not opened recursively), or a
+        # local reference in another format. The build fails; the last page stays.
+        from shared import notices
+        why = ("the ZIP holds no .docx or .docm" if filepath.suffix.lower() == ".zip"
+               else "the RAN1 parser reads .docx or .docm only")
+        notices.add("ran1", "unreadable-schedule", f"ran1:unreadable-schedule:{filepath.name}",
+                    "RAN1: a schedule file in a format the site does not read",
+                    [f"File: {filepath.name}", f"It was chosen as a schedule, but {why}.",
+                     "The build failed and the page keeps the last schedule."])
+        raise ValueError(f"{filepath.name}: {why}")
+    # Document() refuses .docm by content type only; its body is the same WordprocessingML.
+    doc = DocxPackage.open(str(filepath)).main_document_part.document
 
     # ── Context extraction ───────────────────────────────────────
     # Map each table to the paragraph text preceding it.

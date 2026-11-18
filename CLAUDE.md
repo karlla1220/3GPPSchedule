@@ -322,6 +322,11 @@ WG가 원본에서 옮긴 표 밖 글(`Schedule.supplements`, `topic_references.
 - **규칙이 양식을 읽지 못하면 문서 전체를 LLM이 읽는다(`llm_cells.read_document`).** 답은 WG의 검사(시각은 원문에 있음, 인용한 id의 글, 겹침 없음)를 통과할 때만 쓰고, 아니면 빌드가 실패해 직전 페이지가 남는다.
 - **LLM에 넘기는 문서는 `shared/office_outline.py`의 블록이다.** DOCX는 docx-cli AST(CI가 고정 판을 받는다, 없으면 python-docx), PPTX·XLSX는 직접 걷는다. 양식이 깨진 경우를 위해 글자 순서, 병합, 취소선·색·바탕을 모두 담는다(README "LLM 폴백").
 - **이 폴백이 쓰이면 사람에게 알린다.** 의장이 양식을 바꿨다는 신호다. 빌드가 알림을 남기고(`shared/notices.py`), 워크플로가 WG별 GitHub 이슈 댓글로 올려 저장소 주인에게 이메일이 간다. 같은 답을 다시 쓰는 빌드는 다시 알리지 않는다. 빌드 실패는 워크플로 실패 메일 그대로다.
+- **읽을 수 없는 형식의 일정 파일은 고르지 않고 알린다(`notices.unreadable_schedules`).** 읽는 형식은 WG마다 이름 규칙(`FILE`) 옆의 `FORMATS`다(RAN2·RAN3 docx, RAN4 pptx, SA2·RAN P docx·zip). RAN1은 `.docx`·`.docm`과 그것을 담은 zip이다(`downloader.SUPPORTED_EXTENSIONS`).
+  - 확장자만 읽는 형식으로 바꾸면 그 WG의 일정 이름이 되는 파일(`RAN1_127_Daily_Schedule_Online+Offline_v02.pdf`)이 대상이다. 파일마다 한 번 알린다. 고르면 파싱에서 빌드가 실패했다(RAN1#127).
+  - `.doc`는 옛 바이너리 Word라 읽지 못한다. `.docm`은 매크로가 든 `.docx`이고 본문이 같다. python-docx는 형식 표시로만 거부하므로 RAN1 파서가 그 표시를 등록해 연다.
+  - zip은 한 겹만 연다. 안에 Word 파일이 없으면 RAN1 파서가 알리고 빌드가 실패해 직전 페이지가 남는다.
+  - check는 이런 파일로 빌드를 열지 않는다. 알림은 다음 빌드에서 나온다. SA1과 메일 첨부는 아직 연결하지 않았다.
 - **RAN1 세션 시각이 문서의 줄과 맞지 않아도 알리고 빌드가 실패한다.** 시각은 LLM 답의 순서가 아니라 세션이 가리킨 출처 셀(`source_cells`)이 표의 어느 줄에 있는지로 정한다. 세션이 셀의 끝을 넘거나 출처 셀을 끝내 답하지 못하면 이슈 알림을 남기고, 그 슬롯을 다음 빌드에서 처음부터 다시 묻는다(`PARSING_ARCHITECTURE.md`의 "시각은 셀의 줄에서").
 
 ## 헤더의 미팅 전환

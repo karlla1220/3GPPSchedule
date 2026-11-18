@@ -28,6 +28,7 @@ DAYS = ('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sun
 # S2-2610195_SA2-177-Session Plan - r7.docx, S2-2610195_SA2-177-Session Plan -r14 - Friday plan.docx,
 # S2-260nnnn_SA2-177-Session Plan.zip (the first upload has no r), Draft S2-2606837_SA2-176-Session Plan - r1.docx
 FILE = re.compile(r'.*?(?<![A-Za-z])SA2-(\d+)-Session Plan(?:\s*-\s*r(\d+))?(.*)\.(docx|zip)', re.I)
+FORMATS = ('.docx', '.zip')   # what FILE accepts; a schedule-named file in another format is reported
 QUARTER = re.compile(r'Q(\d)')
 # A quarter's range, "0900 - 1030". A part may lack its minutes (#178's first plan: "1100 - 12");
 # conventions.py completes it.

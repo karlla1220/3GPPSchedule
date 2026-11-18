@@ -18,6 +18,7 @@ DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sun
 TIME_RANGE = re.compile(r'(\d{1,2}):(\d{2})\s*[~–—-]\s*(\d{1,2}):(\d{2})')
 MEETING = re.compile(r'(?:3GPP)?RAN\s*#?\s*(\d+)(?!\d)', re.I)
 FILE = re.compile(r'RAN\s*#?\s*(\d+)\s+time\s*plan\s+v(\d+)\.(zip|docx)$', re.I)
+FORMATS = ('.zip', '.docx')   # what FILE accepts; a schedule-named file in another format is reported
 
 
 def time_range(text):

@@ -31,6 +31,28 @@ def add(wg_id: str, kind: str, key: str, title: str, lines: list[str]) -> None:
     PATH.write_text(json.dumps(notices, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
 
 
+def unreadable_schedules(wg_id: str, label: str, names, is_schedule, formats: tuple[str, ...]) -> list[str]:
+    """Names that would be a schedule in a format the WG reads, but are in another one.
+
+    ``is_schedule`` is the WG's own name test; a name passes it once its extension
+    is swapped for one of ``formats`` (``R2-137 Schedule v01.pdf``). Each such file
+    gets one notice: the chair may have posted a schedule the site skips.
+    """
+    found = []
+    for name in names:
+        stem, dot, ext = name.rpartition('.')
+        if not dot or f'.{ext.lower()}' in formats:
+            continue
+        if any(is_schedule(stem + f) for f in formats):
+            found.append(name)
+            add(wg_id, 'unreadable-schedule', f'{wg_id}:unreadable-schedule:{name}',
+                f'{label}: a schedule file in a format the site does not read',
+                [f'File: {name}', f'The site reads {", ".join(formats)}; it skipped this file.',
+                 'The page keeps the newest schedule it can read. If this file is the only new '
+                 'version, read it by hand or add the format.'])
+    return found
+
+
 def _body(notice: dict, run_url: str | None, owner: str | None) -> str:
     lines = [f'- {line}' for line in notice['lines']]
     if run_url:
