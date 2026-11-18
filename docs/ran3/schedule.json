@@ -1021,6 +1021,56 @@
             2
           ],
           "stream": ""
+        },
+        {
+          "name": "CB#5 (GTW)",
+          "duration_minutes": 60,
+          "start_time": "17:00",
+          "end_time": "18:00",
+          "day": "Wednesday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "Weiwei Wang",
+          "agenda_item": "10.3.1.3",
+          "group_header": "Study on 6G Radio",
+          "description": "Service Based Interface (SBI)",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "10.3.1.3",
+              "matched_agenda_item": "10.3.1.3",
+              "description": "Service Based Interface (SBI)",
+              "hierarchy": [
+                {
+                  "agenda_item": "10",
+                  "description": "Study on 6G Radio"
+                },
+                {
+                  "agenda_item": "10.3",
+                  "description": "RAN-CN interface"
+                },
+                {
+                  "agenda_item": "10.3.1",
+                  "description": "RAN-CN control plane for non-connectivity services"
+                },
+                {
+                  "agenda_item": "10.3.1.3",
+                  "description": "Service Based Interface (SBI)"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "offline"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "CB#5 (GTW)",
+            "Weiwei Wang (Samsung)"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": null,
+          "stream": ""
         }
       ],
       "date": "2026-11-18",
@@ -1652,22 +1702,22 @@
     }
   ],
   "source_file": "RAN3_134_agenda_20261117_1800.docx",
-  "generated_at": "2026-11-17 18:21",
+  "generated_at": "2026-11-17 20:41",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
     "RAN3_134_agenda_20261117_1800.docx",
-    "RAN3 offline discussion_ver_02.xlsx",
+    "RAN3 offline discussion_ver_03.xlsx",
     "agenda.csv"
   ],
   "source_labels": {
     "RAN3_134_agenda_20261117_1800.docx": "agenda_20261117_1800",
-    "RAN3 offline discussion_ver_02.xlsx": "offline discussion_ver_02",
+    "RAN3 offline discussion_ver_03.xlsx": "offline discussion_ver_03",
     "agenda.csv": "agenda.csv"
   },
   "source_urls": {
     "RAN3_134_agenda_20261117_1800.docx": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN3/Inbox/Chairs_Notes/RAN3_134_agenda_20261117_1800.docx",
-    "RAN3 offline discussion_ver_02.xlsx": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN3/Offline_meeting_room/RAN3%20offline%20discussion_ver_02.xlsx",
+    "RAN3 offline discussion_ver_03.xlsx": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN3/Offline_meeting_room/RAN3%20offline%20discussion_ver_03.xlsx",
     "agenda.csv": "https://www.3gpp.org/ftp/tsg_ran/WG3_Iu/TSGR3_134/Agenda/agenda.csv"
   },
   "source_mails": {},
