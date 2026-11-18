@@ -479,6 +479,7 @@ def build_schedule(args) -> Schedule:
                 preferred_meeting_id=preferred_meeting_id,
                 locked_meeting_id=locked_meeting_id,
                 mail_files=mail_files,
+                ignored_files=cfg.get("ignored_files"),
             )
             if not sources:
                 return None, {}
