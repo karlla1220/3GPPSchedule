@@ -8300,7 +8300,25 @@
           "room_scope": "assigned",
           "notes": [],
           "inferred_agenda_items": [],
-          "email_details": [],
+          "email_details": [
+            {
+              "kind": "session",
+              "session": "Wed 08:00-08:30 BMO 221",
+              "quote": "we will have a 30-minute offline session tomorrow at 8 am. Plan is to treat Proposal 4-3-1, considering the guidance provided by Madam Chair.",
+              "mode": "offline",
+              "summary": "Offline session to treat Proposal 4-3-1 per Madam Chair's guidance",
+              "topics": [
+                "Proposal 4-3-1"
+              ],
+              "start": "08:00",
+              "day": "Wednesday",
+              "split": [],
+              "mail": "9da4c9b9.2611c",
+              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;9da4c9b9.2611c",
+              "author": "Sven Jacobsson",
+              "sent": "2026-11-17T20:52:31-06:00"
+            }
+          ],
           "part": null,
           "stream": ""
         },
@@ -14215,7 +14233,7 @@
     }
   ],
   "source_file": "RAN1#127 online and offline schedules - v02.docx",
-  "generated_at": "2026-11-17 19:18",
+  "generated_at": "2026-11-17 21:01",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
@@ -18109,20 +18127,7 @@
         "changed_in": "Chair notes RAN1#127_v03.docx"
       }
     },
-    "retained_files": [
-      "agreements/0bea3c833a2082818c8f.html",
-      "agreements/17f9fafceeac6ddf0464.html",
-      "agreements/432347db2998334efebf.html",
-      "agreements/47e0eff6d22431deb6ee.html",
-      "agreements/5598f3ef891453c5a3d3.html",
-      "agreements/81f02c1ae5ff868df4e5.html",
-      "agreements/9242f83ce226110906f7.html",
-      "agreements/a34d31b5ca1a51d1e5a0.html",
-      "agreements/af0abddd370f1e7a1c44.html",
-      "agreements/cdb3e79db0542d0f6b17.html",
-      "agreements/e293978991c3e72b38c6.html",
-      "agreements/fb94818ce9a0815b24a9.html"
-    ]
+    "retained_files": []
   },
   "email_informal": {
     "10.6.3": [
