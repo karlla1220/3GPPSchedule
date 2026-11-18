@@ -1260,3 +1260,51 @@ def test_a_note_that_is_not_listed_keeps_what_was_published(tmp_path, monkeypatc
         empty, ref = a.build_agreements(cfg=cfg, meeting_id="ran1#124", schedule_path=tmp_path / "s.docx",
                                         offline=False)
     assert empty["status"] == "unavailable" and ref is None
+
+
+
+def test_typed_number_does_not_replace_word_numbering(tmp_path):
+    # RAN1#127 v01: a TDoc number typed before a Word-numbered heading (9.3.1)
+    # became the section number and renumbered the rest of the section.
+    document = Document()
+    numbering = document.part.numbering_part.element
+    abstract = OxmlElement('w:abstractNum')
+    abstract.set(qn('w:abstractNumId'), '101')
+    for index, (start, text) in enumerate([(9, '%1'), (3, '%1.%2'), (1, '%1.%2.%3')]):
+        level = OxmlElement('w:lvl')
+        level.set(qn('w:ilvl'), str(index))
+        for tag, value in [('start', str(start)), ('numFmt', 'decimal'), ('lvlText', text)]:
+            child = OxmlElement('w:' + tag)
+            child.set(qn('w:val'), value)
+            level.append(child)
+        abstract.append(level)
+    numbering.append(abstract)
+    num = OxmlElement('w:num')
+    num.set(qn('w:numId'), '101')
+    child = OxmlElement('w:abstractNumId')
+    child.set(qn('w:val'), '101')
+    num.append(child)
+    numbering.append(num)
+
+    def numbered(title, ilvl):
+        paragraph = document.add_heading(title, level=ilvl + 1)
+        num_props = OxmlElement('w:numPr')
+        for tag, value in [('ilvl', str(ilvl)), ('numId', '101')]:
+            child = OxmlElement('w:' + tag)
+            child.set(qn('w:val'), value)
+            num_props.append(child)
+        paragraph._p.get_or_add_pPr().append(num_props)
+        return paragraph
+
+    numbered('Release 20 NR', 0)
+    numbered('Multiple carrier operation', 1)
+    typed = numbered('Operation in idle mode', 2)
+    typed.runs[0].text = '2609358 Operation in idle mode'
+    document.add_paragraph('Body of the typed heading')
+    path = tmp_path / 'Chair notes RAN1#127_v01.docx'
+    document.save(path)
+    sections = a.parse_agreements(path, 'ran1#127')['sections']
+    assert '2609358' not in sections
+    assert sections['9.3']['title'] == 'Multiple carrier operation'
+    assert sections['9.3.1']['title'] == 'Operation in idle mode'
+    assert 'Body of the typed heading' in sections['9.3.1']['html']
