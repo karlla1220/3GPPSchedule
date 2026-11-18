@@ -1,16 +1,16 @@
 {
   "meeting_id": "ran3#134",
-  "version": "20261118.0.0900",
+  "version": "20261118.0.1310",
   "config_hash": "fdf80a0eb29dd64dbe8f8e0dbf1f6320eb2cbdcf53e080038977ac99443fe045",
   "schedule": {
-    "name": "RAN3_134_agenda_20261118_0900.docx",
-    "url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN3/Inbox/Chairs_Notes/RAN3_134_agenda_20261118_0900.docx",
-    "uploaded_at": "2026-11-18 14:40",
-    "size": 238674,
-    "sha256": "1c2d80a3dda12639e2bcea27323a528ef4b8843c460f9b1f2f33d6ea3daeff50",
+    "name": "RAN3_134_agenda_20261118_1310.docx",
+    "url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN3/Inbox/Chairs_Notes/RAN3_134_agenda_20261118_1310.docx",
+    "uploaded_at": "2026-11-18 19:26",
+    "size": 254763,
+    "sha256": "cc278ab4d9bb9a2c89a87da3fef06652b6a20a741c6c551dc1451a78b0a4c908",
     "etag": null,
-    "last_modified": "Wed, 18 Nov 2026 14:40:46 GMT",
-    "ftp_modified": "213 20261118144046",
+    "last_modified": "Wed, 18 Nov 2026 19:26:41 GMT",
+    "ftp_modified": "213 20261118192641",
     "content_type": "application/octet-stream",
     "content_disposition": null
   },
@@ -94,6 +94,21 @@
       "agenda_item": "10.8.1",
       "name": "CB: # 9_6GServiceCharacterictics",
       "moderator": "Nokia"
+    },
+    "AIML2": {
+      "agenda_item": "12.2.2",
+      "name": "CB: # AIML2_IntraCU-LTM",
+      "moderator": "CATT"
+    },
+    "AIML3": {
+      "agenda_item": "12.2.3",
+      "name": "CB: # AIML3_Inter-CU LTM",
+      "moderator": "ZTE"
+    },
+    "13": {
+      "agenda_item": "13.2",
+      "name": "CB: # 13_5GISAC",
+      "moderator": "Xiaomi"
     }
   },
   "llm": {

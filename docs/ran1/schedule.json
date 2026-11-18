@@ -9380,6 +9380,27 @@
               "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;c7640d64.2611c",
               "author": "<>",
               "sent": "2026-11-18T11:32:34-06:00"
+            },
+            {
+              "kind": "session",
+              "session": "Wed 14:35-15:35 Champions Ballroom A",
+              "quote": "Please check the proposals for today’s online.",
+              "mode": "online",
+              "summary": "Proposals 3.1.1B, 3.1.2B, 3.2.1B, 3.8.3.1B, 3.4.1B and Observation 3.2 for online",
+              "topics": [
+                "Proposal 3.1.1B",
+                "Proposal 3.1.2B",
+                "Proposal 3.2.1B",
+                "Proposal 3.8.3.1B",
+                "Proposal 3.4.1B",
+                "Observation 3.2"
+              ],
+              "day": "Wednesday",
+              "split": [],
+              "mail": "80a5baa5.2611c",
+              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;80a5baa5.2611c",
+              "author": "<>",
+              "sent": "2026-11-18T13:30:52-06:00"
             }
           ],
           "part": null,
@@ -14880,7 +14901,7 @@
     }
   ],
   "source_file": "RAN1#127 online and offline schedules - v02.docx",
-  "generated_at": "2026-11-18 13:23",
+  "generated_at": "2026-11-18 13:42",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
