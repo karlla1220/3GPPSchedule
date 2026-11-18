@@ -7,5 +7,6 @@
   "meeting_specific_override": [],
   "extra_folders": [],
   "extra_files": [],
-  "email_list": "3GPP_TSG_RAN_WG1"
+  "email_list": "3GPP_TSG_RAN_WG1",
+  "ignored_files": {}
 }

@@ -8,6 +8,8 @@ RAN1은 3GPP FTP 서버에서 최신 회의 스케줄 DOCX 파일을 다운로�
 
 - 3GPP FTP에서 최신 스케줄 DOCX 자동 다운로드 (ZIP 내 문서 자동 추출 지원)
 - **다중 소스 스케줄 통합**: Chair_notes 외 부의장(Hiroki, Sorour 등) 폴더의 스케줄도 자동 탐색·다운로드
+  - Chair_notes에 있어도 이름이 폴더가 있는 부의장을 가리키는 일정(`RAN1#127 Sorour sessions … - v03`)은 그 부의장의 판으로 읽고 Main 후보에서 뺍니다. 빌드 알림을 남깁니다. 같은 이름의 파일이 부의장 폴더에 있는지는 보지 않습니다. 부의장은 Main 사본을 Main 이름으로 두기도 합니다.
+  - 규칙이 못 잡는 잘못 올린 파일은 `working_groups/ran1/config.json`의 `ignored_files`에 폴더별로 적어 읽지 않게 합니다(`{"Chair_notes": ["… - v03.docx"]}`). 평소에는 비워 둡니다.
 - **미팅 우선순위 인식**: 정규 미팅은 `RAN1#124 < RAN1#124bis < RAN1#125` 순으로 비교하고, 비정규 미팅(AH/e/기타)은 업로드 시각 기준으로 판단
 - `python-docx`로 테이블 구조 추출 및 병합 셀 처리 (TextBox 색상 기반 방 매칭)
 - Gemini API를 사용한 비정형 텍스트 → 구조화 세션 데이터 변환 (결과 캐싱)

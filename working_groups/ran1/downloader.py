@@ -1389,6 +1389,72 @@ def _extract_person_from_filename(filename: str) -> str | None:
     return None
 
 
+def _without_ignored(folder_name: str, files: list[dict], ignored_files: dict | None) -> list[dict]:
+    """``files`` less the names ``config.json`` ``ignored_files`` lists for this folder."""
+    names = set((ignored_files or {}).get(folder_name) or ())
+    for f in files:
+        if f["name"] in names:
+            print(f"  Ignoring {folder_name}/{f['name']} (config.json ignored_files)")
+    return [f for f in files if f["name"] not in names]
+
+
+_PERSON_SESSIONS = re.compile(r"\b([A-Za-z]+)\s+sessions?\b", re.IGNORECASE)
+
+
+def _named_owner(name: str, persons: dict[str, str]) -> str | None:
+    """The vice chair a schedule name says it is, among those with a folder.
+
+    "RAN1#127 Sorour sessions online and offline schedules - v03" is Sorour's.
+    Only a person with a ``<Name>_notes`` folder counts: "online sessions"
+    names no one.
+    """
+    candidates = [_extract_person_from_filename(name)] + _PERSON_SESSIONS.findall(name)
+    for person in candidates:
+        if person and person.lower() in persons:
+            return persons[person.lower()]
+    return None
+
+
+def _move_misplaced(listed: list[tuple[dict, list[dict] | None]]) -> None:
+    """Move a vice chair's schedule found in the chair's folder to that vice chair's folder.
+
+    Someone uploaded "RAN1#127 Sorour sessions … - v03" to Chair_notes as well
+    as to Sorour_notes; as the highest version there it became Main. A
+    schedule whose name names a vice chair with a folder is that vice chair's,
+    wherever it is: it competes with their own versions, never for Main.
+    The name decides, not a same-named file in a person's folder: a vice chair
+    may keep a copy of Main under Main's name.
+    """
+    persons = {}
+    for folder, files in listed:
+        person = _extract_person_name(folder["name"])
+        if person and files is not None:
+            persons[person.lower()] = (person, files, folder["name"])
+    for folder, files in listed:
+        if files is None or _extract_person_name(folder["name"]) or "chair" not in folder["name"].lower():
+            continue
+        kept = []
+        for f in files:
+            owner = "schedule" in f["name"].lower() and _named_owner(
+                f["name"], {key: value[0] for key, value in persons.items()})
+            if not owner:
+                kept.append(f)
+                continue
+            person, person_files, person_folder = persons[owner.lower()]
+            if all(p["name"] != f["name"] for p in person_files):
+                person_files.append(f)
+            print(f"  {folder['name']}/{f['name']} names {person}: read as {person_folder}/, not Main")
+            from shared import notices
+            notices.add("ran1", "misplaced-schedule", f"ran1:misplaced-schedule:{folder['name']}/{f['name']}",
+                        f"RAN1: {person}'s schedule in {folder['name']}",
+                        [f"File: {folder['name']}/{f['name']}",
+                         f"Its name names {person}, so it is read as {person}'s schedule ({person_folder}/), "
+                         "not as the main schedule.",
+                         "If it really is the main schedule, rename it on FTP; to drop it, list it under "
+                         "ignored_files in working_groups/ran1/config.json."])
+        files[:] = kept
+
+
 def _filter_files_to_meeting(files: list[dict], meeting_id: str | None) -> list[dict]:
     """Return only files whose filename explicitly matches ``meeting_id``.
 
@@ -1406,6 +1472,7 @@ def _discover_from_inbox(
     url: str,
     preferred_meeting_id: str | None = None,
     locked_meeting_id: str | None = None,
+    ignored_files: dict | None = None,
 ) -> list[ScheduleSource]:
     """Scan a single inbox URL for schedule sources (subfolders + stray root files)."""
     sources: list[ScheduleSource] = []
@@ -1420,7 +1487,23 @@ def _discover_from_inbox(
             chair_notes_url,
             preferred_meeting_id=preferred_meeting_id,
             locked_meeting_id=locked_meeting_id,
+            ignored_files=ignored_files,
         )
+
+    # List every folder first: a schedule in the chair's folder may be a
+    # vice chair's (``_move_misplaced``), and only their folder says so.
+    listed: list[tuple[dict, list[dict] | None]] = []
+    for folder in subfolders:
+        if folder["name"] in BLACKLISTED_FOLDERS:
+            continue
+        try:
+            files = _without_ignored(folder["name"], list_remote_files(folder["url"]), ignored_files)
+        except Exception as e:
+            print(f"  Warning: Cannot access {folder['name']}/: {e}")
+            files = None
+        listed.append((folder, files))
+    _move_misplaced(listed)
+    files_of = {folder["name"]: files for folder, files in listed}
 
     # First pass: locate the Chair_notes folder so we can determine the
     # canonical meeting for this run. The cached state meeting id is a
@@ -1436,10 +1519,8 @@ def _discover_from_inbox(
         if "chair" in folder["name"].lower() and person_name is None:
             chair_folder_seen = True
             main_folder_name = folder["name"]
-            try:
-                chair_files = list_remote_files(folder["url"])
-            except Exception as e:
-                print(f"  Warning: Cannot access {folder['name']}/: {e}")
+            chair_files = files_of[folder["name"]]
+            if chair_files is None:
                 chair_scan_failed = True
                 break
             chair_latest = find_latest_schedule(
@@ -1472,11 +1553,8 @@ def _discover_from_inbox(
         if folder["name"] == main_folder_name:
             continue
 
-        folder_url = folder["url"]
-        try:
-            files = list_remote_files(folder_url)
-        except Exception as e:
-            print(f"  Warning: Cannot access {folder['name']}/: {e}")
+        files = files_of[folder["name"]]
+        if files is None:
             continue
 
         if main_meeting_id is not None:
@@ -1550,6 +1628,7 @@ def _discover_from_inbox(
             chair_notes_url,
             preferred_meeting_id=main_meeting_id or preferred_meeting_id,
             locked_meeting_id=locked_meeting_id,
+            ignored_files=ignored_files,
         )
         if fallback:
             sources.extend(fallback)
@@ -2082,6 +2161,7 @@ def discover_schedule_sources(
     preferred_meeting_id: str | None = None,
     locked_meeting_id: str | None = None,
     mail_files: list[dict] | None = None,
+    ignored_files: dict | None = None,
 ) -> list[ScheduleSource]:
     """Discover schedule sources across one or more inbox URLs and extra folders.
 
@@ -2109,6 +2189,9 @@ def discover_schedule_sources(
     ``mail_files`` are schedule attachments from the list
     (``mailed_schedule_files``); a newer mailed version of a found document
     replaces it (``_with_mail``).
+
+    ``ignored_files`` is ``config.json`` ``ignored_files``: file names per
+    folder never read, for a wrong upload the rules do not catch.
     """
     if urls is None:
         urls = [url] if url is not None else [INBOX_URL]
@@ -2120,6 +2203,7 @@ def discover_schedule_sources(
                 u,
                 preferred_meeting_id=preferred_meeting_id,
                 locked_meeting_id=locked_meeting_id,
+                ignored_files=ignored_files,
             )
         )
 
@@ -2147,10 +2231,11 @@ def _fallback_chair_only(
     chair_url: str = BASE_URL,
     preferred_meeting_id: str | None = None,
     locked_meeting_id: str | None = None,
+    ignored_files: dict | None = None,
 ) -> list[ScheduleSource]:
     """Fallback: discover only the main Chair_notes schedule."""
     try:
-        files = list_remote_files(chair_url)
+        files = _without_ignored("Chair_notes", list_remote_files(chair_url), ignored_files)
         latest = find_latest_schedule(
             files,
             preferred_meeting_id=preferred_meeting_id,
@@ -2391,6 +2476,7 @@ def get_all_remote_schedule_info(
     preferred_meeting_id: str | None = None,
     locked_meeting_id: str | None = None,
     mail_files: list[dict] | None = None,
+    ignored_files: dict | None = None,
 ) -> list[dict]:
     """Return metadata of the schedule sources selected for a build.
 
@@ -2419,6 +2505,7 @@ def get_all_remote_schedule_info(
         preferred_meeting_id=preferred_meeting_id,
         locked_meeting_id=locked_meeting_id,
         mail_files=mail_files,
+        ignored_files=ignored_files,
     )
 
     result = [_state_entry(source) for source in sources]

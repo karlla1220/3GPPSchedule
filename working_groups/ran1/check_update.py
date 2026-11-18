@@ -194,6 +194,7 @@ def check_updates(*, staging_dir=None) -> CheckResult:
             preferred_meeting_id=preferred_meeting_id,
             locked_meeting_id=locked_meeting_id,
             mail_files=mail_files,
+            ignored_files=cfg.get("ignored_files"),
         )
     except Exception as e:
         print(f"FTP check failed: {e}")
