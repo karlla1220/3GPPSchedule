@@ -8388,7 +8388,27 @@
           "room_scope": "assigned",
           "notes": [],
           "inferred_agenda_items": [],
-          "email_details": [],
+          "email_details": [
+            {
+              "kind": "session",
+              "session": "Wed 08:30-09:00 BMO 221",
+              "quote": "Tuesday Offline (30min, AM 8:30 ~ PM 9:00): \n*\tProposal 6.1.2: Category A PUCCH format\n*\tProposal 6.2.1: Category B PUCCH format",
+              "mode": "offline",
+              "summary": "Offline on Proposals 6.1.2 & 6.2.1 (Category A/B PUCCH format)",
+              "topics": [
+                "Proposal 6.1.2: Category A PUCCH format",
+                "Proposal 6.2.1: Category B PUCCH format"
+              ],
+              "start": "08:30",
+              "end": "09:00",
+              "day": "Wednesday",
+              "split": [],
+              "mail": "ce5fa481.2611c",
+              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;ce5fa481.2611c",
+              "author": "Youngrok Jang",
+              "sent": "2026-11-18T05:06:17-06:00"
+            }
+          ],
           "part": null,
           "stream": ""
         },
@@ -9307,7 +9327,27 @@
           "room_scope": "assigned",
           "notes": [],
           "inferred_agenda_items": [],
-          "email_details": [],
+          "email_details": [
+            {
+              "kind": "session",
+              "session": "Wed 15:10-16:00 BMO 225-226",
+              "quote": "Tuesday Online (50min, PM 3:10 ~ PM 4:00)\n*\tWill discuss the outcome of offline session (+ stable proposals in FL summary)",
+              "mode": "online",
+              "summary": "Online discussion on offline session outcome and stable proposals",
+              "topics": [
+                "outcome of offline session",
+                "stable proposals in FL summary"
+              ],
+              "start": "15:10",
+              "end": "16:00",
+              "day": "Wednesday",
+              "split": [],
+              "mail": "ce5fa481.2611c",
+              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;ce5fa481.2611c",
+              "author": "Youngrok Jang",
+              "sent": "2026-11-18T05:06:17-06:00"
+            }
+          ],
           "part": null,
           "stream": ""
         },
@@ -9645,7 +9685,26 @@
           "room_scope": "assigned",
           "notes": [],
           "inferred_agenda_items": [],
-          "email_details": [],
+          "email_details": [
+            {
+              "kind": "session",
+              "session": "Wed 14:40-15:15 BMO 212",
+              "quote": "For Wednesday offline/online, I'm planning to discuss the following:\n8 observations in section 5.1.1\n[FL2] Proposal 5.2.1-2\n[FL2]Proposal 5.2.5",
+              "mode": "offline",
+              "summary": "Offline discussion on Section 5.1.1 observations and Proposals 5.2.1-2, 5.2.5",
+              "topics": [
+                "8 observations in section 5.1.1",
+                "[FL2] Proposal 5.2.1-2",
+                "[FL2]Proposal 5.2.5"
+              ],
+              "day": "Wednesday",
+              "split": [],
+              "mail": "e801c60a.2611c",
+              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;e801c60a.2611c",
+              "author": "Qu Xin (vivo)",
+              "sent": "2026-11-18T05:06:58-06:00"
+            }
+          ],
           "part": null,
           "stream": ""
         },
@@ -10051,7 +10110,26 @@
           "room_scope": "assigned",
           "notes": [],
           "inferred_agenda_items": [],
-          "email_details": [],
+          "email_details": [
+            {
+              "kind": "session",
+              "session": "Wed 17:00-18:00 Champions Ballroom A",
+              "quote": "For Wednesday offline/online, I'm planning to discuss the following:\n8 observations in section 5.1.1\n[FL2] Proposal 5.2.1-2\n[FL2]Proposal 5.2.5",
+              "mode": "online",
+              "summary": "Online discussion on Section 5.1.1 observations and Proposals 5.2.1-2, 5.2.5",
+              "topics": [
+                "8 observations in section 5.1.1",
+                "[FL2] Proposal 5.2.1-2",
+                "[FL2]Proposal 5.2.5"
+              ],
+              "day": "Wednesday",
+              "split": [],
+              "mail": "e801c60a.2611c",
+              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;e801c60a.2611c",
+              "author": "Qu Xin (vivo)",
+              "sent": "2026-11-18T05:06:58-06:00"
+            }
+          ],
           "part": null,
           "stream": ""
         },
@@ -14322,7 +14400,7 @@
     }
   ],
   "source_file": "RAN1#127 online and offline schedules - v02.docx",
-  "generated_at": "2026-11-18 03:41",
+  "generated_at": "2026-11-18 05:21",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
