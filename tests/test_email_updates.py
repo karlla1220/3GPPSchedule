@@ -459,3 +459,19 @@ def test_the_popup_spells_out_what_the_cell_says(meeting):
                 assert piece.casefold() in text, (piece, text)
                 checked += 1
     assert checked > 10
+
+
+def test_a_record_takes_its_threads_current_item():
+    # RAN1#127 v01 named the 6GR threads "2609358.x"; the record kept that.
+    threads = [{"tag": "127-R20-6GR-X", "agenda_item": "10.5.4.2"},
+               {"tag": "127-R20-A-IoT", "agenda_item": "9.3"}]
+    records = {
+        "stale": {"thread": "127-R20-6GR-X", "agenda_items": ["2609358.2.4.2"]},
+        "narrowed": {"thread": "127-R20-A-IoT", "agenda_items": ["9.3.3"]},
+        "no_thread": {"thread": None, "agenda_items": ["2609358.3.2"]},
+    }
+    out = email_updates._with_thread_items(records, threads)
+    assert out["stale"]["agenda_items"] == ["10.5.4.2"]
+    assert out["narrowed"]["agenda_items"] == ["9.3.3"]
+    assert out["no_thread"]["agenda_items"] == ["2609358.3.2"]
+    assert records["stale"]["agenda_items"] == ["2609358.2.4.2"]  # input not changed

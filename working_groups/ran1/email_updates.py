@@ -348,13 +348,34 @@ def _on_date(item: dict, sent: datetime) -> str:
     return sent.date().isoformat()
 
 
+def _with_thread_items(records: dict[str, dict], threads: list[dict]) -> dict[str, dict]:
+    """Records whose agenda item the chairman note of their thread now gives.
+
+    A record keeps the items it had when it was asked. A chairman note that
+    was wrong for a while (RAN1#127 v01 named the 6GR threads "2609358.x")
+    left those items in the list for good, so an item outside the thread's
+    current item is replaced by it. Items under it (a sub-item of a thread
+    over several items) stay.
+    """
+    own = {t["tag"]: t["agenda_item"] for t in threads if t.get("tag") and t.get("agenda_item")}
+    out = {}
+    for key, record in records.items():
+        item = own.get(record.get("thread"))
+        items = record.get("agenda_items") or []
+        if item and items and not all(i == item or i.startswith(item + ".") for i in items):
+            record = {**record, "agenda_items": [item]}
+        out[key] = record
+    return out
+
+
 def apply_records(schedule: Schedule) -> None:
     """Put every recorded answer on the grid as it is now.
 
     Sessions and tentative slots get ``email_details``, oldest first;
     off-offline goes to ``schedule.email_informal`` by agenda item.
     """
-    records = load_records(schedule.meeting_id)
+    threads = (schedule.chairman_agreements or {}).get("email_threads") or []
+    records = _with_thread_items(load_records(schedule.meeting_id), threads)
     cells, sessions = cells_of(schedule)
     tz = ZoneInfo(schedule.timezone or "UTC")
     for session in sessions.values():

@@ -36,7 +36,7 @@ from .downloader import (
 )
 from .parser import find_chair_notes_docx
 
-PARSER_VERSION = 23
+PARSER_VERSION = 24
 CACHE_DIR = Path(".cache/ran1/agreements")
 SESSION_NOTES_DIR = Path("downloads/ran1/Session_notes")
 TDOC_ID = re.compile(r"R1-\d{6,}(?:\s*(?:rev\.?|r)\s*\d+)?", re.I)
@@ -404,21 +404,26 @@ def _parse(path: Path) -> dict:
                 sid, int(outline) if outline is not None else None
             )
             if level is not None and txt:
+                # Word's number is the one readers see, and it advances the
+                # counters. A number typed into the title only counts where
+                # Word numbers nothing: a stray "2609358" (RAN1#127 v01, a
+                # TDoc number) on the Word heading 10.4.1 would reset the section.
+                nid = val(block, "w:pPr/w:numPr/w:numId")
+                ilvl = val(block, "w:pPr/w:numPr/w:ilvl")
+                if nid is None and ilvl is None:
+                    nid, ilvl = styles.get_style_num_pr(sid)
+                word = numbers.get_heading_marker(
+                    num_id=nid,
+                    ilvl=int(ilvl) if ilvl is not None else None,
+                    outline_level=level,
+                )
                 explicit = _extract_leading_agenda_marker(txt)
-                if explicit:
+                if explicit and word is None:
                     marker, title = explicit
                     numbers.apply_explicit_marker(marker)
                 else:
-                    nid = val(block, "w:pPr/w:numPr/w:numId")
-                    ilvl = val(block, "w:pPr/w:numPr/w:ilvl")
-                    if nid is None and ilvl is None:
-                        nid, ilvl = styles.get_style_num_pr(sid)
-                    marker = numbers.get_heading_marker(
-                        num_id=nid,
-                        ilvl=int(ilvl) if ilvl is not None else None,
-                        outline_level=level,
-                    )
-                    title = txt
+                    marker = word
+                    title = explicit[1] if explicit else txt
                 if marker and re.fullmatch(r"\d+(?:\.\d+)*", marker):
                     finish()
                     agenda = marker
