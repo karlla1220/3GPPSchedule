@@ -1,16 +1,16 @@
 {
   "meeting_id": "ran3#134",
-  "version": "20261117.0.1635",
+  "version": "20261117.0.1800",
   "config_hash": "fdf80a0eb29dd64dbe8f8e0dbf1f6320eb2cbdcf53e080038977ac99443fe045",
   "schedule": {
-    "name": "RAN3_134_agenda_20261117_1635.docx",
-    "url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN3/Inbox/Chairs_Notes/RAN3_134_agenda_20261117_1635.docx",
-    "uploaded_at": "2026-11-17 22:41",
-    "size": 234342,
-    "sha256": "6a13bdbe795d34b896d1b56a7504e71a114cc056ae10b49c22f13e30d1ca8aa2",
+    "name": "RAN3_134_agenda_20261117_1800.docx",
+    "url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN3/Inbox/Chairs_Notes/RAN3_134_agenda_20261117_1800.docx",
+    "uploaded_at": "2026-11-18 00:06",
+    "size": 243280,
+    "sha256": "007d6bdb1c88e59257a8be33f54e83a480fea53f0117506880c73e6a82cd86d8",
     "etag": null,
-    "last_modified": "Tue, 17 Nov 2026 22:41:51 GMT",
-    "ftp_modified": "213 20261117224151",
+    "last_modified": "Wed, 18 Nov 2026 00:06:16 GMT",
+    "ftp_modified": "213 20261118000616",
     "content_type": "application/octet-stream",
     "content_disposition": null
   },
@@ -89,6 +89,11 @@
       "agenda_item": "10.6.2",
       "name": "CB: # 8_6GDataBuffering",
       "moderator": "CATT"
+    },
+    "9": {
+      "agenda_item": "10.8.1",
+      "name": "CB: # 9_6GServiceCharacterictics",
+      "moderator": "Nokia"
     }
   },
   "llm": {

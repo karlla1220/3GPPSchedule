@@ -721,7 +721,7 @@
           "stream": ""
         },
         {
-          "name": "6G Offline*",
+          "name": "6G Offline (CB#9)",
           "duration_minutes": 30,
           "start_time": "10:30",
           "end_time": "11:00",
@@ -729,21 +729,39 @@
           "room_col_start": 2,
           "room_col_end": 3,
           "chair": null,
-          "agenda_item": null,
-          "group_header": "",
-          "description": null,
-          "agenda_descriptions": [],
+          "agenda_item": "10.8.1",
+          "group_header": "Study on 6G Radio",
+          "description": "Service Characteristics Awareness and Performance Monitoring",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "10.8.1",
+              "matched_agenda_item": "10.8.1",
+              "description": "Service Characteristics Awareness and Performance Monitoring",
+              "hierarchy": [
+                {
+                  "agenda_item": "10",
+                  "description": "Study on 6G Radio"
+                },
+                {
+                  "agenda_item": "10.8",
+                  "description": "Other functionalities"
+                },
+                {
+                  "agenda_item": "10.8.1",
+                  "description": "Service Characteristics Awareness and Performance Monitoring"
+                }
+              ]
+            }
+          ],
           "room_ids": [
             "main"
           ],
           "room_scope": "assigned",
           "notes": [
-            "6G Offline*",
-            "* if needed"
+            "6G Offline (CB#9)",
+            "CB: # 9_6GServiceCharacterictics (moderator - Nokia)"
           ],
-          "inferred_agenda_items": [
-            "10"
-          ],
+          "inferred_agenda_items": [],
           "email_details": [],
           "part": null,
           "stream": ""
@@ -1633,22 +1651,22 @@
       "caveats": []
     }
   ],
-  "source_file": "RAN3_134_agenda_20261117_1635.docx",
-  "generated_at": "2026-11-17 17:02",
+  "source_file": "RAN3_134_agenda_20261117_1800.docx",
+  "generated_at": "2026-11-17 18:21",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
-    "RAN3_134_agenda_20261117_1635.docx",
+    "RAN3_134_agenda_20261117_1800.docx",
     "RAN3 offline discussion_ver_02.xlsx",
     "agenda.csv"
   ],
   "source_labels": {
-    "RAN3_134_agenda_20261117_1635.docx": "agenda_20261117_1635",
+    "RAN3_134_agenda_20261117_1800.docx": "agenda_20261117_1800",
     "RAN3 offline discussion_ver_02.xlsx": "offline discussion_ver_02",
     "agenda.csv": "agenda.csv"
   },
   "source_urls": {
-    "RAN3_134_agenda_20261117_1635.docx": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN3/Inbox/Chairs_Notes/RAN3_134_agenda_20261117_1635.docx",
+    "RAN3_134_agenda_20261117_1800.docx": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN3/Inbox/Chairs_Notes/RAN3_134_agenda_20261117_1800.docx",
     "RAN3 offline discussion_ver_02.xlsx": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN3/Offline_meeting_room/RAN3%20offline%20discussion_ver_02.xlsx",
     "agenda.csv": "https://www.3gpp.org/ftp/tsg_ran/WG3_Iu/TSGR3_134/Agenda/agenda.csv"
   },
