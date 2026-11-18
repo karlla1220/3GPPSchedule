@@ -15009,7 +15009,7 @@
     }
   ],
   "source_file": "RAN1#127 online and offline schedules - v02.docx",
-  "generated_at": "2026-11-18 15:41",
+  "generated_at": "2026-11-18 16:22",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
@@ -15485,11 +15485,11 @@
         "source_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Hiroki_notes/draft_R1-2609120_Session%20Notes%20of%20AI%2010.5.4_v03.docx"
       },
       "R1-2609121": {
-        "name": "Draft R1-2609121 Session Notes of AI 10.5.2 - v02.docx",
+        "name": "Draft R1-2609121 Session Notes of AI 10.5.2 - v03.docx",
         "agenda_item": "10.5.2",
-        "changed_at": "2026-11-18T01:02:01+00:00",
-        "sha256": "c78918c5107dd372aedca650b0e94e6d039ae80f22cb5f3e8d9af402c529f320",
-        "source_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Sorour_notes/Draft%20R1-2609121%20Session%20Notes%20of%20AI%2010.5.2%20-%20v02.docx"
+        "changed_at": "2026-11-18T22:10:56+00:00",
+        "sha256": "fed35c9cfc5261f1fce065b3f58407c179d8b2b86e9cf40494ac8d588fed01a0",
+        "source_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Sorour_notes/Draft%20R1-2609121%20Session%20Notes%20of%20AI%2010.5.2%20-%20v03.docx"
       },
       "R1-2609122": {
         "name": "Draft R1-2609122 Session Notes of AI 10.3.2 - v01.docx",
@@ -17514,7 +17514,6 @@
           "d5400d2235ef",
           "816a8879df79",
           "334907737e61",
-          "48bfaa8ba38d",
           "1c4ab8c6f7cc",
           "d4f02846a30d",
           "4004d85f09d8",
@@ -17532,26 +17531,40 @@
           "f0e3a7a3ab49",
           "d95b5a435b50",
           "d0b35f2e80cf",
-          "b7a91732b972"
+          "b7a91732b972",
+          "48bfaa8ba38d",
+          "668544acaa68",
+          "8e7b3b4a2dee",
+          "a4ef384fdacb",
+          "28216d0a5c89",
+          "d13005623003",
+          "cc97f3699ce5",
+          "f969ac3e3ded",
+          "3841f5626c3e",
+          "2c664ea5c7aa",
+          "ae4c30c3a451"
         ],
         "sources": {
           "chair": "25edf0d03cb9",
-          "R1-2609121": "89ba9fdb6bce"
+          "R1-2609121": "00fddd89e42c"
         },
         "change": "updated",
         "added": [
-          14,
-          15,
-          16,
-          17,
-          18,
-          19,
-          20,
-          21
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31
         ],
-        "changed_at": "2026-11-18T01:02:01+00:00",
-        "changed_in": "Draft R1-2609121 Session Notes of AI 10.5.2 - v02.docx",
-        "file": "agreements/a8958e94d108f2ffb55d.html"
+        "changed_at": "2026-11-18T22:10:56+00:00",
+        "changed_in": "Draft R1-2609121 Session Notes of AI 10.5.2 - v03.docx",
+        "file": "agreements/5537c3b542e4be56ad78.html"
       },
       "10.5.2.2": {
         "title": "Downlink transmission scheme(s) for downlink shared channels",
@@ -17561,7 +17574,6 @@
           "c34382a60777",
           "334907737e61",
           "e9be97cb788b",
-          "adfa3068d2bb",
           "44b130619643",
           "022d558af6d8",
           "c9e068dcc1cc",
@@ -17689,32 +17701,41 @@
           "51b60686c151",
           "85e577bd076d",
           "3ac8913a1cb7",
-          "e430ed562a43",
-          "f707e782b056",
-          "508bd11365e1",
-          "f2f2d2c63608",
-          "05b54ab31389",
-          "01a5ea51847b",
-          "44452154c21f",
-          "ea3e8d06311d",
-          "cc774351c663",
-          "b0ed72992ca2",
-          "9fcc6880712b",
-          "43c9552dd869",
-          "aec88ebbf4df",
-          "3dc1b5735b3f",
-          "4ce862b37860",
-          "ed43fd73e20e",
-          "6d9854e42595",
-          "0b10f2cb1c8f",
-          "dbe728b1df92",
-          "536ae84af53e",
-          "8b0bc7681e2d",
-          "f5cf65029686"
+          "adfa3068d2bb",
+          "668544acaa68",
+          "a7fe41c8de6e",
+          "e27d9e7612dc",
+          "b7837eb06554",
+          "dd2d9a625650",
+          "d1afffc26a4f",
+          "9e925e8bb9ed",
+          "c2cd43850c8e",
+          "27e94195b137",
+          "6464aa6ee53d",
+          "dd15855e39da",
+          "668544acaa68",
+          "688422e1be85",
+          "328eb8c27edd",
+          "9eb9b95c5ed7",
+          "952908863993",
+          "401b173b2fb0",
+          "5295c4830063",
+          "4e76a4097023",
+          "d737e541fbfc",
+          "326ef4d58acb",
+          "3ce982ec3a63",
+          "352a458f3b74",
+          "668544acaa68",
+          "e2d072aadad0",
+          "f61fca27789f",
+          "ee703c0f9f59",
+          "668544acaa68",
+          "5ed95422e932",
+          "e556fe183a16"
         ],
         "sources": {
           "chair": "f8ff7f1e7d42",
-          "R1-2609121": "94ffe764c6b4"
+          "R1-2609121": "3af8456f1425"
         },
         "change": "updated",
         "added": [
@@ -17740,11 +17761,19 @@
           150,
           151,
           152,
-          153
+          153,
+          154,
+          155,
+          156,
+          157,
+          158,
+          159,
+          160,
+          161
         ],
-        "changed_at": "2026-11-18T01:02:01+00:00",
-        "changed_in": "Draft R1-2609121 Session Notes of AI 10.5.2 - v02.docx",
-        "file": "agreements/4cde24b1d30d3af8b5b9.html"
+        "changed_at": "2026-11-18T22:10:56+00:00",
+        "changed_in": "Draft R1-2609121 Session Notes of AI 10.5.2 - v03.docx",
+        "file": "agreements/b70a780a325f233459ca.html"
       },
       "10.5.2.3": {
         "title": "Uplink transmission scheme(s) for uplink channels",
@@ -17968,7 +17997,7 @@
         ],
         "changed_at": "2026-11-18T01:02:01+00:00",
         "changed_in": "Draft R1-2609121 Session Notes of AI 10.5.2 - v02.docx",
-        "file": "agreements/959365690ad35d308e21.html"
+        "file": "agreements/3c9d833198e506844b14.html"
       },
       "10.5.3": {
         "title": "CSI acquisition and report",
@@ -19386,7 +19415,11 @@
         "changed_in": "Chair notes RAN1#127_v03.docx"
       }
     },
-    "retained_files": []
+    "retained_files": [
+      "agreements/4cde24b1d30d3af8b5b9.html",
+      "agreements/959365690ad35d308e21.html",
+      "agreements/a8958e94d108f2ffb55d.html"
+    ]
   },
   "email_informal": {
     "10.6.3": [
