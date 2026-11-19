@@ -1,16 +1,16 @@
 {
   "meeting_id": "ran3#134",
-  "version": "20261119.0.0921",
+  "version": "20261119.0.1430",
   "config_hash": "fdf80a0eb29dd64dbe8f8e0dbf1f6320eb2cbdcf53e080038977ac99443fe045",
   "schedule": {
-    "name": "RAN3_134_agenda_20261119_0921.docx",
-    "url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN3/Inbox/Chairs_Notes/RAN3_134_agenda_20261119_0921.docx",
-    "uploaded_at": "2026-11-19 15:22",
-    "size": 252566,
-    "sha256": "3ac627e11b2a1b8f4f46b9af6b5ff448c19eb621146a7b678c7211dfce25c0a7",
+    "name": "RAN3_134_agenda_20261119_1430.docx",
+    "url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN3/Inbox/Chairs_Notes/RAN3_134_agenda_20261119_1430.docx",
+    "uploaded_at": "2026-11-19 20:30",
+    "size": 269505,
+    "sha256": "d7c8a5633e61880bd771a4cfa107b700edbb7a24e3d70d9769de3c53374c7972",
     "etag": null,
-    "last_modified": "Thu, 19 Nov 2026 15:22:33 GMT",
-    "ftp_modified": "213 20261119152233",
+    "last_modified": "Thu, 19 Nov 2026 20:30:32 GMT",
+    "ftp_modified": "213 20261119203032",
     "content_type": "application/octet-stream",
     "content_disposition": null
   },
@@ -124,6 +124,16 @@
       "agenda_item": "15.2",
       "name": "CB: # 14_R20Mobility",
       "moderator": "Lenovo"
+    },
+    "R20": {
+      "agenda_item": "11.2.2",
+      "name": "CB: # R20_SON&MDT_Intra-CULTM",
+      "moderator": "CATT"
+    },
+    "Rel20": {
+      "agenda_item": "14.4",
+      "name": "CB: # Rel20_AIoT",
+      "moderator": "LGE"
     }
   },
   "llm": {
