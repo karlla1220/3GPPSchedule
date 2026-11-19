@@ -13560,7 +13560,27 @@
           "room_scope": "assigned",
           "notes": [],
           "inferred_agenda_items": [],
-          "email_details": [],
+          "email_details": [
+            {
+              "kind": "session",
+              "session": "Thu 15:00-15:35 Champions Ballroom A",
+              "quote": "The issues for discussion online this afternoon are presented in Section 3.8.",
+              "mode": "online",
+              "summary": "Online discussion on issues presented in Section 3.8",
+              "topics": [
+                "Section 3.8"
+              ],
+              "day": "Thursday",
+              "tdocs": [
+                "R1-2609682"
+              ],
+              "split": [],
+              "mail": "9e7cb44c.2611c",
+              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;9e7cb44c.2611c",
+              "author": "Xin Su (蘇昕)",
+              "sent": "2026-11-19T14:13:38-06:00"
+            }
+          ],
           "part": null,
           "stream": ""
         },
@@ -16658,7 +16678,7 @@
     }
   ],
   "source_file": "RAN1#127 online and offline schedules - v04.docx",
-  "generated_at": "2026-11-19 14:09",
+  "generated_at": "2026-11-19 14:21",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
