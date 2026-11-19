@@ -12384,7 +12384,22 @@
           "room_scope": "assigned",
           "notes": [],
           "inferred_agenda_items": [],
-          "email_details": [],
+          "email_details": [
+            {
+              "kind": "session",
+              "session": "Thu 11:00-11:45 BMO 212",
+              "quote": "Please provide your comments in the FL summary, preferably before Thursday morning coffee break, to facilitate our offline discussion after the coffee break.",
+              "mode": "offline",
+              "summary": "Offline discussion after Thursday morning coffee break",
+              "topics": [],
+              "day": "Thursday",
+              "split": [],
+              "mail": "95845029.2611c",
+              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;95845029.2611c",
+              "author": "Hao Wu",
+              "sent": "2026-11-18T19:20:10-06:00"
+            }
+          ],
           "part": null,
           "stream": ""
         },
@@ -15166,7 +15181,7 @@
     }
   ],
   "source_file": "RAN1#127 online and offline schedules - v04.docx",
-  "generated_at": "2026-11-18 19:02",
+  "generated_at": "2026-11-18 19:22",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
