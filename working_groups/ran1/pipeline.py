@@ -646,10 +646,6 @@ def build_schedule(args) -> Schedule:
     # Step 4d: Agenda items for cells whose schedule gives none
     sessions = apply_inferred_agenda_items(sessions, current_meeting_id)
 
-    # Step 4e: Links from the popup's agenda tree to each item's drafts folder
-    sessions = drafts_folders.apply(sessions, current_meeting_id, agenda_urls,
-                                    offline=bool(args.local or args.no_download))
-
     # Step 5: Build Schedule model
     meeting_name = _extract_meeting_name(docx_path)
 
@@ -888,6 +884,9 @@ def build_schedule(args) -> Schedule:
         starts_at=portal_ref.get("starts_at") if portal_ref else None,
         ends_at=portal_ref.get("ends_at") if portal_ref else None,
     )
+
+    # Links from the popup's agenda tree to each item's drafts folder
+    drafts_folders.apply(schedule, cfg.get("meeting_sync"), offline=bool(args.local or args.no_download))
 
     # Session plans from the email discussion threads. Optional like the
     # agreements: a failure leaves the schedule without them.
