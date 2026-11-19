@@ -3687,7 +3687,7 @@
           "stream": ""
         },
         {
-          "name": "FS_enIMS_ARC / KI#6 (Policy)",
+          "name": "KI#6 (Policy) / FS_enIMS_ARC",
           "duration_minutes": 90,
           "start_time": "14:00",
           "end_time": "15:30",
@@ -3695,29 +3695,10 @@
           "room_col_start": 2,
           "room_col_end": 3,
           "chair": null,
-          "agenda_item": "20.10.1, 20.6.6",
+          "agenda_item": "20.6.6, 20.10.1",
           "group_header": "Rel-20 SIDs and WIDs",
-          "description": "Study on IMS Architecture Enhancement (FS_enIMS_ARC)\nStudy on Architecture for 6G System (FS_6G_ARC) - Policy and charging control framework",
+          "description": "Study on Architecture for 6G System (FS_6G_ARC) - Policy and charging control framework\nStudy on IMS Architecture Enhancement (FS_enIMS_ARC)",
           "agenda_descriptions": [
-            {
-              "agenda_item": "20.10.1",
-              "matched_agenda_item": "20.10.1",
-              "description": "Study on IMS Architecture Enhancement (FS_enIMS_ARC)",
-              "hierarchy": [
-                {
-                  "agenda_item": "20",
-                  "description": "Rel-20 SIDs and WIDs"
-                },
-                {
-                  "agenda_item": "20.10",
-                  "description": null
-                },
-                {
-                  "agenda_item": "20.10.1",
-                  "description": "Study on IMS Architecture Enhancement (FS_enIMS_ARC)"
-                }
-              ]
-            },
             {
               "agenda_item": "20.6.6",
               "matched_agenda_item": "20.6.6",
@@ -3736,6 +3717,25 @@
                   "description": "Study on Architecture for 6G System (FS_6G_ARC) - Policy and charging control framework"
                 }
               ]
+            },
+            {
+              "agenda_item": "20.10.1",
+              "matched_agenda_item": "20.10.1",
+              "description": "Study on IMS Architecture Enhancement (FS_enIMS_ARC)",
+              "hierarchy": [
+                {
+                  "agenda_item": "20",
+                  "description": "Rel-20 SIDs and WIDs"
+                },
+                {
+                  "agenda_item": "20.10",
+                  "description": null
+                },
+                {
+                  "agenda_item": "20.10.1",
+                  "description": "Study on IMS Architecture Enhancement (FS_enIMS_ARC)"
+                }
+              ]
             }
           ],
           "room_ids": [
@@ -3743,8 +3743,8 @@
           ],
           "room_scope": "assigned",
           "notes": [
-            "FS_enIMS_ARC (20.10.1)",
-            "KI#6 (Policy) (20.6.6)"
+            "KI#6 (Policy) (20.6.6)",
+            "FS_enIMS_ARC (20.10.1)"
           ],
           "inferred_agenda_items": [],
           "email_details": [],
@@ -4858,20 +4858,20 @@
       "caveats": []
     }
   ],
-  "source_file": "S2-2611637_SA2-178-Session Plan - r17.docx",
-  "generated_at": "2026-11-19 10:02",
+  "source_file": "S2-2611637_SA2-178-Session Plan - r18.docx",
+  "generated_at": "2026-11-19 10:42",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
-    "S2-2611637_SA2-178-Session Plan - r17.docx",
+    "S2-2611637_SA2-178-Session Plan - r18.docx",
     "agenda.csv"
   ],
   "source_labels": {
-    "S2-2611637_SA2-178-Session Plan - r17.docx": "Session Plan - r17",
+    "S2-2611637_SA2-178-Session Plan - r18.docx": "Session Plan - r18",
     "agenda.csv": "agenda.csv"
   },
   "source_urls": {
-    "S2-2611637_SA2-178-Session Plan - r17.docx": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/SA2/Inbox/Drafts/_Session_Plan_Updates/S2-2611637_SA2-178-Session%20Plan%20-%20r17.docx"
+    "S2-2611637_SA2-178-Session Plan - r18.docx": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/SA2/Inbox/Drafts/_Session_Plan_Updates/S2-2611637_SA2-178-Session%20Plan%20-%20r18.docx"
   },
   "source_mails": {},
   "timezone": "America/Edmonton",
