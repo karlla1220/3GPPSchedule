@@ -176,7 +176,8 @@ def build_schedule(options=None, *, request=None, history=None):
         and manifest[k].get('url')
     }
     warnings = list(bundle.warnings) + warnings + read_warnings
-    repeated = [text for day in schedule.days for text in day.caveats[:1]][:1]
+    # One line per repeated weekday (Tuesday and Friday may both repeat).
+    repeated = list({day.day_name: day.caveats[0] for day in schedule.days if day.caveats}.values())
     if repeated:
         notices.add('ran4', 'repeated-weekday', f'ran4:{meeting}:repeated-weekday:{name}',
                     'RAN4: the schedule file has two slides for one weekday',

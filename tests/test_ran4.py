@@ -189,6 +189,37 @@ def test_a_repeated_weekday_slide_is_its_own_day():
     assert page.select_one('.week-day[data-day="friday-2"]').text.startswith('Fri 2')
 
 
+def test_a_repeated_weekday_in_mid_week_keeps_the_days_around_it():
+    """Two Tuesday slides before Thursday: each day keeps its own slide, and the ids stay unique."""
+    import io, zipfile
+    from bs4 import BeautifulSoup
+    from shared.renderer import generate_html
+    name = 'RAN4_121_meeting_schedule_v10_after_WED.pptx'
+    out = io.BytesIO()
+    with zipfile.ZipFile(FIXTURES / name) as a, zipfile.ZipFile(out, 'w') as b:
+        for info in a.infolist():
+            data = a.read(info.filename)
+            if info.filename == 'ppt/slides/slide4.xml':   # Wednesday's slide, titled Tuesday
+                data = data.replace(b'<a:t>Wednesday</a:t>', b'<a:t>Tuesday</a:t>')
+            b.writestr(info, data)
+    document = docmod.extract_document(out.getvalue(), name)
+    assert [d.get('key', d['day']) for d in document['days']] == [
+        'Monday', 'Tuesday', 'Tuesday 2', 'Thursday', 'Friday', 'Friday 2']
+    meta = {**META, 'starts_on': '2026-11-16', 'ends_on': '2026-11-20'}
+    schedule, _ = sessions.make_schedule(document, None, None, meta, [name], {}, 'now', column_chairs=CHAIRS)
+    tuesday, again, thursday = schedule.days[1:4]
+    assert tuesday.date == again.date == '2026-11-17' and thursday.caveats == []
+    assert 'This tab shows slide 3' in tuesday.caveats[0] and 'This tab shows slide 4' in again.caveats[0]
+    # Each Tuesday holds its own slide's cells only: Wednesday's slide opens at 08:30 with "107] 6G AI".
+    names = [{s.name for s in d.sessions} for d in (tuesday, again)]
+    assert any('107] 6G AI' in n for n in names[1]) and not any('107] 6G AI' in n for n in names[0])
+    page = BeautifulSoup(generate_html(schedule), 'html.parser')
+    assert [t.text for t in page.select('.tabs .tab')] == ['Mon', 'Tue', 'Tue 2', 'Thu', 'Fri', 'Fri 2', 'All']
+    for cell in page.select('#all-days .week-cell'):
+        day, index = cell['data-popup-of'].split(':')
+        assert len(page.select(f'#{day} .session-block')) > int(index)
+
+
 def test_monday_matches_the_report_grid(week):
     rows = block(week[0], 'Monday', '11:00', '13:00')
     assert ('yang', '11:00', '13:00', None, '[101-A] System Parameter', '8.2.1, 8.2.2, 8.2.7', 'Yang TANG',

@@ -311,6 +311,15 @@ WG가 원본에서 옮긴 표 밖 글(`Schedule.supplements`, `topic_references.
 
 - **거르지 않는다.** 원본이 적은 회의 접속 정보(Teams 링크, meeting ID, passcode)도 그대로 둔다. 3GPP FTP와 list.etsi.org에 이미 공개된 원문이고, 참석자에게는 시간표 바로 아래에서 찾는 편이 오히려 편하다(2026-10-30 결정).
 
+## 같은 요일이 두 번 나오는 원본
+
+RAN4#121 v09·v10은 금요일 슬라이드가 두 장이고 표가 서로 다르다. 어느 쪽이 맞는지 파일에 표시가 없다.
+
+- **둘 다 적힌 대로 따로 둔다.** 둘째 슬라이드는 `Friday 2`라는 하루가 되고(`working_groups/ran4/document.py`, 셀 id 끝 `-2`), 탭은 `Fri`, `Fri 2`다. 요일이 어디서 반복되든(화·화·목) 같다.
+  - 세션을 요일 이름으로 모으면 두 탭에 두 슬라이드의 셀이 겹쳐 들어간다. 셀 id가 같으면 LLM 폴백 답이 다른 슬라이드의 같은 칸에 붙는다.
+- 두 탭 모두 그리드 위 callout(`DaySchedule.caveats`)이 슬라이드 번호를 밝히고 의장에게 확인하라고 한다. 빌드 알림(`repeated-weekday`)은 파일마다 한 번이다.
+- 페이지 id는 `friday`, `friday-2`다(`renderer.py`의 `_day_id`). 오늘인 요일은 둘 다 NOW 줄을 받는다(`schedule.js`의 `updateNowLine`). 날짜는 같다.
+
 ## 원본이 모호할 때: WG 관례 문서
 
 - **원본이 덜 적었거나 모호하게 적은 값은 그 WG의 지난 회의 원본에서 정한 관례로 채운다.** 근거와 쓰는 법은 `working_groups/<wg>/CONVENTIONS.md`, 값은 `conventions.json`에 둔다. 지금은 SA2에만 있다.

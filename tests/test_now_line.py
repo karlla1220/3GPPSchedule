@@ -18,7 +18,7 @@ END = '2026-08-28T17:30:00+02:00'
 
 
 def run_page(*, now, starts_at=START, ends_at=END, stored=None, steps=(), storage_error=False, script=None,
-             all_days=False):
+             all_days=False, days=None):
     node = shutil.which('node')
     if not node:
         pytest.skip('Node.js is required to execute browser logic')
@@ -27,7 +27,7 @@ def run_page(*, now, starts_at=START, ends_at=END, stored=None, steps=(), storag
     result = subprocess.run([node, str(Path(__file__).parent / 'fixtures/now_line_browser.cjs')],
                             input=json.dumps({'script': source, 'now': now, 'stored': stored,
                                               'steps': steps, 'storageError': storage_error,
-                                              'allDays': all_days}),
+                                              'allDays': all_days, 'days': days}),
                             text=True, capture_output=True, check=True,
                             env={**os.environ, 'TZ': 'America/Los_Angeles'})
     return json.loads(result.stdout)
@@ -89,6 +89,16 @@ def test_the_all_view_keeps_now_on_the_time_axis_and_the_red_line_on_todays_room
     state, = run_page(now='2026-08-26T08:00:00Z', stored='true', all_days=True)
     assert [(d['class'], d['column']) for d in state['drawn'] if d['grid'] == 'all-days'] == [
         ('now-line now-label', None), ('now-line now-today', '14 / 19')]
+
+
+def test_a_repeated_weekday_gets_now_on_each_of_its_tabs():
+    # A weekday the source repeats (RAN4#121) is "monday" and "monday-2": both are today.
+    state, = run_page(now='2026-08-24T08:00:00Z', stored='true', all_days=True,
+                      days=['monday', 'monday-2', 'tuesday', 'wednesday'])
+    assert [(d['grid'], d['class'], d['column']) for d in state['drawn']] == [
+        ('monday', 'now-line', None), ('monday-2', 'now-line', None),
+        ('all-days', 'now-line now-label', None),
+        ('all-days', 'now-line now-today', '2 / 7'), ('all-days', 'now-line now-today', '8 / 13')]
 
 
 def test_storage_unavailable_still_enables_now_during_meeting():
