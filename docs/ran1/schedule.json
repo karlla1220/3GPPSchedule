@@ -14716,7 +14716,25 @@
           "room_scope": "assigned",
           "notes": [],
           "inferred_agenda_items": [],
-          "email_details": [],
+          "email_details": [
+            {
+              "kind": "session",
+              "session": "Fri 09:30-10:30 BMO 214-215",
+              "quote": "RAN1 will endorse the TP and corresponding LS to RAN2 on Friday online session (see Proposals in Section 2).",
+              "mode": "online",
+              "summary": "Endorsement of TP and corresponding LS to RAN2 (Proposals in Section 2)",
+              "topics": [
+                "TP and corresponding LS to RAN2",
+                "Proposals in Section 2"
+              ],
+              "day": "Friday",
+              "split": [],
+              "mail": "9acb5aaa.2611c",
+              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;9acb5aaa.2611c",
+              "author": "Mixiang (Shawn)",
+              "sent": "2026-11-19T03:04:24-06:00"
+            }
+          ],
           "part": null,
           "stream": ""
         },
@@ -15219,7 +15237,7 @@
     }
   ],
   "source_file": "RAN1#127 online and offline schedules - v04.docx",
-  "generated_at": "2026-11-18 23:21",
+  "generated_at": "2026-11-19 03:21",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
