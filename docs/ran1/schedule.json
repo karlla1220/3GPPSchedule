@@ -16778,7 +16778,7 @@
     }
   ],
   "source_file": "RAN1#127 online and offline schedules - v04.docx",
-  "generated_at": "2026-11-19 16:02",
+  "generated_at": "2026-11-19 16:22",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
@@ -22252,11 +22252,7 @@
         "changed_in": "Chair notes RAN1#127_v03.docx"
       }
     },
-    "retained_files": [
-      "agreements/455128ddc3db3eaf6309.html",
-      "agreements/69754790ce2c45245217.html",
-      "agreements/810a7a7fd0f6522baf24.html"
-    ]
+    "retained_files": []
   },
   "email_informal": {
     "10.6.3": [
