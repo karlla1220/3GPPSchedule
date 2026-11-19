@@ -44,6 +44,9 @@ body {
     color: var(--ink);
     line-height: 1.4;
     -webkit-font-smoothing: antialiased;
+    /* Room for the header and tab bar specDuck lays over the frame it shows us in (embed in schedule.js). */
+    padding-top: var(--embed-top, 0px);
+    padding-bottom: var(--embed-bottom, 0px);
 }
 
 .container {
@@ -1242,11 +1245,11 @@ header .meta a:focus-visible,
 .filter-panel {
     position: fixed;
     right: 0;
-    top: 50%;
+    top: calc(50% + (var(--embed-top, 0px) - var(--embed-bottom, 0px)) / 2);
     transform: translateY(-50%);
     z-index: 100;
     width: 260px;
-    max-height: 80vh;
+    max-height: min(80vh, calc(100vh - var(--embed-top, 0px) - var(--embed-bottom, 0px) - 16px));
     background: white;
     border-radius: 8px 0 0 8px;
     box-shadow: -2px 0 12px rgba(0,0,0,0.15);
@@ -4708,8 +4711,16 @@ header .meta a:focus-visible,
     function visibleArea() {
         const vv = window.visualViewport;
         const de = document.documentElement;
-        if (!vv) return { left: 0, top: 0, width: de.clientWidth, height: de.clientHeight };
-        return { left: vv.offsetLeft, top: vv.offsetTop, width: vv.width, height: vv.height };
+        // specDuck lays its header and tab bar over the top and bottom of our frame.
+        const css = getComputedStyle(de);
+        const insetTop = parseFloat(css.getPropertyValue('--embed-top')) || 0;
+        const insetBottom = parseFloat(css.getPropertyValue('--embed-bottom')) || 0;
+        const area = vv
+            ? { left: vv.offsetLeft, top: vv.offsetTop, width: vv.width, height: vv.height }
+            : { left: 0, top: 0, width: de.clientWidth, height: de.clientHeight };
+        area.top += insetTop;
+        area.height = Math.max(0, area.height - insetTop - insetBottom);
+        return area;
     }
 
     const POPUP_MARGIN = 8;
@@ -5356,6 +5367,58 @@ header .meta a:focus-visible,
         }, AUTO_REFRESH_MS);
     }
 });
+
+// specDuck shows this site in a full-screen frame with its header and tab bar
+// laid over it. It sends the room they take (specduck:insets); we keep content
+// out of it and say when the visitor scrolls down or up (specduck:chrome), so
+// it can slide them away like on its own pages. Standalone, nothing happens.
+(function() {
+    if (window.parent === window) return;
+    const INSETS_KEY = 'specduck_insets';
+    let parentOrigin = null;
+    let hidden = false;
+    let last = 0;
+    const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)');
+
+    function applyInsets(top, bottom) {
+        const root = document.documentElement.style;
+        root.setProperty('--embed-top', top + 'px');
+        root.setProperty('--embed-bottom', bottom + 'px');
+    }
+
+    function onScroll() {
+        if (!parentOrigin || (reduceMotion && reduceMotion.matches)) return;
+        const y = window.scrollY;
+        let next = hidden;
+        if (y <= 24 || y < last - 10) next = false;
+        else if (y > last + 10) next = true;
+        if (y <= 24 || Math.abs(y - last) > 10) last = y;
+        if (next === hidden) return;
+        hidden = next;
+        window.parent.postMessage({ type: 'specduck:chrome', hidden: hidden }, parentOrigin);
+    }
+
+    // The next page in this frame (a WG switch, a reload) starts with the same room.
+    try {
+        const saved = JSON.parse(sessionStorage.getItem(INSETS_KEY) || 'null');
+        if (saved) applyInsets(saved.top, saved.bottom);
+    } catch (e) { /* no storage: wait for the parent */ }
+
+    window.addEventListener('message', function(event) {
+        const data = event.data;
+        if (event.source !== window.parent || !data || data.type !== 'specduck:insets') return;
+        const top = Number(data.top);
+        const bottom = Number(data.bottom);
+        if (!isFinite(top) || !isFinite(bottom)) return;
+        if (!parentOrigin) {
+            parentOrigin = event.origin === 'null' ? '*' : event.origin;  // a file:// parent has no origin to name
+            last = window.scrollY;
+        }
+        applyInsets(top, bottom);
+        try { sessionStorage.setItem(INSETS_KEY, JSON.stringify({ top: top, bottom: bottom })); } catch (e) { /* ignore */ }
+    });
+    window.addEventListener('scroll', onScroll, { passive: true });
+})();
 </script>
 </body>
 </html>
