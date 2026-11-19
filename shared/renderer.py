@@ -191,7 +191,8 @@ def _agenda_description_popup_lines(session) -> list[str]:
         hierarchy = _agenda_hierarchy_levels(item.get("hierarchy") or [])
         parents = hierarchy[:-1] if len(hierarchy) > 1 else []
         children = [c for c in item.get("children") or [] if c.get("agenda_item") and c.get("description")]
-        entries.append((agenda_item, parents, _agenda_description_header(agenda_item, description), children))
+        header = _agenda_description_header(agenda_item, description) + _drafts_link(item)
+        entries.append((agenda_item, parents, header, children))
     # An item already listed under an "x" item is not repeated on its own.
     covered = {c["agenda_item"] for entry in entries for c in entry[3]}
     entries = [entry for entry in entries if entry[0] not in covered]
@@ -213,12 +214,12 @@ def _agenda_description_popup_lines(session) -> list[str]:
                 continue
             shown.add(key)
             parent_rows += 1
-            rows.append(f'<div class="popup-agenda-parent">{_agenda_hierarchy_line(level)}</div>')
+            rows.append(f'<div class="popup-agenda-parent">{_agenda_hierarchy_line(level)}{_drafts_link(level)}</div>')
         rows.append(f'<div class="popup-agenda-item">{header}</div>')
         for child in children:
             rows.append(
                 '<div class="popup-agenda-item">'
-                f'{_agenda_description_header(child["agenda_item"], child["description"])}</div>'
+                f'{_agenda_description_header(child["agenda_item"], child["description"])}{_drafts_link(child)}</div>'
             )
 
     if parent_rows <= 1 or len(rows) <= _AGENDA_OPEN_ROWS:
@@ -248,6 +249,15 @@ def _agenda_description_header(label: str, description: str) -> str:
     return f"<strong>Description:</strong> {_esc(description)}"
 
 
+def _drafts_link(entry: dict) -> str:
+    """" ↗" to the item's folder under Inbox/drafts (RAN1 ``drafts_folders``), like the mail arrow."""
+    url = entry.get("drafts_url")
+    if not url:
+        return ""
+    return ('&nbsp;<a class="mail-link" href="' + _esc(url) + '" target="_blank" rel="noopener"'
+            ' title="Drafts folder" aria-label="Drafts folder">↗</a>')
+
+
 def _agenda_hierarchy_levels(raw_levels: list) -> list[dict[str, str | None]]:
     levels: list[dict[str, str | None]] = []
     for level in raw_levels:
@@ -259,6 +269,7 @@ def _agenda_hierarchy_levels(raw_levels: list) -> list[dict[str, str | None]]:
             {
                 "agenda_item": level_ai,
                 "description": str(level_desc) if level_desc else None,
+                "drafts_url": level.get("drafts_url"),
             }
         )
     return levels

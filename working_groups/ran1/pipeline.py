@@ -74,6 +74,7 @@ from . import main_history
 from .merger import collect_time_slot_data
 from .config import load_config, with_meeting_folders
 from .agenda_labels import apply_inferred_agenda_items
+from . import drafts_folders
 from .consistency import reject_concurrent_agenda_duplicates
 from .agenda_descriptions import (
     DEFAULT_JSON_PATH,
@@ -644,6 +645,10 @@ def build_schedule(args) -> Schedule:
 
     # Step 4d: Agenda items for cells whose schedule gives none
     sessions = apply_inferred_agenda_items(sessions, current_meeting_id)
+
+    # Step 4e: Links from the popup's agenda tree to each item's drafts folder
+    sessions = drafts_folders.apply(sessions, current_meeting_id, agenda_urls,
+                                    offline=bool(args.local or args.no_download))
 
     # Step 5: Build Schedule model
     meeting_name = _extract_meeting_name(docx_path)
