@@ -248,10 +248,19 @@ def extract_document(data: bytes, name: str) -> dict:
             day = next((t for t in texts if t in DAYS), None)
             if day is None:
                 raise LayoutError(f'A table slide of {name} has no weekday title')
-            days.append(_read_table(table, day))
+            read = _read_table(table, day)
+            read['slide'] = int(re.search(r'(\d+)\.xml$', slide)[1])
+            repeat = sum(d['day'] == day for d in days)
+            if repeat:
+                # RAN4#121 v09, v10: two Friday slides with different tables. Both
+                # are kept as written, each its own day; the page says so.
+                read['key'] = f'{day} {repeat + 1}'
+                for cell in read['cells']:
+                    cell['id'] += f'-{repeat + 1}'
+            days.append(read)
             others = [t for t in texts if t != day]
             if others:
-                supplements.append({'type': 'heading', 'text': day})
+                supplements.append({'type': 'heading', 'text': read.get('key', day)})
                 supplements.extend({'type': 'paragraph', 'text': t, 'bold': False} for t in others)
         properties = core_properties(archive)
     if not days or not any(day['cells'] for day in days):
@@ -265,7 +274,7 @@ def extract_document(data: bytes, name: str) -> dict:
         raise ValueError('Cannot tell the RAN4 meeting from the file name or the cover slide')
     if titled and info and titled != meeting:
         print(f'[ran4] Cover says {titled} but the file is {meeting}; using the file name')
-    notes = [(day['day'], note) for day in days for note in day.pop('notes')]
+    notes = [(day.get('key', day['day']), note) for day in days for note in day.pop('notes')]
     if notes:
         supplements.append({'type': 'heading', 'text': 'Notes in the schedule table'})
         supplements.append({'type': 'table', 'header': True,

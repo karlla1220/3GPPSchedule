@@ -31,7 +31,7 @@ elements.set('popup-backdrop', element());
 elements.set('popup-close-btn', element());
 elements.set('popup-floating', element());
 elements.set('popup-content', element());
-const DAYS = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday'];
+const DAYS = input.days ?? ['monday', 'tuesday', 'wednesday', 'thursday', 'friday'];
 for (const day of DAYS) {
     const grid = element();
     grid.dataset = {start: '480', end: '1080', slot: '5'};
@@ -51,7 +51,7 @@ const weekDays = new Map(DAYS.map((day, i) => {
     return [day, name];
 }));
 function querySelector(selector) {
-    const day = input.allDays && /^\.week-day\[data-day="(\w+)"\]$/.exec(selector);
+    const day = input.allDays && /^\.week-day\[data-day="([\w-]+)"\]$/.exec(selector);
     return (day && weekDays.get(day[1])) || null;
 }
 const context = {

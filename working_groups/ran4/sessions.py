@@ -444,6 +444,26 @@ def resolve_overlaps(sessions: list[dict]) -> list[dict]:
     return [s for s in placed if s['start'] < s['end']]
 
 
+def day_key(day: dict) -> str:
+    """Which document day a session belongs to: its weekday, or 'Friday 2' for a weekday's second slide."""
+    return day.get('key', day['day'])
+
+
+def repeat_caveats(days: list[dict]) -> dict[str, list[str]]:
+    """The page's caveat for each slide of a weekday that has more than one."""
+    caveats = {}
+    for day in days:
+        same = [d for d in days if d['day'] == day['day']]
+        if len(same) < 2:
+            continue
+        slides = ', '.join(f"slide {d.get('slide', '?')} ({day_key(d)})" for d in same)
+        caveats[day_key(day)] = [
+            f"The schedule file has {len(same)} slides for {day['day']} with different sessions: {slides}. "
+            f"This tab shows slide {day.get('slide', '?')} as written. "
+            "Check with the session chair which one holds. The next update will probably resolve it."]
+    return caveats
+
+
 def interpret(document: dict, context: dict, refine=None) -> tuple[list[dict], list[str]]:
     """Session dicts for every day, and the build warnings.
 
@@ -462,7 +482,7 @@ def interpret(document: dict, context: dict, refine=None) -> tuple[list[dict], l
     replaced = refine(doubtful, context) if refine and doubtful else {}
     sessions = []
     for day in document['days']:
-        found = [{**s, 'day': day['day']} for owner, cell, rules in readings if owner is day
+        found = [{**s, 'day': day_key(day)} for owner, cell, rules in readings if owner is day
                  for s in replaced.get(cell['id'], rules)]
         sessions += resolve_overlaps(found)
     return sessions, warnings
@@ -507,8 +527,9 @@ def make_schedule(document: dict, agenda: dict | None, topics: dict | None, meta
     sessions, warnings = reader(context, metadata) if reader else interpret(document, context, refine)
     warnings = sorted(eom) + warnings
     days = []
+    caveats = repeat_caveats(document['days'])
     for day in document['days']:
-        raw = [s for s in sessions if s['day'] == day['day']]
+        raw = [s for s in sessions if s['day'] == day_key(day)]
         if not raw:
             continue
         if day['day'] not in dates:
@@ -549,7 +570,8 @@ def make_schedule(document: dict, agenda: dict | None, topics: dict | None, meta
         days.append(DaySchedule(day_name=day['day'], date=dates.get(day['day']), rooms=rooms,
                                 sessions=sorted(built, key=lambda s: (s.start_time, s.room_ids, s.part or [0])),
                                 timeline=Timeline(start=minutes_to_time(start), end=minutes_to_time(end),
-                                                  breaks=breaks)))
+                                                  breaks=breaks),
+                                caveats=caveats.get(day_key(day), [])))
     if not days:
         raise ValueError('The RAN4 schedule produced no sessions')
     number = document['meeting_id'].split('#', 1)[1]
