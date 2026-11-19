@@ -363,8 +363,8 @@ def generate_html(schedule: Schedule, *, schedules=None, groups=None, presentati
     html_parts.append('    <div class="schedule-toolbar">\n')
     html_parts.append('        <div class="tabs">\n')
     for day_schedule in schedule.days:
-        day_lower = day_schedule.day_name.lower()
-        day_short = day_schedule.day_name[:3]
+        day_lower = _day_id(schedule.days, day_schedule)
+        day_short = _day_short(day_schedule, day_lower)
         html_parts.append(
             # Named so the meeting switch slides each day's tab to its place (schedule.css).
             f'            <button class="tab" type="button" aria-pressed="false" data-day="{day_lower}" style="view-transition-name:day-tab-{day_lower};view-transition-class:grid-move">{day_short}</button>\n'
@@ -396,7 +396,7 @@ def generate_html(schedule: Schedule, *, schedules=None, groups=None, presentati
     # Day panels
     week_cells: list[str] = []
     for day_schedule in schedule.days:
-        day_lower = day_schedule.day_name.lower()
+        day_lower = _day_id(schedule.days, day_schedule)
         num_rooms = len(day_schedule.rooms)
         if num_rooms == 0:
             continue
@@ -753,6 +753,17 @@ class _WeekLayout:
         return (minute - self.start) // self.slot + _WEEK_FIRST_ROW
 
 
+def _day_id(days: list, day) -> str:
+    """The day's id in the page: its weekday, then "friday-2" for a weekday the source repeats (RAN4#121)."""
+    repeat = [d.day_name for d in days[:next(i for i, d in enumerate(days) if d is day)]].count(day.day_name)
+    return day.day_name.lower() + (f"-{repeat + 1}" if repeat else "")
+
+
+def _day_short(day, day_id: str) -> str:
+    """The tab's name: "Fri", and "Fri 2" for a weekday's second slide."""
+    return day.day_name[:3] + (" " + day_id.rpartition("-")[2] if "-" in day_id else "")
+
+
 def _week_layout(schedule: Schedule) -> _WeekLayout | None:
     """The All view's grid, or None for a meeting with one day to show."""
     days = [day for day in schedule.days if day.rooms]
@@ -765,7 +776,7 @@ def _week_layout(schedule: Schedule) -> _WeekLayout | None:
     timelines = [day.timeline for day in days]
     columns, column = {}, 2
     for day in days:
-        columns[day.day_name.lower()] = column
+        columns[_day_id(schedule.days, day)] = column
         column += len(day.rooms) + 1  # a gutter after each day
     slot = reduce(gcd, [t.slot_minutes for t in timelines]
                   + [time_to_minutes(t.start) - start for t in timelines])
@@ -845,7 +856,8 @@ def _render_all_days(schedule: Schedule, week: _WeekLayout, cells: list[str]) ->
         tracks.append(f"repeat({len(day.rooms)}, minmax(0, 1fr))")
     parts = [
         f'    <div class="day-panel all-days" id="{_ALL_DAYS}" data-date="">\n'
-        + _caveats_html([f"{day.day_name}: {text}" for day in week.days for text in day.caveats]) +
+        + _caveats_html([f"{day.day_name}{_day_short(day, _day_id(schedule.days, day))[3:]}: {text}"
+                         for day in week.days for text in day.caveats]) +
         '        <div class="grid-wrapper">\n'
         f'            <div class="schedule-grid week-grid" data-start="{week.start}" data-end="{week.end}" '
         f'data-slot="{week.slot}" data-first-row="{_WEEK_FIRST_ROW}" '
@@ -863,14 +875,14 @@ def _render_all_days(schedule: Schedule, week: _WeekLayout, cells: list[str]) ->
         parts.append(f'<div class="time-label" style="grid-row:{row}/{row + span};view-transition-name:time-{minute};view-transition-class:grid-move"><span>{label}</span></div>')
         parts.append(f'<div class="grid-line{major}" style="grid-row:{row}"></div>')
     for index, day in enumerate(week.days):
-        day_lower = day.day_name.lower()
+        day_lower = _day_id(schedule.days, day)
         first = week.columns[day_lower]
         after = first + len(day.rooms)
         date = _short_date(day.date)
         # The day's name opens its own grid.
         parts.append(
             f'<button type="button" class="week-day wd-{index}" data-day="{day_lower}" '
-            f'style="grid-column:{first}/{after};grid-row:1"><span>{_esc(day.day_name[:3])}'
+            f'style="grid-column:{first}/{after};grid-row:1"><span>{_esc(_day_short(day, day_lower))}'
             + (f' <span class="week-date">{date}</span>' if date else "") + "</span></button>\n"
         )
         if after <= week.last_column:

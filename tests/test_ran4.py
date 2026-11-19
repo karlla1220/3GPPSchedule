@@ -162,6 +162,33 @@ def block(schedule, day, start, end):
             for s in day.sessions if start <= s.start_time < end]
 
 
+def test_a_repeated_weekday_slide_is_its_own_day():
+    """RAN4#121 v10 has two Friday slides with different tables: each is a tab as written, with a caveat."""
+    from bs4 import BeautifulSoup
+    from shared.renderer import generate_html
+    name = 'RAN4_121_meeting_schedule_v10_after_WED.pptx'
+    document = extract(name)
+    assert [(d['day'], d.get('key'), d['slide']) for d in document['days'][4:]] == [
+        ('Friday', None, 6), ('Friday', 'Friday 2', 7)]
+    # The LLM's answers come back by cell id: one id for both slides gave slide 6's answer to slide 7.
+    ids = [c['id'] for d in document['days'] for c in d['cells']]
+    assert len(set(ids)) == len(ids)
+    meta = {**META, 'starts_on': '2026-11-16', 'ends_on': '2026-11-20'}
+    schedule, _ = sessions.make_schedule(document, None, None, meta, [name], {}, 'now', column_chairs=CHAIRS)
+    first, second = schedule.days[4:]
+    shan = [[(s.start_time, s.name) for s in d.sessions if s.room_ids == ['shan'] and s.start_time < '10:30']
+            for d in (first, second)]
+    # Each slide once: slide 6 has the 8:00 ad hoc, slide 7 does not.
+    assert shan[0][0][1].startswith('BR1 Ad-hoc') and shan[1] == [('08:00', 'Return to')]
+    assert 'slide 6 (Friday), slide 7 (Friday 2)' in first.caveats[0]
+    assert 'This tab shows slide 6' in first.caveats[0] and 'This tab shows slide 7' in second.caveats[0]
+    page = BeautifulSoup(generate_html(schedule), 'html.parser')
+    assert [t.text for t in page.select('.tabs .tab')][4:6] == ['Fri', 'Fri 2']
+    assert page.select_one('#friday-2 > .schedule-caveats') and page.select_one('#friday > .schedule-caveats')
+    assert len({p['id'] for p in page.select('.day-panel')}) == len(page.select('.day-panel'))
+    assert page.select_one('.week-day[data-day="friday-2"]').text.startswith('Fri 2')
+
+
 def test_monday_matches_the_report_grid(week):
     rows = block(week[0], 'Monday', '11:00', '13:00')
     assert ('yang', '11:00', '13:00', None, '[101-A] System Parameter', '8.2.1, 8.2.2, 8.2.7', 'Yang TANG',

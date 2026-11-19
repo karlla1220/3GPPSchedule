@@ -14,7 +14,7 @@ import re
 import shutil
 from zoneinfo import ZoneInfo
 
-from shared import officials, timezones
+from shared import notices, officials, timezones
 from shared.agenda import agenda_map
 from shared.agenda_labels import infer_for_schedule
 from shared.llm_cells import gemini_request, has_key
@@ -176,6 +176,12 @@ def build_schedule(options=None, *, request=None, history=None):
         and manifest[k].get('url')
     }
     warnings = list(bundle.warnings) + warnings + read_warnings
+    repeated = [text for day in schedule.days for text in day.caveats[:1]][:1]
+    if repeated:
+        notices.add('ran4', 'repeated-weekday', f'ran4:{meeting}:repeated-weekday:{name}',
+                    'RAN4: the schedule file has two slides for one weekday',
+                    [f'Meeting: {meeting}', f'File: {name}', *repeated,
+                     'Both are on the page as separate tabs, each with a caveat.'])
     for warning in warnings:
         print(f'[ran4] {warning}')
     # Cells the schedule gives no AI: an LLM reads their label for the filter (shared/agenda_labels.py).
