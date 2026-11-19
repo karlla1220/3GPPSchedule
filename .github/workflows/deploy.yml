@@ -121,7 +121,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+      url: ${{ steps.deployment.outputs.page_url || steps.deployment_retry.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v4
@@ -198,9 +198,19 @@ jobs:
         uses: actions/upload-pages-artifact@v3
         with:
           path: docs/
+      # The artifact listing can lag the upload by a moment ("No artifacts named
+      # github-pages", run 44600735809), so a failed deploy waits and tries once more.
       - name: Deploy changed site
         if: steps.build.outputs.site_changed == 'true'
         id: deployment
+        continue-on-error: true
+        uses: actions/deploy-pages@v4
+      - name: Wait before retrying deploy
+        if: steps.deployment.outcome == 'failure'
+        run: sleep 15
+      - name: Retry deploy
+        if: steps.deployment.outcome == 'failure'
+        id: deployment_retry
         uses: actions/deploy-pages@v4
       # Commit AFTER deployment: if Pages fails, the next check still sees
       # the old source state and retries. State-only updates need no deploy.
