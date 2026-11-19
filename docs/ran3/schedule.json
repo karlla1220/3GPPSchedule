@@ -1520,7 +1520,7 @@
           "day": "Thursday",
           "room_col_start": 2,
           "room_col_end": 3,
-          "chair": "Yin Gao",
+          "chair": "Jiajun Chen",
           "agenda_item": "10.5.2",
           "group_header": "Study on 6G Radio",
           "description": "AI/ML framework",
@@ -1551,7 +1551,7 @@
           "room_scope": "assigned",
           "notes": [
             "CB: # 6GAIML2_Framework (GTW)",
-            "Yin Gao (ZTE)"
+            "Jiajun Chen (ZTE)"
           ],
           "inferred_agenda_items": [],
           "email_details": [],
@@ -1888,22 +1888,22 @@
     }
   ],
   "source_file": "RAN3_134_agenda_20261119_0921.docx",
-  "generated_at": "2026-11-19 09:42",
+  "generated_at": "2026-11-19 13:22",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
     "RAN3_134_agenda_20261119_0921.docx",
-    "RAN3 offline discussion_ver_05.xlsx",
+    "RAN3 offline discussion_ver_06.xlsx",
     "agenda.csv"
   ],
   "source_labels": {
     "RAN3_134_agenda_20261119_0921.docx": "agenda_20261119_0921",
-    "RAN3 offline discussion_ver_05.xlsx": "offline discussion_ver_05",
+    "RAN3 offline discussion_ver_06.xlsx": "offline discussion_ver_06",
     "agenda.csv": "agenda.csv"
   },
   "source_urls": {
     "RAN3_134_agenda_20261119_0921.docx": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN3/Inbox/Chairs_Notes/RAN3_134_agenda_20261119_0921.docx",
-    "RAN3 offline discussion_ver_05.xlsx": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN3/Offline_meeting_room/RAN3%20offline%20discussion_ver_05.xlsx",
+    "RAN3 offline discussion_ver_06.xlsx": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN3/Offline_meeting_room/RAN3%20offline%20discussion_ver_06.xlsx",
     "agenda.csv": "https://www.3gpp.org/ftp/tsg_ran/WG3_Iu/TSGR3_134/Agenda/agenda.csv"
   },
   "source_mails": {},
