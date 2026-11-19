@@ -14241,7 +14241,24 @@
           "room_scope": "assigned",
           "notes": [],
           "inferred_agenda_items": [],
-          "email_details": [],
+          "email_details": [
+            {
+              "kind": "session",
+              "session": "Thu 16:00-16:30 BMO 212",
+              "quote": "Please keep in mind that we have ONLY 30 mins offline discussion time. It would be highly appreciated if you could provide comments, as early as possible, and participate in offline session",
+              "mode": "offline",
+              "summary": "Offline discussion on Proposal #4-2-2b",
+              "topics": [
+                "Proposal #4-2-2b"
+              ],
+              "day": "Thursday",
+              "split": [],
+              "mail": "156a0cdb.2611c",
+              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;156a0cdb.2611c",
+              "author": "Seonwook Kim",
+              "sent": "2026-11-19T11:51:18-06:00"
+            }
+          ],
           "part": null,
           "stream": ""
         },
@@ -15234,7 +15251,22 @@
           "inferred_agenda_items": [
             "9.3"
           ],
-          "email_details": [],
+          "email_details": [
+            {
+              "kind": "session",
+              "session": "Thu 18:00-19:00 BMO 221",
+              "quote": "Please have a check on the proposals for offline proposals on Thursday.",
+              "mode": "offline",
+              "summary": "Check FL summary #3_v25 proposals for Thursday offline",
+              "topics": [],
+              "day": "Thursday",
+              "split": [],
+              "mail": "6a317a2e.2611c",
+              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;6a317a2e.2611c",
+              "author": "Teng Ma",
+              "sent": "2026-11-19T11:42:50-06:00"
+            }
+          ],
           "part": null,
           "stream": ""
         }
@@ -16274,7 +16306,27 @@
           "room_scope": "assigned",
           "notes": [],
           "inferred_agenda_items": [],
-          "email_details": [],
+          "email_details": [
+            {
+              "kind": "session",
+              "session": "Fri 11:05-11:15 BMO 214-215",
+              "quote": "Before Friday online I'd have two separate files for your comments.\n#1: The draft LS. Please check V3 and provide your comments to the comment file in the draft LS folder.",
+              "mode": "online",
+              "summary": "Friday online topics and draft LS updates for comments",
+              "topics": [
+                "draft LS",
+                "DFT size restriction",
+                "FDSS for pi/2 BPSK",
+                "section #9"
+              ],
+              "day": "Friday",
+              "split": [],
+              "mail": "dd332afb.2611c",
+              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;dd332afb.2611c",
+              "author": "Karri Ranta-aho (Nokia)",
+              "sent": "2026-11-19T11:45:59-06:00"
+            }
+          ],
           "part": null,
           "stream": ""
         },
@@ -16459,7 +16511,7 @@
     }
   ],
   "source_file": "RAN1#127 online and offline schedules - v04.docx",
-  "generated_at": "2026-11-19 11:42",
+  "generated_at": "2026-11-19 12:02",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
