@@ -15211,49 +15211,10 @@
           "stream": ""
         },
         {
-          "name": "8.1 ISAC",
-          "duration_minutes": 20,
-          "start_time": "11:00",
-          "end_time": "11:20",
-          "day": "Friday",
-          "room_col_start": 4,
-          "room_col_end": 5,
-          "chair": "Hiroki",
-          "agenda_item": "8.1",
-          "group_header": "",
-          "description": "Maintenance on all items of Rel-19 NR and E-UTRA",
-          "agenda_descriptions": [
-            {
-              "agenda_item": "8.1",
-              "matched_agenda_item": "8.1",
-              "description": "Maintenance on all items of Rel-19 NR and E-UTRA",
-              "hierarchy": [
-                {
-                  "agenda_item": "8",
-                  "description": "Maintenance on Rel-19 NR and E-UTRA",
-                  "has_description": true
-                },
-                {
-                  "agenda_item": "8.1",
-                  "description": "Maintenance on all items of Rel-19 NR and E-UTRA",
-                  "has_description": true
-                }
-              ]
-            }
-          ],
-          "room_ids": [],
-          "room_scope": "assigned",
-          "notes": [],
-          "inferred_agenda_items": [],
-          "email_details": [],
-          "part": null,
-          "stream": ""
-        },
-        {
           "name": "10.2.1 Waveform",
           "duration_minutes": 10,
-          "start_time": "11:20",
-          "end_time": "11:30",
+          "start_time": "11:00",
+          "end_time": "11:10",
           "day": "Friday",
           "room_col_start": 4,
           "room_col_end": 5,
@@ -15280,6 +15241,45 @@
                 {
                   "agenda_item": "10.2.1",
                   "description": "Waveform",
+                  "has_description": true
+                }
+              ]
+            }
+          ],
+          "room_ids": [],
+          "room_scope": "assigned",
+          "notes": [],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": null,
+          "stream": ""
+        },
+        {
+          "name": "8.1 ISAC",
+          "duration_minutes": 20,
+          "start_time": "11:10",
+          "end_time": "11:30",
+          "day": "Friday",
+          "room_col_start": 4,
+          "room_col_end": 5,
+          "chair": "Hiroki",
+          "agenda_item": "8.1",
+          "group_header": "",
+          "description": "Maintenance on all items of Rel-19 NR and E-UTRA",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "8.1",
+              "matched_agenda_item": "8.1",
+              "description": "Maintenance on all items of Rel-19 NR and E-UTRA",
+              "hierarchy": [
+                {
+                  "agenda_item": "8",
+                  "description": "Maintenance on Rel-19 NR and E-UTRA",
+                  "has_description": true
+                },
+                {
+                  "agenda_item": "8.1",
+                  "description": "Maintenance on all items of Rel-19 NR and E-UTRA",
                   "has_description": true
                 }
               ]
@@ -15458,24 +15458,24 @@
     }
   ],
   "source_file": "RAN1#127 online and offline schedules - v04.docx",
-  "generated_at": "2026-11-19 07:42",
+  "generated_at": "2026-11-19 08:02",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
     "RAN1#127 online and offline schedules - v04.docx",
-    "RAN1#127 online and offline schedules - v02_hh4.docx",
+    "RAN1#127 online and offline schedules - v02_hh5.docx",
     "RAN1#127 online and offline schedules - UE Features.docx",
     "RAN1#127 Sorour sessions online and offline schedules - v04.docx"
   ],
   "source_labels": {
     "RAN1#127 online and offline schedules - v04.docx": "Main",
-    "RAN1#127 online and offline schedules - v02_hh4.docx": "Hiroki",
+    "RAN1#127 online and offline schedules - v02_hh5.docx": "Hiroki",
     "RAN1#127 online and offline schedules - UE Features.docx": "Ralf",
     "RAN1#127 Sorour sessions online and offline schedules - v04.docx": "Sorour"
   },
   "source_urls": {
     "RAN1#127 online and offline schedules - v04.docx": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Chair_notes/RAN1%23127%20online%20and%20offline%20schedules%20-%20v04.docx",
-    "RAN1#127 online and offline schedules - v02_hh4.docx": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Hiroki_notes/RAN1%23127%20online%20and%20offline%20schedules%20-%20v02_hh4.docx",
+    "RAN1#127 online and offline schedules - v02_hh5.docx": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Hiroki_notes/RAN1%23127%20online%20and%20offline%20schedules%20-%20v02_hh5.docx",
     "RAN1#127 online and offline schedules - UE Features.docx": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Ralf_notes/RAN1%23127%20online%20and%20offline%20schedules%20-%20UE%20Features.docx",
     "RAN1#127 Sorour sessions online and offline schedules - v04.docx": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Sorour_notes/RAN1%23127%20Sorour%20sessions%20online%20and%20offline%20schedules%20-%20v04.docx",
     "RAN1#127 online and offline schedules - v01.docx": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/R1-2610231/RAN1%23127%20online%20and%20offline%20schedules%20-%20v01.docx",
