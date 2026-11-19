@@ -141,6 +141,12 @@ jobs:
         with:
           distribution: temurin
           java-version: '21'
+      # Pinned JAR (SHA-256 checked by the script); cached so Maven is hit once per version.
+      - name: Restore wmf2svg JAR
+        uses: actions/cache@v4
+        with:
+          path: .cache/tools
+          key: wmf2svg-0.10.6
       - run: uv run python scripts/setup_wmf2svg.py
       # docx-cli reads a DOCX whose layout the rules do not know for the LLM
       # fallback (shared/office_outline.py). Pinned by version and SHA-256.
