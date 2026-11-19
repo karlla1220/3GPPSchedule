@@ -1,16 +1,16 @@
 {
   "meeting_id": "ran3#134",
-  "version": "20261119.0.1430",
+  "version": "20261119.0.1630",
   "config_hash": "fdf80a0eb29dd64dbe8f8e0dbf1f6320eb2cbdcf53e080038977ac99443fe045",
   "schedule": {
-    "name": "RAN3_134_agenda_20261119_1430.docx",
-    "url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN3/Inbox/Chairs_Notes/RAN3_134_agenda_20261119_1430.docx",
-    "uploaded_at": "2026-11-19 20:30",
-    "size": 269505,
-    "sha256": "d7c8a5633e61880bd771a4cfa107b700edbb7a24e3d70d9769de3c53374c7972",
+    "name": "RAN3_134_agenda_20261119_1630.docx",
+    "url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN3/Inbox/Chairs_Notes/RAN3_134_agenda_20261119_1630.docx",
+    "uploaded_at": "2026-11-19 22:45",
+    "size": 264946,
+    "sha256": "d28e4b2bcee77d3c0330d99389aba4b813e70746429e516c6d8174afc38c15da",
     "etag": null,
-    "last_modified": "Thu, 19 Nov 2026 20:30:32 GMT",
-    "ftp_modified": "213 20261119203032",
+    "last_modified": "Thu, 19 Nov 2026 22:45:04 GMT",
+    "ftp_modified": "213 20261119224504",
     "content_type": "application/octet-stream",
     "content_disposition": null
   },
@@ -134,6 +134,21 @@
       "agenda_item": "14.4",
       "name": "CB: # Rel20_AIoT",
       "moderator": "LGE"
+    },
+    "19": {
+      "agenda_item": "31.2",
+      "name": "CB: # 19_TEI20mobrestriction",
+      "moderator": "Docomo"
+    },
+    "20": {
+      "agenda_item": "31.2",
+      "name": "CB: # 20_TEI20UEperm",
+      "moderator": "Huawei"
+    },
+    "21": {
+      "agenda_item": "31.2",
+      "name": "CB: # 21_TEI20NonMPS",
+      "moderator": "Ericsson"
     }
   },
   "llm": {
