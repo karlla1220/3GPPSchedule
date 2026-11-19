@@ -66,14 +66,13 @@ def test_sync_is_not_listed_outside_the_meeting(monkeypatch):
     assert calls == []
 
 
-def test_links_under_another_root_are_looked_up_again(monkeypatch):
-    path = drafts_folders.map_path("ran1#127")
-    path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text('{"10.5.2.2": "https://x/TSGR1_127/Inbox/drafts/10.5.2.2/"}')
+def test_another_meetings_folders_are_not_used(monkeypatch):
+    drafts_folders.PATH.write_text('{"meeting_id": "ran1#126bis", "folders": {"10.5.2.2": "https://old/"}}')
     monkeypatch.setattr(drafts_folders, "list_inbox_subfolders", folder_listing([]))
     s = schedule()
     drafts_folders.apply(s, SYNC, offline=False, now=DURING)
     assert session_of(s).agenda_descriptions[0]["drafts_url"] == ROOT + "10.5.2.2/"
+    assert '"ran1#127"' in drafts_folders.PATH.read_text()
 
 
 def test_x_item_is_its_parent_folder():
