@@ -14653,7 +14653,25 @@
           "room_scope": "assigned",
           "notes": [],
           "inferred_agenda_items": [],
-          "email_details": [],
+          "email_details": [
+            {
+              "kind": "session",
+              "session": "Thu 17:00-17:30 Champions Ballroom A",
+              "quote": "Final Round 4 FL summary for today's online has been uploaded in R1-2609888.",
+              "mode": "online",
+              "summary": "Round 4 FL summary uploaded in R1-2609888 for online session",
+              "topics": [],
+              "day": "Thursday",
+              "tdocs": [
+                "R1-2609888"
+              ],
+              "split": [],
+              "mail": "d2a555a4.2611c",
+              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;d2a555a4.2611c",
+              "author": "Bingchao BC2 Liu",
+              "sent": "2026-11-19T16:33:19-06:00"
+            }
+          ],
           "part": null,
           "stream": ""
         },
@@ -15131,7 +15149,28 @@
           "room_scope": "assigned",
           "notes": [],
           "inferred_agenda_items": [],
-          "email_details": [],
+          "email_details": [
+            {
+              "kind": "session",
+              "session": "Thu 17:00-17:30 BMO 214-215",
+              "quote": "will be brought to the online session at 17:00 for discussion.",
+              "mode": "online",
+              "summary": "Online session to discuss Section 2.2 of FL#2 (R1-2610004)",
+              "topics": [
+                "Section 2.2 of FL#2"
+              ],
+              "start": "17:00",
+              "day": "Thursday",
+              "tdocs": [
+                "R1-2610004"
+              ],
+              "split": [],
+              "mail": "508fb547.2611c",
+              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;508fb547.2611c",
+              "author": "Lei Zhang (Fujitsu)",
+              "sent": "2026-11-19T16:39:20-06:00"
+            }
+          ],
           "part": null,
           "stream": ""
         },
@@ -16490,7 +16529,37 @@
           "room_scope": "assigned",
           "notes": [],
           "inferred_agenda_items": [],
-          "email_details": [],
+          "email_details": [
+            {
+              "kind": "session",
+              "session": "Fri 11:00-12:30 BMO 225-226",
+              "quote": "Hence, I will treat PUCCH/UCI issue on Friday, and I will start from small issue (5min) and the remaining time is totally used for UCI/PUCCH (90min).",
+              "mode": null,
+              "summary": "Friday session will cover small issue (5 min) then UCI/PUCCH (90 min)",
+              "topics": [
+                "small issue",
+                "UCI/PUCCH"
+              ],
+              "day": "Friday",
+              "tdocs": [
+                "R1-2609610"
+              ],
+              "split": [
+                {
+                  "topic": "small issue",
+                  "minutes": 5
+                },
+                {
+                  "topic": "UCI/PUCCH",
+                  "minutes": 90
+                }
+              ],
+              "mail": "58b4bef5.2611c",
+              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;58b4bef5.2611c",
+              "author": "Youngrok Jang",
+              "sent": "2026-11-19T16:33:30-06:00"
+            }
+          ],
           "part": null,
           "stream": ""
         },
@@ -16778,7 +16847,7 @@
     }
   ],
   "source_file": "RAN1#127 online and offline schedules - v04.docx",
-  "generated_at": "2026-11-19 16:22",
+  "generated_at": "2026-11-19 16:42",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
@@ -22632,6 +22701,22 @@
         "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;30237f27.2611c",
         "author": "Naoya Shibaike",
         "sent": "2026-11-19T13:47:20-06:00",
+        "date": "2026-11-20"
+      },
+      {
+        "kind": "informal",
+        "quote": "The plan for tomorrow offline would still be the same as announced earlier, to treat section 4.1.",
+        "mode": "offline",
+        "summary": "Offline to treat section 4.1",
+        "topics": [
+          "section 4.1"
+        ],
+        "start": "09:50",
+        "day": "Friday",
+        "mail": "e1c244ec.2611c",
+        "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;e1c244ec.2611c",
+        "author": "Naoya Shibaike",
+        "sent": "2026-11-19T16:27:40-06:00",
         "date": "2026-11-20"
       }
     ],
