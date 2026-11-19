@@ -1,21 +1,21 @@
 {
   "meeting_id": "ran4#121",
-  "version": 4418,
+  "version": 4421,
   "config_hash": "f04fc1d6db7022ddbcced9458ec46e5ab179d607bcdcc815909bda6ed3a4ff7a",
   "schedule": {
-    "url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN4/Inbox/Meeting_Arrangements/RAN4_121_meeting_schedule_v09_after_TUE.pptx",
-    "name": "RAN4_121_meeting_schedule_v09_after_TUE.pptx",
-    "uploaded_at": "2026-11-18 14:20",
-    "label": "v09_after_TUE",
-    "size": 150657,
-    "sha256": "7dbbe40e695ae6599d0b21b78c86467a061f4fe1e2abb720e02ecb6e86da017a",
+    "url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN4/Inbox/Meeting_Arrangements/RAN4_121_meeting_schedule_v10_after_WED.pptx",
+    "name": "RAN4_121_meeting_schedule_v10_after_WED.pptx",
+    "uploaded_at": "2026-11-19 14:19",
+    "label": "v10_after_WED",
+    "size": 151133,
+    "sha256": "ff996ea6e71c19cbfaa329f4e5efbeedd7d5fd085d028669a06c54f0549b6189",
     "etag": null,
-    "last_modified": "Wed, 18 Nov 2026 14:20:44 GMT",
-    "ftp_modified": "213 20261118142044",
+    "last_modified": "Thu, 19 Nov 2026 14:19:55 GMT",
+    "ftp_modified": "213 20261119141955",
     "content_type": "application/octet-stream",
     "content_disposition": null,
-    "revision": 4418,
-    "modified": "2026-11-18T00:59:26Z"
+    "revision": 4421,
+    "modified": "2026-11-19T01:13:31Z"
   },
   "topics": {
     "url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN4/Inbox/Meeting_Arrangements/List_Topics_moderators%20-RAN4_121_v3.xlsx",
@@ -33,8 +33,8 @@
     "name": "agenda.csv",
     "size": 18606,
     "sha256": "c35c8ba8eb18e820f553f2ccd9304f87e16dae904c8e810b5b93851f32a35559",
-    "etag": "\"43c793b81f77dd1:0\"",
-    "last_modified": "Wed, 18 Nov 2026 05:43:21 GMT",
+    "etag": "\"9546bbe3e877dd1:0\"",
+    "last_modified": "Thu, 19 Nov 2026 05:43:22 GMT",
     "ftp_modified": null,
     "content_type": "application/octet-stream",
     "content_disposition": null
@@ -56,8 +56,8 @@
   ],
   "llm": {
     "model": "gemini-3.8-flash",
-    "uncertain": 7,
-    "applied": 7,
+    "uncertain": 8,
+    "applied": 8,
     "kept_rules": 0
   }
 }
