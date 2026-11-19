@@ -34,6 +34,9 @@ body {
     color: var(--ink);
     line-height: 1.4;
     -webkit-font-smoothing: antialiased;
+    /* Room for the header and tab bar specDuck lays over the frame it shows us in (embed in schedule.js). */
+    padding-top: var(--embed-top, 0px);
+    padding-bottom: var(--embed-bottom, 0px);
 }
 
 .container {
@@ -1232,11 +1235,11 @@ header .meta a:focus-visible,
 .filter-panel {
     position: fixed;
     right: 0;
-    top: 50%;
+    top: calc(50% + (var(--embed-top, 0px) - var(--embed-bottom, 0px)) / 2);
     transform: translateY(-50%);
     z-index: 100;
     width: 260px;
-    max-height: 80vh;
+    max-height: min(80vh, calc(100vh - var(--embed-top, 0px) - var(--embed-bottom, 0px) - 16px));
     background: white;
     border-radius: 8px 0 0 8px;
     box-shadow: -2px 0 12px rgba(0,0,0,0.15);
