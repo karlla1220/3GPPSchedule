@@ -15181,7 +15181,7 @@
     }
   ],
   "source_file": "RAN1#127 online and offline schedules - v04.docx",
-  "generated_at": "2026-11-18 19:22",
+  "generated_at": "2026-11-18 21:21",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
@@ -20135,6 +20135,23 @@
         "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;2d4a9bee.2611c",
         "author": "Karri Ranta-aho (Nokia)",
         "sent": "2026-11-18T17:36:15-06:00",
+        "date": "2026-11-19"
+      }
+    ],
+    "10.5.3.1": [
+      {
+        "kind": "informal",
+        "quote": "We may have some off-offline tmr morning on non-AI part, please send me an email for it.",
+        "mode": "off-offline",
+        "summary": "Potential off-offline on non-AI part; send email to FL",
+        "topics": [
+          "non-AI part"
+        ],
+        "day": "Thursday",
+        "mail": "3bebf902.2611c",
+        "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;3bebf902.2611c",
+        "author": "<>",
+        "sent": "2026-11-18T21:19:51-06:00",
         "date": "2026-11-19"
       }
     ]
