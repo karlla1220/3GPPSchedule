@@ -232,10 +232,7 @@
   - 펼친 상태는 `.popup-floating`의 클래스(`show-agenda-parents`)로 두어 다음 팝업에도 이어진다.
     내용(`innerHTML`)에 두면 같은 셀을 다시 눌러 닫는 비교가 깨진다. 늘 펼친 트리는 이 상태와 상관없다.
   - 펼쳐서 높아지면 팝업의 위쪽 위치는 그대로 두고, 아래가 화면을 넘을 때만 그만큼 올린다(`keepPopupInViewport`).
-  - **RAN1은 트리의 항목마다(상위 항목 포함) 그 항목의 drafts 폴더로 가는 `↗`를 단다(`working_groups/ran1/drafts_folders.py`, 렌더러의 `_drafts_link`).** 메일 링크와 같은 `.mail-link`다. Agreement 패널에는 달지 않는다.
-    - 폴더 이름은 FL이 손으로 줄여 쓴 것이라(`10.5.2.2 (DL transmission scheme for shared)`) agenda에서 만들 수 없다. FTP 목록에서 앞 번호로 맞춘다. 폴더는 번호대로 겹쳐 있다(`10.5.2 (…)/10.5.2.2 (…)/`).
-    - 회의 폴더(`…/TSGR1_127/Inbox/drafts/`)를 쓴다. sync와 같은 내용이 회의 중에도 있고, 회의가 끝나도 남고, 다른 회의 것일 수 없다.
-    - 찾은 폴더는 `docs/ran1/drafts_folders/<meeting>.json`에 두고, 목록에 없는 항목이 나올 때만 FTP를 읽는다. 폴더가 없는 항목(`10.5`)은 다음 빌드에서 다시 찾는다. 회의 중에 폴더가 생긴다. 목록 실패는 빌드를 실패시키지 않는다.
+  - 항목에 `drafts_url`이 있으면 그 줄 끝에 `↗`를 단다(`_drafts_link`, 메일 링크와 같은 `.mail-link`). 지금은 RAN1만 준다(`working_groups/ran1/CLAUDE.md`).
 - **팝업은 화면 내용과 상관없이 늘 화면 안에 다 보인다.** 위치는 `placePopup`이 정한다(블록 오른쪽 → 왼쪽 → 아래 → 위, 그다음 클램프).
   - 기준은 `window.visualViewport`(실제로 보이는 영역)다. `documentElement.clientHeight`나 `100vh`는 휴대폰 툴바가 보이거나
     핀치 줌을 했을 때 보이는 영역보다 커서, 팝업 아래쪽이 툴바 밑에 깔린다. CSS 기본값도 `100dvh`다.
