@@ -47,3 +47,12 @@ def test_links_nested_folders_and_lists_only_for_unknown_items(monkeypatch):
     html = "".join(_agenda_description_popup_lines(s))
     assert html.count('title="Drafts folder"') == 3
     assert f'href="{ROOT}10.5.2.2/"' in html
+
+
+def test_x_item_is_its_parent_folder():
+    assert drafts_folders.tree_numbers({"agenda_item": "10.6.x", "children": [{"agenda_item": "10.6.1"}]}) == ["10.6", "10.6.1"]
+
+
+def test_says_when_the_meeting_folder_is_unknown(capsys):
+    drafts_folders.apply([session()], "ran1#127", [], offline=False)
+    assert "no meeting folder" in capsys.readouterr().out

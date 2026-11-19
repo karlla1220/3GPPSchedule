@@ -39,12 +39,15 @@ def drafts_root(agenda_urls: list[str]) -> str | None:
     return None
 
 
+def folder_number(agenda_item) -> str:
+    """An "x" item is its parent's folder: 10.6.x is 10.6 (as the popup tree shows it)."""
+    return re.sub(r"\.[xX]$", "", str(agenda_item or ""))
+
+
 def tree_numbers(item: dict) -> list[str]:
     """Agenda numbers one popup tree entry shows: the item, its parents, an "x" item's children."""
-    numbers = [str(item.get("agenda_item") or "")]
-    numbers += [str(level.get("agenda_item") or "") for level in item.get("hierarchy") or []]
-    numbers += [str(child.get("agenda_item") or "") for child in item.get("children") or []]
-    return [re.sub(r"\.[xX]$", "", n) for n in numbers if n]
+    entries = [item, *(item.get("hierarchy") or []), *(item.get("children") or [])]
+    return [n for n in (folder_number(e.get("agenda_item")) for e in entries) if n]
 
 
 def find(wanted: set[str], known: dict[str, str], root: str) -> dict[str, str]:
@@ -89,6 +92,8 @@ def apply(sessions: list, meeting_id: str | None, agenda_urls: list[str], *, off
         known = {}
     wanted = {n for s in sessions for item in s.agenda_descriptions for n in tree_numbers(item)}
     root = drafts_root(agenda_urls)
+    if not root and wanted:
+        print("  Drafts folders: no meeting folder in agenda_urls, no new links")
     if not offline and root and wanted - known.keys():
         try:
             found = find(wanted, known, root)
@@ -102,7 +107,7 @@ def apply(sessions: list, meeting_id: str | None, agenda_urls: list[str], *, off
             known = found
 
     def linked(entry: dict) -> dict:
-        number = re.sub(r"\.[xX]$", "", str(entry.get("agenda_item") or ""))
+        number = folder_number(entry.get("agenda_item"))
         return {**entry, "drafts_url": known[number]} if number in known else entry
 
     for session in sessions:
