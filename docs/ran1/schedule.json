@@ -11482,7 +11482,25 @@
           "room_scope": "assigned",
           "notes": [],
           "inferred_agenda_items": [],
-          "email_details": [],
+          "email_details": [
+            {
+              "kind": "session",
+              "session": "Thu 09:00-09:40 BMO 225-226",
+              "quote": "The FLS for today online has been uploaded into the inbox in R1-2609261.",
+              "mode": "online",
+              "summary": "FLS uploaded in R1-2609261 for today's online session",
+              "topics": [],
+              "day": "Thursday",
+              "tdocs": [
+                "R1-2609261"
+              ],
+              "split": [],
+              "mail": "5cc7ad79.2611c",
+              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;5cc7ad79.2611c",
+              "author": "EL JAAFARI Mohamed",
+              "sent": "2026-11-19T07:15:36-06:00"
+            }
+          ],
           "part": null,
           "stream": ""
         },
@@ -15411,7 +15429,7 @@
     }
   ],
   "source_file": "RAN1#127 online and offline schedules - v04.docx",
-  "generated_at": "2026-11-19 06:42",
+  "generated_at": "2026-11-19 07:21",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
