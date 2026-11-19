@@ -12335,7 +12335,27 @@
           "room_scope": "assigned",
           "notes": [],
           "inferred_agenda_items": [],
-          "email_details": [],
+          "email_details": [
+            {
+              "kind": "session",
+              "session": "Thu 11:45-12:30 BMO 214-215",
+              "quote": "The 2nd round FL summary (R1-2609697) to be used for online discussion tomorrow is uploaded into the inbox. The online proposals are listed in section 2.4.",
+              "mode": "online",
+              "summary": "Online discussion on proposals in section 2.4 (FL summary R1-2609697)",
+              "topics": [
+                "section 2.4"
+              ],
+              "day": "Thursday",
+              "tdocs": [
+                "R1-2609697"
+              ],
+              "split": [],
+              "mail": "890f6b8e.2611c",
+              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;890f6b8e.2611c",
+              "author": "Fei Yongqiang",
+              "sent": "2026-11-18T21:55:52-06:00"
+            }
+          ],
           "part": null,
           "stream": ""
         },
@@ -15181,7 +15201,7 @@
     }
   ],
   "source_file": "RAN1#127 online and offline schedules - v04.docx",
-  "generated_at": "2026-11-18 21:21",
+  "generated_at": "2026-11-18 22:02",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
@@ -20152,6 +20172,22 @@
         "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;3bebf902.2611c",
         "author": "<>",
         "sent": "2026-11-18T21:19:51-06:00",
+        "date": "2026-11-19"
+      },
+      {
+        "kind": "informal",
+        "quote": "For tomorrow’s off-offline, we will start with the proposal on DMRS, basis, etc…",
+        "mode": "off-offline",
+        "summary": "Off-offline starting with proposal on DMRS, basis, etc.",
+        "topics": [
+          "DMRS",
+          "basis"
+        ],
+        "day": "Thursday",
+        "mail": "b65c162d.2611c",
+        "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;b65c162d.2611c",
+        "author": "<>",
+        "sent": "2026-11-18T21:53:08-06:00",
         "date": "2026-11-19"
       }
     ]
