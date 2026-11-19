@@ -13951,7 +13951,27 @@
           "room_scope": "assigned",
           "notes": [],
           "inferred_agenda_items": [],
-          "email_details": [],
+          "email_details": [
+            {
+              "kind": "session",
+              "session": "Thu 14:00-15:00 BMO 214-215",
+              "quote": "putting candidate proposals in section 4.6 for Thursday afternoon online discussion",
+              "mode": "online",
+              "summary": "Online discussion on candidate proposals in section 4.6",
+              "topics": [
+                "section 4.6"
+              ],
+              "day": "Thursday",
+              "tdocs": [
+                "R1-2609057"
+              ],
+              "split": [],
+              "mail": "84829b17.2611c",
+              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;84829b17.2611c",
+              "author": "Jinzhe (A)",
+              "sent": "2026-11-19T13:45:24-06:00"
+            }
+          ],
           "part": null,
           "stream": ""
         },
@@ -14421,7 +14441,27 @@
           "room_scope": "assigned",
           "notes": [],
           "inferred_agenda_items": [],
-          "email_details": [],
+          "email_details": [
+            {
+              "kind": "session",
+              "session": "Thu 14:30-15:50 BMO 221",
+              "quote": "The FLS for our Thursday offline discussion is now uploaded in the folder “Thursday_offline”. Please check Section 4.4 of “draft R1-2610772 FLS for 6GR HARQ related aspects_v108” for proposals for the offline session.",
+              "mode": "offline",
+              "summary": "FLS uploaded for Thursday offline discussion (Section 4.4 proposals)",
+              "topics": [
+                "Section 4.4"
+              ],
+              "day": "Thursday",
+              "tdocs": [
+                "R1-2610772"
+              ],
+              "split": [],
+              "mail": "56edfdd6.2611c",
+              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;56edfdd6.2611c",
+              "author": "Kevin Lin",
+              "sent": "2026-11-19T13:55:39-06:00"
+            }
+          ],
           "part": null,
           "stream": ""
         },
@@ -15247,6 +15287,22 @@
               "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;349ef371.2611c",
               "author": "Woo-Suk Ko",
               "sent": "2026-11-19T12:14:48-06:00"
+            },
+            {
+              "kind": "session",
+              "session": "Thu 17:30-19:00 BMO 212",
+              "quote": "The plan is to use this version for further discussion during the offline session today.",
+              "mode": "offline",
+              "summary": "Discuss draft LS (v03) on network-wide sensing performance during offline",
+              "topics": [
+                "draft LS (v03) on network-wide sensing performance"
+              ],
+              "day": "Thursday",
+              "split": [],
+              "mail": "3a71cc59.2611c",
+              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;3a71cc59.2611c",
+              "author": "Fei Yongqiang",
+              "sent": "2026-11-19T14:02:10-06:00"
             }
           ],
           "part": null,
@@ -16602,7 +16658,7 @@
     }
   ],
   "source_file": "RAN1#127 online and offline schedules - v04.docx",
-  "generated_at": "2026-11-19 13:21",
+  "generated_at": "2026-11-19 14:09",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
@@ -21859,6 +21915,22 @@
         "author": "Naoya Shibaike",
         "sent": "2026-11-18T15:19:17-06:00",
         "date": "2026-11-18"
+      },
+      {
+        "kind": "informal",
+        "quote": "extra offline and online tomorrow morning (around 30min for each). Although not officially informed yet, my understanding is that:\n*   Offline: Starting around 9:50am local time in BMO 212",
+        "mode": "offline",
+        "summary": "Extra offline session on Section 4.1 issues",
+        "topics": [
+          "Section 4.1 issues"
+        ],
+        "start": "09:50",
+        "day": "Friday",
+        "mail": "30237f27.2611c",
+        "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;30237f27.2611c",
+        "author": "Naoya Shibaike",
+        "sent": "2026-11-19T13:47:20-06:00",
+        "date": "2026-11-20"
       }
     ],
     "10.2": [
