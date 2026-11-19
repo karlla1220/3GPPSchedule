@@ -1922,9 +1922,8 @@
           "room_scope": "assigned",
           "notes": [
             "6G Single Stream (20.6.x)",
-            "Show of hands takes place",
-            "(including RAN migration topic)",
-            "6G Overall Architecture"
+            "6G Overall Architecture",
+            "RAN migration topic"
           ],
           "inferred_agenda_items": [],
           "email_details": [],
@@ -2441,29 +2440,6 @@
           "stream": ""
         },
         {
-          "name": "Main:13:00 Drafting for SoH questionsif any",
-          "duration_minutes": 90,
-          "start_time": "12:30",
-          "end_time": "14:00",
-          "day": "Wednesday",
-          "room_col_start": 2,
-          "room_col_end": 3,
-          "chair": null,
-          "agenda_item": null,
-          "group_header": "",
-          "description": null,
-          "agenda_descriptions": [],
-          "room_ids": [],
-          "room_scope": "unassigned",
-          "notes": [
-            "Main:13:00 Drafting for SoH questionsif any"
-          ],
-          "inferred_agenda_items": [],
-          "email_details": [],
-          "part": null,
-          "stream": ""
-        },
-        {
           "name": "6G Single Stream",
           "duration_minutes": 90,
           "start_time": "14:00",
@@ -2674,8 +2650,7 @@
           ],
           "room_scope": "assigned",
           "notes": [
-            "6G Single Stream (20.6.x)",
-            "6G Overall Architecture"
+            "6G Single Stream (20.6.x)"
           ],
           "inferred_agenda_items": [],
           "email_details": [],
@@ -2706,8 +2681,7 @@
           {
             "name": "Lunch",
             "start": "12:30",
-            "end": "14:00",
-            "label_position": "time-axis"
+            "end": "14:00"
           },
           {
             "name": "Coffee",
@@ -2756,6 +2730,54 @@
         }
       ],
       "sessions": [
+        {
+          "name": "KI#1.1 (NAS)",
+          "duration_minutes": 50,
+          "start_time": "08:00",
+          "end_time": "08:50",
+          "day": "Thursday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": "20.6.1",
+          "group_header": "Rel-20 SIDs and WIDs",
+          "description": "Study on Architecture for 6G System (FS_6G_ARC) - support for control signalling for 6G System",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "20.6.1",
+              "matched_agenda_item": "20.6.1",
+              "description": "Study on Architecture for 6G System (FS_6G_ARC) - support for control signalling for 6G System",
+              "hierarchy": [
+                {
+                  "agenda_item": "20",
+                  "description": "Rel-20 SIDs and WIDs"
+                },
+                {
+                  "agenda_item": "20.6",
+                  "description": null
+                },
+                {
+                  "agenda_item": "20.6.1",
+                  "description": "Study on Architecture for 6G System (FS_6G_ARC) - support for control signalling for 6G System"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "stream1"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "KI#1.1 (NAS) (20.6.1)"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": [
+            1,
+            2
+          ],
+          "stream": ""
+        },
         {
           "name": "KI#10 (FWA) – not revisions",
           "duration_minutes": 50,
@@ -2853,6 +2875,55 @@
           "stream": ""
         },
         {
+          "name": "KI#1.1 (NAS) / KI#1.2",
+          "duration_minutes": 50,
+          "start_time": "08:00",
+          "end_time": "08:50",
+          "day": "Thursday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": "20.6.1",
+          "group_header": "Rel-20 SIDs and WIDs",
+          "description": "Study on Architecture for 6G System (FS_6G_ARC) - support for control signalling for 6G System",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "20.6.1",
+              "matched_agenda_item": "20.6.1",
+              "description": "Study on Architecture for 6G System (FS_6G_ARC) - support for control signalling for 6G System",
+              "hierarchy": [
+                {
+                  "agenda_item": "20",
+                  "description": "Rel-20 SIDs and WIDs"
+                },
+                {
+                  "agenda_item": "20.6",
+                  "description": null
+                },
+                {
+                  "agenda_item": "20.6.1",
+                  "description": "Study on Architecture for 6G System (FS_6G_ARC) - support for control signalling for 6G System"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "stream1"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "KI#1.1 (NAS) (20.6.1)",
+            "KI#1.2 (20.6.1)"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": [
+            2,
+            2
+          ],
+          "stream": ""
+        },
+        {
           "name": "SMS2EC-ARC – not revisions",
           "duration_minutes": 50,
           "start_time": "08:00",
@@ -2891,6 +2962,1352 @@
           "room_scope": "assigned",
           "notes": [
             "SMS2EC-ARC (20.8.2) [6] – not revisions"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": [
+            2,
+            2
+          ],
+          "stream": ""
+        },
+        {
+          "name": "KI#18 (AI for Network)",
+          "duration_minutes": 90,
+          "start_time": "09:00",
+          "end_time": "10:30",
+          "day": "Thursday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": "20.6.18",
+          "group_header": "Rel-20 SIDs and WIDs",
+          "description": "Study on Architecture for 6G System (FS_6G_ARC) - AI for 6G architecture",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "20.6.18",
+              "matched_agenda_item": "20.6.18",
+              "description": "Study on Architecture for 6G System (FS_6G_ARC) - AI for 6G architecture",
+              "hierarchy": [
+                {
+                  "agenda_item": "20",
+                  "description": "Rel-20 SIDs and WIDs"
+                },
+                {
+                  "agenda_item": "20.6",
+                  "description": null
+                },
+                {
+                  "agenda_item": "20.6.18",
+                  "description": "Study on Architecture for 6G System (FS_6G_ARC) - AI for 6G architecture"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "stream1"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "KI#18 (AI for Network) (20.6.18)"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": [
+            1,
+            2
+          ],
+          "stream": ""
+        },
+        {
+          "name": "KI#4 (UP Arch) / KI#9 (Localized Net)",
+          "duration_minutes": 90,
+          "start_time": "09:00",
+          "end_time": "10:30",
+          "day": "Thursday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "Michael STARSINIC",
+          "agenda_item": "20.6.4, 20.6.9",
+          "group_header": "Rel-20 SIDs and WIDs",
+          "description": "Study on Architecture for 6G System (FS_6G_ARC) - User Plane Architecture\nStudy on Architecture for 6G System (FS_6G_ARC) - Localized Service Access",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "20.6.4",
+              "matched_agenda_item": "20.6.4",
+              "description": "Study on Architecture for 6G System (FS_6G_ARC) - User Plane Architecture",
+              "hierarchy": [
+                {
+                  "agenda_item": "20",
+                  "description": "Rel-20 SIDs and WIDs"
+                },
+                {
+                  "agenda_item": "20.6",
+                  "description": null
+                },
+                {
+                  "agenda_item": "20.6.4",
+                  "description": "Study on Architecture for 6G System (FS_6G_ARC) - User Plane Architecture"
+                }
+              ]
+            },
+            {
+              "agenda_item": "20.6.9",
+              "matched_agenda_item": "20.6.9",
+              "description": "Study on Architecture for 6G System (FS_6G_ARC) - Localized Service Access",
+              "hierarchy": [
+                {
+                  "agenda_item": "20",
+                  "description": "Rel-20 SIDs and WIDs"
+                },
+                {
+                  "agenda_item": "20.6",
+                  "description": null
+                },
+                {
+                  "agenda_item": "20.6.9",
+                  "description": "Study on Architecture for 6G System (FS_6G_ARC) - Localized Service Access"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "stream2"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "KI#4 (UP Arch) (20.6.4)",
+            "KI#9 (Localized Net) (20.6.9)"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": [
+            1,
+            2
+          ],
+          "stream": ""
+        },
+        {
+          "name": "KI#7 (Net Exposure)",
+          "duration_minutes": 90,
+          "start_time": "09:00",
+          "end_time": "10:30",
+          "day": "Thursday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "Wanqiang ZHANG",
+          "agenda_item": "20.6.7",
+          "group_header": "Rel-20 SIDs and WIDs",
+          "description": "Study on Architecture for 6G System (FS_6G_ARC) - Network Exposure",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "20.6.7",
+              "matched_agenda_item": "20.6.7",
+              "description": "Study on Architecture for 6G System (FS_6G_ARC) - Network Exposure",
+              "hierarchy": [
+                {
+                  "agenda_item": "20",
+                  "description": "Rel-20 SIDs and WIDs"
+                },
+                {
+                  "agenda_item": "20.6",
+                  "description": null
+                },
+                {
+                  "agenda_item": "20.6.7",
+                  "description": "Study on Architecture for 6G System (FS_6G_ARC) - Network Exposure"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "stream3"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "KI#7 (Net Exposure) (20.6.7)"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": [
+            1,
+            2
+          ],
+          "stream": ""
+        },
+        {
+          "name": "KI#5 (QoS)",
+          "duration_minutes": 90,
+          "start_time": "09:00",
+          "end_time": "10:30",
+          "day": "Thursday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": "20.6.5",
+          "group_header": "Rel-20 SIDs and WIDs",
+          "description": "Study on Architecture for 6G System (FS_6G_ARC) - QoS Framework for 6G",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "20.6.5",
+              "matched_agenda_item": "20.6.5",
+              "description": "Study on Architecture for 6G System (FS_6G_ARC) - QoS Framework for 6G",
+              "hierarchy": [
+                {
+                  "agenda_item": "20",
+                  "description": "Rel-20 SIDs and WIDs"
+                },
+                {
+                  "agenda_item": "20.6",
+                  "description": null
+                },
+                {
+                  "agenda_item": "20.6.5",
+                  "description": "Study on Architecture for 6G System (FS_6G_ARC) - QoS Framework for 6G"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "stream1"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "KI#5 (QoS) (20.6.5)"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": [
+            2,
+            2
+          ],
+          "stream": ""
+        },
+        {
+          "name": "NG_RTC_Ph3-ARC",
+          "duration_minutes": 90,
+          "start_time": "09:00",
+          "end_time": "10:30",
+          "day": "Thursday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "Michael STARSINIC",
+          "agenda_item": "20.7.2",
+          "group_header": "Rel-20 SIDs and WIDs",
+          "description": "System architecture for next generation real time communication services Phase 3 (NG_RTC_Ph3-ARC)",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "20.7.2",
+              "matched_agenda_item": "20.7.2",
+              "description": "System architecture for next generation real time communication services Phase 3 (NG_RTC_Ph3-ARC)",
+              "hierarchy": [
+                {
+                  "agenda_item": "20",
+                  "description": "Rel-20 SIDs and WIDs"
+                },
+                {
+                  "agenda_item": "20.7",
+                  "description": null
+                },
+                {
+                  "agenda_item": "20.7.2",
+                  "description": "System architecture for next generation real time communication services Phase 3 (NG_RTC_Ph3-ARC)"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "stream2"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "NG_RTC_Ph3-ARC (20.7.2)"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": [
+            2,
+            2
+          ],
+          "stream": ""
+        },
+        {
+          "name": "KI#20 (Sensing)",
+          "duration_minutes": 90,
+          "start_time": "09:00",
+          "end_time": "10:30",
+          "day": "Thursday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "Wanqiang ZHANG",
+          "agenda_item": "20.6.20",
+          "group_header": "Rel-20 SIDs and WIDs",
+          "description": "Study on Architecture for 6G System (FS_6G_ARC) - Integrated Sensing and Communication",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "20.6.20",
+              "matched_agenda_item": "20.6.20",
+              "description": "Study on Architecture for 6G System (FS_6G_ARC) - Integrated Sensing and Communication",
+              "hierarchy": [
+                {
+                  "agenda_item": "20",
+                  "description": "Rel-20 SIDs and WIDs"
+                },
+                {
+                  "agenda_item": "20.6",
+                  "description": null
+                },
+                {
+                  "agenda_item": "20.6.20",
+                  "description": "Study on Architecture for 6G System (FS_6G_ARC) - Integrated Sensing and Communication"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "stream3"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "KI#20 (Sensing) (20.6.20)"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": [
+            2,
+            2
+          ],
+          "stream": ""
+        },
+        {
+          "name": "FS_enIMS_ARC",
+          "duration_minutes": 90,
+          "start_time": "11:00",
+          "end_time": "12:30",
+          "day": "Thursday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": "20.10.1",
+          "group_header": "Rel-20 SIDs and WIDs",
+          "description": "Study on IMS Architecture Enhancement (FS_enIMS_ARC)",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "20.10.1",
+              "matched_agenda_item": "20.10.1",
+              "description": "Study on IMS Architecture Enhancement (FS_enIMS_ARC)",
+              "hierarchy": [
+                {
+                  "agenda_item": "20",
+                  "description": "Rel-20 SIDs and WIDs"
+                },
+                {
+                  "agenda_item": "20.10",
+                  "description": null
+                },
+                {
+                  "agenda_item": "20.10.1",
+                  "description": "Study on IMS Architecture Enhancement (FS_enIMS_ARC)"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "stream1"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "FS_enIMS_ARC (20.10.1)"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": [
+            1,
+            2
+          ],
+          "stream": ""
+        },
+        {
+          "name": "KI#23 (NTN)",
+          "duration_minutes": 90,
+          "start_time": "11:00",
+          "end_time": "12:30",
+          "day": "Thursday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "Michael STARSINIC",
+          "agenda_item": "20.6.23",
+          "group_header": "Rel-20 SIDs and WIDs",
+          "description": "Study on Architecture for 6G System (FS_6G_ARC) - Support of 6G NTN",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "20.6.23",
+              "matched_agenda_item": "20.6.23",
+              "description": "Study on Architecture for 6G System (FS_6G_ARC) - Support of 6G NTN",
+              "hierarchy": [
+                {
+                  "agenda_item": "20",
+                  "description": "Rel-20 SIDs and WIDs"
+                },
+                {
+                  "agenda_item": "20.6",
+                  "description": null
+                },
+                {
+                  "agenda_item": "20.6.23",
+                  "description": "Study on Architecture for 6G System (FS_6G_ARC) - Support of 6G NTN"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "stream2"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "KI#23 (NTN) (20.6.23)"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": [
+            1,
+            2
+          ],
+          "stream": ""
+        },
+        {
+          "name": "AmbientIoT_Ph2-ARC",
+          "duration_minutes": 90,
+          "start_time": "11:00",
+          "end_time": "12:30",
+          "day": "Thursday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "Wanqiang ZHANG",
+          "agenda_item": "20.5.2",
+          "group_header": "Rel-20 SIDs and WIDs",
+          "description": "Architecture support of Ambient power-enabled Internet of Things - Phase 2 (AmbientIoT_Ph2-ARC)",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "20.5.2",
+              "matched_agenda_item": "20.5.2",
+              "description": "Architecture support of Ambient power-enabled Internet of Things - Phase 2 (AmbientIoT_Ph2-ARC)",
+              "hierarchy": [
+                {
+                  "agenda_item": "20",
+                  "description": "Rel-20 SIDs and WIDs"
+                },
+                {
+                  "agenda_item": "20.5",
+                  "description": null
+                },
+                {
+                  "agenda_item": "20.5.2",
+                  "description": "Architecture support of Ambient power-enabled Internet of Things - Phase 2 (AmbientIoT_Ph2-ARC)"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "stream3"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "AmbientIoT_Ph2-ARC (20.5.2)"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": [
+            1,
+            2
+          ],
+          "stream": ""
+        },
+        {
+          "name": "KI#3 (Slicing) / KI#2 (SBA)",
+          "duration_minutes": 90,
+          "start_time": "11:00",
+          "end_time": "12:30",
+          "day": "Thursday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": "20.6.3, 20.6.2",
+          "group_header": "Rel-20 SIDs and WIDs",
+          "description": "Study on Architecture for 6G System (FS_6G_ARC) - Support of Network Slicing in the 6G system\nStudy on Architecture for 6G System (FS_6G_ARC) - SBA framework",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "20.6.3",
+              "matched_agenda_item": "20.6.3",
+              "description": "Study on Architecture for 6G System (FS_6G_ARC) - Support of Network Slicing in the 6G system",
+              "hierarchy": [
+                {
+                  "agenda_item": "20",
+                  "description": "Rel-20 SIDs and WIDs"
+                },
+                {
+                  "agenda_item": "20.6",
+                  "description": null
+                },
+                {
+                  "agenda_item": "20.6.3",
+                  "description": "Study on Architecture for 6G System (FS_6G_ARC) - Support of Network Slicing in the 6G system"
+                }
+              ]
+            },
+            {
+              "agenda_item": "20.6.2",
+              "matched_agenda_item": "20.6.2",
+              "description": "Study on Architecture for 6G System (FS_6G_ARC) - SBA framework",
+              "hierarchy": [
+                {
+                  "agenda_item": "20",
+                  "description": "Rel-20 SIDs and WIDs"
+                },
+                {
+                  "agenda_item": "20.6",
+                  "description": null
+                },
+                {
+                  "agenda_item": "20.6.2",
+                  "description": "Study on Architecture for 6G System (FS_6G_ARC) - SBA framework"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "stream1"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "KI#3 (Slicing) (20.6.3)",
+            "KI#2 (SBA) (20.6.2)"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": [
+            2,
+            2
+          ],
+          "stream": ""
+        },
+        {
+          "name": "KI#12 – KI#16",
+          "duration_minutes": 90,
+          "start_time": "11:00",
+          "end_time": "12:30",
+          "day": "Thursday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "Michael STARSINIC",
+          "agenda_item": "20.6.12–20.6.16",
+          "group_header": "Rel-20 SIDs and WIDs",
+          "description": "Study on Architecture for 6G System (FS_6G_ARC) - Voice Services for 6G\nStudy on Architecture for 6G System (FS_6G_ARC) - Emergency Voice Services for 6G\nStudy on Architecture for 6G System (FS_6G_ARC) - Location Services for 6G\nStudy on Architecture for 6G System (FS_6G_ARC) - Messaging Services for 6G\nStudy on Architecture for 6G System (FS_6G_ARC) - Other Essential/Regulatory Services for 6G",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "20.6.12",
+              "matched_agenda_item": "20.6.12",
+              "description": "Study on Architecture for 6G System (FS_6G_ARC) - Voice Services for 6G",
+              "hierarchy": [
+                {
+                  "agenda_item": "20",
+                  "description": "Rel-20 SIDs and WIDs"
+                },
+                {
+                  "agenda_item": "20.6",
+                  "description": null
+                },
+                {
+                  "agenda_item": "20.6.12",
+                  "description": "Study on Architecture for 6G System (FS_6G_ARC) - Voice Services for 6G"
+                }
+              ]
+            },
+            {
+              "agenda_item": "20.6.13",
+              "matched_agenda_item": "20.6.13",
+              "description": "Study on Architecture for 6G System (FS_6G_ARC) - Emergency Voice Services for 6G",
+              "hierarchy": [
+                {
+                  "agenda_item": "20",
+                  "description": "Rel-20 SIDs and WIDs"
+                },
+                {
+                  "agenda_item": "20.6",
+                  "description": null
+                },
+                {
+                  "agenda_item": "20.6.13",
+                  "description": "Study on Architecture for 6G System (FS_6G_ARC) - Emergency Voice Services for 6G"
+                }
+              ]
+            },
+            {
+              "agenda_item": "20.6.14",
+              "matched_agenda_item": "20.6.14",
+              "description": "Study on Architecture for 6G System (FS_6G_ARC) - Location Services for 6G",
+              "hierarchy": [
+                {
+                  "agenda_item": "20",
+                  "description": "Rel-20 SIDs and WIDs"
+                },
+                {
+                  "agenda_item": "20.6",
+                  "description": null
+                },
+                {
+                  "agenda_item": "20.6.14",
+                  "description": "Study on Architecture for 6G System (FS_6G_ARC) - Location Services for 6G"
+                }
+              ]
+            },
+            {
+              "agenda_item": "20.6.15",
+              "matched_agenda_item": "20.6.15",
+              "description": "Study on Architecture for 6G System (FS_6G_ARC) - Messaging Services for 6G",
+              "hierarchy": [
+                {
+                  "agenda_item": "20",
+                  "description": "Rel-20 SIDs and WIDs"
+                },
+                {
+                  "agenda_item": "20.6",
+                  "description": null
+                },
+                {
+                  "agenda_item": "20.6.15",
+                  "description": "Study on Architecture for 6G System (FS_6G_ARC) - Messaging Services for 6G"
+                }
+              ]
+            },
+            {
+              "agenda_item": "20.6.16",
+              "matched_agenda_item": "20.6.16",
+              "description": "Study on Architecture for 6G System (FS_6G_ARC) - Other Essential/Regulatory Services for 6G",
+              "hierarchy": [
+                {
+                  "agenda_item": "20",
+                  "description": "Rel-20 SIDs and WIDs"
+                },
+                {
+                  "agenda_item": "20.6",
+                  "description": null
+                },
+                {
+                  "agenda_item": "20.6.16",
+                  "description": "Study on Architecture for 6G System (FS_6G_ARC) - Other Essential/Regulatory Services for 6G"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "stream2"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "KI#12 – KI#16 (20.6.12 – 16)"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": [
+            2,
+            2
+          ],
+          "stream": ""
+        },
+        {
+          "name": "KI#19 (Network for AI)",
+          "duration_minutes": 90,
+          "start_time": "11:00",
+          "end_time": "12:30",
+          "day": "Thursday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "Wanqiang ZHANG",
+          "agenda_item": "20.6.19",
+          "group_header": "Rel-20 SIDs and WIDs",
+          "description": "Study on Architecture for 6G System (FS_6G_ARC) - 6G Network for AI",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "20.6.19",
+              "matched_agenda_item": "20.6.19",
+              "description": "Study on Architecture for 6G System (FS_6G_ARC) - 6G Network for AI",
+              "hierarchy": [
+                {
+                  "agenda_item": "20",
+                  "description": "Rel-20 SIDs and WIDs"
+                },
+                {
+                  "agenda_item": "20.6",
+                  "description": null
+                },
+                {
+                  "agenda_item": "20.6.19",
+                  "description": "Study on Architecture for 6G System (FS_6G_ARC) - 6G Network for AI"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "stream3"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "KI#19 (Network for AI) (20.6.19)"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": [
+            2,
+            2
+          ],
+          "stream": ""
+        },
+        {
+          "name": "FS_enIMS_ARC / KI#6 (Policy)",
+          "duration_minutes": 90,
+          "start_time": "14:00",
+          "end_time": "15:30",
+          "day": "Thursday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": "20.10.1, 20.6.6",
+          "group_header": "Rel-20 SIDs and WIDs",
+          "description": "Study on IMS Architecture Enhancement (FS_enIMS_ARC)\nStudy on Architecture for 6G System (FS_6G_ARC) - Policy and charging control framework",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "20.10.1",
+              "matched_agenda_item": "20.10.1",
+              "description": "Study on IMS Architecture Enhancement (FS_enIMS_ARC)",
+              "hierarchy": [
+                {
+                  "agenda_item": "20",
+                  "description": "Rel-20 SIDs and WIDs"
+                },
+                {
+                  "agenda_item": "20.10",
+                  "description": null
+                },
+                {
+                  "agenda_item": "20.10.1",
+                  "description": "Study on IMS Architecture Enhancement (FS_enIMS_ARC)"
+                }
+              ]
+            },
+            {
+              "agenda_item": "20.6.6",
+              "matched_agenda_item": "20.6.6",
+              "description": "Study on Architecture for 6G System (FS_6G_ARC) - Policy and charging control framework",
+              "hierarchy": [
+                {
+                  "agenda_item": "20",
+                  "description": "Rel-20 SIDs and WIDs"
+                },
+                {
+                  "agenda_item": "20.6",
+                  "description": null
+                },
+                {
+                  "agenda_item": "20.6.6",
+                  "description": "Study on Architecture for 6G System (FS_6G_ARC) - Policy and charging control framework"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "stream1"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "FS_enIMS_ARC (20.10.1)",
+            "KI#6 (Policy) (20.6.6)"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": [
+            1,
+            2
+          ],
+          "stream": ""
+        },
+        {
+          "name": "KI#17 (IWK)",
+          "duration_minutes": 90,
+          "start_time": "14:00",
+          "end_time": "15:30",
+          "day": "Thursday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "Wanqiang ZHANG",
+          "agenda_item": "20.6.17",
+          "group_header": "Rel-20 SIDs and WIDs",
+          "description": "Study on Architecture for 6G System (FS_6G_ARC) - Migration and Interworking",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "20.6.17",
+              "matched_agenda_item": "20.6.17",
+              "description": "Study on Architecture for 6G System (FS_6G_ARC) - Migration and Interworking",
+              "hierarchy": [
+                {
+                  "agenda_item": "20",
+                  "description": "Rel-20 SIDs and WIDs"
+                },
+                {
+                  "agenda_item": "20.6",
+                  "description": null
+                },
+                {
+                  "agenda_item": "20.6.17",
+                  "description": "Study on Architecture for 6G System (FS_6G_ARC) - Migration and Interworking"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "stream2"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "In Breakout 1",
+            "KI#17 (IWK) (20.6.17)"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": [
+            1,
+            2
+          ],
+          "stream": "Stream 3"
+        },
+        {
+          "name": "KI#8 (Net Sharing) / KI#22 (Computing)",
+          "duration_minutes": 90,
+          "start_time": "14:00",
+          "end_time": "15:30",
+          "day": "Thursday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "Michael STARSINIC",
+          "agenda_item": "20.6.8, 20.6.22",
+          "group_header": "Rel-20 SIDs and WIDs",
+          "description": "Study on Architecture for 6G System (FS_6G_ARC) - Network Sharing in the 6G system\nStudy on Architecture for 6G System (FS_6G_ARC) - 6G Computing Support",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "20.6.8",
+              "matched_agenda_item": "20.6.8",
+              "description": "Study on Architecture for 6G System (FS_6G_ARC) - Network Sharing in the 6G system",
+              "hierarchy": [
+                {
+                  "agenda_item": "20",
+                  "description": "Rel-20 SIDs and WIDs"
+                },
+                {
+                  "agenda_item": "20.6",
+                  "description": null
+                },
+                {
+                  "agenda_item": "20.6.8",
+                  "description": "Study on Architecture for 6G System (FS_6G_ARC) - Network Sharing in the 6G system"
+                }
+              ]
+            },
+            {
+              "agenda_item": "20.6.22",
+              "matched_agenda_item": "20.6.22",
+              "description": "Study on Architecture for 6G System (FS_6G_ARC) - 6G Computing Support",
+              "hierarchy": [
+                {
+                  "agenda_item": "20",
+                  "description": "Rel-20 SIDs and WIDs"
+                },
+                {
+                  "agenda_item": "20.6",
+                  "description": null
+                },
+                {
+                  "agenda_item": "20.6.22",
+                  "description": "Study on Architecture for 6G System (FS_6G_ARC) - 6G Computing Support"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "stream3"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "In Breakout 2",
+            "KI#8 (Net Sharing) (20.6.8)",
+            "KI#22 (Computing) (20.6.22)"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": [
+            1,
+            2
+          ],
+          "stream": "Stream 2"
+        },
+        {
+          "name": "KI#21 (Data Framework)",
+          "duration_minutes": 90,
+          "start_time": "14:00",
+          "end_time": "15:30",
+          "day": "Thursday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": "20.6.21",
+          "group_header": "Rel-20 SIDs and WIDs",
+          "description": "Study on Architecture for 6G System (FS_6G_ARC) - 6G data framework in SA WG2",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "20.6.21",
+              "matched_agenda_item": "20.6.21",
+              "description": "Study on Architecture for 6G System (FS_6G_ARC) - 6G data framework in SA WG2",
+              "hierarchy": [
+                {
+                  "agenda_item": "20",
+                  "description": "Rel-20 SIDs and WIDs"
+                },
+                {
+                  "agenda_item": "20.6",
+                  "description": null
+                },
+                {
+                  "agenda_item": "20.6.21",
+                  "description": "Study on Architecture for 6G System (FS_6G_ARC) - 6G data framework in SA WG2"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "stream1"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "KI#21 (Data Framework) (20.6.21)"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": [
+            2,
+            2
+          ],
+          "stream": ""
+        },
+        {
+          "name": "In Breakout 1",
+          "duration_minutes": 90,
+          "start_time": "14:00",
+          "end_time": "15:30",
+          "day": "Thursday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "Wanqiang ZHANG",
+          "agenda_item": null,
+          "group_header": "",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [
+            "stream2"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "In Breakout 1"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": [
+            2,
+            2
+          ],
+          "stream": "Stream 3"
+        },
+        {
+          "name": "KI#23 NTN",
+          "duration_minutes": 90,
+          "start_time": "14:00",
+          "end_time": "15:30",
+          "day": "Thursday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "Michael STARSINIC",
+          "agenda_item": "20.6.23",
+          "group_header": "Rel-20 SIDs and WIDs",
+          "description": "Study on Architecture for 6G System (FS_6G_ARC) - Support of 6G NTN",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "20.6.23",
+              "matched_agenda_item": "20.6.23",
+              "description": "Study on Architecture for 6G System (FS_6G_ARC) - Support of 6G NTN",
+              "hierarchy": [
+                {
+                  "agenda_item": "20",
+                  "description": "Rel-20 SIDs and WIDs"
+                },
+                {
+                  "agenda_item": "20.6",
+                  "description": null
+                },
+                {
+                  "agenda_item": "20.6.23",
+                  "description": "Study on Architecture for 6G System (FS_6G_ARC) - Support of 6G NTN"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "stream3"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "In Breakout 2",
+            "KI#23 NTN (20.6.23)",
+            "KI#11 (Non-3GPP)"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": [
+            2,
+            2
+          ],
+          "stream": "Stream 2"
+        },
+        {
+          "name": "Common Issues / 20.48, 20.49, 20.50",
+          "duration_minutes": 75,
+          "start_time": "16:00",
+          "end_time": "17:15",
+          "day": "Thursday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": "4.1, 20.48, 20.49, 20.50",
+          "group_header": "General",
+          "description": "Common issues and Incoming LSs\nGeneric Rel-20 CRs\nGeneric Rel-20 LSs\nRel-20 LSs and CAT B/C alignment CR(s) due to the work led by other 3GPP Working Groups",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "4.1",
+              "matched_agenda_item": "4.1",
+              "description": "Common issues and Incoming LSs",
+              "hierarchy": [
+                {
+                  "agenda_item": "4",
+                  "description": "General"
+                },
+                {
+                  "agenda_item": "4.1",
+                  "description": "Common issues and Incoming LSs"
+                }
+              ]
+            },
+            {
+              "agenda_item": "20.48",
+              "matched_agenda_item": "20.48",
+              "description": "Generic Rel-20 CRs",
+              "hierarchy": [
+                {
+                  "agenda_item": "20",
+                  "description": "Rel-20 SIDs and WIDs"
+                },
+                {
+                  "agenda_item": "20.48",
+                  "description": "Generic Rel-20 CRs"
+                }
+              ]
+            },
+            {
+              "agenda_item": "20.49",
+              "matched_agenda_item": "20.49",
+              "description": "Generic Rel-20 LSs",
+              "hierarchy": [
+                {
+                  "agenda_item": "20",
+                  "description": "Rel-20 SIDs and WIDs"
+                },
+                {
+                  "agenda_item": "20.49",
+                  "description": "Generic Rel-20 LSs"
+                }
+              ]
+            },
+            {
+              "agenda_item": "20.50",
+              "matched_agenda_item": "20.50",
+              "description": "Rel-20 LSs and CAT B/C alignment CR(s) due to the work led by other 3GPP Working Groups",
+              "hierarchy": [
+                {
+                  "agenda_item": "20",
+                  "description": "Rel-20 SIDs and WIDs"
+                },
+                {
+                  "agenda_item": "20.50",
+                  "description": "Rel-20 LSs and CAT B/C alignment CR(s) due to the work led by other 3GPP Working Groups"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "stream1"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "Common Issues (4.1)",
+            "20.48, 20.49, 20.50"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": [
+            1,
+            2
+          ],
+          "stream": ""
+        },
+        {
+          "name": "KI#24 (IoT) / 5GSAT_Ph4-ARC",
+          "duration_minutes": 75,
+          "start_time": "16:00",
+          "end_time": "17:15",
+          "day": "Thursday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "Michael STARSINIC",
+          "agenda_item": "20.6.24, 20.1.2",
+          "group_header": "Rel-20 SIDs and WIDs",
+          "description": "Study on Architecture for 6G System (FS_6G_ARC) - Analyse 5GS IoT features and solutions\nIntegration of satellite components in the 5G architecture Phase 4 (5GSAT_Ph4_ARC)",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "20.6.24",
+              "matched_agenda_item": "20.6.24",
+              "description": "Study on Architecture for 6G System (FS_6G_ARC) - Analyse 5GS IoT features and solutions",
+              "hierarchy": [
+                {
+                  "agenda_item": "20",
+                  "description": "Rel-20 SIDs and WIDs"
+                },
+                {
+                  "agenda_item": "20.6",
+                  "description": null
+                },
+                {
+                  "agenda_item": "20.6.24",
+                  "description": "Study on Architecture for 6G System (FS_6G_ARC) - Analyse 5GS IoT features and solutions"
+                }
+              ]
+            },
+            {
+              "agenda_item": "20.1.2",
+              "matched_agenda_item": "20.1.2",
+              "description": "Integration of satellite components in the 5G architecture Phase 4 (5GSAT_Ph4_ARC)",
+              "hierarchy": [
+                {
+                  "agenda_item": "20",
+                  "description": "Rel-20 SIDs and WIDs"
+                },
+                {
+                  "agenda_item": "20.1",
+                  "description": null
+                },
+                {
+                  "agenda_item": "20.1.2",
+                  "description": "Integration of satellite components in the 5G architecture Phase 4 (5GSAT_Ph4_ARC)"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "stream2"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "KI#24 (IoT) (20.6.24)",
+            "5GSAT_Ph4-ARC (20.1.2)"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": [
+            1,
+            2
+          ],
+          "stream": ""
+        },
+        {
+          "name": "KI#19 (Network for AI) / KI#20 (Sensing)",
+          "duration_minutes": 75,
+          "start_time": "16:00",
+          "end_time": "17:15",
+          "day": "Thursday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "Wanqiang ZHANG",
+          "agenda_item": "20.6.19, 20.6.20",
+          "group_header": "Rel-20 SIDs and WIDs",
+          "description": "Study on Architecture for 6G System (FS_6G_ARC) - 6G Network for AI\nStudy on Architecture for 6G System (FS_6G_ARC) - Integrated Sensing and Communication",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "20.6.19",
+              "matched_agenda_item": "20.6.19",
+              "description": "Study on Architecture for 6G System (FS_6G_ARC) - 6G Network for AI",
+              "hierarchy": [
+                {
+                  "agenda_item": "20",
+                  "description": "Rel-20 SIDs and WIDs"
+                },
+                {
+                  "agenda_item": "20.6",
+                  "description": null
+                },
+                {
+                  "agenda_item": "20.6.19",
+                  "description": "Study on Architecture for 6G System (FS_6G_ARC) - 6G Network for AI"
+                }
+              ]
+            },
+            {
+              "agenda_item": "20.6.20",
+              "matched_agenda_item": "20.6.20",
+              "description": "Study on Architecture for 6G System (FS_6G_ARC) - Integrated Sensing and Communication",
+              "hierarchy": [
+                {
+                  "agenda_item": "20",
+                  "description": "Rel-20 SIDs and WIDs"
+                },
+                {
+                  "agenda_item": "20.6",
+                  "description": null
+                },
+                {
+                  "agenda_item": "20.6.20",
+                  "description": "Study on Architecture for 6G System (FS_6G_ARC) - Integrated Sensing and Communication"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "stream3"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "KI#19 (Network for AI) (20.6.19)",
+            "KI#20 (Sensing) (20.6.20)"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": [
+            1,
+            2
+          ],
+          "stream": ""
+        },
+        {
+          "name": "KI#10 (FWA) / SMS2EC-ARC",
+          "duration_minutes": 75,
+          "start_time": "16:00",
+          "end_time": "17:15",
+          "day": "Thursday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "Michael STARSINIC",
+          "agenda_item": "20.6.10, 20.8.2",
+          "group_header": "Rel-20 SIDs and WIDs",
+          "description": "Study on Architecture for 6G System (FS_6G_ARC) - Fixed Wireless Access\nShort Message Service to Emergency Response Centre (SMS2EC-ARC)",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "20.6.10",
+              "matched_agenda_item": "20.6.10",
+              "description": "Study on Architecture for 6G System (FS_6G_ARC) - Fixed Wireless Access",
+              "hierarchy": [
+                {
+                  "agenda_item": "20",
+                  "description": "Rel-20 SIDs and WIDs"
+                },
+                {
+                  "agenda_item": "20.6",
+                  "description": null
+                },
+                {
+                  "agenda_item": "20.6.10",
+                  "description": "Study on Architecture for 6G System (FS_6G_ARC) - Fixed Wireless Access"
+                }
+              ]
+            },
+            {
+              "agenda_item": "20.8.2",
+              "matched_agenda_item": "20.8.2",
+              "description": "Short Message Service to Emergency Response Centre (SMS2EC-ARC)",
+              "hierarchy": [
+                {
+                  "agenda_item": "20",
+                  "description": "Rel-20 SIDs and WIDs"
+                },
+                {
+                  "agenda_item": "20.8",
+                  "description": null
+                },
+                {
+                  "agenda_item": "20.8.2",
+                  "description": "Short Message Service to Emergency Response Centre (SMS2EC-ARC)"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "stream2"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "KI#10 (FWA) (20.6.10)",
+            "SMS2EC-ARC (20.8.2)"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": [
+            2,
+            2
+          ],
+          "stream": ""
+        },
+        {
+          "name": "Sensing-ARC",
+          "duration_minutes": 75,
+          "start_time": "16:00",
+          "end_time": "17:15",
+          "day": "Thursday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "Wanqiang ZHANG",
+          "agenda_item": "20.2.2",
+          "group_header": "Rel-20 SIDs and WIDs",
+          "description": "Architecture Enhancement to support Integrated Sensing and Communication (Sensing_ARC)",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "20.2.2",
+              "matched_agenda_item": "20.2.2",
+              "description": "Architecture Enhancement to support Integrated Sensing and Communication (Sensing_ARC)",
+              "hierarchy": [
+                {
+                  "agenda_item": "20",
+                  "description": "Rel-20 SIDs and WIDs"
+                },
+                {
+                  "agenda_item": "20.2",
+                  "description": null
+                },
+                {
+                  "agenda_item": "20.2.2",
+                  "description": "Architecture Enhancement to support Integrated Sensing and Communication (Sensing_ARC)"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "stream3"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "Sensing-ARC (20.2.2)"
           ],
           "inferred_agenda_items": [],
           "email_details": [],
@@ -3369,20 +4786,20 @@
       "caveats": []
     }
   ],
-  "source_file": "S2-2611637_SA2-178-Session Plan - r14.docx",
-  "generated_at": "2026-11-17 15:41",
+  "source_file": "S2-2611637_SA2-178-Session Plan - r15.docx",
+  "generated_at": "2026-11-19 07:42",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
-    "S2-2611637_SA2-178-Session Plan - r14.docx",
+    "S2-2611637_SA2-178-Session Plan - r15.docx",
     "agenda.csv"
   ],
   "source_labels": {
-    "S2-2611637_SA2-178-Session Plan - r14.docx": "Session Plan - r14",
+    "S2-2611637_SA2-178-Session Plan - r15.docx": "Session Plan - r15",
     "agenda.csv": "agenda.csv"
   },
   "source_urls": {
-    "S2-2611637_SA2-178-Session Plan - r14.docx": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/SA2/Inbox/Drafts/_Session_Plan_Updates/S2-2611637_SA2-178-Session%20Plan%20-%20r14.docx"
+    "S2-2611637_SA2-178-Session Plan - r15.docx": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/SA2/Inbox/Drafts/_Session_Plan_Updates/S2-2611637_SA2-178-Session%20Plan%20-%20r15.docx"
   },
   "source_mails": {},
   "timezone": "America/Edmonton",

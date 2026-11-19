@@ -1200,7 +1200,7 @@
           "day": "Thursday",
           "room_col_start": 2,
           "room_col_end": 3,
-          "chair": "Jiang Zheng",
+          "chair": "Jiang Zheng Lisi Li",
           "agenda_item": null,
           "group_header": "",
           "description": null,
@@ -1211,7 +1211,7 @@
           "room_scope": "assigned",
           "notes": [
             "ISAC offline (GTW)",
-            "Jiang Zheng (China Telecom)"
+            "Jiang Zheng (China Telecom) Lisi Li (Xiaomi)"
           ],
           "inferred_agenda_items": [
             "13"
@@ -1494,6 +1494,52 @@
           "stream": ""
         },
         {
+          "name": "CB: # 6GAIML2_Framework (GTW)",
+          "duration_minutes": 30,
+          "start_time": "16:30",
+          "end_time": "17:00",
+          "day": "Thursday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "Yin Gao",
+          "agenda_item": "10.5.2",
+          "group_header": "Study on 6G Radio",
+          "description": "AI/ML framework",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "10.5.2",
+              "matched_agenda_item": "10.5.2",
+              "description": "AI/ML framework",
+              "hierarchy": [
+                {
+                  "agenda_item": "10",
+                  "description": "Study on 6G Radio"
+                },
+                {
+                  "agenda_item": "10.5",
+                  "description": "AI/ML for RAN"
+                },
+                {
+                  "agenda_item": "10.5.2",
+                  "description": "AI/ML framework"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "offline"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "CB: # 6GAIML2_Framework (GTW)",
+            "Yin Gao (ZTE)"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": null,
+          "stream": ""
+        },
+        {
           "name": "Early CBs",
           "duration_minutes": 120,
           "start_time": "17:00",
@@ -1549,6 +1595,52 @@
             2,
             2
           ],
+          "stream": ""
+        },
+        {
+          "name": "CB: # 6GAIML1_Usecase (GTW)",
+          "duration_minutes": 60,
+          "start_time": "18:00",
+          "end_time": "19:00",
+          "day": "Thursday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "Aijuan Liu",
+          "agenda_item": "10.5.1",
+          "group_header": "Study on 6G Radio",
+          "description": "AI/ML use cases",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "10.5.1",
+              "matched_agenda_item": "10.5.1",
+              "description": "AI/ML use cases",
+              "hierarchy": [
+                {
+                  "agenda_item": "10",
+                  "description": "Study on 6G Radio"
+                },
+                {
+                  "agenda_item": "10.5",
+                  "description": "AI/ML for RAN"
+                },
+                {
+                  "agenda_item": "10.5.1",
+                  "description": "AI/ML use cases"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "offline"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "CB: # 6GAIML1_Usecase (GTW)",
+            "Aijuan Liu (CATT)"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": null,
           "stream": ""
         }
       ],
@@ -1754,22 +1846,22 @@
     }
   ],
   "source_file": "RAN3_134_agenda_20261118_1800.docx",
-  "generated_at": "2026-11-18 19:02",
+  "generated_at": "2026-11-19 07:42",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
     "RAN3_134_agenda_20261118_1800.docx",
-    "RAN3 offline discussion_ver_04.xlsx",
+    "RAN3 offline discussion_ver_05.xlsx",
     "agenda.csv"
   ],
   "source_labels": {
     "RAN3_134_agenda_20261118_1800.docx": "agenda_20261118_1800",
-    "RAN3 offline discussion_ver_04.xlsx": "offline discussion_ver_04",
+    "RAN3 offline discussion_ver_05.xlsx": "offline discussion_ver_05",
     "agenda.csv": "agenda.csv"
   },
   "source_urls": {
     "RAN3_134_agenda_20261118_1800.docx": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN3/Inbox/Chairs_Notes/RAN3_134_agenda_20261118_1800.docx",
-    "RAN3 offline discussion_ver_04.xlsx": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN3/Offline_meeting_room/RAN3%20offline%20discussion_ver_04.xlsx",
+    "RAN3 offline discussion_ver_05.xlsx": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN3/Offline_meeting_room/RAN3%20offline%20discussion_ver_05.xlsx",
     "agenda.csv": "https://www.3gpp.org/ftp/tsg_ran/WG3_Iu/TSGR3_134/Agenda/agenda.csv"
   },
   "source_mails": {},
