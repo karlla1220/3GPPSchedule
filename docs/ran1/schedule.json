@@ -15531,7 +15531,7 @@
     }
   ],
   "source_file": "RAN1#127 online and offline schedules - v04.docx",
-  "generated_at": "2026-11-19 10:02",
+  "generated_at": "2026-11-19 10:22",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
@@ -20279,12 +20279,7 @@
         "changed_in": "Chair notes RAN1#127_v03.docx"
       }
     },
-    "retained_files": [
-      "agreements/344cd6315db22396752e.html",
-      "agreements/7d23e411522210a982ac.html",
-      "agreements/e9658a4ef7a3b4d4aa3d.html",
-      "agreements/f46909462057ac95fa1f.html"
-    ]
+    "retained_files": []
   },
   "email_informal": {
     "10.6.3": [
@@ -20640,6 +20635,22 @@
         "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;b65c162d.2611c",
         "author": "<>",
         "sent": "2026-11-18T21:53:08-06:00",
+        "date": "2026-11-19"
+      }
+    ],
+    "10.5.4.1": [
+      {
+        "kind": "informal",
+        "quote": "Xiaodong and I are outside of room 203. Please come to us if you want to discuss anything.",
+        "mode": null,
+        "summary": "FLs outside room 203 for discussions",
+        "topics": [],
+        "day": "Thursday",
+        "place": "outside of room 203",
+        "mail": "2fbe97d3.2611c",
+        "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;2fbe97d3.2611c",
+        "author": "Sigen Ye",
+        "sent": "2026-11-19T10:06:56-06:00",
         "date": "2026-11-19"
       }
     ]
