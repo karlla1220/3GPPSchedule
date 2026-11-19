@@ -404,6 +404,16 @@ WG 페이지는 따로 된 정적 페이지이고 SPA로 바꾸지 않았다. �
     휴대폰에서는 `Before fix`(예전 사이트 규칙 `move`)와 `After fix`(지금 사이트 `noroot`) 두 버튼을 차례로 누른다. 판독 줄 첫 줄이 돌린 변형을 밝힌다.
     `?v=plain|move|fix|noroot`로 루트 겹침만, 예전 사이트 규칙, 스냅숏 크기 고정, 페이지 스냅숏 없음(지금 사이트, 기본값)을 고르고 `?slow=1`이 10배, `?hold=0.5`가 그 지점에서 멈춘다. 높이가 반으로 주는 프로브 상자 두 개(기본, `object-fit: none`)와 판독 줄이 그 브라우저가 옛 스냅숏을 상자에 맞춰 늘이는지 말해 준다. Playwright가 없으면 건너뛴다.
 
+## specDuck 안에 띄울 때
+
+specDuck(https://github.com/karlla1220/specduck)의 Schedule 화면이 이 사이트를 화면 전체 iframe으로 띄우고, 그 위에 헤더(48px)와 탭바(56px)를 얹는다. 코드는 `schedule.js` 끝의 embed 구획, 테스트는 `tests/test_embed.py`다. 메시지 규약은 specDuck과 함께 정한 것이라 한쪽만 바꾸지 않는다.
+
+- **부모 → 사이트 `{type: "specduck:insets", top, bottom}`.** `event.source === window.parent`인 것만 받고, 첫 메시지의 origin으로 답한다(부모 도메인은 고정하지 않는다). 값은 `--embed-top`·`--embed-bottom`이 되고, `body`의 위아래 padding, 필터 패널 위치, 팝업의 `visibleArea`가 그만큼 비킨다. 단독으로 열면 0이라 바뀌는 것이 없다.
+  - 같은 프레임의 다음 페이지(WG 전환, 새로고침)가 처음부터 같은 여백으로 그리도록 `sessionStorage`에 둔다.
+- **사이트 → 부모 `{type: "specduck:chrome", hidden}`.** insets를 받은 뒤, 상태가 바뀔 때만 보낸다. 규칙은 specDuck 헤더와 같다(`y <= 24` 또는 10px 넘게 올리면 보임, 10px 넘게 내리면 숨김). `prefers-reduced-motion: reduce`이면 보내지 않는다.
+- 페이지에 `iframe`이라는 낱말을 쓰지 않는다(`test_agreements.py`가 본다). 주석도 마찬가지다.
+- Help 투어의 카드 배치는 아직 여백을 모른다.
+
 ## 헤더의 후원 안내, 제작자 줄, 회의 종료 인사
 
 HTML은 `shared/page.py`, 표시 판단은 `templates/support-note.js`, 값은 `site.json`의 `presentation`이다.
