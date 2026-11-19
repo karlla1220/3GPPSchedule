@@ -15391,6 +15391,22 @@
               "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;3a71cc59.2611c",
               "author": "Fei Yongqiang",
               "sent": "2026-11-19T14:02:10-06:00"
+            },
+            {
+              "kind": "session",
+              "session": "Thu 17:30-19:00 BMO 212",
+              "quote": "The updated FL summary for offline discussion is uploaded into the inbox. The offline proposals are listed in section 3.4.",
+              "mode": "offline",
+              "summary": "Updated FL summary uploaded for offline discussion on section 3.4 proposals",
+              "topics": [
+                "section 3.4"
+              ],
+              "day": "Thursday",
+              "split": [],
+              "mail": "87d6cce0.2611c",
+              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;87d6cce0.2611c",
+              "author": "Fei Yongqiang",
+              "sent": "2026-11-19T15:12:11-06:00"
             }
           ],
           "part": null,
@@ -16746,7 +16762,7 @@
     }
   ],
   "source_file": "RAN1#127 online and offline schedules - v04.docx",
-  "generated_at": "2026-11-19 15:03",
+  "generated_at": "2026-11-19 15:21",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
@@ -21950,6 +21966,21 @@
         "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;873bcd81.2611c",
         "author": "Alberto Rico Alvarino",
         "sent": "2026-11-19T12:46:52-06:00",
+        "date": "2026-11-19"
+      },
+      {
+        "kind": "informal",
+        "quote": "We will have a follow-up off-offline at 6pm at the same location as where we had the previous off-offline.",
+        "mode": "off-offline",
+        "summary": "Follow-up off-offline at 18:00 in coffee break area next to escalator",
+        "topics": [],
+        "start": "18:00",
+        "day": "Thursday",
+        "place": "the coffee break area, next to the escalator",
+        "mail": "e8287d7b.2611c",
+        "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;e8287d7b.2611c",
+        "author": "Alberto Rico Alvarino",
+        "sent": "2026-11-19T15:10:09-06:00",
         "date": "2026-11-19"
       }
     ],
