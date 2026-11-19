@@ -12705,7 +12705,25 @@
           "room_scope": "assigned",
           "notes": [],
           "inferred_agenda_items": [],
-          "email_details": [],
+          "email_details": [
+            {
+              "kind": "session",
+              "session": "Thu 15:35-16:00 Champions Ballroom A",
+              "quote": "The official deadline of companies input for this round#4 is 2 hours before Thursday online.",
+              "mode": "online",
+              "summary": "Deadline for Round#4 input is 2 hours before Thursday online",
+              "topics": [],
+              "day": "Thursday",
+              "input_due": {
+                "minutes_before": 120
+              },
+              "split": [],
+              "mail": "a199324.2611c",
+              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;a199324.2611c",
+              "author": "Bo Gao",
+              "sent": "2026-11-19T03:43:41-06:00"
+            }
+          ],
           "part": null,
           "stream": ""
         },
@@ -15237,7 +15255,7 @@
     }
   ],
   "source_file": "RAN1#127 online and offline schedules - v04.docx",
-  "generated_at": "2026-11-19 03:21",
+  "generated_at": "2026-11-19 04:01",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
