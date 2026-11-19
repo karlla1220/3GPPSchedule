@@ -5,7 +5,7 @@
     "Main Schedule": "30d37192eb315eb1",
     "Hiroki's schedule": "74c47ddf0887b8ab",
     "Ralf's schedule": "b2454b17d4cc48d3",
-    "Sorour's schedule": "2d4abfec898b849e"
+    "Sorour's schedule": "ad7ead60d70cf4f6"
   },
   "merged_sessions": [
     {
@@ -23,58 +23,16 @@
     },
     {
       "room_name": "RAN1_brk1",
-      "name": "AI 10.5.2.2 PDSCH",
-      "duration_minutes": 30,
-      "specified_start_time": null,
-      "chair": "Sorour",
-      "group_header": "6GR",
-      "agenda_item": "10.5.2.2",
-      "source_cells": [
-        "c67be2e",
-        "c9e966e"
-      ],
-      "description": "Downlink transmission scheme(s) for downlink shared channels",
-      "agenda_descriptions": [
-        {
-          "agenda_item": "10.5.2.2",
-          "matched_agenda_item": "10.5.2.2",
-          "description": "Downlink transmission scheme(s) for downlink shared channels",
-          "hierarchy": [
-            {
-              "agenda_item": "10",
-              "description": "Rel-20 Study of 6GR",
-              "has_description": true
-            },
-            {
-              "agenda_item": "10.5",
-              "description": "Multi-antenna system",
-              "has_description": true
-            },
-            {
-              "agenda_item": "10.5.2",
-              "description": "MIMO operation",
-              "has_description": true
-            },
-            {
-              "agenda_item": "10.5.2.2",
-              "description": "Downlink transmission scheme(s) for downlink shared channels",
-              "has_description": true
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "room_name": "RAN1_brk1",
       "name": "AI 10.5.2.3 PUxCH",
-      "duration_minutes": 60,
+      "duration_minutes": 90,
       "specified_start_time": null,
       "chair": "Sorour",
       "group_header": "6GR",
       "agenda_item": "10.5.2.3",
       "source_cells": [
         "c67be2e",
-        "c9e966e"
+        "cb56937",
+        "c9ca82d"
       ],
       "description": "Uplink transmission scheme(s) for uplink channels",
       "agenda_descriptions": [
@@ -225,7 +183,7 @@
       ]
     }
   ],
-  "merged_at": "2026-11-18T22:42:10.497621+00:00",
+  "merged_at": "2026-11-19T01:02:30.954616+00:00",
   "meeting_id": "ran1#127",
   "schema_version": 3,
   "source_entries": {
@@ -268,9 +226,15 @@
     "Sorour's schedule": [
       {
         "room_label": "Room 225-226",
-        "cell_text": "6GR (90)\nAI 10.5.2.2 PDSCH (30)\nAI 10.5.2.3 PUxCH (60)",
+        "cell_text": "6GR (90)\n.10.5.2.3 (90)",
         "fallback_start_time": null,
-        "cell_id": "c9e966e"
+        "cell_id": "cb56937"
+      },
+      {
+        "room_label": "Room 225-226",
+        "cell_text": "6GR (90)\nAI 10.5.2.3 PUxCH (90)",
+        "fallback_start_time": null,
+        "cell_id": "c9ca82d"
       }
     ]
   },
