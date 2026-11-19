@@ -3695,15 +3695,19 @@ header .meta a:focus-visible,
         const { minutes, weekday, date } = nowInMeetingTZ();
         document.querySelectorAll('.now-line').forEach(el => el.remove());
         if (!showNowLine) return;
-        const todayPanel = document.getElementById(weekday);
-        if (!todayPanel || (todayPanel.dataset.date && todayPanel.dataset.date !== date)) return;
-        addNowLine(todayPanel.querySelector('.schedule-grid'), minutes);
+        // A weekday the source repeats is "friday", "friday-2" (RAN4#121): each is today.
+        const ids = [];
+        for (let id = weekday, n = 1; document.getElementById(id); id = weekday + '-' + ++n) ids.push(id);
+        const todayPanels = ids.map(id => document.getElementById(id))
+            .filter(panel => !(panel.dataset.date && panel.dataset.date !== date));
+        if (!todayPanels.length) return;
+        todayPanels.forEach(panel => addNowLine(panel.querySelector('.schedule-grid'), minutes));
         // In the All view the NOW label stays on the time axis, and the red
         // line runs across today's rooms only (schedule.css).
-        const today = document.querySelector('.week-day[data-day="' + weekday + '"]');
-        if (today) {
-            addNowLine(today.parentElement, minutes, 'now-label');
-            addNowLine(today.parentElement, minutes, 'now-today', today.style.gridColumn);
+        const today = ids.map(id => document.querySelector('.week-day[data-day="' + id + '"]')).filter(Boolean);
+        if (today.length) {
+            addNowLine(today[0].parentElement, minutes, 'now-label');
+            today.forEach(day => addNowLine(day.parentElement, minutes, 'now-today', day.style.gridColumn));
         }
     }
 

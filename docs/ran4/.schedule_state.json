@@ -33,9 +33,9 @@
     "name": "agenda.csv",
     "size": 18606,
     "sha256": "c35c8ba8eb18e820f553f2ccd9304f87e16dae904c8e810b5b93851f32a35559",
-    "etag": "\"9546bbe3e877dd1:0\"",
+    "etag": null,
     "last_modified": "Thu, 19 Nov 2026 05:43:22 GMT",
-    "ftp_modified": null,
+    "ftp_modified": "213 20261119054322",
     "content_type": "application/octet-stream",
     "content_disposition": null
   },
