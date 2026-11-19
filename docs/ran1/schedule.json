@@ -14194,7 +14194,22 @@
           "room_scope": "assigned",
           "notes": [],
           "inferred_agenda_items": [],
-          "email_details": [],
+          "email_details": [
+            {
+              "kind": "session",
+              "session": "Thu 15:25-16:00 BMO 212",
+              "quote": "The updated proposals for Thursday offline/online are now available in v33 in draft folder.",
+              "mode": "offline",
+              "summary": "Updated proposals in v33 for Thursday offline session",
+              "topics": [],
+              "day": "Thursday",
+              "split": [],
+              "mail": "1862218e.2611c",
+              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;1862218e.2611c",
+              "author": "Qu Xin (vivo)",
+              "sent": "2026-11-19T12:04:55-06:00"
+            }
+          ],
           "part": null,
           "stream": ""
         },
@@ -14639,7 +14654,22 @@
           "room_scope": "assigned",
           "notes": [],
           "inferred_agenda_items": [],
-          "email_details": [],
+          "email_details": [
+            {
+              "kind": "session",
+              "session": "Thu 18:25-19:00 Champions Ballroom A",
+              "quote": "The updated proposals for Thursday offline/online are now available in v33 in draft folder.",
+              "mode": "online",
+              "summary": "Updated proposals in v33 for Thursday online session",
+              "topics": [],
+              "day": "Thursday",
+              "split": [],
+              "mail": "1862218e.2611c",
+              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;1862218e.2611c",
+              "author": "Qu Xin (vivo)",
+              "sent": "2026-11-19T12:04:55-06:00"
+            }
+          ],
           "part": null,
           "stream": ""
         },
@@ -15088,17 +15118,20 @@
             {
               "kind": "session",
               "session": "Thu 17:00-17:30 BMO 212",
-              "quote": "Tomorrow's offline is 5pm",
+              "quote": "For the offline session, I plan to discuss 2.1.4-8 (link adaptation simulation)\nAls want to check if other discussions capturing options are stable or not.",
               "mode": "offline",
-              "summary": "Offline session",
-              "topics": [],
+              "summary": "Discuss 2.1.4-8 (link adaptation simulation) and option stability",
+              "topics": [
+                "2.1.4-8 (link adaptation simulation)",
+                "other discussions capturing options"
+              ],
               "start": "17:00",
               "day": "Thursday",
               "split": [],
-              "mail": "dc5d2c9d.2611c",
-              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;dc5d2c9d.2611c",
+              "mail": "1f4f50f9.2611c",
+              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;1f4f50f9.2611c",
               "author": "Jing Sun",
-              "sent": "2026-11-18T17:52:05-06:00"
+              "sent": "2026-11-19T12:01:17-06:00"
             }
           ],
           "part": null,
@@ -15156,6 +15189,22 @@
               "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;2b02d9b5.2611c",
               "author": "Woo-Suk Ko",
               "sent": "2026-11-19T10:23:25-06:00"
+            },
+            {
+              "kind": "session",
+              "session": "Thu 17:30-19:00 BMO 212",
+              "quote": "FL summary was further updated as v05, which includes the updated [FL3][M]\nProposal 3.3 for offline discussion.",
+              "mode": "offline",
+              "summary": "Offline discussion on updated Proposal 3.3 in FL summary v05",
+              "topics": [
+                "Proposal 3.3"
+              ],
+              "day": "Thursday",
+              "split": [],
+              "mail": "349ef371.2611c",
+              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;349ef371.2611c",
+              "author": "Woo-Suk Ko",
+              "sent": "2026-11-19T12:14:48-06:00"
             }
           ],
           "part": null,
@@ -16511,7 +16560,7 @@
     }
   ],
   "source_file": "RAN1#127 online and offline schedules - v04.docx",
-  "generated_at": "2026-11-19 12:02",
+  "generated_at": "2026-11-19 12:22",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
@@ -21480,6 +21529,20 @@
         "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;dc5d2c9d.2611c",
         "author": "Jing Sun",
         "sent": "2026-11-18T17:52:05-06:00",
+        "date": "2026-11-19"
+      },
+      {
+        "kind": "informal",
+        "quote": "If you still have suggestions, please talk to me before lunch break. I am in Sorour's room now.",
+        "mode": null,
+        "summary": "FL available in Sorour's room before lunch break",
+        "topics": [],
+        "day": "Thursday",
+        "place": "Sorour's room",
+        "mail": "1f4f50f9.2611c",
+        "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;1f4f50f9.2611c",
+        "author": "Jing Sun",
+        "sent": "2026-11-19T12:01:17-06:00",
         "date": "2026-11-19"
       }
     ],
