@@ -56,7 +56,7 @@ def fresh_listings(tmp_path, monkeypatch):
     monkeypatch.setattr(agenda_labels, 'gemini_judge', lambda *a, **k: {})
     # Nor the repository's drafts folder lists, nor the FTP for them.
     from working_groups.ran1 import drafts_folders
-    monkeypatch.setattr(drafts_folders, 'DIRECTORY', tmp_path / 'drafts_folders')
+    monkeypatch.setattr(drafts_folders, 'PATH', tmp_path / 'drafts_folders.json')
     monkeypatch.setattr(drafts_folders, 'list_inbox_subfolders', lambda url: [])
     # RAN1 tests give their own folders; the lookup has its own tests.
     for module in ('check_update', 'pipeline'):

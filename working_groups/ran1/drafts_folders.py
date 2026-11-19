@@ -8,8 +8,9 @@ found by its leading number in the FTP listing. The links go to the sync area
 archive folder lags it. The sync area keeps the last meeting's folders until
 the next one, so it is listed only while the meeting is in progress.
 
-Found folders are kept per meeting in ``docs/ran1/drafts_folders/<meeting>.json``
-and the FTP is listed only for an item the list does not have yet. An item
+Found folders are kept in ``docs/ran1/drafts_folders.json``, one file for the
+meeting being built (a new meeting starts it afresh; history is in git), and
+the FTP is listed only for an item the file does not have yet. An item
 with no folder is looked for again on the next build (FLs add folders during
 the meeting); that costs the root listing and its ancestors' listings.
 Failing to list is not an error: the links are a convenience.
@@ -25,13 +26,9 @@ from shared.navigation import meeting_phase
 
 from .downloader import list_inbox_subfolders
 
-DIRECTORY = Path("docs/ran1/drafts_folders")
+PATH = Path("docs/ran1/drafts_folders.json")
 
 _NUMBER = re.compile(r"\s*(\d+(?:\.\d+)*)")
-
-
-def map_path(meeting_id: str) -> Path:
-    return DIRECTORY / f"{meeting_id.replace('#', '_')}.json"
 
 
 def folder_number(agenda_item) -> str:
@@ -82,13 +79,11 @@ def apply(schedule, meeting_sync: str | None, *, offline: bool, now=None) -> Non
         return
     sessions = [s for day in schedule.days for s in day.sessions]
     root = meeting_sync.rstrip("/") + "/Inbox/drafts/" if meeting_sync else None
-    path = map_path(schedule.meeting_id)
     try:
-        known = json.loads(path.read_text(encoding="utf-8"))
+        saved = json.loads(PATH.read_text(encoding="utf-8"))
     except (OSError, ValueError):
-        known = {}
-    if root:  # a folder listed under another root (the archive, before) is looked up again
-        known = {k: v for k, v in known.items() if v.startswith(root)}
+        saved = {}
+    known = saved.get("folders", {}) if saved.get("meeting_id") == schedule.meeting_id else {}
     wanted = {n for s in sessions for item in s.agenda_descriptions for n in tree_numbers(item)}
     in_progress = meeting_phase(schedule.starts_on, schedule.ends_on, schedule.timezone or "UTC", now) == "In progress"
     if not root and wanted:
@@ -100,8 +95,9 @@ def apply(schedule, meeting_sync: str | None, *, offline: bool, now=None) -> Non
             print(f"  Warning: could not list drafts folders: {e}")
             found = known
         if found != known:
-            path.parent.mkdir(parents=True, exist_ok=True)
-            path.write_text(json.dumps(found, indent=1, sort_keys=True) + "\n", encoding="utf-8")
+            PATH.parent.mkdir(parents=True, exist_ok=True)
+            PATH.write_text(json.dumps({"meeting_id": schedule.meeting_id, "folders": found},
+                                       indent=1, sort_keys=True) + "\n", encoding="utf-8")
             print(f"  Drafts folders: {len(found) - len(known)} new")
             known = found
 
