@@ -544,7 +544,8 @@ async function start() {
                 let content = cache.get(current.url);
                 if (!content) {
                     const response = await fetch(current.url, { signal, credentials: 'same-origin' });
-                    if (!response.ok) throw new Error('HTTP ' + response.status);
+                    // A 404 means a newer build removed this file; only a fresh manifest (page reload) can fix it.
+                    if (!response.ok) return { error: true, stale: response.status === 404 };
                     content = await response.text();
                     cache.set(current.url, content);
                 }
@@ -595,7 +596,7 @@ async function start() {
                         <h3><span class="agreement-ai">${() => 'AI ' + activeAI()}</span>${' '}<span>${() => entry()?.title || ''}</span></h3>
                         <${Show} when=${changeNote}><p class=${() => 'agreement-change' + (entry()?.added ? ' has-added' : '')}>${changeNote}</p><//>
                         <${Show} when=${() => !document.loading}>
-                            <${Show} when=${() => document()?.error}><p>${TEXT.error} <button type="button" class="agreement-action" onClick=${() => refetch()}>Retry</button></p><//>
+                            <${Show} when=${() => document()?.error}><p>${TEXT.error} <button type="button" class="agreement-action" onClick=${() => document()?.stale ? location.reload() : refetch()}>Retry</button></p><//>
                             <${Show} when=${() => !document()?.error && !document()?.content}><p class="agreement-note">${emptyNote}</p><//>
                             <${Show} when=${() => document()?.content} keyed=${true}>${content => documentView(content)}<//>
                         <//>

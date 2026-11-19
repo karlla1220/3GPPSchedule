@@ -4225,6 +4225,54 @@
           "stream": ""
         },
         {
+          "name": "KI#18 (AI for Network)",
+          "duration_minutes": 75,
+          "start_time": "16:00",
+          "end_time": "17:15",
+          "day": "Thursday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": null,
+          "agenda_item": "20.6.18",
+          "group_header": "Rel-20 SIDs and WIDs",
+          "description": "Study on Architecture for 6G System (FS_6G_ARC) - AI for 6G architecture",
+          "agenda_descriptions": [
+            {
+              "agenda_item": "20.6.18",
+              "matched_agenda_item": "20.6.18",
+              "description": "Study on Architecture for 6G System (FS_6G_ARC) - AI for 6G architecture",
+              "hierarchy": [
+                {
+                  "agenda_item": "20",
+                  "description": "Rel-20 SIDs and WIDs"
+                },
+                {
+                  "agenda_item": "20.6",
+                  "description": null
+                },
+                {
+                  "agenda_item": "20.6.18",
+                  "description": "Study on Architecture for 6G System (FS_6G_ARC) - AI for 6G architecture"
+                }
+              ]
+            }
+          ],
+          "room_ids": [
+            "stream1"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "KI#18 (AI for Network) (20.6.18)"
+          ],
+          "inferred_agenda_items": [],
+          "email_details": [],
+          "part": [
+            2,
+            2
+          ],
+          "stream": ""
+        },
+        {
           "name": "KI#10 (FWA) / SMS2EC-ARC",
           "duration_minutes": 75,
           "start_time": "16:00",
@@ -4810,20 +4858,20 @@
       "caveats": []
     }
   ],
-  "source_file": "S2-2611637_SA2-178-Session Plan - r16.docx",
-  "generated_at": "2026-11-19 09:22",
+  "source_file": "S2-2611637_SA2-178-Session Plan - r17.docx",
+  "generated_at": "2026-11-19 10:02",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
-    "S2-2611637_SA2-178-Session Plan - r16.docx",
+    "S2-2611637_SA2-178-Session Plan - r17.docx",
     "agenda.csv"
   ],
   "source_labels": {
-    "S2-2611637_SA2-178-Session Plan - r16.docx": "Session Plan - r16",
+    "S2-2611637_SA2-178-Session Plan - r17.docx": "Session Plan - r17",
     "agenda.csv": "agenda.csv"
   },
   "source_urls": {
-    "S2-2611637_SA2-178-Session Plan - r16.docx": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/SA2/Inbox/Drafts/_Session_Plan_Updates/S2-2611637_SA2-178-Session%20Plan%20-%20r16.docx"
+    "S2-2611637_SA2-178-Session Plan - r17.docx": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/SA2/Inbox/Drafts/_Session_Plan_Updates/S2-2611637_SA2-178-Session%20Plan%20-%20r17.docx"
   },
   "source_mails": {},
   "timezone": "America/Edmonton",
