@@ -7649,9 +7649,9 @@
           "room_col_start": 2,
           "room_col_end": 3,
           "chair": "Shan YANG",
-          "agenda_item": "7.8.4, 7.17.2, 7.17.4, 10.4.1, 10.4.2, 10.8, 4.3.3, 4.4.2, 4.5.2, 10.4.3, 10.9.2",
+          "agenda_item": "7.8.4, 10.4.1, 10.4.2, 10.8, 4.3.3, 4.4.2, 4.5.2, 10.4.3, 10.9.2, 7.17.2, 7.17.4",
           "group_header": "Rel-20 on-going non-spectrum related work/study items",
-          "description": "RRM core requirements\nGeneral aspects and workplan\nRRM core requirements\nUp to Rel-16 maintenance\nRel-17 maintenance\nRel-16/17 TEI and others (EMC, OTA, and TRP/TRS)",
+          "description": "RRM core requirements\nUp to Rel-16 maintenance\nRel-17 maintenance\nRel-16/17 TEI and others (EMC, OTA, and TRP/TRS)\nRRM requirements (other than NTN)\nRRM related topics (other than NTN)",
           "agenda_descriptions": [
             {
               "agenda_item": "7.8.4",
@@ -7668,44 +7668,6 @@
                 },
                 {
                   "agenda_item": "7.8.4",
-                  "description": "RRM core requirements"
-                }
-              ]
-            },
-            {
-              "agenda_item": "7.17.2",
-              "matched_agenda_item": "7.17.2",
-              "description": "General aspects and workplan",
-              "hierarchy": [
-                {
-                  "agenda_item": "7",
-                  "description": "Rel-20 on-going non-spectrum related work/study items"
-                },
-                {
-                  "agenda_item": "7.17",
-                  "description": "GNSS resilient NR-NTN operation"
-                },
-                {
-                  "agenda_item": "7.17.2",
-                  "description": "General aspects and workplan"
-                }
-              ]
-            },
-            {
-              "agenda_item": "7.17.4",
-              "matched_agenda_item": "7.17.4",
-              "description": "RRM core requirements",
-              "hierarchy": [
-                {
-                  "agenda_item": "7",
-                  "description": "Rel-20 on-going non-spectrum related work/study items"
-                },
-                {
-                  "agenda_item": "7.17",
-                  "description": "GNSS resilient NR-NTN operation"
-                },
-                {
-                  "agenda_item": "7.17.4",
                   "description": "RRM core requirements"
                 }
               ]
@@ -7762,6 +7724,44 @@
                   "description": "Rel-16/17 TEI and others (EMC, OTA, and TRP/TRS)"
                 }
               ]
+            },
+            {
+              "agenda_item": "4.3.3",
+              "matched_agenda_item": "4.3.3",
+              "description": "RRM requirements (other than NTN)",
+              "hierarchy": [
+                {
+                  "agenda_item": "4",
+                  "description": "Rel-19/20 maintenance for LTE and NR, TEI19 and TEI20"
+                },
+                {
+                  "agenda_item": "4.3",
+                  "description": "Rel-19/20 non-spectrum related Wis"
+                },
+                {
+                  "agenda_item": "4.3.3",
+                  "description": "RRM requirements (other than NTN)"
+                }
+              ]
+            },
+            {
+              "agenda_item": "4.4.2",
+              "matched_agenda_item": "4.4.2",
+              "description": "RRM related topics (other than NTN)",
+              "hierarchy": [
+                {
+                  "agenda_item": "4",
+                  "description": "Rel-19/20 maintenance for LTE and NR, TEI19 and TEI20"
+                },
+                {
+                  "agenda_item": "4.4",
+                  "description": "Rel-19 TEI"
+                },
+                {
+                  "agenda_item": "4.4.2",
+                  "description": "RRM related topics (other than NTN)"
+                }
+              ]
             }
           ],
           "room_ids": [
@@ -7771,9 +7771,9 @@
           "notes": [
             "Rel-20 RRM",
             "[203] NR_LBCA_Sw_enh_RRM",
-            "[208] NR_NTN_GNSS_resilient_RRM",
             "[222] RRM_Maintenance_Up_to_R17",
-            "[223] RRM_Maintenance_R18_to_R20"
+            "[223] RRM_Maintenance_R18_to_R20",
+            "[208] NR_NTN_GNSS_resilient_RRM"
           ],
           "inferred_agenda_items": [],
           "email_details": [],
@@ -7931,6 +7931,33 @@
             "Coffee break AH: [105-B] 6G RRM Chaired by Jin-Yup (LGE)"
           ],
           "inferred_agenda_items": [],
+          "email_details": [],
+          "part": null,
+          "stream": ""
+        },
+        {
+          "name": "Coffee break ad-hoc: MEO coex",
+          "duration_minutes": 30,
+          "start_time": "10:30",
+          "end_time": "11:00",
+          "day": "Thursday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "Michal",
+          "agenda_item": null,
+          "group_header": "",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [
+            "gene"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "Coffee break ad-hoc: MEO coex chaired by Michal"
+          ],
+          "inferred_agenda_items": [
+            "8.4.3.2"
+          ],
           "email_details": [],
           "part": null,
           "stream": ""
@@ -8634,16 +8661,15 @@
           "room_scope": "assigned",
           "notes": [
             "BDaT Early Return To",
-            "NTN coexistence",
-            "7 GHz coexistence",
-            "NTN",
+            "MEO coexistence",
             "6G sensing (including LS)",
+            "NTN coexistence",
+            "NTN (if delegates are available)",
             "BR2 Ad-hoc: Ambient-IoT",
             "Chaired by Ling (Huawei) and/or Huiping (Xiaomi)"
           ],
           "inferred_agenda_items": [
             "7.20",
-            "8.4.3.1",
             "8.4.3.2",
             "8.4.4",
             "8.10"
@@ -8743,6 +8769,33 @@
           ],
           "inferred_agenda_items": [
             "8.6"
+          ],
+          "email_details": [],
+          "part": null,
+          "stream": ""
+        },
+        {
+          "name": "Coffee break ad-hoc: 7 GHz coex",
+          "duration_minutes": 30,
+          "start_time": "16:30",
+          "end_time": "17:00",
+          "day": "Thursday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "Michal",
+          "agenda_item": null,
+          "group_header": "",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [
+            "gene"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "Coffee break ad-hoc: 7 GHz coex chaired by Michal"
+          ],
+          "inferred_agenda_items": [
+            "8.4.3.1"
           ],
           "email_details": [],
           "part": null,
@@ -9557,31 +9610,6 @@
       ],
       "sessions": [
         {
-          "name": "Return to",
-          "duration_minutes": 150,
-          "start_time": "08:00",
-          "end_time": "10:30",
-          "day": "Friday",
-          "room_col_start": 2,
-          "room_col_end": 3,
-          "chair": "Gene FONG",
-          "agenda_item": null,
-          "group_header": "",
-          "description": null,
-          "agenda_descriptions": [],
-          "room_ids": [
-            "gene"
-          ],
-          "room_scope": "assigned",
-          "notes": [
-            "Return to"
-          ],
-          "inferred_agenda_items": [],
-          "email_details": [],
-          "part": null,
-          "stream": ""
-        },
-        {
           "name": "BR1 Ad-hoc / [218] NR_AIML_air_Ph2",
           "duration_minutes": 60,
           "start_time": "08:00",
@@ -9643,16 +9671,154 @@
           "room_scope": "assigned",
           "notes": [
             "Return to",
-            "6G system parameter",
-            "6G UE RF",
+            "Maintenance",
             "6G spectrum",
-            "6G spectrum sharing"
+            "6G spectrum sharing",
+            "6G system parameter",
+            "6G UE RF"
           ],
           "inferred_agenda_items": [
+            "4",
             "8.2",
             "8.3",
             "8.5",
-            "8.9"
+            "8.9",
+            "10"
+          ],
+          "email_details": [],
+          "part": null,
+          "stream": ""
+        },
+        {
+          "name": "Return to Start at 8:30",
+          "duration_minutes": 120,
+          "start_time": "08:30",
+          "end_time": "10:30",
+          "day": "Friday",
+          "room_col_start": 2,
+          "room_col_end": 3,
+          "chair": "Gene FONG",
+          "agenda_item": null,
+          "group_header": "",
+          "description": null,
+          "agenda_descriptions": [],
+          "room_ids": [
+            "gene"
+          ],
+          "room_scope": "assigned",
+          "notes": [
+            "Return to Start at 8:30",
+            "Spectrum baskets [320], [321],[323],[324],[325],[330]",
+            "JSON [371], UAV [352], PCI FRMCS [355]",
+            "UE RF [340], [342]",
+            "Maintenance [301],[303][304][305][306][321][323][324][325][330][331]",
+            "BSRF [345]",
+            "NTN [346], [347], [348], [350], [351], [356]",
+            "A-IOT [353][354]"
+          ],
+          "inferred_agenda_items": [
+            "5.2.1",
+            "5.2.2",
+            "5.2.3",
+            "5.2.4",
+            "5.3.1",
+            "5.3.2",
+            "5.3.3",
+            "5.3.4",
+            "5.3.5",
+            "5.3.6",
+            "5.3.7",
+            "5.5.1",
+            "5.5.2",
+            "5.5.3",
+            "5.5.4",
+            "5.5.5",
+            "5.5.6",
+            "5.6.1",
+            "5.6.2",
+            "5.6.3",
+            "5.6.4",
+            "5.6.5",
+            "5.6.6",
+            "5.6.7",
+            "5.6.8",
+            "5.6.9",
+            "5.7.1",
+            "5.7.2",
+            "5.7.3",
+            "5.7.4",
+            "5.7.5",
+            "5.11.1",
+            "5.11.2",
+            "5.11.3",
+            "5.11.4",
+            "5.12.1",
+            "5.12.2",
+            "5.12.3",
+            "12.1",
+            "7.7.2",
+            "7.7.3",
+            "7.7.4",
+            "7.11.2",
+            "7.11.3",
+            "7.1.2",
+            "7.1.3.2",
+            "7.1.3.3",
+            "7.1.3.4",
+            "7.1.5",
+            "7.8.2",
+            "7.8.3",
+            "10.6.1",
+            "10.6.2",
+            "10.3",
+            "10.8",
+            "10.9.3",
+            "4.3.2",
+            "4.4.3",
+            "4.2.2",
+            "4.3.5.1",
+            "4.4.5.1",
+            "4.3.5.2",
+            "4.4.5.2",
+            "10.6.4",
+            "5.13.1",
+            "5.13.2",
+            "7.2.2",
+            "7.2.3",
+            "7.2.4",
+            "4.5.3",
+            "7.6.2",
+            "7.6.3",
+            "7.6.6.1.1",
+            "7.6.6.1.2",
+            "7.6.6.2.1",
+            "7.6.6.2.2",
+            "7.6.7",
+            "7.6.4",
+            "7.6.5.1",
+            "4.5.5.1",
+            "7.6.5.2",
+            "7.6.6.3",
+            "4.5.5.2",
+            "7.18.2",
+            "7.18.3",
+            "7.18.4",
+            "7.19.2",
+            "7.19.3.1",
+            "7.19.3.2",
+            "7.12.2",
+            "7.12.3.1",
+            "7.12.3.2",
+            "7.20.2",
+            "7.20.4",
+            "7.20.5.1",
+            "7.20.5.2",
+            "7.20.5.3",
+            "7.20.6.1",
+            "7.20.6.2",
+            "7.20.6.3",
+            "7.20.6.4",
+            "7.20.7"
           ],
           "email_details": [],
           "part": null,
@@ -9736,9 +9902,35 @@
           ],
           "room_scope": "assigned",
           "notes": [
-            "Return to"
+            "Return to",
+            "6G BSRF [360]",
+            "NTN_coexistence [364]",
+            "6G coex [361]",
+            "Sensing [362], [363]"
           ],
-          "inferred_agenda_items": [],
+          "inferred_agenda_items": [
+            "8.4.1.1",
+            "8.4.1.2",
+            "8.4.1.3",
+            "8.4.7.1",
+            "8.4.8",
+            "8.4.4.1",
+            "8.4.4.2",
+            "8.4.4.3",
+            "8.4.7.3",
+            "8.4.3.1",
+            "8.4.3.2",
+            "8.4.5",
+            "8.4.6",
+            "8.4.7.2",
+            "8.10.3",
+            "8.10.4",
+            "8.10.5",
+            "8.10.6.2",
+            "8.10.1",
+            "8.10.2",
+            "8.10.6.1"
+          ],
           "email_details": [],
           "part": null,
           "stream": ""
@@ -9908,349 +10100,25 @@
         ],
         "blocks": []
       },
-      "caveats": [
-        "The schedule file has 2 slides for Friday with different sessions: slide 6 (Friday), slide 7 (Friday 2). This tab shows slide 6 as written. Check with the session chair which one holds. The next update will probably resolve it."
-      ]
-    },
-    {
-      "day_name": "Friday",
-      "rooms": [
-        {
-          "name": "RAN4 Main (Yang Session)",
-          "table_index": 0,
-          "room_index_in_table": 0,
-          "id": "yang",
-          "kind": "",
-          "detail": "",
-          "stream": ""
-        },
-        {
-          "name": "RAN4 RRM_Demod_OTA (Shan Session)",
-          "table_index": 0,
-          "room_index_in_table": 0,
-          "id": "shan",
-          "kind": "",
-          "detail": "",
-          "stream": ""
-        },
-        {
-          "name": "RAN4 RF,NTN,A-IOT (Gene Session)",
-          "table_index": 0,
-          "room_index_in_table": 0,
-          "id": "gene",
-          "kind": "",
-          "detail": "",
-          "stream": ""
-        }
-      ],
-      "sessions": [
-        {
-          "name": "Return to",
-          "duration_minutes": 150,
-          "start_time": "08:00",
-          "end_time": "10:30",
-          "day": "Friday",
-          "room_col_start": 2,
-          "room_col_end": 3,
-          "chair": "Gene FONG",
-          "agenda_item": null,
-          "group_header": "",
-          "description": null,
-          "agenda_descriptions": [],
-          "room_ids": [
-            "gene"
-          ],
-          "room_scope": "assigned",
-          "notes": [
-            "Return to"
-          ],
-          "inferred_agenda_items": [],
-          "email_details": [],
-          "part": null,
-          "stream": ""
-        },
-        {
-          "name": "Return to",
-          "duration_minutes": 150,
-          "start_time": "08:00",
-          "end_time": "10:30",
-          "day": "Friday",
-          "room_col_start": 2,
-          "room_col_end": 3,
-          "chair": "Shan YANG",
-          "agenda_item": null,
-          "group_header": "",
-          "description": null,
-          "agenda_descriptions": [],
-          "room_ids": [
-            "shan"
-          ],
-          "room_scope": "assigned",
-          "notes": [
-            "Return to",
-            "5G PHY AI and AI mobility",
-            "5G RRM",
-            "Demod"
-          ],
-          "inferred_agenda_items": [
-            "4.3.3",
-            "4.3.4",
-            "7.4",
-            "7.5",
-            "7.13",
-            "7.15"
-          ],
-          "email_details": [],
-          "part": null,
-          "stream": ""
-        },
-        {
-          "name": "Return to",
-          "duration_minutes": 150,
-          "start_time": "08:00",
-          "end_time": "10:30",
-          "day": "Friday",
-          "room_col_start": 2,
-          "room_col_end": 3,
-          "chair": "Yang TANG",
-          "agenda_item": null,
-          "group_header": "",
-          "description": null,
-          "agenda_descriptions": [],
-          "room_ids": [
-            "yang"
-          ],
-          "room_scope": "assigned",
-          "notes": [
-            "Return to",
-            "6G system parameter",
-            "6G UE RF",
-            "6G spectrum",
-            "6G spectrum sharing"
-          ],
-          "inferred_agenda_items": [
-            "8.2",
-            "8.3",
-            "8.5",
-            "8.9"
-          ],
-          "email_details": [],
-          "part": null,
-          "stream": ""
-        },
-        {
-          "name": "Return to",
-          "duration_minutes": 75,
-          "start_time": "11:30",
-          "end_time": "12:45",
-          "day": "Friday",
-          "room_col_start": 2,
-          "room_col_end": 3,
-          "chair": "Gene FONG",
-          "agenda_item": null,
-          "group_header": "",
-          "description": null,
-          "agenda_descriptions": [],
-          "room_ids": [
-            "gene"
-          ],
-          "room_scope": "assigned",
-          "notes": [
-            "Return to"
-          ],
-          "inferred_agenda_items": [],
-          "email_details": [],
-          "part": null,
-          "stream": ""
-        },
-        {
-          "name": "Return to",
-          "duration_minutes": 75,
-          "start_time": "11:30",
-          "end_time": "12:45",
-          "day": "Friday",
-          "room_col_start": 2,
-          "room_col_end": 3,
-          "chair": "Shan YANG",
-          "agenda_item": null,
-          "group_header": "",
-          "description": null,
-          "agenda_descriptions": [],
-          "room_ids": [
-            "shan"
-          ],
-          "room_scope": "assigned",
-          "notes": [
-            "Return to",
-            "OTA"
-          ],
-          "inferred_agenda_items": [
-            "7.3",
-            "8.11"
-          ],
-          "email_details": [],
-          "part": null,
-          "stream": ""
-        },
-        {
-          "name": "6G RRM / 6G AI / 6G operation efficiency …",
-          "duration_minutes": 75,
-          "start_time": "11:30",
-          "end_time": "12:45",
-          "day": "Friday",
-          "room_col_start": 2,
-          "room_col_end": 3,
-          "chair": "Yang TANG",
-          "agenda_item": null,
-          "group_header": "",
-          "description": null,
-          "agenda_descriptions": [],
-          "room_ids": [
-            "yang"
-          ],
-          "room_scope": "assigned",
-          "notes": [
-            "6G RRM",
-            "6G AI",
-            "6G operation efficiency",
-            "5GA R19 AI",
-            "13 Any other business",
-            "14 Close of the meeting (main session)"
-          ],
-          "inferred_agenda_items": [
-            "7.13",
-            "8.6",
-            "8.8",
-            "8.12",
-            "14",
-            "15"
-          ],
-          "email_details": [],
-          "part": null,
-          "stream": ""
-        },
-        {
-          "name": "Return to (final round)",
-          "duration_minutes": 210,
-          "start_time": "14:00",
-          "end_time": "17:30",
-          "day": "Friday",
-          "room_col_start": 2,
-          "room_col_end": 3,
-          "chair": "Gene FONG",
-          "agenda_item": null,
-          "group_header": "",
-          "description": null,
-          "agenda_descriptions": [],
-          "room_ids": [
-            "gene"
-          ],
-          "room_scope": "assigned",
-          "notes": [
-            "Return to (final round)"
-          ],
-          "inferred_agenda_items": [],
-          "email_details": [],
-          "part": null,
-          "stream": ""
-        },
-        {
-          "name": "Return to (final round)",
-          "duration_minutes": 210,
-          "start_time": "14:00",
-          "end_time": "17:30",
-          "day": "Friday",
-          "room_col_start": 2,
-          "room_col_end": 3,
-          "chair": "Shan YANG",
-          "agenda_item": null,
-          "group_header": "",
-          "description": null,
-          "agenda_descriptions": [],
-          "room_ids": [
-            "shan"
-          ],
-          "room_scope": "assigned",
-          "notes": [
-            "Return to (final round)"
-          ],
-          "inferred_agenda_items": [],
-          "email_details": [],
-          "part": null,
-          "stream": ""
-        },
-        {
-          "name": "Return to (final round)",
-          "duration_minutes": 210,
-          "start_time": "14:00",
-          "end_time": "17:30",
-          "day": "Friday",
-          "room_col_start": 2,
-          "room_col_end": 3,
-          "chair": "Yang TANG",
-          "agenda_item": null,
-          "group_header": "",
-          "description": null,
-          "agenda_descriptions": [],
-          "room_ids": [
-            "yang"
-          ],
-          "room_scope": "assigned",
-          "notes": [
-            "Return to (final round)"
-          ],
-          "inferred_agenda_items": [],
-          "email_details": [],
-          "part": null,
-          "stream": ""
-        }
-      ],
-      "date": "2026-11-20",
-      "timeline": {
-        "start": "08:00",
-        "end": "17:30",
-        "slot_minutes": 5,
-        "label_minutes": 30,
-        "breaks": [
-          {
-            "name": "Coffee break",
-            "start": "10:30",
-            "end": "11:00"
-          },
-          {
-            "name": "Joint session",
-            "start": "11:00",
-            "end": "11:30"
-          },
-          {
-            "name": "Lunch break",
-            "start": "12:45",
-            "end": "13:45"
-          }
-        ],
-        "blocks": []
-      },
-      "caveats": [
-        "The schedule file has 2 slides for Friday with different sessions: slide 6 (Friday), slide 7 (Friday 2). This tab shows slide 7 as written. Check with the session chair which one holds. The next update will probably resolve it."
-      ]
+      "caveats": []
     }
   ],
-  "source_file": "RAN4_121_meeting_schedule_v10_after_WED.pptx",
-  "generated_at": "2026-11-19 17:35",
+  "source_file": "RAN4_121_meeting_schedule_v11_after_THU.pptx",
+  "generated_at": "2026-11-20 08:21",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
-    "RAN4_121_meeting_schedule_v10_after_WED.pptx",
+    "RAN4_121_meeting_schedule_v11_after_THU.pptx",
     "List_Topics_moderators -RAN4_121_v3.xlsx",
     "agenda.csv"
   ],
   "source_labels": {
-    "RAN4_121_meeting_schedule_v10_after_WED.pptx": "Schedule v10 after WED",
+    "RAN4_121_meeting_schedule_v11_after_THU.pptx": "Schedule v11 after THU",
     "List_Topics_moderators -RAN4_121_v3.xlsx": "Topics",
     "agenda.csv": "Agenda"
   },
   "source_urls": {
-    "RAN4_121_meeting_schedule_v10_after_WED.pptx": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN4/Inbox/Meeting_Arrangements/RAN4_121_meeting_schedule_v10_after_WED.pptx",
+    "RAN4_121_meeting_schedule_v11_after_THU.pptx": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN4/Inbox/Meeting_Arrangements/RAN4_121_meeting_schedule_v11_after_THU.pptx",
     "List_Topics_moderators -RAN4_121_v3.xlsx": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN4/Inbox/Meeting_Arrangements/List_Topics_moderators%20-RAN4_121_v3.xlsx",
     "agenda.csv": "https://www.3gpp.org/ftp/tsg_ran/WG4_Radio/TSGR4_121/Agenda/agenda.csv"
   },
@@ -10269,15 +10137,6 @@
     {
       "type": "heading",
       "text": "Friday"
-    },
-    {
-      "type": "paragraph",
-      "text": "Note: Depending on the progress and the need, the session chair(s) may introduce additional morning AH sessions, starting no earlier than 8 am.",
-      "bold": false
-    },
-    {
-      "type": "heading",
-      "text": "Friday 2"
     },
     {
       "type": "paragraph",
