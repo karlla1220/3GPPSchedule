@@ -1887,22 +1887,22 @@
       "caveats": []
     }
   ],
-  "source_file": "RAN3_134_agenda_20261119_1750.docx",
-  "generated_at": "2026-11-19 18:06",
+  "source_file": "RAN3_134_agenda_20261120_0900.docx",
+  "generated_at": "2026-11-20 09:05",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
-    "RAN3_134_agenda_20261119_1750.docx",
+    "RAN3_134_agenda_20261120_0900.docx",
     "RAN3 offline discussion_ver_06.xlsx",
     "agenda.csv"
   ],
   "source_labels": {
-    "RAN3_134_agenda_20261119_1750.docx": "agenda_20261119_1750",
+    "RAN3_134_agenda_20261120_0900.docx": "agenda_20261120_0900",
     "RAN3 offline discussion_ver_06.xlsx": "offline discussion_ver_06",
     "agenda.csv": "agenda.csv"
   },
   "source_urls": {
-    "RAN3_134_agenda_20261119_1750.docx": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN3/Inbox/Chairs_Notes/RAN3_134_agenda_20261119_1750.docx",
+    "RAN3_134_agenda_20261120_0900.docx": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN3/Inbox/Chairs_Notes/RAN3_134_agenda_20261120_0900.docx",
     "RAN3 offline discussion_ver_06.xlsx": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN3/Offline_meeting_room/RAN3%20offline%20discussion_ver_06.xlsx",
     "agenda.csv": "https://www.3gpp.org/ftp/tsg_ran/WG3_Iu/TSGR3_134/Agenda/agenda.csv"
   },
