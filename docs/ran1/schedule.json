@@ -16439,7 +16439,30 @@
           "room_scope": "assigned",
           "notes": [],
           "inferred_agenda_items": [],
-          "email_details": [],
+          "email_details": [
+            {
+              "kind": "session",
+              "session": "Fri 09:20-09:30 BMO 214-215",
+              "quote": "Two proposals on email discussions are in Section 2.5, to be approved today (I was told Hiroki planned 10 mins 9:20-9:30 to approve the email discussions for 10.5.4.x).",
+              "mode": null,
+              "summary": "Approve email discussions for 10.5.4.x (Section 2.5 proposals)",
+              "topics": [
+                "Section 2.5",
+                "email discussions for 10.5.4.x"
+              ],
+              "start": "09:20",
+              "end": "09:30",
+              "day": "Friday",
+              "tdocs": [
+                "R1-2609869"
+              ],
+              "split": [],
+              "mail": "ca453d0d.2611c",
+              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;ca453d0d.2611c",
+              "author": "Sigen Ye",
+              "sent": "2026-11-20T07:41:24-06:00"
+            }
+          ],
           "part": null,
           "stream": ""
         },
@@ -17280,7 +17303,7 @@
     }
   ],
   "source_file": "RAN1#127 online and offline schedules - v04.docx",
-  "generated_at": "2026-11-20 07:21",
+  "generated_at": "2026-11-20 08:02",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
