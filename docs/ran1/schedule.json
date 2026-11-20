@@ -17341,7 +17341,7 @@
     }
   ],
   "source_file": "RAN1#127 online and offline schedules - v04.docx",
-  "generated_at": "2026-11-20 10:22",
+  "generated_at": "2026-11-20 10:41",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
@@ -17874,11 +17874,11 @@
         "source_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Sorour_notes/Draft%20R1-2609127%20Session%20Notes%20of%20AI%209.4%20-%20v04.docx"
       },
       "R1-2609128": {
-        "name": "draft_R1-2609128_Session Notes of AI 9.3_v04.docx",
+        "name": "draft_R1-2609128_Session Notes of AI 9.3_v06.docx",
         "agenda_item": "9.3",
-        "changed_at": "2026-11-20T16:12:41+00:00",
-        "sha256": "83435297b18e73be90589b2de1f375a0d2a8aff4712405cc407478e069b2e8d5",
-        "source_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Hiroki_notes/draft_R1-2609128_Session%20Notes%20of%20AI%209.3_v04.docx"
+        "changed_at": "2026-11-20T16:30:41+00:00",
+        "sha256": "8a090df06c9537bf4977506e4d6352a49aa7e9798699444e4bd288190abbfd40",
+        "source_url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Hiroki_notes/draft_R1-2609128_Session%20Notes%20of%20AI%209.3_v06.docx"
       },
       "R1-2609129": {
         "name": "Draft R1-2609129 Session Notes of AI 9.2 - final.docx",
@@ -18654,31 +18654,36 @@
           "334907737e61",
           "af3e82761b0f",
           "b6ff4bdc464d",
-          "a95535ba52e7",
-          "cdf5c09c6b1d",
+          "edcae39329e1",
+          "12358cbcc209",
           "668544acaa68",
           "09afad8c1a64",
           "668544acaa68",
           "7a8d9ee71a6d",
-          "99cc3e7f4e7f"
+          "99cc3e7f4e7f",
+          "0d049200911e",
+          "e278f35f9291",
+          "668544acaa68",
+          "74613054cb00",
+          "b8b9c3d2c12c"
         ],
         "sources": {
           "chair": "177c4494c690",
-          "R1-2609128": "e841439d0967"
+          "R1-2609128": "e5417fc6c4a7"
         },
         "change": "updated",
         "added": [
           6,
           7,
-          8,
-          9,
-          10,
-          11,
-          12
+          13,
+          14,
+          15,
+          16,
+          17
         ],
-        "changed_at": "2026-11-20T16:12:41+00:00",
-        "changed_in": "draft_R1-2609128_Session Notes of AI 9.3_v04.docx",
-        "file": "agreements/ba3e5ba939d70eeffa1b.html"
+        "changed_at": "2026-11-20T16:30:41+00:00",
+        "changed_in": "draft_R1-2609128_Session Notes of AI 9.3_v06.docx",
+        "file": "agreements/55c7a6eb91d5b171dfbd.html"
       },
       "9.3.1": {
         "title": "R2D signals, channels, waveform and procedures",
@@ -18814,7 +18819,7 @@
         ],
         "changed_at": "2026-11-20T16:12:41+00:00",
         "changed_in": "draft_R1-2609128_Session Notes of AI 9.3_v04.docx",
-        "file": "agreements/3722c9abfce60a68e22a.html"
+        "file": "agreements/d77ad348c8c8343b73f5.html"
       },
       "9.3.2": {
         "title": "D2R signals, channels, waveform and procedures",
@@ -19097,7 +19102,7 @@
         ],
         "changed_at": "2026-11-20T16:12:41+00:00",
         "changed_in": "draft_R1-2609128_Session Notes of AI 9.3_v04.docx",
-        "file": "agreements/3dad34e1801269dfba53.html"
+        "file": "agreements/2836be03385528f708ca.html"
       },
       "9.4": {
         "title": "GNSS resilient NR-NTN operation",
@@ -23112,10 +23117,9 @@
       }
     },
     "retained_files": [
-      "agreements/2ab562ddb3b2af8f7955.html",
-      "agreements/4ada0fbcf90192e1b03d.html",
-      "agreements/4e608e6711933ad0aeac.html",
-      "agreements/caed438f9b542d601b07.html"
+      "agreements/3722c9abfce60a68e22a.html",
+      "agreements/3dad34e1801269dfba53.html",
+      "agreements/ba3e5ba939d70eeffa1b.html"
     ]
   },
   "email_informal": {
