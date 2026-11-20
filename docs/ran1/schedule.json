@@ -16556,6 +16556,27 @@
               "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;b0bc415.2611c",
               "author": "Mixiang (Shawn)",
               "sent": "2026-11-20T02:43:17-06:00"
+            },
+            {
+              "kind": "session",
+              "session": "Fri 09:30-10:30 BMO 214-215",
+              "quote": "The LS to RAN2 will be endorsed on Friday online session (see Proposal in Section 2).",
+              "mode": "online",
+              "summary": "Endorse LS to RAN2 on higher layer parameters (Proposal in Section 2)",
+              "topics": [
+                "LS to RAN2",
+                "Section 2"
+              ],
+              "day": "Friday",
+              "tdocs": [
+                "R1-2610891",
+                "R1-2610889"
+              ],
+              "split": [],
+              "mail": "55162148.2611c",
+              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;55162148.2611c",
+              "author": "Mixiang (Shawn)",
+              "sent": "2026-11-20T04:32:43-06:00"
             }
           ],
           "part": null,
@@ -17238,7 +17259,7 @@
     }
   ],
   "source_file": "RAN1#127 online and offline schedules - v04.docx",
-  "generated_at": "2026-11-20 04:01",
+  "generated_at": "2026-11-20 04:42",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
