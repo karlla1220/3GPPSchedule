@@ -15959,7 +15959,28 @@
           "room_scope": "assigned",
           "notes": [],
           "inferred_agenda_items": [],
-          "email_details": [],
+          "email_details": [
+            {
+              "kind": "session",
+              "session": "Fri 09:50-10:30 Champions Ballroom A",
+              "quote": "I plan to use this for the online discussion Friday.",
+              "mode": "online",
+              "summary": "Online discussion on Friday using FL summary v75",
+              "topics": [
+                "Proposal #4-2L/4-2M",
+                "Proposal #4-4",
+                "Proposal #6-2F",
+                "Proposal #6-3D",
+                "Proposal #9-1D"
+              ],
+              "day": "Friday",
+              "split": [],
+              "mail": "acca23cf.2611c",
+              "url": "https://list.etsi.org/scripts/wa.exe?A2=3GPP_TSG_RAN_WG1;acca23cf.2611c",
+              "author": "Daewon Lee",
+              "sent": "2026-11-20T07:06:56-06:00"
+            }
+          ],
           "part": null,
           "stream": ""
         },
@@ -17259,7 +17280,7 @@
     }
   ],
   "source_file": "RAN1#127 online and offline schedules - v04.docx",
-  "generated_at": "2026-11-20 04:42",
+  "generated_at": "2026-11-20 07:21",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
