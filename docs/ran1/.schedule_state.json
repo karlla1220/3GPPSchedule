@@ -32,9 +32,9 @@
     }
   ],
   "agreements_ref": {
-    "name": "Chair notes RAN1#127_eom.docx",
-    "url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Chair_notes/Chair%20notes%20RAN1%23127_eom.docx",
-    "sha256": "9b96008ed7b393ee602f40e99b1bb8aa92172e3506b28a0fe70200686ea6a807",
+    "name": "Chair notes RAN1#127_eom1.docx",
+    "url": "https://www.3gpp.org/ftp/Meetings_3GPP_SYNC/RAN1/Inbox/Chair_notes/Chair%20notes%20RAN1%23127_eom1.docx",
+    "sha256": "fb6a839cebc32db90fa3b86fb72394a92b68cd7a9d1ce3031dea3c02b7b6c02a",
     "session_notes": [
       {
         "name": "draft_R1-2609118_Session Notes of AI 10.8_v07.docx",
