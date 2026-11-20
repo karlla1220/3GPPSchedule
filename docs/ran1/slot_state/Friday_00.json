@@ -3,7 +3,7 @@
   "time_block_index": 0,
   "source_hashes": {
     "Main Schedule": "b0427384c466d520",
-    "Hiroki's schedule": "f4cabe90b36628e1",
+    "Hiroki's schedule": "3742a7614cac0335",
     "Sorour's schedule": "59c8424289db4f67"
   },
   "merged_sessions": [
@@ -325,6 +325,39 @@
     },
     {
       "room_name": "RAN1_brk2",
+      "name": "8.1 ISAC",
+      "duration_minutes": 30,
+      "specified_start_time": null,
+      "chair": "Hiroki",
+      "group_header": "",
+      "agenda_item": "8.1",
+      "source_cells": [
+        "ce75ed7",
+        "cbcb370"
+      ],
+      "description": "Maintenance on all items of Rel-19 NR and E-UTRA",
+      "agenda_descriptions": [
+        {
+          "agenda_item": "8.1",
+          "matched_agenda_item": "8.1",
+          "description": "Maintenance on all items of Rel-19 NR and E-UTRA",
+          "hierarchy": [
+            {
+              "agenda_item": "8",
+              "description": "Maintenance on Rel-19 NR and E-UTRA",
+              "has_description": true
+            },
+            {
+              "agenda_item": "8.1",
+              "description": "Maintenance on all items of Rel-19 NR and E-UTRA",
+              "has_description": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "room_name": "RAN1_brk2",
       "name": "10.8.1",
       "duration_minutes": 30,
       "specified_start_time": null,
@@ -333,7 +366,7 @@
       "agenda_item": "10.8.1",
       "source_cells": [
         "ce75ed7",
-        "c7e86c6"
+        "cbcb370"
       ],
       "description": "Evaluations",
       "agenda_descriptions": [
@@ -364,14 +397,14 @@
     {
       "room_name": "RAN1_brk2",
       "name": "10.8.2",
-      "duration_minutes": 50,
+      "duration_minutes": 20,
       "specified_start_time": null,
       "chair": "Hiroki",
       "group_header": "6GR / 10.8 Sensing",
       "agenda_item": "10.8.2",
       "source_cells": [
         "ce75ed7",
-        "c7e86c6"
+        "cbcb370"
       ],
       "description": "Aspects of integration with communication",
       "agenda_descriptions": [
@@ -401,15 +434,58 @@
     },
     {
       "room_name": "RAN1_brk2",
-      "name": "Break",
+      "name": "10.5.4.x post-meeting email discussion",
       "duration_minutes": 10,
       "specified_start_time": null,
-      "chair": null,
+      "chair": "Hiroki",
       "group_header": "",
-      "agenda_item": null,
+      "agenda_item": "10.5.4.x",
       "source_cells": [
         "ce75ed7",
-        "c7e86c6"
+        "cbcb370"
+      ],
+      "description": "Downlink control channel, scheduling and HARQ operation",
+      "agenda_descriptions": [
+        {
+          "agenda_item": "10.5.4.x",
+          "matched_agenda_item": "10.5.4",
+          "description": "Downlink control channel, scheduling and HARQ operation",
+          "hierarchy": [
+            {
+              "agenda_item": "10",
+              "description": "Rel-20 Study of 6GR",
+              "has_description": true
+            },
+            {
+              "agenda_item": "10.5",
+              "description": "Multi-antenna system",
+              "has_description": true
+            },
+            {
+              "agenda_item": "10.5.4",
+              "description": "Downlink control channel, scheduling and HARQ operation",
+              "has_description": true
+            }
+          ],
+          "children": [
+            {
+              "agenda_item": "10.5.4.1",
+              "description": "Downlink control channel, scheduling for downlink and uplink transmission"
+            },
+            {
+              "agenda_item": "10.5.4.2",
+              "description": "Downlink and uplink transmission without dynamic scheduling"
+            },
+            {
+              "agenda_item": "10.5.4.3",
+              "description": "HARQ related Aspects"
+            },
+            {
+              "agenda_item": "10.5.4.4",
+              "description": "Handling of potential multiple uplink transmissions"
+            }
+          ]
+        }
       ]
     },
     {
@@ -419,13 +495,57 @@
       "specified_start_time": null,
       "chair": "Hiroki",
       "group_header": "R20",
-      "agenda_item": "9.3.3",
+      "agenda_item": "9.3.1, 9.3.2, 9.3.3",
       "source_cells": [
         "ce75ed7",
-        "c7e86c6"
+        "cbcb370"
       ],
-      "description": "Other procedures",
+      "description": "R2D signals, channels, waveform and procedures",
       "agenda_descriptions": [
+        {
+          "agenda_item": "9.3.1",
+          "matched_agenda_item": "9.3.1",
+          "description": "R2D signals, channels, waveform and procedures",
+          "hierarchy": [
+            {
+              "agenda_item": "9",
+              "description": "Release 20 NR",
+              "has_description": true
+            },
+            {
+              "agenda_item": "9.3",
+              "description": "Solutions for Ambient IoT (Internet of Things) in NR Phase 2",
+              "has_description": true
+            },
+            {
+              "agenda_item": "9.3.1",
+              "description": "R2D signals, channels, waveform and procedures",
+              "has_description": true
+            }
+          ]
+        },
+        {
+          "agenda_item": "9.3.2",
+          "matched_agenda_item": "9.3.2",
+          "description": "D2R signals, channels, waveform and procedures",
+          "hierarchy": [
+            {
+              "agenda_item": "9",
+              "description": "Release 20 NR",
+              "has_description": true
+            },
+            {
+              "agenda_item": "9.3",
+              "description": "Solutions for Ambient IoT (Internet of Things) in NR Phase 2",
+              "has_description": true
+            },
+            {
+              "agenda_item": "9.3.2",
+              "description": "D2R signals, channels, waveform and procedures",
+              "has_description": true
+            }
+          ]
+        },
         {
           "agenda_item": "9.3.3",
           "matched_agenda_item": "9.3.3",
@@ -591,7 +711,7 @@
       ]
     }
   ],
-  "merged_at": "2026-11-19T23:02:46.232869+00:00",
+  "merged_at": "2026-11-20T01:22:18.400333+00:00",
   "meeting_id": "ran1#127",
   "schema_version": 3,
   "source_entries": {
@@ -630,9 +750,9 @@
     "Hiroki's schedule": [
       {
         "room_label": "Hiroki: BMO 214-215",
-        "cell_text": "6GR (80)\n.10.8 Sensing (80)\n10.8.1 (30)\n10.8.2 (50)\n\nBreak (10)\n\nR20 (60)\nA-IoT Phase2 (60)\n 9.3.3 (60)",
+        "cell_text": "8.1 ISAC (30)\n\n6GR (50)\n.10.8 Sensing (50)\n10.8.1 (30)\n10.8.2 (20)\n\n10.5.4.x post-meeting email discussion (10)\n\nR20 (60)\nA-IoT Phase2 (60)\n 9.3.1, 9.3.2, [9.3.3], LS/TP (60)",
         "fallback_start_time": null,
-        "cell_id": "c7e86c6"
+        "cell_id": "cbcb370"
       }
     ],
     "Sorour's schedule": [
