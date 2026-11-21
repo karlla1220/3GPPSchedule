@@ -17341,7 +17341,7 @@
     }
   ],
   "source_file": "RAN1#127 online and offline schedules - v04.docx",
-  "generated_at": "2026-11-21 14:23",
+  "generated_at": "2026-11-21 14:43",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
@@ -17381,7 +17381,7 @@
     "meeting_id": "ran1#127",
     "document_file": "Chair notes RAN1#127_eom1.docx",
     "sha256": "fb6a839cebc32db90fa3b86fb72394a92b68cd7a9d1ce3031dea3c02b7b6c02a",
-    "parser_version": 25,
+    "parser_version": 26,
     "warnings": [
       "An equation could not be converted; its source text is shown. Check the original document.",
       "Tracked insertions/deletions are shown inline; Word revision balloons are not reproduced."
@@ -19180,7 +19180,7 @@
         ],
         "changed_at": "2026-11-20T16:12:41+00:00",
         "changed_in": "draft_R1-2609128_Session Notes of AI 9.3_v04.docx",
-        "file": "agreements/32b495b2b0449c7b1290.html"
+        "file": "agreements/5a298a7d27a3b593938e.html"
       },
       "9.4": {
         "title": "GNSS resilient NR-NTN operation",
@@ -23730,7 +23730,7 @@
       }
     },
     "retained_files": [
-      "agreements/688d244866f60294aa19.html"
+      "agreements/32b495b2b0449c7b1290.html"
     ]
   },
   "email_informal": {
