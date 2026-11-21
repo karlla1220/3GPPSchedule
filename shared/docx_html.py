@@ -17,7 +17,8 @@ from zipfile import ZipFile
 from lxml import etree as ET
 
 from shared.docx_math import render_math
-from shared.metafile_images import render_metafile_svg, symbol_map
+from shared.metafile_images import render_metafile_svg
+from shared.symbol_fonts import run_font, sym_char, symbol_text
 
 NS = {
     "w": "http://schemas.openxmlformats.org/wordprocessingml/2006/main",
@@ -148,30 +149,6 @@ def render_blocks(blocks):
 _KEPT_FONTS = re.compile(r"symbol|wingdings|webdings|math|courier|consolas|mono", re.I)
 
 
-# Wingdings arrows, by direction, as plain arrows every font has.
-_WINGDINGS = {
-    0xDF: "←", 0xE0: "→", 0xE1: "↑", 0xE2: "↓",
-    0xE7: "←", 0xE8: "→", 0xE9: "↑", 0xEA: "↓",
-    0xEF: "⇦", 0xF0: "⇨", 0xF1: "⇧", 0xF2: "⇩",
-}
-
-
-def symbol_char(sym):
-    """Word's Insert Symbol (`w:sym`): a byte of a legacy symbol font, or None."""
-    font = (attr(sym, "font") or "").strip().lower()
-    try:
-        code = int(attr(sym, "char") or "", 16)
-    except ValueError:
-        return None
-    if code >= 0xF000:  # Word stores the byte in the private-use F0xx block
-        code -= 0xF000
-    if font == "symbol":
-        return symbol_map().get(code)
-    if font == "wingdings":
-        return _WINGDINGS.get(code)
-    return None
-
-
 class DocxHTML:
     def __init__(self, path):
         with ZipFile(path) as z:
@@ -293,7 +270,7 @@ class DocxHTML:
         for e in node:
             tag = ET.QName(e).localname
             if tag in {"t", "delText"}:
-                result.append(escape(e.text or ""))
+                result.append(escape(symbol_text(run_font(node), e.text or "")))
             elif tag == "r":
                 result.append(self.run(e, p))
             elif tag in {"br", "cr"}:
@@ -322,7 +299,7 @@ class DocxHTML:
                 result.append(f"<{tag}>" + self.inline(e, p) + f"</{tag}>")
             elif tag in {"sdt", "sdtContent", "smartTag", "customXml"}:
                 result.append(self.inline(e, p))
-            elif tag == "sym" and (char := symbol_char(e)):
+            elif tag == "sym" and (char := sym_char(e)):
                 result.append(escape(char))
             elif tag in {"altChunk", "sym"}:
                 self.warnings.add(
@@ -562,7 +539,7 @@ class DocxHTML:
 TABLE_FONT_EM = 0.93
 
 DOCUMENT_CSS = (
-    """:host{display:block;min-width:0}.docx-document{font-family:"Times New Roman","STIX Two Text",Times,serif;font-size:14px;color:var(--ink,#0f172a);line-height:1.55;overflow-wrap:anywhere;position:relative;margin-left:-10px;padding-left:10px;clip-path:inset(-8px -100vw -8px 0)}.docx-document::after{content:"";position:absolute;z-index:-2;inset:0 0 0 3px;background:var(--surface,#fff);box-shadow:0 1px var(--surface,#fff),0 -1px var(--surface,#fff)}ul,ol{margin:.4em 0;padding-left:1.6em}ul{list-style-type:disc}ul ul{list-style-type:circle}ul ul ul{list-style-type:square}ol{list-style-type:decimal}li>ul,li>ol{margin-top:0;margin-bottom:0}li+li{margin-top:.2em}li>p{margin:0!important}.list-gap{list-style-type:none}li::marker{color:var(--ink-3,#8a94a6)}p{white-space:pre-wrap;margin:0 0 .6em;min-height:.3em}img{max-width:100%;height:auto}table{border-collapse:collapse;width:100%;font-size:"""
+    """:host{display:block;min-width:0}.docx-document{font-family:"Times New Roman","STIX Two Text",Times,"Noto Sans Symbols 2",serif;font-size:14px;color:var(--ink,#0f172a);line-height:1.55;overflow-wrap:anywhere;position:relative;margin-left:-10px;padding-left:10px;clip-path:inset(-8px -100vw -8px 0)}.docx-document::after{content:"";position:absolute;z-index:-2;inset:0 0 0 3px;background:var(--surface,#fff);box-shadow:0 1px var(--surface,#fff),0 -1px var(--surface,#fff)}ul,ol{margin:.4em 0;padding-left:1.6em}ul{list-style-type:disc}ul ul{list-style-type:circle}ul ul ul{list-style-type:square}ol{list-style-type:decimal}li>ul,li>ol{margin-top:0;margin-bottom:0}li+li{margin-top:.2em}li>p{margin:0!important}.list-gap{list-style-type:none}li::marker{color:var(--ink-3,#8a94a6)}p{white-space:pre-wrap;margin:0 0 .6em;min-height:.3em}img{max-width:100%;height:auto}table{border-collapse:collapse;width:100%;font-size:"""
     + f"{TABLE_FONT_EM}em"
-    + """}.word-grid{table-layout:fixed}.word-grid.fitted{min-width:0!important}.fitted>*>tr>td,.fitted>*>tr>th{padding:var(--fit-pad-y) var(--fit-pad-x)}.measuring td,.measuring td *{text-align:left!important}.measuring>*>tr>td,.measuring>*>tr>th{padding-left:.53em;padding-right:.53em}td,th{border:1px solid var(--hairline,#e7e9ee);padding:6px 8px;vertical-align:top}th{background:var(--break-bg,#f8f9fb);font-weight:600}.table-scroll{margin:12px 0}article{border-top:1px solid var(--hairline,#e7e9ee);padding-top:16px;margin-top:20px}article:first-child{border-top:0;padding-top:0;margin-top:0}math{font-family:"STIX Two Math",math;font-size:1.1em}.equation-block{margin:8px 0}.tdoc-list{margin:0 0 .6em;font-size:.93em}.tdoc-list>summary{cursor:pointer;width:fit-content;color:var(--ink-3,#8a94a6)}.tdoc-list>summary:hover,.tdoc-list[open]>summary{color:var(--ink-2,#475569)}.tdoc-list>summary:focus-visible{outline:2px solid #2563EB;outline-offset:2px;border-radius:2px}.tdoc-list[open]>summary{margin-bottom:.3em}.tdoc-list p{margin:0 0 .2em 1.15em;color:var(--ink-2,#475569)}.agreement-added{position:relative;--added-reach:0px}.agreement-added::before,.agreement-added::after{content:"";position:absolute;top:calc(-1*var(--added-reach));bottom:0;background:var(--added,#2f9e62)}.agreement-added::before{z-index:-3;right:calc(100% - 3px);width:100vw}.agreement-added::after{z-index:-1;left:-100vw;right:0;opacity:0;animation:added-flash 2s ease-out}@keyframes added-flash{0%,40%{opacity:.1}100%{opacity:0}}.tdoc{white-space:nowrap}td.agreement-added::before,td.agreement-added::after{display:none}td.agreement-added{box-shadow:inset 3px 0 var(--added,#2f9e62)}ins,ins *{color:#17784a!important}del,del *{color:#b42318!important}ins{text-decoration:underline 1px #8fcca8;text-underline-offset:2px}del{text-decoration:line-through 1px rgba(180,35,24,.6)}a{color:#275d8c;text-decoration-color:#93adc4;text-underline-offset:2px}a:hover{color:#173f65;text-decoration-color:currentColor}.table-pan{overflow-x:auto}@supports not (zoom:1){.table-scroll{overflow-x:auto}}@media(max-width:600px){.docx-document{font-size:13.5px}}"""
+    + """}.word-grid{table-layout:fixed}.word-grid.fitted{min-width:0!important}.fitted>*>tr>td,.fitted>*>tr>th{padding:var(--fit-pad-y) var(--fit-pad-x)}.measuring td,.measuring td *{text-align:left!important}.measuring>*>tr>td,.measuring>*>tr>th{padding-left:.53em;padding-right:.53em}td,th{border:1px solid var(--hairline,#e7e9ee);padding:6px 8px;vertical-align:top}th{background:var(--break-bg,#f8f9fb);font-weight:600}.table-scroll{margin:12px 0}article{border-top:1px solid var(--hairline,#e7e9ee);padding-top:16px;margin-top:20px}article:first-child{border-top:0;padding-top:0;margin-top:0}math{font-family:"STIX Two Math","Noto Sans Symbols 2",math;font-size:1.1em}.equation-block{margin:8px 0}.tdoc-list{margin:0 0 .6em;font-size:.93em}.tdoc-list>summary{cursor:pointer;width:fit-content;color:var(--ink-3,#8a94a6)}.tdoc-list>summary:hover,.tdoc-list[open]>summary{color:var(--ink-2,#475569)}.tdoc-list>summary:focus-visible{outline:2px solid #2563EB;outline-offset:2px;border-radius:2px}.tdoc-list[open]>summary{margin-bottom:.3em}.tdoc-list p{margin:0 0 .2em 1.15em;color:var(--ink-2,#475569)}.agreement-added{position:relative;--added-reach:0px}.agreement-added::before,.agreement-added::after{content:"";position:absolute;top:calc(-1*var(--added-reach));bottom:0;background:var(--added,#2f9e62)}.agreement-added::before{z-index:-3;right:calc(100% - 3px);width:100vw}.agreement-added::after{z-index:-1;left:-100vw;right:0;opacity:0;animation:added-flash 2s ease-out}@keyframes added-flash{0%,40%{opacity:.1}100%{opacity:0}}.tdoc{white-space:nowrap}td.agreement-added::before,td.agreement-added::after{display:none}td.agreement-added{box-shadow:inset 3px 0 var(--added,#2f9e62)}ins,ins *{color:#17784a!important}del,del *{color:#b42318!important}ins{text-decoration:underline 1px #8fcca8;text-underline-offset:2px}del{text-decoration:line-through 1px rgba(180,35,24,.6)}a{color:#275d8c;text-decoration-color:#93adc4;text-underline-offset:2px}a:hover{color:#173f65;text-decoration-color:currentColor}.table-pan{overflow-x:auto}@supports not (zoom:1){.table-scroll{overflow-x:auto}}@media(max-width:600px){.docx-document{font-size:13.5px}}"""
 )

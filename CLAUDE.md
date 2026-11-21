@@ -655,6 +655,8 @@ RAN1에서 시작해 모든 WG가 쓴다. 코드는 `shared/agenda_labels.py`이
     Tinos(Times New Roman과 글자 폭이 같음)는 모양이 덜 닮아서 버렸다. STIX는 글자가 조금 커서 Word와 다른 자리에서 줄바꿈되지만, 표는 `fitTables`가 셀마다 줄 수를 다시 세므로 깨지지 않는다.
   - 수식(MathML)은 STIX Two Math다. 기기마다 다른 기본 수식 서체 대신 본문과 짝인 서체로 맞춘다. 수식 그림(`metafile_images.py`)의 글자도 같은 서체를 쓴다.
   - 둘 다 `schedule.html`의 `<link>`에 있고, 브라우저는 실제로 쓰는 글자가 있을 때만 내려받는다(Times New Roman이 있으면 STIX Two Text는 그 서체에 없는 기호가 나올 때만 받는다).
+  - Word 기호 글꼴(Symbol, Wingdings 1~3, MT Extra)의 글자는 유니코드로 바꾼다(`shared/symbol_fonts.py`, 표는 specDuck-converter에서 가져온 wmf2svg 표 `shared/vendor/symbol-font-map.json`). 기호 삽입(`w:sym`)과 그 글꼴로 친 PUA 글자(U+F0xx) 모두이고, 수식 안도 같다. 수식 변환기는 `w:sym`을 말없이 버려서 미리 바꾼다(`docx_math._with_symbols`). 그래서 복사한 TeX·MathML에도 글자가 남는다(`R2D\rightarrow D2R`).
+    - Wingdings 글자는 대개 SMP 화살표(🡺)라 Times·STIX에 없다. Noto Sans Symbols 2(Google Fonts, unicode-range)를 본문과 수식 글꼴 끝에 둔다. 표에 없는 기호는 `[Object: see source document]`로 남는다.
   - Word 문단의 글꼴은 버리고 기호·수식·고정폭 글꼴만 남긴다(`_KEPT_FONTS`). 글자 크기는 Word 본문 11pt 기준 `em`이라 패널의 14px가 전체 배율을 정한다.
 - **Word 형광펜은 같은 색조로 옅게 바꾼다.** 원색 녹색·노랑은 페이지에서 가장 튀는 요소가 된다.
 - **Word 변경 추적(`<ins>`, `<del>`)은 글자색으로 가른다.** 넣은 글은 초록(`#17784a`)에 옅은 초록 밑줄, 지운 글은 빨강(`#b42318`)에 반투명 빨간 취소선이다. 둘 다 1px이다.
