@@ -17341,7 +17341,7 @@
     }
   ],
   "source_file": "RAN1#127 online and offline schedules - v04.docx",
-  "generated_at": "2026-11-20 16:02",
+  "generated_at": "2026-11-21 14:23",
   "contact_name": "",
   "contact_email": "",
   "source_files": [
@@ -17381,9 +17381,8 @@
     "meeting_id": "ran1#127",
     "document_file": "Chair notes RAN1#127_eom1.docx",
     "sha256": "fb6a839cebc32db90fa3b86fb72394a92b68cd7a9d1ce3031dea3c02b7b6c02a",
-    "parser_version": 24,
+    "parser_version": 25,
     "warnings": [
-      "An embedded object or legacy symbol requires the source document.",
       "An equation could not be converted; its source text is shown. Check the original document.",
       "Tracked insertions/deletions are shown inline; Word revision balloons are not reproduced."
     ],
@@ -19181,7 +19180,7 @@
         ],
         "changed_at": "2026-11-20T16:12:41+00:00",
         "changed_in": "draft_R1-2609128_Session Notes of AI 9.3_v04.docx",
-        "file": "agreements/688d244866f60294aa19.html"
+        "file": "agreements/32b495b2b0449c7b1290.html"
       },
       "9.4": {
         "title": "GNSS resilient NR-NTN operation",
@@ -23731,56 +23730,7 @@
       }
     },
     "retained_files": [
-      "agreements/05b99136f2f1f34a803d.html",
-      "agreements/0806e21b127d3641a23e.html",
-      "agreements/12ba1480e5df907175cd.html",
-      "agreements/12c701e8c74c234fbbc8.html",
-      "agreements/1b6df28a5045e4cfeac3.html",
-      "agreements/1ee4d6f818dd23016c44.html",
-      "agreements/218771801366b43fb410.html",
-      "agreements/21f1d73e556a35de3c57.html",
-      "agreements/2836be03385528f708ca.html",
-      "agreements/2c1b0bf533500fe4cc13.html",
-      "agreements/2ef1603f4ee1255a8f21.html",
-      "agreements/30133b47deaade1c637e.html",
-      "agreements/37bdde4f6c378fa63aa1.html",
-      "agreements/3a532e09f50869bb222e.html",
-      "agreements/3bbbd0860007d6a34ff4.html",
-      "agreements/3d79171f0de65016fca0.html",
-      "agreements/3e55ba3e4b726954e92a.html",
-      "agreements/3ea8154cf94efecdd3e3.html",
-      "agreements/41ef0053905d2eb6cf4a.html",
-      "agreements/43d5ddeeceb73e0f4078.html",
-      "agreements/4f051eaa0953054f672d.html",
-      "agreements/57d6cf41288d7eec5b60.html",
-      "agreements/5bcd3de86756786093a7.html",
-      "agreements/5c17e1fd54139901cc0b.html",
-      "agreements/60a71251a1b91d3d95d5.html",
-      "agreements/659c6931a86703848ffb.html",
-      "agreements/6c7f689c9b48b256e125.html",
-      "agreements/7106ba68879cd087f14a.html",
-      "agreements/7662a79c3f435c405a9f.html",
-      "agreements/7f29e8941e830f669625.html",
-      "agreements/81437009e9462180d371.html",
-      "agreements/819768ca4f6d63c34d58.html",
-      "agreements/890402f88ba24db7d891.html",
-      "agreements/8dae521f224135fc9fa6.html",
-      "agreements/967621a070de5db5a392.html",
-      "agreements/9770cd646b67f7c4e056.html",
-      "agreements/9ab71a559f4c55782b71.html",
-      "agreements/9e1cd0f0a3e53e39c459.html",
-      "agreements/a2b6befc51308ce24ad1.html",
-      "agreements/a6240356ab78912536d4.html",
-      "agreements/a923e09d95ff30383fcc.html",
-      "agreements/ae497df84fb58c56f1cc.html",
-      "agreements/bca2c10e1b4f16ea263d.html",
-      "agreements/c0a6c8bc6fd860010a83.html",
-      "agreements/ca86a65103d6e482a9dd.html",
-      "agreements/d77ad348c8c8343b73f5.html",
-      "agreements/ea2eb87d43b770cc49bc.html",
-      "agreements/f465215c4d2ccf638109.html",
-      "agreements/f669f201d2b4d7d533bb.html",
-      "agreements/ff9859d3ee22cf731283.html"
+      "agreements/688d244866f60294aa19.html"
     ]
   },
   "email_informal": {
