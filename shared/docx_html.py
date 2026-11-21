@@ -17,7 +17,7 @@ from zipfile import ZipFile
 from lxml import etree as ET
 
 from shared.docx_math import render_math
-from shared.metafile_images import render_metafile_svg
+from shared.metafile_images import render_metafile_svg, symbol_map
 
 NS = {
     "w": "http://schemas.openxmlformats.org/wordprocessingml/2006/main",
@@ -146,6 +146,30 @@ def render_blocks(blocks):
 
 
 _KEPT_FONTS = re.compile(r"symbol|wingdings|webdings|math|courier|consolas|mono", re.I)
+
+
+# Wingdings arrows, by direction, as plain arrows every font has.
+_WINGDINGS = {
+    0xDF: "←", 0xE0: "→", 0xE1: "↑", 0xE2: "↓",
+    0xE7: "←", 0xE8: "→", 0xE9: "↑", 0xEA: "↓",
+    0xEF: "⇦", 0xF0: "⇨", 0xF1: "⇧", 0xF2: "⇩",
+}
+
+
+def symbol_char(sym):
+    """Word's Insert Symbol (`w:sym`): a byte of a legacy symbol font, or None."""
+    font = (attr(sym, "font") or "").strip().lower()
+    try:
+        code = int(attr(sym, "char") or "", 16)
+    except ValueError:
+        return None
+    if code >= 0xF000:  # Word stores the byte in the private-use F0xx block
+        code -= 0xF000
+    if font == "symbol":
+        return symbol_map().get(code)
+    if font == "wingdings":
+        return _WINGDINGS.get(code)
+    return None
 
 
 class DocxHTML:
@@ -298,6 +322,8 @@ class DocxHTML:
                 result.append(f"<{tag}>" + self.inline(e, p) + f"</{tag}>")
             elif tag in {"sdt", "sdtContent", "smartTag", "customXml"}:
                 result.append(self.inline(e, p))
+            elif tag == "sym" and (char := symbol_char(e)):
+                result.append(escape(char))
             elif tag in {"altChunk", "sym"}:
                 self.warnings.add(
                     "An embedded object or legacy symbol requires the source document."
