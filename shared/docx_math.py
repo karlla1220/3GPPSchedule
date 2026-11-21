@@ -4,11 +4,13 @@ No browser scripts or external resources are needed. Convert one equation at a
  time so a malformed equation cannot silently remove the rest of a document.
 """
 
+import copy
 from html import escape
 
 from latex2mathml.converter import convert
 from lxml import etree as ET
 
+from shared.symbol_fonts import run_font, sym_char, symbol_text
 from shared.vendor.markitdown_math.omml import oMath2Latex
 
 MATH_NS = "http://schemas.openxmlformats.org/officeDocument/2006/math"
@@ -21,7 +23,25 @@ ATTRS = set(
 )
 
 
+def _with_symbols(element):
+    """Symbol-font characters as Unicode; the converter drops `w:sym` silently."""
+    element = copy.deepcopy(element)
+    for run in element.iter("{%s}r" % MATH_NS):
+        font = run_font(run)
+        for node in list(run):
+            name = ET.QName(node).localname
+            if name == "t":
+                node.text = symbol_text(font, node.text)
+            elif name == "sym" and (char := sym_char(node)):
+                text = ET.Element("{%s}t" % MATH_NS)
+                text.text = char
+                node.addprevious(text)
+                run.remove(node)
+    return element
+
+
 def to_mathml(element):
+    element = _with_symbols(element)
     latex = oMath2Latex(element).latex
     if not latex.strip():
         if element.findall(".//{%s}t" % MATH_NS):
